@@ -1,14 +1,8 @@
 <template>
     <span>
-        <a :href="'https://www.camptocamp.org/' + documentType[document.type]  + 's/' + document.document_id"
-           target="_blank">
-            <i class="fas fa-external-link-alt"></i>
-        </a>
-        -
-        <a :href="'https://www.camptocamp.org/' + documentType[document.type]  + 's/history/' + document.document_id + '/fr'"
-           target="_blank">
+        <router-link :to="{ name: 'history', params: {id:document.document_id, lang:'fr'} }">
             <i class="fa fa-users"></i>
-        </a>
+        </router-link>
         -
         <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank"
            v-if="cc == 'by-sa'">

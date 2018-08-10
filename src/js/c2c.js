@@ -41,6 +41,10 @@ var result = {
 
     getRecentChanges(params){
         return axios.get(apiUrl + '/documents/changes', {params})
+    },
+
+    getHistory(document_id, lang){
+        return axios.get(apiUrl + '/document/' + document_id + '/history/' + lang)
     }
 };
 

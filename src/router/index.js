@@ -10,6 +10,8 @@ import WhatsNew from '@/components/views/WhatsNew'
 import Documents from '@/components/views/Documents'
 import Images from '@/components/views/Images'
 
+import DocumentHistory from '@/components/views/DocumentHistory'
+
 import Route from '@/components/views/document/Route'
 import Outing from '@/components/views/document/Outing'
 import Article from '@/components/views/document/Article'
@@ -20,6 +22,7 @@ import Waypoint from '@/components/views/document/Waypoint'
 import Xreport from '@/components/views/document/Xreport'
 
 import WorkInProgress from '@/components/views/WorkInProgress'
+
 
 Vue.use(Router)
 
@@ -107,6 +110,13 @@ const routes = [
         path: '/xreports',
         name: 'xreports',
         component: Documents
+    },
+
+
+    {
+        path: '/document/history/:id/:lang',
+        name: 'history',
+        component: DocumentHistory
     },
 
 
