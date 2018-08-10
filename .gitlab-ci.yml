@@ -1,0 +1,22 @@
+
+build-npm:
+  stage: build
+  image: node:8.11
+  script:
+  - npm install
+  - npm run build
+  artifacts:
+    paths:
+      - dist
+
+pages:
+  stage: deploy
+  dependencies:
+    - build-npm
+  script:
+  - mv dist/ public/
+  only:
+  - master
+  artifacts:
+    paths:
+      - public
