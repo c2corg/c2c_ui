@@ -5,6 +5,7 @@ import Home from '@/components/views/Home'
 import Dashboard from '@/components/views/dashboard/Dashboard'
 import Serac from '@/components/views/Serac'
 import SearchView from '@/components/views/SearchView'
+import WhatsNew from '@/components/views/WhatsNew'
 
 import Documents from '@/components/views/Documents'
 import Images from '@/components/views/Images'
@@ -48,6 +49,14 @@ const routes = [
         name: 'search',
         component: SearchView
     },
+    {
+        path: '/whatsnew',
+        name: 'whatsnew',
+        component: WhatsNew
+    },
+
+
+
 
     {
         path: '/areas',

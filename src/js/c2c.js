@@ -36,8 +36,11 @@ var result = {
     },
 
     search(params){
-        console.log(params)
         return axios.get(apiUrl + '/search', {params})
+    },
+
+    getRecentChanges(params){
+        return axios.get(apiUrl + '/documents/changes', {params})
     }
 };
 
