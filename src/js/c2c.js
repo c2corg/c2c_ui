@@ -45,21 +45,44 @@ var result = {
 
     getHistory(document_id, lang){
         return axios.get(apiUrl + '/document/' + document_id + '/history/' + lang)
+    },
+
+    signIn(username, password){
+        var result =  axios.post(apiUrl + '/users/login', {
+            username,
+            password,
+            discourse:false
+        })
+
+        result.then(response => {
+            var token = response.data.token
+            axios.defaults.headers.common['Authorization'] = 'JWT token="' + token + '"'
+        })
+
+        return result
     }
 };
 
 ["area", "article", "book", "image", "map", "outing", "profile", "route", "waypoint", "xreport"].forEach(type => {
 
     result[type + "s"] = {
-        get:function(params){
+        get(params){
             return axios.get(apiUrl + '/' + type + 's', {params})
         }
     }
 
     result[type] = {
-        get:function(id){
+        get(id){
             return axios.get(apiUrl + '/' + type + 's/' + id)
+        },
+
+        save(document, comment){
+            return axios.put(apiUrl + '/' + type + 's/' + document.document_id, {
+                document,
+                message:comment
+            })
         }
+
     }
 
 })

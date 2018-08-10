@@ -36,6 +36,13 @@
             </div>
 
             <div class="navbar-end">
+                <div class="navbar-item">
+                    <router-link class="button is-primary"
+                                 :to="{ name: 'auth' }"
+                                 v-if="!user.logged">
+                        sign in
+                    </router-link>
+                </div>
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         fr
@@ -53,10 +60,14 @@
 </template>
 
 <script>
+
+    import user from "@/js/user.js"
+
     export default {
 
         data() {
             return {
+                user,
                 burgerActive:false,
                 langs:["fr","en","de"],
                 links: [
