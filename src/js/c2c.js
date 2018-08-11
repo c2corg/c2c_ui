@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-var apiUrl = "https://api.camptocamp.org"
+var apiUrl = "https://api.demov6.camptocamp.org"
 
 var result = {
 
