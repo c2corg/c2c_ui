@@ -23,12 +23,8 @@
 <script>
 
     import c2c from '@/js/c2c.js'
-    import LoadingNotification from '@/components/utils/LoadingNotification'
 
     export default {
-        components: {
-            LoadingNotification,
-        },
 
         data() {
             return {

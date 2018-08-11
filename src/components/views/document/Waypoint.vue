@@ -1,7 +1,7 @@
 <template>
     <div v-if="waypoint" class="section content">
         <h1>
-            <i class="fas fa-map-pin"/>
+            <icon-document type="waypoint"/>
             <document-title :document="waypoint"/>
         </h1>
 
@@ -117,7 +117,7 @@
 
                     <h2>Routes</h2>
 
-                    <route-link
+                    <pretty-route-link
                        v-for="(route, index) of waypoint.associations.all_routes.documents"
                        :route="route"
                        :key="index"/>
@@ -127,7 +127,7 @@
                     <h2  v-if="waypoint.associations.recent_outings.documents.length">
                         Recent outings
                     </h2>
-                    <outing-link v-for="(outing, index) of waypoint.associations.recent_outings.documents"
+                    <pretty-outing-link v-for="(outing, index) of waypoint.associations.recent_outings.documents"
                                  :outing="outing"
                                  :key="index"/>
 
@@ -154,10 +154,6 @@
 
 <script>
     import MarkdownSection from '@/components/utils/MarkdownSection'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-    import OutingLink from '@/components/views/document/utils/OutingLink'
-    import RouteLink from '@/components/views/document/utils/RouteLink'
-    import DocumentLink from '@/components/utils/DocumentLink'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
@@ -171,10 +167,6 @@
         components: {
             Activities,
             MarkdownSection,
-            DocumentTitle,
-            DocumentLink,
-            OutingLink,
-            RouteLink,
             DocumentLicense,
             Gallery,
             AreasLinks,

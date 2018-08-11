@@ -67,7 +67,7 @@
                 forumname:{value:""},
                 email:{value:""},
                 signin(){
-                    c2c.signIn(this.username.value, this.password.value).then(response => {
+                    c2c.signIn(this.username.value, this.password.value).then(() => {
                         this.user.logged = true
                     })
                 }

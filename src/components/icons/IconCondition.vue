@@ -1,9 +1,11 @@
 <template>
-    <span v-if="condition" v-bind:class="'condition-'+condition">
-        <i class="fas fa-circle"></i>
-    </span>
-    <span v-else>
-        <i class="far fa-circle"></i>
+    <span class="icon">
+        <span v-if="condition" :class="'condition-'+condition">
+            <i class="fas fa-circle"></i>
+        </span>
+        <span v-else>
+            <i class="far fa-circle"></i>
+        </span>
     </span>
 </template>
 

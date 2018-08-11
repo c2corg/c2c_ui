@@ -1,5 +1,6 @@
 //https://bulma.io/documentation/customize/variables/
 
+/*
 $size-1	: 2.625rem;   // 3rem;
 $size-2	: 2.1875rem;   // 2.5rem;
 $size-3	: 1.75rem;   // 2rem;
@@ -7,13 +8,15 @@ $size-4	: 1.3125rem;   // 1.5rem;
 $size-5	: 1.125rem;   // 1.25rem;
 $size-6	: 0.875rem;  // 1rem;
 $size-7	: 0.625rem;   // 0.75rem;
+*/
 
 @import '~bulma/bulma.sass';
 @import '~@fortawesome/fontawesome-free/css/all.css';
-
+/*
 body{
     font-size:$size-6;
 }
+*/
 
 $font_path: '~@/assets/fonts';
 

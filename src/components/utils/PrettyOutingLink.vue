@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ConditionIcon v-bind:condition="outing.condition_rating"></ConditionIcon>
+        <icon-condition v-bind:condition="outing.condition_rating"/>
         {{outing.date_start}}
         :
         <document-link :document="outing"/>
@@ -16,15 +16,7 @@
 </template>
 
 <script>
-    import ConditionIcon from '@/components/utils/ConditionIcon'
-    import DocumentLink from '@/components/utils/DocumentLink'
-
     export default {
         props: ['outing'],
-
-        components: {
-            ConditionIcon,
-            DocumentLink,
-        }
     }
 </script>

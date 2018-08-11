@@ -1,7 +1,7 @@
 <template>
     <div v-if="article" class="section content">
         <h1>
-            <i class="far fa-file-alt"></i>
+            <icon-document type="article"/>
             <document-title :document="article"/>
         </h1>
 
@@ -29,7 +29,6 @@
 
 <script>
     import Markdown from '@/components/Markdown'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import Activities from '@/components/utils/Activities'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
@@ -40,7 +39,6 @@
 
         components: {
             Markdown,
-            DocumentTitle,
             Activities,
             DocumentLicense,
             Gallery

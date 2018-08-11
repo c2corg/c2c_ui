@@ -6,8 +6,7 @@
                 <tr v-for='(change, index) of results.feed' :key="index">
                     <td>{{formatDate(change.written_at)}}</td>
                     <td>
-                        <author-link :author="change.user"/>
-                        (<router-link :to="{name: 'whatsnew', query: {u:change.user.user_id} }">c</router-link>)
+                        <contributor-link :contributor="change.user"/>
                     </td>
                     <td>
                         <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">last</router-link>
@@ -16,7 +15,7 @@
                     </td>
                     <td>{{change.lang}}</td>
                     <td>
-                        <quality-icon :quality="change.document.quality"/>
+                        <icon-quality :quality="change.document.quality"/>
                     </td>
                     <td>
                         {{documentType[change.document.type]}}:{{change.document.title}}
@@ -30,13 +29,11 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import AuthorLink from '@/components/views/document/utils/AuthorLink'
-    import QualityIcon from '@/components/utils/QualityIcon'
+    import ContributorLink from '@/components/utils/ContributorLink'
 
     export default {
         components:{
-            AuthorLink,
-            QualityIcon
+            ContributorLink,
         },
 
         data(){
@@ -51,7 +48,6 @@
 
                 getQueryNext(){
                     this.$route.query["token"] = this.results.pagination_token
-                    console.log(this.$route.query)
                     return this.$route.query
                 }
             }

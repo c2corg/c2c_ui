@@ -1,7 +1,7 @@
 <template>
     <div v-if="area" class="section content">
         <h1>
-            <i class="fas fa-globe-americas"></i>
+            <icon-document type="area"/>
             <document-title :document="area"/>
         </h1>
 
@@ -25,7 +25,6 @@
 
 <script>
     import Markdown from '@/components/Markdown'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
 
@@ -35,7 +34,6 @@
 
         components: {
             Markdown,
-            DocumentTitle,
             DocumentLicense,
             Gallery
         },

@@ -1,7 +1,7 @@
 <template>
     <div v-if="route" class="section content">
         <h1>
-            <i class="fa fa-route"></i>
+            <icon-document type="route"/>
             <document-title :document="route"/>
         </h1>
 
@@ -23,7 +23,7 @@
                     <h2>
                         <span>Recent outings</span>
                     </h2>
-                    <outing-link
+                    <pretty-outing-link
                        v-for="outing of route.associations.recent_outings.documents"
                        :outing="outing"
                        :key="outing.document_id"/>
@@ -105,9 +105,6 @@
 
 <script>
     import MarkdownSection from '@/components/utils/MarkdownSection'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-    import OutingLink from '@/components/views/document/utils/OutingLink'
-    import DocumentLink from '@/components/utils/DocumentLink'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
@@ -122,9 +119,6 @@
 
         components: {
             MarkdownSection,
-            DocumentTitle,
-            DocumentLink,
-            OutingLink,
             Activities,
             DocumentLicense,
             RouteRating,

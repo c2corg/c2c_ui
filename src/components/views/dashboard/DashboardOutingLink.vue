@@ -10,25 +10,14 @@
             </em>
         </span>
         <span class="is-pulled-right">
-            <i class="fa fa-camera" v-if="outing.img_count!=0"></i>
-            &hairsp;
-            <ConditionIcon v-bind:condition="outing.condition_rating"></ConditionIcon>
+            <icon-document type="image" v-if="outing.img_count!=0"/>
+            <icon-condition v-bind:condition="outing.condition_rating"/>
         </span>
     </div>
 </template>
 
 <script>
-    import ConditionIcon from '@/components/utils/ConditionIcon'
-    import DocumentLink from '@/components/utils/DocumentLink'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-
     export default {
         props: ['outing'],
-
-        components: {
-            ConditionIcon,
-            DocumentLink,
-            DocumentTitle
-        }
     }
 </script>

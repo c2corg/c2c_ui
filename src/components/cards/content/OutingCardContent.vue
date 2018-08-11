@@ -4,7 +4,7 @@
         <card-region-item :document="document"/>
 
         <span>
-            <i class="fas fa-pen"/>
+            <base-icon iconClass="fas fa-pen"/>
             {{document.author.name}}
         </span>
 
@@ -13,12 +13,12 @@
         <outing-rating :outing="document"/>
 
         <span v-if="document.elevation_max">
-            <i class="fas fa-bomb"/>
+            <base-icon iconClass="fas fa-bomb"/>
             {{document.elevation_max}}&nbsp;m
         </span>
 
         <span v-if="document.height_diff_up">
-            <i class="fas fa-bomb"/>
+            <base-icon iconClass="fas fa-bomb"/>
             {{document.height_diff_up}}&nbsp;m
         </span>
 
@@ -26,17 +26,12 @@
 
         <activities :activities="document.activities"/>
 
-        <span v-if="document.geometry.has_geom_detail">
-            <i class="fas fa-flag"/>
-        </span>
-
-        <span v-if="document.img_count != 0">
-            <i class="fas fa-camera"/>
-        </span>
+        <base-icon iconClass="fas fa-flag" v-if="document.geometry.has_geom_detail"/>
+        <icon-document type="image" v-if="document.img_count != 0"/>
 
         {{document.date_start}}
-        <condition-icon :condition="document.condition_rating"/>
-        <quality-icon :quality="document.quality"/>
+        <icon-condition :condition="document.condition_rating"/>
+        <icon-quality :quality="document.quality"/>
 
     </div>
 </template>
@@ -44,8 +39,6 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import ConditionIcon from '@/components/utils/ConditionIcon'
-    import QualityIcon from '@/components/utils/QualityIcon'
     import Activities from '@/components/utils/Activities'
     import OutingRating from '@/components/utils/OutingRating'
 
@@ -53,10 +46,8 @@
 
     export default {
         components: {
-            ConditionIcon,
             Activities,
             OutingRating,
-            QualityIcon,
             CardRegionItem
         },
 

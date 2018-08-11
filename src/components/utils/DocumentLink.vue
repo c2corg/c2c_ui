@@ -10,14 +10,7 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-
     export default {
-
-        components: {
-            DocumentTitle
-        },
-
         props: ['document'],
 
         data(){

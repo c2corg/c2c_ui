@@ -1,7 +1,7 @@
 <template>
     <div v-if="outing" class="section content">
         <h1>
-            <i class="fas fa-edit"></i>
+            <icon-document type="outing"/>
             <document-title :document="outing"/>
             <small>{{outing.date_start}}</small>
         </h1>
@@ -13,7 +13,7 @@
             <div class="column is-9">
                 <areas-links :areas="outing.areas"/>
 
-                <route-link v-for="route of outing.associations.routes"
+                <pretty-route-link v-for="route of outing.associations.routes"
                             :route="route"
                             :key="route.document_id"/>
 
@@ -90,8 +90,6 @@
 <script>
     import Markdown from '@/components/Markdown'
     import MarkdownSection from '@/components/utils/MarkdownSection'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-    import DocumentLink from '@/components/utils/DocumentLink'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import DocumentLicense from '@/components/utils/DocumentLicense'
@@ -99,7 +97,6 @@
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
 
     import UsersLinks from '@/components/views/document/utils/UsersLinks'
-    import RouteLink from '@/components/views/document/utils/RouteLink'
 
     import c2c from '@/js/c2c.js'
 
@@ -108,9 +105,6 @@
         components: {
             Markdown,
             MarkdownSection,
-            DocumentTitle,
-            DocumentLink,
-            RouteLink,
             Activities,
             DocumentLicense,
             RouteRating,

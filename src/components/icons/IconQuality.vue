@@ -1,5 +1,5 @@
 <template>
-    <i :class="'icon-quality-' + quality"/>
+    <base-icon :iconClass="'icon-quality-' + quality"/>
 </template>
 
 <script>

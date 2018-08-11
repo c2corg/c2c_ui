@@ -20,7 +20,7 @@
             <div class="navbar-start">
                 <router-link class="navbar-item" :to="`${link.page}`"
                              v-for="(link, index) in links" :key="index">
-                    <i :class="link.iconClass"></i>
+                    <component :is="link.iconName"/>
                     {{link.text}}
                 </router-link>
 
@@ -74,27 +74,27 @@
                     {
                         text: 'Routes',
                         page:'/routes',
-                        iconClass:"fas fa-route"
+                        iconName:"icon-route"
                     },
                     {
                         text: 'Outings',
                         page:'/outings',
-                        iconClass:"fas fa-edit"
+                        iconName:"icon-outing"
                     },
                     {
                         text: 'Forum',
                         page:'/About',
-                        iconClass:"fab fa-discourse"
+                        iconName:"icon-forum"
                     },
                     {
                         text: 'SERAC',
                         page:'/serac',
-                        iconClass:"fa fa-flag-checkered"
+                        iconName:"icon-xreport"
                     },
                     {
                         text: 'Articles',
                         page:'/articles',
-                        iconClass:"fas fa-newspaper"
+                        iconName:"icon-article"
                     }
                 ],
                 searchText:'',

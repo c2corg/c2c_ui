@@ -14,18 +14,16 @@
         <br>
 
         <activities :activities="document.activities"/>
-        <quality-icon :quality="document.quality"/>
+        <icon-quality :quality="document.quality"/>
     </div>
 </template>
 
 <script>
     import Activities from '@/components/utils/Activities'
-    import QualityIcon from '@/components/utils/QualityIcon'
 
     export default {
         components: {
             Activities,
-            QualityIcon
         },
 
         props: ['document'],

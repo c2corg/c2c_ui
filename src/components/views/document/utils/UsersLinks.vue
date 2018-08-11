@@ -8,14 +8,7 @@
 </template>
 
 <script>
-    import DocumentLink from '@/components/utils/DocumentLink'
-
     export default {
-
-        components: {
-            DocumentLink,
-        },
-
         props : ["users"]
     }
 </script>

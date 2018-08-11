@@ -9,13 +9,13 @@
         <card-elevation-item :elevation="document.elevation_max"/>
 
         <span v-if="document.height_diff_up">
-            <i class="fas fa-bomb"/>
+            <base-icon iconClass="fas fa-bomb"/>
             {{document.height_diff_up}}&nbsp;m
         </span>
 
 
         <span v-if="document.height_diff_difficulties">
-            <i class="fas fa-arrows-alt-v"></i>
+            <base-icon iconClass="fas fa-arrows-alt-v"/>
             {{document.height_diff_difficulties}}&nbsp;m
         </span>
 
@@ -23,24 +23,20 @@
 
         <activities :activities="document.activities"/>
 
-        <span v-if="document.geometry.has_geom_detail">
-            <i class="fas fa-flag"/>
-        </span>
+        <base-icon iconClass="fas fa-flag" v-if="document.geometry.has_geom_detail"/>
 
         <span v-if="document.orientations && document.orientations.length!=0">
-            <i class="fas fa-compass"></i>
+            <base-icon iconClass="fas fa-compass"></i>
             {{document.orientations.join(", ")}}
         </span>
 
-        <quality-icon :quality="document.quality"/>
+        <icon-quality :quality="document.quality"/>
     </div>
 </template>
 
 <script>
     import c2c from '@/js/c2c.js'
 
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-    import QualityIcon from '@/components/utils/QualityIcon'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import CardElevationItem from '@/components/cards/utils/CardElevationItem'
@@ -48,8 +44,6 @@
 
     export default {
         components: {
-            DocumentTitle,
-            QualityIcon,
             Activities,
             RouteRating,
             CardElevationItem,

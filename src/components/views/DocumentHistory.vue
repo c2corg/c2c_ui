@@ -6,7 +6,7 @@
                     {{version.written_at}}
                 </td>
                 <td>
-                    <author-link :author="version"/>
+                    <contributor-link :contributor="version"/>
                 </td>
                 <td>
                     {{version.comment}}
@@ -19,13 +19,11 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import LoadingNotification from '@/components/utils/LoadingNotification'
-    import AuthorLink from '@/components/views/document/utils/AuthorLink'
+    import ContributorLink from '@/components/utils/ContributorLink'
 
     export default {
         components: {
-            LoadingNotification,
-            AuthorLink
+            ContributorLink
         },
 
         data() {

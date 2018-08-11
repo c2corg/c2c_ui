@@ -1,5 +1,28 @@
 import Vue from 'vue'
 import App from './App.vue'
+import DocumentLink from './components/utils/DocumentLink'
+import DocumentTitle from './components/utils/DocumentTitle'
+import LoadingNotification from './components/utils/LoadingNotification'
+import PrettyRouteLink from './components/utils/PrettyRouteLink'
+import PrettyOutingLink from './components/utils/PrettyOutingLink'
+
+/* icons */
+import BaseIcon from './components/icons/BaseIcon'
+
+import IconForum from './components/icons/IconForum'
+import IconActivity from './components/icons/IconActivity'
+import IconCondition from './components/icons/IconCondition'
+import IconQuality from './components/icons/IconQuality'
+
+import IconDocument from './components/icons/IconDocument'
+import IconRoute from './components/icons/IconRoute'
+import IconOuting from './components/icons/IconOuting'
+import IconArticle from './components/icons/IconArticle'
+import IconXreport from './components/icons/IconXreport'
+import IconArea from './components/icons/IconArea'
+
+
+
 import Router from './router'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
@@ -32,6 +55,25 @@ Vue.use(VueGoogleMaps, {
     //// then disable the following:
     // installComponents: true,
 })
+
+Vue.component("document-title", DocumentTitle)
+Vue.component("document-link", DocumentLink)
+Vue.component("loading-notification", LoadingNotification)
+Vue.component("pretty-route-link", PrettyRouteLink)
+Vue.component("pretty-outing-link", PrettyOutingLink)
+
+Vue.component("base-icon", BaseIcon)
+Vue.component("icon-forum", IconForum)
+Vue.component("icon-activity", IconActivity)
+Vue.component("icon-condition", IconCondition)
+Vue.component("icon-quality", IconQuality)
+Vue.component("icon-document", IconDocument)
+Vue.component("icon-area", IconArea)
+Vue.component("icon-route", IconRoute)
+Vue.component("icon-xreport", IconXreport)
+Vue.component("icon-article", IconArticle)
+Vue.component("icon-outing", IconOuting)
+
 
 new Vue({
   router:Router,

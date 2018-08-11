@@ -18,7 +18,8 @@
         <span>
             {{document.date}}
         </span>
-        <quality-icon :quality="document.quality"/>
+
+        <icon-quality :quality="document.quality"/>
 
     </div>
 </template>
@@ -26,16 +27,12 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import Activities from '@/components/utils/Activities'
-    import QualityIcon from '@/components/utils/QualityIcon'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default {
         components: {
-            DocumentTitle,
             Activities,
-            QualityIcon,
             CardRegionItem
         },
 

@@ -11,11 +11,11 @@
             <div class="column is-7">
                 <div>
                     <h2>Outings</h2>
-                    <loading-motification :loaded="outings!=null" :error="outingsError"/>
+                    <loading-notification :loaded="outings!=null" :error="outingsError"/>
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents"
                            v-bind:key="outing.document_id">
-                            <outing-link v-bind:outing="outing"/>
+                            <dashboard-outing-link v-bind:outing="outing"/>
                         </div>
                     </div>
                 </div>
@@ -28,10 +28,9 @@
                          :key="topic.id">
 
                         <a v-bind:href="'https://forum.camptocamp.org/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
-                           target="_blank"
-                        >
+                           target="_blank">
 
-                        <img height="16" width="16"  class="is-pulled-right"
+                           <img height="16" width="16"
                              v-bind:src="'https://forum.camptocamp.org' + topic.last_poster_user.avatar_template.replace('{size}','16')">
 
 
@@ -43,10 +42,10 @@
                 </div>
                 <div>
                     <h2>Routes</h2>
-                    <loading-motification :loaded="routes!=null" :error="routesError"/>
+                    <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" v-bind:key="route.document_id">
-                            <route-link :route="route"/>
+                            <pretty-route-link :route="route" showArea="true"/>
                         </div>
                     </div>
                 </div>
@@ -57,11 +56,8 @@
 
 <script>
 
-    import OutingLink from '@/components/views/dashboard/DashboardOutingLink'
-    import RouteLink from '@/components/views/dashboard/DashboardRouteLink'
+    import DashboardOutingLink from '@/components/views/dashboard/DashboardOutingLink'
 
-    import DocumentLink from '@/components/utils/DocumentLink'
-    import LoadingNotification from '@/components/utils/LoadingNotification'
     import Gallery from '@/components/utils/Gallery'
 
     import c2c from '@/js/c2c.js'
@@ -71,10 +67,7 @@
 export default {
 
   components: {
-    OutingLink,
-    RouteLink,
-    DocumentLink,
-    LoadingNotification,
+    DashboardOutingLink,
     Gallery
   },
 

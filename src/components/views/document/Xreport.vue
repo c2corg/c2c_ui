@@ -1,7 +1,7 @@
 <template>
     <div v-if="xreport" class="section content">
         <h1>
-            <i class="far fa-file-alt"></i>
+            <icon-document type="xreport"/>
             <document-title :document="xreport"/>
             <small>{{xreport.date_start}}</small>
         </h1>
@@ -65,7 +65,6 @@
 
 <script>
     import MarkdownSection from '@/components/utils/MarkdownSection'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import Activities from '@/components/utils/Activities'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
@@ -83,7 +82,6 @@
 
         components: {
             MarkdownSection,
-            DocumentTitle,
             Activities,
             DocumentLicense,
             Gallery,

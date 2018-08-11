@@ -1,7 +1,7 @@
 <template>
     <div v-if="image" class="section content">
         <h1>
-            <i class="fas fa-camera"></i>
+            <icon-document type="image"/>
             <document-title :document="image"/>
         </h1>
 
@@ -61,7 +61,6 @@
 
 <script>
     import Markdown from '@/components/Markdown'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Activities from '@/components/utils/Activities'
 
@@ -79,7 +78,6 @@
             AreasLinks,
             AuthorLink,
             Markdown,
-            DocumentTitle,
             DocumentLicense,
             Activities,
             InformationItem,

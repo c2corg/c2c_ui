@@ -1,7 +1,7 @@
 <template>
     <div v-if="book" class="section content">
         <h1>
-            <i class="fas fa-atlas"></i>
+            <icon-document type="book"/>
             <document-title :document="book"/>
         </h1>
 
@@ -41,7 +41,6 @@
 
 <script>
     import Markdown from '@/components/Markdown'
-    import DocumentTitle from '@/components/utils/DocumentTitle'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
     import Activities from '@/components/utils/Activities'
@@ -54,7 +53,6 @@
 
         components: {
             Markdown,
-            DocumentTitle,
             DocumentLicense,
             Activities,
             InformationItem,

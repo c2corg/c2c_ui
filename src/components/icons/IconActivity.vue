@@ -1,5 +1,5 @@
 <template>
-    <i :class="'icon-activity-' + activity"/>
+    <base-icon :iconClass="'icon-activity-' + activity"/>
 </template>
 
 <script>

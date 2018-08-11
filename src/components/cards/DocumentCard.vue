@@ -20,13 +20,10 @@
     import ProfileCardContent from '@/components/cards/content/ProfileCardContent'
     import XreportCardContent from '@/components/cards/content/XreportCardContent'
 
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-
     import c2c from '@/js/c2c.js'
 
     export default {
         components: {
-            DocumentTitle,
 
             OutingCardContent,
             RouteCardContent,

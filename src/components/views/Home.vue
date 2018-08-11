@@ -3,32 +3,32 @@
         <div class="topoguide">
             <div class="links is-flex">
                 <router-link to="outings" class="link">
-                    <i class="fas fa-edit"></i>
+                    <div><icon-document type="outing"/></div>
                     <span>Outings</span>
                 </router-link>
 
                 <router-link to="routes">
-                    <i class="fa fa-route"/>
+                    <div><icon-document type="route"/></div>
                     <span>Routes</span>
                 </router-link>
 
                 <router-link to="waypoints">
-                    <i class="fas fa-map-pin"/>
+                    <div><icon-document type="waypoint"/></div>
                     <span>Waypoints</span>
                 </router-link>
 
                 <router-link to="images">
-                    <i class="fas fa-images"/>
+                    <div><icon-document type="image"/></div>
                     <span>Images</span>
                 </router-link>
 
                 <router-link to="books">
-                    <i class="fas fa-atlas"/>
+                    <div><icon-document type="book"/></div>
                     <span>Books</span>
                 </router-link>
 
                 <router-link to="areas">
-                    <i class="fas fa-globe-americas"/>
+                    <div><icon-document type="area"/></div>
                     <span>Areas</span>
                 </router-link>
             </div>
@@ -37,32 +37,32 @@
         <div class="social-network">
             <div class="links is-flex">
                 <a>
-                    <i class="fab fa-discourse"/>
+                    <div><icon-forum/></div>
                     <span>Forum</span>
                 </a>
 
                 <router-link to="dashboard">
-                    <i class="fas fa-columns"/>
+                    <div><base-icon iconClass="fas fa-columns"/></div>
                     <span>Dashboard</span>
                 </router-link>
 
                 <router-link to="feed">
-                    <i class="fas fa-users"/>
+                    <div><base-icon iconClass="fas fa-users"/></div>
                     <span>Social network</span>
                 </router-link>
 
                 <a>
-                    <i class="fab fa-facebook"/>
+                    <div><base-icon iconClass="fab fa-facebook"/></div>
                     <span>Facebook</span>
                 </a>
 
                 <a>
-                    <i class="fab fa-twitter"/>
+                    <div><base-icon iconClass="fab fa-twitter"/></div>
                     <span>Twitter</span>>
                 </a>
 
                 <a>
-                    <i class="fab fa-google"/>
+                    <div><base-icon iconClass="fab fa-google"/></div>
                     <span>Google</span>
                 </a>
 
@@ -126,8 +126,8 @@
         overflow-wrap: break-word;
     }
 
-    .links > a > i{
-        font-size:250%;
+    .links > a > div > span > i{
+        font-size:200%;
     }
 
     .links > a:hover{

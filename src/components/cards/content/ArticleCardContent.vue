@@ -15,7 +15,7 @@
         <br>
 
         <activities :activities="document.activities"/>
-        <quality-icon :quality="document.quality"/>
+        <icon-quality :quality="document.quality"/>
 
     </div>
 </template>
@@ -23,15 +23,11 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import DocumentTitle from '@/components/utils/DocumentTitle'
-    import QualityIcon from '@/components/utils/QualityIcon'
     import Activities from '@/components/utils/Activities'
 
     export default {
         components: {
-            DocumentTitle,
             Activities,
-            QualityIcon
         },
 
         props: ['document'],
