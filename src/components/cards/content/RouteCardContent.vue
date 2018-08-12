@@ -26,7 +26,7 @@
         <base-icon iconClass="fas fa-flag" v-if="document.geometry.has_geom_detail"/>
 
         <span v-if="document.orientations && document.orientations.length!=0">
-            <base-icon iconClass="fas fa-compass"></i>
+            <base-icon iconClass="fas fa-compass"/>
             {{document.orientations.join(", ")}}
         </span>
 

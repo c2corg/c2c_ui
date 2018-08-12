@@ -3,6 +3,17 @@
         <table>
             <tr v-for="version of history.versions.reverse()" :key="version.verion_id">
                 <td>
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="versionFrom" v-model="versionFrom">
+                            &nbsp;
+                        </label>
+                        <label>
+                            <input type="radio" name="versionTo" v-model="versionTo">
+                        </label>
+                    </div>
+                </td>
+                <td>
                     {{version.written_at}}
                 </td>
                 <td>

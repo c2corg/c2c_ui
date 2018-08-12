@@ -9,16 +9,21 @@
                         <contributor-link :contributor="change.user"/>
                     </td>
                     <td>
-                        <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">last</router-link>
+                        <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">
+                            last
+                        </router-link>
                         diff
-                        hist
+                        <router-link :to="{name: 'history', params: {id:change.document.document_id, lang:change.lang} }">
+                            hist
+                        </router-link>
                     </td>
                     <td>{{change.lang}}</td>
                     <td>
                         <icon-quality :quality="change.document.quality"/>
                     </td>
                     <td>
-                        {{documentType[change.document.type]}}:{{change.document.title}}
+                        <icon-document :type="documentType[change.document.type]"/>
+                        {{change.document.title}}
                         {{change.comment}}
                     </td>
                 </tr>

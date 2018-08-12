@@ -76,6 +76,7 @@ const routes = [
     //   * add
     //   * edit
     //   * view old version
+    //   * diff
     // * xreport and profile data
     // * auth
     // * account
