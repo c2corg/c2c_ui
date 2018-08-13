@@ -12,6 +12,7 @@ import Documents from '@/components/views/Documents'
 import Images from '@/components/views/Images'
 
 import DocumentHistory from '@/components/views/DocumentHistory'
+import DocumentDiff from '@/components/views/DocumentDiff'
 
 import Route from '@/components/views/document/Route'
 import Outing from '@/components/views/document/Outing'
@@ -38,16 +39,8 @@ const routes = [
     {path: '/whatsnew',     name: 'whatsnew',   component: WhatsNew },
     {path: '/auth',         name: 'auth',       component: LoginView },
 
-    {path: '/document/history/:id/:lang',    name: 'history',            component: DocumentHistory},
-    {path: '/areas/history/:id/:lang',       name: 'area-history',       component: DocumentHistory},
-    {path: '/articles/history/:id/:lang',    name: 'article-history',    component: DocumentHistory},
-    {path: '/books/history/:id/:lang',       name: 'book-history',       component: DocumentHistory},
-    {path: '/images/history/:id/:lang',      name: 'image-history',      component: DocumentHistory},
-    {path: '/outings/history/:id/:lang',     name: 'outing-history',     component: DocumentHistory},
-    {path: '/profiles/history/:id/:lang',    name: 'profile-history',    component: DocumentHistory},
-    {path: '/routes/history/:id/:lang',      name: 'route-history',      component: DocumentHistory},
-    {path: '/waypoints/history/:id/:lang',   name: 'waypoint-history',   component: DocumentHistory},
-    {path: '/xreports/history/:id/:lang',    name: 'xreport-history',    component: DocumentHistory},
+    {path: '/:type/history/:id/:lang',                      name: 'history',    component: DocumentHistory},
+    {path: '/:type/diff/:id/:lang/:versionFrom/:versionTo', name: 'diff',       component: DocumentDiff},
 
     {path: '/areas',        name: 'areas',      component: Documents},
     {path: '/articles',     name: 'articles',   component: Documents},
@@ -76,7 +69,6 @@ const routes = [
     //   * add
     //   * edit
     //   * view old version
-    //   * diff
     // * xreport and profile data
     // * auth
     // * account

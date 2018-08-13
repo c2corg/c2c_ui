@@ -60,6 +60,19 @@ var result = {
         })
 
         return result
+    },
+
+    getLocale(document, lang){
+        var result = {}
+        
+        document.locales.forEach( locale => {
+            if (locale.lang == lang){
+                result = locale
+                return;
+            }
+        })
+
+        return result
     }
 };
 
@@ -74,6 +87,10 @@ var result = {
     result[type] = {
         get(id){
             return axios.get(apiUrl + '/' + type + 's/' + id)
+        },
+
+        getVersion(id, lang, versionId){
+            return axios.get(apiUrl + '/' + type + 's/' + id + '/' + lang + '/' + versionId)
         },
 
         save(document, comment){

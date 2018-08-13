@@ -1,0 +1,221 @@
+<template>
+    <div class="section content">
+        <h1>
+            <icon-document :type="type" class="is-large"/>
+            <span>diff</span> ({{this.lang}}) :
+            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{title}}</router-link>
+        </h1>
+        <table>
+            <tr>
+                <td>
+                    <div v-if="oldVersion">
+                        <div>
+                            <router-link :to="{name:type + '-version', params:{id:documentId, version:oldVersion.version.version_id, lang:lang}}">
+                                Revision #{{oldVersion.document.version}} as of {{oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
+                            </router-link>
+                        </div>
+                        <div>
+                            by <contributor-link :contributor="oldVersion.version"/>
+                        </div>
+                        <div>
+                            {{oldVersion.version.comment}}
+                        </div>
+                        <div>
+                            <router-link v-if="oldVersion.previous_version_id"
+                                :to="{ name: 'diff', params: {type:type,
+                                                              id:documentId,
+                                                              lang:lang,
+                                                              versionFrom:oldVersion.previous_version_id,
+                                                              versionTo:this.$route.params.versionFrom} }">
+                                ← previous difference
+                            </router-link>
+                            <span v-else>
+                                this is the first version
+                            </span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div v-if="newVersion">
+                        <div>
+                            <router-link :to="{name:type + '-version', params:{id:documentId, version:newVersion.version.version_id, lang:lang}}">
+                                Revision #{{newVersion.document.version}} as of {{newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
+                            </router-link>
+                        </div>
+                        <div>
+                            by <contributor-link :contributor="newVersion.version"/>
+                        </div>
+                        <div>
+                            {{newVersion.version.comment}}
+                        </div>
+                        <div>
+                            <router-link v-if="newVersion.next_version_id"
+                                :to="{ name: 'diff', params: {type:type,
+                                                              id:documentId,
+                                                              lang:lang,
+                                                              versionFrom:this.$route.params.versionTo,
+                                                              versionTo:newVersion.next_version_id} }">
+                                next difference →
+                            </router-link>
+                            <span v-else>
+                                this is the last version
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="content" v-for="key of Object.keys(diffProperties)" :key="key">
+            <h2>{{key}}</h2>
+            <table>
+                <tr>
+                    <td>
+                        <del>{{diffProperties[key].old}}</del>
+                    </td>
+                    <td>
+                        <ins>{{diffProperties[key].new}}</ins>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="content" v-for="key of Object.keys(diffLocales)" :key="key">
+            <h2 >{{key}}</h2>
+            <div class="locale-diff">
+                <div><pre><code v-html="diffLocales[key]"></code></pre></div>
+            </div>
+        </div>
+
+
+    </div>
+</template>
+
+<script>
+    import c2c from '@/js/c2c.js'
+
+    import ContributorLink from '@/components/utils/ContributorLink'
+
+    import { diff_match_patch } from '@/js/diff_match_patch_uncompressed'
+
+    export default {
+        components: {
+            ContributorLink,
+        },
+
+        data() {
+            return {
+                documentId: this.$route.params.id,
+                type: this.$route.params.type,
+                lang: this.$route.params.lang,
+                title: undefined,
+                oldVersion:null,
+                newVersion:null,
+                diffProperties:{},
+                diffLocales:{}
+            }
+        },
+
+        methods: {
+            getKeys(obj1, obj2, excludedKeys){
+
+                var keys = Object.keys(obj1).concat( Object.keys(obj2))
+
+                excludedKeys = excludedKeys || []
+
+                keys = keys.filter(function(item, pos, self) {
+                    return self.indexOf(item) == pos && !excludedKeys.includes(item);
+                })
+
+                keys.sort()
+                return keys
+            },
+
+            buildDiff(){
+                if(!this.oldVersion || !this.newVersion) {
+                    return "Waiting for other version"
+                }
+
+                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ["version", "locales" , "geometry"])
+
+                for(let key of keys){
+                    if (this.hasChanged(this.oldVersion.document[key], this.newVersion.document[key])){
+                        this.diffProperties[key] = {
+                            old:this.oldVersion.document[key],
+                            new:this.newVersion.document[key]
+                        }
+                    }
+                }
+
+                var oldLocale = c2c.getLocale(this.oldVersion.document, this.lang)
+                var newLocale = c2c.getLocale(this.newVersion.document, this.lang)
+                var localeKeys = this.getKeys(oldLocale, newLocale, ["lang", "version"])
+
+                for(let key of localeKeys){
+                    var oldVal = oldLocale[key].replace(/\r\n?/g, "\n")
+                    var newVal = newLocale[key].replace(/\r\n?/g, "\n")
+
+                    if (this.hasChanged(oldVal, newVal)){
+                        let diff = diff_match_patch.diff_main(oldVal, newVal)
+                        diff_match_patch.diff_cleanupSemantic(diff)
+                        let html = diff_match_patch.diff_prettyHtml(diff)
+                        this.diffLocales[key] = html
+                    }
+                }
+            },
+
+            hasChanged(oldVal, newVal){
+
+                var result
+
+                if(Array.isArray(oldVal) || Array.isArray(newVal)){
+                    result = JSON.stringify(oldVal) != JSON.stringify(newVal);
+                } else if (oldVal == null && newVal != null || oldVal != null && newVal == null) {
+                    result = true
+                } else {
+                    result = oldVal !== newVal
+                }
+
+                return result
+            }
+        },
+
+        created() {
+            c2c[this.type].getVersion(this.documentId, this.lang, this.$route.params.versionFrom).then(response => {
+                this.oldVersion=response.data;
+
+                this.buildDiff()
+            });
+
+            c2c[this.type].getVersion(this.documentId, this.lang, this.$route.params.versionTo).then(response => {
+                this.newVersion=response.data;
+                this.title = c2c.getLocale(this.newVersion.document, this.lang).title
+                this.buildDiff()
+            });
+        },
+    }
+
+</script>
+
+<style scoped>
+    table{
+        width:100%;
+    }
+
+    td{
+        width: 50%;
+    }
+
+    .locale-diff  pre{
+        white-space: pre-line;
+    }
+
+    ins{
+        background:lightgreen !important;
+    }
+
+    del{
+        background:pink !important;
+    }
+
+</style>

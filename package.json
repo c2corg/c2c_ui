@@ -1,5 +1,5 @@
 {
-  "name": "v7_ui",
+  "name": "vue-camptocamp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "showdown": "^1.8.6",
     "vue": "^2.5.16",
     "vue-awesome-swiper": "^3.1.3",
+    "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
     "vue2-google-maps": "^0.10.2"
   },

@@ -1,6 +1,6 @@
 <template>
     <span>
-        <router-link :to="{ name: 'history', params: {id:document.document_id, lang:'fr'} }">
+        <router-link :to="{ name: 'history', params: {type:documentType[document.type], id:document.document_id, lang:'fr'} }">
             <i class="fa fa-users"></i>
         </router-link>
         -

@@ -13,7 +13,7 @@
                             last
                         </router-link>
                         diff
-                        <router-link :to="{name: 'history', params: {id:change.document.document_id, lang:change.lang} }">
+                        <router-link :to="{name: 'history', params: {type:documentType[change.document.type] , id:change.document.document_id, lang:change.lang} }">
                             hist
                         </router-link>
                     </td>

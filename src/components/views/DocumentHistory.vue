@@ -1,20 +1,52 @@
 <template>
     <div v-if="history" class="section content">
+        <h1>
+            <icon-document class="is-large" :type="type"/>
+            <span>history</span> ({{this.lang}}) :
+            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{history.title}}</router-link>            
+        </h1>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary" @click="gotToDiff">
+                    compare selected versions
+                </button>
+            </div>
+            <div class="control">
+                <router-link :to="{name:type, params:{id:this.documentId, lang:this.lang}}" class="button is-link">
+                    go to last version
+                </router-link>
+            </div>
+        </div>
         <table>
-            <tr v-for="version of history.versions.reverse()" :key="version.verion_id">
+            <tr>
+                <th/>
+                <th>created on</th>
+                <th>author</th>
+                <th>comment</th>
+            </tr>
+            <tr v-for="version of history.versions" :key="version.verion_id">
                 <td>
                     <div class="control">
-                        <label class="radio">
-                            <input type="radio" name="versionFrom" v-model="versionFrom">
-                            &nbsp;
-                        </label>
-                        <label>
-                            <input type="radio" name="versionTo" v-model="versionTo">
-                        </label>
+                        <input type="radio"
+                            name="versionFrom"
+                            v-model="versionFrom"
+                            :disabled="versionTo <= version.version_id"
+                            :value="version.version_id">
+                        <input type="radio"
+                            name="versionTo"
+                            v-model="versionTo"
+                            :disabled="versionFrom >= version.version_id"
+                            :value="version.version_id">
+                        <router-link :to="{name:'diff', params:{type:type, versionFrom:'prev', versionTo:version.version_id, lang:lang}}"
+                                     v-if="version.version_id != last_version_id">
+                            diff
+                        </router-link>
                     </div>
                 </td>
                 <td>
-                    {{version.written_at}}
+                    <router-link :to="{name:type + '-version', params:{id:documentId, version:version.version_id, lang:lang}}">
+                        {{version.written_at | moment("YYYY-MM-DD hh:mm:ss")}}
+                    </router-link>
                 </td>
                 <td>
                     <contributor-link :contributor="version"/>
@@ -24,6 +56,18 @@
                 </td>
             </tr>
         </table>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary" @click="gotToDiff">
+                    compare selected versions
+                </button>
+            </div>
+            <div class="control">
+                <router-link :to="{name:type, params:{id:documentId, lang:lang}}" class="button is-link">
+                    go to last version
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -39,15 +83,49 @@
 
         data() {
             return {
+                documentId: this.$route.params.id,
+                type: this.$route.params.type,
+                lang: this.$route.params.lang,
                 history: null,
+                versionFrom:undefined,
+                versionTo:undefined,
+                last_version_id:undefined,
+            }
+        },
+
+        methods: {
+            gotToDiff(){
+
+                this.$router.push({
+                    name: "diff", params: { type:this.type,
+                                            versionFrom:this.versionFrom,
+                                            versionTo:this.versionTo,
+                                            lang:this.lang }
+                })
             }
         },
 
         created() {
-            c2c.getHistory(this.$route.params.id, this.$route.params.lang).then(response => {
+            c2c.getHistory(this.documentId, this.lang).then(response => {
                 this.history=response.data;
+                this.last_version_id = this.history.versions[0].version_id
+                this.history.versions = this.history.versions.reverse()
+                this.versionFrom = this.history.versions[this.history.versions.length-1].version_id
+                this.versionTo = this.history.versions[0].version_id
             });
         },
     }
 
 </script>
+
+<style scoped>
+    td{
+        white-space:nowrap;
+    }
+
+    td:nth-child(4) {
+        width: 100%;
+        white-space:normal;
+        font-style:italic;
+    }
+</style>

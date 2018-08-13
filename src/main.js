@@ -31,6 +31,8 @@ require('./assets/sass/main.scss');
 
 Vue.config.productionTip = false
 
+Vue.use(require('vue-moment'));
+
 Vue.use(VueGoogleMaps, {
     load: {
     key: 'AIzaSyAYiZ3lDd0WNJIOEWLO_y2tJHTmWmZG6oY',
