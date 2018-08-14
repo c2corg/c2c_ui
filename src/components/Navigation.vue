@@ -1,5 +1,5 @@
 <template>
-    <nav  id="navbar" class="navbar">
+    <nav class="navbar is-light">
         <div class="navbar-brand">
             <router-link class="navbar-item" :to="'/'">
                 <img src="@/assets/img/logo.svg"
@@ -20,7 +20,7 @@
             <div class="navbar-start">
                 <router-link class="navbar-item" :to="`${link.page}`"
                              v-for="(link, index) in links" :key="index">
-                    <component :is="link.iconName"/>
+                    <component :is="link.iconName" class="is-medium"/>
                     {{link.text}}
                 </router-link>
 
@@ -36,20 +36,54 @@
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item">
+
+                <div class="navbar-item" v-if="!user.isLogged()">
                     <router-link class="button is-primary"
-                                 :to="{ name: 'auth' }"
-                                 v-if="!user.logged">
+                                 :to="{ name: 'auth' }">
                         sign in
                     </router-link>
                 </div>
+
+                <div class="navbar-item has-dropdown is-hoverable" v-else>
+                    <div  class="navbar-link">
+                        <img class="user-avatar" :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'">
+                    </div>
+                    <div class="navbar-dropdown is-right is-boxed">
+                        <router-link class="navbar-item" :to="{ name: 'profile', params:{id:user.data.id} }">
+                            <base-icon iconClass="fa fa-user"  class="is-medium"/>
+                            my profile
+                        </router-link>
+                        <router-link class="navbar-item" :to="{ name: 'account' }">
+                            <base-icon iconClass="fas fa-check-circle"  class="is-medium"/>
+                            my account
+                        </router-link>
+                        <router-link class="navbar-item" :to="{ name: 'preferences' }">
+                            <base-icon iconClass="fas fa-cogs"  class="is-medium"/>
+                            my preferences
+                        </router-link>
+
+                        <router-link class="navbar-item" :to="{ name: 'outings', query:{u:user.data.id} }">
+                            <icon-outing   class="is-medium"/>
+                            my outings
+                        </router-link>
+                        <router-link class="navbar-item" :to="{ name: 'following' }">
+                            <base-icon iconClass="fas fa-heart"  class="is-medium"/>
+                            my followed users
+                        </router-link>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" @click="signout">
+                            <base-icon iconClass="fas fa-sign-out-alt"  class="is-medium"/>
+                            sign out
+                        </a>
+                    </div>
+                </div>
+
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         fr
                     </a>
-                    <div class="navbar-dropdown is-boxed">
-                        <a class="navbar-item"
-                           v-for="lang in langs" :key="lang">
+                    <div class="navbar-dropdown is-right is-boxed">
+                        <a class="navbar-item" v-for="lang in langs" :key="lang">
                             {{lang}}
                         </a>
                     </div>
@@ -107,6 +141,15 @@
                     }
                 }
             }
+        },
+        methods:{
+            signout(){
+                user.signout()
+            }
         }
     }
 </script>
+
+<style scoped>
+//    .navbar-dropdown.dropdown-right { left: calc(-100% + 4px); }
+</style>

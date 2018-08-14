@@ -5,6 +5,7 @@
 <script>
     var iconClass = {
         route:"fas fa-route",
+        profile:"fas fa-user",
         article:"fas fa-newspaper",
         xreport:"fas fa-flag-checkered",
         outing:"fas fa-edit",

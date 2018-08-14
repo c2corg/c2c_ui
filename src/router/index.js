@@ -7,6 +7,7 @@ import Serac from '@/components/views/Serac'
 import SearchView from '@/components/views/SearchView'
 import WhatsNew from '@/components/views/WhatsNew'
 import LoginView from '@/components/views/LoginView'
+import AccountView from '@/components/views/AccountView'
 
 import Documents from '@/components/views/Documents'
 import Images from '@/components/views/Images'
@@ -16,6 +17,7 @@ import DocumentDiff from '@/components/views/DocumentDiff'
 
 import Route from '@/components/views/document/Route'
 import Outing from '@/components/views/document/Outing'
+import Profile from '@/components/views/document/Profile'
 import Article from '@/components/views/document/Article'
 import Book from '@/components/views/document/Book'
 import Area from '@/components/views/document/Area'
@@ -38,6 +40,7 @@ const routes = [
     {path: '/search',       name: 'search',     component: SearchView },
     {path: '/whatsnew',     name: 'whatsnew',   component: WhatsNew },
     {path: '/auth',         name: 'auth',       component: LoginView },
+    {path: '/account',      name: 'account',    component: AccountView },
 
     {path: '/:type/history/:id/:lang',                      name: 'history',    component: DocumentHistory},
     {path: '/:type/diff/:id/:lang/:versionFrom/:versionTo', name: 'diff',       component: DocumentDiff},
@@ -53,15 +56,15 @@ const routes = [
     {path: '/waypoints',    name: 'waypoints',  component: Documents},
     {path: '/xreports',     name: 'xreports',   component: Documents},
 
-    {path: '/areas/:id',        name: 'area',       component: Area},
-    {path: '/articles/:id',     name: 'article',    component: Article},
-    {path: '/books/:id',        name: 'book',       component: Book},
-    {path: '/images/:id',       name: 'image',      component: Image},
-    {path: '/outings/:id',      name: 'outing',     component: Outing},
-    {path: '/profiles/:id',     name: 'profile',    component: WorkInProgress},
-    {path: '/routes/:id',       name: 'route',      component: Route},
-    {path: '/waypoints/:id',    name: 'waypoint',   component: Waypoint},
-    {path: '/xreports/:id',     name: 'xreport',    component: Xreport},
+    {path: '/areas/:id/:lang?',        name: 'area',       component: Area},
+    {path: '/articles/:id/:lang?',     name: 'article',    component: Article},
+    {path: '/books/:id/:lang?',        name: 'book',       component: Book},
+    {path: '/images/:id/:lang?',       name: 'image',      component: Image},
+    {path: '/outings/:id/:lang?',      name: 'outing',     component: Outing},
+    {path: '/profiles/:id/:lang?',     name: 'profile',    component: Profile},
+    {path: '/routes/:id/:lang?',       name: 'route',      component: Route},
+    {path: '/waypoints/:id/:lang?',    name: 'waypoint',   component: Waypoint},
+    {path: '/xreports/:id/:lang?',     name: 'xreport',    component: Xreport},
 
 
     // todo
@@ -70,8 +73,7 @@ const routes = [
     //   * edit
     //   * view old version
     // * xreport and profile data
-    // * auth
-    // * account
+    // * signup
     // * preferences
     // * mailinglists
     // * following

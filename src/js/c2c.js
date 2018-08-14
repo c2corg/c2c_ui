@@ -47,24 +47,46 @@ var result = {
         return axios.get(apiUrl + '/document/' + document_id + '/history/' + lang)
     },
 
-    signIn(username, password){
-        var result =  axios.post(apiUrl + '/users/login', {
+    login(username, password){
+        return axios.post(apiUrl + '/users/login', {
             username,
             password,
             discourse:false
         })
+    },
 
-        result.then(response => {
-            var token = response.data.token
-            axios.defaults.headers.common['Authorization'] = 'JWT token="' + token + '"'
-        })
+    userAccount:{
+        get(){
+            return axios.get(apiUrl + '/users/account')
+        },
 
-        return result
+        post(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
+            var payload = {
+                currentpassword,
+            }
+
+            if(name!==null)
+                payload.name = name
+
+            if(is_profile_public!==null)
+                payload.is_profile_public = is_profile_public
+
+            if(email!==null)
+                payload.email = email
+
+            if(forum_username!==null)
+                payload.forum_username = forum_username
+
+            if(newpassword!==null)
+                payload.newpassword = newpassword
+
+            return axios.post(apiUrl + '/users/account', payload)
+        }
     },
 
     getLocale(document, lang){
         var result = {}
-        
+
         document.locales.forEach( locale => {
             if (locale.lang == lang){
                 result = locale

@@ -49,7 +49,6 @@
 
 <script>
     import user from "@/js/user.js"
-    import c2c from "@/js/c2c.js"
 
     import FormField from '@/components/utils/FormField'
 
@@ -66,11 +65,13 @@
                 fullname:{value:""},
                 forumname:{value:""},
                 email:{value:""},
-                signin(){
-                    c2c.signIn(this.username.value, this.password.value).then(() => {
-                        this.user.logged = true
-                    })
-                }
+            }
+        },
+        methods:{
+            signin(){
+                user.signIn(this.username.value, this.password.value).then(() => {
+                    //this.user.logged = true
+                })
             }
         }
     }

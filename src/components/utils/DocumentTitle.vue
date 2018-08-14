@@ -11,6 +11,10 @@
         data(){
             return {
                 getTitle : function(){
+                    if(this.document.type=="u"){
+                        return this.document.name
+                    }
+
                     var locale = this.document.locales[0]
 
                     this.document.locales.forEach(function(iLocale){
