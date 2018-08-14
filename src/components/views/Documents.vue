@@ -1,22 +1,21 @@
 <template>
-    <div class="section is-fullheight documents-view">
+    <div class="section content documents-view">
 
+        <h1>
+            <icon-document :type="title.slice(0, -1)"/>
+            {{title}}
             <span class="is-pulled-right"  v-if="hasMap">
-                <span class="icon is-medium">
-                    <i class="fas fa-lg fa-list"
+                <span class="icon is-large">
+                    <i class="fas fa-list"
                        :class="{'has-text-primary':showResults}"
                        @click="showResults=!showResults" />
                </span>
-               <span class="icon is-medium">
-                    <i class="fas fa-lg fa-map-marked-alt"
+               <span class="icon is-large">
+                    <i class="fas fa-map-marked-alt"
                        :class="{'has-text-primary':showMap}"
                        @click="showMap=!showMap" />
                 </span>
             </span>
-
-        <h1 class="title is-1">
-            <icon-document :type="title.slice(0, -1)"/>
-            {{title}}
         </h1>
 
         <loading-notification :loaded="documents!=null" class="column"/>
@@ -79,7 +78,7 @@
         },
 
         created() {
-            c2c[this.$route.name].get().then(response => {
+            c2c[this.$route.name].get(this.$route.query).then(response => {
                 this.documents=response.data;
                 if(this.hasMap){
                     this.positions=mapUtils.getPositions(this.documents.documents)

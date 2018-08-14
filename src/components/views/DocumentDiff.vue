@@ -26,7 +26,7 @@
                                                               id:documentId,
                                                               lang:lang,
                                                               versionFrom:oldVersion.previous_version_id,
-                                                              versionTo:this.$route.params.versionFrom} }">
+                                                              versionTo:oldVersion.version.version_id} }">
                                 ← previous difference
                             </router-link>
                             <span v-else>
@@ -53,7 +53,7 @@
                                 :to="{ name: 'diff', params: {type:type,
                                                               id:documentId,
                                                               lang:lang,
-                                                              versionFrom:this.$route.params.versionTo,
+                                                              versionFrom:newVersion.version.version_id,
                                                               versionTo:newVersion.next_version_id} }">
                                 next difference →
                             </router-link>
@@ -152,14 +152,20 @@
                 var localeKeys = this.getKeys(oldLocale, newLocale, ["lang", "version"])
 
                 for(let key of localeKeys){
-                    var oldVal = oldLocale[key].replace(/\r\n?/g, "\n")
-                    var newVal = newLocale[key].replace(/\r\n?/g, "\n")
+                    var oldVal = (oldLocale[key] || "").replace(/\r\n?/g, "\n")
+                    var newVal = (newLocale[key] || "").replace(/\r\n?/g, "\n")
 
                     if (this.hasChanged(oldVal, newVal)){
                         let diff = diff_match_patch.diff_main(oldVal, newVal)
                         diff_match_patch.diff_cleanupSemantic(diff)
                         let html = diff_match_patch.diff_prettyHtml(diff)
-                        this.diffLocales[key] = html
+                        let result = []
+                        for(let line of html.split("\n")){
+                            if(line.search(/<(ins|del)[ >]/) != -1){
+                                result.push(line + "\n")
+                            }
+                        }
+                        this.diffLocales[key] = result.join("\n")
                     }
                 }
             },
@@ -177,21 +183,39 @@
                 }
 
                 return result
+            },
+
+            loadVersion(versionId, resultProperty){
+                c2c[this.type].getVersion(this.documentId, this.lang, versionId).then(response => {
+                    this[resultProperty]=response.data;
+                    if(resultProperty=="newVersion"){
+                        this.title = c2c.getLocale(this.newVersion.document, this.lang).title
+                    }
+
+                    this.buildDiff()
+                });
+            },
+
+            loadVersionSmart(versionId, resultProperty, baseVersionId){
+                if(versionId=="prev"){
+                    c2c.getHistory(this.documentId, this.lang).then(response => {
+                        let versions = response.data.versions;
+
+                        for(let i=0;i<versions.length;i++){
+                            if(versions[i].version_id==baseVersionId && i!=0){
+                                this.loadVersion(versions[i-1].version_id, resultProperty)
+                            }
+                        }
+                    })
+                } else {
+                    this.loadVersion(versionId, resultProperty)
+                }
             }
         },
 
         created() {
-            c2c[this.type].getVersion(this.documentId, this.lang, this.$route.params.versionFrom).then(response => {
-                this.oldVersion=response.data;
-
-                this.buildDiff()
-            });
-
-            c2c[this.type].getVersion(this.documentId, this.lang, this.$route.params.versionTo).then(response => {
-                this.newVersion=response.data;
-                this.title = c2c.getLocale(this.newVersion.document, this.lang).title
-                this.buildDiff()
-            });
+            this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
+            this.loadVersion(this.$route.params.versionTo, "newVersion")
         },
     }
 
@@ -208,6 +232,7 @@
 
     .locale-diff  pre{
         white-space: pre-line;
+        line-height:1.3;
     }
 
     ins{
