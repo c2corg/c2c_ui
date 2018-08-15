@@ -21,7 +21,7 @@
         props:["type"],
         methods:{
             getIconClass(type){
-                return iconClass[type] || iconClass[constants.documentType[type]]
+                return iconClass[constants.getDocumentType(type)]
             }
         }
     }

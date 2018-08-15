@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
-import DocumentLink from './components/utils/DocumentLink'
 import DocumentTitle from './components/utils/DocumentTitle'
 import LoadingNotification from './components/utils/LoadingNotification'
 import PrettyRouteLink from './components/utils/PrettyRouteLink'
 import PrettyOutingLink from './components/utils/PrettyOutingLink'
+
+import DocumentLink from './components/utils/links/DocumentLink'
+import DiffLink from './components/utils/links/DiffLink'
+import VersionLink from './components/utils/links/VersionLink'
+import ContributorLink from '@/components/utils/links/ContributorLink'
 
 /* icons */
 import BaseIcon from './components/icons/BaseIcon'
@@ -65,6 +69,10 @@ Vue.component("document-link", DocumentLink)
 Vue.component("loading-notification", LoadingNotification)
 Vue.component("pretty-route-link", PrettyRouteLink)
 Vue.component("pretty-outing-link", PrettyOutingLink)
+
+Vue.component("diff-link", DiffLink)
+Vue.component("version-link", VersionLink)
+Vue.component("contributor-link", ContributorLink)
 
 Vue.component("base-icon", BaseIcon)
 Vue.component("icon-geometry-detail", IconGeometryDetail)

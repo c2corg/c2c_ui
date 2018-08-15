@@ -10,9 +10,9 @@
                 <td>
                     <div v-if="oldVersion">
                         <div>
-                            <router-link :to="{name:type + '-version', params:{id:documentId, version:oldVersion.version.version_id, lang:lang}}">
+                            <version-link :type="type" :id="documentId" :version="oldVersion.version.version_id" :lang="lang">
                                 Revision #{{oldVersion.document.version}} as of {{oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
-                            </router-link>
+                            </version-link>
                         </div>
                         <div>
                             by <contributor-link :contributor="oldVersion.version"/>
@@ -21,14 +21,12 @@
                             {{oldVersion.version.comment}}
                         </div>
                         <div>
-                            <router-link v-if="oldVersion.previous_version_id"
-                                :to="{ name: type + '-diff',
-                                       params: { id:documentId,
-                                                 lang:lang,
-                                                 versionFrom:oldVersion.previous_version_id,
-                                                 versionTo:oldVersion.version.version_id} }">
+                            <diff-link v-if="oldVersion.previous_version_id"
+                                :type="type" :id="documentId" :lang="lang"
+                                :versionFrom="oldVersion.previous_version_id"
+                                :versionTo="oldVersion.version.version_id">
                                 ← previous difference
-                            </router-link>
+                            </diff-link>
                             <span v-else>
                                 this is the first version
                             </span>
@@ -38,9 +36,9 @@
                 <td>
                     <div v-if="newVersion">
                         <div>
-                            <router-link :to="{name:type + '-version', params:{id:documentId, version:newVersion.version.version_id, lang:lang}}">
+                            <version-link :type="type" :id="documentId" :version="newVersion.version.version_id" :lang="lang">
                                 Revision #{{newVersion.document.version}} as of {{newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
-                            </router-link>
+                            </version-link>
                         </div>
                         <div>
                             by <contributor-link :contributor="newVersion.version"/>
@@ -49,14 +47,12 @@
                             {{newVersion.version.comment}}
                         </div>
                         <div>
-                            <router-link v-if="newVersion.next_version_id"
-                                :to="{ name: type + '-diff',
-                                       params: { id:documentId,
-                                                 lang:lang,
-                                                 versionFrom:newVersion.version.version_id,
-                                                 versionTo:newVersion.next_version_id} }">
+                            <diff-link v-if="newVersion.next_version_id"
+                                :type="type" :id="documentId" :lang="lang"
+                                :versionFrom="newVersion.version.version_id"
+                                :versionTo="newVersion.next_version_id">
                                 next difference →
-                            </router-link>
+                            </diff-link>
                             <span v-else>
                                 this is the last version
                             </span>
@@ -95,14 +91,9 @@
     import c2c from '@/js/c2c.js'
     import user from '@/js/user.js'
 
-    import ContributorLink from '@/components/utils/ContributorLink'
-
     import { diff_match_patch } from '@/js/diff_match_patch_uncompressed'
 
     export default {
-        components: {
-            ContributorLink,
-        },
 
         data() {
             return {

@@ -1,26 +1,51 @@
 
 <template>
-    <div class="section content">
+    <div class="section content"  v-if="document">
+
+        <div class="notification is-warning" v-if="isVersionView">
+            This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+
+            <br>
+
+            <span v-if="previousVersionId">
+                (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                            :versionFrom="previousVersionId"
+                            :versionTo="$route.params.version"/>)
+                <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="previousVersionId">
+                    ← previous version
+                </version-link>
+            </span>
+            <span v-else>this is the first version</span>
+            |
+            <document-link :document="document" :lang="$route.params.lang">
+                see actual version
+            </document-link>
+            (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                        :versionFrom="$route.params.version"
+                        versionTo="last"/>)
+            |
+            <span v-if="nextVersionId">
+                <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
+                    next version →
+                </version-link>
+                (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                            :versionTo="nextVersionId"
+                            :versionFrom="$route.params.version"/>)
+            </span>
+            <span v-else>this is the last version</span>
+
+            <br>
+            <icon-document type="profile"/>
+            <contributor-link :contributor="version"/> : <em>{{version.comment}}</em>
+        </div>
 
         <h1>
             <icon-document :type="type"/>
-            <document-title :document="document" v-if="document"/>
+            <document-title :document="document"/>
         </h1>
-
-        <p v-if="isVersionView">
-            (diff)
-            ← Version précédente
-            |
-            Voir la version actuelle
-            (diff)
-            |
-            Version suivante →
-            (diff)
-        </p>
-
-        <component :is="type + '-content'" v-if="document"
-            :document="document" :locale="locale"/>
+        <component :is="type + '-content'" :document="document" :locale="locale"/>
     </div>
+
 </template>
 
 <script>
@@ -70,7 +95,6 @@
                     this.version = response.data.version
                     this.nextVersionId = response.data.next_version_id
                     this.previousVersionId = response.data.previous_version_id
-                    console.log(response)
                 })
             } else {
 

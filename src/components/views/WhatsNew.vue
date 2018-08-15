@@ -18,9 +18,10 @@
                 </tr>
                 <tr v-for='(change, index) of results.feed' :key="index">
                     <td>
-                        <router-link :to="{name:documentType[change.document.type] + '-version', params:{id:change.document.documentId, version:change.version_id, change:change.lang}}">
+                        <version-link :type="change.document.type" :id="change.document.document_id"
+                                      :version="change.version_id" :lang="change.lang">
                             {{change.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
-                        </router-link>
+                        </version-link>
                     </td>
                     <td>
                         <contributor-link :contributor="change.user"/>
@@ -29,13 +30,11 @@
                         <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">
                             last
                         </router-link>
-                        <router-link :to="{name: documentType[change.document.type] + '-diff',
-                                           params: { id:change.document.document_id,
-                                                     versionFrom: 'prev',
-                                                     versionTo: change.version_id,
-                                                     lang: change.lang} }">
-                            diff
-                        </router-link>
+
+                        <diff-link :type="change.document.type"
+                                   :id="change.document.document_id" :lang="change.lang"
+                                   :versionTo="change.version_id"/>
+
                         <router-link :to="{name: documentType[change.document.type] + '-history',
                                            params: {id:change.document.document_id, lang:change.lang} }">
                             hist
@@ -65,12 +64,7 @@
     import c2c from '@/js/c2c.js'
     import constants from '@/js/constants.js'
 
-    import ContributorLink from '@/components/utils/ContributorLink'
-
     export default {
-        components:{
-            ContributorLink,
-        },
 
         data(){
             return {

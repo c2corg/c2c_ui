@@ -1,16 +1,22 @@
-export default {
+const documentType = {
+    a:"area",
+    c:"article",
+    b:"book",
+    i:"image",
+    m:"map",
+    o:"outing",
+    r:"route",
+    u:"profile",
+    w:"waypoint",
+    x:"xreport"
+}
 
-    documentType : {
-        a:"area",
-        c:"article",
-        b:"book",
-        i:"image",
-        m:"map",
-        o:"outing",
-        r:"route",
-        u:"profile",
-        w:"waypoint",
-        x:"xreport"
+
+export default {
+    documentType,
+
+    getDocumentType(type){
+        return type.length == 1 ? documentType[type] : type
     },
 
     documentsGeoLocalization: [

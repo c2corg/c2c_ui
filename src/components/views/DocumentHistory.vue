@@ -37,16 +37,14 @@
                             v-model="versionTo"
                             :disabled="versionFrom >= version.version_id"
                             :value="version.version_id">
-                        <router-link :to="{name:type + '-diff', params:{versionFrom:'prev', versionTo:version.version_id, lang:lang}}"
-                                     v-if="version.version_id != last_version_id">
-                            diff
-                        </router-link>
+                        <diff-link :type="type" :id="documentId" :lang="lang" :versionTo="version.version_id"
+                                     v-if="version.version_id != last_version_id"/>
                     </div>
                 </td>
                 <td>
-                    <router-link :to="{name:type + '-version', params:{id:documentId, version:version.version_id, lang:lang}}">
+                    <version-link :type="type" :id="documentId" :version="version.version_id" :lang="lang">
                         {{version.written_at | moment("YYYY-MM-DD hh:mm:ss")}}
-                    </router-link>
+                    </version-link>
                 </td>
                 <td>
                     <contributor-link :contributor="version"/>
@@ -74,12 +72,7 @@
 <script>
     import c2c from '@/js/c2c.js'
 
-    import ContributorLink from '@/components/utils/ContributorLink'
-
     export default {
-        components: {
-            ContributorLink
-        },
 
         data() {
             return {
@@ -107,7 +100,6 @@
         },
 
         created() {
-            console.log(this.type)
             c2c.getHistory(this.documentId, this.lang).then(response => {
                 this.history=response.data;
                 this.last_version_id = this.history.versions[0].version_id
