@@ -8,7 +8,7 @@
 
 <script>
 
-    import Markdown from '@/components/Markdown'
+    import Markdown from '@/components/views/document/utils/Markdown'
 
     export default {
 

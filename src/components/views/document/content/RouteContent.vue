@@ -98,7 +98,7 @@
 </template>
 
 <script>
-    import MarkdownSection from '@/components/utils/MarkdownSection'
+    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'

@@ -8,17 +8,18 @@ import FeedView from '@/components/views/feed/FeedView'
 import SearchView from '@/components/views/SearchView'
 import WhatsNew from '@/components/views/WhatsNew'
 import LoginView from '@/components/views/LoginView'
-import AccountView from '@/components/views/AccountView'
-import FollowingView from '@/components/views/FollowingView'
-import PreferencesView from '@/components/views/PreferencesView'
-import MailingListsView from '@/components/views/MailingListsView'
+
+import AccountView from '@/components/views/user/AccountView'
+import FollowingView from '@/components/views/user/FollowingView'
+import PreferencesView from '@/components/views/user/PreferencesView'
+import MailingListsView from '@/components/views/user/MailingListsView'
 
 import Documents from '@/components/views/Documents'
 import Images from '@/components/views/Images'
 
 import DocumentView from '@/components/views/document/DocumentView'
-import DocumentHistory from '@/components/views/DocumentHistory'
-import DocumentDiff from '@/components/views/DocumentDiff'
+import DocumentHistory from '@/components/views/document/DocumentHistory'
+import DocumentDiff from '@/components/views/document/DocumentDiff'
 
 import WorkInProgress from '@/components/views/WorkInProgress'
 

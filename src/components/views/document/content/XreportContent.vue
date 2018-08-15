@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import MarkdownSection from '@/components/utils/MarkdownSection'
+    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
     import Activities from '@/components/utils/Activities'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'

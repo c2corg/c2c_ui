@@ -82,8 +82,9 @@
 </template>
 
 <script>
-    import Markdown from '@/components/Markdown'
-    import MarkdownSection from '@/components/utils/MarkdownSection'
+
+    import Markdown from '@/components/views/document/utils/Markdown'
+    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import DocumentLicense from '@/components/utils/DocumentLicense'

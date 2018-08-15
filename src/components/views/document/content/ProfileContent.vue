@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import Markdown from '@/components/Markdown'
+    import Markdown from '@/components/views/document/utils/Markdown'
     import Activities from '@/components/utils/Activities'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
