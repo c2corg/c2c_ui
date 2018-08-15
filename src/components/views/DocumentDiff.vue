@@ -22,11 +22,11 @@
                         </div>
                         <div>
                             <router-link v-if="oldVersion.previous_version_id"
-                                :to="{ name: 'diff', params: {type:type,
-                                                              id:documentId,
-                                                              lang:lang,
-                                                              versionFrom:oldVersion.previous_version_id,
-                                                              versionTo:oldVersion.version.version_id} }">
+                                :to="{ name: type + '-diff',
+                                       params: { id:documentId,
+                                                 lang:lang,
+                                                 versionFrom:oldVersion.previous_version_id,
+                                                 versionTo:oldVersion.version.version_id} }">
                                 ← previous difference
                             </router-link>
                             <span v-else>
@@ -50,11 +50,11 @@
                         </div>
                         <div>
                             <router-link v-if="newVersion.next_version_id"
-                                :to="{ name: 'diff', params: {type:type,
-                                                              id:documentId,
-                                                              lang:lang,
-                                                              versionFrom:newVersion.version.version_id,
-                                                              versionTo:newVersion.next_version_id} }">
+                                :to="{ name: type + '-diff',
+                                       params: { id:documentId,
+                                                 lang:lang,
+                                                 versionFrom:newVersion.version.version_id,
+                                                 versionTo:newVersion.next_version_id} }">
                                 next difference →
                             </router-link>
                             <span v-else>
@@ -93,6 +93,7 @@
 
 <script>
     import c2c from '@/js/c2c.js'
+    import user from '@/js/user.js'
 
     import ContributorLink from '@/components/utils/ContributorLink'
 
@@ -106,7 +107,7 @@
         data() {
             return {
                 documentId: this.$route.params.id,
-                type: this.$route.params.type,
+                type: this.$route.name.replace("-diff",""),
                 lang: this.$route.params.lang,
                 title: undefined,
                 oldVersion:null,
@@ -147,8 +148,8 @@
                     }
                 }
 
-                var oldLocale = c2c.getLocale(this.oldVersion.document, this.lang)
-                var newLocale = c2c.getLocale(this.newVersion.document, this.lang)
+                var oldLocale = user.getLocaleStupid(this.oldVersion.document, this.lang)
+                var newLocale = user.getLocaleStupid(this.newVersion.document, this.lang)
                 var localeKeys = this.getKeys(oldLocale, newLocale, ["lang", "version"])
 
                 for(let key of localeKeys){
@@ -189,7 +190,7 @@
                 c2c[this.type].getVersion(this.documentId, this.lang, versionId).then(response => {
                     this[resultProperty]=response.data;
                     if(resultProperty=="newVersion"){
-                        this.title = c2c.getLocale(this.newVersion.document, this.lang).title
+                        this.title = user.getLocaleStupid(this.newVersion.document, this.lang).title
                     }
 
                     this.buildDiff()

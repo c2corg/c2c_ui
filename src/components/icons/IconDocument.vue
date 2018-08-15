@@ -1,14 +1,16 @@
 <template>
-    <base-icon :iconClass="iconClass[type]" />
+    <base-icon :iconClass="getIconClass(type)" />
 </template>
 
 <script>
+    import constants from '@/js/constants.js'
+
     var iconClass = {
         route:"fas fa-route",
         profile:"fas fa-user",
         article:"fas fa-newspaper",
         xreport:"fas fa-flag-checkered",
-        outing:"fas fa-edit",
+        outing:"far fa-sun",
         area:"fas fa-globe-americas",
         waypoint:"fas fa-map-pin",
         image:"fas fa-image",
@@ -17,9 +19,9 @@
 
     export default {
         props:["type"],
-        data(){
-            return {
-                iconClass
+        methods:{
+            getIconClass(type){
+                return iconClass[type] || iconClass[constants.documentType[type]]
             }
         }
     }

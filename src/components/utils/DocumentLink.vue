@@ -8,14 +8,14 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
 
     export default {
         props: ['document'],
 
         data(){
             return {
-                documentType: c2c.documentType
+                documentType: constants.documentType
             }
         }
     }

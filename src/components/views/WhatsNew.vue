@@ -29,14 +29,15 @@
                         <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">
                             last
                         </router-link>
-                        <router-link :to="{name: 'diff', params: {type: documentType[change.document.type],
-                                                                  id:change.document.document_id,
-                                                                  versionFrom: 'prev',
-                                                                  versionTo: change.version_id,
-                                                                  lang: change.lang} }">
+                        <router-link :to="{name: documentType[change.document.type] + '-diff',
+                                           params: { id:change.document.document_id,
+                                                     versionFrom: 'prev',
+                                                     versionTo: change.version_id,
+                                                     lang: change.lang} }">
                             diff
                         </router-link>
-                        <router-link :to="{name: 'history', params: {type:documentType[change.document.type] , id:change.document.document_id, lang:change.lang} }">
+                        <router-link :to="{name: documentType[change.document.type] + '-history',
+                                           params: {id:change.document.document_id, lang:change.lang} }">
                             hist
                         </router-link>
                     </td>
@@ -45,7 +46,7 @@
                         {{change.lang}}
                     </td>
                     <td>
-                        <icon-document :type="documentType[change.document.type]"/>
+                        <icon-document :type="change.document.type"/>
                         {{change.document.title}}
                         :
                         <span v-if="change.comment">
@@ -62,6 +63,7 @@
 </template>
 <script>
     import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
 
     import ContributorLink from '@/components/utils/ContributorLink'
 
@@ -72,7 +74,7 @@
 
         data(){
             return {
-                documentType:c2c.documentType,
+                documentType:constants.documentType,
                 results:null,
 
             }

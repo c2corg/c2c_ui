@@ -1,14 +1,15 @@
 import c2c from '@/js/c2c.js'
+import constants from '@/js/constants.js'
 import axios from 'axios';
+
 
 var result = {
     signIn(username, password){
-        var result = c2c.login(username, password)
+        var result = c2c.user.login(username, password)
 
         result.then(response => {
-            this.data = response.data
+            this.setData(response.data)
             this.setToken()
-            window.localStorage.setItem("user", JSON.stringify(response.data))
         })
         return result
     },
@@ -17,6 +18,20 @@ var result = {
         if(this.data.token){
             axios.defaults.headers.common['Authorization'] = 'JWT token="' + this.data.token + '"'
         }
+    },
+
+    setData(data){
+        this.data = data
+        window.localStorage.setItem("user", JSON.stringify(this.data))
+    },
+
+    setLang(lang){
+        if(this.isLogged){
+            c2c.user.update_preferred_language(lang)
+        }
+
+        this.data.lang = lang
+        window.localStorage.setItem("user", JSON.stringify(this.data))
     },
 
     isLogged(){
@@ -31,23 +46,69 @@ var result = {
         const expire = this.userData.expire;
 
         if (now > expire) {
-            this.removeUserData();
+            this.clearUserData();
             return true;
         }
 
         return false;
     },
 
-    removeUserData(){
-        this.data = {}
-        window.localStorage.removeItem("user")
+    clearUserData(){
+        defaultUserData.lang = this.data.lang
+        this.setData(defaultUserData)
     },
 
     signout(){
-        this.removeUserData()
+        this.clearUserData()
     },
 
-    data:JSON.parse(window.localStorage.getItem("user") || '{}')
+    getLocaleStupid(document, lang){
+        if(!document.locales)
+            return null;
+
+        for(let result of document.locales){
+            if (result.lang == lang){
+                return result;
+            }
+        }
+
+        return null
+    },
+
+    getLocaleSmart(document, lang){
+
+        //first of all try to search asked lang
+        var result = lang ? this.getLocaleStupid(document, lang) : null
+        if(result)
+            return result
+
+        //else, search user lang
+        result = this.getLocaleStupid(document, this.data.lang)
+        if(result)
+            return result
+
+        //else try langs by order
+        for(let lang of constants.langs){
+            result = this.getLocaleStupid(document, lang)
+            if(result)
+                return result
+
+        }
+
+        //should never happen
+        return null
+    }
+}
+
+
+var defaultUserData = {
+    lang:"en"
+}
+
+if(window.localStorage.getItem("user")){
+    result.data = JSON.parse(window.localStorage.getItem("user"))
+} else {
+    result.data = defaultUserData
 }
 
 result.setToken()

@@ -62,7 +62,7 @@
                     return fieldValue.value===fieldValue.originalValue ? null : fieldValue.value
                 }
 
-                c2c.userAccount.post(
+                c2c.user.account.post(
                     this.password.value,
                     newOrNull(this.name),
                     newOrNull(this.forum_username),
@@ -76,7 +76,7 @@
         },
 
         created(){
-            c2c.userAccount.get().then(response => {
+            c2c.user.account.get().then(response => {
                 this.email = getFieldValue(response.data.email)
                 this.is_profile_public = getFieldValue(response.data.is_profile_public)
             })

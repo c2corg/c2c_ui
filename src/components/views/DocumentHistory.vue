@@ -3,7 +3,7 @@
         <h1>
             <icon-document class="is-large" :type="type"/>
             <span>history</span> ({{this.lang}}) :
-            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{history.title}}</router-link>            
+            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{history.title}}</router-link>
         </h1>
         <div class="field is-grouped">
             <div class="control">
@@ -37,7 +37,7 @@
                             v-model="versionTo"
                             :disabled="versionFrom >= version.version_id"
                             :value="version.version_id">
-                        <router-link :to="{name:'diff', params:{type:type, versionFrom:'prev', versionTo:version.version_id, lang:lang}}"
+                        <router-link :to="{name:type + '-diff', params:{versionFrom:'prev', versionTo:version.version_id, lang:lang}}"
                                      v-if="version.version_id != last_version_id">
                             diff
                         </router-link>
@@ -84,7 +84,7 @@
         data() {
             return {
                 documentId: this.$route.params.id,
-                type: this.$route.params.type,
+                type: this.$route.name.replace("-history",""),
                 lang: this.$route.params.lang,
                 history: null,
                 versionFrom:undefined,
@@ -97,15 +97,17 @@
             gotToDiff(){
 
                 this.$router.push({
-                    name: "diff", params: { type:this.type,
-                                            versionFrom:this.versionFrom,
-                                            versionTo:this.versionTo,
-                                            lang:this.lang }
+                    name: this.type + "-diff", params: {
+                        versionFrom:this.versionFrom,
+                        versionTo:this.versionTo,
+                        lang:this.lang
+                    }
                 })
             }
         },
 
         created() {
+            console.log(this.type)
             c2c.getHistory(this.documentId, this.lang).then(response => {
                 this.history=response.data;
                 this.last_version_id = this.history.versions[0].version_id

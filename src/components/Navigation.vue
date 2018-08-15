@@ -70,6 +70,10 @@
                             <base-icon iconClass="fas fa-heart"  class="is-medium"/>
                             my followed users
                         </router-link>
+                        <router-link class="navbar-item" :to="{ name: 'mailinglists' }">
+                            <base-icon iconClass="fas fa-at"  class="is-medium"/>
+                            my mailings
+                        </router-link>
                         <hr class="navbar-divider">
                         <a class="navbar-item" @click="signout">
                             <base-icon iconClass="fas fa-sign-out-alt"  class="is-medium"/>
@@ -80,10 +84,10 @@
 
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
-                        fr
+                        {{user.data.lang}}
                     </a>
                     <div class="navbar-dropdown is-right is-boxed">
-                        <a class="navbar-item" v-for="lang in langs" :key="lang">
+                        <a class="navbar-item" v-for="lang in langs" :key="lang" @click="user.setLang(lang)">
                             {{lang}}
                         </a>
                     </div>
@@ -96,6 +100,7 @@
 <script>
 
     import user from "@/js/user.js"
+    import constants from "@/js/constants.js"
 
     export default {
 
@@ -103,7 +108,7 @@
             return {
                 user,
                 burgerActive:false,
-                langs:["fr","en","de"],
+                langs:constants.langs,
                 links: [
                     {
                         text: 'Routes',
@@ -132,20 +137,21 @@
                     }
                 ],
                 searchText:'',
-                search(){
-                    if(this.searchText.length >=3){
-                        this.$router.push({
-                            name: 'search',
-                            query: {q: this.searchText}
-                        })
-                    }
-                }
             }
         },
         methods:{
+            search(){
+                if(this.searchText.length >=3){
+                    this.$router.push({
+                        name: 'search',
+                        query: {q: this.searchText}
+                    })
+                }
+            },
+
             signout(){
                 user.signout()
-            }
+            },
         }
     }
 </script>

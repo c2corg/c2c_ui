@@ -1,6 +1,6 @@
 <template>
     <span>
-        <router-link :to="{ name: 'history', params: {type:documentType[document.type], id:document.document_id, lang:'fr'} }">
+        <router-link :to="{ name: type + '-history', params: {id:document.document_id, lang:'fr'} }">
             <i class="fa fa-users"></i>
         </router-link>
         -
@@ -16,13 +16,19 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
 
     export default {
         props: ['document', 'cc'],
 
         data(){
-            return {documentType: c2c.documentType}
+            return {
+                type: null
+            }
+        },
+
+        created(){
+            this.type = constants.documentType[this.document.type]
         }
     }
 </script>

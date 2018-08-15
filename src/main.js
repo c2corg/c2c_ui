@@ -9,6 +9,8 @@ import PrettyOutingLink from './components/utils/PrettyOutingLink'
 /* icons */
 import BaseIcon from './components/icons/BaseIcon'
 
+import IconGeometryDetail from './components/icons/IconGeometryDetail'
+
 import IconForum from './components/icons/IconForum'
 import IconActivity from './components/icons/IconActivity'
 import IconCondition from './components/icons/IconCondition'
@@ -65,6 +67,7 @@ Vue.component("pretty-route-link", PrettyRouteLink)
 Vue.component("pretty-outing-link", PrettyOutingLink)
 
 Vue.component("base-icon", BaseIcon)
+Vue.component("icon-geometry-detail", IconGeometryDetail)
 Vue.component("icon-forum", IconForum)
 Vue.component("icon-activity", IconActivity)
 Vue.component("icon-condition", IconCondition)
@@ -76,6 +79,12 @@ Vue.component("icon-xreport", IconXreport)
 Vue.component("icon-article", IconArticle)
 Vue.component("icon-outing", IconOuting)
 
+
+const moment = require('moment')
+
+Vue.filter('timeAgo', (arg) => {
+    return moment.utc(arg).local().fromNow()
+})
 
 new Vue({
   router:Router,

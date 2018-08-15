@@ -1,5 +1,5 @@
 <template>
-    <div class="card" @click="go()">
+    <div class="card" @click="go">
         <header class="card-header">
             <document-title class="card-header-title" :document="document"/>
         </header>
@@ -20,7 +20,7 @@
     import ProfileCardContent from '@/components/cards/content/ProfileCardContent'
     import XreportCardContent from '@/components/cards/content/XreportCardContent'
 
-    import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
 
     export default {
         components: {
@@ -40,22 +40,26 @@
 
         data() {
             return {
-                go(){
-                    this.$router.push({
-                        name: c2c.documentType[this.document.type],
-                        params: { id: this.document.document_id }
-                    })
-                }
             }
         },
+
+        methods:{
+            go(){
+                this.$router.push({
+                    name: constants.documentType[this.document.type],
+                    params: { id: this.document.document_id }
+                })
+            }
+        },
+
         created() {
-            this.cardComponentName = c2c.documentType[this.document.type] + "-card-content"
+            this.cardComponentName = constants.documentType[this.document.type] + "-card-content"
         },
     }
 
 </script>
 
-<style>
+<style scoped>
 
 .card{
     background-color:#FFF!important;

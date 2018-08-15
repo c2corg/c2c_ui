@@ -1,31 +1,10 @@
 
 import axios from 'axios';
 
-var apiUrl = "https://api.demov6.camptocamp.org"
+var apiUrl = "https://api.camptocamp.org"
+//var apiUrl = "https://api.demov6.camptocamp.org"
 
 var result = {
-
-    documentType : {
-        a:"area",
-        c:"article",
-        b:"book",
-        i:"image", //todo
-        m:"map",
-        o:"outing",
-        r:"route",
-        u:"profile",
-        w:"waypoint",
-        x:"xreport"
-    },
-
-    documentsGeoLocalization: [
-        "routes",
-        "waypoints",
-        "profiles",
-        "outings",
-        "images",
-        "xreports"
-    ],
 
     getSmallImageUrl(image){
         return 'https://media.camptocamp.org/c2corg_active/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
@@ -47,54 +26,77 @@ var result = {
         return axios.get(apiUrl + '/document/' + document_id + '/history/' + lang)
     },
 
-    login(username, password){
-        return axios.post(apiUrl + '/users/login', {
-            username,
-            password,
-            discourse:false
-        })
-    },
-
-    userAccount:{
-        get(){
-            return axios.get(apiUrl + '/users/account')
+    user:{
+        login(username, password){
+            return axios.post(apiUrl + '/users/login', {
+                username,
+                password,
+                discourse:false
+            })
         },
 
-        post(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
-            var payload = {
-                currentpassword,
+        update_preferred_language(lang){
+            return axios.post(apiUrl + '/users/update_preferred_language', {lang})
+        },
+
+        preferences:{
+            get(){
+                return axios.get(apiUrl + '/users/preferences')
+            },
+
+            post(preferences){
+                return axios.post(apiUrl + '/users/preferences', preferences)
             }
+        },
 
-            if(name!==null)
-                payload.name = name
+        mailinglists:{
+            get(){
+                return axios.get(apiUrl + '/users/mailinglists')
+            },
 
-            if(is_profile_public!==null)
-                payload.is_profile_public = is_profile_public
+            post(mailinglists){
+                return axios.post(apiUrl + '/users/mailinglists', mailinglists)
+            }
+        },
 
-            if(email!==null)
-                payload.email = email
+        following:{
+            get(){
+                return axios.get(apiUrl + '/users/following')
+            }
+        },
 
-            if(forum_username!==null)
-                payload.forum_username = forum_username
+        account:{
+            get(){
+                return axios.get(apiUrl + '/users/account')
+            },
 
-            if(newpassword!==null)
-                payload.newpassword = newpassword
+            post(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
+                var payload = {
+                    currentpassword,
+                }
 
-            return axios.post(apiUrl + '/users/account', payload)
-        }
+                if(name!==null)
+                    payload.name = name
+
+                if(is_profile_public!==null)
+                    payload.is_profile_public = is_profile_public
+
+                if(email!==null)
+                    payload.email = email
+
+                if(forum_username!==null)
+                    payload.forum_username = forum_username
+
+                if(newpassword!==null)
+                    payload.newpassword = newpassword
+
+                return axios.post(apiUrl + '/users/account', payload)
+            }
+        },
     },
 
-    getLocale(document, lang){
-        var result = {}
-
-        document.locales.forEach( locale => {
-            if (locale.lang == lang){
-                result = locale
-                return;
-            }
-        })
-
-        return result
+    getFeed(params){
+        return axios.get(apiUrl + '/feed', {params})
     }
 };
 

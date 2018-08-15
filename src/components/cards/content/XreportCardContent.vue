@@ -25,7 +25,6 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
 
     import Activities from '@/components/utils/Activities'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
@@ -37,12 +36,5 @@
         },
 
         props: ['document'],
-
-
-        data(){
-            return {
-                documentType: c2c.documentType
-            }
-        }
     }
 </script>

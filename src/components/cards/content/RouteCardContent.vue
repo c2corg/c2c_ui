@@ -23,7 +23,7 @@
 
         <activities :activities="document.activities"/>
 
-        <base-icon iconClass="fas fa-flag" v-if="document.geometry.has_geom_detail"/>
+        <icon-geometry-detail v-if="document.geometry.has_geom_detail"/>
 
         <span v-if="document.orientations && document.orientations.length!=0">
             <base-icon iconClass="fas fa-compass"/>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
-
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import CardElevationItem from '@/components/cards/utils/CardElevationItem'
@@ -51,12 +49,5 @@
         },
 
         props: ['document'],
-
-
-        data(){
-            return {
-                documentType: c2c.documentType
-            }
-        }
     }
 </script>

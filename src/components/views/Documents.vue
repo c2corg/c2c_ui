@@ -54,6 +54,7 @@
 <script>
 
     import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
     import mapUtils from '@/js/mapUtils.js'
 
     import DocumentCard from '@/components/cards/DocumentCard'
@@ -68,7 +69,7 @@
                 map: null,
                 documents: null,
                 title: this.$route.name,
-                hasMap: c2c.documentsGeoLocalization.includes(this.$route.name),
+                hasMap: constants.documentsGeoLocalization.includes(this.$route.name),
                 showMap: true,
                 showResults: true,
 
@@ -94,7 +95,7 @@
 
 </script>
 
-<style>
+<style scoped>
 
 .cards-container > div{
     flex-flow:wrap row;

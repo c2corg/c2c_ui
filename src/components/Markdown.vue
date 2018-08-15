@@ -1,6 +1,5 @@
 <template>
-<div v-html="convert(content)">
-</div>
+    <div v-html="convert(content)"/>
 </template>
 
 <script>
@@ -8,10 +7,8 @@
 
     export default {
         props: ['content'],
-        data(){
-            return {
+        methods:{
             convert : markdown.convert
-            }
         }
     }
 </script>

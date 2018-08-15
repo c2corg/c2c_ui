@@ -11,7 +11,7 @@
         </span>
         <span class="is-pulled-right">
             <icon-document type="image" v-if="outing.img_count!=0"/>
-            <icon-condition v-bind:condition="outing.condition_rating"/>
+            <icon-condition :condition="outing.condition_rating"/>
         </span>
     </div>
 </template>

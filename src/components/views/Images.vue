@@ -23,6 +23,7 @@
 <script>
 
     import c2c from '@/js/c2c.js'
+    import constants from '@/js/constants.js'
 
     export default {
 
@@ -35,7 +36,7 @@
 
                 go(image){
                     this.$router.push({
-                        name: c2c.documentType[image.type],
+                        name: constants.documentType[image.type],
                         params: { id: image.document_id }
                     })
                 }

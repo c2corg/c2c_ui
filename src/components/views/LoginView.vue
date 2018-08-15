@@ -70,7 +70,6 @@
         methods:{
             signin(){
                 user.signIn(this.username.value, this.password.value).then(() => {
-                    //this.user.logged = true
                 })
             }
         }
