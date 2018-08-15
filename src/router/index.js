@@ -81,7 +81,7 @@ for(let type of Object.values(constants.documentType)){
     routes.push({
         path: '/' + type + 's/version/:id/:lang/:version',
         name: type + "-version",
-        component: WorkInProgress},
+        component: DocumentView},
     )
 }
 
