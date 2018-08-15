@@ -12,7 +12,7 @@
             <markdown-section :markdown="locale.remarks" title="Remarks"/>
             <markdown-section :markdown="locale.gear" title="Gears"/>
 
-            <div class="hidden-print" v-if="document.associations && document.associations.recent_outings.documents.length!=0">
+            <div class="hidden-print" v-if="document.associations.recent_outings.documents.length!=0">
                 <h2>
                     <span>Recent outings</span>
                 </h2>
@@ -22,7 +22,7 @@
                    :key="outing.document_id"/>
             </div>
 
-            <div class="hidden-print" v-if="document.associations && document.associations.books.length!=0">
+            <div class="hidden-print" v-if="document.associations.books.length!=0">
                 <h2>
                     <span>Books</span>
                 </h2>

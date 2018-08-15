@@ -47,7 +47,6 @@ var routes = [
     // * for each doc type :
     //   * add
     //   * edit
-    //   * view old version
     // * xreport and profile data
     // * signup
 

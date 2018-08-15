@@ -7,7 +7,7 @@
         </h1>
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-primary" @click="gotToDiff">
+                <button class="button is-primary" @click="gotToDiff"  v-if="type!='profile'">
                     compare selected versions
                 </button>
             </div>
@@ -26,7 +26,7 @@
             </tr>
             <tr v-for="version of history.versions" :key="version.verion_id">
                 <td>
-                    <div class="control">
+                    <div class="control" v-if="type!='profile'">
                         <input type="radio"
                             name="versionFrom"
                             v-model="versionFrom"

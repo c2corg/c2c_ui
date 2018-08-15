@@ -91,6 +91,23 @@
             if(this.isVersionView){
                 c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version).then(response => {
                     this.document = response.data.document
+                    //versionned datas are poor...
+                    this.document.areas = []
+                    this.document.creator = null
+                    this.document.associations = {
+                        images:[],
+                        books:[],
+                        users:[],
+                        waypoints:[],
+                        waypoint_children:[],
+                        all_routes:{
+                            documents:[],
+                        },
+                        recent_outings:{
+                            documents:[],
+                        }
+                    }
+
                     this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
                     this.version = response.data.version
                     this.nextVersionId = response.data.next_version_id

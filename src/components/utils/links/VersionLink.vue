@@ -1,7 +1,11 @@
 <template>
-    <router-link :to="{name:getType(type) + '-version', params:{id:id, version:version, lang:lang}}">
+    <router-link v-if="type!='u' && type!='profile'"
+        :to="{name:getType(type) + '-version', params:{id:id, version:version, lang:lang}}">
         <slot/>
     </router-link>
+    <span v-else>
+        <slot/>
+    </span>
 </template>
 
 <script>
