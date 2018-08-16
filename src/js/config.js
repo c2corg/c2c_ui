@@ -12,4 +12,4 @@ var prodConfig = {
 
 var useProd = false
 
-export default (useProd ? devConfig : prodConfig)
+export default (useProd ? prodConfig : devConfig)

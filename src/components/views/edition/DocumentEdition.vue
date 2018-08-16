@@ -1,12 +1,18 @@
 <template>
     <div class="section">
-        <p>
-            <input type="text"/>
-            <button class="button is-primary">
-                Save
-            </button>
-        </p>
-        <component :is="type + '-edition-content'" :document="document" :locale="locale"></component>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary">
+                    Save
+                </button>
+            </div>
+            <div class="control">
+                <input type="text" class="input" placeholder="comment"/>
+            </div>
+        </div>
+        <component :is="type + '-edition-content'" v-if="document"
+            :document="document" :locale="locale"></component>
     </div>
 </template>
 
