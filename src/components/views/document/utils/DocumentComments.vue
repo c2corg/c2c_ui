@@ -83,7 +83,7 @@
             },
 
             getComments(){
-                if(this.locale.topic_id && False){ //todo : once cors are allowed, test all that stuff
+                if(this.locale.topic_id){ 
                     forum.topic.get(this.locale.topic_id)
                     .then(response => {
                         this.topic = response.data

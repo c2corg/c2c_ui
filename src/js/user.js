@@ -1,6 +1,5 @@
 import c2c from '@/js/c2c.js'
 import constants from '@/js/constants.js'
-import axios from 'axios';
 
 
 var result = {
@@ -15,9 +14,7 @@ var result = {
     },
 
     setToken(){
-        if(this.data.token){
-            axios.defaults.headers.common['Authorization'] = 'JWT token="' + this.data.token + '"'
-        }
+        c2c.setToken(this.data.token)
     },
 
     setData(data){

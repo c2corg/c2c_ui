@@ -1,34 +1,19 @@
 
 import axios from 'axios';
+import config from '@/js/config.js'
 
-var apiUrl = "https://api.camptocamp.org"
-//var apiUrl = "https://api.demov6.camptocamp.org"
+function c2c(){
+    var this_ = this
 
-var result = {
+    // axios instances shares same common headers. this trick fix this.
+    this.axios = axios.create({headers:{common:{}}});
 
-    getSmallImageUrl(image){
-        return 'https://media.camptocamp.org/c2corg_active/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
-    },
+    this.apiUrl = config.apiUrl
+    this.mediaUrl = config.mediaUrl
 
-    getImageUrl(image){
-        return 'https://media.camptocamp.org/c2corg_active/' + image.filename
-    },
-
-    search(params){
-        return axios.get(apiUrl + '/search', {params})
-    },
-
-    getRecentChanges(params){
-        return axios.get(apiUrl + '/documents/changes', {params})
-    },
-
-    getHistory(document_id, lang){
-        return axios.get(apiUrl + '/document/' + document_id + '/history/' + lang)
-    },
-
-    user:{
+    this.user = {
         login(username, password){
-            return axios.post(apiUrl + '/users/login', {
+            return this_.axios.post(this_.apiUrl + '/users/login', {
                 username,
                 password,
                 discourse:false
@@ -36,38 +21,38 @@ var result = {
         },
 
         update_preferred_language(lang){
-            return axios.post(apiUrl + '/users/update_preferred_language', {lang})
+            return this_.axios.post(this_.apiUrl + '/users/update_preferred_language', {lang})
         },
 
         preferences:{
             get(){
-                return axios.get(apiUrl + '/users/preferences')
+                return this_.axios.get(this_.apiUrl + '/users/preferences')
             },
 
             post(preferences){
-                return axios.post(apiUrl + '/users/preferences', preferences)
+                return this_.axios.post(this_.apiUrl + '/users/preferences', preferences)
             }
         },
 
         mailinglists:{
             get(){
-                return axios.get(apiUrl + '/users/mailinglists')
+                return this_.axios.get(this_.apiUrl + '/users/mailinglists')
             },
 
             post(mailinglists){
-                return axios.post(apiUrl + '/users/mailinglists', mailinglists)
+                return this_.axios.post(this_.apiUrl + '/users/mailinglists', mailinglists)
             }
         },
 
         following:{
             get(){
-                return axios.get(apiUrl + '/users/following')
+                return this_.axios.get(this_.apiUrl + '/users/following')
             }
         },
 
         account:{
             get(){
-                return axios.get(apiUrl + '/users/account')
+                return this_.axios.get(this_.apiUrl + '/users/account')
             },
 
             post(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
@@ -90,42 +75,71 @@ var result = {
                 if(newpassword!==null)
                     payload.newpassword = newpassword
 
-                return axios.post(apiUrl + '/users/account', payload)
+                return this_.axios.post(this_.apiUrl + '/users/account', payload)
             }
         },
-    },
+    };
 
-    getFeed(params){
-        return axios.get(apiUrl + '/feed', {params})
+    const types = ["area", "article", "book", "image", "map", "outing", "profile", "route", "waypoint", "xreport"]
+
+    for(let type of types){
+        this[type + "s"] = {
+            get(params){
+                return this_.axios.get(this_.apiUrl + '/' + type + 's', {params})
+            }
+        };
+
+        this[type] = {
+            get(id){
+                return this_.axios.get(this_.apiUrl + '/' + type + 's/' + id)
+            },
+
+            getVersion(id, lang, versionId){
+                return this_.axios.get(this_.apiUrl + '/' + type + 's/' + id + '/' + lang + '/' + versionId)
+            },
+
+            save(document, comment){
+                return this_.axios.put(this_.apiUrl + '/' + type + 's/' + document.document_id, {
+                    document,
+                    message:comment
+                })
+            }
+
+        };
     }
-};
+}
 
-["area", "article", "book", "image", "map", "outing", "profile", "route", "waypoint", "xreport"].forEach(type => {
-
-    result[type + "s"] = {
-        get(params){
-            return axios.get(apiUrl + '/' + type + 's', {params})
-        }
+c2c.prototype.setToken = function(token){
+    console.log(this.axios)
+    if(token){
+        this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"'
+    } else if(this.axios.defaults.headers.common.Authorization){
+        delete this.axios.defaults.headers.common.Authorization
     }
+}
 
-    result[type] = {
-        get(id){
-            return axios.get(apiUrl + '/' + type + 's/' + id)
-        },
+c2c.prototype.getSmallImageUrl = function(image){
+    return this.mediaUrl + '/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
+}
 
-        getVersion(id, lang, versionId){
-            return axios.get(apiUrl + '/' + type + 's/' + id + '/' + lang + '/' + versionId)
-        },
+c2c.prototype.getImageUrl = function(image){
+    return this.mediaUrl + '/' + image.filename
+}
 
-        save(document, comment){
-            return axios.put(apiUrl + '/' + type + 's/' + document.document_id, {
-                document,
-                message:comment
-            })
-        }
+c2c.prototype.search = function(params){
+    return this.axios.get(this.apiUrl + '/search', {params})
+}
 
-    }
+c2c.prototype.getRecentChanges = function(params){
+    return this.axios.get(this.apiUrl + '/documents/changes', {params})
+}
 
-})
+c2c.prototype.getHistory = function(document_id, lang){
+    return this.axios.get(this.apiUrl + '/document/' + document_id + '/history/' + lang)
+}
 
-export default result;
+c2c.prototype.getFeed = function(params){
+    return this.axios.get(this.apiUrl + '/feed', {params})
+}
+
+export default new c2c();

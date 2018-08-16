@@ -13,9 +13,8 @@
                     <h2>Outings</h2>
                     <loading-notification :loaded="outings!=null" :error="outingsError"/>
                     <div v-if="outings!=null">
-                        <div v-for="outing of outings.documents"
-                           v-bind:key="outing.document_id">
-                            <dashboard-outing-link v-bind:outing="outing"/>
+                        <div v-for="outing of outings.documents" :key="outing.document_id">
+                            <dashboard-outing-link :outing="outing"/>
                         </div>
                     </div>
                 </div>
@@ -24,14 +23,13 @@
                 <h2>Forum</h2>
                 <div v-if="latest_topics && latest_topics.topic_list">
                     <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)"
-                         v-if="topic.category_id != 29"
-                         :key="topic.id">
+                         v-if="topic.category_id != 29" :key="topic.id">
 
-                        <a v-bind:href="'https://forum.camptocamp.org/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
+                        <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
                            target="_blank">
 
                            <img height="16" width="16"
-                             v-bind:src="'https://forum.camptocamp.org' + topic.last_poster_user.avatar_template.replace('{size}','16')">
+                                :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')">
 
 
                             {{topic.title}}
@@ -44,7 +42,7 @@
                     <h2>Routes</h2>
                     <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
-                        <div v-for="route of routes.documents" v-bind:key="route.document_id">
+                        <div v-for="route of routes.documents" :key="route.document_id">
                             <pretty-route-link :route="route" showArea="true"/>
                         </div>
                     </div>
@@ -64,55 +62,54 @@
     import forum from '@/js/forum.js'
 
 
-export default {
+    export default {
 
-  components: {
-    DashboardOutingLink,
-    Gallery
-  },
+        components: {
+            DashboardOutingLink,
+            Gallery
+        },
 
-  data() {
-    return {
+        data() {
+            return {
 
-      routes: null,
-      images: null,
-      outings: null,
+                routes: null,
+                images: null,
+                outings: null,
 
-      routesError: null,
-      imagesError: null,
-      outingsError: null,
+                routesError: null,
+                imagesError: null,
+                outingsError: null,
 
-      latest_topics: [],
+                latest_topics: [],
 
-    }
-  },
+                forum,
+            }
+        },
 
-    computed: {
-        swiper() {
-            return this.$refs.mySwiper.swiper
+        computed: {
+            swiper() {
+                return this.$refs.mySwiper.swiper
+            }
+        },
+
+        created() {
+
+            c2c.outings.get()
+            .then(response => {  this.outings = response.data;    })
+            .catch(response => {this.outingsError = response})
+
+            c2c.routes.get({limit:10})
+            .then(response => {  this.routes = response.data;    })
+            .catch(response => {this.routesError = response})
+
+            c2c.images.get()
+            .then(response => {  this.images = response.data;    })
+            .catch(response => { this.imagesError=response    })
+
+            forum.getLatest()
+            .then(response => {  this.latest_topics = response.data;    })
+
         }
-    },
-
-
-  created() {
-
-    c2c.outings.get()
-    .then(response => {  this.outings = response.data;    })
-    .catch(response => {this.outingsError = response})
-
-    c2c.routes.get({limit:10})
-    .then(response => {  this.routes = response.data;    })
-    .catch(response => {this.routesError = response})
-
-    c2c.images.get()
-    .then(response => {  this.images = response.data;    })
-    .catch(response => { this.imagesError=response    })
-
-    forum.get()
-    .then(response => {  this.latest_topics = response.data;    })
-
-  }
-}
-
+    }
 
 </script>

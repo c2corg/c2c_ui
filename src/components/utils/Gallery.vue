@@ -1,7 +1,7 @@
 <template>
     <swiper :options="swiperOption">
         <swiper-slide v-for="image of images" v-bind:key="image.document_id">
-            <img :src="getSmallImageUrl(image)">
+            <img :src="c2c.getSmallImageUrl(image)">
         </swiper-slide>
     </swiper>
 </template>
@@ -27,9 +27,7 @@
                     slidesPerView: 'auto',
                     spaceBetween: 5
                 },
-
-                getSmallImageUrl : c2c.getSmallImageUrl,
-
+                c2c,
             }
         }
     }

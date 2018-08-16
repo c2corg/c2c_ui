@@ -1,38 +1,43 @@
 
 import axios from 'axios';
+import config from '@/js/config.js'
 
-const apiUrl = 'https://forum.camptocamp.org'
-const url = 'https://forum.camptocamp.org'
+function forum(){
 
-export default {
-    url,
+    var this_ = this
 
-    get:function(){
-        var result = axios.get(apiUrl + '/latest.json')
+    // axios instances shares same common headers. this trick fix this.
+    this.axios = axios.create({headers:{common:{}}});
 
-        result.then(function(response){
+    this.apiUrl = config.forumUrl
+    this.url = config.forumUrl
 
-            var users = {}
-
-            response.data.users.forEach(function(user){
-                users[user.username] = user
-            })
-
-            response.data.topic_list.topics.map(function(topic){
-                topic.last_poster_user = users[topic.last_poster_username]
-            })
-
-        })
-        return result
-    },
-
-    topic:{
+    this.topic = {
         get(topicId){
-            var result = axios.get(apiUrl + '/t/title/' + topicId + '.json')
-            return result
+            return this_.axios.get(this_.apiUrl + '/t/title/' + topicId + '.json')
         }
     }
+}
 
-};
+forum.prototype.getLatest = function () {
+    console.log(this.axios)
+    var result = this.axios.get(this.apiUrl + '/latest.json')
 
-//https://forum.camptocamp.org/t/1012597-fr/219521.json
+    result.then(function(response){
+
+        var users = {}
+
+        response.data.users.forEach(function(user){
+            users[user.username] = user
+        })
+
+        response.data.topic_list.topics.map(function(topic){
+            topic.last_poster_user = users[topic.last_poster_username]
+        })
+
+    })
+
+    return result
+}
+
+export default new forum();

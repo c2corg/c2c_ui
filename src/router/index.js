@@ -20,6 +20,7 @@ import Images from '@/components/views/Images'
 import DocumentView from '@/components/views/document/DocumentView'
 import DocumentHistory from '@/components/views/document/DocumentHistory'
 import DocumentDiff from '@/components/views/document/DocumentDiff'
+import DocumentEdition from '@/components/views/edition/DocumentEdition'
 
 import WorkInProgress from '@/components/views/WorkInProgress'
 
@@ -62,8 +63,11 @@ var routes = [
     // * test all comments functions
     // * markdown alerts
     // * markdown icons
-    // * config for url api and url forum
-    // * config for history mode 
+    // * config for history mode
+
+    // * CSS
+    //   * choose font size and family
+    //   * icon size must not be a subjet
 
 ]
 
@@ -85,6 +89,12 @@ for(let type of Object.values(constants.documentType)){
         path: '/' + type + 's/history/:id/:lang',
         name: type + "-history",
         component: DocumentHistory},
+    )
+
+    routes.push({
+        path: '/' + type + 's/edit/:id/:lang',
+        name: type + "-edit",
+        component: DocumentEdition},
     )
 
     routes.push({
