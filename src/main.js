@@ -8,6 +8,7 @@ import PrettyOutingLink from './components/utils/PrettyOutingLink'
 import DocumentLink from './components/utils/links/DocumentLink'
 import DiffLink from './components/utils/links/DiffLink'
 import VersionLink from './components/utils/links/VersionLink'
+import HistoryLink from './components/utils/links/HistoryLink'
 import ContributorLink from '@/components/utils/links/ContributorLink'
 
 /* icons */
@@ -73,6 +74,8 @@ Vue.component("pretty-outing-link", PrettyOutingLink)
 Vue.component("diff-link", DiffLink)
 Vue.component("version-link", VersionLink)
 Vue.component("contributor-link", ContributorLink)
+Vue.component("history-link", HistoryLink)
+
 
 Vue.component("base-icon", BaseIcon)
 Vue.component("icon-geometry-detail", IconGeometryDetail)

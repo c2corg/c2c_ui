@@ -1,7 +1,7 @@
 
 import common from '@/js/common.js'
 
-common.documentType = {
+common.letterToType = {
     a:"area",
     c:"article",
     b:"book",
@@ -13,6 +13,8 @@ common.documentType = {
     w:"waypoint",
     x:"xreport"
 }
+
+common.documentTypes = Object.values(common.letterToType)
 
 common.documentsGeoLocalization = [
     "routes",
@@ -41,7 +43,7 @@ common.localeFields = {
 
 
 common.getDocumentType = function(type){
-    return type.length == 1 ? common.documentType[type] : type
+    return type.length == 1 ? common.letterToType[type] : type
 }
 
 export default common

@@ -1,7 +1,7 @@
 <template>
-    <router-link :to="{name:getType(type) + '-diff', params:{id:id, versionFrom:versionFrom || 'prev', versionTo:versionTo || 'next', lang:lang}}">
+    <router-link :to="{name:getType(type) + '-history', params:{id:id, lang:lang}}">
         <slot>
-            diff
+            hist
         </slot>
     </router-link>
 </template>
@@ -10,7 +10,7 @@
     import constants from '@/js/constants.js'
 
     export default{
-        props:["type", "versionFrom", "versionTo", "lang", "id"],
+        props:["type", "lang", "id"],
         methods:{
             getType:constants.getDocumentType
         }

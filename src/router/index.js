@@ -55,7 +55,6 @@ var routes = [
     // * see maps on document view
     // * admin actions
     // * document-view actions (hostory, edit, translate...)
-    // * version-link and diff-link props are not kebab case : https://vuejs.org/v2/style-guide/#Prop-name-casing-strongly-recommended
     // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
     // * scope all styles : https://vuejs.org/v2/style-guide/#Component-style-scoping-essential
     // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
@@ -71,7 +70,7 @@ var routes = [
 
 ]
 
-for(let type of Object.values(constants.documentType)){
+for(let type of constants.documentTypes){
 
     routes.push({
         path: '/' + type + 's',

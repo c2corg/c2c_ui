@@ -9,8 +9,8 @@
 
             <span v-if="previousVersionId">
                 (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                            :versionFrom="previousVersionId"
-                            :versionTo="$route.params.version"/>)
+                            :version-from="previousVersionId"
+                            :version-to="$route.params.version"/>)
                 <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="previousVersionId">
                     ← previous version
                 </version-link>
@@ -21,16 +21,16 @@
                 see actual version
             </document-link>
             (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                        :versionFrom="$route.params.version"
-                        versionTo="last"/>)
+                        :version-from="$route.params.version"
+                        version-to="last"/>)
             |
             <span v-if="nextVersionId">
                 <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
                     next version →
                 </version-link>
                 (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                            :versionTo="nextVersionId"
-                            :versionFrom="$route.params.version"/>)
+                            :version-to="nextVersionId"
+                            :version-from="$route.params.version"/>)
             </span>
             <span v-else>this is the last version</span>
 

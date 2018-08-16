@@ -37,7 +37,7 @@
                             v-model="versionTo"
                             :disabled="versionFrom >= version.version_id"
                             :value="version.version_id">
-                        <diff-link :type="type" :id="documentId" :lang="lang" :versionTo="version.version_id"
+                        <diff-link :type="type" :id="documentId" :lang="lang" :version-to="version.version_id"
                                      v-if="version.version_id != last_version_id"/>
                     </div>
                 </td>

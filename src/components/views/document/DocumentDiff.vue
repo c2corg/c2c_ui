@@ -23,8 +23,8 @@
                         <div>
                             <diff-link v-if="oldVersion.previous_version_id"
                                 :type="type" :id="documentId" :lang="lang"
-                                :versionFrom="oldVersion.previous_version_id"
-                                :versionTo="oldVersion.version.version_id">
+                                :version-from="oldVersion.previous_version_id"
+                                :version-to="oldVersion.version.version_id">
                                 ← previous difference
                             </diff-link>
                             <span v-else>
@@ -49,8 +49,8 @@
                         <div>
                             <diff-link v-if="newVersion.next_version_id"
                                 :type="type" :id="documentId" :lang="lang"
-                                :versionFrom="newVersion.version.version_id"
-                                :versionTo="newVersion.next_version_id">
+                                :version-from="newVersion.version.version_id"
+                                :version-to="newVersion.next_version_id">
                                 next difference →
                             </diff-link>
                             <span v-else>

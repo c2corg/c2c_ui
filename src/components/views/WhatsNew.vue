@@ -33,12 +33,11 @@
 
                         <diff-link :type="change.document.type"
                                    :id="change.document.document_id" :lang="change.lang"
-                                   :versionTo="change.version_id"/>
+                                   :version-to="change.version_id"/>
 
-                        <router-link :to="{name: documentType[change.document.type] + '-history',
-                                           params: {id:change.document.document_id, lang:change.lang} }">
-                            hist
-                        </router-link>
+                        <history-link :type="change.document.type"
+                                   :id="change.document.document_id" :lang="change.lang"/>
+
                     </td>
                     <td>
                         <icon-quality :quality="change.document.quality"/>
@@ -62,15 +61,12 @@
 </template>
 <script>
     import c2c from '@/js/c2c.js'
-    import constants from '@/js/constants.js'
 
     export default {
 
         data(){
             return {
-                documentType:constants.documentType,
                 results:null,
-
             }
         },
 
