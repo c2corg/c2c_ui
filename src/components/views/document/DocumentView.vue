@@ -43,7 +43,11 @@
             <icon-document :type="type"/>
             <document-title :document="document"/>
         </h1>
-        <component :is="type + '-content'" :document="document" :locale="locale"/>
+
+        <component :is="type + '-content'" :document="document"
+                   :locale="locale" :locale-fields="constants.localeFields[this.type]">
+        </component>
+
         <document-comments :document="document" :locale="locale" />
     </div>
 
@@ -52,6 +56,8 @@
 <script>
     import c2c from '@/js/c2c.js'
     import user from '@/js/user.js'
+    import constants from '@/js/constants.js'
+
 
     import RouteContent from './content/RouteContent'
     import OutingContent from './content/OutingContent'
@@ -88,10 +94,12 @@
                 version: null,
                 previousVersionId: null,
                 nextVersionId: null,
+                constants:constants,
             }
         },
 
         created() {
+
             if(this.isVersionView){
                 c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version).then(response => {
                     this.document = response.data.document

@@ -12,13 +12,15 @@
             </div>
         </div>
         <component :is="type + '-edition-content'" v-if="document"
-            :document="document" :locale="locale"></component>
+            :document="document" :locale="locale" :localeFields="constants.localeFields[type]">
+        </component>
     </div>
 </template>
 
 <script>
     import c2c from '@/js/c2c.js'
     import user from '@/js/user.js'
+    import constants from '@/js/constants.js'
 
     import RouteEditionContent from './content/RouteEditionContent'
     /*
@@ -43,6 +45,7 @@
                 lang: this.$route.params.lang,
                 document: null,
                 locale:undefined,
+                constants,
             }
         },
 

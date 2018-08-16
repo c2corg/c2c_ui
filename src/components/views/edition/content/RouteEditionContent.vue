@@ -10,11 +10,12 @@
                       </div>
                 </div>
 
-                <div v-for="locale_field of locale_fields" :key="locale_field">
-                    <h2>{{locale_field}}</h2>
+                <div v-for="field of localeFields" :key="field.name"
+                     v-if="!field.activity || document.activities.indexOf(field.activity) != -1">
+                    <h2>{{field.label || field.name}}</h2>
                     <textarea
                         class="textarea"
-                        v-model="locale[locale_field]"/>
+                        v-model="locale[field.name]"/>
                 </div>
             </tab-item>
 
@@ -40,12 +41,9 @@
             TabItem
         },
 
-        props : ["document", "locale"],
+        props : ["document", "locale", "localeFields"],
 
-        data(){
-            return {
-                locale_fields:["summary","description"]
-            }
+        methods:{
         },
     }
 </script>

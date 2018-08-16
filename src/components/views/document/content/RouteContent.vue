@@ -4,13 +4,10 @@
         <div class="column is-9">
             <!--   CONTENT  -->
 
-            <markdown-section :markdown="locale.summary" class="summary"/>
-            <markdown-section :markdown="locale.route_history" title="History"/>
-            <markdown-section :markdown="locale.description" title="Description"/>
-            <markdown-section :markdown="locale.slackline_anchor1" title="Anchor 1"/>
-            <markdown-section :markdown="locale.slackline_anchor2" title="Anchor 2"/>
-            <markdown-section :markdown="locale.remarks" title="Remarks"/>
-            <markdown-section :markdown="locale.gear" title="Gears"/>
+            <markdown-section v-for="(field, index) of localeFields" :key="index"
+                :markdown="locale[field.name]"
+                :class="{summary:field.name=='summary'}"
+                :title="field.name!='summary' ? field.name : null"/>
 
             <div class="hidden-print" v-if="document.associations.recent_outings.documents.length!=0">
                 <h2>
@@ -120,6 +117,6 @@
             DistanceInformationItem
         },
 
-        props:["document", "locale"]
+        props:["document", "locale", "localeFields"],
     }
 </script>
