@@ -1,9 +1,14 @@
 
 import axios from 'axios';
 
+const apiUrl = 'https://forum.camptocamp.org'
+const url = 'https://forum.camptocamp.org'
+
 export default {
+    url,
+
     get:function(){
-        var result = axios.get('https://forum.camptocamp.org/latest.json')
+        var result = axios.get(apiUrl + '/latest.json')
 
         result.then(function(response){
 
@@ -19,5 +24,15 @@ export default {
 
         })
         return result
+    },
+
+    topic:{
+        get(topicId){
+            var result = axios.get(apiUrl + '/t/title/' + topicId + '.json')
+            return result
+        }
     }
+
 };
+
+//https://forum.camptocamp.org/t/1012597-fr/219521.json

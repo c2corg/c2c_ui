@@ -49,6 +49,21 @@ var routes = [
     //   * edit
     // * xreport and profile data
     // * signup
+    // * filters for documents
+    // * maps types (ign, swiss...)
+    // * see maps on document view
+    // * admin actions
+    // * document-view actions (hostory, edit, translate...)
+    // * version-link and diff-link props are not kebab case : https://vuejs.org/v2/style-guide/#Prop-name-casing-strongly-recommended
+    // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
+    // * scope all styles : https://vuejs.org/v2/style-guide/#Component-style-scoping-essential
+    // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
+    // * do forum.createTopic()
+    // * test all comments functions
+    // * markdown alerts
+    // * markdown icons
+    // * config for url api and url forum
+    // * config for history mode 
 
 ]
 

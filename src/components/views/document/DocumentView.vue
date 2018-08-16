@@ -44,6 +44,7 @@
             <document-title :document="document"/>
         </h1>
         <component :is="type + '-content'" :document="document" :locale="locale"/>
+        <document-comments :document="document" :locale="locale" />
     </div>
 
 </template>
@@ -62,6 +63,8 @@
     import WaypointContent from './content/WaypointContent'
     import XreportContent from './content/XreportContent'
 
+    import DocumentComments from './utils/DocumentComments'
+
     export default {
         components:{
             RouteContent,
@@ -73,6 +76,7 @@
             ImageContent,
             WaypointContent,
             XreportContent,
+            DocumentComments,
         },
 
         data() {
