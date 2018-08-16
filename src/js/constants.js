@@ -1,4 +1,9 @@
-const documentType = {
+
+import common from '@/js/common.js'
+
+console.log(common)
+
+common.documentType = {
     a:"area",
     c:"article",
     b:"book",
@@ -11,36 +16,20 @@ const documentType = {
     x:"xreport"
 }
 
+common.documentsGeoLocalization = [
+    "routes",
+    "waypoints",
+    "profiles",
+    "outings",
+    "images",
+    "xreports"
+]
 
-export default {
-    documentType,
+common.activities = common.attributes.activities
+common.langs = common.attributes.langs
 
-    getDocumentType(type){
-        return type.length == 1 ? documentType[type] : type
-    },
-
-    documentsGeoLocalization: [
-        "routes",
-        "waypoints",
-        "profiles",
-        "outings",
-        "images",
-        "xreports"
-    ],
-
-    activities: [
-        'skitouring',
-        'snow_ice_mixed',
-        'mountain_climbing',
-        'rock_climbing',
-        'ice_climbing',
-        'hiking',
-        'snowshoeing',
-        'paragliding',
-        'mountain_biking',
-        'via_ferrata',
-        'slacklining'
-    ],
-
-    langs: ['fr', 'en', 'it', 'de', 'es', 'ca', 'eu']
+common.getDocumentType = function(type){
+    return type.length == 1 ? common.documentType[type] : type
 }
+
+export default common
