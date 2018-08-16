@@ -110,7 +110,6 @@ function c2c(){
 }
 
 c2c.prototype.setToken = function(token){
-    console.log(this.axios)
     if(token){
         this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"'
     } else if(this.axios.defaults.headers.common.Authorization){

@@ -10,4 +10,6 @@ var prodConfig = {
     forumUrl : "https://forum.camptocamp.org",
 }
 
-export default devConfig
+var useProd = false
+
+export default (useProd ? devConfig : prodConfig)

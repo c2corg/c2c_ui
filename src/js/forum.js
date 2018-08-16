@@ -20,7 +20,6 @@ function forum(){
 }
 
 forum.prototype.getLatest = function () {
-    console.log(this.axios)
     var result = this.axios.get(this.apiUrl + '/latest.json')
 
     result.then(function(response){
