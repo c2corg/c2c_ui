@@ -28,7 +28,7 @@
         },
 
         created(){
-            this.type = constants.documentType[this.document.type]
+            this.type = constants.getDocumentType(this.document.type)
         }
     }
 </script>

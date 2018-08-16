@@ -108,7 +108,7 @@
                     break;
             }
 
-            this.actionLine += constants.documentType[this.item['document']['type']];
+            this.actionLine += constants.getDocumentType(this.item['document']['type']);
 
 
             const start = moment(this.item['document']['date_start']);

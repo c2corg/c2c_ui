@@ -12,10 +12,10 @@ def get_fields(name):
 result = {"fields": {}}
 
 result["fields"]["area"] = get_fields('fields_area')['fields_area']
-result["fields"]["article"] = get_fields('fields_area')['fields_area']
-result["fields"]["book"] = get_fields('fields_area')['fields_area']
-result["fields"]["image"] = get_fields('fields_area')['fields_area']
-result["fields"]["outing"] = get_fields('fields_area')['fields_area']
+result["fields"]["article"] = get_fields('fields_article')['fields_article']
+result["fields"]["book"] = get_fields('fields_book')['fields_book']
+result["fields"]["image"] = get_fields('fields_image')['fields_image']
+result["fields"]["outing"] = get_fields('fields_outing')['fields_outing']
 result["fields"]["route"] = get_fields('fields_route')['fields_route']
 result["fields"]["map"] = get_fields('fields_topo_map')['fields_topo_map']
 result["fields"]["profile"] = get_fields('fields_user_profile')['fields_user_profile']

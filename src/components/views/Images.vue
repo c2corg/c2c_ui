@@ -12,7 +12,7 @@
                     <div class="card-image"
                         v-for="document in documents.documents"
                         :key="document.document_id">
-                        <img :src="getSmallImageUrl(document)" height="250" @click="go(document)">
+                        <img :src="c2c.getSmallImageUrl(document)" height="250" @click="go(document)">
                     </div>
                 </div>
             </div>
@@ -32,11 +32,11 @@
                 documents: null,
                 title: this.$route.name,
 
-                getSmallImageUrl : c2c.getSmallImageUrl,
+                c2c : c2c,
 
                 go(image){
                     this.$router.push({
-                        name: constants.documentType[image.type],
+                        name: "image",
                         params: { id: image.document_id }
                     })
                 }

@@ -27,9 +27,9 @@
                         <contributor-link :contributor="change.user"/>
                     </td>
                     <td>
-                        <router-link :to="{name: documentType[change.document.type], params: {id:change.document.document_id} }">
+                        <document-link :document="change.document" :lang="change.lang">
                             last
-                        </router-link>
+                        </document-link>
 
                         <diff-link :type="change.document.type"
                                    :id="change.document.document_id" :lang="change.lang"

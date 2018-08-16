@@ -46,14 +46,14 @@
         methods:{
             go(){
                 this.$router.push({
-                    name: constants.documentType[this.document.type],
+                    name: constants.getDocumentType(this.document.type),
                     params: { id: this.document.document_id }
                 })
             }
         },
 
         created() {
-            this.cardComponentName = constants.documentType[this.document.type] + "-card-content"
+            this.cardComponentName = constants.getDocumentType(this.document.type) + "-card-content"
         },
     }
 
