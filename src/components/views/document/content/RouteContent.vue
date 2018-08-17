@@ -4,8 +4,8 @@
         <div class="column is-9">
             <!--   CONTENT  -->
 
-            <markdown-section v-for="(field, index) of localeFields" :key="index"
-                :markdown="locale[field.name]"
+            <markdown-section v-for="(field, index) of Object.values(objectDefinition.localeFields)" :key="index"
+                :markdown="locale[field.name]" v-if="!field.rawText"
                 :class="{summary:field.name=='summary'}"
                 :title="field.name!='summary' ? field.name : null"/>
 
@@ -29,7 +29,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
 
         <div class="column is-3">
@@ -117,6 +116,6 @@
             DistanceInformationItem
         },
 
-        props:["document", "locale", "localeFields"],
+        props:["document", "locale", "objectDefinition"],
     }
 </script>

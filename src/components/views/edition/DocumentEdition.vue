@@ -3,16 +3,16 @@
 
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-primary">
+                <button class="button is-primary" @click="save">
                     Save
                 </button>
             </div>
             <div class="control">
-                <input type="text" class="input" placeholder="comment"/>
+                <input type="text" class="input" placeholder="comment" v-model="comment"/>
             </div>
         </div>
         <component :is="type + '-edition-content'" v-if="document"
-            :document="document" :locale="locale" :localeFields="constants.localeFields[type]">
+            :document="document" :locale="locale" :objectDefinition="constants.objectDefinitions[type]">
         </component>
     </div>
 </template>
@@ -46,6 +46,7 @@
                 document: null,
                 locale:undefined,
                 constants,
+                comment:"",
             }
         },
 
@@ -55,6 +56,12 @@
                 this.document=response.data
                 this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
             });
+        },
+
+        methods:{
+            save(){
+                c2c[this.type].save(this.document, this.comment)
+            }
         }
     }
 </script>

@@ -45,7 +45,7 @@
         </h1>
 
         <component :is="type + '-content'" :document="document"
-                   :locale="locale" :locale-fields="constants.localeFields[this.type]">
+                   :locale="locale" :object-definition="constants.objectDefinitions[this.type]">
         </component>
 
         <document-comments :document="document" :locale="locale" />

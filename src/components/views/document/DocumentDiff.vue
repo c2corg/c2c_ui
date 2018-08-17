@@ -150,14 +150,15 @@
                     if (this.hasChanged(oldVal, newVal)){
                         let diff = diff_match_patch.diff_main(oldVal, newVal)
                         diff_match_patch.diff_cleanupSemantic(diff)
-                        let html = diff_match_patch.diff_prettyHtml(diff)
+                        let html = diff_match_patch.diff_prettyHtml(diff).split("<br>")
                         let result = []
-                        for(let line of html.split("\n")){
+                        for(let line of html){
                             if(line.search(/<(ins|del)[ >]/) != -1){
-                                result.push(line + "\n")
+                                result.push(line)
                             }
                         }
-                        this.diffLocales[key] = result.join("\n")
+
+                        this.diffLocales[key] = result.join("<br>")
                     }
                 }
             },
