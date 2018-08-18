@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:getType(type) + '-history', params:{id:id, lang:lang}}">
+    <router-link :to="{name:type + '-history', params:{id:id, lang:lang}}">
         <slot>
             hist
         </slot>
@@ -7,12 +7,7 @@
 </template>
 
 <script>
-    import constants from '@/js/constants.js'
-
     export default{
         props:["type", "lang", "id"],
-        methods:{
-            getType:constants.getDocumentType
-        }
     }
 </script>

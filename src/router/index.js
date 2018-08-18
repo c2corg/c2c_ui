@@ -60,8 +60,8 @@ var routes = [
     // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
     // * do forum.createTopic()
     // * test all comments functions
-    // * markdown alerts
-    // * markdown icons
+    // * markdown alerts in parser
+    // * markdown icons in parser
     // * config for history mode
 
     // * CSS
@@ -71,6 +71,8 @@ var routes = [
 ]
 
 for(let type of constants.documentTypes){
+
+    var def = constants.objectDefinitions[type]
 
     routes.push({
         path: '/' + type + 's',
@@ -85,8 +87,20 @@ for(let type of constants.documentTypes){
     )
 
     routes.push({
+        path: '/' + type + 's/:id/:lang?',
+        name: def.letter,
+        component: DocumentView},
+    )
+
+    routes.push({
         path: '/' + type + 's/history/:id/:lang',
         name: type + "-history",
+        component: DocumentHistory},
+    )
+
+    routes.push({
+        path: '/' + type + 's/history/:id/:lang',
+        name: def.letter + "-history",
         component: DocumentHistory},
     )
 
@@ -97,14 +111,32 @@ for(let type of constants.documentTypes){
     )
 
     routes.push({
+        path: '/' + type + 's/edit/:id/:lang',
+        name: def.letter + "-edit",
+        component: DocumentEdition},
+    )
+
+    routes.push({
         path: '/' + type + 's/diff/:id/:lang/:versionFrom/:versionTo',
         name: type + "-diff",
         component: DocumentDiff},
     )
 
     routes.push({
+        path: '/' + type + 's/diff/:id/:lang/:versionFrom/:versionTo',
+        name: def.letter + "-diff",
+        component: DocumentDiff},
+    )
+
+    routes.push({
         path: '/' + type + 's/version/:id/:lang/:version',
         name: type + "-version",
+        component: DocumentView},
+    )
+
+    routes.push({
+        path: '/' + type + 's/version/:id/:lang/:version',
+        name: def.letter + "-version",
         component: DocumentView},
     )
 }

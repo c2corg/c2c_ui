@@ -1,6 +1,6 @@
 <template>
     <span>
-        <router-link :to="{ name: type + '-history', params: {id:document.document_id, lang:'fr'} }">
+        <router-link :to="{ name: document.type + '-history', params: {id:document.document_id, lang:'fr'} }">
             <i class="fa fa-users"></i>
         </router-link>
         -
@@ -16,19 +16,7 @@
 </template>
 
 <script>
-    import constants from '@/js/constants.js'
-
     export default {
         props: ['document', 'cc'],
-
-        data(){
-            return {
-                type: null
-            }
-        },
-
-        created(){
-            this.type = constants.getDocumentType(this.document.type)
-        }
     }
 </script>

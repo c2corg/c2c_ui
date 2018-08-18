@@ -91,19 +91,6 @@ function Constants(){
 
     this.langs = common.attributes.langs
 
-    this.letterToType = {
-        a:"area",
-        c:"article",
-        b:"book",
-        i:"image",
-        m:"map",
-        o:"outing",
-        r:"route",
-        u:"profile",
-        w:"waypoint",
-        x:"xreport"
-    }
-
     this.documentsGeoLocalization = [
         "routes",
         "waypoints",
@@ -113,7 +100,6 @@ function Constants(){
         "xreports"
     ]
 
-    this.documentTypes = Object.values(this.letterToType)
 
     //small helper for shorter code
     var no_paragliding_or_slacklining = [
@@ -130,6 +116,7 @@ function Constants(){
 
     this.objectDefinitions = {
         route:{
+            letter:"r",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -191,6 +178,7 @@ function Constants(){
         },
 
         area:{
+            letter:"a",
             localeFields:getFieldsObject(
                 new Field("title"),
             ),
@@ -201,6 +189,7 @@ function Constants(){
         },
 
         article:{
+            letter:"c",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -215,6 +204,7 @@ function Constants(){
         },
 
         book:{
+            letter:"b",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -234,6 +224,7 @@ function Constants(){
         },
 
         map:{
+            letter:"m",
             localeFields:getFieldsObject(
                 new Field("title"),
             ),
@@ -245,6 +236,7 @@ function Constants(){
         },
 
         outing:{
+            letter:"o",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -304,6 +296,7 @@ function Constants(){
         },
 
         profile:{
+            letter:"u",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -316,6 +309,7 @@ function Constants(){
         },
 
         waypoint:{
+            letter:"w",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -375,6 +369,7 @@ function Constants(){
         },
 
         xreport:{
+            letter:"x",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -417,6 +412,7 @@ function Constants(){
         },
 
         image:{
+            letter:"i",
             localeFields:getFieldsObject(
                 new Field("title"),
                 new Field("summary"),
@@ -441,6 +437,13 @@ function Constants(){
             )
         },
     };
+
+    this.documentTypes = Object.keys(this.objectDefinitions)
+
+    this.letterToType = {}
+    for(let type of this.documentTypes){
+        this.letterToType[this.objectDefinitions[type].letter] = type
+    }
 }
 
 Constants.prototype.getDocumentType = function(type){

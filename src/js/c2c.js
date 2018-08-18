@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import config from '@/js/config.js'
+import constants from '@/js/constants.js'
 
 function c2c(){
     var this_ = this
@@ -80,16 +81,17 @@ function c2c(){
         },
     };
 
-    const types = ["area", "article", "book", "image", "map", "outing", "profile", "route", "waypoint", "xreport"]
+    for(let type of constants.documentTypes){
 
-    for(let type of types){
+        let def = constants.objectDefinitions[type]
+
         this[type + "s"] = {
             get(params){
                 return this_.axios.get(this_.apiUrl + '/' + type + 's', {params})
             }
         };
 
-        this[type] = {
+        var documentService = {
             get(id){
                 return this_.axios.get(this_.apiUrl + '/' + type + 's/' + id)
             },
@@ -106,6 +108,9 @@ function c2c(){
             }
 
         };
+
+        this[type] = documentService
+        this[def.letter] = documentService
     }
 }
 
