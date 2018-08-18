@@ -39,6 +39,15 @@
 
     export default {
         props:["document", "field"],
-        methods:{hasField:constants.hasField}
+        methods:{hasField:constants.hasField},
+        created(){
+            if(this.field.values && (this.field.type=="text" || this.field.type == "number")){
+                if(this.document[this.field.name] === null){
+                    this.document[this.field.name] = []
+                }
+            }
+        }
     }
+
+
 </script>

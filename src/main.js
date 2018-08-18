@@ -7,6 +7,7 @@ import PrettyOutingLink from './components/utils/PrettyOutingLink'
 
 import DocumentLink from './components/utils/links/DocumentLink'
 import DiffLink from './components/utils/links/DiffLink'
+import EditLink from './components/utils/links/EditLink'
 import VersionLink from './components/utils/links/VersionLink'
 import HistoryLink from './components/utils/links/HistoryLink'
 import ContributorLink from '@/components/utils/links/ContributorLink'
@@ -27,6 +28,9 @@ import IconOuting from './components/icons/IconOuting'
 import IconArticle from './components/icons/IconArticle'
 import IconXreport from './components/icons/IconXreport'
 import IconArea from './components/icons/IconArea'
+
+import IconEdit from './components/icons/IconEdit'
+import IconHistory from './components/icons/IconHistory'
 
 
 
@@ -71,10 +75,14 @@ Vue.component("loading-notification", LoadingNotification)
 Vue.component("pretty-route-link", PrettyRouteLink)
 Vue.component("pretty-outing-link", PrettyOutingLink)
 
+Vue.component("edit-link", EditLink)
 Vue.component("diff-link", DiffLink)
 Vue.component("version-link", VersionLink)
 Vue.component("contributor-link", ContributorLink)
 Vue.component("history-link", HistoryLink)
+
+Vue.component("icon-edit", IconEdit)
+Vue.component("icon-history", IconHistory)
 
 
 Vue.component("base-icon", BaseIcon)

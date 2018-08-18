@@ -42,6 +42,14 @@
         <h1>
             <icon-document :type="type"/>
             <document-title :document="document"/>
+            <span class="is-pulled-right">
+                <history-link :type="type" :id="document.document_id" :lang="locale.lang">
+                    <icon-history class="is-large" />
+                </history-link>
+                <edit-link :type="type" :id="document.document_id" :lang="locale.lang">
+                    <icon-edit class="is-large"/>
+                </edit-link>
+            </span>
         </h1>
 
         <component :is="type + '-content'" :document="document"
