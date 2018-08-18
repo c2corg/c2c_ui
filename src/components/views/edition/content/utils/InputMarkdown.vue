@@ -1,5 +1,5 @@
 <template>
-    <div class="field">
+    <div class="field" v-if="hasField(document, field)">
           <div class="control">
               <h2>{{field.label}}</h2>
 
@@ -9,7 +9,10 @@
 </template>
 
 <script>
+    import constants from "@/js/constants.js"
+
     export default {
-        props:["locale", "field"]
+        props:["document", "locale", "field"],
+        methods:{hasField:constants.hasField}
     }
 </script>

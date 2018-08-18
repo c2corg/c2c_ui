@@ -10,10 +10,14 @@
                       </div>
                 </div>
 
-                <div v-for="field of Object.values(objectDefinition.localeFields)" :key="field.name"
-                     v-if="!field.isRawText && hasField(document, field)">
-                     <input-markdown :locale="locale" :field="field"/>
-                </div>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.route_history"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.slackline_anchor1"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.slackline_anchor2"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.remarks"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.gear"/>
+                <input-markdown :document="document" :locale="locale" :field="localeFields.external_resources"/>
 
             </tab-item>
 
@@ -78,8 +82,6 @@
 
 <script>
 
-    import constants from "@/js/constants.js"
-
     import TabView from './../utils/TabView'
     import TabItem from './../utils/TabItem'
 
@@ -98,13 +100,9 @@
 
         data(){
             return {
-                fields : this.objectDefinition.fields
+                fields : this.objectDefinition.fields,
+                localeFields : this.objectDefinition.localeFields,
             }
         },
-
-        methods:{
-            hasField : constants.hasField,
-        }
-
     }
 </script>

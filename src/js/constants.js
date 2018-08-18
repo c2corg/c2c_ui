@@ -10,14 +10,16 @@ function Field(name, properties){
         slope : {isRawText:true},
 
         // document's fields
-        activities:{values:common.attributes.activities},
+        activities:{values:common.attributes.activities, multiple:true},
         climbing_outdoor_typ:{values:common.attributes.climbing_outdoor_types},
-        configuration:{values:common.attributes.route_configuration_types},
+        configuration:{values:common.attributes.route_configuration_types, multiple:true},
+        orientations:{values:common.attributes.orientation_types, multiple:true},
         glacier_gear:{values:common.attributes.glacier_gear_types},
         quality:{values:common.attributes.quality_types},
-        rock_types:{values:common.attributes.rock_types},
-        route_types:{values:common.attributes.route_types},
+        rock_types:{values:common.attributes.rock_types, multiple:true},
+        route_types:{values:common.attributes.route_types, multiple:true},
         slackline_type:{values:common.attributes.slackline_types},
+        durations:{values:common.attributes.route_duration_types, multiple:true},
 
         difficulties_height:{type:"number", min:0, unit:"m"},
         elevation_max:{type:"number", min:0, unit:"m"},
@@ -54,12 +56,13 @@ function Field(name, properties){
         mtb_up_rating:{values:common.attributes.mtb_up_ratings},
     }
 
-    var def = fields[name] || {}
-
     this.name = name
 
-    for(let key of Object.keys(def)){
-        this[key] = def[key]
+    var baseProperties = fields[name] || {}
+
+
+    for(let key of Object.keys(baseProperties)){
+        this[key] = baseProperties[key]
     }
 
 
@@ -137,7 +140,6 @@ function Constants(){
                 new Field("slope", {activities:["snow_ice_mixed", "ice_climbing", "snowshoeing", "skitouring"]}),
                 new Field("remarks"),
                 new Field("gear"),
-                new Field("slope"),
                 new Field("external_resources"),
             ),
             fields:getFieldsObject(
