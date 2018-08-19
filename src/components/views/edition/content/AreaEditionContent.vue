@@ -7,8 +7,8 @@
               </div>
         </div>
 
-        <input-base :document="document" :field="localeFields.area_tye"/>
-        <input-base :document="document" :field="localeFields.quality"/>
+        <input-base :document="document" :field="fields.area_type"/>
+        <input-base :document="document" :field="fields.quality"/>
 
     </div>
 </template>
