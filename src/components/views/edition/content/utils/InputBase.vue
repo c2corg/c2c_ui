@@ -1,7 +1,7 @@
 <template>
     <div class="field" v-if="hasField(document, field)">
         <label>
-            {{field.label}} {{document[field.name]}}
+            {{field.label}} 
         </label>
 
         <div v-if="field.values && (field.type == 'text' || field.type=='number')" class="control">
@@ -42,7 +42,7 @@
         methods:{hasField:constants.hasField},
         created(){
             if(this.field.values && (this.field.type=="text" || this.field.type == "number")){
-                if(this.document[this.field.name] === null){
+                if(!this.document[this.field.name]){
                     this.document[this.field.name] = []
                 }
             }

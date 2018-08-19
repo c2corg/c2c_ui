@@ -82,8 +82,8 @@
 
 <script>
 
-    import TabView from './../utils/TabView'
-    import TabItem from './../utils/TabItem'
+    import TabView from './utils/TabView'
+    import TabItem from './utils/TabItem'
 
     import InputBase from './utils/InputBase'
     import InputMarkdown from './utils/InputMarkdown'

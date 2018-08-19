@@ -22,20 +22,29 @@
     import user from '@/js/user.js'
     import constants from '@/js/constants.js'
 
-    import RouteEditionContent from './content/RouteEditionContent'
-    /*
-    import OutingEditionContent from './content/OutingEditionContent'
-    import ProfileEditionContent from './content/ProfileEditionContent'
+    import AreaEditionContent from './content/AreaEditionContent'
     import ArticleEditionContent from './content/ArticleEditionContent'
     import BookEditionContent from './content/BookEditionContent'
-    import AreaEditionContent from './content/AreaEditionContent'
     import ImageEditionContent from './content/ImageEditionContent'
+    import MapEditionContent from './content/MapEditionContent'
+    import OutingEditionContent from './content/OutingEditionContent'
+    import ProfileEditionContent from './content/ProfileEditionContent'
+    import RouteEditionContent from './content/RouteEditionContent'
     import WaypointEditionContent from './content/WaypointEditionContent'
     import XreportEditionContent from './content/XreportEditionContent'
-    */
+
     export default{
         components:{
+            AreaEditionContent,
+            ArticleEditionContent,
+            BookEditionContent,
+            ImageEditionContent,
+            MapEditionContent,
+            OutingEditionContent,
+            ProfileEditionContent,
             RouteEditionContent,
+            WaypointEditionContent,
+            XreportEditionContent,
         },
 
         data() {
