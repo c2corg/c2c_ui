@@ -1,12 +1,13 @@
 <template>
-    <div class="field" v-if="hasField(document, field)">
+    <div class="field" v-if="field.isVisibleFor(document)">
         <label>
-            {{field.label}} 
+            {{field.label}}
+            <span v-if="field.required">*</span>
         </label>
 
         <div v-if="field.values && (field.type == 'text' || field.type=='number')" class="control">
             <div class="select" :class="{'is-multiple':field.multiple}">
-                 <select v-model="document[field.name]"
+                 <select v-model="object[field.name]"
                          :multiple="!!field.multiple">
                      <option v-for="value of field.values"
                              :value="value" :key="value">
@@ -20,11 +21,15 @@
             <input class="input"
                 :type="field.type"
                 :min="field.min"
-                v-model="document[field.name]">
+                v-model="object[field.name]">
 
             <span class="icon is-right" v-if="field.unit">
                 {{field.unit}}
             </span>
+        </div>
+
+        <div v-else-if="field.type=='markdown'">
+              <textarea class="textarea" v-model="object[field.name]"/>
         </div>
 
         <div v-else class="notification is-danger">
@@ -35,12 +40,18 @@
 </template>
 
 <script>
-    import constants from "@/js/constants.js"
 
     export default {
-        props:["document", "field"],
-        methods:{hasField:constants.hasField},
+        props:["document", "base", "field"],
+
+        data(){
+            return {
+                object:null,
+            }
+        },
         created(){
+            this.object = this.base || this.document
+
             if(this.field.values && (this.field.type=="text" || this.field.type == "number")){
                 if(!this.document[this.field.name]){
                     this.document[this.field.name] = []

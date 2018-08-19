@@ -15,93 +15,55 @@ function Field(name, properties){
     //todo : geom, longlat, condiction_levels
 
     var fields = {
-
-        /*
-        //locales' fields
-        title: {isRawText:true},
-        external_resources : {label:"External resources"},
-        route_history : {label:"History"},
-        slope : {isRawText:true},
-
-        // document's fields
-        climbing_outdoor_typ:{values:attrs.climbing_outdoor_types},
-        configuration:{values:attrs.route_configuration_types, multiple:true},
-        orientations:{values:attrs.orientation_types, multiple:true},
-        glacier_gear:{values:attrs.glacier_gear_types},
-        quality:{values:attrs.quality_types},
-        rock_types:{values:attrs.rock_types, multiple:true},
-        route_types:{values:attrs.route_types, multiple:true},
-        slackline_type:{values:attrs.slackline_types},
-        durations:{values:attrs.route_duration_types, multiple:true},
-
-        difficulties_height:{type:"number", min:0, unit:"m"},
-        prominence:{type:"number", max:9000, unit:"m"},
-        height_diff_access:{type:"number", min:0, unit:"m"},
-        height_diff_down:{type:"number", min:0, unit:"m"},
-        height_diff_up:{type:"number", min:0, unit:"m"},
-        mtb_length_asphalt:{type:"number", min:0, unit:"km"},
-        mtb_length_trail:{type:"number", min:0, unit:"km"},
-        mtb_height_diff_portages:{type:"number", min:0, unit:"km"},
-        route_length:{type:"number", min:0, unit:"km"},
-        slackline_height:{type:"number", min:0, unit:"km"},
-
-        climbing_outdoor_types:{values:common.attributes.climbing_outdoor_types, multiple:true},
-        climbing_indoor_types:{values:common.attributes.climbing_indoor_types, multiple:true},
-        slackline_types:{values:common.attributes.slackline_types, multiple:true},
-        climbing_styles:{values:common.attributes.climbing_styles, multiple:true},
-        best_periods:{values:common.attributes.months, multiple:true},
-        access_time:{values:common.attributes.access_times},
-        */
-
-
-        access:{},
-        access_comment:{},
+        access:{type:"markdown"},
+        access_comment:{type:"markdown"},
         access_condition:{values:attrs.access_conditions},
-        access_period:{},
+        access_period:{values:attrs.months, multiple},
         access_time:{values:attrs.access_times},
         activities:{values:attrs.activities, multiple},
         activity_rate:{values:attrs.activity_rates},
         age:{type:"number", min:0, max:120, units:"years"},
         aid_rating:{values:attrs.aid_ratings},
         anonymous:{type:"boolean"},
-        area_type:{values:attrs.area_types},
+        area_type:{values:attrs.area_types, required},
+        article_categories:{name:"categories", values:attrs.article_categories, multiple},
         article_type:{values:attrs.article_types},
         author:{minLength:2},
         author_status:{values:attrs.author_statuses},
         autonomy:{values:attrs.autonomies},
         avalanche_level:{values:attrs.avalanche_levels},
-        avalanche_signs:{},
+        avalanche_signs:{values:attrs.avalanche_signs, multiple},
         avalanche_slope:{values:attrs.avalanche_slopes},
-        avalanches:{},
-        best_periods:{},
+        avalanches:{type:"markdown"},
+        best_periods:{values:attrs.months, multiple},
         blanket_unstaffed:{values:[true, false, null]},
-        book_types:{},
-        camera_name:{},
+        book_types:{values:attrs.book_types, multiple},
+        camera_name:{type:"text"},
         capacity:{type:"number", min:0, max:9999},
         capacity_staffed:{type:"number", min:0, max:9999},
         categories:{values:attrs.user_categories, multiple},
         children_proof:{values:common.attributes.children_proof_types},
-        climbing_indoor_types:{},
-        climbing_outdoor_typ:{},
+        climbing_indoor_types:{values:attrs.climbing_indoor_types, multiple},
+        climbing_outdoor_typ:{values:attrs.climbing_outdoor_types},
         climbing_outdoor_type:{values:attrs.climbing_outdoor_types},
-        climbing_outdoor_types:{},
+        climbing_outdoor_types:{values:attrs.climbing_outdoor_types, multiple},
         climbing_rating_max:{values:attrs.climbing_ratings},
         climbing_rating_median:{values:attrs.climbing_ratings},
         climbing_rating_min:{values:attrs.climbing_ratings},
-        climbing_styles:{},
-        code:{},
-        condition_rating:{},
-        conditions:{values:attrs.condition_ratings},
-        configuration:{},
+        climbing_styles:{values:attrs.climbing_styles, multiple},
+        code:{type:"text"},
+        condition_rating:{values:attrs.condition_ratings},
+        conditions:{type:"markdown"},
+        configuration:{values:attrs.route_configuration_types, multiple},
         custodianship:{values:attrs.custodianship_types},
         date:{type:"date"},
         date_end:{type:"date"},
         date_start:{type:"date", required},
         date_time:{type:"date_time"}, // wasn't in common... //todo : max:today
-        description:{},
+        description:{type:"markdown"},
         difficulties_height:{type:"number", min:0, max:9999, unit:"m"},
         disable_comments:{type:"boolean"},
-        durations:{},
+        durations:{values:attrs.route_duration_types, multiple},
         editor:{minLength:2},
         elevation:{type:"number", min:0, max:9999, unit:"m"},
         elevation_access:{type:"number", min:0, max:9999, unit:"m"},
@@ -111,27 +73,27 @@ function Field(name, properties){
         elevation_up_snow:{type:"number", min:0, max:9999, unit:"m"},
         engagement_rating:{values:attrs.engagement_ratings},
         equipment_rating:{values:attrs.equipment_ratings},
-        equipment_ratings:{values:attrs.equipment_ratings},
-        event_type:{},
+        equipment_ratings:{values:attrs.equipment_ratings, multiple},
+        event_type:{values:attrs.event_types, multiple},
         exposition_rating:{values:attrs.exposition_ratings},
         exposition_rock_rating:{values:attrs.exposition_rock_ratings},
         exposure_time:{type:"number",min:0, max:0},
-        external_resources:{},
-        file_size:{},
-        filename:{disabled},
-        fnumber:{},
+        external_resources:{type:"markdown"},
+        file_size:{type:"number",disabled},
+        filename:{type:"text", disabled},
+        fnumber:{type:"text"},
         focal_length:{type:"number",min:1},
         frequentation:{values:attrs.frequentation_types},
         gas_unstaffed:{values:[true, false, null]},
-        gear:{},
+        gear:{type:"markdown"},
         gender:{values:attrs.genders},
-        glacier_gear:{},
-        glacier_rating:{values:common.attributes.glacier_ratings},
-        global_rating:{values:common.attributes.global_ratings},
-        ground_types:{},
-        group_management:{},
+        glacier_gear:{values:attrs.glacier_gear_types},
+        glacier_rating:{values:attrs.glacier_ratings},
+        global_rating:{values:attrs.global_ratings},
+        ground_types:{values:attrs.ground_types, multiple},
+        group_management:{type:"markdown"},
         heating_unstaffed:{values:[true, false, null]},
-        height:{},
+        height:{type:"number", disabled},
         height_diff_access:{type:"number", min:0, unit:"m"},
         height_diff_difficulties:{type:"number", min:0, unit:"m"},
         height_diff_down:{type:"number", min:0, unit:"m"},
@@ -141,25 +103,26 @@ function Field(name, properties){
         height_min:{type:"number", min:0, max:9999, unit:"m"},
         hiking_mtb_exposition:{values:common.attributes.exposition_ratings},
         hiking_rating:{values:attrs.hiking_ratings},
-        hut_comment:{},
+        hut_comment:{type:"markdown"},
         hut_status:{values:attrs.hut_status},
         ice_rating:{values:common.attributes.ice_ratings},
+        image_catergories:{name:"catergories", values:attrs.image_catergories, multiple},
         image_type:{values:attrs.image_types},
         isbn:{minLength:9, maxLength:17},
         iso_speed:{type:"number", min:1},
         labande_global_rating:{values:attrs.global_ratings},
         labande_ski_rating:{values:attrs.labande_ski_ratings},
-        langs:{},
+        langs:{}, //todo
         length:{type:"number", min:0, max:9999, unit:"m"},
         length_total:{type:"number", min:0, unit:"km"},
         lift_access:{values:[true, false, null]},
         lift_status:{values:attrs.lift_status},
-        main_waypoint_id:{},
+        main_waypoint_id:{}, //todo
         maps_info:{type:"text"},
         matress_unstaffed:{values:[true, false, null]},
         mixed_rating:{values:attrs.mixed_ratings},
-        modifications:{},
-        motivations:{},
+        modifications:{type:"markdown"},
+        motivations:{type:"markdown"},
         mtb_down_rating:{values:common.attributes.mtb_down_ratings},
         mtb_height_diff_portages:{type:"number", min:0, unit:"m"},
         mtb_length_asphalt:{type:"number", min:0, unit:"km"},
@@ -170,67 +133,68 @@ function Field(name, properties){
         nb_outings:{values:attrs.nb_outings},
         nb_pages:{type:"number", min:0, max:9999},
         nb_participants:{type:"number", min:0, max:1000},
-        orientations:{},
-        other_comments:{},
+        orientations:{values:attrs.orientation_types, multiple:true},
+        other_comments:{type:"markdown"},
         paragliding_rating:{values:attrs.paragliding_ratings},
         parking_fee:{values:attrs.parking_fee_types},
         partial_trip:{type:"boolean"},
         participant_count:{type:"number", min:1, max:9999},
-        participants:{},
+        participants:{type:"text"},
         phone:{type:"tel"},
         phone_custodian:{type:"tel"},
-        place:{},
+        place:{type:"markdown"},
         previous_injuries:{values:attrs.previous_injuries},
-        product_types:{},
+        product_types:{values:attrs.product_types, multiple},
         prominence:{type:"number", min:0, max:9999, unit:"m"},
         public_transport:{type:"boolean"},
-        public_transportation_rating:{vlaues:attrs.public_transportation_ratings},
-        public_transportation_types:{},
-        publication_date:{},
-        quality:{},
+        public_transportation_rating:{values:attrs.public_transportation_ratings},
+        public_transportation_types:{values:attrs.public_transportation_types, multiple},
+        publication_date:{type:"text"},
+        quality:{values:attrs.quality_types},
         rain_proof:{values:common.attributes.rain_proof_types},
-        reduce_impact:{},
-        remarks:{},
+        reduce_impact:{type:"markdown"},
+        remarks:{type:"markdown"},
         rescue:{type:"boolean"},
-        risk:{},
+        risk:{type:"markdown"},
         risk_rating:{values:common.attributes.risk_ratings},
         rock_free_rating:{values:common.attributes.climbing_ratings},
         rock_required_rating:{values:common.attributes.climbing_ratings},
-        rock_types:{},
-        route_description:{},
-        route_history:{},
+        rock_types:{values:attrs.rock_types, multiple},
+        route_description:{type:"markdown"},
+        route_history:{type:"markdown"},
         route_length:{type:"number", min:0, unit:"km"},
-        route_study:{},
-        route_types:{},
+        route_study:{type:"markdown"},
+        route_types:{values:attrs.route_types, multiple},
         routes_quantity:{type:"number", min:0, max:9999},
-        safety:{},
-        scale:{},
+        safety:{type:"markdown"},
+        scale:{type:"text"},
         severity:{values:attrs.severities},
         ski_exposition:{values:attrs.exposition_ratings},
         ski_rating:{values:attrs.ski_ratings},
-        slackline_anchor1:{},
-        slackline_anchor2:{},
+        slackline_anchor1:{type:"markdown"},
+        slackline_anchor2:{type:"markdown"},
         slackline_height:{type:"number", min:0, unit:"m"},
         slackline_length_max:{type:"number", min:0, max:9999, unit:"m"},
         slackline_length_min:{type:"number", min:0, max:9999, unit:"m"},
         slackline_type:{values:attrs.slackline_types},
-        slackline_types:{},
+        slackline_types:{values:attrs.slackline_types, multiple},
         slope:{type:'text'}, //locale, but NOT markdown
         waypoint_slope:{name:"slope", type:'number', min:0, max:99, unit:"&deg;"}, //locale, but NOT markdown
         snow_clearance_rating:{values:attrs.snow_clearance_ratings},
         snow_quality:{values:attrs.condition_ratings},
         snow_quantity:{values:attrs.condition_ratings},
         snowshoe_rating:{values:attrs.snowshoe_ratings},
-        summary:{},
-        time_management:{},
-        timing:{},
+        summary:{type:"markdown"},
+        time_management:{type:"markdown"},
+        timing:{type:"markdown"},
         title:{required, minLength:3},
-        training:{},
+        training:{type:"markdown"},
         url:{type:"url", minLength:6},
         via_ferrata_rating:{values:attrs.via_ferrata_ratings},
         waypoint_type:{values:common.attributes.waypoint_types},
-        weather:{},
-        width:{},
+        weather:{type:"markdown"},
+        weather_station_types:{values:attrs.weather_station_types, multiple},
+        width:{type:"number",disabled},
     }
 
     this.name = name
@@ -251,6 +215,20 @@ function Field(name, properties){
 
     this.label = this.label || this.name
     this.type = this.type || "text"
+}
+
+Field.prototype.isVisibleFor = function(document){
+    if(this.activities){
+        for(let activity of this.activities){
+            if(document.activities.indexOf(activity) != -1){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
 }
 
 function getFieldsObject(){
@@ -358,6 +336,8 @@ function Constants(){
             letter:"a",
             localeFields:getFieldsObject(
                 new Field("title"),
+                new Field("summary"),
+                new Field("description"),
             ),
             fields:getFieldsObject(
                 new Field("area_type"),
@@ -374,7 +354,7 @@ function Constants(){
             ),
             fields:getFieldsObject(
                 new Field("activities"),
-                new Field("categories"),
+                new Field("article_categories"),
                 new Field("quality"),
                 new Field("article_type"),
             )
@@ -387,7 +367,7 @@ function Constants(){
                 new Field("summary"),
                 new Field("description"),
             ),
-            fields:[
+            fields:getFieldsObject(
                 new Field("author"),
                 new Field("editor"),
                 new Field("activities"),
@@ -397,7 +377,7 @@ function Constants(){
                 new Field("publication_date"),
                 new Field("langs"),
                 new Field("nb_pages"),
-            ]
+            )
         },
 
         map:{
@@ -405,11 +385,11 @@ function Constants(){
             localeFields:getFieldsObject(
                 new Field("title"),
             ),
-            fields:[
+            fields:getFieldsObject(
                 new Field("code"),
                 new Field("scale"),
                 new Field("editor"),
-            ]
+            )
         },
 
         outing:{
@@ -596,7 +576,7 @@ function Constants(){
             ),
             fields:getFieldsObject(
                 new Field("activities"),
-                new Field("categories"),
+                new Field("image_catergories"),
                 new Field("image_type"),
                 new Field("author"),
                 new Field("elevation"),
@@ -624,20 +604,6 @@ function Constants(){
 
 Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type
-}
-
-Constants.prototype.hasField = function (document, field){
-    if(field.activities){
-        for(let activity of field.activities){
-            if(document.activities.indexOf(activity) != -1){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return true;
 }
 
 

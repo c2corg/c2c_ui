@@ -1,18 +1,12 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
+        <input-base :document="document" :base="locale" :field="localeFields.title" />
 
-        <input-base :document="document" :field="field.activities" />
-        <input-base :document="document" :field="field.categories" />
-
-        <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
-        <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
-
+        <input-base :document="document" :field="fields.activities" />
+        <input-base :document="document" :field="fields.categories" />
+        
+        <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+        <input-base :document="document" :base="locale" :field="localeFields.description"/>
 
     </div>
 </template>

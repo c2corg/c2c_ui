@@ -1,24 +1,19 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
+        <input-base :document="document" :base="locale" :field="localeFields.title" />
 
-        <input-base :document="document" :field="field.author" />
-        <input-base :document="document" :field="field.editor" />
-        <input-base :document="document" :field="field.activities" />
-        <input-base :document="document" :field="field.url" />
-        <input-base :document="document" :field="field.isbn" />
-        <input-base :document="document" :field="field.book_types" />
-        <input-base :document="document" :field="field.publication_date" />
-        <input-base :document="document" :field="field.langs" />
-        <input-base :document="document" :field="field.nb_pages" />
+        <input-base :document="document" :field="fields.author" />
+        <input-base :document="document" :field="fields.editor" />
+        <input-base :document="document" :field="fields.activities" />
+        <input-base :document="document" :field="fields.url" />
+        <input-base :document="document" :field="fields.isbn" />
+        <input-base :document="document" :field="fields.book_types" />
+        <input-base :document="document" :field="fields.publication_date" />
+        <input-base :document="document" :field="fields.langs" />
+        <input-base :document="document" :field="fields.nb_pages" />
 
-        <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
-        <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
+        <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+        <input-base :document="document" :base="locale" :field="localeFields.description"/>
 
 
     </div>

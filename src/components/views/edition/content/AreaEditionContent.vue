@@ -1,14 +1,11 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
-
+        <input-base :document="document" :base="locale" :field="localeFields.title"/>
         <input-base :document="document" :field="fields.area_type"/>
         <input-base :document="document" :field="fields.quality"/>
+
+        <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+        <input-base :document="document" :base="locale" :field="localeFields.description"/>
 
     </div>
 </template>

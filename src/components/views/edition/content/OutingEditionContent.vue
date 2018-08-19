@@ -12,7 +12,7 @@
 
                 <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
                 <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.participants"/>
+                <input-base :document="document" :locale="locale" :field="localeFields.participants"/>
                 <input-markdown :document="document" :locale="locale" :field="localeFields.access_comment"/>
                 <input-markdown :document="document" :locale="locale" :field="localeFields.weather"/>
                 <input-markdown :document="document" :locale="locale" :field="localeFields.timing"/>

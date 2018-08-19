@@ -28,7 +28,7 @@
                 <input-base :document="document" :field="fields.slackline_type"/>
                 <input-base :document="document" :field="fields.quality"/>
                 <input-base :document="document" :field="fields.glacier_gear"/>
-                <input-base :document="document" :field="fields.climbing_outdoor_typ"/>
+                <input-base :document="document" :field="fields.climbing_outdoor_type"/>
                 <input-base :document="document" :field="fields.durations"/>
             </tab-item>
 
