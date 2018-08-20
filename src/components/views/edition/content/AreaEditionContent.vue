@@ -1,23 +1,38 @@
 <template>
     <div>
-        <input-base :document="document" :base="locale" :field="localeFields.title"/>
-        <input-base :document="document" :field="fields.area_type"/>
-        <input-base :document="document" :field="fields.quality"/>
+        <edit-section>
+            <template slot="header">
+                general informations
+            </template>
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
+                </div>
+                <div class="column is-narrow">
+                    <input-base :document="document" :field="fields.area_type"/>
+                </div>
+            </div>
+        </edit-section>
 
-        <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-        <input-base :document="document" :base="locale" :field="localeFields.description"/>
+        <edit-section>
+            <template slot="header">
+                description
+            </template>
+            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+        </edit-section>
 
     </div>
 </template>
 
 <script>
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
-            InputMarkdown,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

@@ -17,10 +17,12 @@
              </div>
         </div>
 
-        <div v-else-if="field.type == 'text' || field.type=='number'" class="control" :class="{'has-icons-right':field.unit}">
+        <div v-else-if="['text', 'number', 'url'].indexOf(field.type) !=-1" class="control" :class="{'has-icons-right':field.unit}">
             <input class="input"
                 :type="field.type"
                 :min="field.min"
+                :man="field.max"
+                :disabled="field.disabled"
                 v-model="object[field.name]">
 
             <span class="icon is-right" v-if="field.unit">
@@ -50,6 +52,7 @@
             }
         },
         created(){
+            console.log(this.field.name)
             this.object = this.base || this.document
 
             if(this.field.values && (this.field.type=="text" || this.field.type == "number")){

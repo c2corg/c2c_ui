@@ -32,8 +32,6 @@ import IconArea from './components/icons/IconArea'
 import IconEdit from './components/icons/IconEdit'
 import IconHistory from './components/icons/IconHistory'
 
-
-
 import Router from './router'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
@@ -109,3 +107,20 @@ new Vue({
   router:Router,
   render: h => h(App)
 }).$mount('#app')
+
+
+// extends javascript core objects
+
+Array.prototype.contains = function(value){
+    return this.indexOf(value) !== -1;
+}
+
+Array.prototype.toggle = function(value){
+    if(!this.contains(value)){
+        this.push(value);
+        return true;
+    } else {
+        this.splice(this.indexOf(value), 1);
+        return false;
+    }
+}

@@ -1,43 +1,107 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
 
-        <input-base :document="document" :field="field.activities" />
-        <input-base :document="document" :field="field.categories" />
-        <input-base :document="document" :field="field.image_type" />
-        <input-base :document="document" :field="field.author" />
-        <input-base :document="document" :field="field.elevation" />
-        <input-base :document="document" :field="field.height" />
-        <input-base :document="document" :field="field.width" />
-        <input-base :document="document" :field="field.file_size" />
-        <input-base :document="document" :field="field.filename" />
-        <input-base :document="document" :field="field.camera_name" />
-        <input-base :document="document" :field="field.exposure_time" />
-        <input-base :document="document" :field="field.focal_length" />
-        <input-base :document="document" :field="field.fnumber" />
-        <input-base :document="document" :field="field.iso_speed" />
-        <input-base :document="document" :field="field.quality" />
+        <edit-section>
+            <template slot="header">
+                general information
+            </template>
 
-        <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
-        <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
+                </div>
+                <div class="column is-narrow">
+                    <input-base :document="document" :field="fields.image_type" />
+                </div>
+            </div>
 
+            <div class="columns">
+                <div class="column">
+                    <input-activities :document="document"/>
+                </div>
+                <div class="column">
+                    <input-checkboxes :document="document" :field="fields.categories" />
+                </div>
+            </div>
+
+
+            <div class="columns is-multiline">
+                <div class="column">
+                    <!--<input-base :document="document" :field="fields.author" />-->
+                    <input-base :document="document" :field="fields.date_time" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.file_size" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.filename" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.height" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.width" />
+                </div>
+            </div>
+        </edit-section>
+
+        <edit-section>
+            <template slot="header">
+                geolocation
+            </template>
+
+            <input-base :document="document" :field="fields.elevation" />
+
+        </edit-section>
+
+        <edit-section>
+            <template slot="header">
+                camera settings
+            </template>
+
+            <div class="columns is-multiline">
+                <div class="column">
+                    <input-base :document="document" :field="fields.camera_name" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.fnumber" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.focal_length" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.exposure_time" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.iso_speed" />
+                </div>
+            </div>
+        </edit-section>
+
+
+        <edit-section>
+            <template slot="header">
+                general information
+            </template>
+            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+        </edit-section>
 
     </div>
 </template>
 
 <script>
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import InputActivities from './utils/InputActivities'
+    import InputCheckboxes from './utils/InputCheckboxes'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
-            InputMarkdown,
+            InputActivities,
+            InputCheckboxes,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

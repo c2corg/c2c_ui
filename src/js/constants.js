@@ -20,13 +20,13 @@ function Field(name, properties){
         access_condition:{values:attrs.access_conditions},
         access_period:{values:attrs.months, multiple},
         access_time:{values:attrs.access_times},
-        activities:{values:attrs.activities, multiple},
+        activities:{values:attrs.activities, multiple ,required},
         activity_rate:{values:attrs.activity_rates},
         age:{type:"number", min:0, max:120, units:"years"},
         aid_rating:{values:attrs.aid_ratings},
         anonymous:{type:"boolean"},
         area_type:{values:attrs.area_types, required},
-        article_categories:{name:"categories", values:attrs.article_categories, multiple},
+        article_categories:{name:"categories", values:attrs.article_categories, multiple, required},
         article_type:{values:attrs.article_types},
         author:{minLength:2},
         author_status:{values:attrs.author_statuses},
@@ -37,7 +37,7 @@ function Field(name, properties){
         avalanches:{type:"markdown"},
         best_periods:{values:attrs.months, multiple},
         blanket_unstaffed:{values:[true, false, null]},
-        book_types:{values:attrs.book_types, multiple},
+        book_types:{values:attrs.book_types, multiple, required},
         camera_name:{type:"text"},
         capacity:{type:"number", min:0, max:9999},
         capacity_staffed:{type:"number", min:0, max:9999},
@@ -77,12 +77,12 @@ function Field(name, properties){
         event_type:{values:attrs.event_types, multiple},
         exposition_rating:{values:attrs.exposition_ratings},
         exposition_rock_rating:{values:attrs.exposition_rock_ratings},
-        exposure_time:{type:"number",min:0, max:0},
+        exposure_time:{type:"number",min:0, max:0, unit:"ms"},
         external_resources:{type:"markdown"},
         file_size:{type:"number",disabled},
         filename:{type:"text", disabled},
         fnumber:{type:"text"},
-        focal_length:{type:"number",min:1},
+        focal_length:{type:"number",min:1, unit:"mm"},
         frequentation:{values:attrs.frequentation_types},
         gas_unstaffed:{values:[true, false, null]},
         gear:{type:"markdown"},
@@ -106,13 +106,13 @@ function Field(name, properties){
         hut_comment:{type:"markdown"},
         hut_status:{values:attrs.hut_status},
         ice_rating:{values:common.attributes.ice_ratings},
-        image_catergories:{name:"catergories", values:attrs.image_catergories, multiple},
-        image_type:{values:attrs.image_types},
+        image_categories:{name:"categories", values:attrs.image_categories, multiple},
+        image_type:{values:attrs.image_types, required},
         isbn:{minLength:9, maxLength:17},
-        iso_speed:{type:"number", min:1},
+        iso_speed:{type:"number", min:1, unit:"ISO"},
         labande_global_rating:{values:attrs.global_ratings},
         labande_ski_rating:{values:attrs.labande_ski_ratings},
-        langs:{}, //todo
+        langs:{values:attrs.langs, multiple}, //todo
         length:{type:"number", min:0, max:9999, unit:"m"},
         length_total:{type:"number", min:0, unit:"km"},
         lift_access:{values:[true, false, null]},
@@ -131,7 +131,7 @@ function Field(name, properties){
         name:{disabled}, // for profile
         nb_impacted:{type:"number", min:0, max:1000},
         nb_outings:{values:attrs.nb_outings},
-        nb_pages:{type:"number", min:0, max:9999},
+        nb_pages:{type:"number", min:0, max:9999, unit:"#"},
         nb_participants:{type:"number", min:0, max:1000},
         orientations:{values:attrs.orientation_types, multiple:true},
         other_comments:{type:"markdown"},
@@ -570,26 +570,27 @@ function Constants(){
         image:{
             letter:"i",
             localeFields:getFieldsObject(
-                new Field("title"),
+                new Field("title", {required:false}),
                 new Field("summary"),
                 new Field("description"),
             ),
             fields:getFieldsObject(
                 new Field("activities"),
-                new Field("image_catergories"),
-                new Field("image_type"),
                 new Field("author"),
+                new Field("camera_name"),
+                new Field("date_time"),
                 new Field("elevation"),
                 new Field("height"),
-                new Field("width"),
+                new Field("image_categories"),
+                new Field("image_type"),
+                new Field("iso_speed"),
                 new Field("file_size"),
                 new Field("filename"),
-                new Field("camera_name"),
                 new Field("exposure_time"),
                 new Field("focal_length"),
                 new Field("fnumber"),
-                new Field("iso_speed"),
                 new Field("quality"),
+                new Field("width"),
             )
         },
     };
@@ -608,6 +609,7 @@ Constants.prototype.getDocumentType = function(type){
 
 
 export default new Constants()
+
 
 
 /*

@@ -1,24 +1,52 @@
 <template>
     <div>
-        <input-base :document="document" :base="locale" :field="localeFields.title" />
+        <edit-section>
+            <template slot="header">
+                general information
+            </template>
 
-        <input-base :document="document" :field="fields.activities" />
-        <input-base :document="document" :field="fields.categories" />
-        
-        <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-        <input-base :document="document" :base="locale" :field="localeFields.description"/>
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :base="locale" :field="localeFields.title" />
+                </div>
+                <div class="column is-narrow">
+                    <input-base :document="document" :field="fields.article_type" />
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <input-activities :document="document" />
+                </div>
+                <div class="column">
+                    <input-checkboxes :document="document" :field="fields.categories" />
+                </div>
+            </div>
+        </edit-section>
+
+        <edit-section>
+            <template slot="header">
+                description
+            </template>
+            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+    </edit-section>
 
     </div>
 </template>
 
 <script>
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import InputActivities from './utils/InputActivities'
+    import InputCheckboxes from './utils/InputCheckboxes'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
-            InputMarkdown,
+            InputActivities,
+            InputCheckboxes,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

@@ -10,6 +10,10 @@
             <div class="control">
                 <input type="text" class="input" placeholder="comment" v-model="comment"/>
             </div>
+            <div class="control">
+                <input type="text" class="input" disabled v-model="locale.lang" v-if="document">
+            </div>
+
         </div>
         <component :is="type + '-edition-content'" v-if="document"
             :document="document" :locale="locale" :objectDefinition="constants.objectDefinitions[type]">
@@ -53,9 +57,9 @@
                 type: this.$route.name.replace("-edit",""),
                 lang: this.$route.params.lang,
                 document: null,
-                locale:undefined,
+                locale: null,
                 constants,
-                comment:"",
+                comment: "",
             }
         },
 
