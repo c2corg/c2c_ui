@@ -1,73 +1,179 @@
 <template>
     <div>
-        <tab-view>
 
-            <tab-item title="Comments">
-                <div class="field">
-                      <div class="control">
-                          <h2>Title</h2>
-                          <input class="input is-primary" type="text" v-model="locale.title">
-                      </div>
+        <edit-section header="general information">
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :field="fields.date_start" />
                 </div>
+                <div class="column">
+                    <!-- todo : one day trip -->
+                    <input-base :document="document" :field="fields.date_end" />
+                </div>
+            </div>
 
-                <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
-                <input-base :document="document" :locale="locale" :field="localeFields.participants"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.access_comment"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.weather"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.timing"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.conditions_levels"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.conditions"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.hut_comment"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.route_description"/>
-                <input-markdown :document="document" :locale="locale" :field="localeFields.avalanches"/>
+            <input-activities :document="document"/>
 
-            </tab-item>
+            <input-base :document="document" :base="locale" :field="localeFields.route_description"/>
+            <input-base :document="document" :base="locale" :field="localeFields.timing"/>
 
-            <tab-item title="Outing">
+            <div class="columns is-multiline">
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.partial_trip" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.length_total" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.elevation_min" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.elevation_max" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.height_diff_up" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.height_diff_down" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.ski_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.labande_global_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.snowshoe_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.global_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.engagement_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.equipment_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.ice_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.via_ferrata_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.hiking_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.mtb_down_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.mtb_up_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.rock_free_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.height_diff_difficulties" />
+                </div>
+            </div>
+        </edit-section>
 
-                <input-base :document="document" :field="fields.access_condition" />
-                <input-base :document="document" :field="fields.activities" />
-                <input-base :document="document" :field="fields.avalanche_signs" />
-                <input-base :document="document" :field="fields.condition_rating" />
-                <input-base :document="document" :field="fields.date_end" />
-                <input-base :document="document" :field="fields.date_start" />
-                <input-base :document="document" :field="fields.disable_comments" />
-                <input-base :document="document" :field="fields.elevation_access" />
-                <input-base :document="document" :field="fields.elevation_down_snow" />
-                <input-base :document="document" :field="fields.elevation_max" />
-                <input-base :document="document" :field="fields.elevation_min" />
-                <input-base :document="document" :field="fields.elevation_up_snow" />
-                <input-base :document="document" :field="fields.engagement_rating" />
-                <input-base :document="document" :field="fields.equipment_rating" />
-                <input-base :document="document" :field="fields.frequentation" />
-                <input-base :document="document" :field="fields.glacier_rating" />
-                <input-base :document="document" :field="fields.global_rating" />
-                <input-base :document="document" :field="fields.height_diff_difficulties" />
-                <input-base :document="document" :field="fields.height_diff_down" />
-                <input-base :document="document" :field="fields.height_diff_up" />
-                <input-base :document="document" :field="fields.hiking_rating" />
-                <input-base :document="document" :field="fields.hut_status" />
-                <input-base :document="document" :field="fields.ice_rating" />
-                <input-base :document="document" :field="fields.labande_global_rating" />
-                <input-base :document="document" :field="fields.length_total" />
-                <input-base :document="document" :field="fields.lift_status" />
-                <input-base :document="document" :field="fields.mtb_down_rating" />
-                <input-base :document="document" :field="fields.mtb_up_rating" />
-                <input-base :document="document" :field="fields.partial_trip" />
-                <input-base :document="document" :field="fields.participant_count" />
-                <input-base :document="document" :field="fields.public_transport" />
-                <input-base :document="document" :field="fields.quality" />
-                <input-base :document="document" :field="fields.rock_free_rating" />
-                <input-base :document="document" :field="fields.ski_rating" />
-                <input-base :document="document" :field="fields.snow_quality" />
-                <input-base :document="document" :field="fields.snow_quantity" />
-                <input-base :document="document" :field="fields.snowshoe_rating" />
-                <input-base :document="document" :field="fields.via_ferrata_rating" />
+        <edit-section header="Weather &amp; conditions">
 
-            </tab-item>
 
-        </tab-view>
+
+            <div class="columns is-multiline">
+
+                <div class="column is-6">
+                    <input-base :document="document" :base="locale" :field="localeFields.weather"/>
+                </div>
+                <div class="column is-6">
+                    <input-base :document="document" :base="locale" :field="localeFields.conditions"/>
+                </div>
+                    <!-- todo
+                    <input-base :document="document" :base="locale" :field="localeFields.conditions_levels"/>
+                -->
+
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.condition_rating" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.elevation_up_snow" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.elevation_down_snow" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.snow_quantity" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.snow_quality" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.glacier_rating" />
+                </div>
+                <div class="column is-12">
+                    <input-checkboxes :document="document" :field="fields.avalanche_signs" />
+                </div>
+                <div class="column is-12">
+                    <input-base :document="document" :base="locale" :field="localeFields.avalanches"/>
+                </div>
+            </div>
+        </edit-section>
+
+        <edit-section header="road or PT access &amp; hut">
+            <div class="columns is-multiline">
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.public_transport" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.frequentation" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.lift_status" />
+                </div>
+                <div class="column is-12">
+                    <input-base :document="document" :base="locale" :field="localeFields.hut_comment"/>
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.hut_status" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.elevation_access" />
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.access_condition" />
+                </div>
+                <div class="column is-12">
+                    <input-base :document="document" :base="locale" :field="localeFields.access_comment"/>
+                </div>
+            </div>
+        </edit-section>
+
+        <edit-section header="comments">
+            <div class="columns is-multiline">
+                <div class="column is-12">
+                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
+                </div>
+                <div class="column is-8">
+                    <input-base :document="document" :base="locale" :field="localeFields.participants"/>
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.participant_count" />
+                </div>
+                <div class="column is-12">
+                    <input-base :document="document" :base="locale" :field="localeFields.description"/>
+                </div>
+                <div class="column is-4">
+                    <input-base :document="document" :field="fields.disable_comments" />
+                </div>
+            </div>
+        </edit-section>
+
+        <!-- todo where is that ??
+            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
+        -->
+
     </div>
 </template>
 
@@ -77,14 +183,18 @@
     import TabItem from './utils/TabItem'
 
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import InputActivities from './utils/InputActivities'
+    import InputCheckboxes from './utils/InputCheckboxes'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             TabView,
             TabItem,
             InputBase,
-            InputMarkdown,
+            InputActivities,
+            InputCheckboxes,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

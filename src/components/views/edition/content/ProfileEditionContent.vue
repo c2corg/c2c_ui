@@ -7,10 +7,10 @@
               </div>
         </div>
 
-        <input-base :document="document" :field="field.activities" />
-        <input-base :document="document" :field="field.categories" />
-        <input-base :document="document" :field="field.quality" />
-        <input-base :document="document" :field="field.article_type" />
+        <input-activities :document="document" />
+        <input-base :document="document" :field="fields.categories" />
+        <input-base :document="document" :field="fields.quality" />
+        <input-base :document="document" :field="fields.article_type" />
 
         <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
         <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
@@ -21,12 +21,14 @@
 
 <script>
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import InputActivities from './utils/InputActivities'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
-            InputMarkdown,
+            InputActivities,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

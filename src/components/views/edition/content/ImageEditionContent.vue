@@ -1,11 +1,6 @@
 <template>
     <div>
-
-        <edit-section>
-            <template slot="header">
-                general information
-            </template>
-
+        <edit-section :document="document" header="general information">
             <div class="columns">
                 <div class="column">
                     <input-base :document="document" :base="locale" :field="localeFields.title"/>
@@ -23,7 +18,6 @@
                     <input-checkboxes :document="document" :field="fields.categories" />
                 </div>
             </div>
-
 
             <div class="columns is-multiline">
                 <div class="column">
@@ -45,20 +39,11 @@
             </div>
         </edit-section>
 
-        <edit-section>
-            <template slot="header">
-                geolocation
-            </template>
-
+        <edit-section :document="document" header="geolocation">
             <input-base :document="document" :field="fields.elevation" />
-
         </edit-section>
 
-        <edit-section>
-            <template slot="header">
-                camera settings
-            </template>
-
+        <edit-section :document="document" header="camera settings">
             <div class="columns is-multiline">
                 <div class="column">
                     <input-base :document="document" :field="fields.camera_name" />
@@ -79,10 +64,7 @@
         </edit-section>
 
 
-        <edit-section>
-            <template slot="header">
-                general information
-            </template>
+        <edit-section :document="document" header="general information">
             <input-base :document="document" :base="locale" :field="localeFields.summary"/>
             <input-base :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>

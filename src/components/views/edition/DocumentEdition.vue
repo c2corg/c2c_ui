@@ -1,21 +1,13 @@
 <template>
-    <div class="section">
-
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-primary" @click="save">
-                    Save
-                </button>
-            </div>
-            <div class="control">
-                <input type="text" class="input" placeholder="comment" v-model="comment"/>
-            </div>
-            <div class="control">
-                <input type="text" class="input" disabled v-model="locale.lang" v-if="document">
-            </div>
-
-        </div>
-        <component :is="type + '-edition-content'" v-if="document"
+    <div class="section" v-if="document && locale">
+        <h1 class="title">
+            Edit
+            <document-title :document="document"/>
+            in
+            {{locale.lang}}
+        </h1>
+        <save-block :document="document"></save-block>
+        <component :is="type + '-edition-content'"
             :document="document" :locale="locale" :objectDefinition="constants.objectDefinitions[type]">
         </component>
     </div>
@@ -37,8 +29,13 @@
     import WaypointEditionContent from './content/WaypointEditionContent'
     import XreportEditionContent from './content/XreportEditionContent'
 
+    import SaveBlock from './content/utils/SaveBlock'
+
     export default{
         components:{
+
+            SaveBlock,
+
             AreaEditionContent,
             ArticleEditionContent,
             BookEditionContent,
@@ -55,11 +52,9 @@
             return {
                 documentId: this.$route.params.id,
                 type: this.$route.name.replace("-edit",""),
-                lang: this.$route.params.lang,
                 document: null,
                 locale: null,
                 constants,
-                comment: "",
             }
         },
 
@@ -70,11 +65,5 @@
                 this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
             });
         },
-
-        methods:{
-            save(){
-                c2c[this.type].save(this.document, this.comment)
-            }
-        }
     }
 </script>

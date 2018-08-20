@@ -9,6 +9,7 @@
             <div class="select" :class="{'is-multiple':field.multiple}">
                  <select v-model="object[field.name]"
                          :multiple="!!field.multiple">
+                     <option v-if="!field.required"></option>
                      <option v-for="value of field.values"
                              :value="value" :key="value">
                          {{value}}
@@ -17,7 +18,7 @@
              </div>
         </div>
 
-        <div v-else-if="['text', 'number', 'url'].indexOf(field.type) !=-1" class="control" :class="{'has-icons-right':field.unit}">
+        <div v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1" class="control" :class="{'has-icons-right':field.unit}">
             <input class="input"
                 :type="field.type"
                 :min="field.min"
@@ -49,10 +50,11 @@
         data(){
             return {
                 object:null,
+                values:null,
             }
         },
         created(){
-            console.log(this.field.name)
+        //    console.log(this.field.name)
             this.object = this.base || this.document
 
             if(this.field.values && (this.field.type=="text" || this.field.type == "number")){
@@ -65,3 +67,16 @@
 
 
 </script>
+
+<style scoped>
+
+.select{
+    width:100%;
+    display:block !important;
+}
+
+select{
+    width:100%
+}
+
+</style>

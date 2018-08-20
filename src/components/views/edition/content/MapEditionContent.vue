@@ -1,27 +1,35 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
+        <edit-section :document="document" header="general information">
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
+                </div>
+            </div>
 
-        <input-base :document="document" :field="field.editor" />
-        <input-base :document="document" :field="field.scale" />
-        <input-base :document="document" :field="field.code" />
-
+            <div class="columns">
+                <div class="column">
+                    <input-base :document="document" :field="fields.editor" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.scale" />
+                </div>
+                <div class="column">
+                    <input-base :document="document" :field="fields.code" />
+                </div>
+            </div>
+        </edit-section>
     </div>
 </template>
 
 <script>
     import InputBase from './utils/InputBase'
-    import InputMarkdown from './utils/InputMarkdown'
+    import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
-            InputMarkdown,
+            EditSection,
         },
 
         props : ["document", "locale", "objectDefinition"],

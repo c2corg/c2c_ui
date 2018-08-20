@@ -1,9 +1,6 @@
 <template>
     <div>
-        <edit-section>
-            <template slot="header">
-                general informations
-            </template>
+        <edit-section :document="document" header="general informations">
 
             <input-base :document="document" :base="locale" :field="localeFields.title" />
             <input-activities :document="document" />
@@ -13,7 +10,7 @@
                     <input-checkboxes :document="document" :field="fields.book_types" />
                 </div>
                 <div class="column is-6">
-                    <input-checkboxes :document="document" :field="fields.langs" />    
+                    <input-checkboxes :document="document" :field="fields.langs" />
                 </div>
                 <div class="column is-6">
                     <input-base :document="document" :field="fields.author" />
@@ -38,11 +35,7 @@
 
         </edit-section>
 
-        <edit-section>
-            <template slot="header">
-                description
-            </template>
-
+        <edit-section :document="document" header="description">
             <input-base :document="document" :base="locale" :field="localeFields.summary"/>
             <input-base :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>

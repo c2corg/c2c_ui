@@ -1,29 +1,59 @@
 <template>
     <section>
-        <header>
-            <slot name="header"></slot>
+        <header @click="expanded_=!expanded_">
+            {{header}}
+            <button class="button is-pulled-right">
+                {{expanded_ ? 'Collapse' : 'Expand' }}
+            </button>
         </header>
-        <main>
-            <slot></slot>
+        <main :class="{expanded:expanded_, hidden:!expanded_}">
+
+            <div>
+                <slot></slot>
+            </div>
+
         </main>
     </section>
 </template>
 
-<style scoped>
-    header{
-        background:lightgreen;
-        padding-left:1rem;
-        font-size:150%;
+<script>
+
+    export default {
+        props : ["header", "expanded"],
+        data(){
+            return {
+                expanded_:this.expanded || true,
+            }
+        }
     }
+</script>
+<style scoped>
 
-    section{
-        border:1px solid red;
-        margin-bottom: 2rem;
 
+    main.hidden{
+        max-height:0;
+        overflow: hidden;
     }
 
     main{
+        max-height:9999px;
+    }
+
+    main > div {
         padding:1rem;
+    }
+
+
+    header{
+        font-size:150%;
+        font-weight:bold;
+    }
+
+    section{
+        border-top:1px solid lightgray;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+
     }
 
 </style>

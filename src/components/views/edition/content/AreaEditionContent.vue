@@ -1,9 +1,6 @@
 <template>
     <div>
-        <edit-section>
-            <template slot="header">
-                general informations
-            </template>
+        <edit-section :document="document" header="general informations">
             <div class="columns">
                 <div class="column">
                     <input-base :document="document" :base="locale" :field="localeFields.title"/>
@@ -14,10 +11,7 @@
             </div>
         </edit-section>
 
-        <edit-section>
-            <template slot="header">
-                description
-            </template>
+        <edit-section :document="document" header="Description">
             <input-base :document="document" :base="locale" :field="localeFields.summary"/>
             <input-base :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>
