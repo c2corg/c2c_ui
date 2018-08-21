@@ -1,42 +1,18 @@
 <template>
     <div>
         <edit-section :document="document" header="general information">
-            <div class="columns">
-                <div class="column">
-                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
-                </div>
-                <div class="column is-narrow">
-                    <input-base :document="document" :field="fields.image_type" />
-                </div>
-            </div>
+            <input-base class="is-9" :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-3" :document="document" :field="fields.image_type" />
+            <input-activities class="is-6" :document="document"/>
+            <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
 
-            <div class="columns">
-                <div class="column">
-                    <input-activities :document="document"/>
-                </div>
-                <div class="column">
-                    <input-checkboxes :document="document" :field="fields.categories" />
-                </div>
-            </div>
+            <!--<input-base :document="document" :field="fields.author" />-->
 
-            <div class="columns is-multiline">
-                <div class="column">
-                    <!--<input-base :document="document" :field="fields.author" />-->
-                    <input-base :document="document" :field="fields.date_time" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.file_size" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.filename" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.height" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.width" />
-                </div>
-            </div>
+            <input-base :document="document" :field="fields.date_time" />
+            <input-base :document="document" :field="fields.filename" />
+            <input-base class="is-2" :document="document" :field="fields.file_size" />
+            <input-base class="is-2" :document="document" :field="fields.height" />
+            <input-base class="is-2" :document="document" :field="fields.width" />
         </edit-section>
 
         <edit-section :document="document" header="geolocation">
@@ -44,29 +20,16 @@
         </edit-section>
 
         <edit-section :document="document" header="camera settings">
-            <div class="columns is-multiline">
-                <div class="column">
-                    <input-base :document="document" :field="fields.camera_name" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.fnumber" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.focal_length" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.exposure_time" />
-                </div>
-                <div class="column">
-                    <input-base :document="document" :field="fields.iso_speed" />
-                </div>
-            </div>
+            <input-base :document="document" :field="fields.camera_name" />
+            <input-base :document="document" :field="fields.fnumber" />
+            <input-base :document="document" :field="fields.focal_length" />
+            <input-base :document="document" :field="fields.exposure_time" />
+            <input-base :document="document" :field="fields.iso_speed" />
         </edit-section>
 
-
         <edit-section :document="document" header="general information">
-            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>
 
     </div>

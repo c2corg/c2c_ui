@@ -1,30 +1,16 @@
 <template>
     <div>
-        <edit-section :document="document" header="general information">
-
-            <div class="columns">
-                <div class="column">
-                    <input-base :document="document" :base="locale" :field="localeFields.title" />
-                </div>
-                <div class="column is-narrow">
-                    <input-base :document="document" :field="fields.article_type" />
-                </div>
-            </div>
-
-            <div class="columns">
-                <div class="column">
-                    <input-activities :document="document" />
-                </div>
-                <div class="column">
-                    <input-checkboxes :document="document" :field="fields.categories" />
-                </div>
-            </div>
+        <edit-section expanded="true" header="general information">
+            <input-base class="is-9" :document="document" :base="locale" :field="localeFields.title" />
+            <input-base class="is-3" :document="document" :field="fields.article_type" />
+            <input-activities class="is-6" :document="document" />
+            <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
         </edit-section>
 
-        <edit-section :document="document" header="description">
-            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base :document="document" :base="locale" :field="localeFields.description"/>
-    </edit-section>
+        <edit-section expanded="true" :document="document" header="description">
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
+        </edit-section>
 
     </div>
 </template>

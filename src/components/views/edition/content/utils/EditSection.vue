@@ -8,7 +8,7 @@
         </header>
         <main :class="{expanded:expanded_, hidden:!expanded_}">
 
-            <div>
+            <div class="columns is-multiline">
                 <slot></slot>
             </div>
 

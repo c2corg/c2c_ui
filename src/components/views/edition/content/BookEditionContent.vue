@@ -2,42 +2,22 @@
     <div>
         <edit-section :document="document" header="general informations">
 
-            <input-base :document="document" :base="locale" :field="localeFields.title" />
-            <input-activities :document="document" />
-
-            <div class="columns is-multiline">
-                <div class="column is-6">
-                    <input-checkboxes :document="document" :field="fields.book_types" />
-                </div>
-                <div class="column is-6">
-                    <input-checkboxes :document="document" :field="fields.langs" />
-                </div>
-                <div class="column is-6">
-                    <input-base :document="document" :field="fields.author" />
-                </div>
-                <div class="column is-6">
-                    <input-base :document="document" :field="fields.editor" />
-                </div>
-                <div class="column is-6">
-                    <input-base :document="document" :field="fields.publication_date" />
-                </div>
-                <div class="column is-6">
-                    <input-base :document="document" :field="fields.nb_pages" />
-                </div>
-                <div class="column is-6">
-
-                    <input-base :document="document" :field="fields.isbn" />
-                </div>
-                <div class="column is-6">
-                    <input-base :document="document" :field="fields.url" />
-                </div>
-            </div>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.title" />
+            <input-activities class="is-6" :document="document" />
+            <input-checkboxes class="is-6" :document="document" :field="fields.book_types" />
+            <input-base class="is-6" :document="document" :field="fields.author" />
+            <input-base class="is-6" :document="document" :field="fields.editor" />
+            <input-checkboxes class="is-4" :document="document" :field="fields.langs" />
+            <input-base class="is-4" :document="document" :field="fields.publication_date" />
+            <input-base class="is-4" :document="document" :field="fields.nb_pages" />
+            <input-base class="is-4" :document="document" :field="fields.isbn" />
+            <input-base class="is-8" :document="document" :field="fields.url" />
 
         </edit-section>
 
         <edit-section :document="document" header="description">
-            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>
 
     </div>

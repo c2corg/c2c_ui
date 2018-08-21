@@ -1,14 +1,16 @@
 <template>
-    <div class="field">
-        <label>
-            {{field.name}}
-            <span v-if="field.required">*</span>
-        </label>
-        <div class="control">
-            <label class="checkbox" v-for="item of field.values" :key="item">
-                <input type="checkbox" value="document[field.name].contains(item)">
-                {{item}}
+    <div class="column">
+        <div class="field">
+            <label>
+                {{field.name}}
+                <span v-if="field.required">*</span>
             </label>
+            <div class="control">
+                <label class="checkbox" v-for="item of field.values" :key="item">
+                    <input type="checkbox" value="document[field.name].contains(item)">
+                    {{item}}
+                </label>
+            </div>
         </div>
     </div>
 </template>

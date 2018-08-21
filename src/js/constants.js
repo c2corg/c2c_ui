@@ -27,7 +27,7 @@ function Field(name, properties){
         anonymous:{type:"boolean"},
         area_type:{values:attrs.area_types, required},
         article_categories:{name:"categories", values:attrs.article_categories, multiple, required},
-        article_type:{values:attrs.article_types},
+        article_type:{values:attrs.article_types, required},
         author:{minLength:2},
         author_status:{values:attrs.author_statuses},
         autonomy:{values:attrs.autonomies},

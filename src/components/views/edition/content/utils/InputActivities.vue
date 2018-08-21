@@ -1,15 +1,17 @@
 <template>
-    <div class="field">
-        <label>
-            activities
-            <span v-if="field.required">*</span>
-        </label>
-        <div class="control">
-            <span v-for="activity of constants.activities"
-                  :key="activity" @click="document.activities.toggle(activity)"
-                  :class="{'selected':document.activities.contains(activity)}">
-                <icon-activity :activity="activity" />
-            </span>
+    <div class="column">
+            <div class="field">
+            <label>
+                activities
+                <span v-if="field.required">*</span>
+            </label>
+            <div class="control">
+                <span v-for="activity of constants.activities"
+                      :key="activity" @click="document.activities.toggle(activity)"
+                      :class="{'selected':document.activities.contains(activity)}">
+                    <icon-activity :activity="activity" />
+                </span>
+            </div>
         </div>
     </div>
 </template>

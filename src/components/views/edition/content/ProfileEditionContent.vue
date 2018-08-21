@@ -1,32 +1,27 @@
 <template>
     <div>
-        <div class="field">
-              <div class="control">
-                  <h2>Title</h2>
-                  <input class="input is-primary" type="text" v-model="locale.title">
-              </div>
-        </div>
+        <edit-section header="general information">
 
-        <input-activities :document="document" />
-        <input-base :document="document" :field="fields.categories" />
-        <input-base :document="document" :field="fields.quality" />
-        <input-base :document="document" :field="fields.article_type" />
+            <input-activities class="is-6" :document="document" />
+            <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
 
-        <input-markdown :document="document" :locale="locale" :field="localeFields.summary"/>
-        <input-markdown :document="document" :locale="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :locale="locale" :field="localeFields.summary"/>
+            <input-base class="is-12" :document="document" :locale="locale" :field="localeFields.description"/>
 
-
+        </edit-section>
     </div>
 </template>
 
 <script>
     import InputBase from './utils/InputBase'
+    import InputCheckboxes from './utils/InputCheckboxes'
     import InputActivities from './utils/InputActivities'
     import EditSection from './utils/EditSection'
 
     export default {
         components:{
             InputBase,
+            InputCheckboxes,
             InputActivities,
             EditSection,
         },

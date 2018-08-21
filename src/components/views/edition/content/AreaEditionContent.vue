@@ -1,19 +1,13 @@
 <template>
     <div>
         <edit-section :document="document" header="general informations">
-            <div class="columns">
-                <div class="column">
-                    <input-base :document="document" :base="locale" :field="localeFields.title"/>
-                </div>
-                <div class="column is-narrow">
-                    <input-base :document="document" :field="fields.area_type"/>
-                </div>
-            </div>
+            <input-base :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-narrow" :document="document" :field="fields.area_type"/>
         </edit-section>
 
         <edit-section :document="document" header="Description">
-            <input-base :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base :document="document" :base="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
         </edit-section>
 
     </div>
