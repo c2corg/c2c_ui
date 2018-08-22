@@ -1,5 +1,5 @@
 <template>
-    <div class="column">
+    <div class="column" v-if="field.isVisibleFor(document)">
         <div class="field">
             <label>
                 {{field.name}}

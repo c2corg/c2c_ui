@@ -18,7 +18,7 @@ function Field(name, properties){
         access:{type:"markdown"},
         access_comment:{type:"markdown"},
         access_condition:{values:attrs.access_conditions},
-        access_period:{values:attrs.months, multiple},
+        access_period:{type:"markdown"},
         access_time:{values:attrs.access_times},
         activities:{values:attrs.activities, multiple ,required},
         activity_rate:{values:attrs.activity_rates},
@@ -108,6 +108,7 @@ function Field(name, properties){
         ice_rating:{values:common.attributes.ice_ratings},
         image_categories:{name:"categories", values:attrs.image_categories, multiple},
         image_type:{values:attrs.image_types, required},
+        increase_impact:{type:"markdown"},
         isbn:{minLength:9, maxLength:17},
         iso_speed:{type:"number", min:1, unit:"ISO"},
         labande_global_rating:{values:attrs.global_ratings},
@@ -220,12 +221,15 @@ function Field(name, properties){
 Field.prototype.isVisibleFor = function(document){
     if(this.activities){
         for(let activity of this.activities){
-            if(document.activities.indexOf(activity) != -1){
+            if(document.activities.contains(activity)){
                 return true;
             }
         }
-
         return false;
+    }
+
+    if(this.waypoint_types){
+        return this.waypoint_types.contains(document.waypoint_type)
     }
 
     return true;
@@ -402,7 +406,7 @@ function Constants(){
                 new Field("access_comment"),
                 new Field("weather"),
                 new Field("timing"),
-//                new Field("conditions_levels"),
+// todo                new Field("conditions_levels"),
                 new Field("conditions"),
                 new Field("hut_comment"),
                 new Field("route_description"),
@@ -540,6 +544,7 @@ function Constants(){
                 new Field("time_management"),
                 new Field("safety"),
                 new Field("reduce_impact"),
+                new Field("increase_impact"),
                 new Field("modifications"),
                 new Field("other_comments"),
             ),

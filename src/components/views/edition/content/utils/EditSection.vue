@@ -22,7 +22,7 @@
         props : ["header", "expanded"],
         data(){
             return {
-                expanded_:this.expanded || true,
+                expanded_:this.expanded,
             }
         }
     }

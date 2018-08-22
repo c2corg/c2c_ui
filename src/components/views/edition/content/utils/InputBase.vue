@@ -56,7 +56,7 @@
             }
         },
         created(){
-        //    console.log(this.field.name)
+
             this.object = this.base || this.document
 
             if(this.field.values && (this.field.type=="text" || this.field.type == "number")){
