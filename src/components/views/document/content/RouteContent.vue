@@ -4,10 +4,14 @@
         <div class="column is-9">
             <!--   CONTENT  -->
 
-            <markdown-section v-for="(field, index) of Object.values(objectDefinition.localeFields)" :key="index"
-                :markdown="locale[field.name]" v-if="!field.rawText"
-                :class="{summary:field.name=='summary'}"
-                :title="field.name!='summary' ? field.name : null"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.summary"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_history" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.slackline_anchor1" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.slackline_anchor2" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.remarks" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.gear" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.external_resources" />
 
             <div class="hidden-print" v-if="document.associations.recent_outings.documents.length!=0">
                 <h2>
@@ -94,7 +98,8 @@
 </template>
 
 <script>
-    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
+    import MarkdownSection from './utils/MarkdownSection'
+
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'

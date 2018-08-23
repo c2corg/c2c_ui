@@ -11,13 +11,13 @@
                             :route="route"
                             :key="route.document_id"/>
 
-                <markdown-section :markdown="locale.access_comment" title="Acces comment"/>
-                <markdown-section :markdown="locale.description" title="Description"/>
-                <markdown-section :markdown="locale.route_description" title="Route description"/>
-                <markdown-section :markdown="locale.conditions" title="Conditions"/>
-                <markdown-section :markdown="locale.avalanches" title="Observations relative to avalanches"/>
-                <markdown-section :markdown="locale.hut_comment" title="Hut comment"/>
-                <markdown-section :markdown="locale.timing" title="Timing"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.access_comment" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.conditions"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.avalanches"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.hut_comment"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.timing"/>
             </div>
 
             <div class="column is-3">
@@ -83,8 +83,8 @@
 
 <script>
 
-    import Markdown from '@/components/views/document/utils/Markdown'
-    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
+    import Markdown from './utils/Markdown'
+    import MarkdownSection from './utils/MarkdownSection'
     import Activities from '@/components/utils/Activities'
     import RouteRating from '@/components/utils/RouteRating'
     import DocumentLicense from '@/components/utils/DocumentLicense'

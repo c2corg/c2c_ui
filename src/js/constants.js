@@ -16,7 +16,7 @@ function Field(name, properties){
 
     var fields = {
         access:{type:"markdown"},
-        access_comment:{type:"markdown"},
+        access_comment:{type:"markdown", label:"Acces comment"},
         access_condition:{values:attrs.access_conditions},
         access_period:{type:"markdown"},
         access_time:{values:attrs.access_times},
@@ -34,7 +34,7 @@ function Field(name, properties){
         avalanche_level:{values:attrs.avalanche_levels},
         avalanche_signs:{values:attrs.avalanche_signs, multiple},
         avalanche_slope:{values:attrs.avalanche_slopes},
-        avalanches:{type:"markdown"},
+        avalanches:{type:"markdown", label:"Observations relative to avalanches"},
         best_periods:{values:attrs.months, multiple},
         blanket_unstaffed:{values:[true, false, null]},
         book_types:{values:attrs.book_types, multiple, required},
@@ -53,14 +53,14 @@ function Field(name, properties){
         climbing_styles:{values:attrs.climbing_styles, multiple},
         code:{type:"text"},
         condition_rating:{values:attrs.condition_ratings},
-        conditions:{type:"markdown"},
+        conditions:{type:"markdown", label:"conditions study"},
         configuration:{values:attrs.route_configuration_types, multiple},
         custodianship:{values:attrs.custodianship_types},
         date:{type:"date"},
         date_end:{type:"date"},
         date_start:{type:"date", required},
         date_time:{type:"date_time"}, // wasn't in common... //todo : max:today
-        description:{type:"markdown"},
+        description:{type:"markdown", label:"Description"},
         difficulties_height:{type:"number", min:0, max:9999, unit:"m"},
         disable_comments:{type:"boolean"},
         durations:{values:attrs.route_duration_types, multiple},
@@ -78,20 +78,20 @@ function Field(name, properties){
         exposition_rating:{values:attrs.exposition_ratings},
         exposition_rock_rating:{values:attrs.exposition_rock_ratings},
         exposure_time:{type:"number",min:0, max:0, unit:"ms"},
-        external_resources:{type:"markdown"},
+        external_resources:{type:"markdown", label:"External resources"},
         file_size:{type:"number",disabled},
         filename:{type:"text", disabled},
         fnumber:{type:"text"},
         focal_length:{type:"number",min:1, unit:"mm"},
         frequentation:{values:attrs.frequentation_types},
         gas_unstaffed:{values:[true, false, null]},
-        gear:{type:"markdown"},
+        gear:{type:"markdown", label:"Specific gear"},
         gender:{values:attrs.genders},
         glacier_gear:{values:attrs.glacier_gear_types},
         glacier_rating:{values:attrs.glacier_ratings},
         global_rating:{values:attrs.global_ratings},
         ground_types:{values:attrs.ground_types, multiple},
-        group_management:{type:"markdown"},
+        group_management:{type:"markdown",  label:"group management"},
         heating_unstaffed:{values:[true, false, null]},
         height:{type:"number", disabled},
         height_diff_access:{type:"number", min:0, unit:"m"},
@@ -103,12 +103,12 @@ function Field(name, properties){
         height_min:{type:"number", min:0, max:9999, unit:"m"},
         hiking_mtb_exposition:{values:common.attributes.exposition_ratings},
         hiking_rating:{values:attrs.hiking_ratings},
-        hut_comment:{type:"markdown"},
+        hut_comment:{type:"markdown",  label:"Hut comment"},
         hut_status:{values:attrs.hut_status},
         ice_rating:{values:common.attributes.ice_ratings},
         image_categories:{name:"categories", values:attrs.image_categories, multiple},
         image_type:{values:attrs.image_types, required},
-        increase_impact:{type:"markdown"},
+        increase_impact:{type:"markdown",  label:"increase impact"},
         isbn:{minLength:9, maxLength:17},
         iso_speed:{type:"number", min:1, unit:"ISO"},
         labande_global_rating:{values:attrs.global_ratings},
@@ -135,7 +135,7 @@ function Field(name, properties){
         nb_pages:{type:"number", min:0, max:9999, unit:"#"},
         nb_participants:{type:"number", min:0, max:1000},
         orientations:{values:attrs.orientation_types, multiple:true},
-        other_comments:{type:"markdown"},
+        other_comments:{type:"markdown", label:"other comments"},
         paragliding_rating:{values:attrs.paragliding_ratings},
         parking_fee:{values:attrs.parking_fee_types},
         partial_trip:{type:"boolean"},
@@ -153,7 +153,7 @@ function Field(name, properties){
         publication_date:{type:"text"},
         quality:{values:attrs.quality_types},
         rain_proof:{values:common.attributes.rain_proof_types},
-        reduce_impact:{type:"markdown"},
+        reduce_impact:{type:"markdown", label:"reduce impact"},
         remarks:{type:"markdown"},
         rescue:{type:"boolean"},
         risk:{type:"markdown"},
@@ -161,10 +161,10 @@ function Field(name, properties){
         rock_free_rating:{values:common.attributes.climbing_ratings},
         rock_required_rating:{values:common.attributes.climbing_ratings},
         rock_types:{values:attrs.rock_types, multiple},
-        route_description:{type:"markdown"},
-        route_history:{type:"markdown"},
+        route_description:{type:"markdown",  label:"Route description"},
+        route_history:{type:"markdown", label:"History"},
         route_length:{type:"number", min:0, unit:"km"},
-        route_study:{type:"markdown"},
+        route_study:{type:"markdown", label:"route study"},
         route_types:{values:attrs.route_types, multiple},
         routes_quantity:{type:"number", min:0, max:9999},
         safety:{type:"markdown"},
@@ -172,8 +172,8 @@ function Field(name, properties){
         severity:{values:attrs.severities},
         ski_exposition:{values:attrs.exposition_ratings},
         ski_rating:{values:attrs.ski_ratings},
-        slackline_anchor1:{type:"markdown"},
-        slackline_anchor2:{type:"markdown"},
+        slackline_anchor1:{type:"markdown", label: "Anchor 1"},
+        slackline_anchor2:{type:"markdown", label: "Anchor 2"},
         slackline_height:{type:"number", min:0, unit:"m"},
         slackline_length_max:{type:"number", min:0, max:9999, unit:"m"},
         slackline_length_min:{type:"number", min:0, max:9999, unit:"m"},
@@ -186,7 +186,7 @@ function Field(name, properties){
         snow_quantity:{values:attrs.condition_ratings},
         snowshoe_rating:{values:attrs.snowshoe_ratings},
         summary:{type:"markdown"},
-        time_management:{type:"markdown"},
+        time_management:{type:"markdown", label:"time management"},
         timing:{type:"markdown"},
         title:{required, minLength:3},
         training:{type:"markdown"},
@@ -221,7 +221,7 @@ function Field(name, properties){
 Field.prototype.isVisibleFor = function(document){
     if(this.activities){
         for(let activity of this.activities){
-            if(document.activities.contains(activity)){
+            if(document.activities.includes(activity)){
                 return true;
             }
         }
@@ -229,7 +229,7 @@ Field.prototype.isVisibleFor = function(document){
     }
 
     if(this.waypoint_types){
-        return this.waypoint_types.contains(document.waypoint_type)
+        return this.waypoint_types.includes(document.waypoint_type)
     }
 
     return true;
@@ -605,11 +605,36 @@ function Constants(){
     this.letterToType = {}
     for(let type of this.documentTypes){
         this.letterToType[this.objectDefinitions[type].letter] = type
+        this.objectDefinitions[type].type = type
     }
 }
 
 Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type
+}
+
+Constants.prototype.buildDocument = function(type, lang){
+    var def = this.objectDefinitions[type];
+
+    var result = {
+        type:def.letter,
+        locales:[
+            {lang}
+        ],
+    }
+
+    for(let field of Object.values(def.fields)){
+        result[field.name]= field.multiple ? new Array() : null
+    }
+
+    var locale = result.locales[0]
+
+    for(let field of Object.values(def.localeFields)){
+        locale[field.name]=field.multiple ? new Array() : null
+    }
+
+    return result
+
 }
 
 

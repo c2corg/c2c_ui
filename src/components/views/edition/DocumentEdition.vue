@@ -51,7 +51,8 @@
         data() {
             return {
                 documentId: this.$route.params.id,
-                type: this.$route.name.replace("-edit",""),
+                mode: null,
+                type: null,
                 document: null,
                 locale: null,
                 constants,
@@ -60,10 +61,24 @@
 
         created(){
 
-            c2c[this.type].get(this.$route.params.id).then(response => {
-                this.document=response.data
-                this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
-            });
+            if(this.$route.name.endsWith("-edit")){
+                this.type = this.$route.name.replace("-edit","");
+                this.mode = "edit"
+
+                c2c[this.type].get(this.$route.params.id).then(response => {
+                    this.document=response.data
+                    this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
+                });
+            } else {
+                this.type = this.$route.name.replace("-add","");
+                this.mode = "add"
+                this.document = constants.buildDocument(this.type,
+                    this.$route.params.lang || user.data.lang)
+                    
+                this.locale = this.document.locales[0]
+
+            }
+
         },
     }
 </script>

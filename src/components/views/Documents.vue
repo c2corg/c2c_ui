@@ -2,15 +2,20 @@
     <div class="section content documents-view">
 
         <h1>
-            <icon-document :type="title.slice(0, -1)"/>
+            <icon-document :type="type"/>
             {{title}}
-            <span class="is-pulled-right"  v-if="hasMap">
-                <span class="icon is-large">
+            <span class="is-pulled-right">
+                <add-link :type="type">
+                    <span class="icon is-medium">
+                        <i class="fas fa-plus-circle"/>
+                   </span>
+                </add-link>
+                <span class="icon is-medium" v-if="hasMap">
                     <i class="fas fa-list"
                        :class="{'has-text-primary':showResults}"
                        @click="showResults=!showResults" />
                </span>
-               <span class="icon is-large">
+               <span class="icon is-medium" v-if="hasMap">
                     <i class="fas fa-map-marked-alt"
                        :class="{'has-text-primary':showMap}"
                        @click="showMap=!showMap" />
@@ -69,6 +74,7 @@
                 map: null,
                 documents: null,
                 title: this.$route.name,
+                type: this.$route.name.slice(0, -1),
                 hasMap: constants.documentsGeoLocalization.includes(this.$route.name),
                 showMap: true,
                 showResults: true,

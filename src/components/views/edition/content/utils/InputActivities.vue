@@ -8,7 +8,7 @@
             <div class="control">
                 <span v-for="activity of constants.activities"
                       :key="activity" @click="document.activities.toggle(activity)"
-                      :class="{'selected':document.activities.contains(activity)}">
+                      :class="{'selected':document.activities.includes(activity)}">
                     <icon-activity :activity="activity" />
                 </span>
             </div>

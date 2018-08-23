@@ -8,6 +8,7 @@ import PrettyOutingLink from './components/utils/PrettyOutingLink'
 import DocumentLink from './components/utils/links/DocumentLink'
 import DiffLink from './components/utils/links/DiffLink'
 import EditLink from './components/utils/links/EditLink'
+import AddLink from './components/utils/links/AddLink'
 import VersionLink from './components/utils/links/VersionLink'
 import HistoryLink from './components/utils/links/HistoryLink'
 import ContributorLink from '@/components/utils/links/ContributorLink'
@@ -74,6 +75,7 @@ Vue.component("pretty-route-link", PrettyRouteLink)
 Vue.component("pretty-outing-link", PrettyOutingLink)
 
 Vue.component("edit-link", EditLink)
+Vue.component("add-link", AddLink)
 Vue.component("diff-link", DiffLink)
 Vue.component("version-link", VersionLink)
 Vue.component("contributor-link", ContributorLink)
@@ -111,12 +113,8 @@ new Vue({
 
 // extends javascript core objects
 
-Array.prototype.contains = function(value){
-    return this.indexOf(value) !== -1;
-}
-
 Array.prototype.toggle = function(value){
-    if(!this.contains(value)){
+    if(!this.includes(value)){
         this.push(value);
         return true;
     } else {

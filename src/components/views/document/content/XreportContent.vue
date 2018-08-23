@@ -3,21 +3,21 @@
     <div class="columns">
 
         <div class="column">
-            <markdown-section :markdown="locale.summary" title="summary"/>
-            <markdown-section :markdown="locale.description" title="description"/>
-            <markdown-section :markdown="locale.place" title="place"/>
-            <markdown-section :markdown="locale.route_study" title="route study"/>
-            <markdown-section :markdown="locale.conditions" title="conditions study"/>
-            <markdown-section :markdown="locale.training" title="training"/>
-            <markdown-section :markdown="locale.motivations" title="motivations"/>
-            <markdown-section :markdown="locale.group_management" title="group management"/>
-            <markdown-section :markdown="locale.risk" title="risk"/>
-            <markdown-section :markdown="locale.time_management" title="time management"/>
-            <markdown-section :markdown="locale.safety" title="safety"/>
-            <markdown-section :markdown="locale.increase_impact" title="increase impact"/>
-            <markdown-section :markdown="locale.reduce_impact" title="reduce impact"/>
-            <markdown-section :markdown="locale.modifications" title="modifications"/>
-            <markdown-section :markdown="locale.other_comments" title="other comments"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.summary"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.place"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_study"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.conditions"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.training"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.motivations"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.group_management"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.risk"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.time_management"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.safety"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.increase_impact"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.reduce_impact"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.modifications"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.other_comments"/>
         </div>
 
         <div class="column is-3">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
+    import MarkdownSection from './utils/MarkdownSection'
     import Activities from '@/components/utils/Activities'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
@@ -82,6 +82,6 @@
             DistanceInformationItem
         },
 
-        props:["document", "locale"]
+        props:["document", "locale", "objectDefinition"]
     }
 </script>

@@ -103,8 +103,8 @@
             </div>
 
             <div class="column is-12">
-                <markdown-section :markdown="locale.description" title="Description"/>
-                <markdown-section :markdown="locale.access" title="Access"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.access" />
             </div>
 
             <div class="column is-6" v-if="document.associations.all_routes.documents.length">
@@ -144,7 +144,7 @@
 
 
 <script>
-    import MarkdownSection from '@/components/views/document/utils/MarkdownSection'
+    import MarkdownSection from './utils/MarkdownSection'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Gallery from '@/components/utils/Gallery'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
@@ -162,6 +162,6 @@
             RouteRating
         },
 
-        props:["document", "locale"]
+        props:["document", "locale", "objectDefinition"]
     }
 </script>

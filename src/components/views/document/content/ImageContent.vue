@@ -53,7 +53,7 @@
 </template>
 
 <script>
-    import Markdown from '@/components/views/document/utils/Markdown'
+    import Markdown from './utils/Markdown'
     import DocumentLicense from '@/components/utils/DocumentLicense'
     import Activities from '@/components/utils/Activities'
 

@@ -47,7 +47,7 @@ var routes = [
     // todo
     // * for each doc type :
     //   * add
-    //   * edit
+    // * add image
     // * xreport and profile data
     // * signup
     // * filters for documents
@@ -63,6 +63,7 @@ var routes = [
     // * markdown alerts in parser
     // * markdown icons in parser
     // * config for history mode
+    // * bug for maps view : card-region-item 
 
     // * CSS
     //   * choose font size and family
@@ -81,61 +82,73 @@ for(let type of constants.documentTypes){
     )
 
     routes.push({
-        path: '/' + type + 's/:id/:lang?',
+        path: '/' + type + 's/:id(\\d+)/:lang?',
         name: type,
         component: DocumentView},
     )
 
     routes.push({
-        path: '/' + type + 's/:id/:lang?',
+        path: '/' + type + 's/:id(\\d+)/:lang?',
         name: def.letter,
         component: DocumentView},
     )
 
     routes.push({
-        path: '/' + type + 's/history/:id/:lang',
+        path: '/' + type + 's/history/:id(\\d+)/:lang',
         name: type + "-history",
         component: DocumentHistory},
     )
 
     routes.push({
-        path: '/' + type + 's/history/:id/:lang',
+        path: '/' + type + 's/history/:id(\\d+)/:lang',
         name: def.letter + "-history",
         component: DocumentHistory},
     )
 
     routes.push({
-        path: '/' + type + 's/edit/:id/:lang',
+        path: '/' + type + 's/edit/:id(\\d+)/:lang',
         name: type + "-edit",
         component: DocumentEdition},
     )
 
     routes.push({
-        path: '/' + type + 's/edit/:id/:lang',
+        path: '/' + type + 's/edit/:id(\\d+)/:lang',
         name: def.letter + "-edit",
         component: DocumentEdition},
     )
 
     routes.push({
-        path: '/' + type + 's/diff/:id/:lang/:versionFrom/:versionTo',
+        path: '/' + type + 's/add/:lang?',
+        name: type + "-add",
+        component: DocumentEdition},
+    )
+
+    routes.push({
+        path: '/' + type + 's/add/:lang?',
+        name: def.letter + "-add",
+        component: DocumentEdition},
+    )
+
+    routes.push({
+        path: '/' + type + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
         name: type + "-diff",
         component: DocumentDiff},
     )
 
     routes.push({
-        path: '/' + type + 's/diff/:id/:lang/:versionFrom/:versionTo',
+        path: '/' + type + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
         name: def.letter + "-diff",
         component: DocumentDiff},
     )
 
     routes.push({
-        path: '/' + type + 's/version/:id/:lang/:version',
+        path: '/' + type + 's/version/:id(\\d+)/:lang/:version',
         name: type + "-version",
         component: DocumentView},
     )
 
     routes.push({
-        path: '/' + type + 's/version/:id/:lang/:version',
+        path: '/' + type + 's/version/:id(\\d+)/:lang/:version',
         name: def.letter + "-version",
         component: DocumentView},
     )

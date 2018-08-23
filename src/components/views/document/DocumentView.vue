@@ -44,10 +44,10 @@
             <document-title :document="document"/>
             <span class="is-pulled-right">
                 <history-link :type="type" :id="document.document_id" :lang="locale.lang">
-                    <icon-history class="is-large" />
+                    <icon-history class="is-medium" />
                 </history-link>
                 <edit-link :type="type" :id="document.document_id" :lang="locale.lang">
-                    <icon-edit class="is-large"/>
+                    <icon-edit class="is-medium"/>
                 </edit-link>
             </span>
         </h1>
@@ -96,7 +96,7 @@
         data() {
             return {
                 isVersionView:this.$route.name.endsWith("-version"),
-                type:this.$route.name.split("-")[0],
+                type:constants.getDocumentType(this.$route.name.split("-")[0]),
                 document: null,
                 locale: null,
                 version: null,

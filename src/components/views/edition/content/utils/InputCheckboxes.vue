@@ -7,7 +7,7 @@
             </label>
             <div class="control">
                 <label class="checkbox" v-for="item of field.values" :key="item">
-                    <input type="checkbox" value="document[field.name].contains(item)">
+                    <input type="checkbox" value="document[field.name].includes(item)">
                     {{item}}
                 </label>
             </div>
