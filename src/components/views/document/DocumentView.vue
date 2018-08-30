@@ -1,68 +1,74 @@
 
 <template>
-    <div class="section content"  v-if="document">
+    <div class="section content">
 
-        <div class="notification is-warning" v-if="isVersionView">
-            This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+        <loading-notification :loaded="document!=null" :error="error"/>
 
-            <br>
+        <div v-if="document">
 
-            <span v-if="previousVersionId">
+            <div class="notification is-warning" v-if="isVersionView">
+                This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+
+                <br>
+
+                <span v-if="previousVersionId">
+                    (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                                :version-from="previousVersionId"
+                                :version-to="$route.params.version"/>)
+                    <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="previousVersionId">
+                        ← previous version
+                    </version-link>
+                </span>
+                <span v-else>this is the first version</span>
+                |
+                <document-link :document="document" :lang="$route.params.lang">
+                    see actual version
+                </document-link>
                 (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                            :version-from="previousVersionId"
-                            :version-to="$route.params.version"/>)
-                <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="previousVersionId">
-                    ← previous version
-                </version-link>
-            </span>
-            <span v-else>this is the first version</span>
-            |
-            <document-link :document="document" :lang="$route.params.lang">
-                see actual version
-            </document-link>
-            (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                        :version-from="$route.params.version"
-                        version-to="last"/>)
-            |
-            <span v-if="nextVersionId">
-                <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
-                    next version →
-                </version-link>
-                (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
-                            :version-to="nextVersionId"
-                            :version-from="$route.params.version"/>)
-            </span>
-            <span v-else>this is the last version</span>
+                            :version-from="$route.params.version"
+                            version-to="last"/>)
+                |
+                <span v-if="nextVersionId">
+                    <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
+                        next version →
+                    </version-link>
+                    (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                                :version-to="nextVersionId"
+                                :version-from="$route.params.version"/>)
+                </span>
+                <span v-else>this is the last version</span>
 
-            <br>
-            <icon-document type="profile"/>
-            <contributor-link :contributor="version"/> : <em>{{version.comment}}</em>
+                <br>
+                <icon-document type="profile"/>
+                <contributor-link :contributor="version"/> : <em>{{version.comment}}</em>
+            </div>
+
+            <h1>
+                <icon-document :type="type"/>
+                <document-title :document="document"/>
+                <span class="is-pulled-right">
+                    <history-link :type="type" :id="document.document_id" :lang="locale.lang">
+                        <icon-history class="is-medium" />
+                    </history-link>
+                    <edit-link :type="type" :id="document.document_id" :lang="locale.lang">
+                        <icon-edit class="is-medium"/>
+                    </edit-link>
+                </span>
+            </h1>
+
+            <component :is="type + '-content'" :document="document"
+                       :locale="locale" :object-definition="constants.objectDefinitions[this.type]">
+            </component>
+
+            <document-comments :document="document" :locale="locale" />
         </div>
-
-        <h1>
-            <icon-document :type="type"/>
-            <document-title :document="document"/>
-            <span class="is-pulled-right">
-                <history-link :type="type" :id="document.document_id" :lang="locale.lang">
-                    <icon-history class="is-medium" />
-                </history-link>
-                <edit-link :type="type" :id="document.document_id" :lang="locale.lang">
-                    <icon-edit class="is-medium"/>
-                </edit-link>
-            </span>
-        </h1>
-
-        <component :is="type + '-content'" :document="document"
-                   :locale="locale" :object-definition="constants.objectDefinitions[this.type]">
-        </component>
-
-        <document-comments :document="document" :locale="locale" />
     </div>
 
 </template>
 
 <script>
     import c2c from '@/js/c2c.js'
+    import utils from '@/js/utils.js'
     import user from '@/js/user.js'
     import constants from '@/js/constants.js'
 
@@ -101,6 +107,7 @@
                 isVersionView:this.$route.name.endsWith("-version"),
                 type:constants.getDocumentType(this.$route.name.split("-")[0]),
                 document: null,
+                error:null,
                 locale: null,
                 version: null,
                 previousVersionId: null,
@@ -112,7 +119,8 @@
         created() {
 
             if(this.isVersionView){
-                c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version).then(response => {
+                c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version)
+                .then(response => {
                     this.document = response.data.document
                     //versionned datas are poor...
                     this.document.areas = []
@@ -136,12 +144,16 @@
                     this.nextVersionId = response.data.next_version_id
                     this.previousVersionId = response.data.previous_version_id
                 })
+                .catch(utils.getApiErrorHandler(this));
+                
             } else {
 
-                c2c[this.type].get(this.$route.params.id).then(response => {
+                c2c[this.type].get(this.$route.params.id)
+                .then(response => {
                     this.document=response.data
                     this.locale = user.getLocaleSmart(this.document, this.$route.params.lang)
-                });
+                })
+                .catch(utils.getApiErrorHandler(this));
             }
         }
     }

@@ -79,35 +79,6 @@ showdown.extension('c2c_folies', function () {
         }
     };
 
-    function Blocks(){
-        var this_ = this;
-        this._data = []
-
-        this.pushLine = function(line){
-
-        }
-    }
-
-    var blockProcessor = function(match, markdown){
-
-        var blocks = [];
-
-        for(let block of markdown.split("\n\n")){
-            let currentBlock = [];
-            blocks.push(currentBlock);
-            currentBlockPrefix = "";
-            for(let line of block.split("\n")){
-                if(!line.startsWith("!!")){
-                    if(currentBlockPrefix == ""){
-
-                    }
-                }
-                currentBlock.push(line);
-            }
-        }
-    }
-
-
     // your new best friends :
     // https://regex101.com/
     // http://localhost:3000/markdown
