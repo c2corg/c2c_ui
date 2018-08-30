@@ -15,7 +15,12 @@
 </template>
 
 <script>
+    import CardRegionItem from '@/components/cards/utils/CardRegionItem'
+
     export default {
         props: ['document'],
+        components : {
+            CardRegionItem,
+        }
     }
 </script>

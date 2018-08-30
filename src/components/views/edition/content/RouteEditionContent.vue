@@ -18,10 +18,10 @@
 
         <edit-section header="configuration">
 
-            <input-base :document="document" :field="fields.orientations"/>
-            <input-checkboxes :document="document" :field="fields.route_types"/>
+            <input-base class="is-4" :document="document" :field="fields.orientations"/>
+            <input-checkboxes class="is-4" :document="document" :field="fields.route_types"/>
             <input-checkboxes class="is-4" :document="document" :field="fields.configuration"/>
-            <input-checkboxes :document="document" :field="fields.rock_types"/>
+            <input-checkboxes class="is-12" :document="document" :field="fields.rock_types"/>
         </edit-section>
 
         <edit-section header="Caracteristics">

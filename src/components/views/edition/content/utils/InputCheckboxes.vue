@@ -5,11 +5,13 @@
                 {{field.name}}
                 <span v-if="field.required">*</span>
             </label>
-            <div class="control">
-                <label class="checkbox" v-for="item of field.values" :key="item">
-                    <input type="checkbox" value="document[field.name].includes(item)">
-                    {{item}}
-                </label>
+            <div class="columns is-multiline is-gapless">
+                <div class="column is-6" v-for="item of field.values" :key="item">
+                    <label class="checkbox">
+                        <input type="checkbox" value="document[field.name].includes(item)">
+                        {{item}}
+                    </label>
+                </div>
             </div>
         </div>
     </div>

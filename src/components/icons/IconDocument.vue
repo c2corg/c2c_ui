@@ -15,6 +15,7 @@
         waypoint:"fas fa-map-pin",
         image:"fas fa-image",
         book:"fas fa-atlas",
+        map:"fas fa-map",
     }
 
     export default {

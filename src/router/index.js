@@ -1,3 +1,5 @@
+import config from '@/js/config.js'
+
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -45,8 +47,6 @@ var routes = [
 
 
     // todo
-    // * for each doc type :
-    //   * add
     // * add image
     // * xreport and profile data
     // * signup
@@ -54,16 +54,15 @@ var routes = [
     // * maps types (ign, swiss...)
     // * see maps on document view
     // * admin actions
-    // * document-view actions (hostory, edit, translate...)
+    // * document-view actions (translate...)
     // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
     // * scope all styles : https://vuejs.org/v2/style-guide/#Component-style-scoping-essential
     // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
     // * do forum.createTopic()
-    // * test all comments functions
+    // * test all doc's comments functions
     // * markdown alerts in parser
     // * markdown icons in parser
-    // * config for history mode
-    // * bug for maps view : card-region-item 
+    // * bug for maps view : card-region-item
 
     // * CSS
     //   * choose font size and family
@@ -156,5 +155,5 @@ for(let type of constants.documentTypes){
 
 export default new Router({
     routes,
-//  mode: 'history'
+    mode: config.router_mode,
 })

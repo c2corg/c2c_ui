@@ -1,4 +1,5 @@
 import showdown from "showdown";
+import config from '@/js/config.js'
 
 
 var ltag_memory = {L : 0, R:0}
@@ -67,32 +68,45 @@ showdown.extension('c2c_folies', function () {
         }
     };
 
-    var acr = {
-        type: 'lang',
-        regex: /\[acr(?:onym)?=([^[]*?)\](.*?)\[\/acr(?:onym)?\]/g,
-        replace: function (match, title, text) {
-            return '<acronym title="' + title + '">' + text + '</acronym>';
-        }
-    };
-
     var c2cItem = {
         type: 'lang',
-        regex: /\[\[\/?(book|waypoint|route|outing|area|article)s\/([\d]+)([^|]*)\|([^\]]*)\]\]/g,
+        regex: /\[\[\/?(book|waypoint|route|outing|area|article|map|xreport|image|profile)s\/([\d]+)([^|]*)\|([^\]]*)\]\]/g,
         replace: function (match, item, id, lang, text) {
-            if(item=="book" || item=="article")
-                return '<a href="https://www.camptocamp.org/' + item + 's/' + id + '">' + text + '</a>';
+            if(config.router_mode === 'history')
+                return '<a href="/' + item + 's/' + id + '">' + text + '</a>';
             else
-                return '<a href="' + item + '/' + id + '">' + text + '</a>';
+                return '<a href="#/' + item + 's/' + id + '">' + text + '</a>';
         }
     };
 
-    var url4 = {
-        type: 'lang',
-        regex: /\[\[([^|\n ]*)\|([^\]]*)\]\]/g,
-        replace: function (match, url, text) {
-            return '<a href="' + url + '">' + text + '</a>'; // give it to markdown
+    function Blocks(){
+        var this_ = this;
+        this._data = []
+
+        this.pushLine = function(line){
+
         }
-    };
+    }
+
+    var blockProcessor = function(match, markdown){
+
+        var blocks = [];
+
+        for(let block of markdown.split("\n\n")){
+            let currentBlock = [];
+            blocks.push(currentBlock);
+            currentBlockPrefix = "";
+            for(let line of block.split("\n")){
+                if(!line.startsWith("!!")){
+                    if(currentBlockPrefix == ""){
+
+                    }
+                }
+                currentBlock.push(line);
+            }
+        }
+    }
+
 
     // your new best friends :
     // https://regex101.com/
@@ -242,7 +256,6 @@ showdown.extension('c2c_folies', function () {
         type: 'lang',
         regex: /\[video\](.*?)\[\/video\]/g,
         replace: function (match, url) {
-            console.log(match)
             if(url.includes("vimeo.com")){
                 url = url.replace("vimeo.com","player.vimeo.com/video")
                 return '<iframe src="' + url + '" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
@@ -252,7 +265,7 @@ showdown.extension('c2c_folies', function () {
         }
     };
 
-    return [c2c_title, video, img, imgLegend, acr, c2cItem, url4, toc, ltag];
+    return [c2c_title, video, img, imgLegend, c2cItem, toc, ltag];
 })
 
 

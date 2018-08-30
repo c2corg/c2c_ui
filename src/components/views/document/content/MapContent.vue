@@ -1,0 +1,47 @@
+<template>
+
+    <div>
+        <div class="columns">
+            <div class="column is-3">
+                <label>editor</label>
+                <span>{{document.editor}}</span>
+            </div>
+            <div class="column is-3">
+                <label>code</label>
+                <span>{{document.code}}</span>
+            </div>
+            <div class="column is-3">
+                <label>Scale</label>
+                <span>{{document.scale}}</span>
+            </div>
+        </div>
+        <summary>
+            <markdown :content="locale.summary"></markdown>
+        </summary>
+
+        <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description"/>
+
+        <div >
+            <document-license :document="document" cc="by-sa"/>
+        </div>
+
+    </div>
+
+</template>
+
+<script>
+    import Markdown from './utils/Markdown'
+    import MarkdownSection from './utils/MarkdownSection'
+    import DocumentLicense from '@/components/utils/DocumentLicense'
+
+    export default {
+
+        components: {
+            Markdown,
+            MarkdownSection,
+            DocumentLicense,
+        },
+
+        props:["document", "locale", "objectDefinition"]
+    }
+</script>

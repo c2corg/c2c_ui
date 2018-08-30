@@ -71,6 +71,7 @@
     import OutingContent from './content/OutingContent'
     import ProfileContent from './content/ProfileContent'
     import ArticleContent from './content/ArticleContent'
+    import MapContent from './content/MapContent'
     import BookContent from './content/BookContent'
     import AreaContent from './content/AreaContent'
     import ImageContent from './content/ImageContent'
@@ -81,15 +82,17 @@
 
     export default {
         components:{
-            RouteContent,
-            OutingContent,
-            ProfileContent,
+            AreaContent,
             ArticleContent,
             BookContent,
-            AreaContent,
             ImageContent,
+            MapContent,
+            OutingContent,
+            ProfileContent,
+            RouteContent,
             WaypointContent,
             XreportContent,
+
             DocumentComments,
         },
 
