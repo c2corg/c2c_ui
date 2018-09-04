@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <Navigation></Navigation>
-        <router-view :key="$route.fullPath" />
+        <router-view :key="$route.name + JSON.stringify($route.params)"/>
     </div>
 </template>
 

@@ -11,13 +11,13 @@
                             :route="route"
                             :key="route.document_id"/>
 
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.access_comment" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_description" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.conditions"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.avalanches"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.hut_comment"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.timing"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.access_comment" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.route_description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.conditions"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.avalanches"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.hut_comment"/>
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.timing"/>
             </div>
 
             <div class="column is-3">
@@ -106,6 +106,6 @@
             AreasLinks
         },
 
-        props:["document", "locale"],
+        props:["document", "locale", "objectDefinition"],
     }
 </script>

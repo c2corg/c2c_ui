@@ -16,8 +16,8 @@ import FollowingView from '@/components/views/user/FollowingView'
 import PreferencesView from '@/components/views/user/PreferencesView'
 import MailingListsView from '@/components/views/user/MailingListsView'
 
-import Documents from '@/components/views/Documents'
-import Images from '@/components/views/Images'
+import Documents from '@/components/views//documents/Documents'
+import Images from '@/components/views/documents/Images'
 
 import DocumentView from '@/components/views/document/DocumentView'
 import DocumentHistory from '@/components/views/document/DocumentHistory'

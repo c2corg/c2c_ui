@@ -2,7 +2,7 @@
     <div>
 
         <edit-section header="Comments">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
             <input-base class="is-12" :document="document" :field="fields.activities" />
         </edit-section>
 
@@ -32,25 +32,25 @@
         </edit-section>
 
         <edit-section header="Description">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
             <input-base :document="document" :field="fields.anonymous" />
         </edit-section>
 
         <edit-section header="Factors">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.place" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.route_study" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.conditions" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.training" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.motivations" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.group_management" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.risk" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.time_management" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.safety" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.reduce_impact" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.increase_impact" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.modifications" />
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.other_comments" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.place" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.route_study" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.conditions" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.training" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.motivations" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.group_management" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.risk" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.time_management" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.safety" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.reduce_impact" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.increase_impact" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.modifications" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.other_comments" />
             <input-base :document="document" :field="fields.disable_comments" />
         </edit-section>
     </div>
@@ -77,7 +77,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }

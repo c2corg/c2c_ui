@@ -4,6 +4,10 @@
             {{title}}
         </h1>
 
+        <div>
+            <query-items />
+        </div>
+
         <loading-notification :loaded="documents!=null" class="column"/>
 
         <div class="columns">
@@ -23,9 +27,14 @@
 <script>
 
     import c2c from '@/js/c2c.js'
-    import constants from '@/js/constants.js'
+
+    import QueryItems from './QueryItems'
 
     export default {
+        components: {
+            QueryItems,
+        },
+
 
         data() {
             return {

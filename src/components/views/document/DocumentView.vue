@@ -121,6 +121,7 @@
             if(this.isVersionView){
                 c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version)
                 .then(response => {
+
                     this.document = response.data.document
                     //versionned datas are poor...
                     this.document.areas = []
@@ -145,11 +146,17 @@
                     this.previousVersionId = response.data.previous_version_id
                 })
                 .catch(utils.getApiErrorHandler(this));
-                
+
             } else {
 
                 c2c[this.type].get(this.$route.params.id)
                 .then(response => {
+
+                    if(response.data.not_authorized===true){
+                        this.error = "Sorry, you're not authorized to see this document"
+                        return
+                    }
+
                     this.document=response.data
                     this.locale = user.getLocaleSmart(this.document, this.$route.params.lang)
                 })

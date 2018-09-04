@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar is-light">
         <div class="navbar-brand">
-            <router-link class="navbar-item" :to="'/'">
+            <router-link class="navbar-item" :to="{name:'home'}">
                 <img src="@/assets/img/logo.svg"
                      url="@/assets/img/logo.svg"
                      alt="Camptocamp.org" class="logo src">
@@ -18,7 +18,7 @@
 
         <div id="navMenu" class="navbar-menu" v-bind:class="{ 'is-active': burgerActive }">
             <div class="navbar-start">
-                <router-link class="navbar-item" :to="`${link.page}`"
+                <router-link class="navbar-item" :to="{name:link.page}"
                              v-for="(link, index) in links" :key="index">
                     <component :is="link.iconName" class="is-medium"/>
                     {{link.text}}
@@ -38,7 +38,7 @@
             <div class="navbar-end">
 
                 <div class="navbar-item" v-if="!user.isLogged()">
-                    <router-link class="button is-primary"
+                    <router-link class="button has-background-link has-text-light"
                                  :to="{ name: 'auth' }">
                         sign in
                     </router-link>
@@ -112,27 +112,27 @@
                 links: [
                     {
                         text: 'Routes',
-                        page:'/routes',
+                        page:'routes',
                         iconName:"icon-route"
                     },
                     {
                         text: 'Outings',
-                        page:'/outings',
+                        page:'outings',
                         iconName:"icon-outing"
                     },
                     {
                         text: 'Forum',
-                        page:'/About',
+                        page:'/forum',
                         iconName:"icon-forum"
                     },
                     {
                         text: 'SERAC',
-                        page:'/serac',
+                        page:'serac',
                         iconName:"icon-xreport"
                     },
                     {
                         text: 'Articles',
-                        page:'/articles',
+                        page:'articles',
                         iconName:"icon-article"
                     }
                 ],

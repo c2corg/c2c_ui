@@ -103,8 +103,8 @@
             </div>
 
             <div class="column is-12">
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.access" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description" />
+                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.access" />
             </div>
 
             <div class="column is-6" v-if="document.associations.all_routes.documents.length">

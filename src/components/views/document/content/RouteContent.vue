@@ -4,14 +4,14 @@
         <div class="column is-9">
             <!--   CONTENT  -->
 
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.summary"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_history" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.slackline_anchor1" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.slackline_anchor2" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.remarks" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.gear" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.external_resources" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.summary"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.route_history" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.slackline_anchor1" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.slackline_anchor2" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.remarks" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.gear" />
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.external_resources" />
 
             <div class="hidden-print" v-if="document.associations.recent_outings.documents.length!=0">
                 <h2>

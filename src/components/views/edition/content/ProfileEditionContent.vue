@@ -5,8 +5,8 @@
             <input-activities class="is-6" :document="document" />
             <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
 
-            <input-base class="is-12" :document="document" :locale="locale" :field="localeFields.summary"/>
-            <input-base class="is-12" :document="document" :locale="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :locale="locale" :field="fields.summary"/>
+            <input-base class="is-12" :document="document" :locale="locale" :field="fields.description"/>
 
         </edit-section>
     </div>
@@ -31,7 +31,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }

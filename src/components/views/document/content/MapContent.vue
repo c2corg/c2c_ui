@@ -19,7 +19,7 @@
             <markdown :content="locale.summary"></markdown>
         </summary>
 
-        <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description"/>
+        <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description"/>
 
         <div >
             <document-license :document="document" cc="by-sa"/>

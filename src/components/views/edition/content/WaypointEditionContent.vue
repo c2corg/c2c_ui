@@ -2,7 +2,7 @@
     <div>
 
         <edit-section header="Title">
-            <input-base class="is-9" :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-9" :document="document" :base="locale" :field="fields.title"/>
             <input-base class="is-3" :document="document" :field="fields.waypoint_type" />
         </edit-section>
 
@@ -83,10 +83,10 @@
 
         <edit-section header="Description">
 
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.access"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.access_period"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.access"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.access_period"/>
 
         </edit-section>
     </div>
@@ -115,7 +115,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }

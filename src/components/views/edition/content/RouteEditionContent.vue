@@ -1,7 +1,7 @@
 <template>
     <div>
         <edit-section header="general informations">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
             <input-base class="is-4" :document="document" :field="fields.main_waypoint_id"/>
         </edit-section>
 
@@ -65,15 +65,15 @@
         </edit-section>
 
         <edit-section header="Comments">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.route_history"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.slackline_anchor1"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.slackline_anchor2"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.remarks"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.gear"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.route_history"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.slackline_anchor1"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.slackline_anchor2"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.remarks"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.gear"/>
             <input-base class="is-narrow" :document="document" :field="fields.glacier_gear"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.external_resources"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.external_resources"/>
         </edit-section>
 
     </div>
@@ -105,7 +105,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }

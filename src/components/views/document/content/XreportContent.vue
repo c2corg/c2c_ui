@@ -3,21 +3,21 @@
     <div class="columns">
 
         <div class="column">
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.summary"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.description"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.place"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.route_study"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.conditions"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.training"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.motivations"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.group_management"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.risk"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.time_management"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.safety"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.increase_impact"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.reduce_impact"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.modifications"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.localeFields.other_comments"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.summary"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.place"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.route_study"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.conditions"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.training"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.motivations"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.group_management"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.risk"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.time_management"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.safety"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.increase_impact"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.reduce_impact"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.modifications"/>
+            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.other_comments"/>
         </div>
 
         <div class="column is-3">

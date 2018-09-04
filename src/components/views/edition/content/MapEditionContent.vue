@@ -1,7 +1,7 @@
 <template>
     <div>
         <edit-section expanded="true" :document="document" header="general information">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.title"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
 
             <input-base :document="document" :field="fields.editor" />
             <input-base :document="document" :field="fields.scale" />
@@ -25,7 +25,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }

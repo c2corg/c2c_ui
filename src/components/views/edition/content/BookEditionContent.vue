@@ -2,7 +2,7 @@
     <div>
         <edit-section :document="document" header="general informations">
 
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.title" />
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.title" />
             <input-activities class="is-6" :document="document" />
             <input-checkboxes class="is-6" :document="document" :field="fields.book_types" />
             <input-base class="is-6" :document="document" :field="fields.author" />
@@ -16,8 +16,8 @@
         </edit-section>
 
         <edit-section :document="document" header="description">
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="localeFields.description"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
+            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
         </edit-section>
 
     </div>
@@ -42,7 +42,6 @@
         data(){
             return {
                 fields : this.objectDefinition.fields,
-                localeFields : this.objectDefinition.localeFields,
             }
         },
     }
