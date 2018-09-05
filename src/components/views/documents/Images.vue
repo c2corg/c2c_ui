@@ -61,7 +61,7 @@
 
 </script>
 
-<style>
+<style scoped>
 
 .images-view .cards-container{
     flex-flow:wrap row;

@@ -56,17 +56,13 @@
 
     import DashboardOutingLink from '@/components/views/dashboard/DashboardOutingLink'
 
-    import Gallery from '@/components/utils/Gallery'
-
     import c2c from '@/js/c2c.js'
     import forum from '@/js/forum.js'
-
 
     export default {
 
         components: {
             DashboardOutingLink,
-            Gallery
         },
 
         data() {

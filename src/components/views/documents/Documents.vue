@@ -64,20 +64,8 @@
             <div class="column map-container"
                  :class="{'is-5': showResults, 'is-hidden': !showMap}"
                  v-if="hasMap">
-
-                <gmap-map ref="mapRef"
-                          :street-view-control="false"
-                          :center="{lat:10, lng:10}"
-                          :zoom="7"
-                          map-type-id="terrain"
-                          style="width: 100%; height: 600px">
-                    <gmap-marker v-for="(position, index) in positions"
-                                :key="index"
-                                :position="position"
-                                :clickable="true"
-                                :draggable="true"/>
-                </gmap-map>
-
+                <map-view :documents="documents" style="width: 100%; height: 100%">
+                </map-view>
             </div>
         </div>
 
@@ -90,10 +78,10 @@
     import c2c from '@/js/c2c.js'
     import utils from '@/js/utils.js'
     import constants from '@/js/constants.js'
-    import mapUtils from '@/js/mapUtils.js'
 
     import DocumentCard from '@/components/cards/DocumentCard'
     import QueryItems from './QueryItems'
+
 
     export default {
         components: {
@@ -103,14 +91,10 @@
 
         data() {
             return {
-                map: null,
                 documents: null,
                 error: null,
                 showMap: true,
                 showResults: true,
-
-                positions: [],
-                mapBounds: null,
             }
         },
 
@@ -156,7 +140,6 @@
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
                 c2c[this.$route.name].get(query)
-
                 .then(response => {
 
                     if(this.documents){
@@ -165,15 +148,6 @@
                         }
                     } else {
                         this.documents=response.data;
-                    }
-
-                    if(this.hasMap){
-                        this.positions=mapUtils.getPositions(this.documents.documents)
-                        this.mapBounds=mapUtils.getBounds(this.documents.documents)
-
-                        this.$refs.mapRef.$mapPromise.then((map) => {
-                            mapUtils.fitBounds(map, this.mapBounds)
-                        })
                     }
                 })
                 .catch(utils.getApiErrorHandler(this));

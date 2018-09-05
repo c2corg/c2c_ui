@@ -31,8 +31,6 @@
     import user from "@/js/user.js"
     import c2c from "@/js/c2c.js"
 
-    import FormField from '@/components/utils/FormField'
-
     function getFieldValue(value){
         return {
             value:value,
@@ -41,9 +39,6 @@
     }
 
     export default {
-        components:{
-            FormField
-        },
 
         data(){
             return {

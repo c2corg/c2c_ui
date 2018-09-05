@@ -29,6 +29,9 @@
         <span v-if="route.ski_rating" >
             {{route.ski_rating}}
         </span>
+        <span v-if="route.hiking_rating">
+            {{route.hiking_rating}}
+        </span>
     </span>
 
 </template>

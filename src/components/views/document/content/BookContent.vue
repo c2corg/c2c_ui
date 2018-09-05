@@ -11,20 +11,19 @@
         </div>
 
         <div class="column is-3">
-            <information-item>
+            <label-value label="activities">
                 <activities :activities="document.activities"/>
-            </information-item>
+            </label-value>
 
-            <simple-information-item label="author" :content="document.author"/>
+            <field-view :document="document" :field="fields.author"/>
 
-            <information-item label="book type" v-if="document.book_types.length">
-                {{document.book_types.join(', ')}}
-            </information-item>
+            <field-view :document="document" :field="fields.book_types"/>
 
-            <simple-information-item label="editor" :content="document.editor"/>
-            <simple-information-item label="ISBN" :content="document.isbn"/>
-            <simple-information-item label="number of pages" :content="document.nb_pages"/>
-            <simple-information-item label="publication date" :content="document.publication_date"/>
+            <field-view :document="document" label="editor" :field="fields.editor"/>
+            <field-view :document="document" label="ISBN" :field="fields.isbn"/>
+            <field-view :document="document" label="number of pages" :field="fields.nb_pages"/>
+            <field-view :document="document" label="publication date" :field="fields.publication_date"/>
+
             <document-license :document="document" cc="by-sa"/>
 
         </div>
@@ -34,24 +33,17 @@
 
 <script>
     import Markdown from './utils/Markdown'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Gallery from '@/components/utils/Gallery'
-    import Activities from '@/components/utils/Activities'
-    import InformationItem from '@/components/views/document/utils/InformationItem'
-    import SimpleInformationItem from '@/components/views/document/utils/SimpleInformationItem'
+    import LabelValue from './utils/LabelValue'
+    import FieldView from './utils/FieldView'
 
     export default {
 
         components: {
             Markdown,
-            DocumentLicense,
-            Activities,
-            InformationItem,
-            SimpleInformationItem,
-            Gallery
+            LabelValue,
+            FieldView,
         },
 
-        props:["document", "locale"]
-
+        props:["document", "locale", "fields"],
     }
 </script>

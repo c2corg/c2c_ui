@@ -26,12 +26,6 @@
             EditSection,
         },
 
-        props : ["document", "locale", "objectDefinition"],
-
-        data(){
-            return {
-                fields : this.objectDefinition.fields,
-            }
-        },
+        props : ["document", "locale", "fields"],
     }
 </script>

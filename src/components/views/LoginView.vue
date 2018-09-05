@@ -50,12 +50,7 @@
 <script>
     import user from "@/js/user.js"
 
-    import FormField from '@/components/utils/FormField'
-
     export default {
-        components:{
-            FormField
-        },
         data(){
             return {
                 mode:"signin",

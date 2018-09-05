@@ -24,19 +24,13 @@
 
 <script>
     import Markdown from './utils/Markdown'
-    import Activities from '@/components/utils/Activities'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Gallery from '@/components/utils/Gallery'
 
     export default {
 
         components: {
             Markdown,
-            Activities,
-            DocumentLicense,
-            Gallery
         },
 
-        props:["document", "locale"]
+        props:["document", "locale", "fields"],
     }
 </script>

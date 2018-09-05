@@ -2,7 +2,7 @@
     <div class="serac-view">
         <div class="serac-view-part">
             <h1 class="title is-1">SERAC</h1>
-            <h2 class="subtitle is-1">Accident database</h2>
+            <h3 class="subtitle is-3">Accident database</h3>
 
             <p>
                 SERAC is a worldwide incidents and accidents database aiming
@@ -11,18 +11,18 @@
 
             <div>
 
-                <router-link to="xreports" class="button is-primary">
-                    <i class="fas fa-plus"/>
+                <add-link type="xreport" class="button is-primary">
+                    <base-icon iconClass="fas fa-plus"/>
                     <span translate>Create a new report</span>
-                </router-link>
+                </add-link>
 
                 <router-link to="xreports" class="button is-link">
-                    <i class="fas fa-list"/>
+                    <base-icon iconClass="fas fa-list"/>
                     <span translate>View xreports</span>
                 </router-link>
 
                 <router-link :to="{name:'article', params:{id:697210}}"  class="button is-info">
-                    <i class="fas fa-info"/>
+                    <base-icon iconClass="fas fa-info"/>
                     <span translate>Know more about SERAC</span>
                 </router-link>
             </div>
@@ -30,28 +30,25 @@
 
         <div class="serac-view-part">
             <h2 class="title is-2">
-                Xreports
-            </h2>
-            ...
-        </div>
-
-        <div class="serac-view-part">
-            <h2 class="title is-2">
                 Camptocamp, source de données pour les traveaux de recherche
             </h2>
-            ...
 
-            <h2 class="title is-3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
+
+            <h3 class="title is-3">
                 Travaux de recherche 1
-            </h2>
-            ...
-            <h2 class="title is-3">
+            </h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
+
+            <h3 class="title is-3">
                 Travaux de recherche 2
-            </h2>
-            <h2 class="title is-3">
+            </h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
+
+            <h3 class="title is-3">
                 Travaux de recherche 3
-            </h2>
-            ...
+            </h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
         </div>
 
     </div>
@@ -62,7 +59,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 
 .serac-view{
     background-image:url(https://www.camptocamp.org/static/img/home/cermygian-crevasse.jpg);
@@ -77,7 +74,8 @@
 
 .serac-view,
 .serac-view h1,
-.serac-view h2{
+.serac-view h2,
+.serac-view h3{
     color:white;
 }
 

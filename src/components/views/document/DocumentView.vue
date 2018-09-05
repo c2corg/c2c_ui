@@ -1,10 +1,10 @@
 
 <template>
-    <div class="section content">
+    <div class="section">
 
         <loading-notification :loaded="document!=null" :error="error"/>
 
-        <div v-if="document">
+        <div class="content" v-if="document">
 
             <div class="notification is-warning" v-if="isVersionView">
                 This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
@@ -56,8 +56,9 @@
                 </span>
             </h1>
 
-            <component :is="type + '-content'" :document="document"
-                       :locale="locale" :object-definition="constants.objectDefinitions[this.type]">
+            <component :is="type + '-content'"
+                :document="document" :locale="locale"
+                :fields="constants.objectDefinitions[this.type].fields">
             </component>
 
             <document-comments :document="document" :locale="locale" />

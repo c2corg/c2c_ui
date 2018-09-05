@@ -1,8 +1,9 @@
 <template>
     <div>
-        <label v-if="label">
+        <label>
             <span>{{label}}</span>
         </label>
+        :
         <slot></slot>
     </div>
 </template>

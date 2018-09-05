@@ -12,15 +12,19 @@
             </div>
             <div class="column is-3">
                 <activities :activities="document.activities"/>
-                <information-item label="forum">
+
+                <label-value label="forum">
                     @{{document.forum_username}}
-                </information-item>
-                <simple-information-item label="categories" :content="document.categories"/>
-                <information-item>
+                </label-value>
+
+                <field-view :document="document" :field="field.categories"/>
+
+                <div>
                     <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
                         contributions
                     </router-link>
-                </information-item>
+                </div>
+
                 <document-license :document="document" cc="by-nc-nd"/>
 
             </div>
@@ -33,23 +37,17 @@
 
 <script>
     import Markdown from './utils/Markdown'
-    import Activities from '@/components/utils/Activities'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Gallery from '@/components/utils/Gallery'
-    import InformationItem from '@/components/views/document/utils/InformationItem'
-    import SimpleInformationItem from '@/components/views/document/utils/SimpleInformationItem'
+    import LabelValue from './utils/LabelValue'
+    import FieldView from './utils/FieldView'
 
     export default {
 
         components: {
             Markdown,
-            Activities,
-            DocumentLicense,
-            Gallery,
-            SimpleInformationItem,
-            InformationItem
+            LabelValue,
+            FieldView,
         },
 
-        props:["document", "locale"]
+        props:["document", "locale", "fields"],
     }
 </script>

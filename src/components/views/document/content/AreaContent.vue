@@ -5,7 +5,7 @@
             <markdown :content="locale.summary"></markdown>
         </summary>
 
-        <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description"/>
+        <markdown-section :document="document" :locale="locale" :field="fields.description"/>
 
         <div >
             <document-license :document="document" cc="by-sa"/>
@@ -18,18 +18,14 @@
 <script>
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Gallery from '@/components/utils/Gallery'
 
     export default {
 
         components: {
             Markdown,
             MarkdownSection,
-            DocumentLicense,
-            Gallery
         },
 
-        props:["document", "locale", "objectDefinition"]
+        props:["document", "locale", "fields"],
     }
 </script>

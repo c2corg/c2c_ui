@@ -11,13 +11,13 @@
                             :route="route"
                             :key="route.document_id"/>
 
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.access_comment" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.route_description" />
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.conditions"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.avalanches"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.hut_comment"/>
-                <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.timing"/>
+                <markdown-section :document="document" :locale="locale" :field="fields.description" />
+                <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />
+                <markdown-section :document="document" :locale="locale" :field="fields.route_description" />
+                <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
+                <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
+                <markdown-section :document="document" :locale="locale" :field="fields.hut_comment"/>
+                <markdown-section :document="document" :locale="locale" :field="fields.timing"/>
             </div>
 
             <div class="column is-3">
@@ -85,12 +85,7 @@
 
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-    import Activities from '@/components/utils/Activities'
-    import RouteRating from '@/components/utils/RouteRating'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Gallery from '@/components/utils/Gallery'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
-
     import UsersLinks from '@/components/views/document/utils/UsersLinks'
 
     export default {
@@ -98,14 +93,10 @@
         components: {
             Markdown,
             MarkdownSection,
-            Activities,
-            DocumentLicense,
-            RouteRating,
-            Gallery,
             UsersLinks,
             AreasLinks
         },
 
-        props:["document", "locale", "objectDefinition"],
+        props:["document", "locale", "fields"],
     }
 </script>

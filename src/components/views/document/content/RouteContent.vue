@@ -1,17 +1,17 @@
 <template>
 
     <div class="columns">
-        <div class="column is-9">
+        <div class="column is-8">
             <!--   CONTENT  -->
 
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.summary"/>
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.route_history" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.description" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.slackline_anchor1" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.slackline_anchor2" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.remarks" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.gear" />
-            <markdown-section :document="document" :locale="locale" :field="objectDefinition.fields.external_resources" />
+            <markdown-section :document="document" :locale="locale" :field="fields.summary"/>
+            <markdown-section :document="document" :locale="locale" :field="fields.route_history" />
+            <markdown-section :document="document" :locale="locale" :field="fields.description" />
+            <markdown-section :document="document" :locale="locale" :field="fields.slackline_anchor1" />
+            <markdown-section :document="document" :locale="locale" :field="fields.slackline_anchor2" />
+            <markdown-section :document="document" :locale="locale" :field="fields.remarks" />
+            <markdown-section :document="document" :locale="locale" :field="fields.gear" />
+            <markdown-section :document="document" :locale="locale" :field="fields.external_resources" />
 
             <div class="hidden-print" v-if="document.associations.recent_outings.documents.length!=0">
                 <h2>
@@ -35,57 +35,57 @@
             </div>
         </div>
 
-        <div class="column is-3">
+        <div class="column is-4">
             <areas-links :areas="document.areas"/>
-            <information-item label="Credits">
+            <label-value label="Credits">
                 <document-license :document="document" cc="by-sa"/>
-            </information-item>
+            </label-value>
 
-            <information-item label="activities">
+            <label-value label="activities">
                 <activities :activities="document.activities"/>
-            </information-item>
+            </label-value>
 
-            <information-item label="ratings">
+            <label-value label="ratings">
                 <route-rating :route="document"/>
-                <span v-if="document.hiking_rating">
-                    {{document.hiking_rating}}
-                </span>
-            </information-item>
+            </label-value>
 
-            <simple-information-item label="slackline type" :content="document.slackline_type"/>
-            <distance-information-item label="difficulties height" :content="document.height_diff_difficulties"/>
+            <field-view :document="document" :field="fields.slackline_type"/>
+            <field-view :document="document" :field="fields.height_diff_difficulties"/>
 
-            <information-item label="route type"  v-if="document.route_types">
+            <label-value label="route type"  v-if="document.route_types">
                 {{document.route_types.join(', ')}}
-            </information-item>
+            </label-value>
 
-            <simple-information-item label="glacier gears" :content="document.glacier_gear"/>
-            <information-item label="configuration"  v-if="document.configuration">
+            <field-view :document="document" :field="fields.glacier_gear"/>
+
+            <label-value label="configuration"  v-if="document.configuration">
                 {{document.configuration.join(', ')}}
-            </information-item>
+            </label-value>
 
-            <information-item label="orientation"  v-if="document.orientations">
+            <label-value label="orientation"  v-if="document.orientations">
                 {{document.orientations.join(', ')}}
-            </information-item>
+            </label-value>
 
-            <information-item label="height difference"  v-if="document.height_diff_up || document.height_diff_down">
+            <label-value label="height difference"  v-if="document.height_diff_up || document.height_diff_down">
                 <span v-if="document.height_diff_up">+{{document.height_diff_up}}&#8239;m</span>
                 <span v-if="document.height_diff_up && document.height_diff_down">/</span>
                 <span v-if="document.height_diff_down">-{{document.height_diff_down}}&#8239;m</span>
-            </information-item>
+            </label-value>
 
             <div v-if="document.elevation_min || document.elevation_max">
                 <label>
-                    <span>elevation</span>
+                    <span>elevation&nbsp;</span>
                     <span v-if="document.elevation_min">min</span><span v-if="document.elevation_min && document.elevation_max">/</span><span v-if="document.elevation_max">max</span>
                 </label>
+                :
                 <span v-if="document.elevation_min">{{document.elevation_min}}&#8239;m</span>
                 <span v-if="document.elevation_min && document.elevation_max">/</span>
                 <span v-if="document.elevation_max">{{document.elevation_max}}&#8239;m</span>
             </div>
 
-            <distance-information-item label="route length"  :content="document.route_length"/>
-            <distance-information-item label="slackline height"  :content="document.slackline_height"/>
+            <field-view :document="document" :field="fields.route_length"/>
+            <field-view :document="document" :field="fields.slackline_height"/>
+
             <div v-if="document.associations">
                 <strong>Waypoints</strong>
                 <div v-for="waypoint of document.associations.waypoints"
@@ -93,34 +93,32 @@
                     <document-link :document="waypoint"/>
                 </div>
             </div>
+
+
+           <map-view :documents="{documents:[document]}" style="width: 100%; height: 200px">
+           </map-view>
+
         </div>
     </div>
 </template>
 
 <script>
-    import MarkdownSection from './utils/MarkdownSection'
 
-    import Activities from '@/components/utils/Activities'
-    import RouteRating from '@/components/utils/RouteRating'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import InformationItem from '@/components/views/document/utils/InformationItem'
-    import SimpleInformationItem from '@/components/views/document/utils/SimpleInformationItem'
-    import DistanceInformationItem from '@/components/views/document/utils/DistanceInformationItem'
+
+    import MarkdownSection from './utils/MarkdownSection'
+    import LabelValue from './utils/LabelValue'
+    import FieldView from './utils/FieldView'
 
     export default {
 
         components: {
-            MarkdownSection,
-            Activities,
-            DocumentLicense,
-            RouteRating,
             AreasLinks,
-            SimpleInformationItem,
-            InformationItem,
-            DistanceInformationItem
+            MarkdownSection,
+            LabelValue,
+            FieldView,
         },
 
-        props:["document", "locale", "objectDefinition"],
+        props:["document", "locale", "fields"],
     }
 </script>

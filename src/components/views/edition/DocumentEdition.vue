@@ -8,7 +8,8 @@
         </h1>
         <save-block :document="document"></save-block>
         <component :is="type + '-edition-content'"
-            :document="document" :locale="locale" :objectDefinition="constants.objectDefinitions[type]">
+            :document="document" :locale="locale"
+            :fields="constants.objectDefinitions[type].fields">
         </component>
     </div>
 </template>
@@ -74,7 +75,7 @@
                 this.mode = "add"
                 this.document = constants.buildDocument(this.type,
                     this.$route.params.lang || user.data.lang)
-                    
+
                 this.locale = this.document.locales[0]
 
             }

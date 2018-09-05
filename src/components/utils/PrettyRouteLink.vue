@@ -17,15 +17,8 @@
 </template>
 
 <script>
-    import Activities from '@/components/utils/Activities'
-    import RouteRating from '@/components/utils/RouteRating'
 
     export default {
         props: ['route', 'showArea'],
-
-        components: {
-            Activities,
-            RouteRating,
-        }
     }
 </script>

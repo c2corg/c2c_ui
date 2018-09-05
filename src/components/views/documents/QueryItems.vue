@@ -73,7 +73,6 @@
 
         methods:{
             initialize(){
-                console.log("QueryItems.initialize")
 
                 for(let url of Object.keys(this.$route.query)){
                     let field = this.urlToField[url]

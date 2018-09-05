@@ -61,24 +61,13 @@
     import user from '@/js/user.js'
     import c2c from '@/js/c2c.js'
     import constants from '@/js/constants.js'
-
-
-    import OutingRating from '@/components/utils/OutingRating'
-    import RouteRating from '@/components/utils/RouteRating'
-    import Activities from '@/components/utils/Activities'
-    import Gallery from '@/components/utils/Gallery'
-
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default{
         props:["item"],
 
         components:{
-            Gallery,
             CardRegionItem,
-            RouteRating,
-            OutingRating,
-            Activities
         },
 
         data(){

@@ -230,10 +230,12 @@
 
     ins{
         background:lightgreen !important;
+        text-decoration:none;
     }
 
     del{
         background:pink !important;
+        text-decoration:none;
     }
 
 </style>

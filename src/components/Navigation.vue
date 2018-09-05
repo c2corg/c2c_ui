@@ -18,7 +18,7 @@
 
         <div id="navMenu" class="navbar-menu" v-bind:class="{ 'is-active': burgerActive }">
             <div class="navbar-start">
-                <router-link class="navbar-item" :to="{name:link.page}"
+                <router-link class="navbar-item" :to="{name:link.name}"
                              v-for="(link, index) in links" :key="index">
                     <component :is="link.iconName" class="is-medium"/>
                     {{link.text}}
@@ -112,27 +112,27 @@
                 links: [
                     {
                         text: 'Routes',
-                        page:'routes',
+                        name:'routes',
                         iconName:"icon-route"
                     },
                     {
                         text: 'Outings',
-                        page:'outings',
+                        name:'outings',
                         iconName:"icon-outing"
                     },
                     {
                         text: 'Forum',
-                        page:'/forum',
+                        name:"forum",
                         iconName:"icon-forum"
                     },
                     {
                         text: 'SERAC',
-                        page:'serac',
+                        name:'serac',
                         iconName:"icon-xreport"
                     },
                     {
                         text: 'Articles',
-                        page:'articles',
+                        name:'articles',
                         iconName:"icon-article"
                     }
                 ],

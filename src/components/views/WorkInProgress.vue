@@ -7,7 +7,7 @@
 <script>
 </script>
 
-<style>
+<style scoped>
     .work-in-progress-view div{
         justify-content:center;
     }

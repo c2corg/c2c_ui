@@ -91,7 +91,7 @@ const fieldsProperties = {
     heating_unstaffed:{values:[true, false, null]},
     height:{type:"number", disabled},
     height_diff_access:{type:"number", min:0, max:3000, unit:"m"},
-    height_diff_difficulties:{type:"number", min:0, max:3000, unit:"m"},
+    height_diff_difficulties:{type:"number", min:0, max:3000, unit:"m", label:"difficulties height"},
     height_diff_down:{type:"number", min:0, max:9999, unit:"m"},
     height_diff_up:{type:"number", min:0, max:9999, unit:"m"},
     height_max:{type:"number", min:0, max:9999, unit:"m"},
@@ -127,10 +127,10 @@ const fieldsProperties = {
     mtb_length_trail:{type:"number", min:0, max:50, unit:"km"},
     mtb_up_rating:{values:common.attributes.mtb_up_ratings, queryMode:"valuesRangeSlider"},
     name:{disabled}, // for profile
-    nb_impacted:{type:"number", min:0, max:1000},
+    nb_impacted:{type:"number", min:0, max:1000, label:"count of impacted people"},
     nb_outings:{values:attrs.nb_outings},
     nb_pages:{type:"number", min:0, max:9999, unit:"#"},
-    nb_participants:{type:"number", min:0, max:1000},
+    nb_participants:{type:"number", min:0, max:1000, label:"count of participants"},
     orientations:{values:attrs.orientation_types, multiple:true},
     other_comments:{type:"markdown", parent:"locales", label:"other comments"},
     paragliding_rating:{values:attrs.paragliding_ratings, queryMode:"valuesRangeSlider"},
@@ -160,7 +160,7 @@ const fieldsProperties = {
     rock_types:{values:attrs.rock_types, multiple},
     route_description:{type:"markdown", parent:"locales",  label:"Route description"},
     route_history:{type:"markdown", parent:"locales", label:"History"},
-    route_length:{type:"number", min:0, max:100, unit:"km"},
+    route_length:{type:"number", min:0, max:100000, unit:"m"},
     route_study:{type:"markdown", parent:"locales", label:"route study"},
     route_types:{values:attrs.route_types, multiple},
     routes_quantity:{type:"number", min:0, max:9999},
@@ -174,7 +174,7 @@ const fieldsProperties = {
     slackline_height:{type:"number", min:0, unit:"m"},
     slackline_length_max:{type:"number", min:0, max:9999, unit:"m"},
     slackline_length_min:{type:"number", min:0, max:9999, unit:"m"},
-    slackline_type:{values:attrs.slackline_types},
+    slackline_type:{values:attrs.slackline_types, label:"slackline type"},
     slackline_types:{values:attrs.slackline_types, multiple}, // for waypoints
     slope:{type:'text', parent:"locales"}, //locale, but NOT markdown
     waypoint_slope:{name:"slope", type:'number', min:0, max:99, unit:"&deg;"}, //locale, but NOT markdown
@@ -212,7 +212,7 @@ function Field(name, properties){
         }
     }
 
-    this.label = this.label || this.name
+    this.label = this.label || this.name.replace("_", " ")
     this.type = this.type || "text"
 
     if(!this.queryMode){
@@ -229,8 +229,6 @@ function Field(name, properties){
     var defaultUrlQuery
 
     if(this.queryMode=="numericalRangeSlider"){
-        if(!this.max && this.url)
-        console.log("NAN", this.name, this.url)
         defaultUrlQuery = [this.min, this.max].join(",")
     }
 

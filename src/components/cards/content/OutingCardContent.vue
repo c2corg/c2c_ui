@@ -38,14 +38,10 @@
 
 <script>
 
-    import Activities from '@/components/utils/Activities'
-    import OutingRating from '@/components/utils/OutingRating'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default {
         components: {
-            Activities,
-            OutingRating,
             CardRegionItem
         },
 

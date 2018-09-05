@@ -33,8 +33,7 @@
     }
 </script>
 
-<style>
-
+<style scoped>
 
 .swiper-slide img{
 height:200px;

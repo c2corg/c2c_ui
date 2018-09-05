@@ -58,7 +58,7 @@
 
                 <a>
                     <div><base-icon iconClass="fab fa-twitter"/></div>
-                    <span>Twitter</span>>
+                    <span>Twitter</span>
                 </a>
 
                 <a>
@@ -76,7 +76,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 
 
     .topoguide{
@@ -84,7 +84,7 @@
     }
 
     .social-network{
-      //  background-image:url(https://www.camptocamp.org/static/img/home/alexsaunier-monch.jpg);
+        background-image:url(https://www.camptocamp.org/static/img/home/alexsaunier-monch.jpg);
     }
 
     .topoguide, .social-network{

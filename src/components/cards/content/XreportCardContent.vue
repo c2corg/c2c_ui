@@ -26,12 +26,10 @@
 
 <script>
 
-    import Activities from '@/components/utils/Activities'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default {
         components: {
-            Activities,
             CardRegionItem
         },
 

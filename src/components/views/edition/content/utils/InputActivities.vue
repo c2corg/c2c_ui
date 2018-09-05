@@ -32,12 +32,12 @@
     }
 </script>
 
-<style>
+<style scoped>
 
 .control > span {
     cursor:pointer;
 }
-.selected i{
+.selected{
     color:red;
 }
 </style>

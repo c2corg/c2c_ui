@@ -70,8 +70,6 @@
                     var query = Object.assign({}, this.$route.query)
                     query[this.field.url] = value === this.field.defaultUrlQuery ? undefined : value
 
-                    console.log("try to set url", query[this.field.url], this.$route.query[this.field.url])
-
                     if(query[this.field.url]!==this.$route.query[this.field.url]){
                         this.$router.push({query: query})
                     }
@@ -146,3 +144,15 @@
 
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
+<style scoped>
+
+/*
+If a multi select is below a slider, multi select  popup is bellow slider elements.
+set z-index to 6 (5 is the highest slider z-index value) to fix this
+*/
+.multiselect--active {
+  z-index: 6;
+}
+
+</style>

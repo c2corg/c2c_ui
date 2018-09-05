@@ -12,58 +12,49 @@
         </div>
 
         <div class="column is-3">
-            <information-item>
+            <label-value label="activities" v-if="document.activities.length">
                 <activities :activities="document.activities"/>
-            </information-item>
+            </label-value>
 
-            <information-item>
+            <label-value v-if="document.areas.length">
                 <areas-links :areas="document.areas"/>
-            </information-item>
+            </label-value>
 
-            <information-item label="author" v-if="document.author">
+            <label-value label="author" v-if="document.author">
                 <author-link :author="document.author"/>
-            </information-item>
+            </label-value>
 
-            <information-item label="creator">
+            <label-value label="creator">
                 <author-link :author="document.creator"/>
-            </information-item>
+            </label-value>
 
-            <information-item label="categories"  v-if="document.categories.length">
+            <label-value label="categories"  v-if="document.categories.length">
                 {{document.categories}}
-            </information-item>
+            </label-value>
 
-            <simple-information-item label="camera name" :content="document.camera_name"/>
-            <simple-information-item label="exposure time" :content="document.exposure_time"/>
-            <simple-information-item label="fnumber" :content="document.fnumber"/>
-            <simple-information-item label="focale length" :content="document.focale_length"/>
-            <simple-information-item label="iso speed" :content="document.iso_speed"/>
-
-
-            <simple-information-item label="file name" :content="document.filename"/>
-            <simple-information-item label="file size" :content="document.file_size"/>
-            <simple-information-item label="height" :content="document.height"/>
-            <simple-information-item label="width" :content="document.width"/>
-
-            <distance-information-item label="elevation" :content="document.elevation"/>
-
-
+            <field-view :document="document" :field="fields.camera_name"/>
+            <field-view :document="document" :field="fields.exposure_time"/>
+            <field-view :document="document" :field="fields.fnumber"/>
+            <field-view :document="document" :field="fields.focal_length"/>
+            <field-view :document="document" :field="fields.iso_speed"/>
+            <field-view :document="document" :field="fields.filename"/>
+            <field-view :document="document" :field="fields.file_size"/>
+            <field-view :document="document" :field="fields.height"/>
+            <field-view :document="document" :field="fields.width"/>
+            <field-view :document="document" :field="fields.elevation"/>
         </div>
     </div>
 
 </template>
 
 <script>
-    import Markdown from './utils/Markdown'
-    import DocumentLicense from '@/components/utils/DocumentLicense'
-    import Activities from '@/components/utils/Activities'
+    import c2c from '@/js/c2c.js'
 
-    import InformationItem from '@/components/views/document/utils/InformationItem'
-    import SimpleInformationItem from '@/components/views/document/utils/SimpleInformationItem'
-    import DistanceInformationItem from '@/components/views/document/utils/DistanceInformationItem'
+    import Markdown from './utils/Markdown'
+    import LabelValue from './utils/LabelValue'
+    import FieldView from './utils/FieldView'
     import AreasLinks from '@/components/views/document/utils/AreasLinks'
     import AuthorLink from '@/components/views/document/utils/AuthorLink'
-
-    import c2c from '@/js/c2c.js'
 
 
     export default {
@@ -72,14 +63,11 @@
             AreasLinks,
             AuthorLink,
             Markdown,
-            DocumentLicense,
-            Activities,
-            InformationItem,
-            SimpleInformationItem,
-            DistanceInformationItem,
+            LabelValue,
+            FieldView,
         },
 
-        props:["document", "locale"],
+        props:["document", "locale", "fields"],
 
         methods:{
             getImageUrl : c2c.getImageUrl,

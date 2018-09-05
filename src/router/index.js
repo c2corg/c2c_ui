@@ -1,4 +1,5 @@
-import config from '@/js/config.js'
+import constants from '@/js/constants.js'
+import config from "@/js/config.js"
 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -25,8 +26,7 @@ import DocumentDiff from '@/components/views/document/DocumentDiff'
 import DocumentEdition from '@/components/views/edition/DocumentEdition'
 
 import WorkInProgress from '@/components/views/WorkInProgress'
-
-import constants from '@/js/constants.js'
+import NotFound from '@/components/views/NotFound'
 
 Vue.use(Router)
 
@@ -45,24 +45,26 @@ var routes = [
 
     { path: '/wip', name: 'workinprogress',   component: WorkInProgress },
 
+    {
+        path: '/forum',
+        name: 'forum',
+        beforeEnter() { location.href = config.forumUrl }
+    },
 
     // todo
     // * add image
     // * xreport and profile data
     // * signup
-    // * filters for documents
     // * maps types (ign, swiss...)
     // * see maps on document view
     // * admin actions
     // * document-view actions (translate...)
     // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
-    // * scope all styles : https://vuejs.org/v2/style-guide/#Component-style-scoping-essential
     // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
     // * do forum.createTopic()
     // * test all doc's comments functions
     // * markdown alerts in parser
     // * markdown icons in parser
-    // * bug for maps view : card-region-item
 
     // * CSS
     //   * choose font size and family
@@ -152,6 +154,8 @@ for(let type of constants.documentTypes){
         component: DocumentView},
     )
 }
+
+routes.push({ path: '*', name: '404',   component: NotFound })
 
 export default new Router({
     routes,

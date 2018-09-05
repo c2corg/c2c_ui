@@ -9,14 +9,9 @@
 </template>
 
 <script>
-    import Activities from '@/components/utils/Activities'
 
     export default {
-        components:{
-            Activities
-        },
-
         props: ['document'],
-
     }
+    
 </script>

@@ -1,6 +1,6 @@
 <template>
     <span class="icon">
-        <span v-if="condition" :class="'condition-'+condition">
+        <span v-if="condition" :class="'icon-condition-'+condition">
             <i class="fas fa-circle"></i>
         </span>
         <span v-else>
@@ -14,25 +14,3 @@
         props: ['condition'],
     }
 </script>
-
-<style>
-.condition-excellent{
-    color:green;
-}
-
-.condition-good{
-    color:#9ACD32;
-}
-
-.condition-average{
-    color:yellow;
-}
-
-.condition-poor{
-    color:red;
-}
-
-.condition-awful{
-    color:#8B0000;
-}
-</style>
