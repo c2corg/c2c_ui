@@ -8,7 +8,6 @@
                 <areas-links :areas="document.areas"/>
             </div>
             <div class="column is-4">
-                <label>Credits</label>
                 <document-license :document="document" cc="by-sa"/>
             </div>
 
@@ -112,24 +111,21 @@
                 <h2>Routes</h2>
 
                 <pretty-route-link
-                   v-for="(route, index) of document.associations.all_routes.documents"
-                   :route="route"
-                   :key="index"/>
+                   v-for="(route, index) of document.associations.all_routes.documents" :key="index"
+                   :route="route"/>
             </div>
 
             <div class="column is-6">
                 <h2  v-if="document.associations.recent_outings.documents.length">
                     Recent outings
                 </h2>
-                <pretty-outing-link v-for="(outing, index) of document.associations.recent_outings.documents"
-                             :outing="outing"
-                             :key="index"/>
+                <pretty-outing-link v-for="(outing, i) of document.associations.recent_outings.documents" :key="i"
+                             :outing="outing"/>
 
                 <h2 v-if="document.associations.waypoint_children.length">
                     Waypoints
                 </h2>
-                <div v-for="child of document.associations.waypoint_children"
-                     :key="child.document_id">
+                <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
                     <document-link :document="child"/>
                 </div>
 

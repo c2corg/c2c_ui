@@ -11,8 +11,8 @@
                      <select v-model="object[field.name]"
                              :multiple="!!field.multiple">
                          <option v-if="!field.required"></option>
-                         <option v-for="value of field.values"
-                                 :value="value" :key="value">
+                         <option v-for="value of field.values" :key="value"
+                                 :value="value">
                              {{value}}
                          </option>
                      </select>

@@ -1,74 +1,72 @@
 <template>
     <div class="section documents-view">
-        <div class="columns">
-            <div class="column">
-                <div class="title is-1">
-                    <icon-document :type="type"/>
 
-                    {{title}}
+        <div class="header-section">
+            <div class="columns">
+                <div class="column">
+                    <div class="title is-1">
+                        <icon-document :type="type"/>
 
-                    <add-link :type="type">
-                        <span class="icon">
-                            <i class="fas fa-plus-circle"/>
+                        {{title}}
+
+                        <add-link :type="type">
+                            <span class="icon">
+                                <i class="fas fa-plus-circle"/>
+                           </span>
+                        </add-link>
+                    </div>
+                </div>
+
+                <div class="column is-narrow">
+                    <span>
+                        <span class="icon" v-if="hasMap">
+                            <i class="fas fa-list"
+                               :class="{'has-text-primary':showResults}"
+                               @click="showResults=!showResults" />
                        </span>
-                    </add-link>
-                </div>
-            </div>
 
-            <div class="column is-narrow">
-                <span>
-                    <span class="icon" v-if="hasMap">
-                        <i class="fas fa-list"
-                           :class="{'has-text-primary':showResults}"
-                           @click="showResults=!showResults" />
-                   </span>
-
-                    <span class="icon" v-if="hasMap">
-                        <i class="fas fa-map-marked-alt"
-                        :class="{'has-text-primary':showMap}"
-                        @click="showMap=!showMap" />
-                    </span>
-
-                    <span v-if="documents" @click="loadElements()">
-                        <span v-if="offset!==0">
-                            {{offset + 1}} -
+                        <span class="icon" v-if="hasMap">
+                            <i class="fas fa-map-marked-alt"
+                            :class="{'has-text-primary':showMap}"
+                            @click="showMap=!showMap" />
                         </span>
-                        {{offset + documents.documents.length}} / {{documents.total}}
+
+                        <span v-if="documents" @click="loadElements()">
+                            <span v-if="offset!==0">
+                                {{offset + 1}} -
+                            </span>
+                            {{offset + documents.documents.length}} / {{documents.total}}
+                        </span>
+
                     </span>
-
-                    <a class="icon" @click="showFieldSelector()">
-                        <i class="fas fa-filter"/>
-                    </a>
-
-                </span>
-            </div>
-        </div>
-
-        <div>
-            <query-items ref="queryItems"/>
-        </div>
-
-        <div class="columns">
-
-            <div class="column cards-container" :class="{'is-hidden': !showResults}">
-
-                <loading-notification :loaded="documents!=null" :error="error"/>
-
-                <div v-if="documents" class="is-flex">
-                        <document-card v-for="(document, index) in documents.documents"
-                                      :key="index"
-                                      :document="document"/>
                 </div>
             </div>
-
-            <div class="column map-container"
-                 :class="{'is-5': showResults, 'is-hidden': !showMap}"
-                 v-if="hasMap">
-                <map-view :documents="documents" style="width: 100%; height: 100%">
-                </map-view>
-            </div>
         </div>
 
+        <div class="filter-section">
+            <query-items/>
+        </div>
+
+        <div class="result-section">
+            <div class="columns is-gapless">
+                <div class="column cards-container" :class="{'is-hidden': !showResults}">
+
+                    <loading-notification :loaded="documents!=null" :error="error"/>
+
+                    <div v-if="documents" class="is-flex">
+                            <document-card v-for="(document, index) in documents.documents" :key="index"
+                                          :document="document"/>
+                    </div>
+                </div>
+
+                <div class="column map-container"
+                     :class="{'is-5': showResults, 'is-hidden': !showMap}"
+                     v-if="hasMap">
+                    <map-view :documents="documents" style="width: 100%; height: 100%">
+                    </map-view>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -116,7 +114,6 @@
         watch:{
             $route(){
                 this.documents=null
-                this.$refs.queryItems.initialize()
                 this.loadElements();
             }
         },
@@ -126,9 +123,6 @@
         },
 
         methods:{
-            showFieldSelector : function(){
-                this.$refs.queryItems.showFieldSelector();
-            },
 
             loadElements : function(){
                 var offset = this.offset
@@ -154,10 +148,44 @@
             }
         }
     }
-
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+@import '@/assets/sass/main.scss';
+
+$bulma-section-padding : 3rem; // from 3rem 1.5rem
+$header-height : 78px;
+$filter-height : 60px;
+$result-height : calc(100vh - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height});
+
+.documents-view{
+}
+
+.header-section{
+}
+
+
+.filter-section{
+//    background: pink;
+    height:$filter-height;
+}
+
+.result-section{
+//    background: orange;
+    max-height: $result-height;
+}
+
+.map-container{
+    max-height: $result-height;
+    min-height: 400px;
+    position:relative;
+}
+
+.cards-container{
+    max-height: $result-height;
+    overflow: auto;
+}
 
 .cards-container > div{
     flex-flow:wrap row;

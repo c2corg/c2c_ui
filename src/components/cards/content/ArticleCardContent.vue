@@ -8,8 +8,7 @@
         <br>
 
         <span>
-            <i class="fab fa-creative-commons"/>
-            {{document.article_type}}
+            <icon-creative-commons />{{document.article_type}}
         </span>
 
         <br>
@@ -25,5 +24,5 @@
     export default {
         props: ['document'],
     }
-    
+
 </script>

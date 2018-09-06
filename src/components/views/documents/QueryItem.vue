@@ -1,16 +1,30 @@
 <template>
-    <div class="field">
-        <label class="label" v-if="field.queryMode!=='checkbox'">
+    <div class="field" v-if="field!==undefined">
+
+        <div v-if="field.queryMode==='valuesRangeSlider'">
+            <span>{{value[0]}}</span>
+            {{field.label}}
+            <span class="is-pulled-right">{{value[1]}}</span>
+        </div >
+
+        <div v-else-if="field.queryMode==='numericalRangeSlider'">
+            <span>{{value[0]}}&nbsp;{{field.unit}}</span>
+            {{field.label}}
+            <span class="is-pulled-right">{{value[1]}}&nbsp;{{field.unit}}</span>
+        </div>
+
+        <label v-else-if="field.queryMode!=='checkbox'" class="label">
             {{field.label}}
         </label>
+
         <div class="control">
 
-            <vue-slider v-if="field.queryMode==='valuesRangeSlider'" v-model="value"
+            <vue-slider v-if="field.queryMode==='valuesRangeSlider'" ref="slider" v-model="value"
                 :data="field.values" :lazy="true"
                 tooltip="hover" :piecewise="true">
             </vue-slider>
 
-            <vue-slider v-else-if="field.queryMode==='numericalRangeSlider'" v-model="value"
+            <vue-slider v-else-if="field.queryMode==='numericalRangeSlider'" ref="slider" v-model="value"
                 :min="field.min" :max="field.max" :lazy="true"
                 tooltip="hover">
             </vue-slider>
@@ -30,19 +44,7 @@
             <div v-else class="notification is-danger">
                 Please fill queryMode for {{field.name}}
             </div>
-
         </div>
-
-        <div v-if="field.queryMode==='valuesRangeSlider'">
-            <span>{{value[0]}}</span>
-            <span class="is-pulled-right">{{value[1]}}</span>
-        </div >
-
-
-        <div v-if="field.queryMode==='numericalRangeSlider'">
-            <span>{{value[0]}}&nbsp;{{field.unit}}</span>
-            <span class="is-pulled-right">{{value[1]}}&nbsp;{{field.unit}}</span>
-        </div >
 
     </div>
 </template>
@@ -122,20 +124,15 @@
 
                 },
                 set(value){
-                    if(this.field.queryMode=="valuesRangeSlider")
-                        this.urlValue =  value.join(",")
+                    this.urlValue = this.field.getUrlValue(value)
+                }
+            }
+        },
 
-                    else if(this.field.queryMode=="numericalRangeSlider")
-                        this.urlValue =  value.join(",")
-
-                    else if(this.field.queryMode=="multiSelect")
-                        this.urlValue =  value.join(",")
-
-                    else if(this.field.queryMode=="checkbox")
-                        this.urlValue =  JSON.stringify(value)
-
-                    else
-                        this.urlValue = value
+        methods: {
+            refreshSlider(){
+                if(this.$refs.slider) {
+                    this.$nextTick(() => this.$refs.slider.refresh());
                 }
             }
         }

@@ -1,6 +1,6 @@
 <template>
     <span v-if="areas.length">
-        <i class="fas fa-globe-americas"></i>
+        <icon-area/>
         <i v-for="area of areas" :key="area.document_id">
             <document-link :document="area"/>
         </i>

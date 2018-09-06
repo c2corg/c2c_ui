@@ -39,8 +39,7 @@
             <h2>areas</h2>
             <div class="cards-container">
                 <div class="is-flex">
-                    <document-card v-for="document in preferences.areas"
-                                  :key="document.document_id"
+                    <document-card v-for="document in preferences.areas" :key="document.document_id"
                                   :document="document"/>
                 </div>
             </div>

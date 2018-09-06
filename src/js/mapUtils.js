@@ -12,15 +12,6 @@ var result = {
         return new window.google.maps.LatLng(point.y, point.x)
     },
 
-    getBounds(documents){
-        var bounds = new window.google.maps.LatLngBounds()
-
-        documents.forEach(document => {
-            bounds.extend(this.getDocumentLatLng(document))
-        }, this)
-
-        return bounds
-    },
 
     getPositions(documents){
         var result = []
@@ -31,10 +22,6 @@ var result = {
 
         return result
     },
-
-    fitBounds(map, bounds){
-        map.fitBounds(bounds);
-    }
 }
 
 export default result;

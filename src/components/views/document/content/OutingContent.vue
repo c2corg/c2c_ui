@@ -7,9 +7,8 @@
             <div class="column is-9">
                 <areas-links :areas="document.areas"/>
 
-                <pretty-route-link v-for="route of document.associations.routes"
-                            :route="route"
-                            :key="route.document_id"/>
+                <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
+                            :route="route"/>
 
                 <markdown-section :document="document" :locale="locale" :field="fields.description" />
                 <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />
@@ -28,13 +27,12 @@
                 </div>
 
                 <div v-if="locale.weather">
-                    <i class="fa fa-cloud"></i>
+                    <base-icon iconClass="fa fa-cloud"/>
                     {{locale.weather}}
                 </div>
 
                 <div v-if="document.frequentation">
-                    <i class="fa fa-users"></i>
-                    {{document.frequentation}}
+                    <icon-users />{{document.frequentation}}
                 </div>
 
                 <div v-if="document.elevation_min || document.elevation_max">

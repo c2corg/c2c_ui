@@ -1,6 +1,6 @@
 <template>
     <span v-if="users.length">
-        <i class="fas fa-users"/>
+        <icon-users />
         <span v-for="user of users" :key="user.document_id">
             <document-link :document="user"/>
         </span>

@@ -1,14 +1,12 @@
 <template>
     <div>
-        <gmap-map ref="googleMapRef" v-if="layer==='google-map'"
+        <gmap-map ref="googleMapRef"
                   :street-view-control="false"
                   :center="{lat:10, lng:10}"
-                  :zoom="7"
-                  style="width: 100%; height: 600px"
+                  style="width: 100%; height: 100%"
                   map-type-id="terrain">
 
-            <gmap-marker v-for="(position, index) in positions"
-                        :key="index"
+            <gmap-marker v-for="(position, index) in positions" :key="index"
                         :position="position"
                         :clickable="true"
                         :draggable="true"/>
@@ -51,30 +49,71 @@
 
     export default {
 
-        props:["documents"],
+        props:["documents", "document"],
 
         data(){
             return {
-                layer:"google-map"
+                layer:"google-map",
+                positions:[],
             }
         },
 
         computed:{
-            positions(){
-                return this.documents ? mapUtils.getPositions(this.documents.documents) : []
-            },
+            documents_(){
+                if(this.documents)
+                    return this.documents.documents
 
-            bounds(){
-                return this.documents ? mapUtils.getBounds(this.documents.documents) : new window.google.maps.LatLngBounds()
-            }
+                if(this.document)
+                    return [this.document]
+
+                return []
+            },
+        },
+
+        mounted(){
+            this.computePositions()
+            this.fitBounds()
         },
 
         watch:{
-            documents(){
-                this.$refs.googleMapRef.$mapPromise.then((map) => {
-                    mapUtils.fitBounds(map, this.bounds)
-                })
+            documents:{
+                handler(){
+                    this.computePositions()
+                    this.fitBounds()
+                },
+                deep:true,
+            },
+            document(){
+                this.computePositions()
+                this.fitBounds()
             }
+        },
+
+        methods:{
+            execute_(callback){
+                this.$gmapApiPromiseLazy().then(() => {
+                    this.$refs.googleMapRef.$mapPromise.then(callback)
+                })
+            },
+
+            fitBounds(){
+                this.execute_((map) => {
+                    var bounds = new window.google.maps.LatLngBounds()
+
+                    this.documents_.forEach(document => {
+                        bounds.extend(mapUtils.getDocumentLatLng(document))
+                    })
+
+                    map.fitBounds(bounds)
+                    map.setZoom(Math.min(13, map.zoom ? map.zoom : 13))
+                })
+            },
+
+            computePositions(){
+                this.execute_(() => {
+                    this.positions = mapUtils.getPositions(this.documents_)
+                })
+            },
         }
     }
 

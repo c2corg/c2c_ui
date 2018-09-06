@@ -22,8 +22,8 @@
             <div class="column home-right">
                 <h2>Forum</h2>
                 <div v-if="latest_topics && latest_topics.topic_list">
-                    <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)"
-                         v-if="topic.category_id != 29" :key="topic.id">
+                    <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" :key="topic.id"
+                         v-if="topic.category_id != 29">
 
                         <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
                            target="_blank">

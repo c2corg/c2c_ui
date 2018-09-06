@@ -1,16 +1,18 @@
 <template>
-    <span class="icon">
-        <span v-if="condition" :class="'icon-condition-'+condition">
-            <i class="fas fa-circle"></i>
-        </span>
-        <span v-else>
-            <i class="far fa-circle"></i>
-        </span>
-    </span>
+    <base-icon :iconClass="iconClass" :class="className" />
 </template>
 
 <script>
     export default {
         props: ['condition'],
+        
+        computed:{
+            className(){
+                return this.condition ? 'icon-condition-' + this.condition : ''
+            },
+            iconClass(){
+                return this.condition ? 'fas fa-circle' : 'far fa-circle'
+            }
+        }
     }
 </script>

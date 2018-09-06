@@ -18,9 +18,8 @@
                     <span>Recent outings</span>
                 </h2>
                 <pretty-outing-link
-                   v-for="outing of document.associations.recent_outings.documents"
-                   :outing="outing"
-                   :key="outing.document_id"/>
+                   v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id"
+                   :outing="outing"/>
             </div>
 
             <div class="hidden-print" v-if="document.associations.books.length!=0">
@@ -88,14 +87,13 @@
 
             <div v-if="document.associations">
                 <strong>Waypoints</strong>
-                <div v-for="waypoint of document.associations.waypoints"
-                     :key="waypoint.document_id">
+                <div v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id">
                     <document-link :document="waypoint"/>
                 </div>
             </div>
 
 
-           <map-view :documents="{documents:[document]}" style="width: 100%; height: 200px">
+           <map-view :document="document" style="width: 100%; height: 300px">
            </map-view>
 
         </div>

@@ -4,9 +4,8 @@
         <document-link :document="route"/>
         <route-rating :route="route"/>
         <span v-if="showArea">
-            <em v-if="area.area_type=='range'"
-                v-for="area in route.areas"
-                v-bind:key="area.document_id">
+            <em v-for="area in route.areas" :key="area.document_id"
+                v-if="area.area_type=='range'">
                 &hairsp;&bull;&hairsp;
                 <small>
                     <document-title :document="area"/>

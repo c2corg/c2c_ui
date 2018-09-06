@@ -1,6 +1,6 @@
 <template>
     <swiper :options="swiperOption">
-        <swiper-slide v-for="image of images" v-bind:key="image.document_id">
+        <swiper-slide v-for="image of images" :key="image.document_id">
             <img :src="c2c.getSmallImageUrl(image)">
         </swiper-slide>
     </swiper>

@@ -148,7 +148,7 @@ const fieldsProperties = {
     public_transportation_rating:{values:attrs.public_transportation_ratings},
     public_transportation_types:{values:attrs.public_transportation_types, multiple},
     publication_date:{type:"text"},
-    quality:{values:attrs.quality_types},
+    quality:{values:attrs.quality_types, queryMode:"valuesRangeSlider"},
     rain_proof:{values:common.attributes.rain_proof_types},
     reduce_impact:{type:"markdown", parent:"locales", label:"reduce impact"},
     remarks:{type:"markdown", parent:"locales"},
@@ -225,44 +225,60 @@ function Field(name, properties){
         }
     }
 
-
+    const identity = function(value){ return value }
+    const joinWithComma = function(value){ return value.join(",") }
     var defaultUrlQuery
 
     if(this.queryMode=="numericalRangeSlider"){
+        this.getUrlValue = joinWithComma
         defaultUrlQuery = [this.min, this.max].join(",")
     }
 
-    if(this.queryMode=="valuesRangeSlider"){
+    else if(this.queryMode=="valuesRangeSlider"){
+        this.getUrlValue = joinWithComma
         defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
     }
 
-    if(this.queryMode=="multiSelect"){
+    else if(this.queryMode=="multiSelect"){
+        this.getUrlValue = joinWithComma
         defaultUrlQuery =  ''
     }
 
     if(this.queryMode=="checkbox"){
+        this.getUrlValue = JSON.stringify
         defaultUrlQuery =  'false'
     }
 
-    if(this.queryMode=="input"){
+    else if(this.queryMode=="input"){
+        this.getUrlValue = identity
         defaultUrlQuery =  {number:0, text:''}[this.type]
     }
 
     this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
 }
 
-Field.prototype.isVisibleFor = function(document){
-    if(this.activities){
-        for(let activity of this.activities){
-            if(document.activities.includes(activity)){
-                return true;
-            }
+Field.prototype.isVisibleFor = function(params){
+
+    const intersectionIsNotNull = function(arrayA, arrayB){
+        for(let itemA of arrayA){
+            if(arrayB.includes(itemA))
+                return true
         }
-        return false;
+
+        return false
     }
 
+    if(this.activities && params.activities)
+        return intersectionIsNotNull(this.activities, params.activities)
+
     if(this.waypoint_types){
-        return this.waypoint_types.includes(document.waypoint_type)
+        if(params.waypoint_type)
+            return this.waypoint_types.includes(params.waypoint_type)
+
+        if(params.waypoint_types)
+            return intersectionIsNotNull(this.waypoint_types, params.waypoint_types)
+
+        return false;
     }
 
     return true;
@@ -513,7 +529,7 @@ function Constants(){
                 new Field("orientations", {url:"fac"}),
                 new Field("quality", {url:"qa"}),
                 new Field("risk_rating", {url:"orrat", activities:["rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}),
-                new Field("rock_free_rating", {activities:["rock_climbing", "mountain_climbing"]}),
+                new Field("rock_free_rating", {url:"frat", activities:["rock_climbing", "mountain_climbing"]}),
                 new Field("rock_required_rating", {url:"rrat", activities:["rock_climbing", "mountain_climbing"]}),
                 new Field("rock_types", {url:"rock", activities:["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing"]}),
                 new Field("route_length", {url:"rlen", activities:["hiking", "slacklining", "via_ferrata", "snow_ice_mixed", "mountain_biking", "snowshoeing", "skitouring"]}),

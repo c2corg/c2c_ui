@@ -3,9 +3,9 @@
         <span>
             <document-link :document="outing"/>
             &hairsp;&bull;&hairsp;
-            <em v-for="area in outing.areas" v-bind:key="area.document_id" v-if="area.area_type=='range'">
+            <em v-for="area in outing.areas" :key="area.document_id" v-if="area.area_type=='range'">
                 <small>
-                    <document-title v-bind:document="area"/>
+                    <document-title :document="area"/>
                 </small>
             </em>
         </span>

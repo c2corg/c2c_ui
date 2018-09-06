@@ -2,8 +2,7 @@
     <div class="section content">
         <div class="cards-container">
             <div v-if="following" class="is-flex">
-                    <document-card v-for="document in following.following"
-                                  :key="document.document_id"
+                    <document-card v-for="document in following.following" :key="document.document_id"
                                   :document="document"/>
             </div>
         </div>
