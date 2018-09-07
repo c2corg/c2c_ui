@@ -1,16 +1,24 @@
 <template>
     <div class="field" v-if="field!==undefined">
 
-        <div v-if="field.queryMode==='valuesRangeSlider'">
-            <span>{{value[0]}}</span>
-            {{field.label}}
-            <span class="is-pulled-right">{{value[1]}}</span>
-        </div >
-
-        <div v-else-if="field.queryMode==='numericalRangeSlider'">
-            <span>{{value[0]}}&nbsp;{{field.unit}}</span>
-            {{field.label}}
-            <span class="is-pulled-right">{{value[1]}}&nbsp;{{field.unit}}</span>
+        <div v-if="field.queryMode==='valuesRangeSlider' || field.queryMode==='numericalRangeSlider'">
+            <div class="level"> <!--level must be in a single element to remove bottim margin : todo remove ugly hack -->
+                <div class="level-left">
+                    <span class="level-item query-bound-value">
+                        {{value[0]}}
+                        <span v-if="field.unit">&nbsp;{{field.unit}}</span>
+                    </span>
+                </div>
+                <div class="level-item query-label">
+                    {{field.label}}
+                </div>
+                <div class="level-right">
+                    <span class="level-item query-bound-value">
+                        {{value[1]}}
+                        <span v-if="field.unit">&nbsp;{{field.unit}}</span>
+                    </span>
+                </div>
+            </div >
         </div>
 
         <label v-else-if="field.queryMode!=='checkbox'" class="label">
@@ -40,6 +48,10 @@
                 <input type="checkbox" v-model="value">
                 {{field.label}}
             </label>
+
+            <div v-else-if="field.queryMode==='activities'">
+                <input-activity v-model="value"/>
+            </div>
 
             <div v-else class="notification is-danger">
                 Please fill queryMode for {{field.name}}
@@ -80,51 +92,10 @@
 
             value:{
                 get(){
-
-                    if(this.field.queryMode=="valuesRangeSlider"){
-                        let result = this.urlValue || this.field.defaultUrlQuery
-                        return result.split(",")
-                    }
-
-                    if(this.field.queryMode=="numericalRangeSlider"){
-                        let result = this.urlValue || this.field.defaultUrlQuery
-                        result = result.split(",")
-                        return [parseInt(result[0]), parseInt(result[1])]
-                    }
-
-                    if(this.field.queryMode=="multiSelect"){
-                        let result = this.urlValue
-
-                        if(!result)
-                            return []
-
-                        return result.split(",")
-                    }
-
-                    if(this.field.queryMode=="checkbox"){
-                        let result = this.urlValue
-
-                        if(result === null || result === undefined || result === '' || result === 'false')
-                            return false
-
-                        return true
-                    }
-
-                    if(this.field.queryMode=="input"){
-                        if(this.field.type === "number"){
-                            return parseInt(this.urlValue || this.field.defaultUrlQuery)
-                        }
-
-                        if(this.field.type === "text"){
-                            return this.urlValue || this.field.defaultUrlQuery
-                        }
-                    }
-
-                    return this.urlValue || this.field.defaultUrlQuery
-
+                    return this.field.urlToValue(this.urlValue)
                 },
                 set(value){
-                    this.urlValue = this.field.getUrlValue(value)
+                    this.urlValue = this.field.valueToUrl(value)
                 }
             }
         },
@@ -150,6 +121,14 @@ set z-index to 6 (5 is the highest slider z-index value) to fix this
 */
 .multiselect--active {
   z-index: 6;
+}
+
+.query-bound-value{
+    font-weight:bold;
+}
+
+.query-label{
+    font-style:italic;
 }
 
 </style>

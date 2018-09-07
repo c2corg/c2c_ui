@@ -2,8 +2,11 @@
     <div class="dropdown" :class="activeClass">
 
         <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="isActive=!isActive">
-                <span>{{label}}</span>
+            <button class="button" @click="isActive=!isActive" :disabled="disabled"
+                aria-haspopup="true" aria-controls="dropdown-menu" >
+
+                <slot name="button"></slot>
+
                 <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -22,7 +25,13 @@
 
 <script>
     export default {
-        props : ["label"],
+        props : {
+            disabled : {
+                type : Boolean,
+                default : null
+            }
+        },
+
         data(){
             return {
                 isActive:false

@@ -2,12 +2,41 @@
 import common from '@/js/common.js'
 
 
-var attrs = common.attributes;
+/* shorthand helpers */
+const attrs = common.attributes;
 
 //shorthand for true only properties (missing prop means false)
-var required=true;
-var disabled=true;
-var multiple=true;
+const required=true;
+const disabled=true;
+const multiple=true;
+
+
+//small helper for shorter code
+const no_paragliding_or_slacklining = [
+    "hiking",
+    "rock_climbing",
+    "via_ferrata",
+    "snow_ice_mixed",
+    "mountain_biking",
+    "mountain_climbing",
+    "ice_climbing",
+    "snowshoeing",
+    "skitouring"
+]
+
+const only_paragliding = ["paragliding_landing", "paragliding_takeoff"];
+const only_slackline = ["slackline_spot"];
+const only_climbing = ["climbing_indoor", "climbing_outdoor"];
+
+const getFieldsObject  = function(){
+    var result = {}
+
+    for(let item of arguments){
+        result[item.name] = item
+    }
+
+    return result
+}
 
 //todo : geom, longlat, condiction_levels
 
@@ -17,7 +46,7 @@ const fieldsProperties = {
     access_condition:{values:attrs.access_conditions},
     access_period:{type:"markdown", parent:"locales"},
     access_time:{values:attrs.access_times},
-    activities:{values:attrs.activities, multiple, required},
+    activities:{values:attrs.activities, multiple, required, queryMode:"activities"},
     activity_rate:{values:attrs.activity_rates},
     age:{type:"number", min:0, max:120, units:"years"},
     aid_rating:{values:attrs.aid_ratings, queryMode:"valuesRangeSlider"},
@@ -205,7 +234,6 @@ function Field(name, properties){
         this[key] = baseProperties[key]
     }
 
-
     if(properties){
         for(let key of Object.keys(properties)){
             this[key] = properties[key]
@@ -227,32 +255,87 @@ function Field(name, properties){
 
     const identity = function(value){ return value }
     const joinWithComma = function(value){ return value.join(",") }
+
+    const splitWithComma = function(value){
+        value = value ? value : this.defaultUrlQuery
+        return value.split(",")
+    }
+
+    const splitIntegersWithComma = function(value){
+        value = value ? value : this.defaultUrlQuery
+        value = value.split(",")
+        return [parseInt(value[0]), parseInt(value[1])]
+    }
+
+    const parseUrlArray = function(value){
+        if(!value)
+            return this.defaultUrlQuery ==='' ? [] : this.defaultUrlQuery.split(",")
+
+        return value.split(",")
+    }
+
+    const parseUrlBoolean = function(value){
+        if(value === null || value === undefined || value === '' || value === 'false')
+            return false
+
+        return true
+    }
+
+    const parseUrlDefault = function(value){
+        value = value ? value : this.defaultUrlQuery
+
+        if(this.type === "number"){
+            return parseInt(value)
+        }
+
+        else if(this.type === "text"){
+            return value
+        }
+
+        else
+            throw "Unknow field type : " + this
+    }
+
     var defaultUrlQuery
 
     if(this.queryMode=="numericalRangeSlider"){
-        this.getUrlValue = joinWithComma
+        this.valueToUrl = joinWithComma
+        this.urlToValue = splitIntegersWithComma
         defaultUrlQuery = [this.min, this.max].join(",")
     }
 
     else if(this.queryMode=="valuesRangeSlider"){
-        this.getUrlValue = joinWithComma
+        this.valueToUrl = joinWithComma
+        this.urlToValue = splitWithComma
         defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
     }
 
     else if(this.queryMode=="multiSelect"){
-        this.getUrlValue = joinWithComma
+        this.valueToUrl = joinWithComma
+        this.urlToValue = parseUrlArray
         defaultUrlQuery =  ''
     }
 
-    if(this.queryMode=="checkbox"){
-        this.getUrlValue = JSON.stringify
+    else if(this.queryMode=="checkbox"){
+        this.valueToUrl = JSON.stringify
+        this.urlToValue = parseUrlBoolean
         defaultUrlQuery =  'false'
     }
 
     else if(this.queryMode=="input"){
-        this.getUrlValue = identity
+        this.valueToUrl = identity
+        this.urlToValue = parseUrlDefault
         defaultUrlQuery =  {number:0, text:''}[this.type]
     }
+
+    else if(this.queryMode=="activities"){
+        this.valueToUrl = joinWithComma
+        this.urlToValue = parseUrlArray
+        defaultUrlQuery =  ''
+    }
+
+    else if(this.url !== undefined)
+        throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
 
     this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
 }
@@ -284,37 +367,10 @@ Field.prototype.isVisibleFor = function(params){
     return true;
 }
 
-function getFieldsObject(){
-    var result = {}
-
-    for(let item of arguments){
-        result[item.name] = item
-    }
-
-    return result
-}
-
 function Constants(){
     this.activities = common.attributes.activities
 
     this.langs = common.attributes.langs
-
-    //small helper for shorter code
-    var no_paragliding_or_slacklining = [
-        "hiking",
-        "rock_climbing",
-        "via_ferrata",
-        "snow_ice_mixed",
-        "mountain_biking",
-        "mountain_climbing",
-        "ice_climbing",
-        "snowshoeing",
-        "skitouring"
-    ]
-
-    var only_paragliding = ["paragliding_landing", "paragliding_takeoff"];
-    var only_slackline = ["slackline_spot"];
-    var only_climbing = ["climbing_indoor", "climbing_outdoor"];
 
     this.objectDefinitions = {
         area:{

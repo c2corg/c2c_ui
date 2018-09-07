@@ -1,13 +1,23 @@
 <template>
     <div>
 
-        <dropdown-button v-for="key of Object.keys(categorizedFields)" :key="key"
-            :label="key"  @changeDisplay="refreshSliders()">
+        <dropdown-button v-for="category of categorizedFields" :key="category.name"
+            class="category-button"
+            :disabled="category.fields.length===0"
+            @changeDisplay="refreshSliders()">
+
+            <span slot="button">
+                {{category.name}}
+                <span v-if="category.activeCount!=0">
+                    ({{category.activeCount}})
+                </span>
+            </span>
+
             <div class="sub-query-items">
-                <query-item v-for="field of categorizedFields[key]" :key="field.name" :field="field"></query-item>
+                <query-item v-for="field of category.fields" :key="field.name" :field="field"></query-item>
             </div>
+
         </dropdown-button>
-        
     </div>
 </template>
 
@@ -23,10 +33,10 @@
             "book_types",
             "waypoint_type",
             "event_type",
+            "condition_rating",
         ],
 
         Ratings:[
-            "condition_rating",
             "global_rating",
             "rock_free_rating",
             "rock_required_rating",
@@ -42,7 +52,6 @@
             "ski_exposition",
             "labande_global_rating",
             "labande_ski_rating",
-            "mixed_rating",
             "snowshoe_rating",
             "via_ferrata_rating",
             "mtb_down_rating",
@@ -144,27 +153,59 @@
             },
 
             categorizedFields(){
-                var result = {}
+                var result = []
+
                 var urlFilter = {
                     activities:this.urlActivities,
                     waypoint_types:this.urlWaypoint_types,
                 }
 
-                for(let key of Object.keys(categorizedFields)){
-                    let temp = []
-                    for(let name of categorizedFields[key]){
+                for(let category of Object.keys(categorizedFields)){
+                    let temp = {
+                        name : category,
+                        activeCount : 0,
+                        fields : [],
+                    }
+
+                    let addCategory = false
+
+                    for(let name of categorizedFields[category]){
                         let field = this.fields[name]
-                        if(field && field.isVisibleFor(urlFilter)){
-                            temp.push(field)
+                        if(field!==undefined){
+
+                            addCategory = true
+
+                            if(this.$route.query[field.url] != undefined)
+                                temp.activeCount += 1
+
+                            if(field.isVisibleFor(urlFilter)){
+                                temp.fields.push(field)
+                            }
                         }
                     }
-                    if(temp.length != 0)
-                        result[key] = temp
+
+                    if(addCategory){
+                        result.push(temp)
+                    }
                 }
 
                 return result
             }
         },
+
+        methods:{
+            refreshSliders(){
+                for(let dropdown of this.$children){
+                    if(dropdown.isActive){
+                        for(let queryItem of dropdown.$children){
+                            queryItem.refreshSlider()
+                        }
+                    }
+                }
+            }
+        }
+
+
 /* this function will check that we hav'nt forgotten a field
         mounted(){
             var fields = []
@@ -183,21 +224,15 @@
             }
         },
 */
-        methods:{
-            refreshSliders(){
-                for(let dropdown of this.$children){
-                    if(dropdown.isActive){
-                        for(let queryItem of dropdown.$children){
-                            queryItem.refreshSlider()
-                        }
-                    }
-                }
-            }
-        }
+
     }
 </script>
 
 <style scoped>
+
+    .category-button{
+        margin-right:1em;
+    }
 
     .sub-query-items{
         width:300px

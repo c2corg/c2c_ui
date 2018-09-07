@@ -6,11 +6,7 @@
                 <span v-if="field.required">*</span>
             </label>
             <div class="control">
-                <span v-for="activity of constants.activities" :key="activity"
-                      @click="document.activities.toggle(activity)"
-                      :class="{'selected':document.activities.includes(activity)}">
-                    <icon-activity :activity="activity" />
-                </span>
+                <input-activity v-model="document.activities" />
             </div>
         </div>
     </div>
@@ -31,13 +27,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-.control > span {
-    cursor:pointer;
-}
-.selected{
-    color:red;
-}
-</style>

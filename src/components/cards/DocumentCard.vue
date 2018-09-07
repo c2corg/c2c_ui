@@ -62,9 +62,12 @@
 <style scoped>
 
 .card{
-    background-color:#FFF!important;
+    background-color:#F1FAF8!important;
     transition:0.2s;
-    margin:5px;
+    margin-left:1px;
+    margin-top:1px;
+    margin-right:10px;
+    margin-bottom:10px;
     cursor:pointer;
     flex: 1 1 300px;
 }

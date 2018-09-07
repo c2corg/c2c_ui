@@ -1,44 +1,45 @@
 <template>
-    <div class="section documents-view">
+    <div class="documents-view">
 
         <div class="header-section">
-            <div class="columns">
-                <div class="column">
-                    <div class="title is-1">
-                        <icon-document :type="type"/>
-
-                        {{title}}
-
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-item title is-1">
+                        <span class="document-type-label">{{title}}</span>
+                    </div>
+                    
+                    <div class="level-item">
                         <add-link :type="type">
-                            <span class="icon">
-                                <i class="fas fa-plus-circle"/>
-                           </span>
+                            <base-icon icon-class="fas fa-plus-circle"/>
                         </add-link>
                     </div>
+
                 </div>
 
-                <div class="column is-narrow">
-                    <span>
-                        <span class="icon" v-if="hasMap">
-                            <i class="fas fa-list"
-                               :class="{'has-text-primary':showResults}"
-                               @click="showResults=!showResults" />
-                       </span>
+                <div class="level-right is-narrow">
+                    <div class="level-item">
+                        <span>
+                            <span class="icon" v-if="hasMap">
+                                <i class="fas fa-list"
+                                   :class="{'has-text-primary':showResults}"
+                                   @click="showResults=!showResults" />
+                           </span>
 
-                        <span class="icon" v-if="hasMap">
-                            <i class="fas fa-map-marked-alt"
-                            :class="{'has-text-primary':showMap}"
-                            @click="showMap=!showMap" />
-                        </span>
-
-                        <span v-if="documents" @click="loadElements()">
-                            <span v-if="offset!==0">
-                                {{offset + 1}} -
+                            <span class="icon" v-if="hasMap">
+                                <i class="fas fa-map-marked-alt"
+                                :class="{'has-text-primary':showMap}"
+                                @click="showMap=!showMap" />
                             </span>
-                            {{offset + documents.documents.length}} / {{documents.total}}
-                        </span>
 
-                    </span>
+                            <span v-if="documents" @click="loadElements()">
+                                <span v-if="offset!==0">
+                                    {{offset + 1}} -
+                                </span>
+                                {{offset + documents.documents.length}} / {{documents.total}}
+                            </span>
+
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,24 +157,35 @@
 
 $bulma-section-padding : 3rem; // from 3rem 1.5rem
 $header-height : 78px;
+$filter-padding : 1em;
 $filter-height : 60px;
-$result-height : calc(100vh - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height});
+$result-height : calc(100vh - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+$section-border-top : 1px solid lightgrey;
+$section-padding:1.5em;
 
 .documents-view{
 }
 
 .header-section{
+    margin-bottom:1em;
+    margin-bottom:1em;
+    padding:0 $section-padding;
 }
 
 
 .filter-section{
+    border-top:$section-border-top;
+    padding: $filter-padding $section-padding;
 //    background: pink;
-    height:$filter-height;
+//    height:$filter-height;
 }
 
 .result-section{
 //    background: orange;
+    border-top:$section-border-top;
+    border-bottom:$section-border-top;
     max-height: $result-height;
+    padding:0 $section-padding;
 }
 
 .map-container{
@@ -189,6 +201,10 @@ $result-height : calc(100vh - #{$navbar-height} - #{$bulma-section-padding}*2 - 
 
 .cards-container > div{
     flex-flow:wrap row;
+}
+
+.document-type-label:first-letter{
+    text-transform: uppercase;
 }
 
 </style>
