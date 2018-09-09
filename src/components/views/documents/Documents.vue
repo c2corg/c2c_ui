@@ -7,7 +7,7 @@
                     <div class="level-item title is-1">
                         <span class="document-type-label">{{title}}</span>
                     </div>
-                    
+
                     <div class="level-item">
                         <add-link :type="type">
                             <base-icon icon-class="fas fa-plus-circle"/>
@@ -155,11 +155,11 @@
 
 @import '@/assets/sass/main.scss';
 
-$bulma-section-padding : 3rem; // from 3rem 1.5rem
+$bulma-section-padding : 1rem;
 $header-height : 78px;
 $filter-padding : 1em;
 $filter-height : 60px;
-$result-height : calc(100vh - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+$result-height : calc(100vh); // - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
 $section-border-top : 1px solid lightgrey;
 $section-padding:1.5em;
 
