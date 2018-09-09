@@ -32,6 +32,15 @@
         <span v-if="route.hiking_rating">
             {{route.hiking_rating}}
         </span>
+        <span v-if="route.mtb_up_rating">
+            {{route.mtb_up_rating}}
+        </span>
+        <span v-if="route.mtb_down_rating">
+            {{route.mtb_down_rating}}
+        </span>
+        <span v-if="route.hiking_mtb_exposition">
+            {{route.hiking_mtb_exposition}}
+        </span>
     </span>
 
 </template>

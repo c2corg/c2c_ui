@@ -86,7 +86,7 @@ const fieldsProperties = {
     date_start:{type:"date", required},
     date_time:{type:"date_time"}, // wasn't in common... //todo : max:today
     description:{type:"markdown", parent:"locales", label:"Description"},
-    difficulties_height:{type:"number", min:0, max:9999, unit:"m"},
+    difficulties_height:{type:"number", min:0, max:9999, unit:"m", label:"Difficulties start altitude"},
     disable_comments:{type:"boolean"},
     durations:{values:attrs.route_duration_types, multiple},
     editor:{minLength:2},
@@ -120,7 +120,7 @@ const fieldsProperties = {
     heating_unstaffed:{values:[true, false, null]},
     height:{type:"number", disabled},
     height_diff_access:{type:"number", min:0, max:3000, unit:"m"},
-    height_diff_difficulties:{type:"number", min:0, max:3000, unit:"m", label:"difficulties height"},
+    height_diff_difficulties:{type:"number", min:0, max:3000, unit:"m", label:"difficulties height difference"},
     height_diff_down:{type:"number", min:0, max:9999, unit:"m"},
     height_diff_up:{type:"number", min:0, max:9999, unit:"m"},
     height_max:{type:"number", min:0, max:9999, unit:"m"},

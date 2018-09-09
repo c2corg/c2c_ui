@@ -8,6 +8,7 @@
             </summary>
             <markdown :content="locale.description"></markdown>
 
+            <document-comments :document="document" :locale="locale" />
         </div>
 
         <div class="column is-3">
@@ -36,12 +37,15 @@
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
 
+    import DocumentComments from './utils/DocumentComments'
+
     export default {
 
         components: {
             Markdown,
             LabelValue,
             FieldView,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

@@ -6,13 +6,7 @@
 </template>
 
 <script>
-    import AuthorLink from '@/components/views/document/utils/AuthorLink'
-
     export default {
-        components:{
-            AuthorLink
-        },
-
         props : ["contributor"]
     }
 </script>

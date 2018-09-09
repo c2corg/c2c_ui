@@ -9,6 +9,8 @@
             </summary>
             <markdown :content="locale.description"></markdown>
 
+            <document-comments :document="document" :locale="locale" />
+
         </div>
 
         <div class="column is-3">
@@ -53,18 +55,18 @@
     import Markdown from './utils/Markdown'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
-    import AreasLinks from '@/components/views/document/utils/AreasLinks'
-    import AuthorLink from '@/components/views/document/utils/AuthorLink'
+    import AreasLinks from './utils/AreasLinks'
 
+    import DocumentComments from './utils/DocumentComments'
 
     export default {
 
         components: {
             AreasLinks,
-            AuthorLink,
             Markdown,
             LabelValue,
             FieldView,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

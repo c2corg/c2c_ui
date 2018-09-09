@@ -47,30 +47,33 @@
             <field-view :document="document" :field="fields.rescue"/>
             <field-view :document="document" :field="fields.severity"/>
 
+            <document-comments :document="document" :locale="locale" />
+
             <document-license :document="document" cc="by-nc-nd"/>
         </div>
     </div>
 </template>
 
 <script>
-    import UsersLinks from '@/components/views/document/utils/UsersLinks'
-    import AreasLinks from '@/components/views/document/utils/AreasLinks'
-    import AuthorLink from '@/components/views/document/utils/AuthorLink'
+    import UsersLinks from './utils/UsersLinks'
+    import AreasLinks from './utils/AreasLinks'
 
     import MarkdownSection from './utils/MarkdownSection'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
+
+    import DocumentComments from './utils/DocumentComments'
 
     export default {
 
         components: {
             AreasLinks,
             UsersLinks,
-            AuthorLink,
 
             MarkdownSection,
             LabelValue,
             FieldView,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

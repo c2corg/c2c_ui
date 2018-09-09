@@ -2,137 +2,166 @@
     <!-- CONTENT  -->
 
     <div>
-        <div class="columns is-multiline">
+        <div class="columns">
 
-            <div class="column is-8">
+            <div class="column is-3">
                 <areas-links :areas="document.areas"/>
-            </div>
-            <div class="column is-4">
+                <map-view :document="document" />
+
+                <ul>
+                    <li v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id">
+                        <document-link :document="waypoint">
+                            <document-title :document="document"/>
+                            {{waypoint.elevation}}&nbsp;m
+                        </document-link>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li v-for="article of document.associations.articles" :key="article.document_id">
+                        <document-link :document="article"/>
+                    </li>
+                </ul>
+
+
+                <ul>
+                    <li v-for="book of document.associations.books" :key="book.document_id">
+                        <document-link :document="book"/>
+                    </li>
+                </ul>
+
                 <document-license :document="document" cc="by-sa"/>
             </div>
 
-            <div class="column is-4">
+            <div class="column">
+                <div class="columns">
+                    <div class="column is-4">
 
-                <div v-if="document.waypoint_type">
-                    <label>waypoint_type</label>
-                    {{document.waypoint_type}}
+                        <div v-if="document.waypoint_type">
+                            <label>waypoint_type</label>
+                            {{document.waypoint_type}}
+                        </div>
+
+                        <div v-if="document.elevation">
+                            <label>elevation</label>
+                            {{document.elevation}}&nbsp;m
+                        </div>
+
+                        <div v-if="document.height_max || document.height_min">
+                            <label>height</label>
+                            <span v-if="document.height_min">{{document.height_min}}&nbsp;m</span>
+                            <span v-if="document.height_min && document.height_max">/</span>
+                            <span v-if="document.height_max">{{document.height_max}}&nbsp;m</span>
+                        </div>
+
+                        <div v-if="document.height_median">
+                            <label>height_median</label>
+                            {{document.height_median}}&nbsp;m
+                        </div>
+
+                        <div v-if="document.climbing_outdoor_types">
+                            <label>climbing_outdoor_types</label>
+                            {{document.climbing_outdoor_types.join(', ')}}
+                        </div>
+
+                        <div v-if="document.climbing_styles">
+                            <label>climbing_styles</label>
+                            {{document.climbing_styles.join(', ')}}
+                        </div>
+                        <div v-if="document.climbing_rating_min || document.climbing_rating_max">
+                            <label>climbing_rating</label>
+                            <span v-if="document.climbing_rating_min">{{document.climbing_rating_min}}</span>
+                            <span v-if="document.climbing_rating_min && document.climbing_rating_max">/</span>
+                            <span v-if="document.climbing_rating_max">{{document.climbing_rating_max}}</span>
+                        </div>
+                        <div v-if="document.climbing_rating_median">
+                            <label>climbing_rating_median</label>
+                            {{document.climbing_rating_median}}
+                        </div>
+
+                    </div>
+                    <div class="column is-4">
+                        <div v-if="document.orientations && document.orientations.length != 0">
+                            <label>orientations</label>
+                            {{document.orientations.join(', ')}}
+                        </div>
+                        <div v-if="document.best_periods && document.best_periods.length != 0">
+                            <label>best_periods</label>
+                            {{translateArray(document.best_periods).join(', ')}}
+                        </div>
+                        <div v-if="document.routes_quantity">
+                            <label>routes_quantity</label>
+                            {{document.routes_quantity}}
+                        </div>
+                        <div v-if="document.access_time">
+                            <label>access_time</label>
+                            {{document.access_time}}
+                        </div>
+
+                    </div>
+                    <div class="column is-4">
+                        <div v-if="document.protected">
+                            <label>protected</label>
+                            {{document.protected}}
+                        </div>
+
+                        <div v-if="document.equipment_ratings && document.equipment_ratings.length!=0">
+                            <label>equipment_ratings</label>
+                            {{document.equipment_ratings.join(", ")}}
+                        </div>
+
+                        <div v-if="document.rock_types">
+                            <label>rock_types</label>
+                            {{document.rock_types.join(", ")}}
+                        </div>
+                        <div v-if="document.rain_proof">
+                            <label>rain_proof</label>
+                            {{document.rain_proof}}
+                        </div>
+                        <div v-if="document.children_proof">
+                            <label>children_proof</label>
+                            {{document.children_proof}}
+                        </div>
+
+                    </div>
                 </div>
 
-                <div v-if="document.elevation">
-                    <label>elevation</label>
-                    {{document.elevation}}&nbsp;m
+                <div>
+                    <markdown-section :document="document" :locale="locale" :field="fields.description" />
+                    <markdown-section :document="document" :locale="locale" :field="fields.access" />
                 </div>
 
-                <div v-if="document.height_max || document.height_min">
-                    <label>height</label>
-                    <span v-if="document.height_min">{{document.height_min}}&nbsp;m</span>
-                    <span v-if="document.height_min && document.height_max">/</span>
-                    <span v-if="document.height_max">{{document.height_max}}&nbsp;m</span>
+                <div class="columns">
+                    <div class="column" v-if="document.associations.all_routes.documents.length">
+
+                        <h2>Routes</h2>
+
+                        <pretty-route-link
+                           v-for="(route, index) of document.associations.all_routes.documents" :key="index"
+                           :route="route"/>
+                    </div>
+                    <div class="column">
+                        <h2  v-if="document.associations.recent_outings.documents.length">
+                            Recent outings
+                        </h2>
+                        <pretty-outing-link v-for="(outing, i) of document.associations.recent_outings.documents" :key="i"
+                                     :outing="outing"/>
+
+                        <h2 v-if="document.associations.waypoint_children.length">
+                            Waypoints
+                        </h2>
+                        <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
+                            <document-link :document="child"/>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div v-if="document.height_median">
-                    <label>height_median</label>
-                    {{document.height_median}}&nbsp;m
+                <div v-if="document.associations.images.length">
+                    <gallery :images="document.associations.images"/>
                 </div>
 
-                <div v-if="document.climbing_outdoor_types">
-                    <label>climbing_outdoor_types</label>
-                    {{document.climbing_outdoor_types.join(', ')}}
-                </div>
-
-                <div v-if="document.climbing_styles">
-                    <label>climbing_styles</label>
-                    {{document.climbing_styles.join(', ')}}
-                </div>
-                <div v-if="document.climbing_rating_min || document.climbing_rating_max">
-                    <label>climbing_rating</label>
-                    <span v-if="document.climbing_rating_min">{{document.climbing_rating_min}}</span>
-                    <span v-if="document.climbing_rating_min && document.climbing_rating_max">/</span>
-                    <span v-if="document.climbing_rating_max">{{document.climbing_rating_max}}</span>
-                </div>
-                <div v-if="document.climbing_rating_median">
-                    <label>climbing_rating_median</label>
-                    {{document.climbing_rating_median}}
-                </div>
-
-            </div>
-            <div class="col-sm-4">
-                <div v-if="document.orientations && document.orientations.length != 0">
-                    <label>orientations</label>
-                    {{document.orientations.join(', ')}}
-                </div>
-                <div v-if="document.best_periods && document.best_periods.length != 0">
-                    <label>best_periods</label>
-                    {{translateArray(document.best_periods).join(', ')}}
-                </div>
-                <div v-if="document.routes_quantity">
-                    <label>routes_quantity</label>
-                    {{document.routes_quantity}}
-                </div>
-                <div v-if="document.access_time">
-                    <label>access_time</label>
-                    {{document.access_time}}
-                </div>
-
-            </div>
-            <div class="col-sm-4">
-                <div v-if="document.protected">
-                    <label>protected</label>
-                    {{document.protected}}
-                </div>
-
-                <div v-if="document.equipment_ratings && document.equipment_ratings.length!=0">
-                    <label>equipment_ratings</label>
-                    {{document.equipment_ratings.join(", ")}}
-                </div>
-
-                <div v-if="document.rock_types">
-                    <label>rock_types</label>
-                    {{document.rock_types.join(", ")}}
-                </div>
-                <div v-if="document.rain_proof">
-                    <label>rain_proof</label>
-                    {{document.rain_proof}}
-                </div>
-                <div v-if="document.children_proof">
-                    <label>children_proof</label>
-                    {{document.children_proof}}
-                </div>
-
-            </div>
-
-            <div class="column is-12">
-                <markdown-section :document="document" :locale="locale" :field="fields.description" />
-                <markdown-section :document="document" :locale="locale" :field="fields.access" />
-            </div>
-
-            <div class="column is-6" v-if="document.associations.all_routes.documents.length">
-
-                <h2>Routes</h2>
-
-                <pretty-route-link
-                   v-for="(route, index) of document.associations.all_routes.documents" :key="index"
-                   :route="route"/>
-            </div>
-
-            <div class="column is-6">
-                <h2  v-if="document.associations.recent_outings.documents.length">
-                    Recent outings
-                </h2>
-                <pretty-outing-link v-for="(outing, i) of document.associations.recent_outings.documents" :key="i"
-                             :outing="outing"/>
-
-                <h2 v-if="document.associations.waypoint_children.length">
-                    Waypoints
-                </h2>
-                <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
-                    <document-link :document="child"/>
-                </div>
-
-            </div>
-
-            <div class="column is-12" v-if="document.associations.images.length">
-                <gallery :images="document.associations.images"/>
+                <document-comments :document="document" :locale="locale" />
             </div>
         </div>
     </div>
@@ -141,13 +170,15 @@
 
 <script>
     import MarkdownSection from './utils/MarkdownSection'
-    import AreasLinks from '@/components/views/document/utils/AreasLinks'
+    import AreasLinks from './utils/AreasLinks'
+    import DocumentComments from './utils/DocumentComments'
 
     export default {
 
         components: {
             MarkdownSection,
             AreasLinks,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

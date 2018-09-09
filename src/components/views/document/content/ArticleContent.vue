@@ -17,6 +17,8 @@
 
             <markdown :content="locale.description"></markdown>
 
+            <document-comments :document="document" :locale="locale" />
+
         </div>
     </div>
 
@@ -25,10 +27,13 @@
 <script>
     import Markdown from './utils/Markdown'
 
+    import DocumentComments from './utils/DocumentComments'
+
     export default {
 
         components: {
             Markdown,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

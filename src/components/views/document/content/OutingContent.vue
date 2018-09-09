@@ -17,6 +17,9 @@
                 <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
                 <markdown-section :document="document" :locale="locale" :field="fields.hut_comment"/>
                 <markdown-section :document="document" :locale="locale" :field="fields.timing"/>
+
+                <document-comments :document="document" :locale="locale" />
+
             </div>
 
             <div class="column is-3">
@@ -71,11 +74,10 @@
                     {{document.snow_quantity }}
                 </div>
 
+                <map-view :document="document" />
                 <document-license :document="document" cc="by-nc-nd"/>
-
             </div>
         </div>
-
     </div>
 </template>
 
@@ -83,8 +85,9 @@
 
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-    import AreasLinks from '@/components/views/document/utils/AreasLinks'
-    import UsersLinks from '@/components/views/document/utils/UsersLinks'
+    import AreasLinks from './utils/AreasLinks'
+    import UsersLinks from './utils/UsersLinks'
+    import DocumentComments from './utils/DocumentComments'
 
     export default {
 
@@ -92,7 +95,8 @@
             Markdown,
             MarkdownSection,
             UsersLinks,
-            AreasLinks
+            AreasLinks,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],

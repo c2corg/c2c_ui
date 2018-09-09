@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="map-component">
         <gmap-map ref="googleMapRef"
                   :street-view-control="false"
                   :center="{lat:10, lng:10}"
-                  style="width: 100%; height: 100%"
+                  style="min-height: 300px"
                   map-type-id="terrain">
 
             <gmap-marker v-for="(position, index) in positions" :key="index"
@@ -118,3 +118,9 @@
     }
 
 </script>
+
+<style scoped>
+.map-component{
+    min-height:300px;
+}
+</style>

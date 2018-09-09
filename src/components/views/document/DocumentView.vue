@@ -60,8 +60,6 @@
                 :document="document" :locale="locale"
                 :fields="constants.objectDefinitions[this.type].fields">
             </component>
-
-            <document-comments :document="document" :locale="locale" />
         </div>
     </div>
 
@@ -85,7 +83,6 @@
     import WaypointContent from './content/WaypointContent'
     import XreportContent from './content/XreportContent'
 
-    import DocumentComments from './utils/DocumentComments'
 
     export default {
         components:{
@@ -99,8 +96,6 @@
             RouteContent,
             WaypointContent,
             XreportContent,
-
-            DocumentComments,
         },
 
         data() {

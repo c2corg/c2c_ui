@@ -10,6 +10,7 @@
                 <markdown :content="locale.description"></markdown>
 
             </div>
+
             <div class="column is-3">
                 <activities :activities="document.activities"/>
 
@@ -17,13 +18,15 @@
                     @{{document.forum_username}}
                 </label-value>
 
-                <field-view :document="document" :field="field.categories"/>
+                <field-view :document="document" :field="fields.categories"/>
 
                 <div>
                     <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
                         contributions
                     </router-link>
                 </div>
+
+                <map-view :document="document" />
 
                 <document-license :document="document" cc="by-nc-nd"/>
 

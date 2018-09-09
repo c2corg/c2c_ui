@@ -21,7 +21,9 @@
 
         <markdown-section :document="document" :locale="locale" :field="fields.description"/>
 
-        <div >
+        <document-comments :document="document" :locale="locale" />
+
+        <div>
             <document-license :document="document" cc="by-sa"/>
         </div>
 
@@ -33,11 +35,14 @@
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
 
+    import DocumentComments from './utils/DocumentComments'
+
     export default {
 
         components: {
             Markdown,
             MarkdownSection,
+            DocumentComments,
         },
 
         props:["document", "locale", "fields"],
