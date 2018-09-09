@@ -143,6 +143,7 @@
             </div>
 
             <document-comments :document="document" :locale="locale" />
+
         </div>
 
     </div>

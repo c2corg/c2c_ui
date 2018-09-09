@@ -11,9 +11,21 @@
                 <ul>
                     <li v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id">
                         <document-link :document="waypoint">
-                            <document-title :document="document"/>
+                            <document-title :document="waypoint"/>
                             {{waypoint.elevation}}&nbsp;m
                         </document-link>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li v-for="map of document.maps" :key="map.document_id">
+                        <document-link :document="map"/>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li v-for="book of document.associations.books" :key="book.document_id">
+                        <document-link :document="book"/>
                     </li>
                 </ul>
 
@@ -23,115 +35,82 @@
                     </li>
                 </ul>
 
-
-                <ul>
-                    <li v-for="book of document.associations.books" :key="book.document_id">
-                        <document-link :document="book"/>
-                    </li>
-                </ul>
-
                 <document-license :document="document" cc="by-sa"/>
             </div>
 
             <div class="column">
-                <div class="columns">
+                <div class="columns is-multiline">
                     <div class="column is-4">
 
-                        <div v-if="document.waypoint_type">
-                            <label>waypoint_type</label>
-                            {{document.waypoint_type}}
-                        </div>
+                        <field-view :document="document" :field="fields.waypoint_type"/>
 
-                        <div v-if="document.elevation">
-                            <label>elevation</label>
-                            {{document.elevation}}&nbsp;m
-                        </div>
-
-                        <div v-if="document.height_max || document.height_min">
-                            <label>height</label>
+                        <label-value v-if="document.height_max || document.height_min" label="height">
                             <span v-if="document.height_min">{{document.height_min}}&nbsp;m</span>
                             <span v-if="document.height_min && document.height_max">/</span>
                             <span v-if="document.height_max">{{document.height_max}}&nbsp;m</span>
-                        </div>
+                        </label-value>
 
-                        <div v-if="document.height_median">
-                            <label>height_median</label>
-                            {{document.height_median}}&nbsp;m
-                        </div>
+                        <field-view :document="document" :field="fields.height_median"/>
+                        <field-view :document="document" :field="fields.climbing_outdoor_types"/>
+                        <field-view :document="document" :field="fields.climbing_styles"/>
 
-                        <div v-if="document.climbing_outdoor_types">
-                            <label>climbing_outdoor_types</label>
-                            {{document.climbing_outdoor_types.join(', ')}}
-                        </div>
-
-                        <div v-if="document.climbing_styles">
-                            <label>climbing_styles</label>
-                            {{document.climbing_styles.join(', ')}}
-                        </div>
-                        <div v-if="document.climbing_rating_min || document.climbing_rating_max">
-                            <label>climbing_rating</label>
+                        <label-value v-if="document.climbing_rating_min || document.climbing_rating_max" label="climbing_rating">
                             <span v-if="document.climbing_rating_min">{{document.climbing_rating_min}}</span>
                             <span v-if="document.climbing_rating_min && document.climbing_rating_max">/</span>
                             <span v-if="document.climbing_rating_max">{{document.climbing_rating_max}}</span>
-                        </div>
-                        <div v-if="document.climbing_rating_median">
-                            <label>climbing_rating_median</label>
-                            {{document.climbing_rating_median}}
-                        </div>
+                        </label-value>
+
+                        <field-view :document="document" :field="fields.climbing_rating_median"/>
+
+                        <field-view :document="document" :field="fields.capacity"/>
+                        <field-view :document="document" :field="fields.capacity_staffed"/>
+
 
                     </div>
+
                     <div class="column is-4">
-                        <div v-if="document.orientations && document.orientations.length != 0">
-                            <label>orientations</label>
-                            {{document.orientations.join(', ')}}
-                        </div>
-                        <div v-if="document.best_periods && document.best_periods.length != 0">
-                            <label>best_periods</label>
-                            {{translateArray(document.best_periods).join(', ')}}
-                        </div>
-                        <div v-if="document.routes_quantity">
-                            <label>routes_quantity</label>
-                            {{document.routes_quantity}}
-                        </div>
-                        <div v-if="document.access_time">
-                            <label>access_time</label>
-                            {{document.access_time}}
-                        </div>
+                        <field-view :document="document" :field="fields.orientations"/>
+                        <field-view :document="document" :field="fields.best_periods"/>
+                        <field-view :document="document" :field="fields.routes_quantity"/>
+                        <field-view :document="document" :field="fields.access_time"/>
+
+                        <field-view :document="document" :field="fields.url"/>
+                        <field-view :document="document" :field="fields.phone"/>
+                        <field-view :document="document" :field="fields.custodianship"/>
+
+                        <field-view :document="document" :field="fields.parking_fee"/>
+                        <field-view :document="document" :field="fields.snow_clearance_rating"/>
+
 
                     </div>
+
                     <div class="column is-4">
-                        <div v-if="document.protected">
-                            <label>protected</label>
-                            {{document.protected}}
-                        </div>
 
-                        <div v-if="document.equipment_ratings && document.equipment_ratings.length!=0">
-                            <label>equipment_ratings</label>
-                            {{document.equipment_ratings.join(", ")}}
-                        </div>
+                        <field-view :document="document" :field="fields.elevation"/>
+                        <field-view :document="document" :field="fields.elevation_min"/>
 
-                        <div v-if="document.rock_types">
-                            <label>rock_types</label>
-                            {{document.rock_types.join(", ")}}
-                        </div>
-                        <div v-if="document.rain_proof">
-                            <label>rain_proof</label>
-                            {{document.rain_proof}}
-                        </div>
-                        <div v-if="document.children_proof">
-                            <label>children_proof</label>
-                            {{document.children_proof}}
-                        </div>
+                        <field-view :document="document" :field="fields.public_transportation_rating"/>
+                        <field-view :document="document" :field="fields.public_transportation_types"/>
+
+                        <field-view :document="document" :field="fields.protected"/>
+                        <field-view :document="document" :field="fields.equipment_ratings"/>
+                        <field-view :document="document" :field="fields.rock_types"/>
+                        <field-view :document="document" :field="fields.rain_proof"/>
+                        <field-view :document="document" :field="fields.children_proof"/>
+
+
+                        <field-view :document="document" :field="fields.matress_unstaffed"/>
+                        <field-view :document="document" :field="fields.blanket_unstaffed"/>
+                        <field-view :document="document" :field="fields.heating_unstaffed"/>
+                        <field-view :document="document" :field="fields.gas_unstaffed"/>
 
                     </div>
-                </div>
 
-                <div>
-                    <markdown-section :document="document" :locale="locale" :field="fields.description" />
-                    <markdown-section :document="document" :locale="locale" :field="fields.access" />
-                </div>
+                    <div class="column is-12">
+                        <markdown-section :document="document" :locale="locale" :field="fields.description" />
+                        <markdown-section :document="document" :locale="locale" :field="fields.access" />
+                    </div>
 
-                <div class="columns">
                     <div class="column" v-if="document.associations.all_routes.documents.length">
 
                         <h2>Routes</h2>
@@ -171,6 +150,8 @@
 <script>
     import MarkdownSection from './utils/MarkdownSection'
     import AreasLinks from './utils/AreasLinks'
+    import FieldView from './utils/FieldView'
+    import LabelValue from './utils/LabelValue'
     import DocumentComments from './utils/DocumentComments'
 
     export default {
@@ -178,6 +159,8 @@
         components: {
             MarkdownSection,
             AreasLinks,
+            FieldView,
+            LabelValue,
             DocumentComments,
         },
 
