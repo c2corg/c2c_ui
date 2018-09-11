@@ -1,12 +1,12 @@
 <template>
-    <div class="card" @click="go">
-        <header class="card-header">
-            <document-title class="card-header-title" :document="document"/>
+    <content-box class="document-card" @click="go">
+        <header class="document-card-header">
+            <document-title class="document-card-header-title" :document="document"/>
         </header>
-        <div class="card-content">
+        <div class="document-card-content">
             <component :is="cardComponentName" :document="document"/>
         </div>
-    </div>
+    </content-box>
 </template>
 
 <script>
@@ -59,21 +59,39 @@
 
 </script>
 
-<style scoped>
 
-.card{
-    background-color:#F1FAF8!important;
-    transition:0.2s;
-    margin-left:1px;
-    margin-top:1px;
-    margin-right:10px;
-    margin-bottom:10px;
+<style scoped lang="scss">
+
+@import '@/assets/sass/main.scss';
+
+$card-header-border : 1px solid $border;
+$card-hover-background : #fff8f0!important;
+
+.document-card{
+    transition:0.1s;
     cursor:pointer;
-    flex: 1 1 300px;
 }
 
-.card:hover{
-    background-color:#fff8f0!important;
+.document-card:hover{
+    background:$white-ter;
     transition:0.2s;
 }
+
+.document-card-header{
+    font-weight:bold;
+}
+
+.document-card-header-title {
+    display:block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.document-card-content{
+
+}
+
+
 </style>

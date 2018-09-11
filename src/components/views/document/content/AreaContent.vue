@@ -2,38 +2,36 @@
 
     <div class="columns">
         <div class="column is-3">
-            <map-view :document="document" style="width: 100%; height: 300px">
-            </map-view>
-
-            <document-license :document="document" cc="by-sa"/>
-
+            <map-box :document="document"></map-box>
+            <license-box cc="by-sa"></license-box>
         </div>
 
         <div class="column">
-            <summary>
-                <markdown :content="locale.summary"></markdown>
-            </summary>
+            <content-box>
+                <markdown-section :document="document" :locale="locale" :field="fields.summary"/>
+                <markdown-section :document="document" :locale="locale" :field="fields.description"/>
+            </content-box>
 
-            <markdown-section :document="document" :locale="locale" :field="fields.description"/>
-
-            <document-comments :document="document" :locale="locale" />
+            <comments-box :document="document" :locale="locale" />
         </div>
-
     </div>
-
 </template>
 
 <script>
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-    import DocumentComments from './utils/DocumentComments'
+    import CommentsBox from './utils/CommentsBox'
+    import LicenseBox from './utils/LicenseBox'
+    import MapBox from './utils/MapBox'
 
     export default {
 
         components: {
             Markdown,
             MarkdownSection,
-            DocumentComments,
+            CommentsBox,
+            LicenseBox,
+            MapBox,
         },
 
         props:["document", "locale", "fields"],

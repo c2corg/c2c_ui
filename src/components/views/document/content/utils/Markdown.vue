@@ -1,5 +1,5 @@
 <template>
-    <div v-html="convert(content)"/>
+    <div class="content" v-html="convert(content)"/>
 </template>
 
 <script>
@@ -12,3 +12,21 @@
         }
     }
 </script>
+
+<style lang="scss">
+
+.markdown-ltag td:first-child{
+    font-weight:bold;
+}
+
+.markdown-image{
+    border-radius: 4px;
+    border:1px solid #DDD;
+    padding:0.5rem;
+    background: #FAFAFA;
+}
+
+.markdown-image-right{
+    float: right;
+}
+</style>

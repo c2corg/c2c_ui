@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <dropdown-button v-for="category of categorizedFields" :key="category.name"
             class="category-button"
             :disabled="category.fields.length===0"
@@ -34,6 +33,8 @@
             "waypoint_type",
             "event_type",
             "condition_rating",
+            "climbing_outdoor_type",
+            "route_types",
         ],
 
         Ratings:[
@@ -70,11 +71,10 @@
 
         Terrain:[
             "orientations",
+            "configuration",
             "elevation_max",
             "elevation_min",
-            "configuration",
             "difficulties_height",
-            "climbing_outdoor_type",
             "height_diff_access",
             "height_diff_difficulties",
             "height_diff_down",
@@ -83,7 +83,6 @@
             "mtb_length_asphalt",
             "mtb_length_trail",
             "rock_types",
-            "route_length",
             "slackline_type",
             "snow_quality",
             "snow_quantity",
@@ -92,7 +91,6 @@
             "elevation_down_snow",
             "elevation_up_snow",
             "children_proof",
-            "lift_access",
             "prominence",
             "climbing_indoor_types",
             "climbing_outdoor_types",
@@ -104,7 +102,6 @@
             "length",
             "rain_proof",
             "routes_quantity",
-            "route_types",
         ],
         Miscs:[
             "title",
@@ -114,8 +111,10 @@
             "quality",
             "categories",
             "frequentation",
+            "route_length",
             "length_total",
             "public_transport",
+            "lift_access",
             "access_time",
             "best_periods",
             "capacity",
@@ -133,6 +132,12 @@
     export default {
         components:{
             QueryItem
+        },
+
+        data(){
+            return {
+                test: ['S', 'NE']
+            }
         },
 
         computed:{

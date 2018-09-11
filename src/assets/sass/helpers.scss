@@ -1,0 +1,14 @@
+
+/*
+:first-letter only works with block and inline blocks elements
+
+we force display to inline-block, maybe not a good idea...
+*/
+
+.is-first-letter-uppercase{
+    display:inline-block
+}
+
+.is-first-letter-uppercase:first-letter {
+    text-transform: uppercase;
+}

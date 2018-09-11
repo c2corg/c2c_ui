@@ -12,6 +12,6 @@ var prodConfig = {
     router_mode : undefined, // 'history' for pretty urls
 }
 
-var isDev = true;
+var isDev = false;
 
 export default isDev ? devConfig : prodConfig;

@@ -1,6 +1,7 @@
 <template>
     <div>
         <span>
+            <activities :activities="outing.activities"></activities>
             <document-link :document="outing"/>
             &hairsp;&bull;&hairsp;
             <em v-for="area in outing.areas" :key="area.document_id" v-if="area.area_type=='range'">

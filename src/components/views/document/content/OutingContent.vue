@@ -1,82 +1,72 @@
 <template>
     <div>
         <!--  CONTENT  -->
-        <gallery :images="document.associations.images" />
+        <content-box v-if="document.associations && document.associations.images.length" class="is-paddingless">
+            <gallery :images="document.associations.images" />
+        </content-box>
 
         <div class="columns">
-            <div class="column is-9">
-                <areas-links :areas="document.areas"/>
-
-                <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
-                            :route="route"/>
-
-                <markdown-section :document="document" :locale="locale" :field="fields.description" />
-                <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />
-                <markdown-section :document="document" :locale="locale" :field="fields.route_description" />
-                <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
-                <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
-                <markdown-section :document="document" :locale="locale" :field="fields.hut_comment"/>
-                <markdown-section :document="document" :locale="locale" :field="fields.timing"/>
-
-                <document-comments :document="document" :locale="locale" />
-
-            </div>
 
             <div class="column is-3">
+                <content-box>
+                    <label-value label="Ratings">
+                        <outing-rating :outing="document"></outing-rating>
+                    </label-value>
 
-                <div>
-                    <users-links :users="document.associations.users"/>
-                    {{locale.participants}}
-                </div>
+                    <label-value v-if="locale.weather" label="weather">
+                        {{locale.weather}}
+                    </label-value>
 
-                <div v-if="locale.weather">
-                    <base-icon iconClass="fa fa-cloud"/>
-                    {{locale.weather}}
-                </div>
+                    <field-view :document="document" :field="fields.frequentation"></field-view>
 
-                <div v-if="document.frequentation">
-                    <icon-users />{{document.frequentation}}
-                </div>
+                    <label-value v-if="document.elevation_min || document.elevation_max" label="elevation">
+                        <span v-if="document.elevation_min">{{document.elevation_min}}&nbsp;m</span>
+                        <span v-if="document.elevation_min && document.elevation_max">/</span>
+                        <span v-if="document.elevation_max">{{document.elevation_max}}&nbsp;m</span>
+                    </label-value>
 
-                <div v-if="document.elevation_min || document.elevation_max">
-                    <label>
-                        <span >elevation</span>
-                    </label>
-                    <span v-if="document.elevation_min">{{document.elevation_min}}&nbsp;m</span>
-                    <span v-if="document.elevation_min && document.elevation_max">/</span>
-                    <span v-if="document.elevation_max">{{document.elevation_max}}&nbsp;m</span>
-                </div>
+                    <label-value v-if="document.height_diff_down || document.height_diff_up" label="height difference">
+                        <span v-if="document.height_diff_up">+{{document.height_diff_up}}&nbsp;m</span>
+                        <span v-if="document.height_diff_up && document.height_diff_down">/</span>
+                        <span v-if="document.height_diff_down">-{{document.height_diff_down}}&nbsp;m</span>
+                    </label-value>
 
-                <div v-if="document.height_diff_down || document.height_diff_up">
-                    <label >height difference</label>
-                    <span v-if="document.height_diff_up">+{{document.height_diff_up}}&nbsp;m</span>
-                    <span v-if="document.height_diff_up && document.height_diff_down">/</span>
-                    <span v-if="document.height_diff_down">-{{document.height_diff_down}}&nbsp;m</span>
-                </div>
+                    <field-view :document="document" :field="fields.length_total"></field-view>
+                    <field-view :document="document" :field="fields.hut_status"></field-view>
+                    <field-view :document="document" :field="fields.snow_quality"></field-view>
+                    <field-view :document="document" :field="fields.snow_quantity"></field-view>
 
-                <div v-if="document.length_total">
-                    <label >total length</label>
-                    {{document.length_total}} m
-                </div>
+                </content-box>
 
-                <div v-if="document.hut_status">
-                    <label >hut status</label>
-                    {{document.hut_status }}
-                </div>
-
-                <div v-if="document.snow_quality">
-                    <label >snow quality</label>
-                    {{document.snow_quality }}
-                </div>
-
-                <div v-if="document.snow_quantity">
-                    <label >snow quantity</label>
-                    {{document.snow_quantity }}
-                </div>
-
-                <map-view :document="document" />
-                <document-license :document="document" cc="by-nc-nd"/>
+                <map-box :document="document"></map-box>
+                <license-box cc="by-sa" />
             </div>
+
+            <div class="column is-9">
+
+                <content-box>
+                    <div>
+                        <users-links :users="document.associations.users"/>
+                        {{locale.participants}}
+                    </div>
+
+                    <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
+                                :route="route"/>
+
+                    <markdown-section :document="document" :locale="locale" :field="fields.description" />
+                    <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />
+                    <markdown-section :document="document" :locale="locale" :field="fields.route_description" />
+                    <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
+                    <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
+                    <markdown-section :document="document" :locale="locale" :field="fields.hut_comment"/>
+                    <markdown-section :document="document" :locale="locale" :field="fields.timing"/>
+
+                </content-box>
+
+                <comments-box :document="document" :locale="locale" />
+
+            </div>
+
         </div>
     </div>
 </template>
@@ -85,9 +75,12 @@
 
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-    import AreasLinks from './utils/AreasLinks'
     import UsersLinks from './utils/UsersLinks'
-    import DocumentComments from './utils/DocumentComments'
+    import CommentsBox from './utils/CommentsBox'
+    import LicenseBox from './utils/LicenseBox'
+    import MapBox from './utils/MapBox'
+    import LabelValue from './utils/LabelValue'
+    import FieldView from './utils/FieldView'
 
     export default {
 
@@ -95,8 +88,11 @@
             Markdown,
             MarkdownSection,
             UsersLinks,
-            AreasLinks,
-            DocumentComments,
+            CommentsBox,
+            LicenseBox,
+            MapBox,
+            LabelValue,
+            FieldView,
         },
 
         props:["document", "locale", "fields"],

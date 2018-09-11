@@ -44,14 +44,17 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+@import '@/assets/sass/main.scss';
 
 .input-item {
     cursor:pointer;
     font-size:40px;
-    margin:4px
+    margin:4px;
+    color:#888;
 }
 .selected{
-    color:green;
+    color:$primary;
 }
 </style>

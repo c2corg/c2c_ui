@@ -1,17 +1,15 @@
 <template>
-    <div class="map-component">
-        <gmap-map ref="googleMapRef"
-                  :street-view-control="false"
-                  :center="{lat:10, lng:10}"
-                  style="min-height: 300px"
-                  map-type-id="terrain">
+    <gmap-map  class="map-component" ref="googleMapRef"
+              :street-view-control="false"
+              :center="{lat:10, lng:10}"
+              style="min-height: 300px"
+              map-type-id="terrain">
 
-            <gmap-marker v-for="(position, index) in positions" :key="index"
-                        :position="position"
-                        :clickable="true"
-                        :draggable="true"/>
-        </gmap-map>
-    </div>
+        <gmap-marker v-for="(position, index) in positions" :key="index"
+                    :position="position"
+                    :clickable="true"
+                    :draggable="true"/>
+    </gmap-map>
 </template>
 
 <script>

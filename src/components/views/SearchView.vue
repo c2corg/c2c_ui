@@ -25,11 +25,23 @@
         },
 
         created(){
-            c2c.search(this.$route.query).then(response => {
-                this.results = response.data
-            })
-        }
+            this.search()
+        },
 
+        watch:{
+            $route(){
+                this.search();
+            }
+        },
+
+        methods:{
+            search(){
+                var query = Object.assign({limit:100}, this.$route.query)
+                c2c.search(query).then(response => {
+                    this.results = response.data
+                })
+            }
+        }
     }
 
 </script>

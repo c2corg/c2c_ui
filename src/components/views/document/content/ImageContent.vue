@@ -9,7 +9,7 @@
             </summary>
             <markdown :content="locale.description"></markdown>
 
-            <document-comments :document="document" :locale="locale" />
+            <comments-box :document="document" :locale="locale" />
 
         </div>
 
@@ -57,7 +57,7 @@
     import FieldView from './utils/FieldView'
     import AreasLinks from './utils/AreasLinks'
 
-    import DocumentComments from './utils/DocumentComments'
+    import CommentsBox from './utils/CommentsBox'
 
     export default {
 
@@ -66,7 +66,7 @@
             Markdown,
             LabelValue,
             FieldView,
-            DocumentComments,
+            CommentsBox,
         },
 
         props:["document", "locale", "fields"],

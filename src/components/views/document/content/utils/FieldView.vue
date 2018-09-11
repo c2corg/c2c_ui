@@ -26,6 +26,7 @@
             },
 
             hasValue(){
+                
                 if(this.value === undefined || this.value === null)
                     return false
 

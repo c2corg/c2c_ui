@@ -1,7 +1,5 @@
 <template>
-    <span>
-        {{getTitle()}}
-    </span>
+    <span>{{getTitle()}}</span>
 </template>
 
 <script>
@@ -10,20 +8,18 @@
     export default {
         props: ['document'],
 
-        data(){
-            return {
-                getTitle : function(){
-                    if(this.document.type=="u" || !this.document.type){
-                        return this.document.name
-                    }
-
-                    var locale = user.getLocaleSmart(this.document, this.$route.params.lang)
-
-                    if (locale.title_prefix)
-                        return locale.title_prefix + " : " + locale.title
-
-                    return locale.title
+        methods:{
+            getTitle(){
+                if(this.document.type=="u" || !this.document.type){
+                    return this.document.name
                 }
+
+                var locale = user.getLocaleSmart(this.document, this.$route.params.lang)
+
+                if (locale.title_prefix)
+                    return locale.title_prefix + " : " + locale.title
+
+                return locale.title
             }
         }
     }

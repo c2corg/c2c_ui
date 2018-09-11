@@ -21,7 +21,7 @@
 
         <markdown-section :document="document" :locale="locale" :field="fields.description"/>
 
-        <document-comments :document="document" :locale="locale" />
+        <comments-box :document="document" :locale="locale" />
 
         <div>
             <document-license :document="document" cc="by-sa"/>
@@ -34,15 +34,14 @@
 <script>
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
-
-    import DocumentComments from './utils/DocumentComments'
+    import CommentsBox from './utils/CommentsBox'
 
     export default {
 
         components: {
             Markdown,
             MarkdownSection,
-            DocumentComments,
+            CommentsBox,
         },
 
         props:["document", "locale", "fields"],

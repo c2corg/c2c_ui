@@ -1,16 +1,19 @@
 <template>
-    <div>
-        <h2>Comments</h2>
+    <content-box class="discourse-comments">
+        <h2 class="title is-2">Comments</h2>
+
         <div v-if="errorMessage" class="notification is-danger">
             <p>
                 Oups! Something went wrong with forum. Here is the message : <br>
                 {{errorMessage}}
             </p>
         </div>
+
         <div v-if="locale.topic_id === null">
             <div v-if="document.disable_comments">
                 <p>Comments are disabled.</p>
             </div>
+
             <div v-else>
                 <p v-if="!user.isLogged()">Log in to post the first comment</p>
                 <button v-else class="button is-primary" @click="createTopic">
@@ -20,26 +23,34 @@
         </div>
 
         <div v-if="comments.length > 0">
-            <div v-for="post of comments" :key="post.id">
-                <div>
-                    <img :src="post.avatar_template">
-                    <a :href="'https://forum.camptocamp.org/users/' + post.username" :title="post.username">
-                        {{post.username}}
-                    </a>
-                    <span class="is-pulled-right">
-                        {{post['created_at'] | timeAgo}}
-                    </span>
+            <div v-for="post of comments" :key="post.id" class="discourse-post">
+                <div class="columns is-gapless">
+                    <div class="column is-narrow discourse-post-avatar">
+                        <img :src="post.avatar_template">
+                    </div>
+                    <div class="column">
+                        <div  class="discourse-post-header">
+                            <a :href="'https://forum.camptocamp.org/users/' + post.username" :title="post.username"
+                                class="discourse-post-header-username">
+                                {{post.username}}
+                            </a>
+                            <span class="is-pulled-right">
+                                {{post['created_at'] | timeAgo}}
+                            </span>
+                        </div>
+                        <div class="discourse-content" v-html="post['cooked']"></div>
+                    </div>
                 </div>
-                <div v-html="post['cooked']"></div>
             </div>
 
-            <div>
-                <a :href="forum.url + '/t/' + topic.slug + '/' + locale.topic_id + '/' + topic.posts_count" class="button is-primary">
+            <div class="has-text-centered">
+                <a :href="forum.url + '/t/' + topic.slug + '/' + locale.topic_id + '/' + topic.posts_count"
+                    class="button is-primary">
                     Continue the discussion
                 </a>
             </div>
         </div>
-    </div>
+    </content-box>
 </template>
 
 <script>
@@ -83,7 +94,7 @@
             },
 
             getComments(){
-                if(this.locale.topic_id){ 
+                if(this.locale.topic_id){
                     forum.topic.get(this.locale.topic_id)
                     .then(response => {
                         this.topic = response.data
@@ -93,7 +104,7 @@
                         if (data !== undefined) {
                             for (let post of data.posts) {
                                 if (post['name'] != 'system') {
-                                    post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', '24')
+                                    post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', '45')
                                     post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
                                     this.comments.push(post);
                                 }
@@ -112,3 +123,40 @@
         }
     }
 </script>
+
+<style lang="scss">
+
+@import '@/assets/sass/main.scss';
+
+.discourse-comments{
+    background: #fbfaf6 !important;
+}
+
+.discourse-post{
+    border-top:6px solid $color-base-c2c;
+    margin-bottom:1.5rem;
+}
+
+.discourse-post-avatar img{
+    margin:15px 15px 15px 0;
+    border-radius: 4px;
+}
+
+.discourse-post-header{
+    background: #E4E4E4;
+    padding: 4px 10px 4px;
+}
+
+.discourse-post-header-username{
+    font-weight:bold;
+}
+
+.discourse-content{
+    margin-top:0.5rem;
+}
+
+.discourse-content .emoji{
+    width:1em;
+    height:1em;
+}
+</style>

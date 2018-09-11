@@ -160,7 +160,7 @@ const fieldsProperties = {
     nb_outings:{values:attrs.nb_outings},
     nb_pages:{type:"number", min:0, max:9999, unit:"#"},
     nb_participants:{type:"number", min:0, max:1000, label:"count of participants"},
-    orientations:{values:attrs.orientation_types, multiple:true},
+    orientations:{values:attrs.orientation_types, multiple:true, queryMode:"orientations"},
     other_comments:{type:"markdown", parent:"locales", label:"other comments"},
     paragliding_rating:{values:attrs.paragliding_ratings, queryMode:"valuesRangeSlider"},
     parking_fee:{values:attrs.parking_fee_types},
@@ -240,7 +240,7 @@ function Field(name, properties){
         }
     }
 
-    this.label = this.label || this.name.replace("_", " ")
+    this.label = this.label || this.name.replace(/_/g, " ")
     this.type = this.type || "text"
 
     if(!this.queryMode){
@@ -310,7 +310,7 @@ function Field(name, properties){
         defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
     }
 
-    else if(this.queryMode=="multiSelect"){
+    else if(this.queryMode=="multiSelect" || this.queryMode=="orientations"){
         this.valueToUrl = joinWithComma
         this.urlToValue = parseUrlArray
         defaultUrlQuery =  ''

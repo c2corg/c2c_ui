@@ -16,7 +16,8 @@ add all vue component as globals components, given en require context
 */
 const addComponents = function(context){
     context.keys().forEach(key => {
-        let component =context(key)
+
+        let component = context(key)
         let name = key.split("/").slice(-1)[0]
 
         // kebab-case-ification, assuming that all module names are in PascalCase
@@ -26,9 +27,8 @@ const addComponents = function(context){
     });
 }
 
-// add all components in /icons and /utils
+// add all components in /utils
 addComponents(require.context('./components/utils', true, /\.vue$/))
-addComponents(require.context('./components/icons', true, /\.vue$/))
 
 // other globals components
 Vue.component("map-view", MapView)

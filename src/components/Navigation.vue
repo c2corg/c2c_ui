@@ -16,7 +16,7 @@
             </a>
         </div>
 
-        <div id="navMenu" class="navbar-menu" v-bind:class="{ 'is-active': burgerActive }">
+        <div id="navMenu" class="navbar-menu is-size-5" v-bind:class="{ 'is-active': burgerActive }">
             <div class="navbar-start">
                 <router-link class="navbar-item" :to="{name:link.name}"
                              v-for="(link, index) in links" :key="index">
@@ -26,8 +26,8 @@
 
                 <div class="navbar-item field">
                     <div class="control has-icons-left">
-                        <input class="input" placeholder="Search" v-model="searchText" @input="search()">
-                        <span class="icon is-left">
+                        <input class="input is-primary is-size-5" placeholder="Search" v-model="searchText" @input="search()">
+                        <span class="icon is-left is-size-5">
                             <i class="fas fa-search"/>
                         </span>
                     </div>
@@ -38,7 +38,7 @@
             <div class="navbar-end">
 
                 <div class="navbar-item" v-if="!user.isLogged()">
-                    <router-link class="button has-background-link has-text-light"
+                    <router-link class="button is-primary"
                                  :to="{ name: 'auth' }">
                         sign in
                     </router-link>
@@ -48,7 +48,7 @@
                     <div  class="navbar-link">
                         <img class="user-avatar" :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'">
                     </div>
-                    <div class="navbar-dropdown is-right is-boxed">
+                    <div class="navbar-dropdown is-right is-boxed is-size-5">
                         <router-link class="navbar-item" :to="{ name: 'profile', params:{id:user.data.id} }">
                             <base-icon iconClass="fa fa-user"  class="is-medium"/>
                             my profile
@@ -86,7 +86,7 @@
                     <a class="navbar-link">
                         {{user.data.lang}}
                     </a>
-                    <div class="navbar-dropdown is-right is-boxed">
+                    <div class="navbar-dropdown is-right is-boxed is-size-5">
                         <a class="navbar-item" v-for="lang in langs" :key="lang" @click="user.setLang(lang)">
                             {{lang}}
                         </a>
@@ -141,6 +141,7 @@
         },
         methods:{
             search(){
+
                 if(this.searchText.length >=3){
                     this.$router.push({
                         name: 'search',
@@ -156,6 +157,11 @@
     }
 </script>
 
-<style scoped>
-//    .navbar-dropdown.dropdown-right { left: calc(-100% + 4px); }
+<style scoped lang="scss">
+
+@import '@/assets/sass/main.scss';
+
+.navbar{
+        box-shadow:$card-shadow;
+}
 </style>

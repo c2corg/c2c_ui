@@ -28,14 +28,14 @@ showdown.extension('c2c_folies', function () {
 
     function image(imgId, options, legend){
         var size = "MI"
-        var css = []
+        var css = ['markdown-image']
 
         if(options){
             options = options.split(" ")
 
             options.forEach(function(option){
                 if(option){
-                    css.push('image-' + option.replace("_","-"))
+                    css.push('markdown-image-' + option.replace("_","-"))
                     size = option=="big" ? "BI" : size
                  }
             })
@@ -48,7 +48,7 @@ showdown.extension('c2c_folies', function () {
         return '<figure' + css + '>' +
             '<img src="https://api.camptocamp.org/images/proxy/' + imgId + '?size=' + size + '" ' +
             'href="photoswipe.showGallery(' + imgId + ')"' +
-            '/><!--' + legend +  '--></figure>'
+            '/><figcaption>' + legend +  '</figcaption></figure>'
 
     }
 
@@ -79,6 +79,15 @@ showdown.extension('c2c_folies', function () {
         }
     };
 
+
+    var numberStuckToUnit = {
+        type: 'lang',
+        regex: /\b(\d+ \w)/g,
+        replace: function (match, text) {
+            return text.replace(/ /g, "&nbsp;")
+        }
+    };
+
     // your new best friends :
     // https://regex101.com/
     // http://localhost:3000/markdown
@@ -92,7 +101,7 @@ showdown.extension('c2c_folies', function () {
         this.cellCount = 1
 
         this.compute = function(){
-            var items = ['\n<table>']
+            var items = ['\n<table class="markdown-ltag">']
 
             this.rows.forEach(function(row){
 
@@ -236,7 +245,7 @@ showdown.extension('c2c_folies', function () {
         }
     };
 
-    return [c2c_title, video, img, imgLegend, c2cItem, toc, ltag];
+    return [c2c_title, video, img, imgLegend, c2cItem, toc, ltag, numberStuckToUnit];
 })
 
 

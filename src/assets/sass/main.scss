@@ -1,155 +1,39 @@
+
+
 //https://bulma.io/documentation/customize/variables/
 
+$body-size : 14px !default;
 
-$size-1	: 2.5rem;   // 3rem;
-$size-2	: 2.1rem;   // 2.5rem;
-$size-3	: 1.75rem;   // 2rem;
+$size-1	: 2.2rem;   // 3rem;
+$size-2	: 1.9rem;   // 2.5rem;
+$size-3	: 1.6rem;   // 2rem;
 $size-4	: 1.3rem;   // 1.5rem;
-$size-5	: 1.1rem;   // 1.25rem;
-$size-6	: 0.85rem;  // 1rem;
-$size-7	: 0.6rem;   // 0.75rem;
+$size-5	: 1.15rem;   // 1.25rem;
+// $size-6 : 1 rem, untouched
+$size-7 : 0.8rem; //0.75
 
+//c2c colors
+$color-base-c2c: #ffaa45;
+$color-base-darker: #B26F1E;
+$color-base-lighter: #FFAA45;
+$color-complementary: #0D7FB2;
+$color-complementary-lighter: #45C5FF;
 
-$primary : #ffaa45;
+//customize bulma colors
+$primary: $color-complementary; //$turquoise
+//$link: $blue
+//$info: $cyan
+//$success: $green
+//$warning: $yellow
+//$danger: $red
+//$dark: $grey-darker
+//$text: $grey-dark
 
+$body-background-color : hsl(0, 0%, 95%);
+
+// paddings and margins
 $section-padding : 1.5rem 1.5rem;
 
 @import '~bulma';
-@import '~@fortawesome/fontawesome-free/css/all.css';
-
-/*
-body{
-    font-size:$size-6;
-}
-*/
-
-$font_path: '~@/assets/fonts';
-
-@font-face {
-  font-family: 'c2c-activities';
-  src:  url($font_path +'/activities/activities.eot?h2f3q2');
-  src:  url($font_path +'/activities/activities.eot?h2f3q2#iefix') format('embedded-opentype'),
-    url($font_path +'/activities/activities.ttf?h2f3q2') format('truetype'),
-    url($font_path +'/activities/activities.woff?h2f3q2') format('woff'),
-    url($font_path +'/activities/activities.svg?h2f3q2#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-
-@font-face {
-  font-family: 'c2c-quality';
-  src:  url($font_path + '/quality/quality.eot?afck5w');
-  src:  url($font_path + '/quality/quality.eot?afck5w#iefix') format('embedded-opentype'),
-    url($font_path + '/quality/quality.ttf?afck5w') format('truetype'),
-    url($font_path + '/quality/quality.woff?afck5w') format('woff'),
-    url($font_path + '/quality/quality.svg?afck5w#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-
-[class^="icon-activity-"], [class*=" icon-activity-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'c2c-activities' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-activity-slacklining:before {
-  content: "\e907";
-}
-.icon-activity-mountain_climbing:before {
-  content: "\e913";
-}
-.icon-activity-hiking:before {
-  content: "\1f304";
-}
-.icon-activity-ice_climbing:before {
-  content: "\1f31b";
-}
-.icon-activity-paragliding:before {
-  content: "\1f332";
-}
-.icon-activity-rock_climbing:before {
-  content: "\1f36a";
-}
-.icon-activity-skitouring:before {
-  content: "\1f37d";
-}
-.icon-activity-snowshoeing:before {
-  content: "\1f388";
-}
-.icon-activity-snow_ice_mixed:before {
-  content: "\1f3fb";
-}
-.icon-activity-mountain_biking:before {
-  content: "\1f433";
-}
-.icon-activity-via_ferrata:before {
-  content: "\1f468";
-}
-
-
-.icon-condition-excellent{
-    color:green;
-}
-
-.icon-condition-good{
-    color:#9ACD32;
-}
-
-.icon-condition-average{
-    color:yellow;
-}
-
-.icon-condition-poor{
-    color:red;
-}
-
-.icon-condition-awful{
-    color:#8B0000;
-}
-
-
-[class^="icon-quality-"], [class*=" icon-quality-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'c2c-quality' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-quality-bomb:before {
-  content: "\e905";
-}
-.icon-quality-empty:before {
-  content: "\e900";
-}
-.icon-quality-draft:before {
-  content: "\e901";
-}
-.icon-quality-medium:before {
-  content: "\e902";
-}
-.icon-quality-fine:before {
-  content: "\e903";
-}
-.icon-quality-great:before {
-  content: "\e904";
-}
+@import './fonts.scss';
+@import './helpers.scss';

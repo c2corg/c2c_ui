@@ -4,7 +4,7 @@
 
         <loading-notification :loaded="document!=null" :error="error"/>
 
-        <div class="content" v-if="document">
+        <div v-if="document">
 
             <div class="notification is-warning" v-if="isVersionView">
                 This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
@@ -43,7 +43,7 @@
                 <contributor-link :contributor="version"/> : <em>{{version.comment}}</em>
             </div>
 
-            <h1>
+            <content-box class="title is-1">
                 <icon-document :type="type"/>
                 <document-title :document="document"/>
                 <span class="is-pulled-right">
@@ -54,7 +54,7 @@
                         <icon-edit class="is-medium"/>
                     </edit-link>
                 </span>
-            </h1>
+            </content-box>
 
             <component :is="type + '-content'"
                 :document="document" :locale="locale"

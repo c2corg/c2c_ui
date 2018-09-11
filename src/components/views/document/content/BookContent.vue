@@ -2,31 +2,37 @@
 
     <div class="columns">
 
-        <div  class="column is-9">
-            <summary>
-                <markdown :content="locale.summary"></markdown>
-            </summary>
-            <markdown :content="locale.description"></markdown>
-
-            <document-comments :document="document" :locale="locale" />
-        </div>
 
         <div class="column is-3">
-            <label-value label="activities">
-                <activities :activities="document.activities"/>
-            </label-value>
+            <content-box>
+                <label-value label="activities">
+                    <activities :activities="document.activities"/>
+                </label-value>
 
-            <field-view :document="document" :field="fields.author"/>
+                <field-view :document="document" :field="fields.author"/>
 
-            <field-view :document="document" :field="fields.book_types"/>
+                <field-view :document="document" :field="fields.book_types"/>
 
-            <field-view :document="document" label="editor" :field="fields.editor"/>
-            <field-view :document="document" label="ISBN" :field="fields.isbn"/>
-            <field-view :document="document" label="number of pages" :field="fields.nb_pages"/>
-            <field-view :document="document" label="publication date" :field="fields.publication_date"/>
+                <field-view :document="document" :field="fields.editor"/>
+                <field-view :document="document" :field="fields.isbn"/>
+                <field-view :document="document" :field="fields.nb_pages"/>
+                <field-view :document="document" :field="fields.publication_date"/>
+                <field-view :document="document" :field="fields.url"/>
+            </content-box>
 
-            <document-license :document="document" cc="by-sa"/>
+            <license-box cc="by-sa"/>
 
+        </div>
+
+        <div  class="column is-9">
+            <content-box>
+                <summary>
+                    <markdown :content="locale.summary"></markdown>
+                </summary>
+                <markdown :content="locale.description"></markdown>
+            </content-box>
+
+            <comments-box :document="document" :locale="locale" />
         </div>
     </div>
 
@@ -36,8 +42,10 @@
     import Markdown from './utils/Markdown'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
+    import LicenseBox from './utils/LicenseBox'
 
-    import DocumentComments from './utils/DocumentComments'
+
+    import CommentsBox from './utils/CommentsBox'
 
     export default {
 
@@ -45,7 +53,8 @@
             Markdown,
             LabelValue,
             FieldView,
-            DocumentComments,
+            CommentsBox,
+            LicenseBox,
         },
 
         props:["document", "locale", "fields"],

@@ -1,52 +1,55 @@
 <template>
-    <div class="section content">
-        <div class="columns">
-            <div class="column home-images">
-                <h2>Images</h2>
-                <loading-notification :loaded="images!=null" :error="imagesError" />
-                <gallery v-if="images!=null" :images="images.documents" />
-            </div>
-        </div>
+    <div class="section">
+        <content-box>
+            <h2 class="title is-2">Images</h2>
+            <loading-notification :loaded="images!=null" :error="imagesError" />
+            <gallery v-if="images!=null" :images="images.documents" />
+        </content-box>
+
         <div class="columns">
             <div class="column is-7">
-                <div>
-                    <h2>Outings</h2>
+                <content-box>
+                    <h2 class="title is-2">Outings</h2>
                     <loading-notification :loaded="outings!=null" :error="outingsError"/>
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents" :key="outing.document_id">
                             <dashboard-outing-link :outing="outing"/>
                         </div>
                     </div>
-                </div>
+                </content-box>
             </div>
-            <div class="column home-right">
-                <h2>Forum</h2>
-                <div v-if="latest_topics && latest_topics.topic_list">
-                    <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" :key="topic.id"
-                         v-if="topic.category_id != 29">
 
-                        <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
-                           target="_blank">
+            <div class="column">
+                <content-box>
+                    <h2 class="title is-2">Forum</h2>
+                    <div v-if="latest_topics && latest_topics.topic_list">
+                        <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" :key="topic.id"
+                             v-if="topic.category_id != 29">
 
-                           <img height="16" width="16"
-                                :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')">
+                            <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
+                               target="_blank">
 
-
-                            {{topic.title}}
-                        </a>
+                               <img height="16" width="16"
+                                    :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')">
 
 
+                                {{topic.title}}
+                            </a>
+
+
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <h2>Routes</h2>
+                </content-box>
+
+                <content-box>
+                    <h2 class="title is-2 box-header">Routes</h2>
                     <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
                             <pretty-route-link :route="route" showArea="true"/>
                         </div>
                     </div>
-                </div>
+                </content-box>
             </div>
         </div>
     </div>
@@ -54,7 +57,7 @@
 
 <script>
 
-    import DashboardOutingLink from '@/components/views/dashboard/DashboardOutingLink'
+    import DashboardOutingLink from './DashboardOutingLink'
 
     import c2c from '@/js/c2c.js'
     import forum from '@/js/forum.js'
@@ -109,3 +112,11 @@
     }
 
 </script>
+
+<style scoped>
+h2{
+    padding-bottom:0.7rem !important;
+    margin-bottom:0.7rem !important;
+    border-bottom:1px solid #DDD;
+}
+</style>

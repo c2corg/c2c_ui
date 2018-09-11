@@ -6,6 +6,11 @@
         <span v-if="route.rock_free_rating" >
             {{route.rock_free_rating}}</span><span v-if="route.rock_required_rating" >&gt;{{route.rock_required_rating}}
         </span>
+
+        <span v-if="route.aid_rating" >
+            {{route.aid_rating}}
+        </span>
+
         <span v-if="route.engagement_rating" >
             {{route.engagement_rating}}
         </span>

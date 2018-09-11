@@ -1,7 +1,7 @@
 <template>
 
     <span v-if="text">
-        <icon-area/>
+        <icon-area />
         {{text}}
     </span>
 

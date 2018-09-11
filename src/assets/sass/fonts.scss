@@ -1,0 +1,27 @@
+
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+$font_path: '~@/assets/fonts';
+
+@font-face {
+  font-family: 'c2c-activities';
+  src:  url($font_path +'/activities/activities.eot?h2f3q2');
+  src:  url($font_path +'/activities/activities.eot?h2f3q2#iefix') format('embedded-opentype'),
+    url($font_path +'/activities/activities.ttf?h2f3q2') format('truetype'),
+    url($font_path +'/activities/activities.woff?h2f3q2') format('woff'),
+    url($font_path +'/activities/activities.svg?h2f3q2#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'c2c-quality';
+  src:  url($font_path + '/quality/quality.eot?afck5w');
+  src:  url($font_path + '/quality/quality.eot?afck5w#iefix') format('embedded-opentype'),
+    url($font_path + '/quality/quality.ttf?afck5w') format('truetype'),
+    url($font_path + '/quality/quality.woff?afck5w') format('woff'),
+    url($font_path + '/quality/quality.svg?afck5w#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

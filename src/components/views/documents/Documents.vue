@@ -1,74 +1,58 @@
 <template>
-    <div class="documents-view">
+    <div class="section documents-view">
+        <div class="level is-mobile header-section">
+            <div class="level-left">
+                <span class="level-item">
+                    <span class="title is-1 is-first-letter-uppercase">{{title}}</span>
+                </span>
+            </div>
+            <div class="level-right">
+                <span class="level-item">
+                    <add-link :type="type" class="button is-rounded is-primary">
+                        Add a {{type}}
+                    </add-link>
+                </span>
+            </div>
+        </div>
 
-        <div class="header-section">
-            <div class="level is-mobile">
-                <div class="level-left">
-                    <div class="level-item title is-1">
-                        <span class="document-type-label">{{title}}</span>
-                    </div>
-
-                    <div class="level-item">
-                        <add-link :type="type">
-                            <base-icon icon-class="fas fa-plus-circle"/>
-                        </add-link>
-                    </div>
-
+        <div class="level is-mobile filter-section">
+            <div class="level-left">
+                <div class="level-item">
+                    <query-items/>
                 </div>
-
-                <div class="level-right is-narrow">
-                    <div class="level-item">
-                        <span>
-                            <span class="icon" v-if="hasMap">
-                                <i class="fas fa-list"
-                                   :class="{'has-text-primary':showResults}"
-                                   @click="showResults=!showResults" />
-                           </span>
-
-                            <span class="icon" v-if="hasMap">
-                                <i class="fas fa-map-marked-alt"
-                                :class="{'has-text-primary':showMap}"
-                                @click="showMap=!showMap" />
-                            </span>
-
-                            <span v-if="documents" @click="loadElements()">
-                                <span v-if="offset!==0">
-                                    {{offset + 1}} -
-                                </span>
-                                {{offset + documents.documents.length}} / {{documents.total}}
-                            </span>
-
-                        </span>
-                    </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <span class="icon is-size-3" v-if="hasMap">
+                        <i class="fas fa-map-marked-alt"
+                        :class="{'has-text-primary':showMap}"
+                        @click="showMap=!showMap" />
+                    </span>
                 </div>
             </div>
         </div>
 
-        <div class="filter-section">
-            <query-items/>
-        </div>
+        <div class="columns">
+            <div class="column cards-container">
 
-        <div class="result-section">
-            <div class="columns is-gapless">
-                <div class="column cards-container" :class="{'is-hidden': !showResults}">
+                <loading-notification :loaded="documents!=null" :error="error"/>
 
-                    <loading-notification :loaded="documents!=null" :error="error"/>
-
-                    <div v-if="documents" class="is-flex">
-                            <document-card v-for="(document, index) in documents.documents" :key="index"
-                                          :document="document"/>
+                <div v-if="documents" class="columns is-multiline cards-list">
+                    <div v-for="(document, index) in documents.documents" :key="index" class="column is-4">
+                        <document-card :document="document"/>
                     </div>
                 </div>
 
-                <div class="column map-container"
-                     :class="{'is-5': showResults, 'is-hidden': !showMap}"
-                     v-if="hasMap">
-                    <map-view :documents="documents" style="width: 100%; height: 100%">
-                    </map-view>
-                </div>
+                <page-selector :documents="documents" v-if="documents!=null"/>
+            </div>
+
+            <div class="column is-4 map-container"
+                 :class="{'is-hidden': !showMap}"
+                 v-if="hasMap">
+                <map-view :documents="documents" style="width: 100%; height: 100%">
+                </map-view>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -80,11 +64,12 @@
 
     import DocumentCard from '@/components/cards/DocumentCard'
     import QueryItems from './QueryItems'
-
+    import PageSelector from './PageSelector'
 
     export default {
         components: {
             QueryItems,
+            PageSelector,
             DocumentCard,
         },
 
@@ -93,7 +78,6 @@
                 documents: null,
                 error: null,
                 showMap: true,
-                showResults: true,
             }
         },
 
@@ -107,14 +91,10 @@
             hasMap(){
                 return constants.objectDefinitions[this.type].geoLocalized===true
             },
-            offset(){
-                return parseInt(this.$route.query.offset || 0)
-            },
         },
 
         watch:{
             $route(){
-                this.documents=null
                 this.loadElements();
             }
         },
@@ -128,25 +108,12 @@
             loadElements : function(){
                 var offset = this.offset
 
-                if(this.documents){
-                    offset += this.documents.documents.length
-                }
-
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
                 c2c[this.$route.name].get(query)
-                .then(response => {
-
-                    if(this.documents){
-                        for(let document of response.data.documents){
-                            this.documents.documents.push(document)
-                        }
-                    } else {
-                        this.documents=response.data;
-                    }
-                })
+                .then(response => { this.documents=response.data})
                 .catch(utils.getApiErrorHandler(this));
-            }
+            },
         }
     }
 </script>
@@ -156,55 +123,58 @@
 @import '@/assets/sass/main.scss';
 
 $bulma-section-padding : 1rem;
-$header-height : 78px;
-$filter-padding : 1em;
-$filter-height : 60px;
-$result-height : calc(100vh); // - #{$navbar-height} - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
-$section-border-top : 1px solid lightgrey;
-$section-padding:1.5em;
+$header-margin-bottom : 1rem;
+$header-height : $header-margin-bottom + $size-1;
+$filter-padding : 1rem;
+$filter-height : 100px;
+$result-height : calc(100vh - #{$navbar-height} - #{$header-height} - 2*#{$filter-padding} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+$section-border-top : 0; //2px groove  lightgrey;
+$section-padding:1.5rem;
 
 .documents-view{
 }
 
+
 .header-section{
-    margin-bottom:1em;
-    margin-bottom:1em;
-    padding:0 $section-padding;
+//    margin-bottom:$header-margin-bottom;
+//    padding:0 $section-padding;
 }
 
 
 .filter-section{
     border-top:$section-border-top;
-    padding: $filter-padding $section-padding;
-//    background: pink;
-//    height:$filter-height;
 }
 
 .result-section{
-//    background: orange;
-    border-top:$section-border-top;
-    border-bottom:$section-border-top;
-    max-height: $result-height;
-    padding:0 $section-padding;
+    height: $result-height;
 }
 
 .map-container{
-    max-height: $result-height;
-    min-height: 400px;
+    height: $result-height;
     position:relative;
 }
 
 .cards-container{
     max-height: $result-height;
     overflow: auto;
+    padding-right:0;
 }
+
+.cards-list{
+    margin:0;
+}
+
+.cards-list > div{
+    padding:0;
+    padding-right:0.5rem;
+    padding-bottom:0.5rem;
+    margin-bottom: 1rem;
+}
+
 
 .cards-container > div{
-    flex-flow:wrap row;
+//    flex-flow:wrap row;
 }
 
-.document-type-label:first-letter{
-    text-transform: uppercase;
-}
 
 </style>
