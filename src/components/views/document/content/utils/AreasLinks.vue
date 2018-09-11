@@ -2,8 +2,7 @@
     <span v-if="areas.length">
         <icon-area/>
         <span  v-for="area of areas" :key="area.document_id" class="area-link">
-            <document-link :document="area" />
-            </document-link>
+            <document-link :document="area"></document-link>
         </span>
     </span>
 </template>
