@@ -1,3 +1,3 @@
 <template>
-    <base-icon iconClass="fas fa-edit" />
+    <fa-icon icon="edit" />
 </template>

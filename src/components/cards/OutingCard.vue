@@ -11,24 +11,24 @@
             </span>
 
             <span class="is-nowrap is-pulled-right">
-                <base-icon class="has-text-primary" iconClass="fas fa-pen"/>
+                <fa-icon class="has-text-primary" icon="pen"/>
                 {{document.author.name}}
             </span>
         </div>
 
         <div slot="row2" class="level">
             <span>
-                <base-icon  class="has-text-primary" iconClass="fas fa-tachometer-alt"/>
+                <fa-icon  class="has-text-primary" icon="tachometer-alt"/>
                 <outing-rating :outing="document"/>
             </span>
 
             <span v-if="document.elevation_max">
-                <base-icon iconClass="fas fa-bomb"/>
+                <fa-icon icon="bomb"/>
                 {{document.elevation_max}}&nbsp;m
             </span>
 
             <span v-if="document.height_diff_up">
-                <base-icon iconClass="fas fa-bomb"/>
+                <fa-icon icon="bomb"/>
                 {{document.height_diff_up}}&nbsp;m
             </span>
         </div>
@@ -37,7 +37,7 @@
             <activities class="has-text-primary" :activities="document.activities"/>
 
             <span class="has-text-primary">
-                <icon-geometry-detail v-if="document.geometry.has_geom_detail" />                
+                <icon-geometry-detail v-if="document.geometry.has_geom_detail" />
                 <icon-document type="image" v-if="document.img_count != 0"/>
             </span>
 

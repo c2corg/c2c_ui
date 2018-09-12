@@ -2,33 +2,38 @@
     <div v-if="!document.not_authorized">
 
         <div class="columns">
-            <div class="column is-9">
-                <summary>
-                    <markdown :content="locale.summary"></markdown>
-                </summary>
 
-                <markdown :content="locale.description"></markdown>
+            <div class="column is-3">
+                <content-box>
+                    <activities :activities="document.activities"/>
+
+                    <label-value label="forum">
+                        @{{document.forum_username}}
+                    </label-value>
+
+                    <field-view :document="document" :field="fields.categories"/>
+
+                    <div>
+                        <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
+                            contributions
+                        </router-link>
+                    </div>
+                </content-box>
+
+                <map-box :document="document" />
+
+                <license-box :document="document" cc="by-nc-nd"/>
 
             </div>
 
-            <div class="column is-3">
-                <activities :activities="document.activities"/>
+            <div class="column">
+                <content-box>
+                    <summary>
+                        <markdown :content="locale.summary"></markdown>
+                    </summary>
 
-                <label-value label="forum">
-                    @{{document.forum_username}}
-                </label-value>
-
-                <field-view :document="document" :field="fields.categories"/>
-
-                <div>
-                    <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
-                        contributions
-                    </router-link>
-                </div>
-
-                <map-view :document="document" />
-
-                <document-license :document="document" cc="by-nc-nd"/>
+                    <markdown :content="locale.description"></markdown>
+                </content-box>
 
             </div>
         </div>
@@ -42,6 +47,8 @@
     import Markdown from './utils/Markdown'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
+    import LicenseBox from './utils/LicenseBox'
+    import MapBox from './utils/MapBox'
 
     export default {
 
@@ -49,6 +56,8 @@
             Markdown,
             LabelValue,
             FieldView,
+            LicenseBox,
+            MapBox,
         },
 
         props:["document", "locale", "fields"],

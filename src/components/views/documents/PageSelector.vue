@@ -3,12 +3,12 @@
         <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
             <router-link :disabled="currentPage<=1" class="pagination-previous"
                 :to="pageQuery(currentPage-1)">
-                <base-icon iconClass="fas fa-chevron-left"/>
+                <fa-icon icon="chevron-left"/>
             </router-link>
 
             <router-link  :disabled="currentPage>=pageCount" class="pagination-next"
                 :to="pageQuery(currentPage+1)">
-                <base-icon iconClass="fas fa-chevron-right"/>
+                <fa-icon icon="chevron-right"/>
             </router-link >
 
           <ul class="pagination-list">

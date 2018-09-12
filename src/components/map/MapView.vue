@@ -41,9 +41,8 @@
         //// Vue.component('GmapMarker', GmapMarker)
         //// then disable the following:
         // installComponents: true,
-    })
+    }) 
 
-//    console.log(VueGoogleMaps, l)
 
     export default {
 

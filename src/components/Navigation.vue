@@ -28,7 +28,7 @@
                     <div class="control has-icons-left">
                         <input class="input is-primary is-size-5" placeholder="Search" v-model="searchText" @input="search()">
                         <span class="icon is-left is-size-5">
-                            <i class="fas fa-search"/>
+                            <fa-icon icon="search"/>
                         </span>
                     </div>
                 </div>
@@ -50,33 +50,33 @@
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
                         <router-link class="navbar-item" :to="{ name: 'profile', params:{id:user.data.id} }">
-                            <base-icon iconClass="fa fa-user"  class="is-medium"/>
+                            <fa-icon icon="user"/>
                             my profile
                         </router-link>
                         <router-link class="navbar-item" :to="{ name: 'account' }">
-                            <base-icon iconClass="fas fa-check-circle"  class="is-medium"/>
+                            <fa-icon icon="check-circle"/>
                             my account
                         </router-link>
                         <router-link class="navbar-item" :to="{ name: 'preferences' }">
-                            <base-icon iconClass="fas fa-cogs"  class="is-medium"/>
+                            <fa-icon icon="cogs"/>
                             my preferences
                         </router-link>
 
                         <router-link class="navbar-item" :to="{ name: 'outings', query:{u:user.data.id} }">
-                            <icon-outing   class="is-medium"/>
+                            <icon-outing />
                             my outings
                         </router-link>
                         <router-link class="navbar-item" :to="{ name: 'following' }">
-                            <base-icon iconClass="fas fa-heart"  class="is-medium"/>
+                            <fa-icon icon="heart"/>
                             my followed users
                         </router-link>
                         <router-link class="navbar-item" :to="{ name: 'mailinglists' }">
-                            <base-icon iconClass="fas fa-at"  class="is-medium"/>
+                            <fa-icon icon="at"/>
                             my mailings
                         </router-link>
                         <hr class="navbar-divider">
                         <a class="navbar-item" @click="signout">
-                            <base-icon iconClass="fas fa-sign-out-alt"  class="is-medium"/>
+                            <fa-icon icon="sign-out-alt"/>
                             sign out
                         </a>
                     </div>

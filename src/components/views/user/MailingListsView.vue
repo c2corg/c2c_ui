@@ -1,7 +1,7 @@
 <template>
     <div class="section content" v-if="mailinglists">
         <h1>
-            <base-icon class="is-large" iconClass="fas fa-at"/>
+            <fa-icon icon="at"/>
             <span>My mailing lists</span>
         </h1>
 

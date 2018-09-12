@@ -1,3 +1,3 @@
 <template>
-    <base-icon icon-class="fas fa-users" />
+    <fa-icon icon="users" />
 </template>

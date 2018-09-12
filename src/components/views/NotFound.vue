@@ -14,7 +14,7 @@
 
         <div class="is-flex">
             <router-link :to="{name:'home'}">
-                <base-icon icon-class="fas fa-home"></base-icon>
+                <fa-icon icon="home"/>
                 <div>Home</div>
             </router-link>
 

@@ -1,7 +1,9 @@
 <template>
     <div class="columns">
         <div class="column is-3">
-            <activities :activities="document.activities"/>
+            <content-box>
+                <activities :activities="document.activities"/>
+            </content-box>
             <license-box :cc="document.article_type=='collab' ? 'by-sa' : 'by-nc-nd'"></license-box>
         </div>
         <div class="column is-9">

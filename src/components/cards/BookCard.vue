@@ -9,7 +9,7 @@
         </div>
 
         <div slot="row2">
-            <i class="fas fa-pen"/>
+            <fa-icon icon="pen"/>
             {{document.author}}
         </div>
 

@@ -12,17 +12,17 @@
             <div>
 
                 <add-link type="xreport" class="button is-primary">
-                    <base-icon iconClass="fas fa-plus"/>
+                    <fa-icon icon="plus"/>
                     <span translate>Create a new report</span>
                 </add-link>
 
                 <router-link to="xreports" class="button is-link">
-                    <base-icon iconClass="fas fa-list"/>
+                    <fa-icon icon="list"/>
                     <span translate>View xreports</span>
                 </router-link>
 
                 <router-link :to="{name:'article', params:{id:697210}}"  class="button is-info">
-                    <base-icon iconClass="fas fa-info"/>
+                    <fa-icon icon="info"/>
                     <span translate>Know more about SERAC</span>
                 </router-link>
             </div>

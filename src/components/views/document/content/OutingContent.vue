@@ -1,7 +1,8 @@
 <template>
     <div>
         <!--  CONTENT  -->
-        <content-box v-if="document.associations && document.associations.images.length" class="is-paddingless">
+
+        <content-box v-if="document.associations && document.associations.images.length" >
             <gallery :images="document.associations.images" />
         </content-box>
 

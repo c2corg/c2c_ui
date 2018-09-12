@@ -42,12 +42,12 @@
                 </a>
 
                 <router-link to="dashboard">
-                    <div><base-icon iconClass="fas fa-columns"/></div>
+                    <div><fa-icon icon="columns"/></div>
                     <span>Dashboard</span>
                 </router-link>
 
                 <router-link to="feed">
-                    <div><base-icon iconClass="fas fa-users"/></div>
+                    <div><fa-icon icon="users"/></div>
                     <span>Social network</span>
                 </router-link>
 

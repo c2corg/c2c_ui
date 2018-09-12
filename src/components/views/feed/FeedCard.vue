@@ -26,17 +26,17 @@
 
 
                 <span v-if="item.document.elevation_max">
-                    <base-icon iconClass="fas fa-bomb"/>
+                    <fa-icon icon="bomb"/>
                     {{item.document.elevation_max}} m
                 </span>
 
                 <span v-if="item.document.height_diff_up">
-                    <base-icon iconClass="fas fa-bomb"/>
+                    <fa-icon icon="bomb"/>
                     {{item.document.height_diff_up}} m
                 </span>
 
                 <span v-if="item.document.height_diff_difficulties">
-                    <base-icon iconClass="fas fa-arrows-alt-v"/>
+                    <fa-icon icon="arrows-alt-v"/>
                     {{item.document.height_diff_difficulties}} m
                 </span>
 

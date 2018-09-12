@@ -8,7 +8,7 @@
 
         <div slot="row2" class="level">
             <span class="is-ellipsed" >
-                <base-icon iconClass="fas fa-tachometer-alt" class="has-text-primary"/>
+                <fa-icon  class="has-text-primary" icon="tachometer-alt"/>
                 <route-rating :route="document"/>
             </span>
 
@@ -16,18 +16,18 @@
 
             &nbsp;
             <span v-if="document.height_diff_difficulties" class="is-nowrap">
-                <base-icon iconClass="fas fa-arrows-alt-v" class="has-text-primary"/>
+                <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
                 {{document.height_diff_difficulties}}&nbsp;m
             </span>
         </div>
 
         <div slot="row3" class="level">
-            <activities class="has-text-primary is-size-4" :activities="document.activities"/>
+            <activities class="has-text-primary is-size-4 is-ellipsed" :activities="document.activities"/>
 
             <icon-geometry-detail v-if="document.geometry.has_geom_detail"/>
 
             <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
-                <base-icon iconClass="fas fa-compass" class="has-text-primary"/>
+                <fa-icon icon="compass" class="has-text-primary"/>
                 {{document.orientations.join(", ")}}
             </span>
 

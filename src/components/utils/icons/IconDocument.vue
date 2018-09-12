@@ -1,21 +1,21 @@
 <template>
-    <base-icon :iconClass="getIconClass(type)" />
+    <fa-icon :icon="getIconClass(type)" />
 </template>
 
 <script>
     import constants from '@/js/constants.js'
 
     var iconClass = {
-        route:"fas fa-route",
-        profile:"fas fa-user",
-        article:"fas fa-newspaper",
-        xreport:"fas fa-flag-checkered",
-        outing:"far fa-sun",
-        area:"fas fa-globe-americas",
-        waypoint:"fas fa-map-pin",
-        image:"fas fa-image",
-        book:"fas fa-atlas",
-        map:"fas fa-map",
+        route:"route",
+        profile:"user",
+        article:"newspaper",
+        xreport:"flag-checkered",
+        outing:["far", "sun"],
+        area:"globe-americas",
+        waypoint:"map-pin",
+        image:"image",
+        book:"atlas",
+        map:"map",
     }
 
     export default {

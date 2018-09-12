@@ -2,11 +2,11 @@
     <div class="section content">
         <h1>change account parameters</h1>
         <form>
-            <form-field label="current password" type="password" :data="password" icon="fas fa-key"/>
-            <form-field label="new password" type="password" :data="new_password" icon="fas fa-key"/>
-            <form-field label="email" type="text" :data="email" icon="fas fa-at"/>
-            <form-field label="name" type="text" :data="name" icon="fas fa-user-check"/>
-            <form-field label="forum username" type="text" :data="forum_username" icon="fas fa-comments"/>
+            <form-field label="current password" type="password" :data="password" icon="key"/>
+            <form-field label="new password" type="password" :data="new_password" icon="key"/>
+            <form-field label="email" type="text" :data="email" icon="at"/>
+            <form-field label="name" type="text" :data="name" icon="user-check"/>
+            <form-field label="forum username" type="text" :data="forum_username" icon="comments"/>
 
             <div class="field is-grouped">
                 <label class="checkbox">

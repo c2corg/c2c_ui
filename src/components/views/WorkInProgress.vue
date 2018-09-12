@@ -1,11 +1,8 @@
 <template>
     <div class="work-in-progress-view">
-        <i class="fas fa-wrench"></i>
+        <fa-icon class="wrench"/>
     </div>
 </template>
-
-<script>
-</script>
 
 <style scoped>
     .work-in-progress-view div{

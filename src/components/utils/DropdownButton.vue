@@ -8,7 +8,7 @@
                 <slot name="button"></slot>
 
                 <span class="icon is-small">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    <fa-icon icon="angle-down" aria-hidden="true"/>
                 </span>
             </button>
         </div>

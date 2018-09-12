@@ -10,7 +10,7 @@
             <card-elevation-item :elevation="document.elevation"/>
 
             <span v-if="document.slackline_types">
-                <i class="fas fa-bomb"/>
+                <fa-icon icon="bomb"/>
                 {{document.slackline_types}}
             </span>
 

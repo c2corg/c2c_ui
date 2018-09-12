@@ -1,3 +1,3 @@
 <template>
-    <base-icon iconClass="fas fa-comments" />
+    <fa-icon icon="comments" />
 </template>

@@ -10,7 +10,7 @@
         </router-link>
         <span  v-if="outing.img_count!=0">
             &hairsp;&bull;&hairsp;
-            <i class="fa fa-camera"></i>
+            <fa-icon icon="camera"/>
         </span>
     </div>
 </template>

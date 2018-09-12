@@ -1,6 +1,5 @@
 <template>
-    <base-icon v-if="this.condition" iconClass="fas fa-circle" :class="'icon-condition-' + this.condition" />
-    <base-icon v-else iconClass="far fa-circle" />
+    <fa-icon v-if="this.condition" icon="circle" :class="'icon-condition-' + this.condition" />
 </template>
 
 <script>

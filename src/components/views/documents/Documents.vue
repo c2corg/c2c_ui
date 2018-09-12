@@ -24,7 +24,7 @@
             <div class="level-right">
                 <div class="level-item">
                     <span class="icon is-size-3" v-if="hasMap">
-                        <i class="fas fa-map-marked-alt"
+                        <fa-icon icon="map-marked-alt"
                         :class="{'has-text-primary':showMap}"
                         @click="showMap=!showMap" />
                     </span>
@@ -33,12 +33,14 @@
         </div>
 
         <div class="columns">
-            <div class="column cards-container">
+            <div class="column cards-container"
+                 :class="{'is-12': !showMap, 'is-8': showMap}">
 
                 <loading-notification :loaded="documents!=null" :error="error"/>
 
                 <div v-if="documents" class="columns is-multiline cards-list">
-                    <div v-for="(document, index) in documents.documents" :key="index" class="column is-4">
+                    <div v-for="(document, index) in documents.documents" :key="index" class="column card-container"
+                        :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}">
                         <document-card :document="document"/>
                     </div>
                 </div>
@@ -46,8 +48,7 @@
                 <page-selector :documents="documents" v-if="documents!=null"/>
             </div>
 
-            <div class="column is-4 map-container"
-                 :class="{'is-hidden': !showMap}"
+            <div class="column map-container"
                  v-if="hasMap">
                 <map-view :documents="documents" style="width: 100%; height: 100%">
                 </map-view>
@@ -75,7 +76,7 @@
             return {
                 documents: null,
                 error: null,
-                showMap: true,
+                showMap: null,
             }
         },
 
@@ -98,6 +99,7 @@
         },
 
         created() {
+            this.showMap = this.hasMap;
             this.loadElements();
         },
 
@@ -149,6 +151,11 @@ $cards-gap:0.25rem;
 .cards-container{
     max-height: $result-height;
     overflow: auto;
+    transition:0.3s;
+}
+
+.card-container{
+    transition:0.1s;
 }
 
 .cards-list{

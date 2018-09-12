@@ -9,7 +9,7 @@
 
         <div slot="row2" class="level">
             <span v-if="document.elevation">
-                <i class="fas fa-bomb"/>
+                <fa-icon icon="bomb"/>
                 {{document.elevation}}&nbsp;m
             </span>
             <span>

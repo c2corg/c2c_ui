@@ -42,13 +42,14 @@ showdown.extension('c2c_folies', function () {
         }
 
         css = css.length ? " class='" + css.join(" ") + "'" : ""
+        var caption = legend ? '<figcaption>' + legend +  '</figcaption>' : ''
 
         // todo : include legend
 
         return '<figure' + css + '>' +
             '<img src="https://api.camptocamp.org/images/proxy/' + imgId + '?size=' + size + '" ' +
             'href="photoswipe.showGallery(' + imgId + ')"' +
-            '/><figcaption>' + legend +  '</figcaption></figure>'
+            '/>' + caption +  '</figure>'
 
     }
 

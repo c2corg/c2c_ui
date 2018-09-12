@@ -5,7 +5,7 @@
             <input class="input" :type="type"
                    :placeholder="placeholder || label" v-model="data.value">
             <span class="icon is-small is-left">
-                <i :class="icon"/>
+                <fa-icon :icon="icon"/>
             </span>
         </div>
     </div>

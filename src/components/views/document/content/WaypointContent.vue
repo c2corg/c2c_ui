@@ -105,7 +105,7 @@
                     </div>
                 </content-box>
 
-                <content-box v-if="document.associations.images.length" class="is-paddingless">
+                <content-box v-if="document.associations.images.length">
                     <gallery :images="document.associations.images"/>
                 </content-box>
 

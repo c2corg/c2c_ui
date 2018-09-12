@@ -2,8 +2,8 @@
     <div class="section is-centered">
 
         <div v-if="mode=='signin'">
-            <form-field label="username" type="text" :data="username" icon="fas fa-user"/>
-            <form-field label="password" type="password" :data="password" icon="fas fa-key"/>
+            <form-field label="username" type="text" :data="username" icon="user"/>
+            <form-field label="password" type="password" :data="password" icon="key"/>
 
             <div class="field is-grouped">
                 <div class="control">
@@ -23,13 +23,14 @@
                 </div>
             </div>
         </div>
+
         <div v-if="mode=='signup'">
 
-            <form-field label="fullname" type="text" :data="fullname" icon="fas fa-user-check"/>
-            <form-field label="username" type="text" :data="username" icon="fas fa-user"/>
-            <form-field label="forum username" type="text" :data="forumname" icon="far fa-comments"/>
-            <form-field label="password" type="password" :data="password" icon="fas fa-key"/>
-            <form-field label="email" type="email" :data="email" icon="fas fa-at"/>
+            <form-field label="fullname" type="text" :data="fullname" icon="user-check"/>
+            <form-field label="username" type="text" :data="username" icon="user"/>
+            <form-field label="forum username" type="text" :data="forumname" icon="comments"/>
+            <form-field label="password" type="password" :data="password" icon="key"/>
+            <form-field label="email" type="email" :data="email" icon="at"/>
 
             <div class="field is-grouped">
                 <div class="control">

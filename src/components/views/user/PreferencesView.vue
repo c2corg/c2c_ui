@@ -1,7 +1,7 @@
 <template>
     <div class="section content" v-if="preferences">
         <h1>
-            <base-icon class="is-large" iconClass="fas fa-cogs"/>
+            <fa-icon icon="cogs"/>
             <span>Preferences</span>
         </h1>
 

@@ -1,19 +1,17 @@
 // Require the main Sass manifest file
 require('./assets/sass/main.scss');
 
+import './js/fa.config';
+
 /* core */
 import Vue from 'vue'
 import App from './App.vue'
 import Router from './router'
 
-/* miscs */
-import MapView from './components/map/MapView'
-
 Vue.config.productionTip = false
 
-/*
-add all vue component as globals components, given en require context
-*/
+
+// add all vue component as globals components, given en require context
 const addComponents = function(context){
     context.keys().forEach(key => {
 
@@ -32,7 +30,7 @@ addComponents(require.context('./components/utils', true, /\.vue$/))
 
 // other globals components
 Vue.component("document-card", require('./components/cards/DocumentCard').default)
-Vue.component("map-view", MapView)
+Vue.component("map-view", require('./components/map/MapView').default)
 
 
 // add vue-moment for generic filter :
