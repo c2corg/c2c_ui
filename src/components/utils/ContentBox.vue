@@ -17,13 +17,13 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/variables.scss';
 
 
 // first try : no border, small shadow
 .content-box{
-    box-shadow:$card-shadow;
-    background:$card-background-color;
+    box-shadow:0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
+    background:$white;
     border-radius:$radius-small;
     padding:1rem;
 }

@@ -1,14 +1,22 @@
 
-/*
-:first-letter only works with block and inline blocks elements
-
-we force display to inline-block, maybe not a good idea...
-*/
-
+/////////////////////////////////////////////////////
+//:first-letter only works with block and inline blocks elements
+//we force display to inline-block, maybe not a good idea...
 .is-first-letter-uppercase{
     display:inline-block
 }
-
 .is-first-letter-uppercase:first-letter {
     text-transform: uppercase;
+}
+
+// force nowrap
+.is-nowrap{
+    white-space: nowrap;
+}
+
+// Force a inline element to nowrap, and ellipse overflow
+.is-ellipsed{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

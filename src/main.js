@@ -31,6 +31,7 @@ const addComponents = function(context){
 addComponents(require.context('./components/utils', true, /\.vue$/))
 
 // other globals components
+Vue.component("document-card", require('./components/cards/DocumentCard').default)
 Vue.component("map-view", MapView)
 
 

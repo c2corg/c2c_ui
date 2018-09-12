@@ -62,7 +62,6 @@
     import utils from '@/js/utils.js'
     import constants from '@/js/constants.js'
 
-    import DocumentCard from '@/components/cards/DocumentCard'
     import QueryItems from './QueryItems'
     import PageSelector from './PageSelector'
 
@@ -70,7 +69,6 @@
         components: {
             QueryItems,
             PageSelector,
-            DocumentCard,
         },
 
         data() {
@@ -120,29 +118,23 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/main.scss'; //todo redo this computation : can't include all that stuff
 
-$bulma-section-padding : 1rem;
+
 $header-margin-bottom : 1rem;
 $header-height : $header-margin-bottom + $size-1;
 $filter-padding : 1rem;
 $filter-height : 100px;
 $result-height : calc(100vh - #{$navbar-height} - #{$header-height} - 2*#{$filter-padding} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
-$section-border-top : 0; //2px groove  lightgrey;
-$section-padding:1.5rem;
+$cards-gap:0.25rem;
 
 .documents-view{
 }
 
-
 .header-section{
-//    margin-bottom:$header-margin-bottom;
-//    padding:0 $section-padding;
 }
 
-
 .filter-section{
-    border-top:$section-border-top;
 }
 
 .result-section{
@@ -157,24 +149,16 @@ $section-padding:1.5rem;
 .cards-container{
     max-height: $result-height;
     overflow: auto;
-    padding-right:0;
 }
 
 .cards-list{
-    margin:0;
+    margin-left: -$cards-gap;
+    margin-right: -$cards-gap;
+
 }
-
-.cards-list > div{
-    padding:0;
-    padding-right:0.5rem;
-    padding-bottom:0.5rem;
-    margin-bottom: 1rem;
+.cards-list .column {
+    padding-left: $cards-gap;
+    padding-right: $cards-gap;
 }
-
-
-.cards-container > div{
-//    flex-flow:wrap row;
-}
-
 
 </style>

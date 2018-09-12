@@ -126,7 +126,7 @@
 
 <style lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/variables.scss';
 
 .discourse-comments{
     background: #fbfaf6 !important;

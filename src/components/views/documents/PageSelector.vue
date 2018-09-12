@@ -1,31 +1,29 @@
 <template>
-    <div class="page-selector has-text-centered">
-        <div>
-            <router-link v-if="currentPage!=1"
+    <div>
+        <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
+            <router-link :disabled="currentPage<=1" class="pagination-previous"
                 :to="pageQuery(currentPage-1)">
                 <base-icon iconClass="fas fa-chevron-left"/>
             </router-link>
 
-            <router-link v-for="page of pageLinks" :key="page" v-if="page < pageCount"
-                :to="pageQuery(page)">
-                {{page}}
-            </router-link>
-
-            <span v-if="pageLinks[2]+1<pageCount" >
-                ...
-            </span>
-
-            <router-link v-if="pageLinks[2]<pageCount"
-                :to="pageQuery(pageLinks[2])">
-                {{pageCount}}
-            </router-link>
-
-            <router-link v-if="currentPage<pageCount"
+            <router-link  :disabled="currentPage>=pageCount" class="pagination-next"
                 :to="pageQuery(currentPage+1)">
                 <base-icon iconClass="fas fa-chevron-right"/>
-            </router-link>
-        </div>
-        <div>
+            </router-link >
+
+          <ul class="pagination-list">
+                <li v-for="page of pageLinks" :key="page">
+                    <span v-if="page===null" class="pagination-ellipsis">&hellip;</span>
+                    <router-link v-else class="pagination-link" :class="{'is-current':page==currentPage}"
+                        :aria-label="'Goto page' + page"
+                        :to="pageQuery(page)">
+                        {{page}}
+                    </router-link>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="has-text-centered">
             {{offset + 1}}-{{offset + documents.documents.length}} / {{documents.total}}
         </div>
     </div>
@@ -53,8 +51,34 @@
                 return Math.floor(this.offset / queryLimit) + 1
             },
             pageLinks(){
-                var start = Math.max(this.currentPage-1, 1)
-                return [start, start+1, start+2]
+
+                // Less than 8 pages :
+                //    (1) (2) (3) (4)
+
+                // if current page is less than 5 :
+                //    (1) (2) (3) (4) (5) ... (Z)
+
+                // if current page is more than pageCount -4 :
+                //    (1) ... (V) (W) (X) (Y) (Z)
+
+                // else
+                //    (1) ... (K) (L) (M) ... (Z)
+
+                if(this.pageCount < 8){
+                    let result = []
+
+                    for(let i=1;i<=this.pageCount;i++)
+                        result.push(i)
+
+                    return result
+
+                } else if(this.currentPage < 5) {
+                    return [1,2,3,4,5,null,this.pageCount]
+                } else if(this.currentPage > this.pageCount-4) {
+                    return [1,null,this.pageCount-4,this.pageCount-3,this.pageCount-2,this.pageCount-1,this.pageCount]
+                } else {
+                    return [1, null, this.currentPage-1, this.currentPage, this.currentPage+1, null, this.pageCount]
+                }
             },
         },
 
@@ -69,3 +93,13 @@
     }
 
 </script>
+
+<style scoped lang="scss">
+
+@import '@/assets/sass/main.scss';
+
+.pagination-link, .pagination-next, .pagination-previous{
+    background:$white-bis;
+}
+
+</style>

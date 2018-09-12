@@ -37,10 +37,9 @@
             </div>
 
             <h2>areas</h2>
-            <div class="cards-container">
-                <div class="is-flex">
-                    <document-card v-for="document in preferences.areas" :key="document.document_id"
-                                  :document="document"/>
+            <div class="columns">
+                <div class="column is-2"  v-for="document in preferences.areas" :key="document.document_id">
+                    <document-card :document="document"/>
                 </div>
             </div>
         </div>
@@ -51,12 +50,7 @@
     import c2c from '@/js/c2c.js'
     import constants from '@/js/constants.js'
 
-    import DocumentCard from '@/components/cards/DocumentCard'
-
     export default {
-        components:{
-            DocumentCard
-        },
 
         data(){
             return {

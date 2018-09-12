@@ -65,6 +65,8 @@ var routes = [
     // * test all doc's comments functions
     // * markdown alerts in parser
     // * markdown icons in parser
+    // * following view actions
+    // * preference view : add/remove areas 
 
     // * CSS
     //   * choose font size and family
@@ -72,7 +74,7 @@ var routes = [
     //   * icon-activity bug :
     //     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
     //     * remove font-family from icon-activity : the bug diseapper
-    //     * issue come from this font... 
+    //     * issue come from this font...
 
 ]
 

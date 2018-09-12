@@ -159,9 +159,9 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/variables.scss';
 
 .navbar{
-        box-shadow:$card-shadow;
+        box-shadow:0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
 }
 </style>

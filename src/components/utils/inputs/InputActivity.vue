@@ -46,7 +46,7 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/variables.scss';
 
 .input-item {
     cursor:pointer;

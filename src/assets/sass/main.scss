@@ -1,39 +1,8 @@
 
 
-//https://bulma.io/documentation/customize/variables/
-
-$body-size : 14px !default;
-
-$size-1	: 2.2rem;   // 3rem;
-$size-2	: 1.9rem;   // 2.5rem;
-$size-3	: 1.6rem;   // 2rem;
-$size-4	: 1.3rem;   // 1.5rem;
-$size-5	: 1.15rem;   // 1.25rem;
-// $size-6 : 1 rem, untouched
-$size-7 : 0.8rem; //0.75
-
-//c2c colors
-$color-base-c2c: #ffaa45;
-$color-base-darker: #B26F1E;
-$color-base-lighter: #FFAA45;
-$color-complementary: #0D7FB2;
-$color-complementary-lighter: #45C5FF;
-
-//customize bulma colors
-$primary: $color-complementary; //$turquoise
-//$link: $blue
-//$info: $cyan
-//$success: $green
-//$warning: $yellow
-//$danger: $red
-//$dark: $grey-darker
-//$text: $grey-dark
-
-$body-background-color : hsl(0, 0%, 95%);
-
-// paddings and margins
-$section-padding : 1.5rem 1.5rem;
-
-@import '~bulma';
+@import './variables.scss';
 @import './fonts.scss';
 @import './helpers.scss';
+
+
+@import '~bulma';
