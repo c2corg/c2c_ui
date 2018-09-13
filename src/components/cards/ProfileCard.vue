@@ -8,7 +8,7 @@
             </span>
             <span class="is-pulled-right">
                 <icon-forum />
-                @{{document.forum_username}}
+                @{{ document.forum_username }}
             </span>
         </div>
 
@@ -16,7 +16,7 @@
             <activities :activities="document.activities"/>
             &nbsp;
             <span class="is-pulled-right">
-                {{document.categories.join(", ")}}
+                {{ document.categories.join(", ") }}
             </span>
         </div>
     </card-container>

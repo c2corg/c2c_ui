@@ -3,7 +3,7 @@
         <document-title slot="header" :document="document"/>
 
         <p slot="row1" class="level">
-            <span>{{document.area_type}}</span>
+            <span>{{ document.area_type }}</span>
         </p>
     </card-container>
 </template>

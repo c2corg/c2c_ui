@@ -18,7 +18,7 @@
 
         <div v-else-if="field.queryMode==='multiSelect'" class="control">
             <label class="label is-first-letter-uppercase">
-                {{field.label}}
+                {{ field.label }}
             </label>
 
             <multiselect v-model="value"
@@ -32,7 +32,7 @@
 
         <div v-else-if="field.queryMode==='input'" class="control">
             <label class="label is-first-letter-uppercase">
-                {{field.label}}
+                {{ field.label }}
             </label>
             <input :type="field.type" v-model="value" class="input is-primary">
         </div>
@@ -40,7 +40,7 @@
         <div v-else-if="field.queryMode==='checkbox'" class="control">
             <label class="checkbox">
                 <input v-model="value" type="checkbox">
-                {{field.label}}
+                {{ field.label }}
             </label>
         </div>
 
@@ -49,7 +49,7 @@
         </div>
 
         <div v-else class="notification is-danger">
-            Please fill queryMode for {{field.name}}
+            Please fill queryMode for {{ field.name }}
         </div>
     </div>
 </template>

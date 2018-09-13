@@ -7,7 +7,7 @@
         <div v-if="document">
 
             <div v-if="isVersionView" class="notification is-warning">
-                This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+                This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
 
                 <br>
 
@@ -40,7 +40,7 @@
 
                 <br>
                 <icon-document type="profile"/>
-                <contributor-link :contributor="version"/> : <em>{{version.comment}}</em>
+                <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
             </div>
 
             <content-box class="title is-1">

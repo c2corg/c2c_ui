@@ -2,8 +2,8 @@
     <div v-if="history" class="section content">
         <h1>
             <icon-document :type="type" class="is-large"/>
-            <span>history</span> ({{lang}}) :
-            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{history.title}}</router-link>
+            <span>history</span> ({{ lang }}) :
+            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
         </h1>
         <div class="field is-grouped">
             <div class="control">
@@ -43,14 +43,14 @@
                 </td>
                 <td>
                     <version-link :type="type" :id="documentId" :version="version.version_id" :lang="lang">
-                        {{version.written_at | moment("YYYY-MM-DD hh:mm:ss")}}
+                        {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
                     </version-link>
                 </td>
                 <td>
                     <contributor-link :contributor="version"/>
                 </td>
                 <td>
-                    {{version.comment}}
+                    {{ version.comment }}
                 </td>
             </tr>
         </table>

@@ -4,7 +4,7 @@
             Loading
         </div>
         <div v-if="error!=null" class="notification is-danger">
-            {{error}}
+            {{ error }}
         </div>
     </div>
 </template>

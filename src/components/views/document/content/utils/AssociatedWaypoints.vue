@@ -4,7 +4,7 @@
         <div v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id">
             <document-link :document="waypoint">
                 <document-title :document="waypoint"/><span>,</span>
-                {{waypoint.elevation}}&nbsp;m
+                {{ waypoint.elevation }}&nbsp;m
             </document-link>
         </div>
     </content-box>

@@ -3,13 +3,13 @@
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
-                    <span class="title is-1 is-first-letter-uppercase">{{title}}</span>
+                    <span class="title is-1 is-first-letter-uppercase">{{ title }}</span>
                 </span>
             </div>
             <div class="level-right">
                 <span class="level-item">
                     <add-link :type="type" class="button is-rounded is-primary">
-                        Add a {{type}}
+                        Add a {{ type }}
                     </add-link>
                 </span>
             </div>

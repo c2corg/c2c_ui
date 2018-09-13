@@ -5,7 +5,7 @@
         <div v-if="errorMessage" class="notification is-danger">
             <p>
                 Oups! Something went wrong with forum. Here is the message : <br>
-                {{errorMessage}}
+                {{ errorMessage }}
             </p>
         </div>
 
@@ -32,10 +32,10 @@
                         <div class="discourse-post-header">
                             <a :href="'https://forum.camptocamp.org/users/' + post.username" :title="post.username"
                                class="discourse-post-header-username">
-                                {{post.username}}
+                                {{ post.username }}
                             </a>
                             <span class="is-pulled-right">
-                                {{post['created_at'] | timeAgo}}
+                                {{ post['created_at'] | timeAgo }}
                             </span>
                         </div>
                         <div class="discourse-content" v-html="post['cooked']"/>

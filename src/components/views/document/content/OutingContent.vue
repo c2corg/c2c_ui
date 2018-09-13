@@ -15,21 +15,21 @@
                     </label-value>
 
                     <label-value v-if="locale.weather" label="weather">
-                        {{locale.weather}}
+                        {{ locale.weather }}
                     </label-value>
 
                     <field-view :document="document" :field="fields.frequentation"/>
 
                     <label-value v-if="document.elevation_min || document.elevation_max" label="elevation">
-                        <span v-if="document.elevation_min">{{document.elevation_min}}&nbsp;m</span>
+                        <span v-if="document.elevation_min">{{ document.elevation_min }}&nbsp;m</span>
                         <span v-if="document.elevation_min && document.elevation_max">/</span>
-                        <span v-if="document.elevation_max">{{document.elevation_max}}&nbsp;m</span>
+                        <span v-if="document.elevation_max">{{ document.elevation_max }}&nbsp;m</span>
                     </label-value>
 
                     <label-value v-if="document.height_diff_down || document.height_diff_up" label="height difference">
-                        <span v-if="document.height_diff_up">+{{document.height_diff_up}}&nbsp;m</span>
+                        <span v-if="document.height_diff_up">+{{ document.height_diff_up }}&nbsp;m</span>
                         <span v-if="document.height_diff_up && document.height_diff_down">/</span>
-                        <span v-if="document.height_diff_down">-{{document.height_diff_down}}&nbsp;m</span>
+                        <span v-if="document.height_diff_down">-{{ document.height_diff_down }}&nbsp;m</span>
                     </label-value>
 
                     <field-view :document="document" :field="fields.length_total"/>
@@ -48,7 +48,7 @@
                 <content-box>
                     <div>
                         <users-links :users="document.associations.users"/>
-                        {{locale.participants}}
+                        {{ locale.participants }}
                     </div>
 
                     <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"

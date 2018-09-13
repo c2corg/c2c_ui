@@ -27,7 +27,7 @@
                         </label-value>
 
                         <label-value v-if="document.route_types" label="route type">
-                            {{document.route_types.join(', ')}}
+                            {{ document.route_types.join(', ') }}
                         </label-value>
 
                         <field-view :document="document" :field="fields.durations"/>
@@ -57,15 +57,15 @@
                                 <span v-if="document.elevation_min">min</span><span v-if="document.elevation_min && document.elevation_max">/</span><span v-if="document.elevation_max">max</span>
                             </label>
                             :
-                            <span v-if="document.elevation_min">{{document.elevation_min}}&#8239;m</span>
+                            <span v-if="document.elevation_min">{{ document.elevation_min }}&#8239;m</span>
                             <span v-if="document.elevation_min && document.elevation_max">/</span>
-                            <span v-if="document.elevation_max">{{document.elevation_max}}&#8239;m</span>
+                            <span v-if="document.elevation_max">{{ document.elevation_max }}&#8239;m</span>
                         </div>
 
                         <label-value v-if="document.height_diff_up || document.height_diff_down" label="height difference">
-                            <span v-if="document.height_diff_up">+{{document.height_diff_up}}&#8239;m</span>
+                            <span v-if="document.height_diff_up">+{{ document.height_diff_up }}&#8239;m</span>
                             <span v-if="document.height_diff_up && document.height_diff_down">/</span>
-                            <span v-if="document.height_diff_down">-{{document.height_diff_down}}&#8239;m</span>
+                            <span v-if="document.height_diff_down">-{{ document.height_diff_down }}&#8239;m</span>
                         </label-value>
 
                         <field-view :document="document" :field="fields.height_diff_difficulties"/>
@@ -80,7 +80,7 @@
                         <field-view :document="document" :field="fields.mtb_length_trail"/>
 
                         <label-value v-if="locale.slope" label="slope">
-                            {{locale.slope}}
+                            {{ locale.slope }}
                         </label-value>
 
                         <field-view :document="document" :field="fields.slackline_height"/>

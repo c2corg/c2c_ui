@@ -4,7 +4,7 @@
             Edit
             <document-title :document="document"/>
             in
-            {{locale.lang}}
+            {{ locale.lang }}
         </h1>
         <save-block :document="document"/>
         <component :is="type + '-edition-content'"

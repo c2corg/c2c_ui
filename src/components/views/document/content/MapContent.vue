@@ -4,15 +4,15 @@
         <div class="columns">
             <div class="column is-3">
                 <label>editor</label>
-                <span>{{document.editor}}</span>
+                <span>{{ document.editor }}</span>
             </div>
             <div class="column is-3">
                 <label>code</label>
-                <span>{{document.code}}</span>
+                <span>{{ document.code }}</span>
             </div>
             <div class="column is-3">
                 <label>Scale</label>
-                <span>{{document.scale}}</span>
+                <span>{{ document.scale }}</span>
             </div>
         </div>
         <summary>

@@ -17,7 +17,7 @@
             &nbsp;
             <span v-if="document.height_diff_difficulties" class="is-nowrap">
                 <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
-                {{document.height_diff_difficulties}}&nbsp;m
+                {{ document.height_diff_difficulties }}&nbsp;m
             </span>
         </div>
 
@@ -28,7 +28,7 @@
 
             <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
                 <fa-icon icon="compass" class="has-text-primary"/>
-                {{document.orientations.join(", ")}}
+                {{ document.orientations.join(", ") }}
             </span>
 
             <icon-quality :quality="document.quality"/>

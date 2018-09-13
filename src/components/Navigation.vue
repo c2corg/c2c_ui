@@ -21,7 +21,7 @@
                 <router-link v-for="(link, index) in links" :to="{name:link.name}"
                              :key="index" class="navbar-item">
                     <component :is="link.iconName" class="is-medium"/>
-                    {{link.text}}
+                    {{ link.text }}
                 </router-link>
 
                 <div class="navbar-item field">
@@ -84,11 +84,11 @@
 
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
-                        {{user.data.lang}}
+                        {{ user.data.lang }}
                     </a>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
                         <a v-for="lang in langs" :key="lang" class="navbar-item" @click="user.setLang(lang)">
-                            {{lang}}
+                            {{ lang }}
                         </a>
                     </div>
                 </div>

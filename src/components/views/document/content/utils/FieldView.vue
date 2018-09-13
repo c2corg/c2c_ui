@@ -2,7 +2,7 @@
     <label-value v-if="hasValue" :label="field.label">
         {{ isArray ? value.join(", ") : value }}
         <span v-if="field.unit">
-            {{field.unit}}
+            {{ field.unit }}
         </span>
     </label-value>
 </template>

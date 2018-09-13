@@ -20,7 +20,7 @@
                 </label-value>
 
                 <label-value v-if="document.categories.length" label="categories">
-                    {{document.categories.join(", ")}}
+                    {{ document.categories.join(", ") }}
                 </label-value>
 
                 <field-view :document="document" :field="fields.camera_name"/>

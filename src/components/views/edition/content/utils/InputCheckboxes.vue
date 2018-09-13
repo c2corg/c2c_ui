@@ -30,4 +30,4 @@
             }
         }
     }
-</scrip
+</script>

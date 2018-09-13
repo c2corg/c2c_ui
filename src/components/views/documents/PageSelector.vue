@@ -23,14 +23,14 @@
                         :aria-label="'Goto page' + page"
                         :to="pageQuery(page)"
                         class="pagination-link">
-                        {{page}}
+                        {{ page }}
                     </router-link>
                 </li>
             </ul>
         </nav>
 
         <div class="has-text-centered">
-            {{offset + 1}}-{{offset + documents.documents.length}} / {{documents.total}}
+            {{ offset + 1 }}-{{ offset + documents.documents.length }} / {{ documents.total }}
         </div>
     </div>
 </template>

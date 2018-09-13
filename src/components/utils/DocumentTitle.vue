@@ -1,5 +1,5 @@
 <template>
-    <span>{{getTitle()}}</span>
+    <span>{{ getTitle() }}</span>
 </template>
 
 <script>

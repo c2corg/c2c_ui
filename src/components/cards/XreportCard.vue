@@ -4,16 +4,16 @@
 
         <div slot="row1" class="is-ellipsed">
             <card-region-item :document="document" class="is-ellipsed"/>
-            <span>{{document.event_type}}</span>
+            <span>{{ document.event_type }}</span>
         </div>
 
         <div slot="row2" class="level">
             <span v-if="document.elevation">
                 <fa-icon icon="bomb"/>
-                {{document.elevation}}&nbsp;m
+                {{ document.elevation }}&nbsp;m
             </span>
             <span>
-                {{document.date}}
+                {{ document.date }}
             </span>
         </div>
 

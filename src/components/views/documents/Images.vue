@@ -1,7 +1,7 @@
 <template>
     <div class="section images-view">
         <h1 class="title is-1">
-            {{title}}
+            {{ title }}
         </h1>
 
         <div>

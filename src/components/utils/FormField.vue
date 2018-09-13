@@ -1,6 +1,6 @@
 <template>
     <div class="field">
-        <label class="label">{{label}}</label>
+        <label class="label">{{ label }}</label>
         <div class="control has-icons-left">
             <input :type="type" :placeholder="placeholder || label"
                    v-model="data.value" class="input">

@@ -11,7 +11,7 @@
 
             <span v-if="document.slackline_types">
                 <fa-icon icon="bomb"/>
-                {{document.slackline_types}}
+                {{ document.slackline_types }}
             </span>
 
             <icon-quality :quality="document.quality"/>

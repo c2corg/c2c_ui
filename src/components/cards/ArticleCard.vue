@@ -4,12 +4,12 @@
 
         <div slot="row1" class="level">
             <span v-for="category of document.categories" :key="category">
-                {{category}}
+                {{ category }}
             </span>
         </div>
 
         <div slot="row2">
-            <icon-creative-commons />{{document.article_type}}
+            <icon-creative-commons />{{ document.article_type }}
         </div>
 
         <div slot="row3">

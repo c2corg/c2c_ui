@@ -2,8 +2,8 @@
     <div class="section content">
         <h1>
             <icon-document :type="type" class="is-large"/>
-            <span>diff</span> ({{lang}}) :
-            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{title}}</router-link>
+            <span>diff</span> ({{ lang }}) :
+            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ title }}</router-link>
         </h1>
         <table>
             <tr>
@@ -11,14 +11,14 @@
                     <div v-if="oldVersion">
                         <div>
                             <version-link :type="type" :id="documentId" :version="oldVersion.version.version_id" :lang="lang">
-                                Revision #{{oldVersion.document.version}} as of {{oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
+                                Revision #{{ oldVersion.document.version }} as of {{ oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                             </version-link>
                         </div>
                         <div>
                             by <contributor-link :contributor="oldVersion.version"/>
                         </div>
                         <div>
-                            {{oldVersion.version.comment}}
+                            {{ oldVersion.version.comment }}
                         </div>
                         <div>
                             <diff-link v-if="oldVersion.previous_version_id"
@@ -37,14 +37,14 @@
                     <div v-if="newVersion">
                         <div>
                             <version-link :type="type" :id="documentId" :version="newVersion.version.version_id" :lang="lang">
-                                Revision #{{newVersion.document.version}} as of {{newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss')}}
+                                Revision #{{ newVersion.document.version }} as of {{ newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                             </version-link>
                         </div>
                         <div>
                             by <contributor-link :contributor="newVersion.version"/>
                         </div>
                         <div>
-                            {{newVersion.version.comment}}
+                            {{ newVersion.version.comment }}
                         </div>
                         <div>
                             <diff-link v-if="newVersion.next_version_id"
@@ -63,21 +63,21 @@
         </table>
 
         <div v-for="key of Object.keys(diffProperties)" :key="key" class="content">
-            <h2>{{key}}</h2>
+            <h2>{{ key }}</h2>
             <table>
                 <tr>
                     <td>
-                        <del>{{diffProperties[key].old}}</del>
+                        <del>{{ diffProperties[key].old }}</del>
                     </td>
                     <td>
-                        <ins>{{diffProperties[key].new}}</ins>
+                        <ins>{{ diffProperties[key].new }}</ins>
                     </td>
                 </tr>
             </table>
         </div>
 
         <div v-for="key of Object.keys(diffLocales)" :key="key" class="content">
-            <h2 >{{key}}</h2>
+            <h2 >{{ key }}</h2>
             <div class="locale-diff">
                 <div><pre><code v-html="diffLocales[key]"/></pre></div>
             </div>

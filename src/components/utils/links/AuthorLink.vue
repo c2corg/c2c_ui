@@ -1,6 +1,6 @@
 <template>
     <router-link :to="{name:'profile', params:{id:author.user_id}}">
-        {{author.name}}
+        {{ author.name }}
     </router-link>
 </template>
 

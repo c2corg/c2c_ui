@@ -33,7 +33,7 @@
                                      width="16">
 
 
-                                {{topic.title}}
+                                {{ topic.title }}
                             </a>
 
 

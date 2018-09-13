@@ -7,9 +7,9 @@
         </div>
 
         <div slot="row2">
-            <span>{{document.code}}</span>
+            <span>{{ document.code }}</span>
             -
-            <span>{{document.editor}}</span>
+            <span>{{ document.editor }}</span>
         </div>
     </card-container>
 </template>

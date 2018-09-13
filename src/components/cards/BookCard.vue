@@ -4,13 +4,13 @@
 
         <div slot="row1" class="level">
             <span v-for="book_type of document.book_types" :key="book_type">
-                {{book_type}}
+                {{ book_type }}
             </span>
         </div>
 
         <div slot="row2">
             <fa-icon icon="pen"/>
-            {{document.author}}
+            {{ document.author }}
         </div>
 
         <div slot="row3">

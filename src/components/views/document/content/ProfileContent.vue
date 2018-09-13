@@ -8,7 +8,7 @@
                     <activities :activities="document.activities"/>
 
                     <label-value label="forum">
-                        @{{document.forum_username}}
+                        @{{ document.forum_username }}
                     </label-value>
 
                     <field-view :document="document" :field="fields.categories"/>

@@ -20,7 +20,7 @@
                     <td>
                         <version-link :type="change.document.type" :id="change.document.document_id"
                                       :version="change.version_id" :lang="change.lang">
-                            {{change.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
+                            {{ change.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                         </version-link>
                     </td>
                     <td>
@@ -41,14 +41,14 @@
                     </td>
                     <td>
                         <icon-quality :quality="change.document.quality"/>
-                        {{change.lang}}
+                        {{ change.lang }}
                     </td>
                     <td>
                         <icon-document :type="change.document.type"/>
-                        {{change.document.title}}
+                        {{ change.document.title }}
                         :
                         <span v-if="change.comment">
-                            {{change.comment}}
+                            {{ change.comment }}
                         </span>
                         <span v-else>
                             empty comment

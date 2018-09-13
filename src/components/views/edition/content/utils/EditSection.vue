@@ -1,9 +1,9 @@
 <template>
     <section>
         <header @click="expanded_=!expanded_">
-            {{header}}
+            {{ header }}
             <button class="button is-pulled-right">
-                {{expanded_ ? 'Collapse' : 'Expand' }}
+                {{ expanded_ ? 'Collapse' : 'Expand' }}
             </button>
         </header>
         <main :class="{expanded:expanded_, hidden:!expanded_}">

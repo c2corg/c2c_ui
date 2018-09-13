@@ -25,9 +25,9 @@
 
                             <field-view :document="document" :field="fields.height_median"/>
                             <label-value v-if="document.height_max || document.height_min" label="height">
-                                <span v-if="document.height_min">{{document.height_min}}&nbsp;m</span>
+                                <span v-if="document.height_min">{{ document.height_min }}&nbsp;m</span>
                                 <span v-if="document.height_min && document.height_max">/</span>
-                                <span v-if="document.height_max">{{document.height_max}}&nbsp;m</span>
+                                <span v-if="document.height_max">{{ document.height_max }}&nbsp;m</span>
                             </label-value>
 
                             <field-view :document="document" :field="fields.climbing_outdoor_types"/>
@@ -35,9 +35,9 @@
 
                             <field-view :document="document" :field="fields.climbing_rating_median"/>
                             <label-value v-if="document.climbing_rating_min || document.climbing_rating_max" label="climbing rating">
-                                <span v-if="document.climbing_rating_min">{{document.climbing_rating_min}}</span>
+                                <span v-if="document.climbing_rating_min">{{ document.climbing_rating_min }}</span>
                                 <span v-if="document.climbing_rating_min && document.climbing_rating_max">/</span>
-                                <span v-if="document.climbing_rating_max">{{document.climbing_rating_max}}</span>
+                                <span v-if="document.climbing_rating_max">{{ document.climbing_rating_max }}</span>
                             </label-value>
 
                             <field-view :document="document" :field="fields.capacity"/>

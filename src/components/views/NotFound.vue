@@ -5,7 +5,7 @@
 
         <p>The page you are looking for does not exist or is broken.</p>
 
-        <p>{{$route.fullPath}}</p>
+        <p>{{ $route.fullPath }}</p>
 
         <p>
             <a href="javascript:history.go(-1)">Go to the previous page</a>

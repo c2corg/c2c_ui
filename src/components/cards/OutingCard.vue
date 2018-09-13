@@ -12,7 +12,7 @@
 
             <span class="is-nowrap is-pulled-right">
                 <fa-icon class="has-text-primary" icon="pen"/>
-                {{document.author.name}}
+                {{ document.author.name }}
             </span>
         </div>
 
@@ -24,12 +24,12 @@
 
             <span v-if="document.elevation_max">
                 <fa-icon icon="bomb"/>
-                {{document.elevation_max}}&nbsp;m
+                {{ document.elevation_max }}&nbsp;m
             </span>
 
             <span v-if="document.height_diff_up">
                 <fa-icon icon="bomb"/>
-                {{document.height_diff_up}}&nbsp;m
+                {{ document.height_diff_up }}&nbsp;m
             </span>
         </div>
 
@@ -41,7 +41,7 @@
                 <icon-document v-if="document.img_count != 0" type="image"/>
             </span>
 
-            {{document.date_start}}
+            {{ document.date_start }}
             <icon-quality :quality="document.quality"/>
         </div>
     </card-container>

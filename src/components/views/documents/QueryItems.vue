@@ -6,9 +6,9 @@
                          @changeDisplay="refreshSliders()">
 
             <span slot="button">
-                {{category.name}}
+                {{ category.name }}
                 <span v-if="category.activeCount!=0">
-                    ({{category.activeCount}})
+                    ({{ category.activeCount }})
                 </span>
             </span>
 
