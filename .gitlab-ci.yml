@@ -1,4 +1,4 @@
-build:
+build-npm:
   stage: build
   image: node:8.11
   script:
@@ -12,9 +12,14 @@ build:
 pages:
   stage: deploy
   dependencies:
-    - build
+    - build-npm
   script:
+  - ls -la 
   - mv dist/ public/
+  - ls -la 
+  - cd public 
+  - ls -la 
+
   only:
   - master
   artifacts:
