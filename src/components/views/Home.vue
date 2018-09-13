@@ -3,32 +3,32 @@
         <div class="topoguide">
             <div class="links is-flex">
                 <router-link to="outings" class="link">
-                    <div><icon-document type="outing"/></div>
+                    <div><icon-outing /></div>
                     <span>Outings</span>
                 </router-link>
 
                 <router-link to="routes">
-                    <div><icon-document type="route"/></div>
+                    <div><icon-route /></div>
                     <span>Routes</span>
                 </router-link>
 
                 <router-link to="waypoints">
-                    <div><icon-document type="waypoint"/></div>
+                    <div><icon-waypoint /></div>
                     <span>Waypoints</span>
                 </router-link>
 
                 <router-link to="images">
-                    <div><icon-document type="image"/></div>
+                    <div><icon-image /></div>
                     <span>Images</span>
                 </router-link>
 
                 <router-link to="books">
-                    <div><icon-document type="book"/></div>
+                    <div><icon-book /></div>
                     <span>Books</span>
                 </router-link>
 
                 <router-link to="areas">
-                    <div><icon-document type="area"/></div>
+                    <div><icon-area /></div>
                     <span>Areas</span>
                 </router-link>
             </div>
@@ -52,17 +52,17 @@
                 </router-link>
 
                 <a>
-                    <div><base-icon iconClass="fab fa-facebook"/></div>
+                    <div><fa-icon :icon="['fab', 'facebook']"/></div>
                     <span>Facebook</span>
                 </a>
 
                 <a>
-                    <div><base-icon iconClass="fab fa-twitter"/></div>
+                    <div><fa-icon :icon="['fab', 'twitter']"/></div>
                     <span>Twitter</span>
                 </a>
 
                 <a>
-                    <div><base-icon iconClass="fab fa-google"/></div>
+                    <div><fa-icon :icon="['fab', 'google']"/></div>
                     <span>Google</span>
                 </a>
 

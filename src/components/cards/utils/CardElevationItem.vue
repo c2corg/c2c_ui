@@ -1,6 +1,6 @@
 <template>
     <span v-if="elevation">
-        <fa-icon icon="sort-amount-up"/>
+        <fa-icon icon="sort-amount-up" class="has-text-primary"/>
         {{elevation}}&nbsp;m
     </span>
 </template>

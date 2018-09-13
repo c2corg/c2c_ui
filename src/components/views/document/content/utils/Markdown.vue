@@ -1,5 +1,5 @@
 <template>
-    <div class="content" v-html="convert(content)"/>
+    <div class="content" v-html="html"/>
 </template>
 
 <script>
@@ -7,8 +7,10 @@
 
     export default {
         props: ['content'],
-        methods:{
-            convert : markdown.convert
+        computed:{
+            html(){
+                return markdown.convert(this.content)
+            }
         }
     }
 </script>
@@ -28,5 +30,6 @@
 
 .markdown-image-right{
     float: right;
+    margin-right:0 !important;
 }
 </style>

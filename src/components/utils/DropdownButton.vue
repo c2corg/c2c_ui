@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown" :class="activeClass">
+    <div class="dropdown" :class="{'is-active': isActive}">
 
         <div class="dropdown-trigger">
             <button class="button" @click="isActive=!isActive" :disabled="disabled"
@@ -47,12 +47,6 @@
                     self.isActive = false
                 }
             })
-        },
-
-        computed:{
-            activeClass(){
-                return this.isActive ? "is-active" : undefined
-            }
         },
 
         watch:{

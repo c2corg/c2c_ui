@@ -24,19 +24,16 @@
             }
         },
 
-        created(){
-            this.search()
-        },
-
         watch:{
-            $route(){
-                this.search();
-            }
+            $route: {
+                handler: 'search',
+                immediate: true, // fire event at the creation
+            },
         },
 
         methods:{
             search(){
-                var query = Object.assign({limit:100}, this.$route.query)
+                var query = Object.assign({limit:20}, this.$route.query)
                 c2c.search(query).then(response => {
                     this.results = response.data
                 })

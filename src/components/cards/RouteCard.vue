@@ -24,7 +24,7 @@
         <div slot="row3" class="level">
             <activities class="has-text-primary is-size-4 is-ellipsed" :activities="document.activities"/>
 
-            <icon-geometry-detail v-if="document.geometry.has_geom_detail"/>
+            <icon-geometry-detail v-if="document.geometry.has_geom_detail" class="has-text-primary"/>
 
             <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
                 <fa-icon icon="compass" class="has-text-primary"/>

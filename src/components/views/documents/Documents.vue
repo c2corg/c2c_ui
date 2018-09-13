@@ -93,9 +93,7 @@
         },
 
         watch:{
-            $route(){
-                this.loadElements();
-            }
+            $route : 'loadElements',
         },
 
         created() {

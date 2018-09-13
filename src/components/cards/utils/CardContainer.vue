@@ -40,8 +40,9 @@
 }
 
 .card:hover{
-    background:$white-ter;
+//    background:$white-ter;
     transition:0.2s;
+    box-shadow:1px 3px 4px rgba(10, 10, 10, 0.12), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }
 
 .card-header-title {

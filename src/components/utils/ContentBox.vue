@@ -22,9 +22,9 @@
 
 // first try : no border, small shadow
 .content-box{
-    box-shadow:0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
+//    box-shadow:0 2px 3px rgba(10, 10, 10, 0.10), 0 0 0 1px rgba(10, 10, 10, 0.1);
     background:$white;
-    border-radius:$radius-small;
+//    border-radius:$radius-small;
     padding:1rem;
 }
 

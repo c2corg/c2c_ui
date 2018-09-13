@@ -1,3 +1,3 @@
 <template>
-    <base-icon icon-class="fab fa-creative-commons" />
+    <fa-icon :icon="['fab', 'creative-commons']" />
 </template>

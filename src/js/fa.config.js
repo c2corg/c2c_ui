@@ -47,12 +47,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-    //faCircle as faCircleRegular,
     faSun as faSunRegular,
 } from '@fortawesome/free-regular-svg-icons'
 
+
+import {
+    faCreativeCommons,
+    faFacebook,
+    faGoogle,
+    faTwitter,
+} from '@fortawesome/free-brands-svg-icons'
+
+
 library.add(
-    //solid
+    //solid icons
     faAngleDown,
     faArrowsAltV,
     faAt,
@@ -95,9 +103,14 @@ library.add(
     faUsers,
     faWrench,
 
-    //regular
-    //faCircleRegular,
+    //regular icons
     faSunRegular,
+
+    //brands icons
+    faCreativeCommons,
+    faFacebook,
+    faGoogle,
+    faTwitter,
 );
 
 Vue.component('fa-icon', FontAwesomeIcon); // registered globally

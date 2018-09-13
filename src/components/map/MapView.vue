@@ -41,7 +41,7 @@
         //// Vue.component('GmapMarker', GmapMarker)
         //// then disable the following:
         // installComponents: true,
-    }) 
+    })
 
 
     export default {
@@ -74,19 +74,18 @@
 
         watch:{
             documents:{
-                handler(){
-                    this.computePositions()
-                    this.fitBounds()
-                },
-                deep:true,
+                handler:'fitMapToDocuments',
+                deep:true, // must look on change inside documents object
             },
-            document(){
-                this.computePositions()
-                this.fitBounds()
-            }
+            document: 'fitMapToDocuments',
         },
 
         methods:{
+            fitMapToDocuments(){
+                this.computePositions()
+                this.fitBounds()
+            },
+
             execute_(callback){
                 this.$gmapApiPromiseLazy().then(() => {
                     this.$refs.googleMapRef.$mapPromise.then(callback)
