@@ -48,7 +48,9 @@ var routes = [
     {
         path: '/forum',
         name: 'forum',
-        beforeEnter() { location.href = config.forumUrl }
+        beforeEnter() {
+            location.href = config.forumUrl
+        }
     },
 
     // todo
@@ -56,7 +58,6 @@ var routes = [
     // * xreport and profile data
     // * signup
     // * maps types (ign, swiss...)
-    // * see maps on document view
     // * admin actions
     // * document-view actions (translate...)
     // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
@@ -65,11 +66,11 @@ var routes = [
     // * test all doc's comments functions
     // * markdown alerts in parser
     // * markdown icons in parser
-    // * following view actions
-    // * preference view : add/remove areas 
+    // * FollowingView actions
+    // * PreferenceView : add/remove areas
 
     // * CSS
-    //   * choose font size and family
+    //   * choose family
     //   * icon size must not be a subjet
     //   * icon-activity bug :
     //     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
