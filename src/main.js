@@ -34,11 +34,20 @@ Vue.component("map-view", require('./components/map/MapView').default)
 
 
 // add vue-moment for generic filter :
-// <span>{{ someDate | moment("dddd, MMMM Do YYYY") }}</span>
-Vue.use(require('vue-moment'));
+
+const moment = require('moment')
+
+require("moment/locale/ca.js")
+require("moment/locale/es.js")
+require("moment/locale/eu.js")
+require("moment/locale/de.js")
+require("moment/locale/fr.js")
+require("moment/locale/it.js")
+require("moment/locale/en-gb.js") // keep en in last.
+
+Vue.use(require('vue-moment'), {moment})
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
-const moment = require('moment')
 Vue.filter('timeAgo', (arg) => {
     return moment.utc(arg).local().fromNow()
 })

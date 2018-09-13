@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --report",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -45,8 +45,10 @@
     ],
     "rules": {
         "vue/html-indent": ["warn", 4],
+        "vue/no-v-html": "error",
+
+        "vue/order-in-components": "warn",
         "vue/no-multi-spaces": "warn",
-        "vue/mustache-interpolation-spacing": "warn",
 
         "vue/max-attributes-per-line" : "off",
         "vue/require-prop-types": "off",

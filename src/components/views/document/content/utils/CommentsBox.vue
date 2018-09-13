@@ -38,7 +38,10 @@
                                 {{ post['created_at'] | timeAgo }}
                             </span>
                         </div>
-                        <div class="discourse-content" v-html="post['cooked']"/>
+
+                        <!-- eslint-disable-next-line vue/no-v-html -->
+                        <div class="discourse-content" v-html="post.cooked"/>
+
                     </div>
                 </div>
             </div>
@@ -59,7 +62,7 @@
 
     export default {
         props:["document", "locale"],
-
+        
         data(){
             return {
                 forum,

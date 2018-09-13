@@ -79,7 +79,12 @@
         <div v-for="key of Object.keys(diffLocales)" :key="key" class="content">
             <h2 >{{ key }}</h2>
             <div class="locale-diff">
-                <div><pre><code v-html="diffLocales[key]"/></pre></div>
+                <div>
+                    <pre>
+                        <!-- eslint-disable-next-line vue/no-v-html -->
+                        <code v-html="diffLocales[key]"/>
+                    </pre>
+                </div>
             </div>
         </div>
 

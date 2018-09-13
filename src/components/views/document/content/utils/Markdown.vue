@@ -1,4 +1,5 @@
 <template>
+    <!-- eslint-disable-next-line vue/no-v-html -->
     <div class="content" v-html="html"/>
 </template>
 
@@ -6,7 +7,10 @@
     import markdown from '@/js/markdown.js'
 
     export default {
-        props: ['content'],
+        props: {
+            content:String,
+        },
+
         computed:{
             html(){
                 return markdown.convert(this.content)
