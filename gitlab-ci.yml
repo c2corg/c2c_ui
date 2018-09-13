@@ -1,5 +1,4 @@
-
-build-npm:
+build:
   stage: build
   image: node:8.11
   script:
@@ -9,10 +8,11 @@ build-npm:
     paths:
       - dist
 
+
 pages:
   stage: deploy
   dependencies:
-    - build-npm
+    - build
   script:
   - mv dist/ public/
   only:
