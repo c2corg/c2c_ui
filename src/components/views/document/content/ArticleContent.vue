@@ -4,15 +4,15 @@
             <content-box>
                 <activities :activities="document.activities"/>
             </content-box>
-            <license-box :cc="document.article_type=='collab' ? 'by-sa' : 'by-nc-nd'"></license-box>
+            <license-box :cc="document.article_type=='collab' ? 'by-sa' : 'by-nc-nd'"/>
         </div>
         <div class="column is-9">
             <content-box>
                 <summary>
-                    <markdown :content="locale.summary"></markdown>
+                    <markdown :content="locale.summary"/>
                 </summary>
 
-                <markdown :content="locale.description"></markdown>
+                <markdown :content="locale.description"/>
 
             </content-box>
 

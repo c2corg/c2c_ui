@@ -11,7 +11,13 @@
     import user from '@/js/user.js'
 
     export default {
-        props: ['document'],
+
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         data(){
             return {

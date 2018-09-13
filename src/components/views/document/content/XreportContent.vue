@@ -8,7 +8,7 @@
                     <activities :activities="document.activities"/>
                 </label-value>
 
-                <label-value label="author" v-if="document.author">
+                <label-value v-if="document.author" label="author">
                     <author-link :author="document.author"/>
                 </label-value>
 
@@ -27,9 +27,9 @@
                 <field-view :document="document" :field="fields.severity"/>
             </content-box>
 
-            <map-box :document="document"></map-box>
+            <map-box :document="document"/>
 
-            <license-box cc="by-nc-nd"></license-box>
+            <license-box cc="by-nc-nd"/>
         </div>
 
         <div class="column">

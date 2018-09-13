@@ -5,8 +5,8 @@
             <button class="button is-small is-primary is-rounded" disabled>Add an outing</button>
         </div>
         <pretty-outing-link
-           v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id"
-           :outing="outing"/>
+            v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id"
+            :outing="outing"/>
     </content-box>
 </template>
 

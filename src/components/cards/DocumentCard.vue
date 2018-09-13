@@ -28,7 +28,12 @@
             XreportCard,
         },
 
-        props: ['document'],
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         computed:{
             type(){

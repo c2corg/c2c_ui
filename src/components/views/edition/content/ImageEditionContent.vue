@@ -1,18 +1,18 @@
 <template>
     <div>
         <edit-section :document="document" header="general information">
-            <input-base class="is-9" :document="document" :base="locale" :field="fields.title"/>
-            <input-base class="is-3" :document="document" :field="fields.image_type" />
-            <input-activities class="is-6" :document="document"/>
-            <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
+            <input-base :document="document" :base="locale" :field="fields.title" class="is-9"/>
+            <input-base :document="document" :field="fields.image_type" class="is-3" />
+            <input-activities :document="document" class="is-6"/>
+            <input-checkboxes :document="document" :field="fields.categories" class="is-6" />
 
             <!--<input-base :document="document" :field="fields.author" />-->
 
             <input-base :document="document" :field="fields.date_time" />
             <input-base :document="document" :field="fields.filename" />
-            <input-base class="is-2" :document="document" :field="fields.file_size" />
-            <input-base class="is-2" :document="document" :field="fields.height" />
-            <input-base class="is-2" :document="document" :field="fields.width" />
+            <input-base :document="document" :field="fields.file_size" class="is-2" />
+            <input-base :document="document" :field="fields.height" class="is-2" />
+            <input-base :document="document" :field="fields.width" class="is-2" />
         </edit-section>
 
         <edit-section :document="document" header="geolocation">
@@ -28,8 +28,8 @@
         </edit-section>
 
         <edit-section :document="document" header="general information">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
+            <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
         </edit-section>
 
     </div>

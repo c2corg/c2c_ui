@@ -1,6 +1,6 @@
 <template>
     <router-link v-if="type!='u' && type!='profile'"
-        :to="{name:type + '-version', params:{id:id, version:version, lang:lang}}">
+                 :to="{name:type + '-version', params:{id:id, version:version, lang:lang}}">
         <slot/>
     </router-link>
     <span v-else>

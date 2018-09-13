@@ -1,5 +1,5 @@
 <template>
-    <fa-icon v-if="this.condition" icon="circle" :class="'icon-condition-' + this.condition" />
+    <fa-icon v-if="condition" :class="'icon-condition-' + condition" icon="circle" />
 </template>
 
 <script>

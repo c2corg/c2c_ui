@@ -2,11 +2,11 @@
     <div>
         <edit-section header="general information">
 
-            <input-activities class="is-6" :document="document" />
-            <input-checkboxes class="is-6" :document="document" :field="fields.categories" />
+            <input-activities :document="document" class="is-6" />
+            <input-checkboxes :document="document" :field="fields.categories" class="is-6" />
 
-            <input-base class="is-12" :document="document" :locale="locale" :field="fields.summary"/>
-            <input-base class="is-12" :document="document" :locale="locale" :field="fields.description"/>
+            <input-base :document="document" :locale="locale" :field="fields.summary" class="is-12"/>
+            <input-base :document="document" :locale="locale" :field="fields.description" class="is-12"/>
 
         </edit-section>
     </div>

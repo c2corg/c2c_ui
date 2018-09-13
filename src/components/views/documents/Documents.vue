@@ -23,35 +23,34 @@
             </div>
             <div class="level-right">
                 <div class="level-item">
-                    <span class="icon is-size-3" v-if="hasMap">
-                        <fa-icon icon="map-marked-alt"
-                        :class="{'has-text-primary':showMap}"
-                        @click="showMap=!showMap" />
+                    <span v-if="hasMap" class="icon is-size-3">
+                        <fa-icon :class="{'has-text-primary':showMap}"
+                                 icon="map-marked-alt"
+                                 @click="showMap=!showMap" />
                     </span>
                 </div>
             </div>
         </div>
 
         <div class="columns">
-            <div class="column cards-container"
-                 :class="{'is-12': !showMap, 'is-8': showMap}">
+            <div :class="{'is-12': !showMap, 'is-8': showMap}"
+                 class="column cards-container">
 
                 <loading-notification :loaded="documents!=null" :error="error"/>
 
                 <div v-if="documents" class="columns is-multiline cards-list">
-                    <div v-for="(document, index) in documents.documents" :key="index" class="column card-container"
-                        :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}">
+                    <div v-for="(document, index) in documents.documents" :key="index" :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}"
+                         class="column card-container">
                         <document-card :document="document"/>
                     </div>
                 </div>
 
-                <page-selector :documents="documents" v-if="documents!=null"/>
+                <page-selector v-if="documents!=null" :documents="documents"/>
             </div>
 
-            <div class="column map-container"
-                 v-if="hasMap">
-                <map-view :documents="documents" style="width: 100%; height: 100%">
-                </map-view>
+            <div v-if="hasMap"
+                 class="column map-container">
+                <map-view :documents="documents" style="width: 100%; height: 100%"/>
             </div>
         </div>
     </div>
@@ -118,8 +117,7 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss'; //todo redo this computation : can't include all that stuff
-
+@import '@/assets/sass/variables.scss';
 
 $header-margin-bottom : 1rem;
 $header-height : $header-margin-bottom + $size-1;

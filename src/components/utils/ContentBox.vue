@@ -1,6 +1,6 @@
 <template>
     <div class="content-box" @click="click" >
-        <slot></slot>
+        <slot/>
     </div>
 </template>
 

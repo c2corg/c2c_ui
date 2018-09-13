@@ -1,5 +1,5 @@
 <template>
-    <div class="columns content section" v-if="results">
+    <div v-if="results" class="columns content section">
         <div class="column">
             <h1>routes ({{results.routes.total}})</h1>
             <pretty-route-link v-for="route of results.routes.documents" :key="route.document_id" :route="route"/>

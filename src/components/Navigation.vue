@@ -1,32 +1,32 @@
 <template>
     <nav class="navbar is-light">
         <div class="navbar-brand">
-            <router-link class="navbar-item" :to="{name:'home'}">
+            <router-link :to="{name:'home'}" class="navbar-item">
                 <img src="@/assets/img/logo.svg"
                      url="@/assets/img/logo.svg"
                      alt="Camptocamp.org" class="logo src">
             </router-link>
-            <a role="button" aria-label="menu" aria-expanded="false"
-               class="navbar-burger" :class="{ 'is-active': burgerActive }"
-               v-on:click="burgerActive=!burgerActive">
+            <a :class="{ 'is-active': burgerActive }" role="button" aria-label="menu"
+               aria-expanded="false" class="navbar-burger"
+               @click="burgerActive=!burgerActive">
 
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
+                <span aria-hidden="true"/>
+                <span aria-hidden="true"/>
+                <span aria-hidden="true"/>
             </a>
         </div>
 
-        <div id="navMenu" class="navbar-menu is-size-5" v-bind:class="{ 'is-active': burgerActive }">
+        <div id="navMenu" :class="{ 'is-active': burgerActive }" class="navbar-menu is-size-5">
             <div class="navbar-start">
-                <router-link class="navbar-item" :to="{name:link.name}"
-                             v-for="(link, index) in links" :key="index">
+                <router-link v-for="(link, index) in links" :to="{name:link.name}"
+                             :key="index" class="navbar-item">
                     <component :is="link.iconName" class="is-medium"/>
                     {{link.text}}
                 </router-link>
 
                 <div class="navbar-item field">
                     <div class="control has-icons-left">
-                        <input class="input is-primary is-size-5" placeholder="Search" v-model="searchText" @input="search()">
+                        <input v-model="searchText" class="input is-primary is-size-5" placeholder="Search" @input="search()">
                         <span class="icon is-left is-size-5">
                             <fa-icon icon="search"/>
                         </span>
@@ -37,40 +37,40 @@
 
             <div class="navbar-end">
 
-                <div class="navbar-item" v-if="!user.isLogged()">
-                    <router-link class="button is-primary"
-                                 :to="{ name: 'auth' }">
+                <div v-if="!user.isLogged()" class="navbar-item">
+                    <router-link :to="{ name: 'auth' }"
+                                 class="button is-primary">
                         sign in
                     </router-link>
                 </div>
 
-                <div class="navbar-item has-dropdown is-hoverable" v-else>
-                    <div  class="navbar-link">
-                        <img class="user-avatar" :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'">
+                <div v-else class="navbar-item has-dropdown is-hoverable">
+                    <div class="navbar-link">
+                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'" class="user-avatar">
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
-                        <router-link class="navbar-item" :to="{ name: 'profile', params:{id:user.data.id} }">
+                        <router-link :to="{ name: 'profile', params:{id:user.data.id} }" class="navbar-item">
                             <fa-icon icon="user"/>
                             my profile
                         </router-link>
-                        <router-link class="navbar-item" :to="{ name: 'account' }">
+                        <router-link :to="{ name: 'account' }" class="navbar-item">
                             <fa-icon icon="check-circle"/>
                             my account
                         </router-link>
-                        <router-link class="navbar-item" :to="{ name: 'preferences' }">
+                        <router-link :to="{ name: 'preferences' }" class="navbar-item">
                             <fa-icon icon="cogs"/>
                             my preferences
                         </router-link>
 
-                        <router-link class="navbar-item" :to="{ name: 'outings', query:{u:user.data.id} }">
+                        <router-link :to="{ name: 'outings', query:{u:user.data.id} }" class="navbar-item">
                             <icon-outing />
                             my outings
                         </router-link>
-                        <router-link class="navbar-item" :to="{ name: 'following' }">
+                        <router-link :to="{ name: 'following' }" class="navbar-item">
                             <fa-icon icon="heart"/>
                             my followed users
                         </router-link>
-                        <router-link class="navbar-item" :to="{ name: 'mailinglists' }">
+                        <router-link :to="{ name: 'mailinglists' }" class="navbar-item">
                             <fa-icon icon="at"/>
                             my mailings
                         </router-link>
@@ -87,7 +87,7 @@
                         {{user.data.lang}}
                     </a>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
-                        <a class="navbar-item" v-for="lang in langs" :key="lang" @click="user.setLang(lang)">
+                        <a v-for="lang in langs" :key="lang" class="navbar-item" @click="user.setLang(lang)">
                             {{lang}}
                         </a>
                     </div>

@@ -2,8 +2,8 @@
     <div class="section content">
         <h1>
             <icon-document :type="type" class="is-large"/>
-            <span>diff</span> ({{this.lang}}) :
-            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{title}}</router-link>
+            <span>diff</span> ({{lang}}) :
+            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{title}}</router-link>
         </h1>
         <table>
             <tr>
@@ -22,9 +22,9 @@
                         </div>
                         <div>
                             <diff-link v-if="oldVersion.previous_version_id"
-                                :type="type" :id="documentId" :lang="lang"
-                                :version-from="oldVersion.previous_version_id"
-                                :version-to="oldVersion.version.version_id">
+                                       :type="type" :id="documentId" :lang="lang"
+                                       :version-from="oldVersion.previous_version_id"
+                                       :version-to="oldVersion.version.version_id">
                                 ← previous difference
                             </diff-link>
                             <span v-else>
@@ -48,9 +48,9 @@
                         </div>
                         <div>
                             <diff-link v-if="newVersion.next_version_id"
-                                :type="type" :id="documentId" :lang="lang"
-                                :version-from="newVersion.version.version_id"
-                                :version-to="newVersion.next_version_id">
+                                       :type="type" :id="documentId" :lang="lang"
+                                       :version-from="newVersion.version.version_id"
+                                       :version-to="newVersion.next_version_id">
                                 next difference →
                             </diff-link>
                             <span v-else>
@@ -62,7 +62,7 @@
             </tr>
         </table>
 
-        <div class="content" v-for="key of Object.keys(diffProperties)" :key="key">
+        <div v-for="key of Object.keys(diffProperties)" :key="key" class="content">
             <h2>{{key}}</h2>
             <table>
                 <tr>
@@ -76,10 +76,10 @@
             </table>
         </div>
 
-        <div class="content" v-for="key of Object.keys(diffLocales)" :key="key">
+        <div v-for="key of Object.keys(diffLocales)" :key="key" class="content">
             <h2 >{{key}}</h2>
             <div class="locale-diff">
-                <div><pre><code v-html="diffLocales[key]"></code></pre></div>
+                <div><pre><code v-html="diffLocales[key]"/></pre></div>
             </div>
         </div>
 
@@ -106,6 +106,11 @@
                 diffProperties:{},
                 diffLocales:{}
             }
+        },
+
+        created() {
+            this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
+            this.loadVersion(this.$route.params.versionTo, "newVersion")
         },
 
         methods: {
@@ -204,11 +209,6 @@
                     this.loadVersion(versionId, resultProperty)
                 }
             }
-        },
-
-        created() {
-            this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
-            this.loadVersion(this.$route.params.versionTo, "newVersion")
         },
     }
 

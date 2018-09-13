@@ -8,7 +8,7 @@
 
         <div slot="row2" class="level">
             <span class="is-ellipsed" >
-                <fa-icon  class="has-text-primary" icon="tachometer-alt"/>
+                <fa-icon class="has-text-primary" icon="tachometer-alt"/>
                 <route-rating :route="document"/>
             </span>
 
@@ -22,7 +22,7 @@
         </div>
 
         <div slot="row3" class="level">
-            <activities class="has-text-primary is-size-4 is-ellipsed" :activities="document.activities"/>
+            <activities :activities="document.activities" class="has-text-primary is-size-4 is-ellipsed"/>
 
             <icon-geometry-detail v-if="document.geometry.has_geom_detail" class="has-text-primary"/>
 
@@ -51,7 +51,12 @@
             CardRegionItem
         },
 
-        props: ['document'],
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         methods:{
             go(){

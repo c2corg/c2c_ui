@@ -4,7 +4,7 @@
             <p class="card-header-title">
                 <slot name="header">A very long header that should be ellipsed</slot>
             </p>
-        </header>
+        </header>        
         <div class="card-content">
             <slot name="row1">Please fill content</slot>
         </div>

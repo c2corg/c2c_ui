@@ -1,15 +1,15 @@
 <template>
-    <div class="column" v-if="field.isVisibleFor(document)">
+    <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
             <label>
-                {{field.name}}
+                {{ field.name }}
                 <span v-if="field.required">*</span>
             </label>
             <div class="columns is-multiline is-gapless">
-                <div class="column is-6" v-for="item of field.values" :key="item">
+                <div v-for="item of field.values" :key="item" class="column is-6">
                     <label class="checkbox">
                         <input type="checkbox" value="document[field.name].includes(item)">
-                        {{item}}
+                        {{ item }}
                     </label>
                 </div>
             </div>
@@ -30,4 +30,4 @@
             }
         }
     }
-</script>
+</scrip

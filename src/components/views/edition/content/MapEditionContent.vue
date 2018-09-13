@@ -1,7 +1,7 @@
 <template>
     <div>
-        <edit-section expanded="true" :document="document" header="general information">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
+        <edit-section :document="document" expanded="true" header="general information">
+            <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
 
             <input-base :document="document" :field="fields.editor" />
             <input-base :document="document" :field="fields.scale" />

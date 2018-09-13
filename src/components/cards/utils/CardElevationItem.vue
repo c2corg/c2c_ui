@@ -8,7 +8,12 @@
 <script>
 
     export default {
-        props: ['elevation'],
-}
+        props: {
+            elevation:{
+                type:Number,
+                default:null,
+            }
+        },
+    }
 
 </script>

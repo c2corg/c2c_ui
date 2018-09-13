@@ -1,5 +1,5 @@
 <template>
-    <div class="section content" v-if="mailinglists">
+    <div v-if="mailinglists" class="section content">
         <h1>
             <fa-icon icon="at"/>
             <span>My mailing lists</span>
@@ -7,10 +7,10 @@
 
         <p>Here you may change your subscriptions to snow forecast mailing lists.</p>
         <div class="field">
-            <div class="control" v-for="mailinglist in Object.keys(mailinglists)" :key="mailinglist">
+            <div v-for="mailinglist in Object.keys(mailinglists)" :key="mailinglist" class="control">
                 <label>
-                    <input class="checkbox" type="checkbox" v-model="mailinglists[mailinglist]" @change="save">
-                    <span>{{mailinglist}} list</span>
+                    <input v-model="mailinglists[mailinglist]" class="checkbox" type="checkbox" @change="save">
+                    <span>{{ mailinglist }} list</span>
                 </label>
             </div>
         </div>
@@ -29,17 +29,17 @@
             }
         },
 
+        created(){
+            c2c.user.mailinglists.get().then(response => {
+                this.mailinglists = response.data
+            })
+        },
+
         methods:{
             save(){
                 c2c.user.mailinglists.post(this.mailinglists)
             }
         },
-
-        created(){
-            c2c.user.mailinglists.get().then(response => {
-                this.mailinglists = response.data
-            })
-        }
     }
 </script>
 

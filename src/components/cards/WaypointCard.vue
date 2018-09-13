@@ -33,7 +33,12 @@
             CardRegionItem
         },
 
-        props: ['document'],
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         methods:{
             go(){

@@ -21,7 +21,7 @@
                     <span translate>View xreports</span>
                 </router-link>
 
-                <router-link :to="{name:'article', params:{id:697210}}"  class="button is-info">
+                <router-link :to="{name:'article', params:{id:697210}}" class="button is-info">
                     <fa-icon icon="info"/>
                     <span translate>Know more about SERAC</span>
                 </router-link>

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Navigation></Navigation>
+        <Navigation/>
         <router-view :key="$route.name + JSON.stringify($route.params)"/>
     </div>
 </template>
@@ -9,7 +9,7 @@
     import Navigation from './components/Navigation'
 
     export default {
-        name: 'app',
+        name: 'App',
         components: {
             Navigation
         }

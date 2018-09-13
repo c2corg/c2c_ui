@@ -1,18 +1,18 @@
 <template>
     <div v-if="history" class="section content">
         <h1>
-            <icon-document class="is-large" :type="type"/>
-            <span>history</span> ({{this.lang}}) :
-            <router-link :to="{ name: this.type, params: {id:this.documentId, lang:this.lang} }">{{history.title}}</router-link>
+            <icon-document :type="type" class="is-large"/>
+            <span>history</span> ({{lang}}) :
+            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{history.title}}</router-link>
         </h1>
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-primary" @click="gotToDiff"  v-if="type!='profile'">
+                <button v-if="type!='profile'" class="button is-primary" @click="gotToDiff">
                     compare selected versions
                 </button>
             </div>
             <div class="control">
-                <router-link :to="{name:type, params:{id:this.documentId, lang:this.lang}}" class="button is-link">
+                <router-link :to="{name:type, params:{id:documentId, lang:lang}}" class="button is-link">
                     go to last version
                 </router-link>
             </div>
@@ -26,19 +26,19 @@
             </tr>
             <tr v-for="version of history.versions" :key="version.verion_id">
                 <td>
-                    <div class="control" v-if="type!='profile'">
-                        <input type="radio"
-                            name="versionFrom"
-                            v-model="versionFrom"
-                            :disabled="versionTo <= version.version_id"
-                            :value="version.version_id">
-                        <input type="radio"
-                            name="versionTo"
-                            v-model="versionTo"
-                            :disabled="versionFrom >= version.version_id"
-                            :value="version.version_id">
-                        <diff-link :type="type" :id="documentId" :lang="lang" :version-to="version.version_id"
-                                     v-if="version.version_id != last_version_id"/>
+                    <div v-if="type!='profile'" class="control">
+                        <input v-model="versionFrom"
+                               :disabled="versionTo <= version.version_id"
+                               :value="version.version_id"
+                               type="radio"
+                               name="versionFrom">
+                        <input v-model="versionTo"
+                               :disabled="versionFrom >= version.version_id"
+                               :value="version.version_id"
+                               type="radio"
+                               name="versionTo">
+                        <diff-link v-if="version.version_id != last_version_id" :type="type" :id="documentId" :lang="lang"
+                                   :version-to="version.version_id"/>
                     </div>
                 </td>
                 <td>
@@ -86,6 +86,16 @@
             }
         },
 
+        created() {
+            c2c.getHistory(this.documentId, this.lang).then(response => {
+                this.history=response.data;
+                this.last_version_id = this.history.versions[0].version_id
+                this.history.versions = this.history.versions.reverse()
+                this.versionFrom = this.history.versions[this.history.versions.length-1].version_id
+                this.versionTo = this.history.versions[0].version_id
+            });
+        },
+
         methods: {
             gotToDiff(){
 
@@ -97,16 +107,6 @@
                     }
                 })
             }
-        },
-
-        created() {
-            c2c.getHistory(this.documentId, this.lang).then(response => {
-                this.history=response.data;
-                this.last_version_id = this.history.versions[0].version_id
-                this.history.versions = this.history.versions.reverse()
-                this.versionFrom = this.history.versions[this.history.versions.length-1].version_id
-                this.versionTo = this.history.versions[0].version_id
-            });
         },
     }
 

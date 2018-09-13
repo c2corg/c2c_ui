@@ -19,42 +19,42 @@
             </router-link>
 
             <router-link to="outings">
-                <icon-outing></icon-outing>
+                <icon-outing/>
                 <div>Outings</div>
             </router-link>
 
             <router-link to="waypoints">
-                <icon-waypoint></icon-waypoint>
+                <icon-waypoint/>
                 <div>Waypoints</div>
             </router-link>
 
             <router-link to="routes">
-                <icon-route></icon-route>
+                <icon-route/>
                 <div>Routes</div>
             </router-link>
 
             <router-link to="articles">
-                <icon-article></icon-article>
+                <icon-article/>
                 <div>Articles</div>
             </router-link>
 
             <router-link to="books">
-                <icon-book></icon-book>
+                <icon-book/>
                 <div>Books</div>
             </router-link>
 
             <router-link to="xreports">
-                <icon-xreport></icon-xreport>
+                <icon-xreport/>
                 <div>Xreports</div>
             </router-link>
 
             <router-link to="images">
-                <icon-image></icon-image>
+                <icon-image/>
                 <div>Images</div>
             </router-link>
 
             <router-link to="areas">
-                <icon-area></icon-area>
+                <icon-area/>
                 <div>Areas</div>
             </router-link>
         </div>

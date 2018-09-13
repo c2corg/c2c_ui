@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="notification is-primary" v-if="!loaded && error==null">
+        <div v-if="!loaded && error==null" class="notification is-primary">
             Loading
         </div>
-        <div class="notification is-danger" v-if="error!=null">
+        <div v-if="error!=null" class="notification is-danger">
             {{error}}
         </div>
     </div>

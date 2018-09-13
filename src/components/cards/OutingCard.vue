@@ -1,8 +1,8 @@
 <template>
     <card-container class="route-card" @click="go">
-        <div  slot="header" class="level">
+        <div slot="header" class="level">
             <document-title :document="document" class="is-ellipsed"/>
-            <icon-condition class="is-pulled-right" :condition="document.condition_rating"/>
+            <icon-condition :condition="document.condition_rating" class="is-pulled-right"/>
         </div>
 
         <div slot="row1" class="level">
@@ -18,7 +18,7 @@
 
         <div slot="row2" class="level">
             <span>
-                <fa-icon  class="has-text-primary" icon="tachometer-alt"/>
+                <fa-icon class="has-text-primary" icon="tachometer-alt"/>
                 <outing-rating :outing="document"/>
             </span>
 
@@ -34,11 +34,11 @@
         </div>
 
         <div slot="row3" class="level">
-            <activities class="has-text-primary" :activities="document.activities"/>
+            <activities :activities="document.activities" class="has-text-primary"/>
 
             <span class="has-text-primary">
                 <icon-geometry-detail v-if="document.geometry.has_geom_detail" />
-                <icon-document type="image" v-if="document.img_count != 0"/>
+                <icon-document v-if="document.img_count != 0" type="image"/>
             </span>
 
             {{document.date_start}}
@@ -61,7 +61,12 @@
             CardRegionItem
         },
 
-        props: ['document'],
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         methods:{
             go(){

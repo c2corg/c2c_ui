@@ -1,9 +1,9 @@
 <template>
     <span>
         <span v-for="activity of constants.activities" :key="activity"
-              @click="toggle(activity)"
+              :class="{'selected':value_.includes(activity)}"
               class="input-item"
-              :class="{'selected':value_.includes(activity)}">
+              @click="toggle(activity)">
             <icon-activity :activity="activity" />
         </span>
     </span>

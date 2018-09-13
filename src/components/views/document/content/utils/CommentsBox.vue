@@ -29,23 +29,23 @@
                         <img :src="post.avatar_template">
                     </div>
                     <div class="column">
-                        <div  class="discourse-post-header">
+                        <div class="discourse-post-header">
                             <a :href="'https://forum.camptocamp.org/users/' + post.username" :title="post.username"
-                                class="discourse-post-header-username">
+                               class="discourse-post-header-username">
                                 {{post.username}}
                             </a>
                             <span class="is-pulled-right">
                                 {{post['created_at'] | timeAgo}}
                             </span>
                         </div>
-                        <div class="discourse-content" v-html="post['cooked']"></div>
+                        <div class="discourse-content" v-html="post['cooked']"/>
                     </div>
                 </div>
             </div>
 
             <div class="has-text-centered">
                 <a :href="forum.url + '/t/' + topic.slug + '/' + locale.topic_id + '/' + topic.posts_count"
-                    class="button is-primary">
+                   class="button is-primary">
                     Continue the discussion
                 </a>
             </div>
@@ -68,6 +68,10 @@
                 comments:[],
                 errorMessage:null
             }
+        },
+
+        created(){
+            this.getComments();
         },
 
         methods:{
@@ -117,10 +121,6 @@
                 }
             }
         },
-
-        created(){
-            this.getComments();
-        }
     }
 </script>
 

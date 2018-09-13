@@ -1,7 +1,7 @@
 //https://bulma.io/documentation/customize/variables/
 
 
-/////////////////////////////////////
+////////////////////////////////////////////////////////////
 // here is cutome c2c variables
 $color-base-c2c: #ffaa45;
 $color-base-darker: #B26F1E;
@@ -10,7 +10,7 @@ $color-complementary: #0D7FB2;
 $color-complementary-lighter: #45C5FF;
 
 
-/////////////////////////////////////
+////////////////////////////////////////////////////////////
 // Bulma variables
 $body-size : 14px !default;
 
@@ -23,6 +23,7 @@ $size-5	: 1.15rem;   // 1.25rem;
 $size-7 : 0.8rem; //0.75
 
 
+////////////////////////////////////////////////////////////
 //customize bulma colors
 $primary: $color-complementary; //$turquoise
 //$link: $blue
@@ -38,8 +39,16 @@ $pagination-current-border-color:$primary;
 
 $body-background-color : white;
 
-// paddings and margins
+////////////////////////////////////////////////////////////
+// Paddings and margins
 $section-padding : 1.5rem 1.5rem;
+
+
+////////////////////////////////////////////////////////////
+// Here is bulma variables needed for components.
+// we only includes variables from utilities, and
+// locally other varaible if needded (like $navbar-height)
+$navbar-height: 3.25rem;
 
 @import "~bulma/sass/utilities/initial-variables.sass";
 @import "~bulma/sass/utilities/functions.sass";

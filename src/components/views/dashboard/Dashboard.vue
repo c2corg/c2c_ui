@@ -23,14 +23,14 @@
                 <content-box>
                     <h2 class="title is-2">Forum</h2>
                     <div v-if="latest_topics && latest_topics.topic_list">
-                        <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" :key="topic.id"
-                             v-if="topic.category_id != 29">
+                        <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" v-if="topic.category_id != 29"
+                             :key="topic.id">
 
                             <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
                                target="_blank">
 
-                               <img height="16" width="16"
-                                    :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')">
+                                <img :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')" height="16"
+                                     width="16">
 
 
                                 {{topic.title}}
@@ -46,7 +46,7 @@
                     <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
-                            <pretty-route-link :route="route" showArea="true"/>
+                            <pretty-route-link :route="route" show-area="true"/>
                         </div>
                     </div>
                 </content-box>
@@ -57,10 +57,10 @@
 
 <script>
 
-    import DashboardOutingLink from './DashboardOutingLink'
-
     import c2c from '@/js/c2c.js'
     import forum from '@/js/forum.js'
+
+    import DashboardOutingLink from './DashboardOutingLink'
 
     export default {
 

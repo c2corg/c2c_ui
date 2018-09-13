@@ -1,9 +1,9 @@
 <template>
     <div>
         <dropdown-button v-for="category of categorizedFields" :key="category.name"
-            class="category-button"
-            :disabled="category.fields.length===0"
-            @changeDisplay="refreshSliders()">
+                         :disabled="category.fields.length===0"
+                         class="category-button"
+                         @changeDisplay="refreshSliders()">
 
             <span slot="button">
                 {{category.name}}
@@ -13,7 +13,7 @@
             </span>
 
             <div class="sub-query-items">
-                <query-item v-for="field of category.fields" :key="field.name" :field="field"></query-item>
+                <query-item v-for="field of category.fields" :key="field.name" :field="field"/>
             </div>
 
         </dropdown-button>

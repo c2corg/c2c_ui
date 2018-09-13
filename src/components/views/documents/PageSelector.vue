@@ -1,22 +1,28 @@
 <template>
     <div>
         <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
-            <router-link :disabled="currentPage<=1" class="pagination-previous"
-                :to="pageQuery(currentPage-1)">
+            <router-link
+                :disabled="currentPage<=1"
+                :to="pageQuery(currentPage-1)"
+                class="pagination-previous">
                 <fa-icon icon="chevron-left"/>
             </router-link>
 
-            <router-link  :disabled="currentPage>=pageCount" class="pagination-next"
-                :to="pageQuery(currentPage+1)">
+            <router-link
+                :disabled="currentPage>=pageCount"
+                :to="pageQuery(currentPage+1)"
+                class="pagination-next">
                 <fa-icon icon="chevron-right"/>
             </router-link >
 
-          <ul class="pagination-list">
+            <ul class="pagination-list">
                 <li v-for="page of pageLinks" :key="page">
                     <span v-if="page===null" class="pagination-ellipsis">&hellip;</span>
-                    <router-link v-else class="pagination-link" :class="{'is-current':page==currentPage}"
+                    <router-link
+                        v-else :class="{'is-current':page==currentPage}"
                         :aria-label="'Goto page' + page"
-                        :to="pageQuery(page)">
+                        :to="pageQuery(page)"
+                        class="pagination-link">
                         {{page}}
                     </router-link>
                 </li>
@@ -34,7 +40,12 @@
     const queryLimit = 30
 
     export default {
-        props:["documents"],
+        props:{
+            documents: {
+                type: Object,
+                required: true,
+            }
+        },
 
         data(){
             return {queryLimit}
@@ -96,7 +107,7 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/main.scss';
+@import '@/assets/sass/variables.scss';
 
 .pagination-link, .pagination-next, .pagination-previous{
     background:$white-bis;

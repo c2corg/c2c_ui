@@ -1,16 +1,15 @@
 <template>
-    <div class="section" v-if="document && locale">
+    <div v-if="document && locale" class="section">
         <h1 class="title">
             Edit
             <document-title :document="document"/>
             in
             {{locale.lang}}
         </h1>
-        <save-block :document="document"></save-block>
+        <save-block :document="document"/>
         <component :is="type + '-edition-content'"
-            :document="document" :locale="locale"
-            :fields="constants.objectDefinitions[type].fields">
-        </component>
+                   :document="document" :locale="locale"
+                   :fields="constants.objectDefinitions[type].fields"/>
     </div>
 </template>
 

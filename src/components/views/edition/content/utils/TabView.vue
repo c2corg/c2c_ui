@@ -3,11 +3,11 @@
         <div class="tabs is-centered is-boxed">
             <ul>
                 <li v-for="(tab, i) in tabs" :key="i" :class="{'is-active':tab.isActive}">
-                    <a @click="selectTab(tab)">{{tab.title}}</a>
+                    <a @click="selectTab(tab)">{{ tab.title }}</a>
                 </li>
             </ul>
         </div>
-        <slot></slot>
+        <slot/>
     </div>
 </template>
 
@@ -19,6 +19,11 @@
             return {
                 tabs:[],
             }
+        },
+
+        mounted() {
+             this.tabs = this.$children;
+             this.tabs[0].isActive=true
         },
 
         methods:{
@@ -37,10 +42,5 @@
                 tab.isActive = true
             }
         },
-
-        mounted() {
-             this.tabs = this.$children;
-             this.tabs[0].isActive=true
-        }
     }
 </script>

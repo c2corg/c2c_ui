@@ -3,7 +3,7 @@
     <div class="columns">
         <div class="column is-3">
 
-            <map-box :document="document"></map-box>
+            <map-box :document="document"/>
 
             <associated-waypoints :document="document" />
             <associated-books :document="document" />
@@ -23,10 +23,10 @@
                     <div class="column is-4">
 
                         <label-value label="activities">
-                            <activities class="is-size-3 has-text-primary" :activities="document.activities"/>
+                            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                         </label-value>
 
-                        <label-value label="route type"  v-if="document.route_types">
+                        <label-value v-if="document.route_types" label="route type">
                             {{document.route_types.join(', ')}}
                         </label-value>
 
@@ -45,7 +45,7 @@
 
                         <field-view :document="document" :field="fields.glacier_gear"/>
 
-                        <input-orientation v-model="document.orientations"  v-if="document.orientations && document.orientations.length" read-only/>
+                        <input-orientation v-if="document.orientations && document.orientations.length" v-model="document.orientations" read-only/>
 
                     </div>
 
@@ -62,7 +62,7 @@
                             <span v-if="document.elevation_max">{{document.elevation_max}}&#8239;m</span>
                         </div>
 
-                        <label-value label="height difference"  v-if="document.height_diff_up || document.height_diff_down">
+                        <label-value v-if="document.height_diff_up || document.height_diff_down" label="height difference">
                             <span v-if="document.height_diff_up">+{{document.height_diff_up}}&#8239;m</span>
                             <span v-if="document.height_diff_up && document.height_diff_down">/</span>
                             <span v-if="document.height_diff_down">-{{document.height_diff_down}}&#8239;m</span>
@@ -79,7 +79,7 @@
                         <field-view :document="document" :field="fields.mtb_length_asphalt"/>
                         <field-view :document="document" :field="fields.mtb_length_trail"/>
 
-                        <label-value label="slope" v-if="locale.slope">
+                        <label-value v-if="locale.slope" label="slope">
                             {{locale.slope}}
                         </label-value>
 
@@ -100,7 +100,7 @@
                 <markdown-section :document="document" :locale="locale" :field="fields.external_resources" />
             </content-box>
 
-            <recent-outings-box :document="document"></recent-outings-box>
+            <recent-outings-box :document="document"/>
 
             <comments-box :document="document" :locale="locale" />
 

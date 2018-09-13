@@ -1,7 +1,7 @@
 <template>
     <div class="section content">
         <div v-if="results">
-            <router-link class="button is-link" :to="{name: 'whatsnew', query: getNextQuery() }">
+            <router-link :to="{name: 'whatsnew', query: getNextQuery() }" class="button is-link">
                 next
             </router-link>
             <table>
@@ -9,14 +9,14 @@
                     <th>modified the</th>
                     <th>author</th>
                     <th>links</th>
-                    <th></th>
+                    <th/>
                     <th>
                         <span>title</span>
                         :
                         <span>comment</span>
                     </th>
                 </tr>
-                <tr v-for='(change, index) of results.feed' :key="index">
+                <tr v-for="(change, index) of results.feed" :key="index">
                     <td>
                         <version-link :type="change.document.type" :id="change.document.document_id"
                                       :version="change.version_id" :lang="change.lang">
@@ -36,7 +36,7 @@
                                    :version-to="change.version_id"/>
 
                         <history-link :type="change.document.type"
-                                   :id="change.document.document_id" :lang="change.lang"/>
+                                      :id="change.document.document_id" :lang="change.lang"/>
 
                     </td>
                     <td>
@@ -70,17 +70,17 @@
             }
         },
 
+        created(){
+            c2c.getRecentChanges(this.$route.query).then(response => {
+                this.results = response.data
+            })
+        },
+
         methods:{
             getNextQuery(){
                 return Object.assign({}, this.$route.query, {token:this.results.pagination_token})
             }
         },
-
-        created(){
-            c2c.getRecentChanges(this.$route.query).then(response => {
-                this.results = response.data
-            })
-        }
     }
 </script>
 <style scoped>

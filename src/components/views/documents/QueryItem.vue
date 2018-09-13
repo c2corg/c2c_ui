@@ -1,21 +1,19 @@
 <template>
-    <div class="field" v-if="field!==undefined">
+    <div v-if="field!==undefined" class="field">
         <div v-if="field.queryMode==='valuesRangeSlider'" class="control" >
 
             <query-item-slider-label :field="field" :value="value"/>
             <vue-slider ref="slider" v-model="value"
-                :data="field.values" :lazy="true"
-                tooltip="hover" :piecewise="true">
-            </vue-slider>
+                        :data="field.values" :lazy="true"
+                        :piecewise="true" tooltip="hover"/>
 
         </div>
 
         <div v-else-if="field.queryMode==='numericalRangeSlider'" class="control">
             <query-item-slider-label :field="field" :value="value"/>
             <vue-slider ref="slider" v-model="value"
-                :min="field.min" :max="field.max" :lazy="true"
-                tooltip="hover">
-            </vue-slider>
+                        :min="field.min" :max="field.max" :lazy="true"
+                        tooltip="hover"/>
         </div>
 
         <div v-else-if="field.queryMode==='multiSelect'" class="control">
@@ -23,26 +21,25 @@
                 {{field.label}}
             </label>
 
-            <multiselect  v-model="value"
-                :options="field.values"
-                :multiple="true">
-            </multiselect>
+            <multiselect v-model="value"
+                         :options="field.values"
+                         :multiple="true"/>
         </div>
 
         <div v-else-if="field.queryMode==='orientations'" class="level">
-            <input-orientation  class="level-item" v-model="value"/>
+            <input-orientation v-model="value" class="level-item"/>
         </div>
 
-        <div v-else-if="field.queryMode==='input'"  class="control">
+        <div v-else-if="field.queryMode==='input'" class="control">
             <label class="label is-first-letter-uppercase">
                 {{field.label}}
             </label>
-            <input :type="field.type" class="input is-primary" v-model="value">
+            <input :type="field.type" v-model="value" class="input is-primary">
         </div>
 
         <div v-else-if="field.queryMode==='checkbox'" class="control">
             <label class="checkbox">
-                <input type="checkbox" v-model="value">
+                <input v-model="value" type="checkbox">
                 {{field.label}}
             </label>
         </div>

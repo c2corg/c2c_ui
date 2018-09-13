@@ -6,7 +6,7 @@
             </button>
         </div>
         <div class="control">
-            <input type="text" class="input" placeholder="comment" v-model="comment"/>
+            <input v-model="comment" type="text" class="input" placeholder="comment">
         </div>
     </div>
 </template>

@@ -29,10 +29,10 @@
             <div class="column">
                 <content-box>
                     <summary>
-                        <markdown :content="locale.summary"></markdown>
+                        <markdown :content="locale.summary"/>
                     </summary>
 
-                    <markdown :content="locale.description"></markdown>
+                    <markdown :content="locale.description"/>
                 </content-box>
 
             </div>

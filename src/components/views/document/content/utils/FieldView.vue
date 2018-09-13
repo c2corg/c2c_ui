@@ -1,5 +1,5 @@
 <template>
-    <label-value :label="field.label" v-if="hasValue">
+    <label-value v-if="hasValue" :label="field.label">
         {{ isArray ? value.join(", ") : value }}
         <span v-if="field.unit">
             {{field.unit}}

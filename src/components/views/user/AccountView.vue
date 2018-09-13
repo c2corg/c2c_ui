@@ -2,15 +2,15 @@
     <div class="section content">
         <h1>change account parameters</h1>
         <form>
-            <form-field label="current password" type="password" :data="password" icon="key"/>
-            <form-field label="new password" type="password" :data="new_password" icon="key"/>
-            <form-field label="email" type="text" :data="email" icon="at"/>
-            <form-field label="name" type="text" :data="name" icon="user-check"/>
-            <form-field label="forum username" type="text" :data="forum_username" icon="comments"/>
+            <form-field :data="password" label="current password" type="password" icon="key"/>
+            <form-field :data="new_password" label="new password" type="password" icon="key"/>
+            <form-field :data="email" label="email" type="text" icon="at"/>
+            <form-field :data="name" label="name" type="text" icon="user-check"/>
+            <form-field :data="forum_username" label="forum username" type="text" icon="comments"/>
 
             <div class="field is-grouped">
                 <label class="checkbox">
-                    <input type="checkbox" v-model="is_profile_public.value">
+                    <input v-model="is_profile_public.value" type="checkbox">
                     Make profile page public
                 </label>
             </div>
@@ -51,6 +51,13 @@
             }
         },
 
+        created(){
+            c2c.user.account.get().then(response => {
+                this.email = getFieldValue(response.data.email)
+                this.is_profile_public = getFieldValue(response.data.is_profile_public)
+            })
+        },
+
         methods:{
             save(){
                 function newOrNull(fieldValue){
@@ -69,13 +76,6 @@
                 })
             }
         },
-
-        created(){
-            c2c.user.account.get().then(response => {
-                this.email = getFieldValue(response.data.email)
-                this.is_profile_public = getFieldValue(response.data.is_profile_public)
-            })
-        }
     }
 
 </script>

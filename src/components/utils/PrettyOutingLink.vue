@@ -1,6 +1,6 @@
 <template>
     <div>
-        <icon-condition v-bind:condition="outing.condition_rating"/>
+        <icon-condition :condition="outing.condition_rating"/>
         {{outing.date_start}}
         :
         <document-link :document="outing"/>
@@ -8,7 +8,7 @@
         <router-link :to="{name:'profile', params:{id:outing.author.user_id}}">
             {{outing.author.name}}
         </router-link>
-        <span  v-if="outing.img_count!=0">
+        <span v-if="outing.img_count!=0">
             &hairsp;&bull;&hairsp;
             <fa-icon icon="camera"/>
         </span>

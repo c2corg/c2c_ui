@@ -6,38 +6,38 @@
                     <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
                 </span>
                 <document-title :document="item.user"/>
-                <span>{{actionLine}}</span>
+                <span>{{ actionLine }}</span>
             </div>
-            <icon-document class="is-pulled-right" :type="item.document.type"/>
+            <icon-document :type="item.document.type" class="is-pulled-right"/>
         </header>
         <div class="card-content">
             <div>
                 <document-title :document="item.document"/>
                 <br>
-                <span v-if="locale && locale.summary">{{locale.summary}}</span>
-                <span v-if="item.document.type=='o'">{{dates}}</span>
+                <span v-if="locale && locale.summary">{{ locale.summary }}</span>
+                <span v-if="item.document.type=='o'">{{ dates }}</span>
             </div>
 
             <gallery v-if="images.length!=0" :images="images" />
 
             <div >
-                <outing-rating :outing="item.document" v-if="item.document.type=='o'"/>
-                <route-rating :route="item.document" v-else-if="item.document.type=='r'"/>
+                <outing-rating v-if="item.document.type=='o'" :outing="item.document"/>
+                <route-rating v-else-if="item.document.type=='r'" :route="item.document"/>
 
 
                 <span v-if="item.document.elevation_max">
                     <fa-icon icon="bomb"/>
-                    {{item.document.elevation_max}} m
+                    {{ item.document.elevation_max }} m
                 </span>
 
                 <span v-if="item.document.height_diff_up">
                     <fa-icon icon="bomb"/>
-                    {{item.document.height_diff_up}} m
+                    {{ item.document.height_diff_up }} m
                 </span>
 
                 <span v-if="item.document.height_diff_difficulties">
                     <fa-icon icon="arrows-alt-v"/>
-                    {{item.document.height_diff_difficulties}} m
+                    {{ item.document.height_diff_difficulties }} m
                 </span>
 
             </div>
@@ -46,10 +46,10 @@
             </div>
             <div>
                 <activities :activities="item.document.activities"/>
-                <icon-document type="image" v-if="item.document.img_count != 0"/>
+                <icon-document v-if="item.document.img_count != 0" type="image"/>
                 <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
-                <span> {{ item.time |  timeAgo }} </span>
-                <icon-condition :condition="item.document.condition_rating" v-if="item.document.type=='o'"/>
+                <span> {{ item.time | timeAgo }} </span>
+                <icon-condition v-if="item.document.type=='o'" :condition="item.document.condition_rating"/>
                 <icon-quality :quality="item.document.quality" />
             </div>
         </div>
@@ -64,11 +64,11 @@
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default{
-        props:["item"],
 
         components:{
             CardRegionItem,
         },
+        props:["item"],
 
         data(){
             return {
@@ -173,5 +173,3 @@
     box-sizing: border-box;
 }
 
-
-</style>

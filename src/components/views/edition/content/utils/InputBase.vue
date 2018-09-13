@@ -1,43 +1,43 @@
 <template>
-    <div class="column"  v-if="field.isVisibleFor(document)">
+    <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
             <label>
-                {{field.label}}
+                {{ field.label }}
                 <span v-if="field.required">*</span>
             </label>
 
             <div v-if="field.values && (field.type == 'text' || field.type=='number')" class="control">
-                <div class="select" :class="{'is-multiple':field.multiple}">
-                     <select v-model="object[field.name]"
-                             :multiple="!!field.multiple">
-                         <option v-if="!field.required"></option>
-                         <option v-for="value of field.values" :key="value"
-                                 :value="value">
-                             {{value}}
-                         </option>
-                     </select>
-                 </div>
+                <div :class="{'is-multiple':field.multiple}" class="select">
+                    <select v-model="object[field.name]"
+                            :multiple="!!field.multiple">
+                        <option v-if="!field.required"/>
+                        <option v-for="value of field.values" :key="value"
+                                :value="value">
+                            {{ value }}
+                        </option>
+                    </select>
+                </div>
             </div>
 
-            <div v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1" class="control" :class="{'has-icons-right':field.unit}">
-                <input class="input"
-                    :type="field.type"
-                    :min="field.min"
-                    :man="field.max"
-                    :disabled="field.disabled"
-                    v-model="object[field.name]">
+            <div v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1" :class="{'has-icons-right':field.unit}" class="control">
+                <input :type="field.type"
+                       :min="field.min"
+                       :man="field.max"
+                       :disabled="field.disabled"
+                       v-model="object[field.name]"
+                       class="input">
 
-                <span class="icon is-right" v-if="field.unit">
-                    {{field.unit}}
+                <span v-if="field.unit" class="icon is-right">
+                    {{ field.unit }}
                 </span>
             </div>
 
             <div v-else-if="field.type=='markdown'">
-                  <textarea class="textarea" v-model="object[field.name]"/>
+                <textarea v-model="object[field.name]" class="textarea"/>
             </div>
 
             <div v-else class="notification is-danger">
-                unknown field type : {{field.type}}
+                unknown field type : {{ field.type }}
             </div>
 
         </div>
@@ -81,4 +81,4 @@ select{
     width:100%
 }
 
-</style>
+</

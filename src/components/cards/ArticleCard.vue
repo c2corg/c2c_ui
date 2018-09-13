@@ -14,7 +14,7 @@
 
         <div slot="row3">
             <activities :activities="document.activities"/>
-            <icon-quality class="is-pulled-right" :quality="document.quality"/>
+            <icon-quality :quality="document.quality" class="is-pulled-right"/>
         </div>
 
     </card-container>
@@ -29,7 +29,12 @@
             CardContainer,
         },
 
-        props: ['document'],
+        props: {
+            document: {
+                type: Object,
+                required: true,
+            }
+        },
 
         methods:{
             go(){

@@ -16,7 +16,7 @@
             </div>
         </div>
         <summary>
-            <markdown :content="locale.summary"></markdown>
+            <markdown :content="locale.summary"/>
         </summary>
 
         <markdown-section :document="document" :locale="locale" :field="fields.description"/>

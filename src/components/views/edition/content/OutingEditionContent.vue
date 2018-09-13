@@ -2,70 +2,70 @@
     <div>
 
         <edit-section header="general information">
-            <input-base class="is-6" :document="document" :field="fields.date_start" />
-            <input-base class="is-6" :document="document" :field="fields.date_end" />
+            <input-base :document="document" :field="fields.date_start" class="is-6" />
+            <input-base :document="document" :field="fields.date_end" class="is-6" />
             <!-- todo : one day trip -->
 
-            <input-activities class="is-12" :document="document"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.route_description"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.timing"/>
+            <input-activities :document="document" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.route_description" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.timing" class="is-12"/>
 
-            <input-base class="is-4" :document="document" :field="fields.partial_trip" />
-            <input-base class="is-4" :document="document" :field="fields.length_total" />
-            <input-base class="is-4" :document="document" :field="fields.elevation_min" />
-            <input-base class="is-4" :document="document" :field="fields.elevation_max" />
-            <input-base class="is-4" :document="document" :field="fields.height_diff_up" />
-            <input-base class="is-4" :document="document" :field="fields.height_diff_down" />
-            <input-base class="is-4" :document="document" :field="fields.ski_rating" />
-            <input-base class="is-4" :document="document" :field="fields.labande_global_rating" />
-            <input-base class="is-4" :document="document" :field="fields.snowshoe_rating" />
-            <input-base class="is-4" :document="document" :field="fields.global_rating" />
-            <input-base class="is-4" :document="document" :field="fields.engagement_rating" />
-            <input-base class="is-4" :document="document" :field="fields.equipment_rating" />
-            <input-base class="is-4" :document="document" :field="fields.ice_rating" />
-            <input-base class="is-4" :document="document" :field="fields.via_ferrata_rating" />
-            <input-base class="is-4" :document="document" :field="fields.hiking_rating" />
-            <input-base class="is-4" :document="document" :field="fields.mtb_down_rating" />
-            <input-base class="is-4" :document="document" :field="fields.mtb_up_rating" />
-            <input-base class="is-4" :document="document" :field="fields.rock_free_rating" />
-            <input-base class="is-4" :document="document" :field="fields.height_diff_difficulties" />
+            <input-base :document="document" :field="fields.partial_trip" class="is-4" />
+            <input-base :document="document" :field="fields.length_total" class="is-4" />
+            <input-base :document="document" :field="fields.elevation_min" class="is-4" />
+            <input-base :document="document" :field="fields.elevation_max" class="is-4" />
+            <input-base :document="document" :field="fields.height_diff_up" class="is-4" />
+            <input-base :document="document" :field="fields.height_diff_down" class="is-4" />
+            <input-base :document="document" :field="fields.ski_rating" class="is-4" />
+            <input-base :document="document" :field="fields.labande_global_rating" class="is-4" />
+            <input-base :document="document" :field="fields.snowshoe_rating" class="is-4" />
+            <input-base :document="document" :field="fields.global_rating" class="is-4" />
+            <input-base :document="document" :field="fields.engagement_rating" class="is-4" />
+            <input-base :document="document" :field="fields.equipment_rating" class="is-4" />
+            <input-base :document="document" :field="fields.ice_rating" class="is-4" />
+            <input-base :document="document" :field="fields.via_ferrata_rating" class="is-4" />
+            <input-base :document="document" :field="fields.hiking_rating" class="is-4" />
+            <input-base :document="document" :field="fields.mtb_down_rating" class="is-4" />
+            <input-base :document="document" :field="fields.mtb_up_rating" class="is-4" />
+            <input-base :document="document" :field="fields.rock_free_rating" class="is-4" />
+            <input-base :document="document" :field="fields.height_diff_difficulties" class="is-4" />
         </edit-section>
 
         <edit-section header="Weather &amp; conditions">
 
-            <input-base class="is-6" :document="document" :base="locale" :field="fields.weather"/>
-            <input-base class="is-6" :document="document" :base="locale" :field="fields.conditions"/>
+            <input-base :document="document" :base="locale" :field="fields.weather" class="is-6"/>
+            <input-base :document="document" :base="locale" :field="fields.conditions" class="is-6"/>
             <!-- todo
             <input-base :document="document" :base="locale" :field="fields.conditions_levels"/>
             -->
 
-            <input-base class="is-4" :document="document" :field="fields.condition_rating" />
-            <input-base class="is-4" :document="document" :field="fields.elevation_up_snow" />
-            <input-base class="is-4" :document="document" :field="fields.elevation_down_snow" />
-            <input-base class="is-4" :document="document" :field="fields.snow_quantity" />
-            <input-base class="is-4" :document="document" :field="fields.snow_quality" />
-            <input-base class="is-4" :document="document" :field="fields.glacier_rating" />
-            <input-checkboxes class="is-12" :document="document" :field="fields.avalanche_signs" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.avalanches"/>
+            <input-base :document="document" :field="fields.condition_rating" class="is-4" />
+            <input-base :document="document" :field="fields.elevation_up_snow" class="is-4" />
+            <input-base :document="document" :field="fields.elevation_down_snow" class="is-4" />
+            <input-base :document="document" :field="fields.snow_quantity" class="is-4" />
+            <input-base :document="document" :field="fields.snow_quality" class="is-4" />
+            <input-base :document="document" :field="fields.glacier_rating" class="is-4" />
+            <input-checkboxes :document="document" :field="fields.avalanche_signs" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.avalanches" class="is-12"/>
         </edit-section>
 
         <edit-section header="road or PT access &amp; hut">
-            <input-base class="is-4" :document="document" :field="fields.public_transport" />
-            <input-base class="is-4" :document="document" :field="fields.frequentation" />
-            <input-base class="is-4" :document="document" :field="fields.lift_status" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.hut_comment"/>
-            <input-base class="is-4" :document="document" :field="fields.hut_status" />
-            <input-base class="is-4" :document="document" :field="fields.elevation_access" />
-            <input-base class="is-4" :document="document" :field="fields.access_condition" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.access_comment"/>
+            <input-base :document="document" :field="fields.public_transport" class="is-4" />
+            <input-base :document="document" :field="fields.frequentation" class="is-4" />
+            <input-base :document="document" :field="fields.lift_status" class="is-4" />
+            <input-base :document="document" :base="locale" :field="fields.hut_comment" class="is-12"/>
+            <input-base :document="document" :field="fields.hut_status" class="is-4" />
+            <input-base :document="document" :field="fields.elevation_access" class="is-4" />
+            <input-base :document="document" :field="fields.access_condition" class="is-4" />
+            <input-base :document="document" :base="locale" :field="fields.access_comment" class="is-12"/>
         </edit-section>
 
         <edit-section header="comments">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
-            <input-base class="is-8" :document="document" :base="locale" :field="fields.participants"/>
-            <input-base class="is-4" :document="document" :field="fields.participant_count" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
-            <input-base class="is-4" :document="document" :field="fields.disable_comments" />
+            <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.participants" class="is-8"/>
+            <input-base :document="document" :field="fields.participant_count" class="is-4" />
+            <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
+            <input-base :document="document" :field="fields.disable_comments" class="is-4" />
         </edit-section>
 
         <!-- todo where is that ??

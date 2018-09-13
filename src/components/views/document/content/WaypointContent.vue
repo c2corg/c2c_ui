@@ -5,14 +5,14 @@
         <div class="columns">
 
             <div class="column is-3">
-                <map-box :document="document" ></map-box>
+                <map-box :document="document" />
 
                 <associated-waypoints :document="document" />
                 <associated-books :document="document" />
                 <associated-articles :document="document" />
                 <associated-maps :document="document" />
 
-                <license-box cc="by-sa"></license-box>
+                <license-box cc="by-sa"/>
             </div>
 
             <div class="column">
@@ -55,7 +55,7 @@
 
                             <field-view :document="document" :field="fields.parking_fee"/>
                             <field-view :document="document" :field="fields.snow_clearance_rating"/>
-                            <input-orientation v-model="document.orientations"  v-if="document.orientations && document.orientations.length" read-only/>
+                            <input-orientation v-if="document.orientations && document.orientations.length" v-model="document.orientations" read-only/>
 
                         </div>
 
@@ -90,11 +90,11 @@
                     <h2 class="title is-2">Routes</h2>
 
                     <pretty-route-link
-                       v-for="(route, index) of document.associations.all_routes.documents" :key="index"
-                       :route="route"/>
+                        v-for="(route, index) of document.associations.all_routes.documents" :key="index"
+                        :route="route"/>
                 </content-box>
 
-                <recent-outings-box :document="document"></recent-outings-box>
+                <recent-outings-box :document="document"/>
 
                 <content-box v-if="document.associations.waypoint_children.length">
                     <h2 class="title is-2">

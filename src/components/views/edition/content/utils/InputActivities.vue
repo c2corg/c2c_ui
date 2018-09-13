@@ -1,6 +1,6 @@
 <template>
     <div class="column">
-            <div class="field">
+        <div class="field">
             <label>
                 activities
                 <span v-if="field.required">*</span>

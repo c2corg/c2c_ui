@@ -9,7 +9,7 @@
         <main :class="{expanded:expanded_, hidden:!expanded_}">
 
             <div class="columns is-multiline">
-                <slot></slot>
+                <slot/>
             </div>
 
         </main>

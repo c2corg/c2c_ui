@@ -1,7 +1,7 @@
 <template>
     <div class="section">
         <div v-if="following" class="columns">
-            <div class="column is-3" v-for="document in following.following" :key="document.document_id">
+            <div v-for="document in following.following" :key="document.document_id" class="column is-3">
                 <document-card :document="document"/>
             </div>
         </div>

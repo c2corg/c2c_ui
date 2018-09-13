@@ -2,8 +2,8 @@
     <div>
 
         <edit-section header="Comments">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.title"/>
-            <input-base class="is-12" :document="document" :field="fields.activities" />
+            <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
+            <input-base :document="document" :field="fields.activities" class="is-12" />
         </edit-section>
 
         <edit-section header="Geolocation">
@@ -11,46 +11,46 @@
         </edit-section>
 
         <edit-section header="General informations">
-            <input-base class="is-3" :document="document" :field="fields.date" />
-            <input-checkboxes class="is-3" :document="document" :field="fields.event_type" />
-            <input-base class="is-3" :document="document" :field="fields.nb_participants" />
-            <input-base class="is-3" :document="document" :field="fields.nb_impacted" />
-            <input-base class="is-3" :document="document" :field="fields.severity" />
-            <input-base class="is-3" :document="document" :field="fields.rescue" />
-            <input-base class="is-3" :document="document" :field="fields.avalanche_level" />
-            <input-base class="is-3" :document="document" :field="fields.avalanche_slope" />
+            <input-base :document="document" :field="fields.date" class="is-3" />
+            <input-checkboxes :document="document" :field="fields.event_type" class="is-3" />
+            <input-base :document="document" :field="fields.nb_participants" class="is-3" />
+            <input-base :document="document" :field="fields.nb_impacted" class="is-3" />
+            <input-base :document="document" :field="fields.severity" class="is-3" />
+            <input-base :document="document" :field="fields.rescue" class="is-3" />
+            <input-base :document="document" :field="fields.avalanche_level" class="is-3" />
+            <input-base :document="document" :field="fields.avalanche_slope" class="is-3" />
         </edit-section>
 
         <edit-section header="General informations">
-            <input-base class="is-3" :document="document" :field="fields.age" />
-            <input-base class="is-3" :document="document" :field="fields.gender" />
-            <input-base class="is-3" :document="document" :field="fields.author_status" />
-            <input-base class="is-3" :document="document" :field="fields.autonomy" />
-            <input-base class="is-3" :document="document" :field="fields.activity_rate" />
-            <input-base class="is-3" :document="document" :field="fields.nb_outings" />
-            <input-base class="is-3" :document="document" :field="fields.previous_injuries" />
+            <input-base :document="document" :field="fields.age" class="is-3" />
+            <input-base :document="document" :field="fields.gender" class="is-3" />
+            <input-base :document="document" :field="fields.author_status" class="is-3" />
+            <input-base :document="document" :field="fields.autonomy" class="is-3" />
+            <input-base :document="document" :field="fields.activity_rate" class="is-3" />
+            <input-base :document="document" :field="fields.nb_outings" class="is-3" />
+            <input-base :document="document" :field="fields.previous_injuries" class="is-3" />
         </edit-section>
 
         <edit-section header="Description">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
+            <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
             <input-base :document="document" :field="fields.anonymous" />
         </edit-section>
 
         <edit-section header="Factors">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.place" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.route_study" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.conditions" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.training" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.motivations" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.group_management" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.risk" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.time_management" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.safety" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.reduce_impact" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.increase_impact" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.modifications" />
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.other_comments" />
+            <input-base :document="document" :base="locale" :field="fields.place" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.route_study" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.conditions" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.training" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.motivations" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.group_management" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.risk" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.time_management" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.safety" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.reduce_impact" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.increase_impact" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.modifications" class="is-12" />
+            <input-base :document="document" :base="locale" :field="fields.other_comments" class="is-12" />
             <input-base :document="document" :field="fields.disable_comments" />
         </edit-section>
     </div>

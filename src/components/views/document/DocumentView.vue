@@ -6,7 +6,7 @@
 
         <div v-if="document">
 
-            <div class="notification is-warning" v-if="isVersionView">
+            <div v-if="isVersionView" class="notification is-warning">
                 This is an archived version of this page, as of {{version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
 
                 <br>
@@ -27,7 +27,7 @@
                 (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
                             :version-from="$route.params.version"
                             version-to="last"/>)
-                |
+                            |
                 <span v-if="nextVersionId">
                     <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
                         next version →
@@ -57,9 +57,8 @@
             </content-box>
 
             <component :is="type + '-content'"
-                :document="document" :locale="locale"
-                :fields="constants.objectDefinitions[this.type].fields">
-            </component>
+                       :document="document" :locale="locale"
+                       :fields="constants.objectDefinitions[type].fields"/>
         </div>
     </div>
 

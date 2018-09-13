@@ -1,11 +1,11 @@
 <template>
-    <div class="dropdown" :class="{'is-active': isActive}">
+    <div :class="{'is-active': isActive}" class="dropdown">
 
         <div class="dropdown-trigger">
-            <button class="button" @click="isActive=!isActive" :disabled="disabled"
-                aria-haspopup="true" aria-controls="dropdown-menu" >
+            <button :disabled="disabled" class="button" aria-haspopup="true"
+                    aria-controls="dropdown-menu" @click="isActive=!isActive" >
 
-                <slot name="button"></slot>
+                <slot name="button"/>
 
                 <span class="icon is-small">
                     <fa-icon icon="angle-down" aria-hidden="true"/>
@@ -13,10 +13,10 @@
             </button>
         </div>
 
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+        <div id="dropdown-menu" class="dropdown-menu" role="menu">
             <div class="dropdown-content">
                 <div class="dropdown-item">
-                    <slot></slot>
+                    <slot/>
                 </div>
             </div>
         </div>
@@ -38,6 +38,12 @@
             }
         },
 
+        watch:{
+            isActive(){
+                this.$emit("changeDisplay")
+            }
+        },
+
         created: function() {
             let self = this;
 
@@ -48,11 +54,5 @@
                 }
             })
         },
-
-        watch:{
-            isActive(){
-                this.$emit("changeDisplay")
-            }
-        }
     }
 </script>

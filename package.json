@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --report",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -40,10 +40,18 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/recommended",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+        "vue/html-indent": ["warn", 4],
+        "vue/no-multi-spaces": "warn",
+        "vue/mustache-interpolation-spacing": "warn",
+
+        "vue/max-attributes-per-line" : "off",
+        "vue/require-prop-types": "off",
+        "vue/require-default-prop": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

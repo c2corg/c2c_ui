@@ -3,10 +3,8 @@
         <swiper-slide v-for="image of images" :key="image.document_id">
             <img :src="c2c.getSmallImageUrl(image)">
         </swiper-slide>
-        <div class="swiper-button-prev" slot="button-prev">
-        </div>
-        <div class="swiper-button-next" slot="button-next">
-        </div>
+        <div slot="button-prev" class="swiper-button-prev"/>
+        <div slot="button-next" class="swiper-button-next"/>
     </swiper>
 </template>
 
@@ -17,12 +15,12 @@
     import c2c from '@/js/c2c.js'
 
     export default {
-        props: ['images'],
 
         components: {
             swiper,
             swiperSlide
           },
+        props: ['images'],
 
         data() {
             return {

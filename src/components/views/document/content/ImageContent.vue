@@ -3,7 +3,7 @@
 
         <div class="column is-3">
             <content-box>
-                <label-value label="activities" v-if="document.activities.length">
+                <label-value v-if="document.activities.length" label="activities">
                     <activities :activities="document.activities"/>
                 </label-value>
 
@@ -11,7 +11,7 @@
                     <areas-links :areas="document.areas"/>
                 </label-value>
 
-                <label-value label="author" v-if="document.author">
+                <label-value v-if="document.author" label="author">
                     <author-link :author="document.author"/>
                 </label-value>
 
@@ -19,7 +19,7 @@
                     <author-link :author="document.creator"/>
                 </label-value>
 
-                <label-value label="categories"  v-if="document.categories.length">
+                <label-value v-if="document.categories.length" label="categories">
                     {{document.categories.join(", ")}}
                 </label-value>
 
@@ -36,15 +36,15 @@
             </content-box>
         </div>
 
-        <div  class="column">
+        <div class="column">
             <content-box class="is-paddingless">
-                <img :src="getImageUrl(document)"/>
+                <img :src="getImageUrl(document)">
             </content-box>
 
             <summary>
-                <markdown :content="locale.summary"></markdown>
+                <markdown :content="locale.summary"/>
             </summary>
-            <markdown :content="locale.description"></markdown>
+            <markdown :content="locale.description"/>
 
             <comments-box :document="document" :locale="locale" />
 

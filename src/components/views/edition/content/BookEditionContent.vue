@@ -2,22 +2,22 @@
     <div>
         <edit-section :document="document" header="general informations">
 
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.title" />
-            <input-activities class="is-6" :document="document" />
-            <input-checkboxes class="is-6" :document="document" :field="fields.book_types" />
-            <input-base class="is-6" :document="document" :field="fields.author" />
-            <input-base class="is-6" :document="document" :field="fields.editor" />
-            <input-checkboxes class="is-4" :document="document" :field="fields.langs" />
-            <input-base class="is-4" :document="document" :field="fields.publication_date" />
-            <input-base class="is-4" :document="document" :field="fields.nb_pages" />
-            <input-base class="is-4" :document="document" :field="fields.isbn" />
-            <input-base class="is-8" :document="document" :field="fields.url" />
+            <input-base :document="document" :base="locale" :field="fields.title" class="is-12" />
+            <input-activities :document="document" class="is-6" />
+            <input-checkboxes :document="document" :field="fields.book_types" class="is-6" />
+            <input-base :document="document" :field="fields.author" class="is-6" />
+            <input-base :document="document" :field="fields.editor" class="is-6" />
+            <input-checkboxes :document="document" :field="fields.langs" class="is-4" />
+            <input-base :document="document" :field="fields.publication_date" class="is-4" />
+            <input-base :document="document" :field="fields.nb_pages" class="is-4" />
+            <input-base :document="document" :field="fields.isbn" class="is-4" />
+            <input-base :document="document" :field="fields.url" class="is-8" />
 
         </edit-section>
 
         <edit-section :document="document" header="description">
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.summary"/>
-            <input-base class="is-12" :document="document" :base="locale" :field="fields.description"/>
+            <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
+            <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
         </edit-section>
 
     </div>

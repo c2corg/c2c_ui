@@ -13,8 +13,8 @@
         <div class="columns">
             <div class="column">
                 <div v-if="documents" class="cards-container is-flex">
-                    <div class="card-image"
-                        v-for="document in documents.documents" :key="document.document_id">
+                    <div v-for="document in documents.documents"
+                         :key="document.document_id" class="card-image">
                         <img :src="c2c.getSmallImageUrl(document)" height="250" @click="go(document)">
                     </div>
                 </div>

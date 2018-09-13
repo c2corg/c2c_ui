@@ -11,14 +11,14 @@
             <div class="column is-3">
                 <content-box>
                     <label-value label="Ratings">
-                        <outing-rating :outing="document"></outing-rating>
+                        <outing-rating :outing="document"/>
                     </label-value>
 
                     <label-value v-if="locale.weather" label="weather">
                         {{locale.weather}}
                     </label-value>
 
-                    <field-view :document="document" :field="fields.frequentation"></field-view>
+                    <field-view :document="document" :field="fields.frequentation"/>
 
                     <label-value v-if="document.elevation_min || document.elevation_max" label="elevation">
                         <span v-if="document.elevation_min">{{document.elevation_min}}&nbsp;m</span>
@@ -32,14 +32,14 @@
                         <span v-if="document.height_diff_down">-{{document.height_diff_down}}&nbsp;m</span>
                     </label-value>
 
-                    <field-view :document="document" :field="fields.length_total"></field-view>
-                    <field-view :document="document" :field="fields.hut_status"></field-view>
-                    <field-view :document="document" :field="fields.snow_quality"></field-view>
-                    <field-view :document="document" :field="fields.snow_quantity"></field-view>
+                    <field-view :document="document" :field="fields.length_total"/>
+                    <field-view :document="document" :field="fields.hut_status"/>
+                    <field-view :document="document" :field="fields.snow_quality"/>
+                    <field-view :document="document" :field="fields.snow_quantity"/>
 
                 </content-box>
 
-                <map-box :document="document"></map-box>
+                <map-box :document="document"/>
                 <license-box cc="by-sa" />
             </div>
 
@@ -52,7 +52,7 @@
                     </div>
 
                     <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
-                                :route="route"/>
+                                       :route="route"/>
 
                     <markdown-section :document="document" :locale="locale" :field="fields.description" />
                     <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />

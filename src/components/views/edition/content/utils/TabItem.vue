@@ -1,6 +1,6 @@
 <template>
     <section v-show="isActive">
-        <slot></slot>
+        <slot/>
     </section>
 </template>
 

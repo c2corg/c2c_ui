@@ -1,5 +1,5 @@
 <template>
-    <div class="section content" v-if="preferences">
+    <div v-if="preferences" class="section content">
         <h1>
             <fa-icon icon="cogs"/>
             <span>Preferences</span>
@@ -10,7 +10,7 @@
         <p>Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.</p>
         <div class="field">
             <label>
-                <input class="checkbox" type="checkbox" v-model="preferences.followed_only" @change="save">
+                <input v-model="preferences.followed_only" class="checkbox" type="checkbox" @change="save">
                 <span>Show only updates from followed users in the homepage feed</span>
             </label>
         </div>
@@ -18,27 +18,27 @@
         <div v-if="!preferences.followed_only">
             <h2>langs</h2>
             <div class="field is-grouped">
-                <div class="control"  v-for="lang of constants.langs" :key="lang">
-                    <button type="button" class="button" :class="{'is-primary' : preferences.langs.indexOf(lang) > -1}"
-                          @click="toggle(lang, preferences.langs)">
-                          {{lang}}
+                <div v-for="lang of constants.langs" :key="lang" class="control">
+                    <button :class="{'is-primary' : preferences.langs.indexOf(lang) > -1}" type="button" class="button"
+                            @click="toggle(lang, preferences.langs)">
+                        {{ lang }}
                     </button>
                 </div>
             </div>
 
             <h2>activities</h2>
             <div class="field is-grouped">
-                <div class="control"  v-for="activity of constants.activities" :key="activity">
-                    <button type="button" class="button" :class="{'is-primary' : preferences.activities.indexOf(activity) > -1}"
-                          @click="toggle(activity, preferences.activities)">
-                          <icon-activity :activity="activity"/>
+                <div v-for="activity of constants.activities" :key="activity" class="control">
+                    <button :class="{'is-primary' : preferences.activities.indexOf(activity) > -1}" type="button" class="button"
+                            @click="toggle(activity, preferences.activities)">
+                        <icon-activity :activity="activity"/>
                     </button>
                 </div>
             </div>
 
             <h2>areas</h2>
             <div class="columns">
-                <div class="column is-2"  v-for="document in preferences.areas" :key="document.document_id">
+                <div v-for="document in preferences.areas" :key="document.document_id" class="column is-2">
                     <document-card :document="document"/>
                 </div>
             </div>
@@ -59,6 +59,12 @@
             }
         },
 
+        created(){
+            c2c.user.preferences.get().then(response => {
+                this.preferences = response.data
+            })
+        },
+
         methods:{
             toggle(item, array){
                 if (array.indexOf(item) > -1) {
@@ -75,12 +81,6 @@
                 c2c.user.preferences.post(this.preferences)
             }
         },
-
-        created(){
-            c2c.user.preferences.get().then(response => {
-                this.preferences = response.data
-            })
-        }
     }
 </script>
 
