@@ -4,7 +4,9 @@
 
 <script>
     export default {
-        props: ['quality'],
+        props: {
+            quality: String
+        },
     }
 </script>
 

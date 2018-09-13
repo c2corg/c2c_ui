@@ -8,6 +8,8 @@
 <script>
 
     export default {
-        props: ['activities'],
+        props: {
+            activities: Array
+        }
     }
 </script>

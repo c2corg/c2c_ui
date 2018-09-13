@@ -20,7 +20,10 @@
             swiper,
             swiperSlide
           },
-        props: ['images'],
+
+        props: {
+            images: Array
+        },
 
         data() {
             return {

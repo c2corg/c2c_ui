@@ -74,7 +74,11 @@
             CommentsBox,
         },
 
-        props:["document", "locale", "fields"],
+        props : {
+            document:Object,
+            locale:Object,
+            fields:Object,
+        },
 
         methods:{
             getImageUrl : c2c.getImageUrl,

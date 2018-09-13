@@ -1,5 +1,5 @@
 <template>
-    <fa-icon :icon="getIconClass(type)" />
+    <fa-icon :icon="iconClass" />
 </template>
 
 <script>
@@ -19,10 +19,13 @@
     }
 
     export default {
-        props:["type"],
-        methods:{
-            getIconClass(type){
-                return iconClass[constants.getDocumentType(type)]
+        props: {
+            type: String
+        },
+
+        computed:{
+            iconClass(){
+                return iconClass[constants.getDocumentType(this.type)]
             }
         }
     }

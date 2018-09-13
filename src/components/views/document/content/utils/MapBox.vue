@@ -14,7 +14,9 @@
         components: {
             AreasLinks,
         },
-
-        props:["document"]
+        
+        props : {
+            document:Object
+        }
     }
 </script>

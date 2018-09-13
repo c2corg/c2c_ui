@@ -32,11 +32,8 @@
                                 <img :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')" height="16"
                                      width="16">
 
-
                                 {{ topic.title }}
                             </a>
-
-
                         </div>
                     </div>
                 </content-box>
@@ -46,7 +43,7 @@
                     <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
-                            <pretty-route-link :route="route" show-area="true"/>
+                            <pretty-route-link :route="route" :show-area="true"/>
                         </div>
                     </div>
                 </content-box>

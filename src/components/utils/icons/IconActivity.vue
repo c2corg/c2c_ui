@@ -5,7 +5,9 @@
 <script>
 
     export default {
-        props: ['activity'],
+        props: {
+            activity: String
+        },
     }
 </script>
 

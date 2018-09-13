@@ -68,7 +68,9 @@
             QueryItemSliderLabel,
         },
 
-        props : ["field", ],
+        props : {
+            field:Object,
+        },
 
         computed:{
 

@@ -12,7 +12,10 @@
 <script>
 
     export default {
-        props: ['document', 'lang'],
+        props: {
+            document:Object,
+            lang:String,
+        },
     }
 
 </script>

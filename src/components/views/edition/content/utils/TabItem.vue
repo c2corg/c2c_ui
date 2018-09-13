@@ -6,7 +6,10 @@
 
 <script>
     export default {
-        props : ["title"],
+        props : {
+            title:String,
+        },
+        
         data(){
             return {
                 isActive:false,

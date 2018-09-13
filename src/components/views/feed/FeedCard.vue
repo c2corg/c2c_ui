@@ -68,7 +68,10 @@
         components:{
             CardRegionItem,
         },
-        props:["item"],
+
+        props:{
+            item:Object,
+        },
 
         data(){
             return {

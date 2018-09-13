@@ -13,7 +13,9 @@
     import constants from "@/js/constants.js"
 
     export default {
-        props:["value"],
+        props:{
+            value: Array,
+        },
 
         data(){
             return {

@@ -49,9 +49,9 @@
 
         "vue/order-in-components": "warn",
         "vue/no-multi-spaces": "warn",
+        "vue/require-prop-types": "warn",
 
         "vue/max-attributes-per-line" : "off",
-        "vue/require-prop-types": "off",
         "vue/require-default-prop": "off"
     },
     "parserOptions": {

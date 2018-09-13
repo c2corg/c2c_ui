@@ -18,6 +18,9 @@
 <script>
 
     export default {
-        props: ['route', 'showArea'],
+        props: {
+            route: Object,
+            showArea: Boolean
+        },
     }
 </script>

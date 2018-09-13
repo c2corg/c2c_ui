@@ -8,6 +8,9 @@
 
 <script>
     export default{
-        props:["type", "lang"],
+        props : {
+            type: String,
+            lang: String,
+        }
     }
 </script>

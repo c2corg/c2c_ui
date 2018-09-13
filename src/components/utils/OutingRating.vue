@@ -12,11 +12,11 @@
         <span v-if="outing.engagement_rating" >
             {{ outing.engagement_rating }}
         </span>
-    
+
         <span v-if="outing.risk_rating" >
             {{ outing.risk_rating }}
         </span>
-    
+
         <span v-if="outing.equipment_rating" >
             {{ outing.equipment_rating }}
         </span>
@@ -33,13 +33,15 @@
             {{ outing.ski_rating }}
         </span>
     </span>
-    
+
 </template>
 
 <script>
 
     export default {
-        props: ['outing'],
+        props: {
+            outing: Object
+        }
     }
 
 </script>

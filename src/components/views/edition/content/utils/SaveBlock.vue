@@ -16,7 +16,10 @@
     import c2c from '@/js/c2c.js'
 
     export default {
-        props : ["document"],
+        props : {
+        document:Object,
+        },
+        
         data(){
             return {
                 comment:"",

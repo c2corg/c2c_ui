@@ -25,7 +25,10 @@
 
 <script>
     export default{
-        props:["field", "value"]
+        props:{
+            field: Object,
+            value: Array,
+        }
     }
 </script>
 

@@ -7,6 +7,8 @@
 
 <script>
     export default {
-        props : ["contributor"]
+        props : {
+            contributor: Object
+        }
     }
 </script>

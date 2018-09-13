@@ -9,7 +9,9 @@
 
 <script>
     export default {
-        props : ["areas"]
+        props : {
+            areas:Array,
+        },
     }
 </script>
 

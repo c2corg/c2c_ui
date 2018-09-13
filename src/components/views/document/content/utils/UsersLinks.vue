@@ -6,7 +6,9 @@
 
 <script>
     export default {
-        props : ["users"]
+        props : {
+            users:Array,
+        }
     }
 </script>
 

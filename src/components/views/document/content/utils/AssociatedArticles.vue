@@ -9,6 +9,8 @@
 
 <script>
     export default {
-        props:["document"]
+        props:{
+            document: Object,
+        },
     }
 </script>

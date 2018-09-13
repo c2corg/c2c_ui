@@ -11,6 +11,11 @@
 <script>
 
     export default{
-        props:["type", "version", "lang", "id"],
+        props: {
+            type:String,
+            version:Number,
+            lang:String,
+            id: Number,
+        },
     }
 </script>

@@ -14,7 +14,10 @@
     export default {
         components : {LabelValue},
 
-        props : ['document', 'field'],
+        props : {
+            document:Object,
+            field:Object,
+        },
 
         computed : {
             value(){
@@ -26,7 +29,7 @@
             },
 
             hasValue(){
-                
+
                 if(this.value === undefined || this.value === null)
                     return false
 

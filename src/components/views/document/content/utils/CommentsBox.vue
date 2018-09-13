@@ -61,8 +61,11 @@
     import user from '@/js/user.js'
 
     export default {
-        props:["document", "locale"],
-        
+        props:{
+            document: Object,
+            locale: Object,
+        },
+
         data(){
             return {
                 forum,

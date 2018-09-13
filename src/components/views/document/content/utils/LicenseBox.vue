@@ -6,6 +6,8 @@
 
 <script>
     export default {
-        props:["cc"]
+        props:{
+            cc: String,
+        }
     }
 </script>

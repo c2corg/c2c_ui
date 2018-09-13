@@ -140,6 +140,10 @@
             RecentOutingsBox,
         },
 
-        props:["document", "locale", "fields"],
+        props : {
+            document:Object,
+            locale:Object,
+            fields:Object,
+        }
     }
 </script>

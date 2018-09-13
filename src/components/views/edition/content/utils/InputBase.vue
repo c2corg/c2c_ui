@@ -47,7 +47,12 @@
 <script>
 
     export default {
-        props:["document", "base", "field"],
+
+        props : {
+            document:Object,
+            base:Object,
+            field:Object,
+        },
 
         data(){
             return {

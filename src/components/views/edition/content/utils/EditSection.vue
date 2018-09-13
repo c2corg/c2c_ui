@@ -19,7 +19,11 @@
 <script>
 
     export default {
-        props : ["header", "expanded"],
+        props : {
+            header:String,
+            expanded:Boolean,
+        },
+        
         data(){
             return {
                 expanded_:this.expanded,

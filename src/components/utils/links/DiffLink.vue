@@ -9,6 +9,12 @@
 <script>
 
     export default{
-        props:["type", "versionFrom", "versionTo", "lang", "id"],
+        props: {
+            type:String,
+            versionFrom: [Number, String],
+            versionTo: [Number, String],
+            lang:String,
+            id: Number,
+        },
     }
 </script>

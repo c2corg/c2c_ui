@@ -1,15 +1,17 @@
 <template>
-    <span>{{ getTitle() }}</span>
+    <span>{{ title }}</span>
 </template>
 
 <script>
     import user from '@/js/user.js'
 
     export default {
-        props: ['document'],
+        props: {
+            document: Object
+        },
 
-        methods:{
-            getTitle(){
+        computed:{
+            title(){
                 if(this.document.type=="u" || !this.document.type){
                     return this.document.name
                 }

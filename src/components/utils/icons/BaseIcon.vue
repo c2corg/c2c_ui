@@ -4,6 +4,8 @@
 
 <script>
     export default {
-        props:["iconClass"]
+        props:{
+            iconClass: String
+        }
     }
 </script>

@@ -19,6 +19,8 @@
 
 <script>
     export default {
-        props: ['outing'],
+        props: {
+            outing:Object
+        },
     }
 </script>

@@ -4,7 +4,9 @@
 
 <script>
     export default {
-        props: ['condition'],
+        props: {
+            condition: String
+        },
     }
 </script>
 

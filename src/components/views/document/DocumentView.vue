@@ -12,10 +12,10 @@
                 <br>
 
                 <span v-if="previousVersionId">
-                    (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                    (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                                 :version-from="previousVersionId"
                                 :version-to="$route.params.version"/>)
-                    <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="previousVersionId">
+                    <version-link :type="type" :id="documentId" :lang="$route.params.lang" :version="previousVersionId">
                         ← previous version
                     </version-link>
                 </span>
@@ -24,15 +24,15 @@
                 <document-link :document="document" :lang="$route.params.lang">
                     see actual version
                 </document-link>
-                (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                             :version-from="$route.params.version"
                             version-to="last"/>)
                             |
                 <span v-if="nextVersionId">
-                    <version-link :type="type" :id="$route.params.id" :lang="$route.params.lang" :version="nextVersionId">
+                    <version-link :type="type" :id="documentId" :lang="$route.params.lang" :version="nextVersionId">
                         next version →
                     </version-link>
-                    (<diff-link :type="type" :id="$route.params.id" :lang="$route.params.lang"
+                    (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                                 :version-to="nextVersionId"
                                 :version-from="$route.params.version"/>)
                 </span>
@@ -111,10 +111,16 @@
             }
         },
 
+        computed:{
+            documentId(){
+                return parseInt(this.$route.params.id)
+            }
+        },
+
         created() {
 
             if(this.isVersionView){
-                c2c[this.type].getVersion(this.$route.params.id,this.$route.params.lang,this.$route.params.version)
+                c2c[this.type].getVersion(this.documentId, this.$route.params.lang,this.$route.params.version)
                 .then(response => {
 
                     this.document = response.data.document
@@ -137,14 +143,14 @@
 
                     this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
                     this.version = response.data.version
-                    this.nextVersionId = response.data.next_version_id
-                    this.previousVersionId = response.data.previous_version_id
+                    this.nextVersionId = parseInt(response.data.next_version_id)
+                    this.previousVersionId = parseInt(response.data.previous_version_id)
                 })
                 .catch(utils.getApiErrorHandler(this));
 
             } else {
 
-                c2c[this.type].get(this.$route.params.id)
+                c2c[this.type].get(this.documentId)
                 .then(response => {
 
                     if(response.data.not_authorized===true){

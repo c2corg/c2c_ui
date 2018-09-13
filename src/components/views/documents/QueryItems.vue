@@ -134,12 +134,6 @@
             QueryItem
         },
 
-        data(){
-            return {
-                test: ['S', 'NE']
-            }
-        },
-
         computed:{
             urlActivities(){
                 return (this.$route.query.act || '').split(",")

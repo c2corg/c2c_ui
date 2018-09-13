@@ -53,6 +53,8 @@
 <script>
 
     export default {
-        props: ['route'],
+        props: {
+            route:Object
+        },
     }
 </script>

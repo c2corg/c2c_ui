@@ -13,6 +13,12 @@
 
 <script>
     export default {
-        props:["label", "type", "placeholder", "data", "icon"]
+        props:{
+            label: String,
+            type: String,
+            placeholder: String,
+            data: [String, Number],
+            icon: String,
+        }
     }
 </script>

@@ -12,6 +12,9 @@
 <script>
 
     export default {
-        props: ['loaded', 'error'],
+        props: {
+            loaded:Boolean,
+            error: [String, Object],
+        }
     }
 </script>

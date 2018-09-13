@@ -9,7 +9,9 @@
 
 <script>
     export default {
-        props : ['label']
+        props : {
+            label:String,
+        }
     }
 </script>
 

@@ -16,7 +16,9 @@
     import constants from "@/js/constants.js"
 
     export default {
-        props:["document"],
+        props:{
+            document: Object,
+        },
 
         data(){
             return {

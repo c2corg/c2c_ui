@@ -13,8 +13,6 @@
 
 <script>
     export default {
-        props : [],
-
         data(){
             return {
                 tabs:[],
