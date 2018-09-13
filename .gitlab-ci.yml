@@ -14,13 +14,8 @@ pages:
   dependencies:
     - build-npm
   script:
-  - ls -la 
   - mv public/ public_src/
-  - ls -la 
   - mv dist/ public/
-  - ls -la 
-  - cd public 
-  - ls -la 
 
   only:
   - master
