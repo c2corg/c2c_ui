@@ -8,14 +8,14 @@
 
         <div slot="row2" class="level is-nowrap">
 
-            <span class="is-ellipsed">
+            <span>
                 <fa-icon class="has-text-primary" icon="tachometer-alt"/>
                 <route-rating :route="document"/>
             </span>
 
-            <card-elevation-item :elevation="document.elevation_max" />
+            <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
-            <span v-if="document.height_diff_difficulties">
+            <span v-if="document.height_diff_difficulties" class="is-ellipsed">
                 <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
                 {{ document.height_diff_difficulties }}&nbsp;m
             </span>
