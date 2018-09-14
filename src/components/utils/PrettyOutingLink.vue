@@ -1,6 +1,6 @@
 <template>
     <div>
-        <icon-condition :condition="outing.condition_rating"/>
+        <marker-condition :condition="outing.condition_rating"/>
         {{ outing.date_start }}
         :
         <document-link :document="outing"/>
@@ -10,7 +10,7 @@
         </router-link>
         <span v-if="outing.img_count!=0">
             &hairsp;&bull;&hairsp;
-            <fa-icon icon="camera"/>
+            <marker-image-count :image-count="outing.img_count"/>
         </span>
     </div>
 </template>

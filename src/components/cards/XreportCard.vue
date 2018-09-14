@@ -2,30 +2,33 @@
     <card-container class="route-card" @click="go">
         <document-title slot="header" :document="document"/>
 
-        <div slot="row1" class="is-ellipsed">
-            <card-region-item :document="document" class="is-ellipsed"/>
-            <span>{{ document.event_type }}</span>
+        <div slot="row1" class="level">
+            <card-region-item :document="document" />
+
+            <card-elevation-item :elevation="document.elevation"/>
         </div>
 
         <div slot="row2" class="level">
-            <span v-if="document.elevation">
-                <fa-icon icon="bomb"/>
-                {{ document.elevation }}&nbsp;m
+            <span class="is-ellipsed">
+                {{ document.event_type.join(", ") }}
             </span>
-            <span>
+
+            <span class="is-nowrap">
                 {{ document.date }}
             </span>
         </div>
 
         <div slot="row3" class="level">
             <activities :activities="document.activities"/>
-            <icon-quality :quality="document.quality"/>
+            <marker-quality :quality="document.quality"/>
         </div>
 
     </card-container>
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
     import constants from '@/js/constants.js'
 
     import CardContainer from './utils/CardContainer'
@@ -39,12 +42,7 @@
             CardRegionItem
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

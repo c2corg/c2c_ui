@@ -76,6 +76,7 @@ var routes = [
     //     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
     //     * remove font-family from icon-activity : the bug diseapper
     //     * issue come from this font...
+    //     * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
 
 ]
 

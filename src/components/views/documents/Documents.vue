@@ -151,7 +151,7 @@ $cards-gap:0.25rem;
 }
 
 .card-container{
-    transition:0.1s;
+    //transition:0.1s;
 }
 
 .cards-list{

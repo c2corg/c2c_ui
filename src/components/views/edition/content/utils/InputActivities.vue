@@ -13,12 +13,11 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
     import constants from "@/js/constants.js"
 
     export default {
-        props:{
-            document: Object,
-        },
+        props : props.requiredDocument,
 
         data(){
             return {

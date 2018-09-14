@@ -11,9 +11,9 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
+
     export default {
-        props:{
-            document: Object,
-        },
+        props : props.requiredDocument,
     }
 </script>

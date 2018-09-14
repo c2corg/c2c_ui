@@ -16,6 +16,8 @@
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "axios": "^0.18.0",
     "bulma": "^0.7.1",
+    "bulma-extensions": "^3.0.0",
+    "bulma-tooltip": "^2.0.2",
     "proj4": "^2.4.4",
     "showdown": "^1.8.6",
     "vue": "^2.5.16",
@@ -44,15 +46,18 @@
       "eslint:recommended"
     ],
     "rules": {
-        "vue/html-indent": ["warn", 4],
-        "vue/no-v-html": "error",
+      "vue/html-indent": [
+        "warn",
+        4
+      ],
+      "vue/no-v-html": "error",
+      "vue/order-in-components": "warn",
+      "vue/no-multi-spaces": "warn",
+      "vue/require-prop-types": "warn",
 
-        "vue/order-in-components": "warn",
-        "vue/no-multi-spaces": "warn",
-        "vue/require-prop-types": "warn",
-
-        "vue/max-attributes-per-line" : "off",
-        "vue/require-default-prop": "off"
+      "vue/attributes-order": "off", 
+      "vue/require-default-prop": "off",
+      "vue/max-attributes-per-line": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

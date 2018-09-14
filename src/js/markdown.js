@@ -41,15 +41,11 @@ showdown.extension('c2c_folies', function () {
             })
         }
 
-        css = css.length ? " class='" + css.join(" ") + "'" : ""
+        var url = 'https://api.camptocamp.org/images/proxy/' + imgId + '?size=' + size
+        var img = '<img src="'+ url + '">'
         var caption = legend ? '<figcaption>' + legend +  '</figcaption>' : ''
 
-        // todo : include legend
-
-        return '<figure' + css + '>' +
-            '<img src="https://api.camptocamp.org/images/proxy/' + imgId + '?size=' + size + '" ' +
-            'href="photoswipe.showGallery(' + imgId + ')"' +
-            '/>' + caption +  '</figure>'
+        return '<figure class="' + css.join(' ') + '"">' + img + caption + '</figure>'
 
     }
 

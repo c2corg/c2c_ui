@@ -39,11 +39,13 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+
     import Markdown from './utils/Markdown'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
     import LicenseBox from './utils/LicenseBox'
-
 
     import CommentsBox from './utils/CommentsBox'
 
@@ -57,10 +59,6 @@
             LicenseBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

@@ -44,6 +44,9 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+    
     import Markdown from './utils/Markdown'
     import LabelValue from './utils/LabelValue'
     import FieldView from './utils/FieldView'
@@ -60,10 +63,6 @@
             MapBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

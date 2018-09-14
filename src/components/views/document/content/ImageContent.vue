@@ -55,6 +55,7 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
     import c2c from '@/js/c2c.js'
 
     import Markdown from './utils/Markdown'
@@ -74,11 +75,7 @@
             CommentsBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        },
+        props : props.documentViewProperties,
 
         methods:{
             getImageUrl : c2c.getImageUrl,

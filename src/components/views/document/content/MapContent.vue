@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
+    
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
     import CommentsBox from './utils/CommentsBox'
@@ -44,10 +46,6 @@
             CommentsBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

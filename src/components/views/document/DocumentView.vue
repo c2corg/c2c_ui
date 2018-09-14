@@ -57,7 +57,8 @@
             </content-box>
 
             <component :is="type + '-content'"
-                       :document="document" :locale="locale"
+                       :document="document"
+                       :locale="locale"
                        :fields="constants.objectDefinitions[type].fields"/>
         </div>
     </div>
@@ -69,7 +70,6 @@
     import utils from '@/js/utils.js'
     import user from '@/js/user.js'
     import constants from '@/js/constants.js'
-
 
     import RouteContent from './content/RouteContent'
     import OutingContent from './content/OutingContent'

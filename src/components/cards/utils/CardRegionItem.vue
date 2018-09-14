@@ -1,5 +1,5 @@
 <template>
-    <span v-if="text">
+    <span v-if="text" class="is-ellipsed">
         <icon-area class="has-text-primary"/>
         {{ text }}
     </span>
@@ -8,16 +8,12 @@
 
 <script>
 
+    import { props } from '@/js/properties.js'
     import user from '@/js/user.js'
 
     export default {
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         data(){
             return {

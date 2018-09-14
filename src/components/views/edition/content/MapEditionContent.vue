@@ -1,6 +1,6 @@
 <template>
     <div>
-        <edit-section :document="document" expanded="true" header="general information">
+        <edit-section :document="document" :expanded="true" header="general information">
             <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
 
             <input-base :document="document" :field="fields.editor" />
@@ -11,6 +11,9 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+
     import InputBase from './utils/InputBase'
     import EditSection from './utils/EditSection'
 
@@ -20,10 +23,6 @@
             EditSection,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

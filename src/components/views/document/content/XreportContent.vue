@@ -58,6 +58,9 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+    
     import UsersLinks from './utils/UsersLinks'
     import LicenseBox from './utils/LicenseBox'
     import MapBox from './utils/MapBox'
@@ -80,10 +83,6 @@
             CommentsBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

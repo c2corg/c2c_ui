@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    import { prop } from '@/js/properties.js'
 
     import LabelValue from './LabelValue'
 
@@ -15,8 +16,8 @@
         components : {LabelValue},
 
         props : {
-            document:Object,
-            field:Object,
+            document:prop.requiredObject,
+            field:prop.requiredObject,
         },
 
         computed : {

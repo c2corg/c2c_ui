@@ -10,11 +10,12 @@
 </template>
 
 <script>
+    import { prop } from '@/js/properties.js'
 
     export default {
         props: {
-            document:Object,
-            lang:String,
+            document:prop.requiredObject,
+            lang:prop.optionalString,
         },
     }
 

@@ -51,6 +51,12 @@ function c2c(){
             }
         },
 
+        associations:{
+            add(parent_document_id, child_document_id){
+                return this_.axios.post(this_.apiUrl + '/associations', { parent_document_id, child_document_id })
+            }
+        },
+
         account:{
             get(){
                 return this_.axios.get(this_.apiUrl + '/users/account')

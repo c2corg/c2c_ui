@@ -2,11 +2,11 @@
     <card-container class="route-card" @click="go">
         <document-title slot="header" :document="document"/>
 
-        <div slot="row1" class="is-ellipsed">
-            <card-region-item :document="document" class="is-ellipsed"/>
+        <div slot="row1" class="level">
+            <card-region-item :document="document"/>
         </div>
 
-        <div slot="row3" class="level">
+        <div slot="row2" class="level">
             <card-elevation-item :elevation="document.elevation"/>
 
             <span v-if="document.slackline_types">
@@ -14,12 +14,14 @@
                 {{ document.slackline_types }}
             </span>
 
-            <icon-quality :quality="document.quality"/>
+            <marker-quality :quality="document.quality"/>
         </div>
     </card-container>
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
     import constants from '@/js/constants.js'
 
     import CardContainer from './utils/CardContainer'
@@ -33,12 +35,7 @@
             CardRegionItem
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

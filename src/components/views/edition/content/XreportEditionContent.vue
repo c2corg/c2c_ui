@@ -58,6 +58,8 @@
 
 <script>
 
+    import { props } from '@/js/properties.js'
+
     import EditSection from './utils/EditSection'
 
     import InputBase from './utils/InputBase'
@@ -72,10 +74,6 @@
             InputCheckboxes,
         },
 
-        props : {
-            document:Object, 
-            locale:Object, 
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

@@ -10,13 +10,8 @@
 
 <script>
 
+    import { prop } from '@/js/properties.js'
     import Markdown from './Markdown'
-
-    // helper
-    var requiredObject = {
-        type:Object,
-        required:true,
-    }
 
     export default {
 
@@ -25,9 +20,9 @@
         },
 
         props: {
-            document:requiredObject,
-            locale:requiredObject,
-            field:requiredObject
+            document:prop.requiredObject,
+            locale:prop.requiredObject,
+            field:prop.requiredObject
         }
     }
 </script>

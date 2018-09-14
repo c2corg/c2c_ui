@@ -81,8 +81,7 @@
 
 <script>
 
-    import TabView from './utils/TabView'
-    import TabItem from './utils/TabItem'
+    import { props } from '@/js/properties.js'
 
     import EditSection from './utils/EditSection'
 
@@ -92,18 +91,12 @@
 
     export default {
         components:{
-            TabView,
-            TabItem,
             InputBase,
             InputCheckboxes,
             InputActivities,
             EditSection,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

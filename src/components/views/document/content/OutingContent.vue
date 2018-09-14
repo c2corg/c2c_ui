@@ -74,6 +74,8 @@
 
 <script>
 
+    import { props } from '@/js/properties.js'
+    
     import Markdown from './utils/Markdown'
     import MarkdownSection from './utils/MarkdownSection'
     import UsersLinks from './utils/UsersLinks'
@@ -96,10 +98,6 @@
             FieldView,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

@@ -26,7 +26,7 @@
             <div v-for="post of comments" :key="post.id" class="discourse-post">
                 <div class="columns is-gapless">
                     <div class="column is-narrow discourse-post-avatar">
-                        <img :src="post.avatar_template">
+                        <img :src="post.avatar_template" :width="forum_avatar_size" :height="forum_avatar_size">
                     </div>
                     <div class="column">
                         <div class="discourse-post-header">
@@ -57,13 +57,14 @@
 </template>
 
 <script>
+    import { prop } from '@/js/properties.js'
     import forum from '@/js/forum.js'
     import user from '@/js/user.js'
 
     export default {
         props:{
-            document: Object,
-            locale: Object,
+            document: prop.requiredObject,
+            locale: prop.requiredObject,
         },
 
         data(){
@@ -72,7 +73,8 @@
                 user,
                 topic:null,
                 comments:[],
-                errorMessage:null
+                errorMessage:null,
+                forum_avatar_size: 45,
             }
         },
 
@@ -114,7 +116,7 @@
                         if (data !== undefined) {
                             for (let post of data.posts) {
                                 if (post['name'] != 'system') {
-                                    post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', '45')
+                                    post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
                                     post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
                                     this.comments.push(post);
                                 }

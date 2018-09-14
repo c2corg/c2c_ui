@@ -1,7 +1,8 @@
 <template>
     <span>
-        <icon-activity v-for="activity of activities" :key="activity"
-                       :activity="activity"/>
+        <icon-activity
+            v-for="activity of activities" :key="activity"
+            v-tooltip="activity" :activity="activity"/>
     </span>
 </template>
 

@@ -52,10 +52,19 @@ Vue.filter('timeAgo', (arg) => {
     return moment.utc(arg).local().fromNow()
 })
 
+//tooltip directive
+Vue.directive('tooltip',  function (el, binding) {
+    if(binding.value!==null && binding.value!=undefined){
+        el.classList.add("tooltip");
+        el.setAttribute("data-tooltip", binding.value);
+    }
+})
+
 new Vue({
-  router:Router,
-  render: h => h(App)
+    router:Router,
+    render: h => h(App)
 }).$mount('#app')
+
 
 
 // extends javascript core objects

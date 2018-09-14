@@ -1,18 +1,20 @@
 <template>
-    <i :class="'icon-activity-' + activity"/>
+    <span>
+        <i :class="'icon-activity-' + activity" />
+    </span>
 </template>
 
 <script>
 
     export default {
         props: {
-            activity: String
+            activity: String,
+            required: true,
         },
     }
 </script>
 
 <style scoped>
-
 
 [class^="icon-activity-"], [class*=" icon-activity-"] {
   /* use !important to prevent issues with browser extensions that change fonts */

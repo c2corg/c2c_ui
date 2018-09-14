@@ -13,13 +13,12 @@
 
 
 <script>
+    import { props } from '@/js/properties.js'
     import c2c from '@/js/c2c.js'
 
     export default {
-        props : {
-        document:Object,
-        },
-        
+        props : props.requiredDocument,
+
         data(){
             return {
                 comment:"",

@@ -24,6 +24,9 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+
     import InputBase from './utils/InputBase'
     import InputCheckboxes from './utils/InputCheckboxes'
     import InputActivities from './utils/InputActivities'
@@ -37,10 +40,6 @@
             EditSection,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

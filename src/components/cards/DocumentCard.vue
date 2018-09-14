@@ -3,6 +3,8 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
     import constants from '@/js/constants.js'
 
     import AreaCard from './AreaCard'
@@ -28,12 +30,7 @@
             XreportCard,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         computed:{
             type(){

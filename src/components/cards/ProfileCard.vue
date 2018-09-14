@@ -3,19 +3,17 @@
         <document-title slot="header" :document="document"/>
 
         <div slot="row1" class="level">
-            <span class="is-ellipsed">
-                <card-region-item :document="document" class="is-ellipsed"/>
-            </span>
-            <span class="is-pulled-right">
+            <card-region-item :document="document" />
+            <span class="is-nowrap">
                 <icon-forum />
                 @{{ document.forum_username }}
             </span>
         </div>
 
-        <div slot="row2">
+        <div slot="row2" class="level">
             <activities :activities="document.activities"/>
-            &nbsp;
-            <span class="is-pulled-right">
+
+            <span>
                 {{ document.categories.join(", ") }}
             </span>
         </div>
@@ -23,6 +21,7 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
     import constants from '@/js/constants.js'
 
     import CardContainer from './utils/CardContainer'
@@ -34,12 +33,7 @@
             CardRegionItem,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

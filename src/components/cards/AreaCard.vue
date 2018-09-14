@@ -2,13 +2,18 @@
     <card-container class="route-card" @click="go">
         <document-title slot="header" :document="document"/>
 
-        <p slot="row1" class="level">
-            <span>{{ document.area_type }}</span>
-        </p>
+        <div slot="row1" class="level">
+            <span>
+                {{ document.area_type }}
+            </span>
+        </div>
     </card-container>
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
+
     import CardContainer from './utils/CardContainer'
     import constants from '@/js/constants.js'
 
@@ -17,12 +22,7 @@
             CardContainer,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

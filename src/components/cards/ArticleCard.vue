@@ -8,19 +8,21 @@
             </span>
         </div>
 
-        <div slot="row2">
+        <div slot="row2" class="level">
             <icon-creative-commons />{{ document.article_type }}
         </div>
 
-        <div slot="row3">
+        <div slot="row3" class="level">
             <activities :activities="document.activities"/>
-            <icon-quality :quality="document.quality" class="is-pulled-right"/>
+            <marker-quality :quality="document.quality" />
         </div>
 
     </card-container>
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
+
     import CardContainer from './utils/CardContainer'
     import constants from '@/js/constants.js'
 
@@ -29,12 +31,7 @@
             CardContainer,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

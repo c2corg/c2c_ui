@@ -1,5 +1,9 @@
 <template>
-    <fa-icon v-if="condition" :class="'icon-condition-' + condition" icon="circle" />
+    <span>
+        <fa-icon
+            :class="'icon-condition-' + condition"
+            :icon="[condition !== null ? 'fas' : 'far', 'circle']" />
+    </span>
 </template>
 
 <script>
@@ -30,6 +34,10 @@
 
 .icon-condition-awful{
     color:#8B0000;
+}
+
+.icon-condition-null{
+    color:lightgrey;
 }
 
 </style>

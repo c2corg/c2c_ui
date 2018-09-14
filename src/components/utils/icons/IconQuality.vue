@@ -1,5 +1,7 @@
 <template>
-    <i :class="'icon-quality-' + quality"/>
+    <span>
+        <i :class="'icon-quality-' + quality"/>
+    </span>
 </template>
 
 <script>

@@ -6,11 +6,9 @@
         </div>
 
         <div slot="row1" class="level">
-            <span class="is-ellipsed">
-                <card-region-item :document="document" class="is-ellipsed"/>
-            </span>
+            <card-region-item :document="document" />
 
-            <span class="is-nowrap is-pulled-right">
+            <span class="is-nowrap">
                 <fa-icon class="has-text-primary" icon="pen"/>
                 {{ document.author.name }}
             </span>
@@ -34,39 +32,38 @@
         </div>
 
         <div slot="row3" class="level">
-            <activities :activities="document.activities" class="has-text-primary"/>
+            <activities :activities="document.activities" class="has-text-primary is-ellipsed"/>
 
-            <span class="has-text-primary">
-                <icon-geometry-detail v-if="document.geometry.has_geom_detail" />
-                <icon-document v-if="document.img_count != 0" type="image"/>
+            <span class="has-text-primary is-nowrap">
+                <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+                <marker-image-count v-if="document.img_count != 0" :image-count="document.img_count"/>
             </span>
 
-            {{ document.date_start }}
-            <icon-quality :quality="document.quality"/>
+            <span class="is-nowrap">
+                {{ document.date_start }}
+            </span>
+
+            <marker-quality :quality="document.quality"/>
         </div>
     </card-container>
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
+    import constants from '@/js/constants.js'
+
     import CardContainer from './utils/CardContainer'
     import CardElevationItem from './utils/CardElevationItem'
     import CardRegionItem from './utils/CardRegionItem'
-
-    import constants from '@/js/constants.js'
 
     export default {
         components: {
             CardContainer,
             CardElevationItem,
-            CardRegionItem
+            CardRegionItem,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

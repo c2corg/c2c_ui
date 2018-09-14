@@ -47,6 +47,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
+    faCircle as faCircleRegular,
     faSun as faSunRegular,
 } from '@fortawesome/free-regular-svg-icons'
 
@@ -104,6 +105,7 @@ library.add(
     faWrench,
 
     //regular icons
+    faCircleRegular,
     faSunRegular,
 
     //brands icons

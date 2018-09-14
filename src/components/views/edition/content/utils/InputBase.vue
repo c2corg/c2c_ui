@@ -45,13 +45,14 @@
 </template>
 
 <script>
+    import { prop } from '@/js/properties.js'
 
     export default {
 
         props : {
-            document:Object,
-            base:Object,
-            field:Object,
+            document:prop.requiredObject,
+            base:prop.optionalObject,
+            field:prop.requiredObject,
         },
 
         data(){

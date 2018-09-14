@@ -2,7 +2,7 @@
     <card-container class="route-card" @click="go">
         <document-title slot="header" :document="document"/>
 
-        <div slot="row1" class="is-ellipsed">
+        <div slot="row1" class="level">
             <card-region-item :document="document"/>
         </div>
 
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import { props } from '@/js/properties.js'
     import constants from '@/js/constants.js'
 
     import CardContainer from './utils/CardContainer'
@@ -26,12 +27,7 @@
             CardRegionItem,
         },
 
-        props: {
-            document: {
-                type: Object,
-                required: true,
-            }
-        },
+        props: props.requiredDocument,
 
         methods:{
             go(){

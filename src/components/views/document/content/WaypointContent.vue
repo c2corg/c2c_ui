@@ -12,6 +12,8 @@
                 <associated-articles :document="document" />
                 <associated-maps :document="document" />
 
+                <lang-switcher-box :document="document"/>
+
                 <license-box cc="by-sa"/>
             </div>
 
@@ -117,12 +119,16 @@
 
 
 <script>
+
+    import { props } from '@/js/properties.js'
+
     import MarkdownSection from './utils/MarkdownSection'
     import MapBox from './utils/MapBox'
     import LicenseBox from './utils/LicenseBox'
     import FieldView from './utils/FieldView'
     import LabelValue from './utils/LabelValue'
     import CommentsBox from './utils/CommentsBox'
+    import LangSwitcherBox from './utils/LangSwitcherBox'
     import AssociatedWaypoints from './utils/AssociatedWaypoints'
     import AssociatedMaps from './utils/AssociatedMaps'
     import AssociatedBooks from './utils/AssociatedBooks'
@@ -143,12 +149,9 @@
             AssociatedBooks,
             AssociatedArticles,
             RecentOutingsBox,
+            LangSwitcherBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
 </script>

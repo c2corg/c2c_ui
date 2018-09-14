@@ -98,6 +98,11 @@
                 <markdown-section :document="document" :locale="locale" :field="fields.remarks" />
                 <markdown-section :document="document" :locale="locale" :field="fields.gear" />
                 <markdown-section :document="document" :locale="locale" :field="fields.external_resources" />
+
+                <gallery
+                    v-if="document.associations && document.associations.images.length"
+                    :images="document.associations.images" />
+
             </content-box>
 
             <recent-outings-box :document="document"/>
@@ -110,6 +115,8 @@
 </template>
 
 <script>
+
+    import { props } from '@/js/properties.js'
 
     import MapBox from './utils/MapBox'
 
@@ -140,10 +147,7 @@
             RecentOutingsBox,
         },
 
-        props : {
-            document:Object,
-            locale:Object,
-            fields:Object,
-        }
+        props : props.documentViewProperties,
     }
+
 </script>
