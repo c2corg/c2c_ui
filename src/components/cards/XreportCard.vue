@@ -28,29 +28,11 @@
 
 <script>
 
-    import { props } from '@/js/properties.js'
-    import constants from '@/js/constants.js'
-
-    import CardContainer from './utils/CardContainer'
-    import CardElevationItem from './utils/CardElevationItem'
-    import CardRegionItem from './utils/CardRegionItem'
+    import cardMixins from './utils/mixins.js'
 
     export default {
-        components: {
-            CardContainer,
-            CardElevationItem,
-            CardRegionItem
-        },
-
-        props: props.requiredDocument,
-
-        methods:{
-            go(){
-                this.$router.push({
-                    name: constants.getDocumentType(this.document.type),
-                    params: { id: this.document.document_id }
-                })
-            }
-        },
+        mixins: [
+            cardMixins,
+        ],
     }
 </script>

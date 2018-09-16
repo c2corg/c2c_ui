@@ -12,25 +12,11 @@
 
 <script>
 
-    import { props } from '@/js/properties.js'
-
-    import CardContainer from './utils/CardContainer'
-    import constants from '@/js/constants.js'
+    import cardMixins from './utils/mixins.js'
 
     export default {
-        components: {
-            CardContainer,
-        },
-
-        props: props.requiredDocument,
-
-        methods:{
-            go(){
-                this.$router.push({
-                    name: constants.getDocumentType(this.document.type),
-                    params: { id: this.document.document_id }
-                })
-            }
-        },
+        mixins: [
+            cardMixins,
+        ],
     }
 </script>
