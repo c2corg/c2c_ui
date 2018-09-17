@@ -1,6 +1,6 @@
 <template>
     <content-box class="is-paddingless">
-        <map-view :document="document" />
+        <map-view :documents="new Array(document)" />
         <div v-if="document.areas" class="has-text-centered">
             <areas-links :areas="document.areas"/>
         </div>
@@ -14,7 +14,7 @@
         components: {
             AreasLinks,
         },
-        
+
         props : {
             document:Object
         }

@@ -6,27 +6,25 @@
 
 
 <script>
+    require('ol/ol.css')
+
     import {Map, View, Feature} from 'ol';
-    //import Point from 'ol/geom/point'
     import TileLayer from 'ol/layer/Tile';
     import OSM from 'ol/source/OSM';
+    import XYZ from 'ol/source/XYZ';
     import Point from 'ol/geom/Point';
     import VectorSource from 'ol/source/Vector';
     import VectorLayer from 'ol/layer/Vector';
     import Collection from 'ol/Collection';
+    import {defaults as defaultControls, FullScreen} from 'ol/control';
 
     export default {
 
         props: {
-            document: {
-                type: Object,
-                default: null,
-            },
             documents: {
-                type: Object,
-                default: null,
+                type: Array,
+                required: true,
             }
-
         },
 
         data(){
@@ -40,19 +38,6 @@
                 }
             }
         },
-
-        computed:{
-            documents_(){
-                if(this.documents)
-                    return this.documents.documents
-
-                if(this.document)
-                    return [this.document]
-
-                return []
-            },
-        },
-
 
         watch:{
             documents:{
@@ -73,14 +58,31 @@
 
         methods : {
             createOlObject () {
+
                 this.map_ = new Map({
+
+                    controls: defaultControls().extend([
+                        new FullScreen({
+                            source: this.$el
+                        })
+                    ]),
+
                     layers: [
                         new TileLayer({
                             source: new OSM()
+                        }),
+
+                        new TileLayer({
+                            title: 'OSM',
+                            type: 'base',
+                            visible: true,
+                            source: new XYZ({
+                                url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
+                            })
                         })
                     ],
                     view: new View({}),
-                    controls: [],
+
                     //loadTilesWhileAnimating: this.loadTilesWhileAnimating,
                     //loadTilesWhileInteracting: this.loadTilesWhileInteracting,
                     //pixelRatio: this.pixelRatio,
@@ -124,9 +126,12 @@
             fitMapToDocuments(){
                 this.documentsLayer.markers.clear()
 
-                for(let document of this.documents_){
+                for(let document of this.documents){
                     this.buildMarker(document, this.documentsLayer)
                 }
+
+                if(this.documents.length==0)
+                    return
 
                 var extent = this.documentsLayer.layer.getSource().getExtent();
                 this.map_.getView().fit(extent, this.map_.getSize());

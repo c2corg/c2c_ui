@@ -48,9 +48,9 @@
                 <page-selector v-if="documents!=null" :documents="documents"/>
             </div>
 
-            <div v-if="hasMap"
+            <div v-if="hasMap && documents"
                  class="column map-container">
-                <map-view :documents="documents" style="width: 100%; height: 100%"/>
+                <map-view :documents="documents.documents" style="width: 100%; height: 100%"/>
             </div>
         </div>
     </div>
