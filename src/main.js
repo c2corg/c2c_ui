@@ -30,7 +30,8 @@ addComponents(require.context('./components/utils', true, /\.vue$/))
 
 // other globals components
 Vue.component("document-card", require('./components/cards/DocumentCard').default)
-Vue.component("map-view", require('./components/map/MapView').default)
+// Vue.component("map-view", require('./components/map/MapView').default)
+Vue.component("map-view", require('./components/map/OlMap').default)
 
 
 // add vue-moment for generic filter :

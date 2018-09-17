@@ -454,6 +454,7 @@ function Constants(){
             letter:"m",
             fields:getFieldsObject(
                 new Field("title", {url:"q"}),
+                new Field("description"),
                 new Field("lang", {url:"l"}),
 
                 new Field("code"),
