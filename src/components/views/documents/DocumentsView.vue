@@ -23,7 +23,6 @@
             </div>
             <div class="level-right">
                 <div class="level-item">
-                    {{ boundsBehavior }}
                     <span v-if="hasMap" class="icon is-size-3">
                         <fa-icon :class="{'has-text-primary':showMap}"
                                  icon="map-marked-alt"
@@ -53,7 +52,6 @@
                  class="column map-container">
                 <map-view
                     :documents="documents.documents"
-                    :bounds-behavior="boundsBehavior"
                     style="width: 100%; height: 100%"/>
             </div>
         </div>
@@ -80,10 +78,6 @@
                 documents: null,
                 error: null,
                 showMap: null,
-                boundsBehavior: {
-                    bounds:[ -787576, 4258891, 1237698, 7751757],
-                    bboxFilter:false,
-                }
             }
         },
 

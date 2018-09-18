@@ -27,6 +27,12 @@
             </div>
         </div>
 
+        <div ref="useMapAsFilter" class="ol-control ol-control-use-map-as-filter">
+            <label>
+                <input type="checkbox" v-model="filterDocumentsWithMap">
+                <span>Search when I move map</span>
+            </label>
+        </div>
     </div>
 </template>
 
@@ -48,10 +54,6 @@
             documents: {
                 type: Array,
                 required: true,
-            },
-            boundsBehavior: {
-                type: Object,
-                required: true,
             }
         },
 
@@ -69,11 +71,19 @@
 
                 showLayerSwitcher: false,
 
-                filterDocumentsWithMap: false,
+                filterDocumentsWithMap: this.$route.query.bbox !== undefined && false,
             }
         },
 
         computed: {
+
+            urlValue:{
+                get(){
+                    var result = this.$route.query.bbox
+                    return result ? result.replace("%252C", ",").split(",").map(parseInt) : undefined
+                },
+            },
+
             visibleLayer : {
                 get(){
                     return this.mapLayers.find( layer => layer.getVisible()===true)
@@ -82,14 +92,19 @@
                     this.visibleLayer.setVisible(false)
                     layer.setVisible(true)
                 }
-            }
+            },
         },
 
         watch:{
             documents:{
-                handler:['drawDocumentMarkers', 'fitMapToDocuments'],
+                handler:function(){
+                    this.drawDocumentMarkers()
+                    this.fitMapToDocuments()
+                },
                 deep:true, // must look on change inside documents object
             },
+
+            filterDocumentsWithMap : 'sendBoundsToUrl',
         },
 
         mounted() {
@@ -101,6 +116,7 @@
                     new FullScreen({source: this.$el}),
                     new Control({element: this.$refs.layerSwitcherButton}),
                     new Control({element: this.$refs.layerSwitcher}),
+                    new Control({element: this.$refs.useMapAsFilter}),
                 ]),
 
                 layers: this.mapLayers.concat(this.dataLayers),
@@ -117,8 +133,7 @@
             this.documentsLayer.layer = this.addLayer(this.documentsLayer.markers)
 
             this.map.on("moveend", function(event) {
-                var extent = event.map.getView().calculateExtent()
-                this_.boundsBehavior.bounds = extent
+                this_.sendBoundsToUrl()
             });
 
             this.drawDocumentMarkers()
@@ -161,18 +176,25 @@
                 for(let document of this.documents){
                     this.buildMarker(document, this.documentsLayer)
                 }
+            },
 
+            sendBoundsToUrl(){
 
+                var bounds = this.map.getView().calculateExtent()
+                var query = Object.assign({}, this.$route.query)
+
+                query.bbox =  this.filterDocumentsWithMap ? bounds.map(Math.round).join(",") : undefined
+                if(query.bbox!==this.$route.query.bbox){
+                    this.$router.push({query: query})
+                }
             },
 
             fitMapToDocuments(){
-
-                if(this.documents.length==0 || this.boundsBehavior.bboxFilter)
+                if(this.documents.length==0 || this.filterDocumentsWithMap)
                     return
 
                 var extent = this.documentsLayer.layer.getSource().getExtent();
                 this.map.getView().fit(extent, this.map.getSize());
-
             },
 
             toogleMapLayer(layer){
@@ -200,12 +222,24 @@
     border: none;
     border-radius: 2px;
     padding: 10px;
+}
 
+.ol-control-use-map-as-filter > label{
+    color: white;
+    text-decoration: none;
+    background-color: rgba(0,60,136,0.5);
+    padding:2px 4px 3px 5px;
+    border-radius: 2px;
 }
 
 .ol-control-layer-switcher-button {
     bottom: .5em;
     left: .5em;
+}
+
+.ol-control-use-map-as-filter{
+    top: .5em;
+    left:3em;
 }
 
 </style>
