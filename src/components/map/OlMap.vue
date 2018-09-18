@@ -4,7 +4,7 @@
 
         <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
             <button @click="showLayerSwitcher=!showLayerSwitcher">
-                L
+                <fa-icon icon="layer-group"/>
             </button>
         </div>
 
@@ -27,10 +27,9 @@
 <script>
     require('ol/ol.css')
 
-    import {Map, View, Feature} from 'ol';
-    import TileLayer from 'ol/layer/Tile';
-    import OSM from 'ol/source/OSM';
-    import XYZ from 'ol/source/XYZ';
+    import mapLayers from './MapLayers.js'
+
+    import {Map, View, Feature } from 'ol';
     import Point from 'ol/geom/Point';
     import VectorSource from 'ol/source/Vector';
     import VectorLayer from 'ol/layer/Vector';
@@ -55,22 +54,7 @@
                     markers : new Collection()
                 },
 
-                mapLayers : [
-                    new TileLayer({
-                        title: 'OpenStreetMap',
-                        source: new OSM(),
-                        visible: true,
-                    }),
-
-                    new TileLayer({
-                        title: 'OpenTopoMap',
-                        type: 'base',
-                        visible: false,
-                        source: new XYZ({
-                            url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
-                        })
-                    })
-                ],
+                mapLayers : mapLayers,
 
                 showLayerSwitcher: false,
             }
