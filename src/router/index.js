@@ -80,7 +80,18 @@ var routes = [
     // * add image
     // * xreport and profile data
     // * signup
-    // * maps types (ign, swiss...)
+    // * map types (ign, swiss...)
+    //   * esri
+    //   * bing
+    //   * ign
+    //   * ign ortho
+    //   * swiss topo
+    //   * ign slopes
+    //   * swisstopo slopes
+    //   * draw region
+    //   * draw trace
+    //   * recenter on
+    //   * recenter current position
     // * admin actions
     // * document-view actions (translate...)
     // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential

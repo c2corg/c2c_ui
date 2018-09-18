@@ -142,6 +142,7 @@ $cards-gap:0.25rem;
 .map-container{
     height: $result-height;
     position:relative;
+    padding:0;
 }
 
 .cards-container{

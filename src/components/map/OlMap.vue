@@ -1,6 +1,25 @@
 <template>
     <div>
-        <slot/>
+        <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false"/>
+
+        <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
+            <button @click="showLayerSwitcher=!showLayerSwitcher">
+                L
+            </button>
+        </div>
+
+        <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher">
+            <div>
+                <header>
+                    Base layer
+                </header>
+                <div v-for="layer of mapLayers" :key="layer.title" @click="switchMapLayer(layer)">
+                    <input type="radio" :checked="layer==visibleLayer">
+                    {{ layer.get('title') }}
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -16,7 +35,7 @@
     import VectorSource from 'ol/source/Vector';
     import VectorLayer from 'ol/layer/Vector';
     import Collection from 'ol/Collection';
-    import {defaults as defaultControls, FullScreen} from 'ol/control';
+    import {defaults as defaultControls, Control, FullScreen} from 'ol/control';
 
     export default {
 
@@ -30,11 +49,41 @@
         data(){
             return {
                 map: null,
-                view_ : null,
-                map_ : null,
+
                 documentsLayer : {
                     layer:null,
                     markers : new Collection()
+                },
+
+                mapLayers : [
+                    new TileLayer({
+                        title: 'OpenStreetMap',
+                        source: new OSM(),
+                        visible: true,
+                    }),
+
+                    new TileLayer({
+                        title: 'OpenTopoMap',
+                        type: 'base',
+                        visible: false,
+                        source: new XYZ({
+                            url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
+                        })
+                    })
+                ],
+
+                showLayerSwitcher: false,
+            }
+        },
+
+        computed: {
+            visibleLayer : {
+                get(){
+                    return this.mapLayers.find( layer => layer.getVisible()===true)
+                },
+                set(layer){
+                    this.visibleLayer.setVisible(false)
+                    layer.setVisible(true)
                 }
             }
         },
@@ -51,7 +100,7 @@
             this.map = this.createOlObject()
 
             //hasMap(this)
-            this.map.setTarget(this.$el)
+            this.map.setTarget(this.$refs.map)
         //    this.subscribeAll()
         //    this.updateSize()
         },
@@ -59,44 +108,29 @@
         methods : {
             createOlObject () {
 
-                this.map_ = new Map({
+                this.map = new Map({
 
                     controls: defaultControls().extend([
-                        new FullScreen({
-                            source: this.$el
-                        })
+                        new FullScreen({source: this.$el}),
+                        new Control({element: this.$refs.layerSwitcherButton}),
+                        new Control({element: this.$refs.layerSwitcher}),
                     ]),
 
-                    layers: [
-                        new TileLayer({
-                            source: new OSM()
-                        }),
-
-                        new TileLayer({
-                            title: 'OSM',
-                            type: 'base',
-                            visible: true,
-                            source: new XYZ({
-                                url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
-                            })
-                        })
-                    ],
+                    layers: this.mapLayers,
                     view: new View({}),
 
-                    //loadTilesWhileAnimating: this.loadTilesWhileAnimating,
-                    //loadTilesWhileInteracting: this.loadTilesWhileInteracting,
+                    loadTilesWhileAnimating: true,
+                    loadTilesWhileInteracting: true,
                     //pixelRatio: this.pixelRatio,
                     //renderer: this.renderer,
                     //logo: this.logo,
                     //keyboardEventTarget: this.keyboardEventTarget,
-                    //view: this._view,
                 })
 
-                this.view_ = this.map_.getView()
                 this.documentsLayer.layer = this.addLayer(this.documentsLayer.markers)
 
                 this.fitMapToDocuments()
-                return this.map_
+                return this.map
             },
 
             addLayer(features){
@@ -106,7 +140,7 @@
                     }),
                 })
 
-                this.map_.addLayer(layer)
+                this.map.addLayer(layer)
 
                 return layer
             },
@@ -134,9 +168,37 @@
                     return
 
                 var extent = this.documentsLayer.layer.getSource().getExtent();
-                this.map_.getView().fit(extent, this.map_.getSize());
+                this.map.getView().fit(extent, this.map.getSize());
 
+            },
+
+            switchMapLayer(layer){
+                this.visibleLayer=layer
             }
         }
     }
 </script>
+
+
+<style>
+
+  .ol-control-layer-switcher {
+    bottom: 3em;
+    left: .5em;
+
+}
+      .ol-control-layer-switcher > div {
+    color: white;
+    text-decoration: none;
+    background-color: rgba(0,60,136,0.5);
+    border: none;
+    border-radius: 2px;
+    padding: 10px;
+
+  }
+
+  .ol-control-layer-switcher-button {
+    bottom: .5em;
+    left: .5em;
+  }
+</style>
