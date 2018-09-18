@@ -5,6 +5,7 @@ import { props } from '@/js/properties.js'
 import CardContainer from './CardContainer'
 import CardRegionItem from './CardRegionItem'
 import CardElevationItem from './CardElevationItem'
+import CardActivitiesItem from './CardActivitiesItem'
 
 export default {
 
@@ -12,6 +13,7 @@ export default {
         CardContainer,
         CardRegionItem,
         CardElevationItem,
+        CardActivitiesItem,
     },
 
     props: props.requiredDocument,

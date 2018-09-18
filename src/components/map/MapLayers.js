@@ -1,7 +1,8 @@
 import config from '@/js/config.js'
 
 import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
+//import OSM from 'ol/source/OSM';
+import BingMaps from 'ol/source/BingMaps';
 import XYZ from 'ol/source/XYZ';
 import WMTS from 'ol/source/WMTS';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
@@ -9,9 +10,9 @@ import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import {get as getProjection} from 'ol/proj';
 import {getWidth} from 'ol/extent';
 
-function createSwisstopoLayer(layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     return new TileLayer({
-        title: 'swisstopo',
+        title: title,
         type: 'base',
         visible: false,
         source: new XYZ({
@@ -27,7 +28,7 @@ function createSwisstopoLayer(layer, format = 'jpeg', time = 'current') {
 }
 
 
-function createIgnSource(layer, format = 'jpeg') {
+function createIgnSource(title, layer, format = 'jpeg') {
     const resolutions = [];
     const matrixIds = [];
     const proj3857 = getProjection('EPSG:3857');
@@ -60,7 +61,7 @@ function createIgnSource(layer, format = 'jpeg') {
     })
 
     return new TileLayer({
-        title: 'IGN maps',
+        title: title,
         type: 'base',
         visible: false,
         source: source,
@@ -85,9 +86,20 @@ var esri = new TileLayer({
     })
 })
 
+/*
 var openStreetMap = new TileLayer({
     title: 'OpenStreetMap',
     source: new OSM(),
+    visible: false,
+})*/
+
+
+var bingMap = new TileLayer({
+    title: 'Bng',
+    source: new BingMaps({
+        key: config.bingApiKey,
+        imagerySet: 'AerialWithLabels'
+     }),
     visible: false,
 })
 
@@ -103,8 +115,15 @@ var openTopoMap = new TileLayer({
     })
 })
 
-var ign_maps = createIgnSource('GEOGRAPHICALGRIDSYSTEMS.MAPS');
+var ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+var ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+var swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe')
 
-var swissTopo = createSwisstopoLayer('ch.swisstopo.pixelkarte-farbe')
+var ign_slopes = createIgnSource('IGN slopes', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+var swiss_slopes = createSwisstopoLayer('SwissTopo slopes', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
 
-export default [esri, openStreetMap, openTopoMap, swissTopo, ign_maps]
+ign_slopes.setOpacity(0.4)
+swiss_slopes.setOpacity(0.4)
+
+export const mapLayers = [esri, /*openStreetMap,*/ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
+export const dataLayers = [ign_slopes, swiss_slopes]

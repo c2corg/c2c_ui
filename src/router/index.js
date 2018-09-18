@@ -81,11 +81,7 @@ var routes = [
     // * xreport and profile data
     // * signup
     // * map types (ign, swiss...)
-    //   * ask for a IGN dev key
-    //   * bing
-    //   * ign ortho
-    //   * ign slopes
-    //   * swisstopo slopes
+    //   * ask for a IGN and Bing dev key
     //   * draw region
     //   * draw trace
     //   * recenter on

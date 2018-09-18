@@ -22,7 +22,7 @@
         </div>
 
         <div slot="row3" class="level">
-            <activities :activities="document.activities" class="has-text-primary is-size-4 is-ellipsed"/>
+            <card-activities-item :activities="document.activities"/>
 
             <marker-gps-trace v-if="document.geometry.has_geom_detail" class="has-text-primary"/>
 

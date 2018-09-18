@@ -11,7 +11,7 @@
         </div>
 
         <div slot="row2" class="level">
-            <activities :activities="document.activities"/>
+            <card-activities-item :activities="document.activities"/>
 
             <span>
                 {{ document.categories.join(", ") }}

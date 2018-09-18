@@ -5,6 +5,7 @@ var devConfig = {
     forumUrl : "https://forum.demov6.camptocamp.org",
     router_mode : undefined,
     ignApiKey : 'not-yet-asked',
+    bingApiKey : 'not-yet-asked',
 }
 
 // eslint-disable-next-line
@@ -14,6 +15,7 @@ var demoConfig = {
     forumUrl : "https://forum.demov6.camptocamp.org",
     router_mode : undefined,
     ignApiKey : undefined,
+    bingApiKey : undefined,
 }
 
 // eslint-disable-next-line
@@ -23,6 +25,7 @@ var prodConfig = {
     forumUrl : "https://forum.camptocamp.org",
     router_mode : 'history', // for pretty urls
     ignApiKey : undefined,
+    bingApiKey : undefined,
 }
 
 

@@ -13,8 +13,15 @@
                 <header>
                     Base layer
                 </header>
-                <div v-for="layer of mapLayers" :key="layer.title" @click="switchMapLayer(layer)">
+                <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
                     <input type="radio" :checked="layer==visibleLayer">
+                    {{ layer.get('title') }}
+                </div>
+                <header>
+                    Slopes
+                </header>
+                <div v-for="layer of dataLayers" :key="layer.title" @click="toogleMapLayer(layer)">
+                    <input type="checkbox" :checked="layer.getVisible()">
                     {{ layer.get('title') }}
                 </div>
             </div>
@@ -25,9 +32,8 @@
 
 
 <script>
-    require('ol/ol.css')
 
-    import mapLayers from './MapLayers.js'
+    import {mapLayers, dataLayers} from './MapLayers.js'
 
     import {Map, View, Feature } from 'ol';
     import Point from 'ol/geom/Point';
@@ -42,6 +48,10 @@
             documents: {
                 type: Array,
                 required: true,
+            },
+            boundsBehavior: {
+                type: Object,
+                required: true,
             }
         },
 
@@ -55,8 +65,11 @@
                 },
 
                 mapLayers : mapLayers,
+                dataLayers : dataLayers,
 
                 showLayerSwitcher: false,
+
+                filterDocumentsWithMap: false,
             }
         },
 
@@ -74,48 +87,49 @@
 
         watch:{
             documents:{
-                handler:'fitMapToDocuments',
+                handler:['drawDocumentMarkers', 'fitMapToDocuments'],
                 deep:true, // must look on change inside documents object
             },
-            document: 'fitMapToDocuments',
         },
 
         mounted() {
-            this.map = this.createOlObject()
+            var this_ = this
+
+            this.map = new Map({
+
+                controls: defaultControls().extend([
+                    new FullScreen({source: this.$el}),
+                    new Control({element: this.$refs.layerSwitcherButton}),
+                    new Control({element: this.$refs.layerSwitcher}),
+                ]),
+
+                layers: this.mapLayers.concat(this.dataLayers),
+                view: new View({}),
+
+                loadTilesWhileAnimating: true,
+                loadTilesWhileInteracting: true,
+                //pixelRatio: this.pixelRatio,
+                //renderer: this.renderer,
+                //keyboardEventTarget: this.keyboardEventTarget,
+            })
+
+            this.map.setTarget(this.$refs.map)
+            this.documentsLayer.layer = this.addLayer(this.documentsLayer.markers)
+
+            this.map.on("moveend", function(event) {
+                var extent = event.map.getView().calculateExtent()
+                this_.boundsBehavior.bounds = extent
+            });
+
+            this.drawDocumentMarkers()
+            this.fitMapToDocuments()
 
             //hasMap(this)
-            this.map.setTarget(this.$refs.map)
         //    this.subscribeAll()
         //    this.updateSize()
         },
 
         methods : {
-            createOlObject () {
-
-                this.map = new Map({
-
-                    controls: defaultControls().extend([
-                        new FullScreen({source: this.$el}),
-                        new Control({element: this.$refs.layerSwitcherButton}),
-                        new Control({element: this.$refs.layerSwitcher}),
-                    ]),
-
-                    layers: this.mapLayers,
-                    view: new View({}),
-
-                    loadTilesWhileAnimating: true,
-                    loadTilesWhileInteracting: true,
-                    //pixelRatio: this.pixelRatio,
-                    //renderer: this.renderer,
-                    //logo: this.logo,
-                    //keyboardEventTarget: this.keyboardEventTarget,
-                })
-
-                this.documentsLayer.layer = this.addLayer(this.documentsLayer.markers)
-
-                this.fitMapToDocuments()
-                return this.map
-            },
 
             addLayer(features){
                 var layer = new VectorLayer({
@@ -141,14 +155,19 @@
                 return marker;
             },
 
-            fitMapToDocuments(){
+            drawDocumentMarkers(){
                 this.documentsLayer.markers.clear()
 
                 for(let document of this.documents){
                     this.buildMarker(document, this.documentsLayer)
                 }
 
-                if(this.documents.length==0)
+
+            },
+
+            fitMapToDocuments(){
+
+                if(this.documents.length==0 || this.boundsBehavior.bboxFilter)
                     return
 
                 var extent = this.documentsLayer.layer.getSource().getExtent();
@@ -156,22 +175,25 @@
 
             },
 
-            switchMapLayer(layer){
-                this.visibleLayer=layer
+            toogleMapLayer(layer){
+                layer.setVisible(!layer.getVisible())
             }
         }
     }
 </script>
 
 
-<style>
+<style lang="scss" scoped>
 
-  .ol-control-layer-switcher {
+
+@import '~ol/ol.css';
+
+.ol-control-layer-switcher {
     bottom: 3em;
     left: .5em;
 
 }
-      .ol-control-layer-switcher > div {
+.ol-control-layer-switcher > div {
     color: white;
     text-decoration: none;
     background-color: rgba(0,60,136,0.5);
@@ -179,10 +201,11 @@
     border-radius: 2px;
     padding: 10px;
 
-  }
+}
 
-  .ol-control-layer-switcher-button {
+.ol-control-layer-switcher-button {
     bottom: .5em;
     left: .5em;
-  }
+}
+
 </style>

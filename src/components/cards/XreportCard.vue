@@ -19,7 +19,7 @@
         </div>
 
         <div slot="row3" class="level">
-            <activities :activities="document.activities"/>
+            <card-activities-item :activities="document.activities"/>
             <marker-quality :quality="document.quality"/>
         </div>
 
