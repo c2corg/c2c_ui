@@ -10,12 +10,18 @@
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
+
+        mixins : [requireDocumentProperty],
+
         props: {
-            document:prop.requiredObject,
-            lang:prop.optionalString,
+            lang:{
+                type:String,
+                required: false,
+                default: undefined,
+            }
         },
     }
 

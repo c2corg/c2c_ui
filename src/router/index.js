@@ -80,22 +80,22 @@ var routes = [
     // * add image
     // * xreport and profile data
     // * signup
-    // * map types (ign, swiss...)
+    // * map types
     //   * ask for a IGN and Bing dev key
-    //   * draw region
-    //   * draw trace
+    //   * region and trace style
+    //   * marker style
     //   * recenter on
     //   * recenter current position
     // * admin actions
     // * document-view actions (translate...)
-    // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
-    // * rename single instance components : https://vuejs.org/v2/style-guide/#Single-instance-component-names-strongly-recommended
     // * do forum.createTopic()
     // * test all doc's comments functions
     // * markdown alerts in parser
     // * markdown icons in parser
     // * FollowingView actions
     // * PreferenceView : add/remove areas
+    // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
+    // * refactor properties.js to propertiesMiwins.js
 
     // * CSS
     //   * choose family

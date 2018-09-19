@@ -10,7 +10,7 @@
 
             <span>
                 <fa-icon class="has-text-primary" icon="tachometer-alt"/>
-                <route-rating :route="document"/>
+                <route-rating :document="document"/>
             </span>
 
             <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>

@@ -4,7 +4,7 @@
 
 <script>
 
-    import { props } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
     import constants from '@/js/constants.js'
 
     import AreaCard from './AreaCard'
@@ -30,7 +30,7 @@
             XreportCard,
         },
 
-        props: props.requiredDocument,
+        mixins : [requireDocumentProperty],
 
         computed:{
             type(){

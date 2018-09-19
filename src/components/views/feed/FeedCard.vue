@@ -22,7 +22,7 @@
 
             <div >
                 <outing-rating v-if="item.document.type=='o'" :outing="item.document"/>
-                <route-rating v-else-if="item.document.type=='r'" :route="item.document"/>
+                <route-rating v-else-if="item.document.type=='r'" :document="item.document"/>
 
 
                 <span v-if="item.document.elevation_max">

@@ -1,24 +1,26 @@
 <template>
     <label-value v-if="hasValue" :label="field.label">
-        {{ isArray ? value.join(", ") : value }}
-        <span v-if="field.unit">
-            {{ field.unit }}
+        <a v-if="field.type==='url'" :href="value">
+            {{ value }}
+        </a>
+        <span v-else>
+            {{ isArray ? value.join(", ") : value }}
+            <span v-if="field.unit">
+                {{ field.unit }}
+            </span>
         </span>
     </label-value>
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
 
     import LabelValue from './LabelValue'
 
     export default {
         components : {LabelValue},
 
-        props : {
-            document:prop.requiredObject,
-            field:prop.requiredObject,
-        },
+        mixins : [ requireDocumentProperty, requireFieldProperty ],
 
         computed : {
             value(){

@@ -9,7 +9,7 @@
         :next-version-id="nextVersionId">
 
         <div>
-            <!--  CONTENT  -->
+            <!--  CONTENT http://localhost:8080/#/outings/714134  -->
 
             <content-box v-if="document.associations && document.associations.images.length" >
                 <gallery :images="document.associations.images" />
@@ -21,10 +21,6 @@
                     <content-box>
                         <label-value label="Ratings">
                             <outing-rating :outing="document"/>
-                        </label-value>
-
-                        <label-value v-if="locale.weather" label="weather">
-                            {{ locale.weather }}
                         </label-value>
 
                         <field-view :document="document" :field="fields.frequentation"/>
@@ -49,6 +45,9 @@
                     </content-box>
 
                     <map-box :document="document"/>
+
+                    <elevation-profile-box :document="document"/>
+
                     <license-box cc="by-sa" />
                 </div>
 
@@ -63,11 +62,15 @@
                         <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
                                            :route="route"/>
 
+                        <markdown-section :document="document" :locale="locale" :field="fields.weather"/>
+                        <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
+
+                        <condition-levels :data="locale.conditions_levels"/>
+
+                        <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
                         <markdown-section :document="document" :locale="locale" :field="fields.description" />
                         <markdown-section :document="document" :locale="locale" :field="fields.access_comment" />
                         <markdown-section :document="document" :locale="locale" :field="fields.route_description" />
-                        <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
-                        <markdown-section :document="document" :locale="locale" :field="fields.avalanches"/>
                         <markdown-section :document="document" :locale="locale" :field="fields.hut_comment"/>
                         <markdown-section :document="document" :locale="locale" :field="fields.timing"/>
 
@@ -84,8 +87,16 @@
 
 <script>
     import mixins from "./utils/mixins.js"
+    import ConditionLevels from "./utils/ConditionLevels"
+    import ElevationProfileBox from "./utils/ElevationProfileBox"
 
     export default {
+
+        components:{
+            ConditionLevels,
+            ElevationProfileBox,
+        },
+
         mixins : [
             mixins,
         ],

@@ -2,7 +2,7 @@
     <div>
         <activities :activities="route.activities"/>
         <document-link :document="route"/>
-        <route-rating :route="route"/>
+        <route-rating :document="route"/>
         <span v-if="showArea">
             <em v-for="area in route.areas" v-if="area.area_type=='range'"
                 :key="area.document_id">

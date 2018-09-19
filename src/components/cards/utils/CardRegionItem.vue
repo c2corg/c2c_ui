@@ -8,12 +8,12 @@
 
 <script>
 
-    import { props } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
     import user from '@/js/user.js'
 
     export default {
 
-        props: props.requiredDocument,
+        mixins : [requireDocumentProperty],
 
         data(){
             return {

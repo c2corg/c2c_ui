@@ -48,7 +48,7 @@
                         <div class="column is-4">
 
                             <label-value label="ratings">
-                                <route-rating :route="document"/>
+                                <route-rating :document="document"/>
                             </label-value>
 
                             <field-view :document="document" :field="fields.glacier_gear"/>

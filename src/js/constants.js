@@ -68,7 +68,7 @@ const fieldsProperties = {
     capacity:{type:"number", min:0, max:9999},
     capacity_staffed:{type:"number", min:0, max:9999},
     categories:{values:attrs.user_categories, multiple},
-    children_proof:{values:common.attributes.children_proof_types},
+    children_proof:{values:attrs.children_proof_types},
     climbing_indoor_types:{values:attrs.climbing_indoor_types, multiple},
     climbing_outdoor_type:{values:attrs.climbing_outdoor_types},
     climbing_outdoor_types:{values:attrs.climbing_outdoor_types, multiple},
@@ -126,12 +126,12 @@ const fieldsProperties = {
     height_max:{type:"number", min:0, max:9999, unit:"m"},
     height_median:{type:"number", min:0, max:9999, unit:"m"},
     height_min:{type:"number", min:0, max:9999, unit:"m"},
-    hiking_mtb_exposition:{values:common.attributes.exposition_ratings, queryMode:"valuesRangeSlider"},
+    hiking_mtb_exposition:{values:attrs.exposition_ratings, queryMode:"valuesRangeSlider"},
     hiking_rating:{values:attrs.hiking_ratings, queryMode:"valuesRangeSlider"},
     hut_comment:{type:"markdown", parent:"locales",  label:"Hut comment"},
     hut_status:{values:attrs.hut_status},
-    lang:{parent:"locales", values:common.attributes.langs},
-    ice_rating:{values:common.attributes.ice_ratings, queryMode:"valuesRangeSlider"},
+    lang:{parent:"locales", values:attrs.langs},
+    ice_rating:{values:attrs.ice_ratings, queryMode:"valuesRangeSlider"},
     image_categories:{name:"categories", values:attrs.image_categories, multiple},
     image_type:{values:attrs.image_types, required},
     increase_impact:{type:"markdown", parent:"locales",  label:"increase impact"},
@@ -150,11 +150,11 @@ const fieldsProperties = {
     mixed_rating:{values:attrs.mixed_ratings, queryMode:"valuesRangeSlider"},
     modifications:{type:"markdown", parent:"locales"},
     motivations:{type:"markdown", parent:"locales"},
-    mtb_down_rating:{values:common.attributes.mtb_down_ratings, queryMode:"valuesRangeSlider"},
+    mtb_down_rating:{values:attrs.mtb_down_ratings, queryMode:"valuesRangeSlider"},
     mtb_height_diff_portages:{type:"number", min:0, max:5000, unit:"m"},
     mtb_length_asphalt:{type:"number", min:0, max:50, unit:"km"},
     mtb_length_trail:{type:"number", min:0, max:50, unit:"km"},
-    mtb_up_rating:{values:common.attributes.mtb_up_ratings, queryMode:"valuesRangeSlider"},
+    mtb_up_rating:{values:attrs.mtb_up_ratings, queryMode:"valuesRangeSlider"},
     name:{disabled}, // for profile
     nb_impacted:{type:"number", min:0, max:1000, label:"count of impacted people"},
     nb_outings:{values:attrs.nb_outings},
@@ -178,14 +178,14 @@ const fieldsProperties = {
     public_transportation_types:{values:attrs.public_transportation_types, multiple},
     publication_date:{type:"text"},
     quality:{values:attrs.quality_types, queryMode:"valuesRangeSlider"},
-    rain_proof:{values:common.attributes.rain_proof_types},
+    rain_proof:{values:attrs.rain_proof_types},
     reduce_impact:{type:"markdown", parent:"locales", label:"reduce impact"},
     remarks:{type:"markdown", parent:"locales"},
     rescue:{type:"boolean"},
     risk:{type:"markdown", parent:"locales"},
-    risk_rating:{values:common.attributes.risk_ratings, queryMode:"valuesRangeSlider"},
-    rock_free_rating:{values:common.attributes.climbing_ratings, queryMode:"valuesRangeSlider"},
-    rock_required_rating:{values:common.attributes.climbing_ratings, queryMode:"valuesRangeSlider"},
+    risk_rating:{values:attrs.risk_ratings, queryMode:"valuesRangeSlider"},
+    rock_free_rating:{values:attrs.climbing_ratings, queryMode:"valuesRangeSlider"},
+    rock_required_rating:{values:attrs.climbing_ratings, queryMode:"valuesRangeSlider"},
     rock_types:{values:attrs.rock_types, multiple},
     route_description:{type:"markdown", parent:"locales",  label:"Route description"},
     route_history:{type:"markdown", parent:"locales", label:"History"},
@@ -218,11 +218,12 @@ const fieldsProperties = {
     training:{type:"markdown", parent:"locales"},
     url:{type:"url", minLength:6},
     via_ferrata_rating:{values:attrs.via_ferrata_ratings, queryMode:"valuesRangeSlider"},
-    waypoint_type:{values:common.attributes.waypoint_types},
+    waypoint_type:{values:attrs.waypoint_types},
     weather:{type:"markdown", parent:"locales"},
     weather_station_types:{values:attrs.weather_station_types, multiple},
     width:{type:"number",disabled},
 }
+
 
 function Field(name, properties){
 
@@ -334,8 +335,9 @@ function Field(name, properties){
         defaultUrlQuery =  ''
     }
 
-    else if(this.url !== undefined)
+    else if(this.url !== undefined){
         throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
+    }
 
     this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
 }
@@ -368,9 +370,9 @@ Field.prototype.isVisibleFor = function(params){
 }
 
 function Constants(){
-    this.activities = common.attributes.activities
+    this.activities = attrs.activities
 
-    this.langs = common.attributes.langs
+    this.langs = attrs.langs
 
     this.objectDefinitions = {
         area:{
@@ -787,7 +789,7 @@ function export_from_common(type, propertyName){
         for(let field of Object.keys(fields).sort()){
             let subCategories = fields[field].sort()
 
-            if(subCategories.length == common.attributes.waypoint_types.length && propertyName=="waypoint_types")
+            if(subCategories.length == attrs.waypoint_types.length && propertyName=="waypoint_types")
                 subCategories = ''
             else if(subCategories.length == 11 && type=="outing")
                 subCategories = ''
