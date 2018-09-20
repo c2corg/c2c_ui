@@ -176,6 +176,10 @@
 
         methods:{
             createChart(){
+
+                if(!this.hasData)
+                    return
+                    
                 const wrapper = this.$refs.graph
 
                 const size = {

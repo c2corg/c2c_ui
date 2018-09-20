@@ -42,16 +42,133 @@
 
 
 <script>
+    import utils from "@/js/utils.js"
 
     import {mapLayers, dataLayers} from './MapLayers.js'
+    import ol from './ol.js'
 
-    import {Map, View, Feature } from 'ol';
-    import Point from 'ol/geom/Point';
-    import VectorSource from 'ol/source/Vector';
-    import VectorLayer from 'ol/layer/Vector';
-    import Collection from 'ol/Collection';
-    import GeoJSON from 'ol/format/GeoJSON';
-    import {defaults as defaultControls, Control, FullScreen} from 'ol/control';
+    const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
+    const DEFAULT_POINT_ZOOM = 12
+
+    const buildLineStyle = function(highlight) {
+
+        return new ol.style.Style({
+            //text: this.createTextStyle_(feature, type, highlight), todo
+            stroke: new ol.style.Stroke({
+                color: highlight ? 'red' : 'yellow',
+                width: 3
+            })
+        })
+    }
+
+    const buildTextStyle = function(title, highlight){
+    //createTextStyle_ = function(feature, type, highlight) {
+        let text;
+
+        if (highlight) { // on hover in list view
+            text = new ol.style.Text({
+                text: utils.stringDivider(title, 30, '\n'),
+                textAlign: 'left',
+                offsetX: 20,
+                font: '12px verdana,sans-serif',
+                stroke: new ol.style.Stroke({
+                    color: 'white',
+                    width: 3
+                }),
+                fill: new ol.style.Fill({
+                    color: 'black'
+                }),
+                textBaseline: 'middle'
+            });
+        }
+
+        return text;
+    };
+
+    const buildPointStyle = function(title, src, color, highlight){
+
+        if( src === undefined)
+            throw "Bad document type"
+
+        var scale = highlight ? 0.55 : 0.4
+        var imgSize = highlight ? 22 : 16;
+
+        var iconStyle = new ol.style.Style({
+            image: new ol.style.Icon({
+                scale: scale,
+                anchor: [0.5, 0.5],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'fraction',
+                color: color,
+                src: src,
+            }),
+            text: buildTextStyle(title, highlight)
+        })
+
+        var circleStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: imgSize,
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.5)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ddd',
+                    width: 2
+                })
+            })
+        })
+
+        return [circleStyle, iconStyle]
+    }
+
+    const getDocumentStyle = function(document, highlight, isLine){
+
+        if(isLine){
+            return buildLineStyle(highlight)
+        }
+
+        // todo : put style in a cache
+        const type = document.type
+
+        const urlByType = {
+            i : require('@/assets/img/documents/images.svg'),
+            o : require('@/assets/img/documents/outings.svg'),
+            r : require('@/assets/img/documents/routes.svg'),
+            u : require('@/assets/img/documents/profiles.svg'),
+            x : require('@/assets/img/documents/xreports.svg'),
+        }
+
+        let color = '#FFAA45' // Usual icon orange
+
+        if(document.condition_rating === 'excellent')
+            color = '#008000';
+
+        else if(document.condition_rating === 'good')
+            color = '#9ACD32';
+
+        else if(document.condition_rating === 'average')
+            color = '#FFFF00';
+
+        else if(document.condition_rating === 'poor')
+            color = '#FF0000';
+
+        else if(document.condition_rating === 'awful')
+            color = '#8B0000';
+
+        let title = utils.getDocumentTitle(document)
+
+        if(type == "w")
+            return buildPointStyle(
+                title,
+                require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg'),
+                color,
+                highlight
+            )
+
+        if(type == "i" || type == "u" || type == "x" || type == "o" || type=="r")
+            return buildPointStyle(title, urlByType[type], color, highlight)
+
+    }
 
     export default {
 
@@ -71,26 +188,46 @@
             return {
                 map: null,
 
-                documentsLayer : {
-                    layer:null,
-                    markers : new Collection()
-                },
+                documentsLayer : new ol.layer.Vector({
+                    source: new ol.source.Vector()
+                }),
 
                 mapLayers : mapLayers,
                 dataLayers : dataLayers,
 
                 showLayerSwitcher: false,
 
-                filterDocumentsWithMap: this.$route.query.bbox !== undefined && false,
+                filterDocumentsWithMap: this.$route.query.bbox !== undefined,
+
+                highlightedFeature : null,
             }
         },
 
         computed: {
+            highlightedDocument:{
+                get(){
+                    if(this.highlightedFeature)
+                        return this.highlightedFeature.get('document')
+
+                },
+                set(document){
+                    if(this.highlightedFeature)
+                        this.highlightedFeature.setStyle(this.highlightedFeature.get("normalStyle"))
+
+                    if(document){
+                        this.highlightedFeature = this.documentsLayer.getSource().getFeatureById(document.document_id)
+
+                        if(this.highlightedFeature && this.highlightedFeature.get("highlightedStyle")){
+                            this.highlightedFeature.setStyle(this.highlightedFeature.get("highlightedStyle"))
+                        }
+                    }
+                }
+            },
 
             urlValue:{
                 get(){
                     var result = this.$route.query.bbox
-                    return result ? result.replace("%252C", ",").split(",").map(parseInt) : undefined
+                    return result ? result.replace("%252C", ",").split(",").map(num => parseInt(num, 10)) : undefined
                 },
             },
 
@@ -124,20 +261,21 @@
 
         mounted() {
 
-            this.map = new Map({
+            this.map = new ol.Map({
                 target : this.$refs.map,
 
-                controls: defaultControls().extend([
-                    new FullScreen({source: this.$el}),
-                    new Control({element: this.$refs.layerSwitcherButton}),
-                    new Control({element: this.$refs.layerSwitcher}),
-                    new Control({element: this.$refs.useMapAsFilter}),
+                controls: ol.control.defaults().extend([
+                    new ol.control.FullScreen({source: this.$el}),
+                    new ol.control.ScaleLine(),
+                    new ol.control.Control({element: this.$refs.layerSwitcherButton}),
+                    new ol.control.Control({element: this.$refs.layerSwitcher}),
+                    new ol.control.Control({element: this.$refs.useMapAsFilter}),
                 ]),
 
-                layers: this.mapLayers.concat(this.dataLayers),
+                layers: this.mapLayers.concat(this.dataLayers).concat([this.documentsLayer]),
 
-                view: new View({
-                    maxZoom:this.visibleLayer.get("maxZoom")
+                view: new ol.View({
+                    maxZoom:this.visibleLayer.get("maxZoom"),
                 }),
 
                 loadTilesWhileAnimating: true,
@@ -147,31 +285,20 @@
                 //keyboardEventTarget: this.keyboardEventTarget,
             })
 
-            this.documentsLayer.layer = this.addLayer(this.documentsLayer.markers)
-
             this.map.on("moveend", this.sendBoundsToUrl);
+            this.map.on('pointermove', this.onPointerMove);
+            this.map.on('click', this.onClick);
 
             this.drawDocumentMarkers()
-            this.fitMapToDocuments()
 
-            //hasMap(this)
-        //    this.subscribeAll()
-        //    this.updateSize()
+            if(this.urlValue)
+                this.view.fit(this.urlValue, this.map.getSize())
+            else
+                this.fitMapToDocuments()
+
         },
 
         methods : {
-
-            addLayer(features){
-                var layer = new VectorLayer({
-                    source: new VectorSource({
-                      features: features
-                    }),
-                })
-
-                this.map.addLayer(layer)
-
-                return layer
-            },
 
             setMaxZoom(){
                 const maxZoom = this.visibleLayer.get("maxZoom")
@@ -179,41 +306,38 @@
                 if(this.view.getZoom() > maxZoom){
                     this.view.setZoom(maxZoom)
                 }
-                
+
                 this.view.set("maxZoom", maxZoom)
-
-
             },
 
-            buildMarker(document, layer){
-                if(!document.geometry.geom)
-                    return
 
-                var point_3785 = JSON.parse(document.geometry.geom).coordinates
+            addDocumentFeature(document, data, isLine, source){
 
-                var marker = new Feature({
-                    geometry: new Point(point_3785),
-                });
+                let feature = (new ol.format.GeoJSON()).readFeature(data)
 
-                layer.markers.push(marker)
+                feature.set("normalStyle", getDocumentStyle(document, false, isLine))
+                feature.set("highlightedStyle", getDocumentStyle(document, true, isLine))
+                feature.setStyle(feature.get('normalStyle'));
 
-                return marker;
+                feature.set("document", document)
+                feature.setId(document.document_id)
+
+                source.addFeature(feature)
             },
 
             drawDocumentMarkers(){
-
-                this.documentsLayer.markers.clear()
+                var source = this.documentsLayer.getSource()
+                source.clear()
 
                 for(let document of this.documents){
-                    this.buildMarker(document, this.documentsLayer)
-
-                    if(document.geometry.geom_detail){
-                        let geom_detail = JSON.parse(document.geometry.geom_detail)
-
-                        let features = (new GeoJSON()).readFeature(geom_detail)
-
-                        this.documentsLayer.markers.push(features)
-
+                    if(document.geometry){
+                        // do not display both line and point
+                        if(document.geometry.geom_detail){
+                            this.addDocumentFeature(document, document.geometry.geom_detail, true, source)
+                        }
+                        else if(document.geometry.geom){
+                            this.addDocumentFeature(document, document.geometry.geom, false, source, false)
+                        }
                     }
                 }
             },
@@ -230,21 +354,53 @@
             },
 
             fitMapToDocuments(){
+
                 if(this.documents.length==0 || this.filterDocumentsWithMap)
                     return
 
-                var extent = this.documentsLayer.layer.getSource().getExtent();
+                var extent = this.documentsLayer.getSource().getExtent();
+
+                if(extent.filter(isFinite).length != 4) // if there is inifnity, default extent
+                    extent =  DEFAULT_EXTENT
+
                 this.view.fit(extent, this.map.getSize());
-                this.view.setZoom(Math.min(14, this.view.getZoom()))
+                this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()))
             },
 
             toogleMapLayer(layer){
                 layer.setVisible(!layer.getVisible())
-            }
+            },
+
+            onPointerMove(event) {
+                var this_ = this
+
+                this.highlightedDocument = null
+
+                this.map.forEachFeatureAtPixel(event.pixel, function (feature) {
+                    if(feature.get('document')){
+                        this_.highlightedDocument = feature.get('document')
+                        return true
+                    }
+                })
+            },
+
+            onClick(event){
+                const feature = this.map.forEachFeatureAtPixel(event.pixel, feature => feature)
+
+                if (feature) {
+                    const document = feature.get('document');
+                    if(document){
+                        this.$router.push({
+                            name: document.type, params: {
+                                id:document.document_id,
+                            }
+                        })
+                    }
+                }
+            },
         }
     }
 </script>
-
 
 <style lang="scss" scoped>
 
@@ -267,6 +423,7 @@ $control-margin:0.5em;
     top: $control-margin;
     left:3em;
 }
+
 
 
 .ol-control-layer-switcher > div {
@@ -292,5 +449,24 @@ $control-margin:0.5em;
     */
 }
 
+
+</style>
+
+
+
+<style lang="scss">
+
+.ol-scale-line {
+        background: rgba(255, 255, 255, 0.3);
+        bottom: 10px;
+        right: 40px;
+        left: initial;
+
+    .ol-scale-line-inner {
+        color: black;
+        border: 1px solid black;
+        border-top: none;
+    }
+}
 
 </style>

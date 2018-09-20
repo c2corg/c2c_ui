@@ -90,7 +90,7 @@
                         </div>
                     </content-box>
 
-                    <content-box>
+                    <content-box v-if="locale.description || locale.access">
                         <markdown-section :document="document" :locale="locale" :field="fields.description" />
                         <markdown-section :document="document" :locale="locale" :field="fields.access" />
                     </content-box>

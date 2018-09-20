@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import user from '@/js/user.js'
+    import utils from '@/js/utils.js'
 
     export default {
         props: {
@@ -12,16 +12,7 @@
 
         computed:{
             title(){
-                if(this.document.type=="u" || !this.document.type){
-                    return this.document.name
-                }
-
-                var locale = user.getLocaleSmart(this.document, this.$route.params.lang)
-
-                if (locale.title_prefix)
-                    return locale.title_prefix + " : " + locale.title
-
-                return locale.title
+                return utils.getDocumentTitle(this.document, this.$route.params.lang)
             }
         }
     }

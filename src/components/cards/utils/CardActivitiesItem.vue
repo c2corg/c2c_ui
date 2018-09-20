@@ -7,7 +7,7 @@
         props:{
             activities:{
                 type:Array,
-                required:true,
+                default:null,
             }
         }
     }

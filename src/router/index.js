@@ -82,10 +82,9 @@ var routes = [
     // * signup
     // * map types
     //   * ask for a IGN and Bing dev key
-    //   * region and trace style
-    //   * marker style
     //   * recenter on
     //   * recenter current position
+    //   * add all biodiv
     // * admin actions
     // * document-view actions (translate...)
     // * do forum.createTopic()
@@ -105,6 +104,9 @@ var routes = [
     //     * remove font-family from icon-activity : the bug diseapper
     //     * issue come from this font...
     //     * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
+
+    // * optims
+    //   * Load ol and d3 separatly
 
 ]
 

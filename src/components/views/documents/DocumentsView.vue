@@ -39,8 +39,13 @@
                 <loading-notification :loaded="documents!=null" :error="error"/>
 
                 <div v-if="documents" class="columns is-multiline cards-list">
-                    <div v-for="(document, index) in documents.documents" :key="index" :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}"
-                         class="column card-container">
+                    <div
+                        v-for="(document, index) in documents.documents"
+                        :key="index"
+                        :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}"
+                        class="column card-container"
+                        @mouseleave="mouseLeave(document)"
+                        @mouseenter="mouseEnter(document)">
                         <document-card :document="document"/>
                     </div>
                 </div>
@@ -50,6 +55,7 @@
 
             <div v-if="hasMap && documents" class="column map-container">
                 <map-view
+                    ref="map"
                     :documents="documents.documents"
                     show-filter-control/>
             </div>
@@ -103,7 +109,7 @@
 
         methods:{
 
-            loadElements : function(){
+            loadElements(){
                 var offset = this.offset
 
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
@@ -112,6 +118,16 @@
                 .then(response => { this.documents=response.data})
                 .catch(utils.getApiErrorHandler(this));
             },
+
+            mouseEnter(document){
+                if(this.hasMap)
+                    this.$refs.map.highlightedDocument = document
+            },
+
+            mouseLeave(){
+                if(this.hasMap)
+                    this.$refs.map.highlightedDocument = null
+            }
         }
     }
 </script>

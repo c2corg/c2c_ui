@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="65"
+   height="65"
+   viewBox="0 0 65.000001 65.000001"
+   id="svg4604"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="canyon.svg">
+  <defs
+     id="defs4606">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath286">
+      <path
+         d="m 513.739,235.444 21.56,0 0,25.556 -21.56,0 0,-25.556 z"
+         id="path288"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath406">
+      <path
+         d="m 57.255,313.364 43.245,0 0,29.167 -43.245,0 0,-29.167 z"
+         id="path408"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="-29.871232"
+     inkscape:cy="5.826634"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="768"
+     inkscape:window-height="848"
+     inkscape:window-x="75"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata4609">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-987.36216)">
+    <g
+       id="g466"
+       transform="matrix(1.9330728,0,0,-1.9330728,62.851428,1049.8344)">
+      <path
+         d="m 0,0 0,14.46 c 0,0.052 -0.007,0.104 -0.023,0.154 l -1.434,4.292 -0.958,7.186 c -0.03,0.24 -0.235,0.419 -0.478,0.419 l -1.445,0 c -0.169,0 -0.327,-0.09 -0.414,-0.236 l -1.445,-2.41 c -0.04,-0.063 -0.061,-0.136 -0.068,-0.211 L -6.731,17.115 -8.976,15.32 c -0.116,-0.093 -0.182,-0.231 -0.182,-0.377 l 0,-9.344 -3.488,-1.744 -3.926,0 -1.268,2.54 -0.475,7.614 c -0.01,0.145 -0.085,0.277 -0.203,0.362 l -3.173,2.264 0,4.09 c 0,0.192 -0.11,0.363 -0.284,0.441 l -4.053,1.8 0,4.028 c 0,0.169 -0.089,0.324 -0.233,0.411 l -2.411,1.448 c -0.162,0.094 -0.359,0.089 -0.515,-0.015 l -1.448,-0.962 c -0.133,-0.09 -0.213,-0.24 -0.213,-0.403 L -30.848,0 0,0 Z"
+         style="fill:#ffaa45;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path468"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>

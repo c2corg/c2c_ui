@@ -1,22 +1,13 @@
 import config from '@/js/config.js'
-
-import TileLayer from 'ol/layer/Tile';
-//import OSM from 'ol/source/OSM';
-import BingMaps from 'ol/source/BingMaps';
-import XYZ from 'ol/source/XYZ';
-import WMTS from 'ol/source/WMTS';
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
-
-import {get as getProjection} from 'ol/proj';
-import {getWidth} from 'ol/extent';
+import ol from "./ol.js"
 
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
-    return new TileLayer({
+    return new ol.layer.Tile({
         title: title,
         maxZoom:19,
         type: 'base',
         visible: false,
-        source: new XYZ({
+        source: new ol.source.XYZ({
             attributions: [
                 '<a target="_blank" href="http://www.swisstopo.admin.ch">swisstopo</a>',
             ],
@@ -32,21 +23,21 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
 function createIgnSource(title, layer, format = 'jpeg') {
     const resolutions = [];
     const matrixIds = [];
-    const proj3857 = getProjection('EPSG:3857');
-    const maxResolution = getWidth(proj3857.getExtent()) / 256;
+    const proj3857 = ol.proj.get('EPSG:3857');
+    const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
 
     for (let i = 0; i < 18; i++) {
         matrixIds[i] = i.toString();
         resolutions[i] = maxResolution / Math.pow(2, i);
     }
 
-    const tileGrid = new WMTSTileGrid({
+    const tileGrid = new ol.tilegrid.WMTS({
         origin: [-20037508, 20037508],
         resolutions: resolutions,
         matrixIds: matrixIds
     });
 
-    var source = new WMTS({
+    var source = new ol.source.WMTS({
         url: '//wxs.ign.fr/' + config.ignApiKey + '/wmts',
         layer: layer,
         matrixSet: 'PM',
@@ -61,7 +52,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
         ]
     })
 
-    return new TileLayer({
+    return new ol.layer.Tile({
         title: title,
         type: 'base',
         maxZoom:19,
@@ -71,12 +62,12 @@ function createIgnSource(title, layer, format = 'jpeg') {
 }
 
 
-var esri = new TileLayer({
+var esri = new ol.layer.Tile({
     title: 'Esri',
     maxZoom: 19,
     type: 'base',
     visible: true,
-    source: new XYZ({
+    source: new ol.source.XYZ({
         url:
             'https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/' +
             'WMTS?layer=World_Topo_Map&style=default&tilematrixset=GoogleMapsCompatible&' +
@@ -90,29 +81,29 @@ var esri = new TileLayer({
 })
 
 /*
-var openStreetMap = new TileLayer({
+var openStreetMap = new ol.layer.Tile({
     title: 'OpenStreetMap',
     source: new OSM(),
     visible: false,
 })*/
 
 
-var bingMap = new TileLayer({
+var bingMap = new ol.layer.Tile({
     title: 'Bing',
     maxZoom:19,
-    source: new BingMaps({
+    source: new ol.source.BingMaps({
         key: config.bingApiKey,
         imagerySet: 'AerialWithLabels'
      }),
     visible: false,
 })
 
-var openTopoMap = new TileLayer({
+var openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
     type: 'base',
     maxZoom:14,
     visible: false,
-    source: new XYZ({
+    source: new ol.source.XYZ({
         url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
         attributions :
             '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
