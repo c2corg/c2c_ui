@@ -55,6 +55,8 @@
 </template>
 
 <script>
+    import { requireFieldProperty } from '@/js/propertiesMixins.js'
+
     import Multiselect from 'vue-multiselect'
     import vueSlider from 'vue-slider-component'
 
@@ -68,9 +70,7 @@
             QueryItemSliderLabel,
         },
 
-        props : {
-            field:Object,
-        },
+        mixins : [ requireFieldProperty ],
 
         computed:{
 

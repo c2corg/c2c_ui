@@ -12,10 +12,22 @@
 
     export default{
         props: {
-            type:String,
-            version:Number,
-            lang:String,
-            id: Number,
+            type:{
+                type:String,
+                required:true,
+            },
+            version:{
+                type:Number,
+                required:true,
+            },
+            lang:{
+                type:String,
+                required:true,
+            },
+            id: {
+                type:Number,
+                required:true,
+            },
         },
     }
 </script>

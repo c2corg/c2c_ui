@@ -9,9 +9,18 @@
 <script>
     export default{
         props: {
-            type:String,
-            lang:String,
-            id: Number,
+            type:{
+                type:String,
+                required:true,
+            },
+            lang:{
+                type:String,
+                required:true,
+            },
+            id: {
+                type:Number,
+                required:true,
+            },
         },
     }
 </script>

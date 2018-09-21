@@ -16,8 +16,10 @@ import Point from 'ol/geom/Point';
 
 import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style';
 
+import Geolocation from 'ol/Geolocation';
+
 import GeoJSON from 'ol/format/GeoJSON';
-import { get as getProjection } from 'ol/proj';
+import { get as getProjection, transform as transformProjection, transformExtent} from 'ol/proj';
 import { getWidth } from 'ol/extent';
 
 
@@ -29,6 +31,7 @@ export default {
     Map,
     View,
     Feature,
+    Geolocation,
 
     control: {
         defaults : defaultControls,
@@ -56,6 +59,8 @@ export default {
 
     proj: {
         get: getProjection,
+        transform: transformProjection,
+        transformExtent,
     },
 
     source: {

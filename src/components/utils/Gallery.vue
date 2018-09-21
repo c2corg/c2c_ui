@@ -22,7 +22,10 @@
           },
 
         props: {
-            images: Array
+            images: {
+                type:Array,
+                required:true,
+            }
         },
 
         data() {

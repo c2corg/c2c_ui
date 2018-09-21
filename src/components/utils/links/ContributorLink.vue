@@ -8,7 +8,10 @@
 <script>
     export default {
         props : {
-            contributor: Object
+            contributor: {
+                type:Object,
+                required:true,
+            }
         }
     }
 </script>

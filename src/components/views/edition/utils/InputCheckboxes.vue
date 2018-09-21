@@ -18,14 +18,12 @@
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
     import constants from "@/js/constants.js"
 
     export default {
-        props:{
-            document:prop.requiredObject,
-            field: prop.requiredObject,
-        },
+
+        mixins : [ requireFieldProperty, requireDocumentProperty ],
 
         data(){
             return {

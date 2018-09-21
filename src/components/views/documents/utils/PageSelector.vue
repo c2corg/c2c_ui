@@ -36,13 +36,15 @@
 </template>
 
 <script>
-    import { prop } from "@/js/properties.js"
 
     const queryLimit = 30
 
     export default {
         props:{
-            documents: prop.requiredObject,
+            documents: {
+                type: Object,
+                required: true,
+            },
         },
 
         data(){

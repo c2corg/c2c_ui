@@ -14,7 +14,10 @@
 
     export default {
         props:{
-            value: Array,
+            value: {
+                type:Array,
+                required:true,
+            },
         },
 
         data(){

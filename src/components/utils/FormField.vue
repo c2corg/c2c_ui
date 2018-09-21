@@ -14,11 +14,26 @@
 <script>
     export default {
         props:{
-            label: String,
-            type: String,
-            placeholder: String,
-            data: [String, Number],
-            icon: String,
+            label: {
+                type:String,
+                required:true,
+            },
+            type: {
+                type:String,
+                required:true,
+            },
+            placeholder: {
+                type:String,
+                required:true,
+            },
+            data: {
+                type:[String, Number],
+                required:true,
+            },
+            icon: {
+                type:String,
+                required:true,
+            },
         }
     }
 </script>

@@ -8,9 +8,9 @@
 </template>
 
 <script>
-    import { props } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
-        props : props.requiredDocument,
+        mixins : [ requireDocumentProperty ],
     }
 </script>

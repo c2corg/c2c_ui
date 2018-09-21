@@ -57,15 +57,13 @@
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
+    import { requireDocumentProperty, requireLocaleProperty} from '@/js/propertiesMixins.js'
+
     import forum from '@/js/forum.js'
     import user from '@/js/user.js'
 
     export default {
-        props:{
-            document: prop.requiredObject,
-            locale: prop.requiredObject,
-        },
+        mixins : [ requireDocumentProperty, requireLocaleProperty ],
 
         data(){
             return {

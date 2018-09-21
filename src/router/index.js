@@ -74,40 +74,6 @@ var routes = [
             location.href = config.forumUrl
         }
     },
-
-
-    // todo
-    // * add image
-    // * xreport and profile data
-    // * signup
-    // * map types
-    //   * ask for a IGN and Bing dev key
-    //   * recenter on
-    //   * recenter current position
-    //   * add all biodiv
-    // * admin actions
-    // * document-view actions (translate...)
-    // * do forum.createTopic()
-    // * test all doc's comments functions
-    // * markdown alerts in parser
-    // * markdown icons in parser
-    // * FollowingView actions
-    // * PreferenceView : add/remove areas
-    // * props refactoring : https://vuejs.org/v2/style-guide/#Prop-definitions-essential
-    // * refactor properties.js to propertiesMiwins.js
-
-    // * CSS
-    //   * choose family
-    //   * icon size must not be a subjet
-    //   * icon-activity bug :
-    //     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
-    //     * remove font-family from icon-activity : the bug diseapper
-    //     * issue come from this font...
-    //     * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
-
-    // * optims
-    //   * Load ol and d3 separatly
-
 ]
 
 

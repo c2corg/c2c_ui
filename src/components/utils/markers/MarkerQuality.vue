@@ -1,5 +1,5 @@
 <template>
-    <icon-quality :quality="quality" v-tooltip="'Quality : ' + quality"/>
+    <icon-quality v-tooltip="'Quality : ' + quality" :quality="quality"/>
 </template>
 
 <script>

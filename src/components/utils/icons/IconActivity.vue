@@ -8,8 +8,10 @@
 
     export default {
         props: {
-            activity: String,
-            required: true,
+            activity: {
+                type:String,
+                required: true,
+            }
         },
     }
 </script>

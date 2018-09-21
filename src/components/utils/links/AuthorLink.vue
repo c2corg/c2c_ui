@@ -7,7 +7,10 @@
 <script>
     export default {
         props : {
-            author: Object,
+            author: {
+                type:Object,
+                required:true,
+            },
         },
     }
 </script>

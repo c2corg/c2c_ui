@@ -45,14 +45,17 @@
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
 
     export default {
 
+        mixins : [ requireFieldProperty, requireDocumentProperty ],
+
         props : {
-            document:prop.requiredObject,
-            base:prop.optionalObject,
-            field:prop.requiredObject,
+            base:{
+                type:Object,
+                default: undefined,
+            },
         },
 
         data(){

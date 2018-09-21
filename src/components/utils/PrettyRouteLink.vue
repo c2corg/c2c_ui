@@ -19,8 +19,15 @@
 
     export default {
         props: {
-            route: Object,
-            showArea: Boolean
+            route: {
+                type:Object,
+                required:true,
+            },
+            showArea: {
+                type:Boolean,
+                required:false,
+                default: false,
+            }
         },
     }
 </script>

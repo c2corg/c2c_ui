@@ -1,8 +1,10 @@
 <template>
     <span>
         <icon-activity
-            v-for="activity of activities" :key="activity"
-            v-tooltip="activity" :activity="activity"/>
+            v-for="activity of activities"
+            :key="activity"
+            v-tooltip="activity"
+            :activity="activity"/>
     </span>
 </template>
 
@@ -10,7 +12,10 @@
 
     export default {
         props: {
-            activities: Array
+            activities: {
+                type:Array,
+                required:true,
+            }
         }
     }
 </script>

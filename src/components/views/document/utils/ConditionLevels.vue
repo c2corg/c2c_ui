@@ -1,5 +1,5 @@
 <template>
-    <div class="content" v-if="hasData">
+    <div v-if="hasData" class="content">
         <table>
             <tr>
                 <th>location | altitude | Orientations</th>

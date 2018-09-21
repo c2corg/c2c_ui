@@ -17,6 +17,7 @@
                 <associated-books :document="document" />
                 <associated-articles :document="document" />
                 <associated-maps :document="document" />
+                <lang-switcher-box :document="document" />
 
                 <license-box cc="by-sa" />
 

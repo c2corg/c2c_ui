@@ -4,11 +4,11 @@
         <form v-if="timeAvailable">
             <span translate>See profile based on:</span>
             <label>
-                <input type="radio" v-model="mode" value="distance" ng-model="elevationProfileCtrl.mode">
+                <input v-model="mode" type="radio" value="distance" ng-model="elevationProfileCtrl.mode">
                 <span translate>Distance</span>
             </label>
             <label>
-                <input type="radio" v-model="mode" value="time" ng-model="elevationProfileCtrl.mode">
+                <input v-model="mode" type="radio" value="time" ng-model="elevationProfileCtrl.mode">
                 <span translate>Time</span>
             </label>
         </form>
@@ -21,11 +21,9 @@
 <script>
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
-
-    import {transform as transformProjection} from 'ol/proj';
+    import ol from '@/js/ol.js'
 
     // let build our own d3 module, instead of a stupid `import * as d3 from 'd3'`
-
     import geoDistance from 'd3-geo/src/distance'
     import scaleLinear from 'd3-scale/src/linear'
     import scaleTime from 'd3-scale/src/time'
@@ -39,6 +37,7 @@
     import { format } from 'd3-format'
     import { extent, bisector } from 'd3-array'
     import { mouse, select } from 'd3-selection'
+    import { transition } from 'd3-transition' // do not forget. d3 has a strange behavior...
 
     const d3 = {
         scaleLinear,
@@ -51,6 +50,7 @@
         line,
         mouse,
         select,
+        transition,
     }
 
     const appLang = {
@@ -145,13 +145,13 @@
                 let d = 0;
                 if (i > 0) {
                     // convert from web mercator to lng/lat
-                    const deg1 = transformProjection(
+                    const deg1 = ol.proj.transform(
                         [coords[i][0], coords[i][1]],
                         'EPSG:3857',
                         'EPSG:4326'
                     );
 
-                    const deg2 = transformProjection(
+                    const deg2 = ol.proj.transform(
                         [coords[i - 1][0], coords[i - 1][1]],
                         'EPSG:3857',
                         'EPSG:4326'
@@ -179,7 +179,7 @@
 
                 if(!this.hasData)
                     return
-                    
+
                 const wrapper = this.$refs.graph
 
                 const size = {
@@ -289,8 +289,7 @@
                 }
 
                 // display line path
-                this.line = this.svg
-                    .append('path')
+                this.line = this.svg.append('path')
                     .datum(this.data)
                     .attr('class', 'line')
                     .attr('d', this.dLine);

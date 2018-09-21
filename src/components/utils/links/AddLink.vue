@@ -7,10 +7,19 @@
 </template>
 
 <script>
+    import user from "@/js/user.js"
+
     export default{
         props : {
-            type: String,
-            lang: String,
+            type: {
+                type:String,
+                required:true,
+            },
+            lang: {
+                type:String,
+                required:false,
+                default: user.getCurrentLang(),
+            },
         }
     }
 </script>

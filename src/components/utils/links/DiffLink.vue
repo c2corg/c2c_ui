@@ -10,11 +10,26 @@
 
     export default{
         props: {
-            type:String,
-            versionFrom: [Number, String],
-            versionTo: [Number, String],
-            lang:String,
-            id: Number,
+            type:{
+                type:String,
+                required:true,
+            },
+            lang:{
+                type:String,
+                required:true,
+            },
+            id: {
+                type:Number,
+                required:true,
+            },
+            versionFrom: {
+                type:[Number, String],
+                required:true,
+            },
+            versionTo: {
+                type:[Number, String],
+                required:true,
+            },
         },
     }
 </script>

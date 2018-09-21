@@ -10,7 +10,10 @@
 <script>
     export default {
         props : {
-            areas:Array,
+            areas:{
+                type:Array,
+                required:true,
+            },
         },
     }
 </script>

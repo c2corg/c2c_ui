@@ -1,5 +1,5 @@
 <template>
-    <content-box class="lang-switcher-box" v-if="document.available_langs.length>1">
+    <content-box v-if="document.available_langs && document.available_langs.length>1" class="lang-switcher-box">
         View in other language :
         <span v-for="lang of document.available_langs" :key="lang">
             <document-link :document="document" :lang="lang">
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-    import { props } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
-        props : props.requiredDocument,
+        mixins : [ requireDocumentProperty ],
     }
 </script>
 

@@ -41,11 +41,11 @@
                 </span>
 
             </div>
-            <div v-if="item.document.areas">
+            <div v-if="item.document.areas" class="is-ellipsed">
                 <card-region-item :document="item.document"/>
             </div>
             <div>
-                <activities :activities="item.document.activities"/>
+                <activities v-if="item.document.activities" :activities="item.document.activities"/>
                 <icon-document v-if="item.document.img_count != 0" type="image"/>
                 <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
                 <span> {{ item.time | timeAgo }} </span>
@@ -58,6 +58,7 @@
 
 <script>
     const moment = require('moment')
+
     import user from '@/js/user.js'
     import c2c from '@/js/c2c.js'
     import constants from '@/js/constants.js'
@@ -70,7 +71,10 @@
         },
 
         props:{
-            item:Object,
+            item:{
+                type:Object,
+                required:true
+            }
         },
 
         data(){
@@ -101,7 +105,6 @@
             }
 
             this.actionLine += constants.getDocumentType(this.item['document']['type']);
-
 
             const start = moment(this.item['document']['date_start']);
             const end = moment(this.item['document']['date_end']);

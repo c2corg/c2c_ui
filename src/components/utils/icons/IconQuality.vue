@@ -7,7 +7,10 @@
 <script>
     export default {
         props: {
-            quality: String
+            quality: {
+                type:String,
+                required:true,
+            }
         },
     }
 </script>

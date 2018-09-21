@@ -9,7 +9,11 @@
 <script>
     export default {
         props: {
-            condition: String
+            condition: {
+                type:String,
+                required:false,
+                default: null,
+            }
         },
     }
 </script>

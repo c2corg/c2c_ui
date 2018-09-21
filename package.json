@@ -23,6 +23,7 @@
     "showdown": "^1.8.6",
     "vue": "^2.5.16",
     "vue-awesome-swiper": "^3.1.3",
+    "vue-gettext": "^2.1.0",
     "vue-moment": "^4.0.0",
     "vue-multiselect": "^2.1.0",
     "vue-router": "^3.0.1",
@@ -54,8 +55,8 @@
       "vue/order-in-components": "warn",
       "vue/no-multi-spaces": "warn",
       "vue/require-prop-types": "warn",
+      "vue/require-default-prop": "warn",
       "vue/attributes-order": "off",
-      "vue/require-default-prop": "off",
       "vue/max-attributes-per-line": "off"
     },
     "parserOptions": {

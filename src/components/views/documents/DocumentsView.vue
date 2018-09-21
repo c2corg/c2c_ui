@@ -57,7 +57,8 @@
                 <map-view
                     ref="map"
                     :documents="documents.documents"
-                    show-filter-control/>
+                    show-filter-control
+                    show-center-on-geolocation/>
             </div>
         </div>
     </div>

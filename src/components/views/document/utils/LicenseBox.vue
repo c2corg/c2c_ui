@@ -7,7 +7,10 @@
 <script>
     export default {
         props:{
-            cc: String,
+            cc: {
+                type:String,
+                required:true,
+            },
         }
     }
 </script>

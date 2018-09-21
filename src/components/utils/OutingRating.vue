@@ -40,7 +40,10 @@
 
     export default {
         props: {
-            outing: Object
+            outing: {
+                type:Object,
+                required:true,
+            }
         }
     }
 

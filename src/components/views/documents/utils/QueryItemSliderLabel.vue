@@ -24,10 +24,17 @@
 </template>
 
 <script>
+    import { requireFieldProperty } from '@/js/propertiesMixins.js'
+
     export default{
+
+        mixins : [ requireFieldProperty ],
+
         props:{
-            field: Object,
-            value: Array,
+            value: {
+                type:Array,
+                required:true,
+            },
         }
     }
 </script>

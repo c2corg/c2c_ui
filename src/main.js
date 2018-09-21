@@ -55,9 +55,14 @@ Vue.filter('timeAgo', (arg) => {
 
 //tooltip directive
 Vue.directive('tooltip',  function (el, binding) {
+    
     if(binding.value!==null && binding.value!=undefined){
         el.classList.add("tooltip");
         el.setAttribute("data-tooltip", binding.value);
+
+        if(binding.arg){
+            el.classList.add("is-tooltip-" + binding.arg);
+        }
     }
 })
 

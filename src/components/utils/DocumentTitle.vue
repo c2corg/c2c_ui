@@ -4,11 +4,10 @@
 
 <script>
     import utils from '@/js/utils.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
-        props: {
-            document: Object
-        },
+        mixins: [ requireDocumentProperty ],
 
         computed:{
             title(){

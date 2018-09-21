@@ -13,8 +13,15 @@
 
     export default {
         props: {
-            loaded:Boolean,
-            error: [String, Object],
+            loaded:{
+                type:Boolean,
+                required:true,
+            },
+            error: {
+                type:[String, Object],
+                required:false,
+                default: null,
+            },
         }
     }
 </script>

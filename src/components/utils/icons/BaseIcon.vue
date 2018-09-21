@@ -5,7 +5,10 @@
 <script>
     export default {
         props:{
-            iconClass: String
+            iconClass: {
+                type: String,
+                required: true,
+            },
         }
     }
 </script>

@@ -22,7 +22,10 @@
 
     export default {
         props: {
-            type: String
+            type: {
+                type:String,
+                required:true,
+            }
         },
 
         computed:{

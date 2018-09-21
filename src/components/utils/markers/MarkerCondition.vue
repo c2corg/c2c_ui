@@ -1,5 +1,5 @@
 <template>
-    <icon-condition :condition="condition" v-tooltip="condition"/>
+    <icon-condition v-tooltip="condition" :condition="condition"/>
 </template>
 
 <script>
@@ -7,7 +7,7 @@
         props : {
             condition:{
                 type:String,
-                required:true,
+                default:null,
             }
         }
     }

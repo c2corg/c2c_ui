@@ -7,7 +7,10 @@
 <script>
     export default {
         props : {
-            users:Array,
+            users:{
+                type:Array,
+                required:true,
+            }
         }
     }
 </script>

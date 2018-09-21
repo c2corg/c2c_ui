@@ -17,12 +17,20 @@
 </template>
 
 <script>
-    import { prop } from '@/js/properties.js'
 
     export default {
+
         props : {
-            header:prop.requiredString,
-            expanded:prop.optionalBoolean,
+            header:{
+                type: String,
+                required: false,
+                default: undefined,
+            },
+            expanded:{
+                type: Boolean,
+                required: false,
+                default: undefined,
+            },
         },
 
         data(){

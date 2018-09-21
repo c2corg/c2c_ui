@@ -9,8 +9,8 @@
 
 
 <script>
+    import { requireDocumentProperty, requireFieldProperty, requireLocaleProperty} from '@/js/propertiesMixins.js'
 
-    import { prop } from '@/js/properties.js'
     import Markdown from './Markdown'
 
     export default {
@@ -19,10 +19,9 @@
             Markdown
         },
 
+        mixins : [ requireDocumentProperty, requireFieldProperty, requireLocaleProperty ],
+
         props: {
-            document:prop.requiredObject,
-            locale:prop.requiredObject,
-            field:prop.requiredObject,
             hideTitle:{
                 type:Boolean,
                 default:false,

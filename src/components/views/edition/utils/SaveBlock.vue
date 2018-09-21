@@ -13,11 +13,11 @@
 
 
 <script>
-    import { props } from '@/js/properties.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
     import c2c from '@/js/c2c.js'
 
     export default {
-        props : props.requiredDocument,
+        mixins : [ requireDocumentProperty ],
 
         data(){
             return {

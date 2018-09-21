@@ -15,14 +15,14 @@
                         <td>
                             <header>Base layer</header>
                             <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
-                                <input type="radio" :checked="layer==visibleLayer">
+                                <input :checked="layer==visibleLayer" type="radio">
                                 {{ layer.get('title') }}
                             </div>
                         </td>
                         <td>
                             <header>Slopes</header>
                             <div v-for="layer of dataLayers" :key="layer.title" @click="toogleMapLayer(layer)">
-                                <input type="checkbox" :checked="layer.getVisible()">
+                                <input :checked="layer.getVisible()" type="checkbox">
                                 {{ layer.get('title') }}
                             </div>
                         </td>
@@ -31,144 +31,39 @@
             </div>
         </div>
 
-        <div v-show="showFilterControl" ref="useMapAsFilter" class="ol-control ol-control-use-map-as-filter">
+        <div
+            v-show="showFilterControl"
+            ref="useMapAsFilter"
+            class="ol-control ol-control-use-map-as-filter"
+            v-tooltip:right="'Search when map moves'">
             <button @click="filterDocumentsWithMap=!filterDocumentsWithMap">
-                <fa-icon :icon="filterDocumentsWithMap ? 'check-square' : 'square'" size="xs"/>
-                Search when I move map
+                <fa-icon :class="{'has-text-success':filterDocumentsWithMap}" icon="search"/>
             </button>
         </div>
+
+        <div
+            v-show="showCenterOnGeolocation"
+            ref="centerOnGeolocation"
+            class="ol-control ol-control-center-on-geolocation">
+            <button @click="centerOnGeolocation">
+                <fa-icon icon="bullseye"/>
+            </button>
+        </div>
+
     </div>
 </template>
 
 
 <script>
-    import utils from "@/js/utils.js"
+    import ol from '@/js/ol.js'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
-    import ol from './ol.js'
+    import biodivSports from './biodivSports.js'
+    import { getDocumentStyle, geoJSONFormat } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
 
-    const buildLineStyle = function(highlight) {
-
-        return new ol.style.Style({
-            //text: this.createTextStyle_(feature, type, highlight), todo
-            stroke: new ol.style.Stroke({
-                color: highlight ? 'red' : 'yellow',
-                width: 3
-            })
-        })
-    }
-
-    const buildTextStyle = function(title, highlight){
-    //createTextStyle_ = function(feature, type, highlight) {
-        let text;
-
-        if (highlight) { // on hover in list view
-            text = new ol.style.Text({
-                text: utils.stringDivider(title, 30, '\n'),
-                textAlign: 'left',
-                offsetX: 20,
-                font: '12px verdana,sans-serif',
-                stroke: new ol.style.Stroke({
-                    color: 'white',
-                    width: 3
-                }),
-                fill: new ol.style.Fill({
-                    color: 'black'
-                }),
-                textBaseline: 'middle'
-            });
-        }
-
-        return text;
-    };
-
-    const buildPointStyle = function(title, src, color, highlight){
-
-        if( src === undefined)
-            throw "Bad document type"
-
-        var scale = highlight ? 0.55 : 0.4
-        var imgSize = highlight ? 22 : 16;
-
-        var iconStyle = new ol.style.Style({
-            image: new ol.style.Icon({
-                scale: scale,
-                anchor: [0.5, 0.5],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'fraction',
-                color: color,
-                src: src,
-            }),
-            text: buildTextStyle(title, highlight)
-        })
-
-        var circleStyle = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: imgSize,
-                fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 255, 0.5)'
-                }),
-                stroke: new ol.style.Stroke({
-                    color: '#ddd',
-                    width: 2
-                })
-            })
-        })
-
-        return [circleStyle, iconStyle]
-    }
-
-    const getDocumentStyle = function(document, highlight, isLine){
-
-        if(isLine){
-            return buildLineStyle(highlight)
-        }
-
-        // todo : put style in a cache
-        const type = document.type
-
-        const urlByType = {
-            i : require('@/assets/img/documents/images.svg'),
-            o : require('@/assets/img/documents/outings.svg'),
-            r : require('@/assets/img/documents/routes.svg'),
-            u : require('@/assets/img/documents/profiles.svg'),
-            x : require('@/assets/img/documents/xreports.svg'),
-        }
-
-        let color = '#FFAA45' // Usual icon orange
-
-        if(document.condition_rating === 'excellent')
-            color = '#008000';
-
-        else if(document.condition_rating === 'good')
-            color = '#9ACD32';
-
-        else if(document.condition_rating === 'average')
-            color = '#FFFF00';
-
-        else if(document.condition_rating === 'poor')
-            color = '#FF0000';
-
-        else if(document.condition_rating === 'awful')
-            color = '#8B0000';
-
-        let title = utils.getDocumentTitle(document)
-
-        if(type == "w")
-            return buildPointStyle(
-                title,
-                require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg'),
-                color,
-                highlight
-            )
-
-        if(type == "i" || type == "u" || type == "x" || type == "o" || type=="r")
-            return buildPointStyle(title, urlByType[type], color, highlight)
-
-    }
 
     export default {
 
@@ -181,6 +76,24 @@
             showFilterControl: {
                 type: Boolean,
                 required: false,
+                default:false,
+            },
+
+            showCenterOnGeolocation: {
+                type: Boolean,
+                required: false,
+                default:false,
+            },
+
+            showBiodivSportsAreas: {
+                type: Boolean,
+                required: false,
+                default:false,
+            },
+
+            biodivSportsActivities: {
+                type: Array,
+                default: null,
             }
         },
 
@@ -188,12 +101,23 @@
             return {
                 map: null,
 
+                // map layers, one of them is visible
+                mapLayers : mapLayers,
+
+                //slope layers
+                dataLayers : dataLayers,
+
+                //bidiv layer
+                biodivLayer : new ol.layer.Vector({
+                    source: new ol.source.Vector()
+                }),
+
+                // layer for document icons and paths
                 documentsLayer : new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
 
-                mapLayers : mapLayers,
-                dataLayers : dataLayers,
+                geolocation : null,
 
                 showLayerSwitcher: false,
 
@@ -204,6 +128,7 @@
         },
 
         computed: {
+
             highlightedDocument:{
                 get(){
                     if(this.highlightedFeature)
@@ -270,9 +195,10 @@
                     new ol.control.Control({element: this.$refs.layerSwitcherButton}),
                     new ol.control.Control({element: this.$refs.layerSwitcher}),
                     new ol.control.Control({element: this.$refs.useMapAsFilter}),
+                    new ol.control.Control({element: this.$refs.centerOnGeolocation}),
                 ]),
 
-                layers: this.mapLayers.concat(this.dataLayers).concat([this.documentsLayer]),
+                layers: this.mapLayers.concat(this.dataLayers).concat([this.biodivLayer, this.documentsLayer]),
 
                 view: new ol.View({
                     maxZoom:this.visibleLayer.get("maxZoom"),
@@ -280,14 +206,22 @@
 
                 loadTilesWhileAnimating: true,
                 loadTilesWhileInteracting: true,
+
+
                 //pixelRatio: this.pixelRatio,
                 //renderer: this.renderer,
                 //keyboardEventTarget: this.keyboardEventTarget,
             })
 
             this.map.on("moveend", this.sendBoundsToUrl);
+            this.map.on("moveend", this.getBiodivSportsAreas);
             this.map.on('pointermove', this.onPointerMove);
             this.map.on('click', this.onClick);
+
+
+            this.geolocation = new ol.Geolocation({
+                projection: this.view.getProjection()
+            })
 
             this.drawDocumentMarkers()
 
@@ -313,7 +247,7 @@
 
             addDocumentFeature(document, data, isLine, source){
 
-                let feature = (new ol.format.GeoJSON()).readFeature(data)
+                let feature = geoJSONFormat.readFeature(data)
 
                 feature.set("normalStyle", getDocumentStyle(document, false, isLine))
                 feature.set("highlightedStyle", getDocumentStyle(document, true, isLine))
@@ -342,6 +276,8 @@
                 }
             },
 
+            // If user want's to filter with map, it will send extent to url
+            // otherwise, it set bbox url to undefined
             sendBoundsToUrl(){
 
                 var bounds = this.view.calculateExtent()
@@ -398,6 +334,61 @@
                     }
                 }
             },
+
+            centerOnGeolocation(){
+                var position = this.geolocation.getPosition()
+
+                if(!position)
+                    return
+
+                this.view.setCenter(position);
+            },
+
+            getBiodivSportsAreas(){
+                if (!this.showBiodivSportsAreas)
+                    return
+
+                let extent = this.view.calculateExtent(this.map.getSize() || null)
+
+                // get extent in WGS format
+                extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
+                biodivSports.fetchData(extent, this.biodivSportsActivities).then(
+                    this.addBiodivSportsData
+                )
+            },
+
+            addBiodivSportsData(response) {
+                //eslint-disable-next-line
+                console.log(this, "is vue component???")
+
+                const results = response['data']['results']
+                const source = this.biodivLayer.getSource()
+
+                this.hasBiodivsportAreas = false
+
+                for (let result of results) {
+
+                    let geometry = geoJSONFormat.readGeometry(result['geometry'], {
+                        dataProjection: 'EPSG:4326',
+                        featureProjection: 'EPSG:3857'
+                    });
+
+                    const feature = new ol.Feature({
+                        geometry,
+                        'id': (result['id']),
+                        'source': 'biodivsports',
+                        'title': (result['name']),
+                        'description': (result['description']),
+                        'info_url': (result['info_url']),
+                        'kml_url': (result['kml_url']),
+                        'period': (result['period']),
+                    });
+
+                    feature.setId('biodiv_' + (result['id']));
+                    source.addFeature(feature);
+                    this.hasBiodivsportAreas = true
+                }
+            }
         }
     }
 </script>
@@ -407,6 +398,11 @@
 @import '~ol/ol.css';
 
 $control-margin:0.5em;
+
+.ol-control-center-on-geolocation{
+    top: 100px;
+    left: $control-margin;
+}
 
 .ol-control-layer-switcher {
     bottom: 3em;
@@ -424,8 +420,7 @@ $control-margin:0.5em;
     left:3em;
 }
 
-
-
+//style on layers popup
 .ol-control-layer-switcher > div {
     color: white;
     text-decoration: none;
@@ -435,26 +430,13 @@ $control-margin:0.5em;
     padding: 10px;
 }
 
-.ol-control-use-map-as-filter > button{
-    width: auto;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    font-weight:normal;
-    /*
-    color: white;
-    background-color: rgba(0,60,136,0.5);
-    border-radius: 2px;
-    margin:1px;
-    height: 30px;
-    */
-}
-
-
 </style>
 
 
 
 <style lang="scss">
+
+$control-margin:0.5em;
 
 .ol-scale-line {
         background: rgba(255, 255, 255, 0.3);
@@ -467,6 +449,12 @@ $control-margin:0.5em;
         border: 1px solid black;
         border-top: none;
     }
+}
+
+.ol-full-screen{
+    right:auto;
+    left:$control-margin;
+    top: 60px;
 }
 
 </style>

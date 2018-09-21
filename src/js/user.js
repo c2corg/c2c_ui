@@ -31,6 +31,10 @@ var result = {
         window.localStorage.setItem("user", JSON.stringify(this.data))
     },
 
+    getCurrentLang(){
+        return this.data.lang 
+    },
+
     isLogged(){
         return this.data.token
     },

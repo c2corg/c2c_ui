@@ -1,6 +1,6 @@
 
 import constants from '@/js/constants.js'
-import { props } from '@/js/properties.js'
+import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
 import CardContainer from './CardContainer'
 import CardRegionItem from './CardRegionItem'
@@ -16,7 +16,7 @@ export default {
         CardActivitiesItem,
     },
 
-    props: props.requiredDocument,
+    mixins : [ requireDocumentProperty ] ,
 
     methods:{
         go(){
