@@ -3,7 +3,7 @@ var devConfig = {
     apiUrl : "https://api.demov6.camptocamp.org",
     mediaUrl : "https://media.camptocamp.org/c2corg_active",
     forumUrl : "https://forum.demov6.camptocamp.org",
-    router_mode : undefined,
+    router_mode : 'history',
     ignApiKey : 'not-yet-asked',
     bingApiKey : 'not-yet-asked',
 }
