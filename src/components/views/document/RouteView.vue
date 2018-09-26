@@ -33,7 +33,7 @@
                                 <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                             </label-value>
 
-                            <label-value v-if="document.route_types" label="route type">
+                            <label-value v-if="document.route_types" label="route_types">
                                 {{ document.route_types.join(', ') }}
                             </label-value>
 

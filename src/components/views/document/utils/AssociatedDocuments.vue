@@ -14,7 +14,7 @@
 
         <!-- books -->
         <div v-if="document.associations && document.associations.books.length!=0" class="associations-list">
-            <div class="title">Books</div>
+            <div class="title" v-translate>Books</div>
             <div v-for="book of document.associations.books" :key="book.document_id" class="is-ellipsed">
                 <icon-book />
                 <document-link :document="book"/>
@@ -23,7 +23,7 @@
 
         <!-- articles -->
         <div v-if="document.associations.articles.length!=0" class="associations-list">
-            <div class="title">Articles</div>
+            <div class="title" v-translate>Articles</div>
             <div v-for="article of document.associations.articles" :key="article.document_id" class="is-ellipsed">
                 <icon-article />
                 <document-link :document="article"/>
@@ -32,7 +32,7 @@
 
         <!-- maps -->
         <div v-if="document.maps && document.maps.length" class="associations-list">
-            <div class="title">Maps</div>
+            <div class="title" v-translate>Maps</div>
             <div v-for="map of document.maps" :key="map.document_id" class="is-ellipsed">
                 <icon-map />
                 <document-link :document="map"/>

@@ -1,5 +1,5 @@
 <template>
-    <label-value v-if="hasValue" :label="label.message">
+    <label-value v-if="hasValue" :label="field.label">
         <a v-if="field.type==='url'" :href="value">
             {{ value }}
         </a>
@@ -25,9 +25,6 @@
         mixins : [ requireDocumentProperty, requireFieldProperty ],
 
         computed : {
-            label(){
-                return this.$gettext(this.field.label) // todo reactivity, nexttick....
-            },
             value(){
                 return this.document[this.field.name]
             },

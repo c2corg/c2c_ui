@@ -2,10 +2,10 @@
     <div v-if="hasData" class="content">
         <table>
             <tr>
-                <th>location | altitude | Orientations</th>
-                <th>Soft snow</th>
-                <th>Total snow</th>
-                <th>Comment</th>
+                <th v-translate>location | altitude | Orientations</th>
+                <th v-translate>Soft snow</th>
+                <th v-translate>Total snow</th>
+                <th v-translate>Comment</th>
             </tr>
             <tr v-for="(level, i) of levels" :key="i">
                 <td> {{ level.level_place }} </td>
@@ -34,7 +34,7 @@
                 if(this.levels===null || this.levels.length === 0)
                     return false
 
-                const firstLevel = this.levels[0] //goddamn API... 
+                const firstLevel = this.levels[0] //goddamn API...
 
                 return Boolean(firstLevel.level_snow_height_total) ||
                     Boolean(firstLevel.level_snow_height_total) ||

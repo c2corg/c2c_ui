@@ -1,6 +1,6 @@
 <template>
     <div class="label-value is-ellipsed">
-        <span class="label-value-label is-first-letter-uppercase has-text-weight-bold">{{ label }}</span>
+        <span v-translate class="label-value-label is-first-letter-uppercase has-text-weight-bold">{{ label }}</span>
         <span>
             <slot/>
         </span>

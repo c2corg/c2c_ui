@@ -2,14 +2,14 @@
     <content-box v-if="hasData">
 
         <form v-if="timeAvailable">
-            <span translate>See profile based on:</span>
+            <span v-translate>See profile based on:</span>
             <label>
                 <input v-model="mode" type="radio" value="distance" ng-model="elevationProfileCtrl.mode">
-                <span translate>Distance</span>
+                <span v-translate>Distance</span>
             </label>
             <label>
                 <input v-model="mode" type="radio" value="time" ng-model="elevationProfileCtrl.mode">
-                <span translate>Time</span>
+                <span v-translate>Time</span>
             </label>
         </form>
 

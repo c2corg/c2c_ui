@@ -15,8 +15,8 @@
             </div>
 
             <div v-else>
-                <p v-if="!user.isLogged()">Log in to post the first comment</p>
-                <button v-else class="button is-primary" @click="createTopic">
+                <p v-if="!user.isLogged()" v-translate>Log in to post the first comment</p>
+                <button v-else class="button is-primary" @click="createTopic" v-translate>
                     Post the first comment
                 </button>
             </div>

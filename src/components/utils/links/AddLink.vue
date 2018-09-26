@@ -1,7 +1,7 @@
 <template>
     <router-link :to="{name:type + '-add', params:{lang:$language.current}}">
         <slot>
-            add
+            <span v-translate>add</span>
         </slot>
     </router-link>
 </template>

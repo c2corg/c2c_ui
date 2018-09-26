@@ -71,16 +71,20 @@ function parseTemplate(file, data){
         preserveWhitespace: false,
         directives: {
             translate (node, directiveMeta) {
-                if(node.children.length != 1 || node.children[0].type != NODETYPE_TEXT){
-                    throw "Nodes with v-translate directive can only contain text"
+                if(node.children.length != 1){
+                    console.log(node.children)
+                    throw `In ${file}\nNodes with v-translate directive must contains only one child`
                 }
 
-                let msgid = node.children[0].text
+                if(node.children[0].type != NODETYPE_TEXT){                    
 
-                //trim
-                msgid = msgid.replace(/^[\r\n\s]*/, "")
-                msgid = msgid.replace(/[\r\n\s]*$/, "")
-                results.push(file, undefined, msgid)
+                    let msgid = node.children[0].text
+
+                    //trim
+                    msgid = msgid.replace(/^[\r\n\s]*/, "")
+                    msgid = msgid.replace(/[\r\n\s]*$/, "")
+                    results.push(file, undefined, msgid)
+                }
             }
         }
     })

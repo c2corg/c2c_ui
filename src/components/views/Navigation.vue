@@ -40,7 +40,7 @@
                 <div v-if="!user.isLogged()" class="navbar-item">
                     <router-link :to="{ name: 'auth' }"
                                  class="button is-primary">
-                        sign in
+                        <span v-translate>Login</span>
                     </router-link>
                 </div>
 
@@ -51,33 +51,33 @@
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
                         <router-link :to="{ name: 'profile', params:{id:user.data.id} }" class="navbar-item">
                             <fa-icon icon="user"/>
-                            my profile
+                            <span v-translate>my profile</span>
                         </router-link>
                         <router-link :to="{ name: 'account' }" class="navbar-item">
                             <fa-icon icon="check-circle"/>
-                            my account
+                            <span v-translate>my account</span>
                         </router-link>
                         <router-link :to="{ name: 'preferences' }" class="navbar-item">
                             <fa-icon icon="cogs"/>
-                            my preferences
+                            <span v-translate>my preferences</span>
                         </router-link>
 
                         <router-link :to="{ name: 'outings', query:{u:user.data.id} }" class="navbar-item">
                             <icon-outing />
-                            my outings
+                            <span v-translate>my outings</span>
                         </router-link>
                         <router-link :to="{ name: 'following' }" class="navbar-item">
                             <fa-icon icon="heart"/>
-                            my followed users
+                            <span v-translate>my followed users</span>
                         </router-link>
                         <router-link :to="{ name: 'mailinglists' }" class="navbar-item">
                             <fa-icon icon="at"/>
-                            my mailings
+                            <span v-translate>my mailings</span>
                         </router-link>
                         <hr class="navbar-divider">
                         <a class="navbar-item" @click="signout">
                             <fa-icon icon="sign-out-alt"/>
-                            sign out
+                            <span v-translate>sign out</span>
                         </a>
                     </div>
                 </div>

@@ -2,10 +2,10 @@
     <div class="serac-view">
         <html-header title="incidents and accidents"/>
         <div class="serac-view-part">
-            <h1 class="title is-1">SERAC</h1>
-            <h3 class="subtitle is-3">Accident database</h3>
+            <h1 class="title is-1" v-translate>SERAC</h1>
+            <h3 class="subtitle is-3" v-translate>Accident database</h3>
 
-            <p>
+            <p v-translate>
                 SERAC is a worldwide incidents and accidents database aiming
                 at increasing safety in rock climbing and mountain sports.
             </p>
@@ -14,17 +14,17 @@
 
                 <add-link type="xreport" class="button is-primary">
                     <fa-icon icon="plus"/>
-                    <span translate>Create a new report</span>
+                    <span v-translate>Create a new report</span>
                 </add-link>
 
                 <router-link to="xreports" class="button is-link">
                     <fa-icon icon="list"/>
-                    <span translate>View xreports</span>
+                    <span v-translate>View xreports</span>
                 </router-link>
 
                 <router-link :to="{name:'article', params:{id:697210}}" class="button is-info">
                     <fa-icon icon="info"/>
-                    <span translate>Know more about SERAC</span>
+                    <span v-translate>Know more about SERAC</span>
                 </router-link>
             </div>
         </div>

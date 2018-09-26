@@ -1,10 +1,13 @@
 <template>
-    <content-box v-if="document.available_langs && document.available_langs.length>1" class="lang-switcher-box">
-        View in other language :
-        <span v-for="lang of document.available_langs" :key="lang">
-            <document-link :document="document" :lang="lang">
-                {{ lang }}
-            </document-link>
+    <content-box v-if="document.available_langs && document.available_langs.length > 1">
+        <span v-translate>View in other lang</span>
+        :
+        <span class="lang-switcher-box-list">
+            <span v-for="lang of document.available_langs" :key="lang">
+                <document-link :document="document" :lang="lang">
+                    {{ lang }}
+                </document-link>
+            </span>
         </span>
     </content-box>
 </template>
@@ -20,7 +23,7 @@
 
 <style scoped>
 
-.lang-switcher-box span:not(:last-child)::after{
+.lang-switcher-box-list span:not(:last-child)::after{
     content:" \2022 "; /* \2022 is bull */
 }
 

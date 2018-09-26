@@ -5,32 +5,32 @@
             <div class="links is-flex">
                 <router-link to="outings" class="link">
                     <div><icon-outing /></div>
-                    <span>Outings</span>
+                    <span v-translate>Outings</span>
                 </router-link>
 
                 <router-link to="routes">
                     <div><icon-route /></div>
-                    <span>Routes</span>
+                    <span v-translate>Routes</span>
                 </router-link>
 
                 <router-link to="waypoints">
                     <div><icon-waypoint /></div>
-                    <span>Waypoints</span>
+                    <span v-translate>Waypoints</span>
                 </router-link>
 
                 <router-link to="images">
                     <div><icon-image /></div>
-                    <span>Images</span>
+                    <span v-translate>Images</span>
                 </router-link>
 
                 <router-link to="books">
                     <div><icon-book /></div>
-                    <span>Books</span>
+                    <span v-translate>Books</span>
                 </router-link>
 
                 <router-link to="areas">
                     <div><icon-area /></div>
-                    <span>Areas</span>
+                    <span v-translate>Areas</span>
                 </router-link>
             </div>
         </div>
@@ -39,17 +39,17 @@
             <div class="links is-flex">
                 <a>
                     <div><icon-forum/></div>
-                    <span>Forum</span>
+                    <span v-translate>Forum</span>
                 </a>
 
                 <router-link to="dashboard">
                     <div><fa-icon icon="columns"/></div>
-                    <span>Dashboard</span>
+                    <span v-translate>Dashboard</span>
                 </router-link>
 
                 <router-link to="feed">
                     <div><fa-icon icon="users"/></div>
-                    <span>Social network</span>
+                    <span v-translate>Social network</span>
                 </router-link>
 
                 <a>
