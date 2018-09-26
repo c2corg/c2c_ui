@@ -1,5 +1,6 @@
 <template>
     <div class="section content">
+        <html-header title="Differences between versions"/>
         <h1>
             <icon-document :type="type" class="is-large"/>
             <span>diff</span> ({{ lang }}) :

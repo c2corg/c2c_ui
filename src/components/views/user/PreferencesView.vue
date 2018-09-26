@@ -1,5 +1,6 @@
 <template>
     <div v-if="preferences" class="section content">
+        <html-header title="My preferences"/>
         <h1>
             <fa-icon icon="cogs"/>
             <span>Preferences</span>

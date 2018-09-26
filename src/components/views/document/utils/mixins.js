@@ -6,10 +6,7 @@ import c2c from '@/js/c2c.js'
 
 import DocumentViewContainer from './DocumentViewContainer'
 
-import AssociatedWaypoints from './AssociatedWaypoints'
-import AssociatedMaps from './AssociatedMaps'
-import AssociatedBooks from './AssociatedBooks'
-import AssociatedArticles from './AssociatedArticles'
+import AssociatedDocuments from './AssociatedDocuments'
 import CommentsBox from './CommentsBox'
 import FieldView from './FieldView'
 import LabelValue from './LabelValue'
@@ -25,10 +22,7 @@ export default {
     components: {
         DocumentViewContainer,
 
-        AssociatedWaypoints,
-        AssociatedMaps,
-        AssociatedBooks,
-        AssociatedArticles,
+        AssociatedDocuments,
         CommentsBox,
         FieldView,
         LangSwitcherBox,

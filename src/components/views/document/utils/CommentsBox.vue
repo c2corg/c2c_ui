@@ -1,6 +1,6 @@
 <template>
     <content-box class="discourse-comments">
-        <h2 class="title is-2">Comments</h2>
+        <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="errorMessage" class="notification is-danger">
             <p>

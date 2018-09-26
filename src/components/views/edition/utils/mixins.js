@@ -43,7 +43,7 @@ export default{
             this.type = this.$route.name.replace("-add","");
             this.mode = "add"
             this.document = constants.buildDocument(this.type,
-                this.$route.params.lang || user.data.lang)
+                this.$route.params.lang || this.$language.current)
 
             this.locale = this.document.locales[0]
 

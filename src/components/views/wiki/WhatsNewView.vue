@@ -1,7 +1,8 @@
 <template>
     <div class="section content">
+        <html-header title="Recents changes"/>
         <div v-if="results">
-            <router-link :to="{name: 'whatsnew', query: getNextQuery() }" class="button is-link">
+            <router-link :to="{name: 'whatsnew', query: getNextQuery() }" class="button is-link" v-translate>
                 next
             </router-link>
             <table>

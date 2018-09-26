@@ -1,5 +1,6 @@
 <template>
     <div class="section">
+        <html-header title="Followed users"/>
         <div v-if="following" class="columns">
             <div v-for="document in following.following" :key="document.document_id" class="column is-3">
                 <document-card :document="document"/>

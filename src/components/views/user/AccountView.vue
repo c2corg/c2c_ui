@@ -1,5 +1,6 @@
 <template>
     <div class="section content">
+        <html-header title="Account"/>
         <h1>change account parameters</h1>
         <form>
             <form-field :data="password" label="current password" type="password" icon="key"/>

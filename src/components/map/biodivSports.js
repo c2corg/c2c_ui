@@ -6,10 +6,7 @@ function BiodivSports(){
     this.axios = axios.create()
 }
 
-BiodivSports.prototype.fetchData = function(extent, activities) {
-
-    // select language
-    let language = undefined // todo this.langService_.getLang();
+BiodivSports.prototype.fetchData = function(extent, activities, language) {
 
     if (language != 'fr' && language != 'en' && language != 'it') {
         language = 'en';

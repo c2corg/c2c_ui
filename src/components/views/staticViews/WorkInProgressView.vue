@@ -1,5 +1,6 @@
 <template>
     <div class="work-in-progress-view">
+        <html-header title="WIP WIP WIP"/>
         <fa-icon class="wrench"/>
     </div>
 </template>

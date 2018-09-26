@@ -1,6 +1,7 @@
 
 <template>
     <div class="section">
+        <html-header :title="title"/>
 
         <loading-notification :loaded="document!=null" :error="error"/>
 
@@ -66,6 +67,7 @@
 
 <script>
     import constants from '@/js/constants.js'
+    import utils from '@/js/utils.js'
 
     export default {
 
@@ -110,7 +112,11 @@
 
             isVersionView(){
                 return this.version !== null
-            }
+            },
+
+            title(){
+                return utils.getDocumentTitle(this.document, this.$route.params.lang)
+            },
         },
     }
 

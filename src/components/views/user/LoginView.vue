@@ -1,5 +1,6 @@
 <template>
     <div class="section is-centered">
+        <html-header title="Login"/>
 
         <div v-if="mode=='signin'">
             <form-field :data="username" label="username" type="text" icon="user"/>

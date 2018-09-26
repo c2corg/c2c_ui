@@ -14,10 +14,7 @@
                 <div class="column is-3">
                     <map-box :document="document" />
 
-                    <associated-waypoints :document="document" />
-                    <associated-books :document="document" />
-                    <associated-articles :document="document" />
-                    <associated-maps :document="document" />
+                    <associated-documents :document="document" />
 
                     <lang-switcher-box :document="document"/>
 

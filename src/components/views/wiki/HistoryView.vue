@@ -1,5 +1,6 @@
 <template>
     <div v-if="history" class="section content">
+        <html-header title="Old version"/>
         <h1>
             <icon-document :type="type" class="is-large"/>
             <span>history</span> ({{ lang }}) :
@@ -75,7 +76,7 @@
     export default {
 
         data() {
-            return {
+            return { // theese three data are computed
                 documentId: this.$route.params.id,
                 type: this.$route.name.replace("-history",""),
                 lang: this.$route.params.lang,

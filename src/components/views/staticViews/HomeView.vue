@@ -1,5 +1,6 @@
 <template>
     <div>
+        <html-header title="Home"/>
         <div class="topoguide">
             <div class="links is-flex">
                 <router-link to="outings" class="link">

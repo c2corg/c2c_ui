@@ -1,5 +1,6 @@
 <template>
     <div class="section documents-view">
+        <html-header :title="type"/>
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">

@@ -1,5 +1,6 @@
 <template>
     <div class="section content cards-container">
+        <html-header title="Social network"/>
         <div v-if="feed">
             <feed-card v-for="(item, index) of feed.feed" :key="index" :item="item"/>
         </div>
@@ -9,7 +10,6 @@
 <script>
 
     import c2c from '@/js/c2c.js'
-    import user from '@/js/user.js'
 
     import FeedCard from './FeedCard'
 
@@ -25,7 +25,7 @@
         },
 
         created(){
-            c2c.getFeed({pl:user.data.lang}).then(response=>{
+            c2c.getFeed({pl:this.$language.current}).then(response=>{
                 this.feed=response.data
             })
         }

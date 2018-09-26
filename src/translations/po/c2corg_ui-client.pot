@@ -1,0 +1,31 @@
+#: src/components/views/Navigation.vue
+msgid "Articles"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Comments"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "Forum"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "Outings"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "Routes"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "SERAC"
+msgstr ""
+
+#: src/components/views/document/utils/AssociatedDocuments.vue
+msgid "Waypoints"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "next"
+msgstr ""

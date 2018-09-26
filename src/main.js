@@ -1,14 +1,19 @@
 // Require the main Sass manifest file
-require('./assets/sass/main.scss');
+require('./assets/sass/main.scss')
 
-import './js/fa.config';
+require('./js/fa.config')
 
 /* core */
 import Vue from 'vue'
 import App from './App.vue'
 import Router from './router'
 
+import GetTextPlugin from './translations/GetTextPlugin'
+
+import user from './js/user.js'
+
 Vue.config.productionTip = false
+Vue.config.silent = false
 
 
 // add all vue component as globals components, given en require context
@@ -48,6 +53,20 @@ require("moment/locale/en-gb.js") // keep en in last.
 
 Vue.use(require('vue-moment'), {moment})
 
+Vue.use(GetTextPlugin, {
+    availableLanguages: {
+        fr: 'Français',
+        it: 'Italiano',
+        de: 'Deutsch',
+        en: 'English',
+        es: 'Español',
+        ca: 'Català',
+        eu: 'Euskara',
+    },
+
+    current: user.getLang(),
+})
+
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
 Vue.filter('timeAgo', (arg) => {
     return moment.utc(arg).local().fromNow()
@@ -55,7 +74,7 @@ Vue.filter('timeAgo', (arg) => {
 
 //tooltip directive
 Vue.directive('tooltip',  function (el, binding) {
-    
+
     if(binding.value!==null && binding.value!=undefined){
         el.classList.add("tooltip");
         el.setAttribute("data-tooltip", binding.value);
@@ -65,6 +84,7 @@ Vue.directive('tooltip',  function (el, binding) {
         }
     }
 })
+
 
 new Vue({
     router:Router,

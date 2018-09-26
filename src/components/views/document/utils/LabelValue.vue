@@ -1,5 +1,5 @@
 <template>
-    <div class="label-value">
+    <div class="label-value is-ellipsed">
         <span class="label-value-label is-first-letter-uppercase has-text-weight-bold">{{ label }}</span>
         <span>
             <slot/>
@@ -21,8 +21,11 @@
 <style scoped>
 
 .label-value span{
-    vertical-align: middle;
-    display: inline-block;
+    /*
+    // todo : icon activities is bigger. vertical align, and be careful to other items
+    // vertical-align: middle;
+    // display: inline-block;
+    */
 }
 
 .label-value-label:after{

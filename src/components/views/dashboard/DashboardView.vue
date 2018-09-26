@@ -1,5 +1,6 @@
 <template>
     <div class="section">
+        <html-header title="Dashboard"/>
         <content-box>
             <h2 class="title is-2">Images</h2>
             <loading-notification :loaded="images!=null" :error="imagesError" />

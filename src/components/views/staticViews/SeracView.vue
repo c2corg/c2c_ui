@@ -1,5 +1,6 @@
 <template>
     <div class="serac-view">
+        <html-header title="incidents and accidents"/>
         <div class="serac-view-part">
             <h1 class="title is-1">SERAC</h1>
             <h3 class="subtitle is-3">Accident database</h3>

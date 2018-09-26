@@ -23,7 +23,7 @@ var result = {
     },
 
     setLang(lang){
-        if(this.isLogged){
+        if(this.isLogged()){
             c2c.user.update_preferred_language(lang)
         }
 
@@ -31,8 +31,8 @@ var result = {
         window.localStorage.setItem("user", JSON.stringify(this.data))
     },
 
-    getCurrentLang(){
-        return this.data.lang 
+    getLang(){
+        return this.data.lang
     },
 
     isLogged(){
@@ -55,7 +55,7 @@ var result = {
     },
 
     clearUserData(){
-        defaultUserData.lang = this.data.lang
+        defaultUserData.lang = this.data.lang // juste save user preference to avoid a back to english.
         this.setData(defaultUserData)
     },
 
@@ -103,7 +103,7 @@ var result = {
 
 
 var defaultUserData = {
-    lang:"en"
+    lang:"fr"
 }
 
 if(window.localStorage.getItem("user")){

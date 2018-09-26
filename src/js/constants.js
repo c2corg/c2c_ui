@@ -241,7 +241,7 @@ function Field(name, properties){
         }
     }
 
-    this.label = this.label || this.name.replace(/_/g, " ")
+    this.label = this.label || this.name //.replace(/_/g, " ")
     this.type = this.type || "text"
 
     if(!this.queryMode){

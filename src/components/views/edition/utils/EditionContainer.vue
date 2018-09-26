@@ -1,5 +1,6 @@
 <template>
     <div v-if="document && locale" class="section">
+        <html-header title="Edit a document"/>
         <h1 class="title">
             Edit
             <document-title :document="document"/>

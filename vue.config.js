@@ -5,8 +5,7 @@ module.exports = {
 
     configureWebpack: {
         plugins: [
-            // moment, by default load all locales.
-            // this will skip all of it, and a fixed list is setted in main.js
+            // moment, by default load all localesca            // this will skip all of it, and a fixed list is setted in main.',
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         ],
     }

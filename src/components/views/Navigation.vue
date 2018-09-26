@@ -21,7 +21,7 @@
                 <router-link v-for="(link, index) in links" :to="{name:link.name}"
                              :key="index" class="navbar-item">
                     <component :is="link.iconName" class="is-medium"/>
-                    {{ link.text }}
+                    {{ link.text.message }}
                 </router-link>
 
                 <div class="navbar-item field">
@@ -81,14 +81,13 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
-                        {{ user.data.lang }}
+                        {{ $language.current }}
                     </a>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
-                        <a v-for="lang in langs" :key="lang" class="navbar-item" @click="user.setLang(lang)">
-                            {{ lang }}
+                        <a v-for="(language, key) in $language.available" :key="key" class="navbar-item" @click="setLang(key)">
+                            {{ language }}
                         </a>
                     </div>
                 </div>
@@ -100,7 +99,6 @@
 <script>
 
     import user from "@/js/user.js"
-    import constants from "@/js/constants.js"
 
     export default {
 
@@ -108,30 +106,29 @@
             return {
                 user,
                 burgerActive:false,
-                langs:constants.langs,
                 links: [
                     {
-                        text: 'Routes',
+                        text: this.$gettext('Routes'),
                         name:'routes',
                         iconName:"icon-route"
                     },
                     {
-                        text: 'Outings',
+                        text: this.$gettext('Outings'),
                         name:'outings',
                         iconName:"icon-outing"
                     },
                     {
-                        text: 'Forum',
+                        text: this.$gettext('Forum'),
                         name:"forum",
                         iconName:"icon-forum"
                     },
                     {
-                        text: 'SERAC',
+                        text: this.$gettext('SERAC'),
                         name:'serac',
                         iconName:"icon-xreport"
                     },
                     {
-                        text: 'Articles',
+                        text: this.$gettext('Articles'),
                         name:'articles',
                         iconName:"icon-article"
                     }
@@ -153,6 +150,11 @@
             signout(){
                 user.signout()
             },
+
+            setLang(lang){
+                this.$language.current = lang
+                user.setLang(lang)
+            }
         }
     }
 </script>

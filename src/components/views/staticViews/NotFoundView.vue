@@ -1,5 +1,6 @@
 <template>
     <section class="section has-text-centered">
+        <html-header title="Page not found"/>
         <h1 class="title is-1">Ooops</h1>
         <h3 class="subtitle is-3">Page not found</h3>
 
