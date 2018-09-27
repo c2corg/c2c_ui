@@ -1,27 +1,391 @@
+#: src/components/utils/markers/MarkerImageCount.vue
+msgid " images"
+msgstr ""
+
+#: src/components/views/staticViews/SeracView.vue
+msgid "Accident database"
+msgstr ""
+
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Areas"
+msgstr ""
+
+#: src/components/views/document/utils/AssociatedDocuments.vue
 #: src/components/views/Navigation.vue
+#: src/components/views/staticViews/NotFoundView.vue
 msgid "Articles"
 msgstr ""
 
+#: src/components/views/wiki/HistoryView.vue
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "Author"
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgid "Base layer"
+msgstr ""
+
+#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Books"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Comments"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Comments are disabled."
+msgstr ""
+
+#: src/components/views/wiki/HistoryView.vue
+msgid "Compare selected versions"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Continue the discussion"
+msgstr ""
+
+#: src/components/views/staticViews/SeracView.vue
+msgid "Create a new report"
+msgstr ""
+
+#: src/components/views/wiki/HistoryView.vue
+msgid "Created on"
+msgstr ""
+
+#: src/components/views/staticViews/HomeView.vue
+msgid "Dashboard"
+msgstr ""
+
+#: src/components/views/document/utils/ElevationProfileBox.vue
+msgid "Distance"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Filter preferences"
+msgstr ""
+
+#: src/components/views/dashboard/DashboardView.vue
 #: src/components/views/Navigation.vue
+#: src/components/views/staticViews/HomeView.vue
 msgid "Forum"
 msgstr ""
 
-#: src/components/views/Navigation.vue
-msgid "Outings"
+#: src/components/utils/markers/MarkerGpsTrace.vue
+msgid "GPS trace"
+msgstr ""
+
+#: src/components/views/wiki/HistoryView.vue
+msgid "Go to last version"
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Go to the previous page"
+msgstr ""
+
+#: src/components/views/user/MailingListsView.vue
+msgid "Here you may change your subscriptions to snow forecast mailing lists."
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Here you may set activity and region filters that will apply to the homepage feed."
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Home"
+msgstr ""
+
+#: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Images"
+msgstr ""
+
+#: src/components/views/staticViews/SeracView.vue
+msgid "Know more about SERAC"
+msgstr ""
+
+#: src/components/views/document/utils/RecentOutingsBox.vue
+msgid "Last outings"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "Links"
+msgstr ""
+
+#: src/components/utils/LoadingNotification.vue
+msgid "Loading"
+msgstr ""
+
+#: src/components/views/document/utils/ConditionLevels.vue
+msgid "Location / elevation / orientation"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Log in to post the first comment"
 msgstr ""
 
 #: src/components/views/Navigation.vue
+msgid "Login"
+msgstr ""
+
+#: src/components/views/user/AccountView.vue
+msgid "Make profile page public"
+msgstr ""
+
+#: src/components/views/document/utils/AssociatedDocuments.vue
+msgid "Maps"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "Modified the"
+msgstr ""
+
+#: src/components/views/user/MailingListsView.vue
+msgid "My mailing lists"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "Next"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown."
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Ooops"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Oups! Something went wrong with forum. Here is the message :"
+msgstr ""
+
+#: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/Navigation.vue
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Outings"
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Page not found"
+msgstr ""
+
+#: src/components/views/document/utils/CommentsBox.vue
+msgid "Post the first comment"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Preferences"
+msgstr ""
+
+#: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/document/WaypointView.vue
+#: src/components/views/Navigation.vue
+#: src/components/views/search/SearchView.vue
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
 msgid "Routes"
 msgstr ""
 
 #: src/components/views/Navigation.vue
+#: src/components/views/staticViews/SeracView.vue
 msgid "SERAC"
 msgstr ""
 
-#: src/components/views/document/utils/MarkdownSection.vue
-msgid "{{ field.label || field.name }}"
+#: src/components/views/staticViews/SeracView.vue
+msgid "SERAC is a worldwide incidents and accidents database aiming
+                at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
-#: src/components/views/document/utils/LabelValue.vue
-msgid "{{ label }}"
+#: src/components/views/edition/utils/SaveBlock.vue
+#: src/components/views/user/AccountView.vue
+msgid "Save"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "Search ..."
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgid "Search when map moves"
+msgstr ""
+
+#: src/components/views/document/utils/ElevationProfileBox.vue
+msgid "See profile based on:"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Show only updates from followed users in the homepage feed"
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgid "Slopes"
+msgstr ""
+
+#: src/components/views/staticViews/HomeView.vue
+msgid "Social network"
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "The page you are looking for does not exist or is broken."
+msgstr ""
+
+#: src/components/views/document/utils/ElevationProfileBox.vue
+msgid "Time"
+msgstr ""
+
+#: src/components/views/document/utils/LangSwitcherBox.vue
+msgid "View in other lang"
+msgstr ""
+
+#: src/components/views/staticViews/SeracView.vue
+msgid "View xreports"
+msgstr ""
+
+#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/views/search/SearchView.vue
+#: src/components/views/staticViews/HomeView.vue
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Waypoints"
+msgstr ""
+
+#: src/components/views/document/WaypointView.vue
+msgid "Waypoints children"
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "Xreports"
+msgstr ""
+
+#: src/components/views/document/ProfileView.vue
+msgid "You're not authorized. Please sign-in or create an account"
+msgstr ""
+
+#: src/components/views/edition/utils/InputActivities.vue
+#: src/components/views/user/PreferencesView.vue
+msgid "activities"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "areas"
+msgstr ""
+
+#: src/components/views/document/utils/ConditionLevels.vue
+#: src/components/views/edition/utils/SaveBlock.vue
+#: src/components/views/wiki/HistoryView.vue
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "comment"
+msgstr ""
+
+#: src/components/views/document/ProfileView.vue
+msgid "contributions"
+msgstr ""
+
+#: src/components/utils/links/EditLink.vue
+msgid "edit"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "empty comment"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "forgot password?"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "have an account?"
+msgstr ""
+
+#: src/components/views/wiki/HistoryView.vue
+msgid "history"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "langs"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my account"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my followed users"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my mailings"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my outings"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my preferences"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "my profile"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "next version →"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "not account yet?"
+msgstr ""
+
+#: src/components/views/staticViews/NotFoundView.vue
+msgid "or try the following pages:"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "see actual version"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "sign in"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "sign out"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "sign up (todo)"
+msgstr ""
+
+#: src/components/views/document/utils/ConditionLevels.vue
+msgid "soft snow"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "this is the first version"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "this is the last version"
+msgstr ""
+
+#: src/components/views/wiki/WhatsNewView.vue
+msgid "title"
+msgstr ""
+
+#: src/components/views/document/utils/ConditionLevels.vue
+msgid "total snow"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "← previous version"
 msgstr ""

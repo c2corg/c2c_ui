@@ -77,15 +77,15 @@ const fieldsProperties = {
     climbing_rating_min:{values:attrs.climbing_ratings},
     climbing_styles:{values:attrs.climbing_styles, multiple},
     code:{type:"text"},
-    condition_rating:{values:attrs.condition_ratings, queryMode:"valuesRangeSlider"},
-    conditions:{type:"markdown", parent:"locales", label:"conditions study"},
+    condition_rating:{values:attrs.condition_ratings, queryMode:"valuesRangeSlider", i18n:true},
+    conditions:{type:"markdown", parent:"locales"},
     configuration:{values:attrs.route_configuration_types, multiple},
     custodianship:{values:attrs.custodianship_types},
     date:{type:"date"},
     date_end:{type:"date"},
     date_start:{type:"date", required},
     date_time:{type:"date_time"}, // wasn't in common... //todo : max:today
-    description:{type:"markdown", parent:"locales", label:"Description"},
+    description:{type:"markdown", parent:"locales"},
     difficulties_height:{type:"number", min:0, max:9999, unit:"m", label:"Difficulties start altitude"},
     disable_comments:{type:"boolean"},
     durations:{values:attrs.route_duration_types, multiple},
@@ -116,7 +116,7 @@ const fieldsProperties = {
     glacier_rating:{values:attrs.glacier_ratings, queryMode:"valuesRangeSlider"},
     global_rating:{values:attrs.global_ratings, queryMode:"valuesRangeSlider"},
     ground_types:{values:attrs.ground_types, multiple},
-    group_management:{type:"markdown", parent:"locales",  label:"group management"},
+    group_management:{type:"markdown", parent:"locales"},
     heating_unstaffed:{values:[true, false, null]},
     height:{type:"number", disabled},
     height_diff_access:{type:"number", min:0, max:3000, unit:"m"},
@@ -134,7 +134,7 @@ const fieldsProperties = {
     ice_rating:{values:attrs.ice_ratings, queryMode:"valuesRangeSlider"},
     image_categories:{name:"categories", values:attrs.image_categories, multiple},
     image_type:{values:attrs.image_types, required},
-    increase_impact:{type:"markdown", parent:"locales",  label:"increase impact"},
+    increase_impact:{type:"markdown", parent:"locales"},
     isbn:{minLength:9, maxLength:17},
     iso_speed:{type:"number", min:1, unit:"ISO"},
     labande_global_rating:{values:attrs.global_ratings, queryMode:"valuesRangeSlider"},
@@ -156,12 +156,12 @@ const fieldsProperties = {
     mtb_length_trail:{type:"number", min:0, max:50, unit:"km"},
     mtb_up_rating:{values:attrs.mtb_up_ratings, queryMode:"valuesRangeSlider"},
     name:{disabled}, // for profile
-    nb_impacted:{type:"number", min:0, max:1000, label:"count of impacted people"},
+    nb_impacted:{type:"number", min:0, max:1000},
     nb_outings:{values:attrs.nb_outings},
     nb_pages:{type:"number", min:0, max:9999, unit:"#"},
-    nb_participants:{type:"number", min:0, max:1000, label:"count of participants"},
+    nb_participants:{type:"number", min:0, max:1000},
     orientations:{values:attrs.orientation_types, multiple:true, queryMode:"orientations"},
-    other_comments:{type:"markdown", parent:"locales", label:"other comments"},
+    other_comments:{type:"markdown", parent:"locales"},
     paragliding_rating:{values:attrs.paragliding_ratings, queryMode:"valuesRangeSlider"},
     parking_fee:{values:attrs.parking_fee_types},
     partial_trip:{type:"boolean"},
@@ -177,9 +177,9 @@ const fieldsProperties = {
     public_transportation_rating:{values:attrs.public_transportation_ratings},
     public_transportation_types:{values:attrs.public_transportation_types, multiple},
     publication_date:{type:"text"},
-    quality:{values:attrs.quality_types, queryMode:"valuesRangeSlider"},
+    quality:{values:attrs.quality_types, queryMode:"valuesRangeSlider", i18n: true},
     rain_proof:{values:attrs.rain_proof_types},
-    reduce_impact:{type:"markdown", parent:"locales", label:"reduce impact"},
+    reduce_impact:{type:"markdown", parent:"locales"},
     remarks:{type:"markdown", parent:"locales"},
     rescue:{type:"boolean"},
     risk:{type:"markdown", parent:"locales"},
@@ -190,7 +190,7 @@ const fieldsProperties = {
     route_description:{type:"markdown", parent:"locales",  label:"Route description"},
     route_history:{type:"markdown", parent:"locales", label:"History"},
     route_length:{type:"number", min:0, max:100000, unit:"m"},
-    route_study:{type:"markdown", parent:"locales", label:"route study"},
+    route_study:{type:"markdown", parent:"locales"},
     route_types:{values:attrs.route_types, multiple},
     routes_quantity:{type:"number", min:0, max:9999},
     safety:{type:"markdown", parent:"locales"},
@@ -212,7 +212,7 @@ const fieldsProperties = {
     snow_quantity:{values:attrs.condition_ratings},
     snowshoe_rating:{values:attrs.snowshoe_ratings, queryMode:"valuesRangeSlider"},
     summary:{type:"markdown", parent:"locales"},
-    time_management:{type:"markdown", parent:"locales", label:"time management"},
+    time_management:{type:"markdown", parent:"locales"},
     timing:{type:"markdown", parent:"locales"},
     title:{required, parent:"locales", minLength:3, queryMode:"input"},
     training:{type:"markdown", parent:"locales"},
@@ -241,8 +241,11 @@ function Field(name, properties){
         }
     }
 
-    this.label = this.label || this.name //.replace(/_/g, " ")
+    this.label = this.label || this.name
     this.type = this.type || "text"
+
+    //Does the values can be translated ?
+    this.i18n = this.i18n === undefined ? false : this.i18n
 
     if(!this.queryMode){
         if(this.type=="number"){

@@ -2,6 +2,7 @@
     <div v-if="document && locale" class="section">
         <html-header title="Edit a document"/>
         <h1 class="title">
+            <!-- TODO  v-translate -->
             Edit
             <document-title :document="document"/>
             in

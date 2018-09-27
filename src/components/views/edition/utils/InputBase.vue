@@ -1,8 +1,8 @@
 <template>
     <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
-            <label>
-                {{ field.label }}
+            <label >
+                <span v-translate>{{ field.label }}</span>
                 <span v-if="field.required">*</span>
             </label>
 
@@ -11,8 +11,11 @@
                     <select v-model="object[field.name]"
                             :multiple="!!field.multiple">
                         <option v-if="!field.required"/>
-                        <option v-for="value of field.values" :key="value"
-                                :value="value">
+                        <option
+                            v-for="value of field.values"
+                            :key="value"
+                            :value="value"
+                            v-translate>
                             {{ value }}
                         </option>
                     </select>
@@ -37,7 +40,8 @@
             </div>
 
             <div v-else class="notification is-danger">
-                unknown field type : {{ field.type }}
+                <!-- Should not happen, message to devs -->
+                Unknown field type : {{ field.type }}
             </div>
 
         </div>

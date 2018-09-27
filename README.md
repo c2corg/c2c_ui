@@ -40,6 +40,10 @@ npm run lint
   * FollowingView actions
   * PreferenceView : add/remove areas
   * add feed on profile
+  * import_common : build a fake vue component with all strings
+  * multiselect : handle i18n in options
+  * slider : handle i18n in options 
+
 
 * CSS
   * choose family
@@ -55,5 +59,5 @@ npm run lint
 
 * bugs
   * on demo, style on pagination fails
-  * "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR : 
+  * "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
      need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...

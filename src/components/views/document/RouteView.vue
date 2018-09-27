@@ -33,10 +33,7 @@
                                 <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                             </label-value>
 
-                            <label-value v-if="document.route_types" label="route_types">
-                                {{ document.route_types.join(', ') }}
-                            </label-value>
-
+                            <field-view :document="document" :field="fields.route_types" />
                             <field-view :document="document" :field="fields.durations"/>
                             <field-view :document="document" :field="fields.rock_types" />
                             <field-view :document="document" :field="fields.climbing_outdoor_type" />
@@ -65,13 +62,13 @@
                                 </label>
                                 :
                                 <span v-if="document.elevation_min">{{ document.elevation_min }}&#8239;m</span>
-                                <span v-if="document.elevation_min && document.elevation_max">/</span>
+                                <span v-if="document.elevation_min && document.elevation_max">&nbsp;/&nbsp;</span>
                                 <span v-if="document.elevation_max">{{ document.elevation_max }}&#8239;m</span>
                             </div>
 
                             <label-value v-if="document.height_diff_up || document.height_diff_down" label="height difference">
                                 <span v-if="document.height_diff_up">+{{ document.height_diff_up }}&#8239;m</span>
-                                <span v-if="document.height_diff_up && document.height_diff_down">/</span>
+                                <span v-if="document.height_diff_up && document.height_diff_down">&nbsp;/&nbsp;</span>
                                 <span v-if="document.height_diff_down">-{{ document.height_diff_down }}&#8239;m</span>
                             </label-value>
 

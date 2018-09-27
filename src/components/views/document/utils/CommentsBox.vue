@@ -4,14 +4,15 @@
 
         <div v-if="errorMessage" class="notification is-danger">
             <p>
-                Oups! Something went wrong with forum. Here is the message : <br>
+                <span v-translate>Oups! Something went wrong with forum. Here is the message :</span>
+                <br>
                 {{ errorMessage }}
             </p>
         </div>
 
         <div v-if="locale.topic_id === null">
             <div v-if="document.disable_comments">
-                <p>Comments are disabled.</p>
+                <p v-translate>Comments are disabled.</p>
             </div>
 
             <div v-else>
@@ -48,7 +49,7 @@
 
             <div class="has-text-centered">
                 <a :href="forum.url + '/t/' + topic.slug + '/' + locale.topic_id + '/' + topic.posts_count"
-                   class="button is-primary">
+                   class="button is-primary" v-translate>
                     Continue the discussion
                 </a>
             </div>

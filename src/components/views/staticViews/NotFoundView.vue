@@ -1,62 +1,62 @@
 <template>
     <section class="section has-text-centered">
         <html-header title="Page not found"/>
-        <h1 class="title is-1">Ooops</h1>
-        <h3 class="subtitle is-3">Page not found</h3>
+        <h1 class="title is-1" v-translate>Ooops</h1>
+        <h3 class="subtitle is-3" v-translate>Page not found</h3>
 
-        <p>The page you are looking for does not exist or is broken.</p>
+        <p v-translate>The page you are looking for does not exist or is broken.</p>
 
         <p>{{ $route.fullPath }}</p>
 
         <p>
-            <a href="javascript:history.go(-1)">Go to the previous page</a>
-            <span> or try the following pages:</span>
+            <a href="javascript:history.go(-1)" v-translate>Go to the previous page</a>
+            <span v-translate> or try the following pages:</span>
         </p>
 
         <div class="is-flex">
             <router-link :to="{name:'home'}">
                 <fa-icon icon="home"/>
-                <div>Home</div>
+                <div v-translate>Home</div>
             </router-link>
 
             <router-link to="outings">
                 <icon-outing/>
-                <div>Outings</div>
+                <div v-translate>Outings</div>
             </router-link>
 
             <router-link to="waypoints">
                 <icon-waypoint/>
-                <div>Waypoints</div>
+                <div v-translate>Waypoints</div>
             </router-link>
 
             <router-link to="routes">
                 <icon-route/>
-                <div>Routes</div>
+                <div v-translate>Routes</div>
             </router-link>
 
             <router-link to="articles">
                 <icon-article/>
-                <div>Articles</div>
+                <div v-translate>Articles</div>
             </router-link>
 
             <router-link to="books">
                 <icon-book/>
-                <div>Books</div>
+                <div v-translate>Books</div>
             </router-link>
 
             <router-link to="xreports">
                 <icon-xreport/>
-                <div>Xreports</div>
+                <div v-translate>Xreports</div>
             </router-link>
 
             <router-link to="images">
                 <icon-image/>
-                <div>Images</div>
+                <div v-translate>Images</div>
             </router-link>
 
             <router-link to="areas">
                 <icon-area/>
-                <div>Areas</div>
+                <div v-translate>Areas</div>
             </router-link>
         </div>
 

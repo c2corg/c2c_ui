@@ -7,11 +7,9 @@
                     <span class="title is-1 is-first-letter-uppercase">{{ title }}</span>
                 </span>
             </div>
-            <div class="level-right">
+            <div class="level-right" v-if="type!='profile'">
                 <span class="level-item">
-                    <add-link :type="type" class="button is-rounded is-primary">
-                        Add a {{ type }}
-                    </add-link>
+                    <add-link :type="type" class="button is-rounded is-primary" />
                 </span>
             </div>
         </div>

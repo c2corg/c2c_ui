@@ -2,7 +2,7 @@
     <div class="column">
         <div class="field">
             <label>
-                activities
+                <span v-translate>activities</span>
                 <span v-if="field.required">*</span>
             </label>
             <div class="control">

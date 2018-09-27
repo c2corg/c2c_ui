@@ -9,17 +9,17 @@
         </div>
 
         <div slot="row2" class="level">
-            <span class="is-ellipsed">
-                {{ document.event_type.join(", ") }}
-            </span>
+            <textual-array class="is-ellipsed" :array="document.event_type" />
 
-            <span class="is-nowrap">
-                {{ document.date }}
-            </span>
         </div>
 
         <div slot="row3" class="level">
             <card-activities-item :activities="document.activities"/>
+
+            <span class="is-nowrap">
+                {{ document.date }}
+            </span>
+            
             <marker-quality :quality="document.quality"/>
         </div>
 

@@ -1,5 +1,5 @@
 <template>
-    <icon-condition v-tooltip="condition" :condition="condition"/>
+    <icon-condition v-tooltip="$gettext(condition)" :condition="condition"/>
 </template>
 
 <script>

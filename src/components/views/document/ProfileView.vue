@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="document && document.not_authorized">
+    <div v-if="document && document.not_authorized" v-translate>
         You're not authorized. Please sign-in or create an account
     </div>
 
@@ -28,7 +28,7 @@
                         <field-view :document="document" :field="fields.categories"/>
 
                         <div>
-                            <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
+                            <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }" v-translate>
                                 contributions
                             </router-link>
                         </div>

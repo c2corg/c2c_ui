@@ -2,19 +2,22 @@
     <div class="section content">
         <html-header title="Recents changes"/>
         <div v-if="results">
-            <router-link :to="{name: 'whatsnew', query: getNextQuery() }" class="button is-link" v-translate>
-                next
+            <router-link
+                :to="{name: 'whatsnew', query: getNextQuery() }"
+                class="button is-link"
+                v-translate>
+                Next
             </router-link>
             <table>
                 <tr>
-                    <th>modified the</th>
-                    <th>author</th>
-                    <th>links</th>
+                    <th v-translate>Modified the</th>
+                    <th v-translate>Author</th>
+                    <th v-translate>Links</th>
                     <th/>
                     <th>
-                        <span>title</span>
+                        <span v-translate>title</span>
                         :
-                        <span>comment</span>
+                        <span v-translate>comment</span>
                     </th>
                 </tr>
                 <tr v-for="(change, index) of results.feed" :key="index">
@@ -33,11 +36,14 @@
                         </document-link>
 
                         <diff-link :type="change.document.type"
-                                   :id="change.document.document_id" :lang="change.lang"
+                                   :id="change.document.document_id"
+                                   :lang="change.lang"
+                                   version-from="prev"
                                    :version-to="change.version_id"/>
 
                         <history-link :type="change.document.type"
-                                      :id="change.document.document_id" :lang="change.lang"/>
+                                      :id="change.document.document_id"
+                                      :lang="change.lang"/>
 
                     </td>
                     <td>
@@ -51,7 +57,7 @@
                         <span v-if="change.comment">
                             {{ change.comment }}
                         </span>
-                        <span v-else>
+                        <span v-else v-translate>
                             empty comment
                         </span>
                     </td>

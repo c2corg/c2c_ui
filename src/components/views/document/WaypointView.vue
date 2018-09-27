@@ -93,7 +93,7 @@
                     </content-box>
 
                     <content-box v-if="document.associations.all_routes.documents.length">
-                        <h2 class="title is-2">Routes</h2>
+                        <h2 class="title is-2" v-translate>Routes</h2>
 
                         <pretty-route-link
                             v-for="(route, index) of document.associations.all_routes.documents" :key="index"
@@ -103,7 +103,7 @@
                     <recent-outings-box :document="document"/>
 
                     <content-box v-if="document.associations.waypoint_children.length">
-                        <h2 class="title is-2">
+                        <h2 class="title is-2" v-translate>
                             Waypoints children
                         </h2>
                         <div v-for="child of document.associations.waypoint_children" :key="child.document_id">

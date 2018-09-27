@@ -6,7 +6,7 @@
                          @changeDisplay="refreshSliders()">
 
             <span slot="button">
-                {{ category.name }}
+                <span v-translate>{{ category.name }}</span>
                 <span v-if="category.activeCount!=0">
                     ({{ category.activeCount }})
                 </span>
@@ -37,7 +37,7 @@
             "route_types",
         ],
 
-        Ratings:[
+        ratings:[
             "global_rating",
             "rock_free_rating",
             "rock_required_rating",

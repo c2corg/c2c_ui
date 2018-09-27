@@ -8,17 +8,17 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button type="button" class="button is-primary" @click="signin()">
+                    <button type="button" class="button is-primary" @click="signin()" v-translate>
                         sign in
                     </button>
                 </div>
                 <div class="control">
-                    <button type="button" class="button is-warning">
+                    <button type="button" class="button is-warning" v-translate>
                         forgot password?
                     </button>
                 </div>
                 <div class="control">
-                    <button type="button" class="button is-link" @click="mode='signup'">
+                    <button type="button" class="button is-link" @click="mode='signup'" v-translate>
                         not account yet?
                     </button>
                 </div>
@@ -35,12 +35,12 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button type="button" class="button is-primary" @click="signup()">
+                    <button type="button" class="button is-primary" @click="signup()" v-translate>
                         sign up (todo)
                     </button>
                 </div>
                 <div class="control">
-                    <button type="button" class="button is-link" @click="mode='signin'">
+                    <button type="button" class="button is-link" @click="mode='signin'" v-translate>
                         have an account?
                     </button>
                 </div>

@@ -13,9 +13,8 @@
         <div slot="row2" class="level">
             <card-activities-item :activities="document.activities"/>
             &nbsp;
-            <span v-if="document.categories" class="is-ellipsed">
-                {{ document.categories.join(", ") }}
-            </span>
+
+            <textual-array :array="document.categories" class="is-ellipsed"/>
         </div>
     </card-container>
 </template>

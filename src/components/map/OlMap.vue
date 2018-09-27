@@ -13,14 +13,14 @@
                 <table>
                     <tr>
                         <td>
-                            <header>Base layer</header>
+                            <header v-translate>Base layer</header>
                             <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
                                 <input :checked="layer==visibleLayer" type="radio">
                                 {{ layer.get('title') }}
                             </div>
                         </td>
                         <td>
-                            <header>Slopes</header>
+                            <header v-translate>Slopes</header>
                             <div v-for="layer of dataLayers" :key="layer.title" @click="toogleMapLayer(layer)">
                                 <input :checked="layer.getVisible()" type="checkbox">
                                 {{ layer.get('title') }}
@@ -35,7 +35,7 @@
             v-show="showFilterControl"
             ref="useMapAsFilter"
             class="ol-control ol-control-use-map-as-filter"
-            v-tooltip:right="'Search when map moves'">
+            v-tooltip:right="$gettext('Filter on map extent')">
             <button @click="filterDocumentsWithMap=!filterDocumentsWithMap">
                 <fa-icon :class="{'has-text-success':filterDocumentsWithMap}" icon="search"/>
             </button>

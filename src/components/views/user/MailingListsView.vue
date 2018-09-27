@@ -3,10 +3,10 @@
         <html-header title="My mailing lists"/>
         <h1>
             <fa-icon icon="at"/>
-            <span>My mailing lists</span>
+            <span v-translate>My mailing lists</span>
         </h1>
 
-        <p>Here you may change your subscriptions to snow forecast mailing lists.</p>
+        <p v-translate>Here you may change your subscriptions to snow forecast mailing lists.</p>
         <div class="field">
             <div v-for="mailinglist in Object.keys(mailinglists)" :key="mailinglist" class="control">
                 <label>

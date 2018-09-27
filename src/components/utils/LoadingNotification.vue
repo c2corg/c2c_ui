@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!loaded && error==null" class="notification is-primary">
+        <div v-if="!loaded && error==null" class="notification is-primary" v-translate>
             Loading
         </div>
         <div v-if="error!=null" class="notification is-danger">

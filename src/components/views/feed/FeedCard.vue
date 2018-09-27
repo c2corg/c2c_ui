@@ -6,7 +6,7 @@
                     <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
                 </span>
                 <document-title :document="item.user"/>
-                <span>{{ actionLine }}</span>
+                <span v-translate>{{ actionLine }}</span>
             </div>
             <icon-document :type="item.document.type" class="is-pulled-right"/>
         </header>

@@ -2,6 +2,7 @@
     <div class="serac-view">
         <html-header title="incidents and accidents"/>
         <div class="serac-view-part">
+
             <h1 class="title is-1" v-translate>SERAC</h1>
             <h3 class="subtitle is-3" v-translate>Accident database</h3>
 
@@ -57,6 +58,13 @@
 
 <script>
     export default {
+        methods:{
+
+            setLang(lang){
+                this.$language.setCurrent(lang)
+        //        user.setLang(lang)
+            }
+        }
     }
 </script>
 

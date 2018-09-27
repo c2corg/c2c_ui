@@ -61,7 +61,7 @@
 
             </edit-section>
 
-            <edit-section header="Ratings">
+            <edit-section header="ratings">
                 <input-checkboxes :document="document" :field="fields.equipment_ratings" class="is-4" />
                 <input-base :document="document" :field="fields.climbing_rating_min" class="is-4" />
                 <input-base :document="document" :field="fields.climbing_rating_max" class="is-4" />

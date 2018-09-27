@@ -3,13 +3,15 @@
         <a v-if="field.type==='url'" :href="value">
             {{ value }}
         </a>
+        <textual-array v-else-if="isArray" :array="value"/>
+        <span v-else-if="field.type=='text'" v-translate>
+            {{ value }}
+        </span>
         <span v-else>
-            <span>
-                {{ isArray ? value.join(", ") : value }}
-            </span>
-            <span v-if="field.unit">
-                {{ field.unit }}
-            </span>
+            {{ value }}
+        </span>
+        <span v-if="field.unit">
+            {{ field.unit }}
         </span>
     </label-value>
 </template>

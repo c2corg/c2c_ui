@@ -44,7 +44,7 @@
                 <input-base :document="document" :field="fields.lift_access" class="is-4"/>
             </edit-section>
 
-            <edit-section header="Ratings">
+            <edit-section header="ratings">
                 <input-base :document="document" :field="fields.labande_ski_rating" class="is-3"/>
                 <input-base :document="document" :field="fields.ski_rating" class="is-3"/>
                 <input-base :document="document" :field="fields.labande_global_rating" class="is-3"/>

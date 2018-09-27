@@ -8,6 +8,7 @@
         <div v-if="document">
 
             <div v-if="isVersionView" class="notification is-warning">
+                <!-- TODO : translation -->
                 This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
 
                 <br>
@@ -16,13 +17,18 @@
                     (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                                 :version-from="previousVersionId"
                                 :version-to="$route.params.version"/>)
-                    <version-link :type="type" :id="documentId" :lang="$route.params.lang" :version="previousVersionId">
+                    <version-link
+                        :type="type"
+                        :id="documentId"
+                        :lang="$route.params.lang"
+                        :version="previousVersionId"
+                        v-translate>
                         ← previous version
                     </version-link>
                 </span>
-                <span v-else>this is the first version</span>
+                <span v-else v-translate>this is the first version</span>
                 |
-                <document-link :document="document" :lang="$route.params.lang">
+                <document-link :document="document" :lang="$route.params.lang" v-translate>
                     see actual version
                 </document-link>
                 (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
@@ -30,14 +36,19 @@
                             version-to="last"/>)
                             |
                 <span v-if="nextVersionId">
-                    <version-link :type="type" :id="documentId" :lang="$route.params.lang" :version="nextVersionId">
+                    <version-link
+                        :type="type"
+                        :id="documentId"
+                        :lang="$route.params.lang"
+                        :version="nextVersionId"
+                        v-translate>
                         next version →
                     </version-link>
                     (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                                 :version-to="nextVersionId"
                                 :version-from="$route.params.version"/>)
                 </span>
-                <span v-else>this is the last version</span>
+                <span v-else v-translate>this is the last version</span>
 
                 <br>
                 <icon-document type="profile"/>

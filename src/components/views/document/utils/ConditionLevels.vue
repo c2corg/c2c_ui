@@ -2,10 +2,10 @@
     <div v-if="hasData" class="content">
         <table>
             <tr>
-                <th v-translate>location | altitude | Orientations</th>
-                <th v-translate>Soft snow</th>
-                <th v-translate>Total snow</th>
-                <th v-translate>Comment</th>
+                <th v-translate>Location / elevation / orientation</th>
+                <th v-translate>soft snow</th>
+                <th v-translate>total snow</th>
+                <th v-translate>comment</th>
             </tr>
             <tr v-for="(level, i) of levels" :key="i">
                 <td> {{ level.level_place }} </td>

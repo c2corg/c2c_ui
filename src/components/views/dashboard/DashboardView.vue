@@ -2,7 +2,7 @@
     <div class="section">
         <html-header title="Dashboard"/>
         <content-box>
-            <h2 class="title is-2">Images</h2>
+            <h2 class="title is-2" v-translate>Images</h2>
             <loading-notification :loaded="images!=null" :error="imagesError" />
             <gallery v-if="images!=null" :images="images.documents" />
         </content-box>
@@ -10,7 +10,7 @@
         <div class="columns">
             <div class="column is-7">
                 <content-box>
-                    <h2 class="title is-2">Outings</h2>
+                    <h2 class="title is-2" v-translate>Outings</h2>
                     <loading-notification :loaded="outings!=null" :error="outingsError"/>
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents" :key="outing.document_id">
@@ -22,7 +22,7 @@
 
             <div class="column">
                 <content-box>
-                    <h2 class="title is-2">Forum</h2>
+                    <h2 class="title is-2" v-translate>Forum</h2>
                     <div v-if="latest_topics && latest_topics.topic_list">
                         <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" v-if="topic.category_id != 29"
                              :key="topic.id">
@@ -40,7 +40,7 @@
                 </content-box>
 
                 <content-box>
-                    <h2 class="title is-2 box-header">Routes</h2>
+                    <h2 class="title is-2 box-header" v-translate>Routes</h2>
                     <loading-notification :loaded="routes!=null" :error="routesError"/>
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">

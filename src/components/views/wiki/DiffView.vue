@@ -1,5 +1,6 @@
 <template>
     <div class="section content">
+        <!-- TODO : translate -->
         <html-header title="Differences between versions"/>
         <h1>
             <icon-document :type="type" class="is-large"/>

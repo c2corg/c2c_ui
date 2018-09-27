@@ -1,6 +1,6 @@
 <template>
     <div class="field">
-        <label class="label">{{ label }}</label>
+        <label class="label" v-translate>{{ label }}</label>
         <div class="control has-icons-left">
             <input :type="type" :placeholder="placeholder || label"
                    v-model="data.value" class="input">
@@ -24,10 +24,11 @@
             },
             placeholder: {
                 type:String,
-                required:true,
+                required:false,
+                default:undefined
             },
             data: {
-                type:[String, Number],
+                type:Object,
                 required:true,
             },
             icon: {

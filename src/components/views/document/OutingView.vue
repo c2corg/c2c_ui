@@ -9,7 +9,7 @@
         :next-version-id="nextVersionId">
 
         <div>
-            <!--  CONTENT http://localhost:8080/#/outings/714134  -->
+            <!--  CONTENT http://localhost:8080/outings/714134  -->
 
             <content-box v-if="document.associations && document.associations.images.length" >
                 <gallery :images="document.associations.images" />
@@ -19,7 +19,7 @@
 
                 <div class="column is-3">
                     <content-box>
-                        <label-value label="Ratings">
+                        <label-value label="ratings">
                             <outing-rating :outing="document"/>
                         </label-value>
 

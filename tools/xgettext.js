@@ -1,6 +1,5 @@
 const fs = require('fs');
 const compiler = require('vue-template-compiler')
-//const Extractor = require('angular-gettext-tools').Extractor;
 
 const NODETYPE_TEXT = 3
 
@@ -76,13 +75,14 @@ function parseTemplate(file, data){
                     throw `In ${file}\nNodes with v-translate directive must contains only one child`
                 }
 
-                if(node.children[0].type != NODETYPE_TEXT){                    
+                if(node.children[0].type == NODETYPE_TEXT){
 
                     let msgid = node.children[0].text
 
                     //trim
                     msgid = msgid.replace(/^[\r\n\s]*/, "")
                     msgid = msgid.replace(/[\r\n\s]*$/, "")
+
                     results.push(file, undefined, msgid)
                 }
             }

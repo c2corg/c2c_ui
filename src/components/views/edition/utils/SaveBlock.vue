@@ -1,12 +1,12 @@
 <template>
     <div class="field is-grouped">
         <div class="control">
-            <button class="button is-primary" @click="save">
+            <button class="button is-primary" @click="save" v-translate>
                 Save
             </button>
         </div>
         <div class="control">
-            <input v-model="comment" type="text" class="input" placeholder="comment">
+            <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
         </div>
     </div>
 </template>

@@ -2,14 +2,14 @@
     <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
             <label>
-                {{ field.name }}
+                <span v-translate>{{ field.label }}</span>
                 <span v-if="field.required">*</span>
             </label>
             <div class="columns is-multiline is-gapless">
                 <div v-for="item of field.values" :key="item" class="column is-6">
                     <label class="checkbox">
                         <input type="checkbox" value="document[field.name].includes(item)">
-                        {{ item }}
+                        <span v-translate>{{ item }}</span>
                     </label>
                 </div>
             </div>

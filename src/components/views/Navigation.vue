@@ -16,17 +16,37 @@
             </a>
         </div>
 
-        <div id="navMenu" :class="{ 'is-active': burgerActive }" class="navbar-menu is-size-5">
+        <div :class="{ 'is-active': burgerActive }" class="navbar-menu is-size-5">
             <div class="navbar-start">
-                <router-link v-for="(link, index) in links" :to="{name:link.name}"
-                             :key="index" class="navbar-item">
-                    <component :is="link.iconName" class="is-medium"/>
-                    {{ link.text.message }}
+
+                <router-link :to="{name:'routes'}" class="navbar-item">
+                    <icon-route class="is-medium"/>
+                    <span v-translate>Routes</span>
+                </router-link>
+                <router-link :to="{name:'outings'}" class="navbar-item">
+                    <icon-outing class="is-medium"/>
+                    <span v-translate>Outings</span>
+                </router-link>
+                <router-link :to="{name:'forum'}" class="navbar-item">
+                    <icon-forum class="is-medium"/>
+                    <span v-translate>Forum</span>
+                </router-link>
+                <router-link :to="{name:'serac'}" class="navbar-item">
+                    <icon-xreport class="is-medium"/>
+                    <span v-translate>SERAC</span>
+                </router-link>
+                <router-link :to="{name:'articles'}" class="navbar-item">
+                    <icon-article class="is-medium"/>
+                    <span v-translate>Articles</span>
                 </router-link>
 
                 <div class="navbar-item field">
                     <div class="control has-icons-left">
-                        <input v-model="searchText" class="input is-primary is-size-5" placeholder="Search" @input="search()">
+                        <input
+                            v-model="searchText"
+                            class="input is-primary is-size-5"
+                            :placeholder="$gettext('Search ...')"
+                            @input="search()">
                         <span class="icon is-left is-size-5">
                             <fa-icon icon="search"/>
                         </span>
@@ -38,8 +58,7 @@
             <div class="navbar-end">
 
                 <div v-if="!user.isLogged()" class="navbar-item">
-                    <router-link :to="{ name: 'auth' }"
-                                 class="button is-primary">
+                    <router-link :to="{ name: 'auth' }" class="button is-primary">
                         <span v-translate>Login</span>
                     </router-link>
                 </div>
@@ -49,35 +68,36 @@
                         <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'" class="user-avatar">
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
+
                         <router-link :to="{ name: 'profile', params:{id:user.data.id} }" class="navbar-item">
                             <fa-icon icon="user"/>
-                            <span v-translate>my profile</span>
+                            <span v-translate>My profile</span>
                         </router-link>
                         <router-link :to="{ name: 'account' }" class="navbar-item">
                             <fa-icon icon="check-circle"/>
-                            <span v-translate>my account</span>
+                            <span v-translate>My account</span>
                         </router-link>
                         <router-link :to="{ name: 'preferences' }" class="navbar-item">
                             <fa-icon icon="cogs"/>
-                            <span v-translate>my preferences</span>
+                            <span v-translate>My preferences</span>
                         </router-link>
 
                         <router-link :to="{ name: 'outings', query:{u:user.data.id} }" class="navbar-item">
                             <icon-outing />
-                            <span v-translate>my outings</span>
+                            <span v-translate>My outings</span>
                         </router-link>
                         <router-link :to="{ name: 'following' }" class="navbar-item">
                             <fa-icon icon="heart"/>
-                            <span v-translate>my followed users</span>
+                            <span v-translate>My followed users</span>
                         </router-link>
                         <router-link :to="{ name: 'mailinglists' }" class="navbar-item">
                             <fa-icon icon="at"/>
-                            <span v-translate>my mailings</span>
+                            <span v-translate>My mailing lists</span>
                         </router-link>
                         <hr class="navbar-divider">
                         <a class="navbar-item" @click="signout">
                             <fa-icon icon="sign-out-alt"/>
-                            <span v-translate>sign out</span>
+                            <span v-translate>Logout</span>
                         </a>
                     </div>
                 </div>
@@ -106,33 +126,6 @@
             return {
                 user,
                 burgerActive:false,
-                links: [
-                    {
-                        text: this.$gettext('Routes'),
-                        name:'routes',
-                        iconName:"icon-route"
-                    },
-                    {
-                        text: this.$gettext('Outings'),
-                        name:'outings',
-                        iconName:"icon-outing"
-                    },
-                    {
-                        text: this.$gettext('Forum'),
-                        name:"forum",
-                        iconName:"icon-forum"
-                    },
-                    {
-                        text: this.$gettext('SERAC'),
-                        name:'serac',
-                        iconName:"icon-xreport"
-                    },
-                    {
-                        text: this.$gettext('Articles'),
-                        name:'articles',
-                        iconName:"icon-article"
-                    }
-                ],
                 searchText:'',
             }
         },
@@ -152,7 +145,7 @@
             },
 
             setLang(lang){
-                this.$language.current = lang
+                this.$language.setCurrent(lang)
                 user.setLang(lang)
             }
         }

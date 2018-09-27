@@ -3,21 +3,21 @@
         <html-header title="My preferences"/>
         <h1>
             <fa-icon icon="cogs"/>
-            <span>Preferences</span>
+            <span v-translate>Preferences</span>
         </h1>
 
-        <h2>Filter preferences</h2>
-        <p>Here you may set activity and region filters that will apply to the homepage feed.</p>
-        <p>Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.</p>
+        <h2 v-translate>Filter preferences</h2>
+        <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
+        <p v-translate>Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.</p>
         <div class="field">
             <label>
                 <input v-model="preferences.followed_only" class="checkbox" type="checkbox" @change="save">
-                <span>Show only updates from followed users in the homepage feed</span>
+                <span v-translate>Show only updates from followed users in the homepage feed</span>
             </label>
         </div>
 
         <div v-if="!preferences.followed_only">
-            <h2>langs</h2>
+            <h2 v-translate>langs</h2>
             <div class="field is-grouped">
                 <div v-for="lang of constants.langs" :key="lang" class="control">
                     <button :class="{'is-primary' : preferences.langs.indexOf(lang) > -1}" type="button" class="button"
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <h2>activities</h2>
+            <h2 v-translate>activities</h2>
             <div class="field is-grouped">
                 <div v-for="activity of constants.activities" :key="activity" class="control">
                     <button :class="{'is-primary' : preferences.activities.indexOf(activity) > -1}" type="button" class="button"
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <h2>areas</h2>
+            <h2 v-translate>areas</h2>
             <div class="columns">
                 <div v-for="document in preferences.areas" :key="document.document_id" class="column is-2">
                     <document-card :document="document"/>

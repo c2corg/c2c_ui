@@ -17,7 +17,7 @@
         </div>
 
         <div v-else-if="field.queryMode==='multiSelect'" class="control">
-            <label class="label is-first-letter-uppercase">
+            <label class="label is-first-letter-uppercase" v-translate>
                 {{ field.label }}
             </label>
 
@@ -31,7 +31,7 @@
         </div>
 
         <div v-else-if="field.queryMode==='input'" class="control">
-            <label class="label is-first-letter-uppercase">
+            <label class="label is-first-letter-uppercase" v-translate>
                 {{ field.label }}
             </label>
             <input :type="field.type" v-model="value" class="input is-primary">
@@ -40,7 +40,7 @@
         <div v-else-if="field.queryMode==='checkbox'" class="control">
             <label class="checkbox">
                 <input v-model="value" type="checkbox">
-                {{ field.label }}
+                <span v-translate>{{ field.label }}</span>
             </label>
         </div>
 
@@ -49,6 +49,7 @@
         </div>
 
         <div v-else class="notification is-danger">
+            <!-- Should not happen, message for devs -->
             Please fill queryMode for {{ field.name }}
         </div>
     </div>

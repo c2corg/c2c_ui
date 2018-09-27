@@ -3,27 +3,34 @@
         <html-header title="Old version"/>
         <h1>
             <icon-document :type="type" class="is-large"/>
-            <span>history</span> ({{ lang }}) :
+            <span v-translate>history</span> ({{ lang }}) :
             <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
         </h1>
         <div class="field is-grouped">
             <div class="control">
-                <button v-if="type!='profile'" class="button is-primary" @click="gotToDiff">
-                    compare selected versions
+                <button
+                    v-if="type!='profile'"
+                    class="button is-primary"
+                    @click="gotToDiff"
+                    v-translate>
+                    Compare selected versions
                 </button>
             </div>
             <div class="control">
-                <router-link :to="{name:type, params:{id:documentId, lang:lang}}" class="button is-link">
-                    go to last version
+                <router-link
+                    :to="{name:type, params:{id:documentId, lang:lang}}"
+                    class="button is-link"
+                    v-translate>
+                    Go to last version
                 </router-link>
             </div>
         </div>
         <table>
             <tr>
                 <th/>
-                <th>created on</th>
-                <th>author</th>
-                <th>comment</th>
+                <th v-translate>Created on</th>
+                <th v-translate>Author</th>
+                <th v-translate>comment</th>
             </tr>
             <tr v-for="version of history.versions" :key="version.verion_id">
                 <td>
@@ -57,13 +64,16 @@
         </table>
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-primary" @click="gotToDiff">
-                    compare selected versions
+                <button class="button is-primary" @click="gotToDiff" v-translate>
+                    Compare selected versions
                 </button>
             </div>
             <div class="control">
-                <router-link :to="{name:type, params:{id:documentId, lang:lang}}" class="button is-link">
-                    go to last version
+                <router-link
+                    :to="{name:type, params:{id:documentId, lang:lang}}"
+                    class="button is-link"
+                    v-translate>
+                    Go to last version
                 </router-link>
             </div>
         </div>

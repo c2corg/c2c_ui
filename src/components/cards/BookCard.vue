@@ -3,9 +3,7 @@
         <document-title slot="header" :document="document"/>
 
         <div slot="row1" class="level">
-            <span v-for="book_type of document.book_types" :key="book_type">
-                {{ book_type }}
-            </span>
+            <textual-array :array="document.book_types"/>
         </div>
 
         <div slot="row2" class="level">

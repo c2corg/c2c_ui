@@ -63,8 +63,36 @@ Vue.use(GetTextPlugin, {
         ca: 'Català',
         eu: 'Euskara',
     },
-
     current: user.getLang(),
+
+    getMessages(lang){
+
+        //eslint-disable-next-line
+        console.warn(`Download ${lang}`)
+
+        if(lang=='fr') // include fr langage in app
+            return import(`@/translations/dist/fr.json`)
+
+        else if(lang=='en') //lazy load the others
+            return import(/* webpackChunkName: "translations-en" */ `@/translations/dist/en.json`)
+
+        else if(lang=='ca')
+            return import(/* webpackChunkName: "translations-ca" */`@/translations/dist/ca.json`)
+
+        else if(lang=='eu')
+            return import(/* webpackChunkName: "translations-eu" */`@/translations/dist/eu.json`)
+
+        else if(lang=='it')
+            return import(/* webpackChunkName: "translations-it" */`@/translations/dist/it.json`)
+
+        else if(lang=='de')
+            return import(/* webpackChunkName: "translations-de" */`@/translations/dist/de.json`)
+
+        else if(lang=='es')
+            return import(/* webpackChunkName: "translations-es" */`@/translations/dist/es.json`)
+
+        throw `Unsuported language : ${lang}`
+    },
 })
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
@@ -75,7 +103,7 @@ Vue.filter('timeAgo', (arg) => {
 //tooltip directive
 Vue.directive('tooltip',  function (el, binding) {
 
-    if(binding.value!==null && binding.value!=undefined){
+    if(binding.value!==null && binding.value!==undefined && binding.value!==''){
         el.classList.add("tooltip");
         el.setAttribute("data-tooltip", binding.value);
 

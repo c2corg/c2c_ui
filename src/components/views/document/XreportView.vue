@@ -12,10 +12,11 @@
             <div class="column is-3">
 
                 <content-box>
-                    <label-value label="Activities">
-                        <activities :activities="document.activities"/>
-                    </label-value>
 
+                    <label-value label="activities">
+                        <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+                    </label-value>
+                                                
                     <label-value v-if="document.author" label="author">
                         <author-link :author="document.author"/>
                     </label-value>

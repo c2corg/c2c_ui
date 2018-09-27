@@ -1,160 +1,99 @@
 
 
-let languageVm  // Singleton.
 
+function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defaultPlural = null){
+    if(messages===undefined){
+        //eslint-disable-next-line
+        console.warn(`messages are not yet available`)
+        return msgid
+    }
 
-function getTranslation(messages, msgid) { //, n = 1, context = null, defaultPlural = null){
+    if(!msgid)
+        return msgid
+
+    msgid = msgid.replace(/^[\r\n\s]*/, "")
+    msgid = msgid.replace(/[\r\n\s]*$/, "")
+
     if(messages[msgid] === undefined) {
         //eslint-disable-next-line
-        console.warn(`Untranslated ${messages.lang} key found: ${msgid}`)
+        console.warn(`Untranslated ${lang} key found: "${msgid}"`)
         return msgid
-    } else {
-        return messages[msgid]
     }
+
+    return messages[msgid]
 }
 
 export default function install(Vue, options = {}){
 
-    languageVm = new Vue({
+    let languageVm = new Vue({
         data: {
-            current: options.current,
-        },
-
-        watch:{
-            current : '_updateAll'
+            current: null,
         },
 
         created: function () {
             // Non-reactive data.
             this.available = options.availableLanguages
-            this.elements = []
             this.translations = {}
-            this.gettextResults = {}
+
+            this.setCurrent(options.current)
         },
 
         methods:{
 
-            gettext(msgid){
-                if(this.gettextResults[msgid] === undefined){
-
-                    const result = {
-                        message:msgid,
-                        msgid,
-                    }
-
-                    this.getCurrentMessages().then(messages => {
-                        result.message = getTranslation(messages, msgid)
-                    })
-
-                    this.gettextResults[msgid] = result
-                }
-
-                return this.gettextResults[msgid]
-            },
-
-            _updateAll(){
-
-                this.getCurrentMessages().then(messages => {
-
-                    for(let node of this.elements){
-                        node.innerText = getTranslation(messages, node.dataset.msgid)
-                    }
-
-                    for(let item of Object.values(this.gettextResults)){
-                        item.message = getTranslation(messages, item.msgid)
-                    }
-                })
-
-            },
-
-            updateElements(elements){
-
-                this.getCurrentMessages().then(messages => {
-                    for(let node of elements){
-                        node.innerText = getTranslation(messages, node.dataset.msgid)
-                    }
+            setCurrent(lang){
+                // we must defer lang setter
+                // because we may need to lazy load data
+                this._getMessages(lang).then(() => {
+                    this.current = lang
                 })
             },
 
-            getCurrentMessages(){
-                const lang = this.current
+            _getMessages(lang){
 
+                // TODO : normally, webpack should handle this
                 if(this.translations[lang] !== undefined){
                     return new Promise((resolve) => {
                         resolve(this.translations[lang])
                     })
                 }
 
-                var imp
-
-                if(lang=='en')
-                    imp = import(/* webpackChunkName: "translations-fr-en" */ `@/translations/dist/en.json`)
-
-                else if(lang=='fr')
-                    imp = import(/* webpackChunkName: "translations-fr-en" */`@/translations/dist/fr.json`)
-
-                else if(lang=='ca')
-                    imp = import(/* webpackChunkName: "translations-ca-eu" */`@/translations/dist/ca.json`)
-
-                else if(lang=='eu')
-                    imp = import(/* webpackChunkName: "translations-ca-eu" */`@/translations/dist/eu.json`)
-
-                else if(lang=='it')
-                    imp = import(/* webpackChunkName: "translations-it-de-es" */`@/translations/dist/it.json`)
-
-                else if(lang=='de')
-                    imp = import(/* webpackChunkName: "translations-it-de-es" */`@/translations/dist/de.json`)
-
-                else if(lang=='es')
-                    imp = import(/* webpackChunkName: "translations-it-de-es" */`@/translations/dist/es.json`)
-
+                let imp = options.getMessages(lang)
 
                 return new Promise(resolve => {
                     imp.then(translations => {
                         this.translations[lang] = translations[lang]
-                        translations[lang].lang = lang
                         resolve(translations[lang])
                     })
                 })
-            }
+            },
+
+            gettext(msgid){
+                return getTranslation(this.current, this.translations[this.current], msgid)
+            },
+
+            updateElement(element){
+                element.innerText = this.gettext(element.dataset.msgid)
+            },
         }
     })
 
-
-  // Override the main init sequence. This is called for every instance.
-    const init = Vue.prototype._init
-    Vue.prototype._init = function (options = {}) {
-        const root = options._parent || options.parent || this
-        // Expose languageVm to every instance.
-        this.$language = root.$language || languageVm
-        init.call(this, options)
-    }
-
-    // Override the main destroy sequence to destroy all languageVm watchers.
-    const destroy = Vue.prototype._destroy
-    Vue.prototype._destroy = function () {
-        this.$language = null
-        destroy.apply(this, arguments)
-    }
+    Object.defineProperty(Vue.prototype, '$language', {
+        get() {
+            return languageVm
+        }
+    })
 
     // An option to support translation with HTML content: `v-translate`.
     Vue.directive('translate', {
         bind(el){
-            let msgid = el.innerText
-            el.dataset.msgid = msgid
-            languageVm.elements.push(el)
+            el.dataset.msgid = el.innerText
+            languageVm.updateElement(el)
         },
         inserted(el){
-            languageVm.updateElements([el])
+            languageVm.updateElement(el)
         },
         update(el){
-            languageVm.updateElements([el])
-        },
-        // componentUpdated(el, binding, vnode){
-        //
-        // },
-        unbind(el){
-            languageVm.elements.splice(languageVm.elements.indexOf(el), 1)
+            languageVm.updateElement(el)
         },
     })
 
