@@ -35,18 +35,6 @@
     <span v-translate>activity_rate_10</span>
     <span v-translate>activity_rate_5</span>
     <span v-translate>activity_rate_1</span>
-    <span v-translate>A0</span>
-    <span v-translate>A0+</span>
-    <span v-translate>A1</span>
-    <span v-translate>A1+</span>
-    <span v-translate>A2</span>
-    <span v-translate>A2+</span>
-    <span v-translate>A3</span>
-    <span v-translate>A3+</span>
-    <span v-translate>A4</span>
-    <span v-translate>A4+</span>
-    <span v-translate>A5</span>
-    <span v-translate>A5+</span>
     <span v-translate>range</span>
     <span v-translate>admin_limits</span>
     <span v-translate>country</span>
@@ -111,43 +99,6 @@
     <span v-translate>multi</span>
     <span v-translate>bloc</span>
     <span v-translate>psicobloc</span>
-    <span v-translate>2</span>
-    <span v-translate>3a</span>
-    <span v-translate>3b</span>
-    <span v-translate>3c</span>
-    <span v-translate>4a</span>
-    <span v-translate>4b</span>
-    <span v-translate>4c</span>
-    <span v-translate>5a</span>
-    <span v-translate>5a+</span>
-    <span v-translate>5b</span>
-    <span v-translate>5b+</span>
-    <span v-translate>5c</span>
-    <span v-translate>5c+</span>
-    <span v-translate>6a</span>
-    <span v-translate>6a+</span>
-    <span v-translate>6b</span>
-    <span v-translate>6b+</span>
-    <span v-translate>6c</span>
-    <span v-translate>6c+</span>
-    <span v-translate>7a</span>
-    <span v-translate>7a+</span>
-    <span v-translate>7b</span>
-    <span v-translate>7b+</span>
-    <span v-translate>7c</span>
-    <span v-translate>7c+</span>
-    <span v-translate>8a</span>
-    <span v-translate>8a+</span>
-    <span v-translate>8b</span>
-    <span v-translate>8b+</span>
-    <span v-translate>8c</span>
-    <span v-translate>8c+</span>
-    <span v-translate>9a</span>
-    <span v-translate>9a+</span>
-    <span v-translate>9b</span>
-    <span v-translate>9b+</span>
-    <span v-translate>9c</span>
-    <span v-translate>9c+</span>
     <span v-translate>slab</span>
     <span v-translate>vertical</span>
     <span v-translate>overhang</span>
@@ -164,31 +115,6 @@
     <span v-translate>always_accessible</span>
     <span v-translate>key_needed</span>
     <span v-translate>no_warden</span>
-    <span v-translate>1</span>
-    <span v-translate>2</span>
-    <span v-translate>3</span>
-    <span v-translate>4</span>
-    <span v-translate>5</span>
-    <span v-translate>6</span>
-    <span v-translate>7</span>
-    <span v-translate>8</span>
-    <span v-translate>9</span>
-    <span v-translate>10</span>
-    <span v-translate>10+</span>
-    <span v-translate>I</span>
-    <span v-translate>II</span>
-    <span v-translate>III</span>
-    <span v-translate>IV</span>
-    <span v-translate>V</span>
-    <span v-translate>VI</span>
-    <span v-translate>P1</span>
-    <span v-translate>P1+</span>
-    <span v-translate>P2</span>
-    <span v-translate>P2+</span>
-    <span v-translate>P3</span>
-    <span v-translate>P3+</span>
-    <span v-translate>P4</span>
-    <span v-translate>P4+</span>
     <span v-translate>avalanche</span>
     <span v-translate>stone_fall</span>
     <span v-translate>falling_ice</span>
@@ -202,12 +128,6 @@
     <span v-translate>E2</span>
     <span v-translate>E3</span>
     <span v-translate>E4</span>
-    <span v-translate>E1</span>
-    <span v-translate>E2</span>
-    <span v-translate>E3</span>
-    <span v-translate>E4</span>
-    <span v-translate>E5</span>
-    <span v-translate>E6</span>
     <span v-translate>quiet</span>
     <span v-translate>some</span>
     <span v-translate>crowded</span>
@@ -223,47 +143,9 @@
     <span v-translate>possible</span>
     <span v-translate>difficult</span>
     <span v-translate>impossible</span>
-    <span v-translate>F</span>
-    <span v-translate>F+</span>
-    <span v-translate>PD-</span>
-    <span v-translate>PD</span>
-    <span v-translate>PD+</span>
-    <span v-translate>AD-</span>
-    <span v-translate>AD</span>
-    <span v-translate>AD+</span>
-    <span v-translate>D-</span>
-    <span v-translate>D</span>
-    <span v-translate>D+</span>
-    <span v-translate>TD-</span>
-    <span v-translate>TD</span>
-    <span v-translate>TD+</span>
-    <span v-translate>ED-</span>
-    <span v-translate>ED</span>
-    <span v-translate>ED+</span>
-    <span v-translate>ED4</span>
-    <span v-translate>ED5</span>
-    <span v-translate>ED6</span>
-    <span v-translate>ED7</span>
     <span v-translate>prairie</span>
     <span v-translate>scree</span>
     <span v-translate>snow</span>
-    <span v-translate>T1</span>
-    <span v-translate>T2</span>
-    <span v-translate>T3</span>
-    <span v-translate>T4</span>
-    <span v-translate>T5</span>
-    <span v-translate>1</span>
-    <span v-translate>2</span>
-    <span v-translate>3</span>
-    <span v-translate>3+</span>
-    <span v-translate>4</span>
-    <span v-translate>4+</span>
-    <span v-translate>5</span>
-    <span v-translate>5+</span>
-    <span v-translate>6</span>
-    <span v-translate>6+</span>
-    <span v-translate>7</span>
-    <span v-translate>7+</span>
     <span v-translate>collaborative</span>
     <span v-translate>personal</span>
     <span v-translate>copyright</span>
@@ -284,37 +166,8 @@
     <span v-translate>book</span>
     <span v-translate>help</span>
     <span v-translate>misc</span>
-    <span v-translate>S1</span>
-    <span v-translate>S2</span>
-    <span v-translate>S3</span>
-    <span v-translate>S4</span>
-    <span v-translate>S5</span>
-    <span v-translate>S6</span>
-    <span v-translate>S7</span>
     <span v-translate>open</span>
     <span v-translate>closed</span>
-    <span v-translate>M1</span>
-    <span v-translate>M2</span>
-    <span v-translate>M3</span>
-    <span v-translate>M3+</span>
-    <span v-translate>M4</span>
-    <span v-translate>M4+</span>
-    <span v-translate>M5</span>
-    <span v-translate>M5+</span>
-    <span v-translate>M6</span>
-    <span v-translate>M6+</span>
-    <span v-translate>M7</span>
-    <span v-translate>M7+</span>
-    <span v-translate>M8</span>
-    <span v-translate>M8+</span>
-    <span v-translate>M9</span>
-    <span v-translate>M9+</span>
-    <span v-translate>M10</span>
-    <span v-translate>M10+</span>
-    <span v-translate>M11</span>
-    <span v-translate>M11+</span>
-    <span v-translate>M12</span>
-    <span v-translate>M12+</span>
     <span v-translate>jan</span>
     <span v-translate>feb</span>
     <span v-translate>mar</span>
@@ -327,33 +180,10 @@
     <span v-translate>oct</span>
     <span v-translate>nov</span>
     <span v-translate>dec</span>
-    <span v-translate>V1</span>
-    <span v-translate>V2</span>
-    <span v-translate>V3</span>
-    <span v-translate>V4</span>
-    <span v-translate>V5</span>
-    <span v-translate>M1</span>
-    <span v-translate>M2</span>
-    <span v-translate>M3</span>
-    <span v-translate>M4</span>
-    <span v-translate>M5</span>
     <span v-translate>nb_outings_4</span>
     <span v-translate>nb_outings_9</span>
     <span v-translate>nb_outings_14</span>
     <span v-translate>nb_outings_15</span>
-    <span v-translate>N</span>
-    <span v-translate>NE</span>
-    <span v-translate>E</span>
-    <span v-translate>SE</span>
-    <span v-translate>S</span>
-    <span v-translate>SW</span>
-    <span v-translate>W</span>
-    <span v-translate>NW</span>
-    <span v-translate>1</span>
-    <span v-translate>2</span>
-    <span v-translate>3</span>
-    <span v-translate>4</span>
-    <span v-translate>5</span>
     <span v-translate>yes</span>
     <span v-translate>seasonal</span>
     <span v-translate>no</span>
@@ -383,11 +213,6 @@
     <span v-translate>partly_protected</span>
     <span v-translate>protected</span>
     <span v-translate>inside</span>
-    <span v-translate>X1</span>
-    <span v-translate>X2</span>
-    <span v-translate>X3</span>
-    <span v-translate>X4</span>
-    <span v-translate>X5</span>
     <span v-translate>basalte</span>
     <span v-translate>calcaire</span>
     <span v-translate>conglomerat</span>
@@ -441,11 +266,6 @@
     <span v-translate>naturally</span>
     <span v-translate>closed_in_winter</span>
     <span v-translate>non_applicable</span>
-    <span v-translate>R1</span>
-    <span v-translate>R2</span>
-    <span v-translate>R3</span>
-    <span v-translate>R4</span>
-    <span v-translate>R5</span>
     <span v-translate>amateur</span>
     <span v-translate>mountain_guide</span>
     <span v-translate>mountain_leader</span>
@@ -458,12 +278,6 @@
     <span v-translate>avalanche_forecaster</span>
     <span v-translate>club</span>
     <span v-translate>institution</span>
-    <span v-translate>K1</span>
-    <span v-translate>K2</span>
-    <span v-translate>K3</span>
-    <span v-translate>K4</span>
-    <span v-translate>K5</span>
-    <span v-translate>K6</span>
     <span v-translate>summit</span>
     <span v-translate>pass</span>
     <span v-translate>lake</span>
