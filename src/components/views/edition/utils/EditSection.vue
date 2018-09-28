@@ -1,7 +1,7 @@
 <template>
     <section>
         <header @click="expanded_=!expanded_">
-            <span v-translate>{{ header }}</span>
+            <span>{{ $gettext(header) }}</span>
             <button class="button is-pulled-right">
                 {{ expanded_ ? 'Collapse' : 'Expand' }}
             </button>

@@ -5,12 +5,14 @@ require('./js/fa.config')
 
 /* core */
 import Vue from 'vue'
-import App from './App.vue'
-import Router from './router'
+import App from '@/App.vue'
+import Router from '@/router'
 
-import GetTextPlugin from './translations/GetTextPlugin'
+import GetTextPlugin from '@/translations/GetTextPlugin'
+import french_translations from '@/translations/dist/fr.json'
 
-import user from './js/user.js'
+import user from '@/js/user.js'
+
 
 Vue.config.productionTip = false
 Vue.config.silent = false
@@ -71,7 +73,7 @@ Vue.use(GetTextPlugin, {
         console.warn(`Download ${lang}`)
 
         if(lang=='fr') // include fr langage in app
-            return import(`@/translations/dist/fr.json`)
+            return french_translations
 
         else if(lang=='en') //lazy load the others
             return import(/* webpackChunkName: "translations-en" */ `@/translations/dist/en.json`)

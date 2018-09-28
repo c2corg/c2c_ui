@@ -75,16 +75,19 @@ function parseTemplate(file, data){
                     throw `In ${file}\nNodes with v-translate directive must contains only one child`
                 }
 
-                if(node.children[0].type == NODETYPE_TEXT){
-
-                    let msgid = node.children[0].text
-
-                    //trim
-                    msgid = msgid.replace(/^[\r\n\s]*/, "")
-                    msgid = msgid.replace(/[\r\n\s]*$/, "")
-
-                    results.push(file, undefined, msgid)
+                if(node.children[0].type != NODETYPE_TEXT){
+                    console.log(node.children[0])
+                    throw `In ${file}\nInterploation is not yet supported. Please use $gettext`
                 }
+
+
+                let msgid = node.children[0].text
+
+                //trim
+                msgid = msgid.replace(/^[\r\n\s]*/, "")
+                msgid = msgid.replace(/[\r\n\s]*$/, "")
+
+                results.push(file, undefined, msgid)
             }
         }
     })
@@ -108,6 +111,12 @@ function main() {
     walkSync("src")
 
     let result = []
+
+    // let temp = require("../src/translations/dist/en.json").en
+    // for(key in temp){
+    //     if(results.data[`${undefined}\u0002${key}`] === undefined)
+    //         console.log(key, temp[key])
+    // }
 
     for(let key of Object.keys(results.data).sort()){
         result.push(results.data[key].toString())

@@ -6,7 +6,8 @@
                     <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
                 </span>
                 <document-title :document="item.user"/>
-                <span v-translate>{{ actionLine }}</span>
+
+                <span>{{ $gettext(actionLine) }}</span>
             </div>
             <icon-document :type="item.document.type" class="is-pulled-right"/>
         </header>
@@ -25,13 +26,10 @@
                 <route-rating v-else-if="item.document.type=='r'" :document="item.document"/>
 
 
-                <span v-if="item.document.elevation_max">
-                    <fa-icon icon="bomb"/>
-                    {{ item.document.elevation_max }} m
-                </span>
+                <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
                 <span v-if="item.document.height_diff_up">
-                    <fa-icon icon="bomb"/>
+                    <icon-height-diff />
                     {{ item.document.height_diff_up }} m
                 </span>
 
@@ -59,6 +57,8 @@
 <script>
     const moment = require('moment')
 
+    import cardMixins from './utils/mixins.js'
+
     import user from '@/js/user.js'
     import c2c from '@/js/c2c.js'
     import constants from '@/js/constants.js'
@@ -69,6 +69,10 @@
         components:{
             CardRegionItem,
         },
+
+        mixins: [
+            cardMixins,
+        ],
 
         props:{
             item:{

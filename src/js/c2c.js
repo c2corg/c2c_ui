@@ -152,4 +152,9 @@ c2c.prototype.getFeed = function(params){
     return this.axios.get(this.apiUrl + '/feed', {params})
 }
 
+c2c.prototype.getProfileFeed = function(params){
+    return this.axios.get(this.apiUrl + '/profile-feed', {params})
+}
+
+
 export default new c2c();

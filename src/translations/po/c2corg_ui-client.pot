@@ -2,12 +2,149 @@
 msgid " images"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "1.1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1.2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1.3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "10min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "15min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1d_to_3d"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1h"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1h30"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1m_to_3m"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "1min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "2.1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "2.2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "2.3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "20min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "2h"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "2h30"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "3.1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "3.2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "3.3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "30min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "3h"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "3h+"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "4.1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "4.2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "4.3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "45min"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "4d_to_1m"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.4"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.5"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5.6"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "5min"
+msgstr ""
+
 #: src/components/views/staticViews/SeracView.vue
 msgid "Accident database"
 msgstr ""
 
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
+#: src/components/views/user/PreferencesView.vue
 msgid "Areas"
 msgstr ""
 
@@ -64,12 +201,32 @@ msgstr ""
 msgid "Distance"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "E1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "E2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "E3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "E4"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Filter on map extent"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
 msgid "Filter preferences"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "Forgot password?"
 msgstr ""
 
 #: src/components/views/dashboard/DashboardView.vue
@@ -82,12 +239,12 @@ msgstr ""
 msgid "GPS Track"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
-msgid "Go to last version"
-msgstr ""
-
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Go to the previous page"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "Have an account?"
 msgstr ""
 
 #: src/components/views/user/MailingListsView.vue
@@ -120,6 +277,10 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
+#: src/components/views/wiki/HistoryView.vue
+msgid "List of versions for language:"
+msgstr ""
+
 #: src/components/utils/LoadingNotification.vue
 msgid "Loading"
 msgstr ""
@@ -133,6 +294,7 @@ msgid "Log in to post the first comment"
 msgstr ""
 
 #: src/components/views/Navigation.vue
+#: src/components/views/user/LoginView.vue
 msgid "Login"
 msgstr ""
 
@@ -181,6 +343,10 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
+#: src/components/views/user/LoginView.vue
+msgid "No account yet?"
+msgstr ""
+
 #: src/components/views/user/PreferencesView.vue
 msgid "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown."
 msgstr ""
@@ -208,8 +374,8 @@ msgstr ""
 msgid "Post the first comment"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
-msgid "Preferences"
+#: src/components/views/user/LoginView.vue
+msgid "Register"
 msgstr ""
 
 #: src/components/views/dashboard/DashboardView.vue
@@ -227,8 +393,7 @@ msgid "SERAC"
 msgstr ""
 
 #: src/components/views/staticViews/SeracView.vue
-msgid "SERAC is a worldwide incidents and accidents database aiming
-                at increasing safety in rock climbing and mountain sports."
+msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
 #: src/components/views/edition/utils/SaveBlock.vue
@@ -242,6 +407,10 @@ msgstr ""
 
 #: src/components/views/document/utils/ElevationProfileBox.vue
 msgid "See profile based on:"
+msgstr ""
+
+#: src/components/views/wiki/HistoryView.vue
+msgid "See the latest version"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
@@ -291,9 +460,53 @@ msgstr ""
 msgid "You're not authorized. Please sign-in or create an account"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "access"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "accessible_when_wardened"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "accidental_avalanche"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "action"
+msgstr ""
+
 #: src/components/views/edition/utils/InputActivities.vue
 #: src/components/views/user/PreferencesView.vue
 msgid "activities"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_10"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_150"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_20"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_30"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_5"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate_50"
 msgstr ""
 
 #: src/components/utils/links/AddLink.vue
@@ -332,8 +545,156 @@ msgstr ""
 msgid "add an outing"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
-msgid "areas"
+#: src/translations/fixed_strings_common_js.vue
+msgid "admin_limits"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "always_accessible"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "amateur"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "apr"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "artificial"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "association"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "aug"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "autonomous"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanche"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanche_forecaster"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "average"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "awful"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "bar"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "basalte"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "base_camp"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "biography"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "bisse"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "bivouac"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "bloc"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "boat"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "book"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "bus"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "c2c_meetings"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "calcaire"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "camp_site"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "canyon"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "cave"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "cleared"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_indoor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_instructor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_outdoor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "closed"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "closed_cleared"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "closed_in_winter"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "closed_snow"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "club"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "collab"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "collaborative"
 msgstr ""
 
 #: src/components/views/document/utils/ConditionLevels.vue
@@ -343,60 +704,836 @@ msgstr ""
 msgid "comment"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "conglomerat"
+msgstr ""
+
 #: src/components/views/document/ProfileView.vue
 msgid "contributions"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "copyright"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "corridor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "country"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "crack_dihedral"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "craie"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "crampons_req"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "crampons_spring"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "crevasse_fall"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "crowded"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "danger_sign"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "dangerous"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "dec"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "descent"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "detail"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "difficult"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "draft"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "easy"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "edge"
 msgstr ""
 
 #: src/components/utils/links/EditLink.vue
 msgid "edit"
 msgstr ""
 
+#: src/components/cards/utils/CardElevationItem.vue
+msgid "elevation_max"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "empty"
+msgstr ""
+
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "empty comment"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
-msgid "forgot password?"
+#: src/translations/fixed_strings_common_js.vue
+msgid "environment"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
-msgid "have an account?"
+#: src/translations/fixed_strings_common_js.vue
+msgid "equipment"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
-msgid "history"
+#: src/translations/fixed_strings_common_js.vue
+msgid "excellent"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "expedition"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "expeditions"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "expert"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "exposed"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "external_witness"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "face"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "falling_ice"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "farm_sale"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "fauna"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "feb"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "female"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "fine"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "flora"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gear"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "geology"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gite"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "glacier"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "glacier_crampons"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "glacier_safety_gear"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gneiss"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "good"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "good service"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "goulotte"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "granit"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "great"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gres"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "grocery"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "help"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "highline"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "hiking"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "historical"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "humidity"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "hut"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "hut_warden"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "ice_climbing"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "impossible"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "initiator"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "inside"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "insolation"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "institution"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "internal_witness"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "jan"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "jul"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "jun"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "key_needed"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "lake"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "landscapes"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
 msgid "langs"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_1"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_4"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_5"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "level_na"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "lightning"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "local_product"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "locality"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "loop"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "loop_hut"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "magazine"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "male"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mar"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "may"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "medium"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "migmatite"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "misc"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mollasse_calcaire"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "more_than_3m"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountain_biking"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountain_climbing"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountain_environment"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountain_guide"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountain_leader"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mountainbike_instructor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "multi"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "natural_avalanche"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "naturally"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_outings_14"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_outings_15"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_outings_4"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_outings_9"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nearby service"
+msgstr ""
+
 #: src/components/views/document/utils/DocumentViewContainer.vue
 msgid "next version →"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
-msgid "not account yet?"
+#: src/translations/fixed_strings_common_js.vue
+msgid "nivology"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "no"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "no service"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "no_warden"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "non_applicable"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "non_autonomous"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nov"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "novel"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "oct"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "often"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "open"
 msgstr ""
 
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "or try the following pages:"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "other"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "overcrowded"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "overhang"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "paragliding"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "paragliding_instructor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "paragliding_landing"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "paragliding_takeoff"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "partly_protected"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "pass"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "people"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "person_fall"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "personal"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "photos-art"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "physical_failure"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "pillar"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "pitch"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "poor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "poor service"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "possible"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "pouding"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "prairie"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "precipitation"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "precipitation_heater"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "pressure"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "previous_injuries_2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "previous_injuries_3"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "primary_impacted"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "progressive"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "protected"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "psicobloc"
+msgstr ""
+
+#: src/components/utils/markers/MarkerQuality.vue
+msgid "quality"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "quartzite"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "quiet"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "raid"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "range"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "recent_avalanche"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "restaurant"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "return_same_way"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rhyolite"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rise"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rock_climbing"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "roof"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "roped_fall"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "safe"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "schiste"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "scree"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "seasonal"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "seasonal service"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "secondary_impacted"
+msgstr ""
+
 #: src/components/views/document/utils/DocumentViewContainer.vue
 msgid "see actual version"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
-msgid "sign in"
+#: src/translations/fixed_strings_common_js.vue
+msgid "sep"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
-msgid "sign up (todo)"
+#: src/translations/fixed_strings_common_js.vue
+msgid "service_on_demand"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "severity_no"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "shelter"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "single"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "site_info"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "ski_instructor"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "ski_patroller"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "skitouring"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slab"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_spot"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slacklining"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slope_30_35"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slope_35_40"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slope_40_45"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slope_gt_45"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slope_lt_30"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "small_pillar"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow_height"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow_ice_mixed"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snowshoeing"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snowy"
 msgstr ""
 
 #: src/components/views/document/utils/ConditionLevels.vue
 msgid "soft snow"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "soft_mobility"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "some"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "sometimes"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "sport_shop"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "stone_fall"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "stories"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "summit"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "tags"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "technical"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "technics"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "temperature"
 msgstr ""
 
 #: src/components/views/document/utils/DocumentViewContainer.vue
@@ -411,8 +1548,88 @@ msgstr ""
 msgid "title"
 msgstr ""
 
+#: src/translations/fixed_strings_common_js.vue
+msgid "topo"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "topoguide_supplements"
+msgstr ""
+
 #: src/components/views/document/utils/ConditionLevels.vue
 msgid "total snow"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "tourism"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "trachyte"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "track"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "train"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "traverse"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "vertical"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "very_dangerous"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "very_safe"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "via_ferrata"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "virtual"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "waterfall"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "waterline"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "waterpoint"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "weather_station"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "webcam"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "wind_direction"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "wind_speed"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "yes"
 msgstr ""
 
 #: src/components/views/document/utils/DocumentViewContainer.vue

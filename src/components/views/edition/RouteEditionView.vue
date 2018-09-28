@@ -9,12 +9,12 @@
                 <input-base :document="document" :field="fields.main_waypoint_id" class="is-4"/>
             </edit-section>
 
-            <edit-section header="Activities">
+            <edit-section header="activities">
                 <input-activities :document="document" :field="fields.activities" class="is-12"/>
                 <input-base :document="document" :field="fields.climbing_outdoor_type" class="is-4"/>
             </edit-section>
 
-            <edit-section header="Slacklining">
+            <edit-section header="slacklining">
                 <input-base :document="document" :field="fields.slackline_type" class="is-4"/>
                 <input-base :document="document" :field="fields.route_length" class="is-4"/>
                 <input-base :document="document" :field="fields.slackline_height" class="is-4"/>
@@ -22,13 +22,15 @@
 
             <edit-section header="configuration">
 
-                <input-base :document="document" :field="fields.orientations" class="is-4"/>
+                <div class="column is-4">
+                    <input-orientation v-model="document.orientations"/>
+                </div>
                 <input-checkboxes :document="document" :field="fields.route_types" class="is-4"/>
                 <input-checkboxes :document="document" :field="fields.configuration" class="is-4"/>
                 <input-checkboxes :document="document" :field="fields.rock_types" class="is-12"/>
             </edit-section>
 
-            <edit-section header="Caracteristics">
+            <edit-section header="numbers">
                 <input-base :document="document" :field="fields.elevation_min" class="is-4"/>
                 <input-base :document="document" :field="fields.elevation_max" class="is-4"/>
                 <input-base :document="document" :field="fields.height_diff_up" class="is-4"/>

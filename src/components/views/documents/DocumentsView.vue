@@ -4,7 +4,7 @@
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
-                    <span class="title is-1 is-first-letter-uppercase">{{ title }}</span>
+                    <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
                 </span>
             </div>
             <div class="level-right" v-if="type!='profile'">
@@ -88,7 +88,8 @@
 
         computed:{
             title(){
-                return this.$route.name
+                var result = this.$route.name
+                return result.charAt(0).toUpperCase() + result.slice(1);
             },
             type(){
                 return this.$route.name.slice(0, -1)

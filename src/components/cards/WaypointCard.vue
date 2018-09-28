@@ -9,10 +9,7 @@
         <div slot="row2" class="level">
             <card-elevation-item :elevation="document.elevation"/>
 
-            <span v-if="document.slackline_types">
-                <fa-icon icon="bomb"/>
-                {{ document.slackline_types }}
-            </span>
+            <textual-array :array="document.slackline_types" />
 
             <marker-quality :quality="document.quality"/>
         </div>

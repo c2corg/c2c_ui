@@ -11,7 +11,7 @@
 
     import c2c from '@/js/c2c.js'
 
-    import FeedCard from './FeedCard'
+    import FeedCard from '@/components/cards/FeedCard'
 
     export default {
         components:{

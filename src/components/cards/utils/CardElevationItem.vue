@@ -1,6 +1,8 @@
 <template>
-    <span v-if="elevation" class="is-nowrap">
-        <fa-icon icon="sort-amount-up" class="has-text-primary"/>
+    <span v-if="elevation">
+        <span v-tooltip="$gettext('elevation_max')">
+            <fa-icon icon="sort-amount-up" class="has-text-primary"/>
+        </span>
         {{ elevation }}&nbsp;m
     </span>
 </template>

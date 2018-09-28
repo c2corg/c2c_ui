@@ -39,10 +39,6 @@ npm run lint
   * markdown icons in parser
   * FollowingView actions
   * PreferenceView : add/remove areas
-  * add feed on profile
-  * import_common : build a fake vue component with all strings
-  * multiselect : handle i18n in options
-  * slider : handle i18n in options 
 
 
 * CSS

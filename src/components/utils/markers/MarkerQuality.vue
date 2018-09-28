@@ -1,5 +1,5 @@
 <template>
-    <icon-quality v-tooltip="'Quality : ' + $gettext(quality)" :quality="quality"/>
+    <icon-quality v-tooltip="$gettext('quality') + ' : ' + $gettext(quality)" :quality="quality"/>
 </template>
 
 <script>

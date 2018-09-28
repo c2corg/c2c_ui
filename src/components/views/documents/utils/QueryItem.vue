@@ -3,9 +3,14 @@
         <div v-if="field.queryMode==='valuesRangeSlider'" class="control" >
 
             <query-item-slider-label :field="field" :value="value"/>
-            <vue-slider ref="slider" v-model="value"
-                        :data="field.values" :lazy="true"
-                        :piecewise="true" tooltip="hover"/>
+            <vue-slider
+                ref="slider"
+                v-model="value"
+                :data="field.values"
+                :lazy="true"
+                :piecewise="true"
+                tooltip="hover"
+                :formatter="field.i18n ? $gettext : undefined"/>
 
         </div>
 
@@ -17,12 +22,13 @@
         </div>
 
         <div v-else-if="field.queryMode==='multiSelect'" class="control">
-            <label class="label is-first-letter-uppercase" v-translate>
-                {{ field.label }}
+            <label class="label is-first-letter-uppercase">
+                {{ $gettext(field.name) }}
             </label>
 
             <multiselect v-model="value"
                          :options="field.values"
+                         :custom-label="field.i18n ? $gettext : undefined"
                          :multiple="true"/>
         </div>
 
@@ -31,8 +37,8 @@
         </div>
 
         <div v-else-if="field.queryMode==='input'" class="control">
-            <label class="label is-first-letter-uppercase" v-translate>
-                {{ field.label }}
+            <label class="label is-first-letter-uppercase">
+                {{ $gettext(field.name) }}
             </label>
             <input :type="field.type" v-model="value" class="input is-primary">
         </div>
@@ -40,7 +46,7 @@
         <div v-else-if="field.queryMode==='checkbox'" class="control">
             <label class="checkbox">
                 <input v-model="value" type="checkbox">
-                <span v-translate>{{ field.label }}</span>
+                <span>{{ $gettext(field.name) }}</span>
             </label>
         </div>
 
@@ -96,8 +102,14 @@
                 set(value){
                     this.urlValue = this.field.valueToUrl(value)
                 }
-            }
+            },
         },
+
+        // debug test, do not remove it
+        // created(){
+        //     if(!this.field.url)
+        //         throw `Please enter url property for field ${this.field.name}`
+        // },
 
         methods: {
             refreshSlider(){

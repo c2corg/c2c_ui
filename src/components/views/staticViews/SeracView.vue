@@ -7,8 +7,7 @@
             <h3 class="subtitle is-3" v-translate>Accident database</h3>
 
             <p v-translate>
-                SERAC is a worldwide incidents and accidents database aiming
-                at increasing safety in rock climbing and mountain sports.
+                SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.
             </p>
 
             <div>

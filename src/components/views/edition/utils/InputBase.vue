@@ -2,7 +2,7 @@
     <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
             <label >
-                <span v-translate>{{ field.label }}</span>
+                <span>{{ $gettext(field.name) }}</span>
                 <span v-if="field.required">*</span>
             </label>
 
@@ -14,9 +14,8 @@
                         <option
                             v-for="value of field.values"
                             :key="value"
-                            :value="value"
-                            v-translate>
-                            {{ value }}
+                            :value="value">
+                            {{ field.i18n ? $gettext(value) : value }}
                         </option>
                     </select>
                 </div>

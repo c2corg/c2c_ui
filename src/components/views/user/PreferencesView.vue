@@ -1,10 +1,6 @@
 <template>
     <div v-if="preferences" class="section content">
         <html-header title="My preferences"/>
-        <h1>
-            <fa-icon icon="cogs"/>
-            <span v-translate>Preferences</span>
-        </h1>
 
         <h2 v-translate>Filter preferences</h2>
         <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
@@ -37,7 +33,7 @@
                 </div>
             </div>
 
-            <h2 v-translate>areas</h2>
+            <h2 v-translate>Areas</h2>
             <div class="columns">
                 <div v-for="document in preferences.areas" :key="document.document_id" class="column is-2">
                     <document-card :document="document"/>

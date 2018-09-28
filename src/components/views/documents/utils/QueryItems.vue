@@ -6,7 +6,7 @@
                          @changeDisplay="refreshSliders()">
 
             <span slot="button">
-                <span v-translate>{{ category.name }}</span>
+                <span>{{ $gettext(category.name) }}</span>
                 <span v-if="category.activeCount!=0">
                     ({{ category.activeCount }})
                 </span>
@@ -114,7 +114,7 @@
             "route_length",
             "length_total",
             "public_transport",
-            "lift_access",
+//            "lift_access",
             "access_time",
             "best_periods",
             "capacity",

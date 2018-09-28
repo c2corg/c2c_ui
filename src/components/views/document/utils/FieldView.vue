@@ -1,11 +1,11 @@
 <template>
-    <label-value v-if="hasValue" :label="field.label">
+    <label-value v-if="hasValue" :label="field.name">
         <a v-if="field.type==='url'" :href="value">
             {{ value }}
         </a>
         <textual-array v-else-if="isArray" :array="value"/>
-        <span v-else-if="field.type=='text'" v-translate>
-            {{ value }}
+        <span v-else-if="field.i18n">
+            {{ $gettext(value) }}
         </span>
         <span v-else>
             {{ value }}

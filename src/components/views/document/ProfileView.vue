@@ -54,6 +54,10 @@
                             hide-title/>
                     </content-box>
 
+                    <div v-if="feed">
+                        <feed-card v-for="(item, index) of feed.feed" :key="index" :item="item"/>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -61,11 +65,33 @@
 </template>
 
 <script>
+
+    import c2c from '@/js/c2c.js'
+
     import mixins from "./utils/mixins.js"
 
+    import FeedCard from '@/components/cards/FeedCard'
+
     export default {
+
+        components:{
+            FeedCard
+        },
+
         mixins : [
             mixins,
         ],
+
+        data(){
+            return {
+                feed:null
+            }
+        },
+
+        created(){
+            c2c.getProfileFeed({u:this.documentId, pl:this.$language.current}).then(response=>{
+                this.feed=response.data
+            })
+        }
     }
 </script>

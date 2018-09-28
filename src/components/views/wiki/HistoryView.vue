@@ -3,9 +3,16 @@
         <html-header title="Old version"/>
         <h1>
             <icon-document :type="type" class="is-large"/>
-            <span v-translate>history</span> ({{ lang }}) :
             <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
         </h1>
+        <p>
+            <span v-translate>
+                List of versions for language:
+            </span>
+            <span>
+                {{ $gettext(lang) }}
+            </span>
+        </p>
         <div class="field is-grouped">
             <div class="control">
                 <button
@@ -21,7 +28,7 @@
                     :to="{name:type, params:{id:documentId, lang:lang}}"
                     class="button is-link"
                     v-translate>
-                    Go to last version
+                    See the latest version
                 </router-link>
             </div>
         </div>
@@ -45,8 +52,13 @@
                                :value="version.version_id"
                                type="radio"
                                name="versionTo">
-                        <diff-link v-if="version.version_id != last_version_id" :type="type" :id="documentId" :lang="lang"
-                                   :version-to="version.version_id"/>
+                        <diff-link
+                            v-if="version.version_id != last_version_id"
+                            :type="type"
+                            :id="documentId"
+                            :lang="lang"
+                            version-from="prev"
+                            :version-to="version.version_id"/>
                     </div>
                 </td>
                 <td>
@@ -73,7 +85,7 @@
                     :to="{name:type, params:{id:documentId, lang:lang}}"
                     class="button is-link"
                     v-translate>
-                    Go to last version
+                    See the latest version
                 </router-link>
             </div>
         </div>
@@ -87,14 +99,23 @@
 
         data() {
             return { // theese three data are computed
-                documentId: this.$route.params.id,
-                type: this.$route.name.replace("-history",""),
-                lang: this.$route.params.lang,
                 history: null,
                 versionFrom:undefined,
                 versionTo:undefined,
                 last_version_id:undefined,
             }
+        },
+
+        computed:{
+            documentId(){
+                return parseInt(this.$route.params.id)
+            },
+            type(){
+                return this.$route.name.replace("-history","")
+            },
+            lang(){
+                return this.$route.params.lang
+            },
         },
 
         created() {

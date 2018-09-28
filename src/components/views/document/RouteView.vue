@@ -44,6 +44,7 @@
                         <div class="column is-4">
 
                             <label-value label="ratings">
+                                <!-- TODO : hide is no cotation -->
                                 <route-rating :document="document"/>
                             </label-value>
 

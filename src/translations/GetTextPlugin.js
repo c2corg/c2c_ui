@@ -3,8 +3,7 @@
 
 function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defaultPlural = null){
     if(messages===undefined){
-        //eslint-disable-next-line
-        console.warn(`messages are not yet available`)
+        // `messages are not yet available`
         return msgid
     }
 
@@ -57,13 +56,18 @@ export default function install(Vue, options = {}){
                     })
                 }
 
-                let imp = options.getMessages(lang)
+                let messages = options.getMessages(lang)
 
                 return new Promise(resolve => {
-                    imp.then(translations => {
-                        this.translations[lang] = translations[lang]
-                        resolve(translations[lang])
-                    })
+                    if(messages.then){ // messages is a promise
+                        messages.then(translations => {
+                            this.translations[lang] = translations[lang]
+                            resolve(translations[lang])
+                        })
+                    } else {
+                        this.translations[lang] = messages[lang]
+                        resolve(messages[lang])
+                    }
                 })
             },
 
@@ -72,6 +76,9 @@ export default function install(Vue, options = {}){
             },
 
             updateElement(element){
+                if(element.dataset.msgid===undefined)
+                    element.dataset.msgid = element.innerText
+
                 element.innerText = this.gettext(element.dataset.msgid)
             },
         }
@@ -86,13 +93,15 @@ export default function install(Vue, options = {}){
     // An option to support translation with HTML content: `v-translate`.
     Vue.directive('translate', {
         bind(el){
-            el.dataset.msgid = el.innerText
+            // console.log("bind", el)
             languageVm.updateElement(el)
         },
         inserted(el){
+            // console.log("inserted", el)
             languageVm.updateElement(el)
         },
         update(el){
+            // console.log("update", el)
             languageVm.updateElement(el)
         },
     })

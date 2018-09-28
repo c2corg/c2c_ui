@@ -5,12 +5,12 @@
         :locale="locale">
         <div>
 
-            <edit-section header="Title">
+            <edit-section header="title">
                 <input-base :document="document" :base="locale" :field="fields.title" class="is-9"/>
                 <input-base :document="document" :field="fields.waypoint_type" class="is-3" />
             </edit-section>
 
-            <edit-section header="Geolocation">
+            <edit-section header="geolocation">
                 <input-base :document="document" :field="fields.elevation" class="is-4" />
                 <input-base :document="document" :field="fields.elevation_min" class="is-4" />
                 <input-base :document="document" :field="fields.prominence" class="is-4" />

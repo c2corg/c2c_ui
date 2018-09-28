@@ -4,7 +4,7 @@
         :document="document"
         :locale="locale">
 
-        <edit-section header="general information">
+        <edit-section header="general informations">
             <input-base :document="document" :field="fields.date_start" class="is-6" />
             <input-base :document="document" :field="fields.date_end" class="is-6" />
             <!-- todo : one day trip -->
@@ -34,7 +34,7 @@
             <input-base :document="document" :field="fields.height_diff_difficulties" class="is-4" />
         </edit-section>
 
-        <edit-section header="Weather &amp; conditions">
+        <edit-section header="weather and conditions">
 
             <input-base :document="document" :base="locale" :field="fields.weather" class="is-6"/>
             <input-base :document="document" :base="locale" :field="fields.conditions" class="is-6"/>

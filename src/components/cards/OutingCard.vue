@@ -20,13 +20,10 @@
                 <outing-rating :outing="document"/>
             </span>
 
-            <span v-if="document.elevation_max">
-                <fa-icon icon="bomb"/>
-                {{ document.elevation_max }}&nbsp;m
-            </span>
+            <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
             <span v-if="document.height_diff_up">
-                <fa-icon icon="bomb"/>
+                <icon-height-diff />
                 {{ document.height_diff_up }}&nbsp;m
             </span>
         </div>
