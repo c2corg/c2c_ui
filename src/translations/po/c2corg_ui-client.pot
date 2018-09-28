@@ -64,6 +64,10 @@ msgstr ""
 msgid "Distance"
 msgstr ""
 
+#: src/components/map/OlMap.vue
+msgid "Filter on map extent"
+msgstr ""
+
 #: src/components/views/user/PreferencesView.vue
 msgid "Filter preferences"
 msgstr ""
@@ -75,7 +79,7 @@ msgid "Forum"
 msgstr ""
 
 #: src/components/utils/markers/MarkerGpsTrace.vue
-msgid "GPS trace"
+msgid "GPS Track"
 msgstr ""
 
 #: src/components/views/wiki/HistoryView.vue
@@ -132,6 +136,10 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+#: src/components/views/Navigation.vue
+msgid "Logout"
+msgstr ""
+
 #: src/components/views/user/AccountView.vue
 msgid "Make profile page public"
 msgstr ""
@@ -144,8 +152,29 @@ msgstr ""
 msgid "Modified the"
 msgstr ""
 
+#: src/components/views/Navigation.vue
+msgid "My account"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "My followed users"
+msgstr ""
+
+#: src/components/views/Navigation.vue
 #: src/components/views/user/MailingListsView.vue
 msgid "My mailing lists"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "My outings"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "My preferences"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "My profile"
 msgstr ""
 
 #: src/components/views/wiki/WhatsNewView.vue
@@ -211,10 +240,6 @@ msgstr ""
 msgid "Search ..."
 msgstr ""
 
-#: src/components/map/OlMap.vue
-msgid "Search when map moves"
-msgstr ""
-
 #: src/components/views/document/utils/ElevationProfileBox.vue
 msgid "See profile based on:"
 msgstr ""
@@ -272,7 +297,39 @@ msgid "activities"
 msgstr ""
 
 #: src/components/utils/links/AddLink.vue
-msgid "add"
+msgid "add a book"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add a map"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add a route"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add a waypoint"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add an area"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add an article"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add an image"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add an incident/accident report"
+msgstr ""
+
+#: src/components/utils/links/AddLink.vue
+msgid "add an outing"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
@@ -314,30 +371,6 @@ msgstr ""
 msgid "langs"
 msgstr ""
 
-#: src/components/views/Navigation.vue
-msgid "my account"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "my followed users"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "my mailings"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "my outings"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "my preferences"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "my profile"
-msgstr ""
-
 #: src/components/views/document/utils/DocumentViewContainer.vue
 msgid "next version →"
 msgstr ""
@@ -356,10 +389,6 @@ msgstr ""
 
 #: src/components/views/user/LoginView.vue
 msgid "sign in"
-msgstr ""
-
-#: src/components/views/Navigation.vue
-msgid "sign out"
 msgstr ""
 
 #: src/components/views/user/LoginView.vue

@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
-    "update-c2c-common": "python tools/import_common.py"
+    "update-c2c-common": "python3 tools/import_common.py"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.2.0",

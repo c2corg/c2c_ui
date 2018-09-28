@@ -1,13 +1,17 @@
 import requests
 import json
+import os
 
 URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/{}.py'.format
 
-
 def get_fields(name):
-    exec(requests.get(URL(name)).text)
-    return dict(locals())
 
+    proxies = {"https" : os.environ["HTTPS_PROXY"]} if os.environ["HTTPS_PROXY"] else None
+    text = requests.get(URL(name), proxies = proxies).text
+
+    exec(text.encode('utf8'))
+
+    return dict(locals())
 
 result = {}
 
@@ -27,78 +31,79 @@ attributes = get_fields('attributes')
 result["attributes"] = {}
 result["attributes"]["langs"] = attributes["langs_priority"]
 
-attribute_names = (
-    "access_conditions",
-    "access_times",
-    "activities",
-    "activity_rates",
-    "aid_ratings",
-    "area_types",
-    "article_categories",
-    "article_types",
-    "author_statuses",
-    "autonomies",
-    "avalanche_levels",
-    "avalanche_signs",
-    "avalanche_slopes",
-    "book_types",
-    "condition_ratings",
-    "children_proof_types",
-    "climbing_indoor_types",
-    "climbing_outdoor_types",
-    "climbing_outdoor_types",
-    "climbing_ratings",
-    "climbing_styles",
-    "route_configuration_types",
-    "custodianship_types",
-    "route_duration_types",
-    "engagement_ratings",
-    "equipment_ratings",
-    "event_types",
-    "exposition_ratings",
-    "exposition_rock_ratings",
-    "frequentation_types",
-    "genders",
-    "glacier_gear_types",
-    "glacier_ratings",
-    "global_ratings",
-    "ground_types",
-    "hiking_ratings",
-    "ice_ratings",
-    "image_types",
-    "image_categories",
-    "labande_ski_ratings",
-    "lift_status",
-    "mixed_ratings",
-    "months",
-    "mtb_down_ratings",
-    "mtb_up_ratings",
-    "nb_outings",
-    "orientation_types",
-    "paragliding_ratings",
-    "parking_fee_types",
-    "previous_injuries",
-    "product_types",
-    "public_transportation_ratings",
-    "public_transportation_types",
-    "quality_types",
-    "rain_proof_types",
-    "risk_ratings",
-    "climbing_ratings",
-    "rock_types",
-    "route_types",
-    "severities",
-    "exposition_ratings",
-    "ski_ratings",
-    "slackline_types",
-    "snow_clearance_ratings",
-    "snowshoe_ratings",
-    "user_categories",
-    "user_categories",
-    "via_ferrata_ratings",
-    "waypoint_types",
-    "weather_station_types",
-)
+# key is attribute name, value is true if content need to be translated
+attribute_names = {
+    "access_conditions":True,
+    "access_times":True,
+    "activities":True,
+    "activity_rates":True,
+    "aid_ratings":True,
+    "area_types":True,
+    "article_categories":True,
+    "article_types":True,
+    "author_statuses":True,
+    "autonomies":True,
+    "avalanche_levels":True,
+    "avalanche_signs":True,
+    "avalanche_slopes":True,
+    "book_types":True,
+    "condition_ratings":True,
+    "children_proof_types":True,
+    "climbing_indoor_types":True,
+    "climbing_outdoor_types":True,
+    "climbing_outdoor_types":True,
+    "climbing_ratings":True,
+    "climbing_styles":True,
+    "route_configuration_types":True,
+    "custodianship_types":True,
+    "route_duration_types":True,
+    "engagement_ratings":True,
+    "equipment_ratings":True,
+    "event_types":True,
+    "exposition_ratings":True,
+    "exposition_rock_ratings":True,
+    "frequentation_types":True,
+    "genders":True,
+    "glacier_gear_types":True,
+    "glacier_ratings":True,
+    "global_ratings":True,
+    "ground_types":True,
+    "hiking_ratings":True,
+    "ice_ratings":True,
+    "image_types":True,
+    "image_categories":True,
+    "labande_ski_ratings":True,
+    "lift_status":True,
+    "mixed_ratings":True,
+    "months":True,
+    "mtb_down_ratings":True,
+    "mtb_up_ratings":True,
+    "nb_outings":True,
+    "orientation_types":True,
+    "paragliding_ratings":True,
+    "parking_fee_types":True,
+    "previous_injuries":True,
+    "product_types":True,
+    "public_transportation_ratings":True,
+    "public_transportation_types":True,
+    "quality_types":True,
+    "rain_proof_types":True,
+    "risk_ratings":True,
+    "climbing_ratings":True,
+    "rock_types":True,
+    "route_types":True,
+    "severities":True,
+    "exposition_ratings":True,
+    "ski_ratings":True,
+    "slackline_types":True,
+    "snow_clearance_ratings":True,
+    "snowshoe_ratings":True,
+    "user_categories":True,
+    "user_categories":True,
+    "via_ferrata_ratings":True,
+    "waypoint_types":True,
+    "weather_station_types":True,
+}
 
 for attribute_name in attribute_names:
     result["attributes"][attribute_name] = attributes[attribute_name]
@@ -111,5 +116,16 @@ result["letter_types"] = get_fields('document_types')['ALL']
 
 # result["sortable_search_attributes"] = get_fields('sortable_search_attributes')
 
-with open("src/js/common.js", "w") as f:
+with open("./src/js/common.js", "w") as f:
     f.write("export default " + json.dumps(result, indent=4))
+
+with open("./src/translations/fixed_strings_common_js.vue", "w") as f:
+    f.write("<template>\n")
+    f.write("    <!-- auto-generated by import_common.py -->\n")
+
+    for attribute_name in attribute_names:
+        if attribute_names[attribute_name]: # does it need translation ?
+            for value in attributes[attribute_name]:
+                f.write("    <span v-translate>{}</span>\n".format(value))
+
+    f.write("</template>\n")

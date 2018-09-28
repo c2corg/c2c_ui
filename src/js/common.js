@@ -122,20 +122,6 @@ export default {
             "slope_40_45",
             "slope_gt_45"
         ],
-        "months": [
-            "jan",
-            "feb",
-            "mar",
-            "apr",
-            "may",
-            "jun",
-            "jul",
-            "aug",
-            "sep",
-            "oct",
-            "nov",
-            "dec"
-        ],
         "book_types": [
             "topo",
             "environment",
@@ -419,6 +405,20 @@ export default {
             "M11+",
             "M12",
             "M12+"
+        ],
+        "months": [
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "may",
+            "jun",
+            "jul",
+            "aug",
+            "sep",
+            "oct",
+            "nov",
+            "dec"
         ],
         "mtb_down_ratings": [
             "V1",
