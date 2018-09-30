@@ -59,10 +59,21 @@
                 <icon-document :type="type"/>
                 <document-title :document="document"/>
                 <span class="is-pulled-right">
-                    <history-link :type="type" :id="document.document_id" :lang="locale.lang">
+                    <span @click="showImagesUploader=true">
+                        <icon-image v-tooltip="$gettext('Add images')" />
+                    </span>
+                    <history-link
+                        :type="type"
+                        :id="document.document_id"
+                        :lang="locale.lang"
+                        v-tooltip="$gettext('History')">
                         <icon-history class="is-medium" />
                     </history-link>
-                    <edit-link :type="type" :id="document.document_id" :lang="locale.lang">
+                    <edit-link
+                        :type="type"
+                        :id="document.document_id"
+                        :lang="locale.lang"
+                        v-tooltip="$gettext('Edit')">
                         <icon-edit class="is-medium"/>
                     </edit-link>
                 </span>
@@ -72,6 +83,8 @@
                 Please insert document content
             </slot>
         </div>
+
+        <images-uploader :visible="showImagesUploader" @hide="showImagesUploader=false"/>
     </div>
 
 </template>
@@ -80,7 +93,12 @@
     import constants from '@/js/constants.js'
     import utils from '@/js/utils.js'
 
+    import ImagesUploader from './ImagesUploader'
+
     export default {
+        components:{
+            ImagesUploader,
+        },
 
         props:{
             document:{
@@ -109,6 +127,7 @@
         data() {
             return {
                 error:null,
+                showImagesUploader:false,
             }
         },
 

@@ -48,7 +48,7 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console":"warn",
+      "no-console": "warn",
       "vue/html-indent": [
         "warn",
         4

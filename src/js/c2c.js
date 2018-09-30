@@ -156,5 +156,25 @@ c2c.prototype.getProfileFeed = function(params){
     return this.axios.get(this.apiUrl + '/profile-feed', {params})
 }
 
+c2C.prototype.uploadImage = function(file, canceller, progress) {
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+
+    const config = {
+        headers: {
+            'Content-Type': undefined
+        },
+        'uploadEventHandlers': {
+            progress: progress
+        }
+    }
+
+    return this.axios.post(config.imageBackendUrl + '/upload', formData, config)
+
+    return promise;
+}
+
 
 export default new c2c();

@@ -42,7 +42,7 @@ npm run lint
 
 
 * CSS
-  * choose family
+  * choose font family
   * icon size must not be a subjet
   * icon-activity bug :
     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
