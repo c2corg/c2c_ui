@@ -156,24 +156,23 @@ c2c.prototype.getProfileFeed = function(params){
     return this.axios.get(this.apiUrl + '/profile-feed', {params})
 }
 
-c2C.prototype.uploadImage = function(file, canceller, progress) {
+c2c.prototype.uploadImage = function(file, onUploadProgress) {
     const formData = new FormData();
 
     formData.append('file', file);
 
-
-    const config = {
+    const requestConfig = {
         headers: {
             'Content-Type': undefined
         },
-        'uploadEventHandlers': {
-            progress: progress
-        }
+        onUploadProgress,
     }
 
-    return this.axios.post(config.imageBackendUrl + '/upload', formData, config)
+    return this.axios.post(config.imageBackendUrl + '/upload', formData, requestConfig)
+}
 
-    return promise;
+c2c.prototype.createImages = function(images){
+    return this.axios.post(this.apiUrl + '/images/list', {images})
 }
 
 

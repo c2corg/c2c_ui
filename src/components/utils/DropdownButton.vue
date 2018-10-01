@@ -2,15 +2,19 @@
     <div :class="{'is-active': isActive}" class="dropdown">
 
         <div class="dropdown-trigger">
-            <button :disabled="disabled" class="button" aria-haspopup="true"
-                    aria-controls="dropdown-menu" @click="isActive=!isActive" >
+            <span
+                :disabled="disabled"
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+                @click="isActive=!isActive" >
 
                 <slot name="button"/>
 
                 <span class="icon is-small">
                     <fa-icon icon="angle-down" aria-hidden="true"/>
                 </span>
-            </button>
+            </span>
         </div>
 
         <div id="dropdown-menu" class="dropdown-menu" role="menu">

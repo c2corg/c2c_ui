@@ -59,7 +59,9 @@
                 <icon-document :type="type"/>
                 <document-title :document="document"/>
                 <span class="is-pulled-right">
-                    <span @click="showImagesUploader=true">
+                    <span
+                        v-if="uploadedImageType"
+                        @click="showImagesUploader=true">
                         <icon-image v-tooltip="$gettext('Add images')" />
                     </span>
                     <history-link
@@ -84,7 +86,12 @@
             </slot>
         </div>
 
-        <images-uploader :visible="showImagesUploader" @hide="showImagesUploader=false"/>
+        <images-uploader
+            :image-type="uploadedImageType"
+            :lang="locale.lang"
+            :parent-document="document"
+            :visible="showImagesUploader"
+            @hide="showImagesUploader=false"/>
     </div>
 
 </template>
@@ -93,7 +100,7 @@
     import constants from '@/js/constants.js'
     import utils from '@/js/utils.js'
 
-    import ImagesUploader from './ImagesUploader'
+    import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
 
     export default {
         components:{
@@ -122,6 +129,10 @@
                 type:Number,
                 default:null,
             },
+            uploadedImageType:{ // TODO : comment this
+                type:String,
+                default:undefined,
+            }
         },
 
         data() {

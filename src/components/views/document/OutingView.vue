@@ -6,7 +6,9 @@
 
         :version="version"
         :previous-version-id="previousVersionId"
-        :next-version-id="nextVersionId">
+        :next-version-id="nextVersionId"
+
+        uploaded-image-type="personal">
 
         <div>
             <!--  CONTENT http://localhost:8080/outings/714134  -->
@@ -19,6 +21,11 @@
 
                 <div class="column is-3">
                     <content-box>
+
+                        <label-value label="activities">
+                            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+                        </label-value>
+
                         <label-value label="ratings">
                             <outing-rating :outing="document"/>
                         </label-value>

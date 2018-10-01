@@ -2,7 +2,7 @@
 var devConfig = {
     apiUrl : "https://api.demov6.camptocamp.org",
     mediaUrl : "https://media.camptocamp.org/c2corg_active",
-    imageBackendUrl : "http://images.demov6.camptocamp.org",
+    imageBackendUrl : "https://images.demov6.camptocamp.org",
     forumUrl : "https://forum.demov6.camptocamp.org",
     router_mode : 'history',
     ignApiKey : 'x216cgugvwkn0go20sm2mgar', // Key valid for localhost (expires 19/09/2016)
