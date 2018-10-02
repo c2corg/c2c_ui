@@ -21,7 +21,6 @@
 
                 <div class="column is-3">
                     <content-box>
-
                         <label-value label="activities">
                             <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                         </label-value>
@@ -93,6 +92,7 @@
 </template>
 
 <script>
+
     import mixins from "./utils/mixins.js"
     import ConditionLevels from "./utils/ConditionLevels"
     import ElevationProfileBox from "./utils/ElevationProfileBox"

@@ -23,7 +23,8 @@ npm run lint
 ## Todo
 
 * Todos
-  * add image
+  * admin actions
+  * associations tools 
   * xreport and profile data
   * signup
   * map types
@@ -31,7 +32,6 @@ npm run lint
     * recenter on...
     * test add all biodiv
     * test recenter on geolocation
-  * admin actions
   * document-view actions (translate...)
   * do forum.createTopic()
   * test all doc's comments functions

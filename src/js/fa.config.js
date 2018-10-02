@@ -44,7 +44,8 @@ import {
     faSortAmountUp,
 //    faSquare,
     faTachometerAlt,
-    faTrashAlt,
+    // faTrash,
+    // faTrashAlt,
     faUser,
     faUserCheck,
     faUsers,
@@ -54,6 +55,7 @@ import {
 import {
     faCircle as faCircleRegular,
     faSun as faSunRegular,
+    faTrashAlt as faTrashAltRegular,
 } from '@fortawesome/free-regular-svg-icons'
 
 
@@ -108,7 +110,8 @@ library.add(
     faSortAmountUp,
 //    faSquare,
     faTachometerAlt,
-    faTrashAlt,
+    // faTrash,
+    // faTrashAlt,
     faUser,
     faUserCheck,
     faUsers,
@@ -117,6 +120,7 @@ library.add(
     //regular icons
     faCircleRegular,
     faSunRegular,
+    faTrashAltRegular,
 
     //brands icons
     faCreativeCommons,

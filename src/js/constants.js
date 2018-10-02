@@ -385,6 +385,12 @@ function Constants(){
 
     this.langs = attrs.langs
 
+    // You can fin in
+    //     https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
+    
+    // also, GUI avalaible associtions can be found here, on dataset attribute :
+    //     https://github.com/c2corg/v6_ui/search?l=HTML&q=app-add-association
+
     this.objectDefinitions = {
         area:{
             letter:"a",
@@ -396,7 +402,8 @@ function Constants(){
 
                 new Field("area_type", {url:"atyp"}),
                 new Field("quality", {url:"qa"}),
-            )
+            ),
+            validAssociations:[],
         },
 
         article:{
@@ -411,7 +418,8 @@ function Constants(){
                 new Field("article_categories", {url:"acat"}),
                 new Field("quality", {url:"qa"}),
                 new Field("article_type", {url:"atyp"}),
-            )
+            ),
+            validAssociations:["article", "waypoint", "outing", "route", "book"],
         },
 
         book:{
@@ -432,7 +440,8 @@ function Constants(){
                 new Field("quality", {url:"qa"}),
                 new Field("langs"),
                 new Field("nb_pages"),
-            )
+            ),
+            validAssociations:["route", "article", "waypoint"],
         },
 
         image:{
@@ -460,7 +469,8 @@ function Constants(){
                 new Field("fnumber"),
                 new Field("quality", {url:"qa"}),
                 new Field("width"),
-            )
+            ),
+            validAssociations:["waypoint", "route", "book", "article"],
         },
 
         map:{
@@ -473,7 +483,8 @@ function Constants(){
                 new Field("code"),
                 new Field("scale"),
                 new Field("editor"),
-            )
+            ),
+            validAssociations:[],
         },
 
         outing:{
@@ -532,7 +543,8 @@ function Constants(){
                 new Field("snow_quantity", {url:"swquan", activities:["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}),
                 new Field("snowshoe_rating", {url:"wrat", activities:["snowshoeing"]}),
                 new Field("via_ferrata_rating", {url:"krat", activities:["via_ferrata"]}),
-            )
+            ),
+            validAssociations:["article", "route", "xreport"],
         },
 
         profile:{
@@ -547,7 +559,8 @@ function Constants(){
                 new Field("activities", {url:"act"}),
                 new Field("categories"),
                 new Field("name"),
-            )
+            ),
+            validAssociations:[],
         },
 
         route:{
@@ -610,7 +623,8 @@ function Constants(){
                 new Field("slackline_type", {url:"sltyp", activities:["slacklining"]}),
                 new Field("snowshoe_rating", {url:"wrat", activities:["snowshoeing"]}),
                 new Field("via_ferrata_rating", {url:"krat", activities:["via_ferrata"]}),
-            )
+            ),
+            validAssociations:["route", "waypoint", "article", "book", "xreport"],
         },
 
         waypoint:{
@@ -673,7 +687,8 @@ function Constants(){
                 new Field("url", {waypoint_types:["camp_site", "climbing_indoor", "climbing_outdoor", "gite", "hut", "local_product", "weather_station", "webcam"]}),
                 new Field("waypoint_type", {url:'wtyp'}),
                 new Field("weather_station_types", {url:'whtyp'}),
-            )
+            ),
+            validAssociations:["waypoint", "article", "book", "xreport"],
         },
 
         xreport:{
@@ -718,7 +733,8 @@ function Constants(){
                 new Field("disable_comments"),
                 new Field("anonymous"),
                 new Field("quality", {url:"qa"}),
-            )
+            ),
+            validAssociations:["route", "outing", "article"],
         },
     };
 

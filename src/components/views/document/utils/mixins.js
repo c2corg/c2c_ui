@@ -6,7 +6,7 @@ import c2c from '@/js/c2c.js'
 
 import DocumentViewContainer from './DocumentViewContainer'
 
-import AssociatedDocuments from './AssociatedDocuments'
+import AssociatedDocuments from './Associations/AssociatedDocuments'
 import CommentsBox from './CommentsBox'
 import FieldView from './FieldView'
 import LabelValue from './LabelValue'

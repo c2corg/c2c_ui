@@ -1,7 +1,7 @@
 <template>
-    <content-box v-if="document.associations"> <!-- version view does not have associtations...-->
+    <content-box>
 
-        <div v-if="document.associations.waypoints.length" class="associations-list">
+        <div v-if="document.associations && document.associations.waypoints.length" class="associations-list">
             <div class="title" v-translate>Waypoints</div>
             <div v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id" class="is-ellipsed">
                 <icon-waypoint-type :waypoint-type="waypoint.waypoint_type"/>
@@ -9,6 +9,10 @@
                     <document-title :document="waypoint"/><span>,</span>
                     {{ waypoint.elevation }}&nbsp;m
                 </document-link>
+                <delete-button
+                    :visible="showDeleteButtons"
+                    class="is-pulled-right"
+                    @click="remove(waypoint)"/>
             </div>
         </div>
 
@@ -22,7 +26,7 @@
         </div>
 
         <!-- articles -->
-        <div v-if="document.associations.articles.length!=0" class="associations-list">
+        <div v-if="document.associations && document.associations.articles.length!=0" class="associations-list">
             <div class="title" v-translate>Articles</div>
             <div v-for="article of document.associations.articles" :key="article.document_id" class="is-ellipsed">
                 <icon-article />
@@ -39,14 +43,38 @@
             </div>
         </div>
 
+        <!-- TODO if version, do not display this button  -->
+
+        <div class="has-text-centered">
+            <button class="button is-primary" v-translate>
+                Add association
+            </button>
+        </div>
+
     </content-box>
 </template>
 
 <script>
+    import c2c from '@/js/c2c.js'
+
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
         mixins : [ requireDocumentProperty ],
+
+        data(){
+            return {
+                showDeleteButtons: false
+            }
+        },
+
+        methods: {
+            remove(child){
+                c2c.removeAssociation(this.document, child).then(() => {
+                    // TODO add feedback and handle error
+                })
+            }
+        }
     }
 </script>
 

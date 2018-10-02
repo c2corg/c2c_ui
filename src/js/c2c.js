@@ -175,5 +175,45 @@ c2c.prototype.createImages = function(images){
     return this.axios.post(this.apiUrl + '/images/list', {images})
 }
 
+c2c.prototype.createAssociation = function(parent, child) {
+
+    var pType = parent.type
+    var cType = child.type
+
+    const data = {}
+
+    // parent and child type are predetermined
+    if(
+        (pType === 'c' && (cType === 'w' || cType === 'o' || cType === 'r' || cType === 'b' || cType === 'c'))
+            ||
+        pType === 'i'
+            ||
+        (pType === 'o' && (cType === 'r' || cType === 'u'))
+            ||
+        (pType === 'r' && (cType === 'w' || cType === 'b'))
+            ||
+        (pType === 'w' && cType === 'b')
+            ||
+        (pType === 'x' && (cType === 'r' || cType === 'o' || cType === 'w'))
+    ) {
+        data.parent_document_id = child.document_id
+        data.child_document_id = parent.documnt_id
+    } else {
+        data.parent_document_id = parent.documnt_id
+        data.child_document_id = child.document_id
+    }
+
+    return this.axios.post(this.apiUrl + '/associations', {data})
+}
+
+c2c.prototype.removeAssociation = function(parent, child) {
+    const data = {
+        parent_document_id: parent.document_id,
+        child_document_id: child.document_id,
+    }
+
+    return this.axios.delete(this.apiUrl + '/associations', {data})
+}
+
 
 export default new c2c();

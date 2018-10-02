@@ -19,7 +19,8 @@
                         :lang="lang"
                         :parent-document="parentDocument"
                         :image-type="imageType"
-                        @deleteFile="deleteFile"/>
+                        @success="onSuccess"
+                        @deleteFile="onDeleteFile"/>
                 </div>
 
                 <div class="column is-4 is-flex images-uploader-message">
@@ -28,14 +29,17 @@
                     </div>
                 </div>
 
-
                 <div class="column is-12">
                     <div class="images-uploader-controls is-pulled-right">
-                        <button class="button is-primary" v-translate>
-                            save
+                        <button
+                            :disabled="documents.length == 0"
+                            class="button is-primary"
+                            @click="save"
+                            v-translate>
+                            Save
                         </button>
                         <button class="button is-warning" @click="hide" v-translate>
-                            close
+                            Close
                         </button>
                     </div>
                 </div>
@@ -46,6 +50,7 @@
 </template>
 
 <script>
+    import c2c from '@/js/c2c.js'
 
     import ImageUploader from './ImageUploader'
 
@@ -76,15 +81,23 @@
 
         data(){
             return {
-                files:{
-
-                }
+                files:{},
+                documents:[],
             }
         },
 
         methods:{
             hide(){
                 this.$emit('hide')
+            },
+
+            save(){
+                c2c.createImages(this.documents).then(() => {
+                    this.hide()
+
+                    // TODO handle error
+                    // TODO redraw parent
+                })
             },
 
             filesChange(event){
@@ -102,10 +115,26 @@
                 return file.name + "#" + file.lastModified
             },
 
-            deleteFile(file){
+            computeDocuments(){
+
+                this.documents = []
+
+                for(let file of Object.values(this.files)){
+                    if(file.document)
+                        this.documents.push(file.document)
+                }
+            },
+
+            onSuccess(file, document){
+                file.document = document
+                this.computeDocuments()
+            },
+
+            onDeleteFile(file){
                 let key = this.getFileKey(file)
                 if(this.files[key]!==undefined){
                     this.$delete(this.files, key)
+                    this.computeDocuments()
                 }
             }
         }

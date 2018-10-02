@@ -1,18 +1,18 @@
 <template>
     <div class="card">
         <div class="card-image img-container" :style="'background-image: url(' + src + ')'">
-            <div class="delete-button" @click="$emit('deleteFile', file)">
-                <fa-icon icon="trash-alt" size="lg" />
-            </div>
+            <delete-button
+                :visible="isSuccess || isFailed"
+                class="delete-button"
+                @click="$emit('deleteFile', file)"/>
 
             <progress
-                v-if="isSaving || true"
+                v-if="isSaving"
                 class="progress is-success is-large"
                 :class="{
                     'is-success' : isSuccess,
                     'is-warning' : isSaving,
-                    'is-danger' : isFailed,
-                    }"
+                    'is-danger' : isFailed}"
                 :value="percentCompleted"
                 max="100">
                 {{ percentCompleted }}%
@@ -162,7 +162,7 @@
         },
 
         created(){
-            this.document.associations[constants.getDocumentType(this.parentDocument.type)] = [
+            this.document.associations[constants.getDocumentType(this.parentDocument.type) + "s"] = [
                 {document_id: this.parentDocument.document_id}
             ]
 
@@ -174,23 +174,25 @@
         methods:{
 
             onUploadProgress(event){
-                this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
                 // TODO : test that
-                console.log(this.percentCompleted, event)
+                this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
             },
 
             onSuccess(event){
                 this.status = STATUS_SUCCESS
                 this.document.filename = event.data.filename
+                this.$emit("success", this.file, this.document)
             },
 
             onFailure(event){
                 this.status = STATUS_FAILED
                 this.errorMessage = event.message
+                this.$emit("fail", event)
             },
 
             upload(){
                 this.status = STATUS_SAVING
+                this.$emit("startUpload", event)
                 c2c.uploadImage(this.file, this.onUploadProgress.bind(this))
                     .then(this.onSuccess.bind(this))
                     .catch(this.onFailure.bind(this))
@@ -265,18 +267,19 @@
 $deleteButtonSize: 2.5rem;
 
 .delete-button{
-    cursor:pointer;
-    padding-top:6px;
-    text-align: center;
-    background:$red;
-    width:$deleteButtonSize;
-    height:$deleteButtonSize;
-    border-radius:50%;
-    color:white;
+    // cursor:pointer;
+    // padding-top:6px;
+    // text-align: center;
+    // background:$red;
+    // width:$deleteButtonSize;
+    // height:$deleteButtonSize;
+    // border-radius:50%;
+    // color:white;
     position:absolute;
     top:-0.5rem;
     right:-0.5rem;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    font-size:200%;
     //size:2.5rem;
 }
  </style>
