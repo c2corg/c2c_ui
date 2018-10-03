@@ -3,9 +3,9 @@
         <div class="title is-2">
             <span v-translate>Last outings</span>
         </div>
-        <pretty-outing-link
-            v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id"
-            :outing="outing"/>
+        <div v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id">
+            <pretty-outing-link :outing="outing"/>
+        </div>
     </content-box>
 </template>
 

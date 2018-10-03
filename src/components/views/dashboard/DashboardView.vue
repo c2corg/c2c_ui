@@ -3,7 +3,7 @@
         <html-header title="Dashboard"/>
         <content-box>
             <h2 class="title is-2" v-translate>Images</h2>
-            <loading-notification :loaded="images!=null" :error="imagesError" />
+            <loading-notification :promise="imagesPromise" />
             <gallery v-if="images!=null" :images="images.documents" />
         </content-box>
 
@@ -11,7 +11,7 @@
             <div class="column is-7">
                 <content-box>
                     <h2 class="title is-2" v-translate>Outings</h2>
-                    <loading-notification :loaded="outings!=null" :error="outingsError"/>
+                    <loading-notification :promise="outingsPromise" />
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents" :key="outing.document_id">
                             <dashboard-outing-link :outing="outing"/>
@@ -41,7 +41,7 @@
 
                 <content-box>
                     <h2 class="title is-2 box-header" v-translate>Routes</h2>
-                    <loading-notification :loaded="routes!=null" :error="routesError"/>
+                    <loading-notification :promise="routesPromise" />
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
                             <pretty-route-link :route="route" :show-area="true"/>
@@ -69,13 +69,11 @@
         data() {
             return {
 
-                routes: null,
-                images: null,
-                outings: null,
 
-                routesError: null,
-                imagesError: null,
-                outingsError: null,
+                outingsPromise: null,
+                routesPromise: null,
+                imagesPromise: null,
+
 
                 latest_topics: [],
 
@@ -86,22 +84,26 @@
         computed: {
             swiper() {
                 return this.$refs.mySwiper.swiper
-            }
+            },
+
+            outings(){
+                return this.outingsPromise.data
+            },
+
+            images(){
+                return this.imagesPromise.data
+            },
+
+            routes(){
+                return this.routesPromise.data
+            },
         },
 
         created() {
 
-            c2c.outings.get()
-            .then(response => {  this.outings = response.data;    })
-            .catch(response => {this.outingsError = response})
-
-            c2c.routes.get({limit:10})
-            .then(response => {  this.routes = response.data;    })
-            .catch(response => {this.routesError = response})
-
-            c2c.images.get()
-            .then(response => {  this.images = response.data;    })
-            .catch(response => { this.imagesError=response    })
+            this.outingsPromise = c2c.outings.get()
+            this.routesPromise = c2c.routes.get({limit:10})
+            this.imagesPromise = c2c.images.get()
 
             forum.getLatest()
             .then(response => {  this.latest_topics = response.data;    })

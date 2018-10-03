@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 
 import {
     faAngleDown,
@@ -31,21 +31,25 @@ import {
     faInfo,
     faKey,
     faLayerGroup,
+    faLink,
     faList,
+    faLock,
     faMap,
     faMapMarkedAlt,
     faMapPin,
     faNewspaper,
     faPen,
     faPlus,
+    faPlusCircle,
     faRoute,
     faSearch,
     faSignOutAlt,
     faSortAmountUp,
 //    faSquare,
     faTachometerAlt,
-    // faTrash,
+    faTrash,
     // faTrashAlt,
+    faUnlock,
     faUser,
     faUserCheck,
     faUsers,
@@ -97,21 +101,25 @@ library.add(
     faInfo,
     faKey,
     faLayerGroup,
+    faLink,
     faList,
+    faLock,
     faMap,
     faMapMarkedAlt,
     faMapPin,
     faNewspaper,
     faPen,
     faPlus,
+    faPlusCircle,
     faRoute,
     faSearch,
     faSignOutAlt,
     faSortAmountUp,
 //    faSquare,
     faTachometerAlt,
-    // faTrash,
+    faTrash,
     // faTrashAlt,
+    faUnlock,
     faUser,
     faUserCheck,
     faUsers,
@@ -127,6 +135,8 @@ library.add(
     faFacebook,
     faGoogle,
     faTwitter,
-);
+)
 
-Vue.component('fa-icon', FontAwesomeIcon); // registered globally
+// registered globally
+Vue.component('fa-icon', FontAwesomeIcon)
+Vue.component('fa-layers', FontAwesomeLayers)

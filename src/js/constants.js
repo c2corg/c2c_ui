@@ -387,7 +387,7 @@ function Constants(){
 
     // You can fin in
     //     https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
-    
+
     // also, GUI avalaible associtions can be found here, on dataset attribute :
     //     https://github.com/c2corg/v6_ui/search?l=HTML&q=app-add-association
 
@@ -742,10 +742,24 @@ function Constants(){
 
     this.letterToType = {}
     for(let type of this.documentTypes){
-        this.letterToType[this.objectDefinitions[type].letter] = type
-        this.objectDefinitions[type].type = type
+        let definition = this.objectDefinitions[type]
+
+        this.letterToType[definition.letter] = type
+        definition.type = type
+
+        // Let's build objectDefinitions.<type>.validAssociations
+        // it's an array of string, transform it to an object of
+        // <string, definition>
+        let validAssociations = {}
+
+        for(let type of definition.validAssociations){
+            validAssociations[type] = this.objectDefinitions[type]
+        }
+
+        definition.validAssociations = validAssociations
     }
 }
+
 
 Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type

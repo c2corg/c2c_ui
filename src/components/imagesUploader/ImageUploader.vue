@@ -43,7 +43,7 @@
                 </span>
 
                 <div class="columns is-multiline is-gapless">
-                    <div v-for="item of image_categories" :key="item" class="column is-4">
+                    <div v-for="item of imageCategories" :key="item" class="column is-4">
                         <label class="checkbox">
                             <input type="checkbox" value="document.image_categories.includes(item)">
                             <span>{{ $gettext(item) }}</span>
@@ -97,10 +97,6 @@
                 type:File,
                 required:true,
             },
-            imageType:{
-                type:String,
-                required:true,
-            },
             lang:{
                 type:String,
                 required:true,
@@ -141,7 +137,17 @@
         },
 
         computed:{
-            image_categories(){
+            imageType(){
+                if(this.parentDocument.type=="o" || this.parentDocument.type=="u")
+                    return "personal"
+
+                if(this.parentDocument.type=="c")
+                    return this.parentDocument.article_type
+
+                return "collab"
+
+            },
+            imageCategories(){
                 return constants.objectDefinitions.image.fields.categories.values
             },
             isInitial() {
@@ -264,22 +270,10 @@
     background: red;
 }
 
-$deleteButtonSize: 2.5rem;
-
 .delete-button{
-    // cursor:pointer;
-    // padding-top:6px;
-    // text-align: center;
-    // background:$red;
-    // width:$deleteButtonSize;
-    // height:$deleteButtonSize;
-    // border-radius:50%;
-    // color:white;
     position:absolute;
-    top:-0.5rem;
-    right:-0.5rem;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
-    font-size:200%;
-    //size:2.5rem;
+    top:-1rem;
+    right:-1rem;
+    font-size:3rem;
 }
  </style>

@@ -1,8 +1,8 @@
 <template>
 
-    <span @click="$emit('click')" :class="{'hidden-button':!visible}">
-        <fa-icon :icon="['far','trash-alt']" />
-    </span>
+    <fa-layers class="fa-lg" @click="$emit('click')" :class="{'hidden-button':!visible}">
+        <fa-icon icon="plus-circle" />
+    </fa-layers>
 
 </template>
 
@@ -23,31 +23,20 @@
 @import "~bulma/sass/utilities/initial-variables.sass";
 
 
-span{
+div{
     cursor:pointer;
-    text-align: center;
-    background:$red;
-    border-radius:100%;
-    color:white;
-
-    width:1.4em;
-    height:1.4em;
-
+    color:$green;
     transition:300ms;
 
     svg{
-        vertical-align:baseline;
         transition:300ms;
     }
 }
 
 .hidden-button{
-    width:0;
-    height:0;
-    margin:0.7em;
-
+    width: 0;
+    height: 0;
     svg{
-        opacity:0;
         font-size:0;
     }
 }

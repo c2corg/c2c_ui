@@ -3,9 +3,8 @@
     <div class="section">
         <html-header :title="title"/>
 
-        <loading-notification :loaded="document!=null" :error="error"/>
-
         <div v-if="document">
+            <!-- TODO : if not found -->
 
             <div v-if="isVersionView" class="notification is-warning">
                 <!-- TODO : translation -->
@@ -59,11 +58,20 @@
                 <icon-document :type="type"/>
                 <document-title :document="document"/>
                 <span class="is-pulled-right">
-                    <span
-                        v-if="uploadedImageType"
+                    <lock-document-button :document="document" />
+                    <delete-document-button :document="document" />
+                    <a
+                        v-if="!isVersionView"
+                        v-tooltip="$gettext('Edit associations')"
+                        @click="showAssociationEditor=true">
+                        <fa-icon icon="link" />
+                    </a>
+                    <a
+                        v-tooltip="$gettext('Add images')"
+                        v-if="!isVersionView"
                         @click="showImagesUploader=true">
-                        <icon-image v-tooltip="$gettext('Add images')" />
-                    </span>
+                        <icon-image />
+                    </a>
                     <history-link
                         :type="type"
                         :id="document.document_id"
@@ -87,11 +95,16 @@
         </div>
 
         <images-uploader
-            :image-type="uploadedImageType"
             :lang="locale.lang"
             :parent-document="document"
             :visible="showImagesUploader"
             @hide="showImagesUploader=false"/>
+
+
+        <associations-editor
+            :document="document"
+            :visible="showAssociationEditor"
+            @hide="showAssociationEditor=false"/>
     </div>
 
 </template>
@@ -100,11 +113,18 @@
     import constants from '@/js/constants.js'
     import utils from '@/js/utils.js'
 
+    import AssociationsEditor from '@/components/associationsEditor/AssociationsEditor'
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
+
+    import LockDocumentButton from './LockDocumentButton'
+    import DeleteDocumentButton from './DeleteDocumentButton'
 
     export default {
         components:{
             ImagesUploader,
+            AssociationsEditor,
+            LockDocumentButton,
+            DeleteDocumentButton,
         },
 
         props:{
@@ -112,6 +132,7 @@
                 type:Object,
                 required:true,
             },
+
             locale:{
                 type:Object,
                 required:true,
@@ -129,16 +150,13 @@
                 type:Number,
                 default:null,
             },
-            uploadedImageType:{ // TODO : comment this
-                type:String,
-                default:undefined,
-            }
         },
 
         data() {
             return {
                 error:null,
                 showImagesUploader:false,
+                showAssociationEditor:false,
             }
         },
 

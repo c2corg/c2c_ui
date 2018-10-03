@@ -18,7 +18,6 @@
                         :file="file"
                         :lang="lang"
                         :parent-document="parentDocument"
-                        :image-type="imageType"
                         @success="onSuccess"
                         @deleteFile="onDeleteFile"/>
                 </div>
@@ -64,10 +63,6 @@
             visible:{
                 type:Boolean,
                 default:false,
-            },
-            imageType:{
-                type:String,
-                required:true,
             },
             lang:{
                 type:String,

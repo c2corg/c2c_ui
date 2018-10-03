@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="!loaded && error==null" class="notification is-primary" v-translate>
+        <div v-if="promise.data === null && promise.error === null" class="notification is-primary">
             Loading
         </div>
-        <div v-if="error!=null" class="notification is-danger">
-            {{ error }}
+        <div v-else-if="promise.error!==null" class="notification is-danger">
+            {{ promise.error.message }} 
         </div>
     </div>
 </template>
@@ -13,14 +13,9 @@
 
     export default {
         props: {
-            loaded:{
-                type:Boolean,
+            promise:{
+                type:Object,
                 required:true,
-            },
-            error: {
-                type:[String, Object],
-                required:false,
-                default: null,
             },
         }
     }

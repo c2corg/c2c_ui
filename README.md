@@ -24,7 +24,12 @@ npm run lint
 
 * Todos
   * admin actions
-  * associations tools 
+    * restore a version
+    * fusionner avec un autre document
+    * supprimer une version linguistique d'un document
+  * print CSS
+  * traduire dans une autre langue
+
   * xreport and profile data
   * signup
   * map types
@@ -39,6 +44,7 @@ npm run lint
   * markdown icons in parser
   * FollowingView actions
   * PreferenceView : add/remove areas
+  * site notice
 
 
 * CSS
@@ -48,7 +54,7 @@ npm run lint
     * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
     * remove font-family from icon-activity : the bug diseapper
     * issue come from this font...
-    * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
+  * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
 
 * optims
   * Load ol and d3 separatly

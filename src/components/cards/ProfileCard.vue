@@ -11,10 +11,15 @@
         </div>
 
         <div slot="row2" class="level">
-            <card-activities-item :activities="document.activities"/>
+            <card-activities-item
+                v-if="document.activities"
+                :activities="document.activities"/>
             &nbsp;
 
-            <textual-array :array="document.categories" class="is-ellipsed"/>
+            <textual-array
+                v-if="document.categories"
+                :array="document.categories"
+                class="is-ellipsed"/>
         </div>
     </card-container>
 </template>

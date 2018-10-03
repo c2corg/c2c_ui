@@ -6,9 +6,7 @@
 
         :version="version"
         :previous-version-id="previousVersionId"
-        :next-version-id="nextVersionId"
-
-        uploaded-image-type="personal">
+        :next-version-id="nextVersionId">
 
         <div>
             <!--  CONTENT http://localhost:8080/outings/714134  -->
@@ -65,8 +63,9 @@
                             {{ locale.participants }}
                         </div>
 
-                        <pretty-route-link v-for="route of document.associations.routes" :key="route.document_id"
-                                           :route="route"/>
+                        <div v-for="route of document.associations.routes" :key="route.document_id">
+                            <pretty-route-link :route="route"/>
+                        </div>
 
                         <markdown-section :document="document" :locale="locale" :field="fields.weather"/>
                         <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>

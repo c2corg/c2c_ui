@@ -24,7 +24,9 @@
         <div slot="row3" class="level">
             <card-activities-item :activities="document.activities"/>
 
-            <marker-gps-trace v-if="document.geometry.has_geom_detail" class="has-text-primary"/>
+            <span class="has-text-primary"> <!-- Englobing span is mandatory for tooltip ?? -->
+                <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+            </span>
 
             <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
                 <fa-icon icon="compass" class="has-text-primary"/>

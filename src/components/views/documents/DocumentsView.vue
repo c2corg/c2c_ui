@@ -35,7 +35,7 @@
             <div :class="{'is-12': !showMap, 'is-8': showMap}"
                  class="column cards-container">
 
-                <loading-notification :loaded="documents!=null" :error="error"/>
+                <loading-notification :promise="promise"/>
 
                 <div v-if="documents" class="columns is-multiline cards-list">
                     <div
@@ -66,7 +66,6 @@
 <script>
 
     import c2c from '@/js/c2c.js'
-    import utils from '@/js/utils.js'
     import constants from '@/js/constants.js'
 
     import QueryItems from './utils/QueryItems'
@@ -80,13 +79,15 @@
 
         data() {
             return {
-                documents: null,
-                error: null,
+                promise: null,
                 showMap: null,
             }
         },
 
         computed:{
+            documents(){
+                return this.promise.data
+            },
             title(){
                 var result = this.$route.name
                 return result.charAt(0).toUpperCase() + result.slice(1);
@@ -112,12 +113,9 @@
 
             loadElements(){
                 var offset = this.offset
-
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
-                c2c[this.$route.name].get(query)
-                .then(response => { this.documents=response.data})
-                .catch(utils.getApiErrorHandler(this));
+                this.promise = c2c[this.$route.name].get(query)
             },
 
             mouseEnter(document){

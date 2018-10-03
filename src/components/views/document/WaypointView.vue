@@ -95,9 +95,10 @@
                     <content-box v-if="document.associations.all_routes.documents.length">
                         <h2 class="title is-2" v-translate>Routes</h2>
 
-                        <pretty-route-link
-                            v-for="(route, index) of document.associations.all_routes.documents" :key="index"
-                            :route="route"/>
+                        <div v-for="route of document.associations.all_routes.documents" :key="route.document_id">
+                            <pretty-route-link :route="route"/>
+                        </div>
+                        
                     </content-box>
 
                     <recent-outings-box :document="document"/>

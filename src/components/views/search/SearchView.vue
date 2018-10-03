@@ -6,7 +6,9 @@
                 <span v-translate>Routes</span>
                 ({{ results.routes.total }})
             </h1>
-            <pretty-route-link v-for="route of results.routes.documents" :key="route.document_id" :route="route"/>
+            <div v-for="route of results.routes.documents" :key="route.document_id" >            
+                <pretty-route-link :route="route"/>
+            </div>
         </div>
         <div class="column">
             <h1>
@@ -27,7 +29,13 @@
 
         data(){
             return {
-                results:null
+                promise:null
+            }
+        },
+
+        computed:{
+            results(){
+                return this.promise.data
             }
         },
 
@@ -41,9 +49,7 @@
         methods:{
             search(){
                 var query = Object.assign({limit:20}, this.$route.query)
-                c2c.search(query).then(response => {
-                    this.results = response.data
-                })
+                this.promise = c2c.search(query)
             }
         }
     }

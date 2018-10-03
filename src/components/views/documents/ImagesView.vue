@@ -8,14 +8,14 @@
             <query-items />
         </div>
 
-        <loading-notification :loaded="documents!=null" class="column"/>
+        <loading-notification :promise="promise"/>
 
         <div class="columns">
             <div class="column">
                 <div v-if="documents" class="cards-container is-flex">
                     <div v-for="document in documents.documents"
                          :key="document.document_id" class="card-image">
-                        <img :src="c2c.getSmallImageUrl(document)" height="250" @click="go(document)">
+                        <img :src="getSmallImageUrl(document)" height="250" @click="go(document)">
                     </div>
                 </div>
             </div>
@@ -37,24 +37,32 @@
 
         data() {
             return {
-                documents: null,
-                title: this.$route.name,
-
-                c2c : c2c,
-
-                go(image){
-                    this.$router.push({
-                        name: "image",
-                        params: { id: image.document_id }
-                    })
-                }
+                promise: null,
             }
         },
 
+        computed:{
+            documents(){
+                return this.promise.data
+            },
+            title(){
+                return this.$route.name
+            },
+        },
+
         created() {
-            c2c[this.$route.name].get().then(response => {
-                this.documents=response.data;
-            });
+            this.promise = c2c[this.$route.name].get()
+        },
+
+        methods:{
+            go(image){
+                this.$router.push({
+                    name: "image",
+                    params: { id: image.document_id }
+                })
+            },
+
+            getSmallImageUrl:c2c.getSmallImageUrl,
         },
     }
 

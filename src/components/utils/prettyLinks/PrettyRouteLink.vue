@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <span>
         <activities :activities="route.activities"/>
         <document-link :document="route"/>
         <route-rating :document="route"/>
@@ -12,7 +12,7 @@
                 </small>
             </em>
         </span>
-    </div>
+    </span>
 </template>
 
 <script>

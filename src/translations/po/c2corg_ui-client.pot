@@ -142,13 +142,18 @@ msgstr ""
 msgid "Accident database"
 msgstr ""
 
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "Add images"
+msgstr ""
+
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 #: src/components/views/user/PreferencesView.vue
 msgid "Areas"
 msgstr ""
 
-#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Articles"
@@ -163,10 +168,15 @@ msgstr ""
 msgid "Base layer"
 msgstr ""
 
-#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Books"
+msgstr ""
+
+#: src/components/imagesUploader/ImagesUploader.vue
+msgid "Close"
 msgstr ""
 
 #: src/components/views/document/utils/CommentsBox.vue
@@ -197,8 +207,16 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
+#: src/components/views/document/utils/DeleteDocumentButton.vue
+msgid "Delete this document"
+msgstr ""
+
 #: src/components/views/document/utils/ElevationProfileBox.vue
 msgid "Distance"
+msgstr ""
+
+#: src/components/imagesUploader/ImagesUploader.vue
+msgid "Drop images here or click to upload"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -215,6 +233,14 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "E4"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "Edit"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "Edit associations"
 msgstr ""
 
 #: src/components/map/OlMap.vue
@@ -255,6 +281,10 @@ msgstr ""
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "History"
+msgstr ""
+
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Home"
 msgstr ""
@@ -281,10 +311,6 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/components/utils/LoadingNotification.vue
-msgid "Loading"
-msgstr ""
-
 #: src/components/views/document/utils/ConditionLevels.vue
 msgid "Location / elevation / orientation"
 msgstr ""
@@ -306,7 +332,7 @@ msgstr ""
 msgid "Make profile page public"
 msgstr ""
 
-#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
 msgid "Maps"
 msgstr ""
 
@@ -359,6 +385,7 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
+#: src/components/associationsEditor/AssociationsEditor.vue
 #: src/components/views/dashboard/DashboardView.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/staticViews/HomeView.vue
@@ -374,10 +401,15 @@ msgstr ""
 msgid "Post the first comment"
 msgstr ""
 
+#: src/components/views/document/utils/LockDocumentButton.vue
+msgid "Protect document"
+msgstr ""
+
 #: src/components/views/user/LoginView.vue
 msgid "Register"
 msgstr ""
 
+#: src/components/associationsEditor/AssociationsEditor.vue
 #: src/components/views/dashboard/DashboardView.vue
 #: src/components/views/document/WaypointView.vue
 #: src/components/views/Navigation.vue
@@ -396,6 +428,7 @@ msgstr ""
 msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
+#: src/components/imagesUploader/ImagesUploader.vue
 #: src/components/views/edition/utils/SaveBlock.vue
 #: src/components/views/user/AccountView.vue
 msgid "Save"
@@ -433,6 +466,14 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
+msgid "Type"
+msgstr ""
+
+#: src/components/views/document/utils/LockDocumentButton.vue
+msgid "Unprotect document"
+msgstr ""
+
 #: src/components/views/document/utils/LangSwitcherBox.vue
 msgid "View in other lang"
 msgstr ""
@@ -441,7 +482,8 @@ msgstr ""
 msgid "View xreports"
 msgstr ""
 
-#: src/components/views/document/utils/AssociatedDocuments.vue
+#: src/components/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
 #: src/components/views/search/SearchView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
@@ -450,6 +492,10 @@ msgstr ""
 
 #: src/components/views/document/WaypointView.vue
 msgid "Waypoints children"
+msgstr ""
+
+#: src/components/associationsEditor/AssociationsEditor.vue
+msgid "Xreport"
 msgstr ""
 
 #: src/components/views/staticViews/NotFoundView.vue
@@ -476,6 +522,7 @@ msgstr ""
 msgid "action"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
 #: src/components/views/edition/utils/InputActivities.vue
 #: src/components/views/user/PreferencesView.vue
 msgid "activities"
@@ -649,6 +696,10 @@ msgstr ""
 msgid "canyon"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
+msgid "categories"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "cave"
 msgstr ""
@@ -689,6 +740,7 @@ msgstr ""
 msgid "club"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "collab"
 msgstr ""
@@ -1236,6 +1288,7 @@ msgstr ""
 msgid "person_fall"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "personal"
 msgstr ""
@@ -1544,6 +1597,7 @@ msgstr ""
 msgid "this is the last version"
 msgstr ""
 
+#: src/components/imagesUploader/ImageUploader.vue
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "title"
 msgstr ""

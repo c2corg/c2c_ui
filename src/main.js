@@ -43,6 +43,7 @@ Vue.component("map-view", require('./components/map/OlMap').default)
 
 // add vue-moment for generic filter :
 
+// TODO : clean use of moment 
 const moment = require('moment')
 
 require("moment/locale/ca.js")

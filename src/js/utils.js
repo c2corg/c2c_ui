@@ -2,11 +2,6 @@
 import user from '@/js/user.js' //todo : utils shoul not use any depandencies
 
 export default {
-    getApiErrorHandler(context){
-        return function(response){
-            context.error = response
-        }
-    },
 
     // from https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L194
     stringDivider(str, width, spaceReplacer) {

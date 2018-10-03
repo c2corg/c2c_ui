@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <span>
         <marker-condition :condition="outing.condition_rating"/>
         {{ outing.date_start }}
         :
@@ -12,7 +12,7 @@
             &hairsp;&bull;&hairsp;
             <marker-image-count :image-count="outing.img_count"/>
         </span>
-    </div>
+    </span>
 </template>
 
 <script>

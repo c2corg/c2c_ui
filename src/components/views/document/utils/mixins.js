@@ -1,6 +1,5 @@
 
 import constants from '@/js/constants.js'
-import utils from '@/js/utils.js'
 import user from '@/js/user.js'
 import c2c from '@/js/c2c.js'
 
@@ -37,39 +36,71 @@ export default {
 
     data() {
         return {
-            type:constants.getDocumentType(this.$route.name.split("-")[0]),
-            document:null,
-            error:null,
-            locale: null,
-            version: null,
-            previousVersionId: null,
-            nextVersionId: null,
-            fields:null,
+            promise:null,
         }
     },
 
     computed:{
+
+        /*
+        * properties that are deducted from URL
+        */
         documentId(){
             return parseInt(this.$route.params.id)
+        },
+        type(){
+            return constants.getDocumentType(this.$route.name.split("-")[0])
+        },
+        fields(){
+            return constants.objectDefinitions[this.type].fields
         },
         isVersionView(){
             return this.$route.name.endsWith("-version");
         },
+
+        /*
+        * properties computed when document is loaded
+        */
+        document(){
+            if(!this.promise.data)
+                return null
+
+            return this.isVersionView ? this.promise.data.document : this.promise.data
+        },
+        locale(){
+            return this.isVersionView ?
+                user.getLocaleStupid(this.document, this.$route.params.lang)
+                :
+                user.getLocaleSmart(this.document, this.$route.params.lang)
+        },
+
+        /*
+        * properties computed when document is loaded, in version mode
+        */
+        version(){
+            return this.isVersionView ? this.promise.data.version : null
+        },
+        nextVersionId(){
+            return this.isVersionView ? this.promise.data.next_version_id : null
+        },
+        previousVersionId(){
+            return this.isVersionView ? this.promise.data.previous_version_id : null
+        },
     },
 
     created() {
-        this.fields = constants.objectDefinitions[this.type].fields
 
         if(this.isVersionView){
-            c2c[this.type].getVersion(this.documentId, this.$route.params.lang, this.$route.params.version)
-            .then(response => {
-
-                this.document = response.data.document
+            this.promise = c2c[this.type].getVersion(
+                this.documentId,
+                this.$route.params.lang,
+                this.$route.params.version
+            ).then(response => {
 
                 //versionned datas are poor...
-                this.document.areas = []
-                this.document.creator = null
-                this.document.associations = {
+                response.data.document.areas = []
+                response.data.document.creator = null
+                response.data.document.associations = {
                     articles:[],
                     books:[],
                     images:[],
@@ -83,28 +114,16 @@ export default {
                         documents:[],
                     }
                 }
-
-                this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
-                this.version = response.data.version
-                this.nextVersionId = parseInt(response.data.next_version_id)
-                this.previousVersionId = parseInt(response.data.previous_version_id)
             })
-            .catch(utils.getApiErrorHandler(this));
 
         } else {
 
-            c2c[this.type].get(this.documentId)
-            .then(response => {
-
+            this.promise = c2c[this.type].get(this.documentId).then(response => {
                 if(response.data.not_authorized===true){
-                    this.error = "Sorry, you're not authorized to see this document"
+                    this.error = new Error("Sorry, you're not authorized to see this document")
                     return
                 }
-
-                this.document=response.data
-                this.locale = user.getLocaleSmart(this.document, this.$route.params.lang)
             })
-            .catch(utils.getApiErrorHandler(this));
         }
     },
 }
