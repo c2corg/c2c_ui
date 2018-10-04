@@ -38,7 +38,7 @@ const getFieldsObject  = function(){
     return result
 }
 
-//todo : geom, longlat, condiction_levels
+//TODO : geom, longlat, condiction_levels
 
 const fieldsProperties = {
     access:{type:"markdown", parent:"locales"},
@@ -84,7 +84,7 @@ const fieldsProperties = {
     date:{type:"date"},
     date_end:{type:"date"},
     date_start:{type:"date", required},
-    date_time:{type:"date_time"}, // wasn't in common... //todo : max:today
+    date_time:{type:"date_time"}, // wasn't in common... //TODO : max:today
     description:{type:"markdown", parent:"locales"},
     difficulties_height:{type:"number", min:0, max:9999, unit:"m"},
     disable_comments:{type:"boolean"},
@@ -139,12 +139,12 @@ const fieldsProperties = {
     iso_speed:{type:"number", min:1, unit:"ISO"},
     labande_global_rating:{values:attrs.global_ratings, queryMode:"valuesRangeSlider", i18n:false},
     labande_ski_rating:{values:attrs.labande_ski_ratings, queryMode:"valuesRangeSlider", i18n:false},
-    langs:{values:attrs.langs, multiple}, //todo
+    langs:{values:attrs.langs, multiple}, //TODO
     length:{type:"number", min:0, max:9999, unit:"m"},
     length_total:{type:"number", min:0, unit:"km", queryMode:"input"},
     lift_access:{values:[true, false, null]},
     lift_status:{values:attrs.lift_status},
-    main_waypoint_id:{}, //todo
+    main_waypoint_id:{}, //TODO
     maps_info:{type:"text"},
     matress_unstaffed:{values:[true, false, null]},
     mixed_rating:{values:attrs.mixed_ratings, queryMode:"valuesRangeSlider", i18n:false},
@@ -498,7 +498,7 @@ function Constants(){
                 new Field("access_comment"),
                 new Field("weather"),
                 new Field("timing"),
-// todo                new Field("conditions_levels"),
+// TODO                new Field("conditions_levels"),
                 new Field("conditions"),
                 new Field("hut_comment"),
                 new Field("route_description"),
@@ -759,7 +759,12 @@ function Constants(){
         definition.validAssociations = validAssociations
     }
 }
-
+//
+// Constants.prototype.getObjectDefinition = function(type){
+//     type = this.getDocumentType(type)
+//
+//     return this.objectDefinitions[type]
+// }
 
 Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type

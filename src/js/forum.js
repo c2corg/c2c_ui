@@ -1,26 +1,25 @@
 
-import axios from 'axios';
+import BaseApi from '@/js/BaseApi.js';
 import config from '@/js/config.js'
 
-function forum(){
+function Forum(){
 
-    var this_ = this
-
-    // axios instances shares same common headers. this trick fix this.
-    this.axios = axios.create({headers:{common:{}}});
-
-    this.apiUrl = config.forumUrl
+    BaseApi.call(this, config.forumUrl)
     this.url = config.forumUrl
-
-    this.topic = {
-        get(topicId){
-            return this_.axios.get(this_.apiUrl + '/t/title/' + topicId + '.json')
-        }
-    }
 }
 
-forum.prototype.getLatest = function () {
-    var result = this.axios.get(this.apiUrl + '/latest.json')
+// inherits prototype
+Forum.prototype = Object.create(BaseApi.prototype);
+
+// restore good contructor
+Forum.prototype.constructor = Forum;
+
+Forum.prototype.getTopic = function(topicId){
+    return this.get('/t/title/' + topicId + '.json')
+}
+
+Forum.prototype.getLatest = function () {
+    var result = this.get('/latest.json')
 
     result.then(function(response){
 
@@ -39,4 +38,4 @@ forum.prototype.getLatest = function () {
     return result
 }
 
-export default new forum();
+export default new Forum();

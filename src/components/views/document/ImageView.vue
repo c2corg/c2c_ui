@@ -70,7 +70,7 @@
 
 <script>
     import mixins from "./utils/mixins.js"
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default {
         mixins : [

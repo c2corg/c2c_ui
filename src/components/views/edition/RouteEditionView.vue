@@ -67,7 +67,7 @@
                 <input-base :document="document" :field="fields.aid_rating" class="is-3"/>
                 <input-base :document="document" :field="fields.ski_exposition" class="is-3"/>
                 <input-base :document="document" :field="fields.hiking_mtb_exposition" class="is-3"/>
-                <!-- todo slope -->
+                <!-- TODO slope -->
             </edit-section>
 
             <edit-section header="Comments">

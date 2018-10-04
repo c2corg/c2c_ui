@@ -54,10 +54,9 @@
                 <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
             </div>
 
-            <content-box class="title is-1">
-                <icon-document :type="type"/>
-                <document-title :document="document"/>
+            <content-box>
                 <span class="is-pulled-right">
+                    <merge-document-button :document="document" />
                     <lock-document-button :document="document" />
                     <delete-document-button :document="document" />
                     <a
@@ -87,6 +86,10 @@
                         <icon-edit class="is-medium"/>
                     </edit-link>
                 </span>
+                <div class="title is-1">
+                    <icon-document :type="type"/>
+                    <document-title :document="document"/>
+                </div>
             </content-box>
 
             <slot>
@@ -118,6 +121,7 @@
 
     import LockDocumentButton from './LockDocumentButton'
     import DeleteDocumentButton from './DeleteDocumentButton'
+    import MergeDocumentButton from './MergeDocumentButton'
 
     export default {
         components:{
@@ -125,6 +129,7 @@
             AssociationsEditor,
             LockDocumentButton,
             DeleteDocumentButton,
+            MergeDocumentButton,
         },
 
         props:{

@@ -106,7 +106,7 @@
 
             getComments(){
                 if(this.locale.topic_id){
-                    forum.topic.get(this.locale.topic_id)
+                    forum.getTopic(this.locale.topic_id)
                     .then(response => {
                         this.topic = response.data
 

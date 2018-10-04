@@ -95,7 +95,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import user from '@/js/user.js'
 
     import { diff_match_patch } from '@/js/diff_match_patch_uncompressed'
@@ -203,7 +203,7 @@
 
             loadVersionSmart(versionId, resultProperty, baseVersionId){
                 if(versionId=="prev"){
-                    c2c.getHistory(this.documentId, this.lang).then(response => {
+                    c2c[this.type].getHistory(this.documentId, this.lang).then(response => {
                         let versions = response.data.versions;
 
                         for(let i=0;i<versions.length;i++){

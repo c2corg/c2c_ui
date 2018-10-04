@@ -93,7 +93,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default {
 
@@ -119,7 +119,7 @@
         },
 
         created() {
-            c2c.getHistory(this.documentId, this.lang).then(response => {
+            c2c[this.type].getHistory(this.documentId, this.lang).then(response => {
                 this.history=response.data;
                 this.last_version_id = this.history.versions[0].version_id
                 this.history.versions = this.history.versions.reverse()

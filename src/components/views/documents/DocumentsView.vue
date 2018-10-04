@@ -65,7 +65,7 @@
 
 <script>
 
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
     import QueryItems from './utils/QueryItems'
@@ -115,7 +115,7 @@
                 var offset = this.offset
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
-                this.promise = c2c[this.$route.name].get(query)
+                this.promise = c2c[this.type].getAll(query)
             },
 
             mouseEnter(document){

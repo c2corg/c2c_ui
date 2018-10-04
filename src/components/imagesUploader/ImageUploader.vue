@@ -76,7 +76,7 @@
 
 <script>
     // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
     import ImageAction from './ImageAction'

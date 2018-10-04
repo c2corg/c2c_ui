@@ -103,7 +103,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
     export default {
@@ -178,12 +178,12 @@
                 this.$emit('hide')
             },
             add(child){
-                c2c.createAssociation(this.document, child).then(() => {
+                c2c.association.create(this.document, child).then(() => {
                     // TODO add feedback and handle error
                 })
             },
             remove(child){
-                c2c.removeAssociation(this.document, child).then(() => {
+                c2c.association.remove(this.document, child).then(() => {
                     // TODO add feedback and handle error
                 })
             },

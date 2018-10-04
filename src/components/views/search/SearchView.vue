@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default{
 

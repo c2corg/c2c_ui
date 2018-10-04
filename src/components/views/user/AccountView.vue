@@ -30,7 +30,7 @@
 <script>
 
     import user from "@/js/user.js"
-    import c2c from "@/js/c2c.js"
+    import c2c from "@/js/c2c"
 
     function getFieldValue(value){
         return {
@@ -53,7 +53,7 @@
         },
 
         created(){
-            c2c.user.account.get().then(response => {
+            c2c.userProfile.account.get().then(response => {
                 this.email = getFieldValue(response.data.email)
                 this.is_profile_public = getFieldValue(response.data.is_profile_public)
             })
@@ -65,7 +65,7 @@
                     return fieldValue.value===fieldValue.originalValue ? null : fieldValue.value
                 }
 
-                c2c.user.account.post(
+                c2c.userProfile.account.post(
                     this.password.value,
                     newOrNull(this.name),
                     newOrNull(this.forum_username),

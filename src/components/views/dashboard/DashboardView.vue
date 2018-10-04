@@ -23,8 +23,9 @@
             <div class="column">
                 <content-box>
                     <h2 class="title is-2" v-translate>Forum</h2>
-                    <div v-if="latest_topics && latest_topics.topic_list">
-                        <div v-for="topic of latest_topics.topic_list.topics.slice(0, 20)" v-if="topic.category_id != 29"
+                    <loading-notification :promise="topicsPromise" />
+                    <div v-if="topics">
+                        <div v-for="topic of topics.topics.slice(0, 20)" v-if="topic.category_id != 29"
                              :key="topic.id">
 
                             <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
@@ -55,7 +56,7 @@
 
 <script>
 
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import forum from '@/js/forum.js'
 
     import DashboardOutingLink from './DashboardOutingLink'
@@ -68,14 +69,10 @@
 
         data() {
             return {
-
-
                 outingsPromise: null,
                 routesPromise: null,
                 imagesPromise: null,
-
-
-                latest_topics: [],
+                topicsPromise:null,
 
                 forum,
             }
@@ -97,17 +94,17 @@
             routes(){
                 return this.routesPromise.data
             },
+
+            topics(){
+                return this.topicsPromise.data ? this.topicsPromise.data.topic_list : null
+            },
         },
 
         created() {
-
-            this.outingsPromise = c2c.outings.get()
-            this.routesPromise = c2c.routes.get({limit:10})
-            this.imagesPromise = c2c.images.get()
-
-            forum.getLatest()
-            .then(response => {  this.latest_topics = response.data;    })
-
+            this.outingsPromise = c2c.outing.getAll()
+            this.routesPromise = c2c.route.getAll({limit:10})
+            this.imagesPromise = c2c.image.getAll()
+            this.topicsPromise = forum.getLatest()
         }
     }
 

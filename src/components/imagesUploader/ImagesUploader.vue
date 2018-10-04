@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     import ImageUploader from './ImageUploader'
 
@@ -96,7 +96,7 @@
             },
 
             filesChange(event){
-                // todo : it must append, and check doublon...
+                // TODO : it must append, and check doublon...
                 for(let file of event.target.files){
                     let key = this.getFileKey(file)
 

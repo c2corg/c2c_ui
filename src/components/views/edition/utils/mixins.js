@@ -1,6 +1,6 @@
 
 import constants from '@/js/constants.js'
-import c2c from '@/js/c2c.js'
+import c2c from '@/js/c2c'
 import user from '@/js/user.js'
 
 import EditionContainer from './EditionContainer'

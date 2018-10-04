@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
@@ -17,8 +17,8 @@
 
         methods:{
             onClick(){
-                /* TODO ask confirm */ 
-                c2c.deleteDocument(this.document.document_id).then(() => {
+                /* TODO ask confirm */
+                c2c.moderator.deleteDocument(this.document.document_id).then(() => {
                     /* TODO : redirect */
                 })
             }

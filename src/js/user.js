@@ -1,10 +1,10 @@
-import c2c from '@/js/c2c.js'
+import c2c from '@/js/c2c'
 import constants from '@/js/constants.js'
 
 
 var result = {
     signIn(username, password){
-        var result = c2c.user.login(username, password)
+        var result = c2c.userProfile.login(username, password)
 
         result.then(response => {
             this.setData(response.data)
@@ -24,7 +24,7 @@ var result = {
 
     setLang(lang){
         if(this.isLogged()){
-            c2c.user.update_preferred_language(lang)
+            c2c.userProfile.update_preferred_language(lang)
         }
 
         this.data.lang = lang

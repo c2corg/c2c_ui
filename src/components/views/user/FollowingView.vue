@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default {
 
@@ -21,7 +21,7 @@
         },
 
         created(){
-            c2c.user.following.get().then(response => { this.following = response.data})
+            c2c.userProfile.following.get().then(response => { this.following = response.data})
         }
     }
 </script>

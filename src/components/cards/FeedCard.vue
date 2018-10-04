@@ -55,13 +55,12 @@
 </template>
 
 <script>
-    const moment = require('moment')
+    import user from '@/js/user.js'
+    import c2c from '@/js/c2c'
+    import constants from '@/js/constants.js'
 
     import cardMixins from './utils/mixins.js'
 
-    import user from '@/js/user.js'
-    import c2c from '@/js/c2c.js'
-    import constants from '@/js/constants.js'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default{
@@ -110,8 +109,8 @@
 
             this.actionLine += constants.getDocumentType(this.item['document']['type']);
 
-            const start = moment(this.item['document']['date_start']);
-            const end = moment(this.item['document']['date_end']);
+            const start = this.$moment(this.item['document']['date_start']);
+            const end = this.$moment(this.item['document']['date_end']);
             const sameYear = start.year() == end.year();
             const sameMonth = start.month() == end.month();
             const sameDay = start.date() == end.date();

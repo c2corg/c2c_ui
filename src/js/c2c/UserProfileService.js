@@ -1,0 +1,73 @@
+
+function UserProfileService(api){
+    this.api = api
+
+    this.preferences = {
+        get(){
+            return api.get('/users/preferences')
+        },
+
+        post(preferences){
+            return api.post('/users/preferences', preferences)
+        }
+    }
+
+    this.mailinglists = {
+        get(){
+            return api.get('/users/mailinglists')
+        },
+
+        post(mailinglists){
+            return api.post('/users/mailinglists', mailinglists)
+        }
+    }
+
+    this.following = {
+        get(){
+            return api.get('/users/following')
+        }
+    }
+    
+    this.account = {
+        get(){
+            return api.get('/users/account')
+        },
+
+        post(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
+            var payload = {
+                currentpassword,
+            }
+
+            if(name!==null)
+                payload.name = name
+
+            if(is_profile_public!==null)
+                payload.is_profile_public = is_profile_public
+
+            if(email!==null)
+                payload.email = email
+
+            if(forum_username!==null)
+                payload.forum_username = forum_username
+
+            if(newpassword!==null)
+                payload.newpassword = newpassword
+
+            return api.post('/users/account', payload)
+        }
+    }
+}
+
+UserProfileService.prototype.login = function (username, password){
+    return this.api.post('/users/login', {
+        username,
+        password,
+        discourse:false
+    })
+}
+
+UserProfileService.prototype.update_preferred_language = function(lang){
+    return this.api.post('/users/update_preferred_language', {lang})
+}
+
+export default UserProfileService

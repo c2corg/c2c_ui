@@ -5,7 +5,7 @@ import utils from "@/js/utils.js"
 const buildLineStyle = function(highlight) {
 
     return new ol.style.Style({
-        //text: this.createTextStyle_(feature, type, highlight), todo
+        // TODO text: this.createTextStyle_(feature, type, highlight)
         stroke: new ol.style.Stroke({
             color: highlight ? 'red' : 'yellow',
             width: 3
@@ -79,7 +79,7 @@ export const getDocumentStyle = function(document, highlight, isLine){
         return buildLineStyle(highlight)
     }
 
-    // todo : put style in a cache
+    // TODO : put style in a cache
     const type = document.type
 
     const urlByType = {

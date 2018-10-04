@@ -24,7 +24,7 @@
 
 .label-value span{
     /*
-    // todo : icon activities is bigger. vertical align, and be careful to other items
+    // TODO : icon activities is bigger. vertical align, and be careful to other items
     // vertical-align: middle;
     // display: inline-block;
     */

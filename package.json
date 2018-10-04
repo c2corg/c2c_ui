@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build_demo_gitlab": "vue-cli-service build --mode demo_gitlab",
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
     "update-c2c-common": "python3 tools/import_common.py"

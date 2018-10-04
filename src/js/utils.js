@@ -1,5 +1,5 @@
 
-import user from '@/js/user.js' //todo : utils shoul not use any depandencies
+import user from '@/js/user.js' //TODO : utils shoul not use any depandencies
 
 export default {
 

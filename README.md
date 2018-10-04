@@ -25,11 +25,10 @@ npm run lint
 * Todos
   * admin actions
     * restore a version
-    * fusionner avec un autre document
+    * bien TESTER la fusion avec un autre document
     * supprimer une version linguistique d'un document
   * print CSS
-  * traduire dans une autre langue
-
+  * action traduire dans une autre langue
   * xreport and profile data
   * signup
   * map types

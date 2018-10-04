@@ -10,7 +10,7 @@ var devConfig = {
 }
 
 // eslint-disable-next-line
-var demoConfig = {
+var demoGitlabConfig = {
     apiUrl : "https://api.demov6.camptocamp.org",
     mediaUrl : "https://media.camptocamp.org/c2corg_active",
     imageBackendUrl : undefined,
@@ -31,5 +31,18 @@ var prodConfig = {
     bingApiKey : undefined,
 }
 
+var config
 
-export default devConfig;
+if(process.env.NODE_ENV == 'development')
+    config = devConfig
+
+else if(process.env.NODE_ENV == 'demo_gitlab')
+    config = demoGitlabConfig
+
+else if(process.env.NODE_ENV == 'production')
+    config = prodConfig
+
+else
+    throw "Unknown ENV. Please use --mode <node_env> with vue-cli-service build command"
+
+export default config;

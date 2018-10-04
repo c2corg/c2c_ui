@@ -40,7 +40,7 @@
 
                 <input-base :document="document" :field="fields.slackline_types" class="is-4" />
 
-                <!-- todo : retrouver ou il est celui la -->
+                <!-- TODO : retrouver ou il est celui la -->
                 <input-base :document="document" :field="fields.public_transportation_types" class="is-4" />
 
             </edit-section>
@@ -72,7 +72,7 @@
             </edit-section>
 
             <edit-section header="Equipement">
-                <!-- todo radio -->
+                <!-- TODO radio -->
                 <input-base :document="document" :field="fields.matress_unstaffed" class="is-3" />
                 <input-base :document="document" :field="fields.blanket_unstaffed" class="is-3" />
                 <input-base :document="document" :field="fields.gas_unstaffed" class="is-3" />

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default {
 
@@ -31,14 +31,14 @@
         },
 
         created(){
-            c2c.user.mailinglists.get().then(response => {
+            c2c.userProfile.mailinglists.get().then(response => {
                 this.mailinglists = response.data
             })
         },
 
         methods:{
             save(){
-                c2c.user.mailinglists.post(this.mailinglists)
+                c2c.userProfile.mailinglists.post(this.mailinglists)
             }
         },
     }

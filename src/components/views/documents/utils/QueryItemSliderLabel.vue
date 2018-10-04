@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="level is-mobile"> <!--level must be in a single element to remove bottim margin : todo remove ugly hack -->
+        <div class="level is-mobile"> <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
             <span class="level-left">
                 <span class="level-item query-bound-value">
                     <span v-if="field.i18n">{{ $gettext(value[0]) }}</span>

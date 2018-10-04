@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
     export default {
@@ -57,7 +57,7 @@
         },
 
         created(){
-            c2c.user.preferences.get().then(response => {
+            c2c.userProfile.preferences.get().then(response => {
                 this.preferences = response.data
             })
         },
@@ -75,7 +75,7 @@
             },
 
             save(){
-                c2c.user.preferences.post(this.preferences)
+                c2c.userProfile.preferences.post(this.preferences)
             }
         },
     }

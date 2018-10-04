@@ -25,7 +25,7 @@
 
 <script>
 
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     import QueryItems from './utils/QueryItems'
 
@@ -48,10 +48,13 @@
             title(){
                 return this.$route.name
             },
+            type(){
+                return this.$route.name.slice(0, -1)
+            },
         },
 
         created() {
-            this.promise = c2c[this.$route.name].get()
+            this.promise = c2c[this.type].getAll()
         },
 
         methods:{

@@ -7,7 +7,7 @@
         <edit-section header="general informations">
             <input-base :document="document" :field="fields.date_start" class="is-6" />
             <input-base :document="document" :field="fields.date_end" class="is-6" />
-            <!-- todo : one day trip -->
+            <!-- TODO : one day trip -->
 
             <input-activities :document="document" class="is-12"/>
             <input-base :document="document" :base="locale" :field="fields.route_description" class="is-12"/>
@@ -38,7 +38,7 @@
 
             <input-base :document="document" :base="locale" :field="fields.weather" class="is-6"/>
             <input-base :document="document" :base="locale" :field="fields.conditions" class="is-6"/>
-            <!-- todo
+            <!-- TODO
             <input-base :document="document" :base="locale" :field="fields.conditions_levels"/>
             -->
 
@@ -71,7 +71,7 @@
             <input-base :document="document" :field="fields.disable_comments" class="is-4" />
         </edit-section>
 
-        <!-- todo where is that ??
+        <!-- TODO where is that ??
             <input-base :document="document" :base="locale" :field="fields.summary"/>
         -->
 

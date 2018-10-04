@@ -3,7 +3,7 @@ build-npm:
   image: node:8.11
   script:
   - npm install
-  - npm run build
+  - npm run build_demo_gitlab
   artifacts:
     paths:
       - dist

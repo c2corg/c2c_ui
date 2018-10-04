@@ -1,15 +1,19 @@
 <template>
     <div class="section content cards-container">
         <html-header title="Social network"/>
-        <div v-if="feed">
-            <feed-card v-for="(item, index) of feed.feed" :key="index" :item="item"/>
+        <div v-if="feedPromise.data">
+            <feed-card
+                v-for="(item, index) of feedPromise.data.feed"
+                :key="index"
+                :item="item"
+                :document="item.document"/>
         </div>
     </div>
 </template>
 
 <script>
 
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     import FeedCard from '@/components/cards/FeedCard'
 
@@ -20,14 +24,12 @@
 
         data(){
             return {
-                feed:null
+                feedPromise:null
             }
         },
 
         created(){
-            c2c.getFeed({pl:this.$language.current}).then(response=>{
-                this.feed=response.data
-            })
+            this.feedPromise = c2c.feed.getDefaultFeed({pl:this.$language.current})
         }
     }
 

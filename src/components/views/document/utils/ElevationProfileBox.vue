@@ -356,12 +356,12 @@
                         this.bubble1.style('display', 'none');
                         this.bubble2.style('display', null);
                     })
-                    .on('mousemove', this.mousemove); //todo
+                    .on('mousemove', this.mousemove); // TODO
 
 
 
             // listen to width changes to redraw graph
-            // $(window).on('resize', todo
+            // $(window).on('resize', TODO
             //    this.ngeoDebounce_(this.resizeChart_.bind(this), 300, true)
             //);
             },

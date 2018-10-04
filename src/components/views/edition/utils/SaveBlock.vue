@@ -14,7 +14,7 @@
 
 <script>
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
-    import c2c from '@/js/c2c.js'
+    import c2c from '@/js/c2c'
 
     export default {
         mixins : [ requireDocumentProperty ],

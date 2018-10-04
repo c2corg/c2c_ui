@@ -1,8 +1,6 @@
 // Require the main Sass manifest file
 require('./assets/sass/main.scss')
 
-require('./js/fa.config')
-
 /* core */
 import Vue from 'vue'
 import App from '@/App.vue'
@@ -13,38 +11,15 @@ import french_translations from '@/translations/dist/fr.json'
 
 import user from '@/js/user.js'
 
+import FontAwesomeConfig from '@/js/fa.config'
+import moment from 'moment'
+import vueMoment from 'vue-moment/vue-moment.js'
+
 
 Vue.config.productionTip = false
 Vue.config.silent = false
 
-
-// add all vue component as globals components, given en require context
-const addComponents = function(context){
-    context.keys().forEach(key => {
-
-        let component = context(key)
-        let name = key.split("/").slice(-1)[0]
-
-        // kebab-case-ification, assuming that all module names are in PascalCase
-        name = name.replace(".vue", "").replace(/([A-Z])/g, "-$1").toLowerCase().substring(1)
-
-        Vue.component(name, component.default)
-    });
-}
-
-// add all components in /utils
-addComponents(require.context('./components/utils', true, /\.vue$/))
-
-// other globals components
-Vue.component("document-card", require('./components/cards/DocumentCard').default)
-// Vue.component("map-view", require('./components/map/MapView').default)
-Vue.component("map-view", require('./components/map/OlMap').default)
-
-
-// add vue-moment for generic filter :
-
-// TODO : clean use of moment 
-const moment = require('moment')
+Vue.use(FontAwesomeConfig)
 
 require("moment/locale/ca.js")
 require("moment/locale/es.js")
@@ -54,7 +29,8 @@ require("moment/locale/fr.js")
 require("moment/locale/it.js")
 require("moment/locale/en-gb.js") // keep en in last.
 
-Vue.use(require('vue-moment'), {moment})
+// add vue-moment for generic filter :
+Vue.use(vueMoment, {moment})
 
 Vue.use(GetTextPlugin, {
     availableLanguages: {
@@ -97,6 +73,28 @@ Vue.use(GetTextPlugin, {
         throw `Unsuported language : ${lang}`
     },
 })
+
+
+// add all vue component as globals components, given en require context
+const addComponents = function(context){
+    context.keys().forEach(key => {
+
+        let component = context(key)
+        let name = key.split("/").slice(-1)[0]
+
+        // kebab-case-ification, assuming that all module names are in PascalCase
+        name = name.replace(".vue", "").replace(/([A-Z])/g, "-$1").toLowerCase().substring(1)
+
+        Vue.component(name, component.default)
+    });
+}
+
+// add all components in /utils
+addComponents(require.context('./components/utils', true, /\.vue$/))
+
+// other globals components
+Vue.component("document-card", require('./components/cards/DocumentCard').default)
+Vue.component("map-view", require('./components/map/OlMap').default)
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
 Vue.filter('timeAgo', (arg) => {

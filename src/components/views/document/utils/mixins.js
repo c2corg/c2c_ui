@@ -1,7 +1,7 @@
 
 import constants from '@/js/constants.js'
 import user from '@/js/user.js'
-import c2c from '@/js/c2c.js'
+import c2c from '@/js/c2c'
 
 import DocumentViewContainer from './DocumentViewContainer'
 
