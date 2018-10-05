@@ -4,8 +4,8 @@ import config from '@/js/config.js'
 
 function Forum(){
 
-    BaseApi.call(this, config.forumUrl)
-    this.url = config.forumUrl
+    BaseApi.call(this, config.urls.forum)
+    this.url = config.urls.forum
 }
 
 // inherits prototype

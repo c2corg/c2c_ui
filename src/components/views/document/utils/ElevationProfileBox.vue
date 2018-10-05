@@ -22,40 +22,7 @@
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
     import ol from '@/js/ol.js'
-
-    // let build our own d3 module, instead of a stupid `import * as d3 from 'd3'`
-    import geoDistance from 'd3-geo/src/distance'
-    import scaleLinear from 'd3-scale/src/linear'
-    import scaleTime from 'd3-scale/src/time'
-
-    import timeHour from 'd3-time/src/hour'
-
-    import line from 'd3-shape/src/line'
-
-    import { axisLeft, axisBottom } from 'd3-axis/src/axis'
-    import { timeFormat } from 'd3-time-format'
-    import { format } from 'd3-format'
-    import { extent, bisector } from 'd3-array'
-    import { mouse, select } from 'd3-selection'
-    import { transition } from 'd3-transition' // do not forget. d3 has a strange behavior...
-
-    const d3 = {
-        scaleLinear,
-        axisLeft, axisBottom,
-        geoDistance,
-        format, timeFormat,
-        extent, bisector,
-        scaleTime,
-        timeHour,
-        line,
-        mouse,
-        select,
-        transition,
-    }
-
-    const appLang = {
-        gettext : val => val
-    }
+    import d3 from '@/js/d3.js'
 
     export default {
         mixins : [ requireDocumentProperty ],
@@ -90,22 +57,22 @@
                 bubble2:null,
 
                 i18n_ : {
-                    elevation: appLang.gettext('Elevation'),
-                    elevation_legend: appLang.gettext('Elevation (m)'),
-                    meters: appLang.gettext('meters'),
-                    distance: appLang.gettext('Distance'),
-                    distance_legend: appLang.gettext('Distance (km)'),
-                    km: appLang.gettext('kilometers'),
-                    time: appLang.gettext('Time'),
-                    duration: appLang.gettext('Duration'),
-                    duration_legend: appLang.gettext('Duration (hrs)')
-                  }
+                    elevation: this.$gettext('Elevation'),
+                    elevation_legend: this.$gettext('Elevation (m)'),
+                    meters: this.$gettext('meters'),
+                    distance: this.$gettext('Distance'),
+                    distance_legend: this.$gettext('Distance (km)'),
+                    km: this.$gettext('kilometers'),
+                    time: this.$gettext('Time'),
+                    duration: this.$gettext('Duration'),
+                    duration_legend: this.$gettext('Duration (hrs)')
+                }
             }
         },
 
         computed:{
             hasData(){
-                return this.data !== null
+                return Boolean(this.document.geometry.geom_detail)
             },
         },
 
@@ -113,73 +80,67 @@
             mode:'updateChart',
         },
 
-        created(){
-            // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
-            if(!this.document.geometry.geom_detail)
-                return
-
-            var geom_detail = JSON.parse(this.document.geometry.geom_detail)
-
-
-            let coords = [];
-
-            if (geom_detail.type === 'MultiLineString') {
-                geom_detail.coordinates.forEach((linestring) => {
-                    coords = coords.concat(linestring);
-                });
-            } else {
-                coords = geom_detail.coordinates;
-            }
-
-            const timeAvailable = coords.every((coord) => {
-                return coord.length > 3;
-            });
-
-            this.timeAvailable=timeAvailable
-
-            const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : undefined;
-
-            let totalDist = 0;
-            this.data = coords.map((coord, i, coords) => {
-                const date = this.timeAvailable ? new Date(coord[3] * 1000) : undefined;
-                let d = 0;
-                if (i > 0) {
-                    // convert from web mercator to lng/lat
-                    const deg1 = ol.proj.transform(
-                        [coords[i][0], coords[i][1]],
-                        'EPSG:3857',
-                        'EPSG:4326'
-                    );
-
-                    const deg2 = ol.proj.transform(
-                        [coords[i - 1][0], coords[i - 1][1]],
-                        'EPSG:3857',
-                        'EPSG:4326'
-                    );
-                    // arc distance x earth radius
-                    d = d3.geoDistance(deg1, deg2) * 6371;
-                }
-                totalDist += d;
-
-                return {
-                    date: date,
-                    ele: coord[2] || 0,
-                    d: totalDist,
-                    elapsed: timeAvailable ? date - startDate : undefined
-                }
-            })
-        },
-
         mounted(){
-            this.createChart()
+            if(this.hasData)
+                d3.then(this.createChart)
         },
 
         methods:{
             createChart(){
+                // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
 
-                if(!this.hasData)
-                    return
+                // compute data 
+                var geom_detail = JSON.parse(this.document.geometry.geom_detail)
 
+                let coords = [];
+
+                if (geom_detail.type === 'MultiLineString') {
+                    geom_detail.coordinates.forEach((linestring) => {
+                        coords = coords.concat(linestring);
+                    });
+                } else {
+                    coords = geom_detail.coordinates;
+                }
+
+                const timeAvailable = coords.every((coord) => {
+                    return coord.length > 3;
+                });
+
+                this.timeAvailable=timeAvailable
+
+                const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : undefined;
+
+                let totalDist = 0;
+                this.data = coords.map((coord, i, coords) => {
+                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : undefined;
+                    let d = 0;
+                    if (i > 0) {
+                        // convert from web mercator to lng/lat
+                        const deg1 = ol.proj.transform(
+                            [coords[i][0], coords[i][1]],
+                            'EPSG:3857',
+                            'EPSG:4326'
+                        );
+
+                        const deg2 = ol.proj.transform(
+                            [coords[i - 1][0], coords[i - 1][1]],
+                            'EPSG:3857',
+                            'EPSG:4326'
+                        );
+                        // arc distance x earth radius
+                        d = d3.geoDistance(deg1, deg2) * 6371;
+                    }
+                    totalDist += d;
+
+                    return {
+                        date: date,
+                        ele: coord[2] || 0,
+                        d: totalDist,
+                        elapsed: timeAvailable ? date - startDate : undefined
+                    }
+                })
+
+                // create chart
                 const wrapper = this.$refs.graph
 
                 const size = {

@@ -146,6 +146,10 @@ msgstr ""
 msgid "Add images"
 msgstr ""
 
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Are you sure you want to merge?"
+msgstr ""
+
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 #: src/components/views/user/PreferencesView.vue
@@ -173,6 +177,10 @@ msgstr ""
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Books"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Cancel"
 msgstr ""
 
 #: src/components/imagesUploader/ImagesUploader.vue
@@ -336,6 +344,20 @@ msgstr ""
 msgid "Maps"
 msgstr ""
 
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Merge documents"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Merge with other document"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Merging a source document with a target document transfers all
+                        associations of the source document to the target document, and sets up a
+                        redirection from the source to the target document."
+msgstr ""
+
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "Modified the"
 msgstr ""
@@ -371,6 +393,10 @@ msgstr ""
 
 #: src/components/views/user/LoginView.vue
 msgid "No account yet?"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Note that comments have to be transferred manually in Discourse before merging."
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
@@ -458,6 +484,14 @@ msgstr ""
 msgid "Social network"
 msgstr ""
 
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Source:"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Target:"
+msgstr ""
+
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
@@ -480,6 +514,10 @@ msgstr ""
 
 #: src/components/views/staticViews/SeracView.vue
 msgid "View xreports"
+msgstr ""
+
+#: src/components/views/document/utils/MergeDocumentButton.vue
+msgid "Warning: This action cannot be undone!"
 msgstr ""
 
 #: src/components/associationsEditor/AssociationsEditor.vue

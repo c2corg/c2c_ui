@@ -59,7 +59,12 @@
                         v-translate>
                         Merge documents
                     </button>
-                    <button class="button" v-translate>Cancel</button>
+                    <button
+                        @click="showModal=false"
+                        class="button"
+                        v-translate>
+                        Cancel
+                    </button>
                 </footer>
             </div>
         </div>

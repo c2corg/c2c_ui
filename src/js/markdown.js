@@ -69,7 +69,7 @@ showdown.extension('c2c_folies', function () {
         type: 'lang',
         regex: /\[\[\/?(book|waypoint|route|outing|area|article|map|xreport|image|profile)s\/([\d]+)([^|]*)\|([^\]]*)\]\]/g,
         replace: function (match, item, id, lang, text) {
-            if(config.router_mode === 'history')
+            if(config.routerMode === 'history')
                 return '<a href="/' + item + 's/' + id + '">' + text + '</a>';
             else
                 return '<a href="#/' + item + 's/' + id + '">' + text + '</a>';

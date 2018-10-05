@@ -10,7 +10,7 @@ import FeedService from './FeedService.js'
 
 function c2c(){
     // inherits properties
-    BaseApi.call(this, config.apiUrl)
+    BaseApi.call(this, config.urls.api)
 
     this.userProfile = new UserProfileService(this)
     this.moderator = new ModeratorService(this)
@@ -48,10 +48,10 @@ c2c.prototype.getRecentChanges = function(params){
 /* TODO : these two function should not be here */
 /* at least in a separated service, or in a vue component */
 c2c.prototype.getSmallImageUrl = function(image){
-    return config.mediaUrl + '/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
+    return config.urls.media + '/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
 }
 c2c.prototype.getImageUrl = function(image){
-    return config.mediaUrl + '/' + image.filename
+    return config.urls.media + '/' + image.filename
 }
 
 /* image service, I'm lazy. TODO :
@@ -76,7 +76,7 @@ c2c.prototype.uploadImage = function(file, onUploadProgress) {
 
     /* can't user post_ helper: it's not the API url */
     /* TODO : move this function in another service... */
-    return this.axios.post(config.imageBackendUrl + '/upload', formData, requestConfig)
+    return this.axios.post(config.urls.imageBackend + '/upload', formData, requestConfig)
 }
 
 c2c.prototype.createImages = function(images){

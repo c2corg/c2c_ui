@@ -71,7 +71,7 @@ var routes = [
         path: '/forum',
         name: 'forum',
         beforeEnter() {
-            location.href = config.forumUrl
+            location.href = config.urls.forum
         }
     },
 ]
@@ -178,5 +178,5 @@ Vue.use(Router)
 
 export default new Router({
     routes,
-    mode: config.router_mode,
+    mode: config.routerMode,
 })
