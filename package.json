@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build_demo_gitlab": "vue-cli-service build --mode demo_gitlab",
+    "serve": "cross-env BUILD_ENV=development vue-cli-service serve",
+    "build": "cross-env BUILD_ENV=production vue-cli-service build",
+    "build_demo_gitlab": "cross-env BUILD_ENV=demo_gitlab vue-cli-service build",
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
     "update-c2c-common": "python3 tools/import_common.py"
@@ -35,6 +35,7 @@
     "@vue/cli-plugin-babel": "^3.0.0-rc.10",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.10",
     "@vue/cli-service": "^3.0.0-rc.10",
+    "cross-env": "^5.2.0",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.16"
