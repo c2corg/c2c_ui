@@ -16,7 +16,9 @@ pages:
   script:
   - mv public/ public_src/
   - mv dist/ public/
-
+  # Serve a compressed version to speed up the loading
+  # https://gitlab.com/gitlab-org/gitlab-pages/merge_requests/25
+  - gzip --recursive --keep public/
   only:
   - master
   artifacts:
