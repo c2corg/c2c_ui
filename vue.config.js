@@ -44,6 +44,12 @@ else {
 const result = {
     baseUrl: config.baseUrl,
 
+    // remove prefetch plugin, in order to prevent loading of translations
+    // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
+    chainWebpack(config){
+        config.plugins.delete('prefetch')
+    },
+
     configureWebpack: {
         plugins: [
             // moment, by default load all localesca
