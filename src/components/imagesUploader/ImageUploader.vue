@@ -7,8 +7,8 @@
                 @click="$emit('deleteFile', file)"/>
 
             <progress
-                v-if="isSaving"
-                class="progress is-success is-large"
+                v-if="isSaving || isFailed"
+                class="progress is-large"
                 :class="{
                     'is-success' : isSuccess,
                     'is-warning' : isSaving,
@@ -22,13 +22,28 @@
 
         <div class="card-content">
             <input
+                v-if="!isFailed"
                 :placeholder="$gettext('title')"
                 class="file-input-title"
                 type="text"
                 v-model="document.locales[0].title">
+            <div v-else>
+                <button
+                    @click="upload"
+                    class="button is-primary"
+                    v-translate>
+                    Retry
+                </button>
+                <button
+                    @click="$emit('deleteFile', file)"
+                    class="button is-danger"
+                    v-translate>
+                    Cancel
+                </button>
+            </div>
         </div>
 
-        <div class="card-footer">
+        <div class="card-footer" v-if="!isFailed">
             <image-action>
                 <span slot="button" v-translate>
                     activities
@@ -181,7 +196,8 @@
 
             onUploadProgress(event){
                 // TODO : test that
-                this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
+                if(event.total!=0)
+                    this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
             },
 
             onSuccess(event){
@@ -191,12 +207,14 @@
             },
 
             onFailure(event){
+                this.percentCompleted = 100
                 this.status = STATUS_FAILED
                 this.errorMessage = event.message
                 this.$emit("fail", event)
             },
 
             upload(){
+                this.percentCompleted = 0 
                 this.status = STATUS_SAVING
                 this.$emit("startUpload", event)
                 c2c.uploadImage(this.file, this.onUploadProgress.bind(this))

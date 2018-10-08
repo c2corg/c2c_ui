@@ -27,7 +27,7 @@ function UserProfileService(api){
             return api.get('/users/following')
         }
     }
-    
+
     this.account = {
         get(){
             return api.get('/users/account')
@@ -69,5 +69,14 @@ UserProfileService.prototype.login = function (username, password){
 UserProfileService.prototype.update_preferred_language = function(lang){
     return this.api.post('/users/update_preferred_language', {lang})
 }
+
+UserProfileService.prototype.requestPasswordChange = function(email) {
+    return this.api.post('/users/request_password_change', {email})
+}
+
+UserProfileService.prototype.register = function(data) {
+    return this.api.post('/users/register', data);
+}
+
 
 export default UserProfileService

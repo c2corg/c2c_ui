@@ -84,7 +84,6 @@
                     <comments-box :document="document" :locale="locale" />
 
                 </div>
-
             </div>
         </div>
     </document-view-container>
@@ -93,8 +92,8 @@
 <script>
 
     import mixins from "./utils/mixins.js"
-    import ConditionLevels from "./utils/ConditionLevels"
-    import ElevationProfileBox from "./utils/ElevationProfileBox"
+    import ConditionLevels from "./utils/fieldViewers/ConditionLevels"
+    import ElevationProfileBox from "./utils/boxes/ElevationProfileBox"
 
     export default {
 

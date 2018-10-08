@@ -7,22 +7,22 @@
             :biodiv-sports-activities="document.activities"
             style="height:275px"/>
 
-        <div v-if="document.areas" class="has-text-centered">
-            <areas-links :areas="document.areas"/>
+        <div v-if="document.areas && document.areas.length" class="has-text-centered">
+
+            <icon-area/>
+            <span v-for="area of document.areas" :key="area.document_id" class="area-link">
+                <document-link :document="area"/>
+            </span>
+
         </div>
-        
+
     </content-box>
 </template>
 
 <script>
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
-    import AreasLinks from './AreasLinks'
 
     export default {
-        components: {
-            AreasLinks,
-        },
-
         mixins : [ requireDocumentProperty ],
     }
 </script>

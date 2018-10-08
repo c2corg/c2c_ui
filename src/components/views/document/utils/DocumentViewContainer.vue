@@ -6,13 +6,13 @@
         <div v-if="document">
             <!-- TODO : if not found -->
 
-            <div v-if="isVersionView" class="notification is-warning">
+            <div v-if="isVersionView" class="notification is-warning has-text-centered">
                 <!-- TODO : translation -->
-                This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+                <p>
+                    This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+                </p>
 
-                <br>
-
-                <span v-if="previousVersionId">
+                <span v-if="!isFirstVersion">
                     (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
                                 :version-from="previousVersionId"
                                 :version-to="$route.params.version"/>)
@@ -25,7 +25,7 @@
                         ← previous version
                     </version-link>
                 </span>
-                <span v-else v-translate>this is the first version</span>
+                <span v-else v-translate>This is the first version</span>
                 |
                 <document-link :document="document" :lang="$route.params.lang" v-translate>
                     see actual version
@@ -34,7 +34,7 @@
                             :version-from="$route.params.version"
                             version-to="last"/>)
                             |
-                <span v-if="nextVersionId">
+                <span v-if="!isLastVersion">
                     <version-link
                         :type="type"
                         :id="documentId"
@@ -47,28 +47,43 @@
                                 :version-to="nextVersionId"
                                 :version-from="$route.params.version"/>)
                 </span>
-                <span v-else v-translate>this is the last version</span>
+                <span v-else v-translate>This is the last version</span>
 
-                <br>
-                <icon-document type="profile"/>
-                <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
+                <p>
+                    <icon-document type="profile"/>
+                    <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
+                </p>
+                <p>
+                    <button
+                        v-if="!isLastVersion"
+                        @click="$refs.restoreVersionConfirmationWindow.show()"
+                        class="button is-primary"
+                        v-translate>
+                        Restore this version
+                    </button>
+                </p>
+
             </div>
 
             <content-box>
                 <span class="is-pulled-right">
-                    <merge-document-button :document="document" />
-                    <lock-document-button :document="document" />
-                    <delete-document-button :document="document" />
+                    <merge-document-button v-if="!isVersionView" :document="document" />
+                    <lock-document-button v-if="!isVersionView" :document="document" />
+                    <delete-document-button v-if="!isVersionView" :document="document" />
+                    <delete-locale-button
+                        v-if="!isVersionView"
+                        :document="document"
+                        :locale="locale"/>
                     <a
                         v-if="!isVersionView"
                         v-tooltip="$gettext('Edit associations')"
-                        @click="showAssociationEditor=true">
+                        @click="$refs.associationsEditor.show()">
                         <fa-icon icon="link" />
                     </a>
                     <a
                         v-tooltip="$gettext('Add images')"
                         v-if="!isVersionView"
-                        @click="showImagesUploader=true">
+                        @click="$refs.imagesUploader.show()">
                         <icon-image />
                     </a>
                     <history-link
@@ -78,7 +93,9 @@
                         v-tooltip="$gettext('History')">
                         <icon-history class="is-medium" />
                     </history-link>
+                    <translate-button :document="document"/>
                     <edit-link
+                        v-if="!isVersionView"
                         :type="type"
                         :id="document.document_id"
                         :lang="locale.lang"
@@ -98,16 +115,20 @@
         </div>
 
         <images-uploader
+            ref="imagesUploader"
             :lang="locale.lang"
-            :parent-document="document"
-            :visible="showImagesUploader"
-            @hide="showImagesUploader=false"/>
+            :parent-document="document"/>
 
+        <associations-editor ref="associationsEditor" :document="document"/>
 
-        <associations-editor
-            :document="document"
-            :visible="showAssociationEditor"
-            @hide="showAssociationEditor=false"/>
+        <modal-confirmation
+            ref="restoreVersionConfirmationWindow"
+            @confirm="restoreVersion">
+            <span v-translate>
+                Are you sure you want to revert to this version of the document?
+            </span>
+        </modal-confirmation>
+
     </div>
 
 </template>
@@ -115,13 +136,17 @@
 <script>
     import constants from '@/js/constants.js'
     import utils from '@/js/utils.js'
+    import c2c from '@/js/c2c'
 
-    import AssociationsEditor from '@/components/associationsEditor/AssociationsEditor'
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
 
-    import LockDocumentButton from './LockDocumentButton'
-    import DeleteDocumentButton from './DeleteDocumentButton'
-    import MergeDocumentButton from './MergeDocumentButton'
+    import AssociationsEditor from './associationsEditor/AssociationsEditor'
+
+    import LockDocumentButton from './buttons/LockDocumentButton'
+    import DeleteDocumentButton from './buttons/DeleteDocumentButton'
+    import DeleteLocaleButton from './buttons/DeleteLocaleButton'
+    import MergeDocumentButton from './buttons/MergeDocumentButton'
+    import TranslateButton from './buttons/TranslateButton'
 
     export default {
         components:{
@@ -129,7 +154,9 @@
             AssociationsEditor,
             LockDocumentButton,
             DeleteDocumentButton,
+            DeleteLocaleButton,
             MergeDocumentButton,
+            TranslateButton,
         },
 
         props:{
@@ -160,8 +187,6 @@
         data() {
             return {
                 error:null,
-                showImagesUploader:false,
-                showAssociationEditor:false,
             }
         },
 
@@ -181,7 +206,27 @@
             title(){
                 return utils.getDocumentTitle(this.document, this.$route.params.lang)
             },
+
+            isFirstVersion(){
+                return !this.previousVersionId
+            },
+
+            isLastVersion(){
+                return !this.nextVersionId
+            },
         },
+
+        methods:{
+            restoreVersion(){
+                this.$refs.restoreVersionConfirmationWindow.hide()
+                c2c.moderator.revertDocument(
+                    this.document.document_id,
+                    this.locale.lang,
+                    this.$route.params.version
+                )
+                // TODO : feedback
+            }
+        }
     }
 
 </script>

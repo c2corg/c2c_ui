@@ -38,4 +38,14 @@ Forum.prototype.getLatest = function () {
     return result
 }
 
+Forum.prototype.readAnnouncement = function(lang) {
+  // const config = {
+  //   headers: {
+  //     'Accept': 'application/json'
+  //   }
+  // };
+
+  return this.get('//t/annonce-' + lang + '.json')
+};
+
 export default new Forum();

@@ -6,7 +6,7 @@
             Edit
             <document-title :document="document"/>
             in
-            {{ locale.lang }}
+            {{ $gettext(locale.lang) }}
         </h1>
 
         <save-block :document="document"/>

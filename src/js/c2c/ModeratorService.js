@@ -19,7 +19,12 @@ ModeratorService.prototype.unprotectDocument = function(documentId) {
 
 ModeratorService.prototype.deleteDocument = function(documentId) {
     return this.api.delete('/documents/delete/' + documentId)
-};
+}
+
+ModeratorService.prototype.deleteLocale = function(documentId, lang) {
+    const url = '/documents/delete/' + String(documentId) + '/' + lang
+    return this.api.delete(url, {})
+}
 
 
 /**
@@ -32,6 +37,15 @@ ModeratorService.prototype.mergeDocuments = function(sourceDocumentId, targetDoc
     }
 
     return this.api.post('/documents/merge', data)
+}
+
+
+ModeratorService.prototype.revertDocument = function(documentId, lang, versionId) {
+    return this.api.post('/documents/revert', {
+        'document_id': documentId,
+        'lang': lang,
+        'version_id': versionId
+    })
 }
 
 export default ModeratorService

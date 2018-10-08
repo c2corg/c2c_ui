@@ -29,5 +29,4 @@ DocumentService.prototype.getHistory = function(document_id, lang){
     return this.api.get('/document/' + document_id + '/history/' + lang)
 }
 
-
 export default DocumentService

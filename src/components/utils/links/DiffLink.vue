@@ -1,8 +1,6 @@
 <template>
     <router-link :to="{name:type + '-diff', params:{id:id, versionFrom:versionFrom || 'prev', versionTo:versionTo || 'next', lang:lang}}">
-        <slot>
-            diff
-        </slot>
+        <slot>diff</slot>
     </router-link>
 </template>
 

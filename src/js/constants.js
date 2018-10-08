@@ -142,7 +142,7 @@ const fieldsProperties = {
     langs:{values:attrs.langs, multiple}, //TODO
     length:{type:"number", min:0, max:9999, unit:"m"},
     length_total:{type:"number", min:0, unit:"km", queryMode:"input"},
-    lift_access:{values:[true, false, null]},
+    lift_access:{values:[true, false, null], i18n:false},
     lift_status:{values:attrs.lift_status},
     main_waypoint_id:{}, //TODO
     maps_info:{type:"text"},
@@ -770,28 +770,39 @@ Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type
 }
 
+Constants.prototype.buildLocale = function(type, lang){
+    var def = this.objectDefinitions[type]
+
+    var result = {}
+
+    for(let field of Object.values(def.fields)){
+        if(field.parent == "locales"){
+            result[field.name]=field.multiple ? new Array() : null
+        }
+    }
+
+    result.lang = lang
+
+    return result
+}
+
 Constants.prototype.buildDocument = function(type, lang){
     var def = this.objectDefinitions[type];
 
     var result = {
         type:def.letter,
-        locales:[{}],
+        locales:[
+            this.buildLocale(lang)
+        ],
     }
 
-    var locale = result.locales[0]
-
     for(let field of Object.values(def.fields)){
-        if(field.parent === "locales"){
-            locale[field.name]=field.multiple ? new Array() : null
-        } else {
+        if(field.parent != "locales"){
             result[field.name]= field.multiple ? new Array() : null
         }
     }
 
-    locale.lang = lang
-
     return result
-
 }
 
 

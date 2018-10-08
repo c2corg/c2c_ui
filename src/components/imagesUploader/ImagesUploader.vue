@@ -1,51 +1,47 @@
 <template>
-    <div class="modal images-uploader" :class="{'is-active':visible}">
-        <div class="modal-background" @click="hide" />
-        <content-box class="modal-content">
-            <input
-                type="file"
-                @change="filesChange"
-                multiple
-                accept="image/*"
-                class="input-file">
+    <modal-window ref="modalWindow" class="images-uploader" wide>
+        <input
+            type="file"
+            @change="filesChange"
+            multiple
+            accept="image/*"
+            class="input-file">
 
-            <div class="columns is-multiline images-uploader-files">
-                <div
-                    v-for="(file, key) of files"
-                    :key="key"
-                    class="column is-4">
-                    <image-uploader
-                        :file="file"
-                        :lang="lang"
-                        :parent-document="parentDocument"
-                        @success="onSuccess"
-                        @deleteFile="onDeleteFile"/>
-                </div>
+        <div class="columns is-multiline images-uploader-files">
+            <div
+                v-for="(file, key) of files"
+                :key="key"
+                class="column is-4">
+                <image-uploader
+                    :file="file"
+                    :lang="lang"
+                    :parent-document="parentDocument"
+                    @success="onSuccess"
+                    @deleteFile="onDeleteFile"/>
+            </div>
 
-                <div class="column is-4 is-flex images-uploader-message">
-                    <div v-translate>
-                        Drop images here or click to upload
-                    </div>
-                </div>
-
-                <div class="column is-12">
-                    <div class="images-uploader-controls is-pulled-right">
-                        <button
-                            :disabled="documents.length == 0"
-                            class="button is-primary"
-                            @click="save"
-                            v-translate>
-                            Save
-                        </button>
-                        <button class="button is-warning" @click="hide" v-translate>
-                            Close
-                        </button>
-                    </div>
+            <div class="column is-4 is-flex images-uploader-message">
+                <div v-translate>
+                    Drop images here or click to upload
                 </div>
             </div>
-        </content-box>
-        <button class="modal-close is-large" aria-label="close" @click="hide"/>
-    </div>
+
+            <div class="column is-12">
+                <div class="images-uploader-controls is-pulled-right">
+                    <button
+                        :disabled="documents.length == 0"
+                        class="button is-primary"
+                        @click="save"
+                        v-translate>
+                        Save
+                    </button>
+                    <button class="button is-warning" @click="hide" v-translate>
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </modal-window>
 </template>
 
 <script>
@@ -60,10 +56,6 @@
         },
 
         props: {
-            visible:{
-                type:Boolean,
-                default:false,
-            },
             lang:{
                 type:String,
                 required:true,
@@ -82,8 +74,12 @@
         },
 
         methods:{
+            show(){
+                this.$refs.modalWindow.show()
+            },
+
             hide(){
-                this.$emit('hide')
+                this.$refs.modalWindow.hide()
             },
 
             save(){
@@ -143,19 +139,14 @@
 
 .images-uploader{
 
-    .modal-content{
-        width:95%;
-        padding:2%;
-
-        input {
-            opacity: 0; /* invisible but it's there! */
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top:0;
-            left:0;
-            cursor: pointer;
-        }
+    input {
+        opacity: 0; /* invisible but it's there! */
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top:0;
+        left:0;
+        cursor: pointer;
     }
 
     .images-uploader-message > div{

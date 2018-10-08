@@ -1,17 +1,20 @@
 <template>
     <div id="app">
-        <Navigation/>
+        <navigation/>
+        <site-notice v-if="$route.name!='home'"/>
         <router-view :key="$route.name + JSON.stringify($route.params)"/>
     </div>
 </template>
 
 <script>
     import Navigation from './components/views/Navigation'
+    import SiteNotice from './components/views/SiteNotice'
 
     export default {
         name: 'App',
         components: {
-            Navigation
+            Navigation,
+            SiteNotice,
         }
     }
 </script>

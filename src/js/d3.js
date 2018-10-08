@@ -27,12 +27,10 @@ D3.prototype.resolve_ = function(){
 }
 
 D3.prototype.load_ = function(promise, key){
-    console.log("load_", promise, key)
 
     this.resolvingCount_ ++
 
     promise.then(response => {
-        console.log("received", key, response)
         if(response.default)
             this[key] = response.default
         else {
@@ -53,14 +51,12 @@ D3.prototype.load_ = function(promise, key){
 
 
 D3.prototype.postResolve_ = function(){
-    console.log("postResolve_", this.callbacks_)
     for(let callback of this.callbacks_){
         callback()
     }
 }
 
 D3.prototype.then = function(callback){
-    console.log("add callback", callback)
 
     this.resolve_()
 

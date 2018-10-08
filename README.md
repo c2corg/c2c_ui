@@ -1,64 +1,77 @@
 ## camptocamp.org
 
-### Project setup
+### Contribute
+
+On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then download camptocamp.org source code :
+
 ```
+git clone https://gitlab.com/cbeauchesne/vue-camptocamp
+cd vue-camptocamp
+
+# Then, install dependencies. It's quite long, but you have to do it once.
 npm install
 ```
 
-#### Compiles and hot-reloads for development
+And now, let's launch
 ```
 npm run serve
 ```
 
-#### Compiles and minifies for production
+:fireworks: on http://localhost:8080 !
+
+
+### Development environment
+
+Well, actually, it will much more comfortable to have an UI to manage every dev tasks. Simply launch
 ```
-npm run build
+vue ui
 ```
 
-##### Lints and fixes files
-```
-npm run lint
-```
+On http://localhost:8000, you will have on-click buttons for any feature :
 
-## Todo
+* `serve` : launch a ready-to-code server with hot reload
+* `build` : build a ready-to-deploy production site
+* `build:gitlab:demo` : a demo site, linked on [demo API](https://api.demov6.camptocamp.org/) that can be deployed on any static file server.
+* `lint` : do you have followed every coding good practices ?
+* `extract-messages` : if you have modified any textual string, please run this task
+* `update-c2c-common` : c2c core data has been updated ? keep UI syncronised with them. We will need python 3 for this task
 
-* Todos
-  * admin actions
-    * restore a version
-    * bien TESTER la fusion avec un autre document
-    * supprimer une version linguistique d'un document
-  * print CSS
-  * action traduire dans une autre langue
-  * xreport and profile data
-  * signup
-  * map types
+
+### Todo
+
+* bien TESTER la fusion avec un autre document
+* signup
+* maps
     * ask for a IGN and Bing dev key
     * recenter on...
     * test add all biodiv
     * test recenter on geolocation
-  * document-view actions (translate...)
-  * do forum.createTopic()
-  * test all doc's comments functions
-  * markdown alerts in parser
-  * markdown icons in parser
-  * FollowingView actions
-  * PreferenceView : add/remove areas
-  * site notice
+* do forum.createTopic()
+* test all doc's comments functions
+* FollowingView actions
+* PreferenceView : add/remove areas
+* xreport and profile data
 
+#### Parser
 
-* CSS
-  * choose font family
-  * icon size must not be a subjet
-  * icon-activity bug :
-    * set a border on base icon, and see that icon activity are placed 1px higher than font-awsome icons
-    * remove font-family from icon-activity : the bug diseapper
-    * issue come from this font...
-  * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
+Wait for decision
 
-* optims
-  * Load ol and d3 separatly
+* markdown alerts in parser
+* markdown icons in parser
 
-* bugs
-  * on demo, style on pagination fails
-  * "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
+#### CSS
+
+* print CSS
+* choose font family
+* icon size must not be a subjet
+* icon-activity bug :
+  * set a border on base icon, and see that icon activity are placed 1px higher
+    than font-awsome icons
+  * remove font-family from icon-activity : the bug diseapper
+  * issue come from this font...
+* swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
+
+#### Bugs
+* on demo, style on pagination fails
+* "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
      need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...

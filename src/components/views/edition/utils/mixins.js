@@ -38,7 +38,12 @@ export default{
             c2c[this.type].get(this.$route.params.id).then(response => {
                 this.document=response.data
                 this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
-            });
+
+                if(!this.locale){
+                    this.locale = constants.buildLocale(this.type, this.$route.params.lang)
+                    this.document.locales.push(this.locale)
+                }
+            })
         } else {
             this.type = this.$route.name.replace("-add","");
             this.mode = "add"

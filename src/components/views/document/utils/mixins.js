@@ -5,16 +5,17 @@ import c2c from '@/js/c2c'
 
 import DocumentViewContainer from './DocumentViewContainer'
 
-import AssociatedDocuments from './Associations/AssociatedDocuments'
-import CommentsBox from './CommentsBox'
-import FieldView from './FieldView'
-import LabelValue from './LabelValue'
-import LangSwitcherBox from './LangSwitcherBox'
-import LicenseBox from './LicenseBox'
-import MapBox from './MapBox'
-import MarkdownSection from './MarkdownSection'
-import RecentOutingsBox from './RecentOutingsBox'
-import UsersLinks from './UsersLinks'
+import AssociatedDocuments from './boxes/AssociatedDocuments'
+import CommentsBox from './boxes/CommentsBox'
+import LangSwitcherBox from './boxes/LangSwitcherBox'
+import LicenseBox from './boxes/LicenseBox'
+import MapBox from './boxes/MapBox'
+import RecentOutingsBox from './boxes/RecentOutingsBox'
+
+import FieldView from './fieldViewers/FieldView'
+import LabelValue from './fieldViewers/LabelValue'
+import MarkdownSection from './fieldViewers/MarkdownSection'
+import UsersLinks from './fieldViewers/UsersLinks'
 
 export default {
 
