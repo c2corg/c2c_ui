@@ -30,6 +30,16 @@
                 </span>
             </div>
 
+            <div v-else-if="props.option.type=='u'" class="option__desc">
+                <icon-document type="profile" />
+                <span class="option__title">
+                    <document-title :document="props.option" />
+                </span>
+                <span class="option__small">
+                    (@{{ props.option.forum_username }})
+                </span>
+            </div>
+
             <!-- TODO template pour tous les types... -->
             <div v-else class="option__desc">
                 <span class="option__title">
@@ -89,7 +99,8 @@ export default {
         },
 
         options(){
-            return this.promise && this.promise.data ? this.promise.data[this.type_ + 's'].documents : []
+            let type = this.type_ == "profile" ? "user" : this.type_  //API anti-pattern...
+            return this.promise && this.promise.data ? this.promise.data[type + 's'].documents : []
         },
     },
 

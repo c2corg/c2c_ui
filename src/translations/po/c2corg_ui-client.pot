@@ -146,8 +146,20 @@ msgstr ""
 msgid "Add images"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/DeleteDocumentButton.vue
+msgid "Are you sure you want to delete this document?"
+msgstr ""
+
+#: src/components/views/document/utils/buttons/DeleteLocaleButton.vue
+msgid "Are you sure you want to delete this locale?"
+msgstr ""
+
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Are you sure you want to merge?"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "Are you sure you want to revert to this version of the document?"
 msgstr ""
 
 #: src/components/views/staticViews/HomeView.vue
@@ -156,8 +168,8 @@ msgstr ""
 msgid "Areas"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
-#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Articles"
@@ -172,14 +184,20 @@ msgstr ""
 msgid "Base layer"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
-#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
+#: src/components/views/document/utils/buttons/BlockAccountButton.vue
+msgid "Block account"
+msgstr ""
+
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Books"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/utils/modals/ModalConfirmation.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Cancel"
 msgstr ""
 
@@ -187,11 +205,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Comments"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Comments are disabled."
 msgstr ""
 
@@ -199,7 +217,11 @@ msgstr ""
 msgid "Compare selected versions"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/utils/modals/ModalConfirmation.vue
+msgid "Confirm"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Continue the discussion"
 msgstr ""
 
@@ -215,16 +237,32 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: src/components/views/document/utils/DeleteDocumentButton.vue
+#: src/components/views/document/utils/buttons/DeleteDocumentButton.vue
 msgid "Delete this document"
 msgstr ""
 
-#: src/components/views/document/utils/ElevationProfileBox.vue
+#: src/components/views/document/utils/buttons/DeleteLocaleButton.vue
+msgid "Delete this locale"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
 msgid "Distance"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "Distance (km)"
 msgstr ""
 
 #: src/components/imagesUploader/ImagesUploader.vue
 msgid "Drop images here or click to upload"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "Duration"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "Duration (hrs)"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -251,12 +289,24 @@ msgstr ""
 msgid "Edit associations"
 msgstr ""
 
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "Elevation"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "Elevation (m)"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Filter on map extent"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
 msgid "Filter preferences"
+msgstr ""
+
+#: src/components/views/user/FollowingView.vue
+msgid "Followed users"
 msgstr ""
 
 #: src/components/views/user/LoginView.vue
@@ -279,6 +329,10 @@ msgstr ""
 
 #: src/components/views/user/LoginView.vue
 msgid "Have an account?"
+msgstr ""
+
+#: src/components/views/user/FollowingView.vue
+msgid "Here is the list of users you are following and whose activity you will see in your personal feed."
 msgstr ""
 
 #: src/components/views/user/MailingListsView.vue
@@ -307,7 +361,7 @@ msgstr ""
 msgid "Know more about SERAC"
 msgstr ""
 
-#: src/components/views/document/utils/RecentOutingsBox.vue
+#: src/components/views/document/utils/boxes/RecentOutingsBox.vue
 msgid "Last outings"
 msgstr ""
 
@@ -319,15 +373,19 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/components/views/document/utils/ConditionLevels.vue
+#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
 msgid "Location / elevation / orientation"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/views/document/utils/boxes/CommentsBox.vue
+msgid "Log in to post a comment"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Log in to post the first comment"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/components/utils/buttons/LoginButton.vue
 #: src/components/views/user/LoginView.vue
 msgid "Login"
 msgstr ""
@@ -340,22 +398,22 @@ msgstr ""
 msgid "Make profile page public"
 msgstr ""
 
-#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
+#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
 msgid "Maps"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Merge documents"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Merge with other document"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Merging a source document with a target document transfers all
-                        associations of the source document to the target document, and sets up a
-                        redirection from the source to the target document."
+                    associations of the source document to the target document, and sets up a
+                    redirection from the source to the target document."
 msgstr ""
 
 #: src/components/views/wiki/WhatsNewView.vue
@@ -395,7 +453,7 @@ msgstr ""
 msgid "No account yet?"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Note that comments have to be transferred manually in Discourse before merging."
 msgstr ""
 
@@ -407,12 +465,12 @@ msgstr ""
 msgid "Ooops"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
 #: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
@@ -423,11 +481,11 @@ msgstr ""
 msgid "Page not found"
 msgstr ""
 
-#: src/components/views/document/utils/CommentsBox.vue
+#: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Post the first comment"
 msgstr ""
 
-#: src/components/views/document/utils/LockDocumentButton.vue
+#: src/components/views/document/utils/buttons/LockDocumentButton.vue
 msgid "Protect document"
 msgstr ""
 
@@ -435,8 +493,20 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
+#: src/components/views/user/LoginView.vue
+msgid "Reset password"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "Restore this version"
+msgstr ""
+
+#: src/components/imagesUploader/ImageUploader.vue
+msgid "Retry"
+msgstr ""
+
 #: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
 #: src/components/views/document/WaypointView.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/search/SearchView.vue
@@ -464,12 +534,16 @@ msgstr ""
 msgid "Search ..."
 msgstr ""
 
-#: src/components/views/document/utils/ElevationProfileBox.vue
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
 msgid "See profile based on:"
 msgstr ""
 
 #: src/components/views/wiki/HistoryView.vue
 msgid "See the latest version"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "Send reset email"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
@@ -484,11 +558,11 @@ msgstr ""
 msgid "Social network"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Source:"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Target:"
 msgstr ""
 
@@ -496,19 +570,35 @@ msgstr ""
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
 
-#: src/components/views/document/utils/ElevationProfileBox.vue
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "This is the first version"
+msgstr ""
+
+#: src/components/views/document/utils/DocumentViewContainer.vue
+msgid "This is the last version"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
 msgid "Time"
+msgstr ""
+
+#: src/components/views/document/utils/buttons/TranslateButton.vue
+msgid "Translate into an other lang"
 msgstr ""
 
 #: src/components/imagesUploader/ImageUploader.vue
 msgid "Type"
 msgstr ""
 
-#: src/components/views/document/utils/LockDocumentButton.vue
+#: src/components/views/document/utils/buttons/BlockAccountButton.vue
+msgid "Unblock account"
+msgstr ""
+
+#: src/components/views/document/utils/buttons/LockDocumentButton.vue
 msgid "Unprotect document"
 msgstr ""
 
-#: src/components/views/document/utils/LangSwitcherBox.vue
+#: src/components/views/document/utils/boxes/LangSwitcherBox.vue
 msgid "View in other lang"
 msgstr ""
 
@@ -516,12 +606,13 @@ msgstr ""
 msgid "View xreports"
 msgstr ""
 
-#: src/components/views/document/utils/MergeDocumentButton.vue
+#: src/components/utils/modals/ModalConfirmation.vue
+#: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Warning: This action cannot be undone!"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
-#: src/components/views/document/utils/Associations/AssociatedDocuments.vue
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/components/views/search/SearchView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
@@ -532,7 +623,7 @@ msgstr ""
 msgid "Waypoints children"
 msgstr ""
 
-#: src/components/associationsEditor/AssociationsEditor.vue
+#: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
 msgid "Xreport"
 msgstr ""
 
@@ -787,7 +878,7 @@ msgstr ""
 msgid "collaborative"
 msgstr ""
 
-#: src/components/views/document/utils/ConditionLevels.vue
+#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
 #: src/components/views/edition/utils/SaveBlock.vue
 #: src/components/views/wiki/HistoryView.vue
 #: src/components/views/wiki/WhatsNewView.vue
@@ -1082,6 +1173,10 @@ msgstr ""
 msgid "key_needed"
 msgstr ""
 
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "kilometers"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "lake"
 msgstr ""
@@ -1156,6 +1251,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "medium"
+msgstr ""
+
+#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+msgid "meters"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1579,7 +1678,7 @@ msgstr ""
 msgid "snowy"
 msgstr ""
 
-#: src/components/views/document/utils/ConditionLevels.vue
+#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
 msgid "soft snow"
 msgstr ""
 
@@ -1627,14 +1726,6 @@ msgstr ""
 msgid "temperature"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentViewContainer.vue
-msgid "this is the first version"
-msgstr ""
-
-#: src/components/views/document/utils/DocumentViewContainer.vue
-msgid "this is the last version"
-msgstr ""
-
 #: src/components/imagesUploader/ImageUploader.vue
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "title"
@@ -1648,7 +1739,7 @@ msgstr ""
 msgid "topoguide_supplements"
 msgstr ""
 
-#: src/components/views/document/utils/ConditionLevels.vue
+#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
 msgid "total snow"
 msgstr ""
 

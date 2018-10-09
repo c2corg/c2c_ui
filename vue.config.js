@@ -66,12 +66,16 @@ const bundleAnalyzerConfig = {
 
 // TODO document this
 if(process.env.BUILD_ENV == 'local:demo' || process.env.BUILD_ENV === undefined){
+    result.configureWebpack.performance.hints = false
+
     config.urls = demoUrls
     config.ignApiKey = 'x216cgugvwkn0go20sm2mgar' // Key valid for localhost (expires 19/09/2016)
     config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj'
 }
 else if(process.env.BUILD_ENV == 'gitlab:demo'){
-    result.baseUrl = "/vue-camptocamp/" 
+    result.baseUrl = "/vue-camptocamp/"
+    result.configureWebpack.performance.hints = "warning"
+
     config.urls = demoUrls
 
     // gitlab pages does not support server redirection, can't use pretty urls

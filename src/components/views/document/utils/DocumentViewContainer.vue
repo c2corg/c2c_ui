@@ -67,6 +67,7 @@
 
             <content-box>
                 <span class="is-pulled-right">
+                    <block-account-button :document="document" />
                     <merge-document-button v-if="!isVersionView" :document="document" />
                     <lock-document-button v-if="!isVersionView" :document="document" />
                     <delete-document-button v-if="!isVersionView" :document="document" />
@@ -147,6 +148,7 @@
     import DeleteLocaleButton from './buttons/DeleteLocaleButton'
     import MergeDocumentButton from './buttons/MergeDocumentButton'
     import TranslateButton from './buttons/TranslateButton'
+    import BlockAccountButton from './buttons/BlockAccountButton'
 
     export default {
         components:{
@@ -157,6 +159,7 @@
             DeleteLocaleButton,
             MergeDocumentButton,
             TranslateButton,
+            BlockAccountButton,
         },
 
         props:{

@@ -25,18 +25,22 @@
 
             <h2 v-translate>activities</h2>
             <div class="field is-grouped">
-                <div v-for="activity of constants.activities" :key="activity" class="control">
-                    <button :class="{'is-primary' : preferences.activities.indexOf(activity) > -1}" type="button" class="button"
-                            @click="toggle(activity, preferences.activities)">
-                        <icon-activity :activity="activity"/>
-                    </button>
-                </div>
+                <input-activity v-model="preferences.activities" @input="save"/>
             </div>
 
             <h2 v-translate>Areas</h2>
+
+            <document-finder type="area" @input="addArea(arguments[0])"/>
+
             <div class="columns">
-                <div v-for="document in preferences.areas" :key="document.document_id" class="column is-2">
-                    <document-card :document="document"/>
+                <div
+                    v-for="document in preferences.areas"
+                    :key="document.document_id"
+                    class="column is-2">
+                    <document-card
+                        :document="document"
+                        show-delete-button
+                        @delete="removeArea(document)"/>
                 </div>
             </div>
         </div>
@@ -70,8 +74,17 @@
                     array.push(item);
                 }
 
-                this.save();
+                this.save()
+            },
 
+            addArea(area){
+                this.preferences.areas.push(area)
+                this.save()
+            },
+
+            removeArea(area){
+                this.preferences.areas = this.preferences.areas.filter(doc => doc.document_id != area.document_id)
+                this.save()
             },
 
             save(){

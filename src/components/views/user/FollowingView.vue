@@ -1,11 +1,27 @@
 <template>
     <div class="section">
-        <html-header title="Followed users"/>
-        <div v-if="following" class="columns">
-            <div v-for="document in following.following" :key="document.document_id" class="column is-3">
-                <document-card :document="document"/>
+        <html-header :title="$gettext('Followed users')"/>
+        <h1 class="title is-1" v-translate>
+            Followed users
+        </h1>
+        <p v-translate>
+            Here is the list of users you are following and whose activity you will see in your personal feed.
+        </p>
+
+        <document-finder type="profile" v-model="newUser" @input="addUser()"/>
+
+        <div v-if="following.data" class="columns is-multiline">
+            <div
+                v-for="document in following.data.following"
+                :key="document.document_id"
+                class="column is-3">
+                <document-card
+                    :document="document"
+                    show-delete-button
+                    @delete="removeUser(document)"/>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -17,11 +33,30 @@
         data(){
             return {
                 following:null,
+                newUser:null,
             }
         },
 
         created(){
-            c2c.userProfile.following.get().then(response => { this.following = response.data})
+            this.load()
+        },
+
+        methods: {
+            load(){
+                this.following = c2c.userProfile.following.get()
+            },
+
+            addUser(){
+                c2c.userProfile.following.add(this.newUser.document_id).then(() => {
+                    this.load()
+                })
+            },
+
+            removeUser(document){
+                c2c.userProfile.following.remove(document.document_id).then(() => {
+                    this.load()
+                })
+            }
         }
     }
 </script>

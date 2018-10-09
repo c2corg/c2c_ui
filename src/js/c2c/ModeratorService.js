@@ -48,4 +48,20 @@ ModeratorService.prototype.revertDocument = function(documentId, lang, versionId
     })
 }
 
+
+/**
+ * block account service
+ */
+ModeratorService.prototype.isAccountBlocked = function(userId) {
+    return this.api.get('/users/blocked/' + userId);
+}
+
+ModeratorService.prototype.blockAccount = function(userId) {
+    return this.api.post('/users/block', {'user_id': userId})
+}
+
+ModeratorService.prototype.unblockAccount = function(userId) {
+    return this.api.post('/users/unblock', {'user_id': userId})
+}
+
 export default ModeratorService

@@ -37,7 +37,7 @@
 
                 <loading-notification :promise="promise"/>
 
-                <div v-if="documents" class="columns is-multiline cards-list">
+                <div v-if="documents && false" class="columns is-multiline cards-list">
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
@@ -49,7 +49,10 @@
                     </div>
                 </div>
 
+                <data-table v-if="documents!=null" :documents="documents" />
+
                 <page-selector v-if="documents!=null" :documents="documents"/>
+
             </div>
 
             <div v-if="hasMap && documents" class="column map-container">
@@ -71,10 +74,13 @@
     import QueryItems from './utils/QueryItems'
     import PageSelector from './utils/PageSelector'
 
+    import DataTable from '@/components/datatable/DataTable'
+
     export default {
         components: {
             QueryItems,
             PageSelector,
+            DataTable,
         },
 
         data() {

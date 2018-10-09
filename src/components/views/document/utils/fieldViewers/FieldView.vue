@@ -1,18 +1,6 @@
 <template>
     <label-value v-if="hasValue" :label="field.name">
-        <a v-if="field.type==='url'" :href="value">
-            {{ value }}
-        </a>
-        <textual-array v-else-if="isArray" :array="value"/>
-        <span v-else-if="field.i18n">
-            {{ $gettext(value) }}
-        </span>
-        <span v-else>
-            {{ value }}
-        </span>
-        <span v-if="field.unit">
-            {{ field.unit }}
-        </span>
+        <document-field :document="document" :field="field" />
     </label-value>
 </template>
 
@@ -27,20 +15,13 @@
         mixins : [ requireDocumentProperty, requireFieldProperty ],
 
         computed : {
-            value(){
-                return this.document[this.field.name]
-            },
-
-            isArray(){
-                return Array.isArray(this.value)
-            },
-
             hasValue(){
+                const value = this.document[this.field.name]
 
-                if(this.value === undefined || this.value === null)
+                if(value === undefined || value === null)
                     return false
 
-                if(this.isArray && this.value.length===0)
+                if(Array.isArray(value) && value.length===0)
                     return false
 
                 return true

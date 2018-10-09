@@ -1,5 +1,5 @@
 <template>
-    <div class="columns">
+    <div class="section columns">
         <html-header :title="$gettext('Login')"/>
 
         <div v-show="mode=='signin'" class="column is-half is-offset-one-quarter">
@@ -75,20 +75,27 @@
         data(){
             return {
                 mode:"signin",
-                user,
                 username:{value:""},
                 password:{value:""},
                 fullname:{value:""},
                 forumname:{value:""},
                 email:{value:""},
+                from:null,
             }
         },
+
+        beforeRouteEnter (to, from, next) {
+            next(vm => vm.from = from)
+        },
+
         methods:{
             signin(){
+
                 user.signIn(this.username.value, this.password.value).then(() => {
-                    // TODO get to in $route.query
+                    this.$router.push(this.from.fullPath)
                 })
             },
+
             signup(){
                 // TODO test that
                 c2c.userProfile.register({

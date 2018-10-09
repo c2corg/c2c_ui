@@ -39,18 +39,25 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 
 ### Todo
 
-* bien TESTER la fusion avec un autre document
-* signup
+* list
+* upload GPS trace
+* download GPS trace
+* validate_new_password
+* validate_change_email
+* validate_register_email
+* follow button on user profile
 * maps
     * ask for a IGN and Bing dev key
     * recenter on...
     * test add all biodiv
     * test recenter on geolocation
-* do forum.createTopic()
+* signup (CAPTCHA)
+
+#### A verifier
+
+* bien TESTER la fusion avec un autre document
+* test forum.createTopic()
 * test all doc's comments functions
-* FollowingView actions
-* PreferenceView : add/remove areas
-* xreport and profile data
 
 #### Parser
 
@@ -61,6 +68,8 @@ Wait for decision
 
 #### CSS
 
+* Preferences vue is ugly
+* Following vue is ugly
 * print CSS
 * choose font family
 * icon size must not be a subjet
@@ -70,8 +79,13 @@ Wait for decision
   * remove font-family from icon-activity : the bug diseapper
   * issue come from this font...
 * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
+* site notice breaks height calc on documents view 
 
 #### Bugs
 * on demo, style on pagination fails
 * "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
      need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...
+
+#### build
+
+* bulma CSS is in app.css, instead of chunk-vendors.css

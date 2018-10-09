@@ -25,7 +25,15 @@ function UserProfileService(api){
     this.following = {
         get(){
             return api.get('/users/following')
-        }
+        },
+
+        add(user_id) {
+            return api.post('/users/follow', {user_id})
+        },
+
+        remove(user_id) {
+            return api.post('/users/unfollow', {user_id})
+        },
     }
 
     this.account = {

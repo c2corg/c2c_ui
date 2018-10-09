@@ -18,6 +18,13 @@ Forum.prototype.getTopic = function(topicId){
     return this.get('/t/title/' + topicId + '.json')
 }
 
+Forum.prototype.createTopic = function(document_id, lang) {
+    return this.post('/forum/topics', {
+        'document_id': document_id,
+        'lang': lang
+    })
+}
+
 Forum.prototype.getLatest = function () {
     var result = this.get('/latest.json')
 
@@ -39,13 +46,7 @@ Forum.prototype.getLatest = function () {
 }
 
 Forum.prototype.readAnnouncement = function(lang) {
-  // const config = {
-  //   headers: {
-  //     'Accept': 'application/json'
-  //   }
-  // };
-
   return this.get('//t/annonce-' + lang + '.json')
-};
+}
 
 export default new Forum();

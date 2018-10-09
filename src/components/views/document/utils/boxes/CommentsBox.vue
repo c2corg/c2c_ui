@@ -2,28 +2,30 @@
     <content-box class="discourse-comments">
         <h2 class="title is-2" v-translate>Comments</h2>
 
-        <div v-if="errorMessage" class="notification is-danger">
+        <div v-if="document.disable_comments">
+            <p v-translate>Comments are disabled.</p>
+        </div>
+
+        <div v-else-if="promise && promise.error" class="notification is-danger">
             <p>
                 <span v-translate>Oups! Something went wrong with forum. Here is the message :</span>
                 <br>
-                {{ errorMessage }}
+                {{ promise.error.message }}
             </p>
         </div>
 
-        <div v-if="locale.topic_id === null">
-            <div v-if="document.disable_comments">
-                <p v-translate>Comments are disabled.</p>
-            </div>
-
-            <div v-else>
-                <p v-if="!user.isLogged()" v-translate>Log in to post the first comment</p>
-                <button v-else class="button is-primary" @click="createTopic" v-translate>
-                    Post the first comment
-                </button>
-            </div>
+        <div
+            v-else-if="locale.topic_id === null || comments.length == 0"
+            class="has-text-centered">
+            <login-button v-if="!userIsLogged" v-translate>
+                Log in to post the first comment
+            </login-button>
+            <button v-else class="button is-primary" @click="createTopic" v-translate>
+                Post the first comment
+            </button>
         </div>
 
-        <div v-if="comments.length > 0">
+        <div v-else>
             <div v-for="post of comments" :key="post.id" class="discourse-post">
                 <div class="columns is-gapless">
                     <div class="column is-narrow discourse-post-avatar">
@@ -48,8 +50,10 @@
             </div>
 
             <div class="has-text-centered">
-                <a :href="forum.url + '/t/' + topic.slug + '/' + locale.topic_id + '/' + topic.posts_count"
-                   class="button is-primary" v-translate>
+                <login-button v-if="!userIsLogged" v-translate>
+                    Log in to post a comment
+                </login-button>
+                <a v-else :href="discussionUrl" class="button is-primary" v-translate>
                     Continue the discussion
                 </a>
             </div>
@@ -68,13 +72,48 @@
 
         data(){
             return {
-                forum,
-                user,
-                topic:null,
-                comments:[],
-                errorMessage:null,
+                promise:null,
                 forum_avatar_size: 45,
             }
+        },
+
+        computed: {
+            discussionUrl(){
+                if(!this.topic)
+                    return null
+
+                return forum.url + '/t/' + this.topic.slug + '/' + this.locale.topic_id + '/' + this.topic.posts_count
+            },
+
+            userIsLogged(){
+                return user.isLogged()
+            },
+
+            topic(){
+                return this.promise.data
+            },
+
+            comments(){
+                const result = []
+
+                if(!this.promise.data)
+                    return result
+
+                const data = this.promise.data.post_stream
+
+                if (data !== undefined) {
+                    for (let post of data.posts) {
+                        if (post['name'] != 'system') {
+                            post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
+                            post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
+                            result.push(post);
+                        }
+                    }
+                }
+
+                return result
+            }
+
         },
 
         created(){
@@ -83,22 +122,21 @@
 
         methods:{
             createTopic(){
-                const document = this.document;
-                const document_id = document.document_id;
-                const lang = this.locale.lang;
+                const document_id = this.document.document_id
+                const lang = this.locale.lang
 
                 forum.createTopic(document_id, lang)
                 .then(response => {
-                    const topic_id = response['data']['topic_id'];
-                    const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id;
-                    window.location = url;
+                    const topic_id = response['data']['topic_id']
+                    const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id
+                    window.location = url
                 })
                 .catch(error => {
                     if (error.response && error.response.status == 400) {
-                        const topic_id = error.response['data']['errors'][0]['topic_id'];
+                        const topic_id = error.response['data']['errors'][0]['topic_id']
                         if (topic_id !== undefined) {
-                            this.locale.topic_id = topic_id;
-                            this.getComments();
+                            this.locale.topic_id = topic_id
+                            this.getComments()
                         }
                     }
                 })
@@ -106,25 +144,7 @@
 
             getComments(){
                 if(this.locale.topic_id){
-                    forum.getTopic(this.locale.topic_id)
-                    .then(response => {
-                        this.topic = response.data
-
-                        const data = this.topic.post_stream
-
-                        if (data !== undefined) {
-                            for (let post of data.posts) {
-                                if (post['name'] != 'system') {
-                                    post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
-                                    post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
-                                    this.comments.push(post);
-                                }
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        this.errorMessage = error.message
-                    })
+                    this.promise = forum.getTopic(this.locale.topic_id)
                 }
             }
         },

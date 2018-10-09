@@ -1,5 +1,11 @@
 <template>
-    <component :is="type + '-card'" :document="document"/>
+    <div class="card-container">
+        <component :is="type + '-card'" :document="document"/>
+        <delete-button
+            v-if="showDeleteButton"
+            @click="$emit('delete')"
+            class="delete-button"/>
+    </div>
 </template>
 
 <script>
@@ -32,6 +38,13 @@
 
         mixins : [requireDocumentProperty],
 
+        props: {
+            showDeleteButton:{
+                type: Boolean,
+                default: false,
+            }
+        },
+
         computed:{
             type(){
                 return constants.getDocumentType(this.document.type)
@@ -40,3 +53,19 @@
     }
 
 </script>
+
+
+<style scoped>
+
+.card-container{
+    position:relative;
+}
+
+.delete-button{
+    position:absolute;
+    top:-1rem;
+    right:-1rem;
+    font-size:2rem;
+}
+
+</style>

@@ -58,9 +58,7 @@
             <div class="navbar-end">
 
                 <div v-if="!user.isLogged()" class="navbar-item">
-                    <router-link :to="{ name: 'auth' }" class="button is-primary">
-                        <span v-translate>Login</span>
-                    </router-link>
+                    <login-button />
                 </div>
 
                 <div v-else class="navbar-item has-dropdown is-hoverable">
