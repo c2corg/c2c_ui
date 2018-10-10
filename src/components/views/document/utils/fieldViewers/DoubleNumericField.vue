@@ -1,0 +1,48 @@
+<template>
+    <label-value v-if="value1 && value2" :label="label">
+        <span>{{ value1 }}&nbsp;{{ field1.unit }}</span>
+        <span>&nbsp;/&nbsp;</span>
+        <span>{{ value2 }}&nbsp;{{ field2.unit }}</span>
+    </label-value>
+    <field-view v-else-if="value1" :document="document" :field="field1" />
+    <field-view v-else-if="value2" :document="document" :field="field2" />
+</template>
+
+<script>
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+
+    import LabelValue from "./LabelValue"
+
+    export default {
+
+        components: {
+            LabelValue
+        },
+
+        mixins: [ requireDocumentProperty ],
+
+        props: {
+            field1: {
+                type:Object,
+                required:true,
+            },
+            field2: {
+                type:Object,
+                required:true,
+            },
+            label: {
+                type:String,
+                required:true,
+            }
+        },
+
+        computed: {
+            value1(){
+                return this.document[this.field1.name]
+            },
+            value2(){
+                return this.document[this.field2.name]
+            }
+        }
+    }
+</script>

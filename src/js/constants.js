@@ -759,12 +759,6 @@ function Constants(){
         definition.validAssociations = validAssociations
     }
 }
-//
-// Constants.prototype.getObjectDefinition = function(type){
-//     type = this.getDocumentType(type)
-//
-//     return this.objectDefinitions[type]
-// }
 
 Constants.prototype.getDocumentType = function(type){
     return type.length == 1 ? this.letterToType[type] : type

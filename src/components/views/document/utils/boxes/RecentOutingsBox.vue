@@ -3,7 +3,8 @@
         <div class="title is-2">
             <span v-translate>Last outings</span>
         </div>
-        <div v-for="outing of document.associations.recent_outings.documents" :key="outing.document_id">
+        <div v-for="(outing, i) of document.associations.recent_outings.documents" :key="i">
+            <!-- TODO remove duplicated -->
             <pretty-outing-link :outing="outing"/>
         </div>
     </content-box>

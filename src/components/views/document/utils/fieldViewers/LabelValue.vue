@@ -1,7 +1,7 @@
 <template>
     <div class="label-value is-ellipsed">
         <span class="label-value-label is-first-letter-uppercase has-text-weight-bold"><!--
-            -->{{ $gettext(label) }}<!--
+            -->{{ label }}<!--
     --></span>
         <span>
             <slot/>

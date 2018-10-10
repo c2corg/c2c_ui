@@ -14,6 +14,7 @@ import RecentOutingsBox from './boxes/RecentOutingsBox'
 
 import FieldView from './fieldViewers/FieldView'
 import LabelValue from './fieldViewers/LabelValue'
+import DoubleNumericField from './fieldViewers/DoubleNumericField'
 import MarkdownSection from './fieldViewers/MarkdownSection'
 import UsersLinks from './fieldViewers/UsersLinks'
 
@@ -24,6 +25,7 @@ export default {
 
         AssociatedDocuments,
         CommentsBox,
+        DoubleNumericField,
         FieldView,
         LangSwitcherBox,
         LabelValue,

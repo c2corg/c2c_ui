@@ -16,9 +16,11 @@ import Point from 'ol/geom/Point';
 
 import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style';
 
-import Geolocation from 'ol/Geolocation';
+import Geolocation from 'ol/Geolocation'
 
-import GeoJSON from 'ol/format/GeoJSON';
+import GeoJSON from 'ol/format/GeoJSON'
+import GPX from 'ol/format/GPX'
+import KML from 'ol/format/KML'
 import { get as getProjection, transform as transformProjection, transformExtent} from 'ol/proj';
 import { getWidth } from 'ol/extent';
 
@@ -45,7 +47,9 @@ export default {
     },
 
     format: {
-        GeoJSON
+        GeoJSON,
+        GPX,
+        KML,
     },
 
     geom: {

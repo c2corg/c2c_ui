@@ -3,8 +3,8 @@
         <html-header :title="$gettext('Login')"/>
 
         <div v-show="mode=='signin'" class="column is-half is-offset-one-quarter">
-            <form-field :data="username" label="Username" type="text" icon="user"/>
-            <form-field :data="password" label="Password" type="password" icon="key"/>
+            <form-field :data="username" :label="$gettext('Username')" type="text" icon="user"/>
+            <form-field :data="password" :label="$gettext('Password')" type="password" icon="key"/>
 
             <div class="field is-grouped">
                 <div class="control">
@@ -28,11 +28,11 @@
 
         <div v-show="mode=='signup'" class="column is-half is-offset-one-quarter">
 
-            <form-field :data="fullname" label="Fullname" type="text" icon="user-check"/>
-            <form-field :data="username" label="Username" type="text" icon="user"/>
-            <form-field :data="forumname" label="Forum username" type="text" icon="comments"/>
-            <form-field :data="password" label="Password" type="password" icon="key"/>
-            <form-field :data="email" label="Email" type="email" icon="at"/>
+            <form-field :data="fullname" :label="$gettext('Fullname')" type="text" icon="user-check"/>
+            <form-field :data="username" :label="$gettext('Username')" type="text" icon="user"/>
+            <form-field :data="forumname" :label="$gettext('Forum username')" type="text" icon="comments"/>
+            <form-field :data="password" :label="$gettext('Password')" type="password" icon="key"/>
+            <form-field :data="email" :label="$gettext('Email')" type="email" icon="at"/>
 
             <!-- TODO : bug sur $gettext -->
             <div class="field is-grouped">
@@ -54,7 +54,7 @@
             <h3 class="title is-3" v-translate>
                 Reset password
             </h3>
-            <form-field :data="email" label="Email" type="email" icon="at"/>
+            <form-field :data="email" :label="$gettext('Email')" type="email" icon="at"/>
             <div class="field is-grouped">
                 <div class="control">
                     <button type="button" class="button is-link" @click="resetPassword" v-translate>

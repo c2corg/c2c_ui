@@ -353,9 +353,9 @@
 
                 // get extent in WGS format
                 extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
-                biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current).then(
-                    this.addBiodivSportsData
-                )
+                biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current)
+                .then(this.addBiodivSportsData)
+                // .catch(response => console.warn(response))
             },
 
             addBiodivSportsData(response) {

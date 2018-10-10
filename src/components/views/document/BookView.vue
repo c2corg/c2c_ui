@@ -12,7 +12,7 @@
 
             <div class="column is-3">
                 <content-box>
-                    <label-value label="activities">
+                    <label-value :label="$gettext('activities')">
                         <activities :activities="document.activities"/>
                     </label-value>
 

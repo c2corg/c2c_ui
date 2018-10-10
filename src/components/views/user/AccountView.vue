@@ -3,11 +3,11 @@
         <html-header title="Account"/>
         <h1>change account parameters</h1>
         <form>
-            <form-field :data="password" label="Current password" type="password" icon="key"/>
-            <form-field :data="new_password" label="New password" type="password" icon="key"/>
-            <form-field :data="email" label="Email" type="text" icon="at"/>
-            <form-field :data="name" label="Fullname" type="text" icon="user-check"/>
-            <form-field :data="forum_username" label="Forum username" type="text" icon="comments"/>
+            <form-field :data="password" :label="$gettext('Current password')" type="password" icon="key"/>
+            <form-field :data="new_password" :label="$gettext('New password')" type="password" icon="key"/>
+            <form-field :data="email" :label="$gettext('Email')" type="text" icon="at"/>
+            <form-field :data="name" :label="$gettext('Fullname')" type="text" icon="user-check"/>
+            <form-field :data="forum_username" :label="$gettext('Forum username')" type="text" icon="comments"/>
 
             <div class="field is-grouped">
                 <label class="checkbox">

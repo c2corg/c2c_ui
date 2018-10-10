@@ -18,10 +18,10 @@
             {{ value }}
         </span>
 
-        <span v-if="field.unit">
+        <span v-if="field.unit && value !== null">
             {{ field.unit }}
         </span>
-        
+
     </span>
 </template>
 

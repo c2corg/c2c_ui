@@ -11,7 +11,7 @@
 
             <div class="column is-3">
                 <content-box>
-                    <label-value v-if="document.activities.length" label="activities">
+                    <label-value v-if="document.activities.length" :label="$gettext('activities')">
                         <activities :activities="document.activities"/>
                     </label-value>
 
@@ -19,15 +19,15 @@
                         <areas-links :areas="document.areas"/>
                     </label-value>
 
-                    <label-value v-if="document.author" label="author">
+                    <label-value v-if="document.author" :label="$gettext('author')">
                         <author-link :author="document.author"/>
                     </label-value>
 
-                    <label-value label="creator">
+                    <label-value :label="$gettext('creator')">
                         <author-link :author="document.creator"/>
                     </label-value>
 
-                    <label-value v-if="document.categories.length" label="categories">
+                    <label-value v-if="document.categories.length" :label="$gettext('categories')">
                         {{ document.categories.join(", ") }}
                     </label-value>
 

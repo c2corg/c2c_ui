@@ -22,6 +22,7 @@
     "bulma-extensions": "^3.0.0",
     "bulma-tooltip": "^2.0.2",
     "d3": "^5.7.0",
+    "file-saver": "^2.0.0-rc.3",
     "ol": "^5.2.0",
     "showdown": "^1.8.6",
     "vue": "^2.5.16",
@@ -51,6 +52,7 @@
       "eslint:recommended"
     ],
     "rules": {
+      "no-unused-vars": "warn",
       "no-console": "warn",
       "vue/html-indent": [
         "warn",

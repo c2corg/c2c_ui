@@ -1,8 +1,8 @@
 <template>
     <div class="field">
-        <label class="label">{{ $gettext(label) }}</label>
+        <label class="label">{{ label }}</label>
         <div class="control has-icons-left">
-            <input :type="type" :placeholder="$gettext(placeholder || label)"
+            <input :type="type" :placeholder="placeholder || label"
                    v-model="data.value" class="input">
             <span class="icon is-small is-left">
                 <fa-icon :icon="icon"/>

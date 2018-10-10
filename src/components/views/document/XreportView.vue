@@ -13,17 +13,17 @@
 
                 <content-box>
 
-                    <label-value label="activities">
+                    <label-value :label="$gettext('activities')">
                         <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                     </label-value>
-                                                
-                    <label-value v-if="document.author" label="author">
+
+                    <label-value v-if="document.author" :label="$gettext('author')">
                         <author-link :author="document.author"/>
                     </label-value>
 
                     <field-view :document="document" :field="fields.event_type"/>
 
-                    <label-value v-if="document.associations.users.length" label="participants">
+                    <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
                         <users-links :users="document.associations.users"/>
                     </label-value>
 

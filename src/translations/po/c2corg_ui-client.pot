@@ -233,6 +233,10 @@ msgstr ""
 msgid "Created on"
 msgstr ""
 
+#: src/components/views/user/AccountView.vue
+msgid "Current password"
+msgstr ""
+
 #: src/components/views/staticViews/HomeView.vue
 msgid "Dashboard"
 msgstr ""
@@ -297,6 +301,11 @@ msgstr ""
 msgid "Elevation (m)"
 msgstr ""
 
+#: src/components/views/user/AccountView.vue
+#: src/components/views/user/LoginView.vue
+msgid "Email"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Filter on map extent"
 msgstr ""
@@ -317,6 +326,16 @@ msgstr ""
 #: src/components/views/Navigation.vue
 #: src/components/views/staticViews/HomeView.vue
 msgid "Forum"
+msgstr ""
+
+#: src/components/views/user/AccountView.vue
+#: src/components/views/user/LoginView.vue
+msgid "Forum username"
+msgstr ""
+
+#: src/components/views/user/AccountView.vue
+#: src/components/views/user/LoginView.vue
+msgid "Fullname"
 msgstr ""
 
 #: src/components/utils/markers/MarkerGpsTrace.vue
@@ -445,6 +464,10 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
+#: src/components/views/user/AccountView.vue
+msgid "New password"
+msgstr ""
+
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "Next"
 msgstr ""
@@ -479,6 +502,10 @@ msgstr ""
 
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Page not found"
+msgstr ""
+
+#: src/components/views/user/LoginView.vue
+msgid "Password"
 msgstr ""
 
 #: src/components/views/document/utils/boxes/CommentsBox.vue
@@ -598,6 +625,10 @@ msgstr ""
 msgid "Unprotect document"
 msgstr ""
 
+#: src/components/views/user/LoginView.vue
+msgid "Username"
+msgstr ""
+
 #: src/components/views/document/utils/boxes/LangSwitcherBox.vue
 msgid "View in other lang"
 msgstr ""
@@ -652,6 +683,11 @@ msgid "action"
 msgstr ""
 
 #: src/components/imagesUploader/ImageUploader.vue
+#: src/components/views/document/BookView.vue
+#: src/components/views/document/ImageView.vue
+#: src/components/views/document/OutingView.vue
+#: src/components/views/document/RouteView.vue
+#: src/components/views/document/XreportView.vue
 #: src/components/views/edition/utils/InputActivities.vue
 #: src/components/views/user/PreferencesView.vue
 msgid "activities"
@@ -749,6 +785,11 @@ msgstr ""
 msgid "aug"
 msgstr ""
 
+#: src/components/views/document/ImageView.vue
+#: src/components/views/document/XreportView.vue
+msgid "author"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "autonomous"
 msgstr ""
@@ -826,6 +867,7 @@ msgid "canyon"
 msgstr ""
 
 #: src/components/imagesUploader/ImageUploader.vue
+#: src/components/views/document/ImageView.vue
 msgid "categories"
 msgstr ""
 
@@ -835,6 +877,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "cleared"
+msgstr ""
+
+#: src/components/views/document/WaypointView.vue
+msgid "climbing rating"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -921,6 +967,10 @@ msgstr ""
 msgid "crampons_spring"
 msgstr ""
 
+#: src/components/views/document/ImageView.vue
+msgid "creator"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "crevasse_fall"
 msgstr ""
@@ -967,6 +1017,11 @@ msgstr ""
 
 #: src/components/utils/links/EditLink.vue
 msgid "edit"
+msgstr ""
+
+#: src/components/views/document/OutingView.vue
+#: src/components/views/document/RouteView.vue
+msgid "elevation"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue
@@ -1045,6 +1100,10 @@ msgstr ""
 msgid "flora"
 msgstr ""
 
+#: src/components/views/document/ProfileView.vue
+msgid "forum"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "gear"
 msgstr ""
@@ -1099,6 +1158,15 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "grocery"
+msgstr ""
+
+#: src/components/views/document/WaypointView.vue
+msgid "height"
+msgstr ""
+
+#: src/components/views/document/OutingView.vue
+#: src/components/views/document/RouteView.vue
+msgid "height difference"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1409,6 +1477,10 @@ msgstr ""
 msgid "paragliding_takeoff"
 msgstr ""
 
+#: src/components/views/document/XreportView.vue
+msgid "participants"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "partly_protected"
 msgstr ""
@@ -1522,6 +1594,11 @@ msgstr ""
 msgid "range"
 msgstr ""
 
+#: src/components/views/document/OutingView.vue
+#: src/components/views/document/RouteView.vue
+msgid "ratings"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "recent_avalanche"
 msgstr ""
@@ -1632,6 +1709,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "slacklining"
+msgstr ""
+
+#: src/components/views/document/RouteView.vue
+msgid "slope"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue

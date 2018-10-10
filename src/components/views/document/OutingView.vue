@@ -18,36 +18,6 @@
             <div class="columns">
 
                 <div class="column is-3">
-                    <content-box>
-                        <label-value label="activities">
-                            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
-                        </label-value>
-
-                        <label-value label="ratings">
-                            <outing-rating :outing="document"/>
-                        </label-value>
-
-                        <field-view :document="document" :field="fields.frequentation"/>
-
-                        <label-value v-if="document.elevation_min || document.elevation_max" label="elevation">
-                            <span v-if="document.elevation_min">{{ document.elevation_min }}&nbsp;m</span>
-                            <span v-if="document.elevation_min && document.elevation_max">/</span>
-                            <span v-if="document.elevation_max">{{ document.elevation_max }}&nbsp;m</span>
-                        </label-value>
-
-                        <label-value v-if="document.height_diff_down || document.height_diff_up" label="height difference">
-                            <span v-if="document.height_diff_up">+{{ document.height_diff_up }}&nbsp;m</span>
-                            <span v-if="document.height_diff_up && document.height_diff_down">/</span>
-                            <span v-if="document.height_diff_down">-{{ document.height_diff_down }}&nbsp;m</span>
-                        </label-value>
-
-                        <field-view :document="document" :field="fields.length_total"/>
-                        <field-view :document="document" :field="fields.hut_status"/>
-                        <field-view :document="document" :field="fields.snow_quality"/>
-                        <field-view :document="document" :field="fields.snow_quantity"/>
-
-                    </content-box>
-
                     <map-box :document="document"/>
 
                     <elevation-profile-box :document="document"/>
@@ -66,6 +36,64 @@
                         <div v-for="route of document.associations.routes" :key="route.document_id">
                             <pretty-route-link :route="route"/>
                         </div>
+
+                        <div class="columns">
+
+                            <div class="column is-4">
+                                <label-value :label="$gettext('activities')">
+                                    <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+                                </label-value>
+
+                                <field-view :document="document" :field="fields.frequentation"/>
+                                <field-view :document="document" :field="fields.condition_rating"/>
+                                <field-view :document="document" :field="fields.quality"/>
+
+                                <field-view :document="document" :field="fields.participant_count"/>
+                            </div>
+
+                            <div class="column is-4">
+                                <label-value :label="$gettext('ratings')">
+                                    <outing-rating :outing="document"/>
+                                </label-value>
+
+                                <field-view :document="document" :field="fields.access_condition"/>
+                                <field-view :document="document" :field="fields.lift_status"/>
+                                <field-view :document="document" :field="fields.hut_status"/>
+
+                            </div>
+
+                            <div class="column is-4">
+                                <double-numeric-field
+                                    :document="document"
+                                    :field1="fields.elevation_min"
+                                    :field2="fields.elevation_max"
+                                    :label="$gettext('elevation')" />
+
+                                <field-view :document="document" :field="fields.elevation_access"/>
+
+                                <double-numeric-field
+                                    :document="document"
+                                    :field1="fields.height_diff_up"
+                                    :field2="fields.height_diff_down"
+                                    :label="$gettext('height difference')" />
+
+                                <field-view :document="document" :field="fields.length_total"/>
+
+                                <field-view :document="document" :field="fields.elevation_up_snow"/>
+                                <field-view :document="document" :field="fields.elevation_down_snow"/>
+
+                                <field-view :document="document" :field="fields.snow_quantity"/>
+                                <field-view :document="document" :field="fields.snow_quality"/>
+
+                                <field-view :document="document" :field="fields.glacier_rating"/>
+                                <field-view :document="document" :field="fields.avalanche_signs"/>
+
+                            </div>
+                        </div>
+                    </content-box>
+
+
+                    <content-box>
 
                         <markdown-section :document="document" :locale="locale" :field="fields.weather"/>
                         <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
@@ -90,7 +118,6 @@
 </template>
 
 <script>
-
     import mixins from "./utils/mixins.js"
     import ConditionLevels from "./utils/fieldViewers/ConditionLevels"
     import ElevationProfileBox from "./utils/boxes/ElevationProfileBox"

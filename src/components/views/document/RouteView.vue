@@ -29,7 +29,7 @@
 
                         <div class="column is-4">
 
-                            <label-value label="activities">
+                            <label-value :label="$gettext('activities')">
                                 <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
                             </label-value>
 
@@ -43,7 +43,7 @@
 
                         <div class="column is-4">
 
-                            <label-value label="ratings">
+                            <label-value :label="$gettext('ratings')">
                                 <!-- TODO : hide is no cotation -->
                                 <route-rating :document="document"/>
                             </label-value>
@@ -56,22 +56,17 @@
 
                         <div class="column is-4">
 
-                            <div v-if="document.elevation_min || document.elevation_max">
-                                <label class="has-text-weight-bold">
-                                    <span class="is-first-letter-uppercase">elevation&nbsp;</span>
-                                    <span v-if="document.elevation_min">min</span><span v-if="document.elevation_min && document.elevation_max">/</span><span v-if="document.elevation_max">max</span>
-                                </label>
-                                :
-                                <span v-if="document.elevation_min">{{ document.elevation_min }}&#8239;m</span>
-                                <span v-if="document.elevation_min && document.elevation_max">&nbsp;/&nbsp;</span>
-                                <span v-if="document.elevation_max">{{ document.elevation_max }}&#8239;m</span>
-                            </div>
+                            <double-numeric-field
+                                :document="document"
+                                :field1="fields.elevation_min"
+                                :field2="fields.elevation_max"
+                                :label="$gettext('elevation')" />
 
-                            <label-value v-if="document.height_diff_up || document.height_diff_down" label="height difference">
-                                <span v-if="document.height_diff_up">+{{ document.height_diff_up }}&#8239;m</span>
-                                <span v-if="document.height_diff_up && document.height_diff_down">&nbsp;/&nbsp;</span>
-                                <span v-if="document.height_diff_down">-{{ document.height_diff_down }}&#8239;m</span>
-                            </label-value>
+                            <double-numeric-field
+                                :document="document"
+                                :field1="fields.height_diff_up"
+                                :field2="fields.height_diff_down"
+                                :label="$gettext('height difference')" />
 
                             <field-view :document="document" :field="fields.height_diff_difficulties"/>
                             <field-view :document="document" :field="fields.difficulties_height"/>
@@ -84,7 +79,7 @@
                             <field-view :document="document" :field="fields.mtb_length_asphalt"/>
                             <field-view :document="document" :field="fields.mtb_length_trail"/>
 
-                            <label-value v-if="locale.slope" label="slope">
+                            <label-value v-if="locale.slope" :label="$gettext('slope')">
                                 {{ locale.slope }}
                             </label-value>
 

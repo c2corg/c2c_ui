@@ -1,5 +1,5 @@
 <template>
-    <label-value v-if="hasValue" :label="field.name">
+    <label-value v-if="hasValue" :label="$gettext(field.name)">
         <document-field :document="document" :field="field" />
     </label-value>
 </template>

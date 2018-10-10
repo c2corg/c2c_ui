@@ -30,21 +30,23 @@
                                 <field-view :document="document" :field="fields.rock_types"/>
 
                                 <field-view :document="document" :field="fields.height_median"/>
-                                <label-value v-if="document.height_max || document.height_min" label="height">
-                                    <span v-if="document.height_min">{{ document.height_min }}&nbsp;m</span>
-                                    <span v-if="document.height_min && document.height_max">/</span>
-                                    <span v-if="document.height_max">{{ document.height_max }}&nbsp;m</span>
-                                </label-value>
+
+                                <double-numeric-field
+                                    :document="document"
+                                    :field1="fields.height_min"
+                                    :field2="fields.height_max"
+                                    :label="$gettext('height')" />
 
                                 <field-view :document="document" :field="fields.climbing_outdoor_types"/>
                                 <field-view :document="document" :field="fields.climbing_styles"/>
 
                                 <field-view :document="document" :field="fields.climbing_rating_median"/>
-                                <label-value v-if="document.climbing_rating_min || document.climbing_rating_max" label="climbing rating">
-                                    <span v-if="document.climbing_rating_min">{{ document.climbing_rating_min }}</span>
-                                    <span v-if="document.climbing_rating_min && document.climbing_rating_max">/</span>
-                                    <span v-if="document.climbing_rating_max">{{ document.climbing_rating_max }}</span>
-                                </label-value>
+
+                                <double-numeric-field
+                                    :document="document"
+                                    :field1="fields.climbing_rating_min"
+                                    :field2="fields.climbing_rating_max"
+                                    :label="$gettext('climbing rating')" />
 
                                 <field-view :document="document" :field="fields.capacity"/>
                                 <field-view :document="document" :field="fields.capacity_staffed"/>
@@ -95,10 +97,11 @@
                     <content-box v-if="document.associations.all_routes.documents.length">
                         <h2 class="title is-2" v-translate>Routes</h2>
 
-                        <div v-for="route of document.associations.all_routes.documents" :key="route.document_id">
+                        <div v-for="(route, i) of document.associations.all_routes.documents" :key="i">
+                            <!-- TODO remove duplicated -->
                             <pretty-route-link :route="route"/>
                         </div>
-                        
+
                     </content-box>
 
                     <recent-outings-box :document="document"/>
@@ -108,7 +111,7 @@
                             Waypoints children
                         </h2>
                         <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
-                            <document-link :document="child"/>
+                            <pretty-waypoint-link :waypoint="child" />
                         </div>
                     </content-box>
 

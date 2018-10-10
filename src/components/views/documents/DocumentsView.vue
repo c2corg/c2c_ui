@@ -23,9 +23,13 @@
             <div class="level-right">
                 <div class="level-item">
                     <span v-if="hasMap" class="icon is-size-3">
-                        <fa-icon :class="{'has-text-primary':showMap}"
-                                 icon="map-marked-alt"
-                                 @click="showMap=!showMap" />
+                        <fa-icon
+                            :icon="listMode ? 'th-list' : 'th-large'"
+                            @click="listMode=!listMode" />
+                        <fa-icon
+                            :class="{'has-text-primary':showMap}"
+                            icon="map-marked-alt"
+                            @click="showMap=!showMap" />
                     </span>
                 </div>
             </div>
@@ -37,7 +41,7 @@
 
                 <loading-notification :promise="promise"/>
 
-                <div v-if="documents && false" class="columns is-multiline cards-list">
+                <div v-if="documents && !listMode" class="columns is-multiline cards-list">
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
@@ -49,7 +53,7 @@
                     </div>
                 </div>
 
-                <data-table v-if="documents!=null" :documents="documents" />
+                <data-table v-if="documents!=null && listMode" :documents="documents" :type="type"/>
 
                 <page-selector v-if="documents!=null" :documents="documents"/>
 
@@ -87,6 +91,7 @@
             return {
                 promise: null,
                 showMap: null,
+                listMode: false,
             }
         },
 

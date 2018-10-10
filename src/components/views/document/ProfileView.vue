@@ -21,7 +21,7 @@
                     <content-box>
                         <activities :activities="document.activities"/>
 
-                        <label-value label="forum">
+                        <label-value :label="$gettext('forum')">
                             @{{ document.forum_username }}
                         </label-value>
 
