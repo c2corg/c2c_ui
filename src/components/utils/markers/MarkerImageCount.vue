@@ -1,6 +1,6 @@
 <template>
     <!-- it's not a simple icon (tooltip), so do not mive it in icons folder -->
-    <span v-tooltip="imageCount + $gettext(' images')">
+    <span v-tooltip="imageCount + ' ' + $gettext(' images')">
         <icon-image />
     </span>
 </template>

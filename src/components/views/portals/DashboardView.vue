@@ -2,7 +2,7 @@
     <div class="section">
         <html-header title="Dashboard"/>
         <content-box>
-            <h2 class="title is-2" v-translate>Images</h2>
+            <h3 class="title is-3" v-translate>Images</h3>
             <loading-notification :promise="imagesPromise" />
             <gallery v-if="images!=null" :images="images.documents" />
         </content-box>
@@ -10,7 +10,7 @@
         <div class="columns">
             <div class="column is-7">
                 <content-box>
-                    <h2 class="title is-2" v-translate>Outings</h2>
+                    <h3 class="title is-2" v-translate>Outings</h3>
                     <loading-notification :promise="outingsPromise" />
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents" :key="outing.document_id">
@@ -22,26 +22,12 @@
 
             <div class="column">
                 <content-box>
-                    <h2 class="title is-2" v-translate>Forum</h2>
-                    <loading-notification :promise="topicsPromise" />
-                    <div v-if="topics">
-                        <div v-for="topic of topics.topics.slice(0, 20)" v-if="topic.category_id != 29"
-                             :key="topic.id">
-
-                            <a :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
-                               target="_blank">
-
-                                <img :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}','16')" height="16"
-                                     width="16">
-
-                                {{ topic.title }}
-                            </a>
-                        </div>
-                    </div>
+                    <h3 class="title is-3" v-translate>Forum</h3>
+                    <forum-widget :message-count="20"/>
                 </content-box>
 
                 <content-box>
-                    <h2 class="title is-2 box-header" v-translate>Routes</h2>
+                    <h3 class="title is-3" v-translate>Routes</h3>
                     <loading-notification :promise="routesPromise" />
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
@@ -57,14 +43,15 @@
 <script>
 
     import c2c from '@/js/c2c'
-    import forum from '@/js/forum.js'
 
-    import DashboardOutingLink from './DashboardOutingLink'
+    import DashboardOutingLink from './utils/DashboardOutingLink'
+    import ForumWidget from './utils/ForumWidget'
 
     export default {
 
         components: {
             DashboardOutingLink,
+            ForumWidget,
         },
 
         data() {
@@ -72,9 +59,6 @@
                 outingsPromise: null,
                 routesPromise: null,
                 imagesPromise: null,
-                topicsPromise:null,
-
-                forum,
             }
         },
 
@@ -94,24 +78,19 @@
             routes(){
                 return this.routesPromise.data
             },
-
-            topics(){
-                return this.topicsPromise.data ? this.topicsPromise.data.topic_list : null
-            },
         },
 
         created() {
             this.outingsPromise = c2c.outing.getAll()
             this.routesPromise = c2c.route.getAll({limit:10})
             this.imagesPromise = c2c.image.getAll()
-            this.topicsPromise = forum.getLatest()
         }
     }
 
 </script>
 
 <style scoped>
-h2{
+h3{
     padding-bottom:0.7rem !important;
     margin-bottom:0.7rem !important;
     border-bottom:1px solid #DDD;

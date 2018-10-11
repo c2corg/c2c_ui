@@ -67,6 +67,10 @@
 
             <content-box>
                 <span class="is-pulled-right">
+                    <follow-button
+                        v-if="type=='profile'"
+                        :document="document" />
+
                     <block-account-button
                         v-if="type=='profile'"
                         :document="document" />
@@ -152,6 +156,7 @@
     import MergeDocumentButton from './buttons/MergeDocumentButton'
     import TranslateButton from './buttons/TranslateButton'
     import BlockAccountButton from './buttons/BlockAccountButton'
+    import FollowButton from './buttons/FollowButton'
 
     export default {
         components:{
@@ -163,6 +168,7 @@
             MergeDocumentButton,
             TranslateButton,
             BlockAccountButton,
+            FollowButton,
         },
 
         props:{

@@ -9,8 +9,8 @@ import SeracView from '@/components/views/staticViews/SeracView'
 import WorkInProgressView from '@/components/views/staticViews/WorkInProgressView'
 import NotFoundView from '@/components/views/staticViews/NotFoundView'
 
-import DashboardView from '@/components/views/dashboard/DashboardView'
-import FeedView from '@/components/views/feed/FeedView'
+import DashboardView from '@/components/views/portals/DashboardView'
+import FeedView from '@/components/views/portals/FeedView'
 import SearchView from '@/components/views/search/SearchView'
 
 import LoginView from '@/components/views/user/LoginView'

@@ -40,12 +40,11 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 ### Todo
 
 * draw GPS trace on map
-* change WP location on edit mode on map 
+* change WP location on edit mode on map
 * upload GPS trace
-* validate_new_password
+* validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email
-* follow button on user profile
 * maps
     * ask for a IGN and Bing dev key
     * recenter on...
@@ -65,6 +64,8 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 * test forum.createTopic()
 * test all doc's comments functions
 * does saveAs dep really usefull now ?
+* test requestPasswordChange and validate_new_password
+* test changemail
 
 #### Parser
 

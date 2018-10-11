@@ -4,6 +4,7 @@
         @click="onClick"
         v-tooltip="tooltip"
         :class="blocked ? 'lock-button-red' : 'lock-button-green'">
+        <!-- TODO chang icon to a harder one,  -->
         <fa-icon :icon="blocked ? 'lock' : 'unlock'" />
     </a>
 </template>

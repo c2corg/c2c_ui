@@ -34,6 +34,10 @@ function UserProfileService(api){
         remove(user_id) {
             return api.post('/users/unfollow', {user_id})
         },
+
+        isFollowing(user_id) {
+            return api.get('/users/following-user/' + user_id)
+        },
     }
 
     this.account = {
@@ -80,6 +84,10 @@ UserProfileService.prototype.update_preferred_language = function(lang){
 
 UserProfileService.prototype.requestPasswordChange = function(email) {
     return this.api.post('/users/request_password_change', {email})
+}
+
+UserProfileService.prototype.validateNewPassword = function(nonce, password) {
+    return this.api.post('/users/validate_new_password/' + nonce, { password })
 }
 
 UserProfileService.prototype.register = function(data) {

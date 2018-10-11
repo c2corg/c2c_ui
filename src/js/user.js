@@ -35,6 +35,10 @@ var result = {
         return this.data.lang
     },
 
+    getId(){
+        return this.data.id
+    },
+
     isLogged(){
         return this.data.token
     },

@@ -59,8 +59,7 @@
     import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
-    import cardMixins from './utils/mixins.js'
-
+    import cardMixins from '@/components/cards/utils/mixins.js'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
 
     export default{
@@ -142,8 +141,9 @@
 
 
 
-<style scoped>
+<style scoped lang="scss">
 
+@import '@/assets/sass/variables.scss';
 
 .card{
     background-color:#FFF!important;
@@ -154,7 +154,7 @@
 }
 
 .card:hover{
-    background-color:#fff8f0!important;
+    background-color:$hover-background!important;
     transition:0.2s;
 }
 
