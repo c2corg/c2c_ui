@@ -1,29 +1,79 @@
 <template>
-    <div class="section content">
+    <div class="columns">
         <html-header title="Account"/>
-        <h1>change account parameters</h1>
-        <form>
-            <form-field :data="password" :label="$gettext('Current password')" type="password" icon="key"/>
-            <form-field :data="new_password" :label="$gettext('New password')" type="password" icon="key"/>
-            <form-field :data="email" :label="$gettext('Email')" type="text" icon="at"/>
-            <form-field :data="name" :label="$gettext('Fullname')" type="text" icon="user-check"/>
-            <form-field :data="forum_username" :label="$gettext('Forum username')" type="text" icon="comments"/>
+        <div class="column is-three-fifths is-offset-one-fifth">
 
-            <div class="field is-grouped">
-                <label class="checkbox">
-                    <input v-model="is_profile_public.value" type="checkbox">
-                    <span v-translate>Make profile page public</span>
-                </label>
-            </div>
+            <h1 class="title is-1" v-translate>Change account parameters</h1>
+            <base-form ref="form" @submit="save" :server-errors="serverErrors">
+                <form-field                    
+                    name="username"
+                    v-model="username"
+                    type="text"
+                    disabled
+                    :label="$gettext('Username')"
+                    icon="user"/>
 
-            <div class="field is-grouped">
-                <div class="control">
-                    <button type="button" class="button is-primary" @click="save" v-translate>
-                        Save
-                    </button>
+                <form-field
+                    name="currentpassword"
+                    v-model="currentpassword"
+                    type="password"
+                    required
+                    :label="$gettext('Current password')"
+                    icon="key"/>
+
+                <form-field
+                    name="newpassword"
+                    v-model="newpassword"
+                    type="password"
+                    :label="$gettext('New password')"
+                    icon="key"/>
+
+                <form-field
+                    name="email"
+                    v-model="email"
+                    type="text"
+                    required
+                    :label="$gettext('Email')"
+                    icon="at"/>
+
+                <form-field
+                    name="name"
+                    v-model="name"
+                    type="text"
+                    required
+                    :label="$gettext('Fullname')"
+                    icon="user-check"/>
+
+                <form-field
+                    name="forum_username"
+                    v-model="forum_username"
+                    type="text"
+                    required
+                    :label="$gettext('Forum username')"
+                    icon="comments"/>
+
+                <div class="field is-grouped">
+                    <label class="checkbox">
+                        <input
+                            name="is_profile_public"
+                            v-model="is_profile_public"
+                            type="checkbox">
+                        <span v-translate>Make profile page public</span>
+                    </label>
                 </div>
-            </div>
-        </form>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button
+                            type="submit"
+                            class="button is-primary"
+                            v-translate>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </base-form>
+        </div>
     </div>
 </template>
 
@@ -32,49 +82,54 @@
     import user from "@/js/user.js"
     import c2c from "@/js/c2c"
 
-    function getFieldValue(value){
-        return {
-            value:value,
-            originalValue:value
-        }
-    }
+    import FormField from "./utils/FormField"
+    import BaseForm from "./utils/BaseForm"
 
     export default {
 
+        components: {
+            FormField,
+            BaseForm,
+        },
+
         data(){
             return {
-                password:getFieldValue(""),
-                new_password:getFieldValue(""),
-                email:getFieldValue(""),
-                name:getFieldValue(user.data.name),
-                forum_username:getFieldValue(user.data.forum_username),
-                is_profile_public:getFieldValue(null),
+                username:user.getUserName(),
+                currentpassword:"",
+                newpassword:"",
+                email:"",
+                name:user.getName(),
+                forum_username:user.getForumUsername(),
+                is_profile_public:null,
+                original_mail: null,
+                serverErrors: null,
             }
         },
 
         created(){
             c2c.userProfile.account.get().then(response => {
-                this.email = getFieldValue(response.data.email)
-                this.is_profile_public = getFieldValue(response.data.is_profile_public)
+                this.email = response.data.email
+                this.is_profile_public = response.data.is_profile_public
+                this.original_mail = response.data.email
             })
         },
 
         methods:{
+
             save(){
-                function newOrNull(fieldValue){
-                    return fieldValue.value===fieldValue.originalValue ? null : fieldValue.value
+                function newOrNull(fieldValue, originalValue){
+                    return fieldValue===originalValue ? null : fieldValue
                 }
 
-                c2c.userProfile.account.post(
-                    this.password.value,
-                    newOrNull(this.name),
-                    newOrNull(this.forum_username),
-                    newOrNull(this.email),
-                    newOrNull(this.is_profile_public),
-                    this.new_password.value ? this.new_password.value : null,
-                ).then(response => {
-                    Object.assign(user.data, response.data)
-                })
+                user.updateAccount(
+                    this.currentpassword,
+                    newOrNull(this.name, user.getUserName()),
+                    newOrNull(this.forum_username, user.getForumUsername()),
+                    newOrNull(this.email, this.original_mail),
+                    this.is_profile_public,
+                    this.newpassword ? this.newpassword : null)
+                .then(() => { /* TODO feedback */ })
+                .catch(error => this.serverErrors = error.response.data )
             }
         },
     }

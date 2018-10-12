@@ -1,7 +1,7 @@
 <template>
     <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
-            <label >
+            <label>
                 <span>{{ $gettext(field.name) }}</span>
                 <span v-if="field.required">*</span>
             </label>
@@ -35,7 +35,7 @@
             </div>
 
             <div v-else-if="field.type=='markdown'">
-                <textarea v-model="object[field.name]" class="textarea"/>
+                <markdown-editor v-model="object[field.name]"/>
             </div>
 
             <div v-else class="notification is-danger">
@@ -50,7 +50,13 @@
 <script>
     import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
 
+    import MarkdownEditor from '@/components/markdownEditor/MarkdownEditor'
+
     export default {
+
+        components: {
+            MarkdownEditor,
+        },
 
         mixins : [ requireFieldProperty, requireDocumentProperty ],
 

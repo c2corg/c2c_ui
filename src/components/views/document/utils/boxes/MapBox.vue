@@ -29,7 +29,6 @@
                 KML
             </button>
         </div>
-
     </content-box>
 </template>
 

@@ -59,10 +59,10 @@
 
             </div>
 
-            <div v-if="hasMap && documents" class="column map-container">
+            <div v-if="hasMap" class="column map-container">
                 <map-view
                     ref="map"
-                    :documents="documents.documents"
+                    :documents="documents ? documents.documents : []"
                     show-filter-control
                     show-center-on-geolocation/>
             </div>

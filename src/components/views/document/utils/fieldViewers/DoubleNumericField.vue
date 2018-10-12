@@ -12,11 +12,13 @@
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     import LabelValue from "./LabelValue"
+    import FieldView from "./FieldView"
 
     export default {
 
         components: {
-            LabelValue
+            LabelValue,
+            FieldView,
         },
 
         mixins: [ requireDocumentProperty ],

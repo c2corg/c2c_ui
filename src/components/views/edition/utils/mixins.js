@@ -15,17 +15,43 @@ export default{
         InputBase,
         InputActivities,
         InputCheckboxes,
-        EditSection
+        EditSection,
     },
 
     data() {
         return {
-            documentId: this.$route.params.id,
             mode: null,
             type: null,
-            document: null,
-            locale: null,
             fields: null,
+            promise:null,
+        }
+    },
+
+    computed: {
+        documentId(){
+            return this.$route.params.id
+        },
+
+        lang(){
+            return this.$route.params.lang || this.$language.current
+        },
+
+        document(){
+            return this.promise.data
+        },
+
+        locale(){
+            if(this.mode=="add")
+                return this.document.locales[0]
+
+            const locale = user.getLocaleStupid(this.document, this.lang)
+
+            if(!locale){
+                locale = constants.buildLocale(this.type, this.lang)
+                this.document.locales.push(locale)
+            }
+
+            return locale
         }
     },
 
@@ -34,24 +60,13 @@ export default{
         if(this.$route.name.endsWith("-edit")){
             this.type = this.$route.name.replace("-edit","");
             this.mode = "edit"
-
-            c2c[this.type].get(this.$route.params.id).then(response => {
-                this.document=response.data
-                this.locale = user.getLocaleStupid(this.document, this.$route.params.lang)
-
-                if(!this.locale){
-                    this.locale = constants.buildLocale(this.type, this.$route.params.lang)
-                    this.document.locales.push(this.locale)
-                }
-            })
+            this.promise = c2c[this.type].get(this.$route.params.id)
         } else {
             this.type = this.$route.name.replace("-add","");
             this.mode = "add"
-            this.document = constants.buildDocument(this.type,
-                this.$route.params.lang || this.$language.current)
-
-            this.locale = this.document.locales[0]
-
+            this.promise = {
+                data : constants.buildDocument(this.type, this.lang)
+            }
         }
 
         this.fields = constants.objectDefinitions[this.type].fields

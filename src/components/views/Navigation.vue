@@ -63,11 +63,11 @@
 
                 <div v-else class="navbar-item has-dropdown is-hoverable">
                     <div class="navbar-link">
-                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.data.forum_username + '/36/1_1.png'" class="user-avatar">
+                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.getForumUsername() + '/36/1_1.png'" class="user-avatar">
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
 
-                        <router-link :to="{ name: 'profile', params:{id:user.data.id} }" class="navbar-item">
+                        <router-link :to="{ name: 'profile', params:{id:user.getId()} }" class="navbar-item">
                             <fa-icon icon="user"/>
                             <span v-translate>My profile</span>
                         </router-link>
@@ -80,7 +80,7 @@
                             <span v-translate>My preferences</span>
                         </router-link>
 
-                        <router-link :to="{ name: 'outings', query:{u:user.data.id} }" class="navbar-item">
+                        <router-link :to="{ name: 'outings', query:{u:user.getId()} }" class="navbar-item">
                             <icon-outing />
                             <span v-translate>My outings</span>
                         </router-link>
@@ -122,12 +122,13 @@
 
         data() {
             return {
-                user,
+                user, // Keep this here, trick to set it reactive...
                 burgerActive:false,
                 searchText:'',
             }
         },
-        methods:{
+        
+        methods: {
             search(){
 
                 if(this.searchText.length >=3){

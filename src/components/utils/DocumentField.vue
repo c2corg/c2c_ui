@@ -10,6 +10,15 @@
 
         <textual-array v-else-if="isArray" :array="value"/>
 
+        <span v-else-if="typeof(value) === 'boolean'">
+            <span v-if="value" v-translate>
+                yes
+            </span>
+            <span v-else v-translate>
+                no
+            </span>
+        </span>
+
         <span v-else-if="field.i18n">
             {{ $gettext(value) }}
         </span>

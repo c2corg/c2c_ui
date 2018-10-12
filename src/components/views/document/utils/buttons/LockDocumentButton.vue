@@ -1,6 +1,6 @@
 <template>
-    <!-- TODO : v-if user admin -->
     <a
+        v-if="canLock"
         @click="onClick"
         v-tooltip="tooltip"
         :class="document.protected ? 'lock-button-red' : 'lock-button-green'">
@@ -10,6 +10,7 @@
 
 <script>
     import c2c from '@/js/c2c'
+    import user from '@/js/user'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
@@ -19,6 +20,9 @@
         ],
 
         computed:{
+            canLock(){
+                return user.isModerator()
+            },
             tooltip(){
                 if(this.document.protected)
                     return this.$gettext('Unprotect document')

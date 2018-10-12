@@ -67,9 +67,7 @@
 
             <content-box>
                 <span class="is-pulled-right">
-                    <follow-button
-                        v-if="type=='profile'"
-                        :document="document" />
+                    <follow-button :document="document" />
 
                     <block-account-button
                         v-if="type=='profile'"
@@ -77,6 +75,7 @@
 
                     <merge-document-button v-if="!isVersionView" :document="document" />
                     <lock-document-button v-if="!isVersionView" :document="document" />
+
                     <delete-document-button v-if="!isVersionView" :document="document" />
                     <delete-locale-button
                         v-if="!isVersionView"

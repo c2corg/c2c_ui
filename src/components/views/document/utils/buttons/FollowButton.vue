@@ -28,7 +28,7 @@
 
         computed:{
             canFollow(){
-                return user.isLogged() && user.getId() != this.document.document_id
+                return this.document.type =='u' && user.isLogged() && user.getId() != this.document.document_id
             },
 
             tooltip(){
@@ -40,8 +40,9 @@
         },
 
         created(){
-            c2c.userProfile.following.isFollowing(this.document.document_id)
-            .then(response => this.followed = response.data.is_following)
+            if(this.canFollow)
+                c2c.userProfile.following.isFollowing(this.document.document_id)
+                .then(response => this.followed = response.data.is_following)
         },
 
         methods:{

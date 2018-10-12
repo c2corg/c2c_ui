@@ -19,7 +19,7 @@
 
                 <div class="column is-3">
                     <content-box>
-                        <activities :activities="document.activities"/>
+                        <field-view :document="document" :field="fields.activities"/>
 
                         <label-value :label="$gettext('forum')">
                             @{{ document.forum_username }}

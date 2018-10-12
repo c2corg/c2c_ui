@@ -160,7 +160,7 @@ const fieldsProperties = {
     nb_outings:{values:attrs.nb_outings},
     nb_pages:{type:"number", min:0, max:9999, unit:"#"},
     nb_participants:{type:"number", min:0, max:1000},
-    orientations:{values:attrs.orientation_types, multiple:true, queryMode:"orientations"},
+    orientations:{values:attrs.orientation_types, multiple:true, queryMode:"orientations", i18n:false},
     other_comments:{type:"markdown", parent:"locales"},
     paragliding_rating:{values:attrs.paragliding_ratings, queryMode:"valuesRangeSlider", i18n:false},
     parking_fee:{values:attrs.parking_fee_types},
@@ -786,7 +786,7 @@ Constants.prototype.buildDocument = function(type, lang){
     var result = {
         type:def.letter,
         locales:[
-            this.buildLocale(lang)
+            this.buildLocale(type, lang)
         ],
     }
 

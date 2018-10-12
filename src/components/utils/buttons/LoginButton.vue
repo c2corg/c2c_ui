@@ -1,7 +1,7 @@
 <template>
     <router-link
         v-if="!userIsLogged"
-        to="auth"
+        :to="{name:'auth'}"
         class="button is-primary">
         <slot>
             <span v-translate>Login</span>

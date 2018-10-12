@@ -1,16 +1,16 @@
 <template>
-    <!-- TODO : v-if user admin -->
     <a
+        v-if="canBlock"
         @click="onClick"
         v-tooltip="tooltip"
-        :class="blocked ? 'lock-button-red' : 'lock-button-green'">
-        <!-- TODO chang icon to a harder one,  -->
-        <fa-icon :icon="blocked ? 'lock' : 'unlock'" />
+        :class="{'lock-button-red':blocked}">
+        <fa-icon icon="user-lock" />
     </a>
 </template>
 
 <script>
     import c2c from '@/js/c2c'
+    import user from '@/js/user'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
@@ -26,6 +26,10 @@
         },
 
         computed:{
+            canBlock(){
+                return this.document.type =='u' && user.isModerator() && user.getId() != this.document.document_id
+            },
+
             tooltip(){
                 if(this.blocked)
                     return this.$gettext('Unblock account')
@@ -35,8 +39,9 @@
         },
 
         created(){
-            c2c.moderator.isAccountBlocked(this.document.document_id)
-            .then(response => this.blocked = response.data.blocked)
+            if(this.canBlock)
+                c2c.moderator.isAccountBlocked(this.document.document_id)
+                .then(response => this.blocked = response.data.blocked)
         },
 
         methods:{
@@ -60,8 +65,8 @@
 
 @import "@/assets/sass/variables.scss";
 
-.lock-button-green{
-    color:$green;
+a{
+    transition: 30ms;
 }
 
 .lock-button-red{
