@@ -1,7 +1,7 @@
 <template>
     <p class="control">
         <a class="button has-text-primary">
-            <span v-if="icon" class="icon is-small">
+            <span v-if="icon" class="icon">
                 <fa-icon :icon="icon" />
             </span>
             <span v-if="text">

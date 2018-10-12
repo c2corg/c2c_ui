@@ -9,9 +9,12 @@
 
             <div class="field has-addons">
                 <editor-button icon="link" />
+                <editor-button icon="image" />
+                <editor-button icon="grin" />
             </div>
 
             <div class="field has-addons">
+                <editor-button icon="hashtag" />
                 <editor-button icon="list-ul" />
                 <editor-button icon="list-ol" />
                 <editor-button icon="code" />
