@@ -44,7 +44,7 @@ export default{
             if(this.mode=="add")
                 return this.document.locales[0]
 
-            const locale = user.getLocaleStupid(this.document, this.lang)
+            var locale = user.getLocaleStupid(this.document, this.lang)
 
             if(!locale){
                 locale = constants.buildLocale(this.type, this.lang)

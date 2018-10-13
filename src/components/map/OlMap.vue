@@ -221,6 +221,10 @@
 
 
             this.geolocation = new ol.Geolocation({
+                trackingOptions: {
+                    enableHighAccuracy: true
+                },
+
                 projection: this.view.getProjection()
             })
 
@@ -337,12 +341,18 @@
             },
 
             centerOnGeolocation(){
-                var position = this.geolocation.getPosition()
+                this.geolocation.setTracking(true)
 
-                if(!position)
-                    return
+                // TODO : not tracking mode,
+                // * add a spinner showing that it's waiting
+                // * remove handler once it's loaded
+                const setCenter = function() {
+                    var position = this.geolocation.getPosition()
+                    console.log(position)
+                    this.view.setCenter(position)
+                }
 
-                this.view.setCenter(position);
+                this.geolocation.on('change:position', setCenter.bind(this))
             },
 
             getBiodivSportsAreas(){
