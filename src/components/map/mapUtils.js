@@ -2,25 +2,16 @@
 import ol from '@/js/ol.js'
 import utils from "@/js/utils.js"
 
-const buildLineStyle = function(highlight) {
-
-    return new ol.style.Style({
-        // TODO text: this.createTextStyle_(feature, type, highlight)
-        stroke: new ol.style.Stroke({
-            color: highlight ? 'red' : 'yellow',
-            width: 3
-        })
-    })
-}
 
 const buildTextStyle = function(title, highlight){
 //createTextStyle_ = function(feature, type, highlight) {
     let text;
 
     if (highlight) { // on hover in list view
-        text = new ol.style.Text({
+        var def = {
             text: utils.stringDivider(title, 30, '\n'),
             textAlign: 'left',
+            overflow: true,
             offsetX: 20,
             font: '12px verdana,sans-serif',
             stroke: new ol.style.Stroke({
@@ -31,10 +22,38 @@ const buildTextStyle = function(title, highlight){
                 color: 'black'
             }),
             textBaseline: 'middle'
-        });
+        }
+
+        text = new ol.style.Text(def)
     }
 
     return text;
+}
+
+export const buildPolygonStyle = function(title, highlight) {
+    const opacityFactor = highlight ? 1.5 : 1
+
+    return new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: [51, 122, 183, 0.8 * opacityFactor],
+            width: 1,
+        }),
+        fill: new ol.style.Fill({
+            color: [51, 122, 183, 0.4 * opacityFactor]
+        }),
+        text: buildTextStyle(title, highlight),
+    })
+}
+
+export const buildLineStyle = function(title, highlight) {
+
+    return new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: highlight ? 'red' : 'yellow',
+            width: 3
+        }),
+        text: buildTextStyle(title, highlight),
+    })
 }
 
 const buildPointStyle = function(title, src, color, highlight){
@@ -75,8 +94,10 @@ const buildPointStyle = function(title, src, color, highlight){
 
 export const getDocumentStyle = function(document, highlight, isLine){
 
+    let title = utils.getDocumentTitle(document)
+
     if(isLine){
-        return buildLineStyle(highlight)
+        return buildLineStyle(title, highlight)
     }
 
     // TODO : put style in a cache
@@ -107,8 +128,6 @@ export const getDocumentStyle = function(document, highlight, isLine){
     else if(document.condition_rating === 'awful')
         color = '#8B0000';
 
-    let title = utils.getDocumentTitle(document)
-
     if(type == "w")
         return buildPointStyle(
             title,
@@ -122,4 +141,4 @@ export const getDocumentStyle = function(document, highlight, isLine){
 
 }
 
-export const geoJSONFormat = new ol.format.GeoJSON();
+export const geoJSONFormat = new ol.format.GeoJSON()

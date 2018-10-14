@@ -48,7 +48,6 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 * maps
     * ask for a IGN and Bing dev key
     * recenter on...
-    * test add all biodiv
 * signup (CAPTCHA)
 
 #### Nice to have

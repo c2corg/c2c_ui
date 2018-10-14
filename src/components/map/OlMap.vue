@@ -60,7 +60,7 @@
 
     import {mapLayers, dataLayers} from './MapLayers.js'
     import biodivSports from './biodivSports.js'
-    import { getDocumentStyle, geoJSONFormat } from './mapUtils.js'
+    import { getDocumentStyle, geoJSONFormat, buildPolygonStyle } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
@@ -124,11 +124,28 @@
 
                 filterDocumentsWithMap: this.$route.query.bbox !== undefined,
 
-                highlightedFeature : null,
+                highlightedFeature_ : null,
             }
         },
 
         computed: {
+
+            highlightedFeature:{
+                get(){
+                    return this.highlightedFeature_
+                },
+
+                set(feature){
+                    if(this.highlightedFeature)
+                        this.highlightedFeature.setStyle(this.highlightedFeature.get("normalStyle"))
+
+                    if(feature && feature.get("highlightedStyle")){
+                        feature.setStyle(feature.get("highlightedStyle"))
+                    }
+
+                    this.highlightedFeature_ = feature
+                }
+            },
 
             highlightedDocument:{
                 get(){
@@ -137,16 +154,10 @@
 
                 },
                 set(document){
-                    if(this.highlightedFeature)
-                        this.highlightedFeature.setStyle(this.highlightedFeature.get("normalStyle"))
-
-                    if(document){
+                    if(document)
                         this.highlightedFeature = this.documentsLayer.getSource().getFeatureById(document.document_id)
-
-                        if(this.highlightedFeature && this.highlightedFeature.get("highlightedStyle")){
-                            this.highlightedFeature.setStyle(this.highlightedFeature.get("highlightedStyle"))
-                        }
-                    }
+                    else
+                        this.highlightedFeature = null
                 }
             },
 
@@ -264,6 +275,41 @@
                 source.addFeature(feature)
             },
 
+            addBiodivSportsData(response) {
+                const results = response['data']['results']
+                const source = this.biodivLayer.getSource()
+
+                this.hasBiodivsportAreas = false
+
+                for (let result of results) {
+
+                    let geometry = geoJSONFormat.readGeometry(result['geometry'], {
+                        dataProjection: 'EPSG:4326',
+                        featureProjection: 'EPSG:3857'
+                    });
+
+                    const feature = new ol.Feature({
+                        geometry,
+                        'id': (result['id']),
+                        'source': 'biodivsports',
+                        'title': (result['name']),
+                        'description': (result['description']),
+                        'info_url': (result['info_url']),
+                        'kml_url': (result['kml_url']),
+                        'period': (result['period']),
+                    });
+
+                    feature.setId('biodiv_' + (result['id']));
+
+                    feature.set("normalStyle", buildPolygonStyle(result.name, false))
+                    feature.set("highlightedStyle", buildPolygonStyle(result.name, true))
+                    feature.setStyle(feature.get('normalStyle'))
+
+                    source.addFeature(feature);
+                    this.hasBiodivsportAreas = true
+                }
+            },
+
             drawDocumentMarkers(){
                 var source = this.documentsLayer.getSource()
                 source.clear()
@@ -318,10 +364,8 @@
                 this.highlightedDocument = null
 
                 this.map.forEachFeatureAtPixel(event.pixel, function (feature) {
-                    if(feature.get('document')){
-                        this_.highlightedDocument = feature.get('document')
-                        return true
-                    }
+                    this_.highlightedFeature = feature
+                    return true
                 })
             },
 
@@ -348,7 +392,6 @@
                 // * remove handler once it's loaded
                 const setCenter = function() {
                     var position = this.geolocation.getPosition()
-                    console.log(position)
                     this.view.setCenter(position)
                 }
 
@@ -367,39 +410,6 @@
                 .then(this.addBiodivSportsData)
                 // .catch(response => console.warn(response))
             },
-
-            addBiodivSportsData(response) {
-                //eslint-disable-next-line
-                console.log(this, "is vue component???")
-
-                const results = response['data']['results']
-                const source = this.biodivLayer.getSource()
-
-                this.hasBiodivsportAreas = false
-
-                for (let result of results) {
-
-                    let geometry = geoJSONFormat.readGeometry(result['geometry'], {
-                        dataProjection: 'EPSG:4326',
-                        featureProjection: 'EPSG:3857'
-                    });
-
-                    const feature = new ol.Feature({
-                        geometry,
-                        'id': (result['id']),
-                        'source': 'biodivsports',
-                        'title': (result['name']),
-                        'description': (result['description']),
-                        'info_url': (result['info_url']),
-                        'kml_url': (result['kml_url']),
-                        'period': (result['period']),
-                    });
-
-                    feature.setId('biodiv_' + (result['id']));
-                    source.addFeature(feature);
-                    this.hasBiodivsportAreas = true
-                }
-            }
         }
     }
 </script>
