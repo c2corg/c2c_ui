@@ -84,6 +84,10 @@
                             <icon-outing />
                             <span v-translate>My outings</span>
                         </router-link>
+                        <router-link :to="{ name: 'whatsnew', query:{u:user.getId()} }" class="navbar-item">
+                            <fa-icon icon="edit"/>
+                            <span v-translate>My changes</span>
+                        </router-link>
                         <router-link :to="{ name: 'following' }" class="navbar-item">
                             <fa-icon icon="heart"/>
                             <span v-translate>My followed users</span>
@@ -127,7 +131,7 @@
                 searchText:'',
             }
         },
-        
+
         methods: {
             search(){
 

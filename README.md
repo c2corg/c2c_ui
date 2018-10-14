@@ -74,8 +74,8 @@ Wait for decision
 
 #### CSS
 
-* Preferences vue is ugly
-* Following vue is ugly
+* Preferences view is ugly
+* Following view is ugly
 * print CSS
 * choose font family
 * icon size must not be a subjet

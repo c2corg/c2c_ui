@@ -32,6 +32,11 @@
                                 contributions
                             </router-link>
                         </div>
+                        <div>
+                            <router-link :to="{ name: 'outings', query: {u:$route.params.id} }" v-translate>
+                                Outings
+                            </router-link>
+                        </div>
                     </content-box>
 
                     <map-box :document="document" />
