@@ -25,10 +25,16 @@
             </tab-item>
 
             <tab-item :title="$gettext('numbers')">
-                <field-simple :document="document" :field="fields.elevation_min"/>
-                <field-simple :document="document" :field="fields.elevation_max"/>
-                <field-simple :document="document" :field="fields.height_diff_up"/>
-                <field-simple :document="document" :field="fields.height_diff_down"/>
+                <field-row :label="$gettext('elevation')">
+                    <field-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')"/>
+                    <field-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')"/>
+                </field-row>
+
+                <field-row :label="$gettext('height_diff')">
+                    <field-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
+                    <field-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>
+                </field-row>
+
                 <field-simple :document="document" :field="fields.height_diff_access"/>
                 <field-simple :document="document" :field="fields.height_diff_difficulties"/>
                 <field-simple :document="document" :field="fields.difficulties_height"/>

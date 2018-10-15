@@ -53,9 +53,13 @@
             <tab-item :title="$gettext('Numbers')">
                 <field-simple :document="document" :field="fields.length" />
                 <field-simple :document="document" :field="fields.slope" />
-                <field-simple :document="document" :field="fields.capacity" />
                 <field-simple :document="document" :field="fields.custodianship" />
                 <field-simple :document="document" :field="fields.capacity_staffed" />
+                <field-simple :document="document" :field="fields.capacity" />
+                <field-simple :document="document" :field="fields.matress_unstaffed" />
+                <field-simple :document="document" :field="fields.blanket_unstaffed" />
+                <field-simple :document="document" :field="fields.gas_unstaffed" />
+                <field-simple :document="document" :field="fields.heating_unstaffed" />
 
                 <field-row :label="$gettext('height')">
                     <field-input :document="document" :field="fields.height_min" prefix="min"/>
@@ -81,14 +85,6 @@
 
                 <field-simple :document="document" :field="fields.paragliding_rating" />
                 <field-simple :document="document" :field="fields.exposition_rating" />
-            </tab-item>
-
-            <tab-item :title="$gettext('Equipement')">
-                <!-- TODO radio -->
-                <field-simple :document="document" :field="fields.matress_unstaffed" />
-                <field-simple :document="document" :field="fields.blanket_unstaffed" />
-                <field-simple :document="document" :field="fields.gas_unstaffed" />
-                <field-simple :document="document" :field="fields.heating_unstaffed" />
             </tab-item>
 
             <tab-item :title="$gettext('Contact')">

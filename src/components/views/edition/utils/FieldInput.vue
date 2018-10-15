@@ -35,9 +35,8 @@
         </div>
 
         <p
-            v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1"
-            class="control"
-            :class="{'has-icons-right':field.unit, 'is-expanded':isExpanded}">
+            v-else-if="['text', 'number', 'url', 'date', 'tel'].indexOf(field.type) !=-1"
+            class="control">
 
             <input :type="field.type"
                    :min="field.min"
@@ -52,6 +51,16 @@
             v-else-if="field.type=='markdown'"
             v-model="object[field.name]"/>
 
+        <div class="control" v-else-if="field.type=='boolean'">
+            <label class="radio">
+                <input type="radio" :value="true" v-model="object[field.name]">
+                <span v-translate>Yes</span>
+            </label>
+            <label class="radio">
+                <input type="radio" :value="null" v-model="object[field.name]">
+                <span v-translate>No</span>
+            </label>
+        </div>
 
         <div v-else class="notification is-danger">
             <!-- Should not happen, message to devs -->
@@ -90,11 +99,6 @@
                 type:String,
                 default:null,
             },
-            isExpanded: {
-                type:Boolean,
-                default:false,
-            }
-
         },
 
 

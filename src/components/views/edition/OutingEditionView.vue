@@ -16,7 +16,6 @@
                 <field-simple :document="document" :field="fields.activities" />
 
                 <field-simple :document="document" :base="locale" :field="fields.route_description" />
-                <field-simple :document="document" :base="locale" :field="fields.timing" />
 
                 <field-simple :document="document" :field="fields.partial_trip" />
                 <field-simple :document="document" :field="fields.length_total" />
@@ -89,7 +88,8 @@
                 <field-simple :document="document" :base="locale" :field="fields.participants" />
                 <field-simple :document="document" :field="fields.participant_count" />
                 <field-simple :document="document" :base="locale" :field="fields.description" />
-                <field-simple :document="document" :field="fields.disable_comments" />           
+                <field-simple :document="document" :base="locale" :field="fields.timing" />
+                <field-simple :document="document" :field="fields.disable_comments" />
             </tab-item>
 
         </tab-view>

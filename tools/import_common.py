@@ -103,6 +103,7 @@ attribute_names = {
     "via_ferrata_ratings":False,
     "waypoint_types":True,
     "weather_station_types":True,
+    "hut_status":True,
 }
 
 for attribute_name in attribute_names:

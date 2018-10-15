@@ -1,6 +1,6 @@
 <template>
     <div class="tab-view">
-        <div class="tabs is-centered is-boxed">
+        <div class="tabs is-centered is-large is-boxed is-fullwidth">
             <ul>
                 <li
                     v-for="(tab, i) in tabs"

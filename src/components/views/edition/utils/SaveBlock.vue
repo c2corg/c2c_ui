@@ -1,5 +1,5 @@
 <template>
-    <field-row label="">
+    <field-row label="" always-visible>
         <div class="field is-grouped">
             <div class="control">
                 <button class="button is-primary" @click="save" v-translate>
