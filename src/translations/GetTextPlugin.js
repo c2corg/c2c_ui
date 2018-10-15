@@ -10,6 +10,11 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
     if(!msgid)
         return msgid
 
+    if(!msgid.replace){
+        console.warn("Found a non-string in translations", msgid)
+        return msgid
+    }
+
     msgid = msgid.replace(/^[\r\n\s]*/, "")
     msgid = msgid.replace(/[\r\n\s]*$/, "")
 

@@ -3,28 +3,30 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
-            <edit-section :document="document" header="general informations">
 
-                <input-base :document="document" :base="locale" :field="fields.title" class="is-12" />
-                <input-activities :document="document" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.book_types" class="is-6" />
-                <input-base :document="document" :field="fields.author" class="is-6" />
-                <input-base :document="document" :field="fields.editor" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.langs" class="is-4" />
-                <input-base :document="document" :field="fields.publication_date" class="is-4" />
-                <input-base :document="document" :field="fields.nb_pages" class="is-4" />
-                <input-base :document="document" :field="fields.isbn" class="is-4" />
-                <input-base :document="document" :field="fields.url" class="is-8" />
+        <tab-view>
+            <tab-item :title="$gettext('general informations')">
 
-            </edit-section>
+                <field-simple :document="document" :base="locale" :field="fields.title"/>
+                <field-simple :document="document" :field="fields.activities"/>
+                <field-simple :document="document" :field="fields.book_types" />
+                <field-simple :document="document" :field="fields.author" />
+                <field-simple :document="document" :field="fields.editor" />
+                <field-simple :document="document" :field="fields.langs" />
+                <field-simple :document="document" :field="fields.publication_date" />
+                <field-simple :document="document" :field="fields.nb_pages" />
+                <field-simple :document="document" :field="fields.isbn" />
+                <field-simple :document="document" :field="fields.url" class="is-8" />
 
-            <edit-section :document="document" header="description">
-                <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
-            </edit-section>
+            </tab-item>
 
-        </div>
+            <tab-item :title="$gettext('description')">
+                <field-simple :document="document" :base="locale" :field="fields.summary"/>
+                <field-simple :document="document" :base="locale" :field="fields.description"/>
+            </tab-item>
+
+        </tab-view>
+
     </edition-container>
 </template>
 

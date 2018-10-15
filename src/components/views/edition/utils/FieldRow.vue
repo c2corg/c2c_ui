@@ -1,21 +1,29 @@
 <template>
-    <section v-show="isActive">
-        <slot/>
-    </section>
+    <div v-show="visible" class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">{{ label }}</label>
+        </div>
+        <div class="field-body">
+            <slot />
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
-        props : {
-            title:{
+        props:{
+            label: {
                 type:String,
                 required:true,
+            },
+            alwaysVisible: {
+                type: Boolean,
+                default: false,
             }
         },
 
         data(){
             return {
-                isActive:true,
                 visible: true,
             }
         },
@@ -32,13 +40,11 @@
         methods:{
             checkVisibility(){
 
-                this.visible = false
-
+                this.visible = this.alwaysVisible
+                
                 for(let child of this.$children)
-                    if(child.visible){
+                    if(child.visible)
                         this.visible = true
-                        return
-                    }
             }
         }
     }

@@ -100,7 +100,9 @@
                         v-tooltip="$gettext('History')">
                         <icon-history class="is-medium" />
                     </history-link>
-                    <translate-button :document="document"/>
+                    <translate-button
+                        v-if="!isVersionView"
+                        :document="document"/>
                     <edit-link
                         v-if="!isVersionView"
                         :type="type"

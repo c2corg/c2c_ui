@@ -3,40 +3,40 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
-            <edit-section :document="document" header="general information">
-                <input-base :document="document" :base="locale" :field="fields.title" class="is-9"/>
-                <input-base :document="document" :field="fields.image_type" class="is-3" />
-                <input-activities :document="document" class="is-6"/>
-                <input-checkboxes :document="document" :field="fields.categories" class="is-6" />
+        <tab-view>
+            <tab-item :title="$gettext('general information')">
+                <field-simple :document="document" :base="locale" :field="fields.title"/>
+                <field-simple :document="document" :field="fields.image_type"  />
+                <field-simple :document="document" :field="fields.activities"  />
+                <field-simple :document="document" :field="fields.categories" />
 
-                <!--<input-base :document="document" :field="fields.author" />-->
+                <!--<field-simple :document="document" :field="fields.author" />-->
 
-                <input-base :document="document" :field="fields.date_time" />
-                <input-base :document="document" :field="fields.filename" />
-                <input-base :document="document" :field="fields.file_size" class="is-2" />
-                <input-base :document="document" :field="fields.height" class="is-2" />
-                <input-base :document="document" :field="fields.width" class="is-2" />
-            </edit-section>
+                <field-simple :document="document" :field="fields.date_time" />
+                <field-simple :document="document" :field="fields.filename" />
+                <field-simple :document="document" :field="fields.file_size" />
+                <field-simple :document="document" :field="fields.height" />
+                <field-simple :document="document" :field="fields.width" />
+            </tab-item>
 
-            <edit-section :document="document" header="geolocation">
-                <input-base :document="document" :field="fields.elevation" />
-            </edit-section>
+            <tab-item :title="$gettext('geolocation')">
+                <field-simple :document="document" :field="fields.elevation" />
+            </tab-item>
 
-            <edit-section :document="document" header="camera settings">
-                <input-base :document="document" :field="fields.camera_name" />
-                <input-base :document="document" :field="fields.fnumber" />
-                <input-base :document="document" :field="fields.focal_length" />
-                <input-base :document="document" :field="fields.exposure_time" />
-                <input-base :document="document" :field="fields.iso_speed" />
-            </edit-section>
+            <tab-item :title="$gettext('camera settings')">
+                <field-simple :document="document" :field="fields.camera_name" />
+                <field-simple :document="document" :field="fields.fnumber" />
+                <field-simple :document="document" :field="fields.focal_length" />
+                <field-simple :document="document" :field="fields.exposure_time" />
+                <field-simple :document="document" :field="fields.iso_speed" />
+            </tab-item>
 
-            <edit-section :document="document" header="general information">
-                <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
-            </edit-section>
+            <tab-item :title="$gettext('general information')">
+                <field-simple :document="document" :base="locale" :field="fields.summary"/>
+                <field-simple :document="document" :base="locale" :field="fields.description"/>
+            </tab-item>
 
-        </div>
+        </tab-view>
     </edition-container>
 </template>
 

@@ -3,61 +3,61 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
+        <tab-view>
 
-            <edit-section header="Comments">
-                <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
-                <input-base :document="document" :field="fields.activities" class="is-12" />
-            </edit-section>
+            <tab-item :title="$gettext('Comments')">
+                <field-simple :document="document" :base="locale" :field="fields.title"/>
+                <field-simple :document="document" :field="fields.activities" />
+            </tab-item>
 
-            <edit-section header="Geolocation">
-                <input-base :document="document" :field="fields.elevation" />
-            </edit-section>
+            <tab-item :title="$gettext('Geolocation')">
+                <field-simple :document="document" :field="fields.elevation" />
+            </tab-item>
 
-            <edit-section header="General informations">
-                <input-base :document="document" :field="fields.date" class="is-3" />
-                <input-checkboxes :document="document" :field="fields.event_type" class="is-3" />
-                <input-base :document="document" :field="fields.nb_participants" class="is-3" />
-                <input-base :document="document" :field="fields.nb_impacted" class="is-3" />
-                <input-base :document="document" :field="fields.severity" class="is-3" />
-                <input-base :document="document" :field="fields.rescue" class="is-3" />
-                <input-base :document="document" :field="fields.avalanche_level" class="is-3" />
-                <input-base :document="document" :field="fields.avalanche_slope" class="is-3" />
-            </edit-section>
+            <tab-item :title="$gettext('General informations')">
+                <field-simple :document="document" :field="fields.date" />
+                <field-simple :document="document" :field="fields.event_type" />
+                <field-simple :document="document" :field="fields.nb_participants" />
+                <field-simple :document="document" :field="fields.nb_impacted" />
+                <field-simple :document="document" :field="fields.severity" />
+                <field-simple :document="document" :field="fields.rescue" />
+                <field-simple :document="document" :field="fields.avalanche_level" />
+                <field-simple :document="document" :field="fields.avalanche_slope" />
+            </tab-item>
 
-            <edit-section header="General informations">
-                <input-base :document="document" :field="fields.age" class="is-3" />
-                <input-base :document="document" :field="fields.gender" class="is-3" />
-                <input-base :document="document" :field="fields.author_status" class="is-3" />
-                <input-base :document="document" :field="fields.autonomy" class="is-3" />
-                <input-base :document="document" :field="fields.activity_rate" class="is-3" />
-                <input-base :document="document" :field="fields.nb_outings" class="is-3" />
-                <input-base :document="document" :field="fields.previous_injuries" class="is-3" />
-            </edit-section>
+            <tab-item :title="$gettext('General informations')">
+                <field-simple :document="document" :field="fields.age" />
+                <field-simple :document="document" :field="fields.gender" />
+                <field-simple :document="document" :field="fields.author_status" />
+                <field-simple :document="document" :field="fields.autonomy" />
+                <field-simple :document="document" :field="fields.activity_rate" />
+                <field-simple :document="document" :field="fields.nb_outings" />
+                <field-simple :document="document" :field="fields.previous_injuries" />
+            </tab-item>
 
-            <edit-section header="Description">
-                <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
-                <input-base :document="document" :field="fields.anonymous" />
-            </edit-section>
+            <tab-item :title="$gettext('Description')">
+                <field-simple :document="document" :base="locale" :field="fields.summary"/>
+                <field-simple :document="document" :base="locale" :field="fields.description"/>
+                <field-simple :document="document" :field="fields.anonymous" />
+            </tab-item>
 
-            <edit-section header="Factors">
-                <input-base :document="document" :base="locale" :field="fields.place" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.route_study" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.conditions" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.training" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.motivations" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.group_management" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.risk" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.time_management" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.safety" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.reduce_impact" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.increase_impact" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.modifications" class="is-12" />
-                <input-base :document="document" :base="locale" :field="fields.other_comments" class="is-12" />
-                <input-base :document="document" :field="fields.disable_comments" />
-            </edit-section>
-        </div>
+            <tab-item :title="$gettext('Factors')">
+                <field-simple :document="document" :base="locale" :field="fields.place" />
+                <field-simple :document="document" :base="locale" :field="fields.route_study" />
+                <field-simple :document="document" :base="locale" :field="fields.conditions" />
+                <field-simple :document="document" :base="locale" :field="fields.training" />
+                <field-simple :document="document" :base="locale" :field="fields.motivations" />
+                <field-simple :document="document" :base="locale" :field="fields.group_management" />
+                <field-simple :document="document" :base="locale" :field="fields.risk" />
+                <field-simple :document="document" :base="locale" :field="fields.time_management" />
+                <field-simple :document="document" :base="locale" :field="fields.safety" />
+                <field-simple :document="document" :base="locale" :field="fields.reduce_impact" />
+                <field-simple :document="document" :base="locale" :field="fields.increase_impact" />
+                <field-simple :document="document" :base="locale" :field="fields.modifications" />
+                <field-simple :document="document" :base="locale" :field="fields.other_comments" />
+                <field-simple :document="document" :field="fields.disable_comments" />
+            </tab-item>
+        </tab-view>
     </edition-container>
 </template>
 

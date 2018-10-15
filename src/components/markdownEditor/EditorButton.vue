@@ -1,14 +1,12 @@
 <template>
-    <p class="control">
-        <a class="button has-text-primary">
-            <span v-if="icon" class="icon">
-                <fa-icon :icon="icon" />
-            </span>
-            <span v-if="text">
-                {{ text }}
-            </span>
-        </a>
-    </p>
+    <a class="button has-text-primary" v-tooltip="tooltip" @click="$emit('click', arguments[0])">
+        <span v-if="icon" class="icon">
+            <fa-icon :icon="icon" />
+        </span>
+        <span v-if="text">
+            {{ text }}
+        </span>
+    </a>
 </template>
 
 <script>
@@ -21,7 +19,11 @@
             icon: {
                 type:String,
                 default:null
-            }
+            },
+            tooltip: {
+                type:String,
+                default:null
+            },
         }
     }
 </script>

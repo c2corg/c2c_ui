@@ -3,15 +3,12 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
-            <edit-section :document="document" :expanded="true" header="general information">
-                <input-base :document="document" :base="locale" :field="fields.title" class="is-12"/>
 
-                <input-base :document="document" :field="fields.editor" />
-                <input-base :document="document" :field="fields.scale" />
-                <input-base :document="document" :field="fields.code" />
-            </edit-section>
-        </div>
+        <field-simple :document="document" :base="locale" :field="fields.title"/>
+        <field-simple :document="document" :field="fields.editor" />
+        <field-simple :document="document" :field="fields.scale" />
+        <field-simple :document="document" :field="fields.code" />
+
     </edition-container>
 </template>
 

@@ -9,10 +9,11 @@
             {{ $gettext(locale.lang) }}
         </h1>
 
-        <save-block :document="document"/>
         <slot>
             ...
         </slot>
+        
+        <save-block :document="document"/>
     </div>
 </template>
 

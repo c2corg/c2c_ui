@@ -374,7 +374,7 @@ Field.prototype.isVisibleFor = function(params){
         if(params.waypoint_types)
             return intersectionIsNotNull(this.waypoint_types, params.waypoint_types)
 
-        return false;
+        return false 
     }
 
     return true;

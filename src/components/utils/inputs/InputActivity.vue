@@ -6,7 +6,7 @@
               @click="toggle(activity)">
             <icon-activity :activity="activity" />
         </span>
-    </span>
+    </span>    
 </template>
 
 <script>

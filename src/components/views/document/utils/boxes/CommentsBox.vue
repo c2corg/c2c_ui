@@ -1,5 +1,5 @@
 <template>
-    <content-box class="discourse-comments">
+    <content-box v-if="enabled" class="discourse-comments">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">
@@ -78,6 +78,10 @@
         },
 
         computed: {
+            enabled(){
+                return Boolean(this.locale.topic_id)
+            },
+
             discussionUrl(){
                 if(!this.topic)
                     return null
@@ -96,7 +100,7 @@
             comments(){
                 const result = []
 
-                if(!this.promise.data)
+                if(!this.enabled || !this.promise.data)
                     return result
 
                 const data = this.promise.data.post_stream
@@ -143,7 +147,7 @@
             },
 
             getComments(){
-                if(this.locale.topic_id){
+                if(this.enabled){
                     this.promise = forum.getTopic(this.locale.topic_id)
                 }
             }

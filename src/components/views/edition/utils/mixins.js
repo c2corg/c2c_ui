@@ -4,18 +4,25 @@ import c2c from '@/js/c2c'
 import user from '@/js/user.js'
 
 import EditionContainer from './EditionContainer'
-import InputBase from './InputBase'
-import InputActivities from './InputActivities'
-import InputCheckboxes from './InputCheckboxes'
-import EditSection from './EditSection'
+
+import TabItem from './TabItem'
+import TabView from './TabView'
+
+import FieldRow from './FieldRow'
+import FieldInput from './FieldInput'
+import FieldSimple from './FieldSimple'
 
 export default{
     components:{
         EditionContainer,
-        InputBase,
-        InputActivities,
-        InputCheckboxes,
-        EditSection,
+
+        TabView,
+        TabItem,
+
+        FieldRow,
+        FieldInput,
+        FieldSimple,
+
     },
 
     data() {

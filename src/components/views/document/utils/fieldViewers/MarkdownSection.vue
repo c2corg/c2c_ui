@@ -11,13 +11,7 @@
 <script>
     import { requireDocumentProperty, requireFieldProperty, requireLocaleProperty} from '@/js/propertiesMixins.js'
 
-    import Markdown from './Markdown'
-
     export default {
-
-        components: {
-            Markdown
-        },
 
         mixins : [ requireDocumentProperty, requireFieldProperty, requireLocaleProperty ],
 

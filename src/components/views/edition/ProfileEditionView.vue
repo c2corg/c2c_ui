@@ -3,17 +3,13 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
-            <edit-section header="general information">
 
-                <input-activities :document="document" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.categories" class="is-6" />
+        <field-simple :document="document" :field="fields.activities" />
+        <field-simple :document="document" :field="fields.categories" />
 
-                <input-base :document="document" :locale="locale" :field="fields.summary" class="is-12"/>
-                <input-base :document="document" :locale="locale" :field="fields.description" class="is-12"/>
+        <field-simple :document="document" :locale="locale" :field="fields.summary"/>
+        <field-simple :document="document" :locale="locale" :field="fields.description"/>
 
-            </edit-section>
-        </div>
     </edition-container>
 </template>
 

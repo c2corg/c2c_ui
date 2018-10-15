@@ -1,9 +1,15 @@
 <template>
-    <div>
+    <div class="tab-view">
         <div class="tabs is-centered is-boxed">
             <ul>
-                <li v-for="(tab, i) in tabs" :key="i" :class="{'is-active':tab.isActive}">
-                    <a @click="selectTab(tab)">{{ tab.title }}</a>
+                <li
+                    v-for="(tab, i) in tabs"
+                    :key="i"
+                    v-show="tab.visible"
+                    :class="{'is-active':tab.isActive}">
+                    <a @click="selectTab(tab)">
+                        {{ tab.title }}
+                    </a>
                 </li>
             </ul>
         </div>
@@ -21,6 +27,10 @@
 
         mounted() {
              this.tabs = this.$children;
+
+             for(let tab of this.tabs)
+                tab.isActive=false
+
              this.tabs[0].isActive=true
         },
 
@@ -42,3 +52,13 @@
         },
     }
 </script>
+
+<style scoped>
+
+.tab-view{
+    padding-bottom:1rem;
+    border-bottom:1px solid #dbdbdb;
+    margin-bottom:1rem;
+}
+
+</style>

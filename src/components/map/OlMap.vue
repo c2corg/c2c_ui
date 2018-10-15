@@ -95,6 +95,11 @@
             biodivSportsActivities: {
                 type: Array,
                 default: null,
+            },
+
+            editable: {
+                type: Boolean,
+                default: false,
             }
         },
 
@@ -225,10 +230,8 @@
                 //keyboardEventTarget: this.keyboardEventTarget,
             })
 
-            this.map.on("moveend", this.sendBoundsToUrl);
-            this.map.on("moveend", this.getBiodivSportsAreas);
-            this.map.on('pointermove', this.onPointerMove);
-            this.map.on('click', this.onClick);
+            this.map.on("moveend", this.sendBoundsToUrl)
+            this.map.on("moveend", this.getBiodivSportsAreas)
 
 
             this.geolocation = new ol.Geolocation({
@@ -246,6 +249,34 @@
             else
                 this.fitMapToDocuments()
 
+            if(this.editable){
+                let source = this.documentsLayer.getSource()
+                let modify = new ol.interaction.Modify({source})
+
+                this.map.addInteraction(modify)
+                this.map.addInteraction(new ol.interaction.Snap({source}))
+
+                modify.on("modifyend", (event) => {
+                    for(let feature of event.features.getArray()){
+                        let document = feature.get("document")
+
+                        if(document){
+                            let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
+
+                            if(geometry.type == "Point")
+                                document.geometry.geom = JSON.stringify(geometry)
+
+                            // TODO trace ?
+                            // TODO version ?
+                        }
+                    }
+                })
+
+            } else {
+                // if map is not editable, feature are clickable
+                this.map.on('pointermove', this.onPointerMove)
+                this.map.on('click', this.onClick)
+            }
         },
 
         methods : {

@@ -1,7 +1,7 @@
 <template>
     <div v-if="field.isVisibleFor(document)" class="column">
         <div class="field">
-            <label>
+            <label class="label" v-if="field.type!=='markdown'">
                 <span>{{ $gettext(field.name) }}</span>
                 <span v-if="field.required">*</span>
             </label>
@@ -21,7 +21,10 @@
                 </div>
             </div>
 
-            <div v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1" :class="{'has-icons-right':field.unit}" class="control">
+            <div
+                v-else-if="['text', 'number', 'url', 'date'].indexOf(field.type) !=-1"
+                :class="{'has-icons-right':field.unit}"
+                class="control">
                 <input :type="field.type"
                        :min="field.min"
                        :man="field.max"
@@ -35,7 +38,9 @@
             </div>
 
             <div v-else-if="field.type=='markdown'">
-                <markdown-editor v-model="object[field.name]"/>
+                <markdown-editor
+                    :title="$gettext(field.name)"
+                    v-model="object[field.name]"/>
             </div>
 
             <div v-else class="notification is-danger">

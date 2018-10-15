@@ -142,8 +142,16 @@ msgstr ""
 msgid "Accident database"
 msgstr ""
 
+#: src/components/views/portals/FeedView.vue
+msgid "Activity feed"
+msgstr ""
+
 #: src/components/views/document/utils/DocumentViewContainer.vue
 msgid "Add images"
+msgstr ""
+
+#: src/components/views/portals/utils/MobileAppAdvertising.vue
+msgid "Application"
 msgstr ""
 
 #: src/components/views/document/utils/buttons/DeleteDocumentButton.vue
@@ -180,6 +188,10 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Back to code"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Base layer"
 msgstr ""
@@ -201,8 +213,16 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: src/components/views/user/AccountView.vue
+msgid "Change account parameters"
+msgstr ""
+
 #: src/components/imagesUploader/ImagesUploader.vue
 msgid "Close"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Code fragment"
 msgstr ""
 
 #: src/components/views/document/utils/boxes/CommentsBox.vue
@@ -314,6 +334,10 @@ msgstr ""
 msgid "Filter preferences"
 msgstr ""
 
+#: src/components/views/portals/utils/MobileAppAdvertising.vue
+msgid "Find all Camptocamp in the mountains with the new mobile application"
+msgstr ""
+
 #: src/components/views/user/FollowingView.vue
 msgid "Followed users"
 msgstr ""
@@ -322,8 +346,8 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/components/views/dashboard/DashboardView.vue
 #: src/components/views/Navigation.vue
+#: src/components/views/portals/DashboardView.vue
 #: src/components/views/staticViews/HomeView.vue
 msgid "Forum"
 msgstr ""
@@ -350,6 +374,14 @@ msgstr ""
 msgid "Have an account?"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Heading"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Help"
+msgstr ""
+
 #: src/components/views/user/FollowingView.vue
 msgid "Here is the list of users you are following and whose activity you will see in your personal feed."
 msgstr ""
@@ -370,14 +402,26 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/portals/DashboardView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Images"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Insert emoji"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Insert image"
+msgstr ""
+
 #: src/components/views/staticViews/SeracView.vue
 msgid "Know more about SERAC"
+msgstr ""
+
+#: src/components/views/portals/FeedView.vue
+msgid "Last forum topics"
 msgstr ""
 
 #: src/components/views/document/utils/boxes/RecentOutingsBox.vue
@@ -435,12 +479,20 @@ msgid "Merging a source document with a target document transfers all
                     redirection from the source to the target document."
 msgstr ""
 
+#: src/components/views/portals/FeedView.vue
+msgid "Mobile application"
+msgstr ""
+
 #: src/components/views/wiki/WhatsNewView.vue
 msgid "Modified the"
 msgstr ""
 
 #: src/components/views/Navigation.vue
 msgid "My account"
+msgstr ""
+
+#: src/components/views/Navigation.vue
+msgid "My changes"
 msgstr ""
 
 #: src/components/views/Navigation.vue
@@ -488,13 +540,18 @@ msgstr ""
 msgid "Ooops"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Ordered list"
+msgstr ""
+
 #: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/components/views/dashboard/DashboardView.vue
+#: src/components/views/document/ProfileView.vue
 #: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
 #: src/components/views/Navigation.vue
+#: src/components/views/portals/DashboardView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Outings"
@@ -508,12 +565,24 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Pitch description tag"
+msgstr ""
+
 #: src/components/views/document/utils/boxes/CommentsBox.vue
 msgid "Post the first comment"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Preview"
+msgstr ""
+
 #: src/components/views/document/utils/buttons/LockDocumentButton.vue
 msgid "Protect document"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Quote"
 msgstr ""
 
 #: src/components/views/user/LoginView.vue
@@ -532,10 +601,10 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/components/views/dashboard/DashboardView.vue
 #: src/components/views/document/utils/associationsEditor/AssociationsEditor.vue
 #: src/components/views/document/WaypointView.vue
 #: src/components/views/Navigation.vue
+#: src/components/views/portals/DashboardView.vue
 #: src/components/views/search/SearchView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
@@ -565,6 +634,10 @@ msgstr ""
 msgid "See profile based on:"
 msgstr ""
 
+#: src/components/views/document/utils/buttons/FollowButton.vue
+msgid "See the activity of this contributor in your feed"
+msgstr ""
+
 #: src/components/views/wiki/HistoryView.vue
 msgid "See the latest version"
 msgstr ""
@@ -589,6 +662,10 @@ msgstr ""
 msgid "Source:"
 msgstr ""
 
+#: src/components/views/document/utils/buttons/FollowButton.vue
+msgid "Stop following this contributor"
+msgstr ""
+
 #: src/components/views/document/utils/buttons/MergeDocumentButton.vue
 msgid "Target:"
 msgstr ""
@@ -609,6 +686,10 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Toggle fullscreen"
+msgstr ""
+
 #: src/components/views/document/utils/buttons/TranslateButton.vue
 msgid "Translate into an other lang"
 msgstr ""
@@ -617,14 +698,27 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "URL/Link"
+msgstr ""
+
 #: src/components/views/document/utils/buttons/BlockAccountButton.vue
 msgid "Unblock account"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Unformatted text"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "Unordered list"
 msgstr ""
 
 #: src/components/views/document/utils/buttons/LockDocumentButton.vue
 msgid "Unprotect document"
 msgstr ""
 
+#: src/components/views/user/AccountView.vue
 #: src/components/views/user/LoginView.vue
 msgid "Username"
 msgstr ""
@@ -1028,6 +1122,10 @@ msgstr ""
 msgid "elevation_max"
 msgstr ""
 
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "emphasized text"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "empty"
 msgstr ""
@@ -1158,6 +1256,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "grocery"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "heading text"
 msgstr ""
 
 #: src/components/views/document/WaypointView.vue
@@ -1405,6 +1507,7 @@ msgstr ""
 msgid "nivology"
 msgstr ""
 
+#: src/components/utils/DocumentField.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "no"
 msgstr ""
@@ -1703,6 +1806,10 @@ msgstr ""
 msgid "slackline"
 msgstr ""
 
+#: src/components/views/document/WaypointView.vue
+msgid "slackline length"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "slackline_spot"
 msgstr ""
@@ -1785,6 +1892,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "stories"
+msgstr ""
+
+#: src/components/markdownEditor/MarkdownEditor.vue
+msgid "strong text"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1892,6 +2003,7 @@ msgstr ""
 msgid "wind_speed"
 msgstr ""
 
+#: src/components/utils/DocumentField.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "yes"
 msgstr ""

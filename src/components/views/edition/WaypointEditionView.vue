@@ -3,97 +3,109 @@
         v-if="document"
         :document="document"
         :locale="locale">
-        <div>
 
-            <edit-section header="title">
-                <input-base :document="document" :base="locale" :field="fields.title" class="is-9"/>
-                <input-base :document="document" :field="fields.waypoint_type" class="is-3" />
-            </edit-section>
+        <tab-view>
 
-            <edit-section header="geolocation">
-                <input-base :document="document" :field="fields.elevation" class="is-4" />
-                <input-base :document="document" :field="fields.elevation_min" class="is-4" />
-                <input-base :document="document" :field="fields.prominence" class="is-4" />
-                <input-base :document="document" :field="fields.maps_info" class="is-4" />
-            </edit-section>
+            <tab-item :title="$gettext('general informations')">
+                <field-simple :document="document" :base="locale" :field="fields.title"/>
+                <field-simple :document="document" :field="fields.waypoint_type" />
 
-            <edit-section header="Transport &amp; road or PT access">
-                <input-base :document="document" :field="fields.snow_clearance_rating" class="is-4" />
-                <input-base :document="document" :field="fields.lift_access" class="is-4" />
-                <input-base :document="document" :field="fields.public_transportation_rating" class="is-4" />
-                <input-base :document="document" :field="fields.parking_fee" class="is-4" />
-            </edit-section>
+                <field-simple :document="document" :field="fields.elevation" />
+                <field-simple :document="document" :field="fields.elevation_min" />
+                <field-simple :document="document" :field="fields.prominence" />
 
-            <edit-section header="Types and styles">
-                <input-checkboxes :document="document" :field="fields.rock_types" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.climbing_styles" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.climbing_outdoor_types" class="is-4" />
-                <input-checkboxes :document="document" :field="fields.climbing_indoor_types" class="is-6" />
-                <input-checkboxes :document="document" :field="fields.best_periods" class="is-4" />
-                <input-base :document="document" :field="fields.access_time" class="is-4" />
-                <input-base :document="document" :field="fields.rain_proof" class="is-4" />
-                <input-base :document="document" :field="fields.children_proof" class="is-4" />
-                <input-base :document="document" :field="fields.orientations" class="is-4" />
-                <input-base :document="document" :field="fields.ground_types" class="is-4" />
+                <field-row label="" always-visible>
+                    <map-view  :documents="[document]" editable/>
+                </field-row>
 
-                <input-base :document="document" :field="fields.product_types" class="is-4" />
+                <field-simple :document="document" :field="fields.maps_info" />
 
-                <input-base :document="document" :field="fields.slackline_types" class="is-4" />
+            </tab-item>
+
+            <tab-item :title="$gettext('Transport &amp; road or PT access')">
+                <field-simple :document="document" :field="fields.snow_clearance_rating" />
+                <field-simple :document="document" :field="fields.lift_access" />
+                <field-simple :document="document" :field="fields.public_transportation_rating" />
+                <field-simple :document="document" :field="fields.parking_fee" />
+            </tab-item>
+
+            <tab-item :title="$gettext('Types and styles')">
+                <field-simple :document="document" :field="fields.rock_types" />
+                <field-simple :document="document" :field="fields.climbing_styles" />
+                <field-simple :document="document" :field="fields.climbing_outdoor_types" />
+                <field-simple :document="document" :field="fields.climbing_indoor_types" />
+                <field-simple :document="document" :field="fields.best_periods" />
+                <field-simple :document="document" :field="fields.access_time" />
+                <field-simple :document="document" :field="fields.rain_proof" />
+                <field-simple :document="document" :field="fields.children_proof" />
+                <field-simple :document="document" :field="fields.orientations" />
+                <field-simple :document="document" :field="fields.ground_types" />
+
+                <field-simple :document="document" :field="fields.product_types" />
+
+                <field-simple :document="document" :field="fields.slackline_types" />
 
                 <!-- TODO : retrouver ou il est celui la -->
-                <input-base :document="document" :field="fields.public_transportation_types" class="is-4" />
+                <field-simple :document="document" :field="fields.public_transportation_types" />
 
-            </edit-section>
+            </tab-item>
 
-            <edit-section header="Numbers">
-                <input-base :document="document" :field="fields.length" class="is-4" />
-                <input-base :document="document" :field="fields.slope" class="is-4" />
-                <input-base :document="document" :field="fields.capacity" class="is-4" />
-                <input-base :document="document" :field="fields.custodianship" class="is-4" />
-                <input-base :document="document" :field="fields.capacity_staffed" class="is-4" />
-                <input-base :document="document" :field="fields.height_max" class="is-3" />
-                <input-base :document="document" :field="fields.height_min" class="is-3" />
-                <input-base :document="document" :field="fields.height_median" class="is-3" />
-                <input-base :document="document" :field="fields.routes_quantity" class="is-3" />
+            <tab-item :title="$gettext('Numbers')">
+                <field-simple :document="document" :field="fields.length" />
+                <field-simple :document="document" :field="fields.slope" />
+                <field-simple :document="document" :field="fields.capacity" />
+                <field-simple :document="document" :field="fields.custodianship" />
+                <field-simple :document="document" :field="fields.capacity_staffed" />
 
-                <input-base :document="document" :field="fields.slackline_length_max" class="is-4" />
-                <input-base :document="document" :field="fields.slackline_length_min" class="is-4" />
+                <field-row :label="$gettext('height')">
+                    <field-input :document="document" :field="fields.height_min" prefix="min"/>
+                    <field-input :document="document" :field="fields.height_median" prefix="median"/>
+                    <field-input :document="document" :field="fields.height_max" prefix="max"/>
+                </field-row>
 
-            </edit-section>
+                <field-simple :document="document" :field="fields.routes_quantity" />
 
-            <edit-section header="ratings">
-                <input-checkboxes :document="document" :field="fields.equipment_ratings" class="is-4" />
-                <input-base :document="document" :field="fields.climbing_rating_min" class="is-4" />
-                <input-base :document="document" :field="fields.climbing_rating_max" class="is-4" />
-                <input-base :document="document" :field="fields.climbing_rating_median" class="is-4" />
+                <field-simple :document="document" :field="fields.slackline_length_max" />
+                <field-simple :document="document" :field="fields.slackline_length_min" />
 
-                <input-base :document="document" :field="fields.paragliding_rating" class="is-6" />
-                <input-base :document="document" :field="fields.exposition_rating" class="is-6" />
-            </edit-section>
+            </tab-item>
 
-            <edit-section header="Equipement">
+            <tab-item :title="$gettext('ratings')">
+                <field-simple :document="document" :field="fields.equipment_ratings" />
+
+                <field-row :label="$gettext('ratings')">
+                    <field-input :document="document" :field="fields.climbing_rating_min" prefix="min"/>
+                    <field-input :document="document" :field="fields.climbing_rating_median" prefix="median"/>
+                    <field-input :document="document" :field="fields.climbing_rating_max" prefix="max"/>
+                </field-row>
+
+                <field-simple :document="document" :field="fields.paragliding_rating" />
+                <field-simple :document="document" :field="fields.exposition_rating" />
+            </tab-item>
+
+            <tab-item :title="$gettext('Equipement')">
                 <!-- TODO radio -->
-                <input-base :document="document" :field="fields.matress_unstaffed" class="is-3" />
-                <input-base :document="document" :field="fields.blanket_unstaffed" class="is-3" />
-                <input-base :document="document" :field="fields.gas_unstaffed" class="is-3" />
-                <input-base :document="document" :field="fields.heating_unstaffed" class="is-3" />
-            </edit-section>
+                <field-simple :document="document" :field="fields.matress_unstaffed" />
+                <field-simple :document="document" :field="fields.blanket_unstaffed" />
+                <field-simple :document="document" :field="fields.gas_unstaffed" />
+                <field-simple :document="document" :field="fields.heating_unstaffed" />
+            </tab-item>
 
-            <edit-section header="Contact">
-                <input-base :document="document" :field="fields.url" class="is-8" />
-                <input-base :document="document" :field="fields.phone" class="is-4" />
-                <input-base :document="document" :field="fields.phone_custodian" class="is-4" />
-            </edit-section>
+            <tab-item :title="$gettext('Contact')">
+                <field-simple :document="document" :field="fields.url" />
+                <field-simple :document="document" :field="fields.phone" />
+                <field-simple :document="document" :field="fields.phone_custodian" />
+            </tab-item>
 
-            <edit-section header="Description">
+            <tab-item :title="$gettext('Description')">
 
-                <input-base :document="document" :base="locale" :field="fields.summary" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.description" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.access" class="is-12"/>
-                <input-base :document="document" :base="locale" :field="fields.access_period" class="is-12"/>
+                <field-simple :document="document" :base="locale" :field="fields.summary"/>
+                <field-simple :document="document" :base="locale" :field="fields.description"/>
+                <field-simple :document="document" :base="locale" :field="fields.access"/>
+                <field-simple :document="document" :base="locale" :field="fields.access_period"/>
 
-            </edit-section>
-        </div>
+            </tab-item>
+        </tab-view>
     </edition-container>
 </template>
 
@@ -107,3 +119,6 @@
         ],
     }
 </script>
+
+<style scoped>
+</style>

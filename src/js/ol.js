@@ -1,32 +1,31 @@
-import { Map, View, Feature } from 'ol';
+import { Map, View, Feature } from 'ol'
 
-import { defaults as defaultControls, Control, FullScreen, ScaleLine } from 'ol/control';
+import { defaults as defaultControls, Control, FullScreen, ScaleLine } from 'ol/control'
 
-import VectorLayer from 'ol/layer/Vector';
-import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector'
+import TileLayer from 'ol/layer/Tile'
 
-import VectorSource from 'ol/source/Vector';
-import BingMaps from 'ol/source/BingMaps';
-import XYZ from 'ol/source/XYZ';
-import WMTS from 'ol/source/WMTS';
+import VectorSource from 'ol/source/Vector'
+import BingMaps from 'ol/source/BingMaps'
+import XYZ from 'ol/source/XYZ'
+import WMTS from 'ol/source/WMTS'
 
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 
-import Point from 'ol/geom/Point';
+import Point from 'ol/geom/Point'
 
-import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style';
+import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style'
 
 import Geolocation from 'ol/Geolocation'
 
 import GeoJSON from 'ol/format/GeoJSON'
 import GPX from 'ol/format/GPX'
 import KML from 'ol/format/KML'
-import { get as getProjection, transform as transformProjection, transformExtent} from 'ol/proj';
-import { getWidth } from 'ol/extent';
+import { get as getProjection, transform as transformProjection, transformExtent} from 'ol/proj'
+import { getWidth } from 'ol/extent'
 
 
-
-
+import {Draw, Modify, Snap} from 'ol/interaction'
 
 //build our own ol module
 export default {
@@ -54,6 +53,12 @@ export default {
 
     geom: {
         Point,
+    },
+
+    interaction: {
+        Draw,
+        Modify,
+        Snap,
     },
 
     layer: {

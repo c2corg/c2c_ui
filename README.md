@@ -40,8 +40,8 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 ### Todo
 
 * draw GPS trace on map
-* change WP location on edit mode on map
 * upload GPS trace
+* see geom diff in diff view 
 * validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email
