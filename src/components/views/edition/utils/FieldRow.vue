@@ -4,7 +4,9 @@
             <label class="label">{{ label }}</label>
         </div>
         <div class="field-body">
-            <slot />
+            <div class="field" :class="{'is-grouped is-grouped-multiline':isGrouped}">
+                <slot />
+            </div>
         </div>
     </div>
 </template>
@@ -17,6 +19,10 @@
                 required:true,
             },
             alwaysVisible: {
+                type: Boolean,
+                default: false,
+            },
+            isGrouped: {
                 type: Boolean,
                 default: false,
             }
@@ -41,7 +47,7 @@
             checkVisibility(){
 
                 this.visible = this.alwaysVisible
-                
+
                 for(let child of this.$children)
                     if(child.visible)
                         this.visible = true

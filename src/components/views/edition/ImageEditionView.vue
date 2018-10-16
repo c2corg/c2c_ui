@@ -6,8 +6,8 @@
         <tab-view>
             <tab-item :title="$gettext('general information')">
                 <field-simple :document="document" :base="locale" :field="fields.title"/>
-                <field-simple :document="document" :field="fields.image_type"  />
-                <field-simple :document="document" :field="fields.activities"  />
+                <field-simple :document="document" :field="fields.image_type" />
+                <field-simple :document="document" :field="fields.activities" />
                 <field-simple :document="document" :field="fields.categories" />
 
                 <!--<field-simple :document="document" :field="fields.author" />-->

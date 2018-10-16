@@ -1,14 +1,12 @@
 <template>
-    <field-row label="" always-visible>
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-primary" @click="save" v-translate>
-                    Save
-                </button>
-            </div>
-            <div class="control">
-                <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
-            </div>
+    <field-row label="" always-visible is-grouped>
+        <div class="control">
+            <button class="button is-primary" @click="save" v-translate>
+                Save
+            </button>
+        </div>
+        <div class="control is-expanded">
+            <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
         </div>
     </field-row>
 </template>
@@ -22,12 +20,13 @@
     import FieldRow from "./FieldRow"
 
     export default {
-        mixins : [ requireDocumentProperty ],
 
         components: {
             FieldRow
         },
 
+        mixins : [ requireDocumentProperty ],
+        
         data(){
             return {
                 comment:"",

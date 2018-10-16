@@ -39,9 +39,10 @@ On http://localhost:8000, you will have on-click buttons for any feature :
 
 ### Todo
 
+* context help : https://forum.camptocamp.org/t/draft-de-brouillon/227835/22?u=charlesb
 * draw GPS trace on map
 * upload GPS trace
-* see geom diff in diff view 
+* see geom diff in diff view
 * validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email

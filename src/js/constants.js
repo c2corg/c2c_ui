@@ -355,6 +355,8 @@ function Field(name, properties){
 
 Field.prototype.isVisibleFor = function(params){
 
+    var result = true
+
     const intersectionIsNotNull = function(arrayA, arrayB){
         for(let itemA of arrayA){
             if(arrayB.includes(itemA))
@@ -365,19 +367,20 @@ Field.prototype.isVisibleFor = function(params){
     }
 
     if(this.activities && params.activities)
-        return intersectionIsNotNull(this.activities, params.activities)
+        result = intersectionIsNotNull(this.activities, params.activities)
 
-    if(this.waypoint_types){
+    else if(this.waypoint_types){
         if(params.waypoint_type)
-            return this.waypoint_types.includes(params.waypoint_type)
+            result = this.waypoint_types.includes(params.waypoint_type)
 
-        if(params.waypoint_types)
-            return intersectionIsNotNull(this.waypoint_types, params.waypoint_types)
+        else if(params.waypoint_types)
+            result = intersectionIsNotNull(this.waypoint_types, params.waypoint_types)
 
-        return false 
+        else
+            result = false
     }
 
-    return true;
+    return result 
 }
 
 function Constants(){

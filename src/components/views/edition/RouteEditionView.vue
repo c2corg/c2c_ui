@@ -25,12 +25,12 @@
             </tab-item>
 
             <tab-item :title="$gettext('numbers')">
-                <field-row :label="$gettext('elevation')">
+                <field-row :label="$gettext('elevation')" is-grouped>
                     <field-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')"/>
                     <field-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')"/>
                 </field-row>
 
-                <field-row :label="$gettext('height_diff')">
+                <field-row :label="$gettext('height_diff')" is-grouped>
                     <field-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
                     <field-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>
                 </field-row>
@@ -47,26 +47,43 @@
             </tab-item>
 
             <tab-item :title="$gettext('ratings')">
+
+                <field-simple :document="document" :field="fields.global_rating"/>
+
+                <field-row :label="$gettext('Climnbing ratings')" is-grouped>
+                    <field-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free')"/>
+                    <field-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required')"/>
+                    <field-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid')"/>
+                </field-row>
+
+                <field-simple :document="document" :field="fields.labande_global_rating"/>
                 <field-simple :document="document" :field="fields.labande_ski_rating"/>
                 <field-simple :document="document" :field="fields.ski_rating"/>
-                <field-simple :document="document" :field="fields.labande_global_rating"/>
+
+                <field-row :label="$gettext('Ice & mixed')" is-grouped>
+                    <field-input :document="document" :field="fields.ice_rating" :prefix="$gettext('ice')"/>
+                    <field-input :document="document" :field="fields.mixed_rating" :prefix="$gettext('mixed')"/>
+                </field-row>
+
                 <field-simple :document="document" :field="fields.snowshoe_rating"/>
-                <field-simple :document="document" :field="fields.global_rating"/>
-                <field-simple :document="document" :field="fields.engagement_rating"/>
-                <field-simple :document="document" :field="fields.equipment_rating"/>
-                <field-simple :document="document" :field="fields.ice_rating"/>
-                <field-simple :document="document" :field="fields.mixed_rating"/>
-                <field-simple :document="document" :field="fields.risk_rating"/>
                 <field-simple :document="document" :field="fields.via_ferrata_rating"/>
                 <field-simple :document="document" :field="fields.hiking_rating"/>
-                <field-simple :document="document" :field="fields.mtb_down_rating"/>
-                <field-simple :document="document" :field="fields.mtb_up_rating"/>
-                <field-simple :document="document" :field="fields.rock_free_rating"/>
-                <field-simple :document="document" :field="fields.exposition_rock_rating"/>
-                <field-simple :document="document" :field="fields.rock_required_rating"/>
-                <field-simple :document="document" :field="fields.aid_rating"/>
-                <field-simple :document="document" :field="fields.ski_exposition"/>
-                <field-simple :document="document" :field="fields.hiking_mtb_exposition"/>
+
+                <field-row :label="$gettext('MTB ratings')" is-grouped>
+                    <field-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('down')"/>
+                    <field-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('up')"/>
+                </field-row>
+
+                <field-row :label="$gettext('Exposition & engagement')" is-grouped>
+                    <field-input :document="document" :field="fields.equipment_rating" :prefix="$gettext('equipment')"/>
+                    <field-input :document="document" :field="fields.ski_exposition" :prefix="$gettext('ski_exposition')"/>
+                    <field-input :document="document" :field="fields.engagement_rating" :prefix="$gettext('engagement_rating')"/>
+                    <field-input :document="document" :field="fields.risk_rating" :prefix="$gettext('risk_rating')"/>
+                    <field-input :document="document" :field="fields.exposition_rock_rating" :prefix="$gettext('exposition_rock_rating')"/>
+                    <field-input :document="document" :field="fields.hiking_mtb_exposition" :prefix="$gettext('hiking_mtb_exposition')"/>
+                </field-row>
+
+
                 <!-- TODO slope -->
             </tab-item>
 

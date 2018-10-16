@@ -11,6 +11,7 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
         return msgid
 
     if(!msgid.replace){
+        // eslint-disable-next-line
         console.warn("Found a non-string in translations", msgid)
         return msgid
     }

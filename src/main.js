@@ -95,6 +95,7 @@ addComponents(require.context('./components/utils', true, /\.vue$/))
 // other globals components
 Vue.component("document-card", require('./components/cards/DocumentCard').default)
 Vue.component("map-view", require('./components/map/OlMap').default)
+Vue.component("context-helper", require('./components/helpers/ContextHelper').default)
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
 Vue.filter('timeAgo', (arg) => {

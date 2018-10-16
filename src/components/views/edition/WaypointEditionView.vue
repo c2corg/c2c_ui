@@ -10,12 +10,15 @@
                 <field-simple :document="document" :base="locale" :field="fields.title"/>
                 <field-simple :document="document" :field="fields.waypoint_type" />
 
-                <field-simple :document="document" :field="fields.elevation" />
+                <field-row :label="$gettext('Terrain')" is-grouped>
+                    <field-input :document="document" :field="fields.elevation" :prefix="$gettext('elevation')"/>
+                    <field-input :document="document" :field="fields.prominence" :prefix="$gettext('prominence')"/>
+                </field-row>
+
                 <field-simple :document="document" :field="fields.elevation_min" />
-                <field-simple :document="document" :field="fields.prominence" />
 
                 <field-row label="" always-visible>
-                    <map-view  :documents="[document]" editable/>
+                    <map-view :documents="[document]" editable/>
                 </field-row>
 
                 <field-simple :document="document" :field="fields.maps_info" />
@@ -27,26 +30,23 @@
                 <field-simple :document="document" :field="fields.lift_access" />
                 <field-simple :document="document" :field="fields.public_transportation_rating" />
                 <field-simple :document="document" :field="fields.parking_fee" />
+                <field-simple :document="document" :field="fields.public_transportation_types" />
             </tab-item>
 
             <tab-item :title="$gettext('Types and styles')">
-                <field-simple :document="document" :field="fields.rock_types" />
-                <field-simple :document="document" :field="fields.climbing_styles" />
                 <field-simple :document="document" :field="fields.climbing_outdoor_types" />
                 <field-simple :document="document" :field="fields.climbing_indoor_types" />
+                <field-simple :document="document" :field="fields.climbing_styles" />
+                <field-simple :document="document" :field="fields.rock_types" />
+                <field-simple :document="document" :field="fields.orientations" />
                 <field-simple :document="document" :field="fields.best_periods" />
                 <field-simple :document="document" :field="fields.access_time" />
                 <field-simple :document="document" :field="fields.rain_proof" />
                 <field-simple :document="document" :field="fields.children_proof" />
-                <field-simple :document="document" :field="fields.orientations" />
                 <field-simple :document="document" :field="fields.ground_types" />
-
                 <field-simple :document="document" :field="fields.product_types" />
-
                 <field-simple :document="document" :field="fields.slackline_types" />
 
-                <!-- TODO : retrouver ou il est celui la -->
-                <field-simple :document="document" :field="fields.public_transportation_types" />
 
             </tab-item>
 
@@ -61,7 +61,7 @@
                 <field-simple :document="document" :field="fields.gas_unstaffed" />
                 <field-simple :document="document" :field="fields.heating_unstaffed" />
 
-                <field-row :label="$gettext('height')">
+                <field-row :label="$gettext('height')" is-grouped>
                     <field-input :document="document" :field="fields.height_min" prefix="min"/>
                     <field-input :document="document" :field="fields.height_median" prefix="median"/>
                     <field-input :document="document" :field="fields.height_max" prefix="max"/>
@@ -77,7 +77,7 @@
             <tab-item :title="$gettext('ratings')">
                 <field-simple :document="document" :field="fields.equipment_ratings" />
 
-                <field-row :label="$gettext('ratings')">
+                <field-row :label="$gettext('ratings')" is-grouped>
                     <field-input :document="document" :field="fields.climbing_rating_min" prefix="min"/>
                     <field-input :document="document" :field="fields.climbing_rating_median" prefix="median"/>
                     <field-input :document="document" :field="fields.climbing_rating_max" prefix="max"/>

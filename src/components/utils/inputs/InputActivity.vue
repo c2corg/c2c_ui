@@ -3,10 +3,11 @@
         <span v-for="activity of constants.activities" :key="activity"
               :class="{'selected':value_.includes(activity)}"
               class="input-item"
+              v-tooltip="$gettext(activity)"
               @click="toggle(activity)">
             <icon-activity :activity="activity" />
         </span>
-    </span>    
+    </span>
 </template>
 
 <script>
@@ -16,7 +17,7 @@
         props:{
             value: {
                 type:Array,
-                required:true,
+                default:null,
             },
         },
 
@@ -29,7 +30,7 @@
         computed:{
             value_:{
                 get(){
-                    return this.value
+                    return this.value ? this.value : []
                 },
                 set(value){
                     this.$emit("input", value)

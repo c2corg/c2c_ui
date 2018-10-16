@@ -31,9 +31,9 @@
                 type:Object,
                 default: undefined,
             },
-            isExpanded: {
+            isExpanded:{
                 type:Boolean,
-                default:false,
+                default:false
             },
         },
 
