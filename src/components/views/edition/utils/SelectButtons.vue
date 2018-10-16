@@ -10,6 +10,24 @@
                 {{ i18n ? $gettext(option) : option }}
             </span>
         </button>
+
+        <!-- <div
+            class="field"
+            v-for="option of options"
+            :key="option"
+            @click="toggle(option)">
+            <input
+                class="is-checkradio is-block is-success is-medium"
+                :id="option + 'exampleCheckboxBlockDefault'"
+                type="checkbox"
+                :checked="multiple ? value_.includes(option) : value == option">
+            <label
+                :for="option + 'exampleCheckboxBlockDefault'"
+                class="is-first-letter-uppercase">
+                {{ i18n ? $gettext(option) : option }}
+            </label>
+        </div> -->
+
     </div>
 </template>
 

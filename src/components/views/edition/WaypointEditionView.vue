@@ -7,8 +7,10 @@
         <tab-view>
 
             <tab-item :title="$gettext('general informations')">
-                <field-simple :document="document" :base="locale" :field="fields.title"/>
-                <field-simple :document="document" :field="fields.waypoint_type" />
+                <field-row :label="$gettext('waypoint')" is-grouped>
+                    <field-input :document="document" :field="fields.waypoint_type" :prefix="$gettext('type')"/>
+                    <field-input :document="document" :base="locale" :field="fields.title" :prefix="$gettext('title')" is-expanded/>
+                </field-row>
 
                 <field-row :label="$gettext('Terrain')" is-grouped>
                     <field-input :document="document" :field="fields.elevation" :prefix="$gettext('elevation')"/>

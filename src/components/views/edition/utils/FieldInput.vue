@@ -25,7 +25,7 @@
                 </span>
             </div>
 
-            <div class="control">
+            <div class="control" :class="{'is-expanded':isExpanded}">
                 <input :type="field.type"
                        :min="field.min"
                        :man="field.max"
@@ -53,15 +53,13 @@
             v-model="object[field.name]"
             class="input">
 
-        <div v-else-if="field.type=='boolean'" >
-            <label class="radio">
-                <input type="radio" :value="true" v-model="object[field.name]">
-                <span v-translate>yes</span>
-            </label>
-            <label class="radio">
-                <input type="radio" :value="null" v-model="object[field.name]">
-                <span v-translate>no</span>
-            </label>
+        <div v-else-if="field.type=='boolean'" class="field">
+
+            <input class="is-checkradio" type="radio" :id="field.name + '1'" :value="true" v-model="object[field.name]">
+            <label :for="field.name + '1'" v-translate>yes</label>
+            <input class="is-checkradio" type="radio" :id="field.name + '2'" :value="null" v-model="object[field.name]">
+            <label :for="field.name + '2'" v-translate>no</label>
+
         </div>
 
         <div v-else class="notification is-danger">

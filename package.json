@@ -19,6 +19,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "axios": "^0.18.0",
     "bulma": "^0.7.1",
+    "bulma-checkradio": "^2.1.0",
     "bulma-extensions": "^3.0.0",
     "bulma-tooltip": "^2.0.2",
     "d3": "^5.7.0",

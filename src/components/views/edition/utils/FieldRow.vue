@@ -1,7 +1,7 @@
 <template>
     <div v-show="visible" class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">{{ label }}</label>
+            <label class="label is-first-letter-uppercase">{{ label }}</label>
         </div>
         <div class="field-body">
             <div class="field" :class="{'is-grouped is-grouped-multiline':isGrouped}">
