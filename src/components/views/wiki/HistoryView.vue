@@ -94,6 +94,7 @@
 
 <script>
     import c2c from '@/js/c2c'
+    import constants from '@/js/constants'
 
     export default {
 

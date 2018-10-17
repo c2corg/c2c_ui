@@ -1,101 +1,105 @@
 <template>
-    <edition-container
-        v-if="document"
-        :document="document"
-        :locale="locale">
+    <edition-container v-if="document" :document="document" @save="save">
 
         <tab-view>
             <tab-item :title="$gettext('general informations')">
-                <field-simple :document="document" :base="locale" :field="fields.title" is-expanded/>
+                <form-input-row :document="document" :field="fields.title" is-expanded/>
 
-                <field-row :label="$gettext('Dates')" is-grouped>
-                    <field-input :document="document" :field="fields.date_start" prefix="start"/>
-                    <field-input :document="document" :field="fields.date_end" prefix="end"/>
-                </field-row>
+                <form-row :label="$gettext('Dates')" is-grouped>
+                    <form-input :document="document" :field="fields.date_start" prefix="start"/>
+                    <form-input :document="document" :field="fields.date_end" prefix="end"/>
+                </form-row>
 
-                <field-simple :document="document" :field="fields.activities" />
+                <form-input-row :document="document" :field="fields.activities" />
 
-                <field-simple :document="document" :base="locale" :field="fields.route_description" />
+                <form-input-row :document="document" :field="fields.description" />
 
-                <field-simple :document="document" :field="fields.partial_trip" />
-                <field-simple :document="document" :field="fields.length_total" />
+                <form-row :label="$gettext('participants')" is-grouped>
+                    <form-input :document="document" :field="fields.participant_count" :prefix="$gettext('count')"/>
+                    <form-input :document="document" :field="fields.participants" :prefix="$gettext('Without c2c account')" is-expanded/>
+                </form-row>
+            </tab-item>
 
-                <field-row :label="$gettext('Elevation')" is-grouped>
-                    <field-input :document="document" :field="fields.elevation_min" prefix="min"/>
-                    <field-input :document="document" :field="fields.elevation_max" prefix="max"/>
-                </field-row>
+            <tab-item :title="$gettext('detailled informations')">
+                <form-input-row :document="document" :field="fields.partial_trip" />
+                <form-input-row :document="document" :field="fields.length_total" />
 
-                <field-row :label="$gettext('height_diff')" is-grouped>
-                    <field-input :document="document" :field="fields.height_diff_up" prefix="up"/>
-                    <field-input :document="document" :field="fields.height_diff_down" prefix="down"/>
-                </field-row>
+                <form-row :label="$gettext('Elevation')" is-grouped>
+                    <form-input :document="document" :field="fields.elevation_min" prefix="min"/>
+                    <form-input :document="document" :field="fields.elevation_max" prefix="max"/>
+                </form-row>
 
-                <field-simple :document="document" :field="fields.height_diff_difficulties" />
+                <form-row :label="$gettext('height_diff')" is-grouped>
+                    <form-input :document="document" :field="fields.height_diff_up" prefix="up"/>
+                    <form-input :document="document" :field="fields.height_diff_down" prefix="down"/>
+                </form-row>
 
-                <field-simple :document="document" :field="fields.global_rating" />
+                <form-input-row :document="document" :field="fields.height_diff_difficulties" />
 
-                <field-simple :document="document" :field="fields.rock_free_rating" />
-                <field-simple :document="document" :field="fields.engagement_rating" />
-                <field-simple :document="document" :field="fields.equipment_rating" />
+                <form-input-row :document="document" :field="fields.global_rating" />
 
-                <field-simple :document="document" :field="fields.ski_rating" />
-                <field-simple :document="document" :field="fields.labande_global_rating" />
-                <field-simple :document="document" :field="fields.snowshoe_rating" />
+                <form-input-row :document="document" :field="fields.rock_free_rating" />
+                <form-input-row :document="document" :field="fields.engagement_rating" />
+                <form-input-row :document="document" :field="fields.equipment_rating" />
 
-                <field-simple :document="document" :field="fields.ice_rating" />
-                <field-simple :document="document" :field="fields.via_ferrata_rating" />
-                <field-simple :document="document" :field="fields.hiking_rating" />
+                <form-input-row :document="document" :field="fields.ski_rating" />
+                <form-input-row :document="document" :field="fields.labande_global_rating" />
+                <form-input-row :document="document" :field="fields.snowshoe_rating" />
 
-                <field-row :label="$gettext('MTB rating')" is-grouped>
-                    <field-input :document="document" :field="fields.mtb_down_rating" prefix="down"/>
-                    <field-input :document="document" :field="fields.mtb_up_rating" prefix="up"/>
-                </field-row>
+                <form-input-row :document="document" :field="fields.ice_rating" />
+                <form-input-row :document="document" :field="fields.via_ferrata_rating" />
+                <form-input-row :document="document" :field="fields.hiking_rating" />
 
-
+                <form-row :label="$gettext('MTB rating')" is-grouped>
+                    <form-input :document="document" :field="fields.mtb_down_rating" prefix="down"/>
+                    <form-input :document="document" :field="fields.mtb_up_rating" prefix="up"/>
+                </form-row>
             </tab-item>
 
             <tab-item :title="$gettext('weather and conditions')">
-                <field-simple :document="document" :base="locale" :field="fields.weather" />
-                <field-simple :document="document" :base="locale" :field="fields.conditions" />
 
-                <field-simple :document="document" :field="fields.condition_rating" />
+                <form-row :label="$gettext('condition_rating')" is-grouped>
+                    <form-input :document="document" :field="fields.condition_rating" />
+                    <form-input :document="document" :field="fields.glacier_rating" :prefix="$gettext('glacier')"/>
+                </form-row>
 
-                <field-simple :document="document" :field="fields.elevation_up_snow" />
-                <field-simple :document="document" :field="fields.elevation_down_snow" />
+                <form-input-row :document="document" :field="fields.elevation_up_snow" />
+                <form-input-row :document="document" :field="fields.elevation_down_snow" />
 
-                <field-row :label="$gettext('Snow')" is-grouped>
-                    <field-input :document="document" :field="fields.snow_quantity" prefix="quantity"/>
-                    <field-input :document="document" :field="fields.snow_quality" prefix="quality"/>
-                </field-row>
+                <form-row :label="$gettext('Snow')" is-grouped>
+                    <form-input :document="document" :field="fields.snow_quantity" prefix="quantity"/>
+                    <form-input :document="document" :field="fields.snow_quality" prefix="quality"/>
+                </form-row>
 
-                <field-simple :document="document" :field="fields.glacier_rating" />
-                <field-simple :document="document" :base="locale" :field="fields.avalanches" />
-                <field-simple :document="document" :field="fields.avalanche_signs" />
+                <form-input-row :document="document" :field="fields.conditions" />
+
+                <form-input-row :document="document" :field="fields.avalanches" />
+                <form-input-row :document="document" :field="fields.avalanche_signs" />
+
+                <form-input-row :document="document" :field="fields.weather" />
             </tab-item>
 
             <tab-item :title="$gettext('access')">
-                <field-simple :document="document" :field="fields.public_transport" />
-                <field-simple :document="document" :field="fields.frequentation" />
-                <field-simple :document="document" :base="locale" :field="fields.hut_comment" />
-                <field-simple :document="document" :field="fields.hut_status" />
-                <field-simple :document="document" :field="fields.elevation_access" />
-                <field-simple :document="document" :field="fields.access_condition" />
-                <field-simple :document="document" :base="locale" :field="fields.access_comment" />
-                <field-simple :document="document" :field="fields.lift_status" />
+                <form-input-row :document="document" :field="fields.public_transport" />
+                <form-input-row :document="document" :field="fields.frequentation" />
+                <form-input-row :document="document" :field="fields.hut_comment" />
+                <form-input-row :document="document" :field="fields.hut_status" />
+                <form-input-row :document="document" :field="fields.elevation_access" />
+                <form-input-row :document="document" :field="fields.access_condition" />
+                <form-input-row :document="document" :field="fields.access_comment" />
+                <form-input-row :document="document" :field="fields.lift_status" />
             </tab-item>
 
             <tab-item :title="$gettext('comments')">
-                <field-simple :document="document" :base="locale" :field="fields.participants" />
-                <field-simple :document="document" :field="fields.participant_count" />
-                <field-simple :document="document" :base="locale" :field="fields.description" />
-                <field-simple :document="document" :base="locale" :field="fields.timing" />
-                <field-simple :document="document" :field="fields.disable_comments" />
+                <form-input-row :document="document" :field="fields.route_description" />
+                <form-input-row :document="document" :field="fields.timing" />
+                <form-input-row :document="document" :field="fields.disable_comments" />
             </tab-item>
 
         </tab-view>
 
         <!-- TODO where is that ??
-            <field-simple :document="document" :base="locale" :field="fields.summary"/>
+            <form-input-row :document="document" :field="fields.summary"/>
         -->
 
     </edition-container>

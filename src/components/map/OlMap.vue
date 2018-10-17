@@ -71,7 +71,7 @@
         props: {
             documents: {
                 type: Array,
-                required: true,
+                default: undefined,
             },
 
             showFilterControl: {
@@ -100,6 +100,16 @@
             editable: {
                 type: Boolean,
                 default: false,
+            },
+
+            oldDocument: {
+                type:Object,
+                default:undefined,
+            },
+
+            newDocument: {
+                type:Object,
+                default:undefined,
             }
         },
 
@@ -244,6 +254,9 @@
 
             this.drawDocumentMarkers()
 
+            this.drawDocumentMarker(this.oldDocument, this.documentsLayer.getSource(), "old")
+            this.drawDocumentMarker(this.newDocument, this.documentsLayer.getSource(), "new")
+
             if(this.urlValue)
                 this.view.fit(this.urlValue, this.map.getSize())
             else
@@ -292,7 +305,7 @@
             },
 
 
-            addDocumentFeature(document, data, isLine, source){
+            addDocumentFeature(document, data, isLine, source, id_postFix){
 
                 let feature = geoJSONFormat.readFeature(data)
 
@@ -301,7 +314,7 @@
                 feature.setStyle(feature.get('normalStyle'));
 
                 feature.set("document", document)
-                feature.setId(document.document_id)
+                feature.setId(document.document_id + (id_postFix || ''))
 
                 source.addFeature(feature)
             },
@@ -345,15 +358,19 @@
                 var source = this.documentsLayer.getSource()
                 source.clear()
 
-                for(let document of this.documents){
-                    if(document.geometry){
-                        // do not display both line and point
-                        if(document.geometry.geom_detail){
-                            this.addDocumentFeature(document, document.geometry.geom_detail, true, source)
-                        }
-                        else if(document.geometry.geom){
-                            this.addDocumentFeature(document, document.geometry.geom, false, source, false)
-                        }
+                for(let document of this.documents || []){
+                    this.drawDocumentMarker(document, source)
+                }
+            },
+
+            drawDocumentMarker(document, source, id_postFix){
+                if(document && document.geometry){
+                    // do not display both line and point
+                    if(document.geometry.geom_detail){
+                        this.addDocumentFeature(document, document.geometry.geom_detail, true, source, id_postFix)
+                    }
+                    else if(document.geometry.geom){
+                        this.addDocumentFeature(document, document.geometry.geom, false, source, id_postFix)
                     }
                 }
             },
@@ -373,13 +390,13 @@
 
             fitMapToDocuments(){
 
-                if(this.documents.length==0 || this.filterDocumentsWithMap)
+                if(this.filterDocumentsWithMap)
                     return
 
                 var extent = this.documentsLayer.getSource().getExtent();
 
-                if(extent.filter(isFinite).length != 4) // if there is inifnity, default extent
-                    extent =  DEFAULT_EXTENT
+                if(extent.filter(isFinite).length != 4) // if there is infnity, default extent
+                    extent =  DEFAULT_EXTENT // TODO need to be current extent if it exists ...
 
                 this.view.fit(extent, this.map.getSize());
                 this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()))

@@ -1,11 +1,11 @@
 <template>
-    <div class="buttons">
+    <div class="control buttons">
         <button
             v-for="option of options"
             :key="option"
             @click="toggle(option)"
             class="button is-primary is-rounded"
-            :class="{ 'is-outlined':multiple ? !value_.includes(option) : value !== option }">
+            :class="{ 'is-outlined': !value_.includes(option) }">
             <span class="is-first-letter-uppercase">
                 {{ i18n ? $gettext(option) : option }}
             </span>
@@ -20,7 +20,7 @@
                 class="is-checkradio is-block is-success is-medium"
                 :id="option + 'exampleCheckboxBlockDefault'"
                 type="checkbox"
-                :checked="multiple ? value_.includes(option) : value == option">
+                :checked="value_.includes(option)">
             <label
                 :for="option + 'exampleCheckboxBlockDefault'"
                 class="is-first-letter-uppercase">
@@ -36,16 +36,12 @@
     export default {
         props:{
             value: {
-                type:[Array, String],
+                type:Array,
                 default:null,
             },
             options: {
                 type:Array,
                 required:true,
-            },
-            multiple: {
-                type:Boolean,
-                default:false,
             },
             i18n: {
                 type:Boolean,
@@ -60,10 +56,7 @@
         computed:{
             value_:{
                 get(){
-                    if(this.multiple)
-                        return this.value ? this.value : []
-                    else
-                        return this.value
+                    return this.value ? this.value : []
                 },
                 set(value){
                     this.$emit("input", value)
@@ -73,17 +66,12 @@
 
         methods:{
             toggle(value){
-                if(this.multiple){
-                    let newValue = this.value_.slice(0);
+                let newValue = this.value_.slice(0);
 
-                    newValue.toggle(value)
+                newValue.toggle(value)
 
-                    if(newValue.length !== 0 || !this.required)
-                        this.value_ =  newValue
-
-                } else {
-                    this.value_ = this.value == value ? (this.required ? this.value : null) : value
-                }
+                if(newValue.length !== 0 || !this.required)
+                    this.value_ =  newValue
             }
         }
     }

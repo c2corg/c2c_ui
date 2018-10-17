@@ -8,9 +8,9 @@ import EditionContainer from './EditionContainer'
 import TabItem from './TabItem'
 import TabView from './TabView'
 
-import FieldRow from './FieldRow'
-import FieldInput from './FieldInput'
-import FieldSimple from './FieldSimple'
+import FormRow from './FormRow'
+import FormInputRow from './FormInputRow'
+import FormInput from './FormInput'
 
 export default{
     components:{
@@ -19,9 +19,10 @@ export default{
         TabView,
         TabItem,
 
-        FieldRow,
-        FieldInput,
-        FieldSimple,
+        FormRow,
+
+        FormInput,
+        FormInputRow,
 
     },
 
@@ -44,22 +45,21 @@ export default{
         },
 
         document(){
-            return this.promise.data
-        },
+            let doc = this.promise.data
 
-        locale(){
-            if(this.mode=="add")
-                return this.document.locales[0]
+            if(doc){
+                var locale = user.getLocaleStupid(doc, this.lang)
 
-            var locale = user.getLocaleStupid(this.document, this.lang)
+                if(!locale){
+                    locale = constants.buildLocale(this.type, this.lang)
+                    doc.locales.push(locale)
+                }
 
-            if(!locale){
-                locale = constants.buildLocale(this.type, this.lang)
-                this.document.locales.push(locale)
+                doc.currentLocale_ = locale
             }
 
-            return locale
-        }
+            return doc
+        },
     },
 
     created(){
@@ -77,6 +77,54 @@ export default{
         }
 
         this.fields = constants.objectDefinitions[this.type].fields
+        this.cleanErrors()
 
     },
+
+    methods: {
+        save(comment){
+            let promise
+
+            if(this.mode=="edit"){
+                promise = c2c[this.type].save(this.document, comment).then(() => {
+                    this.$router.push({name:this.type, params:{id:this.document.document_id}})
+                })
+            } else {
+                promise = c2c[this.type].create(this.document, comment).then(response => {
+                    this.$router.push({name:this.type, params:{id:response.data.document_id}})
+                })
+            }
+
+            promise.catch(error => {
+                const data = error.response.data
+                this.dispatchErrors(data.errors)
+            })
+        },
+
+        dispatchErrors(errors){
+
+            // TODO : errors == undefined
+            this.cleanErrors()
+
+            for(let error of errors){
+                let path = error.name.split(".")
+
+                if(path[0]=="locales")
+                    this.dispatchError(path[2], error)
+                else
+                    this.dispatchError(path[0], error)
+
+            }
+        },
+
+        dispatchError(fieldName, error){
+            // TODO field nothing?
+            this.fields[fieldName].error = error
+        },
+
+        cleanErrors(){
+            for(let field of Object.values(this.fields))
+                field.error = null
+        }
+    }
 }

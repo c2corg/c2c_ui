@@ -4,7 +4,13 @@
             <label class="label is-first-letter-uppercase">{{ label }}</label>
         </div>
         <div class="field-body">
-            <div class="field" :class="{'is-grouped is-grouped-multiline':isGrouped}">
+            <div
+                class="field"
+                :class="{
+                    'is-grouped is-grouped-multiline':isGrouped,
+                    'is-expanded':isExpanded,
+                    'is-narrow':isNarrow,
+                    }">
                 <slot />
             </div>
         </div>
@@ -25,12 +31,21 @@
             isGrouped: {
                 type: Boolean,
                 default: false,
-            }
+            },
+            isExpanded:{
+                type:Boolean,
+                default:false
+            },
+            isNarrow:{
+                type:Boolean,
+                default:false
+            },
         },
 
         data(){
             return {
                 visible: true,
+                hasError: false,
             }
         },
 
@@ -38,9 +53,11 @@
 
             for(let child of this.$children){
                 child.$watch("visible", this.checkVisibility)
+                child.$watch("hasError", this.checkHasError)
             }
 
             this.checkVisibility()
+            this.checkHasError()
         },
 
         methods:{
@@ -51,6 +68,14 @@
                 for(let child of this.$children)
                     if(child.visible)
                         this.visible = true
+            },
+            checkHasError(){
+
+                this.hasError = false
+
+                for(let child of this.$children)
+                    if(child.hasError===true)
+                        this.hasError = true
             }
         }
     }

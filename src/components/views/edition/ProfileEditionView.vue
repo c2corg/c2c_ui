@@ -1,14 +1,11 @@
 <template>
-    <edition-container
-        v-if="document"
-        :document="document"
-        :locale="locale">
+    <edition-container v-if="document" :document="document" @save="save">
 
-        <field-simple :document="document" :field="fields.activities" />
-        <field-simple :document="document" :field="fields.categories" />
+        <form-input-row :document="document" :field="fields.activities" />
+        <form-input-row :document="document" :field="fields.categories" />
 
-        <field-simple :document="document" :locale="locale" :field="fields.summary"/>
-        <field-simple :document="document" :locale="locale" :field="fields.description"/>
+        <form-input-row :document="document" :locale="locale" :field="fields.summary"/>
+        <form-input-row :document="document" :locale="locale" :field="fields.description"/>
 
     </edition-container>
 </template>

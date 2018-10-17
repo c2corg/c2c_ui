@@ -17,6 +17,7 @@
             return {
                 isActive:true,
                 visible: true,
+                hasError: false,
             }
         },
 
@@ -24,9 +25,11 @@
 
             for(let child of this.$children){
                 child.$watch("visible", this.checkVisibility)
+                child.$watch("hasError", this.checkHasError)
             }
 
             this.checkVisibility()
+            this.checkHasError()
         },
 
         methods:{
@@ -39,6 +42,14 @@
                         this.visible = true
                         return
                     }
+            },
+            checkHasError(){
+
+                this.hasError = false
+
+                for(let child of this.$children)
+                    if(child.hasError===true)
+                        this.hasError = true
             }
         }
     }

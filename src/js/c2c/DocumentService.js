@@ -25,6 +25,10 @@ DocumentService.prototype.save = function(document, comment){
     })
 }
 
+DocumentService.prototype.create = function(document){
+    return this.api.post('/' + this.type + 's', document)
+}
+
 DocumentService.prototype.getHistory = function(document_id, lang){
     return this.api.get('/document/' + document_id + '/history/' + lang)
 }

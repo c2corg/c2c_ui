@@ -8,7 +8,9 @@
                     v-show="tab.visible"
                     :class="{'is-active':tab.isActive}">
                     <a @click="selectTab(tab)">
-                        {{ tab.title }}
+                        <span class="is-first-letter-uppercase" :class="{'has-text-danger':tab.hasError}">
+                            {{ tab.title }}
+                        </span>
                     </a>
                 </li>
             </ul>
@@ -28,22 +30,23 @@
         mounted() {
              this.tabs = this.$children;
 
-             for(let tab of this.tabs)
-                tab.isActive=false
-
+             for(let tab of this.tabs){
+                 tab.isActive=false
+             }
+    
              this.tabs[0].isActive=true
         },
 
         methods:{
             selectTab(tab){
                 if(tab.isActive){
-                    return;
+                    return
                 }
 
                 for(let item of this.tabs){
                     if(item.isActive){
                         item.isActive = false
-                        break;
+                        break
                     }
                 }
 

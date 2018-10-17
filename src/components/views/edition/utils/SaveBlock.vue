@@ -1,14 +1,14 @@
 <template>
-    <field-row label="" always-visible is-grouped>
+    <form-row label="" always-visible is-grouped>
         <div class="control">
-            <button class="button is-primary" @click="save" v-translate>
+            <button class="button is-primary" @click="$emit('save', comment)" v-translate>
                 Save
             </button>
         </div>
         <div class="control is-expanded">
             <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
         </div>
-    </field-row>
+    </form-row>
 </template>
 
 
@@ -17,32 +17,20 @@
     import c2c from '@/js/c2c'
     import constants from '@/js/constants'
 
-    import FieldRow from "./FieldRow"
+    import FormRow from "./FormRow"
 
     export default {
 
         components: {
-            FieldRow
+            FormRow
         },
 
         mixins : [ requireDocumentProperty ],
-        
+
         data(){
             return {
                 comment:"",
             }
         },
-        methods:{
-            save(){
-                let type = constants.getDocumentType(this.document.type)
-                c2c[type].save(this.document, this.comment)
-                .then(() => {
-                    this.$router.push({name:type, params:{id:this.document.document_id}})
-                })
-                .catch(() => {
-                    // TODO
-                })
-            }
-        }
     }
 </script>

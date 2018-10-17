@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <div class="control" :class="{'has-error':hasError}">
         <span v-for="activity of constants.activities" :key="activity"
               :class="{'selected':value_.includes(activity)}"
               class="input-item"
@@ -7,7 +7,7 @@
               @click="toggle(activity)">
             <icon-activity :activity="activity" />
         </span>
-    </span>
+    </div>
 </template>
 
 <script>
@@ -17,8 +17,12 @@
         props:{
             value: {
                 type:Array,
-                default:null,
+                default:undefined,
             },
+            hasError:{
+                type:Boolean,
+                default:undefined,
+            }
         },
 
         data(){
@@ -44,7 +48,8 @@
 
                 newValue.toggle(activity)
 
-                this.value_ = newValue
+                if(newValue.length != 0)
+                    this.value_ = newValue
             }
         }
     }
@@ -62,5 +67,9 @@
 }
 .selected{
     color:$primary;
+}
+.has-error{
+    box-shadow: 0px 0px 8px 0px $danger;
+    // border: 1px solid $danger;
 }
 </style>

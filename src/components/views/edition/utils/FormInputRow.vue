@@ -1,18 +1,20 @@
 <template>
-    <field-row :label="$gettext(field.name)">
-        <field-input
+    <form-row
+        :label="$gettext(field.name)"
+        :is-expanded="isExpanded || field.type=='markdown'"
+        :is-narrow="!isExpanded && field.type!='markdown'">
+        <form-input
             ref="input"
             :document="document"
-            :base="base"
             :field="field"
             :is-expanded="isExpanded"/>
-    </field-row>
+    </form-row>
 </template>
 
 <script>
 
-    import FieldRow from './FieldRow'
-    import FieldInput from './FieldInput'
+    import FormRow from './FormRow'
+    import FormInput from './FormInput'
 
     import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
 
@@ -20,17 +22,13 @@
 
     export default {
         components: {
-            FieldRow,
-            FieldInput,
+            FormRow,
+            FormInput,
         },
 
         mixins : [ requireFieldProperty, requireDocumentProperty ],
 
         props : {
-            base:{
-                type:Object,
-                default: undefined,
-            },
             isExpanded:{
                 type:Boolean,
                 default:false
@@ -40,6 +38,9 @@
         computed: {
             visible(){
                 return this.$refs.input.visible
+            },
+            hasError(){
+                return this.$refs.input.hasError === true
             }
         }
     }

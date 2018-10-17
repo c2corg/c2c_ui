@@ -228,6 +228,7 @@ const fieldsProperties = {
 function Field(name, properties){
 
     this.name = name
+    this.error = null 
 
     var baseProperties = fieldsProperties[name]
 
@@ -380,7 +381,7 @@ Field.prototype.isVisibleFor = function(params){
             result = false
     }
 
-    return result 
+    return result
 }
 
 function Constants(){

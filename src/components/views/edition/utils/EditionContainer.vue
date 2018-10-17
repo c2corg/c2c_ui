@@ -1,19 +1,19 @@
 <template>
-    <div v-if="document && locale" class="section">
+    <div v-if="document" class="section">
         <html-header title="Edit a document"/>
         <h1 class="title">
             <!-- TODO  v-translate -->
             Edit
             <document-title :document="document"/>
             in
-            {{ $gettext(locale.lang) }}
+            {{ $gettext(document.currentLocale_.lang) }}
         </h1>
 
         <slot>
             ...
         </slot>
-        
-        <save-block :document="document"/>
+
+        <save-block :document="document" @save="$emit('save', arguments[0])"/>
     </div>
 </template>
 
@@ -30,10 +30,6 @@
                 type:Object,
                 required:true,
             },
-            locale: {
-                type:Object,
-                required:true,
-            }
         }
     }
 </script>

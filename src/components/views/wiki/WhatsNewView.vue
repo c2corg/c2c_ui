@@ -1,7 +1,7 @@
 <template>
     <div class="section content">
         <html-header title="Recents changes"/>
-        <div v-if="results">
+        <div v-if="promise.data">
             <router-link
                 :to="{name: 'whatsnew', query: getNextQuery() }"
                 class="button is-link"
@@ -20,7 +20,7 @@
                         <span v-translate>comment</span>
                     </th>
                 </tr>
-                <tr v-for="(change, index) of results.feed" :key="index">
+                <tr v-for="(change, index) of promise.data.feed" :key="index">
                     <td>
                         <version-link :type="change.document.type" :id="change.document.document_id"
                                       :version="change.version_id" :lang="change.lang">
@@ -73,19 +73,17 @@
 
         data(){
             return {
-                results:null,
+                promise:null,
             }
         },
 
         created(){
-            c2c.getRecentChanges(this.$route.query).then(response => {
-                this.results = response.data
-            })
+            this.promise = c2c.getRecentChanges(this.$route.query)
         },
 
         methods:{
             getNextQuery(){
-                return Object.assign({}, this.$route.query, {token:this.results.pagination_token})
+                return Object.assign({}, this.$route.query, {token:this.promise.data.pagination_token})
             }
         },
     }

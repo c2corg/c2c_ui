@@ -1,39 +1,37 @@
 <template>
-    <edition-container
-        v-if="document"
-        :document="document"
-        :locale="locale">
+    <edition-container v-if="document" :document="document" @save="save">
+
         <tab-view>
             <tab-item :title="$gettext('general information')">
-                <field-simple :document="document" :base="locale" :field="fields.title"/>
-                <field-simple :document="document" :field="fields.image_type" />
-                <field-simple :document="document" :field="fields.activities" />
-                <field-simple :document="document" :field="fields.categories" />
+                <form-input-row :document="document" :field="fields.title"/>
+                <form-input-row :document="document" :field="fields.image_type" />
+                <form-input-row :document="document" :field="fields.activities" />
+                <form-input-row :document="document" :field="fields.categories" />
 
-                <!--<field-simple :document="document" :field="fields.author" />-->
+                <!--<form-input-row :document="document" :field="fields.author" />-->
 
-                <field-simple :document="document" :field="fields.date_time" />
-                <field-simple :document="document" :field="fields.filename" />
-                <field-simple :document="document" :field="fields.file_size" />
-                <field-simple :document="document" :field="fields.height" />
-                <field-simple :document="document" :field="fields.width" />
+                <form-input-row :document="document" :field="fields.date_time" />
+                <form-input-row :document="document" :field="fields.filename" />
+                <form-input-row :document="document" :field="fields.file_size" />
+                <form-input-row :document="document" :field="fields.height" />
+                <form-input-row :document="document" :field="fields.width" />
             </tab-item>
 
             <tab-item :title="$gettext('geolocation')">
-                <field-simple :document="document" :field="fields.elevation" />
+                <form-input-row :document="document" :field="fields.elevation" />
             </tab-item>
 
             <tab-item :title="$gettext('camera settings')">
-                <field-simple :document="document" :field="fields.camera_name" />
-                <field-simple :document="document" :field="fields.fnumber" />
-                <field-simple :document="document" :field="fields.focal_length" />
-                <field-simple :document="document" :field="fields.exposure_time" />
-                <field-simple :document="document" :field="fields.iso_speed" />
+                <form-input-row :document="document" :field="fields.camera_name" />
+                <form-input-row :document="document" :field="fields.fnumber" />
+                <form-input-row :document="document" :field="fields.focal_length" />
+                <form-input-row :document="document" :field="fields.exposure_time" />
+                <form-input-row :document="document" :field="fields.iso_speed" />
             </tab-item>
 
             <tab-item :title="$gettext('general information')">
-                <field-simple :document="document" :base="locale" :field="fields.summary"/>
-                <field-simple :document="document" :base="locale" :field="fields.description"/>
+                <form-input-row :document="document" :field="fields.summary"/>
+                <form-input-row :document="document" :field="fields.description"/>
             </tab-item>
 
         </tab-view>

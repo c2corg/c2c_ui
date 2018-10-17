@@ -1,13 +1,10 @@
 <template>
-    <edition-container
-        v-if="document"
-        :document="document"
-        :locale="locale">
+    <edition-container v-if="document" :document="document" @save="save">
 
-        <field-simple :document="document" :base="locale" :field="fields.title"/>
-        <field-simple :document="document" :field="fields.editor" />
-        <field-simple :document="document" :field="fields.scale" />
-        <field-simple :document="document" :field="fields.code" />
+        <form-input-row :document="document" :field="fields.title"/>
+        <form-input-row :document="document" :field="fields.editor" />
+        <form-input-row :document="document" :field="fields.scale" />
+        <form-input-row :document="document" :field="fields.code" />
 
     </edition-container>
 </template>
