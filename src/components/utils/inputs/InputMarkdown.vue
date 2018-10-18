@@ -5,6 +5,8 @@
 </template>
 
 <script>
+    import { baseMixin } from "./mixins.js"
+
     import MarkdownEditor from '@/components/markdownEditor/MarkdownEditor'
 
     export default {
@@ -13,22 +15,13 @@
             MarkdownEditor,
         },
 
+        mixins: [ baseMixin ],
+        
         props:{
             value: {
                 type:String,
                 default:null,
             },
-        },
-
-        computed:{
-            value_:{
-                get(){
-                    return this.value
-                },
-                set(value){
-                    this.$emit("input", value)
-                }
-            }
         },
     }
 

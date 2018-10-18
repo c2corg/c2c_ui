@@ -1,6 +1,6 @@
 <template>
     <div class="control" :class="{'has-error':hasError}">
-        <span v-for="activity of constants.activities" :key="activity"
+        <span v-for="activity of activities" :key="activity"
               :class="{'selected':value_.includes(activity)}"
               class="input-item"
               v-tooltip="$gettext(activity)"
@@ -12,46 +12,16 @@
 
 <script>
     import constants from "@/js/constants.js"
+    import { baseMixin, arrayMixin } from "./mixins.js"
 
     export default {
-        props:{
-            value: {
-                type:Array,
-                default:undefined,
-            },
-            hasError:{
-                type:Boolean,
-                default:undefined,
-            }
-        },
+        mixins: [ baseMixin, arrayMixin ],
 
         data(){
             return {
-                constants,
+                activities: constants.activities,
             }
         },
-
-        computed:{
-            value_:{
-                get(){
-                    return this.value ? this.value : []
-                },
-                set(value){
-                    this.$emit("input", value)
-                }
-            }
-        },
-
-        methods:{
-            toggle(activity){
-                let newValue = this.value_.slice(0);
-
-                newValue.toggle(activity)
-
-                if(newValue.length != 0)
-                    this.value_ = newValue
-            }
-        }
     }
 </script>
 

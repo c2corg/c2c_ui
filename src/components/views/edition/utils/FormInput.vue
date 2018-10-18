@@ -2,7 +2,7 @@
     <input-activity
         v-if="field.name=='activities'"
         v-show="visible"
-        :hasError="hasError"
+        :error-message="errorMessage"
         v-model="document.activities" />
 
     <input-orientation
@@ -21,7 +21,7 @@
         :options="field.values"
         :required="field.required"
         :i18n="field.i18n"
-        :hasError="hasError"
+        :error-message="errorMessage"
         v-model="object[field.name]"/>
 
     <input-simple
@@ -39,9 +39,8 @@
         :required="field.required"
         :i18n="field.i18n"
         :options="field.values"
-        :hasError="hasError"
-        v-model="object[field.name]"
-        />
+        :error-message="errorMessage"
+        v-model="object[field.name]"/>
 
     <input-yes-no
         v-else-if="field.type=='boolean'"
@@ -86,7 +85,10 @@
                 return ['text', 'number', 'url', 'date', 'tel'].includes(this.field.type)
             },
             hasError(){
-                return this.field.error !== null 
+                return this.field.error !== null
+            },
+            errorMessage(){
+                return this.hasError ? this.$gettext(this.field.error.description) : null
             }
         },
     }

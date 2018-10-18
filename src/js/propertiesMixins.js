@@ -15,12 +15,3 @@ export const requireFieldProperty = {
         }
     }
 }
-
-export const requireLocaleProperty = {
-    props:{
-        locale:{
-            type:Object,
-            required:true,
-        }
-    }
-}

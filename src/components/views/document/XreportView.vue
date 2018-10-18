@@ -1,78 +1,71 @@
 <template>
-    <document-view-container
-        v-if="document"
-        :document="document"
-        :locale="locale"
+    <view-container>
+        <template slot-scope="{ document, fields }">
 
-        :version="version"
-        :previous-version-id="previousVersionId"
-        :next-version-id="nextVersionId">
+            <div class="columns">
+                <div class="column is-3">
 
-        <div class="columns">
-            <div class="column is-3">
+                    <content-box>
 
-                <content-box>
+                        <label-value :label="$gettext('activities')">
+                            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+                        </label-value>
 
-                    <label-value :label="$gettext('activities')">
-                        <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
-                    </label-value>
+                        <label-value v-if="document.author" :label="$gettext('author')">
+                            <author-link :author="document.author"/>
+                        </label-value>
 
-                    <label-value v-if="document.author" :label="$gettext('author')">
-                        <author-link :author="document.author"/>
-                    </label-value>
+                        <field-view :document="document" :field="fields.event_type"/>
 
-                    <field-view :document="document" :field="fields.event_type"/>
+                        <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
+                            <users-links :users="document.associations.users"/>
+                        </label-value>
 
-                    <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
-                        <users-links :users="document.associations.users"/>
-                    </label-value>
+                        <field-view :document="document" :field="fields.avalanche_level"/>
+                        <field-view :document="document" :field="fields.avalanche_slope"/>
+                        <field-view :document="document" :field="fields.elevation"/>
+                        <field-view :document="document" :field="fields.nb_participants"/>
+                        <field-view :document="document" :field="fields.nb_impacted"/>
+                        <field-view :document="document" :field="fields.rescue"/>
+                        <field-view :document="document" :field="fields.severity"/>
+                    </content-box>
 
-                    <field-view :document="document" :field="fields.avalanche_level"/>
-                    <field-view :document="document" :field="fields.avalanche_slope"/>
-                    <field-view :document="document" :field="fields.elevation"/>
-                    <field-view :document="document" :field="fields.nb_participants"/>
-                    <field-view :document="document" :field="fields.nb_impacted"/>
-                    <field-view :document="document" :field="fields.rescue"/>
-                    <field-view :document="document" :field="fields.severity"/>
-                </content-box>
+                    <map-box :document="document"/>
 
-                <map-box :document="document"/>
+                    <license-box cc="by-nc-nd"/>
+                </div>
 
-                <license-box cc="by-nc-nd"/>
+                <div class="column">
+                    <content-box>
+                        <markdown-section :document="document" :field="fields.summary"/>
+                        <markdown-section :document="document" :field="fields.description"/>
+                        <markdown-section :document="document" :field="fields.place"/>
+                        <markdown-section :document="document" :field="fields.route_study"/>
+                        <markdown-section :document="document" :field="fields.conditions"/>
+                        <markdown-section :document="document" :field="fields.training"/>
+                        <markdown-section :document="document" :field="fields.motivations"/>
+                        <markdown-section :document="document" :field="fields.group_management"/>
+                        <markdown-section :document="document" :field="fields.risk"/>
+                        <markdown-section :document="document" :field="fields.time_management"/>
+                        <markdown-section :document="document" :field="fields.safety"/>
+                        <markdown-section :document="document" :field="fields.increase_impact"/>
+                        <markdown-section :document="document" :field="fields.reduce_impact"/>
+                        <markdown-section :document="document" :field="fields.modifications"/>
+                        <markdown-section :document="document" :field="fields.other_comments"/>
+                    </content-box>
+
+                    <comments-box :document="document" />
+
+                </div>
             </div>
-
-            <div class="column">
-                <content-box>
-                    <markdown-section :document="document" :locale="locale" :field="fields.summary"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.description"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.place"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.route_study"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.conditions"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.training"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.motivations"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.group_management"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.risk"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.time_management"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.safety"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.increase_impact"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.reduce_impact"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.modifications"/>
-                    <markdown-section :document="document" :locale="locale" :field="fields.other_comments"/>
-                </content-box>
-
-                <comments-box :document="document" :locale="locale" />
-
-            </div>
-        </div>
-    </document-view-container>
+        </template>
+    </view-container>
 </template>
 
 <script>
-    import mixins from "./utils/mixins.js"
+    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
 
     export default {
-        mixins : [
-            mixins,
-        ],
+        mixins : [ viewComponentsMixin ],
     }
 </script>

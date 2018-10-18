@@ -9,27 +9,160 @@
             {{ $gettext(document.currentLocale_.lang) }}
         </h1>
 
-        <slot>
+        <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
+            {{ error.name }}
+            :
+            {{ error.description }}
+        </div>
+
+        <slot :document="document" :fields="fields">
             ...
         </slot>
 
-        <save-block :document="document" @save="$emit('save', arguments[0])"/>
+        <form-row label="" always-visible is-grouped>
+            <div class="control">
+                <button class="button is-primary" @click="save" v-translate>
+                    Save
+                </button>
+            </div>
+            <div v-show="mode=='edit'" class="control is-expanded">
+                <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
+            </div>
+        </form-row>
+
     </div>
 </template>
 
 <script>
-    import SaveBlock from './SaveBlock'
+
+    import constants from '@/js/constants.js'
+    import c2c from '@/js/c2c'
+    import user from '@/js/user.js'
+
+    import FormRow from './FormRow'
 
     export default {
-        components:{
-            SaveBlock,
+
+        components : { FormRow },
+
+        data() {
+            return {
+                promise:null,
+                fields:null, // keep fields here to set them reactive
+                genericErrors:[],
+                comment:"",
+            }
         },
 
-        props:{
-            document : {
-                type:Object,
-                required:true,
+        computed: {
+            documentId(){
+                return this.$route.params.id
             },
+
+            lang(){
+                return this.$route.params.lang || this.$language.current
+            },
+
+            document(){
+                let doc = this.promise.data
+
+                if(doc){
+                    var locale = user.getLocaleStupid(doc, this.lang)
+
+                    if(!locale){
+                        locale = constants.buildLocale(this.type, this.lang)
+                        doc.locales.push(locale)
+                    }
+
+                    doc.currentLocale_ = locale
+                }
+
+                return doc
+            },
+
+            type(){
+                return this.$route.name.replace(/-(edit|add)/,"")
+            },
+
+            mode(){
+                return this.$route.name.split("-")[1] // right part of route name : add or edit
+            },
+        },
+
+        created(){
+            if(this.mode=="edit")
+                this.promise = c2c[this.type].get(this.documentId)
+            else
+                this.promise = { data : constants.buildDocument(this.type, this.lang) }
+
+            this.fields = constants.objectDefinitions[this.type].fields
+
+            this.cleanErrors()
+        },
+
+        methods: {
+            save(){
+                if (this.hasError())
+                    return
+
+                let promise
+
+                if(this.mode=="edit"){
+                    promise = c2c[this.type].save(this.document, this.comment).then(() => {
+                        this.$router.push({name:this.type, params:{id:this.document.document_id}})
+                    })
+                } else {
+                    promise = c2c[this.type].create(this.document).then(response => {
+                        this.$router.push({name:this.type, params:{id:response.data.document_id}})
+                    })
+                }
+
+                promise.catch(error => {
+                    const data = error.response.data
+                    this.dispatchErrors(data.errors)
+                })
+            },
+
+            hasError(){
+                let hasError = false
+
+                for(let field of Object.values(this.fields)){
+                    let error = field.getError(this.document)
+                    hasError = hasError || error !==null
+                    field.error = error
+                }
+
+                return hasError
+            },
+
+            dispatchErrors(errors){
+
+                // TODO : errors == undefined
+                this.cleanErrors()
+
+                for(let error of errors){
+                    let path = error.name.split(".")
+
+                    if(path[0]=="locales")
+                        this.dispatchError(path[2], error)
+                    else
+                        this.dispatchError(path[0], error)
+
+                }
+            },
+
+            dispatchError(fieldName, error){
+                if(this.fields[fieldName] === undefined)
+                    this.genericErrors.push(error)
+                else
+                    this.fields[fieldName].error = error
+            },
+
+            cleanErrors(){
+                this.genericErrors = []
+                for(let field of Object.values(this.fields))
+                    field.error = null
+            }
         }
     }
 </script>

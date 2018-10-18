@@ -1,4 +1,4 @@
-
+""
 import common from '@/js/common.js'
 
 
@@ -82,7 +82,7 @@ const fieldsProperties = {
     configuration:{values:attrs.route_configuration_types, multiple},
     custodianship:{values:attrs.custodianship_types},
     date:{type:"date"},
-    date_end:{type:"date"},
+    date_end:{type:"date", required},
     date_start:{type:"date", required},
     date_time:{type:"date_time"}, // wasn't in common... //TODO : max:today
     description:{type:"markdown", parent:"locales"},
@@ -228,7 +228,7 @@ const fieldsProperties = {
 function Field(name, properties){
 
     this.name = name
-    this.error = null 
+    this.error = null
 
     var baseProperties = fieldsProperties[name]
 
@@ -352,6 +352,23 @@ function Field(name, properties){
     }
 
     this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
+}
+
+Field.prototype.getError = function (document) {
+    let value
+
+    if(this.parent=="locales")
+        value = document.currentLocale_[this.name]
+    else
+        value = document[this.name]
+
+    if(this.required && (!value || this.multiple && value.length===0))
+        return {
+            name: this.parent=="locales" ? `locales.0.${this.name}` : this.name,
+            description:`${this.name} is required`,
+        }
+
+    return null
 }
 
 Field.prototype.isVisibleFor = function(params){
@@ -510,7 +527,7 @@ function Constants(){
                 new Field("lang", {url:"l"}),
 
                 new Field("access_condition"),
-                new Field("activities", {url:"act"}),
+                new Field("activities", {url:"act", required}),
                 new Field("avalanche_signs", {url:"avdate", activities:["ice_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}),
                 new Field("condition_rating", {url:"ocond"}),
                 new Field("date_end"),

@@ -1,19 +1,19 @@
 <template>
-    <div v-if="locale[field.name] && field.isVisibleFor(document)">
+    <div v-if="document.currentLocale_[field.name] && field.isVisibleFor(document)">
         <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" >
             {{ $gettext(field.name) }}
         </h2>
-        <markdown :class="{'is-italic':field.name==='summary'}" :content="locale[field.name]"/>
+        <markdown :class="{'is-italic':field.name==='summary'}" :content="document.currentLocale_[field.name]"/>
     </div>
 </template>
 
 
 <script>
-    import { requireDocumentProperty, requireFieldProperty, requireLocaleProperty} from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty, requireFieldProperty} from '@/js/propertiesMixins.js'
 
     export default {
 
-        mixins : [ requireDocumentProperty, requireFieldProperty, requireLocaleProperty ],
+        mixins : [ requireDocumentProperty, requireFieldProperty ],
 
         props: {
             hideTitle:{

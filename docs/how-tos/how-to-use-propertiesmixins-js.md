@@ -33,11 +33,11 @@ Use `prop` object that declare property types :
 
 ``` JavaScript
 
-    import { requireDocumentProperty, requireLocaleProperty } from "@/js/propertiesMixins.js"
+    import { requireDocumentProperty, requireFieldProperty } from "@/js/propertiesMixins.js"
 
     //...
 
-    mixins : [requireDocumentProperty, requireLocaleProperty],
+    mixins : [requireDocumentProperty, requireFieldProperty],
 
     props:{
         fields:prop.requiredObject, // "fields" does not have shorthand

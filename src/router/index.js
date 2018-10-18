@@ -33,20 +33,37 @@ import RouteView from '@/components/views/document/RouteView'
 import WaypointView from '@/components/views/document/WaypointView'
 import XreportView from '@/components/views/document/XreportView'
 
-import AreaEditionView from '@/components/views/edition/AreaEditionView'
-import ArticleEditionView from '@/components/views/edition/ArticleEditionView'
-import BookEditionView from '@/components/views/edition/BookEditionView'
-import ImageEditionView from '@/components/views/edition/ImageEditionView'
-import MapEditionView from '@/components/views/edition/MapEditionView'
-import OutingEditionView from '@/components/views/edition/OutingEditionView'
-import ProfileEditionView from '@/components/views/edition/ProfileEditionView'
-import RouteEditionView from '@/components/views/edition/RouteEditionView'
-import WaypointEditionView from '@/components/views/edition/WaypointEditionView'
-import XreportEditionView from '@/components/views/edition/XreportEditionView'
+// import AreaEditionView from '@/components/views/edition/AreaEditionView'
+// import ArticleEditionView from '@/components/views/edition/ArticleEditionView'
+// import BookEditionView from '@/components/views/edition/BookEditionView'
+// import ImageEditionView from '@/components/views/edition/ImageEditionView'
+// import MapEditionView from '@/components/views/edition/MapEditionView'
+// import OutingEditionView from '@/components/views/edition/OutingEditionView'
+// import ProfileEditionView from '@/components/views/edition/ProfileEditionView'
+// import RouteEditionView from '@/components/views/edition/RouteEditionView'
+// import WaypointEditionView from '@/components/views/edition/WaypointEditionView'
+// import XreportEditionView from '@/components/views/edition/XreportEditionView'
+//
+// // lazy load components
+// // actually, only diff is quite big, because of diff computation
+// // but lets group together this three views.
+// const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/WhatsNewView.vue`)
+// const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/HistoryView.vue`)
+// const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/DiffView.vue`)
 
 // lazy load components
 // actually, only diff is quite big, because of diff computation
 // but lets group together this three views.
+const AreaEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/AreaEditionView')
+const ArticleEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/ArticleEditionView')
+const BookEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/BookEditionView')
+const ImageEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/ImageEditionView')
+const MapEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/MapEditionView')
+const OutingEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/OutingEditionView')
+const ProfileEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/ProfileEditionView')
+const RouteEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/RouteEditionView')
+const WaypointEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/WaypointEditionView')
+const XreportEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/components/views/edition/XreportEditionView')
 const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/WhatsNewView.vue`)
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/HistoryView.vue`)
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/components/views/wiki/DiffView.vue`)

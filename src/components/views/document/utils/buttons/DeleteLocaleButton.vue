@@ -29,20 +29,17 @@
 <script>
     import c2c from '@/js/c2c'
 
-    import { requireDocumentProperty, requireLocaleProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
-        mixins : [
-            requireDocumentProperty,
-            requireLocaleProperty
-        ],
+        mixins : [ requireDocumentProperty ],
 
         methods:{
             executeDelete(){
                 /* TODO ask confirm */
                 c2c.moderator.deleteLocale(
                     this.document.document_id,
-                    this.locale.lang
+                    this.document.currentLocale_.lang
                 ).then(() => {
                     /* TODO : redirect */
                 })

@@ -62,13 +62,13 @@
 </template>
 
 <script>
-    import { requireDocumentProperty, requireLocaleProperty} from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     import forum from '@/js/forum.js'
     import user from '@/js/user.js'
 
     export default {
-        mixins : [ requireDocumentProperty, requireLocaleProperty ],
+        mixins : [ requireDocumentProperty ],
 
         data(){
             return {
@@ -80,6 +80,10 @@
         computed: {
             enabled(){
                 return Boolean(this.locale.topic_id)
+            },
+
+            locale(){
+                return this.document.currentLocale_
             },
 
             discussionUrl(){

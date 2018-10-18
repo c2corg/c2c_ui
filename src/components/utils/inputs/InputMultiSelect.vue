@@ -1,5 +1,5 @@
 <template>
-    <div class="control buttons">
+    <div class="control buttons" :class="{'has-error':hasError}">
         <button
             v-for="option of options"
             :key="option"
@@ -33,46 +33,27 @@
 
 <script>
 
+    import { baseMixin, arrayMixin } from "./mixins.js"
+
     export default {
+        mixins: [ baseMixin, arrayMixin ],
+
         props:{
-            value: {
-                type:Array,
-                default:null,
-            },
             options: {
                 type:Array,
                 required:true,
             },
-            i18n: {
-                type:Boolean,
-                default:false,
-            },
-            required: {
-                type:Boolean,
-                default:false,
-            },
         },
-
-        computed:{
-            value_:{
-                get(){
-                    return this.value ? this.value : []
-                },
-                set(value){
-                    this.$emit("input", value)
-                }
-            }
-        },
-
-        methods:{
-            toggle(value){
-                let newValue = this.value_.slice(0);
-
-                newValue.toggle(value)
-
-                if(newValue.length !== 0 || !this.required)
-                    this.value_ =  newValue
-            }
-        }
     }
 </script>
+
+
+<style scoped lang="scss">
+
+@import '@/assets/sass/variables.scss';
+
+.has-error{
+    box-shadow: 0px 0px 8px 0px $danger;
+    // border: 1px solid $danger;
+}
+</style>

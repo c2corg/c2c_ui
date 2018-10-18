@@ -9,8 +9,7 @@
                 :class="{
                     'is-grouped is-grouped-multiline':isGrouped,
                     'is-expanded':isExpanded,
-                    'is-narrow':isNarrow,
-                    }">
+                    'is-narrow':isNarrow,}">
                 <slot />
             </div>
         </div>

@@ -3,23 +3,23 @@
     <div
         class="control"
         :class="{'has-icons-right':postfix, 'has-prefix':prefix, 'is-expanded':isExpanded}">
-       <span v-if="prefix" class="button is-static prefix">
-           <span class="is-first-letter-uppercase">
-               {{ prefix }}
-           </span>
-       </span>
+        <span v-if="prefix" class="button is-static prefix">
+            <span class="is-first-letter-uppercase">
+                {{ prefix }}
+            </span>
+        </span>
 
-       <div v-if="options" class="select" :class="{'is-danger':hasError}">
-           <select v-model="value_">
-               <option v-if="!required"/>
-               <option
-                   v-for="option of options"
-                   :key="option"
-                   :value="option">
-                   {{ i18n ? $gettext(option) : option }}
-               </option>
-           </select>
-       </div>
+        <div v-if="options" class="select" :class="{'is-danger':hasError}">
+            <select v-model="value_">
+                <option v-if="!required"/>
+                <option
+                    v-for="option of options"
+                    :key="option"
+                    :value="option">
+                    {{ i18n ? $gettext(option) : option }}
+                </option>
+            </select>
+        </div>
 
         <input
             v-else
@@ -35,13 +35,21 @@
         <span v-if="postfix" class="icon is-right">
             {{ postfix }}
         </span>
+
+        <span v-if="errorMessage" class="has-text-danger has-text-weight-bold">
+            {{ errorMessage }}
+        </span>
     </div>
 
 </template>
 
 <script>
 
+import { baseMixin } from "./mixins.js"
+
 export default {
+    mixins: [ baseMixin ],
+
     props:{
         type: {
             type: String,
@@ -53,10 +61,6 @@ export default {
         },
         max: {
             type: Number,
-            default: undefined
-        },
-        disabled: {
-            type: Boolean,
             default: undefined
         },
         placeholder: {
@@ -79,32 +83,9 @@ export default {
             type: Array,
             default: undefined
         },
-        i18n: {
-            type: Boolean,
-            default: undefined
-        },
-        required: {
-            type: Boolean,
-            default: undefined
-        },
         isExpanded:{
             type:Boolean,
             default:undefined,
-        },
-        hasError:{
-            type:Boolean,
-            default:undefined,
-        }
-    },
-
-    computed:{
-        value_:{
-            get(){
-                return this.value
-            },
-            set(value){
-                this.$emit("input", value)
-            }
         },
     },
 }

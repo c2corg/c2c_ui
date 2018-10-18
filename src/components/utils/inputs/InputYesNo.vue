@@ -21,7 +21,10 @@
 </template>
 
 <script>
+    import { baseMixin } from "./mixins.js"
+
     export default {
+        mixins: [ baseMixin ],
 
         props:{
             value: {
@@ -29,23 +32,12 @@
                 default:null,
             },
         },
-
-        computed:{
-            value_:{
-                get(){
-                    return this.value
-                },
-                set(value){
-                    this.$emit("input", value)
-                }
-            }
-        },
     }
 
 </script>
 
 <style scoped>
-    .control{ /* extension radio has removed padding around inputs */ 
+    .control{ /* extension radio has removed padding around inputs */
         padding-top:calc(0.375em - 1px);
         padding-bottom:calc(0.375em - 1px);
     }

@@ -1,22 +1,22 @@
 <template>
-    <edition-container v-if="document" :document="document" @save="save">
+    <edition-container>
+        <template slot-scope="{ document, fields }">
 
-        <form-input-row :document="document" :field="fields.activities" />
-        <form-input-row :document="document" :field="fields.categories" />
+            <form-input-row :document="document" :field="fields.activities" />
+            <form-input-row :document="document" :field="fields.categories" />
 
-        <form-input-row :document="document" :locale="locale" :field="fields.summary"/>
-        <form-input-row :document="document" :locale="locale" :field="fields.description"/>
-
+            <form-input-row :document="document" :field="fields.summary"/>
+            <form-input-row :document="document" :field="fields.description"/>
+        </template>
     </edition-container>
 </template>
 
 <script>
 
-    import mixins from './utils/mixins.js'
+    import FormComponentsMixin from './utils/FormComponentsMixin'
 
     export default {
-        mixins : [
-            mixins,
-        ],
+        mixins: [ FormComponentsMixin ],
     }
+
 </script>

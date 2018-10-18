@@ -60,8 +60,8 @@
         </div>
 
         <div v-if="oldVersion && newVersion">
-            <div v-if="oldVersion.document.geometry.geom !== newVersion.document.geometry.geom ">
-                <map-view :oldDocument="oldVersion.document" :newDocument="newVersion.document" />
+            <div v-if="geoLocalized && oldVersion.document.geometry.geom !== newVersion.document.geometry.geom ">
+                <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
             </div>
 
             <div v-for="key of Object.keys(diffProperties)" :key="key">
@@ -93,7 +93,8 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import user from '@/js/user.js'
+    import user from '@/js/user'
+    import constants from '@/js/constants'
 
     import { diff_match_patch } from '@/js/diff_match_patch_uncompressed'
 
@@ -112,15 +113,27 @@
         computed: {
             documentId(){ return parseInt(this.$route.params.id) },
             lang(){ return this.$route.params.lang },
-            type(){ console.log(this.$route.name.replace("-diff","")); return this.$route.name.replace("-diff","") },
+            type(){ return this.$route.name.replace("-diff","") },
+
+            geoLocalized() {
+                return constants.objectDefinitions[this.type].geoLocalized
+            }
+        },
+
+        watch:{
+            '$route':'loadVersions'
         },
 
         created() {
-            this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
-            this.loadVersion(this.$route.params.versionTo, "newVersion")
+            this.loadVersions()
         },
 
         methods: {
+            loadVersions(){
+                this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
+                this.loadVersion(this.$route.params.versionTo, "newVersion")
+            },
+
             getKeys(obj1, obj2, excludedKeys){
 
                 var keys = Object.keys(obj1).concat( Object.keys(obj2))

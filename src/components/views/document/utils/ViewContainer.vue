@@ -1,9 +1,8 @@
 
 <template>
     <div class="section">
-        <html-header :title="title"/>
-
         <div v-if="document">
+            <html-header :title="title"/>
             <!-- TODO : if not found -->
 
             <div v-if="isVersionView" class="notification is-warning has-text-centered">
@@ -75,12 +74,9 @@
 
                     <merge-document-button v-if="!isVersionView" :document="document" />
                     <lock-document-button v-if="!isVersionView" :document="document" />
-
                     <delete-document-button v-if="!isVersionView" :document="document" />
-                    <delete-locale-button
-                        v-if="!isVersionView"
-                        :document="document"
-                        :locale="locale"/>
+                    <delete-locale-button v-if="!isVersionView" :document="document"/>
+
                     <a
                         v-if="!isVersionView"
                         v-tooltip="$gettext('Edit associations')"
@@ -118,34 +114,34 @@
                 </div>
             </content-box>
 
-            <slot>
+            <slot :document="document" :fields="fields">
                 Please insert document content
             </slot>
+
+            <images-uploader
+                ref="imagesUploader"
+                :lang="locale.lang"
+                :parent-document="document"/>
+
+            <associations-editor ref="associationsEditor" :document="document"/>
+
+            <modal-confirmation
+                ref="restoreVersionConfirmationWindow"
+                @confirm="restoreVersion">
+                <span v-translate>
+                    Are you sure you want to revert to this version of the document?
+                </span>
+            </modal-confirmation>
         </div>
-
-        <images-uploader
-            ref="imagesUploader"
-            :lang="locale.lang"
-            :parent-document="document"/>
-
-        <associations-editor ref="associationsEditor" :document="document"/>
-
-        <modal-confirmation
-            ref="restoreVersionConfirmationWindow"
-            @confirm="restoreVersion">
-            <span v-translate>
-                Are you sure you want to revert to this version of the document?
-            </span>
-        </modal-confirmation>
-
     </div>
 
 </template>
 
 <script>
-    import constants from '@/js/constants.js'
-    import utils from '@/js/utils.js'
+    import constants from '@/js/constants'
+    import utils from '@/js/utils'
     import c2c from '@/js/c2c'
+    import user from '@/js/user'
 
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
 
@@ -172,52 +168,72 @@
             FollowButton,
         },
 
-        props:{
-            document:{
-                type:Object,
-                required:true,
-            },
-
-            locale:{
-                type:Object,
-                required:true,
-            },
-
-            version:{
-                type:Object,
-                default:null,
-            },
-            previousVersionId:{
-                type:Number,
-                default:null,
-            },
-            nextVersionId:{
-                type:Number,
-                default:null,
-            },
-        },
-
         data() {
             return {
-                error:null,
+                promise:null,
+                error:null, // TODO : what?
             }
         },
 
         computed:{
+            /*
+            * properties that are deducted from URL
+            */
             documentId(){
-                return this.document.document_id
+                return parseInt(this.$route.params.id)
             },
-
             type(){
-                return constants.getDocumentType(this.document.type)
+                return constants.getDocumentType(this.$route.name.split("-")[0])
             },
-
+            fields(){
+                return constants.objectDefinitions[this.type].fields
+            },
             isVersionView(){
-                return this.version !== null
+                return this.$route.name.endsWith("-version");
             },
 
+            /*
+            * properties computed when document is loaded
+            */
+            document(){
+                if(!this.promise.data)
+                    return null
+
+                let doc = this.isVersionView ? this.promise.data.document : this.promise.data
+
+                if(doc){
+                    if(this.isVersionView)
+                        doc.currentLocale_ = user.getLocaleStupid(doc, this.$route.params.lang)
+                    else
+                        doc.currentLocale_ = user.getLocaleSmart(doc, this.$route.params.lang)
+                }
+
+                return doc
+            },
+            locale(){
+                return this.document.currentLocale_
+            },
+            
+
+            /*
+            * properties computed when document is loaded, in version mode
+            */
+            version(){
+                return this.isVersionView ? this.promise.data.version : null
+            },
+            nextVersionId(){
+                return this.isVersionView ? this.promise.data.next_version_id : null
+            },
+            previousVersionId(){
+                return this.isVersionView ? this.promise.data.previous_version_id : null
+            },
+
+
+            /*
+            * properties available when doc is loaded
+            */
             title(){
-                return utils.getDocumentTitle(this.document, this.$route.params.lang)
+                return this.document ? utils.getDocumentTitle(this.document, this.$route.params.lang) : undefined
             },
 
             isFirstVersion(){
@@ -229,7 +245,54 @@
             },
         },
 
+        watch:{
+            '$route': 'loadDocument',
+        },
+
+        created() {
+            this.loadDocument()
+        },
+
         methods:{
+            loadDocument(){
+
+                if(this.isVersionView){
+                    this.promise = c2c[this.type].getVersion(
+                        this.documentId,
+                        this.$route.params.lang,
+                        this.$route.params.version
+                    ).then(response => {
+
+                        //versionned datas are poor...
+                        response.data.document.areas = []
+                        response.data.document.creator = null
+                        response.data.document.associations = {
+                            articles:[],
+                            books:[],
+                            images:[],
+                            users:[],
+                            waypoints:[],
+                            waypoint_children:[],
+                            all_routes:{
+                                documents:[],
+                            },
+                            recent_outings:{
+                                documents:[],
+                            }
+                        }
+                    })
+
+                } else {
+
+                    this.promise = c2c[this.type].get(this.documentId).then(response => {
+                        if(response.data.not_authorized===true){
+                            this.error = new Error("Sorry, you're not authorized to see this document")
+                            return
+                        }
+                    })
+                }
+            },
+
             restoreVersion(){
                 this.$refs.restoreVersionConfirmationWindow.hide()
                 c2c.moderator.revertDocument(
