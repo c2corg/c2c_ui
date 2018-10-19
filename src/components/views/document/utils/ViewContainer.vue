@@ -255,7 +255,7 @@
 
         methods:{
             loadDocument(){
-                console.log(this)
+                
                 if(this.isVersionView){
                     this.promise = c2c[this.type].getVersion(
                         this.documentId,

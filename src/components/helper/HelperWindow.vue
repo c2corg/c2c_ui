@@ -3,6 +3,7 @@
         <div slot="title">
             {{ title }}
         </div>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <section class="content" v-html="html">
             <!-- <runtime-template :template="'<div>' + html + '</div>'" /> -->
         </section>
@@ -53,14 +54,6 @@
                     title:this.$gettext("Taken routes"),
                     url:"associate.html"
                     },
-                "ski_rating": {
-                    title:this.$gettext("ski_rating"),
-                    url:"route-ski_rating.html"
-                    },
-                "labande_global_rating": {
-                    title:this.$gettext("labande_global_rating"),
-                    url:"route-labande_global_rating.html"
-                    },
                 "snowshoe_rating": {
                     title:this.$gettext("snowshoe_rating"),
                     url:"route-snowshoe_rating.html"
@@ -85,22 +78,6 @@
                     title:this.$gettext("via_ferrata_rating"),
                     url:"route-via_ferrata_rating.html"
                     },
-                "hiking_rating": {
-                    title:this.$gettext("hiking_rating"),
-                    url:"route-hiking_rating.html"
-                    },
-                "mtb_down_rating": {
-                    title:this.$gettext("mtb_down_rating"),
-                    url:"route-mtb_down_rating.html"
-                    },
-                "mtb_up_rating": {
-                    title:this.$gettext("mtb_up_rating"),
-                    url:"route-mtb_up_rating.html"
-                    },
-                "rock_free_rating": {
-                    title:this.$gettext("rock_free_rating"),
-                    url:"route-rock_free_rating.html"
-                    },
                 "conditions_levels": {
                     title:this.$gettext("conditions_levels"),
                     url:"outing-conditions_levels.html"
@@ -112,10 +89,6 @@
                 "frequentation": {
                     title:this.$gettext("frequentation"),
                     url:"outing-frequentation.html"
-                    },
-                "activities": {
-                    title:this.$gettext("activities"),
-                    url:"activities.html"
                     },
                 "route_types": {
                     title:this.$gettext("route_types"),
@@ -149,26 +122,6 @@
                     title:this.$gettext("labande_global_rating"),
                     url:"route-labande_global_rating.html"
                     },
-                "snowshoe_rating": {
-                    title:this.$gettext("snowshoe_rating"),
-                    url:"route-snowshoe_rating.html"
-                    },
-                "global_rating": {
-                    title:this.$gettext("global_rating"),
-                    url:"route-global_rating.html"
-                    },
-                "engagement_rating": {
-                    title:this.$gettext("engagement_rating"),
-                    url:"route-engagement_rating.html"
-                    },
-                "equipment_rating": {
-                    title:this.$gettext("equipment_rating"),
-                    url:"route-equipment_rating.html"
-                    },
-                "ice_rating": {
-                    title:this.$gettext("ice_rating"),
-                    url:"route-ice_rating.html"
-                    },
                 "mixed_rating": {
                     title:this.$gettext("mixed_rating"),
                     url:"route-mixed_rating.html"
@@ -176,10 +129,6 @@
                 "risk_rating": {
                     title:this.$gettext("risk_rating"),
                     url:"route-risk_rating.html"
-                    },
-                "via_ferrata_rating": {
-                    title:this.$gettext("via_ferrata_rating"),
-                    url:"route-via_ferrata_rating.html"
                     },
                 "hiking_rating": {
                     title:this.$gettext("hiking_rating"),
@@ -220,10 +169,6 @@
                 "specific gear": {
                     title:this.$gettext("specific gear"),
                     url:"route-specific_gear.html"
-                    },
-                "activities": {
-                    title:this.$gettext("activities"),
-                    url:"activities.html"
                     },
                 "author_status": {
                     title:this.$gettext("author_status"),
@@ -284,10 +229,6 @@
                 "height_diff_access": {
                     title:this.$gettext("height_diff_access"),
                     content:"Combined elevation of the approach of a route, for a route where approach is distinguished from the route itself. The approach height is calculated from minimum altitude and altitude where difficulties start."
-                    },
-                "height_diff_difficulties": {
-                    title:this.$gettext("height_diff_difficulties"),
-                    content:"Combined elevation of the main difficulties of a route, for a route where approach is distinguished from the route itself. Do not mix up with the difficulties length: difficulties height is always lower."
                     },
                 "difficulties_height": {
                     title:this.$gettext("difficulties_height"),

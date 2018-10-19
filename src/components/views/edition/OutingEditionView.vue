@@ -45,7 +45,7 @@
                     <form-input-row :document="document" :field="fields.equipment_rating" helper="equipment_rating"/>
 
                     <form-input-row :document="document" :field="fields.ski_rating" helper="ski_rating"/>
-                    <form-input-row :document="document" :field="fields.labande_global_rating"helper="labande_global_rating" />
+                    <form-input-row :document="document" :field="fields.labande_global_rating" helper="labande_global_rating" />
                     <form-input-row :document="document" :field="fields.snowshoe_rating" helper="snowshoe_rating"/>
 
                     <form-input-row :document="document" :field="fields.ice_rating" helper="ice_rating"/>
