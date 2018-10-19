@@ -1,6 +1,7 @@
 <template>
     <form-row
         :label="$gettext(field.name)"
+        :helper="helper"
         :is-expanded="isExpanded || field.type=='markdown'"
         :is-narrow="!isExpanded && field.type!='markdown'">
         <form-input
@@ -33,6 +34,10 @@
                 type:Boolean,
                 default:false
             },
+            helper:{
+                type:String,
+                default:undefined,
+            }
         },
 
         computed: {

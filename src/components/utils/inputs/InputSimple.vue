@@ -3,8 +3,10 @@
     <div
         class="control"
         :class="{'has-icons-right':postfix, 'has-prefix':prefix, 'is-expanded':isExpanded}">
-        <span v-if="prefix" class="button is-static prefix">
-            <span class="is-first-letter-uppercase">
+        <span v-if="prefix || helper" class="button prefix">
+            <marker-helper class="marker-helper" :name="helper" />
+
+            <span v-if="prefix" class="is-first-letter-uppercase">
                 {{ prefix }}
             </span>
         </span>
@@ -35,6 +37,7 @@
         <span v-if="postfix" class="icon is-right">
             {{ postfix }}
         </span>
+
 
         <span v-if="errorMessage" class="has-text-danger has-text-weight-bold">
             {{ errorMessage }}
@@ -102,14 +105,26 @@ select, input {
     display:flex;
 
     .prefix{
+        cursor: default;
+        background-color: whitesmoke;
+        border-color: #dbdbdb;
+        color: #7a7a7a;
+        box-shadow: none;
+
         margin-right: -1px;
-            border-bottom-right-radius: 0;
-            border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
     }
     input, select{
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
+}
+
+$icon-size: 1.3rem;
+.marker-helper{/* extension radio has removed padding around inputs */
+    font-size:$icon-size;
+    margin:calc(2.25rem/2 - #{$icon-size}/2);
 }
 
 </style>

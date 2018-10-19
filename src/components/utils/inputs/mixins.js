@@ -17,6 +17,10 @@ export const baseMixin = {
             type:Boolean,
             default:false,
         },
+        helper: {
+            type:String,
+            default:undefined,
+        },
     },
 
     computed: {

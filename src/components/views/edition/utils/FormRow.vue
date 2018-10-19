@@ -1,7 +1,10 @@
 <template>
     <div v-show="visible" class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label is-first-letter-uppercase">{{ label }}</label>
+            <label class="label is-first-letter-uppercase">
+                <marker-helper :name="helper" />
+                {{ label }}
+            </label>
         </div>
         <div class="field-body">
             <div
@@ -38,6 +41,10 @@
             isNarrow:{
                 type:Boolean,
                 default:false
+            },
+            helper:{
+                type:String,
+                default:undefined,
             },
         },
 

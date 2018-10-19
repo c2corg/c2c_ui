@@ -18,7 +18,6 @@
 
         <div :class="{ 'is-active': burgerActive }" class="navbar-menu is-size-5">
             <div class="navbar-start">
-
                 <router-link :to="{name:'routes'}" class="navbar-item">
                     <icon-route class="is-medium"/>
                     <span v-translate>Routes</span>

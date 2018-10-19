@@ -95,7 +95,6 @@ addComponents(require.context('./components/utils', true, /\.vue$/))
 // other globals components
 Vue.component("document-card", require('./components/cards/DocumentCard').default)
 Vue.component("map-view", require('./components/map/OlMap').default)
-Vue.component("context-helper", require('./components/helpers/ContextHelper').default)
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
 Vue.filter('timeAgo', (arg) => {
@@ -115,14 +114,6 @@ Vue.directive('tooltip',  function (el, binding) {
     }
 })
 
-
-new Vue({
-    router:Router,
-    render: h => h(App)
-}).$mount('#app')
-
-
-
 // extends javascript core objects
 Array.prototype.toggle = function(value){
     if(!this.includes(value)){
@@ -137,3 +128,23 @@ Array.prototype.toggle = function(value){
 Array.prototype.remove = function(value){
     this.splice(this.indexOf(value), 1);
 }
+
+
+Vue.prototype.$showHelper = function(name){
+    // we have an unique helper window included in App.vue
+    // this methods allows to display it anywhere
+    const helperComponent = this.$root.$children[0].$refs.helper
+    helperComponent.show(name)
+}
+
+
+new Vue({
+    router:Router,
+    render: h => h(App),
+    // methods:{
+    //     showHelper(name){
+    //         console.log(this, App)
+    //         this.$children[0].$refs.helper.show(name)
+    //     }
+    // }
+}).$mount('#app')

@@ -352,6 +352,12 @@ function Field(name, properties){
     }
 
     this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
+
+    if(this.helper){
+        if(!this.helper.title)
+            this.helper.title = this.name
+
+    }
 }
 
 Field.prototype.getError = function (document) {

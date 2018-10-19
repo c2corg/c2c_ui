@@ -29,6 +29,7 @@
         v-else-if="simpleInputType"
         v-show="visible"
         :prefix="prefix"
+        :helper="helper"
         :is-expanded="isExpanded"
         :postfix="field.unit"
         :type="field.type"
@@ -70,6 +71,10 @@
             },
             isExpanded:{
                 type:Boolean,
+                default:undefined,
+            },
+            helper:{
+                type:String,
                 default:undefined,
             }
         },

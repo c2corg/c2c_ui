@@ -213,7 +213,7 @@
             locale(){
                 return this.document.currentLocale_
             },
-            
+
 
             /*
             * properties computed when document is loaded, in version mode
@@ -255,7 +255,7 @@
 
         methods:{
             loadDocument(){
-
+                console.log(this)
                 if(this.isVersionView){
                     this.promise = c2c[this.type].getVersion(
                         this.documentId,

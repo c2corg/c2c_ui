@@ -76,8 +76,8 @@
                                 <field-view :document="document" :field="fields.mtb_length_asphalt"/>
                                 <field-view :document="document" :field="fields.mtb_length_trail"/>
 
-                                <label-value v-if="locale.slope" :label="$gettext('slope')">
-                                    {{ locale.slope }}
+                                <label-value v-if="document.currentLocale_.slope" :label="$gettext('slope')">
+                                    {{ document.currentLocale_.slope }}
                                 </label-value>
 
                                 <field-view :document="document" :field="fields.slackline_height"/>

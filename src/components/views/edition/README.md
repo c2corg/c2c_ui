@@ -1,9 +1,16 @@
 What is the logic behind field distribution in edition views ?
 
-* first tab, called General informations
+## Fields distributions
+
+What is the logic behind field distribution in edition views ?
+
+1. first tab, called "General informations"
   * all mandatory fields
   * and the shortest possible list of most used fields.
+2. then, in other tabs
   * Ideally, this tab must not have vertical scroll  
-* then, in other tabs
   * fields with common sense are keeped together, on the same row if possible
   * then, rows are ordered by usefullness
+
+## Ergonomics targets
+Keeping pages pretty with 2 activities (trying to have a godd ergonomy with more thant two activities is very hard, and useless)
