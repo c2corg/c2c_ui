@@ -24,7 +24,7 @@
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions
-* does saveAs dep really usefull now ?
+* does saveAs dependency really usefull now ?
 * test requestPasswordChange and validate_new_password
 * test changemail
 

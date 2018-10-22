@@ -8,7 +8,7 @@
                 </div>
 
                 <div class="column">
-                    <content-box v-if="locale.summary || locale.description">
+                    <content-box v-if="document.currentLocale_.summary || document.currentLocale_.description">
                         <markdown-section :document="document" :field="fields.summary"/>
                         <markdown-section :document="document" :field="fields.description"/>
                     </content-box>

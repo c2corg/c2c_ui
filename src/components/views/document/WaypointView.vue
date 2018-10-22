@@ -11,7 +11,7 @@
                         <associated-documents :document="document" />
 
                         <lang-switcher-box :document="document"/>
-
+                        <tool-box :document="document" />
                         <license-box cc="by-sa"/>
                     </div>
 
@@ -106,7 +106,7 @@
                             </div>
                         </content-box>
 
-                        <content-box v-if="locale.description || locale.access">
+                        <content-box v-if="document.currentLocale_.description || document.currentLocale_.access">
                             <markdown-section :document="document" :field="fields.description" />
                             <markdown-section :document="document" :field="fields.access" />
                         </content-box>

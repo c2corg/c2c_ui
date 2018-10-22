@@ -1,6 +1,6 @@
 <template>
     <div @click="$emit('click')" class="toolbox-button">
-        <fa-icon :icon="icon" />
+        <fa-icon :icon="icon" class="toolbox-button-icon"/>
         <span>
             {{ label }}
         </span>
@@ -31,6 +31,10 @@ export default{
 
     span {
         color:$link;
+    }
+
+    .toolbox-button-icon{
+        width: 1rem;
     }
 }
 </style>
