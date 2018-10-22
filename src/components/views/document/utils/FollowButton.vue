@@ -1,5 +1,4 @@
 <template>
-    <!-- TODO : v-if user admin -->
     <a
         v-if="canFollow"
         @click="onClick"

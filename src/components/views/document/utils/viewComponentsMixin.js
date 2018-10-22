@@ -6,6 +6,7 @@ import LangSwitcherBox from './boxes/LangSwitcherBox'
 import LicenseBox from './boxes/LicenseBox'
 import MapBox from './boxes/MapBox'
 import RecentOutingsBox from './boxes/RecentOutingsBox'
+import ToolBox from './boxes/ToolBox'
 
 import FieldView from './fieldViewers/FieldView'
 import LabelValue from './fieldViewers/LabelValue'
@@ -28,6 +29,7 @@ export default {
         MapBox,
         MarkdownSection,
         RecentOutingsBox,
+        ToolBox,
         UsersLinks,
     },
 }

@@ -16,6 +16,8 @@
 
                         <elevation-profile-box :document="document"/>
 
+                        <tool-box :document="document"/> 
+
                         <license-box cc="by-sa" />
                     </div>
 

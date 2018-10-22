@@ -35,6 +35,8 @@
 
                         <map-box :document="document" />
 
+                        <tool-box :document="document"/>
+
                         <license-box :document="document" cc="by-nc-nd"/>
 
                     </div>
@@ -43,12 +45,12 @@
                         <content-box>
                             <markdown-section
                                 :document="document"
-                               
+
                                 :field="fields.summary"/>
 
                             <markdown-section
                                 :document="document"
-                               
+
                                 :field="fields.description"
                                 hide-title/>
                         </content-box>

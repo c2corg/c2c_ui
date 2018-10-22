@@ -2,7 +2,6 @@
 
 ## Todo
 
-* context help : https://forum.camptocamp.org/t/draft-de-brouillon/227835/22?u=charlesb
 * draw GPS trace on map
 * upload GPS trace
 * see geom diff in diff view

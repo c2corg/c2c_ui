@@ -130,12 +130,11 @@ Array.prototype.remove = function(value){
 }
 
 
-Vue.prototype.$showHelper = function(name){
-    // we have an unique helper window included in App.vue
-    // this methods allows to display it anywhere
-    const helperComponent = this.$root.$children[0].$refs.helper
-    helperComponent.show(name)
-}
+Object.defineProperty(Vue.prototype, '$helper', {
+    get() {
+        return this.$root.$children[0].$refs.helper
+    }
+})
 
 
 new Vue({

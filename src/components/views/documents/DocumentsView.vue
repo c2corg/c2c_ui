@@ -22,7 +22,7 @@
             </div>
             <div class="level-right">
                 <div class="level-item">
-                    <span v-if="hasMap" class="icon is-size-3">
+                    <span v-if="documentAreGeoLocalized" class="icon is-size-3">
                         <fa-icon
                             :icon="listMode ? 'th-list' : 'th-large'"
                             @click="listMode=!listMode" />
@@ -36,7 +36,7 @@
         </div>
 
         <div class="columns">
-            <div :class="{'is-12': !showMap, 'is-8': showMap}"
+            <div :class="{'is-12': !displayMap, 'is-8': displayMap}"
                  class="column cards-container">
 
                 <loading-notification :promise="promise"/>
@@ -45,7 +45,7 @@
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
-                        :class="{'is-one-third':showMap, 'is-one-fifth':!showMap}"
+                        :class="{'is-one-third':displayMap, 'is-one-fifth':!displayMap}"
                         class="column card-container"
                         @mouseleave="mouseLeave(document)"
                         @mouseenter="mouseEnter(document)">
@@ -58,8 +58,9 @@
                 <page-selector v-if="documents!=null" :documents="documents"/>
 
             </div>
-
-            <div v-if="hasMap" class="column map-container">
+            <!--  Note : we use v-if, because v-if introduce a bug. -->
+            <!-- Try to swith from /articles to /outings... -->
+            <div v-show="documentAreGeoLocalized" class="column map-container">
                 <map-view
                     ref="map"
                     :documents="documents ? documents.documents : []"
@@ -90,7 +91,7 @@
         data() {
             return {
                 promise: null,
-                showMap: null,
+                showMap: null, // showMap is the user choise
                 listMode: false,
             }
         },
@@ -106,9 +107,12 @@
             type(){
                 return this.$route.name.slice(0, -1)
             },
-            hasMap(){
+            documentAreGeoLocalized(){
                 return constants.objectDefinitions[this.type].geoLocalized===true
             },
+            displayMap(){
+                return this.showMap && this.documentAreGeoLocalized
+            }
         },
 
         watch:{
@@ -116,13 +120,14 @@
         },
 
         created() {
-            this.showMap = this.hasMap;
             this.loadElements();
         },
 
         methods:{
 
             loadElements(){
+                this.showMap = this.documentAreGeoLocalized;
+
                 var offset = this.offset
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
@@ -130,12 +135,12 @@
             },
 
             mouseEnter(document){
-                if(this.hasMap)
+                if(this.documentAreGeoLocalized)
                     this.$refs.map.highlightedDocument = document
             },
 
             mouseLeave(){
-                if(this.hasMap)
+                if(this.documentAreGeoLocalized)
                     this.$refs.map.highlightedDocument = null
             }
         }

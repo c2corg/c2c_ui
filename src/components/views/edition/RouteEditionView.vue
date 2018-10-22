@@ -29,9 +29,9 @@
                 </tab-item>
 
                 <tab-item :title="$gettext('numbers')">
-                    <form-row :label="$gettext('elevation')" is-grouped>
-                        <form-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')" helper="elevation_min"/>
-                        <form-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')" helper="elevation_max"/>
+                    <form-row :label="$gettext('elevation')" is-grouped helper="elevation_min_max">
+                        <form-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')" />
+                        <form-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')" />
                     </form-row>
 
                     <form-row :label="$gettext('height_diff')" is-grouped>

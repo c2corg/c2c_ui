@@ -11,6 +11,8 @@
 
                     <lang-switcher-box :document="document" />
 
+                    <tool-box :document="document"/>
+
                     <license-box cc="by-sa" />
 
                 </div>
@@ -98,7 +100,8 @@
 
                         <gallery
                             v-if="document.associations && document.associations.images.length"
-                            :images="document.associations.images" />
+                            :images="document.associations.images"
+                            class="no-print"/>
 
                     </content-box>
 

@@ -76,19 +76,16 @@
 
             showFilterControl: {
                 type: Boolean,
-                required: false,
                 default:false,
             },
 
             showCenterOnGeolocation: {
                 type: Boolean,
-                required: false,
                 default:false,
             },
 
             showBiodivSportsAreas: {
                 type: Boolean,
-                required: false,
                 default:false,
             },
 

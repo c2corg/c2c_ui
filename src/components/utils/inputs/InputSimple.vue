@@ -2,7 +2,7 @@
 
     <div
         class="control"
-        :class="{'has-icons-right':postfix, 'has-prefix':prefix, 'is-expanded':isExpanded}">
+        :class="{'has-icons-right':postfix, 'has-prefix':prefix || helper, 'is-expanded':isExpanded}">
         <span v-if="prefix || helper" class="button prefix">
             <marker-helper class="marker-helper" :name="helper" />
 
@@ -122,9 +122,10 @@ select, input {
 }
 
 $icon-size: 1.3rem;
-.marker-helper{/* extension radio has removed padding around inputs */
+.marker-helper{
     font-size:$icon-size;
     margin:calc(2.25rem/2 - #{$icon-size}/2);
+    margin-left:0;
 }
 
 </style>

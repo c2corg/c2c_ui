@@ -1,6 +1,9 @@
 <template>
-    <div v-show="hasAnnouncement && !hidden" class="section" @click="showContent=!showContent">
-        <div class="notification is-info">
+    <div
+        v-show="hasAnnouncement && !hidden"
+        class="site-notice has-background-info has-text-light"
+        @click="showContent=!showContent">
+        <div class="section is-info">
             <button class="delete" @click="hidden=true"/>
             <div ref="header"/>
             <div v-show="showContent" ref="content"/>
@@ -27,6 +30,7 @@
         },
 
         methods:{
+            // TODO : remind if user has closed an announce
             loadAnnouncement(){
                 forum.readAnnouncement("fr").then(response => {
                     const data = response['data']
@@ -35,7 +39,7 @@
                         this.html = data.post_stream.posts[0].cooked
 
                         // compute html, to split p
-                        let content = document.createElement( 'div' );
+                        let content = document.createElement( 'div' )
                         content.innerHTML = this.html
                         let paragraphs = content.getElementsByTagName( 'p' )
 
@@ -53,9 +57,19 @@
 
 <style scoped lang="scss">
 
-.section{
+.site-notice{
     padding-bottom:0;
     cursor:pointer;
+    position:absolute;
+    width:100%;
+    z-index:5;
+    box-shadow:0 0 20px 2px rgba(10, 10, 10, 0.50);
+}
+
+.delete{
+    position:absolute;
+    top:0.5rem;
+    right:0.5rem;
 }
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="document.associations.recent_outings.documents.length!=0">
+    <content-box v-if="document.associations.recent_outings.documents.length!=0" class="no-print">
         <div class="title is-2">
             <span v-translate>Last outings</span>
         </div>

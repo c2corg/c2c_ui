@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="enabled" class="discourse-comments">
+    <content-box v-if="enabled" class="discourse-comments no-print">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">

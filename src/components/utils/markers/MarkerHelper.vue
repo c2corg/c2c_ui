@@ -3,7 +3,7 @@
         v-if="name"
         icon="info-circle"
         class="marker-helper has-text-info"
-        @click="$showHelper(name)" />
+        @click="$helper.show(name)" />
 </template>
 
 <script>

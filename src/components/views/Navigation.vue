@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar is-light">
+    <nav class="navbar is-light no-print">
         <div class="navbar-brand">
             <router-link :to="{name:'home'}" class="navbar-item">
                 <img src="@/assets/img/logo.svg"

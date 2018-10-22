@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <navigation/>
-        <site-notice ref="siteNotice" v-if="$route.name!='home'"/>
+        <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print"/>
         <!-- <router-view :key="$route.name + JSON.stringify($route.params)"/> -->
         <router-view />
         <helper-window ref="helper"/>
@@ -25,4 +25,11 @@
 </script>
 
 <style lang="scss">
+@media print {
+    /* print styles go here */
+    .no-print {
+        display: none;
+    }
+}
+
 </style>

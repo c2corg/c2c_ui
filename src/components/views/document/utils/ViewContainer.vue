@@ -65,47 +65,32 @@
             </div>
 
             <content-box>
-                <span class="is-pulled-right">
+                <span class="is-pulled-right button-bar no-print">
+
                     <follow-button :document="document" />
 
-                    <block-account-button
-                        v-if="type=='profile'"
-                        :document="document" />
+                    <history-link
+                        v-tooltip="$gettext('History')"
+                        :type="type"
+                        :id="document.document_id"
+                        :lang="locale.lang">
+                        <icon-history />
+                    </history-link>
 
-                    <merge-document-button v-if="!isVersionView" :document="document" />
-                    <lock-document-button v-if="!isVersionView" :document="document" />
-                    <delete-document-button v-if="!isVersionView" :document="document" />
-                    <delete-locale-button v-if="!isVersionView" :document="document"/>
-
-                    <a
-                        v-if="!isVersionView"
-                        v-tooltip="$gettext('Edit associations')"
-                        @click="$refs.associationsEditor.show()">
-                        <fa-icon icon="link" />
-                    </a>
-                    <a
+                    <span
                         v-tooltip="$gettext('Add images')"
                         v-if="!isVersionView"
                         @click="$refs.imagesUploader.show()">
                         <icon-image />
-                    </a>
-                    <history-link
-                        :type="type"
-                        :id="document.document_id"
-                        :lang="locale.lang"
-                        v-tooltip="$gettext('History')">
-                        <icon-history class="is-medium" />
-                    </history-link>
-                    <translate-button
-                        v-if="!isVersionView"
-                        :document="document"/>
+                    </span>
+
                     <edit-link
                         v-if="!isVersionView"
                         :type="type"
                         :id="document.document_id"
                         :lang="locale.lang"
                         v-tooltip="$gettext('Edit')">
-                        <icon-edit class="is-medium"/>
+                        <icon-edit />
                     </edit-link>
                 </span>
                 <div class="title is-1">
@@ -123,8 +108,6 @@
                 :lang="locale.lang"
                 :parent-document="document"/>
 
-            <associations-editor ref="associationsEditor" :document="document"/>
-
             <modal-confirmation
                 ref="restoreVersionConfirmationWindow"
                 @confirm="restoreVersion">
@@ -132,6 +115,11 @@
                     Are you sure you want to revert to this version of the document?
                 </span>
             </modal-confirmation>
+        </div>
+        <div v-if="promise.error" class="notification is-danger">
+            <div v-for="(error, i) of promise.error.response.data.errors" :key="i">
+                {{ error.description }}
+            </div>
         </div>
     </div>
 
@@ -145,26 +133,11 @@
 
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
 
-    import AssociationsEditor from './associationsEditor/AssociationsEditor'
-
-    import LockDocumentButton from './buttons/LockDocumentButton'
-    import DeleteDocumentButton from './buttons/DeleteDocumentButton'
-    import DeleteLocaleButton from './buttons/DeleteLocaleButton'
-    import MergeDocumentButton from './buttons/MergeDocumentButton'
-    import TranslateButton from './buttons/TranslateButton'
-    import BlockAccountButton from './buttons/BlockAccountButton'
-    import FollowButton from './buttons/FollowButton'
+    import FollowButton from './FollowButton'
 
     export default {
         components:{
             ImagesUploader,
-            AssociationsEditor,
-            LockDocumentButton,
-            DeleteDocumentButton,
-            DeleteLocaleButton,
-            MergeDocumentButton,
-            TranslateButton,
-            BlockAccountButton,
             FollowButton,
         },
 
@@ -255,7 +228,7 @@
 
         methods:{
             loadDocument(){
-                
+
                 if(this.isVersionView){
                     this.promise = c2c[this.type].getVersion(
                         this.documentId,
@@ -286,6 +259,7 @@
 
                     this.promise = c2c[this.type].get(this.documentId).then(response => {
                         if(response.data.not_authorized===true){
+                            // TODO : brancher ca au bon endroit
                             this.error = new Error("Sorry, you're not authorized to see this document")
                             return
                         }
@@ -306,3 +280,25 @@
     }
 
 </script>
+
+<style scoped lang="scss">
+
+    @import '@/assets/sass/variables.scss';
+
+    .button-bar{
+        font-size:1.5rem;
+    }
+
+    .button-bar > a{
+        color:$text;
+    }
+
+    .button-bar > span, .button-bar > a{
+        margin-left:0.25rem;
+        cursor:pointer;
+    }
+    .button-bar > *:hover{
+        color:$black;
+    }
+
+</style>

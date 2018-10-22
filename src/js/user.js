@@ -11,6 +11,8 @@ function User(){
         this.data = JSON.parse(window.localStorage.getItem("user"))
     else
         this.data = this.defaultUserData
+
+    this.setToken()
 }
 
 User.prototype.signIn = function(username, password){
@@ -144,7 +146,4 @@ User.prototype.getLocaleSmart = function(document, lang){
     return null
 }
 
-const user = new User()
-user.setToken()
-
-export default user
+export default new User()

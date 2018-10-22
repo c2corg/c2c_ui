@@ -34,13 +34,34 @@
                 if(helper.url){
                     axios.get(`${githubUrl}${path}${helper.url}`)
                     .then(response => {
-                        this.html = response.data.replace(/ translate/g, " v-translate")
+                        this.computeHtml(response.data)
                     })
                 } else {
-                    this.html = helper.content
+                    this.computeHtml(`<div translate>${helper.content}</div>`)
                 }
 
                 this.$refs.modalCard.show()
+            },
+
+            computeHtml(html){
+                const translate = (function(node){
+                    if(node.attributes){
+                        if(node.attributes["translate"])
+                            node.innerText = this.$gettext(node.innerText)
+                        else {
+                            for(let child of node.childNodes)
+                                translate(child)
+                        }
+                    }
+                }).bind(this)
+
+                let content = document.createElement('div')
+                content.innerHTML = html
+
+                translate(content)
+
+                this.html =  content.innerHTML
+
             },
 
             getHelper(name){
@@ -98,14 +119,17 @@
                     title:this.$gettext("route_configuration_types"),
                     url:"route-configuration.html"
                     },
-                "elevation_min": {
-                    title:this.$gettext("elevation_min"),
+                "elevation_min_max": {
+                    title:this.$gettext("elevation"),
                     url:"route-elevation_min_max.html"
                     },
-                "elevation_max": {
-                    title:this.$gettext("elevation_max"),
-                    url:"route-elevation_min_max.html"
+
+                "height_diff_down": {
+                    title:this.$gettext("height_diff_down"),
+                    content:"Cumulated negative elevation gain. This includes potential descents on the route to the summit."
                     },
+
+                // TODO : ca ne devrait pas être ce fichier
                 "height_diff_up": {
                     title:this.$gettext("height_diff_up"),
                     url:"route-elevation_min_max.html"
@@ -193,10 +217,6 @@
                 "orientations": {
                     title:this.$gettext("orientations"),
                     content:"Main facing of the route or of its main difficulties only. Additional information can be added into the 'Remarks' section."
-                    },
-                "height_diff_down": {
-                    title:this.$gettext("height_diff_down"),
-                    content:"Cumulated negative elevation gain. This includes potential descents on the route to the summit."
                     },
                 "height_diff_difficulties": {
                     title:this.$gettext("height_diff_difficulties"),

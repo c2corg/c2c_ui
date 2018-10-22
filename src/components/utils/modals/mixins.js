@@ -12,7 +12,8 @@ export default {
             this.$emit("show")
         },
 
-        hide(){
+        hide(event){
+            event.stopPropagation()
             this.visible = false
             this.$emit("hide")
         }
