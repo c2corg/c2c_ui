@@ -94,7 +94,7 @@
             },
 
             userIsLogged(){
-                return user.isLogged()
+                return user.isLogged
             },
 
             topic(){

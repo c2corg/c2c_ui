@@ -48,13 +48,13 @@
             title(){
                 return this.$route.name
             },
-            type(){
+            documentType(){
                 return this.$route.name.slice(0, -1)
             },
         },
 
         created() {
-            this.promise = c2c[this.type].getAll()
+            this.promise = c2c[this.documentType].getAll()
         },
 
         methods:{

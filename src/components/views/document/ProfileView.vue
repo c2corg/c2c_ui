@@ -8,7 +8,6 @@
             </div>
 
             <div v-else>
-
                 <div class="columns">
 
                     <div class="column is-3">
@@ -34,25 +33,15 @@
                         </content-box>
 
                         <map-box :document="document" />
-
                         <tool-box :document="document"/>
-
                         <license-box :document="document" cc="by-nc-nd"/>
 
                     </div>
 
                     <div class="column">
                         <content-box>
-                            <markdown-section
-                                :document="document"
-
-                                :field="fields.summary"/>
-
-                            <markdown-section
-                                :document="document"
-
-                                :field="fields.description"
-                                hide-title/>
+                            <markdown-section :document="document" :field="fields.summary"/>
+                            <markdown-section :document="document" :field="fields.description" hide-title/>
                         </content-box>
 
                         <div v-if="feed.data">
@@ -62,7 +51,6 @@
                                 :item="item"
                                 :document="item.document"/>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -92,7 +80,7 @@
         },
 
         created(){
-            this.feed = c2c.feed.getProfileFeed({u:this.documentId, pl:this.$language.current})
+            this.feed = c2c.feed.getProfileFeed({u:this.$route.params.id, pl:this.$language.current})
         }
     }
 </script>

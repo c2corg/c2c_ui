@@ -1,6 +1,6 @@
 <template>
     <div class="card-container">
-        <component :is="type + '-card'" :document="document"/>
+        <component :is="documentType + '-card'" :document="document"/>
         <delete-button
             v-if="showDeleteButton"
             @click="$emit('delete')"
@@ -11,7 +11,6 @@
 <script>
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
-    import constants from '@/js/constants.js'
 
     import AreaCard from './AreaCard'
     import ArticleCard from './ArticleCard'
@@ -44,12 +43,6 @@
                 default: false,
             }
         },
-
-        computed:{
-            type(){
-                return constants.getDocumentType(this.document.type)
-            }
-        }
     }
 
 </script>

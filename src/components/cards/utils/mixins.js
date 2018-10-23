@@ -1,5 +1,4 @@
 
-import constants from '@/js/constants.js'
 import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
 import CardContainer from './CardContainer'
@@ -21,7 +20,7 @@ export default {
     methods:{
         go(){
             this.$router.push({
-                name: constants.getDocumentType(this.document.type),
+                name: this.documentType,
                 params: { id: this.document.document_id }
             })
         }

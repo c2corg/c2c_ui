@@ -56,17 +56,17 @@
 
             <div class="navbar-end">
 
-                <div v-if="!user.isLogged()" class="navbar-item">
+                <div v-if="!user.isLogged" class="navbar-item">
                     <login-button />
                 </div>
 
                 <div v-else class="navbar-item has-dropdown is-hoverable">
                     <div class="navbar-link">
-                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.getForumUsername() + '/36/1_1.png'" class="user-avatar">
+                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.forumUsername + '/36/1_1.png'" class="user-avatar">
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
 
-                        <router-link :to="{ name: 'profile', params:{id:user.getId()} }" class="navbar-item">
+                        <router-link :to="{ name: 'profile', params:{id:user.id} }" class="navbar-item">
                             <fa-icon icon="user"/>
                             <span v-translate>My profile</span>
                         </router-link>
@@ -79,11 +79,11 @@
                             <span v-translate>My preferences</span>
                         </router-link>
 
-                        <router-link :to="{ name: 'outings', query:{u:user.getId()} }" class="navbar-item">
+                        <router-link :to="{ name: 'outings', query:{u:user.id} }" class="navbar-item">
                             <icon-outing />
                             <span v-translate>My outings</span>
                         </router-link>
-                        <router-link :to="{ name: 'whatsnew', query:{u:user.getId()} }" class="navbar-item">
+                        <router-link :to="{ name: 'whatsnew', query:{u:user.id} }" class="navbar-item">
                             <fa-icon icon="edit"/>
                             <span v-translate>My changes</span>
                         </router-link>
@@ -102,7 +102,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="navbar-item has-dropdown is-hoverable">
+                <div v-if="!user.isLogged" class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         {{ $language.current }}
                     </a>
@@ -148,7 +148,7 @@
 
             setLang(lang){
                 this.$language.setCurrent(lang)
-                user.setLang(lang)
+                user.lang = lang
             }
         }
     }
@@ -156,9 +156,9 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+    @import '@/assets/sass/variables.scss';
 
-.navbar{
+    .navbar{
         box-shadow:0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
-}
+    }
 </style>

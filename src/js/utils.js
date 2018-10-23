@@ -6,7 +6,7 @@ export default {
 
     // from https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L194
     stringDivider(str, width, spaceReplacer) {
-        if (str.length > width) {
+        if (str && str.length > width) {
             let p = width;
             while (p > 0 && (str[p] !== ' ' && str[p] !== '-')) {
                 p--;

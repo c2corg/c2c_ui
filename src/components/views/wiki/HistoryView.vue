@@ -2,8 +2,8 @@
     <div v-if="history" class="section content">
         <html-header title="Old version"/>
         <h1>
-            <icon-document :type="type" class="is-large"/>
-            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
+            <icon-document :document-type="documentType" class="is-large"/>
+            <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
         </h1>
         <p>
             <span v-translate>
@@ -16,7 +16,7 @@
         <div class="field is-grouped">
             <div class="control">
                 <button
-                    v-if="type!='profile'"
+                    v-if="documentType!='profile'"
                     class="button is-primary"
                     @click="gotToDiff"
                     v-translate>
@@ -25,7 +25,7 @@
             </div>
             <div class="control">
                 <router-link
-                    :to="{name:type, params:{id:documentId, lang:lang}}"
+                    :to="{name:documentType, params:{id:documentId, lang:lang}}"
                     class="button is-link"
                     v-translate>
                     See the latest version
@@ -41,7 +41,7 @@
             </tr>
             <tr v-for="version of history.versions" :key="version.verion_id">
                 <td>
-                    <div v-if="type!='profile'" class="control">
+                    <div v-if="documentType!='profile'" class="control">
                         <input v-model="versionFrom"
                                :disabled="versionTo <= version.version_id"
                                :value="version.version_id"
@@ -54,7 +54,7 @@
                                name="versionTo">
                         <diff-link
                             v-if="version.version_id != last_version_id"
-                            :type="type"
+                            :document-type="documentType"
                             :id="documentId"
                             :lang="lang"
                             version-from="prev"
@@ -62,7 +62,7 @@
                     </div>
                 </td>
                 <td>
-                    <version-link :type="type" :id="documentId" :version="version.version_id" :lang="lang">
+                    <version-link :document-type="documentType" :id="documentId" :version="version.version_id" :lang="lang">
                         {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
                     </version-link>
                 </td>
@@ -82,7 +82,7 @@
             </div>
             <div class="control">
                 <router-link
-                    :to="{name:type, params:{id:documentId, lang:lang}}"
+                    :to="{name:documentType, params:{id:documentId, lang:lang}}"
                     class="button is-link"
                     v-translate>
                     See the latest version
@@ -110,7 +110,7 @@
             documentId(){
                 return parseInt(this.$route.params.id)
             },
-            type(){
+            documentType(){
                 return this.$route.name.replace("-history","")
             },
             lang(){
@@ -119,7 +119,7 @@
         },
 
         created() {
-            c2c[this.type].getHistory(this.documentId, this.lang).then(response => {
+            c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
                 this.history=response.data;
                 this.last_version_id = this.history.versions[0].version_id
                 this.history.versions = this.history.versions.reverse()
@@ -132,7 +132,7 @@
             gotToDiff(){
 
                 this.$router.push({
-                    name: this.type + "-diff", params: {
+                    name: this.documentType + "-diff", params: {
                         versionFrom:this.versionFrom,
                         versionTo:this.versionTo,
                         lang:this.lang

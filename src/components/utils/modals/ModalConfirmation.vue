@@ -10,12 +10,19 @@
                     Warning: This action cannot be undone!
                 </strong>
             </div>
+
             <slot />
+
+            <div v-if="promise && promise.error" class="notification is-danger">
+                {{ promise.error }}
+            </div>
+
         </div>
         <div slot="footer">
             <button
                 @click="$emit('confirm')"
-                class="button is-danger">
+                class="button is-danger"
+                :class="{'is-loading':promise && promise.loading}">
                 <slot name="confirm-label">
                     <span v-translate>
                         Confirm
@@ -25,6 +32,7 @@
             <button
                 @click="$refs.modalWindow.hide()"
                 class="button is-success"
+                :disabled="promise && promise.loading"
                 v-translate>
                 Cancel
             </button>
@@ -40,7 +48,11 @@ export default {
         showUncancelableWarning:{
             type:Boolean,
             default:false,
-        }
+        },
+        promise:{
+            type:Object,
+            default:null,
+        },
     },
 
     methods:{

@@ -51,6 +51,7 @@
                         {{ change.lang }}
                     </td>
                     <td>
+                        <!-- TODO it's not a documentType -->
                         <icon-document :type="change.document.type"/>
                         {{ change.document.title }}
                         :

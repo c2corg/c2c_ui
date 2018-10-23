@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:type + '-add', params:{lang:$language.current}}">
+    <router-link :to="{name:documentType + '-add', params:{lang:$language.current}}">
         <slot>
             <span>{{ text }}</span>
         </slot>
@@ -7,27 +7,24 @@
 </template>
 
 <script>
+    import { requireDocumentTypeProperty } from "@/js/propertiesMixins"
+
     export default{
-        props : {
-            type: {
-                type:String,
-                required:true,
-            }
-        },
+        mixins : [ requireDocumentTypeProperty ],
 
         computed:{
             text(){
-                if(this.type=="outing") return this.$gettext("add an outing")
-                if(this.type=="route") return this.$gettext("add a route")
-                if(this.type=="image") return this.$gettext("add an image")
-                if(this.type=="waypoint") return this.$gettext("add a waypoint")
-                if(this.type=="map") return this.$gettext("add a map")
-                if(this.type=="xreport") return this.$gettext("add an incident/accident report")
-                if(this.type=="area") return this.$gettext("add an area")
-                if(this.type=="book") return this.$gettext("add a book")
-                if(this.type=="article") return this.$gettext("add an article")
+                if(this.documentType=="outing") return this.$gettext("add an outing")
+                if(this.documentType=="route") return this.$gettext("add a route")
+                if(this.documentType=="image") return this.$gettext("add an image")
+                if(this.documentType=="waypoint") return this.$gettext("add a waypoint")
+                if(this.documentType=="map") return this.$gettext("add a map")
+                if(this.documentType=="xreport") return this.$gettext("add an incident/accident report")
+                if(this.documentType=="area") return this.$gettext("add an area")
+                if(this.documentType=="book") return this.$gettext("add a book")
+                if(this.documentType=="article") return this.$gettext("add an article")
 
-                throw `Unexpected type : ${this.type}`
+                throw `Unexpected type : ${this.documentType}`
             }
         }
     }

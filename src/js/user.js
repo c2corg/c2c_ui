@@ -1,28 +1,77 @@
 import c2c from '@/js/c2c'
 import constants from '@/js/constants.js'
+import localStorage from '@/js/localStorage'
 
 function User(){
-    this.defaultUserData = {
-        lang:"fr",
-        roles: [],
-    }
-
-    if(window.localStorage.getItem("user"))
-        this.data = JSON.parse(window.localStorage.getItem("user"))
-    else
-        this.data = this.defaultUserData
-
-    this.setToken()
+    this.defaultLang = "fr"
+    this.profileData = localStorage.getItem("user")
+    c2c.setAuthorizationToken(this.profileData.get("token"))
+    this.checkExpiration()
 }
 
-User.prototype.signIn = function(username, password){
-    var result = c2c.userProfile.login(username, password)
+Object.defineProperty(User.prototype, "roles", {get(){
+    return this.profileData.get("roles") || []
+}})
 
-    result.then(response => {
-        this.setData(response.data)
-        this.setToken()
+Object.defineProperty(User.prototype, "lang", {
+
+    get(){
+        return this.profileData.get("lang") || this.defaultLang
+    },
+
+    set(lang){
+        if(this.isLogged)
+            c2c.userProfile.update_preferred_language(lang)
+
+        this.profileData.set("lang", lang)
+    },
+})
+
+Object.defineProperty(User.prototype, "token", { get(){
+    return this.profileData.get("token")
+}})
+
+Object.defineProperty(User.prototype, "id", { get(){
+    return this.profileData.get("id")
+}})
+
+Object.defineProperty(User.prototype, "userName", { get(){
+    return this.profileData.get("username")
+}})
+
+Object.defineProperty(User.prototype, "name", { get(){
+    return this.profileData.get("name")
+}})
+
+Object.defineProperty(User.prototype, "forumUsername",  {get(){
+    return this.profileData.get("forum_username")
+}})
+
+Object.defineProperty(User.prototype, "isLogged", { get(){
+    return Boolean(this.profileData.get("token"))
+}})
+
+Object.defineProperty(User.prototype, "isModerator", { get(){
+    return this.roles.includes("moderator")
+}})
+
+Object.defineProperty(User.prototype, "expire", { get(){
+    return this.profileData.get("expire")
+}})
+
+
+User.prototype.signIn = function(username, password){
+    return c2c.userProfile.login(username, password)
+    .then(response => {
+        this.profileData.assign(response.data)
+        c2c.setAuthorizationToken(this.token)
     })
-    return result
+}
+
+User.prototype.signout = function(){
+    this.defaultLang = this.lang  // juste save user preference to avoid a back to english.
+    this.profileData.clear()
+    c2c.setAuthorizationToken(undefined)
 }
 
 User.prototype.updateAccount = function(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
@@ -34,79 +83,23 @@ User.prototype.updateAccount = function(currentpassword, name, forum_username,  
         is_profile_public,
         newpassword
     ).then(response => {
-        Object.assign(this.data, response.data)
-        this.setData(this.data)
+        this.profileData.assign(response.data)
     })
-},
-
-User.prototype.setToken = function(){
-    c2c.setToken(this.data.token)
 }
 
-User.prototype.setData = function(data){
-    this.data = data
-    window.localStorage.setItem("user", JSON.stringify(this.data))
-}
-
-User.prototype.setLang = function(lang){
-    if(this.isLogged()){
-        c2c.userProfile.update_preferred_language(lang)
-    }
-
-    this.data.lang = lang
-    window.localStorage.setItem("user", JSON.stringify(this.data))
-}
-
-User.prototype.getLang = function(){
-    return this.data.lang
-}
-
-User.prototype.getId = function(){
-    return this.data.id
-}
-
-User.prototype.getUserName = function(){
-    return this.data.username
-}
-
-User.prototype.getName = function(){
-    return this.data.name
-}
-
-User.prototype.getForumUsername = function(){
-    return this.data.forum_username
-}
-
-User.prototype.isLogged = function(){
-    return this.data.token
-}
-
-User.prototype.isModerator = function(){
-    return this.isLogged() && this.data.roles.includes("moderator")
-}
-
-User.prototype.isExpired = function(){
-    if(!this.data.expire)
+User.prototype.checkExpiration = function(){
+    if(!this.expire)
         return true;
 
     const now = Date.now() / 1000; // in seconds
-    const expire = this.userData.expire;
+    const expire = this.expire
 
     if (now > expire) {
-        this.clearUserData();
+        this.signout();
         return true;
     }
 
     return false;
-}
-
-User.prototype.clearUserData = function(){
-    this.defaultUserData.lang = this.data.lang // juste save user preference to avoid a back to english.
-    this.setData(this.defaultUserData)
-}
-
-User.prototype.signout = function(){
-    this.clearUserData()
 }
 
 User.prototype.getLocaleStupid = function(document, lang){
@@ -130,7 +123,7 @@ User.prototype.getLocaleSmart = function(document, lang){
         return result
 
     //else, search user lang
-    result = this.getLocaleStupid(document, this.data.lang)
+    result = this.getLocaleStupid(document, this.lang)
     if(result)
         return result
 

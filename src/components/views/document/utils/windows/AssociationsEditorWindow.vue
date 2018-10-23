@@ -1,5 +1,10 @@
 <template>
     <modal-window ref="modalWindow" class="associations-editor">
+        <div slot="header" class="has-text-centered">
+            <span v-translate>
+                Edit associations
+            </span>
+        </div>
         <div class="columns is-multiline">
 
             <div class="column is-12">
@@ -100,16 +105,12 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import constants from '@/js/constants.js'
+    import constants from '@/js/constants'
+    import { requireDocumentProperty } from '@/js/propertiesMixins'
 
     export default {
 
-        props: {
-            document:{
-                type:Object,
-                required:true,
-            },
-        },
+        mixins : [ requireDocumentProperty ],
 
         data(){
             return {
@@ -120,8 +121,7 @@
 
         computed:{
             validAssociations(){
-                let type = constants.getDocumentType(this.document.type)
-                return constants.objectDefinitions[type].validAssociations
+                return constants.objectDefinitions[this.documentType].validAssociations
             },
 
             availableWaypoints(){

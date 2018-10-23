@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="xreport" />
+    <icon-document document-type="xreport" />
 </template>

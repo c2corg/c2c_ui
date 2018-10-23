@@ -10,6 +10,7 @@ import GetTextPlugin from '@/translations/GetTextPlugin'
 import french_translations from '@/translations/dist/fr.json'
 
 import user from '@/js/user.js'
+import localStorage from '@/js/localStorage'
 
 import FontAwesomeConfig from '@/js/fa.config'
 import moment from 'moment'
@@ -42,7 +43,7 @@ Vue.use(GetTextPlugin, {
         ca: 'Català',
         eu: 'Euskara',
     },
-    current: user.getLang(),
+    current: user.lang,
 
     getMessages(lang){
 
@@ -133,6 +134,16 @@ Array.prototype.remove = function(value){
 Object.defineProperty(Vue.prototype, '$helper', {
     get() {
         return this.$root.$children[0].$refs.helper
+    }
+})
+
+
+Object.defineProperty(Vue.prototype, '$localStorage', {
+    get() {
+        if(!this.$options.name)
+            throw new Error("Please set name property of your componenent")
+
+        return localStorage.getItem(`${this.$options.name}.preferences`)
     }
 })
 

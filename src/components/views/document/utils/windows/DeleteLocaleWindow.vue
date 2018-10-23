@@ -2,6 +2,7 @@
     <modal-confirmation
         ref="modalWindow"
         show-uncancelable-warning
+        :promise="promise"
         @confirm="executeDelete">
 
         <span slot="title" v-translate>
@@ -23,14 +24,23 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
+        data(){
+            return {
+                promise:null
+            }
+        },
+
         methods:{
+            show(){
+                this.$refs.modalWindow.show()
+            },
+
             executeDelete(){
-                /* TODO ask confirm */
-                c2c.moderator.deleteLocale(
+                this.promise = c2c.moderator.deleteLocale(
                     this.document.document_id,
                     this.document.currentLocale_.lang
                 ).then(() => {
-                    /* TODO : redirect */
+                    this.$router.push({name:this.documentType, id:this.document.document_id})
                 })
             }
         }

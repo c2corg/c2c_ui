@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import constants from '@/js/constants.js'
+    import { requireDocumentTypeProperty } from '@/js/propertiesMixins.js'
 
     var iconClass = {
         route:"route",
@@ -21,16 +21,11 @@
     }
 
     export default {
-        props: {
-            type: {
-                type:String,
-                required:true,
-            }
-        },
+        mixins : [ requireDocumentTypeProperty ],
 
         computed:{
             iconClass(){
-                return iconClass[constants.getDocumentType(this.type)]
+                return iconClass[this.documentType]
             }
         }
     }

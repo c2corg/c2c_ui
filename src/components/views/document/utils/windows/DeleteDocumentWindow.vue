@@ -17,7 +17,6 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import constants from '@/js/constants'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
@@ -34,7 +33,7 @@
             executeDelete(){
                 c2c.moderator.deleteDocument(this.document.document_id)
                 .then(() => {
-                    this.$router.push({name:constants.getDocumentType(this.document.type) + 's'})
+                    this.$router.push({name:this.documentType + 's'})
                 })
                 // TODO feedback error
             }

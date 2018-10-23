@@ -144,10 +144,10 @@
             },
 
             fields(){
-                return constants.objectDefinitions[this.type].fields
+                return constants.objectDefinitions[this.documentType].fields
             },
 
-            type() {
+            documentType() {
                 return this.$route.name.slice(0, -1)
             },
 

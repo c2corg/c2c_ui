@@ -7,7 +7,7 @@
             :label="$gettext('Edit associations')" />
 
         <tool-box-button
-            v-if="hasMissingLangs && !isVersionView"
+            v-if="!isVersionView && hasMissingLangs"
             @click="$refs.translateWindow.show()"
             icon="edit"
             :label="$gettext('Translate into an other lang')" />
@@ -27,13 +27,13 @@
                 :label="$gettext('Merge with other document')" />
 
             <tool-box-button
-                v-if="document.available_langs.length > 1"
+                v-if="!isVersionView && document.available_langs.length > 1"
                 @click="$refs.DeleteLocaleWindow.show()"
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this locale')" />
 
             <tool-box-button
-                v-if="type=='profile'"
+                v-if="documentType=='profile'"
                 @click="lockAccountAction"
                 icon="user-lock"
                 :class="{'lock-button-red':isAccountBlocked}"
@@ -50,7 +50,7 @@
         <merge-document-window ref="MergeDocumentWindow" :document="document"/>
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
         <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
-        <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
+        <translate-window v-if="!isVersionView" ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
 
     </content-box>
 </template>
@@ -92,14 +92,10 @@
 
         computed:{
             isModerator(){
-                return user.isModerator()
+                return user.isModerator
             },
             isVersionView(){
                 return this.$route.name.endsWith("-version");
-            },
-
-            type(){
-                return constants.getDocumentType(this.document.type)
             },
 
             locale(){
@@ -123,7 +119,7 @@
         },
 
         created(){
-            if(this.isModerator && this.type=="profile")
+            if(this.isModerator && this.documentType=="profile")
                 c2c.moderator.isAccountBlocked(this.document.document_id)
                 .then(response => this.isAccountBlocked = response.data.blocked)
         },

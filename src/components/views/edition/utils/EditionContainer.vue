@@ -21,7 +21,11 @@
 
         <form-row label="" always-visible is-grouped>
             <div class="control">
-                <button class="button is-primary" @click="save" v-translate>
+                <button
+                    class="button is-primary"
+                    :class="{'is-loading':promise && promise.loading}"
+                    @click="save"
+                    v-translate>
                     Save
                 </button>
             </div>
@@ -70,7 +74,7 @@
                     var locale = user.getLocaleStupid(doc, this.lang)
 
                     if(!locale){
-                        locale = constants.buildLocale(this.type, this.lang)
+                        locale = constants.buildLocale(this.documentType, this.lang)
                         doc.locales.push(locale)
                     }
 
@@ -80,7 +84,7 @@
                 return doc
             },
 
-            type(){
+            documentType(){
                 return this.$route.name.replace(/-(edit|add)/,"")
             },
 
@@ -91,11 +95,11 @@
 
         created(){
             if(this.mode=="edit")
-                this.promise = c2c[this.type].get(this.documentId)
+                this.promise = c2c[this.documentType].get(this.documentId)
             else
-                this.promise = { data : constants.buildDocument(this.type, this.lang) }
+                this.promise = { data : constants.buildDocument(this.documentType, this.lang) }
 
-            this.fields = constants.objectDefinitions[this.type].fields
+            this.fields = constants.objectDefinitions[this.documentType].fields
 
             this.cleanErrors()
         },
@@ -108,12 +112,12 @@
                 let promise
 
                 if(this.mode=="edit"){
-                    promise = c2c[this.type].save(this.document, this.comment).then(() => {
-                        this.$router.push({name:this.type, params:{id:this.document.document_id}})
+                    promise = c2c[this.documentType].save(this.document, this.comment).then(() => {
+                        this.$router.push({name:this.documentType, params:{id:this.document.document_id}})
                     })
                 } else {
-                    promise = c2c[this.type].create(this.document).then(response => {
-                        this.$router.push({name:this.type, params:{id:response.data.document_id}})
+                    promise = c2c[this.documentType].create(this.document).then(response => {
+                        this.$router.push({name:this.documentType, params:{id:response.data.document_id}})
                     })
                 }
 

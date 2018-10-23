@@ -27,7 +27,7 @@
 
         computed:{
             canFollow(){
-                return this.document.type =='u' && user.isLogged() && user.getId() != this.document.document_id
+                return this.document.type =='u' && user.isLogged && user.id != this.document.document_id
             },
 
             tooltip(){

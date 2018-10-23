@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="waypoint" />
+    <icon-document document-type="waypoint" />
 </template>

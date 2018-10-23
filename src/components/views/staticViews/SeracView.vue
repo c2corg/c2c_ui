@@ -12,7 +12,7 @@
 
             <div>
 
-                <add-link type="xreport" class="button is-primary">
+                <add-link document-type="xreport" class="button is-primary">
                     <fa-icon icon="plus"/>
                     <span v-translate>Create a new report</span>
                 </add-link>
@@ -54,18 +54,6 @@
 
     </div>
 </template>
-
-<script>
-    export default {
-        methods:{
-
-            setLang(lang){
-                this.$language.setCurrent(lang)
-        //        user.setLang(lang)
-            }
-        }
-    }
-</script>
 
 <style scoped>
 

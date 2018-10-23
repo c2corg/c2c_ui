@@ -1,15 +1,15 @@
 <template>
     <div class="section documents-view">
-        <html-header :title="type"/>
+        <html-header :title="documentType"/>
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
                     <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
                 </span>
             </div>
-            <div class="level-right" v-if="type!='profile'">
+            <div class="level-right" v-if="documentType!='profile'">
                 <span class="level-item">
-                    <add-link :type="type" class="button is-rounded is-primary" />
+                    <add-link :document-type="documentType" class="button is-rounded is-primary" />
                 </span>
             </div>
         </div>
@@ -25,11 +25,11 @@
                     <span v-if="documentAreGeoLocalized" class="icon is-size-3">
                         <fa-icon
                             :icon="listMode ? 'th-list' : 'th-large'"
-                            @click="listMode=!listMode" />
+                            @click="toogleProperty('listMode')" />
                         <fa-icon
                             :class="{'has-text-primary':showMap}"
                             icon="map-marked-alt"
-                            @click="showMap=!showMap" />
+                            @click="toogleProperty('showMap')" />
                     </span>
                 </div>
             </div>
@@ -53,7 +53,10 @@
                     </div>
                 </div>
 
-                <data-table v-if="documents!=null && listMode" :documents="documents" :type="type"/>
+                <data-table
+                    v-if="documents!=null && listMode"
+                    :documents="documents"
+                    :document-type="documentType"/>
 
                 <page-selector v-if="documents!=null" :documents="documents"/>
 
@@ -74,7 +77,7 @@
 <script>
 
     import c2c from '@/js/c2c'
-    import constants from '@/js/constants.js'
+    import constants from '@/js/constants'
 
     import QueryItems from './utils/QueryItems'
     import PageSelector from './utils/PageSelector'
@@ -82,6 +85,8 @@
     import DataTable from '@/components/datatable/DataTable'
 
     export default {
+        name:"DocumentsView",
+
         components: {
             QueryItems,
             PageSelector,
@@ -91,7 +96,9 @@
         data() {
             return {
                 promise: null,
-                showMap: null, // showMap is the user choise
+
+                // showMap is the user choise, if he wants to see the map, or not
+                showMap: null,
                 listMode: false,
             }
         },
@@ -104,11 +111,11 @@
                 var result = this.$route.name
                 return result.charAt(0).toUpperCase() + result.slice(1);
             },
-            type(){
+            documentType(){
                 return this.$route.name.slice(0, -1)
             },
             documentAreGeoLocalized(){
-                return constants.objectDefinitions[this.type].geoLocalized===true
+                return constants.objectDefinitions[this.documentType].geoLocalized===true
             },
             displayMap(){
                 return this.showMap && this.documentAreGeoLocalized
@@ -120,18 +127,25 @@
         },
 
         created() {
-            this.loadElements();
+            this.loadElements()
         },
 
         methods:{
 
             loadElements(){
-                this.showMap = this.documentAreGeoLocalized;
+
+                this.showMap = this.$localStorage.get(this.documentType + ".showMap", this.documentAreGeoLocalized)
+                this.listMode = this.$localStorage.get(this.documentType + ".listMode", false)
 
                 var offset = this.offset
                 var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
 
-                this.promise = c2c[this.type].getAll(query)
+                this.promise = c2c[this.documentType].getAll(query)
+            },
+
+            toogleProperty(property){
+                this[property] = !this[property]
+                this.$localStorage.set(`${this.documentType}.${property}`, this[property])
             },
 
             mouseEnter(document){
@@ -142,59 +156,59 @@
             mouseLeave(){
                 if(this.documentAreGeoLocalized)
                     this.$refs.map.highlightedDocument = null
-            }
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+    @import '@/assets/sass/variables.scss';
 
-$header-margin-bottom : 1rem;
-$header-height : $header-margin-bottom + $size-1;
-$filter-padding : 1rem;
-$filter-height : 100px;
-$result-height : calc(100vh - #{$navbar-height} - #{$header-height} - 2*#{$filter-padding} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
-$cards-gap:0.25rem;
+    $header-margin-bottom : 1rem;
+    $header-height : $header-margin-bottom + $size-1;
+    $filter-padding : 1rem;
+    $filter-height : 100px;
+    $result-height : calc(100vh - #{$navbar-height} - #{$header-height} - 2*#{$filter-padding} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+    $cards-gap:0.25rem;
 
-.documents-view{
-}
+    .documents-view{
+    }
 
-.header-section{
-}
+    .header-section{
+    }
 
-.filter-section{
-}
+    .filter-section{
+    }
 
-.result-section{
-    height: $result-height;
-}
+    .result-section{
+        height: $result-height;
+    }
 
-.map-container{
-    height: $result-height;
-    position:relative;
-    padding:0;
-}
+    .map-container{
+        height: $result-height;
+        position:relative;
+        padding:0;
+    }
 
-.cards-container{
-    max-height: $result-height;
-    overflow: auto;
-    transition:0.3s;
-}
+    .cards-container{
+        max-height: $result-height;
+        overflow: auto;
+        transition:0.3s;
+    }
 
-.card-container{
-    //transition:0.1s;
-}
+    .card-container{
+        //transition:0.1s;
+    }
 
-.cards-list{
-    margin-left: -$cards-gap;
-    margin-right: -$cards-gap;
+    .cards-list{
+        margin-left: -$cards-gap;
+        margin-right: -$cards-gap;
 
-}
-.cards-list .column {
-    padding-left: $cards-gap;
-    padding-right: $cards-gap;
-}
+    }
+    .cards-list .column {
+        padding-left: $cards-gap;
+        padding-right: $cards-gap;
+    }
 
 </style>

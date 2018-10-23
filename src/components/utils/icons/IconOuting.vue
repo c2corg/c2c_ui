@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="outing" />
+    <icon-document document-type="outing" />
 </template>

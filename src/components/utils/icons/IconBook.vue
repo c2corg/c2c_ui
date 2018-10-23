@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="book" />
+    <icon-document document-type="book" />
 </template>

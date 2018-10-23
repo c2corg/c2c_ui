@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="route" />
+    <icon-document document-type="route" />
 </template>

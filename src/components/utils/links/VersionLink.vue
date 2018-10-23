@@ -1,6 +1,7 @@
 <template>
-    <router-link v-if="type!='u' && type!='profile'"
-                 :to="{name:type + '-version', params:{id:id, version:version, lang:lang}}">
+    <router-link
+        v-if="documentType!='profile'"
+        :to="{name:documentType + '-version', params:{id:id, version:version, lang:lang}}">
         <slot/>
     </router-link>
     <span v-else>
@@ -9,13 +10,12 @@
 </template>
 
 <script>
+    import { requireDocumentTypeProperty } from "@/js/propertiesMixins"
 
     export default{
+        mixins : [ requireDocumentTypeProperty ],
+
         props: {
-            type:{
-                type:String,
-                required:true,
-            },
             version:{
                 type:Number,
                 required:true,

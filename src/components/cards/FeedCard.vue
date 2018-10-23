@@ -9,21 +9,21 @@
 
                 <span>{{ $gettext(actionLine) }}</span>
             </div>
-            <icon-document :type="item.document.type" class="is-pulled-right"/>
+            <icon-document :document-type="documentType" class="is-pulled-right"/>
         </header>
         <div class="card-content">
             <div>
                 <document-title :document="item.document"/>
                 <br>
                 <span v-if="locale && locale.summary">{{ locale.summary }}</span>
-                <span v-if="item.document.type=='o'">{{ dates }}</span>
+                <span v-if="documentType=='outing'">{{ dates }}</span>
             </div>
 
             <gallery v-if="images.length!=0" :images="images" />
 
             <div >
-                <outing-rating v-if="item.document.type=='o'" :outing="item.document"/>
-                <route-rating v-else-if="item.document.type=='r'" :document="item.document"/>
+                <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
+                <route-rating v-else-if="documentType=='route'" :document="item.document"/>
 
 
                 <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
@@ -44,10 +44,10 @@
             </div>
             <div>
                 <activities v-if="item.document.activities" :activities="item.document.activities"/>
-                <icon-document v-if="item.document.img_count != 0" type="image"/>
+                <icon-document v-if="item.document.img_count != 0" document-type="image"/>
                 <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
                 <span> {{ item.time | timeAgo }} </span>
-                <icon-condition v-if="item.document.type=='o'" :condition="item.document.condition_rating"/>
+                <icon-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
                 <icon-quality :quality="item.document.quality" />
             </div>
         </div>
@@ -64,7 +64,7 @@
 
     export default{
 
-        components:{
+        components: {
             CardRegionItem,
         },
 
@@ -72,7 +72,7 @@
             cardMixins,
         ],
 
-        props:{
+        props: {
             item:{
                 type:Object,
                 required:true
@@ -84,6 +84,12 @@
                 locale:null,
                 actionLine:null,
                 images:[],
+            }
+        },
+
+        computed: {
+            documentType(){
+                return constants.getDocumentType(this.item['document']['type'])
             }
         },
 
@@ -106,7 +112,7 @@
                     break;
             }
 
-            this.actionLine += constants.getDocumentType(this.item['document']['type']);
+            this.actionLine += this.documentType;
 
             const start = this.$moment(this.item['document']['date_start']);
             const end = this.$moment(this.item['document']['date_end']);

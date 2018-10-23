@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="map" />
+    <icon-document document-type="map" />
 </template>

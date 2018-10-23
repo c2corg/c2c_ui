@@ -35,9 +35,7 @@
                         {{ targetDocument.document_id }}
                     </document-link>)
                 </span>
-                <document-finder
-                    :type="document.type"
-                    v-model="targetDocument"/>
+                <document-finder :document-type="documentType" v-model="targetDocument"/>
             </p>
         </section>
 

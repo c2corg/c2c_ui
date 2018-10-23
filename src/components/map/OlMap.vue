@@ -56,7 +56,8 @@
 
 
 <script>
-    import ol from '@/js/ol.js'
+    import ol from '@/js/ol'
+    import constants from '@/js/constants'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
     import biodivSports from './biodivSports.js'
@@ -421,7 +422,7 @@
                     const document = feature.get('document');
                     if(document){
                         this.$router.push({
-                            name: document.type, params: {
+                            name: constants.getDocumentType(document.type), params: {
                                 id:document.document_id,
                             }
                         })

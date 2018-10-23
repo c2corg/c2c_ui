@@ -9,7 +9,7 @@
             <edit-link
                 class="is-first-letter-uppercase is-size-4"
                 :id="document.document_id"
-                :type="document.type"
+                :document-type="documentType"
                 :lang="lang">
                 {{ $gettext(lang) }}
             </edit-link>

@@ -5,7 +5,7 @@
 
             <h1 class="title is-1" v-translate>Change account parameters</h1>
             <base-form ref="form" @submit="save" :server-errors="serverErrors">
-                <form-field                    
+                <form-field
                     name="username"
                     v-model="username"
                     type="text"
@@ -94,12 +94,12 @@
 
         data(){
             return {
-                username:user.getUserName(),
+                username:user.userName,
                 currentpassword:"",
                 newpassword:"",
                 email:"",
-                name:user.getName(),
-                forum_username:user.getForumUsername(),
+                name:user.name,
+                forum_username:user.forumUsername,
                 is_profile_public:null,
                 original_mail: null,
                 serverErrors: null,
@@ -123,8 +123,8 @@
 
                 user.updateAccount(
                     this.currentpassword,
-                    newOrNull(this.name, user.getUserName()),
-                    newOrNull(this.forum_username, user.getForumUsername()),
+                    newOrNull(this.name, user.userName),
+                    newOrNull(this.forum_username, user.forumUsername),
                     newOrNull(this.email, this.original_mail),
                     this.is_profile_public,
                     this.newpassword ? this.newpassword : null)

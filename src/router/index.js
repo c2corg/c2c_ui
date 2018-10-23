@@ -97,82 +97,44 @@ var routes = [
 const addDocumentTypeView = function(def, viewComponent, editionComponent){
 
     routes.push({
-        path: '/' + def.type + 's',
-        name: def.type + 's',
+        path: '/' + def.documentType + 's',
+        name: def.documentType + 's',
         component: def.type=='image' ? ImagesView : DocumentsView},
     )
 
     routes.push({
-        path: '/' + def.type + 's/:id(\\d+)/:lang?',
-        name: def.type ,
+        path: '/' + def.documentType + 's/:id(\\d+)/:lang?',
+        name: def.documentType ,
         component: viewComponent},
     )
 
     routes.push({
-        path: '/' + def.type + 's/:id(\\d+)/:lang?',
-        name: def.letter ,
+        path: '/' + def.documentType + 's/version/:id(\\d+)/:lang/:version',
+        name: def.documentType + "-version",
         component: viewComponent},
     )
 
     routes.push({
-        path: '/' + def.type + 's/version/:id(\\d+)/:lang/:version',
-        name: def.type + "-version",
-        component: viewComponent},
-    )
-
-    routes.push({
-        path: '/' + def.type + 's/version/:id(\\d+)/:lang/:version',
-        name: def.letter + "-version",
-        component: viewComponent},
-    )
-
-
-    routes.push({
-        path: '/' + def.type + 's/history/:id(\\d+)/:lang',
-        name: def.type + "-history",
+        path: '/' + def.documentType + 's/history/:id(\\d+)/:lang',
+        name: def.documentType + "-history",
         component: HistoryView},
     )
 
     routes.push({
-        path: '/' + def.type + 's/history/:id(\\d+)/:lang',
-        name: def.letter + "-history",
-        component: HistoryView},
-    )
-
-
-    routes.push({
-        path: '/' + def.type + 's/edit/:id(\\d+)/:lang',
-        name: def.type + "-edit",
+        path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
+        name: def.documentType + "-edit",
         component: editionComponent},
     )
 
     routes.push({
-        path: '/' + def.type + 's/edit/:id(\\d+)/:lang',
-        name: def.letter + "-edit",
+        path: '/' + def.documentType + 's/add/:lang?',
+        name: def.documentType + "-add",
         component: editionComponent},
     )
 
     routes.push({
-        path: '/' + def.type + 's/add/:lang?',
-        name: def.type + "-add",
-        component: editionComponent},
-    )
-
-    routes.push({
-        path: '/' + def.type + 's/add/:lang?',
-        name: def.letter + "-add",
-        component: editionComponent},
-    )
-
-    routes.push({
-        path: '/' + def.type + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
-        name: def.type + "-diff",
-        component: DiffView},
-    )
-
-    routes.push({
-        path: '/' + def.type + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
-        name: def.letter + "-diff",
+        path: '/' + def.documentType + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
+        name: def.documentType + "-diff",
         component: DiffView},
     )
 }

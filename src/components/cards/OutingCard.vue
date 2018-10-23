@@ -40,7 +40,7 @@
                 {{ document.date_start }}
             </span>
 
-            <marker-quality :quality="document.quality"/>
+            <icon-quality :quality="document.quality"/>
         </div>
     </card-container>
 </template>

@@ -2,21 +2,21 @@
     <div v-if="results" class="columns content section">
         <html-header title="Search"/>
         <div class="column">
-            <h1>
+            <h2>
                 <span v-translate>Routes</span>
                 ({{ results.routes.total }})
-            </h1>
-            <div v-for="route of results.routes.documents" :key="route.document_id" >            
+            </h2>
+            <div v-for="route of results.routes.documents" :key="route.document_id" >
                 <pretty-route-link :route="route"/>
             </div>
         </div>
         <div class="column">
-            <h1>
+            <h2>
                 <span v-translate>Waypoints</span>
                 ({{ results.waypoints.total }})
-            </h1>
+            </h2>
             <div v-for="waypoint of results.waypoints.documents" :key="waypoint.document_id" >
-                <document-link :document="waypoint"/>
+                <pretty-waypoint-link :waypoint="waypoint"/>
             </div>
         </div>
     </div>

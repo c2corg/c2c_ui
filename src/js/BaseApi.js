@@ -16,12 +16,15 @@ const ApiData = function(promise){
     this.error = null
     this.promise = promise
     this.data = null
+    this.loading = true
 
     promise.catch(error => {
+        this.loading = false
         self.error = error
     })
 
     promise.then(response => {
+        this.loading = false
         self.response = response
         self.data = response.data
     })

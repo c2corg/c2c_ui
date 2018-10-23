@@ -13,11 +13,9 @@
 
                     <div class="column is-3">
                         <map-box :document="document"/>
-
                         <elevation-profile-box :document="document"/>
-
-                        <tool-box :document="document"/> 
-
+                        <lang-switcher-box :document="document" />
+                        <tool-box :document="document"/>
                         <license-box cc="by-sa" />
                     </div>
 

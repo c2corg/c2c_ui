@@ -12,11 +12,11 @@
                 </p>
 
                 <span v-if="!isFirstVersion">
-                    (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
+                    (<diff-link :document-type="documentType" :id="documentId" :lang="$route.params.lang"
                                 :version-from="previousVersionId"
                                 :version-to="$route.params.version"/>)
                     <version-link
-                        :type="type"
+                        :document-type="documentType"
                         :id="documentId"
                         :lang="$route.params.lang"
                         :version="previousVersionId"
@@ -29,27 +29,27 @@
                 <document-link :document="document" :lang="$route.params.lang" v-translate>
                     see actual version
                 </document-link>
-                (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
+                (<diff-link :document-type="documentType" :id="documentId" :lang="$route.params.lang"
                             :version-from="$route.params.version"
                             version-to="last"/>)
                             |
                 <span v-if="!isLastVersion">
                     <version-link
-                        :type="type"
+                        :document-type="documentType"
                         :id="documentId"
                         :lang="$route.params.lang"
                         :version="nextVersionId"
                         v-translate>
                         next version →
                     </version-link>
-                    (<diff-link :type="type" :id="documentId" :lang="$route.params.lang"
+                    (<diff-link :document-type="documentType" :id="documentId" :lang="$route.params.lang"
                                 :version-to="nextVersionId"
                                 :version-from="$route.params.version"/>)
                 </span>
                 <span v-else v-translate>This is the last version</span>
 
                 <p>
-                    <icon-document type="profile"/>
+                    <icon-document document-type="profile"/>
                     <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
                 </p>
                 <p>
@@ -71,7 +71,7 @@
 
                     <history-link
                         v-tooltip="$gettext('History')"
-                        :type="type"
+                        :document-type="documentType"
                         :id="document.document_id"
                         :lang="locale.lang">
                         <icon-history />
@@ -86,7 +86,7 @@
 
                     <edit-link
                         v-if="!isVersionView"
-                        :type="type"
+                        :document-type="documentType"
                         :id="document.document_id"
                         :lang="locale.lang"
                         v-tooltip="$gettext('Edit')">
@@ -94,7 +94,7 @@
                     </edit-link>
                 </span>
                 <div class="title is-1">
-                    <icon-document :type="type"/>
+                    <icon-document :document-type="documentType"/>
                     <document-title :document="document"/>
                 </div>
             </content-box>
@@ -155,11 +155,11 @@
             documentId(){
                 return parseInt(this.$route.params.id)
             },
-            type(){
-                return constants.getDocumentType(this.$route.name.split("-")[0])
+            documentType(){
+                return this.$route.name.split("-")[0]
             },
             fields(){
-                return constants.objectDefinitions[this.type].fields
+                return constants.objectDefinitions[this.documentType].fields
             },
             isVersionView(){
                 return this.$route.name.endsWith("-version");
@@ -230,7 +230,7 @@
             loadDocument(){
 
                 if(this.isVersionView){
-                    this.promise = c2c[this.type].getVersion(
+                    this.promise = c2c[this.documentType].getVersion(
                         this.documentId,
                         this.$route.params.lang,
                         this.$route.params.version
@@ -257,7 +257,7 @@
 
                 } else {
 
-                    this.promise = c2c[this.type].get(this.documentId).then(response => {
+                    this.promise = c2c[this.documentType].get(this.documentId).then(response => {
                         if(response.data.not_authorized===true){
                             // TODO : brancher ca au bon endroit
                             this.error = new Error("Sorry, you're not authorized to see this document")

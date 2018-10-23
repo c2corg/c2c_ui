@@ -8,7 +8,7 @@
             Here is the list of users you are following and whose activity you will see in your personal feed.
         </p>
 
-        <document-finder type="profile" v-model="newUser" @input="addUser()"/>
+        <document-finder document-type="profile" v-model="newUser" @input="addUser()"/>
 
         <div v-if="following.data" class="columns is-multiline">
             <div

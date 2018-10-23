@@ -1,19 +1,16 @@
 <template>
-    <router-link :to="{name:type_ + '-diff', params:{id:id, versionFrom:versionFrom || 'prev', versionTo:versionTo || 'next', lang:lang}}">
+    <router-link :to="{name:documentType + '-diff', params:{id:id, versionFrom:versionFrom || 'prev', versionTo:versionTo || 'next', lang:lang}}">
         <slot>diff</slot>
     </router-link>
 </template>
 
 <script>
-
-    import constants from '@/js/constants'
+    import { requireDocumentTypeProperty } from "@/js/propertiesMixins"
 
     export default{
+        mixins : [ requireDocumentTypeProperty ],
+
         props: {
-            type:{
-                type:String,
-                required:true,
-            },
             lang:{
                 type:String,
                 required:true,
@@ -31,11 +28,5 @@
                 required:true,
             },
         },
-
-        computed: {
-            type_(){
-                return constants.getDocumentType(this.type)
-            }
-        }
     }
 </script>

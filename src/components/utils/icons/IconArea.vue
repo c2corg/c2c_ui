@@ -1,3 +1,3 @@
 <template>
-    <icon-document type="area" />
+    <icon-document document-type="area" />
 </template>

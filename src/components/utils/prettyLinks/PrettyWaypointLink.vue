@@ -1,9 +1,8 @@
 <template>
 
     <document-link :document="waypoint">
-        <icon-waypoint-type :waypoint-type="waypoint.waypoint_type"/>
-        <document-title :document="waypoint"/><span>,</span>
-        {{ waypoint.elevation }}&nbsp;m
+        <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="has-text-dark"/>
+        <document-title :document="waypoint"/><span class="has-text-dark">, {{ waypoint.elevation }}&nbsp;m</span>
     </document-link>
 
 </template>

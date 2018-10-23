@@ -767,32 +767,32 @@ function Constants(){
 
     this.documentTypes = Object.keys(this.objectDefinitions)
 
-    this.letterToType = {}
-    for(let type of this.documentTypes){
-        let definition = this.objectDefinitions[type]
+    this.letterToDocumentType = {}
+    for(let documentType of this.documentTypes){
+        let definition = this.objectDefinitions[documentType]
 
-        this.letterToType[definition.letter] = type
-        definition.type = type
+        this.letterToDocumentType[definition.letter] = documentType
+        definition.documentType = documentType // TODO rename definition.type to definition.documentType
 
         // Let's build objectDefinitions.<type>.validAssociations
         // it's an array of string, transform it to an object of
         // <string, definition>
         let validAssociations = {}
 
-        for(let type of definition.validAssociations){
-            validAssociations[type] = this.objectDefinitions[type]
+        for(let documentType of definition.validAssociations){
+            validAssociations[documentType] = this.objectDefinitions[documentType]
         }
 
         definition.validAssociations = validAssociations
     }
 }
 
-Constants.prototype.getDocumentType = function(type){
-    return type.length == 1 ? this.letterToType[type] : type
+Constants.prototype.getDocumentType = function(letterType){
+    return this.letterToDocumentType[letterType]
 }
 
-Constants.prototype.buildLocale = function(type, lang){
-    var def = this.objectDefinitions[type]
+Constants.prototype.buildLocale = function(documentType, lang){
+    var def = this.objectDefinitions[documentType]
 
     var result = {}
 
@@ -807,13 +807,13 @@ Constants.prototype.buildLocale = function(type, lang){
     return result
 }
 
-Constants.prototype.buildDocument = function(type, lang){
-    var def = this.objectDefinitions[type];
+Constants.prototype.buildDocument = function(documentType, lang){
+    var def = this.objectDefinitions[documentType]
 
     var result = {
         type:def.letter,
         locales:[
-            this.buildLocale(type, lang)
+            this.buildLocale(documentType, lang)
         ],
     }
 

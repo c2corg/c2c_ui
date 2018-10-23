@@ -2,7 +2,23 @@
     <div v-if="preferences" class="section content">
         <html-header title="My preferences"/>
 
-        <h2 v-translate>Filter preferences</h2>
+        <h2 v-translate>
+            lang
+        </h2>
+
+        <div class="field is-grouped">
+            <div v-for="(language, key) of $language.available" :key="key" class="control">
+                <button
+                    :class="{'is-primary' : $language.current == key}"
+                    type="button"
+                    class="button"
+                    @click="setLang(key)">
+                    {{ language }}
+                </button>
+            </div>
+        </div>
+
+        <h2 v-translate>Home page feed</h2>
         <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
         <p v-translate>Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.</p>
         <div class="field">
@@ -13,7 +29,7 @@
         </div>
 
         <div v-if="!preferences.followed_only">
-            <h2 v-translate>langs</h2>
+            <h3 v-translate>langs</h3>
             <div class="field is-grouped">
                 <div v-for="lang of constants.langs" :key="lang" class="control">
                     <button :class="{'is-primary' : preferences.langs.indexOf(lang) > -1}" type="button" class="button"
@@ -23,14 +39,14 @@
                 </div>
             </div>
 
-            <h2 v-translate>activities</h2>
+            <h3 v-translate>activities</h3>
             <div class="field is-grouped">
                 <input-activity v-model="preferences.activities" @input="save"/>
             </div>
 
-            <h2 v-translate>Areas</h2>
+            <h3 v-translate>Areas</h3>
 
-            <document-finder type="area" @input="addArea(arguments[0])"/>
+            <document-finder document-type="area" @input="addArea(arguments[0])"/>
 
             <div class="columns">
                 <div
@@ -49,6 +65,7 @@
 
 <script>
     import c2c from '@/js/c2c'
+    import user from '@/js/user'
     import constants from '@/js/constants.js'
 
     export default {
@@ -89,6 +106,11 @@
 
             save(){
                 c2c.userProfile.preferences.post(this.preferences)
+            },
+
+            setLang(lang){
+                this.$language.setCurrent(lang)
+                user.lang = lang
             }
         },
     }

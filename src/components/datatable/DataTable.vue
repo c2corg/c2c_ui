@@ -6,7 +6,7 @@
                     v-for="(column, i) of columns"
                     :key="i"
                     v-if="column.visible!==false"
-                    :style="column.width ? 'width:' + column.width : ''">            
+                    :style="column.width ? 'width:' + column.width : ''">
                     {{ $gettext(column.header ? column.header : column.field.name) }}
                 </th>
             </tr>
@@ -27,22 +27,21 @@
 
 <script>
     import columnDefs from "./columnDefs"
+    import { requireDocumentTypeProperty } from "@/js/propertiesMixins"
 
     export default {
+        mixins : [ requireDocumentTypeProperty ],
+
         props:{
             documents:{
                 type:Object,
                 required:true
             },
-            type:{
-                type:String,
-                required:true
-            }
         },
 
         computed: {
             columns(){
-                return columnDefs[this.type]
+                return columnDefs[this.documentType]
             },
         },
 

@@ -4,7 +4,7 @@
         class="site-notice has-background-info has-text-light"
         @click="showContent=!showContent">
         <div class="section is-info">
-            <button class="delete" @click="hidden=true"/>
+            <button class="delete" @click="hide"/>
             <div ref="header"/>
             <div v-show="showContent" ref="content"/>
         </div>
@@ -14,14 +14,29 @@
 <script>
 
     import forum from "@/js/forum"
+    import user from "@/js/user"
 
     export default {
+        name:"SiteNotice",
+
         data(){
             return {
                 hasAnnouncement : false,
-                html: null,
                 hidden: false,
                 showContent: false,
+                updatedAt:null,
+                lang: user.lang,
+            }
+        },
+
+        computed: {
+            readdenPostKey: {
+                get(){
+                    return this.$localStorage.get("readdenPostKey." + this.lang)
+                },
+                set(value){
+                    this.$localStorage.set("readdenPostKey." + this.lang, value)
+                }
             }
         },
 
@@ -30,17 +45,21 @@
         },
 
         methods:{
-            // TODO : remind if user has closed an announce
             loadAnnouncement(){
-                forum.readAnnouncement("fr").then(response => {
+                forum.readAnnouncement(this.lang).then(response => {
                     const data = response['data']
                     if (data['tags'].indexOf('visible') > -1) {
+                        let post = data.post_stream.posts[0]
+                        this.updatedAt = post.updated_at
+
+                        if(this.readdenPostKey == post.updated_at)
+                            return
+
                         this.hasAnnouncement = true
-                        this.html = data.post_stream.posts[0].cooked
 
                         // compute html, to split p
                         let content = document.createElement( 'div' )
-                        content.innerHTML = this.html
+                        content.innerHTML = post.cooked
                         let paragraphs = content.getElementsByTagName( 'p' )
 
                         this.$refs.header.appendChild(paragraphs[0])
@@ -49,6 +68,11 @@
                             this.$refs.content.appendChild(p)
                     }
                 })
+            },
+
+            hide(){
+                this.hidden=true
+                this.readdenPostKey = this.updatedAt
             }
         }
     }

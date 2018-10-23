@@ -3,14 +3,14 @@
         <!-- TODO : translate -->
         <html-header title="Differences between versions"/>
         <h1>
-            <icon-document :type="type" class="is-large"/>
+            <icon-document :document-type="documentType" class="is-large"/>
             <span>diff</span> ({{ lang }}) :
-            <router-link :to="{ name: type, params: {id:documentId, lang:lang} }">{{ title }}</router-link>
+            <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ title }}</router-link>
         </h1>
         <div class="columns">
             <div v-if="oldVersion" class="column">
                 <div>
-                    <version-link :type="type" :id="documentId" :version="oldVersion.version.version_id" :lang="lang">
+                    <version-link :document-type="documentType" :id="documentId" :version="oldVersion.version.version_id" :lang="lang">
                         Revision #{{ oldVersion.document.version }} as of {{ oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                     </version-link>
                 </div>
@@ -22,7 +22,9 @@
                 </div>
                 <div>
                     <diff-link v-if="oldVersion.previous_version_id"
-                               :type="type" :id="documentId" :lang="lang"
+                               :document-type="documentType"
+                               :id="documentId"
+                               :lang="lang"
                                :version-from="oldVersion.previous_version_id"
                                :version-to="oldVersion.version.version_id">
                         ← previous difference
@@ -35,7 +37,11 @@
 
             <div v-if="newVersion" class="column">
                 <div>
-                    <version-link :type="type" :id="documentId" :version="newVersion.version.version_id" :lang="lang">
+                    <version-link
+                        :document-type="documentType"
+                        :id="documentId"
+                        :version="newVersion.version.version_id"
+                        :lang="lang">
                         Revision #{{ newVersion.document.version }} as of {{ newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                     </version-link>
                 </div>
@@ -47,7 +53,9 @@
                 </div>
                 <div>
                     <diff-link v-if="newVersion.next_version_id"
-                               :type="type" :id="documentId" :lang="lang"
+                               :document-type="documentType"
+                               :id="documentId"
+                               :lang="lang"
                                :version-from="newVersion.version.version_id"
                                :version-to="newVersion.next_version_id">
                         next difference →
@@ -113,10 +121,10 @@
         computed: {
             documentId(){ return parseInt(this.$route.params.id) },
             lang(){ return this.$route.params.lang },
-            type(){ return this.$route.name.replace("-diff","") },
+            documentType(){ return this.$route.name.replace("-diff","") },
 
             geoLocalized() {
-                return constants.objectDefinitions[this.type].geoLocalized
+                return constants.objectDefinitions[this.documentType].geoLocalized
             }
         },
 
@@ -204,7 +212,7 @@
             },
 
             loadVersion(versionId, resultProperty){
-                c2c[this.type].getVersion(this.documentId, this.lang, versionId).then(response => {
+                c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then(response => {
                     this[resultProperty]=response.data;
                     if(resultProperty=="newVersion"){
                         this.title = user.getLocaleStupid(this.newVersion.document, this.lang).title
@@ -216,7 +224,7 @@
 
             loadVersionSmart(versionId, resultProperty, baseVersionId){
                 if(versionId=="prev"){
-                    c2c[this.type].getHistory(this.documentId, this.lang).then(response => {
+                    c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
                         let versions = response.data.versions;
 
                         for(let i=0;i<versions.length;i++){

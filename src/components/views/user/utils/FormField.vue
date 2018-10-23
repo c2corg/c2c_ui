@@ -39,7 +39,7 @@
                 type:String,
                 required:true,
             },
-            type: {
+            type: { // HTML type of input (text, number...)
                 type:String,
                 required:true,
             },
