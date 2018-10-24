@@ -10,7 +10,6 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import user from '@/js/user'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
@@ -27,7 +26,7 @@
 
         computed:{
             canFollow(){
-                return this.document.type =='u' && user.isLogged && user.id != this.document.document_id
+                return this.document.type =='u' && this.$user.isLogged && this.$user.id != this.document.document_id
             },
 
             tooltip(){

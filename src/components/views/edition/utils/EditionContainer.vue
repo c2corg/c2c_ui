@@ -41,7 +41,6 @@
 
     import constants from '@/js/constants.js'
     import c2c from '@/js/c2c'
-    import user from '@/js/user.js'
 
     import FormRow from './FormRow'
 
@@ -71,7 +70,7 @@
                 let doc = this.promise.data
 
                 if(doc){
-                    var locale = user.getLocaleStupid(doc, this.lang)
+                    var locale = this.$documentUtils.getLocaleStupid(doc, this.lang)
 
                     if(!locale){
                         locale = constants.buildLocale(this.documentType, this.lang)

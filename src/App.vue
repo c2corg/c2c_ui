@@ -25,6 +25,13 @@
 </script>
 
 <style lang="scss">
+body{
+    overflow-y: hidden;
+}
+body::-webkit-scrollbar { 
+    display: none;
+}
+
 @media print {
     /* print styles go here */
     .no-print {

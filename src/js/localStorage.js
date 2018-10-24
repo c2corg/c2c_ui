@@ -27,6 +27,11 @@ LocalStorageItem.prototype.clear = function() {
     this.commit_()
 }
 
+LocalStorageItem.prototype.initialize = function(data) {
+    this.data_ = Object.assign({}, data)
+    this.commit_()
+}
+
 LocalStorageItem.prototype.assign = function(data) {
     for(let key of Object.keys(data))
         this.data_[key] = data[key]

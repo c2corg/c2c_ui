@@ -21,8 +21,8 @@
 <script>
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
-    import ol from '@/js/ol.js'
-    import d3 from '@/js/d3.js'
+    import ol from '@/libs/ol.js'
+    import d3 from '@/libs/d3.js'
 
     export default {
         mixins : [ requireDocumentProperty ],
@@ -89,7 +89,7 @@
             createChart(){
                 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
 
-                // compute data 
+                // compute data
                 var geom_detail = JSON.parse(this.document.geometry.geom_detail)
 
                 let coords = [];

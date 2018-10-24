@@ -1,6 +1,5 @@
 
 import saveAs from 'file-saver'
-import user from '@/js/user.js' //TODO : utils shoul not use any depandencies
 
 export default {
 
@@ -24,19 +23,6 @@ export default {
             }
         }
         return str;
-    },
-
-    getDocumentTitle(document, lang){
-        if(document.type=="u" || !document.type){
-            return document.name
-        }
-
-        var locale = user.getLocaleSmart(document, lang)
-
-        if (locale.title_prefix)
-            return locale.title_prefix + " : " + locale.title
-
-        return locale.title
     },
 
     // from https://github.com/camptocamp/ngeo/blob/master/src/download/service.js#L27

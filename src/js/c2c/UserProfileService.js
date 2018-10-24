@@ -75,7 +75,9 @@ UserProfileService.prototype.login = function (username, password){
         username,
         password,
         discourse:false
-    })
+    },
+    true //safe call : you can do it, even in read-only mode
+    )
 }
 
 UserProfileService.prototype.update_preferred_language = function(lang){

@@ -9,12 +9,11 @@
 <script>
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
-    import user from '@/js/user.js'
 
     export default {
 
         mixins : [requireDocumentProperty],
-        
+
         computed:{
             text(){
                 return this.computeText()
@@ -30,7 +29,7 @@
                     const orderedAreas = {'range': [], 'admin_limits': [], 'country': []};
 
                     for (let area of areas) {
-                        orderedAreas[area.area_type].push(user.getLocaleSmart(area).title);
+                        orderedAreas[area.area_type].push(this.$documentUtils.getLocaleSmart(area).title);
                     }
 
                     let sortedAreas = [];

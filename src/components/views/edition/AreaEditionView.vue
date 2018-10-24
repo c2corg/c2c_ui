@@ -11,9 +11,9 @@
 
 <script>
 
-    import FormComponentsMixin from './utils/FormComponentsMixin.js'
+    import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin.js'
 
     export default {
-        mixins : [ FormComponentsMixin, ],
+        mixins : [ DocumentEditionViewMixin, ],
     }
 </script>

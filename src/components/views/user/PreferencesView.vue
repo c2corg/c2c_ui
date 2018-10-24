@@ -12,7 +12,7 @@
                     :class="{'is-primary' : $language.current == key}"
                     type="button"
                     class="button"
-                    @click="setLang(key)">
+                    @click="$user.lang = key">
                     {{ language }}
                 </button>
             </div>
@@ -65,7 +65,6 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import user from '@/js/user'
     import constants from '@/js/constants.js'
 
     export default {
@@ -107,11 +106,6 @@
             save(){
                 c2c.userProfile.preferences.post(this.preferences)
             },
-
-            setLang(lang){
-                this.$language.setCurrent(lang)
-                user.lang = lang
-            }
         },
     }
 </script>

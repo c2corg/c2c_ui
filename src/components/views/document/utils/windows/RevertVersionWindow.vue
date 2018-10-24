@@ -1,18 +1,14 @@
 <template>
     <modal-confirmation
         ref="modalWindow"
-        show-uncancelable-warning
         :promise="promise"
-        @confirm="executeDelete">
-
-        <span slot="title" v-translate>
-            Delete this document
+        @confirm="restoreVersion">
+        <span slot="title">
+            <span v-translate>Restore this version</span>
         </span>
-
         <span v-translate>
-            Are you sure you want to delete this document?
+            Are you sure you want to revert to this version of the document?
         </span>
-
     </modal-confirmation>
 </template>
 
@@ -35,12 +31,15 @@
                 this.$refs.modalWindow.show()
             },
 
-            executeDelete(){
-                this.promise = c2c.moderator.deleteDocument(this.document.document_id)
-                .then(() => {
-                    this.$router.push({name:this.documentType + 's'})
+            restoreVersion(){
+                this.promise = c2c.moderator.revertDocument(
+                    this.document.document_id,
+                    this.document.currentLocale_.lang,
+                    this.$route.params.version
+                ).then(() => {
+                    this.$refs.modalWindow.hide()
+                    this.$router.push({name:this.documentType, id:this.document.document_id})
                 })
-                // TODO feedback error
             }
         }
     }

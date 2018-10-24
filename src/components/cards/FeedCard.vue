@@ -55,7 +55,6 @@
 </template>
 
 <script>
-    import user from '@/js/user.js'
     import c2c from '@/js/c2c'
     import constants from '@/js/constants.js'
 
@@ -94,7 +93,7 @@
         },
 
         created(){
-            this.locale = user.getLocaleSmart(this.item.document)
+            this.locale = this.$documentUtils.getLocaleSmart(this.item.document)
 
             this.actionLine = '';
 

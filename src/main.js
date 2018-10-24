@@ -1,26 +1,25 @@
 // Require the main Sass manifest file
 require('./assets/sass/main.scss')
 
-/* core */
 import Vue from 'vue'
 import App from '@/App.vue'
-import Router from '@/router'
 
-import GetTextPlugin from '@/translations/GetTextPlugin'
-import french_translations from '@/translations/dist/fr.json'
+import router from '@/tools/router'
+import documentUtils from '@/tools/documentUtils'
+import fontAwesome from '@/tools/fa.config'
+import getText from '@/tools/getTextPlugin'
+import globalComponents from '@/tools/globalComponents'
+import tooltip from '@/tools/tooltip'
+import user from '@/tools/user'
 
-import user from '@/js/user.js'
 import localStorage from '@/js/localStorage'
 
-import FontAwesomeConfig from '@/js/fa.config'
 import moment from 'moment'
 import vueMoment from 'vue-moment/vue-moment.js'
 
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 Vue.config.silent = false
-
-Vue.use(FontAwesomeConfig)
 
 require("moment/locale/ca.js")
 require("moment/locale/es.js")
@@ -30,90 +29,21 @@ require("moment/locale/fr.js")
 require("moment/locale/it.js")
 require("moment/locale/en-gb.js") // keep en in last.
 
-// add vue-moment for generic filter :
+// add vue-moment for generic filter {{ bar | moment("yyyy") }}
 Vue.use(vueMoment, {moment})
 
-Vue.use(GetTextPlugin, {
-    availableLanguages: {
-        fr: 'Français',
-        it: 'Italiano',
-        de: 'Deutsch',
-        en: 'English',
-        es: 'Español',
-        ca: 'Català',
-        eu: 'Euskara',
-    },
-    current: user.lang,
-
-    getMessages(lang){
-
-        //eslint-disable-next-line
-        console.warn(`Download ${lang}`)
-
-        if(lang=='fr') // include fr langage in app
-            return french_translations
-
-        else if(lang=='en') //lazy load the others
-            return import(/* webpackChunkName: "translations-en" */ `@/translations/dist/en.json`)
-
-        else if(lang=='ca')
-            return import(/* webpackChunkName: "translations-ca" */`@/translations/dist/ca.json`)
-
-        else if(lang=='eu')
-            return import(/* webpackChunkName: "translations-eu" */`@/translations/dist/eu.json`)
-
-        else if(lang=='it')
-            return import(/* webpackChunkName: "translations-it" */`@/translations/dist/it.json`)
-
-        else if(lang=='de')
-            return import(/* webpackChunkName: "translations-de" */`@/translations/dist/de.json`)
-
-        else if(lang=='es')
-            return import(/* webpackChunkName: "translations-es" */`@/translations/dist/es.json`)
-
-        throw `Unsuported language : ${lang}`
-    },
-})
-
-
-// add all vue component as globals components, given en require context
-const addComponents = function(context){
-    context.keys().forEach(key => {
-
-        let component = context(key)
-        let name = key.split("/").slice(-1)[0]
-
-        // kebab-case-ification, assuming that all module names are in PascalCase
-        name = name.replace(".vue", "").replace(/([A-Z])/g, "-$1").toLowerCase().substring(1)
-
-        Vue.component(name, component.default)
-    });
-}
-
-// add all components in /utils
-addComponents(require.context('./components/utils', true, /\.vue$/))
-
-// other globals components
-Vue.component("document-card", require('./components/cards/DocumentCard').default)
-Vue.component("map-view", require('./components/map/OlMap').default)
+Vue.use(documentUtils)
+Vue.use(fontAwesome)
+Vue.use(getText)
+Vue.use(globalComponents)
+Vue.use(tooltip)
+Vue.use(user)
 
 // build timeAgo filter, basiccly a shorthand for  moment.utc(someDate).local().fromNow()
 Vue.filter('timeAgo', (arg) => {
     return moment.utc(arg).local().fromNow()
 })
 
-//tooltip directive
-Vue.directive('tooltip',  function (el, binding) {
-
-    if(binding.value!==null && binding.value!==undefined && binding.value!==''){
-        el.classList.add("tooltip");
-        el.setAttribute("data-tooltip", binding.value);
-
-        if(binding.arg){
-            el.classList.add("is-tooltip-" + binding.arg);
-        }
-    }
-})
 
 // extends javascript core objects
 Array.prototype.toggle = function(value){
@@ -131,13 +61,6 @@ Array.prototype.remove = function(value){
 }
 
 
-Object.defineProperty(Vue.prototype, '$helper', {
-    get() {
-        return this.$root.$children[0].$refs.helper
-    }
-})
-
-
 Object.defineProperty(Vue.prototype, '$localStorage', {
     get() {
         if(!this.$options.name)
@@ -147,14 +70,13 @@ Object.defineProperty(Vue.prototype, '$localStorage', {
     }
 })
 
+Object.defineProperty(Vue.prototype, '$helper', {
+    get() { return this.$root.$children[0].$refs.helper }
+})
+
+
 
 new Vue({
-    router:Router,
+    router:router,
     render: h => h(App),
-    // methods:{
-    //     showHelper(name){
-    //         console.log(this, App)
-    //         this.$children[0].$refs.helper.show(name)
-    //     }
-    // }
 }).$mount('#app')

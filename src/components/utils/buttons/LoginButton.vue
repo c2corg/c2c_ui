@@ -1,6 +1,6 @@
 <template>
     <router-link
-        v-if="!userIsLogged"
+        v-show="!$user.isLogged"
         :to="{name:'auth'}"
         class="button is-primary">
         <slot>
@@ -8,16 +8,3 @@
         </slot>
     </router-link>
 </template>
-
-<script>
-
-    import user from '@/js/user.js'
-
-    export default{
-        computed   : {
-            userIsLogged(){
-                return user.isLogged
-            }
-        }
-    }
-</script>

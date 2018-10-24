@@ -412,7 +412,7 @@ function Constants(){
 
     this.langs = attrs.langs
 
-    // You can fin in
+    // You can find associations in
     //     https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
 
     // also, GUI avalaible associtions can be found here, on dataset attribute :
@@ -504,6 +504,7 @@ function Constants(){
             letter:"m",
             fields:getFieldsObject(
                 new Field("title", {url:"q"}),
+                new Field("summary"),
                 new Field("description"),
                 new Field("lang", {url:"l"}),
 

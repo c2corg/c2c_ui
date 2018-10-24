@@ -56,7 +56,7 @@
 
 
 <script>
-    import ol from '@/js/ol'
+    import ol from '@/libs/ol'
     import constants from '@/js/constants'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
@@ -306,9 +306,10 @@
             addDocumentFeature(document, data, isLine, source, id_postFix){
 
                 let feature = geoJSONFormat.readFeature(data)
+                let title = this.$documentUtils.getDocumentTitle(document)
 
-                feature.set("normalStyle", getDocumentStyle(document, false, isLine))
-                feature.set("highlightedStyle", getDocumentStyle(document, true, isLine))
+                feature.set("normalStyle", getDocumentStyle(document, title, false, isLine))
+                feature.set("highlightedStyle", getDocumentStyle(document, title, true, isLine))
                 feature.setStyle(feature.get('normalStyle'));
 
                 feature.set("document", document)

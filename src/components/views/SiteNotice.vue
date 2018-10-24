@@ -14,7 +14,6 @@
 <script>
 
     import forum from "@/js/forum"
-    import user from "@/js/user"
 
     export default {
         name:"SiteNotice",
@@ -25,7 +24,7 @@
                 hidden: false,
                 showContent: false,
                 updatedAt:null,
-                lang: user.lang,
+                lang: this.$user.lang, //store lang, because if user changes lang after getting notice...
             }
         },
 

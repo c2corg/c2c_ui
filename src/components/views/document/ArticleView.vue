@@ -25,9 +25,9 @@
 </template>
 
 <script>
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
     export default {
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
     }
 </script>

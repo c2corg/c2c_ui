@@ -1,10 +1,8 @@
 <template>
     <view-container>
         <template slot-scope="{ document, fields }">
-
             <div>
                 <div class="columns">
-
                     <div class="column is-3">
                         <map-box :document="document" />
 
@@ -111,15 +109,7 @@
                             <markdown-section :document="document" :field="fields.access" />
                         </content-box>
 
-                        <content-box v-if="document.associations.all_routes.documents.length">
-                            <h2 class="title is-2" v-translate>Routes</h2>
-
-                            <div v-for="(route, i) of document.associations.all_routes.documents" :key="i">
-                                <!-- TODO remove duplicated -->
-                                <pretty-route-link :route="route"/>
-                            </div>
-
-                        </content-box>
+                        <all-routes-box :document="document"/>
 
                         <recent-outings-box :document="document"/>
 
@@ -145,9 +135,9 @@
 </template>
 
 <script>
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
     export default {
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
     }
 </script>

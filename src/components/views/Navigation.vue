@@ -56,17 +56,28 @@
 
             <div class="navbar-end">
 
-                <div v-if="!user.isLogged" class="navbar-item">
+                <div v-if="readOnlyConfig" class="navbar-item" v-tooltip:bottom="'Read only site'">
+                    <fa-layers>
+                        <fa-icon icon="pen"/>
+                        <fa-icon icon="ban" transform="grow-16" class="has-text-danger"/>
+                    </fa-layers>
+                </div>
+
+                <div v-if="!isProduction" class="navbar-item" v-tooltip:bottom="'Demo'">
+                    <fa-icon icon="brain" size="lg" class="has-text-success"/>
+                </div>
+
+                <div v-if="!$user.isLogged" class="navbar-item">
                     <login-button />
                 </div>
 
                 <div v-else class="navbar-item has-dropdown is-hoverable">
                     <div class="navbar-link">
-                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + user.forumUsername + '/36/1_1.png'" class="user-avatar">
+                        <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/36/1_1.png'" class="user-avatar">
                     </div>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
 
-                        <router-link :to="{ name: 'profile', params:{id:user.id} }" class="navbar-item">
+                        <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="navbar-item">
                             <fa-icon icon="user"/>
                             <span v-translate>My profile</span>
                         </router-link>
@@ -79,11 +90,11 @@
                             <span v-translate>My preferences</span>
                         </router-link>
 
-                        <router-link :to="{ name: 'outings', query:{u:user.id} }" class="navbar-item">
+                        <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="navbar-item">
                             <icon-outing />
                             <span v-translate>My outings</span>
                         </router-link>
-                        <router-link :to="{ name: 'whatsnew', query:{u:user.id} }" class="navbar-item">
+                        <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="navbar-item">
                             <fa-icon icon="edit"/>
                             <span v-translate>My changes</span>
                         </router-link>
@@ -102,12 +113,16 @@
                         </a>
                     </div>
                 </div>
-                <div v-if="!user.isLogged" class="navbar-item has-dropdown is-hoverable">
+                <div v-if="!$user.isLogged" class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         {{ $language.current }}
                     </a>
                     <div class="navbar-dropdown is-right is-boxed is-size-5">
-                        <a v-for="(language, key) in $language.available" :key="key" class="navbar-item" @click="setLang(key)">
+                        <a
+                            v-for="(language, key) in $language.available"
+                            :key="key"
+                            class="navbar-item"
+                            @click="$user.lang = key">
                             {{ language }}
                         </a>
                     </div>
@@ -119,15 +134,23 @@
 
 <script>
 
-    import user from "@/js/user.js"
+    import config from "@/js/config"
 
     export default {
 
         data() {
             return {
-                user, // Keep this here, trick to set it reactive...
                 burgerActive:false,
                 searchText:'',
+            }
+        },
+
+        computed: {
+            readOnlyConfig(){
+                return !config.urls.readWrite
+            },
+            isProduction(){
+                return config.urls.isProduction
             }
         },
 
@@ -143,13 +166,8 @@
             },
 
             signout(){
-                user.signout()
+                this.$user.signout()
             },
-
-            setLang(lang){
-                this.$language.setCurrent(lang)
-                user.lang = lang
-            }
         }
     }
 </script>

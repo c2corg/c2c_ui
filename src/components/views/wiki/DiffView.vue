@@ -101,10 +101,9 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import user from '@/js/user'
     import constants from '@/js/constants'
 
-    import { diff_match_patch } from '@/js/diff_match_patch_uncompressed'
+    import { diff_match_patch } from '@/libs/diff_match_patch_uncompressed'
 
     export default {
 
@@ -172,8 +171,8 @@
                     }
                 }
 
-                var oldLocale = user.getLocaleStupid(this.oldVersion.document, this.lang)
-                var newLocale = user.getLocaleStupid(this.newVersion.document, this.lang)
+                var oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang)
+                var newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang)
                 var localeKeys = this.getKeys(oldLocale, newLocale, ["lang", "version"])
 
                 for(let key of localeKeys){
@@ -215,7 +214,7 @@
                 c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then(response => {
                     this[resultProperty]=response.data;
                     if(resultProperty=="newVersion"){
-                        this.title = user.getLocaleStupid(this.newVersion.document, this.lang).title
+                        this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
                     }
 
                     this.buildDiff()

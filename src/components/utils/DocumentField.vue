@@ -1,5 +1,5 @@
 <template>
-    <!-- This a generic component that display field of a document for any kind of field  -->
+    <!-- This a generic component that display field value of a document for any kind of field  -->
     <span>
 
         <activities v-if="field.name=='activities'" :activities="document.activities" />
@@ -8,7 +8,7 @@
             {{ value }}
         </a>
 
-        <textual-array v-else-if="isArray" :array="value"/>
+        <textual-array v-else-if="isArray" :array="value" :i18n="field.i18n"/>
 
         <span v-else-if="typeof(value) === 'boolean'">
             <span v-if="value" v-translate>

@@ -127,7 +127,6 @@
 </template>
 
 <script>
-    import user from "@/js/user.js"
     import c2c from "@/js/c2c"
 
     import FormField from "./utils/FormField"
@@ -162,7 +161,7 @@
         methods:{
             signin(){
 
-                user.signIn(this.username, this.password)
+                this.$user.signIn(this.username, this.password)
                 .then(() => this.$router.push(this.from.fullPath))
                 .catch(error => this.serverErrors = error.response.data )
 

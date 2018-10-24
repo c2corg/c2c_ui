@@ -13,7 +13,7 @@
             :label="$gettext('Translate into an other lang')" />
 
         <!-- Moderator zone -->
-        <div v-if="isModerator">
+        <div v-if="$user.isModerator">
 
             <tool-box-button
                 @click="lockDocumentAction"
@@ -57,7 +57,6 @@
 
 <script>
     import c2c from '@/js/c2c'
-    import user from '@/js/user'
     import constants from '@/js/constants'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
@@ -91,9 +90,6 @@
         },
 
         computed:{
-            isModerator(){
-                return user.isModerator
-            },
             isVersionView(){
                 return this.$route.name.endsWith("-version");
             },
@@ -119,7 +115,7 @@
         },
 
         created(){
-            if(this.isModerator && this.documentType=="profile")
+            if(this.$user.isModerator && this.documentType=="profile")
                 c2c.moderator.isAccountBlocked(this.document.document_id)
                 .then(response => this.isAccountBlocked = response.data.blocked)
         },

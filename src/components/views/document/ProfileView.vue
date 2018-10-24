@@ -61,7 +61,7 @@
 <script>
     import c2c from '@/js/c2c'
 
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
     import FeedCard from '@/components/cards/FeedCard'
 
@@ -71,7 +71,7 @@
             FeedCard
         },
 
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
 
         data(){
             return {

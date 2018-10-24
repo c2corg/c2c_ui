@@ -7,6 +7,7 @@ import LicenseBox from './boxes/LicenseBox'
 import MapBox from './boxes/MapBox'
 import RecentOutingsBox from './boxes/RecentOutingsBox'
 import ToolBox from './boxes/ToolBox'
+import AllRoutesBox from './boxes/AllRoutesBox'
 
 import FieldView from './fieldViewers/FieldView'
 import LabelValue from './fieldViewers/LabelValue'
@@ -31,5 +32,6 @@ export default {
         RecentOutingsBox,
         ToolBox,
         UsersLinks,
+        AllRoutesBox,
     },
 }

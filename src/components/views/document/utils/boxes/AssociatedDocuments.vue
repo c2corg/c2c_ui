@@ -12,7 +12,8 @@
         <div v-if="document.associations && document.associations.books.length!=0" class="associations-list">
             <div class="title" v-translate>Books</div>
             <div v-for="book of document.associations.books" :key="book.document_id" class="is-ellipsed">
-                <pretty-book-link :book="book"/>
+                <icon-book />
+                <document-link :document="book"/>
             </div>
         </div>
 

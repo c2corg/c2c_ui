@@ -44,6 +44,8 @@ const demoUrls = {
     media: "https://media.camptocamp.org/c2corg_active",
     imageBackend: "https://images.demov6.camptocamp.org",
     forum: "https://forum.demov6.camptocamp.org",
+    isProduction: false,
+    readWrite: true,
 }
 
 const prodUrls = {
@@ -51,12 +53,15 @@ const prodUrls = {
     media: "https://media.camptocamp.org/c2corg_active",
     imageBackend: "https://images.camptocamp.org",
     forum: "https://forum.camptocamp.org",
+    isProduction: true,
+    readWrite: false, // conservative approach : you have to explicity set it to true
 }
 
 const config = {
     routerMode: 'history', // for pretty urls
     ignApiKey: undefined,
     bingApiKey: undefined,
+    urls:demoUrls, // conservative default : demo
 }
 
 const bundleAnalyzerConfig = {
@@ -64,22 +69,26 @@ const bundleAnalyzerConfig = {
     openAnalyzer:false,
 }
 
-// TODO document this
-if(process.env.BUILD_ENV == 'local:demo' || process.env.BUILD_ENV === undefined){
-    result.configureWebpack.performance.hints = false
 
-    config.urls = demoUrls
+if(process.env.BUILD_ENV == 'local:demo' || process.env.BUILD_ENV === undefined){
     config.ignApiKey = 'x216cgugvwkn0go20sm2mgar' // Key valid for localhost (expires 19/09/2016)
     config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj'
+
+    // dev bundles are huge, no check
+    result.configureWebpack.performance.hints = false
 }
 else if(process.env.BUILD_ENV == 'gitlab:demo'){
-    result.baseUrl = "/vue-camptocamp/"
-    result.configureWebpack.performance.hints = "warning"
 
     config.urls = demoUrls
 
     // gitlab pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined
+
+    // gitlab pages url is postfixed
+    result.baseUrl = "/vue-camptocamp/"
+
+    // set a warning if bundle size is too big
+    result.configureWebpack.performance.hints = "warning"
 
     // generate a report on bundle size
     bundleAnalyzerConfig.analyzerMode = 'static'
@@ -88,6 +97,7 @@ else if(process.env.BUILD_ENV == 'gitlab:demo'){
 }
 else if(process.env.BUILD_ENV == 'camptocamp:prod'){
     config.urls = prodUrls
+    config.urls.readWrite = true // explicit read-write mode in prod
 }
 else {
     throw "Unknown BUILD_ENV"

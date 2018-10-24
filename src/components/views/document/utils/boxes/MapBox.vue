@@ -34,7 +34,7 @@
 
 <script>
     import utils from "@/js/utils"
-    import ol from "@/js/ol"
+    import ol from "@/libs/ol"
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
 
@@ -65,7 +65,7 @@
                 if (features.length) {
                     // Export only the current document geometry, not the associated features
                     const feature = features[0]
-                    const name = utils.getDocumentTitle(this.document, this.$route.params.lang)
+                    const name = this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang)
 
                     feature.set('name', name)
 

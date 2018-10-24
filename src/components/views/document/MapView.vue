@@ -19,12 +19,10 @@
 
                 <markdown-section
                     :document="document"
-                   
                     :field="fields.summary"/>
 
                 <markdown-section
                     :document="document"
-                   
                     :field="fields.description"
                     hide-title/>
 
@@ -38,9 +36,9 @@
 </template>
 
 <script>
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
     export default {
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
     }
 </script>

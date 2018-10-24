@@ -1,5 +1,5 @@
 
-import ol from '@/js/ol.js'
+import ol from '@/libs/ol.js'
 import utils from "@/js/utils.js"
 
 
@@ -92,9 +92,7 @@ const buildPointStyle = function(title, src, color, highlight){
     return [circleStyle, iconStyle]
 }
 
-export const getDocumentStyle = function(document, highlight, isLine){
-
-    let title = utils.getDocumentTitle(document)
+export const getDocumentStyle = function(document, title, highlight, isLine){
 
     if(isLine){
         return buildLineStyle(title, highlight)

@@ -1,7 +1,7 @@
 <template>
     <span v-if="array">
         <span v-for="(item, i) of array" :key="i">
-            <span>{{ $gettext(item) }}</span><span v-if="i!=array.length-1">, </span>
+            <span>{{ i18n ? $gettext(item) : item }}</span><span v-if="i!=array.length-1">, </span>
         </span>
     </span>
 </template>
@@ -12,6 +12,10 @@
             array:{
                 type:Array,
                 default:null,
+            },
+            i18n:{
+                type:Boolean,
+                default:true,
             }
         }
     }

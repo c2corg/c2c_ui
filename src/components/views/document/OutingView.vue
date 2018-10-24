@@ -113,7 +113,7 @@
 </template>
 
 <script>
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
     import ConditionLevels from "./utils/fieldViewers/ConditionLevels"
     import ElevationProfileBox from "./utils/boxes/ElevationProfileBox"
 
@@ -123,6 +123,6 @@
             ElevationProfileBox,
         },
 
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
     }
 </script>

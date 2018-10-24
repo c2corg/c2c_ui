@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from 'axios'
+import config from './config'
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :
@@ -50,19 +51,31 @@ const BaseApi = function(apiUrl){
 /**
  * Generic request helpers
  */
+if(config.urls.readWrite){
+    BaseApi.prototype.checkReadOnly = function() {}
+} else {
+    BaseApi.prototype.checkReadOnly = function(safeCall){
+        if(!safeCall)
+            throw new Error("This build is read only")
+    }
+}
+
 BaseApi.prototype.get = function(url, body){
     return new ApiData(this.axios.get(this.apiUrl + url, body))
 }
 
-BaseApi.prototype.post = function(url, body){
+BaseApi.prototype.post = function(url, body, safeCall){
+    this.checkReadOnly(safeCall)
     return new ApiData(this.axios.post(this.apiUrl + url, body))
 }
 
-BaseApi.prototype.put = function(url, body){
+BaseApi.prototype.put = function(url, body, safeCall){
+    this.checkReadOnly(safeCall)
     return new ApiData(this.axios.put(this.apiUrl + url, body))
 }
 
-BaseApi.prototype.delete = function(url, body){
+BaseApi.prototype.delete = function(url, body, safeCall){
+    this.checkReadOnly(safeCall)
     return new ApiData(this.axios.delete(this.apiUrl + url, body))
 }
 

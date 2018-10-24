@@ -67,6 +67,7 @@
                         <button
                             type="submit"
                             class="button is-primary"
+                            :class="{'is-loading': promise.loading}"
                             v-translate>
                             Save
                         </button>
@@ -79,7 +80,6 @@
 
 <script>
 
-    import user from "@/js/user.js"
     import c2c from "@/js/c2c"
 
     import FormField from "./utils/FormField"
@@ -94,15 +94,17 @@
 
         data(){
             return {
-                username:user.userName,
+                username:this.$user.userName,
                 currentpassword:"",
                 newpassword:"",
                 email:"",
-                name:user.name,
-                forum_username:user.forumUsername,
+                name:this.$user.name,
+                forum_username:this.$user.forumUsername,
                 is_profile_public:null,
                 original_mail: null,
                 serverErrors: null,
+
+                promise:{},
             }
         },
 
@@ -121,10 +123,10 @@
                     return fieldValue===originalValue ? null : fieldValue
                 }
 
-                user.updateAccount(
+                this.promise = this.$user.updateAccount(
                     this.currentpassword,
-                    newOrNull(this.name, user.userName),
-                    newOrNull(this.forum_username, user.forumUsername),
+                    newOrNull(this.name, this.$user.userName),
+                    newOrNull(this.forum_username, this.$user.forumUsername),
                     newOrNull(this.email, this.original_mail),
                     this.is_profile_public,
                     this.newpassword ? this.newpassword : null)

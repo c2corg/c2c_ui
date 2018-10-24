@@ -66,10 +66,10 @@
 <script>
     import c2c from '@/js/c2c'
 
-    import viewComponentsMixin from "./utils/viewComponentsMixin.js"
+    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
     export default {
-        mixins : [ viewComponentsMixin ],
+        mixins : [ DocumentViewMixin ],
 
         methods:{
             getImageUrl:c2c.getImageUrl,

@@ -13,10 +13,10 @@
 
 <script>
 
-    import FormComponentsMixin from './utils/FormComponentsMixin'
+    import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
-        mixins: [ FormComponentsMixin ],
+        mixins: [ DocumentEditionViewMixin ],
     }
 
 </script>

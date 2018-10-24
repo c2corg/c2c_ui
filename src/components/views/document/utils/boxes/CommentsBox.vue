@@ -17,7 +17,7 @@
         <div
             v-else-if="locale.topic_id === null || comments.length == 0"
             class="has-text-centered">
-            <login-button v-if="!userIsLogged" v-translate>
+            <login-button v-if="!$user.isLogged" v-translate>
                 Log in to post the first comment
             </login-button>
             <button v-else class="button is-primary" @click="createTopic" v-translate>
@@ -50,7 +50,7 @@
             </div>
 
             <div class="has-text-centered">
-                <login-button v-if="!userIsLogged" v-translate>
+                <login-button v-if="!$user.isLogged" v-translate>
                     Log in to post a comment
                 </login-button>
                 <a v-else :href="discussionUrl" class="button is-primary" v-translate>
@@ -65,7 +65,6 @@
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     import forum from '@/js/forum.js'
-    import user from '@/js/user.js'
 
     export default {
         mixins : [ requireDocumentProperty ],
@@ -91,10 +90,6 @@
                     return null
 
                 return forum.url + '/t/' + this.topic.slug + '/' + this.locale.topic_id + '/' + this.topic.posts_count
-            },
-
-            userIsLogged(){
-                return user.isLogged
             },
 
             topic(){

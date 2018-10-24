@@ -1,4 +1,4 @@
-
+import french_translations from '@/translations/dist/fr.json'
 
 
 function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defaultPlural = null){
@@ -28,7 +28,36 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
     return messages[msgid]
 }
 
-export default function install(Vue, options = {}){
+function getMessages(lang){
+
+    //eslint-disable-next-line
+    console.warn(`Download ${lang}`)
+
+    if(lang=='fr') // include fr langage in app
+        return french_translations
+
+    else if(lang=='en') //lazy load the others
+        return import(/* webpackChunkName: "translations-en" */ `@/translations/dist/en.json`)
+
+    else if(lang=='ca')
+        return import(/* webpackChunkName: "translations-ca" */`@/translations/dist/ca.json`)
+
+    else if(lang=='eu')
+        return import(/* webpackChunkName: "translations-eu" */`@/translations/dist/eu.json`)
+
+    else if(lang=='it')
+        return import(/* webpackChunkName: "translations-it" */`@/translations/dist/it.json`)
+
+    else if(lang=='de')
+        return import(/* webpackChunkName: "translations-de" */`@/translations/dist/de.json`)
+
+    else if(lang=='es')
+        return import(/* webpackChunkName: "translations-es" */`@/translations/dist/es.json`)
+
+    throw `Unsuported language : ${lang}`
+}
+
+export default function install(Vue){
 
     let languageVm = new Vue({
         data: {
@@ -37,10 +66,19 @@ export default function install(Vue, options = {}){
 
         created: function () {
             // Non-reactive data.
-            this.available = options.availableLanguages
+            this.available = {
+                fr: 'Français',
+                it: 'Italiano',
+                de: 'Deutsch',
+                en: 'English',
+                es: 'Español',
+                ca: 'Català',
+                eu: 'Euskara',
+            }
+
             this.translations = {}
 
-            this.setCurrent(options.current)
+            this.setCurrent("fr")
         },
 
         methods:{
@@ -62,7 +100,7 @@ export default function install(Vue, options = {}){
                     })
                 }
 
-                let messages = options.getMessages(lang)
+                let messages = getMessages(lang)
 
                 return new Promise(resolve => {
                     if(messages.then){ // messages is a promise
@@ -90,11 +128,6 @@ export default function install(Vue, options = {}){
         }
     })
 
-    Object.defineProperty(Vue.prototype, '$language', {
-        get() {
-            return languageVm
-        }
-    })
 
     // An option to support translation with HTML content: `v-translate`.
     Vue.directive('translate', {
@@ -112,5 +145,6 @@ export default function install(Vue, options = {}){
         },
     })
 
+    Vue.prototype.$language= languageVm
     Vue.prototype.$gettext = languageVm.gettext.bind(languageVm)
 }
