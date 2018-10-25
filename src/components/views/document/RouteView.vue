@@ -34,8 +34,8 @@
                             <div class="column is-4">
 
                                 <label-value :label="$gettext('ratings')">
-                                    <!-- TODO : hide is no cotation -->
-                                    <route-rating :document="document"/>
+                                    <route-rating v-if="$documentUtils.hasRating(document)" :document="document"/>
+                                    <edit-link v-else :document="document" :lang="$user.lang"/>
                                 </label-value>
 
                                 <field-view :document="document" :field="fields.glacier_gear"/>

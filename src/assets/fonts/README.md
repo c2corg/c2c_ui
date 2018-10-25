@@ -1,3 +1,3 @@
-# Font system
+Icon fonts
 
-## How to generaet a font from a SVG file
+## How to generate a font from a SVG file

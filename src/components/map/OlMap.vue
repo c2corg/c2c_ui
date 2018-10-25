@@ -58,9 +58,9 @@
 <script>
     import ol from '@/libs/ol'
     import constants from '@/js/constants'
+    import biodivSports from '@/apis/biodivSports.js'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
-    import biodivSports from './biodivSports.js'
     import { getDocumentStyle, geoJSONFormat, buildPolygonStyle } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]

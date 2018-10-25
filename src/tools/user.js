@@ -1,36 +1,36 @@
-import c2c from '@/js/c2c'
-import localStorage from '@/js/localStorage'
+import c2c from '@/apis/c2c'
 
 export default function install(Vue){
 
-    const profileData = localStorage.getItem("user")
-
     Vue.prototype.$user = new Vue({
+        name: "User",
+
         data(){
+
             return {
                 // The unique name, used to login
-                userName: profileData.get("userName", null),
+                userName: this.$localStorage.get("userName", null),
 
                 // unique numerical ID
-                id: profileData.get("id", null),
+                id: this.$localStorage.get("id", null),
 
                 // user lang, read write property everywhere : this.$user.lang
-                lang: profileData.get("lang", "fr"),
+                lang: this.$localStorage.get("lang", "fr"),
 
                 // list of roles
-                roles: profileData.get("roles", []),
+                roles: this.$localStorage.get("roles", []),
 
                 // public name, a simple label
-                name: profileData.get("name", null),
+                name: this.$localStorage.get("name", null),
 
                 // forum name
-                forumUsername: profileData.get("forumUsername", null),
+                forumUsername: this.$localStorage.get("forumUsername", null),
 
                 // private token used for API auth
-                token: profileData.get("token", null),
+                token: this.$localStorage.get("token", null),
 
                 // token expiration date
-                expire: profileData.get("expire", null),
+                expire: this.$localStorage.get("expire", null),
             }
         },
 
@@ -94,7 +94,7 @@ export default function install(Vue){
                     is_profile_public,
                     newpassword
                 ).then(() => {
-                    this.forum_username = forum_username
+                    this.forumUsername = forum_username
                     this.name = name
                     this.commitToLocaleStorage_()
                 })
@@ -106,16 +106,18 @@ export default function install(Vue){
 
             updateLang(){
                 this.$language.setCurrent(this.lang)
-                if(this.isLogged)
-                    c2c.userProfile.update_preferred_language(this.lang)
 
                 //lang is the only read-write property from outside,
                 // we need to save this value
                 this.commitToLocaleStorage_()
+
+                // keep in last, because it will fail in read only mode
+                if(this.isLogged)
+                    c2c.userProfile.update_preferred_language(this.lang)
             },
 
             commitToLocaleStorage_(){
-                profileData.initialize(this.$data)
+                this.$localStorage.initialize(this.$data)
             },
 
             checkExpiration(){

@@ -22,8 +22,11 @@
                 </tr>
                 <tr v-for="(change, index) of promise.data.feed" :key="index">
                     <td>
-                        <version-link :type="change.document.type" :id="change.document.document_id"
-                                      :version="change.version_id" :lang="change.lang">
+                        <version-link
+                            :document-type="change.document.documentType"
+                            :id="change.document.document_id"
+                            :version="change.version_id"
+                            :lang="change.lang">
                             {{ change.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                         </version-link>
                     </td>
@@ -35,13 +38,13 @@
                             last
                         </document-link>
 
-                        <diff-link :type="change.document.type"
+                        <diff-link :document-type="change.document.documentType"
                                    :id="change.document.document_id"
                                    :lang="change.lang"
                                    version-from="prev"
                                    :version-to="change.version_id"/>
 
-                        <history-link :type="change.document.type"
+                        <history-link :document-type="change.document.documentType"
                                       :id="change.document.document_id"
                                       :lang="change.lang"/>
 
@@ -51,8 +54,7 @@
                         {{ change.lang }}
                     </td>
                     <td>
-                        <!-- TODO it's not a documentType -->
-                        <icon-document :type="change.document.type"/>
+                        <icon-document :document-type="change.document.documentType"/>
                         {{ change.document.title }}
                         :
                         <span v-if="change.comment">
@@ -68,7 +70,8 @@
     </div>
 </template>
 <script>
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
+    import constants from '@/js/constants'
 
     export default {
 
@@ -80,6 +83,11 @@
 
         created(){
             this.promise = c2c.getRecentChanges(this.$route.query)
+            .then(() => {
+
+                for(let change of this.promise.data.feed)
+                    change.document.documentType = constants.getDocumentType(change.document.type)
+            })
         },
 
         methods:{

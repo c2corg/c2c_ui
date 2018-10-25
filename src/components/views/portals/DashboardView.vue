@@ -42,7 +42,7 @@
 
 <script>
 
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
 
     import DashboardOutingLink from './utils/DashboardOutingLink'
     import ForumWidget from './utils/ForumWidget'

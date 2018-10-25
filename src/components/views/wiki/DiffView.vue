@@ -10,7 +10,11 @@
         <div class="columns">
             <div v-if="oldVersion" class="column">
                 <div>
-                    <version-link :document-type="documentType" :id="documentId" :version="oldVersion.version.version_id" :lang="lang">
+                    <version-link
+                        :document-type="documentType"
+                        :id="documentId"
+                        :version="oldVersion.version.version_id"
+                        :lang="lang">
                         Revision #{{ oldVersion.document.version }} as of {{ oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
                     </version-link>
                 </div>
@@ -100,7 +104,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
     import constants from '@/js/constants'
 
     import { diff_match_patch } from '@/libs/diff_match_patch_uncompressed'

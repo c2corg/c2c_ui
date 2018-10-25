@@ -1,4 +1,3 @@
-""
 import common from '@/js/common.js'
 
 

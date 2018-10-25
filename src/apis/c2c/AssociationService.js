@@ -33,7 +33,6 @@ AssociationService.prototype.create = function(parent, child) {
     return this.api.post('/associations', data)
 }
 
-/* TODO : document_id in prototype */
 AssociationService.prototype.remove = function(parent, child) {
     const data = {
         parent_document_id: parent.document_id,

@@ -1,7 +1,7 @@
 <template>
     <swiper :options="swiperOption">
         <swiper-slide v-for="image of images" :key="image.document_id">
-            <img :src="c2c.getSmallImageUrl(image)">
+            <img :src="getSmallImageUrl(image)">
         </swiper-slide>
         <div slot="button-prev" class="swiper-button-prev"/>
         <div slot="button-next" class="swiper-button-next"/>
@@ -12,7 +12,7 @@
 
     import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-    import c2c from '@/js/c2c'
+    import imageUrls from '@/js/imageUrls'
 
     export default {
 
@@ -38,8 +38,11 @@
                         prevEl: '.swiper-button-prev',
                     }
                 },
-                c2c,
             }
+        },
+
+        methods:{
+            getSmallImageUrl: imageUrls.getSmall,
         }
     }
 </script>

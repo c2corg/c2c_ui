@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
 
     import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 

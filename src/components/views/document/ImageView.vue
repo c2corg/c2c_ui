@@ -45,12 +45,12 @@
 
                     <markdown-section
                         :document="document"
-                       
+
                         :field="fields.summary"/>
 
                     <markdown-section
                         :document="document"
-                       
+
                         :field="fields.description"
                         hide-title/>
 
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c'
+    import imageUrls from '@/js/imageUrls'
 
     import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
@@ -72,7 +72,7 @@
         mixins : [ DocumentViewMixin ],
 
         methods:{
-            getImageUrl:c2c.getImageUrl,
+            getImageUrl:imageUrls.get,
         }
     }
 </script>

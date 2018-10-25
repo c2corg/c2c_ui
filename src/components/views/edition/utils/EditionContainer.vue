@@ -40,7 +40,7 @@
 <script>
 
     import constants from '@/js/constants.js'
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
 
     import FormRow from './FormRow'
 
@@ -140,7 +140,7 @@
 
             dispatchErrors(errors){
 
-                // TODO : errors == undefined
+                // TODO : errors == undefined ?
                 this.cleanErrors()
 
                 for(let error of errors){

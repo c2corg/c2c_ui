@@ -19,12 +19,12 @@
 
         <div v-if="document.geometry.geom_detail" class="buttons is-centered">
             <button
-                class="button is-info"
+                class="button is-primary"
                 @click="downloadGpx">
                 GPX
             </button>
             <button
-                class="button is-info"
+                class="button is-primary"
                 @click="downloadKml">
                 KML
             </button>

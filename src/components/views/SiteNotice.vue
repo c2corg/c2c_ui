@@ -13,7 +13,7 @@
 
 <script>
 
-    import forum from "@/js/forum"
+    import forum from "@/apis/forum"
 
     export default {
         name:"SiteNotice",

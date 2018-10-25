@@ -166,7 +166,7 @@ msgstr ""
 msgid "Are you sure you want to merge?"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/components/views/document/utils/windows/RevertVersionWindow.vue
 msgid "Are you sure you want to revert to this version of the document?"
 msgstr ""
 
@@ -326,11 +326,13 @@ msgstr ""
 msgid "E4"
 msgstr ""
 
+#: src/components/utils/links/EditLink.vue
 #: src/components/views/document/utils/ViewContainer.vue
 msgid "Edit"
 msgstr ""
 
 #: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
 msgid "Edit associations"
 msgstr ""
 
@@ -358,10 +360,6 @@ msgstr ""
 
 #: src/components/map/OlMap.vue
 msgid "Filter on map extent"
-msgstr ""
-
-#: src/components/views/user/PreferencesView.vue
-msgid "Filter preferences"
 msgstr ""
 
 #: src/components/views/portals/utils/MobileAppAdvertising.vue
@@ -438,6 +436,10 @@ msgstr ""
 
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Home"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
+msgid "Home page feed"
 msgstr ""
 
 #: src/components/views/edition/RouteEditionView.vue
@@ -647,7 +649,8 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/components/views/document/utils/windows/RevertVersionWindow.vue
 msgid "Restore this version"
 msgstr ""
 
@@ -655,8 +658,8 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
+#: src/components/views/document/utils/boxes/AllRoutesBox.vue
 #: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/document/WaypointView.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/portals/DashboardView.vue
 #: src/components/views/search/SearchView.vue
@@ -740,11 +743,11 @@ msgstr ""
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/components/views/document/utils/DocumentVersionBanner.vue
 msgid "This is the first version"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/components/views/document/utils/DocumentVersionBanner.vue
 msgid "This is the last version"
 msgstr ""
 
@@ -1266,10 +1269,6 @@ msgstr ""
 msgid "edge"
 msgstr ""
 
-#: src/components/utils/links/EditLink.vue
-msgid "edit"
-msgstr ""
-
 #: src/components/helper/HelperWindow.vue
 #: src/components/views/document/OutingView.vue
 #: src/components/views/document/RouteView.vue
@@ -1626,6 +1625,10 @@ msgid "landscapes"
 msgstr ""
 
 #: src/components/views/user/PreferencesView.vue
+msgid "lang"
+msgstr ""
+
+#: src/components/views/user/PreferencesView.vue
 msgid "langs"
 msgstr ""
 
@@ -1805,8 +1808,8 @@ msgstr ""
 msgid "nearby service"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
-msgid "next version →"
+#: src/components/views/document/utils/DocumentVersionBanner.vue
+msgid "next version"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1978,6 +1981,10 @@ msgstr ""
 msgid "pressure"
 msgstr ""
 
+#: src/components/views/document/utils/DocumentVersionBanner.vue
+msgid "previous version"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "previous_injuries_2"
 msgstr ""
@@ -2126,7 +2133,7 @@ msgstr ""
 msgid "secondary_impacted"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/components/views/document/utils/DocumentVersionBanner.vue
 msgid "see actual version"
 msgstr ""
 
@@ -2418,8 +2425,4 @@ msgstr ""
 #: src/components/utils/inputs/InputYesNo.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "yes"
-msgstr ""
-
-#: src/components/views/document/utils/ViewContainer.vue
-msgid "← previous version"
 msgstr ""

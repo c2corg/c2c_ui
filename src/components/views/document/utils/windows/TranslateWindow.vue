@@ -8,8 +8,7 @@
         <div v-for="lang in missingLangs" :key="lang" class="has-text-centered">
             <edit-link
                 class="is-first-letter-uppercase is-size-4"
-                :id="document.document_id"
-                :document-type="documentType"
+                :document="document"
                 :lang="lang">
                 {{ $gettext(lang) }}
             </edit-link>

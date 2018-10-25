@@ -3,6 +3,7 @@
  * it allows a key/string to be used as a key/{property:value} object
  */
 
+ 
 function LocalStorageItem(key){
     this.key = key
     this.data_ = JSON.parse(window.localStorage.getItem(key) || "{}")

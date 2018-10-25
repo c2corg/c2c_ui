@@ -1,9 +1,12 @@
 
 <template>
     <div class="section view-container">
-        <div v-if="document">
+        <div v-if="document && document.not_authorized" class="notification is-danger" v-translate>
+            Sorry, you're not authorized to see this page.
+        </div>
+
+        <div v-else-if="document">
             <html-header :title="title"/>
-            <!-- TODO : if not found -->
 
             <document-version-banner
                 v-if="isVersionView"
@@ -34,8 +37,7 @@
 
                     <edit-link
                         v-if="!isVersionView"
-                        :document-type="documentType"
-                        :id="document.document_id"
+                        :document="document"
                         :lang="locale.lang"
                         v-tooltip="$gettext('Edit')">
                         <icon-edit />
@@ -68,7 +70,7 @@
 
 <script>
     import constants from '@/js/constants'
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
 
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
 

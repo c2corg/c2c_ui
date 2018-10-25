@@ -1,9 +1,9 @@
 <template>
+    <!-- Do NOT add tooltip -->
     <div class="control" :class="{'has-error':hasError}">
         <span v-for="activity of activities" :key="activity"
               :class="{'selected':value_.includes(activity)}"
               class="input-item"
-              v-tooltip="$gettext(activity)"
               @click="toggle(activity)">
             <icon-activity :activity="activity" />
         </span>

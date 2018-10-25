@@ -54,6 +54,24 @@ export default function install(Vue){
 
                 //should never happen
                 return null
+            },
+
+            hasRating(document){
+                return document.global_rating ||
+                    document.rock_free_rating ||
+                    document.rock_required_rating ||
+                    document.aid_rating ||
+                    document.engagement_rating ||
+                    document.risk_rating ||
+                    document.equipment_rating ||
+                    document.exposition_rock_rating ||
+                    document.ice_rating ||
+                    document.mixed_rating ||
+                    document.ski_rating ||
+                    document.hiking_rating ||
+                    document.mtb_up_rating ||
+                    document.mtb_down_rating ||
+                    document.hiking_mtb_exposition
             }
         }
     })

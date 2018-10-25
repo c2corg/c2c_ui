@@ -9,10 +9,9 @@ import documentUtils from '@/tools/documentUtils'
 import fontAwesome from '@/tools/fa.config'
 import getText from '@/tools/getTextPlugin'
 import globalComponents from '@/tools/globalComponents'
+import localStorage from '@/tools/localStorage'
 import tooltip from '@/tools/tooltip'
 import user from '@/tools/user'
-
-import localStorage from '@/js/localStorage'
 
 import moment from 'moment'
 import vueMoment from 'vue-moment/vue-moment.js'
@@ -32,6 +31,7 @@ require("moment/locale/en-gb.js") // keep en in last.
 // add vue-moment for generic filter {{ bar | moment("yyyy") }}
 Vue.use(vueMoment, {moment})
 
+Vue.use(localStorage) // First, localStorage
 Vue.use(documentUtils)
 Vue.use(fontAwesome)
 Vue.use(getText)
@@ -60,15 +60,18 @@ Array.prototype.remove = function(value){
     this.splice(this.indexOf(value), 1);
 }
 
-
-Object.defineProperty(Vue.prototype, '$localStorage', {
-    get() {
-        if(!this.$options.name)
-            throw new Error("Please set name property of your componenent")
-
-        return localStorage.getItem(`${this.$options.name}.preferences`)
-    }
-})
+//
+// Object.defineProperty(Vue.prototype, '$localStorage', {
+//     get() {
+//         if(!this.$options.name)
+//             throw new Error("Please set name property of your componenent")
+//
+//         // TODO anti pattern : with this, we can't change any component name
+//         // find another way. Maybe this in created() :
+//         // this.$localStorage
+//         return localStorage.getItem(`${this.$options.name}.preferences`)
+//     }
+// })
 
 Object.defineProperty(Vue.prototype, '$helper', {
     get() { return this.$root.$children[0].$refs.helper }
@@ -78,5 +81,8 @@ Object.defineProperty(Vue.prototype, '$helper', {
 
 new Vue({
     router:router,
+    created(){
+        this.$language.setCurrent(this.$user.lang)
+    },
     render: h => h(App),
 }).$mount('#app')

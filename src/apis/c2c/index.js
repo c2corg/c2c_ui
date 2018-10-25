@@ -1,6 +1,6 @@
 import config from '@/js/config.js'
 import constants from '@/js/constants.js'
-import BaseApi from '@/js/BaseApi.js';
+import BaseApi from '@/apis/BaseApi.js';
 
 import UserProfileService from './UserProfileService.js'
 import DocumentService from './DocumentService.js'
@@ -45,14 +45,6 @@ c2c.prototype.getRecentChanges = function(params){
     return this.get('/documents/changes', {params})
 }
 
-/* TODO : these two function should not be here */
-/* at least in a separated service, or in a vue component */
-c2c.prototype.getSmallImageUrl = function(image){
-    return config.urls.media + '/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
-}
-c2c.prototype.getImageUrl = function(image){
-    return config.urls.media + '/' + image.filename
-}
 
 /* image service, I'm lazy. TODO :
  * uploadImage() must be a dedicated API in @/js/uploadFileApi.js

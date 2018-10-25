@@ -8,6 +8,7 @@
     "build:gitlab:demo": "cross-env BUILD_ENV=gitlab:demo vue-cli-service build",
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
+    "generate-docs": "node tools/generate-docs.js",
     "update-c2c-common": "python3 tools/import_common.py"
   },
   "dependencies": {

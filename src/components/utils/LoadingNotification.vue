@@ -4,7 +4,7 @@
             Loading
         </div>
         <div v-else-if="promise.error!==null" class="notification is-danger">
-            {{ promise.error.message }} 
+            {{ promise.error.message }}
         </div>
     </div>
 </template>

@@ -91,7 +91,8 @@
 
 <script>
     // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
+    import imageUrls from '@/js/imageUrls'
     import constants from '@/js/constants.js'
 
     import ImageAction from './ImageAction'
@@ -178,7 +179,7 @@
                 return this.status === STATUS_FAILED;
             },
             imageUrl() {
-                return c2c.getImageUrl(this.document)
+                return imageUrls.get(this.document)
             }
         },
 
@@ -214,7 +215,7 @@
             },
 
             upload(){
-                this.percentCompleted = 0 
+                this.percentCompleted = 0
                 this.status = STATUS_SAVING
                 this.$emit("startUpload", event)
                 c2c.uploadImage(this.file, this.onUploadProgress.bind(this))

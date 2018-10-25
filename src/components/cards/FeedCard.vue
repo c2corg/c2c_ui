@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/c2c'
+    import imageUrls from '@/js/imageUrls'
     import constants from '@/js/constants.js'
 
     import cardMixins from '@/components/cards/utils/mixins.js'
@@ -139,7 +139,7 @@
         },
 
         methods:{
-            getSmallImageUrl:c2c.getSmallImageUrl
+            getSmallImageUrl:imageUrls.getSmall
         }
     }
 </script>

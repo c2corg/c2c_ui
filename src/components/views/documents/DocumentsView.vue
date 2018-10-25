@@ -65,6 +65,7 @@
             <!-- Try to swith from /articles to /outings... -->
             <div v-show="documentAreGeoLocalized" class="column map-container">
                 <map-view
+                    v-if="displayMap"
                     ref="map"
                     :documents="documents ? documents.documents : []"
                     show-filter-control
@@ -76,7 +77,7 @@
 
 <script>
 
-    import c2c from '@/js/c2c'
+    import c2c from '@/apis/c2c'
     import constants from '@/js/constants'
 
     import QueryItems from './utils/QueryItems'
@@ -149,12 +150,12 @@
             },
 
             mouseEnter(document){
-                if(this.documentAreGeoLocalized)
+                if(this.documentAreGeoLocalized && this.displayMap)
                     this.$refs.map.highlightedDocument = document
             },
 
             mouseLeave(){
-                if(this.documentAreGeoLocalized)
+                if(this.documentAreGeoLocalized && this.displayMap)
                     this.$refs.map.highlightedDocument = null
             },
         }
@@ -194,7 +195,7 @@
     .cards-container{
         max-height: $result-height;
         overflow: auto;
-        transition:0.3s;
+    //    transition:0.3s;
     }
 
     .card-container{

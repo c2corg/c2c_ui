@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import forum from '@/js/forum.js'
+    import forum from '@/apis/forum.js'
 
     export default {
 

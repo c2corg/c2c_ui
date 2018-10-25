@@ -25,7 +25,8 @@
 
 <script>
 
-    import c2c from '@/js/c2c'
+    import imageUrls from '@/js/imageUrls'
+    import c2c from '@/apis/c2c'
 
     import QueryItems from './utils/QueryItems'
 
@@ -65,7 +66,7 @@
                 })
             },
 
-            getSmallImageUrl:c2c.getSmallImageUrl,
+            getSmallImageUrl:imageUrls.getSmall,
         },
     }
 

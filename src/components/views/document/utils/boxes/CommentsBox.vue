@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="enabled" class="discourse-comments no-print">
+    <content-box class="discourse-comments no-print">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">
@@ -64,22 +64,19 @@
 <script>
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
-    import forum from '@/js/forum.js'
+    import forum from '@/apis/forum.js'
 
     export default {
         mixins : [ requireDocumentProperty ],
 
         data(){
             return {
-                promise:null,
+                promise:{},
                 forum_avatar_size: 45,
             }
         },
 
         computed: {
-            enabled(){
-                return Boolean(this.locale.topic_id)
-            },
 
             locale(){
                 return this.document.currentLocale_
@@ -99,10 +96,10 @@
             comments(){
                 const result = []
 
-                if(!this.enabled || !this.promise.data)
+                if(!this.topic)
                     return result
 
-                const data = this.promise.data.post_stream
+                const data = this.topic.post_stream
 
                 if (data !== undefined) {
                     for (let post of data.posts) {
@@ -146,7 +143,7 @@
             },
 
             getComments(){
-                if(this.enabled){
+                if(this.locale.topic_id){
                     this.promise = forum.getTopic(this.locale.topic_id)
                 }
             }

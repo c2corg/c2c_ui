@@ -1,13 +1,13 @@
 import axios from 'axios'
-import config from './config'
+import config from '@/js/config'
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :
 // let result = axios.get(url).then(response => result.response = response)
 //
-// but, for a reason I do not understand, .response is not populated...
-//
+// but, Promise prototype is not writable
 // So let's polyfill it, whith a Promise-like object
+
 
 const ApiData = function(promise){
 
@@ -15,29 +15,30 @@ const ApiData = function(promise){
 
     this.response = null
     this.error = null
-    this.promise = promise
+    this.promise_ = promise
     this.data = null
     this.loading = true
 
-    promise.catch(error => {
-        this.loading = false
-        self.error = error
-    })
-
-    promise.then(response => {
-        this.loading = false
-        self.response = response
-        self.data = response.data
-    })
+    promise.then(
+        response => {
+            self.loading = false
+            self.response = response
+            self.data = response.data
+        },
+        error => {
+            self.loading = false
+            self.error = error
+        }
+    )
 }
 
 ApiData.prototype.then = function(callback){
-    this.promise.then(callback)
+    this.promise_.then(callback)
     return this
 }
 
 ApiData.prototype.catch = function(callback){
-    this.promise.catch(callback)
+    this.promise_.catch(callback)
     return this
 }
 
