@@ -28,6 +28,11 @@
 * test requestPasswordChange and validate_new_password
 * test changemail
 
+### Optims
+
+* flag functionnal components : https://vuejs.org/v2/guide/render-function.html#Functional-Components
+* flag v-once components : https://vuejs.org/v2/api/#extends
+
 ### Parser
 
 Wait for decision
@@ -59,3 +64,7 @@ Wait for decision
 ### Build
 
 * bulma CSS is in app.css, instead of chunk-vendors.css
+
+### Doc
+
+* Probably https://github.com/vue-styleguidist/vue-cli-plugin-styleguidist

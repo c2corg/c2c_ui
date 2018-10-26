@@ -171,14 +171,7 @@
                     })
 
                 } else {
-
-                    this.promise = c2c[this.documentType].get(this.documentId).then(response => {
-                        if(response.data.not_authorized===true){
-                            // TODO : brancher ca au bon endroit
-                            // this.error = new Error("Sorry, you're not authorized to see this document")
-                            return
-                        }
-                    })
+                    this.promise = c2c[this.documentType].get(this.documentId)
                 }
             },
         }

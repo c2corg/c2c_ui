@@ -3,8 +3,7 @@
         <div class="title is-2">
             <span v-translate>Last outings</span>
         </div>
-        <div v-for="(outing, i) of document.associations.recent_outings.documents" :key="i">
-            <!-- TODO remove duplicated -->
+        <div v-for="(outing, i) of outings" :key="i">
             <pretty-outing-link :outing="outing"/>
         </div>
     </content-box>
@@ -14,6 +13,18 @@
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     export default {
-        mixins : [ requireDocumentProperty ]
+        mixins : [ requireDocumentProperty ],
+
+        computed:{
+            // API bug, an outing can be present several times
+            outings(){
+                const result = new Map()
+
+                for(let outing of this.document.associations.recent_outings.documents)
+                    result.set(outing.document_id, outing)
+
+                return [...result.values()]
+            }
+        }
     }
 </script>

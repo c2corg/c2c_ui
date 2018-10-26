@@ -7,6 +7,12 @@
         <section class="content" v-html="html">
             <!-- <runtime-template :template="'<div>' + html + '</div>'" /> -->
         </section>
+
+        <div slot="footer">
+            <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
+                Close
+            </button>
+        </div>
     </modal-card>
 </template>
 

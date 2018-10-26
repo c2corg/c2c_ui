@@ -19,6 +19,7 @@
                 <editor-button icon="heading" @click="handleHeading" :tooltip="$gettext('Heading')"/>
 
                 <span>&nbsp;</span>
+                
                 <!--
                 <editor-button icon="link" @click="handleLink" :tooltip="$gettext('URL/Link')"/>
                 <editor-button icon="image" @click="handleImage" :tooltip="$gettext('Insert image')"/>

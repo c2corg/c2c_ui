@@ -1,3 +1,5 @@
+Utilities for edition views.
+
 ### form-row
 A row with two parts :
 
@@ -31,12 +33,12 @@ This row will be visible if, and only if at least one of its children has `visib
 
 ### form-simple-row
 
-TODO
+``` HTML
+<form-simple-row :document="document" :field="fields.title" />
+```
 
 ### form-input
 
-TODO
-
-
-
- 
+``` HTML
+<form-input :document="document" :field="fields.title"/>
+```
