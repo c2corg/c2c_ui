@@ -17,8 +17,6 @@ pages:
   - mv public/ public_src/
   - mv dist/ public/
   - cp search_engines/google7c06555988eb9ae6.html public/google7c06555988eb9ae6.html
-  - cd public/
-  - ls -la
   # Serve a compressed version to speed up the loading
   # https://gitlab.com/gitlab-org/gitlab-pages/merge_requests/25
   - gzip --recursive --keep public/
