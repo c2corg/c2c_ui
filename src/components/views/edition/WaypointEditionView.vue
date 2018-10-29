@@ -17,10 +17,8 @@
 
                     <form-input-row :document="document" :field="fields.elevation_min" />
 
-                    <form-row label="" always-visible>
-                        <map-view :documents="[document]" editable/>
-                    </form-row>
-
+                    <map-input-row :document="document" />
+                    
                     <form-input-row :document="document" :field="fields.maps_info" />
 
                 </tab-item>

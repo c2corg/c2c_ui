@@ -2,9 +2,7 @@
 
 ## Todo
 
-* draw GPS trace on map
-* upload GPS trace
-* see geom diff in diff view
+* if not point defined on map, allow to set it 
 * validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email
@@ -24,7 +22,7 @@
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions
-* does saveAs dependency really usefull now ?
+* does saveAs filesaver dependency really usefull now ?
 * test requestPasswordChange and validate_new_password
 * test changemail
 

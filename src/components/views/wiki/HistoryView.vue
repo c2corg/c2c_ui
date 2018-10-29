@@ -118,17 +118,25 @@
             },
         },
 
-        created() {
-            c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
-                this.history=response.data;
-                this.last_version_id = this.history.versions[0].version_id
-                this.history.versions = this.history.versions.reverse()
-                this.versionFrom = this.history.versions[this.history.versions.length-1].version_id
-                this.versionTo = this.history.versions[0].version_id
-            });
+        watch:{
+            "$route":{
+                handler:"load",
+                immediate: true,
+            }
         },
 
         methods: {
+
+            load() {
+                c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
+                    this.history=response.data;
+                    this.last_version_id = this.history.versions[0].version_id
+                    this.history.versions = this.history.versions.reverse()
+                    this.versionFrom = this.history.versions[this.history.versions.length-1].version_id
+                    this.versionTo = this.history.versions[0].version_id
+                });
+            },
+
             gotToDiff(){
 
                 this.$router.push({

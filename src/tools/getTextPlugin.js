@@ -21,7 +21,7 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
 
     if(messages[msgid] === undefined) {
         //eslint-disable-next-line
-        console.warn(`Untranslated ${lang} key found: "${msgid}"`)
+        // console.warn(`Untranslated ${lang} key found: "${msgid}"`)
         return msgid
     }
 

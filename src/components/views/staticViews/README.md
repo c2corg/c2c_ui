@@ -1,1 +1,1 @@
-This views does not depend on API content. 
+Static views that display a specific content (Serac, intro...)

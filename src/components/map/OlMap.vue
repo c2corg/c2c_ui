@@ -61,7 +61,7 @@
     import biodivSports from '@/apis/biodivSports.js'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
-    import { getDocumentStyle, geoJSONFormat, buildPolygonStyle } from './mapUtils.js'
+    import { getDocumentStyle, geoJSONFormat, buildPolygonStyle, buildDiffStyle } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
@@ -96,6 +96,11 @@
             },
 
             editable: {
+                type: Boolean,
+                default: false,
+            },
+
+            geomDetailEditable: {
                 type: Boolean,
                 default: false,
             },
@@ -252,15 +257,26 @@
 
             this.drawDocumentMarkers()
 
-            this.drawDocumentMarker(this.oldDocument, this.documentsLayer.getSource(), "old")
-            this.drawDocumentMarker(this.newDocument, this.documentsLayer.getSource(), "new")
-
             if(this.urlValue)
                 this.view.fit(this.urlValue, this.map.getSize())
             else
-                this.fitMapToDocuments()
+                this.fitMapToDocuments(true)
 
             if(this.editable){
+                this.setEditionInteractions()
+            } else {
+                // if map is not editable, feature are clickable
+                this.map.on('pointermove', this.onPointerMove)
+                this.map.on('click', this.onClick)
+            }
+        },
+
+        methods : {
+
+            setEditionInteractions(){
+
+                let document = this.documents[0] // in this mode, document is not reactive
+
                 let source = this.documentsLayer.getSource()
                 let modify = new ol.interaction.Modify({source})
 
@@ -276,21 +292,105 @@
 
                             if(geometry.type == "Point")
                                 document.geometry.geom = JSON.stringify(geometry)
-
-                            // TODO trace ?
-                            // TODO version ?
+                            else if(geometry.type =="LineString")
+                                document.geometry.geom_detail = JSON.stringify(geometry)
+                            else
+                                throw `Unexpected geometry type : ${geometry.type}`
                         }
                     }
                 })
 
-            } else {
-                // if map is not editable, feature are clickable
-                this.map.on('pointermove', this.onPointerMove)
-                this.map.on('click', this.onClick)
-            }
-        },
+                if(this.geomDetailEditable && !document.geometry.geom_detail){
+                    let add = new ol.interaction.Draw({
+                        source: source,
+                        type: "LineString"
+                    })
+                    this.map.addInteraction(add)
 
-        methods : {
+                    add.on("drawend", (event) => {
+                        let feature = event.feature
+                        let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
+
+                        feature.set(document, "document")
+                        document.geometry.has_geom_detail = true // TODO useless???
+                        document.geometry.geom_detail = JSON.stringify(geometry)
+
+                        this.map.removeInteraction(add)
+                    })
+                }
+            },
+
+            setGeomDetail(gpx){
+
+                // TODO : remove add interaction
+
+                let document = this.documents[0]
+                let gpxFormat = new ol.format.GPX()
+                let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
+
+                let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
+                document.geometry.has_geom_detail = true // TODO useless???
+                document.geometry.geom_detail = JSON.stringify(geometry)
+
+                this.drawDocumentMarkers()
+                this.fitMapToDocuments(true)
+            },
+
+            drawDocumentMarkers(){
+                var source = this.documentsLayer.getSource()
+                source.clear()
+
+                this.addDocumentFeature(this.oldDocument, source, buildDiffStyle(true))
+                this.addDocumentFeature(this.newDocument, source, buildDiffStyle(false))
+
+                for(let document of this.documents || []){
+                    this.addDocumentFeature(document, source)
+                }
+            },
+
+            addDocumentFeature(document, source, style){
+                if(!document || !document.geometry)
+                    return
+
+                let title = this.$documentUtils.getDocumentTitle(document)
+
+                if(document.geometry.geom){
+                    let feature = this.addFeature(
+                        source,
+                        JSON.parse(document.geometry.geom),
+                        style ? style : getDocumentStyle(document, title, false, false),
+                        style ? null : getDocumentStyle(document, title, true, false)
+                    )
+
+                    feature.set("document", document)
+                    feature.setId(document.document_id)
+                }
+
+                if(document.geometry.geom_detail)
+                    this.addFeature(
+                        source,
+                        JSON.parse(document.geometry.geom_detail),
+                        style ? style : getDocumentStyle(document, title, false, true),
+                        style ? null : getDocumentStyle(document, title, true, true)
+                    ).set("document", document)
+            },
+
+            addFeature(source, data, normalStyle, highlightedStyle){
+                if(!data)
+                    return
+
+                let feature = geoJSONFormat.readFeature(data)
+
+                feature.set("normalStyle", normalStyle)
+
+                if(highlightedStyle)
+                    feature.set("highlightedStyle", highlightedStyle)
+
+                feature.setStyle(normalStyle)
+                source.addFeature(feature)
+
+                return feature
+            },
 
             setMaxZoom(){
                 const maxZoom = this.visibleLayer.get("maxZoom")
@@ -300,22 +400,6 @@
                 }
 
                 this.view.set("maxZoom", maxZoom)
-            },
-
-
-            addDocumentFeature(document, data, isLine, source, id_postFix){
-
-                let feature = geoJSONFormat.readFeature(data)
-                let title = this.$documentUtils.getDocumentTitle(document)
-
-                feature.set("normalStyle", getDocumentStyle(document, title, false, isLine))
-                feature.set("highlightedStyle", getDocumentStyle(document, title, true, isLine))
-                feature.setStyle(feature.get('normalStyle'));
-
-                feature.set("document", document)
-                feature.setId(document.document_id + (id_postFix || ''))
-
-                source.addFeature(feature)
             },
 
             addBiodivSportsData(response) {
@@ -353,31 +437,9 @@
                 }
             },
 
-            drawDocumentMarkers(){
-                var source = this.documentsLayer.getSource()
-                source.clear()
-
-                for(let document of this.documents || []){
-                    this.drawDocumentMarker(document, source)
-                }
-            },
-
-            drawDocumentMarker(document, source, id_postFix){
-                if(document && document.geometry){
-                    // do not display both line and point
-                    if(document.geometry.geom_detail){
-                        this.addDocumentFeature(document, document.geometry.geom_detail, true, source, id_postFix)
-                    }
-                    else if(document.geometry.geom){
-                        this.addDocumentFeature(document, document.geometry.geom, false, source, id_postFix)
-                    }
-                }
-            },
-
             // If user want's to filter with map, it will send extent to url
             // otherwise, it set bbox url to undefined
             sendBoundsToUrl(){
-
                 var bounds = this.view.calculateExtent()
                 var query = Object.assign({}, this.$route.query)
 
@@ -387,9 +449,8 @@
                 }
             },
 
-            fitMapToDocuments(){
-
-                if(this.filterDocumentsWithMap)
+            fitMapToDocuments(force){
+                if((this.filterDocumentsWithMap || this.editable) && !force)
                     return
 
                 var extent = this.documentsLayer.getSource().getExtent();

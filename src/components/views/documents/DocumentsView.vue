@@ -100,7 +100,7 @@
 
                 // showMap is the user choise, if he wants to see the map, or not
                 showMap: null,
-                listMode: false,
+                listMode: null,
             }
         },
 
@@ -124,22 +124,20 @@
         },
 
         watch:{
-            $route : 'loadElements',
-        },
-
-        created() {
-            this.loadElements()
+            "$route" : {
+                handler: 'load',
+                immediate: true,
+            },
         },
 
         methods:{
 
-            loadElements(){
+            load(){
 
                 this.showMap = this.$localStorage.get(this.documentType + ".showMap", this.documentAreGeoLocalized)
                 this.listMode = this.$localStorage.get(this.documentType + ".listMode", false)
 
-                var offset = this.offset
-                var query = Object.assign({offset : offset ? offset : undefined}, this.$route.query)
+                var query = Object.assign({offset : this.offset ? this.offset : undefined}, this.$route.query)
 
                 this.promise = c2c[this.documentType].getAll(query)
             },

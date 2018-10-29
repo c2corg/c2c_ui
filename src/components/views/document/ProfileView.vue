@@ -79,8 +79,17 @@
             }
         },
 
-        created(){
-            this.feed = c2c.feed.getProfileFeed({u:this.$route.params.id, pl:this.$language.current})
+        watch: {
+            "$route":{
+                handler: "load",
+                immediate: true,
+            }
+        },
+
+        methods: {
+                load(){
+                this.feed = c2c.feed.getProfileFeed({u:this.$route.params.id, pl:this.$language.current})
+            }
         }
     }
 </script>

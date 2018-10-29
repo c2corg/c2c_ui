@@ -54,11 +54,18 @@
             },
         },
 
-        created() {
-            this.promise = c2c[this.documentType].getAll()
+        watch: {
+            "$route": {
+                handler: "load",
+                immediate: true,
+            }
         },
 
         methods:{
+            load(){
+                this.promise = c2c[this.documentType].getAll()
+            },
+
             go(image){
                 this.$router.push({
                     name: "image",

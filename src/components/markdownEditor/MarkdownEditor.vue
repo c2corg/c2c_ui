@@ -14,12 +14,12 @@
 
             <div class="buttons has-addons">
 
-                <editor-button icon="bold" @click="handleBold" :tooltip="$gettext('strong text')"/>
-                <editor-button icon="italic" @click="handleItalic" :tooltip="$gettext('emphasized text')"/>
-                <editor-button icon="heading" @click="handleHeading" :tooltip="$gettext('Heading')"/>
+                <editor-button icon="bold" :disabled="preview" @click="handleBold" :tooltip="$gettext('strong text')"/>
+                <editor-button icon="italic" :disabled="preview" @click="handleItalic" :tooltip="$gettext('emphasized text')"/>
+                <editor-button icon="heading" :disabled="preview" @click="handleHeading" :tooltip="$gettext('Heading')"/>
 
                 <span>&nbsp;</span>
-                
+
                 <!--
                 <editor-button icon="link" @click="handleLink" :tooltip="$gettext('URL/Link')"/>
                 <editor-button icon="image" @click="handleImage" :tooltip="$gettext('Insert image')"/>
@@ -28,11 +28,11 @@
                 <span>&nbsp;</span>
                 -->
 
-                <editor-button icon="hashtag" @click="handleHashtag" :tooltip="$gettext('Pitch description tag')"/>
-                <editor-button icon="list-ul" @click="handleListUl" :tooltip="$gettext('Unordered list')"/>
-                <editor-button icon="list-ol" @click="handleListOl" :tooltip="$gettext('Ordered list')"/>
-                <editor-button icon="code" @click="handleCode" :tooltip="$gettext('Unformatted text')"/>
-                <editor-button icon="comment" @click="handleQuote" :tooltip="$gettext('Quote')"/>
+                <editor-button icon="hashtag" :disabled="preview" @click="handleHashtag" :tooltip="$gettext('Pitch description tag')"/>
+                <editor-button icon="list-ul" :disabled="preview" @click="handleListUl" :tooltip="$gettext('Unordered list')"/>
+                <editor-button icon="list-ol" :disabled="preview" @click="handleListOl" :tooltip="$gettext('Ordered list')"/>
+                <editor-button icon="code" :disabled="preview" @click="handleCode" :tooltip="$gettext('Unformatted text')"/>
+                <editor-button icon="comment" :disabled="preview" @click="handleQuote" :tooltip="$gettext('Quote')"/>
 
                 <span>&nbsp;</span>
 

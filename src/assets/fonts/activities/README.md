@@ -1,1 +1,1 @@
-Camptocamp activity icons fonts
+Camptocamp activity icons font

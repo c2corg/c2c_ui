@@ -22,6 +22,10 @@
                     </form-row>
                 </tab-item>
 
+                <tab-item :title="$gettext('GPS track')">
+                    <map-input-row :document="document" geom-detail-editable/>
+                </tab-item>
+
                 <tab-item :title="$gettext('detailled informations')">
                     <form-input-row :document="document" :field="fields.partial_trip" />
                     <form-input-row :document="document" :field="fields.length_total" />

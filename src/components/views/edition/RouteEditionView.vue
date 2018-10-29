@@ -9,9 +9,7 @@
                     <form-input-row :document="document" :field="fields.activities" helper="activities"/>
                     <form-input-row :document="document" :field="fields.climbing_outdoor_type"/>
 
-                    <form-row label="" always-visible>
-                        <map-view :documents="[document]" editable/>
-                    </form-row>
+                    <map-input-row :document="document" geom-detail-editable/>
 
                 </tab-item>
 

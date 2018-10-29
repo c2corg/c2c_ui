@@ -72,7 +72,7 @@
         </div>
 
         <div v-if="oldVersion && newVersion">
-            <div v-if="geoLocalized && oldVersion.document.geometry.geom !== newVersion.document.geometry.geom ">
+            <div v-if="geometryHasChanged">
                 <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
             </div>
 
@@ -128,6 +128,19 @@
 
             geoLocalized() {
                 return constants.objectDefinitions[this.documentType].geoLocalized
+            },
+
+            geometryHasChanged(){
+                if(!this.geoLocalized)
+                    return false
+
+                if(this.oldVersion.document.geometry.geom !== this.newVersion.document.geometry.geom)
+                    return true
+
+                if(this.oldVersion.document.geometry.geom_detail !== this.newVersion.document.geometry.geom_detail)
+                    return true
+
+                return false
             }
         },
 

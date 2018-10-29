@@ -823,6 +823,9 @@ Constants.prototype.buildDocument = function(documentType, lang){
         }
     }
 
+    if(def.geoLocalized)
+        result.geometry = {}
+
     return result
 }
 

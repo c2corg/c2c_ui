@@ -45,6 +45,22 @@ export const buildPolygonStyle = function(title, highlight) {
     })
 }
 
+export const buildDiffStyle = function(isOld){
+
+    return new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: isOld ? 'red' : 'green',
+            width: isOld ? 5 : 3,
+        }),
+        image: new ol.style.Circle({
+            fill : new ol.style.Fill({
+                color: isOld ? 'rgba(255, 0, 0, 0.5)' : 'rgba(0, 255, 0, 0.9)'
+            }),
+            radius :  isOld ? 10 : 5,
+        })
+    })
+}
+
 export const buildLineStyle = function(title, highlight) {
 
     return new ol.style.Style({
