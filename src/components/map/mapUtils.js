@@ -61,20 +61,10 @@ export const buildDiffStyle = function(isOld){
     })
 }
 
-export const buildLineStyle = function(title, highlight) {
-
-    return new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: highlight ? 'red' : 'yellow',
-            width: 3
-        }),
-        text: buildTextStyle(title, highlight),
-    })
-}
 
 const buildPointStyle = function(title, src, color, highlight){
 
-    if( src === undefined)
+    if(!src)
         throw "Bad document type"
 
     var scale = highlight ? 0.55 : 0.4
@@ -108,51 +98,53 @@ const buildPointStyle = function(title, src, color, highlight){
     return [circleStyle, iconStyle]
 }
 
-export const getDocumentStyle = function(document, title, highlight, isLine){
 
-    if(isLine){
-        return buildLineStyle(title, highlight)
-    }
+const iconByDocumentType = {
+    i : require('@/assets/img/documents/images.svg'),
+    o : require('@/assets/img/documents/outings.svg'),
+    r : require('@/assets/img/documents/routes.svg'),
+    u : require('@/assets/img/documents/profiles.svg'),
+    x : require('@/assets/img/documents/xreports.svg'),
+}
 
-    // TODO : put style in a cache
+const colorByConditionRating = {
+    "excellent":"#008000",
+    "good":"#9ACD32",
+    "average":"#FFFF00",
+    "poor":"#FF0000",
+    "awful":"#8B0000",
+}
+
+export const getDocumentPointStyle = function(document, title, highlight){
+
     const type = document.type
+    let color = null
+    let icon = null
 
-    const urlByType = {
-        i : require('@/assets/img/documents/images.svg'),
-        o : require('@/assets/img/documents/outings.svg'),
-        r : require('@/assets/img/documents/routes.svg'),
-        u : require('@/assets/img/documents/profiles.svg'),
-        x : require('@/assets/img/documents/xreports.svg'),
-    }
-
-    let color = '#FFAA45' // Usual icon orange
-
-    if(document.condition_rating === 'excellent')
-        color = '#008000';
-
-    else if(document.condition_rating === 'good')
-        color = '#9ACD32';
-
-    else if(document.condition_rating === 'average')
-        color = '#FFFF00';
-
-    else if(document.condition_rating === 'poor')
-        color = '#FF0000';
-
-    else if(document.condition_rating === 'awful')
-        color = '#8B0000';
-
-    if(type == "w")
-        return buildPointStyle(
-            title,
-            require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg'),
-            color,
-            highlight
-        )
+    if(!document.condition_rating)
+        color = '#FFAA45' // Usual icon orange
+    else
+        color = colorByConditionRating[document.condition_rating]
 
     if(type == "i" || type == "u" || type == "x" || type == "o" || type=="r")
-        return buildPointStyle(title, urlByType[type], color, highlight)
+        icon = iconByDocumentType[type]
+    else if(type == "w")
+        icon = require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg')
+    else
+        throw "Wrong document specification"
 
+    return buildPointStyle(title, icon, color, highlight)
+}
+
+export const getDocumentLineStyle = function(title, highlight) {
+
+    return new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: highlight ? 'red' : 'yellow',
+            width: 3
+        }),
+        text: buildTextStyle(title, highlight),
+    })
 }
 
 export const geoJSONFormat = new ol.format.GeoJSON()

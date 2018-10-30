@@ -40,18 +40,11 @@
                 </router-link>
 
                 <div class="navbar-item field">
-                    <div class="control has-icons-left">
-                        <input
-                            v-model="searchText"
-                            class="input is-primary is-size-5"
-                            :placeholder="$gettext('Search ...')"
-                            @input="search()">
-                        <span class="icon is-left is-size-5">
-                            <fa-icon icon="search"/>
-                        </span>
-                    </div>
-                </div>
+                    <input-document
+                        :types="['route', 'waypoint', 'article', 'book']"
+                        @input="go(arguments[0])"/>
 
+                </div>
             </div>
 
             <div class="navbar-end">
@@ -107,7 +100,7 @@
                             <span v-translate>My mailing lists</span>
                         </router-link>
                         <hr class="navbar-divider">
-                        <a class="navbar-item" @click="signout">
+                        <a class="navbar-item" @click="$user.signout()">
                             <fa-icon icon="sign-out-alt"/>
                             <span v-translate>Logout</span>
                         </a>
@@ -135,6 +128,7 @@
 <script>
 
     import config from "@/js/config"
+    import constants from "@/js/constants"
 
     export default {
 
@@ -155,18 +149,13 @@
         },
 
         methods: {
-            search(){
+            go(documents){
+                let document = documents[0]
 
-                if(this.searchText.length >=3){
-                    this.$router.push({
-                        name: 'search',
-                        query: {q: this.searchText}
-                    })
-                }
-            },
-
-            signout(){
-                this.$user.signout()
+                this.$router.push({
+                    name: constants.getDocumentType(document.type),
+                    params: { id: document.document_id }
+                })
             },
         }
     }

@@ -2,7 +2,7 @@
 
 ## Todo
 
-* if not point defined on map, allow to set it 
+* associations on document creation
 * validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email

@@ -61,7 +61,7 @@
     import biodivSports from '@/apis/biodivSports.js'
 
     import {mapLayers, dataLayers} from './MapLayers.js'
-    import { getDocumentStyle, geoJSONFormat, buildPolygonStyle, buildDiffStyle } from './mapUtils.js'
+    import { getDocumentPointStyle, getDocumentLineStyle, geoJSONFormat, buildPolygonStyle, buildDiffStyle } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
@@ -200,6 +200,15 @@
                     this.setMaxZoom()
                 }
             },
+
+            editedDocument(){
+                if(this.editable){
+                    // documents must be a 1-length array
+                    // in this mode, documents array is not reactive
+                    // and can't be setted after component creation
+                    return this.documents[0]
+                }
+            }
         },
 
         watch:{
@@ -263,7 +272,8 @@
                 this.fitMapToDocuments(true)
 
             if(this.editable){
-                this.setEditionInteractions()
+                this.setModifyInteractions()
+                this.setDrawInteraction()
             } else {
                 // if map is not editable, feature are clickable
                 this.map.on('pointermove', this.onPointerMove)
@@ -273,10 +283,7 @@
 
         methods : {
 
-            setEditionInteractions(){
-
-                let document = this.documents[0] // in this mode, document is not reactive
-
+            setModifyInteractions(){
                 let source = this.documentsLayer.getSource()
                 let modify = new ol.interaction.Modify({source})
 
@@ -285,55 +292,70 @@
 
                 modify.on("modifyend", (event) => {
                     for(let feature of event.features.getArray()){
-                        let document = feature.get("document")
-
-                        if(document){
-                            let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
-
-                            if(geometry.type == "Point")
-                                document.geometry.geom = JSON.stringify(geometry)
-                            else if(geometry.type =="LineString")
-                                document.geometry.geom_detail = JSON.stringify(geometry)
-                            else
-                                throw `Unexpected geometry type : ${geometry.type}`
-                        }
+                        this.setDocumentGeometryFromFeature(feature)
                     }
                 })
+            },
 
-                if(this.geomDetailEditable && !document.geometry.geom_detail){
-                    let add = new ol.interaction.Draw({
+            setDrawInteraction(){
+                let source = this.documentsLayer.getSource()
+
+                if(this.drawInteraction)
+                    this.map.removeInteraction(this.drawInteraction)
+
+                this.drawInteraction = null
+
+                if(!this.editedDocument.geometry.geom){
+                    this.drawInteraction = new ol.interaction.Draw({
+                        source: source,
+                        type: "Point"
+                    })
+                } else if(this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
+                    this.drawInteraction = new ol.interaction.Draw({
                         source: source,
                         type: "LineString"
                     })
-                    this.map.addInteraction(add)
+                }
 
-                    add.on("drawend", (event) => {
+                if(this.drawInteraction){
+                    this.map.addInteraction(this.drawInteraction)
+
+                    this.drawInteraction.on("drawend", (event) => {
                         let feature = event.feature
-                        let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
-
-                        feature.set(document, "document")
-                        document.geometry.has_geom_detail = true // TODO useless???
-                        document.geometry.geom_detail = JSON.stringify(geometry)
-
-                        this.map.removeInteraction(add)
+                        feature.set("document", document)
+                        this.setDocumentGeometryFromFeature(feature)
+                        this.drawDocumentMarkers()
+                        this.setDrawInteraction()
                     })
                 }
             },
 
+            setDocumentGeometryFromFeature(feature){
+                let document = feature.get("document")
+                let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
+
+                if(!document)
+                    return
+
+                if(geometry.type == "Point")
+                    document.geometry.geom = JSON.stringify(geometry)
+                else if(geometry.type =="LineString")
+                    document.geometry.geom_detail = JSON.stringify(geometry)
+                else
+                    throw `Unexpected geometry type : ${geometry.type}`
+            },
+
             setGeomDetail(gpx){
-
-                // TODO : remove add interaction
-
-                let document = this.documents[0]
                 let gpxFormat = new ol.format.GPX()
                 let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
-
                 let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
-                document.geometry.has_geom_detail = true // TODO useless???
-                document.geometry.geom_detail = JSON.stringify(geometry)
+                
+                this.editedDocument.geometry.geom_detail = JSON.stringify(geometry)
 
+                // TODO : if not document.geometry.geom, get center and add as point
                 this.drawDocumentMarkers()
                 this.fitMapToDocuments(true)
+                this.setDrawinteractions()
             },
 
             drawDocumentMarkers(){
@@ -358,8 +380,8 @@
                     let feature = this.addFeature(
                         source,
                         JSON.parse(document.geometry.geom),
-                        style ? style : getDocumentStyle(document, title, false, false),
-                        style ? null : getDocumentStyle(document, title, true, false)
+                        style ? style : getDocumentPointStyle(document, title, false),
+                        style ? null : getDocumentPointStyle(document, title, true)
                     )
 
                     feature.set("document", document)
@@ -370,8 +392,8 @@
                     this.addFeature(
                         source,
                         JSON.parse(document.geometry.geom_detail),
-                        style ? style : getDocumentStyle(document, title, false, true),
-                        style ? null : getDocumentStyle(document, title, true, true)
+                        style ? style : getDocumentLineStyle(title, false),
+                        style ? null : getDocumentLineStyle(title, true)
                     ).set("document", document)
             },
 

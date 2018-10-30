@@ -11,7 +11,6 @@ import NotFoundView from '@/components/views/staticViews/NotFoundView'
 
 import DashboardView from '@/components/views/portals/DashboardView'
 import FeedView from '@/components/views/portals/FeedView'
-import SearchView from '@/components/views/search/SearchView'
 
 import LoginView from '@/components/views/user/LoginView'
 import AccountView from '@/components/views/user/AccountView'
@@ -74,7 +73,6 @@ var routes = [
     { path: '/dashboard',    name: 'dashboard',      component: DashboardView },
     { path: '/feed',         name: 'feed',           component: FeedView },
     { path: '/serac',        name: 'serac',          component: SeracView },
-    { path: '/search',       name: 'search',         component: SearchView },
     { path: '/whatsnew',     name: 'whatsnew',       component: WhatsNewView },
     { path: '/auth',         name: 'auth',           component: LoginView },
     { path: '/account',      name: 'account',        component: AccountView },

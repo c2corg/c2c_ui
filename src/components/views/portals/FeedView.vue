@@ -46,7 +46,7 @@
 
         data(){
             return {
-                feedPromise:null
+                feedPromise:null,
             }
         },
 

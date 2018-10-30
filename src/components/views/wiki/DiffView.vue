@@ -173,6 +173,9 @@
             },
 
             buildDiff(){
+                this.diffProperties={}
+                this.diffLocales={}
+
                 if(!this.oldVersion || !this.newVersion) {
                     return "Waiting for other version"
                 }
@@ -228,6 +231,8 @@
             },
 
             loadVersion(versionId, resultProperty){
+                this[resultProperty]=null
+
                 c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then(response => {
                     this[resultProperty]=response.data;
                     if(resultProperty=="newVersion"){

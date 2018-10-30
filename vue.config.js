@@ -32,8 +32,8 @@ const result = {
         },
 
         plugins: [
-            // moment, by default load all localesca
-            // this will skip all of it, and a fixed list is setted in main.',
+            // moment, by default load all locales
+            // this will skip all of it, and a fixed list is setted in @/tools/vue-moment.js',
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         ],
     }

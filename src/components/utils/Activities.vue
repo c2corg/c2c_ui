@@ -3,7 +3,7 @@
         <icon-activity
             v-for="activity of activities"
             :key="activity"
-            v-tooltip="$gettext(activity)"
+            v-tooltip="tooltips ? $gettext(activity) : undefined"
             :activity="activity"/>
     </span>
 </template>
@@ -13,8 +13,12 @@
     export default {
         props: {
             activities: {
-                type:Array,
-                required:true,
+                type: Array,
+                required: true,
+            },
+            tooltips: { // default is false, because tooltip must not be activated on floating elements
+                type: Boolean,
+                default: false,
             }
         }
     }
