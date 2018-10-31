@@ -3,8 +3,6 @@
         <template slot-scope="{ document, fields }">
 
             <div>
-                <!--  CONTENT http://localhost:8080/outings/714134  -->
-
                 <content-box v-if="document.associations && document.associations.images.length" >
                     <gallery :images="document.associations.images" />
                 </content-box>
@@ -23,7 +21,12 @@
 
                         <content-box>
                             <div>
-                                <users-links :users="document.associations.users"/>
+                                <!-- API anti-pattern :
+                                associations.users should have been called associations.profiles
+                                as it refers to profiles document
+                                let stay profile coherent and call this component profiles-links
+                                and not users-links -->
+                                <profiles-links :profiles="document.associations.users"/>
                                 {{ document.currentLocale_.participants }}
                             </div>
 

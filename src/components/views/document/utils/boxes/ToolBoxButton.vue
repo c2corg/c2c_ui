@@ -29,12 +29,17 @@ export default{
 .toolbox-button{
     cursor:pointer;
 
-    span {
+    span{
         color:$link;
+    }
+
+    :hover{
+        color:$dark;
     }
 
     .toolbox-button-icon{
         width: 1rem;
     }
+
 }
 </style>

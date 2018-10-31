@@ -43,10 +43,11 @@ ApiData.prototype.catch = function(callback){
 }
 
 const BaseApi = function(apiUrl){
-    // axios instances shares same common headers. this trick fix this.
-    this.axios = axios.create({headers:{common:{}}})
 
-    this.apiUrl = apiUrl
+    this.axios = axios.create({
+        headers:{common:{}}, // axios instances shares same common headers. this trick fix this.
+        baseURL: apiUrl,
+    })
 }
 
 /**
@@ -61,23 +62,23 @@ if(config.urls.readWrite){
     }
 }
 
-BaseApi.prototype.get = function(url, body){
-    return new ApiData(this.axios.get(this.apiUrl + url, body))
+BaseApi.prototype.get = function(url, params){
+    return new ApiData(this.axios.get(url, params))
 }
 
 BaseApi.prototype.post = function(url, body, safeCall){
     this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.post(this.apiUrl + url, body))
+    return new ApiData(this.axios.post(url, body))
 }
 
 BaseApi.prototype.put = function(url, body, safeCall){
     this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.put(this.apiUrl + url, body))
+    return new ApiData(this.axios.put(url, body))
 }
 
 BaseApi.prototype.delete = function(url, body, safeCall){
     this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.delete(this.apiUrl + url, body))
+    return new ApiData(this.axios.delete(url, body))
 }
 
 export default BaseApi

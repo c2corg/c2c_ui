@@ -99,7 +99,7 @@
 
                     </content-box>
 
-                    <recent-outings-box :document="document"/>
+                    <recent-outings-box :document="document" :add-query="{r:document.document_id}"/>
 
                     <comments-box :document="document"/>
 

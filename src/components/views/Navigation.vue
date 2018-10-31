@@ -41,8 +41,9 @@
 
                 <div class="navbar-item field">
                     <input-document
-                        :types="['route', 'waypoint', 'article', 'book']"
-                        @input="go(arguments[0])"/>
+                        :document-type="['waypoint', 'route', 'article', 'book']"
+                        propose-creation
+                        @input="go"/>
 
                 </div>
             </div>
@@ -149,9 +150,7 @@
         },
 
         methods: {
-            go(documents){
-                let document = documents[0]
-
+            go(document){
                 this.$router.push({
                     name: constants.getDocumentType(document.type),
                     params: { id: document.document_id }

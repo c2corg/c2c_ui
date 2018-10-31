@@ -81,7 +81,13 @@
 
         computed: {
             object(){
-                return this.field.parent == "locales" ? this.document.currentLocale_ : this.document
+                if(this.field.parent == "locales")
+                    return this.document.currentLocale_
+
+                if(this.field.parent == "document")
+                    return this.document
+
+                throw `Unexpected parent value : ${this.field.parent}`                    
             },
             visible(){
                 return this.field.isVisibleFor(this.document)

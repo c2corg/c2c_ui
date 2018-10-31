@@ -1,7 +1,15 @@
 <template>
     <content-box v-if="document.associations.all_routes.documents.length">
         <!-- TODO : add route button -->
-        <h2 class="title is-2" v-translate>Routes</h2>
+        <h2 class="title is-2">
+            <span v-translate>
+                Routes
+            </span>
+            <add-link
+                document-type="route"
+                :query="{w:document.document_id}"
+                class="button is-small is-rounded is-primary"/>
+        </h2>
         <div v-for="activity of Object.keys(routes)" :key="activity">
             <h3 class="title is-3">
                 <icon-activity :activity="activity" />

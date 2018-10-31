@@ -13,7 +13,7 @@ import FieldView from './fieldViewers/FieldView'
 import LabelValue from './fieldViewers/LabelValue'
 import DoubleNumericField from './fieldViewers/DoubleNumericField'
 import MarkdownSection from './fieldViewers/MarkdownSection'
-import UsersLinks from './fieldViewers/UsersLinks'
+import ProfilesLinks from './fieldViewers/ProfilesLinks'
 
 export default {
 
@@ -29,9 +29,9 @@ export default {
         LicenseBox,
         MapBox,
         MarkdownSection,
+        ProfilesLinks,
         RecentOutingsBox,
         ToolBox,
-        UsersLinks,
         AllRoutesBox,
     },
 }

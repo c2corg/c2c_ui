@@ -20,6 +20,17 @@ function c2c(){
     for(let type of constants.documentTypes){
         this[type] = new DocumentService(this, type)
     }
+
+    // TODO
+    // once https://github.com/c2corg/v6_api/issues/730 is fixed
+    // add an intercpetor on 401 responses (not authorized), and if
+    // user is logged, log-out it
+    // this.axios.interceptors.response.use(
+    //     response => response,
+    //     function(error){
+    //         return Promise.reject(error)
+    //     }
+    // )
 }
 
 // inherits prototype

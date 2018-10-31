@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:documentType + '-add', params:{lang:$language.current}}">
+    <router-link :to="{name:documentType + '-add', params:{lang:$language.current}, query:query_}">
         <slot>
             <span>{{ text }}</span>
         </slot>
@@ -12,7 +12,22 @@
     export default{
         mixins : [ requireDocumentTypeProperty ],
 
+        props:{
+            query: {
+                type:Object,
+                default:undefined,
+            }
+        },
+
         computed:{
+            query_(){
+                if(this.documentType!="outing")
+                    return this.query
+
+                // for outings, always add current user 
+                return Object.assign({u:this.$user.id}, this.query)
+            },
+
             text(){
                 if(this.documentType=="outing") return this.$gettext("add an outing")
                 if(this.documentType=="route") return this.$gettext("add a route")

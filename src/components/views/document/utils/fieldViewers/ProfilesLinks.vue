@@ -1,13 +1,13 @@
 <template>
-    <span v-if="users.length">
-        <document-link v-for="user of users" :key="user.document_id" :document="user" class="user-link-label"/>
+    <span v-if="profiles.length">
+        <document-link v-for="profile of profiles" :key="profile.document_id" :document="profile" class="user-link-label"/>
     </span>
 </template>
 
 <script>
     export default {
         props : {
-            users:{
+            profiles:{
                 type:Array,
                 required:true,
             }

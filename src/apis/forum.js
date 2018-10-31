@@ -46,7 +46,7 @@ Forum.prototype.getLatest = function () {
 }
 
 Forum.prototype.readAnnouncement = function(lang) {
-  return this.get('//t/annonce-' + lang + '.json')
+  return this.get('/t/annonce-' + lang + '.json')
 }
 
 export default new Forum();

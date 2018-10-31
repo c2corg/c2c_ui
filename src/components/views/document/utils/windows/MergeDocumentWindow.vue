@@ -35,8 +35,11 @@
                         {{ targetDocument.document_id }}
                     </document-link>)
                 </span>
-                <document-finder :document-type="documentType" v-model="targetDocument"/>
             </p>
+
+            <div>
+                <input-document :document-type="documentType" v-model="targetDocument" />
+            </div>
         </section>
 
         <footer slot="footer">

@@ -203,14 +203,16 @@
                         let diff = diff_match_patch.diff_main(oldVal, newVal)
                         diff_match_patch.diff_cleanupSemantic(diff)
                         let html = diff_match_patch.diff_prettyHtml(diff).split("<br>")
-                        let result = []
-                        for(let line of html){
-                            if(line.search(/<(ins|del)[ >]/) != -1){
-                                result.push(line)
-                            }
-                        }
 
-                        this.diffLocales[key] = result.join("<br>")
+                        // TODO bug : a block may be present on several lines...
+                        // let result = []
+                        // for(let line of html){
+                        //     if(line.search(/<(ins|del)[ >]/) != -1){
+                        //         result.push(line)
+                        //     }
+                        // }
+
+                        this.diffLocales[key] = html.join("<br>")
                     }
                 }
             },

@@ -1,8 +1,25 @@
 <template>
-    <content-box v-if="document.associations.recent_outings.documents.length!=0" class="no-print">
+    <content-box class="no-print">
         <div class="title is-2">
             <span v-translate>Last outings</span>
+            <add-link
+                v-if="addQuery && document.associations.recent_outings.documents.length!=0"
+                document-type="outing"
+                :query="addQuery"
+                class="button is-small is-rounded is-primary"/>
         </div>
+
+        <div v-if="document.associations.recent_outings.documents.length==0">
+            <!-- TODO center -->
+            <add-link
+                v-if="addQuery"
+                document-type="outing"
+                :query="addQuery"
+                class="button is-primary">
+                Add the first outing
+            </add-link>
+        </div>
+
         <div v-for="(outing, i) of outings" :key="i">
             <pretty-outing-link :outing="outing"/>
         </div>
@@ -14,6 +31,13 @@
 
     export default {
         mixins : [ requireDocumentProperty ],
+
+        props: {
+            addQuery: {
+                type:Object,
+                default:undefined,
+            }
+        },
 
         computed:{
             // API bug, an outing can be present several times

@@ -95,8 +95,23 @@
         created(){
             if(this.mode=="edit")
                 this.promise = c2c[this.documentType].get(this.documentId)
-            else
+            else {
                 this.promise = { data : constants.buildDocument(this.documentType, this.lang) }
+
+                // Add associations presents in url query 
+                for(let letter of Object.keys(this.$route.query)){
+                    let documentType = constants.getDocumentType(letter)
+
+                    // Value may be a number or a string
+                    let documentIds = String(this.$route.query[letter]).split(",")
+
+                    for(let documentId of documentIds){
+                        c2c[documentType].get(documentId).then(response => {
+                            this.$documentUtils.addAssociation(this.document, response.data)
+                        })
+                    }
+                }
+            }
 
             this.fields = constants.objectDefinitions[this.documentType].fields
 

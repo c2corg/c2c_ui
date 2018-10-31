@@ -241,6 +241,7 @@ function Field(name, properties){
         }
     }
 
+    this.parent = this.parent || "document"
     this.type = this.type || "text"
 
     //Does the values can be translated
@@ -364,14 +365,24 @@ Field.prototype.getError = function (document) {
 
     if(this.parent=="locales")
         value = document.currentLocale_[this.name]
-    else
+    else if(this.parent=="document")
         value = document[this.name]
+    else
+        throw `Unexpected parent property : ${this.parent}`
 
-    if(this.required && (!value || this.multiple && value.length===0))
+    if(this.required && (!value || this.multiple && value.length===0)){
+        let errorName
+
+        if(this.parent=="locales")
+            errorName = `locales.0.${this.name}`
+        else if(this.parent=="document")
+            errorName = this.name
+
         return {
-            name: this.parent=="locales" ? `locales.0.${this.name}` : this.name,
+            name: errorName,
             description:`${this.name} is required`,
         }
+    }
 
     return null
 }
@@ -571,7 +582,7 @@ function Constants(){
                 new Field("snowshoe_rating", {url:"wrat", activities:["snowshoeing"]}),
                 new Field("via_ferrata_rating", {url:"krat", activities:["via_ferrata"]}),
             ),
-            validAssociations:["article", "route", "xreport"],
+            validAssociations:["article", "route", "xreport", "profile"],
         },
 
         profile:{
@@ -815,16 +826,23 @@ Constants.prototype.buildDocument = function(documentType, lang){
         locales:[
             this.buildLocale(documentType, lang)
         ],
+        associations:{},
     }
 
     for(let field of Object.values(def.fields)){
-        if(field.parent != "locales"){
+        if(field.parent == "document"){
             result[field.name]= field.multiple ? new Array() : null
         }
     }
 
     if(def.geoLocalized)
-        result.geometry = {}
+        result.geometry = {
+            geom:null,
+            geom_detail:null,
+        }
+
+    for(let type of Object.keys(def.validAssociations))
+        result.associations[(type == "profile" ? "user" : type) + "s"] = []
 
     return result
 }

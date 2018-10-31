@@ -11,15 +11,54 @@
                         <form-input :document="document" :field="fields.date_end" prefix="end"/>
                     </form-row>
 
-                    <form-input-row :document="document" :field="fields.activities" helper="activities"/>
-
                     <form-input-row :document="document" :field="fields.description" />
-                    <!-- TODO route + helper on Taken route -->
-                    <!-- TODO user + helper on participants -->
-                    <form-row :label="$gettext('participants')" is-grouped>
-                        <form-input :document="document" :field="fields.participant_count" :prefix="$gettext('count')"/>
-                        <form-input :document="document" :field="fields.participants" :prefix="$gettext('Without c2c account')" is-expanded helper="participants"/>
+
+                    <form-row :label="$gettext('participants')" always-visible is-grouped>
+
+                        <div class="control">
+                            <input-document
+                                document-type="profile"
+                                @input="$documentUtils.addAssociation(document, arguments[0])" />
+                        </div>
+
+                        <div class="control is-expanded">
+                            <div class="columns is-multiline ">
+                                <div
+                                    v-for="child in document.associations.users"
+                                    :key="child.document_id"
+                                    class="column is-3">
+                                    <document-card
+                                        :document="child"
+                                        :show-delete-button="child.document_id != $user.id"
+                                        @delete="$documentUtils.removeAssociation(document, child)"/>
+                                </div>
+                            </div>
+                        </div>
                     </form-row>
+
+                    <form-row :label="$gettext('routes')" always-visible is-grouped>
+
+                        <div class="control">
+                            <input-document
+                                document-type="route"
+                                @input="$documentUtils.addAssociation(document, arguments[0])" />
+                        </div>
+
+                        <div class="control is-expanded">
+                            <div class="columns is-multiline">
+                                <div
+                                    v-for="child in document.associations.routes"
+                                    :key="child.document_id"
+                                    class="column is-4">
+                                    <document-card
+                                        :document="child"
+                                        :show-delete-button="child.document_id != $user.id"
+                                        @delete="$documentUtils.removeAssociation(document, child)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form-row>
+
                 </tab-item>
 
                 <tab-item :title="$gettext('GPS track')">
@@ -27,6 +66,8 @@
                 </tab-item>
 
                 <tab-item :title="$gettext('detailled informations')">
+                    <form-input-row :document="document" :field="fields.activities" helper="activities"/>
+
                     <form-input-row :document="document" :field="fields.partial_trip" />
                     <form-input-row :document="document" :field="fields.length_total" />
 
@@ -97,6 +138,12 @@
                 </tab-item>
 
                 <tab-item :title="$gettext('comments')">
+
+                    <form-row :label="$gettext('participants')" is-grouped>
+                        <form-input :document="document" :field="fields.participant_count" :prefix="$gettext('count')"/>
+                        <form-input :document="document" :field="fields.participants" :prefix="$gettext('Without c2c account')" is-expanded helper="participants"/>
+                    </form-row>
+
                     <form-input-row :document="document" :field="fields.route_description" />
                     <form-input-row :document="document" :field="fields.timing" />
                     <form-input-row :document="document" :field="fields.disable_comments" />

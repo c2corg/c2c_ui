@@ -1,7 +1,5 @@
 <template>
-    <span>
-        <fa-icon :icon="iconClass" />
-    </span>
+    <fa-icon :icon="iconClass" />    
 </template>
 
 <script>

@@ -11,6 +11,11 @@
     * recenter on...
 * signup (CAPTCHA)
 
+### Wait for c2c issues
+
+* https://github.com/c2corg/v6_api/issues/730
+  handle if token is obsolote or corrupted
+  
 ### Nice to have
 
 * Sort on data table

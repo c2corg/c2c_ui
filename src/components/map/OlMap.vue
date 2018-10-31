@@ -349,13 +349,13 @@
                 let gpxFormat = new ol.format.GPX()
                 let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
                 let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
-                
+
                 this.editedDocument.geometry.geom_detail = JSON.stringify(geometry)
 
                 // TODO : if not document.geometry.geom, get center and add as point
                 this.drawDocumentMarkers()
                 this.fitMapToDocuments(true)
-                this.setDrawinteractions()
+                this.setDrawinteraction()
             },
 
             drawDocumentMarkers(){

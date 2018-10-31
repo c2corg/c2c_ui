@@ -46,17 +46,23 @@
 
             <h3 v-translate>Areas</h3>
 
-            <document-finder document-type="area" @input="addArea(arguments[0])"/>
+            <div class="columns is-multiline">
 
-            <div class="columns">
-                <div
-                    v-for="document in preferences.areas"
-                    :key="document.document_id"
-                    class="column is-2">
-                    <document-card
-                        :document="document"
-                        show-delete-button
-                        @delete="removeArea(document)"/>
+                <div class="column is-narrow">
+                    <input-document document-type="area" @input="addArea" />
+                </div>
+                <div class="column">
+                    <div class="columns is-multiline">
+                        <div
+                            v-for="document in preferences.areas"
+                            :key="document.document_id"
+                            class="column is-3">
+                            <document-card
+                                :document="document"
+                                show-delete-button
+                                @delete="removeArea(document)"/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,12 @@
+/*
+ * This module manipulate document objects
+ * it does not provide any API service
+ */
+
 import constants from '@/js/constants'
 
 // we need to use a VM, because we need access to Vue.$user.lang
+
 
 export default function install(Vue){
 
@@ -72,6 +78,74 @@ export default function install(Vue){
                     document.mtb_up_rating ||
                     document.mtb_down_rating ||
                     document.hiking_mtb_exposition
+            },
+
+            getAssociationArrayName(child){
+                const documentType = constants.getDocumentType(child.type)
+                return documentType == "profile" ? "users" : documentType + 's'
+            },
+
+            isInArray(array, document){
+                return array.filter(item => item.document_id == document.document_id).length != 0
+            },
+
+            addAssociation(document, child){
+                const array = document.associations[this.getAssociationArrayName(child)]
+
+                if(this.isInArray(array, child))
+                    return
+
+                array.push(child)
+
+                if(document.type=="o" && child.type=="r"){
+                    // propagate route property to outing
+                    this.propagateRouteProperties(child, document)
+                }
+            },
+
+            removeAssociation(document, child){
+                const arrayName = this.getAssociationArrayName(child)
+                const array = document.associations[arrayName]
+
+                document.associations[arrayName] = array.filter(item => item.document_id != child.document_id)
+            },
+
+            propagateRouteProperties(route, outing){
+
+                for(let activity of route.activities)
+                    if(!outing.activities.includes(activity))
+                        outing.activities.push(activity)
+
+                outing.geometry.geom = outing.geometry.geom === null ? route.geometry.geom : outing.geometry.geom
+
+                const names = [
+                    "elevation_min",
+                    "elevation_max",
+
+                    "height_diff_down",
+                    "height_diff_up",
+
+                    "height_diff_difficulties",
+
+                    "global_rating",
+                    "engagement_rating",
+                    "equipment_rating",
+                    "rock_free_rating",
+
+                    "ice_rating",
+
+                    "labande_global_rating",
+                    "ski_rating",
+                    "snowshoe_rating",
+                    "hiking_rating",
+
+                    "via_ferrata_rating",
+
+                    "mtb_down_rating",
+                    "mtb_up_rating",
+                ]
+
+                names.forEach(name => outing[name] = outing[name] === null ? route[name] : outing[name])
             }
         }
     })

@@ -27,8 +27,9 @@
 <style lang="scss">
 body{
     overflow-y: hidden;
+    min-height:100vh;
 }
-body::-webkit-scrollbar { 
+body::-webkit-scrollbar {
     display: none;
 }
 
