@@ -19,3 +19,5 @@ npm run serve
 ```
 
 :heart: http://localhost:8080 :heart:
+
+Want to easily access to every dev tools on a pretty interface? Have a look on [the doc](https://gitlab.com/cbeauchesne/vue-camptocamp/blob/master/docs/development-environment.md)! :sunglasses:
