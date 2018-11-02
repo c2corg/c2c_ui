@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="field">
         <form-row v-if="geomDetailEditable" :label="$gettext('Trace')" always-visible is-grouped>
             <div class="control">
                 <button class="button is-primary" @click="$refs.gpxFileInput.click()" v-translate>

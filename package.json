@@ -77,8 +77,11 @@
     }
   },
   "browserslist": [
+    "cover 95% in FR",
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
+    "not dead",
+    "not ie <= 8",
+    "Chrome 41"
   ]
 }

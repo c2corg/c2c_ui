@@ -71,7 +71,7 @@
 
 <script>
     import c2c from '@/apis/c2c'
-    import constants from '@/js/constants.js'
+    import constants from '@/js/constants'
 
     export default {
 

@@ -17,3 +17,8 @@ The strategy on this is quite limited, because we must also test any dependancie
 function foo(...args){
 }
 ```
+
+### Wait, but why ?
+
+browserslist on package.json should handle this...
+https://browserl.ist/?q=cover+95%25+in+FR%2C+%3E+1%25%2C+not+ie+%3C%3D+8%2C+Chrome+41%2C+last+2+versions 

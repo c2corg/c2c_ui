@@ -74,7 +74,6 @@
 </template>
 <script>
     import c2c from '@/apis/c2c'
-    import constants from '@/js/constants'
 
     export default {
 
@@ -105,9 +104,8 @@
             load(){
                 this.promise = c2c.getRecentChanges(this.$route.query)
                 .then(() => {
-
                     for(let change of this.promise.data.feed)
-                        change.document.documentType = constants.getDocumentType(change.document.type)
+                        change.document.documentType = this.$documentUtils.getDocumentType(change.document.type)
                 })
             }
         },

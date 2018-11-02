@@ -57,15 +57,19 @@
 
 <script>
     import ol from '@/libs/ol'
-    import constants from '@/js/constants'
     import biodivSports from '@/apis/biodivSports.js'
 
-    import {mapLayers, dataLayers} from './MapLayers.js'
-    import { getDocumentPointStyle, getDocumentLineStyle, geoJSONFormat, buildPolygonStyle, buildDiffStyle } from './mapUtils.js'
+    import { cartoLayers, dataLayers } from './mapLayers.js'
+    import {
+        getDocumentPointStyle,
+        getDocumentLineStyle,
+        geoJSONFormat,
+        buildPolygonStyle,
+        buildDiffStyle
+    } from './mapUtils.js'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
-
 
     export default {
 
@@ -121,7 +125,7 @@
                 map: null,
 
                 // map layers, one of them is visible
-                mapLayers : mapLayers,
+                mapLayers : cartoLayers,
 
                 //slope layers
                 dataLayers : dataLayers,
@@ -322,7 +326,7 @@
 
                     this.drawInteraction.on("drawend", (event) => {
                         let feature = event.feature
-                        feature.set("document", document)
+                        feature.set("document", this.editedDocument)
                         this.setDocumentGeometryFromFeature(feature)
                         this.drawDocumentMarkers()
                         this.setDrawInteraction()
@@ -332,30 +336,44 @@
 
             setDocumentGeometryFromFeature(feature){
                 let document = feature.get("document")
-                let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
 
                 if(!document)
                     return
 
-                if(geometry.type == "Point")
-                    document.geometry.geom = JSON.stringify(geometry)
-                else if(geometry.type =="LineString")
-                    document.geometry.geom_detail = JSON.stringify(geometry)
-                else
+                this.setDocumentGeometry(document, feature.get("geometry"))
+            },
+
+
+            setDocumentGeometry(document, geometry){
+                let geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
+
+                if(geoJsonGeometry.type == "Point"){
+                    //remove elevation and timestamp
+                    geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2) 
+                    document.geometry.geom = JSON.stringify(geoJsonGeometry)
+
+                } else if(geoJsonGeometry.type =="LineString" || geoJsonGeometry.type =="MultiLineString") {
+                    document.geometry.geom_detail = JSON.stringify(geoJsonGeometry)
+
+                    if(!document.geometry.geom){
+                        let mainLine = geometry.getType() == "MultiLineString" ? geometry.getLineString(0) : geometry
+                        console.log(mainLine, mainLine.getCoordinateAt(0.5))
+                        this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
+                    }
+
+                } else {
                     throw `Unexpected geometry type : ${geometry.type}`
+                }
             },
 
             setGeomDetail(gpx){
                 let gpxFormat = new ol.format.GPX()
                 let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
-                let geometry = geoJSONFormat.writeGeometryObject(feature.get("geometry"))
 
-                this.editedDocument.geometry.geom_detail = JSON.stringify(geometry)
-
-                // TODO : if not document.geometry.geom, get center and add as point
+                this.setDocumentGeometry(this.editedDocument, feature.get("geometry"))
                 this.drawDocumentMarkers()
                 this.fitMapToDocuments(true)
-                this.setDrawinteraction()
+                this.setDrawInteraction()
             },
 
             drawDocumentMarkers(){
@@ -506,9 +524,8 @@
                     const document = feature.get('document');
                     if(document){
                         this.$router.push({
-                            name: constants.getDocumentType(document.type), params: {
-                                id:document.document_id,
-                            }
+                            name: this.$documentUtils.getDocumentType(document.type),
+                            params: { id:document.document_id }
                         })
                     }
                 }

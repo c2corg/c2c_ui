@@ -56,8 +56,8 @@
 
 .delete-button{
     position:absolute;
-    top:-1rem;
-    right:-1rem;
+    top:-0.5rem;
+    right:-0.5rem;
     font-size:2rem;
 }
 

@@ -56,7 +56,6 @@
 
 <script>
     import imageUrls from '@/js/imageUrls'
-    import constants from '@/js/constants.js'
 
     import cardMixins from '@/components/cards/utils/mixins.js'
     import CardRegionItem from '@/components/cards/utils/CardRegionItem'
@@ -88,7 +87,7 @@
 
         computed: {
             documentType(){
-                return constants.getDocumentType(this.item['document']['type'])
+                return this.$documentUtils.getDocumentType(this.item['document']['type'])
             }
         },
 

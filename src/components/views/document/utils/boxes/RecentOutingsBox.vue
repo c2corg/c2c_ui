@@ -9,8 +9,7 @@
                 class="button is-small is-rounded is-primary"/>
         </div>
 
-        <div v-if="document.associations.recent_outings.documents.length==0">
-            <!-- TODO center -->
+        <div v-if="document.associations.recent_outings.documents.length==0" class="has-text-centered">
             <add-link
                 v-if="addQuery"
                 document-type="outing"

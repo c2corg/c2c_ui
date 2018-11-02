@@ -121,5 +121,5 @@ var swiss_slopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-u
 ign_slopes.setOpacity(0.4)
 swiss_slopes.setOpacity(0.4)
 
-export const mapLayers = [esri, /*openStreetMap,*/ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
+export const cartoLayers = [esri, /*openStreetMap,*/ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
 export const dataLayers = [ign_slopes, swiss_slopes]

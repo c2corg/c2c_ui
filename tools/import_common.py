@@ -117,7 +117,7 @@ result["letter_types"] = get_fields('document_types')['ALL']
 
 # result["sortable_search_attributes"] = get_fields('sortable_search_attributes')
 
-with open("./src/js/common.js", "w") as f:
+with open("./src/js/constants/common.js", "w") as f:
     f.write("export default " + json.dumps(result, indent=4))
 
 with open("./src/translations/fixed_strings_common_js.vue", "w") as f:

@@ -2,14 +2,23 @@
     <form-row
         :label="label || $gettext(field.name)"
         :helper="helper === undefined ? field.helper : helper"
-        :is-expanded="isExpanded || field.type=='markdown'"
-        :is-narrow="!isExpanded && field.type!='markdown'">
-        <form-input
-            ref="input"
-            :document="document"
-            :field="field"
-            :helper="null"
-            :is-expanded="isExpanded"/>
+        always-visible
+        is-grouped>
+        <form-input ref="input" :document="document" :field="field" />
+
+        <div class="control is-expanded">
+            <div class="columns is-multiline ">
+                <div
+                    v-for="child in document.associations[field.name]"
+                    :key="child.document_id"
+                    class="column is-4">
+                    <document-card
+                        :document="child"
+                        show-delete-button
+                        @delete="$documentUtils.removeAssociation(document, child)"/>
+                </div>
+            </div>
+        </div>
     </form-row>
 </template>
 
@@ -20,8 +29,6 @@
 
     import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
 
-    // import MarkdownEditor from '@/components/markdownEditor/MarkdownEditor'
-
     export default {
         components: {
             FormRow,
@@ -31,15 +38,12 @@
         mixins : [ requireFieldProperty, requireDocumentProperty ],
 
         props : {
-            isExpanded:{
-                type:Boolean,
-                default:false
-            },
-            helper:{
+            label:{
                 type:String,
                 default:undefined,
             },
-            label:{
+
+            helper:{
                 type:String,
                 default:undefined,
             }

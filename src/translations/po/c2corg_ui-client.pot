@@ -221,6 +221,7 @@ msgstr ""
 msgid "Climbing ratings"
 msgstr ""
 
+#: src/components/helper/HelperWindow.vue
 #: src/components/imagesUploader/ImagesUploader.vue
 msgid "Close"
 msgstr ""
@@ -257,6 +258,10 @@ msgstr ""
 
 #: src/components/views/staticViews/SeracView.vue
 msgid "Create a new report"
+msgstr ""
+
+#: src/translations/fixed_strings_manual.vue
+msgid "Create a new route"
 msgstr ""
 
 #: src/components/views/wiki/HistoryView.vue
@@ -358,6 +363,10 @@ msgstr ""
 msgid "Factors"
 msgstr ""
 
+#: src/components/views/edition/ImageEditionView.vue
+msgid "File"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Filter on map extent"
 msgstr ""
@@ -392,6 +401,10 @@ msgstr ""
 
 #: src/components/utils/markers/MarkerGpsTrace.vue
 msgid "GPS Track"
+msgstr ""
+
+#: src/components/views/edition/OutingEditionView.vue
+msgid "GPS track"
 msgstr ""
 
 #: src/components/views/edition/XreportEditionView.vue
@@ -580,6 +593,10 @@ msgstr ""
 msgid "No account yet?"
 msgstr ""
 
+#: src/components/utils/inputs/InputDocument.vue
+msgid "No match?"
+msgstr ""
+
 #: src/components/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Note that comments have to be transferred manually in Discourse before merging."
 msgstr ""
@@ -660,9 +677,9 @@ msgstr ""
 
 #: src/components/views/document/utils/boxes/AllRoutesBox.vue
 #: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
+#: src/components/views/edition/OutingEditionView.vue
 #: src/components/views/Navigation.vue
 #: src/components/views/portals/DashboardView.vue
-#: src/components/views/search/SearchView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Routes"
@@ -683,7 +700,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/components/utils/inputs/InputDocument.vue
 msgid "Search ..."
 msgstr ""
 
@@ -703,6 +720,10 @@ msgstr ""
 msgid "Send reset email"
 msgstr ""
 
+#: src/components/views/edition/OutingEditionView.vue
+msgid "Several days?"
+msgstr ""
+
 #: src/components/views/user/PreferencesView.vue
 msgid "Show only updates from followed users in the homepage feed"
 msgstr ""
@@ -717,6 +738,10 @@ msgstr ""
 
 #: src/components/views/staticViews/HomeView.vue
 msgid "Social network"
+msgstr ""
+
+#: src/components/views/document/utils/ViewContainer.vue
+msgid "Sorry, you're not authorized to see this page."
 msgstr ""
 
 #: src/components/views/document/utils/windows/MergeDocumentWindow.vue
@@ -759,6 +784,10 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
+#: src/components/views/edition/utils/MapInputRow.vue
+msgid "Trace"
+msgstr ""
+
 #: src/components/views/document/utils/boxes/ToolBox.vue
 #: src/components/views/document/utils/windows/TranslateWindow.vue
 msgid "Translate into an other lang"
@@ -796,6 +825,10 @@ msgstr ""
 msgid "Unprotect document"
 msgstr ""
 
+#: src/components/views/edition/utils/MapInputRow.vue
+msgid "Upload a GPS track"
+msgstr ""
+
 #: src/components/views/user/AccountView.vue
 #: src/components/views/user/LoginView.vue
 msgid "Username"
@@ -816,7 +849,7 @@ msgstr ""
 
 #: src/components/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/search/SearchView.vue
+#: src/components/views/edition/RouteEditionView.vue
 #: src/components/views/staticViews/HomeView.vue
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Waypoints"
@@ -836,6 +869,10 @@ msgstr ""
 
 #: src/components/views/staticViews/NotFoundView.vue
 msgid "Xreports"
+msgstr ""
+
+#: src/components/views/edition/utils/MapInputRow.vue
+msgid "You may also drag, draw or edit the track on the map."
 msgstr ""
 
 #: src/components/views/document/ProfileView.vue
@@ -968,6 +1005,14 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "association"
+msgstr ""
+
+#: src/components/views/edition/ArticleEditionView.vue
+#: src/components/views/edition/BookEditionView.vue
+#: src/components/views/edition/ImageEditionView.vue
+#: src/components/views/edition/WaypointEditionView.vue
+#: src/components/views/edition/XreportEditionView.vue
+msgid "associations"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1282,6 +1327,7 @@ msgid "elevation_down_snow"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue
+#: src/components/utils/inputs/InputDocument.vue
 msgid "elevation_max"
 msgstr ""
 
@@ -1376,6 +1422,10 @@ msgstr ""
 msgid "female"
 msgstr ""
 
+#: src/components/views/edition/ImageEditionView.vue
+msgid "file_size"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "fine"
 msgstr ""
@@ -1404,6 +1454,7 @@ msgstr ""
 msgid "general information"
 msgstr ""
 
+#: src/components/views/edition/ArticleEditionView.vue
 #: src/components/views/edition/BookEditionView.vue
 #: src/components/views/edition/OutingEditionView.vue
 #: src/components/views/edition/RouteEditionView.vue
@@ -1481,6 +1532,7 @@ msgid "heading text"
 msgstr ""
 
 #: src/components/views/document/WaypointView.vue
+#: src/components/views/edition/ImageEditionView.vue
 #: src/components/views/edition/WaypointEditionView.vue
 msgid "height"
 msgstr ""
@@ -1684,6 +1736,10 @@ msgstr ""
 msgid "magazine"
 msgstr ""
 
+#: src/components/views/edition/RouteEditionView.vue
+msgid "main waypoint"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "male"
 msgstr ""
@@ -1774,6 +1830,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "multi"
+msgstr ""
+
+#: src/components/views/edition/ImageEditionView.vue
+msgid "name"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2105,6 +2165,10 @@ msgstr ""
 msgid "route_types"
 msgstr ""
 
+#: src/translations/fixed_strings_manual.vue
+msgid "routes"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "safe"
 msgstr ""
@@ -2202,7 +2266,6 @@ msgstr ""
 msgid "slackline_spot"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "slacklining"
 msgstr ""
@@ -2411,6 +2474,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "webcam"
+msgstr ""
+
+#: src/components/views/edition/ImageEditionView.vue
+msgid "width"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue

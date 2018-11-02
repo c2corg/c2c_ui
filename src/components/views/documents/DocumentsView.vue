@@ -35,9 +35,9 @@
             </div>
         </div>
 
-        <div class="columns">
-            <div :class="{'is-12': !displayMap, 'is-8': displayMap}"
-                 class="column cards-container">
+        <div class="columns result-section">
+            <div class="column cards-container"
+                 :class="{'is-12': !displayMap, 'is-8': displayMap}">
 
                 <loading-notification :promise="promise"/>
 
@@ -59,7 +59,6 @@
                     :document-type="documentType"/>
 
                 <page-selector v-if="documents!=null" :documents="documents"/>
-
             </div>
             <!--  Note : we use v-if, because v-if introduce a bug. -->
             <!-- Try to swith from /articles to /outings... -->
@@ -164,11 +163,12 @@
 
     @import '@/assets/sass/variables.scss';
 
-    $header-margin-bottom : 1rem;
-    $header-height : $header-margin-bottom + $size-1;
-    $filter-padding : 1rem;
-    $filter-height : 100px;
-    $result-height : calc(100vh - #{$navbar-height} - #{$header-height} - 2*#{$filter-padding} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+    $section-padding: 1.5rem; //TODO find this variable
+    $header-height : 34px;
+    $header-margin-bottom : 1rem; //TODO find this variable
+    $filter-height : 32px;
+    $filter-padding-bottom : 1.5rem;
+    $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
     $cards-gap:0.25rem;
 
     .documents-view{
@@ -181,23 +181,19 @@
     }
 
     .result-section{
-        height: $result-height;
-    }
+        margin-top:0;
+        height:$result-height;
 
-    .map-container{
-        height: $result-height;
-        position:relative;
-        padding:0;
-    }
+        .cards-container{
+            overflow: auto;
+        //    transition:0.3s;
+        }
 
-    .cards-container{
-        max-height: $result-height;
-        overflow: auto;
-    //    transition:0.3s;
-    }
-
-    .card-container{
-        //transition:0.1s;
+        .map-container{
+            min-height: 100%;
+            padding:0;
+        //    transition:0.3s;
+        }
     }
 
     .cards-list{

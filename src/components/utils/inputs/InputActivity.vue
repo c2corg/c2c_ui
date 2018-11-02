@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import constants from "@/js/constants.js"
+    import constants from "@/js/constants"
     import { baseMixin, arrayMixin } from "./mixins.js"
 
     export default {

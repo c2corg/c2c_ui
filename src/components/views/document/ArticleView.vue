@@ -5,8 +5,12 @@
                 <div class="column is-3">
                     <content-box>
                         <activities :activities="document.activities"/>
+                        <field-view :document="document" :field="fields.categories" />
+                        <field-view :document="document" :field="fields.article_type" />
+                        <field-view :document="document" :field="fields.quality" />
                     </content-box>
 
+                    <associated-documents :document="document" />
                     <lang-switcher-box :document="document" />
 
                     <license-box :cc="document.article_type=='collab' ? 'by-sa' : 'by-nc-nd'"/>

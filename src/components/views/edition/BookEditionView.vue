@@ -1,30 +1,37 @@
 <template>
-    <edition-container>
-        <template slot-scope="{ document, fields }">
+    <edition-container
+        :mode="mode"
+        :is-loading="!!promise.loading"
+        :document="document"
+        :generic-errors="genericErrors"
+        @save="save">
 
-            <tab-view>
-                <tab-item :title="$gettext('general informations')">
+        <tab-view>
+            <tab-item :title="$gettext('general informations')">
+                <form-input-row :document="document" :field="fields.title" is-expanded/>
+                <form-input-row :document="document" :field="fields.activities"/>
+                <form-input-row :document="document" :field="fields.book_types" />
+                <form-input-row :document="document" :field="fields.author" />
+                <form-input-row :document="document" :field="fields.editor" />
+                <form-input-row :document="document" :field="fields.langs" />
+                <form-input-row :document="document" :field="fields.publication_date" />
+                <form-input-row :document="document" :field="fields.nb_pages" />
+                <form-input-row :document="document" :field="fields.isbn" />
+                <form-input-row :document="document" :field="fields.url" is-expanded />
+            </tab-item>
 
-                    <form-input-row :document="document" :field="fields.title"/>
-                    <form-input-row :document="document" :field="fields.activities"/>
-                    <form-input-row :document="document" :field="fields.book_types" />
-                    <form-input-row :document="document" :field="fields.author" />
-                    <form-input-row :document="document" :field="fields.editor" />
-                    <form-input-row :document="document" :field="fields.langs" />
-                    <form-input-row :document="document" :field="fields.publication_date" />
-                    <form-input-row :document="document" :field="fields.nb_pages" />
-                    <form-input-row :document="document" :field="fields.isbn" />
-                    <form-input-row :document="document" :field="fields.url" class="is-8" />
+            <tab-item :title="$gettext('description')">
+                <form-input-row :document="document" :field="fields.summary"/>
+                <form-input-row :document="document" :field="fields.description"/>
+            </tab-item>
 
-                </tab-item>
+            <tab-item :title="$gettext('associations')">
+                <associations-input-row :document="document" :field="fields.articles" />
+                <associations-input-row :document="document" :field="fields.waypoints" />
+                <associations-input-row :document="document" :field="fields.routes" />
+            </tab-item>
 
-                <tab-item :title="$gettext('description')">
-                    <form-input-row :document="document" :field="fields.summary"/>
-                    <form-input-row :document="document" :field="fields.description"/>
-                </tab-item>
-
-            </tab-view>
-        </template>
+        </tab-view>
     </edition-container>
 </template>
 

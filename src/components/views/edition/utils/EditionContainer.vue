@@ -15,7 +15,7 @@
             {{ error.description }}
         </div>
 
-        <slot :document="document" :fields="fields">
+        <slot>
             ...
         </slot>
 
@@ -23,8 +23,8 @@
             <div class="control">
                 <button
                     class="button is-primary"
-                    :class="{'is-loading':promise && promise.loading}"
-                    @click="save"
+                    :class="{'is-loading':isLoading}"
+                    @click="$emit('save', comment)"
                     v-translate>
                     Save
                 </button>
@@ -39,148 +39,35 @@
 
 <script>
 
-    import constants from '@/js/constants.js'
-    import c2c from '@/apis/c2c'
-
     import FormRow from './FormRow'
 
     export default {
 
         components : { FormRow },
 
+        props : {
+            document:{
+                type : Object,
+                default: null,
+            },
+            genericErrors:{
+                type: Array,
+                required: true,
+            },
+            isLoading:{
+                type:Boolean,
+                required:true,
+            },
+            mode:{
+                type: String,
+                required: true,
+            }
+        },
+
         data() {
             return {
-                promise:null,
-                fields:null, // keep fields here to set them reactive
-                genericErrors:[],
                 comment:"",
             }
         },
-
-        computed: {
-            documentId(){
-                return this.$route.params.id
-            },
-
-            lang(){
-                return this.$route.params.lang || this.$language.current
-            },
-
-            document(){
-                let doc = this.promise.data
-
-                if(doc){
-                    var locale = this.$documentUtils.getLocaleStupid(doc, this.lang)
-
-                    if(!locale){
-                        locale = constants.buildLocale(this.documentType, this.lang)
-                        doc.locales.push(locale)
-                    }
-
-                    doc.currentLocale_ = locale
-                }
-
-                return doc
-            },
-
-            documentType(){
-                return this.$route.name.replace(/-(edit|add)/,"")
-            },
-
-            mode(){
-                return this.$route.name.split("-")[1] // right part of route name : add or edit
-            },
-        },
-
-        created(){
-            if(this.mode=="edit")
-                this.promise = c2c[this.documentType].get(this.documentId)
-            else {
-                this.promise = { data : constants.buildDocument(this.documentType, this.lang) }
-
-                // Add associations presents in url query 
-                for(let letter of Object.keys(this.$route.query)){
-                    let documentType = constants.getDocumentType(letter)
-
-                    // Value may be a number or a string
-                    let documentIds = String(this.$route.query[letter]).split(",")
-
-                    for(let documentId of documentIds){
-                        c2c[documentType].get(documentId).then(response => {
-                            this.$documentUtils.addAssociation(this.document, response.data)
-                        })
-                    }
-                }
-            }
-
-            this.fields = constants.objectDefinitions[this.documentType].fields
-
-            this.cleanErrors()
-        },
-
-        methods: {
-            save(){
-                if (this.hasError())
-                    return
-
-                let promise
-
-                if(this.mode=="edit"){
-                    promise = c2c[this.documentType].save(this.document, this.comment).then(() => {
-                        this.$router.push({name:this.documentType, params:{id:this.document.document_id}})
-                    })
-                } else {
-                    promise = c2c[this.documentType].create(this.document).then(response => {
-                        this.$router.push({name:this.documentType, params:{id:response.data.document_id}})
-                    })
-                }
-
-                promise.catch(error => {
-                    const data = error.response.data
-                    this.dispatchErrors(data.errors)
-                })
-            },
-
-            hasError(){
-                let hasError = false
-
-                for(let field of Object.values(this.fields)){
-                    let error = field.getError(this.document)
-                    hasError = hasError || error !==null
-                    field.error = error
-                }
-
-                return hasError
-            },
-
-            dispatchErrors(errors){
-
-                // TODO : errors == undefined ?
-                this.cleanErrors()
-
-                for(let error of errors){
-                    let path = error.name.split(".")
-
-                    if(path[0]=="locales")
-                        this.dispatchError(path[2], error)
-                    else
-                        this.dispatchError(path[0], error)
-
-                }
-            },
-
-            dispatchError(fieldName, error){
-                if(this.fields[fieldName] === undefined)
-                    this.genericErrors.push(error)
-                else
-                    this.fields[fieldName].error = error
-            },
-
-            cleanErrors(){
-                this.genericErrors = []
-                for(let field of Object.values(this.fields))
-                    field.error = null
-            }
-        }
     }
 </script>

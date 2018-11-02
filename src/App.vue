@@ -3,7 +3,7 @@
         <navigation/>
         <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print"/>
         <!-- <router-view :key="$route.name + JSON.stringify($route.params)"/> -->
-        <router-view />
+        <router-view class="router-view"/>
         <helper-window ref="helper"/>
     </div>
 </template>
@@ -25,12 +25,18 @@
 </script>
 
 <style lang="scss">
-body{
-    overflow-y: hidden;
+
+html, body, #app{
     min-height:100vh;
 }
-body::-webkit-scrollbar {
-    display: none;
+
+#app{
+    display: flex;
+    flex-flow: column;
+}
+
+.router-view{
+    flex-grow : 1;
 }
 
 @media print {

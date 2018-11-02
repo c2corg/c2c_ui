@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import constants from '@/js/constants.js'
+    import constants from '@/js/constants'
     import QueryItem from './QueryItem'
 
     const categorizedFields = {

@@ -93,7 +93,7 @@
     // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
     import c2c from '@/apis/c2c'
     import imageUrls from '@/js/imageUrls'
-    import constants from '@/js/constants.js'
+    import constants from '@/js/constants'
 
     import ImageAction from './ImageAction'
 
@@ -184,7 +184,7 @@
         },
 
         created(){
-            this.document.associations[constants.getDocumentType(this.parentDocument.type) + "s"] = [
+            this.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + "s"] = [
                 {document_id: this.parentDocument.document_id}
             ]
 

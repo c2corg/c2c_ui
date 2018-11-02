@@ -24,7 +24,7 @@
         props:{
             label: {
                 type:String,
-                required:true,
+                default:"",
             },
             alwaysVisible: {
                 type: Boolean,

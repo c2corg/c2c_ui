@@ -1,4 +1,4 @@
-import constants from '@/js/constants.js'
+import constants from '@/js/constants'
 import config from "@/js/config.js"
 
 import Vue from 'vue'

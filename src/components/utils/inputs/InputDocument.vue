@@ -1,8 +1,9 @@
 <template>
-    <div class="dropdown" :class="{'is-active':promise.data}">
+    <div class="dropdown control" :class="{'is-active':promise.data}">
         <div class="control has-icons-left">
             <input
-                class="input is-primary"
+                class="input"
+                :class="{'is-danger':hasError}"
                 type="text"
                 :placeholder="$gettext('Search ...')"
                 @input="loadOptions"
@@ -172,6 +173,8 @@
             toggle(value){
                 if(!this.multiple){
                     this.value_ = value
+                    if(value)
+                        this.$emit("add", value)
                 } else {
                     var newValue = []
                     var removed = false
@@ -185,6 +188,7 @@
 
                     if(!removed){
                         newValue.push(value)
+                        this.$emit("add", value)
                     }
 
                     this.value_ = newValue

@@ -10,9 +10,32 @@
         v-show="visible"
         v-model="document.orientations" />
 
+    <div
+        v-else-if="field.name=='main_waypoint_id'"
+        class="control select"
+        :class="{'is-danger': hasError}">
+        <select v-model="document.main_waypoint_id">
+            <option :value="null"/>
+            <option
+                v-for="waypoint of document.associations.waypoints"
+                :key="waypoint.document_id"
+                :value="waypoint.document_id">
+                {{ $documentUtils.getDocumentTitle(waypoint) }}
+            </option>
+        </select>
+    </div>
+
     <input-markdown
         v-else-if="field.type=='markdown'"
         v-show="visible"
+        v-model="object[field.name]"/>
+
+    <input-document
+        v-else-if="field.parent=='associations'"
+        :document-type="field.documentType"
+        multiple
+        :error-message="errorMessage"
+        @add="$documentUtils.propagateAssociationProperties(document, arguments[0])"
         v-model="object[field.name]"/>
 
     <input-multi-select
@@ -29,7 +52,7 @@
         v-else-if="simpleInputType"
         v-show="visible"
         :prefix="prefix"
-        :helper="helper"
+        :helper="helper===undefined ? field.helper : helper"
         :is-expanded="isExpanded"
         :postfix="field.unit"
         :type="field.type"
@@ -41,6 +64,7 @@
         :i18n="field.i18n"
         :options="field.values"
         :error-message="errorMessage"
+        @input="$emit('input', arguments[0])"
         v-model="object[field.name]"/>
 
     <input-yes-no
@@ -81,13 +105,16 @@
 
         computed: {
             object(){
-                if(this.field.parent == "locales")
-                    return this.document.currentLocale_
-
                 if(this.field.parent == "document")
                     return this.document
 
-                throw `Unexpected parent value : ${this.field.parent}`                    
+                if(this.field.parent == "locales")
+                    return this.document.currentLocale_
+
+                if(this.field.parent == "associations")
+                    return this.document.associations
+
+                throw `Unexpected parent value : ${this.field.parent}`
             },
             visible(){
                 return this.field.isVisibleFor(this.document)

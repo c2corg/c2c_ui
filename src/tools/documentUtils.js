@@ -12,6 +12,10 @@ export default function install(Vue){
 
     Vue.prototype.$documentUtils = new Vue({
         methods:{
+            getDocumentType(letterType){
+                return constants.letterToDocumentType[letterType]
+            },
+
             getDocumentTitle(document, lang){
                 if(document.type=="u" || !document.type){
                     return document.name
@@ -81,7 +85,7 @@ export default function install(Vue){
             },
 
             getAssociationArrayName(child){
-                const documentType = constants.getDocumentType(child.type)
+                const documentType = this.getDocumentType(child.type)
                 return documentType == "profile" ? "users" : documentType + 's'
             },
 
@@ -96,11 +100,7 @@ export default function install(Vue){
                     return
 
                 array.push(child)
-
-                if(document.type=="o" && child.type=="r"){
-                    // propagate route property to outing
-                    this.propagateRouteProperties(child, document)
-                }
+                this.propagateAssociationProperties(document, child)
             },
 
             removeAssociation(document, child){
@@ -110,7 +110,14 @@ export default function install(Vue){
                 document.associations[arrayName] = array.filter(item => item.document_id != child.document_id)
             },
 
-            propagateRouteProperties(route, outing){
+            propagateAssociationProperties(parent, child){
+
+                // propagate route property to outing
+                if(parent.type!="o" || child.type!="r")
+                    return
+
+                let route = child
+                let outing = parent
 
                 for(let activity of route.activities)
                     if(!outing.activities.includes(activity))
@@ -146,6 +153,51 @@ export default function install(Vue){
                 ]
 
                 names.forEach(name => outing[name] = outing[name] === null ? route[name] : outing[name])
+            },
+
+            buildLocale(documentType, lang){
+                var def = constants.objectDefinitions[documentType]
+
+                var result = {}
+
+                for(let field of Object.values(def.fields)){
+                    if(field.parent == "locales"){
+                        result[field.name]=field.multiple ? new Array() : null
+                    }
+                }
+
+                result.lang = lang
+
+                return result
+            },
+
+            buildDocument(documentType, lang){
+                var def = constants.objectDefinitions[documentType]
+
+                var result = {
+                    type:def.letter,
+                    locales:[
+                        this.buildLocale(documentType, lang)
+                    ],
+                    associations:{},
+                }
+
+                for(let field of Object.values(def.fields)){
+                    if(field.parent == "document"){
+                        result[field.name]= field.multiple ? new Array() : null
+                    }
+                }
+
+                if(def.geoLocalized)
+                    result.geometry = {
+                        geom:null,
+                        geom_detail:null,
+                    }
+
+                for(let type of Object.keys(def.validAssociations))
+                    result.associations[(type == "profile" ? "user" : type) + "s"] = []
+
+                return result
             }
         }
     })

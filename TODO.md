@@ -2,7 +2,6 @@
 
 ## Todo
 
-* associations on document creation
 * validate_new_password : callback when requestPasswordChange
 * validate_change_email
 * validate_register_email
@@ -15,7 +14,7 @@
 
 * https://github.com/c2corg/v6_api/issues/730
   handle if token is obsolote or corrupted
-  
+
 ### Nice to have
 
 * Sort on data table
@@ -24,6 +23,10 @@
 
 ### A verifier
 
+### Refactors
+
+* move views/ folder from components/ to src/ (not sure)
+* move edition/ folder into wiki/ folder
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions

@@ -3,7 +3,7 @@
     <div
         class="control"
         :class="{'has-icons-right':postfix, 'has-prefix':prefix || helper, 'is-expanded':isExpanded}">
-        <span v-if="prefix || helper" class="button prefix">
+        <span v-if="prefix || helper" class="button prefix" :class="{'is-danger':hasError}">
             <marker-helper class="marker-helper" :name="helper" />
 
             <span v-if="prefix" class="is-first-letter-uppercase">
@@ -71,7 +71,7 @@ export default {
             default: undefined
         },
         value: {
-            type: [String, Number],
+            type: [String, Number, Boolean],
             default:undefined
         },
         prefix: {
@@ -97,35 +97,41 @@ export default {
 
 <style scoped lang="scss">
 
-select, input {
-    min-width:15rem;
-}
+    @import '@/assets/sass/variables.scss';
 
-.has-prefix{
-    display:flex;
-
-    .prefix{
-        cursor: default;
-        background-color: whitesmoke;
-        border-color: #dbdbdb;
-        color: #7a7a7a;
-        box-shadow: none;
-
-        margin-right: -1px;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
+    select, input {
+        min-width:15rem;
     }
-    input, select{
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-}
 
-$icon-size: 1.3rem;
-.marker-helper{
-    font-size:$icon-size;
-    margin:calc(2.25rem/2 - #{$icon-size}/2);
-    margin-left:0;
-}
+    .has-prefix{
+        display:flex;
+
+        .prefix{
+            cursor: default;
+            background-color: whitesmoke;
+            border-color: #dbdbdb;
+            color: #7a7a7a;
+            box-shadow: none;
+
+            margin-right: -1px;
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+        input, select{
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+
+    $icon-size: 1.3rem;
+    .marker-helper{
+        font-size:$icon-size;
+        margin:calc(2.25rem/2 - #{$icon-size}/2);
+        margin-left:0;
+    }
+
+    .prefix.is-danger{
+        border-color: $danger;
+    }
 
 </style>

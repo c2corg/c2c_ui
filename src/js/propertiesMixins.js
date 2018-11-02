@@ -1,4 +1,3 @@
-import constants from "./constants"
 
 export const requireDocumentProperty = {
     props:{
@@ -10,7 +9,7 @@ export const requireDocumentProperty = {
 
     computed: {
         documentType(){
-            return constants.getDocumentType(this.document.type)
+            return this.$documentUtils.getDocumentType(this.document.type)
         }
     }
 }

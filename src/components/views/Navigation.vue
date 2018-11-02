@@ -129,7 +129,6 @@
 <script>
 
     import config from "@/js/config"
-    import constants from "@/js/constants"
 
     export default {
 
@@ -152,7 +151,7 @@
         methods: {
             go(document){
                 this.$router.push({
-                    name: constants.getDocumentType(document.type),
+                    name: this.$documentUtils.getDocumentType(document.type),
                     params: { id: document.document_id }
                 })
             },
