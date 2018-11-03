@@ -18,7 +18,7 @@ export default function install(Vue){
     }
 
     // add all components in /utils
-    addComponents(require.context('@/components/utils', true, /\.vue$/))
+    addComponents(require.context('@/components/generics', true, /\.vue$/))
 
     // other globals components
     Vue.component("document-card", require('@/components/cards/DocumentCard').default)

@@ -349,7 +349,7 @@
 
                 if(geoJsonGeometry.type == "Point"){
                     //remove elevation and timestamp
-                    geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2) 
+                    geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2)
                     document.geometry.geom = JSON.stringify(geoJsonGeometry)
 
                 } else if(geoJsonGeometry.type =="LineString" || geoJsonGeometry.type =="MultiLineString") {
@@ -357,7 +357,6 @@
 
                     if(!document.geometry.geom){
                         let mainLine = geometry.getType() == "MultiLineString" ? geometry.getLineString(0) : geometry
-                        console.log(mainLine, mainLine.getCoordinateAt(0.5))
                         this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
                     }
 

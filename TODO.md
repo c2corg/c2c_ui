@@ -25,8 +25,6 @@
 
 ### Refactors
 
-* move views/ folder from components/ to src/ (not sure)
-* move edition/ folder into wiki/ folder
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions

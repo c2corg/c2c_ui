@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import Navigation from './components/views/Navigation'
-    import SiteNotice from './components/views/SiteNotice'
+    import Navigation from './views/Navigation'
+    import SiteNotice from './views/SiteNotice'
     import HelperWindow from './components/helper/HelperWindow'
 
     export default {

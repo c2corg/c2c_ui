@@ -80,10 +80,12 @@
 
 <style scoped lang="scss">
 
+@import '@/assets/sass/variables.scss';
+
 .site-notice{
-    padding-bottom:0;
     cursor:pointer;
     position:absolute;
+    top:$navbar-height;
     width:100%;
     z-index:5;
     box-shadow:0 0 20px 2px rgba(10, 10, 10, 0.50);
