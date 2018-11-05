@@ -1,5 +1,7 @@
 <template>
-    <router-link :to="{name:documentType + '-add', params:{lang:$language.current}, query:query_}">
+    <router-link
+        v-if="$user.isLogged"
+        :to="{name:documentType + '-add', params:{lang:$language.current}, query:query_}">
         <slot>
             <span>{{ text }}</span>
         </slot>
@@ -24,13 +26,13 @@
                 if(this.documentType!="outing")
                     return this.query
 
-                // for outings, always add current user 
+                // for outings, always add current user
                 return Object.assign({u:this.$user.id}, this.query)
             },
 
             text(){
                 if(this.documentType=="outing") return this.$gettext("add an outing")
-                if(this.documentType=="route") return this.$gettext("add a route")
+                if(this.documentType=="route") return this.$gettext("Create a new route")
                 if(this.documentType=="image") return this.$gettext("add an image")
                 if(this.documentType=="waypoint") return this.$gettext("add a waypoint")
                 if(this.documentType=="map") return this.$gettext("add a map")

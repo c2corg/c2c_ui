@@ -6,16 +6,16 @@
             </p>
         </header>
         <div class="card-content">
-            <slot name="row1" class="level">Please fill content</slot>
+            <slot name="row1">Please fill content</slot>
         </div>
         <div v-if="this.$slots.row2" class="card-content">
-            <slot name="row2" class="level">row2</slot>
+            <slot name="row2">row2</slot>
         </div>
         <div v-if="this.$slots.row3" class="card-content">
-            <slot name="row3" class="level">row3</slot>
+            <slot name="row3">row3</slot>
         </div>
         <div v-if="this.$slots.row4" class="card-content">
-            <slot name="row3" class="level">row4</slot>
+            <slot name="row3">row4</slot>
         </div>
     </div>
 </template>
@@ -59,6 +59,7 @@
 
 .card-content{
     font-size:0.9rem;
+    min-height: 29px;
 }
 
 .card-content:not(:last-child){

@@ -21,16 +21,15 @@
                 </div>
             </div>
             <div class="level-right">
-                <div class="level-item">
-                    <span v-if="documentAreGeoLocalized" class="icon is-size-3">
-                        <fa-icon
-                            :icon="listMode ? 'th-list' : 'th-large'"
-                            @click="toogleProperty('listMode')" />
-                        <fa-icon
-                            :class="{'has-text-primary':showMap}"
-                            icon="map-marked-alt"
-                            @click="toogleProperty('showMap')" />
-                    </span>
+                <div class="level-item is-size-3">
+                    <fa-icon
+                        :icon="listMode ? 'th-list' : 'th-large'"
+                        @click="toogleProperty('listMode')" />
+                    <fa-icon
+                        v-if="documentAreGeoLocalized"
+                        :class="{'has-text-primary':showMap}"
+                        icon="map-marked-alt"
+                        @click="toogleProperty('showMap')" />
                 </div>
             </div>
         </div>
@@ -185,25 +184,18 @@
         height:$result-height;
 
         .cards-container{
+            padding-top:2px;
             overflow: auto;
         //    transition:0.3s;
         }
 
         .map-container{
             min-height: 100%;
-            padding:0;
+            padding-left:0;
+            padding-top:0;
+            padding-bottom:0;
         //    transition:0.3s;
         }
-    }
-
-    .cards-list{
-        margin-left: -$cards-gap;
-        margin-right: -$cards-gap;
-
-    }
-    .cards-list .column {
-        padding-left: $cards-gap;
-        padding-right: $cards-gap;
     }
 
 </style>

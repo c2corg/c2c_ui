@@ -21,6 +21,7 @@
                         <field-view :document="document" :field="fields.url"/>
                     </content-box>
 
+                    <tool-box :document="document"/>
                     <license-box cc="by-sa"/>
 
                 </div>

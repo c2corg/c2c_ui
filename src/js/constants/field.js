@@ -1,147 +1,132 @@
-import fieldsProperties from "./fieldsProperties"
+import common from './common.js'
+import fieldsProperties from "./fieldsProperties.json"
 
-function Field(name, properties){
+const attrs = common.attributes
 
-    this.name = name
+// values  can be a string : it describes a common.attributes fields
+for(let property of Object.values(fieldsProperties))
+    if(property.values && typeof property.values == "string")
+        property.values = attrs[property.values]
+
+function Field(id, properties = {}){
+
+    this.name = id
     this.error = null
 
-    var baseProperties = fieldsProperties[name]
-
-    for(let key of Object.keys(baseProperties)){
-        this[key] = baseProperties[key]
-    }
-
-    if(properties){
-        for(let key of Object.keys(properties)){
-            this[key] = properties[key]
-        }
-    }
+    // copy baseProperties to this, and overwrite it with specific properties
+    Object.assign(this, fieldsProperties[id], properties)
 
     this.parent = this.parent || "document"
     this.type = this.type || "text"
 
     //Does the values can be translated
-    if(this.i18n === undefined){
-        if(this.type=="number")
-            this.i18n = false
-        else if(this.type=="text")
-            this.i18n = true
-        else if(this.values)
-            this.i18n = true
-        else
-            this.i18n = false
-    }
+    if(this.i18n === undefined)
+        this.i18n = Boolean(this.type=="text" || this.values)
 
-    if(!this.queryMode){
-        if(this.type=="number"){
+    if(this.queryMode === undefined){
+        if(this.type=="number")
             this.queryMode = "numericalRangeSlider"
 
-        } else if(this.type=="boolean"){
+        else if(this.type=="boolean")
             this.queryMode = "checkbox"
 
-        } else if(this.type=="document"){
+        else if(this.type=="document")
             this.queryMode = "input-document"
 
-        } else if(this.values){
+        else if(this.values)
             this.queryMode = "multiSelect"
-        }
     }
 
-    const identity = function(value){ return value }
-    const joinWithComma = function(value){ return value.join(",") }
+    if(this.defaultUrlQuery === undefined){
 
-    const splitWithComma = function(value){
-        value = value ? value : this.defaultUrlQuery
-        return value.split(",")
+        if(this.queryMode=="numericalRangeSlider")
+            this.defaultUrlQuery = [this.min, this.max].join(",")
+
+        else if(this.queryMode=="valuesRangeSlider")
+            this.defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
+
+        else if(this.queryMode=="multiSelect" || this.queryMode=="orientations")
+            this.defaultUrlQuery =  ''
+
+        else if(this.queryMode=="checkbox")
+            this.defaultUrlQuery =  'false'
+
+        else if(this.queryMode=="input")
+            this.defaultUrlQuery =  {number:0, text:''}[this.type]
+
+        else if(this.queryMode=="activities")
+            this.defaultUrlQuery =  ''
+
+        else if(this.url !== undefined && this.queryMode!="input-document")
+            throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
     }
+}
 
-    const splitIntegersWithComma = function(value){
-        value = value ? value : this.defaultUrlQuery
+Field.prototype.valueToUrl = function(value) {
+    if(this.queryMode=="numericalRangeSlider" || this.queryMode=="valuesRangeSlider")
+        return value.join(",")
+
+    if(this.queryMode=="multiSelect" || this.queryMode=="orientations" || this.queryMode=="activities")
+        return value.join(",")
+
+    if(this.queryMode=="checkbox")
+        return JSON.stringify(value)
+
+    if(this.queryMode=="input")
+        return value
+
+    if(this.queryMode=="input-document")
+        return value.map(item => item.document_id).join(",")
+
+    throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
+}
+
+Field.prototype.urlToValue = function(url){
+
+    if(this.queryMode=="numericalRangeSlider"){
+        let value = url ? url : this.defaultUrlQuery
         value = value.split(",")
         return [parseInt(value[0]), parseInt(value[1])]
     }
 
-    const parseUrlArray = function(value){
-        if(!value)
-            return this.defaultUrlQuery ==='' ? [] : this.defaultUrlQuery.split(",")
-
+    if(this.queryMode=="valuesRangeSlider"){
+        let value = url ? url : this.defaultUrlQuery
         return value.split(",")
     }
 
-    const parseUrlBoolean = function(value){
-        if(value === null || value === undefined || value === '' || value === 'false')
-            return false
+    if(this.queryMode=="multiSelect" || this.queryMode=="orientations" || this.queryMode=="activities"){
+        if(!url)
+            return this.defaultUrlQuery ==='' ? [] : this.defaultUrlQuery.split(",")
 
-        return true
+        return url.split(",")
     }
 
-    const parseUrlDefault = function(value){
-        value = value ? value : this.defaultUrlQuery
+    if(this.queryMode=="checkbox")
+        return (url === null || url === undefined || url === '' || url === 'false') ? false : true
 
-        if(this.type === "number"){
+
+    if(this.queryMode=="input"){
+        let value = url ? url : this.defaultUrlQuery
+
+        if(this.type === "number")
             return parseInt(value)
-        }
 
-        else if(this.type === "text"){
+        if(this.type === "text")
             return value
-        }
 
-        else
-            throw "Unknow field type : " + this
+        throw `Unknow field type for ${this.name} : ${this.type}`
     }
 
-    var defaultUrlQuery
+    throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
 
-    if(this.queryMode=="numericalRangeSlider"){
-        this.valueToUrl = joinWithComma
-        this.urlToValue = splitIntegersWithComma
-        defaultUrlQuery = [this.min, this.max].join(",")
-    }
-
-    else if(this.queryMode=="valuesRangeSlider"){
-        this.valueToUrl = joinWithComma
-        this.urlToValue = splitWithComma
-        defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
-    }
-
-    else if(this.queryMode=="multiSelect" || this.queryMode=="orientations"){
-        this.valueToUrl = joinWithComma
-        this.urlToValue = parseUrlArray
-        defaultUrlQuery =  ''
-    }
-
-    else if(this.queryMode=="checkbox"){
-        this.valueToUrl = JSON.stringify
-        this.urlToValue = parseUrlBoolean
-        defaultUrlQuery =  'false'
-    }
-
-    else if(this.queryMode=="input"){
-        this.valueToUrl = identity
-        this.urlToValue = parseUrlDefault
-        defaultUrlQuery =  {number:0, text:''}[this.type]
-    }
-
-    else if(this.queryMode=="activities"){
-        this.valueToUrl = joinWithComma
-        this.urlToValue = parseUrlArray
-        defaultUrlQuery =  ''
-    }
-
-    else if(this.queryMode=="input-document"){
-        this.valueToUrl = array => array.map(item => item.document_id).join(",")
-        this.urlToValue = undefined // TODO
-    }
-
-    else if(this.url !== undefined){
-        throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
-    }
-
-    this.defaultUrlQuery = this.defaultUrlQuery === undefined ? defaultUrlQuery : this.defaultUrlQuery
 }
 
 Field.prototype.getError = function(document) {
     let value
+
+    // for the moment, no coherence check
+    if(!this.required)
+        return null
 
     if(this.parent=="document")
         value = document[this.name]
@@ -155,7 +140,7 @@ Field.prototype.getError = function(document) {
     else
         throw `Unexpected parent property : ${this.parent}`
 
-    if(this.required && (!value || this.multiple && value.length===0)){
+    if(!value || this.multiple && value.length===0){
         let errorName
 
         if(this.parent=="document")

@@ -15,6 +15,7 @@
 
             <tab-item :title="$gettext('Geolocation')">
                 <form-input-row :document="document" :field="fields.elevation" />
+                <map-input-row :document="document" geom-detail-editable/>
             </tab-item>
 
             <tab-item :title="$gettext('General informations')">

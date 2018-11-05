@@ -31,6 +31,7 @@
                     </content-box>
 
                     <map-box :document="document"/>
+                    <tool-box :document="document"/>
 
                     <license-box cc="by-nc-nd"/>
                 </div>

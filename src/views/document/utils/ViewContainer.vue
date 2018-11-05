@@ -30,13 +30,13 @@
 
                     <span
                         v-tooltip="$gettext('Add images')"
-                        v-if="!isVersionView"
+                        v-if="!isVersionView && $user.isLogged"
                         @click="$refs.imagesUploader.show()">
                         <icon-image />
                     </span>
 
                     <edit-link
-                        v-if="!isVersionView"
+                        v-if="!isVersionView && $user.isLogged"
                         :document="document"
                         :lang="locale.lang"
                         v-tooltip="$gettext('Edit')">

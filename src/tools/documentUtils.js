@@ -185,6 +185,8 @@ export default function install(Vue){
                 for(let field of Object.values(def.fields)){
                     if(field.parent == "document"){
                         result[field.name]= field.multiple ? new Array() : null
+                    } else if(field.parent == "associations"){
+                        result.associations[(field.documentType == "profile" ? "user" : field.documentType) + "s"] = []
                     }
                 }
 
@@ -193,9 +195,6 @@ export default function install(Vue){
                         geom:null,
                         geom_detail:null,
                     }
-
-                for(let type of Object.keys(def.validAssociations))
-                    result.associations[(type == "profile" ? "user" : type) + "s"] = []
 
                 return result
             }

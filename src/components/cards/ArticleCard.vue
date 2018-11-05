@@ -3,7 +3,7 @@
         <document-title slot="header" :document="document"/>
 
         <div slot="row1" class="level">
-            <textual-array :array="document.categories"/>
+            <textual-array :array="document.categories"/>        
         </div>
 
         <div slot="row2" class="level">

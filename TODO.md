@@ -2,9 +2,6 @@
 
 ## Todo
 
-* validate_new_password : callback when requestPasswordChange
-* validate_change_email
-* validate_register_email
 * maps
     * ask for a IGN and Bing dev key
     * recenter on...
@@ -14,6 +11,20 @@
 
 * https://github.com/c2corg/v6_api/issues/730
   handle if token is obsolote or corrupted
+* no mail from c2c :
+  * validate_new_password : callback when requestPasswordChange
+  * validate_change_email
+  * validate_register_email
+
+### Wait for decision
+
+  * markdown alerts in parser
+  * markdown icons in parser
+
+### Wait for dep issues
+
+* "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
+     need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...
 
 ### Nice to have
 
@@ -37,13 +48,6 @@
 * flag functionnal components : https://vuejs.org/v2/guide/render-function.html#Functional-Components
 * flag v-once components : https://vuejs.org/v2/api/#extends
 
-### Parser
-
-Wait for decision
-
-* markdown alerts in parser
-* markdown icons in parser
-
 ### CSS
 
 * Preferences view is ugly
@@ -60,10 +64,7 @@ Wait for decision
 * site notice breaks height calc on documents view
 
 ### Bugs
-* outing > edit > refuge : ca doit etre un multi select
 * on demo, style on pagination fails
-* "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
-     need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...
 
 ### Build
 

@@ -50,6 +50,10 @@
 
             <div class="navbar-end">
 
+                <div v-if="!isProduction || readOnlyConfig" class="navbar-item" v-tooltip:bottom="'This page may contains bugs or incomplete features'">
+                    <fa-icon icon="bug" size="lg" class="has-text-danger"/>
+                </div>
+
                 <div v-if="readOnlyConfig" class="navbar-item" v-tooltip:bottom="'Read only site'">
                     <fa-layers>
                         <fa-icon icon="pen"/>
@@ -57,7 +61,7 @@
                     </fa-layers>
                 </div>
 
-                <div v-if="!isProduction" class="navbar-item" v-tooltip:bottom="'Demo'">
+                <div v-if="!isProduction" class="navbar-item" v-tooltip:bottom="'Demo API, you can test everything'">
                     <fa-icon icon="brain" size="lg" class="has-text-success"/>
                 </div>
 
@@ -143,9 +147,10 @@
             readOnlyConfig(){
                 return !config.urls.readWrite
             },
+
             isProduction(){
                 return config.urls.isProduction
-            }
+            },
         },
 
         methods: {

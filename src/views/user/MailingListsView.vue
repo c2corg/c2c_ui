@@ -7,13 +7,10 @@
         </h1>
 
         <p v-translate>Here you may change your subscriptions to snow forecast mailing lists.</p>
-        <div class="field">
-            <div v-for="mailinglist in Object.keys(mailinglists)" :key="mailinglist" class="control">
-                <label>
-                    <input v-model="mailinglists[mailinglist]" class="checkbox" type="checkbox" @change="save">
-                    <span>{{ mailinglist }} list</span>
-                </label>
-            </div>
+        <div v-for="mailinglist in Object.keys(mailinglists)" :key="mailinglist" class="field">
+            <input-checkbox v-model="mailinglists[mailinglist]" @change="save">
+                {{ mailinglist }} list
+            </input-checkbox>
         </div>
     </div>
 </template>

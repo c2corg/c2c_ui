@@ -1,5 +1,7 @@
 <template>
-    <router-link :to="{name:documentType + '-edit', params:{id:document.document_id, lang:lang}}">
+    <router-link
+        v-if="$user.isLogged"
+        :to="{name:documentType + '-edit', params:{id:document.document_id, lang:lang}}">
         <slot>
             <span v-translate>Edit</span>
         </slot>

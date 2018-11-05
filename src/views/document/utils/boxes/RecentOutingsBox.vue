@@ -9,19 +9,27 @@
                 class="button is-small is-rounded is-primary"/>
         </div>
 
-        <div v-if="document.associations.recent_outings.documents.length==0" class="has-text-centered">
+        <div v-for="(outing, i) of outings" :key="i">
+            <pretty-outing-link :outing="outing"/>
+        </div>
+
+        <div v-if="addQuery" class="has-text-centered">
             <add-link
-                v-if="addQuery"
+                v-if="document.associations.recent_outings.documents.length==0"
                 document-type="outing"
                 :query="addQuery"
                 class="button is-primary">
                 Add the first outing
             </add-link>
+            <router-link
+                v-else-if="document.associations.recent_outings.documents.length!=0"
+                class="button is-primary"
+                :to="{ name: 'outings', query: addQuery }"
+                v-translate>
+                show all
+            </router-link>
         </div>
 
-        <div v-for="(outing, i) of outings" :key="i">
-            <pretty-outing-link :outing="outing"/>
-        </div>
     </content-box>
 </template>
 

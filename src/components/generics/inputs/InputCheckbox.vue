@@ -2,7 +2,7 @@
 
     <div class="control">
         <input class="is-checkradio is-info" type="checkbox" v-model="value_">
-        <label @click="value_=!value_">
+        <label @click="onClick">
             <slot />
         </label>
     </div>
@@ -21,6 +21,13 @@
                 default:null,
             },
         },
+
+        methods: {
+            onClick(){
+                this.value_ = !this.value_
+                this.$emit("change")
+            }
+        }
     }
 
 </script>

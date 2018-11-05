@@ -36,6 +36,9 @@
                         <field-view :document="document" :field="fields.width"/>
                         <field-view :document="document" :field="fields.elevation"/>
                     </content-box>
+
+                    <tool-box :document="document" />
+                    <!-- TODO licesne -->
                 </div>
 
                 <div class="column">

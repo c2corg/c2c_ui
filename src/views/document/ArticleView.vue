@@ -13,6 +13,7 @@
                     <associated-documents :document="document" />
                     <lang-switcher-box :document="document" />
 
+                    <tool-box :document="document"/>
                     <license-box :cc="document.article_type=='collab' ? 'by-sa' : 'by-nc-nd'"/>
                 </div>
                 <div class="column is-9">

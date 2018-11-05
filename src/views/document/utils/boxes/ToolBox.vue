@@ -1,10 +1,5 @@
 <template>
-    <content-box class="no-print">
-        <tool-box-button
-            v-if="!isVersionView"
-            @click="$refs.associationsEditor.show()"
-            icon="link"
-            :label="$gettext('Edit associations')" />
+    <content-box v-if="$user.isLogged" class="no-print">
 
         <tool-box-button
             v-if="!isVersionView && hasMissingLangs"
@@ -46,7 +41,6 @@
         </div>
 
         <!-- Modal windows -->
-        <associations-editor-window ref="associationsEditor" :document="document"/>
         <merge-document-window ref="MergeDocumentWindow" :document="document"/>
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
         <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
@@ -63,7 +57,6 @@
 
     import ToolBoxButton from './ToolBoxButton'
 
-    import AssociationsEditorWindow from '../windows/AssociationsEditorWindow'
     import DeleteDocumentWindow from '../windows/DeleteDocumentWindow'
     import DeleteLocaleWindow from '../windows/DeleteLocaleWindow'
     import MergeDocumentWindow from '../windows/MergeDocumentWindow'
@@ -74,7 +67,6 @@
         components:{
             ToolBoxButton,
 
-            AssociationsEditorWindow,
             DeleteLocaleWindow,
             DeleteDocumentWindow,
             MergeDocumentWindow,
