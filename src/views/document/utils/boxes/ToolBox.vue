@@ -1,8 +1,23 @@
 <template>
     <content-box v-if="$user.isLogged" class="no-print">
 
+        <associated-documents :document="document" />
+
+        <div class="has-text-centered" v-if="document.available_langs.length>1">
+            <span v-translate>View in other lang</span>
+            <br>
+            <span class="lang-switcher-box-list">
+                <span v-for="lang of document.available_langs" :key="lang">
+                    <document-link :document="document" :lang="lang">
+                        {{ lang }}
+                    </document-link>
+                </span>
+            </span>
+            <hr>
+        </div>
+
         <tool-box-button
-            v-if="!isVersionView && hasMissingLangs"
+            v-if="!isVersionView && hasMissingLangs && $user.isLogged"
             @click="$refs.translateWindow.show()"
             icon="edit"
             :label="$gettext('Translate into an other lang')" />
@@ -40,6 +55,10 @@
                 :label="$gettext('Delete this document')" />
         </div>
 
+        <hr>
+
+        <license-box :document="document" />
+
         <!-- Modal windows -->
         <merge-document-window ref="MergeDocumentWindow" :document="document"/>
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
@@ -56,6 +75,8 @@
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
 
     import ToolBoxButton from './ToolBoxButton'
+    import LicenseBox from './LicenseBox'
+    import AssociatedDocuments from './AssociatedDocuments'
 
     import DeleteDocumentWindow from '../windows/DeleteDocumentWindow'
     import DeleteLocaleWindow from '../windows/DeleteLocaleWindow'
@@ -66,6 +87,8 @@
     export default {
         components:{
             ToolBoxButton,
+            LicenseBox,
+            AssociatedDocuments,
 
             DeleteLocaleWindow,
             DeleteDocumentWindow,
@@ -143,21 +166,26 @@
 
 <style scoped lang="scss">
 
-@import "@/assets/sass/variables.scss";
+    @import "@/assets/sass/variables.scss";
 
-.toolbox-button{
-    cursor:pointer;
+    .toolbox-button{
+        cursor:pointer;
 
-    span {
-        color:$link;
+        span {
+            color:$link;
+        }
     }
-}
 
-.lock-button-green{
-    color:$green!important;
-}
+    .lock-button-green{
+        color:$green!important;
+    }
 
-.lock-button-red{
-    color:$red!important;
-}
+    .lock-button-red{
+        color:$red!important;
+    }
+
+    .lang-switcher-box-list span:not(:last-child)::after{
+        content:" \2022 "; /* \2022 is bull */
+    }
+
 </style>

@@ -6,6 +6,7 @@
     * ask for a IGN and Bing dev key
     * recenter on...
 * signup (CAPTCHA)
+* v-tooltip : may have break lines
 
 ### Wait for c2c issues
 
@@ -42,6 +43,7 @@
 * does saveAs filesaver dependency really usefull now ?
 * test requestPasswordChange and validate_new_password
 * test changemail
+* remove swiper : too big...
 
 ### Optims
 
@@ -61,10 +63,10 @@
   * remove font-family from icon-activity : the bug diseapper
   * issue come from this font...
 * swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
-* site notice breaks height calc on documents view
 
 ### Bugs
-* on demo, style on pagination fails
+* on gitlab build, style on pagination fails
+* on gitlab build, icon filter on map is missing, tooltip issue...
 
 ### Build
 

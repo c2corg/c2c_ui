@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="hasData">
+    <div v-if="hasData">
 
         <form v-if="timeAvailable">
             <span v-translate>See profile based on:</span>
@@ -15,7 +15,7 @@
 
         <div ref="graph" class="elevation-profile-chart"/>
 
-    </content-box>
+    </div>
 </template>
 
 <script>

@@ -43,21 +43,24 @@ function Field(id, properties = {}){
             this.defaultUrlQuery = [this.min, this.max].join(",")
 
         else if(this.queryMode=="valuesRangeSlider")
-            this.defaultUrlQuery =  [this.values[0], this.values[this.values.length-1]].join(",")
+            this.defaultUrlQuery = [this.values[0], this.values[this.values.length-1]].join(",")
 
         else if(this.queryMode=="multiSelect" || this.queryMode=="orientations")
-            this.defaultUrlQuery =  ''
+            this.defaultUrlQuery = ''
 
         else if(this.queryMode=="checkbox")
-            this.defaultUrlQuery =  'false'
+            this.defaultUrlQuery = 'false'
 
         else if(this.queryMode=="input")
-            this.defaultUrlQuery =  {number:0, text:''}[this.type]
+            this.defaultUrlQuery = {number:0, text:''}[this.type]
 
         else if(this.queryMode=="activities")
             this.defaultUrlQuery =  ''
 
-        else if(this.url !== undefined && this.queryMode!="input-document")
+        else if(this.queryMode=="input-document")
+            this.defaultUrlQuery =  ''
+
+        else if(this.url !== undefined)
             throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
     }
 }
@@ -76,7 +79,7 @@ Field.prototype.valueToUrl = function(value) {
         return value
 
     if(this.queryMode=="input-document")
-        return value.map(item => item.document_id).join(",")
+        return value.join(",")
 
     throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
 }
@@ -116,6 +119,9 @@ Field.prototype.urlToValue = function(url){
 
         throw `Unknow field type for ${this.name} : ${this.type}`
     }
+
+    if(this.queryMode=="input-document")
+        return url ? String(url).split(",").map(parseInt) : []
 
     throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
 

@@ -17,15 +17,19 @@
             </div>
 
         </dropdown-button>
+
+        <association-query-item :documentTypes="associations"/>
     </div>
 </template>
 
 <script>
     import constants from '@/js/constants'
     import QueryItem from './QueryItem'
+    import AssociationQueryItem from './AssociationQueryItem'
 
-    const categorizedFields = {
+    const categorizedFieldsDefault = {
         General : [
+            "title",
             "activities",
             "article_type",
             "area_type",
@@ -35,6 +39,9 @@
             "condition_rating",
             "climbing_outdoor_type",
             "route_types",
+            "lang",
+            "quality",
+            "categories",
         ],
 
         ratings:[
@@ -102,17 +109,13 @@
             "length",
             "rain_proof",
             "routes_quantity",
-        ],
-        Miscs:[
-            "title",
-            "lang",
+            "length_total",
+            "route_length",
             "durations",
             "glacier_gear",
-            "quality",
-            "categories",
+        ],
+        Miscs:[
             "frequentation",
-            "route_length",
-            "length_total",
             "public_transport",
 //            "lift_access",
             "access_time",
@@ -129,9 +132,23 @@
         ]
     }
 
+    const categorizedFields = {
+        area:categorizedFieldsDefault,
+        article:categorizedFieldsDefault,
+        book:categorizedFieldsDefault,
+        image:categorizedFieldsDefault,
+        map:categorizedFieldsDefault,
+        outing:categorizedFieldsDefault,
+        profile:categorizedFieldsDefault,
+        route:categorizedFieldsDefault,
+        waypoint:categorizedFieldsDefault,
+        xreport:categorizedFieldsDefault,
+    }
+
     export default {
         components:{
-            QueryItem
+            QueryItem,
+            AssociationQueryItem,
         },
 
         computed:{
@@ -151,6 +168,19 @@
                 return this.$route.name.slice(0, -1)
             },
 
+            associations(){
+                if(this.documentType == "outing")
+                    return ["area", "profile", "waypoint", "route"]
+
+                if(this.documentType == "route")
+                    return ["area", "waypoint"]
+
+                if(this.documentType == "waypoint")
+                    return ["area"]
+
+                return []
+            },
+
             categorizedFields(){
                 var result = []
 
@@ -159,7 +189,7 @@
                     waypoint_types:this.urlWaypoint_types,
                 }
 
-                for(let category of Object.keys(categorizedFields)){
+                for(let category of Object.keys(categorizedFields[this.documentType])){
                     let temp = {
                         name : category,
                         activeCount : 0,
@@ -168,7 +198,7 @@
 
                     let addCategory = false
 
-                    for(let name of categorizedFields[category]){
+                    for(let name of categorizedFields[this.documentType][category]){
                         let field = this.fields[name]
                         if(field!==undefined){
 
@@ -183,9 +213,8 @@
                         }
                     }
 
-                    if(addCategory){
+                    if(addCategory)
                         result.push(temp)
-                    }
                 }
 
                 return result
@@ -201,29 +230,8 @@
                         }
                     }
                 }
-            }
+            },
         }
-
-
-/* this function will check that we hav'nt forgotten a field
-        mounted(){
-            var fields = []
-
-            for(let dropdown of this.$children){
-                for(let queryItem of dropdown.$children){
-                    if(queryItem.field){
-                        fields.push(queryItem.field)
-                    }
-                }
-            }
-
-            for(let field of Object.values(this.fields)){
-                if(field.url && !fields.includes(field))
-                    console.log('<query-item :field="fields.' + field.name + '"></query-item>')
-            }
-        },
-*/
-
     }
 </script>
 

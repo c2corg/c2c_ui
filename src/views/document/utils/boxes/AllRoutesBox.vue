@@ -1,14 +1,15 @@
 <template>
     <content-box v-if="document.associations.all_routes.documents.length">
-        <!-- TODO : add route button -->
         <h2 class="title is-2">
-            <span v-translate>
-                Routes
-            </span>
+            <span v-translate>Routes</span>
             <add-link
                 document-type="route"
-                :query="{w:document.document_id}"
+                :query="query"
                 class="button is-small is-rounded is-primary"/>
+
+            <router-link :to="{name:'routes', query:query}" class="button is-small is-rounded is-primary">
+                List
+            </router-link>
         </h2>
         <div v-for="activity of Object.keys(routes)" :key="activity">
             <h3 class="title is-3">
@@ -36,6 +37,14 @@
             }
         },
 
+        computed:{
+            query(){
+                const query = {}
+                query[this.document.type] = this.document.document_id
+                return query
+            }
+        },
+
         created(){
             for(let route of this.document.associations.all_routes.documents){
                 for(let activity of route.activities){
@@ -57,5 +66,10 @@
     h3{
         margin-top:1.5rem!important;
         margin-bottom: 0.5rem!important;
+    }
+
+    .button{
+        vertical-align: bottom;
+        margin-left: 1rem;
     }
 </style>

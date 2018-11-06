@@ -2,29 +2,35 @@
     <content-box class="no-print">
         <div class="title is-2">
             <span v-translate>Last outings</span>
+
             <add-link
-                v-if="addQuery && document.associations.recent_outings.documents.length!=0"
+                v-if="documentType=='route' && document.associations.recent_outings.documents.length!=0"
                 document-type="outing"
-                :query="addQuery"
+                :query="query"
                 class="button is-small is-rounded is-primary"/>
+
+            <router-link :to="{name:'outings', query:query}" class="button is-small is-rounded is-primary">
+                List
+            </router-link>
+
         </div>
 
         <div v-for="(outing, i) of outings" :key="i">
             <pretty-outing-link :outing="outing"/>
         </div>
 
-        <div v-if="addQuery" class="has-text-centered">
+        <div v-if="documentType=='route'" class="has-text-centered">
             <add-link
                 v-if="document.associations.recent_outings.documents.length==0"
                 document-type="outing"
-                :query="addQuery"
+                :query="query"
                 class="button is-primary">
                 Add the first outing
             </add-link>
             <router-link
                 v-else-if="document.associations.recent_outings.documents.length!=0"
                 class="button is-primary"
-                :to="{ name: 'outings', query: addQuery }"
+                :to="{ name: 'outings', query: query }"
                 v-translate>
                 show all
             </router-link>
@@ -39,13 +45,6 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
-        props: {
-            addQuery: {
-                type:Object,
-                default:undefined,
-            }
-        },
-
         computed:{
             // API bug, an outing can be present several times
             outings(){
@@ -55,7 +54,20 @@
                     result.set(outing.document_id, outing)
 
                 return [...result.values()]
-            }
+            },
+
+            query(){
+                const query = {}
+                query[this.document.type] = this.document.document_id
+                return query
+            },
         }
     }
 </script>
+
+<style scoped>
+    .button{
+        vertical-align: bottom;
+        margin-left: 1rem;
+    }
+</style>

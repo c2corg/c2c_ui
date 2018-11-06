@@ -1,6 +1,6 @@
 
 <template>
-    <div class="section view-container">
+    <div v-if="document" class="section view-container">
         <div v-if="document && document.not_authorized" class="notification is-danger" v-translate>
             Sorry, you're not authorized to see this page.
         </div>
@@ -8,12 +8,7 @@
         <div v-else-if="document">
             <html-header :title="title"/>
 
-            <document-version-banner
-                v-if="isVersionView"
-                :version="promise.data.version"
-                :document="document"
-                :next-version-id="promise.data.next_version_id"
-                :previous-version-id="promise.data.previous_version_id" />
+            <document-version-banner :version="version" :document="document" />
 
             <content-box>
                 <span class="is-pulled-right button-bar no-print">
@@ -22,9 +17,8 @@
 
                     <history-link
                         v-tooltip="$gettext('History')"
-                        :document-type="documentType"
-                        :id="document.document_id"
-                        :lang="locale.lang">
+                        :document="document"
+                        :lang="lang">
                         <icon-history />
                     </history-link>
 
@@ -38,29 +32,26 @@
                     <edit-link
                         v-if="!isVersionView && $user.isLogged"
                         :document="document"
-                        :lang="locale.lang"
+                        :lang="lang"
                         v-tooltip="$gettext('Edit')">
                         <icon-edit />
                     </edit-link>
                 </span>
                 <div class="title is-1">
-                    <icon-document :document-type="documentType"/>
+                    <icon-document :document-type="$documentUtils.getDocumentType(document.type)"/>
                     <document-title :document="document"/>
                 </div>
             </content-box>
 
-            <slot :document="document" :fields="fields">
+            <slot>
                 Please insert document content
             </slot>
 
-            <images-uploader
-                ref="imagesUploader"
-                :lang="locale.lang"
-                :parent-document="document"/>
+            <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document"/>
 
         </div>
-        <div v-if="promise.error" class="notification is-danger">
-            <div v-for="(error, i) of promise.error.response.data.errors" :key="i">
+        <div v-if="error" class="notification is-danger">
+            <div v-for="(error, i) of error.response.data.errors" :key="i">
                 {{ error.description }}
             </div>
         </div>
@@ -69,11 +60,7 @@
 </template>
 
 <script>
-    import constants from '@/js/constants'
-    import c2c from '@/apis/c2c'
-
     import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
-
     import FollowButton from './FollowButton'
     import DocumentVersionBanner from './DocumentVersionBanner'
 
@@ -84,6 +71,25 @@
             DocumentVersionBanner,
         },
 
+        props: {
+            document:{
+                type : Object,
+                default: null,
+            },
+            lang:{
+                type : String,
+                required: true,
+            },
+            version:{
+                type : Object,
+                default: null,
+            },
+            error:{
+                type: Object,
+                default: null,
+            },
+        },
+
         data() {
             return {
                 promise:null,
@@ -91,88 +97,12 @@
         },
 
         computed:{
-            /*
-            * properties that are deducted from URL
-            */
-            documentId(){
-                return parseInt(this.$route.params.id)
-            },
-            documentType(){
-                return this.$route.name.split("-")[0]
-            },
-            fields(){
-                return constants.objectDefinitions[this.documentType].fields
-            },
             isVersionView(){
-                return this.$route.name.endsWith("-version");
+                return !!this.version
             },
 
-            /*
-            * properties computed when document is loaded
-            */
-            document(){
-                if(!this.promise.data)
-                    return null
-
-                let doc = this.isVersionView ? this.promise.data.document : this.promise.data
-
-                if(doc){
-                    if(this.isVersionView)
-                        doc.currentLocale_ = this.$documentUtils.getLocaleStupid(doc, this.$route.params.lang)
-                    else
-                        doc.currentLocale_ = this.$documentUtils.getLocaleSmart(doc, this.$route.params.lang)
-                }
-
-                return doc
-            },
             title(){
-                return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.locale.lang) : undefined
-            },
-            locale(){
-                return this.document.currentLocale_
-            },
-        },
-
-        watch:{
-            '$route': 'loadDocument',
-        },
-
-        created() {
-            this.loadDocument()
-        },
-
-        methods:{
-            loadDocument(){
-
-                if(this.isVersionView){
-                    this.promise = c2c[this.documentType].getVersion(
-                        this.documentId,
-                        this.$route.params.lang,
-                        this.$route.params.version
-                    ).then(response => {
-
-                        //versionned datas are poor...
-                        response.data.document.areas = []
-                        response.data.document.creator = null
-                        response.data.document.associations = {
-                            articles:[],
-                            books:[],
-                            images:[],
-                            users:[],
-                            waypoints:[],
-                            waypoint_children:[],
-                            all_routes:{
-                                documents:[],
-                            },
-                            recent_outings:{
-                                documents:[],
-                            }
-                        }
-                    })
-
-                } else {
-                    this.promise = c2c[this.documentType].get(this.documentId)
-                }
+                return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.lang) : undefined
             },
         }
     }

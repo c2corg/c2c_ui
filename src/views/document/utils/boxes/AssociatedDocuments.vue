@@ -1,31 +1,33 @@
 <template>
-    <content-box>
-
-        <div v-if="document.associations && document.associations.waypoints.length" class="associations-list">
+    <div>
+        <div v-if="associations.waypoints.length" class="associations-list">
             <div class="title" v-translate>Waypoints</div>
-            <div v-for="waypoint of document.associations.waypoints" :key="waypoint.document_id" class="is-ellipsed">
+            <div v-for="waypoint of associations.waypoints" :key="waypoint.document_id" class="is-ellipsed">
                 <pretty-waypoint-link :waypoint="waypoint"/>
             </div>
+            <hr>
         </div>
 
         <!-- books -->
-        <div v-if="document.associations && document.associations.books.length!=0" class="associations-list">
+        <div v-if="associations.books.length!=0" class="associations-list">
             <div class="title" v-translate>Books</div>
-            <div v-for="book of document.associations.books" :key="book.document_id" class="is-ellipsed">
+            <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
                 <document-link :document="book">
                     <icon-book class="icon-link"/>&nbsp;<document-title :document="book" />
                 </document-link>
             </div>
+            <hr>
         </div>
 
         <!-- articles -->
-        <div v-if="document.associations && document.associations.articles.length!=0" class="associations-list">
+        <div v-if="associations.articles.length!=0" class="associations-list">
             <div class="title" v-translate>Articles</div>
-            <div v-for="article of document.associations.articles" :key="article.document_id" class="is-ellipsed">
+            <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
                 <document-link :document="article">
                     <icon-article class="icon-link"/>&nbsp;<document-title :document="article" />
                 </document-link>
             </div>
+            <hr>
         </div>
 
         <!-- maps -->
@@ -37,9 +39,9 @@
                     {{ map.editor }} - {{ map.code }} - <document-title :document="map" />
                 </document-link>
             </div>
+            <hr>
         </div>
-
-    </content-box>
+    </div>
 </template>
 
 <script>
@@ -47,6 +49,18 @@
 
     export default {
         mixins : [ requireDocumentProperty ],
+
+        computed: {
+            associations(){
+                const associations = this.document.associations || {}
+
+                associations.books = associations.books || []
+                associations.waypoints = associations.waypoints || []
+                associations.articles = associations.articles || []
+
+                return associations
+            }
+        }
     }
 </script>
 

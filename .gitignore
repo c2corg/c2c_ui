@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/dist_gitlab_demo
+/dist_gitlab_prod
 
 # local env files
 .env.local
@@ -20,5 +22,5 @@ yarn-error.log*
 *.sln
 *.sw*
 
-# local helpers 
+# local helpers
 run-build.bat

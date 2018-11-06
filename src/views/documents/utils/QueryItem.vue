@@ -64,9 +64,10 @@
 <script>
     import { requireFieldProperty } from '@/js/propertiesMixins.js'
 
+    import QueryItemMixin from "./QueryItemMixin.js"
+
     import Multiselect from 'vue-multiselect'
     import vueSlider from 'vue-slider-component'
-
     import QueryItemSliderLabel from './QueryItemSliderLabel'
 
     export default {
@@ -77,33 +78,7 @@
             QueryItemSliderLabel,
         },
 
-        mixins : [ requireFieldProperty ],
-
-        computed:{
-
-            urlValue:{
-                get(){
-                    return this.$route.query[this.field.url]
-                },
-                set(value){
-                    var query = Object.assign({}, this.$route.query)
-                    query[this.field.url] = value === this.field.defaultUrlQuery ? undefined : value
-
-                    if(query[this.field.url]!==this.$route.query[this.field.url]){
-                        this.$router.push({query: query})
-                    }
-                }
-            },
-
-            value:{
-                get(){
-                    return this.field.urlToValue(this.urlValue)
-                },
-                set(value){
-                    this.urlValue = this.field.valueToUrl(value)
-                }
-            },
-        },
+        mixins : [ requireFieldProperty, QueryItemMixin ],
 
         // debug test, do not remove it
         // created(){

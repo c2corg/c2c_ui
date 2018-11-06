@@ -1,5 +1,5 @@
 <template>
-    <div class="notification is-warning has-text-centered">
+    <div v-if="version" class="notification is-warning has-text-centered">
         <!-- TODO : translation -->
         <p>
             This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
@@ -10,13 +10,13 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version-from="previousVersionId"
+                :version-from="version.previousVersionId"
                 :version-to="$route.params.version"/>)
             <version-link
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version="previousVersionId">
+                :version="version.previousVersionId">
                 ←
                 <span v-translate>previous version</span>
             </version-link>
@@ -38,7 +38,7 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version="nextVersionId">
+                :version="version.nextVersionId">
                 <span v-translate>next version</span>
                 →
             </version-link>
@@ -46,7 +46,7 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version-to="nextVersionId"
+                :version-to="version.nextVersionId"
                 :version-from="$route.params.version"/>)
         </span>
         <span v-else v-translate>This is the last version</span>
@@ -80,26 +80,18 @@
         mixins : [ requireDocumentProperty ],
 
         props:{
-            previousVersionId:{
-                type:Number,
-                default:undefined,
-            },
-            nextVersionId:{
-                type:Number,
-                default:undefined,
-            },
             version:{
                 type:Object,
-                required:true,
+                default:null,
             }
         },
 
         computed:{
             isFirstVersion(){
-                return !this.previousVersionId
+                return !this.version.previousVersionId
             },
             isLastVersion(){
-                return !this.nextVersionId
+                return !this.version.nextVersionId
             },
         }
     }

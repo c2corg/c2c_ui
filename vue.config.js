@@ -79,14 +79,22 @@ if(process.env.BUILD_ENV == 'local:demo' || process.env.BUILD_ENV === undefined)
 }
 else if(process.env.BUILD_ENV == 'gitlab:demo'){
 
-    // prod in read only mode
-    config.urls = prodUrls
+    // gitlab pages does not support server redirection, can't use pretty urls
+    config.routerMode = undefined
+
+    // gitlab pages url is postfixed
+    result.baseUrl = "/vue-camptocamp/demo/"
+}
+else if(process.env.BUILD_ENV == 'gitlab:prod'){
 
     // gitlab pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined
 
     // gitlab pages url is postfixed
     result.baseUrl = "/vue-camptocamp/"
+
+    // prod in read only mode
+    config.urls = prodUrls
 
     // set a warning if bundle size is too big
     result.configureWebpack.performance.hints = "warning"

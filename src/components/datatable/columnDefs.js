@@ -7,6 +7,13 @@ const result = { }
 
 let fields
 
+
+fields = constants.objectDefinitions.area.fields
+result.area = [
+    { field: fields.title, componentName:'document-link' },
+    { field: fields.area_type},
+]
+
 fields = constants.objectDefinitions.article.fields
 result.article = [
     {field: fields.title, componentName:'document-link' },
@@ -14,6 +21,7 @@ result.article = [
     {field: fields.activities },
     {field: fields.categories },
     {field: fields.article_type },
+    {field: fields.quality },
 ]
 
 fields = constants.objectDefinitions.outing.fields
@@ -65,7 +73,7 @@ result.route = [
     { field: fields.rock_free_rating, visible:false },
     { field: fields.rock_required_rating, visible:false },
     // TODO { field: fields.document_id, header: 'id', visible:false },
-],
+]
 
 fields = constants.objectDefinitions.waypoint.fields
 result.waypoint = [
@@ -75,12 +83,6 @@ result.waypoint = [
     // },
     { field: fields.elevation, width: '10%' },
     { field: fields.waypoint_type, width: '15%' },
-],
-
-fields = constants.objectDefinitions.area.fields
-result.area = [
-    { field: fields.title, componentName:'document-link' },
-    { field: fields.area_type, width: '15%' },
 ]
 
 export default result

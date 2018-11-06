@@ -48,9 +48,7 @@
                                version-from="prev"
                                :version-to="change.version_id"/>
 
-                    <history-link :document-type="change.document.documentType"
-                                  :id="change.document.document_id"
-                                  :lang="change.lang"/>
+                    <history-link :document="change.document" :lang="change.lang"/>
 
                 </td>
                 <td>

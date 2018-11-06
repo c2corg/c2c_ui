@@ -17,6 +17,8 @@
             :biodiv-sports-activities="document.activities"
             style="height:275px"/>
 
+        <elevation-profile :document="document" />
+
         <div v-if="document.geometry.geom_detail" class="buttons is-centered">
             <button
                 class="button is-primary"
@@ -37,9 +39,14 @@
     import ol from "@/libs/ol"
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
+    import ElevationProfile from "./ElevationProfile"
 
     export default {
         mixins : [ requireDocumentProperty ],
+
+        components: {
+            ElevationProfile,
+        },
 
         methods:{
             downloadKml(){

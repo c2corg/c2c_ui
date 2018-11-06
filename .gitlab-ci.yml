@@ -4,6 +4,7 @@ build-npm:
   script:
   - npm install
   - npm run build:gitlab:demo
+  - npm run build:gitlab:prod
   artifacts:
     paths:
       - dist
@@ -15,7 +16,8 @@ pages:
     - build-npm
   script:
   - mv public/ public_src/
-  - mv dist/ public/
+  - mv dist_gitlab_prod/ public/
+  - mv dist_gitlab_demo/ public/demo/
   # Serve a compressed version to speed up the loading
   # https://gitlab.com/gitlab-org/gitlab-pages/merge_requests/25
   - gzip --recursive --keep public/

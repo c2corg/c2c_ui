@@ -57,6 +57,14 @@
         "values": "area_types",
         "required": true
     },
+    "areas":
+    {
+        "type": "document",
+        "parent": "associations",
+        "documentType": "area",
+        "multiple": true,
+        "url":"a"
+    },
     "article_categories":
     {
         "name": "categories",
@@ -74,7 +82,8 @@
         "type": "document",
         "parent": "associations",
         "documentType": "article",
-        "multiple": true
+        "multiple": true,
+        "url":"c"
     },
     "author":
     {
@@ -132,7 +141,8 @@
         "type": "document",
         "parent": "associations",
         "documentType": "book",
-        "multiple": true
+        "multiple": true,
+        "url":"b"
     },
     "camera_name":
     {
@@ -701,7 +711,8 @@
         "type": "document",
         "parent": "associations",
         "documentType": "outing",
-        "multiple": true
+        "multiple": true,
+        "url":"o"
     },
     "paragliding_rating":
     {
@@ -866,7 +877,8 @@
         "parent": "associations",
         "documentType": "route",
         "multiple": true,
-        "helper": "routes"
+        "helper": "routes",
+        "url":"r"
     },
     "routes_quantity":
     {
@@ -1012,7 +1024,8 @@
         "parent": "associations",
         "documentType": "profile",
         "multiple": true,
-        "helper": "users"
+        "helper": "users",
+        "url":"u"
     },
     "via_ferrata_rating":
     {
@@ -1030,7 +1043,8 @@
         "type": "document",
         "parent": "associations",
         "documentType": "waypoint",
-        "multiple": true
+        "multiple": true,
+        "url":"w"
     },
     "weather":
     {
