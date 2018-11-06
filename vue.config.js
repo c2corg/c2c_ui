@@ -84,6 +84,9 @@ else if(process.env.BUILD_ENV == 'gitlab:demo'){
 
     // gitlab pages url is postfixed
     result.baseUrl = "/vue-camptocamp/demo/"
+
+    // set a warning if bundle size is too big
+    result.configureWebpack.performance.hints = "warning"
 }
 else if(process.env.BUILD_ENV == 'gitlab:prod'){
 
