@@ -7,7 +7,8 @@ build-npm:
   - npm run build:gitlab:prod
   artifacts:
     paths:
-      - dist
+      - dist_gitlab_prod
+      - dist_gitlab_demo
 
 
 pages:
