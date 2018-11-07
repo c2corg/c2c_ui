@@ -39,7 +39,7 @@ c2c.prototype = Object.create(BaseApi.prototype);
 // restore good contructor
 c2c.prototype.constructor = c2c;
 
-c2c.prototype.setAuthorizationToken = function(token){
+c2c.prototype.setAuthorizationToken = function(token){    
     if(token){
         this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"'
     } else if(this.axios.defaults.headers.common.Authorization){

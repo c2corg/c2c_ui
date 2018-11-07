@@ -44,7 +44,7 @@
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
-                        :class="{'is-one-third':displayMap, 'is-one-fifth':!displayMap}"
+                        :class="{'is-one-third':displayMap, 'is-one-quarter':!displayMap}"
                         class="column card-container"
                         @mouseleave="mouseLeave(document)"
                         @mouseenter="mouseEnter(document)">

@@ -18,7 +18,7 @@
 
         </dropdown-button>
 
-        <association-query-item :documentTypes="associations"/>
+        <association-query-item :document-types="associations"/>
     </div>
 </template>
 

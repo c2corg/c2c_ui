@@ -1,5 +1,5 @@
 <template>
-    <fa-icon :icon="iconClass" />    
+    <fa-icon :icon="iconClass" />
 </template>
 
 <script>
@@ -10,7 +10,7 @@
         profile:"user",
         article:"newspaper",
         xreport:"flag-checkered",
-        outing:["far", "sun"],
+        outing:["far", "clock"],
         area:"globe-americas",
         waypoint:"map-pin",
         image:"image",

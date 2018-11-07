@@ -1,4 +1,5 @@
 import c2c from '@/apis/c2c'
+import config from "@/js/config"
 
 export default function install(Vue){
 
@@ -6,31 +7,33 @@ export default function install(Vue){
         name: "User",
 
         data(){
+            const data = this.$localStorage.get(config.urls.api)
 
             return {
+
                 // The unique name, used to login
-                userName: this.$localStorage.get("userName", null),
+                userName: data["userName"] || null,
 
                 // unique numerical ID
-                id: this.$localStorage.get("id", null),
+                id: data["id"] || null,
 
                 // user lang, read write property everywhere : this.$user.lang
-                lang: this.$localStorage.get("lang", "fr"),
+                lang: data["lang"] || "fr",
 
                 // list of roles
-                roles: this.$localStorage.get("roles", []),
+                roles: data["roles"]  || [],
 
                 // public name, a simple label
-                name: this.$localStorage.get("name", null),
+                name: data["name"] || null,
 
                 // forum name
-                forumUsername: this.$localStorage.get("forumUsername", null),
+                forumUsername: data["forumUsername"] || null,
 
                 // private token used for API auth
-                token: this.$localStorage.get("token", null),
+                token: data["token"] || null,
 
                 // token expiration date
-                expire: this.$localStorage.get("expire", null),
+                expire: data["expire"] || null,
             }
         },
 
@@ -117,7 +120,7 @@ export default function install(Vue){
             },
 
             commitToLocaleStorage_(){
-                this.$localStorage.initialize(this.$data)
+                this.$localStorage.set(config.urls.api, this.$data)
             },
 
             checkExpiration(){

@@ -3,7 +3,7 @@
 ## Todo
 
 * maps
-    * ask for a IGN and Bing dev key
+    * ask for an Bing Map dev key
     * recenter on...
 * signup (CAPTCHA)
 * v-tooltip : may have break lines
@@ -37,6 +37,7 @@
 
 ### Refactors
 
+* rename all js file in this-is-a-file-name.js
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions

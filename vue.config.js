@@ -39,30 +39,35 @@ const result = {
     }
 }
 
-const demoUrls = {
-    api: "https://api.demov6.camptocamp.org",
-    media: "https://media.camptocamp.org/c2corg_active",
-    imageBackend: "https://images.demov6.camptocamp.org",
-    forum: "https://forum.demov6.camptocamp.org",
-    isProduction: false,
-    readWrite: true,
-}
 
-const prodUrls = {
-    api: "https://api.camptocamp.org",
-    media: "https://media.camptocamp.org/c2corg_active",
-    imageBackend: "https://images.camptocamp.org",
-    forum: "https://forum.camptocamp.org",
-    isProduction: true,
-    readWrite: false, // conservative approach : you have to explicity set it to true
-}
+
 
 const config = {
     routerMode: 'history', // for pretty urls
     ignApiKey: undefined,
     bingApiKey: undefined,
-    urls:demoUrls, // conservative default : demo
+    isProduction: false,
+    urlsConfigurations: {
+        demo: {
+            name:"demo",
+            api: "https://api.demov6.camptocamp.org",
+            media: "https://media.camptocamp.org/c2corg_active",
+            imageBackend: "https://images.demov6.camptocamp.org",
+            forum: "https://forum.demov6.camptocamp.org",
+            readWrite: true,
+        },
+        prod: {
+            name:"prod",
+            api: "https://api.camptocamp.org",
+            media: "https://media.camptocamp.org/c2corg_active",
+            imageBackend: "https://images.camptocamp.org",
+            forum: "https://forum.camptocamp.org",
+            readWrite: false, // conservative approach : you have to explicity set it to true
+        }
+    }
 }
+
+config.urls = config.urlsConfigurations.demo // conservative default : demo
 
 const bundleAnalyzerConfig = {
     analyzerMode:'disabled',
@@ -70,34 +75,20 @@ const bundleAnalyzerConfig = {
 }
 
 
-if(process.env.BUILD_ENV == 'local:demo' || process.env.BUILD_ENV === undefined){
-    config.ignApiKey = 'x216cgugvwkn0go20sm2mgar' // Key valid for localhost (expires 19/09/2016)
+if(process.env.BUILD_ENV == 'local' || process.env.BUILD_ENV === undefined){
+    config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che' // Key valid for localhost (Expires 08/11/2019)
     config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj'
 
     // dev bundles are huge, no check
     result.configureWebpack.performance.hints = false
 }
-else if(process.env.BUILD_ENV == 'gitlab:demo'){
-
-    // gitlab pages does not support server redirection, can't use pretty urls
-    config.routerMode = undefined
-
-    // gitlab pages url is postfixed
-    result.baseUrl = "/vue-camptocamp/demo/"
-
-    // set a warning if bundle size is too big
-    result.configureWebpack.performance.hints = "warning"
-}
-else if(process.env.BUILD_ENV == 'gitlab:prod'){
+else if(process.env.BUILD_ENV == 'gitlab'){
 
     // gitlab pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined
 
     // gitlab pages url is postfixed
     result.baseUrl = "/vue-camptocamp/"
-
-    // prod in read only mode
-    config.urls = prodUrls
 
     // set a warning if bundle size is too big
     result.configureWebpack.performance.hints = "warning"
@@ -107,8 +98,9 @@ else if(process.env.BUILD_ENV == 'gitlab:prod'){
     bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html'
     bundleAnalyzerConfig.defaultSizes = 'gzip'
 }
-else if(process.env.BUILD_ENV == 'camptocamp:prod'){
-    config.urls = prodUrls
+else if(process.env.BUILD_ENV == 'camptocamp'){
+    config.urls = config.urlsConfigurations.prod
+    config.isProduction = true // explicit prod flag
     config.urls.readWrite = true // explicit read-write mode in prod
 }
 else {

@@ -5,7 +5,6 @@ import config from '@/js/config.js'
 function Forum(){
 
     BaseApi.call(this, config.urls.forum)
-    this.url = config.urls.forum
 }
 
 // inherits prototype
@@ -13,6 +12,13 @@ Forum.prototype = Object.create(BaseApi.prototype);
 
 // restore good contructor
 Forum.prototype.constructor = Forum;
+
+
+Object.defineProperty(Forum.prototype, 'url', {
+    get(){
+        return config.urls.forum
+    }
+})
 
 Forum.prototype.getTopic = function(topicId){
     return this.get('/t/title/' + topicId + '.json')

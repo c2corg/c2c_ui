@@ -7,7 +7,7 @@
                 class="button"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
-                @click="isActive=!isActive" >
+                @click="isActive=(!isActive && !disabled)" >
 
                 <slot name="button"/>
 

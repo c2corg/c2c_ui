@@ -44,10 +44,9 @@
         </div>
 
         <div v-else-if="field.queryMode==='checkbox'" class="control">
-            <label class="checkbox">
-                <input v-model="value" type="checkbox">
-                <span>{{ $gettext(field.name) }}</span>
-            </label>
+            <input-checkbox v-model="value">
+                {{ $gettext(field.name) }}
+            </input-checkbox>
         </div>
 
         <div v-else-if="field.queryMode==='activities'" class="control">

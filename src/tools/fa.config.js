@@ -5,12 +5,12 @@ import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome
 import {
     faAngleDown,
     faArrowsAltV,
+    faArrowRight,
     faAt,
     faAtlas,
     faBan,
     faBold,
     faBomb,
-    faBrain,
     faBug,
     faBullseye,
     faCamera,
@@ -26,6 +26,7 @@ import {
     faComments,
     faCompass,
     faCompress,
+    faDatabase,
     faEdit,
     faExpand,
     faEye,
@@ -79,7 +80,7 @@ import {
 
 import {
     faCircle as faCircleRegular,
-    faSun as faSunRegular,
+    faClock as faClockRegular,
     faTrashAlt as faTrashAltRegular,
 } from '@fortawesome/free-regular-svg-icons'
 
@@ -102,12 +103,12 @@ export default function install(Vue){
         //solid icons
         faAngleDown,
         faArrowsAltV,
+        faArrowRight,
         faAt,
         faAtlas,
         faBold,
         faBan,
         faBomb,
-        faBrain,
         faBug,
         faBullseye,
         faCamera,
@@ -123,6 +124,7 @@ export default function install(Vue){
         faComments,
         faCompass,
         faCompress,
+        faDatabase,
         faEdit,
         faExpand,
         faEye,
@@ -176,7 +178,7 @@ export default function install(Vue){
 
         //regular icons
         faCircleRegular,
-        faSunRegular,
+        faClockRegular,
         faTrashAltRegular,
 
         //brands icons

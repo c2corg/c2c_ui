@@ -50,9 +50,7 @@ const BaseApi = function(apiUrl){
     })
 }
 
-/**
- * Generic request helpers
- */
+
 if(config.urls.readWrite){
     BaseApi.prototype.checkReadOnly = function() {}
 } else {
@@ -61,6 +59,10 @@ if(config.urls.readWrite){
             throw new Error("This build is read only")
     }
 }
+
+/**
+ * Generic request helpers
+ */
 
 BaseApi.prototype.get = function(url, params){
     return new ApiData(this.axios.get(url, params))

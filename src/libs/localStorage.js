@@ -3,7 +3,7 @@
  * it allows a key/string to be used as a key/{property:value} object
  */
 
- 
+
 function LocalStorageItem(key){
     this.key = key
     this.data_ = JSON.parse(window.localStorage.getItem(key) || "{}")
@@ -19,6 +19,9 @@ LocalStorageItem.prototype.get = function (propertyName, defaultIfUndefined) {
 }
 
 LocalStorageItem.prototype.set = function(propertyName, value) {
+    //deep copy of value
+    value = JSON.parse(JSON.stringify(value))
+
     this.data_[propertyName] = value
     this.commit_()
 }

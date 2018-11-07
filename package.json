@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "cross-env BUILD_ENV=local:demo vue-cli-service serve",
-    "build": "cross-env BUILD_ENV=camptocamp:prod vue-cli-service build",
-    "build:gitlab:demo": "cross-env BUILD_ENV=gitlab:demo vue-cli-service build --dest=dist_gitlab_demo",
-    "build:gitlab:prod": "cross-env BUILD_ENV=gitlab:prod vue-cli-service build --dest=dist_gitlab_prod",
+    "serve": "cross-env BUILD_ENV=local vue-cli-service serve",
+    "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build",
+    "build:gitlab": "cross-env BUILD_ENV=gitlab vue-cli-service build",
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
     "generate-docs": "node tools/generate-docs.js",

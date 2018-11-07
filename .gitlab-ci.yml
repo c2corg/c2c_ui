@@ -3,12 +3,10 @@ build-npm:
   image: node:8.11
   script:
   - npm install
-  - npm run build:gitlab:demo
-  - npm run build:gitlab:prod
+  - npm run build:gitlab
   artifacts:
     paths:
-      - dist_gitlab_prod
-      - dist_gitlab_demo
+      - dist
 
 
 pages:
@@ -17,8 +15,7 @@ pages:
     - build-npm
   script:
   - mv public/ public_src/
-  - mv dist_gitlab_prod/ public/
-  - mv dist_gitlab_demo/ public/demo/
+  - mv dist/ public/
   # Serve a compressed version to speed up the loading
   # https://gitlab.com/gitlab-org/gitlab-pages/merge_requests/25
   - gzip --recursive --keep public/

@@ -42,11 +42,11 @@
     import ElevationProfile from "./ElevationProfile"
 
     export default {
-        mixins : [ requireDocumentProperty ],
-
         components: {
             ElevationProfile,
         },
+
+        mixins : [ requireDocumentProperty ],
 
         methods:{
             downloadKml(){

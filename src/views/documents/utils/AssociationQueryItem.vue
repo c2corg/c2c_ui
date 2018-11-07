@@ -1,7 +1,7 @@
 <template>
-    <span  v-if="documentTypes.length!=0">
+    <span v-if="documentTypes.length!=0">
 
-        <input-document class="input-document" :documentType="documentTypes" @add="add"/>
+        <input-document class="input-document" :document-type="documentTypes" @add="add"/>
 
         <span v-for="document of documents" :key="document.document_id" class="tag is-primary is-medium">
             <span v-if="document.loading">

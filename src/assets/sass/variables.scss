@@ -4,10 +4,12 @@
 /**
  * here is custom c2c variables
  */
-$color-base-c2c: #ffaa45;
+$color-base-c2c: #ffaa45; // orange
+$color-complementary: #a9d361; // green
+$color-link: #337ab7; // actually, primary color, but used for links...
+
 $color-base-darker: #B26F1E;
 $color-base-lighter: #FFAA45;
-$color-complementary: #0D7FB2;
 $color-complementary-lighter: #45C5FF;
 
 /**
@@ -27,8 +29,9 @@ $size-7 : 0.8rem; //0.75
 /**
  * customize bulma colors
  */
-$primary: $color-complementary; //$turquoise
-//$link: $blue
+$primary: $color-base-c2c;
+$secondary: $color-complementary;
+$link: $color-link;
 //$info: $cyan
 //$success: $green
 //$warning: $yellow
