@@ -63,7 +63,6 @@
     than font-awsome icons
   * remove font-family from icon-activity : the bug diseapper
   * issue come from this font...
-* swiper take to much width : http://localhost:8080/#/waypoints/37355/fr
 
 ### Bugs
 * on gitlab build, style on pagination fails

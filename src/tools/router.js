@@ -4,7 +4,8 @@ import config from "@/js/config.js"
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import HomeView from '@/views/staticViews/HomeView'
+// import HomeView from '@/views/staticViews/HomeView'
+import TopoguideView from '@/views/staticViews/TopoguideView'
 import SeracView from '@/views/staticViews/SeracView'
 import WorkInProgressView from '@/views/staticViews/WorkInProgressView'
 import NotFoundView from '@/views/staticViews/NotFoundView'
@@ -51,8 +52,9 @@ const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki
 
 
 var routes = [
-    { path: '/',             name: 'home',           component: HomeView },
+    { path: '/',             name: 'home',           component: FeedView },
     { path: '/dashboard',    name: 'dashboard',      component: DashboardView },
+    { path: '/topoguide',    name: 'topoguide',      component: TopoguideView },
     { path: '/feed',         name: 'feed',           component: FeedView },
     { path: '/serac',        name: 'serac',          component: SeracView },
     { path: '/whatsnew',     name: 'whatsnew',       component: WhatsNewView },

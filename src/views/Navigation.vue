@@ -1,5 +1,10 @@
 <template>
-    <nav class="no-print is-size-5">
+    <nav class="navbar no-print is-size-5">
+        <router-link :to="{name:'home'}" class="navbar-brand has-text-centered">
+            <img src="@/assets/img/logo_small.svg"
+                 url="@/assets/img/logo_small.svg"
+                 alt="Camptocamp.org">
+        </router-link>
         <div class="navbar-end">
 
             <input-document
@@ -139,6 +144,14 @@
         height:$navbar-height;
         // border-bottom:1px solid $grey-lighter
         box-shadow: 0 2px 2px rgba($black, 0.1);
+
+        .navbar-brand img{
+
+                height:$navbar-height;
+                padding:5px;
+                margin-left:20px;
+        }
+
     }
 
     .search-input{

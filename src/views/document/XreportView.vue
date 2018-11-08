@@ -32,7 +32,7 @@
                 <tool-box :document="document"/>
             </div>
 
-            <div class="column">
+            <div class="column is-9">
                 <content-box>
                     <markdown-section :document="document" :field="fields.summary"/>
                     <markdown-section :document="document" :field="fields.description"/>

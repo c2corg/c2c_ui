@@ -39,7 +39,7 @@
                 <tool-box :document="document" />
             </div>
 
-            <div class="column">
+            <div class="column is-9">
                 <content-box class="is-paddingless">
                     <img :src="getImageUrl(document)">
                 </content-box>

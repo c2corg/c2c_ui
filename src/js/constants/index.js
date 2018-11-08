@@ -15,6 +15,7 @@ const getFieldsObject  = function(fieldsArray){
 
 function Constants(){
     this.activities = common.attributes.activities
+    this.waypoint_types = common.attributes.waypoint_types
 
     this.langs = common.attributes.langs
 

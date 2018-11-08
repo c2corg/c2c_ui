@@ -10,13 +10,13 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version-from="version.previousVersionId"
+                :version-from="version.previous_version_id"
                 :version-to="$route.params.version"/>)
             <version-link
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version="version.previousVersionId">
+                :version="version.previous_version_id">
                 ←
                 <span v-translate>previous version</span>
             </version-link>
@@ -38,7 +38,7 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version="version.nextVersionId">
+                :version="version.next_version_id">
                 <span v-translate>next version</span>
                 →
             </version-link>
@@ -46,7 +46,7 @@
                 :document-type="documentType"
                 :id="document.document_id"
                 :lang="$route.params.lang"
-                :version-to="version.nextVersionId"
+                :version-to="version.next_version_id"
                 :version-from="$route.params.version"/>)
         </span>
         <span v-else v-translate>This is the last version</span>
@@ -88,10 +88,10 @@
 
         computed:{
             isFirstVersion(){
-                return !this.version.previousVersionId
+                return this.version.previous_version_id === null
             },
             isLastVersion(){
-                return !this.version.nextVersionId
+                return this.version.next_version_id === null
             },
         }
     }

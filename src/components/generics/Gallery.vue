@@ -1,5 +1,5 @@
 <template>
-    <swiper :options="swiperOption">
+    <swiper :options="swiperOption" class="swiper">
         <swiper-slide v-for="image of images" :key="image.document_id">
             <img :src="getSmallImageUrl(image)">
         </swiper-slide>
@@ -52,12 +52,14 @@
 @import '~swiper/dist/css/swiper.css';
 
 $navigation-button-size:2rem;
+.swiper
 .swiper-slide img{
     height:200px;
-    display:block;
+    // display:block;
 }
-
+//
 .swiper-slide{
+    // width:200px;
     width:auto;
 }
 

@@ -7,7 +7,7 @@ export default function install(Vue){
         name: "User",
 
         data(){
-            const data = this.$localStorage.get(config.urls.api)
+            const data = this.$localStorage.get(config.urls.api, {})
 
             return {
 

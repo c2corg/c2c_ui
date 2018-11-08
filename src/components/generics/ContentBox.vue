@@ -1,5 +1,5 @@
 <template>
-    <div class="box" @click="click" >
+    <div class="content-box" @click="click" >
         <slot/>
     </div>
 </template>
@@ -26,7 +26,7 @@ $cb-border-left: 0;
 $cb-border-bottom: 0;
 $cb-margin-bottom: 0;
 
-$cb-skin : skin1;
+$cb-skin : skin4;
 
 @if ($cb-skin == skin1) { //no border, small shadow
     $cb-shadow : 0 2px 3px rgba(10, 10, 10, 0.10), 0 0 0 1px rgba(10, 10, 10, 0.1);

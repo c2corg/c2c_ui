@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="$user.isLogged" class="no-print">
+    <content-box class="no-print">
 
         <associated-documents :document="document" />
 
@@ -16,11 +16,13 @@
             <hr>
         </div>
 
-        <tool-box-button
-            v-if="!isVersionView && hasMissingLangs && $user.isLogged"
-            @click="$refs.translateWindow.show()"
-            icon="edit"
-            :label="$gettext('Translate into an other lang')" />
+        <div v-if="!isVersionView && hasMissingLangs && $user.isLogged">
+            <tool-box-button
+                @click="$refs.translateWindow.show()"
+                icon="edit"
+                :label="$gettext('Translate into an other lang')" />
+            <hr>
+        </div>            
 
         <!-- Moderator zone -->
         <div v-if="$user.isModerator">
@@ -53,9 +55,10 @@
                 @click="$refs.deleteDocumentWindow.show()"
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this document')" />
-        </div>
 
-        <hr>
+
+            <hr>
+        </div>
 
         <license-box :document="document" />
 

@@ -7,7 +7,7 @@
                     <tool-box :document="document" />
                 </div>
 
-                <div class="column">
+                <div class="column is-9">
                     <content-box>
                         <div class="columns is-multiline">
                             <div class="column is-4">

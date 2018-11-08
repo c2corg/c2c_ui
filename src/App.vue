@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <side-menu class="side-menu" />
-        <navigation class="navigation"/>
+        <navigation class="navigation is-fixed-top"/>
         <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
         <div class="page-content">
             <router-view class="router-view"/>
@@ -49,14 +49,16 @@
     }
 
     .side-menu{
+        padding-top:$navbar-height;
         width:$sidemenu-width;
         height:100%;
         position:fixed;
-        z-index:100;
+        top:5px;
+        // z-index:99;
     }
 
     .navigation{
-        z-index:99;
+        // z-index:100;
     }
 
     .site-notice{
@@ -70,6 +72,7 @@
     }
 
     .page-content{
+        margin-top:$navbar-height;
         margin-left:$sidemenu-width;
         display: flex;
         flex-flow: column;
