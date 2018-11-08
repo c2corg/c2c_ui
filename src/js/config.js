@@ -11,7 +11,7 @@ config.setUrlsName = function(name){
     window.localStorage.setItem(LOCAL_STORAGE_KEY, name)
 }
 
-const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY, config.urls.name)
+const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) || config.urls.name
 
 if(!config.isProduction)
     config.urls = config.urlsConfigurations[urlsName]

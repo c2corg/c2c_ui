@@ -1,36 +1,38 @@
 <template>
     <aside>
-        <router-link :to="{name:'home'}" class="menu-brand">
+        <router-link :to="{name:'home'}" class="menu-brand has-text-centered">
             <img src="@/assets/img/logo.svg"
                  url="@/assets/img/logo.svg"
-                 alt="Camptocamp.org" class="logo src">
+                 alt="Camptocamp.org">
         </router-link>
+
         <router-link :to="{name:'topoguide'}" class="menu-item">
             <fa-icon icon="arrow-right"/>
             <span class="menu-item-text" v-translate>Topoguide</span>
         </router-link>
         <router-link :to="{name:'outings'}" class="menu-item">
-            <icon-outing class="is-medium"/>
+            <icon-outing/>
             <span class="menu-item-text" v-translate>Outings</span>
         </router-link>
         <router-link :to="{name:'forum'}" class="menu-item">
-            <icon-forum class="is-medium"/>
+            <icon-forum/>
             <span class="menu-item-text" v-translate>Forum</span>
         </router-link>
         <router-link :to="{name:'serac'}" class="menu-item">
-            <icon-xreport class="is-medium"/>
+            <icon-xreport/>
             <span class="menu-item-text" v-translate>SERAC</span>
         </router-link>
         <router-link :to="{name:'articles'}" class="menu-item">
-            <icon-article class="is-medium"/>
+            <icon-article/>
             <span class="menu-item-text" v-translate>Articles</span>
         </router-link>
+
         <div class="menu-footer is-size-7">
             <div class="menu-add">
 
             </div>
 
-            <div class="has-text-centered">
+            <div class="has-text-centered menu-links">
                 <router-link :to="{name:'article', params:{id:106727}}" v-translate>
                     contact
                 </router-link>
@@ -48,15 +50,15 @@
                 </router-link>
             </div>
 
-            <div class="columns is-gapless has-text-centered">
+            <div class="columns is-gapless has-text-centered menu-socials">
                 <div class="column">
-                    T
+                    <img src="@/assets/img/social/twitter.png" alt="Facebook">
                 </div>
                 <div class="column">
-                    T
+                    <img src="@/assets/img/social/google-plus.png" alt="Facebook">
                 </div>
                 <div class="column">
-                    T
+                    <img src="@/assets/img/social/facebook.png" alt="Facebook">
                 </div>
             </div>
         </div>
@@ -68,25 +70,30 @@
 
     aside{
         box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+        background: $white;
     }
 
     .menu-brand{
         height:80px;
         display:block;
         padding:5px;
+
+        img {
+            width: 140px;
+        }
     }
 
     .menu-item{
         display: block;
         height: 37px;
-        border-top: 1px solid #ccc;
+        // border-top: 1px solid #ccc;
         padding: 8px 15px;
         color:$grey-dark;
     }
 
     .menu-item:hover{
-        background:$primary;
-        color:$white;
+        background:$light;
+        // color:$white;
     }
 
     .menu-item-text{
@@ -98,12 +105,12 @@
         width:100%;
         bottom: 0;
 
-        div {
+        .menu-socials, .menu-add, .menu-links {
             margin-bottom: 15px!important;
         }
 
         .menu-add{
-            background:red;
+            background:$grey-lighter;
             height: 320px;
             margin-left: calc((200px - 160px)/2);
             margin-right: calc((200px - 160px)/2);

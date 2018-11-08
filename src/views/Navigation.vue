@@ -3,7 +3,7 @@
         <div class="navbar-end">
 
             <input-document
-                class="navbar-item"
+                class="navbar-item search-input"
                 :document-type="['waypoint', 'route', 'article', 'book']"
                 propose-creation
                 @input="go"/>
@@ -136,6 +136,17 @@
 <style scoped lang="scss">
     @import '@/assets/sass/variables.scss';
     nav{
-        box-shadow: 0 2px 2px rgba($black, 0.1)
+        height:$navbar-height;
+        // border-bottom:1px solid $grey-lighter
+        box-shadow: 0 2px 2px rgba($black, 0.1);
+    }
+
+    .search-input{
+        width:200px;
+        transition: width .5s ease;
+    }
+
+    .search-input:hover{
+        width:300px;
     }
 </style>

@@ -121,7 +121,7 @@ Field.prototype.urlToValue = function(url){
     }
 
     if(this.queryMode=="input-document")
-        return url ? String(url).split(",").map(parseInt) : []
+        return url ? String(url).split(",").map(num => parseInt(num, 10)) : []
 
     throw "Unknow field queryMode for " + this.name + ": " + this.queryMode
 

@@ -61,7 +61,7 @@
             getValue(documentType){
                 let urlValue = this.getUrlValue(documentType)
 
-                return urlValue ? String(urlValue).split(",").map(parseInt) : []
+                return urlValue ? String(urlValue).split(",").map(num => parseInt(num, 10)) : []
             },
 
             setValue(documentType, value){

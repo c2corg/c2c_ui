@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown control" :class="{'is-active':promise.data}">
-        <div class="control has-icons-left">
+        <div class="control has-icons-left input-container">
             <input
                 class="input"
                 :class="{'is-danger':hasError}"
@@ -213,6 +213,10 @@
         background: #EEE; /* TODO variables */
     }
 
+    .input-container{
+        width:100%;
+    }
+    
     .dropdown-menu{
         max-width:30rem;
         min-width:30rem;

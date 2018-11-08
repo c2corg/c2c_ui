@@ -1,7 +1,7 @@
 <template>
     <div
         v-show="hasAnnouncement && !hidden"
-        class="site-notice has-background-info has-text-light"
+        class="has-background-info has-text-light"
         @click="showContent=!showContent">
         <div class="section is-info">
             <button class="delete" @click="hide"/>
@@ -79,17 +79,6 @@
 </script>
 
 <style scoped lang="scss">
-
-@import '@/assets/sass/variables.scss';
-
-.site-notice{
-    cursor:pointer;
-    position:absolute;
-    top:$navbar-height;
-    width:100%;
-    z-index:5;
-    box-shadow:0 0 20px 2px rgba(10, 10, 10, 0.50);
-}
 
 .delete{
     position:absolute;
