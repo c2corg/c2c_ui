@@ -3,7 +3,7 @@
         <icon-activity
             v-for="activity of activities"
             :key="activity"
-            v-tooltip="tooltips ? $gettext(activity) : undefined"
+            v-tooltip="tooltips ? $gettext(activity) : null"
             :activity="activity"/>
     </span>
 </template>

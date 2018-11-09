@@ -106,7 +106,7 @@
 
             value: {
                 type:[Array, Object],
-                default:undefined,
+                default:null,
             },
             multiple: {
                 type:Boolean,
@@ -216,7 +216,7 @@
     .input-container{
         width:100%;
     }
-    
+
     .dropdown-menu{
         max-width:30rem;
         min-width:30rem;

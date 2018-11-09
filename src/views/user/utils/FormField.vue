@@ -45,8 +45,7 @@
             },
             placeholder: {
                 type:String,
-                required:false,
-                default:undefined
+                default:null,
             },
             icon: {
                 type:String,

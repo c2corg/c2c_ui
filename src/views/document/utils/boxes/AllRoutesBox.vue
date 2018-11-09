@@ -1,5 +1,5 @@
 <template>
-    <content-box v-if="document.associations.all_routes.documents.length">
+    <div class="box" v-if="document.associations.all_routes.documents.length">
         <h2 class="title is-2">
             <span v-translate>Routes</span>
             <add-link
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-    </content-box>
+    </div>
 </template>
 
 <script>

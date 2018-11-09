@@ -31,10 +31,10 @@
         <div v-if="!preferences.followed_only">
             <h3 v-translate>langs</h3>
             <div class="field is-grouped">
-                <div v-for="lang of constants.langs" :key="lang" class="control">
-                    <button :class="{'is-primary' : preferences.langs.indexOf(lang) > -1}" type="button" class="button"
-                            @click="toggle(lang, preferences.langs)">
-                        {{ lang }}
+                <div v-for="(language, key) of $language.available" :key="key" class="control">
+                    <button :class="{'is-primary' : preferences.langs.indexOf(key) > -1}" type="button" class="button"
+                            @click="toggle(key, preferences.langs)">
+                        {{ language }}
                     </button>
                 </div>
             </div>
@@ -71,21 +71,17 @@
 
 <script>
     import c2c from '@/apis/c2c'
-    import constants from '@/js/constants'
 
     export default {
 
         data(){
             return {
                 preferences:null,
-                constants:constants,
             }
         },
 
         created(){
-            c2c.userProfile.preferences.get().then(response => {
-                this.preferences = response.data
-            })
+            c2c.userProfile.preferences.get().then(response => { this.preferences = response.data })
         },
 
         methods:{

@@ -28,6 +28,7 @@ fields = constants.objectDefinitions.outing.fields
 result.outing = [
     { field: fields.title, componentName:'document-link' },
     { field: fields.activities },
+    { field: fields.date_start, class:"is-nowrap" },
     // TODO { field: fields.areas },
     { field: fields.condition_rating },
     { field: fields.height_diff_up },

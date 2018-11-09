@@ -3,6 +3,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 
 import {
+    faCloud,
+    faSun,
+
     faAngleDown,
     faArrowsAltV,
     faArrowRight,
@@ -100,6 +103,10 @@ import {
 export default function install(Vue){
 
     library.add(
+
+            faCloud,
+            faSun,
+            
         //solid icons
         faAngleDown,
         faArrowsAltV,

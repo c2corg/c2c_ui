@@ -3,7 +3,7 @@
         <div class="columns">
             <div class="column is-3">
 
-                <content-box>
+                <div class="box">
 
                     <label-value :label="$gettext('activities')">
                         <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
@@ -26,14 +26,14 @@
                     <field-view :document="document" :field="fields.nb_impacted"/>
                     <field-view :document="document" :field="fields.rescue"/>
                     <field-view :document="document" :field="fields.severity"/>
-                </content-box>
+                </div>
 
                 <map-box :document="document"/>
                 <tool-box :document="document"/>
             </div>
 
             <div class="column is-9">
-                <content-box>
+                <div class="box">
                     <markdown-section :document="document" :field="fields.summary"/>
                     <markdown-section :document="document" :field="fields.description"/>
                     <markdown-section :document="document" :field="fields.place"/>
@@ -49,7 +49,7 @@
                     <markdown-section :document="document" :field="fields.reduce_impact"/>
                     <markdown-section :document="document" :field="fields.modifications"/>
                     <markdown-section :document="document" :field="fields.other_comments"/>
-                </content-box>
+                </div>
 
                 <comments-box :document="document" />
 

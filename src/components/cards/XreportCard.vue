@@ -19,7 +19,7 @@
             <span class="is-nowrap">
                 {{ document.date }}
             </span>
-            
+
             <marker-quality :quality="document.quality"/>
         </div>
 
@@ -28,11 +28,11 @@
 
 <script>
 
-    import cardMixins from './utils/mixins.js'
+    import { documentCardMixin } from './utils/mixins.js'
 
     export default {
         mixins: [
-            cardMixins,
+            documentCardMixin,
         ],
     }
 </script>

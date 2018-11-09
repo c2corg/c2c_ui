@@ -1,6 +1,7 @@
 @import './variables.scss';
 @import './fonts.scss';
 @import './helpers.scss';
+@import './scrollbar.scss';
 
 @import "~bulma/sass/utilities/_all.sass";
 
@@ -10,7 +11,6 @@
 @import "~bulma/sass/components/dropdown.sass";
 @import "~bulma/sass/components/level.sass";
 @import "~bulma/sass/components/modal.sass";
-@import "~bulma/sass/components/navbar.sass";
 @import "~bulma/sass/components/pagination.sass";
 @import "~bulma/sass/components/tabs.sass";
 

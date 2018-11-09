@@ -1,7 +1,7 @@
 <template>
     <form-row
         :label="label || $gettext(field.name)"
-        :helper="helper === undefined ? field.helper : helper"
+        :helper="helper !== undefined ? helper : field.helper"
         always-visible
         is-grouped>
         <form-input ref="input" :document="document" :field="field" />
@@ -40,12 +40,12 @@
         props : {
             label:{
                 type:String,
-                default:undefined,
+                default:null,
             },
 
             helper:{
                 type:String,
-                default:undefined,
+                default:undefined, // default must be undefined. null means explicit no helper
             }
         },
 

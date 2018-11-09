@@ -10,7 +10,7 @@
             <div class="column is-9">
                 <!--   CONTENT  -->
 
-                <content-box>
+                <div class="box">
                     <div class="columns">
 
                         <div class="column is-4">
@@ -76,9 +76,9 @@
 
                         </div>
                     </div>
-                </content-box>
+                </div>
 
-                <content-box>
+                <div class="box">
                     <markdown-section :document="document" :field="fields.summary"/>
                     <markdown-section :document="document" :field="fields.route_history" />
                     <markdown-section :document="document" :field="fields.description" />
@@ -93,7 +93,7 @@
                         :images="document.associations.images"
                         class="no-print"/>
 
-                </content-box>
+                </div>
 
                 <recent-outings-box :document="document" />
 

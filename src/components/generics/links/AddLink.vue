@@ -17,7 +17,7 @@
         props:{
             query: {
                 type:Object,
-                default:undefined,
+                default:null,
             }
         },
 

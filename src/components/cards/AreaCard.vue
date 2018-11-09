@@ -12,11 +12,11 @@
 
 <script>
 
-    import cardMixins from './utils/mixins.js'
+    import { documentCardMixin } from './utils/mixins.js'
 
     export default {
         mixins: [
-            cardMixins,
+            documentCardMixin,
         ],
     }
 </script>

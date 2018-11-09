@@ -108,11 +108,11 @@
 
                 this.timeAvailable=timeAvailable
 
-                const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : undefined;
+                const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : null;
 
                 let totalDist = 0;
                 this.data = coords.map((coord, i, coords) => {
-                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : undefined;
+                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : null;
                     let d = 0;
                     if (i > 0) {
                         // convert from web mercator to lng/lat

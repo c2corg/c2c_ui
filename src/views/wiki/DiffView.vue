@@ -1,7 +1,6 @@
 <template>
     <div class="section content">
-        <!-- TODO : translate -->
-        <html-header title="Differences between versions"/>
+        <html-header :title="$gettext('Differences between versions')"/>
         <h1>
             <icon-document :document-type="documentType" class="is-large"/>
             <span>diff</span> ({{ lang }}) :
@@ -113,11 +112,11 @@
 
         data() {
             return {
-                title: undefined,
-                oldVersion:null,
-                newVersion:null,
-                diffProperties:{},
-                diffLocales:{}
+                title: null,
+                oldVersion: null,
+                newVersion: null,
+                diffProperties: {},
+                diffLocales: {}
             }
         },
 

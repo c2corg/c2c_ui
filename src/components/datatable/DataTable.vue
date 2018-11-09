@@ -18,7 +18,8 @@
                     <component
                         :is="column.componentName || 'document-field'"
                         :document="document"
-                        :field="column.field" />
+                        :field="column.field"
+                        :class="column.class"/>
                 </td>
             </tr>
         </tbody>

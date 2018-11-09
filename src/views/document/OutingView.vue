@@ -2,9 +2,9 @@
     <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
 
         <div>
-            <content-box v-if="document.associations && document.associations.images.length" >
+            <div class="box" v-if="document.associations && document.associations.images.length" >
                 <gallery :images="document.associations.images" />
-            </content-box>
+            </div>
 
             <div class="columns">
 
@@ -15,7 +15,7 @@
 
                 <div class="column is-9">
 
-                    <content-box>
+                    <div class="box">
                         <div>
                             <!-- API anti-pattern :
                             associations.users should have been called associations.profiles
@@ -83,10 +83,10 @@
 
                             </div>
                         </div>
-                    </content-box>
+                    </div>
 
 
-                    <content-box>
+                    <div class="box">
 
                         <markdown-section :document="document" :field="fields.weather"/>
                         <markdown-section :document="document" :field="fields.conditions"/>
@@ -100,7 +100,7 @@
                         <markdown-section :document="document" :field="fields.hut_comment"/>
                         <markdown-section :document="document" :field="fields.timing"/>
 
-                    </content-box>
+                    </div>
 
                     <comments-box :document="document" />
 

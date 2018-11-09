@@ -15,7 +15,13 @@
             <slot name="row3">row3</slot>
         </div>
         <div v-if="this.$slots.row4" class="card-content">
-            <slot name="row3">row4</slot>
+            <slot name="row4">row4</slot>
+        </div>
+        <div v-if="this.$slots.row5" class="card-content">
+            <slot name="row5">row5</slot>
+        </div>
+        <div v-if="this.$slots.row6" class="card-content">
+            <slot name="row6">row6</slot>
         </div>
     </div>
 </template>

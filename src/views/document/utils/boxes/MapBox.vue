@@ -1,5 +1,5 @@
 <template>
-    <content-box class="">
+    <div class="box">
 
         <div v-if="document.areas && document.areas.length" class="has-text-centered">
 
@@ -31,7 +31,7 @@
                 KML
             </button>
         </div>
-    </content-box>
+    </div>
 </template>
 
 <script>

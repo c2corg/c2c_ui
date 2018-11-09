@@ -26,7 +26,8 @@
 </template>
 
 <style scoped>
-img{
-    width:40%;
-}
+    img{
+        width:40%;
+        padding-top:1rem;
+    }
 </style>

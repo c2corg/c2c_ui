@@ -8,7 +8,7 @@
                 </div>
 
                 <div class="column is-9">
-                    <content-box>
+                    <div class="box">
                         <div class="columns is-multiline">
                             <div class="column is-4">
 
@@ -96,29 +96,29 @@
 
                             </div>
                         </div>
-                    </content-box>
+                    </div>
 
-                    <content-box v-if="document.currentLocale_.description || document.currentLocale_.access">
+                    <div class="box" v-if="document.currentLocale_.description || document.currentLocale_.access">
                         <markdown-section :document="document" :field="fields.description" />
                         <markdown-section :document="document" :field="fields.access" />
-                    </content-box>
+                    </div>
 
                     <all-routes-box :document="document"/>
 
                     <recent-outings-box :document="document"/>
 
-                    <content-box v-if="document.associations.waypoint_children.length">
+                    <div class="box" v-if="document.associations.waypoint_children.length">
                         <h2 class="title is-2" v-translate>
                             Waypoints children
                         </h2>
                         <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
                             <pretty-waypoint-link :waypoint="child" />
                         </div>
-                    </content-box>
+                    </div>
 
-                    <content-box v-if="document.associations.images.length">
+                    <div class="box" v-if="document.associations.images.length">
                         <gallery :images="document.associations.images"/>
-                    </content-box>
+                    </div>
 
                     <comments-box :document="document" />
                 </div>

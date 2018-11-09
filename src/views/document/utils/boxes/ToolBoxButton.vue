@@ -34,7 +34,7 @@ export default{
     }
 
     :hover{
-        color:$dark;
+        color:$text;
     }
 
     .toolbox-button-icon{

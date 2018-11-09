@@ -1,5 +1,5 @@
 <template>
-    <content-box class="no-print">
+    <div class="box no-print">
 
         <associated-documents :document="document" />
 
@@ -22,7 +22,7 @@
                 icon="edit"
                 :label="$gettext('Translate into an other lang')" />
             <hr>
-        </div>            
+        </div>
 
         <!-- Moderator zone -->
         <div v-if="$user.isModerator">
@@ -68,7 +68,7 @@
         <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
         <translate-window v-if="!isVersionView" ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
 
-    </content-box>
+    </div>
 </template>
 
 <script>

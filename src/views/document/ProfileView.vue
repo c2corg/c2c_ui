@@ -10,7 +10,7 @@
             <div class="columns">
 
                 <div class="column is-3">
-                    <content-box>
+                    <div class="box">
                         <field-view :document="document" :field="fields.activities"/>
 
                         <label-value :label="$gettext('forum')">
@@ -29,7 +29,7 @@
                                 Outings
                             </router-link>
                         </div>
-                    </content-box>
+                    </div>
 
                     <map-box :document="document" />
                     <tool-box :document="document"/>
@@ -37,17 +37,16 @@
                 </div>
 
                 <div class="column is-9">
-                    <content-box>
+                    <div class="box">
                         <markdown-section :document="document" :field="fields.summary"/>
                         <markdown-section :document="document" :field="fields.description" hide-title/>
-                    </content-box>
+                    </div>
 
                     <div v-if="feed.data">
                         <feed-card
                             v-for="(item, index) of feed.data.feed"
                             :key="index"
-                            :item="item"
-                            :document="item.document"/>
+                            :item="item"/>
                     </div>
                 </div>
             </div>

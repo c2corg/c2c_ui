@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <side-menu class="side-menu" />
-        <navigation class="navigation is-fixed-top"/>
+        <navigation class="navigation"/>
         <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
         <div class="page-content">
             <router-view class="router-view"/>
@@ -42,7 +42,7 @@
     }
 
     html, body, #app{
-        min-height:100vh;
+        min-height:calc(100vh - $navbar-height);
     }
 
     #app{
@@ -53,12 +53,16 @@
         width:$sidemenu-width;
         height:100%;
         position:fixed;
-        top:5px;
-        // z-index:99;
+        top:0px;
+        z-index:25;
     }
 
     .navigation{
-        // z-index:100;
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        z-index:30;
     }
 
     .site-notice{
@@ -67,7 +71,7 @@
         top:$navbar-height;
         padding-left: $sidemenu-width;
         width:100%;
-        z-index:98;
+        z-index:20;
         box-shadow:0 5px 10px 0px rgba(10, 10, 10, 0.50);
     }
 

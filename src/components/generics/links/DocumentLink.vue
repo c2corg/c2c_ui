@@ -19,8 +19,7 @@
         props: {
             lang:{
                 type:String,
-                required: false,
-                default: undefined,
+                default: null,
             }
         },
     }

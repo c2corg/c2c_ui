@@ -76,7 +76,7 @@
         props: {
             documents: {
                 type: Array,
-                default: undefined,
+                default: null,
             },
 
             showFilterControl: {
@@ -111,12 +111,12 @@
 
             oldDocument: {
                 type:Object,
-                default:undefined,
+                default:null,
             },
 
             newDocument: {
                 type:Object,
-                default:undefined,
+                default:null,
             }
         },
 
@@ -144,7 +144,7 @@
 
                 showLayerSwitcher: false,
 
-                filterDocumentsWithMap: this.$route.query.bbox !== undefined,
+                filterDocumentsWithMap: Boolean(this.$route.query.bbox),
 
                 highlightedFeature_ : null,
             }

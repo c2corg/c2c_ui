@@ -1,5 +1,5 @@
 <template>
-    <content-box class="no-print">
+    <div class="box no-print">
         <div class="title is-2">
             <span v-translate>Last outings</span>
 
@@ -36,7 +36,7 @@
             </router-link>
         </div>
 
-    </content-box>
+    </div>
 </template>
 
 <script>

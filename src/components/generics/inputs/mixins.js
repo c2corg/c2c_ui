@@ -3,15 +3,15 @@ export const baseMixin = {
 
         disabled: {
             type: Boolean,
-            default: undefined
+            default: null
         },
         required: {
             type: Boolean,
-            default: undefined
+            default: null
         },
         errorMessage:{
             type:String,
-            default:undefined,
+            default:null,
         },
         i18n: {
             type:Boolean,
@@ -19,7 +19,7 @@ export const baseMixin = {
         },
         helper: {
             type:String,
-            default:undefined,
+            default:null,
         },
     },
 
@@ -45,7 +45,7 @@ export const arrayMixin = {
     props:{
         value: {
             type:Array,
-            default:undefined,
+            default:null,
         },
     },
 

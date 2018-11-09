@@ -6,7 +6,7 @@ import CardRegionItem from './CardRegionItem'
 import CardElevationItem from './CardElevationItem'
 import CardActivitiesItem from './CardActivitiesItem'
 
-export default {
+export const cardMixin = {
 
     components: {
         CardContainer,
@@ -14,8 +14,6 @@ export default {
         CardElevationItem,
         CardActivitiesItem,
     },
-
-    mixins : [ requireDocumentProperty ] ,
 
     methods:{
         go(){
@@ -25,4 +23,9 @@ export default {
             })
         }
     },
+}
+
+export const documentCardMixin = {
+    mixins : [cardMixin, requireDocumentProperty],
+
 }

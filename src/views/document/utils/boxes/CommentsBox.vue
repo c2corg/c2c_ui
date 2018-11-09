@@ -1,5 +1,5 @@
 <template>
-    <content-box class="discourse-comments no-print">
+    <div class="box discourse-comments no-print">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">
@@ -58,7 +58,7 @@
                 </a>
             </div>
         </div>
-    </content-box>
+    </div>
 </template>
 
 <script>

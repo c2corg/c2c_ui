@@ -60,35 +60,35 @@ export default {
         },
         min: {
             type: Number,
-            default: undefined
+            default: null
         },
         max: {
             type: Number,
-            default: undefined
+            default: null
         },
         placeholder: {
             type: String,
-            default: undefined
+            default: null
         },
         value: {
             type: [String, Number, Boolean],
-            default:undefined
+            default:null
         },
         prefix: {
             type: String,
-            default: undefined
+            default: null
         },
         postfix: {
             type: String,
-            default: undefined
+            default: null
         },
         options: {
             type: Array,
-            default: undefined
+            default: null
         },
         isExpanded:{
             type:Boolean,
-            default:undefined,
+            default:null,
         },
     },
 }

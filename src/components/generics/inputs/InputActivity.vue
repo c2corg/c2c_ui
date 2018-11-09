@@ -17,9 +17,9 @@
     export default {
         mixins: [ baseMixin, arrayMixin ],
 
-        data(){
-            return {
-                activities: constants.activities,
+        computed: {
+            activities(){
+                return constants.activities
             }
         },
     }

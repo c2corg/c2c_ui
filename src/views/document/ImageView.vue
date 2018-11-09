@@ -3,7 +3,7 @@
         <div class="columns">
 
             <div class="column is-3">
-                <content-box>
+                <div class="box">
                     <label-value v-if="document.activities.length" :label="$gettext('activities')">
                         <activities :activities="document.activities"/>
                     </label-value>
@@ -34,15 +34,15 @@
                     <field-view :document="document" :field="fields.height"/>
                     <field-view :document="document" :field="fields.width"/>
                     <field-view :document="document" :field="fields.elevation"/>
-                </content-box>
+                </div>
 
                 <tool-box :document="document" />
             </div>
 
             <div class="column is-9">
-                <content-box class="is-paddingless">
+                <div class="box is-paddingless">
                     <img :src="getImageUrl(document)">
-                </content-box>
+                </div>
 
                 <markdown-section
                     :document="document"

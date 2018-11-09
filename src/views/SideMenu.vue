@@ -1,16 +1,11 @@
 <template>
     <aside>
-        <!-- <router-link :to="{name:'home'}" class="menu-brand has-text-centered">
-            <img src="@/assets/img/logo.svg"
-                 url="@/assets/img/logo.svg"
-                 alt="Camptocamp.org">
-        </router-link> -->
-
         <router-link
             v-for="item of menuItems"
             :key="item.name"
             :to="{name:item.name}"
-            class="menu-item">
+            class="menu-item"
+            :class="{'router-link-active':item.activeFor.includes($route.name)}">
             <component :is="item.icon" />
             <span class="menu-item-text"> {{ item.text }} </span>
         </router-link>
@@ -30,7 +25,7 @@
                 <router-link :to="{name:'article', params:{id:106726}}" v-translate>Association</router-link>
             </div>
 
-            <div class="columns is-gapless has-text-centered menu-socials">
+            <div class="columns is-gapless has-text-centered is-mobile menu-socials">
                 <div class="column">
                     <img src="@/assets/img/social/twitter.png" alt="Twitter">
                 </div>
@@ -50,11 +45,11 @@
         computed:{
             menuItems(){
                 return [
-                    {name:'topoguide', icon:'icon-topoguide', text:this.$gettext('Topoguide')},
-                    {name:'outings', icon:'icon-outing', text:this.$gettext('Outings')},
-                    {name:'forum', icon:'icon-forum', text:this.$gettext('Forum')},
-                    {name:'serac', icon:'icon-xreport', text:this.$gettext('SERAC')},
-                    {name:'articles', icon:'icon-article', text:this.$gettext('Articles')},
+                    {name:'topoguide', icon:'icon-topoguide', text:this.$gettext('Topoguide'), activeFor:['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas']},
+                    {name:'outings', icon:'icon-outing', text:this.$gettext('Outings'), activeFor:['outing']},
+                    {name:'forum', icon:'icon-forum', text:this.$gettext('Forum'), activeFor:[]},
+                    {name:'serac', icon:'icon-xreport', text:this.$gettext('Accident database'), activeFor:['xreports', 'xreport', 'xreport-add']},
+                    {name:'articles', icon:'icon-article', text:this.$gettext('Articles'), activeFor:['article']},
                 ]
             }
         }
@@ -68,16 +63,6 @@
         box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
         background: $white;
     }
-
-    // .menu-brand{
-    //     height:80px;
-    //     display:block;
-    //     padding:5px;
-    //
-    //     img {
-    //         width: 140px;
-    //     }
-    // }
 
     .menu-item{
         display: block;
@@ -94,7 +79,7 @@
     }
 
     .menu-item-text{
-        margin-left: 10px;
+        margin-left: 0;
         font-size:1.1rem;
     }
 

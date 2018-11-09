@@ -1,5 +1,5 @@
 <template>
-    <div class="content-box" @click="click" >
+    <div class="box" @click="click" >
         <slot/>
     </div>
 </template>

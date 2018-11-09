@@ -10,7 +10,7 @@
 
             <document-version-banner :version="version" :document="document" />
 
-            <content-box>
+            <div class="box">
                 <span class="is-pulled-right button-bar no-print">
 
                     <follow-button :document="document" />
@@ -41,7 +41,7 @@
                     <icon-document :document-type="$documentUtils.getDocumentType(document.type)"/>
                     <document-title :document="document"/>
                 </div>
-            </content-box>
+            </div>
 
             <slot>
                 Please insert document content

@@ -11,7 +11,7 @@
         props:{
             name:{
                 type:String,
-                default:undefined,
+                default:null,
             }
         }
     }

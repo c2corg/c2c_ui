@@ -2,20 +2,20 @@
     <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
         <div class="columns">
             <div class="column is-3">
-                <content-box>
+                <div class="box">
                     <field-view :document="document" :field="fields.activities" />
                     <field-view :document="document" :field="fields.categories" />
                     <field-view :document="document" :field="fields.article_type" />
                     <field-view :document="document" :field="fields.quality" />
-                </content-box>
+                </div>
 
                 <tool-box :document="document"/>
             </div>
             <div class="column is-9">
-                <content-box>
+                <div class="box">
                     <markdown-section :document="document" :field="fields.summary"/>
                     <markdown-section :document="document" :field="fields.description" hide-title/>
-                </content-box>
+                </div>
 
                 <comments-box :document="document" />
             </div>

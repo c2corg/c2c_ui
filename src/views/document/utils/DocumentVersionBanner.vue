@@ -55,7 +55,7 @@
             <icon-document document-type="profile"/>
             <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
         </p>
-        <p>
+        <p v-if="$user.isModerator">
             <button
                 v-if="!isLastVersion"
                 @click="$refs.restoreVersionConfirmationWindow.show()"

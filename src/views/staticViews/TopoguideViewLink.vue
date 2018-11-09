@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="topoguide-link-view">
         <router-link :to="to">
             <span class="is-size-2"><component :is="icon" /></span>
             <span class="is-size-4">{{ label }}</span>
@@ -29,7 +29,7 @@
 <style scoped lang="scss">
     @import '@/assets/sass/variables.scss';
 
-    div{
+    .topoguide-link-view{
         width:150px;
         height:150px;
 

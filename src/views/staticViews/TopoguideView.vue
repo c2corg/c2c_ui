@@ -23,17 +23,17 @@
                         v-for="activity of activities"
                         :key="activity"
                         :to="{name:'outings', query:{act:activity}}">
-                            <span class="is-size-2"><icon-activity :activity="activity" /></span>
-                            <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
+                        <span class="is-size-2"><icon-activity :activity="activity" /></span>
+                        <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
                     </topoguide-view-small-link>
 
                     <topoguide-view-small-link
                         class="column is-3"
                         :to="{name:'outing-add'}">
-                            <span class="is-size-2"><fa-icon icon="plus" /></span>
-                            <span class="has-text-dark has-text-weight-semibold" v-translate>
-                                New outing
-                            </span>
+                        <span class="is-size-2"><fa-icon icon="plus" /></span>
+                        <span class="has-text-dark has-text-weight-semibold" v-translate>
+                            New outing
+                        </span>
                     </topoguide-view-small-link>
                 </div>
             </div>
@@ -45,17 +45,17 @@
                         v-for="activity of activities"
                         :key="activity"
                         :to="{name:'routes', query:{act:activity}}">
-                            <span class="is-size-2"><icon-activity :activity="activity" /></span>
-                            <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
+                        <span class="is-size-2"><icon-activity :activity="activity" /></span>
+                        <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
                     </topoguide-view-small-link>
 
                     <topoguide-view-small-link
                         class="column is-3"
                         :to="{name:'route-add'}">
-                            <span class="is-size-2"><fa-icon icon="plus" /></span>
-                            <span class="has-text-dark has-text-weight-semibold" v-translate>
-                                New route
-                            </span>
+                        <span class="is-size-2"><fa-icon icon="plus" /></span>
+                        <span class="has-text-dark has-text-weight-semibold" v-translate>
+                            New route
+                        </span>
                     </topoguide-view-small-link>
                 </div>
             </div>
@@ -67,19 +67,19 @@
                         v-for="waypoint_type of waypoint_types"
                         :key="waypoint_type"
                         :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
-                            <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
-                            <span class="has-text-dark has-text-weight-semibold is-first-letter-uppercase">
-                                {{ $gettext(waypoint_type) }}
-                            </span>
+                        <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
+                        <span class="has-text-dark has-text-weight-semibold is-first-letter-uppercase">
+                            {{ $gettext(waypoint_type) }}
+                        </span>
                     </topoguide-view-small-link>
 
                     <topoguide-view-small-link
                         class="column is-2"
                         :to="{name:'waypoint-add'}">
-                            <span class="is-size-2"><fa-icon icon="plus" /></span>
-                            <span class="has-text-dark has-text-weight-semibold" v-translate>
-                                New waypoint
-                            </span>
+                        <span class="is-size-2"><fa-icon icon="plus" /></span>
+                        <span class="has-text-dark has-text-weight-semibold" v-translate>
+                            New waypoint
+                        </span>
                     </topoguide-view-small-link>
                 </div>
             </div>

@@ -1,15 +1,15 @@
 <template>
     <div class="section">
         <html-header title="Dashboard"/>
-        <content-box>
+        <div class="box">
             <h3 class="title is-3" v-translate>Images</h3>
             <loading-notification :promise="imagesPromise" />
             <gallery v-if="images!=null" :images="images.documents" />
-        </content-box>
+        </div>
 
         <div class="columns">
             <div class="column is-7">
-                <content-box>
+                <div class="box">
                     <h3 class="title is-2" v-translate>Outings</h3>
                     <loading-notification :promise="outingsPromise" />
                     <div v-if="outings!=null">
@@ -17,16 +17,16 @@
                             <dashboard-outing-link :outing="outing"/>
                         </div>
                     </div>
-                </content-box>
+                </div>
             </div>
 
             <div class="column">
-                <content-box>
+                <div class="box">
                     <h3 class="title is-3" v-translate>Forum</h3>
                     <forum-widget :message-count="20"/>
-                </content-box>
+                </div>
 
-                <content-box>
+                <div class="box">
                     <h3 class="title is-3" v-translate>Routes</h3>
                     <loading-notification :promise="routesPromise" />
                     <div v-if="routes!=null">
@@ -34,7 +34,7 @@
                             <pretty-route-link :route="route" :show-area="true"/>
                         </div>
                     </div>
-                </content-box>
+                </div>
             </div>
         </div>
     </div>

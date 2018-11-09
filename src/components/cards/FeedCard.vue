@@ -1,73 +1,70 @@
 <template>
-    <div class="card">
-        <header class="card-header card-header-title">
-            <div>
-                <span class="icon is-medium">
-                    <img :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
-                </span>
-                <document-title :document="item.user"/>
+    <card-container class="route-card" @click="go">
+        <div slot="header" class="level">
+            <img class="level-left avatar"
+                 :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
 
-                <span>{{ $gettext(actionLine) }}</span>
-            </div>
-            <icon-document :document-type="documentType" class="is-pulled-right"/>
-        </header>
-        <div class="card-content">
+            <span class="level-left">
+                <document-title :document="item.user"/>
+                <span>&nbsp;{{ $gettext(actionLine) }}</span>
+            </span>
+
+            <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
+        </div>
+        <div slot="row1">
             <div>
                 <document-title :document="item.document"/>
                 <br>
-                <span v-if="locale && locale.summary">{{ locale.summary }}</span>
+                <markdown v-if="locale && locale.summary" :content="locale.summary" />
                 <span v-if="documentType=='outing'">{{ dates }}</span>
-            </div>
-
-            <gallery v-if="images.length!=0" :images="images" />
-
-            <div >
-                <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
-                <route-rating v-else-if="documentType=='route'" :document="item.document"/>
-
-
-                <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
-
-                <span v-if="item.document.height_diff_up">
-                    <icon-height-diff />
-                    {{ item.document.height_diff_up }} m
-                </span>
-
-                <span v-if="item.document.height_diff_difficulties">
-                    <fa-icon icon="arrows-alt-v"/>
-                    {{ item.document.height_diff_difficulties }} m
-                </span>
-
-            </div>
-            <div v-if="item.document.areas" class="is-ellipsed">
-                <card-region-item :document="item.document"/>
-            </div>
-            <div>
-                <activities v-if="item.document.activities" :activities="item.document.activities"/>
-                <icon-document v-if="item.document.img_count != 0" document-type="image"/>
-                <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
-                <span> {{ item.time | timeAgo }} </span>
-                <icon-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
-                <icon-quality :quality="item.document.quality" />
+                <gallery v-if="images.length!=0" :images="images" />
             </div>
         </div>
-    </div>
+        <div slot="row3" v-if="documentType!='article'" class="level">
+            <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
+            <route-rating v-else-if="documentType=='route'" :document="item.document"/>
+
+
+            <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
+
+            <span v-if="item.document.height_diff_up">
+                <icon-height-diff />
+                {{ item.document.height_diff_up }} m
+            </span>
+
+            <span v-if="item.document.height_diff_difficulties">
+                <fa-icon icon="arrows-alt-v"/>
+                {{ item.document.height_diff_difficulties }} m
+            </span>
+
+        </div>
+        <div v-if="item.document.areas" slot="row4" class="level">
+            <card-region-item :document="item.document"/>
+        </div>
+        <div slot="row5" class="level">
+            <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
+            <span>
+                <icon-document v-if="item.document.img_count != 0" document-type="image"/>
+                <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
+            </span>
+            <span> {{ item.time | timeAgo }} </span>
+            <span>
+                <icon-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
+                <icon-quality :quality="item.document.quality" />
+            </span>
+        </div>
+    </card-container>
 </template>
 
 <script>
     import imageUrls from '@/js/imageUrls'
 
-    import cardMixins from '@/components/cards/utils/mixins.js'
-    import CardRegionItem from '@/components/cards/utils/CardRegionItem'
+    import { cardMixin } from './utils/mixins.js'
 
     export default{
 
-        components: {
-            CardRegionItem,
-        },
-
         mixins: [
-            cardMixins,
+            cardMixin,
         ],
 
         props: {
@@ -86,8 +83,11 @@
         },
 
         computed: {
+            document(){
+                return this.item.document
+            },
             documentType(){
-                return this.$documentUtils.getDocumentType(this.item['document']['type'])
+                return this.$documentUtils.getDocumentType(this.document['type'])
             }
         },
 
@@ -149,42 +149,50 @@
 
 @import '@/assets/sass/variables.scss';
 
-.card{
-    background-color:#FFF!important;
-    transition:0.2s;
-    margin:5px;
-    cursor:pointer;
-    max-width:600px
-}
+    .card{
+        background-color:#FFF!important;
+        transition:0.2s;
+        margin:5px;
+        cursor:pointer;
+        max-width:600px
+    }
 
-.card:hover{
-    background-color:$hover-background!important;
-    transition:0.2s;
-}
+    .card:hover{
+        background-color:$hover-background!important;
+        transition:0.2s;
+    }
 
-.card-image-content{
-    display:flex;
-    overflow: hidden;
-}
+    .card-image-content{
+        display:flex;
+        overflow: hidden;
+    }
 
-.has-3-images > div{
-    width:33.33%;
-    max-height: 275px;
-    overflow: hidden;
-}
+    .avatar{
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        vertical-align: bottom;
+        margin-right: 0.5rem;
+    }
 
-.has-2-images > div{
-    width:50%;
-}
+    .has-3-images > div{
+        width:33.33%;
+        max-height: 275px;
+        overflow: hidden;
+    }
 
-.has-2-images > div{
-    width:100%;
-}
+    .has-2-images > div{
+        width:50%;
+    }
 
-.card-image-content > div > img{
-    width:100%;
-    box-sizing: border-box;
-}
+    .has-2-images > div{
+        width:100%;
+    }
+
+    .card-image-content > div > img{
+        width:100%;
+        box-sizing: border-box;
+    }
 
 
 </style>

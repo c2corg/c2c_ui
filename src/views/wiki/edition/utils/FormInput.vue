@@ -91,11 +91,11 @@
         props : {
             prefix:{
                 type:String,
-                default:undefined,
+                default:null,
             },
             isExpanded:{
                 type:Boolean,
-                default:undefined,
+                default:null,
             },
             helper:{
                 type:String,

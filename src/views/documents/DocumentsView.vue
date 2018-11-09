@@ -6,11 +6,26 @@
                 <span class="level-item">
                     <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
                 </span>
+
+                <span class="level-item">
+                    <add-link :document-type="documentType" class="is-size-3" v-tooltip:right="$gettext('Create')">
+                        <fa-icon icon="plus-circle" />
+                    </add-link>
+                </span>
             </div>
             <div class="level-right" v-if="documentType!='profile'">
-                <span class="level-item">
-                    <add-link :document-type="documentType" class="button is-rounded is-primary" />
-                </span>
+
+                <div class="level-item is-size-3">
+                    <fa-icon
+                        :icon="listMode ? 'th-list' : 'th-large'"
+                        @click="toogleProperty('listMode')" />
+                    <div class="level-item is-size-3"/>
+                    <fa-icon
+                        v-if="documentAreGeoLocalized"
+                        :class="{'has-text-primary':showMap}"
+                        icon="map-marked-alt"
+                        @click="toogleProperty('showMap')" />
+                </div>
             </div>
         </div>
 
@@ -18,18 +33,6 @@
             <div class="level-left">
                 <div class="level-item">
                     <query-items/>
-                </div>
-            </div>
-            <div class="level-right">
-                <div class="level-item is-size-3">
-                    <fa-icon
-                        :icon="listMode ? 'th-list' : 'th-large'"
-                        @click="toogleProperty('listMode')" />
-                    <fa-icon
-                        v-if="documentAreGeoLocalized"
-                        :class="{'has-text-primary':showMap}"
-                        icon="map-marked-alt"
-                        @click="toogleProperty('showMap')" />
                 </div>
             </div>
         </div>
