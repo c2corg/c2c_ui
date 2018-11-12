@@ -3,7 +3,11 @@
     <div
         class="control"
         :class="{'has-icons-right':postfix, 'has-prefix':prefix || helper, 'is-expanded':isExpanded}">
-        <span v-if="prefix || helper" class="button prefix" :class="{'is-danger':hasError}">
+        <span
+            v-if="prefix || helper"
+            class="button prefix"
+            :class="{'is-danger':hasError}"
+            @click="$emit('click:prefix')">
             <marker-helper class="marker-helper" :name="helper" />
 
             <span v-if="prefix" class="is-first-letter-uppercase">

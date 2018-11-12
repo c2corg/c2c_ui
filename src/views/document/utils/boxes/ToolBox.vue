@@ -3,7 +3,7 @@
 
         <associated-documents :document="document" />
 
-        <div class="has-text-centered" v-if="document.available_langs.length>1">
+        <div class="has-text-centered" v-if="!isDraftView && document.available_langs.length>1">
             <span v-translate>View in other lang</span>
             <br>
             <span class="lang-switcher-box-list">
@@ -16,7 +16,7 @@
             <hr>
         </div>
 
-        <div v-if="!isVersionView && hasMissingLangs && $user.isLogged">
+        <div v-if="!isVersionView && !isDraftView && hasMissingLangs && $user.isLogged">
             <tool-box-button
                 @click="$refs.translateWindow.show()"
                 icon="edit"
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Moderator zone -->
-        <div v-if="$user.isModerator">
+        <div v-if="$user.isModerator && !isDraftView">
 
             <tool-box-button
                 @click="lockDocumentAction"
@@ -66,7 +66,11 @@
         <merge-document-window ref="MergeDocumentWindow" :document="document"/>
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
         <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
-        <translate-window v-if="!isVersionView" ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
+        <translate-window
+            v-if="!isDraftView && !isVersionView"
+            ref="translateWindow"
+            :document="document"
+            :missing-langs="missingLangs"/>
 
     </div>
 </template>
@@ -110,6 +114,10 @@
         computed:{
             isVersionView(){
                 return this.$route.name.endsWith("-version");
+            },
+
+            isDraftView(){
+                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
             },
 
             locale(){

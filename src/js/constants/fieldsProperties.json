@@ -219,6 +219,12 @@
         "parent": "locales",
         "helper": "route_configuration_types"
     },
+    "conditions_levels":
+    {
+        "type": "Array",
+        "parent": "locales",
+        "helper": "conditions_levels"
+    },
     "configuration":
     {
         "values": "route_configuration_types",
@@ -525,6 +531,12 @@
     {
         "parent": "locales",
         "values": "langs"
+    },
+    "images":{
+        "type": "document",
+        "parent": "associations",
+        "documentType": "image",
+        "multiple": true
     },
     "ice_rating":
     {

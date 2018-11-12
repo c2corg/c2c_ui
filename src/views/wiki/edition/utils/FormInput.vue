@@ -25,6 +25,10 @@
         </select>
     </div>
 
+    <input-conditions-levels
+        v-else-if="field.name=='conditions_levels'"
+        v-model="object[field.name]"/>
+
     <input-markdown
         v-else-if="field.type=='markdown'"
         v-show="visible"
@@ -52,6 +56,7 @@
         v-else-if="simpleInputType"
         v-show="visible"
         :prefix="prefix"
+        @click:prefix="$emit('click:prefix')"
         :helper="helper===undefined ? field.helper : helper"
         :is-expanded="isExpanded"
         :postfix="field.unit"
@@ -82,9 +87,11 @@
 
 <script>
     import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
+    import InputConditionsLevels from './InputConditionsLevels'
 
 
     export default {
+        components : { InputConditionsLevels },
 
         mixins : [ requireFieldProperty, requireDocumentProperty ],
 

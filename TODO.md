@@ -35,12 +35,13 @@
 
 ### A verifier
 
-### Refactors
-
-* rename all js file in this-is-a-file-name.js
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions
+
+### Refactors
+
+* rename all js file in this-is-a-file-name.js
 * does saveAs filesaver dependency really usefull now ?
 * test requestPasswordChange and validate_new_password
 * test changemail

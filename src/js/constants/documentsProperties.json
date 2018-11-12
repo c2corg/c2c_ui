@@ -112,6 +112,7 @@
             {"id": "title", "properties": {"url":"q"}},
             {"id": "summary"},
             {"id": "description"},
+            {"id": "conditions_levels"},
             {"id": "participants"},
             {"id": "access_comment"},
             {"id": "weather"},
@@ -164,7 +165,8 @@
             {"id": "articles", "properties": {"url":"c"}},
             {"id": "routes", "properties": {"url":"r", "required":true}},
             {"id": "users", "properties": {"url":"u", "required":true}},
-            {"id": "xreports", "properties": {"url":"x"}}
+            {"id": "xreports", "properties": {"url":"x"}},
+            {"id": "images"}
         ]
     },
 

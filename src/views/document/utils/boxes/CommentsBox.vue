@@ -1,5 +1,5 @@
 <template>
-    <div class="box discourse-comments no-print">
+    <div v-if="!isVersionView && !isDraftView" class="box discourse-comments no-print">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">
@@ -77,6 +77,14 @@
         },
 
         computed: {
+
+            isVersionView(){
+                return this.$route.name.endsWith("-version");
+            },
+
+            isDraftView(){
+                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
+            },
 
             locale(){
                 return this.document.currentLocale_

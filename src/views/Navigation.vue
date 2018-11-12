@@ -148,7 +148,9 @@
 </script>
 
 <style scoped lang="scss">
+
     @import '@/assets/sass/variables.scss';
+
     nav{
         max-width: 100vw;
         height:$navbar-height;
@@ -177,7 +179,6 @@
             }
 
             .dropdown-menu{
-                // position:fixed;
                 left:auto;
                 right:5px;
             }

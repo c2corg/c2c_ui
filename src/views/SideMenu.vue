@@ -1,5 +1,5 @@
 <template>
-    <aside>
+    <aside class="no-print">
         <router-link
             v-for="item of menuItems"
             :key="item.name"
@@ -20,7 +20,7 @@
                 <span> &bull; </span>
                 <router-link :to="{name:'article', params:{id:106731}}" v-translate>EULA</router-link>
                 <span> &bull; </span>
-                <router-link :to="{name:'article', params:{id:106728}}" v-translate>licenses</router-link>
+                <router-link :to="{name:'article', params:{id:106728}}" v-translate>Licenses</router-link>
                 <br>
                 <router-link :to="{name:'article', params:{id:106726}}" v-translate>Association</router-link>
             </div>

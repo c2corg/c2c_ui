@@ -6,12 +6,12 @@
         </div>
 
         <div v-else-if="document">
-            <html-header :title="title"/>
+            <html-header v-if="!isDraftView" :title="title"/>
 
             <document-version-banner :version="version" :document="document" />
 
             <div class="box">
-                <span class="is-pulled-right button-bar no-print">
+                <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
 
                     <follow-button :document="document" />
 
@@ -99,6 +99,10 @@
         computed:{
             isVersionView(){
                 return !!this.version
+            },
+
+            isDraftView(){ // means preview for edit and add mode
+                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
             },
 
             title(){

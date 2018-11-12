@@ -50,7 +50,15 @@
                 <form-input-row :document="document" :field="fields.engagement_rating"/>
                 <form-input-row :document="document" :field="fields.equipment_rating"/>
 
-                <form-input-row :document="document" :field="fields.ski_rating"/>
+                <form-row :label="$gettext('ski_rating')" helper="ski_rating">
+                    <form-input
+                        :document="document"
+                        :field="fields.ski_rating"
+                        :helper="null"
+                        prefix="?"
+                        @click:prefix="showCotometer"/>
+                </form-row>
+
                 <form-input-row :document="document" :field="fields.labande_global_rating"/>
                 <form-input-row :document="document" :field="fields.snowshoe_rating"/>
 
@@ -85,6 +93,9 @@
                 <form-input-row :document="document" :field="fields.avalanche_signs"/>
 
                 <form-input-row :document="document" :field="fields.weather" />
+
+                <form-input-row :document="document" :field="fields.conditions_levels" />
+
             </tab-item>
 
             <tab-item :title="$gettext('access')">
@@ -115,6 +126,7 @@
         <!-- TODO where is that ??
             <form-input-row :document="document" :field="fields.summary"/>
         -->
+        <cotometer-window ref="cotometerWindow" v-if="document" v-model="document.ski_rating"/>
     </edition-container>
 </template>
 
@@ -122,8 +134,11 @@
 <script>
 
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
+    import CotometerWindow from "./utils/CotometerWindow"
 
     export default {
+        components : { CotometerWindow },
+
         mixins: [ DocumentEditionViewMixin ],
 
         data(){
@@ -144,7 +159,11 @@
 
             beforeSave(){
                 this.handleDates()
-            }
+            },
+
+            showCotometer(){
+                this.$refs.cotometerWindow.show()
+            },
         }
     }
 

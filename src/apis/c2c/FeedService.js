@@ -10,4 +10,8 @@ FeedService.prototype.getProfileFeed = function(params){
     return this.api.get('/profile-feed', {params})
 }
 
+FeedService.prototype.getPersonalFeed = function(params){
+    return this.api.get('/personal-feed', {params})
+}
+
 export default FeedService

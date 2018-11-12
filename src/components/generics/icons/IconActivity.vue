@@ -37,7 +37,7 @@
   content: "\e907";
 }
 .icon-activity-mountain_climbing:before {
-  content: "\e913";
+  content: "\1f36a";
 }
 .icon-activity-hiking:before {
   content: "\1f304";
@@ -49,7 +49,7 @@
   content: "\1f332";
 }
 .icon-activity-rock_climbing:before {
-  content: "\1f36a";
+  content: "\e913";
 }
 .icon-activity-skitouring:before {
   content: "\1f37d";

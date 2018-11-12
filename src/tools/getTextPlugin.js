@@ -1,23 +1,30 @@
 import french_translations from '@/translations/dist/fr.json'
 
+const TEXT_NODE = 3
+
+function cleanMessageId(msgid){
+
+    if(!msgid)
+        return msgid
+
+
+    if(!msgid.replace){
+        // eslint-disable-next-line
+        console.error("Found a non-string in translations", msgid)
+        return String(msgid)
+    }
+
+    msgid = msgid.replace(/^[\r\n\s]*/, "")
+    msgid = msgid.replace(/[\r\n\s]*$/, "")
+
+    return msgid
+}
 
 function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defaultPlural = null){
     if(messages===undefined){
         // `messages are not yet available`
         return msgid
     }
-
-    if(!msgid)
-        return msgid
-
-    if(!msgid.replace){
-        // eslint-disable-next-line
-        console.warn("Found a non-string in translations", msgid)
-        return msgid
-    }
-
-    msgid = msgid.replace(/^[\r\n\s]*/, "")
-    msgid = msgid.replace(/[\r\n\s]*$/, "")
 
     if(messages[msgid] === undefined) {
         //eslint-disable-next-line
@@ -29,9 +36,6 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
 }
 
 function getMessages(lang){
-
-    //eslint-disable-next-line
-    console.warn(`Download ${lang}`)
 
     if(lang=='fr') // include fr langage in app
         return french_translations
@@ -120,8 +124,16 @@ export default function install(Vue){
             },
 
             updateElement(element){
-                if(element.dataset.msgid===undefined)
-                    element.dataset.msgid = element.innerText
+                if(element.dataset.msgid===undefined){
+
+                    if(element.childNodes.length > 1 || element.firstChild.nodeType!==TEXT_NODE){
+                        // eslint-disable-next-line
+                        console.error("v-translate must contains only text", element.childNodes)
+                        return
+                    }
+
+                    element.dataset.msgid = cleanMessageId(element.innerText)
+                }
 
                 element.innerText = this.gettext(element.dataset.msgid)
             },

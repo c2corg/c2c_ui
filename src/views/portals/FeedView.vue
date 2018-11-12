@@ -1,11 +1,17 @@
 <template>
     <div class="has-background-light">
+        <html-header :title="$gettext('Home')"/>
         <div class="section">
-            <html-header title="Social network"/>
             <div class="columns">
                 <div class="column is-7">
-                    <h3 class="title is-3" v-translate>
-                        Activity feed
+                    <h3 class="title is-3">
+                        <span v-translate>Activity feed</span>
+                        <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">
+                            <router-link :to="{name:'preferences'}">
+                                <fa-icon icon="cogs"/>
+                            </router-link>
+                            <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="isPersonal=!isPersonal"/>
+                        </span>
                     </h3>
                     <div v-if="feedPromise.data">
                         <feed-card
@@ -50,19 +56,32 @@
         data(){
             return {
                 feedPromise:null,
+                isPersonal:false,
             }
         },
 
-        created(){
-            this.feedPromise = c2c.feed.getDefaultFeed({pl:this.$language.current})
+        watch:{
+            'isPersonal':{
+                handler:"load",
+                immediate: true,
+            }
+        },
+
+        methods:{
+            load(){
+                const service = (this.isPersonal ? c2c.feed.getPersonalFeed : c2c.feed.getDefaultFeed).bind(c2c.feed)
+
+                this.feedPromise = service({pl:this.$language.current})
+            }
         }
     }
 
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 
+    @import '@/assets/sass/variables.scss';
 
     .cards-container > div{
         justify-content:center;
@@ -71,6 +90,17 @@
 
     .feed-card{
         margin-bottom: 2rem;
+    }
+
+    .feed-buttons{
+        a, svg{
+            color:$text;
+        }
+
+        svg{
+            margin-right:0.3rem;
+            cursor: pointer;
+        }
     }
 
 </style>

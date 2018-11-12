@@ -1,4 +1,4 @@
-#: src/components/utils/markers/MarkerImageCount.vue
+#: src/components/generics/markers/MarkerImageCount.vue
 msgid " images"
 msgstr ""
 
@@ -138,53 +138,62 @@ msgstr ""
 msgid "5min"
 msgstr ""
 
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/SideMenu.vue
+#: src/views/staticViews/SeracView.vue
 msgid "Accident database"
 msgstr ""
 
-#: src/components/views/portals/FeedView.vue
+#: src/views/portals/FeedView.vue
 msgid "Activity feed"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/ViewContainer.vue
 msgid "Add images"
 msgstr ""
 
-#: src/components/views/portals/utils/MobileAppAdvertising.vue
+#: src/views/portals/utils/MobileAppAdvertising.vue
 msgid "Application"
 msgstr ""
 
-#: src/components/views/document/utils/windows/DeleteDocumentWindow.vue
+#: src/views/document/utils/windows/DeleteDocumentWindow.vue
 msgid "Are you sure you want to delete this document?"
 msgstr ""
 
-#: src/components/views/document/utils/windows/DeleteLocaleWindow.vue
+#: src/views/document/utils/windows/DeleteLocaleWindow.vue
 msgid "Are you sure you want to delete this locale?"
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Are you sure you want to merge?"
 msgstr ""
 
-#: src/components/views/document/utils/windows/RevertVersionWindow.vue
+#: src/views/document/utils/windows/RevertVersionWindow.vue
 msgid "Are you sure you want to revert to this version of the document?"
 msgstr ""
 
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
-#: src/components/views/user/PreferencesView.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
+#: src/views/user/PreferencesView.vue
 msgid "Areas"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/Navigation.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/SideMenu.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Articles"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/SideMenu.vue
+msgid "Association"
+msgstr ""
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made."
+msgstr ""
+
+#: src/views/wiki/HistoryView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "Author"
 msgstr ""
 
@@ -192,32 +201,36 @@ msgstr ""
 msgid "Back to code"
 msgstr ""
 
+#: src/views/wiki/edition/utils/EditionContainer.vue
+msgid "Back to edit mode"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Base layer"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "Block account"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
 msgid "Books"
 msgstr ""
 
+#: src/components/generics/modals/ModalConfirmation.vue
 #: src/components/imagesUploader/ImageUploader.vue
-#: src/components/utils/modals/ModalConfirmation.vue
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Cancel"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
+#: src/views/user/AccountView.vue
 msgid "Change account parameters"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "Climbing ratings"
 msgstr ""
 
@@ -230,76 +243,85 @@ msgstr ""
 msgid "Code fragment"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
-#: src/components/views/edition/RouteEditionView.vue
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "Comments"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Comments are disabled."
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
+#: src/views/wiki/HistoryView.vue
 msgid "Compare selected versions"
 msgstr ""
 
-#: src/components/utils/modals/ModalConfirmation.vue
+#: src/components/generics/modals/ModalConfirmation.vue
 msgid "Confirm"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Contact"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Continue the discussion"
 msgstr ""
 
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/documents/DocumentsView.vue
+msgid "Create"
+msgstr ""
+
+#: src/views/staticViews/SeracView.vue
 msgid "Create a new report"
 msgstr ""
 
+#: src/components/generics/links/AddLink.vue
 #: src/translations/fixed_strings_manual.vue
 msgid "Create a new route"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
+#: src/views/wiki/HistoryView.vue
 msgid "Created on"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
+#: src/views/user/AccountView.vue
 msgid "Current password"
 msgstr ""
 
-#: src/components/views/staticViews/HomeView.vue
+#: src/views/staticViews/HomeView.vue
 msgid "Dashboard"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Dates"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
-#: src/components/views/document/utils/windows/DeleteDocumentWindow.vue
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/DeleteDocumentWindow.vue
 msgid "Delete this document"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
-#: src/components/views/document/utils/windows/DeleteLocaleWindow.vue
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/DeleteLocaleWindow.vue
 msgid "Delete this locale"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "Description"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/wiki/DiffView.vue
+msgid "Differences between versions"
+msgstr ""
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Distance"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Distance (km)"
 msgstr ""
 
@@ -307,11 +329,11 @@ msgstr ""
 msgid "Drop images here or click to upload"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Duration"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Duration (hrs)"
 msgstr ""
 
@@ -331,39 +353,38 @@ msgstr ""
 msgid "E4"
 msgstr ""
 
-#: src/components/utils/links/EditLink.vue
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/views/SideMenu.vue
+msgid "EULA"
+msgstr ""
+
+#: src/components/generics/links/EditLink.vue
+#: src/views/document/utils/ViewContainer.vue
 msgid "Edit"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-msgid "Edit associations"
-msgstr ""
-
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Elevation"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Elevation (m)"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
-#: src/components/views/user/LoginView.vue
+#: src/views/user/AccountView.vue
+#: src/views/user/LoginView.vue
 msgid "Email"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "Exposition & engagement"
 msgstr ""
 
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "Factors"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "File"
 msgstr ""
 
@@ -371,55 +392,55 @@ msgstr ""
 msgid "Filter on map extent"
 msgstr ""
 
-#: src/components/views/portals/utils/MobileAppAdvertising.vue
+#: src/views/portals/utils/MobileAppAdvertising.vue
 msgid "Find all Camptocamp in the mountains with the new mobile application"
 msgstr ""
 
-#: src/components/views/user/FollowingView.vue
+#: src/views/user/FollowingView.vue
 msgid "Followed users"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "Forgot password?"
 msgstr ""
 
-#: src/components/views/Navigation.vue
-#: src/components/views/portals/DashboardView.vue
-#: src/components/views/staticViews/HomeView.vue
+#: src/views/portals/DashboardView.vue
+#: src/views/SideMenu.vue
+#: src/views/staticViews/HomeView.vue
 msgid "Forum"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
-#: src/components/views/user/LoginView.vue
+#: src/views/user/AccountView.vue
+#: src/views/user/LoginView.vue
 msgid "Forum username"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
-#: src/components/views/user/LoginView.vue
+#: src/views/user/AccountView.vue
+#: src/views/user/LoginView.vue
 msgid "Fullname"
 msgstr ""
 
-#: src/components/utils/markers/MarkerGpsTrace.vue
+#: src/components/generics/markers/MarkerGpsTrace.vue
 msgid "GPS Track"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "GPS track"
 msgstr ""
 
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "General informations"
 msgstr ""
 
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "Geolocation"
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Go to the previous page"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "Have an account?"
 msgstr ""
 
@@ -431,37 +452,39 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/components/views/user/FollowingView.vue
+#: src/views/user/FollowingView.vue
 msgid "Here is the list of users you are following and whose activity you will see in your personal feed."
 msgstr ""
 
-#: src/components/views/user/MailingListsView.vue
+#: src/views/user/MailingListsView.vue
 msgid "Here you may change your subscriptions to snow forecast mailing lists."
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/user/PreferencesView.vue
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/ViewContainer.vue
 msgid "History"
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/portals/FeedView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Home"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/user/PreferencesView.vue
 msgid "Home page feed"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "Ice & mixed"
 msgstr ""
 
-#: src/components/views/portals/DashboardView.vue
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/portals/DashboardView.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
 msgid "Images"
 msgstr ""
 
@@ -473,143 +496,168 @@ msgstr ""
 msgid "Insert image"
 msgstr ""
 
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/staticViews/SeracView.vue
 msgid "Know more about SERAC"
 msgstr ""
 
-#: src/components/views/portals/FeedView.vue
+#: src/views/portals/FeedView.vue
 msgid "Last forum topics"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/RecentOutingsBox.vue
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
 msgid "Last outings"
 msgstr ""
 
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/SideMenu.vue
+msgid "Licenses"
+msgstr ""
+
+#: src/views/wiki/WhatsNewView.vue
 msgid "Links"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
+#: src/views/wiki/HistoryView.vue
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "Location / elevation / orientation"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Log in to post a comment"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Log in to post the first comment"
 msgstr ""
 
-#: src/components/utils/buttons/LoginButton.vue
-#: src/components/views/user/LoginView.vue
+#: src/components/generics/buttons/LoginButton.vue
+#: src/views/user/LoginView.vue
 msgid "Login"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "Logout"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "MTB rating"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "MTB ratings"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
+#: src/views/user/AccountView.vue
 msgid "Make profile page public"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
 msgid "Maps"
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Merge documents"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "Merge with other document"
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Merging a source document with a target document transfers all
                 associations of the source document to the target document, and sets up a
                 redirection from the source to the target document."
 msgstr ""
 
-#: src/components/views/portals/FeedView.vue
+#: src/views/portals/FeedView.vue
 msgid "Mobile application"
 msgstr ""
 
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "Modified the"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My account"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My changes"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My followed users"
 msgstr ""
 
-#: src/components/views/Navigation.vue
-#: src/components/views/user/MailingListsView.vue
+#: src/views/Navigation.vue
+#: src/views/user/MailingListsView.vue
 msgid "My mailing lists"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My outings"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My preferences"
 msgstr ""
 
-#: src/components/views/Navigation.vue
+#: src/views/Navigation.vue
 msgid "My profile"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
+#: src/views/staticViews/TopoguideView.vue
+msgid "New outing"
+msgstr ""
+
+#: src/views/user/AccountView.vue
 msgid "New password"
 msgstr ""
 
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/staticViews/TopoguideView.vue
+msgid "New route"
+msgstr ""
+
+#: src/views/staticViews/TopoguideView.vue
+msgid "New waypoint"
+msgstr ""
+
+#: src/views/wiki/WhatsNewView.vue
 msgid "Next"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "No account yet?"
 msgstr ""
 
-#: src/components/utils/inputs/InputDocument.vue
+#: src/components/generics/inputs/InputDocument.vue
 msgid "No match?"
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material."
+msgstr ""
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "NonCommercial — You may not use the material for commercial purposes."
+msgstr ""
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Note that comments have to be transferred manually in Discourse before merging."
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Numbers"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/user/PreferencesView.vue
 msgid "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown."
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Ooops"
 msgstr ""
 
@@ -617,24 +665,24 @@ msgstr ""
 msgid "Ordered list"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/components/views/document/ProfileView.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/Navigation.vue
-#: src/components/views/portals/DashboardView.vue
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/document/ProfileView.vue
+#: src/views/portals/DashboardView.vue
+#: src/views/SideMenu.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
 msgid "Outings"
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Page not found"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "Password"
 msgstr ""
 
@@ -642,15 +690,16 @@ msgstr ""
 msgid "Pitch description tag"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/CommentsBox.vue
+#: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Post the first comment"
 msgstr ""
 
 #: src/components/markdownEditor/MarkdownEditor.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
 msgid "Preview"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "Protect document"
 msgstr ""
 
@@ -658,16 +707,20 @@ msgstr ""
 msgid "Quote"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "Register"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/components/helper/HelperWindow.vue
+msgid "Registered participants can be directly associated to the outing, thus allowing them to modify the outing, add pictures, and associate other registered participants."
+msgstr ""
+
+#: src/views/user/LoginView.vue
 msgid "Reset password"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
-#: src/components/views/document/utils/windows/RevertVersionWindow.vue
+#: src/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/windows/RevertVersionWindow.vue
 msgid "Restore this version"
 msgstr ""
 
@@ -675,56 +728,58 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/AllRoutesBox.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/edition/OutingEditionView.vue
-#: src/components/views/Navigation.vue
-#: src/components/views/portals/DashboardView.vue
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/document/utils/boxes/AllRoutesBox.vue
+#: src/views/portals/DashboardView.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Routes"
 msgstr ""
 
-#: src/components/views/Navigation.vue
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/staticViews/SeracView.vue
 msgid "SERAC"
 msgstr ""
 
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/staticViews/SeracView.vue
 msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
 #: src/components/imagesUploader/ImagesUploader.vue
-#: src/components/views/edition/utils/EditionContainer.vue
-#: src/components/views/user/AccountView.vue
+#: src/views/user/AccountView.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
 msgid "Save"
 msgstr ""
 
-#: src/components/utils/inputs/InputDocument.vue
+#: src/components/generics/inputs/InputDocument.vue
 msgid "Search ..."
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "See profile based on:"
 msgstr ""
 
-#: src/components/views/document/utils/FollowButton.vue
+#: src/views/document/utils/FollowButton.vue
 msgid "See the activity of this contributor in your feed"
 msgstr ""
 
-#: src/components/views/wiki/HistoryView.vue
+#: src/views/wiki/HistoryView.vue
 msgid "See the latest version"
 msgstr ""
 
-#: src/components/views/user/LoginView.vue
+#: src/views/user/LoginView.vue
 msgid "Send reset email"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Several days?"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
+msgstr ""
+
+#: src/views/user/PreferencesView.vue
 msgid "Show only updates from followed users in the homepage feed"
 msgstr ""
 
@@ -732,23 +787,23 @@ msgstr ""
 msgid "Slopes"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Snow"
 msgstr ""
 
-#: src/components/views/staticViews/HomeView.vue
+#: src/views/staticViews/HomeView.vue
 msgid "Social network"
 msgstr ""
 
-#: src/components/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/ViewContainer.vue
 msgid "Sorry, you're not authorized to see this page."
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Source:"
 msgstr ""
 
-#: src/components/views/document/utils/FollowButton.vue
+#: src/views/document/utils/FollowButton.vue
 msgid "Stop following this contributor"
 msgstr ""
 
@@ -756,27 +811,43 @@ msgstr ""
 msgid "Taken routes"
 msgstr ""
 
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Target:"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Terrain"
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This book cover is the property of its editor and/or author"
+msgstr ""
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This content is licensed under Creative Commons BY-NC-ND 3.0"
+msgstr ""
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This content is licensed under Creative Commons BY-SA 3.0"
+msgstr ""
+
+#: src/views/document/utils/DocumentVersionBanner.vue
 msgid "This is the first version"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/DocumentVersionBanner.vue
 msgid "This is the last version"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes."
+msgstr ""
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "Time"
 msgstr ""
 
@@ -784,16 +855,21 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: src/components/views/edition/utils/MapInputRow.vue
+#: src/views/SideMenu.vue
+#: src/views/staticViews/TopoguideView.vue
+msgid "Topoguide"
+msgstr ""
+
+#: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "Trace"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
-#: src/components/views/document/utils/windows/TranslateWindow.vue
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/TranslateWindow.vue
 msgid "Translate into an other lang"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Transport &amp; road or PT access"
 msgstr ""
 
@@ -801,7 +877,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Types and styles"
 msgstr ""
 
@@ -809,7 +885,7 @@ msgstr ""
 msgid "URL/Link"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "Unblock account"
 msgstr ""
 
@@ -821,66 +897,62 @@ msgstr ""
 msgid "Unordered list"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "Unprotect document"
 msgstr ""
 
-#: src/components/views/edition/utils/MapInputRow.vue
+#: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "Upload a GPS track"
 msgstr ""
 
-#: src/components/views/user/AccountView.vue
-#: src/components/views/user/LoginView.vue
+#: src/views/user/AccountView.vue
+#: src/views/user/LoginView.vue
 msgid "Username"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/LangSwitcherBox.vue
+#: src/views/document/utils/boxes/ToolBox.vue
 msgid "View in other lang"
 msgstr ""
 
-#: src/components/views/staticViews/SeracView.vue
+#: src/views/staticViews/SeracView.vue
 msgid "View xreports"
 msgstr ""
 
-#: src/components/utils/modals/ModalConfirmation.vue
-#: src/components/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/components/generics/modals/ModalConfirmation.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
 msgid "Warning: This action cannot be undone!"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/AssociatedDocuments.vue
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
-#: src/components/views/staticViews/HomeView.vue
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/staticViews/HomeView.vue
+#: src/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/TopoguideView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "Waypoints"
 msgstr ""
 
-#: src/components/views/document/WaypointView.vue
+#: src/views/document/WaypointView.vue
 msgid "Waypoints children"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "Without c2c account"
 msgstr ""
 
-#: src/components/views/document/utils/windows/AssociationsEditorWindow.vue
-msgid "Xreport"
-msgstr ""
-
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "Xreports"
 msgstr ""
 
-#: src/components/views/edition/utils/MapInputRow.vue
+#: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "You may also drag, draw or edit the track on the map."
 msgstr ""
 
-#: src/components/views/document/ProfileView.vue
+#: src/views/document/ProfileView.vue
 msgid "You're not authorized. Please sign-in or create an account"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
 #: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "access"
 msgstr ""
 
@@ -898,12 +970,12 @@ msgstr ""
 
 #: src/components/helper/HelperWindow.vue
 #: src/components/imagesUploader/ImageUploader.vue
-#: src/components/views/document/BookView.vue
-#: src/components/views/document/ImageView.vue
-#: src/components/views/document/OutingView.vue
-#: src/components/views/document/RouteView.vue
-#: src/components/views/document/XreportView.vue
-#: src/components/views/user/PreferencesView.vue
+#: src/views/document/BookView.vue
+#: src/views/document/ImageView.vue
+#: src/views/document/OutingView.vue
+#: src/views/document/RouteView.vue
+#: src/views/document/XreportView.vue
+#: src/views/user/PreferencesView.vue
 msgid "activities"
 msgstr ""
 
@@ -935,39 +1007,35 @@ msgstr ""
 msgid "activity_rate_50"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add a book"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add a map"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
-msgid "add a route"
-msgstr ""
-
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add a waypoint"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add an area"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add an article"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add an image"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add an incident/accident report"
 msgstr ""
 
-#: src/components/utils/links/AddLink.vue
+#: src/components/generics/links/AddLink.vue
 msgid "add an outing"
 msgstr ""
 
@@ -975,7 +1043,7 @@ msgstr ""
 msgid "admin_limits"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "aid"
 msgstr ""
 
@@ -1007,11 +1075,11 @@ msgstr ""
 msgid "association"
 msgstr ""
 
-#: src/components/views/edition/ArticleEditionView.vue
-#: src/components/views/edition/BookEditionView.vue
-#: src/components/views/edition/ImageEditionView.vue
-#: src/components/views/edition/WaypointEditionView.vue
-#: src/components/views/edition/XreportEditionView.vue
+#: src/views/wiki/edition/ArticleEditionView.vue
+#: src/views/wiki/edition/BookEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
 msgid "associations"
 msgstr ""
 
@@ -1019,8 +1087,8 @@ msgstr ""
 msgid "aug"
 msgstr ""
 
-#: src/components/views/document/ImageView.vue
-#: src/components/views/document/XreportView.vue
+#: src/views/document/ImageView.vue
+#: src/views/document/XreportView.vue
 msgid "author"
 msgstr ""
 
@@ -1112,7 +1180,7 @@ msgstr ""
 msgid "calcaire"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "camera settings"
 msgstr ""
 
@@ -1125,7 +1193,7 @@ msgid "canyon"
 msgstr ""
 
 #: src/components/imagesUploader/ImageUploader.vue
-#: src/components/views/document/ImageView.vue
+#: src/views/document/ImageView.vue
 msgid "categories"
 msgstr ""
 
@@ -1137,7 +1205,7 @@ msgstr ""
 msgid "cleared"
 msgstr ""
 
-#: src/components/views/document/WaypointView.vue
+#: src/views/document/WaypointView.vue
 msgid "climbing rating"
 msgstr ""
 
@@ -1186,19 +1254,20 @@ msgstr ""
 msgid "collaborative"
 msgstr ""
 
-#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
-#: src/components/views/edition/utils/EditionContainer.vue
-#: src/components/views/wiki/HistoryView.vue
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+#: src/views/wiki/HistoryView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "comment"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "comments"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "condition_rating"
 msgstr ""
 
@@ -1206,7 +1275,7 @@ msgstr ""
 msgid "conditions_levels"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "configuration"
 msgstr ""
 
@@ -1214,7 +1283,11 @@ msgstr ""
 msgid "conglomerat"
 msgstr ""
 
-#: src/components/views/document/ProfileView.vue
+#: src/views/SideMenu.vue
+msgid "contact"
+msgstr ""
+
+#: src/views/document/ProfileView.vue
 msgid "contributions"
 msgstr ""
 
@@ -1226,7 +1299,7 @@ msgstr ""
 msgid "corridor"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "count"
 msgstr ""
 
@@ -1250,7 +1323,7 @@ msgstr ""
 msgid "crampons_spring"
 msgstr ""
 
-#: src/components/views/document/ImageView.vue
+#: src/views/document/ImageView.vue
 msgid "creator"
 msgstr ""
 
@@ -1278,7 +1351,7 @@ msgstr ""
 msgid "descent"
 msgstr ""
 
-#: src/components/views/edition/BookEditionView.vue
+#: src/views/wiki/edition/BookEditionView.vue
 msgid "description"
 msgstr ""
 
@@ -1286,7 +1359,7 @@ msgstr ""
 msgid "detail"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "detailled informations"
 msgstr ""
 
@@ -1298,7 +1371,7 @@ msgstr ""
 msgid "difficulties_height"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "down"
 msgstr ""
 
@@ -1315,10 +1388,10 @@ msgid "edge"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/document/OutingView.vue
-#: src/components/views/document/RouteView.vue
-#: src/components/views/edition/RouteEditionView.vue
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/document/OutingView.vue
+#: src/views/document/RouteView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "elevation"
 msgstr ""
 
@@ -1327,7 +1400,7 @@ msgid "elevation_down_snow"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue
-#: src/components/utils/inputs/InputDocument.vue
+#: src/components/generics/inputs/InputDocument.vue
 msgid "elevation_max"
 msgstr ""
 
@@ -1343,12 +1416,12 @@ msgstr ""
 msgid "empty"
 msgstr ""
 
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "empty comment"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "engagement_rating"
 msgstr ""
 
@@ -1356,8 +1429,8 @@ msgstr ""
 msgid "environment"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
 #: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "equipment"
 msgstr ""
 
@@ -1390,7 +1463,7 @@ msgid "exposed"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "exposition_rock_rating"
 msgstr ""
 
@@ -1422,7 +1495,7 @@ msgstr ""
 msgid "female"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "file_size"
 msgstr ""
 
@@ -1434,11 +1507,11 @@ msgstr ""
 msgid "flora"
 msgstr ""
 
-#: src/components/views/document/ProfileView.vue
+#: src/views/document/ProfileView.vue
 msgid "forum"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "free"
 msgstr ""
 
@@ -1450,19 +1523,19 @@ msgstr ""
 msgid "gear"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "general information"
 msgstr ""
 
-#: src/components/views/edition/ArticleEditionView.vue
-#: src/components/views/edition/BookEditionView.vue
-#: src/components/views/edition/OutingEditionView.vue
-#: src/components/views/edition/RouteEditionView.vue
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/ArticleEditionView.vue
+#: src/views/wiki/edition/BookEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "general informations"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "geolocation"
 msgstr ""
 
@@ -1474,8 +1547,8 @@ msgstr ""
 msgid "gite"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
 #: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "glacier"
 msgstr ""
 
@@ -1531,19 +1604,19 @@ msgstr ""
 msgid "heading text"
 msgstr ""
 
-#: src/components/views/document/WaypointView.vue
-#: src/components/views/edition/ImageEditionView.vue
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/document/WaypointView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "height"
 msgstr ""
 
-#: src/components/views/document/OutingView.vue
-#: src/components/views/document/RouteView.vue
+#: src/views/document/OutingView.vue
+#: src/views/document/RouteView.vue
 msgid "height difference"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "height_diff"
 msgstr ""
 
@@ -1576,7 +1649,7 @@ msgid "hiking"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "hiking_mtb_exposition"
 msgstr ""
 
@@ -1600,7 +1673,7 @@ msgstr ""
 msgid "hut_warden"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "ice"
 msgstr ""
 
@@ -1656,7 +1729,7 @@ msgstr ""
 msgid "key_needed"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "kilometers"
 msgstr ""
 
@@ -1676,11 +1749,11 @@ msgstr ""
 msgid "landscapes"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/user/PreferencesView.vue
 msgid "lang"
 msgstr ""
 
-#: src/components/views/user/PreferencesView.vue
+#: src/views/user/PreferencesView.vue
 msgid "langs"
 msgstr ""
 
@@ -1736,7 +1809,7 @@ msgstr ""
 msgid "magazine"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "main waypoint"
 msgstr ""
 
@@ -1748,7 +1821,7 @@ msgstr ""
 msgid "mar"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "max"
 msgstr ""
 
@@ -1760,7 +1833,7 @@ msgstr ""
 msgid "medium"
 msgstr ""
 
-#: src/components/views/document/utils/boxes/ElevationProfileBox.vue
+#: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "meters"
 msgstr ""
 
@@ -1768,7 +1841,7 @@ msgstr ""
 msgid "migmatite"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "min"
 msgstr ""
 
@@ -1776,7 +1849,7 @@ msgstr ""
 msgid "misc"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "mixed"
 msgstr ""
 
@@ -1832,7 +1905,7 @@ msgstr ""
 msgid "multi"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "name"
 msgstr ""
 
@@ -1868,7 +1941,7 @@ msgstr ""
 msgid "nearby service"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/DocumentVersionBanner.vue
 msgid "next version"
 msgstr ""
 
@@ -1876,8 +1949,8 @@ msgstr ""
 msgid "nivology"
 msgstr ""
 
-#: src/components/utils/DocumentField.vue
-#: src/components/utils/inputs/InputYesNo.vue
+#: src/components/generics/DocumentField.vue
+#: src/components/generics/inputs/InputYesNo.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "no"
 msgstr ""
@@ -1906,7 +1979,7 @@ msgstr ""
 msgid "novel"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "numbers"
 msgstr ""
 
@@ -1930,7 +2003,7 @@ msgstr ""
 msgid "open_non_guarded"
 msgstr ""
 
-#: src/components/views/staticViews/NotFoundView.vue
+#: src/views/staticViews/NotFoundView.vue
 msgid "or try the following pages:"
 msgstr ""
 
@@ -1967,8 +2040,8 @@ msgid "paragliding_takeoff"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/document/XreportView.vue
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/document/XreportView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "participants"
 msgstr ""
 
@@ -2041,7 +2114,7 @@ msgstr ""
 msgid "pressure"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/DocumentVersionBanner.vue
 msgid "previous version"
 msgstr ""
 
@@ -2061,7 +2134,7 @@ msgstr ""
 msgid "progressive"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "prominence"
 msgstr ""
 
@@ -2073,7 +2146,7 @@ msgstr ""
 msgid "psicobloc"
 msgstr ""
 
-#: src/components/utils/markers/MarkerQuality.vue
+#: src/components/generics/markers/MarkerQuality.vue
 msgid "quality"
 msgstr ""
 
@@ -2093,10 +2166,10 @@ msgstr ""
 msgid "range"
 msgstr ""
 
-#: src/components/views/document/OutingView.vue
-#: src/components/views/document/RouteView.vue
-#: src/components/views/edition/RouteEditionView.vue
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/document/OutingView.vue
+#: src/views/document/RouteView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "ratings"
 msgstr ""
 
@@ -2108,7 +2181,7 @@ msgstr ""
 msgid "reduce_impact"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "required"
 msgstr ""
 
@@ -2133,7 +2206,7 @@ msgid "rise"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "risk_rating"
 msgstr ""
 
@@ -2197,7 +2270,7 @@ msgstr ""
 msgid "secondary_impacted"
 msgstr ""
 
-#: src/components/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/DocumentVersionBanner.vue
 msgid "see actual version"
 msgstr ""
 
@@ -2221,6 +2294,10 @@ msgstr ""
 msgid "shelter"
 msgstr ""
 
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+msgid "show all"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "single"
 msgstr ""
@@ -2230,7 +2307,7 @@ msgid "site_info"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "ski_exposition"
 msgstr ""
 
@@ -2258,7 +2335,7 @@ msgstr ""
 msgid "slackline"
 msgstr ""
 
-#: src/components/views/document/WaypointView.vue
+#: src/views/document/WaypointView.vue
 msgid "slackline length"
 msgstr ""
 
@@ -2270,7 +2347,7 @@ msgstr ""
 msgid "slacklining"
 msgstr ""
 
-#: src/components/views/document/RouteView.vue
+#: src/views/document/RouteView.vue
 msgid "slope"
 msgstr ""
 
@@ -2322,7 +2399,8 @@ msgstr ""
 msgid "snowy"
 msgstr ""
 
-#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "soft snow"
 msgstr ""
 
@@ -2379,8 +2457,8 @@ msgid "temperature"
 msgstr ""
 
 #: src/components/imagesUploader/ImageUploader.vue
-#: src/components/views/edition/WaypointEditionView.vue
-#: src/components/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "title"
 msgstr ""
 
@@ -2392,7 +2470,8 @@ msgstr ""
 msgid "topoguide_supplements"
 msgstr ""
 
-#: src/components/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "total snow"
 msgstr ""
 
@@ -2416,11 +2495,11 @@ msgstr ""
 msgid "traverse"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "type"
 msgstr ""
 
-#: src/components/views/edition/RouteEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
 msgid "up"
 msgstr ""
 
@@ -2460,11 +2539,11 @@ msgstr ""
 msgid "waterpoint"
 msgstr ""
 
-#: src/components/views/edition/WaypointEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "waypoint"
 msgstr ""
 
-#: src/components/views/edition/OutingEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "weather and conditions"
 msgstr ""
 
@@ -2476,7 +2555,7 @@ msgstr ""
 msgid "webcam"
 msgstr ""
 
-#: src/components/views/edition/ImageEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
 msgid "width"
 msgstr ""
 
@@ -2488,8 +2567,8 @@ msgstr ""
 msgid "wind_speed"
 msgstr ""
 
-#: src/components/utils/DocumentField.vue
-#: src/components/utils/inputs/InputYesNo.vue
+#: src/components/generics/DocumentField.vue
+#: src/components/generics/inputs/InputYesNo.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "yes"
 msgstr ""

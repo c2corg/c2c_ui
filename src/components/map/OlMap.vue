@@ -35,10 +35,12 @@
         <div
             v-show="showFilterControl"
             ref="useMapAsFilter"
-            class="ol-control ol-control-use-map-as-filter"
-            v-tooltip:right="$gettext('Filter on map extent')">
-            <button @click="filterDocumentsWithMap=!filterDocumentsWithMap">
-                <fa-icon :class="{'has-text-success':filterDocumentsWithMap}" icon="search"/>
+            class="ol-control ol-control-use-map-as-filter">
+            <button
+                @click="filterDocumentsWithMap=!filterDocumentsWithMap"
+                :class="{'has-text-success':filterDocumentsWithMap}">
+                <fa-icon icon="search"/>
+                <span v-translate>Filter on map extent</span>
             </button>
         </div>
 
@@ -585,6 +587,13 @@ $control-margin:0.5em;
 .ol-control-use-map-as-filter{
     top: $control-margin;
     left:3em;
+
+    button {
+        width:auto;
+        font-size:1rem;
+        font-weight: normal;
+        padding:3px;
+    }
 }
 
 //style on layers popup

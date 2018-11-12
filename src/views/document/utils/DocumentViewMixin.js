@@ -33,6 +33,13 @@ export default {
         AllRoutesBox,
     },
 
+    props:{
+        draft:{
+            type:Object,
+            default:null,
+        }
+    },
+
     data() {
         return {
             promise:null,
@@ -53,7 +60,10 @@ export default {
             return constants.objectDefinitions[this.documentType].fields
         },
         isVersionView(){
-            return this.$route.name.endsWith("-version");
+            return this.$route.name.endsWith("-version")
+        },
+        isDraftView(){ // means preview for edit and add mode
+            return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
         },
 
         /*
@@ -66,7 +76,7 @@ export default {
             let doc = this.isVersionView ? this.promise.data.document : this.promise.data
 
             if(doc){
-                if(this.isVersionView)
+                if(this.isVersionView || this.isDraftView)
                     doc.currentLocale_ = this.$documentUtils.getLocaleStupid(doc, this.$route.params.lang)
                 else
                     doc.currentLocale_ = this.$documentUtils.getLocaleSmart(doc, this.$route.params.lang)
@@ -129,8 +139,9 @@ export default {
                         }
                     }
                 })
-
-            } else {
+            } else if(this.isDraftView){
+                this.promise = {data:this.draft}
+            } else { // normal mode
                 this.promise = c2c[this.documentType].get(this.documentId)
             }
         },

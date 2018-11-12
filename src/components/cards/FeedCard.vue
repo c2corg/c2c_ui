@@ -152,7 +152,6 @@
     .card{
         background-color:#FFF!important;
         transition:0.2s;
-        margin:5px;
         cursor:pointer;
         max-width:600px
     }

@@ -1,7 +1,7 @@
 <template>
     <div
         v-show="hasAnnouncement && !hidden"
-        class="has-background-info has-text-light"
+        class="has-background-info has-text-light no-print"
         @click="showContent=!showContent">
         <div class="section is-info">
             <button class="delete" @click="hide"/>

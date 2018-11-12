@@ -46,7 +46,8 @@
                         <feed-card
                             v-for="(item, index) of feed.data.feed"
                             :key="index"
-                            :item="item"/>
+                            :item="item"
+                            class="feed-card"/>
                     </div>
                 </div>
             </div>
@@ -89,3 +90,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .feed-card{
+        margin:auto;
+        margin-bottom:1.5rem;
+    }
+</style>

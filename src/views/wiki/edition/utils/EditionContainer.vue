@@ -1,5 +1,5 @@
 <template>
-    <div v-if="document" class="section">
+    <div v-if="document" class="section" :class="{preview: isPreview}">
         <html-header title="Edit a document"/>
         <h1 class="title">
             <!-- TODO  v-translate -->
@@ -7,6 +7,12 @@
             <document-title :document="document"/>
             in
             {{ $gettext(document.currentLocale_.lang) }}
+            <button class="button is-size-6" @click="isPreview=!isPreview">
+                <fa-icon :icon="isPreview ? 'edit' : 'eye'" />
+                &nbsp;
+                <span v-if="isPreview" v-translate>Back to edit mode</span>
+                <span v-else v-translate>Preview</span>
+            </button>
         </h1>
 
         <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
@@ -15,7 +21,9 @@
             {{ error.description }}
         </div>
 
-        <slot>
+        <component :is="$documentUtils.getDocumentType(document.type) + '-view'" v-if="isPreview" :draft="document"/>
+
+        <slot v-else>
             ...
         </slot>
 
@@ -41,9 +49,30 @@
 
     import FormRow from './FormRow'
 
+    import AreaView from '@/views/document/AreaView'
+    import ArticleView from '@/views/document/ArticleView'
+    import BookView from '@/views/document/BookView'
+    import ImageView from '@/views/document/ImageView'
+    import MapView from '@/views/document/MapView'
+    import OutingView from '@/views/document/OutingView'
+    import RouteView from '@/views/document/RouteView'
+    import WaypointView from '@/views/document/WaypointView'
+    import XreportView from '@/views/document/XreportView'
+
     export default {
 
-        components : { FormRow },
+        components : {
+            FormRow,
+            AreaView,
+            ArticleView,
+            BookView,
+            ImageView,
+            MapView,
+            OutingView,
+            RouteView,
+            WaypointView,
+            XreportView,
+         },
 
         props : {
             document:{
@@ -67,7 +96,14 @@
         data() {
             return {
                 comment:"",
+                isPreview:false,
             }
         },
     }
 </script>
+
+<style scoped>
+    .preview{
+        background: #ffffe0;
+    }
+</style>
