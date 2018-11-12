@@ -33,6 +33,7 @@
     @import '@/assets/sass/variables.scss';
 
     $sidemenu-width: 200px;
+    $body-height : calc(100vh - #{$navbar-height});
 
     html{
         overflow-x: hidden;
@@ -42,7 +43,7 @@
     }
 
     html, body, #app{
-        min-height:calc(100vh - $navbar-height);
+        min-height:$body-height;
     }
 
     #app{
