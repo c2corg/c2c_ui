@@ -49,6 +49,7 @@
             <div v-else class="navigation-item dropdown is-hoverable">
                 <div class="dropdown-trigger">
                     <img
+                        width="24" height="24"
                         :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
                         class="user-avatar">
                 </div>
