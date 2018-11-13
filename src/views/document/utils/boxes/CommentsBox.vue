@@ -103,12 +103,15 @@
                 const data = this.topic.post_stream
 
                 if (data !== undefined) {
-                    for (let post of data.posts) {
-                        if (post['name'] != 'system') {
-                            post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
-                            post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
-                            result.push(post);
-                        }
+                    let posts = data.posts
+
+                    if(posts[0].name =='system')
+                        posts = posts.slice(1)
+
+                    for (let post of posts) {
+                        post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
+                        post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
+                        result.push(post)
                     }
                 }
 
