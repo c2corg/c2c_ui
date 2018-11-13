@@ -2,6 +2,10 @@
 msgid " images"
 msgstr ""
 
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "1 or 2 complications (steeper or narrow section...)"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "1.1"
 msgstr ""
@@ -197,6 +201,14 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Average slope (degrees)"
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Average slope in degree"
+msgstr ""
+
 #: src/components/markdownEditor/MarkdownEditor.vue
 msgid "Back to code"
 msgstr ""
@@ -223,6 +235,7 @@ msgstr ""
 #: src/components/generics/modals/ModalConfirmation.vue
 #: src/components/imagesUploader/ImageUploader.vue
 #: src/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "Cancel"
 msgstr ""
 
@@ -625,10 +638,6 @@ msgstr ""
 msgid "New waypoint"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue
-msgid "Next"
-msgstr ""
-
 #: src/views/user/LoginView.vue
 msgid "No account yet?"
 msgstr ""
@@ -651,6 +660,10 @@ msgstr ""
 
 #: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Numbers"
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Ok"
 msgstr ""
 
 #: src/views/user/PreferencesView.vue
@@ -728,7 +741,7 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/views/document/utils/boxes/AllRoutesBox.vue
+#: src/views/document/utils/boxes/RoutesBox.vue
 #: src/views/portals/DashboardView.vue
 #: src/views/staticViews/HomeView.vue
 #: src/views/staticViews/NotFoundView.vue
@@ -783,6 +796,10 @@ msgstr ""
 msgid "Show only updates from followed users in the homepage feed"
 msgstr ""
 
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Skiability"
+msgstr ""
+
 #: src/components/map/OlMap.vue
 msgid "Slopes"
 msgstr ""
@@ -807,6 +824,10 @@ msgstr ""
 msgid "Stop following this contributor"
 msgstr ""
 
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Suggested rating"
+msgstr ""
+
 #: src/components/helper/HelperWindow.vue
 msgid "Taken routes"
 msgstr ""
@@ -821,6 +842,14 @@ msgstr ""
 
 #: src/views/staticViews/NotFoundView.vue
 msgid "The page you are looking for does not exist or is broken."
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "The slope must be between 0 and 80 deg"
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "The slope must be between 50 and 3000m high"
 msgstr ""
 
 #: src/views/document/utils/boxes/LicenseBox.vue
@@ -845,6 +874,10 @@ msgstr ""
 
 #: src/views/document/utils/boxes/LicenseBox.vue
 msgid "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes."
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "This tool estimates the technical difficulty of a ski route (ski rating)."
 msgstr ""
 
 #: src/views/document/utils/boxes/ElevationProfile.vue
@@ -910,6 +943,10 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Very complex (steps, narrow sections, ridges...)"
+msgstr ""
+
 #: src/views/document/utils/boxes/ToolBox.vue
 msgid "View in other lang"
 msgstr ""
@@ -933,6 +970,10 @@ msgstr ""
 
 #: src/views/document/WaypointView.vue
 msgid "Waypoints children"
+msgstr ""
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Wide and constant"
 msgstr ""
 
 #: src/views/wiki/edition/OutingEditionView.vue
@@ -1164,6 +1205,10 @@ msgstr ""
 msgid "boat"
 msgstr ""
 
+#: src/views/document/RouteView.vue
+msgid "bolted rock climbing gear"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "book"
 msgstr ""
@@ -1381,6 +1426,14 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "easy"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "easy mountain climbing gear"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "easy snow ice mixed gear"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1617,6 +1670,7 @@ msgstr ""
 
 #: src/views/wiki/edition/OutingEditionView.vue
 #: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "height_diff"
 msgstr ""
 
@@ -1648,6 +1702,10 @@ msgstr ""
 msgid "hiking"
 msgstr ""
 
+#: src/views/document/RouteView.vue
+msgid "hiking gear"
+msgstr ""
+
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "hiking_mtb_exposition"
@@ -1675,6 +1733,10 @@ msgstr ""
 
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "ice"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "ice && dry climbing gear"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2320,11 +2382,16 @@ msgid "ski_patroller"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
+#: src/views/wiki/edition/OutingEditionView.vue
 msgid "ski_rating"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "skitouring"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "skitouring gear"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue

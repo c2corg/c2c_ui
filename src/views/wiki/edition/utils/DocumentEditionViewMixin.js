@@ -111,7 +111,7 @@ export default {
         },
 
         save(comment){
-            this.beforeSave() // allow each view to handle some specifi cases
+            this.beforeSave() // allow each view to handle some specific cases
 
             if (this.hasError())
                 return

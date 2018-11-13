@@ -19,7 +19,7 @@
 
         <elevation-profile :document="document" />
 
-        <div v-if="document.geometry.geom_detail" class="buttons is-centered">
+        <div v-if="document.geometry && document.geometry.geom_detail" class="buttons is-centered">
             <button
                 class="button is-primary"
                 @click="downloadGpx">

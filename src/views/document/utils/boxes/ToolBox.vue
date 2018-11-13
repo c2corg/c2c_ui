@@ -3,7 +3,7 @@
 
         <associated-documents :document="document" />
 
-        <div class="has-text-centered" v-if="!isDraftView && document.available_langs.length>1">
+        <div class="has-text-centered" v-if="isNormalView && document.available_langs.length>1">
             <span v-translate>View in other lang</span>
             <br>
             <span class="lang-switcher-box-list">
@@ -16,7 +16,7 @@
             <hr>
         </div>
 
-        <div v-if="!isVersionView && !isDraftView && hasMissingLangs && $user.isLogged">
+        <div v-if="isEditable && hasMissingLangs">
             <tool-box-button
                 @click="$refs.translateWindow.show()"
                 icon="edit"
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Moderator zone -->
-        <div v-if="$user.isModerator && !isDraftView">
+        <div v-if="$user.isModerator && isEditable">
 
             <tool-box-button
                 @click="lockDocumentAction"
@@ -39,7 +39,7 @@
                 :label="$gettext('Merge with other document')" />
 
             <tool-box-button
-                v-if="!isVersionView && document.available_langs.length > 1"
+                v-if="document.available_langs.length > 1"
                 @click="$refs.DeleteLocaleWindow.show()"
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this locale')" />
@@ -67,7 +67,7 @@
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
         <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
         <translate-window
-            v-if="!isDraftView && !isVersionView"
+            v-if="isEditable"
             ref="translateWindow"
             :document="document"
             :missing-langs="missingLangs"/>
@@ -80,6 +80,8 @@
     import constants from '@/js/constants'
 
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import isEditableMixin from '../is-editable-mixin'
+    import viewModeMixin from '../view-mode-mixin'
 
     import ToolBoxButton from './ToolBoxButton'
     import LicenseBox from './LicenseBox'
@@ -103,7 +105,7 @@
             TranslateWindow,
         },
 
-        mixins : [ requireDocumentProperty ],
+        mixins : [ requireDocumentProperty, viewModeMixin, isEditableMixin ],
 
         data(){
             return {
@@ -112,13 +114,6 @@
         },
 
         computed:{
-            isVersionView(){
-                return this.$route.name.endsWith("-version");
-            },
-
-            isDraftView(){
-                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
-            },
 
             locale(){
                 return this.document.currentLocale_

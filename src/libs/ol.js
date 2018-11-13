@@ -21,7 +21,7 @@ import Geolocation from 'ol/Geolocation'
 import GeoJSON from 'ol/format/GeoJSON'
 import GPX from 'ol/format/GPX'
 import KML from 'ol/format/KML'
-import { get as getProjection, transform as transformProjection, transformExtent} from 'ol/proj'
+import { get as getProjection, transform as transformProjection, transformExtent, toLonLat} from 'ol/proj'
 import { getWidth } from 'ol/extent'
 
 
@@ -70,6 +70,7 @@ export default {
         get: getProjection,
         transform: transformProjection,
         transformExtent,
+        toLonLat
     },
 
     source: {

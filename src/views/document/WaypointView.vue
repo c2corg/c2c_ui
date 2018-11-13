@@ -103,7 +103,7 @@
                         <markdown-section :document="document" :field="fields.access" />
                     </div>
 
-                    <all-routes-box :document="document"/>
+                    <routes-box :document="document"/>
 
                     <recent-outings-box :document="document"/>
 
@@ -115,10 +115,8 @@
                             <pretty-waypoint-link :waypoint="child" />
                         </div>
                     </div>
-
-                    <div class="box" v-if="document.associations.images.length">
-                        <gallery :images="document.associations.images"/>
-                    </div>
+                    
+                    <images-box :document="document" />
 
                     <comments-box :document="document" />
                 </div>

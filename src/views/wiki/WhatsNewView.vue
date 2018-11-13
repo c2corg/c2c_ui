@@ -2,17 +2,7 @@
     <div class="section content">
         <html-header title="Recents changes"/>
 
-        <router-link
-            :to="{name: 'whatsnew', query: nextQuery }"
-            class="button is-link"
-            :class="{'is-loading':promise.loading}"
-            v-translate>
-            Next
-        </router-link>
-
-        <loading-notification :promise="promise" />
-
-        <table v-if="promise.data">
+        <table>
             <tr>
                 <th v-translate>Modified the</th>
                 <th v-translate>Author</th>
@@ -24,7 +14,7 @@
                     <span v-translate>comment</span>
                 </th>
             </tr>
-            <tr v-for="(change, index) of promise.data.feed" :key="index">
+            <tr v-for="(change, index) of feed" :key="index">
                 <td>
                     <version-link
                         :document-type="change.document.documentType"
@@ -68,6 +58,9 @@
                 </td>
             </tr>
         </table>
+
+        <loading-notification :promise="promise" />
+
     </div>
 </template>
 <script>
@@ -77,7 +70,9 @@
 
         data(){
             return {
-                promise:null,
+                promise:{},
+                feed:[],
+                endOfFeed:false,
             }
         },
 
@@ -92,24 +87,55 @@
 
         watch:{
             "$route":{
-                handler:"load",
+                handler:"initialize",
                 immediate:true,
             }
         },
 
+        mounted() {
+          window.addEventListener("scroll", this.onScroll)
+        },
+
+        beforeDestroy(){
+            window.removeEventListener("scroll", this.onScroll)
+        },
+
         methods:{
+            initialize(){
+                this.feed = []
+                this.endOfFeed = false
+                this.load()
+            },
 
             load(){
-                this.promise = c2c.getRecentChanges(this.$route.query)
-                .then(() => {
-                    for(let change of this.promise.data.feed)
-                        change.document.documentType = this.$documentUtils.getDocumentType(change.document.type)
-                })
-            }
+                if(this.promise && this.promise.loading)
+                    return
+
+                if(this.endOfFeed)
+                    return
+
+                this.promise = c2c.getRecentChanges(this.nextQuery).then(this.onLoad)
+            },
+
+            onLoad(){
+
+                for(let change of this.promise.data.feed){
+                    change.document.documentType = this.$documentUtils.getDocumentType(change.document.type)
+                    this.feed.push(change)
+                }
+
+                this.endOfFeed = this.promise.data.feed.length == 0
+            },
+
+            onScroll(){
+                if(document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight)
+                    this.load()
+            },
         },
     }
 </script>
-<style scoped>
+
+<style scoped lang="scss">
 
     td{
         white-space:nowrap;

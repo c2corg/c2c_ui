@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isVersionView && !isDraftView" class="box discourse-comments no-print">
+    <div v-if="isNormalView" class="box discourse-comments no-print">
         <h2 class="title is-2" v-translate>Comments</h2>
 
         <div v-if="document.disable_comments">
@@ -63,11 +63,12 @@
 
 <script>
     import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import viewModeMixin from '.././view-mode-mixin'
 
     import forum from '@/apis/forum.js'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins : [ requireDocumentProperty, viewModeMixin ],
 
         data(){
             return {
@@ -77,14 +78,6 @@
         },
 
         computed: {
-
-            isVersionView(){
-                return this.$route.name.endsWith("-version");
-            },
-
-            isDraftView(){
-                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
-            },
 
             locale(){
                 return this.document.currentLocale_

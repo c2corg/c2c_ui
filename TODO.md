@@ -41,6 +41,7 @@
 
 ### Refactors
 
+* remane all folder into kebab-case 
 * rename all js file in this-is-a-file-name.js
 * does saveAs filesaver dependency really usefull now ?
 * test requestPasswordChange and validate_new_password

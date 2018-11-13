@@ -12,6 +12,26 @@
                     <markdown-section :document="document" :field="fields.description"/>
                 </div>
 
+                <div class="box">
+                    <div class="level is-mobile">
+                        <div class="level-item has-text-centered"
+                             v-for="documentType of ['Waypoint', 'Route', 'Outing']"
+                             :key="documentType">
+
+                            <router-link
+                                :to="{ name: documentType.toLowerCase() + 's', query: {a:documentId} }"
+                                class="">
+                                <div>
+                                    <icon-document class="is-size-1" :document-type="documentType.toLowerCase()" />
+                                </div>
+                                <p>{{ $gettext(documentType + 's') }}</p>
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
+
+                <images-box :document="document" />
+
                 <comments-box :document="document" />
             </div>
         </div>

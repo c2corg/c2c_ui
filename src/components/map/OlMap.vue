@@ -53,13 +53,33 @@
             </button>
         </div>
 
+        <div
+            v-show="showRecenterOn"
+            ref="recenterOnControl"
+            class="ol-control ol-control-recenter-on">
+            <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions">
+        </div>
+
+        <div
+            v-show="showRecenterOnPropositions"
+            ref="recenterOnPropositions"
+            class="ol-control ol-control-recenter-on-propositions">
+            <ul v-if="recenterPropositions && recenterPropositions.data && recenterPropositions.data.features">
+                <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
+                    {{ item.properties.name }},
+                    <small>{{ item.properties.state }}, {{ item.properties.country }}</small>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </template>
 
 
 <script>
     import ol from '@/libs/ol'
-    import biodivSports from '@/apis/biodivSports.js'
+    import biodivSports from '@/apis/biodiv-sports'
+    import photon from '@/apis/photon'
 
     import { cartoLayers, dataLayers } from './mapLayers.js'
     import {
@@ -82,6 +102,11 @@
             },
 
             showFilterControl: {
+                type: Boolean,
+                default:false,
+            },
+
+            showRecenterOn: {
                 type: Boolean,
                 default:false,
             },
@@ -149,6 +174,9 @@
                 filterDocumentsWithMap: Boolean(this.$route.query.bbox),
 
                 highlightedFeature_ : null,
+
+                recenterPropositions : null,
+                showRecenterOnPropositions: false,
             }
         },
 
@@ -241,6 +269,8 @@
                     new ol.control.Control({element: this.$refs.layerSwitcher}),
                     new ol.control.Control({element: this.$refs.useMapAsFilter}),
                     new ol.control.Control({element: this.$refs.centerOnGeolocation}),
+                    new ol.control.Control({element: this.$refs.recenterOnControl}),
+                    new ol.control.Control({element: this.$refs.recenterOnPropositions}),
                 ]),
 
                 layers: this.mapLayers.concat(this.dataLayers).concat([this.biodivLayer, this.documentsLayer]),
@@ -546,6 +576,35 @@
                 this.geolocation.on('change:position', setCenter.bind(this))
             },
 
+            searchRecenterPropositions(event){
+                let query = event.target.value
+
+                if(query && query.length >=3){
+                    const center = this.view.getCenter()
+                    const centerWgs84 = ol.proj.toLonLat(center);
+
+                    this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84)
+                    this.showRecenterOnPropositions = true
+                }
+            },
+
+            // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
+            recenterOn(item){
+                const feature = geoJSONFormat.readFeature(item)
+                const extent = feature.get('extent')
+
+                let geomOrExtent
+
+                if(extent) {
+                    geomOrExtent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+                } else {
+                    geomOrExtent =feature.getGeometry()
+                }
+
+                this.map.getView().fit(geomOrExtent, this.map.getSize(), {maxZoom: 12})
+                this.showRecenterOnPropositions = false
+            },
+
             getBiodivSportsAreas(){
                 if (!this.showBiodivSportsAreas)
                     return
@@ -593,6 +652,27 @@ $control-margin:0.5em;
         font-size:1rem;
         font-weight: normal;
         padding:3px;
+
+        svg {
+            margin-right: 3px;
+        }
+    }
+}
+
+.ol-control-recenter-on{
+    top: 35px;
+    left:3em;
+}
+
+.ol-control-recenter-on-propositions{
+    top: 65px;
+    left:3em;
+    background: rgba(255,255,255,0.9);
+    padding:5px;
+
+    li:hover{
+        background: lightgrey;
+        cursor: pointer;
     }
 }
 

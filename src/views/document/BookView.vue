@@ -29,6 +29,8 @@
                     <markdown-section :document="document" :field="fields.description" hide-title/>
                 </div>
 
+                <routes-box :document="document" hide-buttons/>
+
                 <comments-box :document="document" />
             </div>
         </div>

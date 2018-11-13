@@ -14,8 +14,9 @@
                 <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
 
                     <follow-button :document="document" />
-
+                    
                     <history-link
+                        v-if="documentType!='profile' || $user.isModerator || document.document_id == $user.id"
                         v-tooltip="$gettext('History')"
                         :document="document"
                         :lang="lang">
@@ -24,13 +25,13 @@
 
                     <span
                         v-tooltip="$gettext('Add images')"
-                        v-if="!isVersionView && $user.isLogged"
+                        v-if="isEditable"
                         @click="$refs.imagesUploader.show()">
                         <icon-image />
                     </span>
 
                     <edit-link
-                        v-if="!isVersionView && $user.isLogged"
+                        v-if="isEditable"
                         :document="document"
                         :lang="lang"
                         v-tooltip="$gettext('Edit')">
@@ -38,7 +39,7 @@
                     </edit-link>
                 </span>
                 <div class="title is-1">
-                    <icon-document :document-type="$documentUtils.getDocumentType(document.type)"/>
+                    <icon-document :document-type="documentType"/>
                     <document-title :document="document"/>
                 </div>
             </div>
@@ -64,12 +65,20 @@
     import FollowButton from './FollowButton'
     import DocumentVersionBanner from './DocumentVersionBanner'
 
+    import isEditableMixin from './is-editable-mixin'
+    import viewModeMixin from './view-mode-mixin'
+
     export default {
         components:{
             ImagesUploader,
             FollowButton,
             DocumentVersionBanner,
         },
+
+        mixins : [
+            isEditableMixin,
+            viewModeMixin,
+        ],
 
         props: {
             document:{
@@ -90,23 +99,13 @@
             },
         },
 
-        data() {
-            return {
-                promise:null,
-            }
-        },
-
         computed:{
-            isVersionView(){
-                return !!this.version
-            },
-
-            isDraftView(){ // means preview for edit and add mode
-                return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
-            },
-
             title(){
                 return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.lang) : undefined
+            },
+
+            documentType(){ // is-editable mixin needs this property
+                return this.$documentUtils.getDocumentType(this.document.type)
             },
         }
     }

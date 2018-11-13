@@ -1,3 +1,4 @@
+
 /*
  * LocalStorage is a wrapper arround window.localStorage
  * it allows a key/string to be used as a key/{property:value} object
@@ -55,4 +56,18 @@ LocalStorage.prototype.getItem = function(key){
 
 }
 
-export default new LocalStorage()
+const localStorage = new LocalStorage()
+
+export default function install(Vue){
+    Object.defineProperty(Vue.prototype, '$localStorage', {
+        get() {
+            if(!this.$options.name)
+                throw new Error("Please set name property of your componenent")
+
+            // TODO anti pattern : with this, we can't change any component name
+            // find another way. Maybe this in created() :
+            // this.$localStorage
+            return localStorage.getItem(`${this.$options.name}.preferences`)
+        }
+    })
+}

@@ -2,14 +2,15 @@
 import constants from '@/js/constants'
 import c2c from '@/apis/c2c'
 
-import ViewContainer from './ViewContainer'
+import viewModeMixin from './view-mode-mixin'
 
+import ViewContainer from './ViewContainer'
 import CommentsBox from './boxes/CommentsBox'
 import MapBox from './boxes/MapBox'
+import ImagesBox from './boxes/ImagesBox'
 import RecentOutingsBox from './boxes/RecentOutingsBox'
 import ToolBox from './boxes/ToolBox'
-import AllRoutesBox from './boxes/AllRoutesBox'
-
+import RoutesBox from './boxes/RoutesBox'
 import FieldView from './fieldViewers/FieldView'
 import LabelValue from './fieldViewers/LabelValue'
 import DoubleNumericField from './fieldViewers/DoubleNumericField'
@@ -30,8 +31,12 @@ export default {
         ProfilesLinks,
         RecentOutingsBox,
         ToolBox,
-        AllRoutesBox,
+        RoutesBox,
+        ImagesBox,
     },
+
+    mixins : [ viewModeMixin ],
+
 
     props:{
         draft:{
@@ -59,12 +64,6 @@ export default {
         fields(){
             return constants.objectDefinitions[this.documentType].fields
         },
-        isVersionView(){
-            return this.$route.name.endsWith("-version")
-        },
-        isDraftView(){ // means preview for edit and add mode
-            return this.$route.name.endsWith("-edit") || this.$route.name.endsWith("-add")
-        },
 
         /*
         * properties computed when document is loaded
@@ -76,10 +75,10 @@ export default {
             let doc = this.isVersionView ? this.promise.data.document : this.promise.data
 
             if(doc){
-                if(this.isVersionView || this.isDraftView)
-                    doc.currentLocale_ = this.$documentUtils.getLocaleStupid(doc, this.$route.params.lang)
-                else
+                if(this.isNormalView)
                     doc.currentLocale_ = this.$documentUtils.getLocaleSmart(doc, this.$route.params.lang)
+                else
+                    doc.currentLocale_ = this.$documentUtils.getLocaleStupid(doc, this.$route.params.lang)
             }
 
             return doc

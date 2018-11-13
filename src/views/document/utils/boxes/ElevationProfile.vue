@@ -29,6 +29,9 @@
 
         data(){
             return {
+                hasData : false,
+
+                coords: null,
                 data: null,
                 timeAvailable : false,
                 mode:"distance",
@@ -70,14 +73,13 @@
             }
         },
 
-        computed:{
-            hasData(){
-                return Boolean(this.document.geometry.geom_detail)
-            },
-        },
-
         watch:{
             mode:'updateChart',
+        },
+
+        created(){
+            if(this.document.geometry && this.document.geometry.geom_detail)
+                this.computeCoords()
         },
 
         mounted(){
@@ -86,33 +88,40 @@
         },
 
         methods:{
-            createChart(){
+            computeCoords(){
                 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
 
                 // compute data
                 var geom_detail = JSON.parse(this.document.geometry.geom_detail)
 
-                let coords = [];
 
                 if (geom_detail.type === 'MultiLineString') {
+                    this.coords = []
                     geom_detail.coordinates.forEach((linestring) => {
-                        coords = coords.concat(linestring);
+                        this.coords = this.coords.concat(linestring);
                     });
                 } else {
-                    coords = geom_detail.coordinates;
+                    this.coords = geom_detail.coordinates;
                 }
 
-                const timeAvailable = coords.every((coord) => {
-                    return coord.length > 3;
-                });
+                // is there any elevation data
+                if(!this.coords.some((coord) => {return coord.length > 2}))
+                    return
 
-                this.timeAvailable=timeAvailable
+                this.timeAvailable = this.coords.every((coord) => { return coord.length > 3 })
+                this.hasData = true
 
-                const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : null;
+            },
+
+            createChart(){
+
+                const timeAvailable = this.timeAvailable
+                const coords = this.coords
+                const startDate = timeAvailable ? new Date(coords[0][3] * 1000) : null
 
                 let totalDist = 0;
                 this.data = coords.map((coord, i, coords) => {
-                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : null;
+                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : null
                     let d = 0;
                     if (i > 0) {
                         // convert from web mercator to lng/lat

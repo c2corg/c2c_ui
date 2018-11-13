@@ -14,8 +14,10 @@
             <div class="column is-9">
                 <div class="box">
                     <markdown-section :document="document" :field="fields.summary"/>
-                    <markdown-section :document="document" :field="fields.description" hide-title/>
+                    <markdown-section :document="document" :field="fields.description" hide-title/>                                 
                 </div>
+
+                <images-box :document="document" />
 
                 <comments-box :document="document" />
             </div>

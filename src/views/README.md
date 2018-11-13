@@ -1,1 +1,1 @@
-Router views.
+Main views called by vue-router.

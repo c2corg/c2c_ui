@@ -18,12 +18,14 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;cards|Document's cards. Simply use them with `<document-card :document="myOuting" />`.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;datatable|A table that display a list of document. |
+|&nbsp;&nbsp;&nbsp;&nbsp;feed-widget| |
 |&nbsp;&nbsp;&nbsp;&nbsp;generics|Generic components. Any component present in this folder is available everywhere. |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttons| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icons|Components in this folder are simple icon, without any behavior|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document|Icons by document type (outing, route...)|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputs|All input must be wrapped into a `.control` container|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;links| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;markdown| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;markers|A `marker` is an icon, with some feature, like a tooltip, inside logic, or anything else.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modals|Generic modal windows|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prettyLinks| |
@@ -34,11 +36,10 @@
 |js|Generic Javascript files.|
 |&nbsp;&nbsp;&nbsp;&nbsp;constants| |
 |libs|Wrappers, with small functionalities, around existing libraries |
-|tools|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|
 |translations| |
 |&nbsp;&nbsp;&nbsp;&nbsp;dist|Do not edit these files, thee are generated from .po files|
 |&nbsp;&nbsp;&nbsp;&nbsp;po| |
-|views|Router views.|
+|views|Main views called by vue-router.|
 |&nbsp;&nbsp;&nbsp;&nbsp;document|Views for each document type. Maybe the most important folder!|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boxes| |
@@ -54,3 +55,5 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;wiki| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|Edition views, one per document's type|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils|Utilities for edition views.|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
+|vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|

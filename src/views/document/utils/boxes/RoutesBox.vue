@@ -1,13 +1,17 @@
 <template>
-    <div class="box" v-if="document.associations.all_routes.documents.length">
+    <div class="box" v-if="source.length !=0 || !hideButtons">
         <h2 class="title is-2">
             <span v-translate>Routes</span>
             <add-link
+                v-if="!hideButtons"
                 document-type="route"
                 :query="query"
                 class="button is-small is-rounded is-primary"/>
 
-            <router-link :to="{name:'routes', query:query}" class="button is-small is-rounded is-primary">
+            <router-link
+                v-if="!hideButtons"
+                :to="{name:'routes', query:query}"
+                class="button is-small is-rounded is-primary">
                 List
             </router-link>
         </h2>
@@ -31,6 +35,13 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
+        props : {
+            hideButtons:{
+                type:Boolean,
+                default:false,
+            }
+        },
+
         data(){
             return {
                 routes : {},
@@ -42,11 +53,16 @@
                 const query = {}
                 query[this.document.type] = this.document.document_id
                 return query
-            }
+            },
+
+            source(){
+                return this.document.associations.routes || this.document.associations.all_routes.documents
+            },
         },
 
         created(){
-            for(let route of this.document.associations.all_routes.documents){
+
+            for(let route of this.source){
                 for(let activity of route.activities){
                     if(!this.routes[activity])
                         this.routes[activity] = {}

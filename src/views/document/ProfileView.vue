@@ -41,14 +41,7 @@
                         <markdown-section :document="document" :field="fields.summary"/>
                         <markdown-section :document="document" :field="fields.description" hide-title/>
                     </div>
-
-                    <div v-if="feed.data">
-                        <feed-card
-                            v-for="(item, index) of feed.data.feed"
-                            :key="index"
-                            :item="item"
-                            class="feed-card"/>
-                    </div>
+                    <feed-widget type="profile" />
                 </div>
             </div>
         </div>
@@ -56,44 +49,17 @@
 </template>
 
 <script>
-    import c2c from '@/apis/c2c'
 
     import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 
-    import FeedCard from '@/components/cards/FeedCard'
+    import FeedWidget from '@/components/feed-widget/FeedWidget'
 
     export default {
 
         components:{
-            FeedCard
+            FeedWidget
         },
 
         mixins : [ DocumentViewMixin ],
-
-        data(){
-            return {
-                feed:null
-            }
-        },
-
-        watch: {
-            "$route":{
-                handler: "load",
-                immediate: true,
-            }
-        },
-
-        methods: {
-                load(){
-                this.feed = c2c.feed.getProfileFeed({u:this.$route.params.id, pl:this.$language.current})
-            }
-        }
     }
 </script>
-
-<style scoped>
-    .feed-card{
-        margin:auto;
-        margin-bottom:1.5rem;
-    }
-</style>

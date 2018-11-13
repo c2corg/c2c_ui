@@ -5,16 +5,16 @@ require('@/js/polyfills.js')
 import Vue from 'vue'
 import App from '@/App.vue'
 
-import router from '@/tools/router'
-import documentUtils from '@/tools/documentUtils'
-import fontAwesome from '@/tools/fa.config'
-import helperWindow from '@/tools/helperWindow'
-import getText from '@/tools/getTextPlugin'
-import globalComponents from '@/tools/globalComponents'
-import localStorage from '@/tools/localStorage'
-import tooltip from '@/tools/tooltip'
-import user from '@/tools/user'
-import vueMoment from '@/tools/vue-moment.js'
+import router from '@/vue-plugins/router'
+import documentUtils from '@/vue-plugins/document-utils'
+import fontAwesome from '@/vue-plugins/font-awesome-config'
+import helperWindow from '@/vue-plugins/helper-window'
+import getText from '@/vue-plugins/gettext-plugin'
+import globalComponents from '@/vue-plugins/generic-components'
+import localStorage from '@/vue-plugins/local-storage'
+import tooltip from '@/vue-plugins/tooltip'
+import user from '@/vue-plugins/user'
+import vueMoment from '@/vue-plugins/vue-moment.js'
 
 Vue.config.productionTip = false
 Vue.config.silent = false

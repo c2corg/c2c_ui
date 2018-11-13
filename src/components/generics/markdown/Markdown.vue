@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import markdown from '@/libs/markdown.js'
+    import markdown from './markdown.js'
 
     export default {
         props: {

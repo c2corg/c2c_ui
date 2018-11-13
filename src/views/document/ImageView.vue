@@ -16,7 +16,7 @@
                         <author-link :author="document.author"/>
                     </label-value>
 
-                    <label-value :label="$gettext('creator')">
+                    <label-value v-if="document.creator" :label="$gettext('creator')">
                         <author-link :author="document.creator"/>
                     </label-value>
 
