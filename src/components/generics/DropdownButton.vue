@@ -48,15 +48,20 @@
             }
         },
 
-        created: function() {
-            let self = this;
-
-            window.addEventListener('click', function(e){
-                // close dropdown when clicked outside
-                if (!self.$el.contains(e.target)){
-                    self.isActive = false
-                }
-            })
+        created(){
+            window.addEventListener('click', this.onClick)
         },
+
+        beforeDestroy(){
+            window.removeEventListener("click", this.onClick)
+        },
+
+        methods:{
+            onClick(event){
+                // close dropdown when clicked outside
+                if(!this.$el.contains(event.target))
+                    this.isActive = false
+            }
+        }
     }
 </script>

@@ -24,17 +24,19 @@
             }
         },
 
-        created() {
-            let self = this;
+        created(){
+            window.addEventListener('click', this.onClick)
+        },
 
-            // TODO remove listener
+        beforeDestroy(){
+            window.removeEventListener("click", this.onClick)
+        },
 
-            window.addEventListener('click', function(e){
-                // close dropdown when clicked outside
-                if (!self.$el.contains(e.target)){
-                    self.isActive = false
-                }
-            })
+        methods:{
+            onClick(event){
+                if (!this.$el.contains(event.target))
+                    this.isActive = false
+            }
         },
     }
 </script>
