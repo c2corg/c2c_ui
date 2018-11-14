@@ -34,7 +34,7 @@
                                 <edit-link v-else :document="document" :lang="$user.lang"/>
                             </label-value>
 
-                            <field-view :document="document" :field="fields.glacier_gear"/>
+                            <field-view v-if="document.glacier_gear!='no'" :document="document" :field="fields.glacier_gear"/>
 
                             <input-orientation
                                 v-if="document.orientations && document.orientations.length"

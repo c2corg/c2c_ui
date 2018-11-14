@@ -1,5 +1,5 @@
 <template>
-    <label-value v-if="hasValue" :label="$gettext(field.name)">
+    <label-value v-if="hasValue && visible" :label="$gettext(field.name)">
         <document-field :document="document" :field="field" />
     </label-value>
 </template>
@@ -25,7 +25,11 @@
                     return false
 
                 return true
-            }
+            },
+
+            visible(){
+                return this.field.isVisibleFor(this.document)
+            },
         }
     }
 </script>
