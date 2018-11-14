@@ -303,13 +303,14 @@
             this.drawDocumentMarkers()
 
             if(this.urlValue)
-                this.view.fit(this.urlValue, this.map.getSize())
+                this.view.fit(this.urlValue, {size:this.map.getSize()})
             else
                 this.fitMapToDocuments(true)
 
             if(this.editable){
                 this.setModifyInteractions()
                 this.setDrawInteraction()
+                this.setDragAndDropInteraction()
             } else {
                 // if map is not editable, feature are clickable
                 this.map.on('pointermove', this.onPointerMove)
@@ -328,7 +329,7 @@
 
                 modify.on("modifyend", (event) => {
                     for(let feature of event.features.getArray()){
-                        this.setDocumentGeometryFromFeature(feature)
+                        this.updateDocumentGeometryFromFeature(feature)
                     }
                 })
             },
@@ -357,16 +358,25 @@
                     this.map.addInteraction(this.drawInteraction)
 
                     this.drawInteraction.on("drawend", (event) => {
-                        let feature = event.feature
-                        feature.set("document", this.editedDocument)
-                        this.setDocumentGeometryFromFeature(feature)
-                        this.drawDocumentMarkers()
-                        this.setDrawInteraction()
+                        this.setDocumentGeometryFromFeature(event.feature, false)
                     })
                 }
             },
 
-            setDocumentGeometryFromFeature(feature){
+            // https://openlayers.org/en/latest/examples/drag-and-drop.html
+            setDragAndDropInteraction(){
+                let dragAndDrop = new ol.interaction.DragAndDrop({
+                    formatConstructors: [ol.format.GPX, ol.format.KML]
+                })
+
+                dragAndDrop.on('addfeatures', (function(event){
+                    this.setDocumentGeometryFromFeature(event.features[0])
+                }).bind(this))
+
+                this.map.addInteraction(dragAndDrop)
+            },
+
+            updateDocumentGeometryFromFeature(feature){
                 let document = feature.get("document")
 
                 if(!document)
@@ -375,6 +385,22 @@
                 this.setDocumentGeometry(document, feature.get("geometry"))
             },
 
+            setDocumentGeometryFromGpx(gpx){
+                let gpxFormat = new ol.format.GPX()
+                let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
+
+                this.setDocumentGeometryFromFeature(feature)
+            },
+
+            setDocumentGeometryFromFeature(feature, fitMap=true){
+                this.setDocumentGeometry(this.editedDocument, feature.get("geometry"))
+                this.drawDocumentMarkers()
+
+                if(fitMap)
+                    this.fitMapToDocuments(true)
+
+                this.setDrawInteraction()
+            },
 
             setDocumentGeometry(document, geometry){
                 let geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
@@ -395,16 +421,6 @@
                 } else {
                     throw `Unexpected geometry type : ${geometry.type}`
                 }
-            },
-
-            setGeomDetail(gpx){
-                let gpxFormat = new ol.format.GPX()
-                let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
-
-                this.setDocumentGeometry(this.editedDocument, feature.get("geometry"))
-                this.drawDocumentMarkers()
-                this.fitMapToDocuments(true)
-                this.setDrawInteraction()
             },
 
             drawDocumentMarkers(){
@@ -524,12 +540,12 @@
                 if((this.filterDocumentsWithMap || this.editable) && !force)
                     return
 
-                var extent = this.documentsLayer.getSource().getExtent();
+                var extent = this.documentsLayer.getSource().getExtent()
 
                 if(extent.filter(isFinite).length != 4) // if there is infnity, default extent
                     extent =  DEFAULT_EXTENT // TODO need to be current extent if it exists ...
 
-                this.view.fit(extent, this.map.getSize());
+                this.view.fit(extent, {size:this.map.getSize()})
                 this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()))
             },
 
@@ -591,17 +607,18 @@
             // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
             recenterOn(item){
                 const feature = geoJSONFormat.readFeature(item)
-                const extent = feature.get('extent')
-
-                let geomOrExtent
+                let extent = feature.get('extent')
+                let coordinates = feature.getGeometry().flatCoordinates
 
                 if(extent) {
-                    geomOrExtent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+                    extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+                    this.view.fit(extent, {size:this.map.getSize(), maxZoom: 12})
                 } else {
-                    geomOrExtent =feature.getGeometry()
+                    coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857')
+                    this.view.setCenter(coordinates)
+                    this.view.setZoom(16)
                 }
 
-                this.map.getView().fit(geomOrExtent, this.map.getSize(), {maxZoom: 12})
                 this.showRecenterOnPropositions = false
             },
 

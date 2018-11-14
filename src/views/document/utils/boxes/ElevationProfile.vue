@@ -4,11 +4,11 @@
         <form v-if="timeAvailable">
             <span v-translate>See profile based on:</span>
             <label>
-                <input v-model="mode" type="radio" value="distance" ng-model="elevationProfileCtrl.mode">
+                <input v-model="mode" type="radio" value="distance">
                 <span v-translate>Distance</span>
             </label>
             <label>
-                <input v-model="mode" type="radio" value="time" ng-model="elevationProfileCtrl.mode">
+                <input v-model="mode" type="radio" value="time">
                 <span v-translate>Time</span>
             </label>
         </form>

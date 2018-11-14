@@ -70,7 +70,8 @@
                     ref="map"
                     :documents="documents ? documents.documents : []"
                     show-filter-control
-                    show-center-on-geolocation/>
+                    show-center-on-geolocation
+                    show-recenter-on/>
             </div>
         </div>
     </div>

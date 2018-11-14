@@ -14,7 +14,7 @@
                 <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
 
                     <follow-button :document="document" />
-                    
+
                     <history-link
                         v-if="documentType!='profile' || $user.isModerator || document.document_id == $user.id"
                         v-tooltip="$gettext('History')"
@@ -41,6 +41,10 @@
                 <div class="title is-1">
                     <icon-document :document-type="documentType"/>
                     <document-title :document="document"/>
+                    <!-- outing specific  -->
+                    <span v-if="documentType=='outing'" class="tag is-rounded is-primary is-size-6">
+                        {{ document.date_start }}
+                    </span>
                 </div>
             </div>
 
@@ -61,7 +65,7 @@
 </template>
 
 <script>
-    import ImagesUploader from '@/components/imagesUploader/ImagesUploader'
+    import ImagesUploader from '@/components/images-uploader/ImagesUploader'
     import FollowButton from './FollowButton'
     import DocumentVersionBanner from './DocumentVersionBanner'
 
@@ -130,6 +134,13 @@
     }
     .button-bar > *:hover{
         color:$black;
+    }
+
+    .title{
+        .tag{
+            margin-left:1rem;
+            height: auto;
+        }
     }
 
 </style>

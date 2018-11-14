@@ -154,7 +154,7 @@
             }
         },
 
-        beforeRouteEnter (to, from, next) {
+        beforeRouteEnter(to, from, next) {
             next(vm => vm.from = from)
         },
 

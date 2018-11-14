@@ -27,7 +27,7 @@
                 class="file-input-title"
                 type="text"
                 v-model="document.locales[0].title">
-            <div v-else>
+            <div v-else class="buttons">
                 <button
                     @click="upload"
                     class="button is-primary"
@@ -73,14 +73,42 @@
                     Type
                 </span>
 
-                <div @click="document.image_type='collaborative'">
-                    <input :checked="document.image_type=='collaborative'" type="radio">
-                    <span v-translate>collab</span>
-                </div>
+                <div style="position:relative">
+                    <p>
+                        <input
+                            class="is-checkradio"
+                            name="c2c-image_type"
+                            id="c2c-image_type-collaborative"
+                            value="collaborative"
+                            type="radio"
+                            v-model="document.image_type"
+                            :checked="document.image_type=='collaborative'">
+                        <label for="c2c-image_type-collaborative" v-translate>collab</label>
+                    </p>
 
-                <div @click="document.image_type='personal'">
-                    <input :checked="document.image_type=='personal'" type="radio">
-                    <span v-translate>personal</span>
+                    <p>
+                        <input
+                            class="is-checkradio"
+                            name="c2c-image_type"
+                            id="c2c-image_type-personal"
+                            value="personal"
+                            type="radio"
+                            v-model="document.image_type"
+                            :checked="document.image_type=='personal'">
+                        <label for="c2c-image_type-personal" v-translate>personal</label>
+                    </p>
+
+                    <p>
+                        <input
+                            class="is-checkradio"
+                            name="c2c-image_type"
+                            id="c2c-image_type-copyright"
+                            value="copyright"
+                            type="radio"
+                            v-model="document.image_type"
+                            :checked="document.image_type=='copyright'">
+                        <label for="c2c-image_type-copyright" v-translate>copyright</label>
+                    </p>
                 </div>
             </image-action>
         </div>
@@ -131,7 +159,7 @@
                 errorMessage : null,
                 src: null,
                 document : {
-                    image_type: this.imageType,
+                    image_type: null,
                     activities: this.parentDocument.activities.slice(0),
                     filename : null,
                     fnumber: null,
@@ -154,13 +182,13 @@
 
         computed:{
             imageType(){
-                if(this.parentDocument.type=="o" || this.parentDocument.type=="u")
+                if(this.parentDocument.type=="o" || this.parentDocument.type=="u" || this.parentDocument.type=="x")
                     return "personal"
 
                 if(this.parentDocument.type=="c")
-                    return this.parentDocument.article_type
+                    return this.parentDocument.article_type == "collab" ? "collaborative" : "personal"
 
-                return "collab"
+                return "collaborative"
 
             },
             imageCategories(){
@@ -187,6 +215,8 @@
             this.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + "s"] = [
                 {document_id: this.parentDocument.document_id}
             ]
+
+            this.document.image_type = this.imageType
 
             this.computeSrc_()
             this.upload()
@@ -273,10 +303,6 @@
     }
 }
 
-.button-activities, .button-categories, .button-image-type{
-    display:inline-block;
-    width:33.33%;
-}
 
 .file-input-title, .file-input-title:focus{
     display:block;
@@ -285,9 +311,6 @@
     outline:0;
 }
 
-.file-controls{
-    background: red;
-}
 
 .delete-button{
     position:absolute;
@@ -295,4 +318,5 @@
     right:-1rem;
     font-size:3rem;
 }
+
  </style>

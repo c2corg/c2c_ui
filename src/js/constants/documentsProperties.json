@@ -112,7 +112,7 @@
             {"id": "title", "properties": {"url":"q"}},
             {"id": "summary"},
             {"id": "description"},
-            {"id": "conditions_levels"},
+            {"id": "conditions_levels", "properties": {"activities": ["skitouring", "snowshoeing", "ice_climbing", "snow_ice_mixed"]}},
             {"id": "participants"},
             {"id": "access_comment"},
             {"id": "weather"},

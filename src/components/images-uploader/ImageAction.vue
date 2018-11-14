@@ -1,5 +1,5 @@
 <template>
-    <div class="card-footer-item dropdown" :class="{'is-active': isActive}">
+    <div class="card-footer-item dropdown is-up" :class="{'is-active': isActive}">
         <a @click="isActive=!isActive" >
             <slot name="button"/>
             <span class="icon">
@@ -24,8 +24,10 @@
             }
         },
 
-        created: function() {
+        created() {
             let self = this;
+
+            // TODO remove listener
 
             window.addEventListener('click', function(e){
                 // close dropdown when clicked outside
@@ -36,3 +38,9 @@
         },
     }
 </script>
+
+<style scoped>
+.dropdown-content{
+    padding:1rem;
+}
+</style>

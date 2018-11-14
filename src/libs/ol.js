@@ -25,7 +25,7 @@ import { get as getProjection, transform as transformProjection, transformExtent
 import { getWidth } from 'ol/extent'
 
 
-import {Draw, Modify, Snap} from 'ol/interaction'
+import {Draw, Modify, Snap, DragAndDrop} from 'ol/interaction'
 
 //build our own ol module
 export default {
@@ -59,6 +59,7 @@ export default {
         Draw,
         Modify,
         Snap,
+        DragAndDrop,
     },
 
     layer: {

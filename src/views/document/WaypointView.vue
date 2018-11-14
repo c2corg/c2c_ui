@@ -98,7 +98,8 @@
                         </div>
                     </div>
 
-                    <div class="box" v-if="document.currentLocale_.description || document.currentLocale_.access">
+                    <div class="box" v-if="locale.description || locale.access || locale.summary">
+                        <markdown-section :document="document" :field="fields.summary" />
                         <markdown-section :document="document" :field="fields.description" />
                         <markdown-section :document="document" :field="fields.access" />
                     </div>
@@ -115,7 +116,7 @@
                             <pretty-waypoint-link :waypoint="child" />
                         </div>
                     </div>
-                    
+
                     <images-box :document="document" />
 
                     <comments-box :document="document" />

@@ -27,7 +27,7 @@
             </div>
 
             <div class="column is-12">
-                <div class="images-uploader-controls is-pulled-right">
+                <div class="buttons is-pulled-right">
                     <button
                         :disabled="documents.length == 0"
                         class="button is-primary"

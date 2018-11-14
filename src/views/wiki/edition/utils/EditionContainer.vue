@@ -40,6 +40,11 @@
             <div v-show="mode=='edit'" class="control is-expanded">
                 <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
             </div>
+            <div class="control">
+                <button class="button is-danger" @click="$router.go(-1)" v-translate>
+                    Cancel
+                </button>
+            </div>
         </form-row>
 
     </div>

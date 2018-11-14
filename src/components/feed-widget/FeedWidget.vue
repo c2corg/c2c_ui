@@ -6,6 +6,7 @@
             :key="index"
             :item="item"
             class="feed-card"/>
+        <loading-notification :promise="promise" />
     </div>
 
 </template>

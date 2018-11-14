@@ -153,6 +153,8 @@ export default function install(Vue){
                 ]
 
                 names.forEach(name => outing[name] = outing[name] === null ? route[name] : outing[name])
+                if(!outing.currentLocale_.title)
+                    outing.currentLocale_.title = this.getDocumentTitle(route, outing.currentLocale_.lang)
             },
 
             buildLocale(documentType, lang){
