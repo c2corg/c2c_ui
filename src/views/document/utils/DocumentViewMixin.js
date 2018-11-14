@@ -11,11 +11,12 @@ import ImagesBox from './boxes/ImagesBox'
 import RecentOutingsBox from './boxes/RecentOutingsBox'
 import ToolBox from './boxes/ToolBox'
 import RoutesBox from './boxes/RoutesBox'
-import FieldView from './fieldViewers/FieldView'
-import LabelValue from './fieldViewers/LabelValue'
-import DoubleNumericField from './fieldViewers/DoubleNumericField'
-import MarkdownSection from './fieldViewers/MarkdownSection'
-import ProfilesLinks from './fieldViewers/ProfilesLinks'
+
+import FieldView from './field-viewers/FieldView'
+import LabelValue from './field-viewers/LabelValue'
+import DoubleNumericField from './field-viewers/DoubleNumericField'
+import MarkdownSection from './field-viewers/MarkdownSection'
+import ProfilesLinks from './field-viewers/ProfilesLinks'
 
 export default {
 

@@ -77,7 +77,7 @@
 
 
 <script>
-    import ol from '@/libs/ol'
+    import ol from '@/js/libs/ol'
     import biodivSports from '@/apis/biodiv-sports'
     import photon from '@/apis/photon'
 

@@ -1,5 +1,5 @@
 import config from '@/js/config.js'
-import ol from '@/libs/ol.js'
+import ol from '@/js/libs/ol.js'
 
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     return new ol.layer.Tile({

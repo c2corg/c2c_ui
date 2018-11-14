@@ -7,7 +7,7 @@
 <script>
     import { baseMixin } from "./mixins.js"
 
-    import MarkdownEditor from '@/components/markdownEditor/MarkdownEditor'
+    import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor'
 
     export default {
 
@@ -16,7 +16,7 @@
         },
 
         mixins: [ baseMixin ],
-        
+
         props:{
             value: {
                 type:String,

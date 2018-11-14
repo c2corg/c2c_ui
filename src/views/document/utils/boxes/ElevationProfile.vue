@@ -21,8 +21,8 @@
 <script>
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
-    import ol from '@/libs/ol.js'
-    import d3 from '@/libs/d3.js'
+    import ol from '@/js/libs/ol.js'
+    import d3 from '@/js/libs/d3.js'
 
     export default {
         mixins : [ requireDocumentProperty ],

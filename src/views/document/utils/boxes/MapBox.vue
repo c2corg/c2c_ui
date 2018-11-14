@@ -36,7 +36,7 @@
 
 <script>
     import utils from "@/js/utils"
-    import ol from "@/libs/ol"
+    import ol from "@/js/libs/ol"
 
     import { requireDocumentProperty } from "@/js/propertiesMixins.js"
     import ElevationProfile from "./ElevationProfile"

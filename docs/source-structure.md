@@ -28,14 +28,15 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;markdown| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;markers|A `marker` is an icon, with some feature, like a tooltip, inside logic, or anything else.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modals|Generic modal windows|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prettyLinks| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pretty-links| |
 |&nbsp;&nbsp;&nbsp;&nbsp;helper|Global helper window. Call it with a simple `this.$helper.show(helperId)`.|
-|&nbsp;&nbsp;&nbsp;&nbsp;imagesUploader|Image uploader component. It's included in all document views.|
+|&nbsp;&nbsp;&nbsp;&nbsp;images-uploader|Image uploader component. It's included in all document views.|
 |&nbsp;&nbsp;&nbsp;&nbsp;map|THE map component, it's a wrapper around [OpenLayers](https://openlayers.org/)|
-|&nbsp;&nbsp;&nbsp;&nbsp;markdownEditor|A textarea-based component that edit a markdown value. Comes with helpers and preview.|
+|&nbsp;&nbsp;&nbsp;&nbsp;markdown-editor|A textarea-based component that edit a markdown value. Comes with helpers and preview.|
 |js|Generic Javascript files.|
 |&nbsp;&nbsp;&nbsp;&nbsp;constants| |
-|libs|Wrappers, with small functionalities, around existing libraries |
+|&nbsp;&nbsp;&nbsp;&nbsp;libs|Wrappers, with small functionalities, around existing libraries |
+|&nbsp;&nbsp;&nbsp;&nbsp;vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|
 |translations| |
 |&nbsp;&nbsp;&nbsp;&nbsp;dist|Do not edit these files, thee are generated from .po files|
 |&nbsp;&nbsp;&nbsp;&nbsp;po| |
@@ -43,17 +44,16 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;document|Views for each document type. Maybe the most important folder!|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boxes| |
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fieldViewers| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field-viewers| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windows| |
 |&nbsp;&nbsp;&nbsp;&nbsp;documents|Document list view.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;portals|Dynamics views, that display a specific content (dashboard, feed)|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
-|&nbsp;&nbsp;&nbsp;&nbsp;staticViews|Static views that display a specific content (Serac, intro...)|
+|&nbsp;&nbsp;&nbsp;&nbsp;static-views|Static views that display a specific content (Serac, intro...)|
 |&nbsp;&nbsp;&nbsp;&nbsp;user|Profile related views|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;wiki| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|Edition views, one per document's type|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils|Utilities for edition views.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
-|vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|

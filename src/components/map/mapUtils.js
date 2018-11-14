@@ -1,5 +1,5 @@
 
-import ol from '@/libs/ol.js'
+import ol from '@/js/libs/ol.js'
 import utils from "@/js/utils.js"
 
 

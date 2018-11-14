@@ -108,7 +108,7 @@
 
 <script>
     import DocumentViewMixin from "./utils/DocumentViewMixin.js"
-    import ConditionLevels from "./utils/fieldViewers/ConditionLevels"
+    import ConditionLevels from "./utils/field-viewers/ConditionLevels"
 
     export default {
         components:{

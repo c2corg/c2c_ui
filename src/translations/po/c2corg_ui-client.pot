@@ -143,7 +143,7 @@ msgid "5min"
 msgstr ""
 
 #: src/views/SideMenu.vue
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "Accident database"
 msgstr ""
 
@@ -175,16 +175,16 @@ msgstr ""
 msgid "Are you sure you want to revert to this version of the document?"
 msgstr ""
 
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 #: src/views/user/PreferencesView.vue
 msgid "Areas"
 msgstr ""
 
-#: src/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/views/SideMenu.vue
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Articles"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgstr ""
 msgid "Average slope in degree"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Back to code"
 msgstr ""
 
@@ -226,16 +226,17 @@ msgid "Block account"
 msgstr ""
 
 #: src/views/document/utils/boxes/AssociatedDocuments.vue
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "Books"
 msgstr ""
 
 #: src/components/generics/modals/ModalConfirmation.vue
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/views/document/utils/windows/MergeDocumentWindow.vue
 #: src/views/wiki/edition/utils/CotometerWindow.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
 msgid "Cancel"
 msgstr ""
 
@@ -248,11 +249,11 @@ msgid "Climbing ratings"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/imagesUploader/ImagesUploader.vue
+#: src/components/images-uploader/ImagesUploader.vue
 msgid "Close"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Code fragment"
 msgstr ""
 
@@ -286,7 +287,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "Create a new report"
 msgstr ""
 
@@ -303,7 +304,7 @@ msgstr ""
 msgid "Current password"
 msgstr ""
 
-#: src/views/staticViews/HomeView.vue
+#: src/views/static-views/HomeView.vue
 msgid "Dashboard"
 msgstr ""
 
@@ -338,7 +339,7 @@ msgstr ""
 msgid "Distance (km)"
 msgstr ""
 
-#: src/components/imagesUploader/ImagesUploader.vue
+#: src/components/images-uploader/ImagesUploader.vue
 msgid "Drop images here or click to upload"
 msgstr ""
 
@@ -417,9 +418,9 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/portals/DashboardView.vue
 #: src/views/SideMenu.vue
-#: src/views/staticViews/HomeView.vue
+#: src/views/portals/DashboardView.vue
+#: src/views/static-views/HomeView.vue
 msgid "Forum"
 msgstr ""
 
@@ -449,7 +450,7 @@ msgstr ""
 msgid "Geolocation"
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Go to the previous page"
 msgstr ""
 
@@ -457,11 +458,11 @@ msgstr ""
 msgid "Have an account?"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Heading"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Help"
 msgstr ""
 
@@ -482,7 +483,7 @@ msgid "History"
 msgstr ""
 
 #: src/views/portals/FeedView.vue
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Home"
 msgstr ""
 
@@ -495,21 +496,21 @@ msgid "Ice & mixed"
 msgstr ""
 
 #: src/views/portals/DashboardView.vue
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "Images"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Insert emoji"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Insert image"
 msgstr ""
 
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "Know more about SERAC"
 msgstr ""
 
@@ -533,7 +534,7 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "Location / elevation / orientation"
 msgstr ""
@@ -622,7 +623,7 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "New outing"
 msgstr ""
 
@@ -630,11 +631,11 @@ msgstr ""
 msgid "New password"
 msgstr ""
 
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "New route"
 msgstr ""
 
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "New waypoint"
 msgstr ""
 
@@ -670,11 +671,11 @@ msgstr ""
 msgid "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown."
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Ooops"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Ordered list"
 msgstr ""
 
@@ -682,16 +683,16 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
+#: src/views/SideMenu.vue
 #: src/views/document/ProfileView.vue
 #: src/views/portals/DashboardView.vue
-#: src/views/SideMenu.vue
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "Outings"
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Page not found"
 msgstr ""
 
@@ -699,7 +700,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Pitch description tag"
 msgstr ""
 
@@ -707,7 +708,7 @@ msgstr ""
 msgid "Post the first comment"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 #: src/views/wiki/edition/utils/EditionContainer.vue
 msgid "Preview"
 msgstr ""
@@ -716,8 +717,12 @@ msgstr ""
 msgid "Protect document"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Quote"
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgid "Recenter on..."
 msgstr ""
 
 #: src/views/user/LoginView.vue
@@ -737,28 +742,28 @@ msgstr ""
 msgid "Restore this version"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 msgid "Retry"
 msgstr ""
 
 #: src/views/document/utils/boxes/RoutesBox.vue
 #: src/views/portals/DashboardView.vue
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "Routes"
 msgstr ""
 
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "SERAC"
 msgstr ""
 
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
-#: src/components/imagesUploader/ImagesUploader.vue
+#: src/components/images-uploader/ImagesUploader.vue
 #: src/views/user/AccountView.vue
 #: src/views/wiki/edition/utils/EditionContainer.vue
 msgid "Save"
@@ -808,7 +813,7 @@ msgstr ""
 msgid "Snow"
 msgstr ""
 
-#: src/views/staticViews/HomeView.vue
+#: src/views/static-views/HomeView.vue
 msgid "Social network"
 msgstr ""
 
@@ -840,7 +845,7 @@ msgstr ""
 msgid "Terrain"
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
 
@@ -884,12 +889,12 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Toggle fullscreen"
 msgstr ""
 
 #: src/views/SideMenu.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/TopoguideView.vue
 msgid "Topoguide"
 msgstr ""
 
@@ -906,7 +911,7 @@ msgstr ""
 msgid "Transport &amp; road or PT access"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 msgid "Type"
 msgstr ""
 
@@ -914,7 +919,7 @@ msgstr ""
 msgid "Types and styles"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "URL/Link"
 msgstr ""
 
@@ -922,11 +927,11 @@ msgstr ""
 msgid "Unblock account"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Unformatted text"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Unordered list"
 msgstr ""
 
@@ -951,7 +956,7 @@ msgstr ""
 msgid "View in other lang"
 msgstr ""
 
-#: src/views/staticViews/SeracView.vue
+#: src/views/static-views/SeracView.vue
 msgid "View xreports"
 msgstr ""
 
@@ -961,9 +966,9 @@ msgid "Warning: This action cannot be undone!"
 msgstr ""
 
 #: src/views/document/utils/boxes/AssociatedDocuments.vue
-#: src/views/staticViews/HomeView.vue
-#: src/views/staticViews/NotFoundView.vue
-#: src/views/staticViews/TopoguideView.vue
+#: src/views/static-views/HomeView.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "Waypoints"
 msgstr ""
@@ -980,7 +985,7 @@ msgstr ""
 msgid "Without c2c account"
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "Xreports"
 msgstr ""
 
@@ -1010,7 +1015,7 @@ msgid "action"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/views/document/BookView.vue
 #: src/views/document/ImageView.vue
 #: src/views/document/OutingView.vue
@@ -1237,7 +1242,7 @@ msgstr ""
 msgid "canyon"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/views/document/ImageView.vue
 msgid "categories"
 msgstr ""
@@ -1290,7 +1295,7 @@ msgstr ""
 msgid "club"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "collab"
 msgstr ""
@@ -1299,11 +1304,11 @@ msgstr ""
 msgid "collaborative"
 msgstr ""
 
-#: src/views/document/utils/fieldViewers/ConditionLevels.vue
-#: src/views/wiki/edition/utils/EditionContainer.vue
-#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
 #: src/views/wiki/HistoryView.vue
 #: src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "comment"
 msgstr ""
 
@@ -1336,6 +1341,7 @@ msgstr ""
 msgid "contributions"
 msgstr ""
 
+#: src/components/images-uploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "copyright"
 msgstr ""
@@ -1461,7 +1467,7 @@ msgstr ""
 msgid "elevation_up_snow"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "emphasized text"
 msgstr ""
 
@@ -1653,7 +1659,7 @@ msgstr ""
 msgid "grocery"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "heading text"
 msgstr ""
 
@@ -2065,7 +2071,7 @@ msgstr ""
 msgid "open_non_guarded"
 msgstr ""
 
-#: src/views/staticViews/NotFoundView.vue
+#: src/views/static-views/NotFoundView.vue
 msgid "or try the following pages:"
 msgstr ""
 
@@ -2123,7 +2129,7 @@ msgstr ""
 msgid "person_fall"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "personal"
 msgstr ""
@@ -2466,7 +2472,7 @@ msgstr ""
 msgid "snowy"
 msgstr ""
 
-#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "soft snow"
 msgstr ""
@@ -2499,7 +2505,7 @@ msgstr ""
 msgid "stories"
 msgstr ""
 
-#: src/components/markdownEditor/MarkdownEditor.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
 msgid "strong text"
 msgstr ""
 
@@ -2523,9 +2529,9 @@ msgstr ""
 msgid "temperature"
 msgstr ""
 
-#: src/components/imagesUploader/ImageUploader.vue
-#: src/views/wiki/edition/WaypointEditionView.vue
+#: src/components/images-uploader/ImageUploader.vue
 #: src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "title"
 msgstr ""
 
@@ -2537,7 +2543,7 @@ msgstr ""
 msgid "topoguide_supplements"
 msgstr ""
 
-#: src/views/document/utils/fieldViewers/ConditionLevels.vue
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "total snow"
 msgstr ""
