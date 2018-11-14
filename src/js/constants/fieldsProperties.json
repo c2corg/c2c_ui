@@ -417,7 +417,9 @@
     },
     "glacier_gear":
     {
-        "values": "glacier_gear_types"
+        "values": "glacier_gear_types",
+        "required": true,
+        "default": "no"
     },
     "glacier_rating":
     {

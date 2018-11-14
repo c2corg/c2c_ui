@@ -134,6 +134,9 @@ Field.prototype.getError = function(document) {
     if(!this.required)
         return null
 
+    if(!this.isVisibleFor(document))
+        return null
+        
     if(this.parent=="document")
         value = document[this.name]
 
