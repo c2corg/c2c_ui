@@ -24,28 +24,21 @@
                 :label="$gettext('Password')"
                 icon="key"/>
 
-            <div class="field is-grouped">
-                <div class="control">
-                    <button type="submit" class="button is-primary" v-translate>
-                        Login
-                    </button>
-                </div>
-                <div class="control">
-                    <!-- TODO : handler -->
-                    <button type="button" class="button is-warning" @click="mode='resetPassword'" v-translate>
-                        Forgot password?
-                    </button>
-                </div>
-                <div class="control">
-                    <button type="button" class="button is-link" @click="mode='signup'" v-translate>
-                        No account yet?
-                    </button>
-                </div>
+            <div class="buttons">
+                <button type="submit" class="button is-primary" v-translate>
+                    Login
+                </button>
+                <!-- TODO : handler -->
+                <button type="button" class="button is-warning" @click="mode='resetPassword'" v-translate>
+                    Forgot password?
+                </button>
+                <button type="button" class="button is-link" @click="mode='signup'" v-translate>
+                    No account yet?
+                </button>
             </div>
         </base-form>
 
         <base-form
-            ref="signuForm"
             v-show="mode=='signup'"
             class="column is-half is-offset-one-quarter"
             @submit="signup">

@@ -23,13 +23,8 @@
             {{ $gettext(value) }}
         </span>
 
-        <span v-else>
-            {{ value }}
-        </span>
-
-        <span v-if="field.unit && value !== null">
-            {{ field.unit }}
-        </span>
+        <span v-else>{{ value }}</span><!--
+     --><span v-if="field.unit && value !== null">&nbsp;{{ field.unit }}</span>
 
     </span>
 </template>

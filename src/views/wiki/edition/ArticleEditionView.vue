@@ -13,6 +13,8 @@
                 <form-input-row :document="document" :field="fields.categories" />
                 <form-input-row :document="document" :field="fields.summary"/>
                 <form-input-row :document="document" :field="fields.description"/>
+                
+                <quality-input-row :document="document" />
             </tab-item>
 
             <tab-item :title="$gettext('associations')">

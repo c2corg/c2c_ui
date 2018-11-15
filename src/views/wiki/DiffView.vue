@@ -222,7 +222,7 @@
 
                 if(Array.isArray(oldVal) || Array.isArray(newVal)){
                     result = JSON.stringify(oldVal) != JSON.stringify(newVal);
-                } else if (oldVal == null && newVal != null || oldVal != null && newVal == null) {
+                } else if (oldVal === null && newVal !== null || oldVal !== null && newVal === null) {
                     result = true
                 } else {
                     result = oldVal !== newVal

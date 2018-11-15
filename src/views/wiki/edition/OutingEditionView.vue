@@ -20,6 +20,8 @@
                 <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
                 <associations-input-row :label="$gettext('Routes')" :document="document" :field="fields.routes" />
 
+                <quality-input-row :document="document" />
+
             </tab-item>
 
             <tab-item :title="$gettext('GPS track')">

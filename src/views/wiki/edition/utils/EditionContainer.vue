@@ -46,7 +46,6 @@
                 </button>
             </div>
         </form-row>
-
     </div>
 </template>
 
@@ -63,6 +62,7 @@
     import RouteView from '@/views/document/RouteView'
     import WaypointView from '@/views/document/WaypointView'
     import XreportView from '@/views/document/XreportView'
+    import ProfileView from '@/views/document/ProfileView'
 
     export default {
 
@@ -74,6 +74,7 @@
             ImageView,
             MapView,
             OutingView,
+            ProfileView,
             RouteView,
             WaypointView,
             XreportView,

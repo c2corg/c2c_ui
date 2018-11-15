@@ -605,7 +605,7 @@
     {
         "type": "number",
         "min": 0,
-        "unit": "km",
+        "unit": "m",
         "queryMode": "input"
     },
     "lift_access":
@@ -804,7 +804,8 @@
     {
         "values": "quality_types",
         "queryMode": "valuesRangeSlider",
-        "i18n": true
+        "i18n": true,
+        "default":"empty"
     },
     "rain_proof":
     {

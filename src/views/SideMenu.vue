@@ -1,5 +1,6 @@
 <template>
     <aside class="no-print">
+
         <router-link
             v-for="item of menuItems"
             :key="item.name"
@@ -104,4 +105,17 @@
             margin-right: calc((200px - 160px)/2);
         }
     }
+
+    @media screen and (max-height: 645px){
+        .menu-add{
+            display:none!important;
+        }
+    }
+
+    @media screen and (max-height: 340px){
+        .menu-socials{
+            display:none!important;
+        }
+    }
+
 </style>

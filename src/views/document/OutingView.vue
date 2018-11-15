@@ -43,7 +43,7 @@
 
                         <div class="column is-4">
                             <label-value :label="$gettext('ratings')">
-                                <outing-rating :outing="document"/>
+                                <outing-rating :outing="document" tooltips/>
                             </label-value>
 
                             <field-view :document="document" :field="fields.access_condition"/>
@@ -67,7 +67,10 @@
                                 :field2="fields.height_diff_down"
                                 :label="$gettext('height difference')" />
 
-                            <field-view :document="document" :field="fields.length_total"/>
+
+                            <label-value v-if="document.length_total" :label="$gettext('length_total')">
+                                {{ document.length_total / 1000 }}&nbsp;km
+                            </label-value>
 
                             <field-view :document="document" :field="fields.elevation_up_snow"/>
                             <field-view :document="document" :field="fields.elevation_down_snow"/>

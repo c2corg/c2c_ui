@@ -12,6 +12,7 @@ import {
     faAt,
     faAtlas,
     faBan,
+    faBars,
     faBold,
     faBomb,
     faBug,
@@ -65,6 +66,7 @@ import {
     faQuestionCircle,
     faRoute,
     faSearch,
+    faSignInAlt,
     faSignOutAlt,
     faSortAmountUp,
     faStar,
@@ -106,7 +108,7 @@ export default function install(Vue){
 
             faCloud,
             faSun,
-            
+
         //solid icons
         faAngleDown,
         faArrowsAltV,
@@ -115,6 +117,7 @@ export default function install(Vue){
         faAtlas,
         faBold,
         faBan,
+        faBars,
         faBomb,
         faBug,
         faBullseye,
@@ -167,6 +170,7 @@ export default function install(Vue){
         faQuestionCircle,
         faRoute,
         faSearch,
+        faSignInAlt,
         faSignOutAlt,
         faSortAmountUp,
         faStar,

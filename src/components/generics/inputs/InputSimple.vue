@@ -16,7 +16,7 @@
         </span>
 
         <div v-if="options" class="select" :class="{'is-danger':hasError}">
-            <select v-model="value_">
+            <select v-model="value_" :disabled="disabled">
                 <option v-if="!required"/>
                 <option
                     v-for="option of options"
@@ -93,6 +93,10 @@ export default {
         isExpanded:{
             type:Boolean,
             default:null,
+        },
+        disabled:{
+            type:Boolean,
+            default:false,
         },
     },
 }

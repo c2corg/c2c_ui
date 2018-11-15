@@ -10,6 +10,8 @@ import EditionContainer from './EditionContainer'
 import FormRow from './FormRow'
 import FormInputRow from './FormInputRow'
 import FormInput from './FormInput'
+
+import QualityInputRow from './QualityInputRow'
 import MapInputRow from './MapInputRow'
 import AssociationsInputRow from './AssociationsInputRow'
 
@@ -24,6 +26,7 @@ export default {
         FormRow,
         FormInputRow,
         FormInput,
+        QualityInputRow,
         MapInputRow,
         AssociationsInputRow,
 

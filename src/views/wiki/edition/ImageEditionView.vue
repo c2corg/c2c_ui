@@ -26,6 +26,8 @@
                     <form-input :document="document" :field="fields.width" :prefix="$gettext('width')"/>
                 </form-row>
 
+                <quality-input-row :document="document" />
+
             </tab-item>
 
             <tab-item :title="$gettext('geolocation')">

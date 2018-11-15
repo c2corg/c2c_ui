@@ -1,5 +1,5 @@
 <template>
-    <div class="label-value is-ellipsed">
+    <div class="label-value">
         <span class="label-value-label is-first-letter-uppercase has-text-weight-bold"><!--
             -->{{ label }}<!--
     --></span>

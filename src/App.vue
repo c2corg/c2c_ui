@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <side-menu class="side-menu" />
-        <navigation class="navigation"/>
+        <side-menu class="side-menu" :class="{'alternative-side-menu': alternativeSideMenu}"/>
+        <navigation class="navigation" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
         <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
         <div class="page-content">
             <router-view class="router-view"/>
@@ -25,6 +25,18 @@
             SiteNotice,
             HelperWindow,
         },
+
+        data(){
+            return {
+                alternativeSideMenu:false,
+            }
+        },
+
+        methods:{
+            toggleSideMenu(){
+
+            }
+        }
     }
 </script>
 
@@ -49,15 +61,6 @@
     #app{
     }
 
-    .side-menu{
-        padding-top:$navbar-height;
-        width:$sidemenu-width;
-        height:100%;
-        position:fixed;
-        top:0px;
-        z-index:25;
-    }
-
     .navigation{
         position:fixed;
         top:0;
@@ -66,11 +69,21 @@
         z-index:30;
     }
 
+
+    .side-menu{
+        padding-top:$navbar-height;
+        width:$sidemenu-width;
+        height:100vh;
+        position:fixed;
+        top:0px;
+        z-index:25;
+        transition: 0.3s;
+    }
+
     .site-notice{
         cursor:pointer;
         position:absolute;
         top:$navbar-height;
-        padding-left: $sidemenu-width;
         width:100%;
         z-index:20;
         box-shadow:0 5px 10px 0px rgba(10, 10, 10, 0.50);
@@ -78,9 +91,71 @@
 
     .page-content{
         margin-top:$navbar-height;
-        margin-left:$sidemenu-width;
         display: flex;
         flex-flow: column;
+    }
+
+    @media screen and (max-width: $tablet) {
+
+        .side-menu{
+            left:-$sidemenu-width;
+        }
+
+        .alternative-side-menu{
+            left:0;
+        }
+
+        .page-content{
+            margin-left:0;
+        }
+    }
+
+    @media screen and (min-width: $tablet) and (max-width: $desktop){
+
+        .side-menu{
+            left:-$sidemenu-width;
+        }
+
+        .alternative-side-menu{
+            left:0;
+        }
+
+        .page-content{
+            margin-left:0;
+        }
+    }
+
+    @media screen and (min-width: $desktop) and (max-width: $widescreen){
+
+        .page-content{
+            margin-left:$sidemenu-width;
+        }
+
+        .site-notice{
+            padding-left: $sidemenu-width;
+        }
+    }
+
+    @media screen and (min-width: $widescreen) and (max-width: $fullhd){
+
+        .page-content{
+            margin-left:$sidemenu-width;
+        }
+
+        .site-notice{
+            padding-left: $sidemenu-width;
+        }
+    }
+
+    @media screen and (min-width: $fullhd){
+
+        .page-content{
+            margin-left:$sidemenu-width;
+        }
+
+        .site-notice{
+            padding-left: $sidemenu-width;
+        }
     }
 
     .router-view{

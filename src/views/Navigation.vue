@@ -1,6 +1,19 @@
 <template>
     <nav class="no-print is-size-5">
-        <router-link :to="{name:'home'}" class="navigation-brand has-text-centered">
+
+        <span
+            class="navigation-item is-hidden-desktop"
+            :class="{'is-hidden-mobile': !hideSearchInput}"
+            @click="$emit('toggleSideMenu')">
+            <span class="button">
+                <fa-icon icon="bars"/>
+            </span>
+        </span>
+
+        <router-link
+            :to="{name:'home'}"
+            class="navigation-brand has-text-centered"
+            :class="{'is-hidden-mobile': !hideSearchInput}">
             <img src="@/assets/img/logo_small.svg"
                  url="@/assets/img/logo_small.svg"
                  alt="Camptocamp.org">
@@ -9,9 +22,18 @@
         <div class="navigation-end">
             <input-document
                 class="navigation-item search-input"
+                :class="{'is-hidden-mobile': hideSearchInput}"
                 :document-type="['waypoint', 'route', 'article', 'book']"
                 propose-creation
                 @input="go"/>
+
+            <div
+                class="navigation-item is-hidden-tablet"
+                :class="{'is-hidden-mobile': !hideSearchInput}">
+                <span class="button" @click="hideSearchInput=false">
+                    <fa-icon icon="search"/>
+                </span>
+            </div>
 
             <div v-if="!siteConfiguration.urls.readWrite" class="navigation-item is-hidden-mobile" v-tooltip:bottom="'Read only site'">
                 <fa-layers >
@@ -43,7 +65,10 @@
             </div>
 
             <div v-if="!$user.isLogged" class="navigation-item ">
-                <login-button class="is-link"/>
+                <login-button class="is-link">
+                    <span class="is-hidden-touch" v-translate>Login</span>
+                    <fa-icon class="is-hidden-desktop" icon="sign-in-alt" />
+                </login-button>
             </div>
 
             <div v-else class="navigation-item dropdown is-hoverable">
@@ -94,7 +119,7 @@
                 </div>
             </div>
             <div v-if="!$user.isLogged" class="navigation-item dropdown is-hoverable">
-                <div class="dropdown-trigger">
+                <div class="dropdown-trigger button">
                     {{ $language.current }}
                 </div>
                 <div class="dropdown-menu">
@@ -122,6 +147,7 @@
         data() {
             return {
                 searchText:'',
+                hideSearchInput:true, // only on small screen
             }
         },
 
@@ -130,6 +156,12 @@
                 return config
             }
         },
+
+        created(){
+            window.addEventListener('click', this.onClick)
+        },
+
+        // do need to destroy event listener as Navigation component will always exists
 
         methods: {
 
@@ -143,6 +175,11 @@
             setUrlsConfiguration(name){
                 config.setUrlsName(name)
                 this.$router.go()
+            },
+
+            onClick(event){
+                if(!this.$el.contains(event.target))
+                    this.hideSearchInput = true
             }
         }
     }
@@ -162,10 +199,8 @@
 
         .navigation-brand{
             img{
-
                 height:$navbar-height;
                 padding:5px;
-                margin-left:20px;
             }
         }
 
@@ -173,7 +208,6 @@
             justify-content: flex-end;
             margin-left: auto;
             display:flex;
-            margin-right: 1rem;
 
             .user-avatar{
                 vertical-align: bottom;
@@ -189,16 +223,121 @@
             display:flex;
             align-items: center;
             line-height: 1.5;
-            padding: 0.5rem 0.75rem;
         }
     }
 
-    .search-input{
-        width:250px;
-        transition: width .5s ease;
+    @media screen and (max-width: $tablet) {
+        .navigation-brand{
+            img{
+                margin-left:0px;
+            }
+        }
+
+        .navigation-item{
+            padding: 0.5rem 5px;
+        }
+
+        .navigation-end{
+            margin-right: 5px;
+        }
+
+        .search-input{
+            width:160px;
+        }
     }
 
-    .search-input:hover{
-        width:300px;
+    @media screen and (min-width: $tablet) and (max-width: $desktop){
+        .navigation-brand{
+            img{
+                margin-left:5px;
+            }
+        }
+
+        .navigation-item{
+            padding: 0.5rem 5px;
+        }
+
+        .navigation-end{
+            margin-right: 5px;
+        }
+
+        .search-input{
+            width:250px;
+        }
+    }
+
+    @media screen and (min-width: $desktop) and (max-width: $widescreen){
+        .navigation-brand{
+            img{
+                margin-left:20px;
+            }
+        }
+
+        .navigation-item{
+            padding: 0.5rem 0.75rem;
+        }
+
+        .navigation-end{
+            margin-right: 1rem;
+        }
+
+        .search-input{
+            width:250px;
+            transition: width .5s ease;
+        }
+
+        .search-input:hover{
+            width:300px;
+        }
+    }
+
+    @media screen and (min-width: $widescreen) and (max-width: $fullhd){
+        .navigation-brand{
+            img{
+                margin-left:20px;
+            }
+        }
+
+        .navigation-item{
+            padding: 0.5rem 0.75rem;
+        }
+
+        .navigation-end{
+            margin-right: 1rem;
+        }
+
+        .search-input{
+            width:250px;
+            transition: width .5s ease;
+        }
+
+        .search-input:hover{
+            width:300px;
+        }
+    }
+
+    @media screen and (min-width: $fullhd){
+        .navigation-brand{
+            img{
+                margin-left:20px;
+            }
+        }
+
+        .navigation-item{
+            padding: 0.5rem 0.75rem;
+        }
+
+        .navigation-end{
+            margin-right: 1rem;
+        }
+
+        .search-input{
+            width:250px;
+            transition: width .5s ease;
+        }
+
+        .search-input:hover{
+            width:300px;
+        }
     }
 </style>
