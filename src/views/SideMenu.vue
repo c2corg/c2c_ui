@@ -5,7 +5,7 @@
             v-for="item of menuItems"
             :key="item.name"
             :to="{name:item.name}"
-            class="menu-item"
+            class="menu-item is-ellipsed"
             :class="{'router-link-active':item.activeFor.includes($route.name)}">
             <component :is="item.icon" />
             <span class="menu-item-text"> {{ item.text }} </span>

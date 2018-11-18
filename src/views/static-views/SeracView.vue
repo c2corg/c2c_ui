@@ -55,10 +55,10 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 
 .serac-view{
-    background-image:url(https://www.camptocamp.org/static/img/home/cermygian-crevasse.jpg);
+    background-image:url('~@/assets/img/backgrounds/cermygian-crevasse.jpg');
     text-align: center;
 }
 

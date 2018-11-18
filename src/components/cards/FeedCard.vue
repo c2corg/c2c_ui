@@ -1,6 +1,7 @@
 <template>
     <card-container class="route-card" @click="go">
         <div slot="header" class="level">
+            TODO : good from url
             <img class="level-left avatar"
                  :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
 
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-    import imageUrls from '@/js/imageUrls'
+    import imageUrls from '@/js/image-urls'
 
     import { cardMixin } from './utils/mixins.js'
 
@@ -76,7 +77,6 @@
 
         data(){
             return {
-                locale:null,
                 actionLine:null,
                 images:[],
             }
@@ -88,11 +88,13 @@
             },
             documentType(){
                 return this.$documentUtils.getDocumentType(this.document['type'])
+            },
+            locale(){
+                return this.$documentUtils.getLocaleSmart(this.item.document)
             }
         },
 
         created(){
-            this.locale = this.$documentUtils.getLocaleSmart(this.item.document)
 
             this.actionLine = '';
 

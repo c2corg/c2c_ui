@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
         mixins : [ requireDocumentProperty ],

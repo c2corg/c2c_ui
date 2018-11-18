@@ -9,7 +9,7 @@
 
 
 <script>
-    import { requireDocumentProperty, requireFieldProperty} from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty, requireFieldProperty} from '@/js/properties-mixins'
 
     export default {
 

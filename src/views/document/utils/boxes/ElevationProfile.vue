@@ -20,7 +20,7 @@
 
 <script>
 
-    import { requireDocumentProperty } from "@/js/propertiesMixins.js"
+    import { requireDocumentProperty } from "@/js/properties-mixins"
     import ol from '@/js/libs/ol.js'
     import d3 from '@/js/libs/d3.js'
 

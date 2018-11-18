@@ -1,7 +1,5 @@
 | **directory** | **comment** |
 |---|---|
-|apis|API tools (c2c API, discourse API, biodiv API).|
-|&nbsp;&nbsp;&nbsp;&nbsp;c2c|c2c API service|
 |assets|Statics assets (images, svg, fonts, css)|
 |&nbsp;&nbsp;&nbsp;&nbsp;fonts|Icon fonts|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activities|Camptocamp activity icons font|
@@ -9,6 +7,7 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waypoint_types|Waypoint type icons font|
 |&nbsp;&nbsp;&nbsp;&nbsp;img|Static images in PNG, SVG or JPEG|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgrounds|The images in this directory are used as backgrounds in the homepage.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;documents|SVG files for each document types (outing, route, profile...)|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activities|SVG files for each activity|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waypoints|SVG files for each waypoint types|
@@ -33,7 +32,9 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;images-uploader|Image uploader component. It's included in all document views.|
 |&nbsp;&nbsp;&nbsp;&nbsp;map|THE map component, it's a wrapper around [OpenLayers](https://openlayers.org/)|
 |&nbsp;&nbsp;&nbsp;&nbsp;markdown-editor|A textarea-based component that edit a markdown value. Comes with helpers and preview.|
-|js|Generic Javascript files.|
+|js|Pure Javascript files.|
+|&nbsp;&nbsp;&nbsp;&nbsp;apis|API tools (c2c API, discourse API, biodiv API).|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c2c|c2c API service|
 |&nbsp;&nbsp;&nbsp;&nbsp;constants| |
 |&nbsp;&nbsp;&nbsp;&nbsp;libs|Wrappers, with small functionalities, around existing libraries |
 |&nbsp;&nbsp;&nbsp;&nbsp;vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|

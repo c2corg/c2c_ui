@@ -1,7 +1,7 @@
 <template>
-    <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
-        <div class="columns">
-
+    <div class="section">
+        <document-view-header :document="document" :version="version" :promise="promise" />
+        <div v-if="document" class="columns">
             <div class="column is-3">
                 <div class="box">
                     <label-value v-if="document.activities.length" :label="$gettext('activities')">
@@ -60,11 +60,11 @@
             </div>
 
         </div>
-    </view-container>
+    </div>
 </template>
 
 <script>
-    import imageUrls from '@/js/imageUrls'
+    import imageUrls from '@/js/image-urls'
 
     import DocumentViewMixin from "./utils/DocumentViewMixin.js"
 

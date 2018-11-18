@@ -62,10 +62,10 @@
 </template>
 
 <script>
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
     import viewModeMixin from '.././view-mode-mixin'
 
-    import forum from '@/apis/forum.js'
+    import forum from '@/js/apis/forum.js'
 
     export default {
         mixins : [ requireDocumentProperty, viewModeMixin ],

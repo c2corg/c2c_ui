@@ -1,6 +1,6 @@
 import config from '@/js/config.js'
 import constants from '@/js/constants'
-import BaseApi from '@/apis/BaseApi.js';
+import BaseApi from '@/js/apis/BaseApi.js';
 
 import UserProfileService from './UserProfileService.js'
 import DocumentService from './DocumentService.js'

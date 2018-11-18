@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import { requireFieldProperty } from '@/js/propertiesMixins.js'
+    import { requireFieldProperty } from '@/js/properties-mixins'
 
     import QueryItemMixin from "./QueryItemMixin.js"
 

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
 
     import LabelValue from './LabelValue'
 

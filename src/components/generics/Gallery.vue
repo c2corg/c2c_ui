@@ -12,7 +12,7 @@
 
     import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-    import imageUrls from '@/js/imageUrls'
+    import imageUrls from '@/js/image-urls'
 
     export default {
 

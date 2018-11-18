@@ -28,7 +28,7 @@
 
 <script>
     import columnDefs from "./columnDefs"
-    import { requireDocumentTypeProperty } from "@/js/propertiesMixins"
+    import { requireDocumentTypeProperty } from "@/js/properties-mixins"
 
     export default {
         mixins : [ requireDocumentTypeProperty ],

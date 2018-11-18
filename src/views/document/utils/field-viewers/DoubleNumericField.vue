@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
 
     import LabelValue from "./LabelValue"
     import FieldView from "./FieldView"

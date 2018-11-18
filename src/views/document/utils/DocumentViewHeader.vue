@@ -1,6 +1,9 @@
 
 <template>
-    <div v-if="document" class="section view-container">
+    <div class="section view-container">
+
+        <loading-notification :promise="promise" />
+
         <div v-if="document && document.not_authorized" class="notification is-danger" v-translate>
             Sorry, you're not authorized to see this page.
         </div>
@@ -48,20 +51,13 @@
                 </div>
             </div>
 
+            <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document"/>
+
             <slot>
                 Please insert document content
             </slot>
-
-            <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document"/>
-
-        </div>
-        <div v-if="error" class="notification is-danger">
-            <div v-for="(error, i) of error.response.data.errors" :key="i">
-                {{ error.description }}
-            </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -89,21 +85,22 @@
                 type : Object,
                 default: null,
             },
-            lang:{
-                type : String,
-                required: true,
-            },
             version:{
                 type : Object,
                 default: null,
             },
-            error:{
+            promise:{
                 type: Object,
-                default: null,
+                required: true,
             },
         },
 
         computed:{
+
+            lang(){
+                return this.document ? this.document.currentLocale_.lang : null
+            },
+
             title(){
                 return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.lang) : undefined
             },

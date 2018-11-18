@@ -76,10 +76,10 @@
 </template>
 
 <script>
-    import c2c from '@/apis/c2c'
+    import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
 
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
     import isEditableMixin from '../is-editable-mixin'
     import viewModeMixin from '../view-mode-mixin'
 

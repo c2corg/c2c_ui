@@ -2,7 +2,7 @@
 // https://github.com/komoot/photon
 
 
-import BaseApi from '@/apis/BaseApi.js'
+import BaseApi from '@/js/apis/BaseApi.js'
 
 
 function Photon(){

@@ -86,7 +86,7 @@
 
 
 <script>
-    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
     import InputConditionsLevels from './InputConditionsLevels'
 
 

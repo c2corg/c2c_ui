@@ -18,7 +18,7 @@
     import FormRow from './FormRow'
     import FormInput from './FormInput'
 
-    import { requireDocumentProperty, requireFieldProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
 
     // import MarkdownEditor from '@/components/markdownEditor/MarkdownEditor'
 

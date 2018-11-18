@@ -77,15 +77,15 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 
     .topoguide{
-        background-image:url(https://www.camptocamp.org/static/img/home/laurentf-sajama.jpg);
+        background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
     }
 
     .social-network{
-        background-image:url(https://www.camptocamp.org/static/img/home/alexsaunier-monch.jpg);
+        background-image:url('~@/assets/img/backgrounds/alexsaunier-monch.jpg');
     }
 
     .topoguide, .social-network{

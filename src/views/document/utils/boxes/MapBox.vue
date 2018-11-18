@@ -38,7 +38,7 @@
     import utils from "@/js/utils"
     import ol from "@/js/libs/ol"
 
-    import { requireDocumentProperty } from "@/js/propertiesMixins.js"
+    import { requireDocumentProperty } from "@/js/properties-mixins"
     import ElevationProfile from "./ElevationProfile"
 
     export default {

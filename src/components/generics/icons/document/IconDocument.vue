@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import { requireDocumentTypeProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentTypeProperty } from '@/js/properties-mixins'
 
     export default {
         mixins : [ requireDocumentTypeProperty ],

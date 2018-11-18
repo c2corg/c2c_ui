@@ -1,6 +1,6 @@
 
 import constants from '@/js/constants'
-import c2c from '@/apis/c2c'
+import c2c from '@/js/apis/c2c'
 
 import TabItem from './TabItem'
 import TabView from './TabView'
@@ -86,14 +86,20 @@ export default {
             for(let letter of Object.keys(this.$route.query)){
                 let documentType = this.$documentUtils.getDocumentType(letter)
 
-                // Value may be a number or a string
-                let documentIds = String(this.$route.query[letter]).split(",")
+                if(documentType){
+                    // Value may be a number or a string
+                    let documentIds = String(this.$route.query[letter]).split(",")
 
-                for(let documentId of documentIds){
-                    c2c[documentType].get(documentId).then(response => {
-                        this.$documentUtils.addAssociation(this.document, response.data)
-                    })
+                    for(let documentId of documentIds){
+                        c2c[documentType].get(documentId).then(response => {
+                            this.$documentUtils.addAssociation(this.document, response.data)
+                        })
+                    }
                 }
+            }
+
+            if(this.$route.query.act){
+                this.document.activities = this.$route.query.act.split(",")
             }
 
             this.afterLoad()

@@ -1,6 +1,7 @@
 <template>
-    <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
-        <div class="columns">
+    <div class="section">
+        <document-view-header :document="document" :version="version" :promise="promise" />
+        <div v-if="document" class="columns">
             <div class="column is-3">
                 <div class="box">
                     <field-view :document="document" :field="fields.activities" />
@@ -14,7 +15,7 @@
             <div class="column is-9">
                 <div class="box">
                     <markdown-section :document="document" :field="fields.summary"/>
-                    <markdown-section :document="document" :field="fields.description" hide-title/>                                 
+                    <markdown-section :document="document" :field="fields.description" hide-title/>
                 </div>
 
                 <images-box :document="document" />
@@ -22,7 +23,7 @@
                 <comments-box :document="document" />
             </div>
         </div>
-    </view-container>
+    </div>
 </template>
 
 <script>

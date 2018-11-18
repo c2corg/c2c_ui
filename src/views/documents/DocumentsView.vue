@@ -1,6 +1,6 @@
 <template>
     <div class="section documents-view">
-        <html-header :title="documentType"/>
+        <html-header :title="$gettext(documentType)"/>
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
@@ -8,7 +8,11 @@
                 </span>
 
                 <span class="level-item">
-                    <add-link :document-type="documentType" class="is-size-3" v-tooltip:right="$gettext('Create')">
+                    <add-link
+                        :document-type="documentType"
+                        :query="addQuery"
+                        class="is-size-3"
+                        v-tooltip:right="$gettext('Create')">
                         <fa-icon icon="plus-circle" />
                     </add-link>
                 </span>
@@ -79,7 +83,7 @@
 
 <script>
 
-    import c2c from '@/apis/c2c'
+    import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
 
     import QueryItems from './utils/QueryItems'
@@ -122,7 +126,12 @@
             },
             displayMap(){
                 return this.showMap && this.documentAreGeoLocalized
-            }
+            },
+            addQuery(){
+                return {
+                    act: this.$route.query.act,
+                }
+            },
         },
 
         watch:{

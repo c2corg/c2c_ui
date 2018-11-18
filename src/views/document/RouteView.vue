@@ -1,7 +1,9 @@
 <template>
-    <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
+    <div class="section">
 
-        <div class="columns">
+        <document-view-header :document="document" :version="version" :promise="promise" />
+        <div v-if="document" class="columns">
+
             <div class="column is-3">
                 <map-box :document="document"/>
                 <tool-box :document="document"/>
@@ -110,7 +112,7 @@
 
             </div>
         </div>
-    </view-container>
+    </div>
 </template>
 
 <script>

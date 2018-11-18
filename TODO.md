@@ -38,14 +38,12 @@
 * bien TESTER la fusion avec un autre document
 * test forum.createTopic()
 * test all doc's comments functions
+* test requestPasswordChange and validate_new_password
+* test changemail
 
 ### Refactors
 
-* remane all folder into kebab-case 
-* rename all js file in this-is-a-file-name.js
 * does saveAs filesaver dependency really usefull now ?
-* test requestPasswordChange and validate_new_password
-* test changemail
 * remove swiper : too big...
 
 ### Optims
@@ -68,7 +66,6 @@
 
 ### Bugs
 * on gitlab build, style on pagination fails
-* on gitlab build, icon filter on map is missing, tooltip issue...
 
 ### Build
 
@@ -77,3 +74,8 @@
 ### Doc
 
 * Probably https://github.com/vue-styleguidist/vue-cli-plugin-styleguidist
+
+### tester
+
+* feed card : good locale
+* bonne image dans le markdown

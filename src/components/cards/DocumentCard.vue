@@ -10,7 +10,7 @@
 
 <script>
 
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
 
     import AreaCard from './AreaCard'
     import ArticleCard from './ArticleCard'

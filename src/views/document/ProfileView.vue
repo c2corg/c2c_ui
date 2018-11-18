@@ -1,51 +1,44 @@
 <template>
-    <view-container v-if="document" :document="document" :lang="lang" :version="version" :error="promise.error">
+    <div>
+        <document-view-header :document="document" :version="version" :promise="promise" />
+        <div v-if="document" class="columns">
 
-        <!-- TODO test -->
-        <div v-if="document && document.not_authorized" v-translate>
-            You're not authorized. Please sign-in or create an account
-        </div>
+            <div class="column is-3">
+                <div class="box">
+                    <field-view :document="document" :field="fields.activities"/>
 
-        <div v-else>
-            <div class="columns">
+                    <label-value :label="$gettext('forum')">
+                        @{{ document.forum_username }}
+                    </label-value>
 
-                <div class="column is-3">
-                    <div class="box">
-                        <field-view :document="document" :field="fields.activities"/>
+                    <field-view :document="document" :field="fields.categories"/>
 
-                        <label-value :label="$gettext('forum')">
-                            @{{ document.forum_username }}
-                        </label-value>
-
-                        <field-view :document="document" :field="fields.categories"/>
-
-                        <div>
-                            <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }" v-translate>
-                                contributions
-                            </router-link>
-                        </div>
-                        <div>
-                            <router-link :to="{ name: 'outings', query: {u:$route.params.id} }" v-translate>
-                                Outings
-                            </router-link>
-                        </div>
+                    <div>
+                        <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }" v-translate>
+                            contributions
+                        </router-link>
                     </div>
-
-                    <map-box :document="document" />
-                    <tool-box :document="document"/>
-
+                    <div>
+                        <router-link :to="{ name: 'outings', query: {u:$route.params.id} }" v-translate>
+                            Outings
+                        </router-link>
+                    </div>
                 </div>
 
-                <div class="column is-9">
-                    <div class="box">
-                        <markdown-section :document="document" :field="fields.summary"/>
-                        <markdown-section :document="document" :field="fields.description" hide-title/>
-                    </div>
-                    <feed-widget type="profile" />
+                <map-box :document="document" />
+                <tool-box :document="document"/>
+
+            </div>
+
+            <div class="column is-9">
+                <div class="box">
+                    <markdown-section :document="document" :field="fields.summary"/>
+                    <markdown-section :document="document" :field="fields.description" hide-title/>
                 </div>
+                <feed-widget type="profile" />
             </div>
         </div>
-    </view-container>
+    </div>
 </template>
 
 <script>

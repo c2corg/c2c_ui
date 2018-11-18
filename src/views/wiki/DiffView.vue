@@ -103,7 +103,7 @@
 </template>
 
 <script>
-    import c2c from '@/apis/c2c'
+    import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
 
     import { diff_match_patch } from './utils/diff_match_patch_uncompressed'

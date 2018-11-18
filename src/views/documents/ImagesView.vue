@@ -25,8 +25,8 @@
 
 <script>
 
-    import imageUrls from '@/js/imageUrls'
-    import c2c from '@/apis/c2c'
+    import imageUrls from '@/js/image-urls'
+    import c2c from '@/js/apis/c2c'
 
     import QueryItems from './utils/QueryItems'
 

@@ -61,9 +61,9 @@
 </template>
 
 <script>
-    import c2c from '@/apis/c2c'
+    import c2c from '@/js/apis/c2c'
 
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
         mixins : [

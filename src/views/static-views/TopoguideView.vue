@@ -17,7 +17,7 @@
         <div class="section columns is-multiline is-variable is-8">
             <div class="column is-6">
                 <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Outings</h2>
-                <div class="columns is-multiline is-variable is-1">
+                <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-3"
                         v-for="activity of activities"
@@ -39,7 +39,7 @@
             </div>
             <div class="column is-6">
                 <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Routes</h2>
-                <div class="columns is-multiline is-variable is-1">
+                <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-3"
                         v-for="activity of activities"
@@ -61,7 +61,7 @@
             </div>
             <div class="column is-12">
                 <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Waypoints</h2>
-                <div class="columns is-multiline is-variable is-1">
+                <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-2"
                         v-for="waypoint_type of waypoint_types"
@@ -115,7 +115,7 @@
     @import '@/assets/sass/variables.scss';
 
     .topoguide{
-        background-image:url(https://www.camptocamp.org/static/img/home/laurentf-sajama.jpg);
+        background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
         background-size:cover;
         padding-top:10px;
         padding-bottom:100px;

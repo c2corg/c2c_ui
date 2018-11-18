@@ -1,4 +1,4 @@
-## How to use propertiesMixins.js ?
+## How to use properties-mixins ?
 
 This module provide helpers for props definitions.
 
@@ -33,7 +33,7 @@ Use `prop` object that declare property types :
 
 ``` JavaScript
 
-    import { requireDocumentProperty, requireFieldProperty } from "@/js/propertiesMixins.js"
+    import { requireDocumentProperty, requireFieldProperty } from "@/js/properties-mixins"
 
     //...
 

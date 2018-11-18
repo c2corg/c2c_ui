@@ -1,1 +1,1 @@
-Generic Javascript files.
+Pure Javascript files.

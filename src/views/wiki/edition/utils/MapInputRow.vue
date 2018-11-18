@@ -22,7 +22,7 @@
 
 
 <script>
-    import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+    import { requireDocumentProperty } from '@/js/properties-mixins'
     import FormRow from './FormRow'
 
     export default {

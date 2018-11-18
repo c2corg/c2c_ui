@@ -41,7 +41,7 @@ showdown.extension('c2c_folies', function () {
             })
         }
 
-        var url = 'https://api.camptocamp.org/images/proxy/' + imgId + '?size=' + size
+        var url = config.urls.api + '/images/proxy/' + imgId + '?size=' + size
         var img = '<img src="'+ url + '">'
         var caption = legend ? '<figcaption>' + legend +  '</figcaption>' : ''
 

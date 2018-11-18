@@ -1,5 +1,5 @@
 
-import { requireDocumentProperty } from '@/js/propertiesMixins.js'
+import { requireDocumentProperty } from '@/js/properties-mixins'
 
 import CardContainer from './CardContainer'
 import CardRegionItem from './CardRegionItem'

@@ -1,10 +1,10 @@
 
 import constants from '@/js/constants'
-import c2c from '@/apis/c2c'
+import c2c from '@/js/apis/c2c'
 
 import viewModeMixin from './view-mode-mixin'
 
-import ViewContainer from './ViewContainer'
+import DocumentViewHeader from './DocumentViewHeader'
 import CommentsBox from './boxes/CommentsBox'
 import MapBox from './boxes/MapBox'
 import ImagesBox from './boxes/ImagesBox'
@@ -21,7 +21,7 @@ import ProfilesLinks from './field-viewers/ProfilesLinks'
 export default {
 
     components: {
-        ViewContainer,
+        DocumentViewHeader,
 
         CommentsBox,
         DoubleNumericField,
@@ -92,10 +92,10 @@ export default {
             return this.promise.data.version
         },
         locale(){
-            return this.document.currentLocale_
+            return this.document ? this.document.currentLocale_ : null
         },
         lang(){
-            return this.locale ? this.locale.lang : undefined
+            return this.locale ? this.locale.lang : null
         }
     },
 

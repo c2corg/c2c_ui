@@ -3,7 +3,7 @@
     <span>
         <span v-translate>Create a new route</span>
         <!-- TODO 10 types  -->
-        
+
         <span v-translate>routes</span>
         <!-- TODO 10 types, plural -->
     </span>

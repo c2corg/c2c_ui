@@ -20,19 +20,21 @@
         </router-link>
 
         <div class="navigation-end">
-            <input-document
-                class="navigation-item search-input"
-                :class="{'is-hidden-mobile': hideSearchInput}"
-                :document-type="['waypoint', 'route', 'article', 'book']"
-                propose-creation
-                @input="go"/>
+            <div ref="searchInputContainer">
+                <input-document
+                    class="navigation-item search-input"
+                    :class="{'is-hidden-mobile': hideSearchInput}"
+                    :document-type="['waypoint', 'route', 'article', 'book']"
+                    propose-creation
+                    @input="go"/>
 
-            <div
-                class="navigation-item is-hidden-tablet"
-                :class="{'is-hidden-mobile': !hideSearchInput}">
-                <span class="button" @click="hideSearchInput=false">
-                    <fa-icon icon="search"/>
-                </span>
+                <div
+                    class="navigation-item is-hidden-tablet"
+                    :class="{'is-hidden-mobile': !hideSearchInput}">
+                    <span class="button" @click="hideSearchInput=false">
+                        <fa-icon icon="search"/>
+                    </span>
+                </div>
             </div>
 
             <div v-if="!siteConfiguration.urls.readWrite" class="navigation-item is-hidden-mobile" v-tooltip:bottom="'Read only site'">
@@ -75,7 +77,7 @@
                 <div class="dropdown-trigger">
                     <img
                         width="24" height="24"
-                        :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+                        :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
                         class="user-avatar">
                 </div>
                 <div class="dropdown-menu">
@@ -93,7 +95,6 @@
                             <fa-icon icon="cogs"/>
                             <span v-translate>My preferences</span>
                         </router-link>
-
                         <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="dropdown-item is-size-5">
                             <icon-outing />
                             <span v-translate>My outings</span>
@@ -110,7 +111,9 @@
                             <fa-icon icon="at"/>
                             <span v-translate>My mailing lists</span>
                         </router-link>
+
                         <hr class="dropdown-divider">
+
                         <a class="dropdown-item is-size-5" @click="$user.signout()">
                             <fa-icon icon="sign-out-alt"/>
                             <span v-translate>Logout</span>
@@ -157,6 +160,8 @@
             }
         },
 
+        forumUrl : config.urls.forum,
+
         created(){
             window.addEventListener('click', this.onClick)
         },
@@ -178,7 +183,7 @@
             },
 
             onClick(event){
-                if(!this.$el.contains(event.target))
+                if(!this.$refs.searchInputContainer.contains(event.target))
                     this.hideSearchInput = true
             }
         }
