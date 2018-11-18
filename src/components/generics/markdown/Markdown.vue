@@ -25,7 +25,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 
     .markdown-ltag td:first-child{
         font-weight:bold;
