@@ -3,7 +3,7 @@
         v-if="$user.isLogged"
         :to="{name:documentType + '-add', params:{lang:$language.current}, query:query_}">
         <slot>
-            <span>{{ text }}</span>
+            {{ text }}
         </slot>
     </router-link>
 </template>

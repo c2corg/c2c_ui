@@ -246,7 +246,8 @@
     "date_start":
     {
         "type": "date",
-        "required": true
+        "required": true,
+        "queryMode": "dates"
     },
     "date_time":
     {

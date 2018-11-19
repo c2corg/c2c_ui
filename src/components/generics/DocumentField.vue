@@ -24,7 +24,7 @@
         </span>
 
         <span v-else>{{ value }}</span><!--
-     --><span v-if="field.unit && value !== null">&nbsp;{{ field.unit }}</span>
+     --><span v-if="(unit || field.unit) && value !== null">&nbsp;{{ unit || field.unit }}</span>
 
     </span>
 </template>
@@ -35,6 +35,13 @@
     export default {
 
         mixins : [ requireDocumentProperty, requireFieldProperty ],
+
+        props:{
+            unit:{
+                type:String,
+                default: null,
+            }
+        },
 
         computed : {
             value(){

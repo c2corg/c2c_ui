@@ -33,7 +33,7 @@
 
             <span class="has-text-primary is-nowrap">
                 <marker-gps-trace v-if="document.geometry.has_geom_detail" />
-                <marker-image-count v-if="document.img_count != 0" :image-count="document.img_count"/>
+                <marker-image-count :image-count="document.img_count"/>
             </span>
 
             <span class="is-nowrap">

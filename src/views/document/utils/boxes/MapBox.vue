@@ -17,7 +17,7 @@
             :biodiv-sports-activities="document.activities"
             style="height:275px"/>
 
-        <elevation-profile :document="document" />
+        <elevation-profile :document="document" v-if="documentType=='outing'"/>
 
         <div v-if="document.geometry && document.geometry.geom_detail" class="buttons is-centered">
             <button

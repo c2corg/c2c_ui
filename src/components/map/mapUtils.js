@@ -130,6 +130,8 @@ export const getDocumentPointStyle = function(document, title, highlight){
         icon = iconByDocumentType[type]
     else if(type == "w")
         icon = require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg')
+    else if(type == "a")
+        return new ol.style.Style() 
     else
         throw "Wrong document specification"
 

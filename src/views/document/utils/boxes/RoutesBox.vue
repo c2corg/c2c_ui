@@ -11,8 +11,9 @@
             <router-link
                 v-if="!hideButtons"
                 :to="{name:'routes', query:query}"
-                class="button is-small is-rounded is-primary">
-                List
+                class="button is-small is-rounded is-primary"
+                v-translate>
+                show all
             </router-link>
         </h2>
         <div v-for="activity of Object.keys(routes)" :key="activity">

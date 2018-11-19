@@ -22,7 +22,7 @@
                             </label-value>
 
                             <field-view :document="document" :field="fields.route_types" />
-                            <field-view :document="document" :field="fields.durations"/>
+                            <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')"/>
                             <field-view :document="document" :field="fields.rock_types" />
                             <field-view :document="document" :field="fields.climbing_outdoor_type" />
                             <field-view :document="document" :field="fields.configuration" />
@@ -152,7 +152,7 @@
                 }
 
                 if(activities.includes('ice_climbing'))
-                    result['194479'] = this.$gettext('ice && dry climbing gear')
+                    result['194479'] = this.$gettext('ice and dry climbing gear')
 
                 if(activities.includes('hiking'))
                     result['185207'] = this.$gettext('hiking gear')

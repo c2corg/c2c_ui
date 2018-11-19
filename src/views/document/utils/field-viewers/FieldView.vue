@@ -1,6 +1,6 @@
 <template>
     <label-value v-if="hasValue && visible" :label="$gettext(field.name)">
-        <document-field :document="document" :field="field" />
+        <document-field :document="document" :field="field" :unit="unit || field.unit"/>
     </label-value>
 </template>
 
@@ -13,6 +13,13 @@
         components : {LabelValue},
 
         mixins : [ requireDocumentProperty, requireFieldProperty ],
+
+        props:{
+            unit:{
+                type: String,
+                default: null,
+            }
+        },
 
         computed : {
             hasValue(){

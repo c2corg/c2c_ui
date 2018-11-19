@@ -51,7 +51,7 @@ const config = {
         demo: {
             name:"demo",
             api: "https://api.demov6.camptocamp.org",
-            media: "https://media.camptocamp.org/c2corg_active",
+            media: "https://sos.exo.io/c2corg-demov6-active",
             imageBackend: "https://images.demov6.camptocamp.org",
             forum: "https://forum.demov6.camptocamp.org",
             readWrite: true,

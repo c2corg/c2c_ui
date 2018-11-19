@@ -9,8 +9,12 @@
                 :query="query"
                 class="button is-small is-rounded is-primary"/>
 
-            <router-link :to="{name:'outings', query:query}" class="button is-small is-rounded is-primary">
-                List
+            <router-link
+                v-if="document.associations.recent_outings.documents.length!=0"
+                :to="{name:'outings', query:query}"
+                class="button is-small is-rounded is-primary"
+                v-translate>
+                show all
             </router-link>
 
         </div>
@@ -24,16 +28,10 @@
                 v-if="document.associations.recent_outings.documents.length==0"
                 document-type="outing"
                 :query="query"
-                class="button is-primary">
+                class="button is-primary"
+                v-translate>
                 Add the first outing
             </add-link>
-            <router-link
-                v-else-if="document.associations.recent_outings.documents.length!=0"
-                class="button is-primary"
-                :to="{ name: 'outings', query: query }"
-                v-translate>
-                show all
-            </router-link>
         </div>
 
     </div>

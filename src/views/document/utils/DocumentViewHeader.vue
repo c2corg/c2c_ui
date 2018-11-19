@@ -1,6 +1,6 @@
 
 <template>
-    <div class="section view-container">
+    <div class="view-container">
 
         <loading-notification :promise="promise" />
 
@@ -52,10 +52,6 @@
             </div>
 
             <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document"/>
-
-            <slot>
-                Please insert document content
-            </slot>
         </div>
     </div>
 </template>

@@ -53,6 +53,10 @@
             <input-activity v-model="value"/>
         </div>
 
+        <div v-else-if="field.queryMode==='dates'">
+            <date-query-item />
+        </div>
+
         <div v-else class="notification is-danger">
             <!-- Should not happen, message for devs -->
             Please fill queryMode for {{ field.name }}
@@ -68,6 +72,7 @@
     import Multiselect from 'vue-multiselect'
     import vueSlider from 'vue-slider-component'
     import QueryItemSliderLabel from './QueryItemSliderLabel'
+    import DateQueryItem from './DateQueryItem'
 
     export default {
 
@@ -75,6 +80,7 @@
             Multiselect,
             vueSlider,
             QueryItemSliderLabel,
+            DateQueryItem,
         },
 
         mixins : [ requireFieldProperty, QueryItemMixin ],

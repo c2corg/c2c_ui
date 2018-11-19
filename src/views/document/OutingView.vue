@@ -49,6 +49,7 @@
 
                             <field-view :document="document" :field="fields.access_condition"/>
                             <field-view :document="document" :field="fields.lift_status"/>
+                            <field-view :document="document" :field="fields.public_transport"/>
                             <field-view :document="document" :field="fields.hut_status"/>
 
                         </div>

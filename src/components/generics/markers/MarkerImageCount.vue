@@ -1,6 +1,6 @@
 <template>
-    <!-- it's not a simple icon (tooltip), so do not mive it in icons folder -->
-    <span v-tooltip="imageCount + ' ' + $gettext(' images')">
+    <!-- it's not a simple icon (tooltip), so do not move it in icons folder -->
+    <span v-if="imageCount && imageCount>0" v-tooltip="imageCount + ' ' + $gettext(' images')">
         <icon-image />
     </span>
 </template>
@@ -10,7 +10,7 @@
         props : {
             imageCount:{
                 type: Number,
-                required: true,
+                default: null,
             }
         }
     }

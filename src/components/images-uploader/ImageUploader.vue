@@ -244,7 +244,7 @@
                 this.$emit("fail", event)
             },
 
-            upload(){
+            upload(event){
                 this.percentCompleted = 0
                 this.status = STATUS_SAVING
                 this.$emit("startUpload", event)

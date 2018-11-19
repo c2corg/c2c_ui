@@ -11,7 +11,7 @@
             </em>
         </span>
         <span class="is-pulled-right">
-            <marker-image-count v-if="outing.img_count!=0" :image-count="outing.img_count"/>
+            <marker-image-count :image-count="outing.img_count"/>
             <marker-condition :condition="outing.condition_rating"/>
         </span>
     </div>

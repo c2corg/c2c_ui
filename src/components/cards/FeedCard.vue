@@ -1,7 +1,7 @@
 <template>
     <card-container class="route-card" @click="go">
         <div slot="header" class="level">
-            TODO : good from url
+            <!-- TODO : good from url -->
             <img class="level-left avatar"
                  :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
 
@@ -45,7 +45,7 @@
         <div slot="row5" class="level">
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
-                <icon-document v-if="item.document.img_count != 0" document-type="image"/>
+                <marker-image-count :image-count="item.document.img_count" />
                 <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
             </span>
             <span> {{ item.time | timeAgo }} </span>

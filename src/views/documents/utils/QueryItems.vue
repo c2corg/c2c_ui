@@ -42,6 +42,7 @@
             "lang",
             "quality",
             "categories",
+            "date_start",
         ],
 
         ratings:[

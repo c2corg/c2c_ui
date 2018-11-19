@@ -167,6 +167,11 @@
                     source: new ol.source.Vector()
                 }),
 
+                // layer for associated waypoints
+                waypointsLayer : new ol.layer.Vector({
+                    source: new ol.source.Vector()
+                }),
+
                 geolocation : null,
 
                 showLayerSwitcher: false,
@@ -273,7 +278,11 @@
                     new ol.control.Control({element: this.$refs.recenterOnPropositions}),
                 ]),
 
-                layers: this.mapLayers.concat(this.dataLayers).concat([this.biodivLayer, this.documentsLayer]),
+                layers: this.mapLayers.concat(this.dataLayers).concat([
+                    this.biodivLayer,
+                    this.waypointsLayer,
+                    this.documentsLayer,
+                ]),
 
                 view: new ol.View({
                     maxZoom:this.visibleLayer.get("maxZoom"),
@@ -424,14 +433,23 @@
             },
 
             drawDocumentMarkers(){
-                var source = this.documentsLayer.getSource()
-                source.clear()
+                var documentsSource = this.documentsLayer.getSource()
+                var waypointsSource = this.waypointsLayer.getSource()
 
-                this.addDocumentFeature(this.oldDocument, source, buildDiffStyle(true))
-                this.addDocumentFeature(this.newDocument, source, buildDiffStyle(false))
+                documentsSource.clear()
+                waypointsSource.clear()
+
+                this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true))
+                this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false))
 
                 for(let document of this.documents || []){
-                    this.addDocumentFeature(document, source)
+                    this.addDocumentFeature(document, documentsSource)
+
+                    if(document.associations && document.associations.waypoints){
+                        for(let waypoint of document.associations.waypoints){
+                            this.addDocumentFeature(waypoint, waypointsSource)
+                        }
+                    }
                 }
             },
 

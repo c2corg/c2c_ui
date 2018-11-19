@@ -1,16 +1,25 @@
 <template>
     <div v-if="hasData">
 
-        <form v-if="timeAvailable">
-            <span v-translate>See profile based on:</span>
-            <label>
-                <input v-model="mode" type="radio" value="distance">
-                <span v-translate>Distance</span>
-            </label>
-            <label>
-                <input v-model="mode" type="radio" value="time">
-                <span v-translate>Time</span>
-            </label>
+        <form v-if="timeAvailable" class="has-text-centered">
+            <span class="is-size-7" v-translate>See profile based on:</span>
+            <br>
+
+            <input
+                id="c2c-elevation-profile-distance"
+                v-model="mode"
+                type="radio"
+                value="distance"
+                class="is-checkradio is-small">
+            <label v-translate for="c2c-elevation-profile-distance">Distance</label>
+
+            <input
+                id="c2c-elevation-profile-time"
+                v-model="mode"
+                type="radio"
+                value="time"
+                class="is-checkradio is-small">
+            <label v-translate for="c2c-elevation-profile-time">Time</label>
         </form>
 
         <div ref="graph" class="elevation-profile-chart"/>
@@ -121,8 +130,10 @@
 
                 let totalDist = 0;
                 this.data = coords.map((coord, i, coords) => {
-                    const date = this.timeAvailable ? new Date(coord[3] * 1000) : null
+                    const date = timeAvailable ? new Date(coord[3] * 1000) : null
+                    console.log(i)
                     let d = 0;
+
                     if (i > 0) {
                         // convert from web mercator to lng/lat
                         const deg1 = ol.proj.transform(
@@ -237,25 +248,13 @@
 
                 // data lines
                 this.dLine = d3.line()
-                    .x(
-                        (d) => { return this.x1(d.d) }
-                    )
-                    .y(
-                        (d) => { return this.y(d.ele); }
-                    );
+                    .x((d) => { return this.x1(d.d) })
+                    .y((d) => { return this.y(d.ele); });
 
                 if (this.timeAvailable) {
                     this.tLine = d3.line()
-                        .x(
-                            (d) => {
-                                return this.x2(d.elapsed);
-                            }
-                        )
-                        .y(
-                            (d) => {
-                                return this.y(d.ele);
-                            }
-                        );
+                    .x( (d) => { return this.x2(d.elapsed); } )
+                    .y( (d) => { return this.y(d.ele); });
                 }
 
                 // display line path
@@ -408,7 +407,8 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+// do NOT add scoped
 
 $C2C-orange : red;
 
@@ -448,18 +448,4 @@ $C2C-orange : red;
   }
 }
 
-.viewdoc {
-  .elevation-profile-controls {
-    font-size: 15px;
-
-    label {
-      margin-right: 10px;
-      font-weight: normal;
-    }
-
-    input[type="radio"] {
-      margin-right: 0;
-    }
-  }
-}
 </style>
