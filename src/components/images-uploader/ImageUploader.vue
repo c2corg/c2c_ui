@@ -74,40 +74,16 @@
                 </span>
 
                 <div style="position:relative">
-                    <p>
+                    <p v-for="(label, licence) of licences" :key="licence">
                         <input
                             class="is-checkradio"
                             name="c2c-image_type"
-                            id="c2c-image_type-collaborative"
-                            value="collaborative"
+                            :id="_uid + '-c2c-image_type-' + licence"
+                            :value="licence"
                             type="radio"
                             v-model="document.image_type"
-                            :checked="document.image_type=='collaborative'">
-                        <label for="c2c-image_type-collaborative" v-translate>collab</label>
-                    </p>
-
-                    <p>
-                        <input
-                            class="is-checkradio"
-                            name="c2c-image_type"
-                            id="c2c-image_type-personal"
-                            value="personal"
-                            type="radio"
-                            v-model="document.image_type"
-                            :checked="document.image_type=='personal'">
-                        <label for="c2c-image_type-personal" v-translate>personal</label>
-                    </p>
-
-                    <p>
-                        <input
-                            class="is-checkradio"
-                            name="c2c-image_type"
-                            id="c2c-image_type-copyright"
-                            value="copyright"
-                            type="radio"
-                            v-model="document.image_type"
-                            :checked="document.image_type=='copyright'">
-                        <label for="c2c-image_type-copyright" v-translate>copyright</label>
+                            :checked="document.image_type==licence">
+                        <label :for="_uid + '-c2c-image_type-' + licence">{{ label }}</label>
                     </p>
                 </div>
             </image-action>
@@ -152,12 +128,18 @@
         },
 
         data(){
-            return {
+            var result = {
                 visibleDropdown:null,
                 status : STATUS_INITIAL,
                 percentCompleted : 0,
                 errorMessage : null,
                 src: null,
+
+                licences : {
+                    collaborative : this.$gettext('collab'),
+                    personal : this.$gettext('personal'),
+                },
+
                 document : {
                     image_type: null,
                     activities: this.parentDocument.activities.slice(0),
@@ -178,6 +160,11 @@
                     }]
                 },
             }
+
+            if(this.$user.isModerator)
+                result.licences.copyright = this.$gettext('copyright')
+
+            return result
         },
 
         computed:{
