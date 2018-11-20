@@ -131,7 +131,7 @@
                 let totalDist = 0;
                 this.data = coords.map((coord, i, coords) => {
                     const date = timeAvailable ? new Date(coord[3] * 1000) : null
-                    console.log(i)
+                    
                     let d = 0;
 
                     if (i > 0) {

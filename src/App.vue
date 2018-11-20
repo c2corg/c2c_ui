@@ -32,6 +32,10 @@
             }
         },
 
+        mounted(){
+            document.getElementById("splashscreen").style.display = "none"
+        },
+
         methods:{
             toggleSideMenu(){
 

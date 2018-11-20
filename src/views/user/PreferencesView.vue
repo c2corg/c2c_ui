@@ -26,10 +26,9 @@
             <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
             <p v-translate>Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.</p>
             <div class="field">
-                <label>
-                    <input v-model="preferences.followed_only" class="checkbox" type="checkbox" @change="save">
+                <input-checkbox v-model="preferences.followed_only" @change="save">
                     <span v-translate>Show only updates from followed users in the homepage feed</span>
-                </label>
+                </input-checkbox>
             </div>
 
             <div v-if="!preferences.followed_only">

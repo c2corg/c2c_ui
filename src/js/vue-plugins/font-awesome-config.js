@@ -86,6 +86,7 @@ import {
 import {
     faCircle as faCircleRegular,
     faClock as faClockRegular,
+    faHourglass as faHourglassRegular,
     faTrashAlt as faTrashAltRegular,
 } from '@fortawesome/free-regular-svg-icons'
 
@@ -190,6 +191,7 @@ export default function install(Vue){
         //regular icons
         faCircleRegular,
         faClockRegular,
+        faHourglassRegular,
         faTrashAltRegular,
 
         //brands icons

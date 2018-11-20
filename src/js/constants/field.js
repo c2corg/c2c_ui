@@ -8,6 +8,49 @@ for(let property of Object.values(fieldsProperties))
     if(property.values && typeof property.values == "string")
         property.values = attrs[property.values]
 
+const onlyRockClimbing = function(document){
+    const activities = document.activities
+
+    if(!activities || activities.length == 0 || activities.length > 1)
+        return false
+
+    return activities[0] == 'rock_climbing'
+}
+
+const getIsOnlyRockClimbingTypesHandler = function(types){
+    return function(document){
+        if(onlyRockClimbing(document) && !types.includes(document.climbing_outdoor_type))
+            return false
+
+        // generic activities criterion is handle by documentProperties.json
+        return true
+    }
+}
+
+const extraIsVisibleForHandlers = {
+    route_types(document){
+
+        if(!document.activities || document.activities.length == 0)
+            return false
+
+        if(document.activities.length > 1)
+            return true
+
+        if(onlyRockClimbing(document) && !['single', 'multi'].includes(document.climbing_outdoor_type))
+            return false
+
+        return true
+    },
+
+    configuration: getIsOnlyRockClimbingTypesHandler(['multi']),
+    global_rating: getIsOnlyRockClimbingTypesHandler(['multi']),
+    engagement_rating: getIsOnlyRockClimbingTypesHandler(['multi']),
+
+    equipment_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
+    rock_required_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
+    aid_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
+}
+
 function Field(id, properties = {}){
 
     this.name = id
@@ -18,6 +61,8 @@ function Field(id, properties = {}){
 
     this.parent = this.parent || "document"
     this.type = this.type || "text"
+
+    this.extraIsVisibleFor = extraIsVisibleForHandlers[this.name] || Boolean // trick for true default
 
     //Does the values can be translated
     if(this.i18n === undefined)
@@ -136,7 +181,7 @@ Field.prototype.getError = function(document) {
 
     if(!this.isVisibleFor(document))
         return null
-        
+
     if(this.parent=="document")
         value = document[this.name]
 
@@ -170,7 +215,10 @@ Field.prototype.getError = function(document) {
     return null
 }
 
-Field.prototype.isVisibleFor = function(params){
+Field.prototype.isVisibleFor = function(document){
+
+    if(!this.extraIsVisibleFor(document))
+        return false
 
     var result = true
 
@@ -183,15 +231,15 @@ Field.prototype.isVisibleFor = function(params){
         return false
     }
 
-    if(this.activities && params.activities)
-        result = intersectionIsNotNull(this.activities, params.activities)
+    if(this.activities && document.activities)
+        result = intersectionIsNotNull(this.activities, document.activities)
 
     else if(this.waypoint_types){
-        if(params.waypoint_type)
-            result = this.waypoint_types.includes(params.waypoint_type)
+        if(document.waypoint_type)
+            result = this.waypoint_types.includes(document.waypoint_type)
 
-        else if(params.waypoint_types)
-            result = intersectionIsNotNull(this.waypoint_types, params.waypoint_types)
+        else if(document.waypoint_types)
+            result = intersectionIsNotNull(this.waypoint_types, document.waypoint_types)
 
         else
             result = false

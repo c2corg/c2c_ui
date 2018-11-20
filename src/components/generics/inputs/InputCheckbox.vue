@@ -1,7 +1,7 @@
 <template>
 
     <div class="control">
-        <input class="is-checkradio is-info" type="checkbox" v-model="value_">
+        <input class="is-checkradio is-info" type="checkbox" v-model="value_" @change="$emit('change')">
         <label @click="onClick">
             <slot />
         </label>

@@ -76,7 +76,7 @@
             </div>
 
             <div v-for="key of Object.keys(diffProperties)" :key="key">
-                <h2 class="title is-2">{{ key }}</h2>
+                <h2 class="title is-2">{{ $gettext(key) }}</h2>
                 <div class="columns">
                     <div class="column is-6">
                         <del>{{ diffProperties[key].old }}</del>
@@ -88,7 +88,7 @@
             </div>
 
             <div v-for="key of Object.keys(diffLocales)" :key="key">
-                <h2 class="title is-2">{{ key }}</h2>
+                <h2 class="title is-2">{{ $gettext(key) }}</h2>
                 <div class="locale-diff">
                     <div>
                         <pre>
@@ -108,6 +108,17 @@
 
     import { diff_match_patch } from './utils/diff_match_patch_uncompressed'
 
+    const hasChanged = function(oldVal, newVal){
+
+        if(Array.isArray(oldVal) || Array.isArray(newVal))
+            return JSON.stringify(oldVal) != JSON.stringify(newVal)
+
+        if (oldVal === null && newVal !== null || oldVal !== null && newVal === null)
+            return true
+
+        return oldVal !== newVal
+    }
+
     export default {
 
         data() {
@@ -122,8 +133,10 @@
 
         computed: {
             documentId(){ return parseInt(this.$route.params.id) },
-            lang(){ return this.$route.params.lang },
+
             documentType(){ return this.$route.name.replace("-diff","") },
+
+            lang(){ return this.$route.params.lang },
 
             geoLocalized() {
                 return constants.objectDefinitions[this.documentType].geoLocalized
@@ -144,11 +157,10 @@
         },
 
         watch:{
-            '$route':'loadVersions'
-        },
-
-        created() {
-            this.loadVersions()
+            '$route': {
+                handler: 'loadVersions',
+                immediate: true,
+            }
         },
 
         methods: {
@@ -182,7 +194,7 @@
                 var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ["version", "locales" , "geometry"])
 
                 for(let key of keys){
-                    if (this.hasChanged(this.oldVersion.document[key], this.newVersion.document[key])){
+                    if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])){
                         this.diffProperties[key] = {
                             old:this.oldVersion.document[key],
                             new:this.newVersion.document[key]
@@ -198,7 +210,7 @@
                     var oldVal = (oldLocale[key] || "").replace(/\r\n?/g, "\n")
                     var newVal = (newLocale[key] || "").replace(/\r\n?/g, "\n")
 
-                    if (this.hasChanged(oldVal, newVal)){
+                    if (hasChanged(oldVal, newVal)){
                         let diff = diff_match_patch.diff_main(oldVal, newVal)
                         diff_match_patch.diff_cleanupSemantic(diff)
                         let html = diff_match_patch.diff_prettyHtml(diff).split("<br>")
@@ -216,38 +228,25 @@
                 }
             },
 
-            hasChanged(oldVal, newVal){
-
-                var result
-
-                if(Array.isArray(oldVal) || Array.isArray(newVal)){
-                    result = JSON.stringify(oldVal) != JSON.stringify(newVal);
-                } else if (oldVal === null && newVal !== null || oldVal !== null && newVal === null) {
-                    result = true
-                } else {
-                    result = oldVal !== newVal
-                }
-
-                return result
-            },
-
             loadVersion(versionId, resultProperty){
                 this[resultProperty]=null
 
-                c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then(response => {
+                return c2c[this.documentType].getVersion(this.documentId, this.lang, versionId)
+                .then(response => {
                     this[resultProperty]=response.data;
                     if(resultProperty=="newVersion"){
                         this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
                     }
 
                     this.buildDiff()
-                });
+                })
             },
 
             loadVersionSmart(versionId, resultProperty, baseVersionId){
                 if(versionId=="prev"){
-                    c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
-                        let versions = response.data.versions;
+                    c2c[this.documentType].getHistory(this.documentId, this.lang)
+                    .then(response => {
+                        let versions = response.data.versions
 
                         for(let i=0;i<versions.length;i++){
                             if(versions[i].version_id==baseVersionId && i!=0){
@@ -256,7 +255,7 @@
                         }
                     })
                 } else {
-                    this.loadVersion(versionId, resultProperty)
+                    return this.loadVersion(versionId, resultProperty)
                 }
             }
         },
@@ -279,7 +278,7 @@
     }
 
     ins{
-        background:lightgreen !important;
+        background:green !important;
         text-decoration:none;
     }
 

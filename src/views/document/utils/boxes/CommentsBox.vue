@@ -29,11 +29,14 @@
             <div v-for="post of comments" :key="post.id" class="discourse-post">
                 <div class="columns is-gapless">
                     <div class="column is-narrow discourse-post-avatar">
-                        <img :src="post.avatar_template" :width="forum_avatar_size" :height="forum_avatar_size">
+                        <img
+                            :src="$options.forumUrl + '/' + post.avatar_template"
+                            :width="$options.forumAvatarSize"
+                            :height="$options.forumAvatarSize">
                     </div>
                     <div class="column">
                         <div class="discourse-post-header">
-                            <a :href="'https://forum.camptocamp.org/users/' + post.username" :title="post.username"
+                            <a :href="$options.forumUrl + '/users/' + post.username" :title="post.username"
                                class="discourse-post-header-username">
                                 {{ post.username }}
                             </a>
@@ -67,13 +70,18 @@
 
     import forum from '@/js/apis/forum.js'
 
+    const computeCooked = function(cooked){
+        cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url)
+
+        return cooked
+    }
+
     export default {
         mixins : [ requireDocumentProperty, viewModeMixin ],
 
         data(){
             return {
                 promise:{},
-                forum_avatar_size: 45,
             }
         },
 
@@ -97,28 +105,29 @@
             comments(){
                 const result = []
 
-                if(!this.topic)
+                if(!this.topic || !this.topic.post_stream)
                     return result
 
                 const data = this.topic.post_stream
 
-                if (data !== undefined) {
-                    let posts = data.posts
+                let posts = data.posts
 
-                    if(posts[0].name =='system')
-                        posts = posts.slice(1)
+                if(posts[0].name =='system')
+                    posts = posts.slice(1)
 
-                    for (let post of posts) {
-                        post.avatar_template =  forum.url + '/' + post.avatar_template.replace('{size}', this.forum_avatar_size)
-                        post.cooked =  post.cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url),
-                        result.push(post)
-                    }
+                for (let post of posts) {
+                    post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize)
+                    post.cooked =  computeCooked(post.cooked)
+                    result.push(post)
                 }
 
                 return result
             }
 
         },
+
+        forumUrl: forum.url,
+        forumAvatarSize: 45,
 
         created(){
             this.getComments();

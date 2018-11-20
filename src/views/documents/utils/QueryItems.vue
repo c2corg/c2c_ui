@@ -185,7 +185,8 @@
             categorizedFields(){
                 var result = []
 
-                var urlFilter = {
+                // fake doc build from URL filter
+                var documentFromUrlFilter = {
                     activities:this.urlActivities,
                     waypoint_types:this.urlWaypoint_types,
                 }
@@ -208,7 +209,7 @@
                             if(this.$route.query[field.url] != undefined)
                                 temp.activeCount += 1
 
-                            if(field.isVisibleFor(urlFilter)){
+                            if(field.isVisibleFor(documentFromUrlFilter)){
                                 temp.fields.push(field)
                             }
                         }

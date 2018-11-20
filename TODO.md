@@ -4,7 +4,6 @@
 
 * maps
     * ask for an Bing Map dev key
-    * recenter on...
 * signup (CAPTCHA)
 * v-tooltip : may have break lines
 
@@ -19,8 +18,8 @@
 
 ### Wait for decision
 
-  * markdown alerts in parser
-  * markdown icons in parser
+* markdown alerts in parser
+* markdown icons in parser
 
 ### Wait for dep issues
 

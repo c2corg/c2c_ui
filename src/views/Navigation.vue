@@ -74,11 +74,14 @@
             </div>
 
             <div v-else class="navigation-item dropdown is-hoverable">
-                <div class="dropdown-trigger">
+                <div class="dropdown-trigger button">
                     <img
                         width="24" height="24"
                         :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
                         class="user-avatar">
+                    <span class="has-text-weight-bold is-hidden-mobile">
+                        &nbsp;{{ $user.name }}
+                    </span>
                 </div>
                 <div class="dropdown-menu">
                     <div class="dropdown-content">
