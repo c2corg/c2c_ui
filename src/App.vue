@@ -7,6 +7,7 @@
             <router-view class="router-view"/>
         </div>
         <helper-window ref="helper"/>
+        <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
     </div>
 </template>
 
@@ -82,6 +83,15 @@
         top:0px;
         z-index:25;
         transition: 0.3s;
+    }
+
+    .alternative-side-menu-shader{
+        position:fixed;
+        top:0;
+        left:0;
+        width: 100vw;
+        height:100vh;
+        background: rgba(0,0,0,0.2)
     }
 
     .site-notice{

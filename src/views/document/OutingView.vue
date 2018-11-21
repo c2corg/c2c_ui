@@ -93,7 +93,7 @@
                     <markdown-section :document="document" :field="fields.weather"/>
                     <markdown-section :document="document" :field="fields.conditions"/>
 
-                    <condition-levels :data="document.currentLocale_.conditions_levels"/>
+                    <condition-levels :data="locale.conditions_levels"/>
 
                     <markdown-section :document="document" :field="fields.avalanches"/>
                     <markdown-section :document="document" :field="fields.description" />
@@ -121,5 +121,6 @@
         },
 
         mixins : [ DocumentViewMixin ],
+
     }
 </script>

@@ -12,7 +12,7 @@
 
         <router-link
             :to="{name:'home'}"
-            class="navigation-brand has-text-centered"
+            class="navigation-item navigation-brand has-text-centered"
             :class="{'is-hidden-mobile': !hideSearchInput}">
             <img src="@/assets/img/logo_small.svg"
                  url="@/assets/img/logo_small.svg"
@@ -204,40 +204,42 @@
         // border-bottom:1px solid $grey-lighter
         box-shadow: 0 2px 2px rgba($black, 0.1);
         display: flex;
+    }
 
-        .navigation-brand{
-            img{
-                height:$navbar-height;
-                padding:5px;
-            }
-        }
-
-        .navigation-end{
-            justify-content: flex-end;
-            margin-left: auto;
-            display:flex;
-
-            .user-avatar{
-                vertical-align: bottom;
-            }
-
-            .dropdown-menu{
-                left:auto;
-                right:5px;
-            }
-        }
-
-        .navigation-item{
-            display:flex;
-            align-items: center;
-            line-height: 1.5;
+    .navigation-brand{
+        img{
+            height:calc(#{$navbar-height} - 1rem);
         }
     }
 
+    .navigation-end{
+        justify-content: flex-end;
+        margin-left: auto;
+        display:flex;
+
+        .user-avatar{
+            vertical-align: bottom;
+        }
+
+        .dropdown-menu{
+            left:auto;
+            right:5px;
+        }
+    }
+
+    .navigation-item{
+        display:flex;
+        align-items: center;
+        line-height: 1.5;
+    }
+
+
     @media screen and (max-width: $tablet) {
         .navigation-brand{
+
             img{
                 margin-left:0px;
+                // height:31px;
             }
         }
 
