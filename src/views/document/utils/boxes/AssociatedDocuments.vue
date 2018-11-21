@@ -11,7 +11,7 @@
         <!-- books -->
         <div v-if="associations.books.length!=0" class="associations-list">
             <div class="title" v-translate>Books</div>
-            <div v-for="book of associations.books.reverse()" :key="book.document_id" class="is-ellipsed">
+            <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
                 <document-link :document="book">
                     <icon-book class="icon-link"/>&nbsp;<document-title :document="book" />
                 </document-link>
@@ -54,12 +54,12 @@
             associations(){
                 const associations = this.document.associations || {}
 
-                associations.books = associations.books || []
+                associations.books = (associations.books || []).reverse()
                 associations.waypoints = associations.waypoints || []
                 associations.articles = associations.articles || []
 
                 return associations
-            }
+            },
         }
     }
 </script>
