@@ -50,17 +50,24 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
-        computed: {
-            associations(){
-                const associations = this.document.associations || {}
+        data(){
+            return {
+                associations:null
+            }
+        },
 
-                associations.books = (associations.books || []).reverse()
-                associations.waypoints = associations.waypoints || []
-                associations.articles = associations.articles || []
+        created(){
 
-                return associations
-            },
-        }
+            function compare(left, right){
+                return left.document_id < right.document_id
+            }
+
+            this.associations = this.document.associations || {}
+
+            this.associations.books = (this.associations.books || []).sort(compare)
+            this.associations.waypoints = this.associations.waypoints || []
+            this.associations.articles = this.associations.articles || []
+        },
     }
 </script>
 

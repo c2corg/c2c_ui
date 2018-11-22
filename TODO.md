@@ -73,8 +73,3 @@
 ### Doc
 
 * Probably https://github.com/vue-styleguidist/vue-cli-plugin-styleguidist
-
-### tester
-
-* feed card : good locale
-* bonne image dans le markdown

@@ -445,7 +445,7 @@
                 for(let document of this.documents || []){
                     this.addDocumentFeature(document, documentsSource)
 
-                    if(document.associations && document.associations.waypoints){
+                    if(document.associations && document.associations.waypoints && !this.editable){
                         for(let waypoint of document.associations.waypoints){
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }

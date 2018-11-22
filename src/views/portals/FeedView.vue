@@ -43,6 +43,7 @@
             FeedWidget,
             ForumWidget,
             MobileAppAdvertising,
+
         },
 
         data(){

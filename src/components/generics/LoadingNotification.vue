@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div v-if="promise.data === null && promise.error === null" class="notification is-primary">
+        <div v-if="!promise.data && !promise.error" class="notification is-primary">
             Loading
         </div>
-        <div v-else-if="promise.error!==null" class="notification is-danger">
+        <div v-else-if="promise.error" class="notification is-danger">
             {{ promise.error.message }}
         </div>
     </div>
