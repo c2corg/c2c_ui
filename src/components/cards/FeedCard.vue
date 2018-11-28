@@ -21,7 +21,7 @@
                 <gallery v-if="images.length!=0" :images="images" />
             </div>
         </div>
-        <div slot="row3" v-if="documentType!='article'" class="level">
+        <div slot="row3" v-if="documentType!='article' && documentType!='book'" class="level">
             <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
             <route-rating v-else-if="documentType=='route'" :document="item.document"/>
 

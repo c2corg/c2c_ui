@@ -45,7 +45,8 @@ ApiData.prototype.catch = function(callback){
 const BaseApi = function(apiUrl){
 
     this.axios = axios.create({
-        headers:{common:{}}, // axios instances shares same common headers. this trick fix this.
+        // axios instances shares same common headers. this trick fix this.
+        headers:{common:{}},
         baseURL: apiUrl,
     })
 }

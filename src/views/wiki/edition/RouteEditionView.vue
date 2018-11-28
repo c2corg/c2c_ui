@@ -60,7 +60,6 @@
                 <form-input-row :document="document" :field="fields.lift_access"/>
 
                 <form-input-row :document="document" :field="fields.slackline_type"/>
-                <form-input-row :document="document" :field="fields.route_length"/>
                 <form-input-row :document="document" :field="fields.slackline_height"/>
             </tab-item>
 

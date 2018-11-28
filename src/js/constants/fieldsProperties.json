@@ -699,8 +699,7 @@
     {
         "type": "number",
         "min": 0,
-        "max": 9999,
-        "unit": "#"
+        "max": 9999
     },
     "nb_participants":
     {

@@ -16,7 +16,7 @@
                     <field-view :document="document" :field="fields.isbn"/>
                     <field-view :document="document" :field="fields.nb_pages"/>
                     <field-view :document="document" :field="fields.publication_date"/>
-                    <field-view :document="document" :field="fields.url"/>
+                    <field-view :document="document" :field="fields.url" style="overflow:hidden"/>
                 </div>
 
                 <tool-box :document="document"/>

@@ -164,7 +164,7 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 @import '@/assets/sass/variables.scss';
 
@@ -193,10 +193,41 @@
 
 .discourse-content{
     margin-top:0.5rem;
+
+    .emoji{
+        width:20px;
+        height:20px;
+        vertical-align: middle;
+    }
+
+    .quote{
+        margin-top: 1em;
+        margin-bottom: 1em;
+
+        .title, blockquote {
+            background-color: #F0EFEB;
+            border-left: 5px solid #e9e9e9;
+            border-left-color: #D0D0D0;
+        }
+
+        .title{
+            padding: 12px 12px 1px 12px;
+            margin-bottom: 0;
+        }
+
+        blockquote{
+            margin-top: 0;
+            margin-left: 0;
+            margin-right: 0;
+            padding: 12px;
+        }
+    }
+
+    h2{
+        margin: 30px 0 10px;
+        font-size: 1.5em;
+        font-weight: bold;       
+    }
 }
 
-.discourse-content .emoji{
-    width:1em;
-    height:1em;
-}
 </style>

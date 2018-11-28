@@ -97,8 +97,9 @@
             position:absolute;
             color:#CCC;
             font-size:40px;
-            left:130px;
-            top:80px;
+            margin:auto;
+            left:50%;
+            top:50%;
         }
     }
 
