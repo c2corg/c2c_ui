@@ -70,7 +70,7 @@ export default {
         * properties computed when document is loaded
         */
         document(){
-            if(!this.promise.data)
+            if(!this.promise || !this.promise.data)
                 return null
 
             let doc = this.isVersionView ? this.promise.data.document : this.promise.data
@@ -100,15 +100,14 @@ export default {
     },
 
     watch:{
-        '$route': 'loadDocument',
-    },
-
-    created() {
-        this.loadDocument()
+        '$route': {
+            handler: 'loadDocument',
+            immediate: true
+        },
     },
 
     methods:{
-        loadDocument(){
+        loadDocument($route){
 
             if(this.isVersionView){
                 this.promise = c2c[this.documentType].getVersion(
@@ -142,8 +141,19 @@ export default {
             } else if(this.isDraftView){
                 this.promise = {data:this.draft}
             } else { // normal mode
-                this.promise = c2c[this.documentType].get(this.documentId)
+
+                if(this.document && $route.params.id == this.document.document_id && $route.params.lang === this.lang)
+                    return
+
+                this.promise = c2c[this.documentType].get(this.documentId).then(this.updateUrl)
             }
         },
+
+        updateUrl(){
+            var title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
+            title = title.toLowerCase().replace(/ /g, "-")
+            const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
+            this.$router.replace(path)
+        }
     }
 }

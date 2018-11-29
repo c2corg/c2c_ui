@@ -85,7 +85,7 @@ const addDocumentTypeView = function(def, viewComponent, editionComponent){
     )
 
     routes.push({
-        path: '/' + def.documentType + 's/:id(\\d+)/:lang?',
+        path: '/' + def.documentType + 's/:id(\\d+)/:lang?/:title?',
         name: def.documentType ,
         component: viewComponent},
     )

@@ -1,0 +1,1 @@
+[[articles/1234/en/sl-ug|slug]]

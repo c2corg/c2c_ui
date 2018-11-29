@@ -1,0 +1,1 @@
+Some text and a [[waypoints/12345/fr/some-slug|wiki link]] before [[/whatever|another one]] that follows.

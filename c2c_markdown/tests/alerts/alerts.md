@@ -1,0 +1,6 @@
+!!Information
+
+!!!Warning
+
+!!!!Danger
+
