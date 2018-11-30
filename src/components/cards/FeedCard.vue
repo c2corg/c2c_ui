@@ -2,9 +2,9 @@
     <card-container class="route-card" @click="go">
         <div slot="header" class="level">
             <span class="level-left">
-                 <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
-                 <document-title :document="item.user"/>
-                 <span class="has-text-weight-normal">&nbsp;{{ $gettext(actionLine) }}</span>
+                <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+                <document-title :document="item.user"/>
+                <span class="has-text-weight-normal">&nbsp;{{ $gettext(actionLine) }}</span>
             </span>
 
             <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
