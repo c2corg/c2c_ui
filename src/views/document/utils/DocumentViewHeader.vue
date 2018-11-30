@@ -94,7 +94,7 @@
         computed:{
 
             lang(){
-                return this.document ? this.document.currentLocale_.lang : null
+                return this.document ? this.document.cooked.lang : null
             },
 
             title(){

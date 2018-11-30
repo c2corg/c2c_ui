@@ -172,7 +172,7 @@ Field.prototype.urlToValue = function(url){
 
 }
 
-Field.prototype.getError = function(document) {
+Field.prototype.getError = function(document, locale) {
     let value
 
     // for the moment, no coherence check
@@ -186,7 +186,7 @@ Field.prototype.getError = function(document) {
         value = document[this.name]
 
     else if(this.parent=="locales")
-        value = document.currentLocale_[this.name]
+        value = locale[this.name]
 
     else if(this.parent=="associations")
         value = document.associations[this.name]

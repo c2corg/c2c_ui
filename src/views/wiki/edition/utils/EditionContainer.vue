@@ -6,7 +6,7 @@
             Edit
             <document-title :document="document"/>
             in
-            {{ $gettext(document.currentLocale_.lang) }}
+            {{ $gettext($route.params.lang) }}
             <button class="button is-size-6" @click="isPreview=!isPreview">
                 <fa-icon :icon="isPreview ? 'edit' : 'eye'" />
                 &nbsp;

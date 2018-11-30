@@ -1,6 +1,7 @@
 <template>
     <div class="has-background-light">
         <html-header :title="$gettext('Home')"/>
+        <home-banner v-if="!$user.isLogged"/>
         <div class="section">
             <div class="columns">
                 <div class="column is-7">
@@ -35,11 +36,13 @@
 <script>
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'
+    import HomeBanner from './HomeBanner'
     import ForumWidget from './utils/ForumWidget'
     import MobileAppAdvertising from './utils/MobileAppAdvertising'
 
     export default {
         components:{
+            HomeBanner,
             FeedWidget,
             ForumWidget,
             MobileAppAdvertising,

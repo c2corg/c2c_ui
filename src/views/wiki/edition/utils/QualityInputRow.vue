@@ -24,12 +24,11 @@
         return false
     }
 
-    function hasRouteInfo(doc){
-        return (doc.geometry && doc.geometry.geom_detail) || doc.currentLocale_.route_description
+    function hasRouteInfo(doc, locale){
+        return (doc.geometry && doc.geometry.geom_detail) || locale.route_description
     }
 
-    function hasConditionLevel(doc){
-        const locale = doc.currentLocale_
+    function hasConditionLevel(doc, locale){
 
         if(locale.conditions)
             return true
@@ -54,8 +53,7 @@
             doc.glacier_rating)
     }
 
-    function getImageScore(doc){
-        const locale = doc.currentLocale_
+    function getImageScore(doc, locale){
         let score = 0
 
         score += doc.geometry && doc.geometry.geom ? 1 : 0
@@ -69,8 +67,7 @@
         return score
     }
 
-    function getArticleScore(doc){
-        const locale = doc.currentLocale_
+    function getArticleScore(doc, locale){
         const description = locale.description || ""
 
         let score = 0
@@ -85,13 +82,12 @@
         return score
     }
 
-    function getOutingScore(doc){
-        const locale = doc.currentLocale_
+    function getOutingScore(doc, locale){
 
         function getSkiScore(){
             let score = 0
 
-            score += hasRouteInfo(doc) ? 0.5 : 0
+            score += hasRouteInfo(doc, locale) ? 0.5 : 0
             score += hasSnowInfo(doc) ? 0.5 : 0
 
             if(doc.access_condition && doc.access_condition !== 'snowy' && doc.elevation_access)
@@ -105,7 +101,7 @@
             score += locale.weather ? 0.5 : 0
             score += locale.condition_rating ? 0.5 : 0
 
-            score = hasConditionLevel(doc) ? score + 1 : Math.min(score, 2)
+            score = hasConditionLevel(doc, locale) ? score + 1 : Math.min(score, 2)
 
             return score
         }
@@ -113,12 +109,12 @@
         function getIceScore(){
             let score = 0
 
-            score += hasRouteInfo(doc) ? 0.5 : 0
+            score += hasRouteInfo(doc, locale) ? 0.5 : 0
             score += doc.condition_rating ? 0.5 : 0
             score += locale.description ? 1 : 0
             score += locale.timing ? 0.5 : 0
             score += locale.weather ? 0.5 : 0
-            score = hasConditionLevel(doc) ? score + 1.5 : Math.min(score, 2)
+            score = hasConditionLevel(doc, locale) ? score + 1.5 : Math.min(score, 2)
 
             return score
         }
@@ -126,7 +122,7 @@
         function getClimbingScore(){
             let score = 0
 
-            score += hasRouteInfo(doc) ? 0.5 : 0
+            score += hasRouteInfo(doc, locale) ? 0.5 : 0
             score += locale.description ? 1 : 0
             score += locale.timing ? 0.5 : 0
             score += locale.weather ? 0.5 : 0
@@ -169,6 +165,13 @@
             }
         },
 
+        computed:{
+            editedLocale(){
+                // in edit mode, there is only one locale
+                return this.document ? this.document.locales[0] : null 
+            }
+        },
+
         watch:{
             document:{
                 handler:"computeQuality",
@@ -194,11 +197,11 @@
                 let score = this.document.quality
 
                 if(this.document.type=="o")
-                    score = getOutingScore(this.document)
+                    score = getOutingScore(this.document, this.editedLocale)
                 else if(this.document.type=="c")
-                    score = getArticleScore(this.document)
+                    score = getArticleScore(this.document, this.editedLocale)
                 else if(this.document.type=="i")
-                    score = getImageScore(this.document)
+                    score = getImageScore(this.document, this.editedLocale)
 
                 if(score<1)
                     this.computedQuality = 'empty'

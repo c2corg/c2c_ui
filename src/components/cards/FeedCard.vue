@@ -1,30 +1,27 @@
 <template>
     <card-container class="route-card" @click="go">
         <div slot="header" class="level">
-            <!-- TODO : good from url -->
-            <img class="level-left avatar"
-                 :src="'https://forum.camptocamp.org/user_avatar/forum.camptocamp.org/' + item.user.forum_username + '/36/1_1.png'">
-
             <span class="level-left">
-                <document-title :document="item.user"/>
-                <span>&nbsp;{{ $gettext(actionLine) }}</span>
+                 <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+                 <document-title :document="item.user"/>
+                 <span class="has-text-weight-normal">&nbsp;{{ $gettext(actionLine) }}</span>
             </span>
 
             <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
         </div>
         <div slot="row1">
             <div>
-                <document-title :document="item.document"/>
+                <document-title :document="item.document" class="has-text-centered has-text-weight-bold"/>
                 <br>
                 <markdown v-if="locale && locale.summary" :content="locale.summary" />
                 <span v-if="documentType=='outing'">{{ dates }}</span>
                 <gallery v-if="images.length!=0" :images="images" />
             </div>
         </div>
+
         <div slot="row3" v-if="documentType!='article' && documentType!='book'" class="level">
             <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
             <route-rating v-else-if="documentType=='route'" :document="item.document"/>
-
 
             <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
@@ -37,11 +34,12 @@
                 <fa-icon icon="arrows-alt-v"/>
                 {{ item.document.height_diff_difficulties }} m
             </span>
-
         </div>
+
         <div v-if="item.document.areas" slot="row4" class="level">
             <card-region-item :document="item.document"/>
         </div>
+        
         <div slot="row5" class="level">
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
@@ -58,6 +56,7 @@
 </template>
 
 <script>
+    import forum from '@/js/apis/forum.js'
     import imageUrls from '@/js/image-urls'
 
     import { cardMixin } from './utils/mixins.js'
@@ -93,6 +92,8 @@
                 return this.$documentUtils.getLocaleSmart(this.item.document)
             }
         },
+
+        forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace("https://", "") + "/",
 
         created(){
 

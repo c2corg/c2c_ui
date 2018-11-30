@@ -1,14 +1,12 @@
 <template>
     <div>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="content" v-html="html"/>
+        <div class="content" v-html="content"/>
         <div style="clear:both"/>
     </div>
 </template>
 
 <script>
-    import markdown from './markdown.js'
-
     export default {
         props: {
             content:{
@@ -16,12 +14,6 @@
                 required:true,
             }
         },
-
-        computed:{
-            html(){
-                return markdown.convert(this.content)
-            }
-        }
     }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="box no-print">
+    <div class="box no-print" v-if="documentType=='route' || document.associations.recent_outings.documents.length!=0">
         <div class="title is-2">
             <span v-translate>Last outings</span>
 

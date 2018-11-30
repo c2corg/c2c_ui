@@ -42,43 +42,36 @@ export default {
     },
 
     computed: {
-        documentId(){
-            return this.$route.params.id
-        },
 
-        lang(){
-            return this.$route.params.lang || this.$language.current
-        },
-
-        document(){
-            let doc = this.promise.data
-
-            if(doc){
-                var locale = this.$documentUtils.getLocaleStupid(doc, this.lang)
-
-                if(!locale){
-                    locale = this.$documentUtils.buildLocale(this.documentType, this.lang)
-                    doc.locales.push(locale)
-                }
-
-                doc.currentLocale_ = locale
-            }
-
-            return doc
+        mode(){
+            return this.$route.name.split("-")[1] // right part of route name : add or edit
         },
 
         documentType(){
             return this.$route.name.replace(/-(edit|add)/,"")
         },
 
-        mode(){
-            return this.$route.name.split("-")[1] // right part of route name : add or edit
+        documentId(){
+            return this.$route.params.id
         },
+
+        lang(){
+            return this.$route.params.lang
+        },
+
+        document(){
+            return this.promise.data
+        },
+
+        editedLocale(){
+            // in edit mode, there is only one locale
+            return this.document ? this.document.locales[0] : null
+        }
     },
 
     created(){
         if(this.mode=="edit")
-            this.promise = c2c[this.documentType].get(this.documentId).then(this.afterLoad)
+            this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
         else {
             this.promise = { data : this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
@@ -147,7 +140,7 @@ export default {
             let hasError = false
 
             for(let field of Object.values(this.fields)){
-                let error = field.getError(this.document)
+                let error = field.getError(this.document, this.editedLocale)
                 hasError = hasError || error !==null
                 field.error = error
             }

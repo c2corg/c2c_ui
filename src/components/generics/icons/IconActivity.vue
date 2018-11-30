@@ -1,7 +1,5 @@
 <template>
-    <span>
-        <i :class="'icon-activity-' + activity" />
-    </span>
+    <i :class="'icon-activity-' + activity" />
 </template>
 
 <script>

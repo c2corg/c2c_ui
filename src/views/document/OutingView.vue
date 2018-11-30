@@ -21,7 +21,7 @@
                         let stay profile coherent and call this component profiles-links
                         and not users-links -->
                         <profiles-links :profiles="document.associations.users"/>
-                        {{ document.currentLocale_.participants }}
+                        {{ document.cooked.participants }}
                     </div>
 
                     <div v-for="route of document.associations.routes" :key="route.document_id">

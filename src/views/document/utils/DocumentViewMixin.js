@@ -65,6 +65,9 @@ export default {
         fields(){
             return constants.objectDefinitions[this.documentType].fields
         },
+        expected_lang(){
+            return this.$route.params.lang || this.$language.current || "fr"
+        },
 
         /*
         * properties computed when document is loaded
@@ -75,13 +78,6 @@ export default {
 
             let doc = this.isVersionView ? this.promise.data.document : this.promise.data
 
-            if(doc){
-                if(this.isNormalView)
-                    doc.currentLocale_ = this.$documentUtils.getLocaleSmart(doc, this.$route.params.lang)
-                else
-                    doc.currentLocale_ = this.$documentUtils.getLocaleStupid(doc, this.$route.params.lang)
-            }
-
             return doc
         },
 
@@ -91,11 +87,13 @@ export default {
 
             return this.promise.data.version
         },
+
         locale(){
-            return this.document ? this.document.currentLocale_ : null
+            return this.document ? this.document.cooked : null
         },
+
         lang(){
-            return this.locale ? this.locale.lang : null
+            return this.document ? this.document.cooked.lang : null
         }
     },
 
@@ -113,7 +111,8 @@ export default {
                 this.promise = c2c[this.documentType].getVersion(
                     this.documentId,
                     this.$route.params.lang,
-                    this.$route.params.version
+                    this.$route.params.version,
+                    true,
                 ).then(response => {
 
                     //version object with all data
@@ -138,20 +137,27 @@ export default {
                         }
                     }
                 })
+
             } else if(this.isDraftView){
-                this.promise = {data:this.draft}
+                this.promise = {}
+
+                c2c.cooker(this.draft.locales[0]).then(response => {
+                    this.draft.cooked = response.data
+                    this.promise.data = this.draft
+                })
+
             } else { // normal mode
 
-                if(this.document && $route.params.id == this.document.document_id && $route.params.lang === this.lang)
+                if(this.document && $route.params.id == this.document.document_id && this.expected_lang === this.lang)
                     return
 
-                this.promise = c2c[this.documentType].get(this.documentId).then(this.updateUrl)
+                this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang).then(this.updateUrl)
             }
         },
 
         updateUrl(){
             var title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
-            title = title.toLowerCase().replace(/ /g, "-")
+            title = title.toLowerCase().replace(/[^a-z0-1]+/g, "-")
             const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
             this.$router.replace(path)
         }

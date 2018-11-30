@@ -153,8 +153,8 @@ export default function install(Vue){
                 ]
 
                 names.forEach(name => outing[name] = outing[name] === null ? route[name] : outing[name])
-                if(!outing.currentLocale_.title)
-                    outing.currentLocale_.title = this.getDocumentTitle(route, outing.currentLocale_.lang)
+                if(!outing.cooked.title)
+                    outing.cooked.title = this.getDocumentTitle(route, outing.cooked.lang)
             },
 
             buildLocale(documentType, lang){
@@ -190,7 +190,7 @@ export default function install(Vue){
 
                         if(field.default)
                             result[field.name] = field.default
-                            
+
                     } else if(field.parent == "associations"){
                         result.associations[(field.documentType == "profile" ? "user" : field.documentType) + "s"] = []
                     }

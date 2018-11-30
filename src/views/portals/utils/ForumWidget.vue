@@ -7,10 +7,10 @@
                 v-for="topic of topics.topics.slice(0, messageCount<0 ? 9999 : messageCount)"
                 :key="topic.id"
                 v-if="topic.category_id != 29"
-                :href="forum.url + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
+                :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
                 target="_blank">
                 <img
-                    :src="forum.url + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
+                    :src="$options.forumUrl + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
                     :style="'width:' + imgSize + 'px'">
                 <span>
                     {{ topic.title }}
@@ -35,12 +35,14 @@
                 default: -1,
             }
         },
+
         data() {
             return {
                 promise:null,
-                forum,
             }
         },
+
+        forumUrl: forum.url,
 
         computed: {
             topics(){

@@ -24,6 +24,13 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
+        props:{
+            localeLang:{
+                type:String,
+                required:true,
+            }
+        },
+
         data(){
             return {
                 promise:null
@@ -38,7 +45,7 @@
             executeDelete(){
                 this.promise = c2c.moderator.deleteLocale(
                     this.document.document_id,
-                    this.document.currentLocale_.lang
+                    this.localeLang
                 ).then(() => {
                     this.$router.push({name:this.documentType, id:this.document.document_id})
                 })

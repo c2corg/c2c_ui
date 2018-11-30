@@ -111,12 +111,17 @@
         },
 
         computed: {
+            editedLocale(){
+                // in edit mode, there is only one locale
+                return this.document.locales[0]
+            },
+
             object(){
                 if(this.field.parent == "document")
                     return this.document
 
                 if(this.field.parent == "locales")
-                    return this.document.currentLocale_
+                    return this.editedLocale
 
                 if(this.field.parent == "associations")
                     return this.document.associations

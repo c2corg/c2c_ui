@@ -65,7 +65,7 @@
         <!-- Modal windows -->
         <merge-document-window ref="MergeDocumentWindow" :document="document"/>
         <delete-document-window ref="deleteDocumentWindow" :document="document"/>
-        <delete-locale-window ref="DeleteLocaleWindow" :document="document"/>
+        <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang"/>
         <translate-window
             v-if="isEditable"
             ref="translateWindow"
@@ -114,10 +114,10 @@
         },
 
         computed:{
-
-            locale(){
-                return this.document.currentLocale_
-            },
+            // TODO : useless ? remove !
+            // locale(){
+            //     return this.document.cooked
+            // },
 
             missingLangs(){
                 var result = []

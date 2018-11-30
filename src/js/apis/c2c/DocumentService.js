@@ -1,3 +1,4 @@
+import { cook_document } from '@/js/markdown.js'
 
 function DocumentService(api, documentType){
     this.documentType = documentType
@@ -9,13 +10,24 @@ DocumentService.prototype.getAll = function(params){
     return this.api.get( '/' + this.documentType + 's', {params})
 }
 
-DocumentService.prototype.get = function(id){
-    return this.api.get('/' + this.documentType + 's/' + id)
+DocumentService.prototype.get = function(id, lang){
+    return this.api.get('/' + this.documentType + 's/' + id, {params:{l:lang}})
 }
 
-DocumentService.prototype.getVersion = function(id, lang, versionId){
+DocumentService.prototype.getCooked = function(id, prefered_lang){
+    var promise = this.api.get('/' + this.documentType + 's/' + id)
+
+    promise.then(response => cook_document(response.data, prefered_lang))
+
+    return promise
+}
+
+DocumentService.prototype.getVersion = function(id, lang, versionId, cooked){
     let url = '/' + this.documentType + 's/' + id + '/' + lang + '/' + versionId
-    return this.api.get(url)
+    return this.api.get(url).then((response) => {
+        if(cooked)
+            cook_document(response.data.document, lang)
+    })
 }
 
 DocumentService.prototype.save = function(document, comment){

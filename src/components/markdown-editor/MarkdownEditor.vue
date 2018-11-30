@@ -53,13 +53,14 @@
                 @focus="focus=true"
                 @blur="focus=false"/>
 
-            <markdown class="preview" v-if="preview" :content="value" />
+            <markdown class="preview" v-if="preview" :content="cooked" />
         </div>
 
     </div>
 </template>
 
 <script>
+    import c2c from '@/js/apis/c2c'
     import EditorButton from "./EditorButton"
 
     function Selection(textarea, onInput){
@@ -178,7 +179,12 @@
                 focus: false,
                 preview: false,
                 fullScreen: false,
+                cooked:"",
             }
+        },
+
+        watch:{
+            preview:"computePreview"
         },
 
         mounted(){
@@ -189,6 +195,15 @@
         methods:{
             onInput(){
                 this.$emit("input", this.$refs.textarea.value)
+            },
+
+            computePreview(){
+                if(!this.preview)
+                    return
+
+                c2c.cooker({value: this.value}).then(response => {
+                    this.cooked = response.data.value
+                })
             },
 
             handleSimpleMarkdownTag(tag, defaultChunk){

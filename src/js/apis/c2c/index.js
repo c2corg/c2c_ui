@@ -1,6 +1,8 @@
 import config from '@/js/config.js'
 import constants from '@/js/constants'
-import BaseApi from '@/js/apis/BaseApi.js';
+import BaseApi from '@/js/apis/BaseApi.js'
+
+import {cook_object} from '@/js/markdown.js'
 
 import UserProfileService from './UserProfileService.js'
 import DocumentService from './DocumentService.js'
@@ -84,6 +86,18 @@ c2c.prototype.uploadImage = function(file, onUploadProgress) {
 
 c2c.prototype.createImages = function(images){
     return this.post('/images/list', {images})
+}
+
+c2c.prototype.cooker = function(data){
+
+    const response = {
+        data:cook_object(data),
+        then(callback){
+            callback(response)
+        }
+    }
+
+    return response
 }
 
 // export a singleton

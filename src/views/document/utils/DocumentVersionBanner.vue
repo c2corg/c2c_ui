@@ -65,7 +65,7 @@
             </button>
         </p>
 
-        <revert-version-window ref="restoreVersionConfirmationWindow" :document="document" />
+        <revert-version-window ref="restoreVersionConfirmationWindow" :document="document" :lang="document.cooked.lang"/>
     </div>
 </template>
 

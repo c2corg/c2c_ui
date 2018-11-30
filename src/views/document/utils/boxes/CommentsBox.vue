@@ -88,7 +88,7 @@
         computed: {
 
             locale(){
-                return this.document.currentLocale_
+                return this.document.cooked
             },
 
             discussionUrl(){
@@ -226,7 +226,7 @@
     h2{
         margin: 30px 0 10px;
         font-size: 1.5em;
-        font-weight: bold;       
+        font-weight: bold;
     }
 }
 

@@ -20,6 +20,13 @@
     export default {
         mixins : [ requireDocumentProperty ],
 
+        props: {
+            lang: {
+                type:String,
+                required:true,
+            }
+        },
+
         data(){
             return {
                 promise:null
@@ -34,7 +41,7 @@
             restoreVersion(){
                 this.promise = c2c.moderator.revertDocument(
                     this.document.document_id,
-                    this.document.currentLocale_.lang,
+                    this.lang,
                     this.$route.params.version
                 ).then(() => {
                     this.$refs.modalWindow.hide()

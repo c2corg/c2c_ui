@@ -8,7 +8,7 @@
             </div>
 
             <div class="column is-9">
-                <div class="box" v-if="document.currentLocale_.summary || document.currentLocale_.description">
+                <div class="box" v-if="document.cooked.summary || document.cooked.description">
                     <markdown-section :document="document" :field="fields.summary"/>
                     <markdown-section :document="document" :field="fields.description"/>
                 </div>

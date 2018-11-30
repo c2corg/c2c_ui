@@ -151,8 +151,12 @@ msgstr ""
 msgid "Activity feed"
 msgstr ""
 
-#: src/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/DocumentViewHeader.vue
 msgid "Add images"
+msgstr ""
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+msgid "Add the first outing"
 msgstr ""
 
 #: src/views/portals/utils/MobileAppAdvertising.vue
@@ -182,8 +186,8 @@ msgstr ""
 msgid "Areas"
 msgstr ""
 
-#: src/views/SideMenu.vue
 #: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/SideMenu.vue
 #: src/views/static-views/NotFoundView.vue
 msgid "Articles"
 msgstr ""
@@ -199,6 +203,10 @@ msgstr ""
 #: src/views/wiki/HistoryView.vue
 #: src/views/wiki/WhatsNewView.vue
 msgid "Author"
+msgstr ""
+
+#: src/views/wiki/edition/utils/QualityInputRow.vue
+msgid "Auto-compute quality"
 msgstr ""
 
 #: src/views/wiki/edition/utils/CotometerWindow.vue
@@ -230,6 +238,10 @@ msgstr ""
 #: src/views/static-views/NotFoundView.vue
 #: src/views/static-views/TopoguideView.vue
 msgid "Books"
+msgstr ""
+
+#: src/views/portals/HomeBanner.vue
+msgid "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities."
 msgstr ""
 
 #: src/components/generics/modals/ModalConfirmation.vue
@@ -271,6 +283,10 @@ msgstr ""
 msgid "Compare selected versions"
 msgstr ""
 
+#: src/views/portals/HomeBanner.vue
+msgid "Conditions, summits, routes"
+msgstr ""
+
 #: src/components/generics/modals/ModalConfirmation.vue
 msgid "Confirm"
 msgstr ""
@@ -281,6 +297,10 @@ msgstr ""
 
 #: src/views/document/utils/boxes/CommentsBox.vue
 msgid "Continue the discussion"
+msgstr ""
+
+#: src/views/document/ProfileView.vue
+msgid "Contributions"
 msgstr ""
 
 #: src/views/documents/DocumentsView.vue
@@ -372,7 +392,7 @@ msgid "EULA"
 msgstr ""
 
 #: src/components/generics/links/EditLink.vue
-#: src/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/DocumentViewHeader.vue
 msgid "Edit"
 msgstr ""
 
@@ -418,8 +438,9 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue
 #: src/views/portals/DashboardView.vue
+#: src/views/portals/HomeBanner.vue
+#: src/views/SideMenu.vue
 #: src/views/static-views/HomeView.vue
 msgid "Forum"
 msgstr ""
@@ -478,7 +499,7 @@ msgstr ""
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
-#: src/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/DocumentViewHeader.vue
 msgid "History"
 msgstr ""
 
@@ -548,6 +569,7 @@ msgid "Log in to post the first comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue
+#: src/views/Navigation.vue
 #: src/views/user/LoginView.vue
 msgid "Login"
 msgstr ""
@@ -616,6 +638,7 @@ msgid "My outings"
 msgstr ""
 
 #: src/views/Navigation.vue
+#: src/views/user/PreferencesView.vue
 msgid "My preferences"
 msgstr ""
 
@@ -683,9 +706,9 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/views/SideMenu.vue
 #: src/views/document/ProfileView.vue
 #: src/views/portals/DashboardView.vue
+#: src/views/SideMenu.vue
 #: src/views/static-views/HomeView.vue
 #: src/views/static-views/NotFoundView.vue
 #: src/views/static-views/TopoguideView.vue
@@ -793,6 +816,10 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
+#: src/views/portals/HomeBanner.vue
+msgid "Share with us!"
+msgstr ""
+
 #: src/views/document/utils/boxes/LicenseBox.vue
 msgid "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
 msgstr ""
@@ -817,7 +844,7 @@ msgstr ""
 msgid "Social network"
 msgstr ""
 
-#: src/views/document/utils/ViewContainer.vue
+#: src/views/document/utils/DocumentViewHeader.vue
 msgid "Sorry, you're not authorized to see this page."
 msgstr ""
 
@@ -843,6 +870,10 @@ msgstr ""
 
 #: src/views/wiki/edition/WaypointEditionView.vue
 msgid "Terrain"
+msgstr ""
+
+#: src/views/portals/HomeBanner.vue
+msgid "The mountain sports community"
 msgstr ""
 
 #: src/views/static-views/NotFoundView.vue
@@ -893,6 +924,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
+#: src/views/portals/HomeBanner.vue
 #: src/views/SideMenu.vue
 #: src/views/static-views/TopoguideView.vue
 msgid "Topoguide"
@@ -948,6 +980,10 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
+#: src/views/wiki/HistoryView.vue
+msgid "Versions"
+msgstr ""
+
 #: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "Very complex (steps, narrow sections, ridges...)"
 msgstr ""
@@ -991,10 +1027,6 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "You may also drag, draw or edit the track on the map."
-msgstr ""
-
-#: src/views/document/ProfileView.vue
-msgid "You're not authorized. Please sign-in or create an account"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1093,6 +1125,7 @@ msgstr ""
 msgid "aid"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "aid_rating"
 msgstr ""
@@ -1305,10 +1338,10 @@ msgid "collaborative"
 msgstr ""
 
 #: src/views/document/utils/field-viewers/ConditionLevels.vue
-#: src/views/wiki/HistoryView.vue
-#: src/views/wiki/WhatsNewView.vue
 #: src/views/wiki/edition/utils/EditionContainer.vue
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue
+#: src/views/wiki/HistoryView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "comment"
 msgstr ""
 
@@ -1335,10 +1368,6 @@ msgstr ""
 
 #: src/views/SideMenu.vue
 msgid "contact"
-msgstr ""
-
-#: src/views/document/ProfileView.vue
-msgid "contributions"
 msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue
@@ -1392,6 +1421,18 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "dangerous"
+msgstr ""
+
+#: src/views/documents/utils/DateQueryItem.vue
+msgid "date_end"
+msgstr ""
+
+#: src/views/documents/utils/DateQueryItem.vue
+msgid "date_start"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "day(s)"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1479,6 +1520,7 @@ msgstr ""
 msgid "empty comment"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "engagement_rating"
@@ -1493,6 +1535,7 @@ msgstr ""
 msgid "equipment"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "equipment_rating"
 msgstr ""
@@ -1521,6 +1564,7 @@ msgstr ""
 msgid "exposed"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "exposition_rock_rating"
@@ -1623,6 +1667,7 @@ msgstr ""
 msgid "glacier_safety_gear"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "global_rating"
 msgstr ""
@@ -1712,11 +1757,13 @@ msgstr ""
 msgid "hiking gear"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "hiking_mtb_exposition"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "hiking_rating"
 msgstr ""
@@ -1742,13 +1789,14 @@ msgid "ice"
 msgstr ""
 
 #: src/views/document/RouteView.vue
-msgid "ice && dry climbing gear"
+msgid "ice and dry climbing gear"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "ice_climbing"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "ice_rating"
 msgstr ""
@@ -1823,6 +1871,10 @@ msgstr ""
 
 #: src/views/user/PreferencesView.vue
 msgid "langs"
+msgstr ""
+
+#: src/views/document/OutingView.vue
+msgid "length_total"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1921,6 +1973,7 @@ msgstr ""
 msgid "mixed"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "mixed_rating"
 msgstr ""
@@ -1961,10 +2014,12 @@ msgstr ""
 msgid "mountainbike_instructor"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "mtb_down_rating"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "mtb_up_rating"
 msgstr ""
@@ -2215,6 +2270,7 @@ msgid "psicobloc"
 msgstr ""
 
 #: src/components/generics/markers/MarkerQuality.vue
+#: src/views/wiki/edition/utils/QualityInputRow.vue
 msgid "quality"
 msgstr ""
 
@@ -2273,6 +2329,7 @@ msgstr ""
 msgid "rise"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "risk_rating"
@@ -2282,10 +2339,12 @@ msgstr ""
 msgid "rock_climbing"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "rock_free_rating"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 msgid "rock_required_rating"
 msgstr ""
@@ -2363,6 +2422,7 @@ msgid "shelter"
 msgstr ""
 
 #: src/views/document/utils/boxes/RecentOutingsBox.vue
+#: src/views/document/utils/boxes/RoutesBox.vue
 msgid "show all"
 msgstr ""
 
@@ -2387,6 +2447,7 @@ msgstr ""
 msgid "ski_patroller"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "ski_rating"
@@ -2530,8 +2591,8 @@ msgid "temperature"
 msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue
-#: src/views/wiki/WhatsNewView.vue
 #: src/views/wiki/edition/WaypointEditionView.vue
+#: src/views/wiki/WhatsNewView.vue
 msgid "title"
 msgstr ""
 

@@ -253,10 +253,49 @@ var converter = new showdown.Converter({
     extensions : ['c2c_folies'],
 })
 
-export default {
-    convert : function (markdown){
-        ltag_memory.R = 0;
-        ltag_memory.L = 0;
-        return converter.makeHtml(markdown);
+
+const convert = function(markdown){
+    ltag_memory.R = 0;
+    ltag_memory.L = 0;
+    return converter.makeHtml(markdown);
+}
+
+const notMarkdown = new Set(["lang", "version", "title", "slope", "conditions_levels", "topic_id", "participants"])
+
+export const cook_object = function(object){
+    const result = {}
+
+    for(let property of Object.keys(object)){
+        if(object[property] && !notMarkdown.has(property))
+            result[property] = convert(object[property])
+        else
+            result[property] = object[property]
+    }
+
+    return result
+}
+
+const cook_locale = function(document, locales, lang){
+    if(locales[lang] == undefined)
+        return false
+
+    document.cooked = cook_object(locales[lang])
+
+    return true
+}
+
+export function cook_document(document, prefered_lang){
+    var locales = {}
+
+    for(let locale of document.locales)
+        locales[locale.lang] = locale
+
+    if(!cook_locale(document, locales, prefered_lang)){
+        const langs_priority = ['fr', 'en', 'it', 'de', 'es', 'ca', 'eu']
+
+        for(let lang of langs_priority){
+            if(cook_locale(document, locales, lang))
+                break
+        }
     }
 }
