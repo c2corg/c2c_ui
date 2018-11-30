@@ -1,5 +1,7 @@
 SVG_CDN = "/static/img/documents/activities/"
 
+name = "c2c-activities"
+
 emoji = {
     ":rock_climbing:": {
         "category": "activitiy",

@@ -14,30 +14,52 @@ from markdown.inlinepatterns import Pattern
 from markdown.util import etree
 
 # document_type/document_id(/lang(/slug))(#anchor)
-WIKILINK_RE = r'\[\[([a-z]+\/[0-9]+(?:\/[a-z]{2}(?:\/[a-z0-9\-]+)?)?(?:#[a-z0-9\-]+)?)\|([^\]]+)\]\]'  # noqa
+
+DOCUMENT_RE = r'(?P<document_type>[a-z]+)/(?P<document_id>\d+)'
+LANG_SLUG_RE = r'(/(?P<lang>[a-z]{2})(/(?P<slug>[a-z0-9\-]+))?)?'
+ANCHOR_RE = r'(#(?P<anchor>[a-z0-9\-]+))?'
+LABEL_RE = r'(?P<label>[^\]]+)'
+
+TARGET_RE = "".join((
+    DOCUMENT_RE,
+    LANG_SLUG_RE,
+    ANCHOR_RE
+))
+
+WIKILINK_RE = r'\[\[' + TARGET_RE + r'\|' + LABEL_RE + r'\]\]'
 
 
 class C2CWikiLinkExtension(Extension):
     def extendMarkdown(self, md, md_globals):  # noqa
-        self.md = md
-
         pattern = C2CWikiLinks(WIKILINK_RE)
-        pattern.md = md
         # append to end of inline patterns
         md.inlinePatterns.add('c2cwikilink', pattern, "<not_strong")
 
 
 class C2CWikiLinks(Pattern):
     def handleMatch(self, m):  # noqa
-        if m.group(2).strip():
-            url = m.group(2).strip()
-            url = '/' + url if url[0] != '/' else url
-            label = m.group(3).strip()
-            a = etree.Element('a')
-            a.text = label
-            a.set('href', url)
-        else:
-            a = ''
+
+        a = etree.Element('a', {
+            "c2c:role": "internal-link",
+            "c2c:document-id": m.group("document_id"),
+            "c2c:document-type": m.group("document_type"),
+        })
+
+        a.text = m.group("label")
+
+        lang = m.group("lang")
+        slug = m.group("slug")
+        anchor = m.group("anchor")
+
+        if lang:
+            a.set("c2c:lang", lang)
+
+        if anchor:
+            a.set("c2c:anchor", anchor)
+
+        if slug:
+            a.set("c2c:slug", slug)
+
         return a
 
 

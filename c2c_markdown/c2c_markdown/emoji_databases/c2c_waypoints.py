@@ -1,5 +1,6 @@
 SVG_CDN = "/static/img/documents/waypoints/"
 
+name = "c2c-waypoints"
 emoji = {
     ":access:": {
         "category": "travel",

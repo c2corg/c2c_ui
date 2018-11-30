@@ -17,7 +17,8 @@ RE_EMOJI = r'(:[+\-\w]+:)'
 
 
 class Emoji(object):
-    def __init__(self, code, **kwargs):
+    def __init__(self, db_name, code, **kwargs):
+        self.db_name = db_name
         self.code = code
         self.name = kwargs.pop("name")
         self.category = kwargs.pop("category")
@@ -44,8 +45,9 @@ class Emoji(object):
         """Return svg element."""
         return md_util.etree.Element("img", {
             "c2c:role": "emoji",
+            "c2c:emoji-db": self.db_name,
+            "c2c:svg-name": self.svg_name,
             "alt": self.get_alt(user_code),
-            "src": "%s%s.svg" % (self.SVG_CDN, self.svg_name),
             "title": user_code,
         })
 
@@ -68,7 +70,7 @@ class EmojiPattern(Pattern):
             kwargs = db.emoji[code]
             kwargs["SVG_CDN"] = kwargs.get("SVG_CDN", db.SVG_CDN)
 
-            self.emoji_index[code] = Emoji(code=code, **kwargs)
+            self.emoji_index[code] = Emoji(db_name=db.name, code=code, **kwargs)
 
         for code in db.aliases:
             self.emoji_index[code] = self.emoji_index[db.aliases[code]]

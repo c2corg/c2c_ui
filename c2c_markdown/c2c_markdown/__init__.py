@@ -90,6 +90,14 @@ def _get_cleaner():
 
         allowed_attributes = dict(bleach.ALLOWED_ATTRIBUTES)
         allowed_extra_attributes = {
+            "a": [
+                "c2c:role",
+                "c2c:document-type",
+                "c2c:document-id",
+                "c2c:lang",
+                "c2c:slug",
+                "c2c:anchor"
+            ],
             "h1": ["id", "c2c:role"],
             "h2": ["id", "c2c:role"],
             "h3": ["id", "c2c:role"],
@@ -102,7 +110,15 @@ def _get_cleaner():
             "span": ["class", "translate", "id", "c2c:role"],
             _iframe_secret_tag: ["src"],
             "figure": ["c2c:position"],
-            "img": ["src", "alt", "c2c:document-id", "c2c:role", "c2c:size"],
+            "img": [
+                "src",
+                "alt",
+                "c2c:document-id",
+                "c2c:role",
+                "c2c:size",
+                "c2c:svg-name",
+                "c2c:emoji-db"
+            ],
         }
 
         for key in allowed_extra_attributes:
@@ -163,6 +179,8 @@ def parse_code(text):
         # reset parser state. Otherwise, internals parser cache grows
         # indefinitely, and performance decreases over time
         parser.reset()
+
+        parser.convert(text)
 
         try:
             text = parser.convert(text)
