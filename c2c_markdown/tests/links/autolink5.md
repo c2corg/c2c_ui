@@ -1,1 +1,0 @@
-Even that one <a href="http://www.example.com">www.example.com</a> is not impacted.

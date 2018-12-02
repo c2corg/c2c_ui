@@ -1,1 +1,0 @@
-[[articles/1234/a23|mini]]

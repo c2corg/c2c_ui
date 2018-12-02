@@ -1,1 +1,0 @@
-[video]http://www.dailymotion.com/video/x28z33_chinese-man[/video]

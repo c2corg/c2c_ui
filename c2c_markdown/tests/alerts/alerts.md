@@ -1,6 +1,0 @@
-!!Information
-
-!!!Warning
-
-!!!!Danger
-

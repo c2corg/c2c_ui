@@ -1,1 +1,0 @@
-Already converted links such as <a href="http://www.example.com">a link</a> are not impacted.
