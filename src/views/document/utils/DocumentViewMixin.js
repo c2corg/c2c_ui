@@ -157,7 +157,13 @@ export default {
 
         updateUrl(){
             var title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
+
+            // transform any unocde into it'sd ascii value
+            title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+
+            // and clean
             title = title.toLowerCase().replace(/[^a-z0-1]+/g, "-")
+
             const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
             this.$router.replace(path)
         }

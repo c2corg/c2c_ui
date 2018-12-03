@@ -7,7 +7,8 @@
             @load="loading=false"
             @error="error=true"
             :class="{'large-c2c-image': large}"
-            @click="$emit('click', image)">
+            @click="$emit('click', image)"
+            :title="image.locales[0].title">
         <fa-icon v-if="error" icon="ban"/>
     </div>
 </template>

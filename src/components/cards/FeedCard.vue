@@ -1,5 +1,5 @@
 <template>
-    <card-container class="route-card" @click="go">
+    <card-container class="feed-card" :to="{name:documentType, params:{id:document.document_id}}">
         <div slot="header" class="level">
             <span class="level-left">
                 <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
@@ -39,7 +39,7 @@
         <div v-if="item.document.areas" slot="row4" class="level">
             <card-region-item :document="item.document"/>
         </div>
-        
+
         <div slot="row5" class="level">
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
@@ -152,14 +152,13 @@
 
 @import '@/assets/sass/variables.scss';
 
-    .card{
+    .feed-card{
         background-color:#FFF!important;
         transition:0.2s;
-        cursor:pointer;
         max-width:600px
     }
 
-    .card:hover{
+    .feed-card:hover{
         background-color:$hover-background!important;
         transition:0.2s;
     }

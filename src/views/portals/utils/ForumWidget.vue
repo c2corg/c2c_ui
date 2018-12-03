@@ -8,7 +8,8 @@
                 :key="topic.id"
                 v-if="topic.category_id != 29"
                 :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
-                target="_blank">
+                target="_blank"
+                :title="topic.last_poster_username">
                 <img
                     :src="$options.forumUrl + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
                     :style="'width:' + imgSize + 'px'">

@@ -98,10 +98,11 @@
                     </div>
                 </div>
 
-                <div class="box" v-if="locale.description || locale.access || locale.summary">
+                <div class="box" v-if="locale.description || locale.access || locale.summary || locale.access_period">
                     <markdown-section :document="document" :field="fields.summary" />
                     <markdown-section :document="document" :field="fields.description" />
-                    <markdown-section :document="document" :field="fields.access" />
+                    <markdown-section :document="document" :field="fields.access" :title="accessFieldTitle"/>
+                    <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodFieldTitle" />
                 </div>
 
                 <routes-box :document="document"/>
@@ -130,5 +131,31 @@
 
     export default {
         mixins : [ DocumentViewMixin ],
+
+        computed:{
+            // https://github.com/c2corg/v6_ui/blob/f7b8794648e475240fc63bbff7ff6bdbd3968746/c2corg_ui/templates/waypoint/helpers/view.html#L425
+            accessFieldTitle(){
+                if(this.document.waypoint_type == 'access')
+                    return this.$gettext('public transportation access')
+
+                if(['hut', 'climbing_indoor', 'climbing_outdoor'].includes(this.document.waypoint_type))
+                    return this.$gettext('pedestrian access')
+
+                return this.$gettext("road or pedestrian access")
+            },
+
+            accessPeriodFieldTitle(){
+                if(['hut', 'gite', 'camp_site'].includes(this.document.waypoint_type))
+                    return this.$gettext("opening_periods")
+
+                if(this.waypoint_type == 'local_product')
+                    return this.$gettext("opening_hours")
+
+                if(this.waypoint_type == 'climbing_outdoor')
+                    return this.$gettext("restricted_access")
+
+                return this.$gettext("access_period")
+            },
+        }
     }
 </script>

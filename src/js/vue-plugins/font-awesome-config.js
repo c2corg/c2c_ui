@@ -17,6 +17,7 @@ import {
     faBomb,
     faBug,
     faBullseye,
+    faCalendar,
     faCamera,
     faCheckCircle,
 //    faCheckSquare,
@@ -71,6 +72,7 @@ import {
     faSortAmountUp,
     faStar,
     faTachometerAlt,
+    faTag,
     faThLarge,
     faThList,
     faTrash,
@@ -98,7 +100,13 @@ import {
     faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
 
-
+import {
+    empty as qualityEmpty,
+    draft as qualityDraft,
+    medium as qualityMedium,
+    fine as qualityFine,
+    great as qualityGreat,
+} from '@/assets/font-awesome-custom/js/quality'
 
 
 // registered globally
@@ -107,8 +115,14 @@ export default function install(Vue){
 
     library.add(
 
-            faCloud,
-            faSun,
+        qualityEmpty,
+        qualityDraft,
+        qualityMedium,
+        qualityFine,
+        qualityGreat,
+
+        faCloud,
+        faSun,
 
         //solid icons
         faAngleDown,
@@ -122,6 +136,7 @@ export default function install(Vue){
         faBomb,
         faBug,
         faBullseye,
+        faCalendar,
         faCamera,
         faCheckCircle,
     //    faCheckSquare,
@@ -177,6 +192,7 @@ export default function install(Vue){
         faStar,
     //    faSquare,
         faTachometerAlt,
+        faTag,
         faThLarge,
         faThList,
         faTrash,

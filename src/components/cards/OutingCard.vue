@@ -1,5 +1,5 @@
 <template>
-    <card-container class="route-card" @click="go">
+    <card-container class="route-card" :to="{name:documentType, params:{id:document.document_id}}">
         <div slot="header" class="level">
             <document-title :document="document" class="is-ellipsed"/>
             <icon-condition :condition="document.condition_rating" class="is-pulled-right"/>

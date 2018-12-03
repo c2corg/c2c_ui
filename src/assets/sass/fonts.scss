@@ -14,17 +14,6 @@ $font_path: '~@/assets/fonts';
 
 
 @font-face {
-  font-family: 'c2c-quality';
-  src:  url($font_path + '/quality/quality.eot?afck5w');
-  src:  url($font_path + '/quality/quality.eot?afck5w#iefix') format('embedded-opentype'),
-    url($font_path + '/quality/quality.ttf?afck5w') format('truetype'),
-    url($font_path + '/quality/quality.woff?afck5w') format('woff'),
-    url($font_path + '/quality/quality.svg?afck5w#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'c2c-waypoint';
   src:  url($font_path + '/waypoint_types/waypoint_types.eot?afck5w');
   src:  url($font_path + '/waypoint_types/waypoint_types.eot?afck5w#iefix') format('embedded-opentype'),

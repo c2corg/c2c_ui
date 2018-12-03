@@ -41,7 +41,8 @@
     "node-sass": "^4.9.2",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack-bundle-analyser": "^1.4.0"
+    "webpack-bundle-analyser": "^1.4.0",
+    "xml2js": "^0.4.19"
   },
   "eslintConfig": {
     "root": true,

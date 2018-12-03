@@ -96,7 +96,7 @@
                     <condition-levels :data="locale.conditions_levels"/>
 
                     <markdown-section :document="document" :field="fields.avalanches"/>
-                    <markdown-section :document="document" :field="fields.description" />
+                    <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
                     <markdown-section :document="document" :field="fields.access_comment" />
                     <markdown-section :document="document" :field="fields.route_description" />
                     <markdown-section :document="document" :field="fields.hut_comment"/>

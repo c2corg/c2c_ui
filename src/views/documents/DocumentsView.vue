@@ -147,10 +147,7 @@
 
                 this.showMap = this.$localStorage.get(this.documentType + ".showMap", this.documentAreGeoLocalized)
                 this.listMode = this.$localStorage.get(this.documentType + ".listMode", false)
-
-                var query = Object.assign({offset : this.offset ? this.offset : undefined}, this.$route.query)
-
-                this.promise = c2c[this.documentType].getAll(query)
+                this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
             toogleProperty(property){

@@ -20,6 +20,9 @@
                 </div>
             </div>
         </div>
+
+        <page-selector v-if="documents!=null" :documents="documents"/>
+
     </div>
 </template>
 
@@ -29,10 +32,12 @@
     import c2c from '@/js/apis/c2c'
 
     import QueryItems from './utils/QueryItems'
+    import PageSelector from './utils/PageSelector'
 
     export default {
         components: {
             QueryItems,
+            PageSelector,
         },
 
 
@@ -63,7 +68,7 @@
 
         methods:{
             load(){
-                this.promise = c2c[this.documentType].getAll()
+                this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
             go(image){

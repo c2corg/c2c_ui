@@ -15,7 +15,7 @@
                     <form-input v-show="showBothDates" :document="document" :field="fields.date_end" prefix="end"/>
                 </form-row>
 
-                <form-input-row :document="document" :field="fields.description" />
+                <form-input-row :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
 
                 <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
                 <associations-input-row :label="$gettext('Routes')" :document="document" :field="fields.routes" />

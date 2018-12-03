@@ -1,38 +1,41 @@
 <template>
-    <div class="card" @click="click">
-        <header class="card-header">
-            <p class="card-header-title">
-                <slot name="header">A very long header that should be ellipsed</slot>
-            </p>
-        </header>
-        <div class="card-content">
-            <slot name="row1">Please fill content</slot>
-        </div>
-        <div v-if="this.$slots.row2" class="card-content">
-            <slot name="row2">row2</slot>
-        </div>
-        <div v-if="this.$slots.row3" class="card-content">
-            <slot name="row3">row3</slot>
-        </div>
-        <div v-if="this.$slots.row4" class="card-content">
-            <slot name="row4">row4</slot>
-        </div>
-        <div v-if="this.$slots.row5" class="card-content">
-            <slot name="row5">row5</slot>
-        </div>
-        <div v-if="this.$slots.row6" class="card-content">
-            <slot name="row6">row6</slot>
-        </div>
+    <div class="card">
+        <router-link :to="to">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <slot name="header">A very long header that should be ellipsed</slot>
+                </p>
+            </header>
+            <div class="card-content">
+                <slot name="row1">Please fill content</slot>
+            </div>
+            <div v-if="this.$slots.row2" class="card-content">
+                <slot name="row2">row2</slot>
+            </div>
+            <div v-if="this.$slots.row3" class="card-content">
+                <slot name="row3">row3</slot>
+            </div>
+            <div v-if="this.$slots.row4" class="card-content">
+                <slot name="row4">row4</slot>
+            </div>
+            <div v-if="this.$slots.row5" class="card-content">
+                <slot name="row5">row5</slot>
+            </div>
+            <div v-if="this.$slots.row6" class="card-content">
+                <slot name="row6">row6</slot>
+            </div>
+        </router-link>
     </div>
 </template>
 
 <script>
     export default {
-        methods:{
-            click(){
-                this.$emit("click")
+        props:{
+            to:{
+                type:Object,
+                required:true,
             }
-        }
+        },
     }
 </script>
 
@@ -57,6 +60,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color:$text;
 }
 
 .card-content, .card-header-title{
@@ -66,6 +70,7 @@
 .card-content{
     font-size:0.9rem;
     min-height: 29px;
+    color:$text;
 }
 
 .card-content:not(:last-child){

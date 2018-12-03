@@ -8,14 +8,43 @@
             <div slot="button-next" class="swiper-button-next"/>
         </swiper>
 
-        <swiper v-if="fullscreen" :options="$options.fullScreenSwiperOption" class="fullscreen-swiper">
+        <swiper
+            v-if="fullscreen"
+            ref="fullscreenSwiper"
+            :options="$options.fullScreenSwiperOption"
+            class="fullscreen-swiper"
+            @slide-change="onSlideChange">
             <swiper-slide v-for="image of images" :key="image.document_id">
                 <gallery-image large :image="image" class="camptocamp-image"/>
             </swiper-slide>
             <div slot="button-prev" class="swiper-button-prev"/>
             <div slot="button-next" class="swiper-button-next"/>
-            <div class="swiper-pagination" slot="pagination"/>
+            <div slot="pagination" class="swiper-pagination"/>
         </swiper>
+
+        <div v-if="fullscreen" class="is-size-3 has-text-grey-lighter swiper-fullscreen-header">
+            <div class="level">
+                <span class="level-left"/>
+                <span class="level-right">
+                    <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
+                        <fa-icon icon="eye"/>
+                    </document-link>
+
+                    <edit-link
+                        :document="activeDocument" :lang="activeDocument.available_langs[0]"
+                        class="level-item has-text-grey-lighter">
+                        <fa-icon icon="edit"/>
+                    </edit-link>
+
+                    <fa-icon class="level-item has-cursor-pointer" icon="info-circle" @click="showInfo = !showInfo"/>
+                    <fa-icon class="level-item has-cursor-pointer" icon="expand"/>
+                    <fa-icon class="level-item has-cursor-pointer" icon="plus" transform="rotate-45" @click="fullscreen=false"/>
+                </span>
+            </div>
+        </div>
+
+        <image-info v-if="fullscreen && showInfo" class="swiper-info" :document_id="activeDocument.document_id" />
+
     </div>
 
 </template>
@@ -41,6 +70,14 @@
         data(){
             return {
                 fullscreen:false,
+                showInfo:false,
+                activeIndex:0, // read only
+            }
+        },
+
+        computed:{
+            activeDocument(){
+                return this.images[this.activeIndex]
             }
         },
 
@@ -59,7 +96,11 @@
             },
             activateFullscreen(initialSlide){
                 this.$options.fullScreenSwiperOption.initialSlide = initialSlide
+                this.activeIndex = initialSlide
                 this.fullscreen = true
+            },
+            onSlideChange(){
+                this.activeIndex = this.$refs.fullscreenSwiper.swiper.activeIndex
             }
         },
 
@@ -133,6 +174,28 @@
         .swiper-button-disabled{
             opacity:100;
         }
+    }
+
+    .swiper-fullscreen-header{
+        z-index:1000;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100vw;
+        padding:0.5rem 1rem;
+
+        svg:hover{
+            color:white;
+        }
+    }
+
+    .swiper-info{
+        height:100vh;
+        width:20rem;
+        z-index:1000;
+        position:fixed;
+        top:4rem;
+        right:0;
     }
 
     .fullscreen-swiper{

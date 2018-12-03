@@ -14,15 +14,6 @@ export const cardMixin = {
         CardElevationItem,
         CardActivitiesItem,
     },
-
-    methods:{
-        go(){
-            this.$router.push({
-                name: this.documentType,
-                params: { id: this.document.document_id }
-            })
-        }
-    },
 }
 
 export const documentCardMixin = {

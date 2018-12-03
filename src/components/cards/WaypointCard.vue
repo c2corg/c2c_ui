@@ -1,5 +1,5 @@
 <template>
-    <card-container class="route-card" @click="go">
+    <card-container :to="{name:documentType, params:{id:document.document_id}}">
         <document-title slot="header" :document="document"/>
 
         <div slot="row1" class="level">

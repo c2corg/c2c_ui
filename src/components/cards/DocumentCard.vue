@@ -48,17 +48,17 @@
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 
-.card-container{
-    position:relative;
-}
+    .card-container{
+        position:relative;
+    }
 
-.delete-button{
-    position:absolute;
-    top:-0.5rem;
-    right:-0.5rem;
-    font-size:2rem;
-}
+    .delete-button{
+        position:absolute;
+        top:-0.5rem;
+        right:-0.5rem;
+        font-size:2rem;
+    }
 
 </style>
