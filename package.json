@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint",
     "extract-message": "node tools/xgettext.js",
     "generate-docs": "node tools/generate-docs.js",
+    "generate-icons": "node tools/generate-icons.js",
     "update-c2c-common": "python3 tools/import_common.py"
   },
   "dependencies": {

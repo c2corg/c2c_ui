@@ -3,8 +3,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 
 import {
-    faCloud,
-    faSun,
 
     faAngleDown,
     faArrowsAltV,
@@ -24,6 +22,7 @@ import {
     faChevronLeft,
     faChevronRight,
     faCircle,
+    faCloud,
     faCode,
     faCogs,
     faColumns,
@@ -71,6 +70,7 @@ import {
     faSignOutAlt,
     faSortAmountUp,
     faStar,
+    faSun,
     faTachometerAlt,
     faTag,
     faThLarge,
@@ -109,20 +109,114 @@ import {
 } from '@/assets/font-awesome-custom/js/quality'
 
 
+import {
+    hiking as activityHiking,
+    ice_climbing as activityIce_climbing,
+    mountain_biking as activityMountain_biking,
+    mountain_climbing as activityMountain_climbing,
+    paragliding as activityParagliding,
+    rock_climbing as activityRock_climbing,
+    skitouring as activitySkitouring,
+    slacklining as activitySlacklining,
+    snowshoeing as activitySnowshoeing,
+    snow_ice_mixed as activitySnow_ice_mixed,
+    via_ferrata as activityVia_ferrata
+} from '@/assets/font-awesome-custom/js/activity'
+
+
+import {
+
+    access as waypointaccess,
+    base_camp as waypointbase_camp,
+    bergschrund as waypointbergschrund,
+    bisse as waypointbisse,
+    bivouac as waypointbivouac,
+    camp_site as waypointcamp_site,
+    canyon as waypointcanyon,
+    cave as waypointcave,
+    cliff as waypointcliff,
+    climbing_indoor as waypointclimbing_indoor,
+    climbing_outdoor as waypointclimbing_outdoor,
+    confluence as waypointconfluence,
+    gite as waypointgite,
+    glacier as waypointglacier,
+    hut as waypointhut,
+    lake as waypointlake,
+    locality as waypointlocality,
+    local_product as waypointlocal_product,
+    misc as waypointmisc,
+    paragliding_landing as waypointparagliding_landing,
+    paragliding_takeoff as waypointparagliding_takeoff,
+    pass as waypointpass,
+    pit as waypointpit,
+    shelter as waypointshelter,
+    slackline_spot as waypointslackline_spot,
+    summit as waypointsummit,
+    virtual as waypointvirtual,
+    waterfall as waypointwaterfall,
+    waterpoint as waypointwaterpoint,
+    waypoints as waypointwaypoints,
+    weather_station as waypointweather_station,
+    webcam as waypointwebcam,
+
+} from '@/assets/font-awesome-custom/js/waypoint'
+
 // registered globally
 
 export default function install(Vue){
 
     library.add(
 
+        waypointaccess,
+        waypointbase_camp,
+        waypointbergschrund,
+        waypointbisse,
+        waypointbivouac,
+        waypointcamp_site,
+        waypointcanyon,
+        waypointcave,
+        waypointcliff,
+        waypointclimbing_indoor,
+        waypointclimbing_outdoor,
+        waypointconfluence,
+        waypointgite,
+        waypointglacier,
+        waypointhut,
+        waypointlake,
+        waypointlocality,
+        waypointlocal_product,
+        waypointmisc,
+        waypointparagliding_landing,
+        waypointparagliding_takeoff,
+        waypointpass,
+        waypointpit,
+        waypointshelter,
+        waypointslackline_spot,
+        waypointsummit,
+        waypointvirtual,
+        waypointwaterfall,
+        waypointwaterpoint,
+        waypointwaypoints,
+        waypointweather_station,
+        waypointwebcam,
+
+        activityHiking,
+        activityIce_climbing,
+        activityMountain_biking,
+        activityMountain_climbing,
+        activityParagliding,
+        activityRock_climbing,
+        activitySkitouring,
+        activitySlacklining,
+        activitySnowshoeing,
+        activitySnow_ice_mixed,
+        activityVia_ferrata,
+
         qualityEmpty,
         qualityDraft,
         qualityMedium,
         qualityFine,
         qualityGreat,
-
-        faCloud,
-        faSun,
 
         //solid icons
         faAngleDown,
@@ -143,6 +237,7 @@ export default function install(Vue){
         faChevronLeft,
         faChevronRight,
         faCircle,
+        faCloud,
         faCode,
         faCogs,
         faColumns,
@@ -191,6 +286,7 @@ export default function install(Vue){
         faSortAmountUp,
         faStar,
     //    faSquare,
+        faSun,
         faTachometerAlt,
         faTag,
         faThLarge,

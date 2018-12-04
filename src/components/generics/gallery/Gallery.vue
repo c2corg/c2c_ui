@@ -23,8 +23,11 @@
         </swiper>
 
         <div v-if="fullscreen" class="is-size-3 has-text-grey-lighter swiper-fullscreen-header">
-            <div class="level">
+            <div class="level is-mobile">
                 <span class="level-left"/>
+                <span class="level-item is-size-2">
+                    {{ activeDocument.locales[0].title }}
+                </span>
                 <span class="level-right">
                     <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
                         <fa-icon icon="eye"/>

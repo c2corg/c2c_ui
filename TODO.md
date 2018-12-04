@@ -57,11 +57,6 @@
 * print CSS
 * choose font family
 * icon size must not be a subjet
-* icon-activity bug :
-  * set a border on base icon, and see that icon activity are placed 1px higher
-    than font-awsome icons
-  * remove font-family from icon-activity : the bug diseapper
-  * issue come from this font...
 
 ### Bugs
 * on gitlab build, style on pagination fails

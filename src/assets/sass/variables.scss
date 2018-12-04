@@ -17,13 +17,16 @@ $color-complementary-lighter: #45C5FF;
  */
 $body-size : 14px !default;
 
-$size-1	: 2.2rem;   // 3rem;
-$size-2	: 1.9rem;   // 2.5rem;
-$size-3	: 1.6rem;   // 2rem;
-$size-4	: 1.3rem;   // 1.5rem;
-$size-5	: 1.15rem;   // 1.25rem;
-// $size-6 : 1 rem, untouched
-$size-7 : 0.8rem; //0.75
+// define size to get entire px size.
+// TODO : is ot smarter to directlty set px values ?....
+
+$size-1	: 2.1429rem;   // 30/14
+$size-2	: 1.8571rem;   // 26/14
+$size-3	: 1.5714rem;   // 22/14
+$size-4	: 1.2857rem;   // 18/14
+$size-5	: 1.1429rem;   // 16/14
+// $size-6 : 1 rem,    untouched
+$size-7 : 0.7857rem;   // 12/14
 
 
 /**

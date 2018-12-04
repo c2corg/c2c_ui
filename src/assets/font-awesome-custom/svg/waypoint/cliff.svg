@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="14"
+   height="14"
+   viewBox="0 0 14 14"
+   id="svg4604"
+   version="1.1"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="cliff.svg">
+  <defs
+     id="defs4606">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath286">
+      <path
+         d="m 513.739,235.444 21.56,0 0,25.556 -21.56,0 0,-25.556 z"
+         id="path288"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath406">
+      <path
+         d="m 57.255,313.364 43.245,0 0,29.167 -43.245,0 0,-29.167 z"
+         id="path408"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath162">
+      <path
+         d="m 0,368 595.28,0 0,-368 L 0,0 0,368 Z"
+         id="path164"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath434">
+      <path
+         d="m 0,368 595.28,0 0,-368 L 0,0 0,368 Z"
+         id="path436"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="31.678384"
+     inkscape:cx="11.311183"
+     inkscape:cy="2.7679038"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg4604"
+     showgrid="true"
+     units="px"
+     inkscape:window-width="1280"
+     inkscape:window-height="1002"
+     inkscape:window-x="2552"
+     inkscape:window-y="1016"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid210" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4609">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     d="M 1.2216203,10.587294 H 1.2063531 C 1.092588,10.587294 1,10.679636 1,10.793647 1,10.907658 1.092588,11 1.2063531,11 H 12.793647 C 12.907658,11 13,10.907658 13,10.793647 13,10.679636 12.907658,10.587294 12.793647,10.587294 H 12.230731 L 11.004432,9.15932 10.13445,4.8103916 C 10.122137,4.7478456 10.081507,4.6946566 10.024624,4.6660916 L 8.7037675,4.0059096 C 8.6510712,3.9795616 8.58951,3.9770996 8.5348436,3.9987686 L 7.5350899,4.3989166 6.9650332,4.0187146 C 6.9123369,3.9835016 6.8458508,3.9746366 6.7855208,3.9945826 L 4.8044817,4.6550106 C 4.7360256,4.6779116 4.6845605,4.7347946 4.6685545,4.8049746 L 3.7311007,8.929574 3.5269638,9.625462 2.3624723,10.587294 H 1.6828367"
+     style="fill:#ffaa45;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.24624477"
+     id="path440"
+     inkscape:connector-curvature="0" />
+</svg>

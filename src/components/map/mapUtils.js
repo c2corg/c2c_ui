@@ -2,6 +2,7 @@
 import ol from '@/js/libs/ol.js'
 import utils from "@/js/utils.js"
 
+import shelter from "@/assets/font-awesome-custom/js/waypoint/shelter"
 
 const buildTextStyle = function(title, highlight){
 //createTextStyle_ = function(feature, type, highlight) {
@@ -67,16 +68,16 @@ const buildPointStyle = function(title, src, color, highlight){
     if(!src)
         throw "Bad document type"
 
-    var scale = highlight ? 0.55 : 0.4
-    var imgSize = highlight ? 22 : 16;
+    var scale = highlight ? 2 : 1
+    var imgSize = highlight ? 20 : 10;
 
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon({
-            scale: scale,
             anchor: [0.5, 0.5],
             anchorXUnits: 'fraction',
             anchorYUnits: 'fraction',
             color: color,
+            scale:scale,
             src: src,
         }),
         text: buildTextStyle(title, highlight)
@@ -85,13 +86,8 @@ const buildPointStyle = function(title, src, color, highlight){
     var circleStyle = new ol.style.Style({
         image: new ol.style.Circle({
             radius: imgSize,
-            fill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.5)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#ddd',
-                width: 2
-            })
+            fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
+            stroke: new ol.style.Stroke({ color: '#ddd', width: 2 })
         })
     })
 
@@ -129,9 +125,9 @@ export const getDocumentPointStyle = function(document, title, highlight){
     if(type == "i" || type == "u" || type == "x" || type == "o" || type=="r")
         icon = iconByDocumentType[type]
     else if(type == "w")
-        icon = require('@/assets/img/documents/waypoints/' + document.waypoint_type + '.svg')
+        icon = require('@/assets/font-awesome-custom/svg/waypoint/' + document.waypoint_type + '.svg')
     else if(type == "a")
-        return new ol.style.Style() 
+        return new ol.style.Style()
     else
         throw "Wrong document specification"
 

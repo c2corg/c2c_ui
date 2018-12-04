@@ -5,7 +5,6 @@
         <h3 class="subtitle is-3" v-translate>Page not found</h3>
 
         <p v-translate>The page you are looking for does not exist or is broken.</p>
-
         <p>{{ $route.fullPath }}</p>
 
         <p>

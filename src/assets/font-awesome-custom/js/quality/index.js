@@ -1,9 +1,15 @@
+// Auto-generated file by generate-icons.js
 
-//
-import empty from "./empty";
-import draft from "./draft";
-import medium from "./medium";
-import fine from "./fine";
-import great from "./great";
+import draft from "./draft"
+import empty from "./empty"
+import fine from "./fine"
+import great from "./great"
+import medium from "./medium"
 
-export { empty, draft, medium, fine, great }
+export {
+    draft,
+    empty,
+    fine,
+    great,
+    medium
+}
