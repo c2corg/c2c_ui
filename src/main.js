@@ -1,6 +1,5 @@
 // Require the main Sass manifest file
 require('./assets/sass/main.scss')
-require('@/js/polyfills.js')
 
 import Vue from 'vue'
 import App from '@/App.vue'

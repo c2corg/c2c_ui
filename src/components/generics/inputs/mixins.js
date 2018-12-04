@@ -68,7 +68,10 @@ export const arrayMixin = {
 
             let newValue = this.value_.slice(0);
 
-            newValue.toggle(item)
+            if(!newValue.includes(item))
+                newValue.push(item)
+            else
+                newValue.splice(newValue.indexOf(item), 1)
 
             if(newValue.length !== 0 || !this.required)
                 this.value_ = newValue

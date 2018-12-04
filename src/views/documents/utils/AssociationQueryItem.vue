@@ -108,7 +108,9 @@
             remove(document){
                 let documentType = this.$documentUtils.getDocumentType(document.type)
                 let value = this.getValue(documentType)
-                value.remove(document.document_id)
+                // remove
+                value.splice(value.indexOf(document.document_id), 1)
+                
                 this.setValue(documentType, value)
             },
         }
