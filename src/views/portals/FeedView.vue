@@ -46,7 +46,6 @@
             FeedWidget,
             ForumWidget,
             MobileAppAdvertising,
-
         },
 
         data(){

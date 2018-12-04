@@ -2,8 +2,6 @@
 import ol from '@/js/libs/ol.js'
 import utils from "@/js/utils.js"
 
-import shelter from "@/assets/font-awesome-custom/js/waypoint/shelter"
-
 const buildTextStyle = function(title, highlight){
 //createTextStyle_ = function(feature, type, highlight) {
     let text;
