@@ -94,56 +94,55 @@
 </template>
 
 <script>
-    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
+// https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
     import c2c from '@/js/apis/c2c'
     import imageUrls from '@/js/image-urls'
     import constants from '@/js/constants'
 
     import ImageAction from './ImageAction'
 
-    const STATUS_INITIAL = "Initial",
-        STATUS_SAVING = "Saving",
-        STATUS_SUCCESS = "Success",
-        STATUS_FAILED = "Failed";
-
+    const STATUS_INITIAL = 'Initial'
+    const STATUS_SAVING = 'Saving'
+    const STATUS_SUCCESS = 'Success'
+    const STATUS_FAILED = 'Failed'
 
     export default {
         components: {
             ImageAction
         },
 
-        props : {
-            file:{
-                type:File,
-                required:true,
+        props: {
+            file: {
+                type: File,
+                required: true
             },
-            lang:{
-                type:String,
-                required:true,
+            lang: {
+                type: String,
+                required: true
             },
-            parentDocument:{
-                type:Object,
-                required:true,
-            },
+            parentDocument: {
+                type: Object,
+                required: true
+            }
         },
 
-        data(){
+        data() {
             var result = {
-                visibleDropdown:null,
-                status : STATUS_INITIAL,
-                percentCompleted : 0,
-                errorMessage : null,
+                visibleDropdown: null,
+                status: STATUS_INITIAL,
+                percentCompleted: 0,
+                errorMessage: null,
                 src: null,
 
-                licences : {
-                    collaborative : this.$gettext('collab'),
-                    personal : this.$gettext('personal'),
+                licences: {
+                    collaborative: this.$gettext('collab'),
+                    personal: this.$gettext('personal')
                 },
 
-                document : {
+                document: {
                     image_type: null,
                     activities: this.parentDocument.activities.slice(0),
-                    filename : null,
+                    filename: null,
                     fnumber: null,
                     focal_length: null,
                     camera_name: null,
@@ -151,56 +150,58 @@
                     exposure_time: null,
                     date_time: null,
                     file_size: this.file.size,
-                    associations:{
+                    associations: {
 
                     },
-                    locales:[{
-                        lang:this.lang,
-                        title:'',
+                    locales: [{
+                        lang: this.lang,
+                        title: ''
                     }]
-                },
+                }
             }
 
-            if(this.$user.isModerator)
+            if (this.$user.isModerator) {
                 result.licences.copyright = this.$gettext('copyright')
+            }
 
             return result
         },
 
-        computed:{
-            imageType(){
-                if(this.parentDocument.type=="o" || this.parentDocument.type=="u" || this.parentDocument.type=="x")
-                    return "personal"
+        computed: {
+            imageType() {
+                if (this.parentDocument.type == 'o' || this.parentDocument.type == 'u' || this.parentDocument.type == 'x') {
+                    return 'personal'
+                }
 
-                if(this.parentDocument.type=="c")
-                    return this.parentDocument.article_type == "collab" ? "collaborative" : "personal"
+                if (this.parentDocument.type == 'c') {
+                    return this.parentDocument.article_type == 'collab' ? 'collaborative' : 'personal'
+                }
 
-                return "collaborative"
-
+                return 'collaborative'
             },
-            imageCategories(){
+            imageCategories() {
                 return constants.objectDefinitions.image.fields.categories.values
             },
             isInitial() {
-                return this.status === STATUS_INITIAL;
+                return this.status === STATUS_INITIAL
             },
             isSaving() {
-                return this.status === STATUS_SAVING;
+                return this.status === STATUS_SAVING
             },
             isSuccess() {
-                return this.status === STATUS_SUCCESS;
+                return this.status === STATUS_SUCCESS
             },
             isFailed() {
-                return this.status === STATUS_FAILED;
+                return this.status === STATUS_FAILED
             },
             imageUrl() {
                 return imageUrls.get(this.document)
             }
         },
 
-        created(){
-            this.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + "s"] = [
-                {document_id: this.parentDocument.document_id}
+        created() {
+            this.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + 's'] = [
+                { document_id: this.parentDocument.document_id }
             ]
 
             this.document.image_type = this.imageType
@@ -209,48 +210,48 @@
             this.upload()
         },
 
+        methods: {
 
-        methods:{
-
-            onUploadProgress(event){
+            onUploadProgress(event) {
                 // TODO : test that
-                if(event.total!=0)
-                    this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
+                if (event.total != 0) {
+                    this.percentCompleted = Math.floor((event.loaded * 100) / event.total)
+                }
             },
 
-            onSuccess(event){
+            onSuccess(event) {
                 this.status = STATUS_SUCCESS
                 this.document.filename = event.data.filename
-                this.$emit("success", this.file, this.document)
+                this.$emit('success', this.file, this.document)
             },
 
-            onFailure(event){
+            onFailure(event) {
                 this.percentCompleted = 100
                 this.status = STATUS_FAILED
                 this.errorMessage = event.message
-                this.$emit("fail", event)
+                this.$emit('fail', event)
             },
 
-            upload(event){
+            upload(event) {
                 this.percentCompleted = 0
                 this.status = STATUS_SAVING
-                this.$emit("startUpload", event)
+                this.$emit('startUpload', event)
                 c2c.uploadImage(this.file, this.onUploadProgress.bind(this))
                     .then(this.onSuccess.bind(this))
                     .catch(this.onFailure.bind(this))
             },
 
-            computeSrc_(){
-                const reader = new FileReader();
+            computeSrc_() {
+                const reader = new FileReader()
 
                 const callback = function(e) {
-                    return this.src = e.target.result;
+                    this.src = e.target.result
                 }
 
                 reader.onload = callback.bind(this)
 
-                reader.readAsDataURL(this.file);
-            },
+                reader.readAsDataURL(this.file)
+            }
         }
     }
 </script>
@@ -290,14 +291,12 @@
     }
 }
 
-
 .file-input-title, .file-input-title:focus{
     display:block;
     width:100%;
     border:0;
     outline:0;
 }
-
 
 .delete-button{
     position:absolute;

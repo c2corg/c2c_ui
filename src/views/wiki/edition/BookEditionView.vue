@@ -40,7 +40,7 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ],
+        mixins: [ DocumentEditionViewMixin ]
     }
 
 </script>

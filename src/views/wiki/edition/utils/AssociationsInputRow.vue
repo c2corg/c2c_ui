@@ -32,28 +32,28 @@
     export default {
         components: {
             FormRow,
-            FormInput,
+            FormInput
         },
 
-        mixins : [ requireFieldProperty, requireDocumentProperty ],
+        mixins: [ requireFieldProperty, requireDocumentProperty ],
 
-        props : {
-            label:{
-                type:String,
-                default:null,
+        props: {
+            label: {
+                type: String,
+                default: null
             },
 
-            helper:{
-                type:String,
-                default:undefined, // default must be undefined. null means explicit no helper
+            helper: {
+                type: String,
+                default: undefined // default must be undefined. null means explicit no helper
             }
         },
 
         computed: {
-            visible(){
+            visible() {
                 return this.$refs.input.visible
             },
-            hasError(){
+            hasError() {
                 return this.$refs.input.hasError === true
             }
         }

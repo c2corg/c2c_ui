@@ -1,6 +1,6 @@
 <template>
     <span>
-        <activities :activities="route.activities"/>
+        <activities :activities="route.activities" class="is-size-4"/>
         <document-link :document="route"/>
         <route-rating :document="route"/>
         <span v-if="showArea">
@@ -20,14 +20,14 @@
     export default {
         props: {
             route: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             },
             showArea: {
-                type:Boolean,
-                required:false,
-                default: false,
+                type: Boolean,
+                required: false,
+                default: false
             }
-        },
+        }
     }
 </script>

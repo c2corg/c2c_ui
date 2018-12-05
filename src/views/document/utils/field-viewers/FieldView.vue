@@ -10,33 +10,35 @@
     import LabelValue from './LabelValue'
 
     export default {
-        components : {LabelValue},
+        components: { LabelValue },
 
-        mixins : [ requireDocumentProperty, requireFieldProperty ],
+        mixins: [ requireDocumentProperty, requireFieldProperty ],
 
-        props:{
-            unit:{
+        props: {
+            unit: {
                 type: String,
-                default: null,
+                default: null
             }
         },
 
-        computed : {
-            hasValue(){
+        computed: {
+            hasValue() {
                 const value = this.document[this.field.name]
 
-                if(value === undefined || value === null)
+                if (value === undefined || value === null) {
                     return false
+                }
 
-                if(Array.isArray(value) && value.length===0)
+                if (Array.isArray(value) && value.length === 0) {
                     return false
+                }
 
                 return true
             },
 
-            visible(){
+            visible() {
                 return this.field.isVisibleFor(this.document)
-            },
+            }
         }
     }
 </script>

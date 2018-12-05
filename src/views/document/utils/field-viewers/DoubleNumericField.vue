@@ -11,38 +11,38 @@
 <script>
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
-    import LabelValue from "./LabelValue"
-    import FieldView from "./FieldView"
+    import LabelValue from './LabelValue'
+    import FieldView from './FieldView'
 
     export default {
 
         components: {
             LabelValue,
-            FieldView,
+            FieldView
         },
 
         mixins: [ requireDocumentProperty ],
 
         props: {
             field1: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             },
             field2: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             },
             label: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             }
         },
 
         computed: {
-            value1(){
+            value1() {
                 return this.document[this.field1.name]
             },
-            value2(){
+            value2() {
                 return this.document[this.field2.name]
             }
         }

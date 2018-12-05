@@ -32,21 +32,20 @@
             ProfileCard,
             RouteCard,
             WaypointCard,
-            XreportCard,
+            XreportCard
         },
 
-        mixins : [requireDocumentProperty],
+        mixins: [requireDocumentProperty],
 
         props: {
-            showDeleteButton:{
+            showDeleteButton: {
                 type: Boolean,
-                default: false,
+                default: false
             }
-        },
+        }
     }
 
 </script>
-
 
 <style scoped lang="scss">
 

@@ -10,24 +10,24 @@
 </template>
 
 <script>
-    import { requireDocumentTypeProperty } from "@/js/properties-mixins"
+    import { requireDocumentTypeProperty } from '@/js/properties-mixins'
 
     export default{
-        mixins : [ requireDocumentTypeProperty ],
+        mixins: [ requireDocumentTypeProperty ],
 
         props: {
-            version:{
-                type:Number,
-                required:true,
+            version: {
+                type: Number,
+                required: true
             },
-            lang:{
-                type:String,
-                required:true,
+            lang: {
+                type: String,
+                required: true
             },
             id: {
-                type:Number,
-                required:true,
-            },
-        },
+                type: Number,
+                required: true
+            }
+        }
     }
 </script>

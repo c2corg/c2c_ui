@@ -12,11 +12,11 @@ export const cardMixin = {
         CardContainer,
         CardRegionItem,
         CardElevationItem,
-        CardActivitiesItem,
-    },
+        CardActivitiesItem
+    }
 }
 
 export const documentCardMixin = {
-    mixins : [cardMixin, requireDocumentProperty],
+    mixins: [cardMixin, requireDocumentProperty]
 
 }

@@ -35,29 +35,29 @@
 
     export default {
 
-        data(){
+        data() {
             return {
-                following:null,
-                newUser:null,
+                following: null,
+                newUser: null
             }
         },
 
-        created(){
+        created() {
             this.load()
         },
 
         methods: {
-            load(){
+            load() {
                 this.following = c2c.userProfile.following.get()
             },
 
-            add(profile){
+            add(profile) {
                 c2c.userProfile.following.add(profile.document_id).then(() => {
                     this.load()
                 })
             },
 
-            remove(document){
+            remove(document) {
                 c2c.userProfile.following.remove(document.document_id).then(() => {
                     this.load()
                 })

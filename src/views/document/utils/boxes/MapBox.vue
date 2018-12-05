@@ -35,21 +35,21 @@
 </template>
 
 <script>
-    import utils from "@/js/utils"
-    import ol from "@/js/libs/ol"
+    import utils from '@/js/utils'
+    import ol from '@/js/libs/ol'
 
-    import { requireDocumentProperty } from "@/js/properties-mixins"
-    import ElevationProfile from "./ElevationProfile"
+    import { requireDocumentProperty } from '@/js/properties-mixins'
+    import ElevationProfile from './ElevationProfile'
 
     export default {
         components: {
-            ElevationProfile,
+            ElevationProfile
         },
 
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        methods:{
-            downloadKml(){
+        methods: {
+            downloadKml() {
                 this.downloadFeatures(
                     new ol.format.KML(),
                     '.kml',
@@ -57,7 +57,7 @@
                 )
             },
 
-            downloadGpx(){
+            downloadGpx() {
                 this.downloadFeatures(
                     new ol.format.GPX(),
                     '.gpx',

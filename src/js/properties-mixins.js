@@ -1,30 +1,30 @@
 
 export const requireDocumentProperty = {
-    props:{
-        document:{
-            type:Object,
-            required:true,
+    props: {
+        document: {
+            type: Object,
+            required: true
         }
     },
 
     computed: {
-        documentType(){
+        documentType() {
             return this.$documentUtils.getDocumentType(this.document.type)
         }
     }
 }
 
 export const requireFieldProperty = {
-    props:{
-        field:{
-            type:Object,
-            required:true,
+    props: {
+        field: {
+            type: Object,
+            required: true
         }
     }
 }
 
 export const requireDocumentTypeProperty = {
-    props:{
+    props: {
         documentType: {
             type: String,
             required: true,
@@ -32,5 +32,5 @@ export const requireDocumentTypeProperty = {
                 return value.length > 1
             }
         }
-    },
+    }
 }

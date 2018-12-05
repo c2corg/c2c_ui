@@ -7,34 +7,34 @@ import constants from '@/js/constants'
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
-
-export default function install(Vue){
-
+export default function install(Vue) {
     Vue.prototype.$documentUtils = new Vue({
-        methods:{
-            getDocumentType(letterType){
+        methods: {
+            getDocumentType(letterType) {
                 return constants.letterToDocumentType[letterType]
             },
 
-            getDocumentTitle(document, lang){
-                if(document.type=="u" || !document.type){
+            getDocumentTitle(document, lang) {
+                if (document.type == 'u' || !document.type) {
                     return document.name
                 }
 
                 var locale = this.$documentUtils.getLocaleSmart(document, lang)
 
-                if (locale.title_prefix)
-                    return locale.title_prefix + " : " + locale.title
+                if (locale.title_prefix) {
+                    return locale.title_prefix + ' : ' + locale.title
+                }
 
                 return locale.title
             },
 
-            getLocaleStupid(document, lang){
-                if(!document.locales)
+            getLocaleStupid(document, lang) {
+                if (!document.locales) {
                     return null
+                }
 
-                for(let result of document.locales){
-                    if (result.lang == lang){
+                for (let result of document.locales) {
+                    if (result.lang == lang) {
                         return result
                     }
                 }
@@ -42,31 +42,33 @@ export default function install(Vue){
                 return null
             },
 
-            getLocaleSmart(document, lang){
-
-                //first of all try to search asked lang
+            getLocaleSmart(document, lang) {
+                // first of all try to search asked lang
                 var result = lang ? this.$documentUtils.getLocaleStupid(document, lang) : null
 
-                if(result)
+                if (result) {
                     return result
-
-                //else, search user lang
-                result = this.$documentUtils.getLocaleStupid(document, this.$user.lang)
-                if(result)
-                    return result
-
-                //else try langs by order
-                for(let lang of constants.langs){
-                    result = this.$documentUtils.getLocaleStupid(document, lang)
-                    if(result)
-                        return result
                 }
 
-                //should never happen
+                // else, search user lang
+                result = this.$documentUtils.getLocaleStupid(document, this.$user.lang)
+                if (result) {
+                    return result
+                }
+
+                // else try langs by order
+                for (let lang of constants.langs) {
+                    result = this.$documentUtils.getLocaleStupid(document, lang)
+                    if (result) {
+                        return result
+                    }
+                }
+
+                // should never happen
                 return null
             },
 
-            hasRating(document){
+            hasRating(document) {
                 return document.global_rating ||
                     document.rock_free_rating ||
                     document.rock_required_rating ||
@@ -84,87 +86,94 @@ export default function install(Vue){
                     document.hiking_mtb_exposition
             },
 
-            getAssociationArrayName(child){
+            getAssociationArrayName(child) {
                 const documentType = this.getDocumentType(child.type)
-                return documentType == "profile" ? "users" : documentType + 's'
+                return documentType == 'profile' ? 'users' : documentType + 's'
             },
 
-            isInArray(array, document){
+            isInArray(array, document) {
                 return array.filter(item => item.document_id == document.document_id).length != 0
             },
 
-            addAssociation(document, child){
+            addAssociation(document, child) {
                 const array = document.associations[this.getAssociationArrayName(child)]
 
-                if(this.isInArray(array, child))
+                if (this.isInArray(array, child)) {
                     return
+                }
 
                 array.push(child)
                 this.propagateAssociationProperties(document, child)
             },
 
-            removeAssociation(document, child){
+            removeAssociation(document, child) {
                 const arrayName = this.getAssociationArrayName(child)
                 const array = document.associations[arrayName]
 
                 document.associations[arrayName] = array.filter(item => item.document_id != child.document_id)
             },
 
-            propagateAssociationProperties(parent, child){
-
+            propagateAssociationProperties(parent, child) {
                 // propagate route property to outing
-                if(parent.type!="o" || child.type!="r")
+                if (parent.type != 'o' || child.type != 'r') {
                     return
+                }
 
                 let route = child
                 let outing = parent
 
-                for(let activity of route.activities)
-                    if(!outing.activities.includes(activity))
+                for (let activity of route.activities) {
+                    if (!outing.activities.includes(activity)) {
                         outing.activities.push(activity)
+                    }
+                }
 
                 outing.geometry.geom = outing.geometry.geom === null ? route.geometry.geom : outing.geometry.geom
 
                 const names = [
-                    "elevation_min",
-                    "elevation_max",
+                    'elevation_min',
+                    'elevation_max',
 
-                    "height_diff_down",
-                    "height_diff_up",
+                    'height_diff_down',
+                    'height_diff_up',
 
-                    "height_diff_difficulties",
+                    'height_diff_difficulties',
 
-                    "global_rating",
-                    "engagement_rating",
-                    "equipment_rating",
-                    "rock_free_rating",
+                    'global_rating',
+                    'engagement_rating',
+                    'equipment_rating',
+                    'rock_free_rating',
 
-                    "ice_rating",
+                    'ice_rating',
 
-                    "labande_global_rating",
-                    "ski_rating",
-                    "snowshoe_rating",
-                    "hiking_rating",
+                    'labande_global_rating',
+                    'ski_rating',
+                    'snowshoe_rating',
+                    'hiking_rating',
 
-                    "via_ferrata_rating",
+                    'via_ferrata_rating',
 
-                    "mtb_down_rating",
-                    "mtb_up_rating",
+                    'mtb_down_rating',
+                    'mtb_up_rating'
                 ]
 
-                names.forEach(name => outing[name] = outing[name] === null ? route[name] : outing[name])
-                if(!outing.cooked.title)
+                names.forEach((name) => {
+                    outing[name] = outing[name] === null ? route[name] : outing[name]
+                })
+
+                if (!outing.cooked.title) {
                     outing.cooked.title = this.getDocumentTitle(route, outing.cooked.lang)
+                }
             },
 
-            buildLocale(documentType, lang){
+            buildLocale(documentType, lang) {
                 var def = constants.objectDefinitions[documentType]
 
                 var result = {}
 
-                for(let field of Object.values(def.fields)){
-                    if(field.parent == "locales"){
-                        result[field.name]=field.multiple ? new Array() : null
+                for (let field of Object.values(def.fields)) {
+                    if (field.parent == 'locales') {
+                        result[field.name] = field.multiple ? [] : null
                     }
                 }
 
@@ -173,34 +182,35 @@ export default function install(Vue){
                 return result
             },
 
-            buildDocument(documentType, lang){
+            buildDocument(documentType, lang) {
                 var def = constants.objectDefinitions[documentType]
 
                 var result = {
-                    type:def.letter,
-                    locales:[
+                    type: def.letter,
+                    locales: [
                         this.buildLocale(documentType, lang)
                     ],
-                    associations:{},
+                    associations: {}
                 }
 
-                for(let field of Object.values(def.fields)){
-                    if(field.parent == "document"){
-                        result[field.name]= field.multiple ? new Array() : null
+                for (let field of Object.values(def.fields)) {
+                    if (field.parent == 'document') {
+                        result[field.name] = field.multiple ? [] : null
 
-                        if(field.default)
+                        if (field.default) {
                             result[field.name] = field.default
-
-                    } else if(field.parent == "associations"){
-                        result.associations[(field.documentType == "profile" ? "user" : field.documentType) + "s"] = []
+                        }
+                    } else if (field.parent == 'associations') {
+                        result.associations[(field.documentType == 'profile' ? 'user' : field.documentType) + 's'] = []
                     }
                 }
 
-                if(def.geoLocalized)
+                if (def.geoLocalized) {
                     result.geometry = {
-                        geom:null,
-                        geom_detail:null,
+                        geom: null,
+                        geom_detail: null
                     }
+                }
 
                 return result
             }

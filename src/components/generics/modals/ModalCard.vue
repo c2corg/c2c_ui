@@ -20,12 +20,11 @@
     </div>
 </template>
 
-
 <script>
-    import mixins from "./mixins"
+    import mixins from './mixins'
 
     export default {
-        mixins : [ mixins ]
+        mixins: [ mixins ]
     }
 
 </script>

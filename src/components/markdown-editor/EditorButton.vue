@@ -15,22 +15,22 @@
 
 <script>
     export default {
-        props : {
+        props: {
             text: {
-                type:String,
-                default:null
+                type: String,
+                default: null
             },
             icon: {
-                type:String,
-                default:null
+                type: String,
+                default: null
             },
             tooltip: {
-                type:String,
-                default:null
+                type: String,
+                default: null
             },
             disabled: {
-                type:Boolean,
-                default:false,
+                type: Boolean,
+                default: false
             }
         }
     }

@@ -27,9 +27,9 @@
 </template>
 
 <script>
-    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
+    import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     export default {
-        mixins : [ DocumentViewMixin ],
+        mixins: [ DocumentViewMixin ]
     }
 </script>

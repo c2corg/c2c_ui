@@ -2,7 +2,7 @@
     <card-container class="route-card" :to="{name:documentType, params:{id:document.document_id}}">
         <div slot="header" class="level">
             <document-title :document="document" class="is-ellipsed"/>
-            <icon-condition :condition="document.condition_rating" class="is-pulled-right"/>
+            <marker-condition :condition="document.condition_rating" class="is-pulled-right"/>
         </div>
 
         <div slot="row1" class="level">
@@ -40,7 +40,7 @@
                 {{ document.date_start }}
             </span>
 
-            <icon-quality :quality="document.quality"/>
+            <marker-quality :quality="document.quality"/>
         </div>
     </card-container>
 </template>
@@ -51,7 +51,7 @@
 
     export default {
         mixins: [
-            documentCardMixin,
-        ],
+            documentCardMixin
+        ]
     }
 </script>

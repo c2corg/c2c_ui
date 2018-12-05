@@ -6,12 +6,12 @@
         @click="$helper.show(name)" />
 </template>
 
-<script>
+<script lang="ts">
     export default {
-        props:{
-            name:{
-                type:String,
-                default:null,
+        props: {
+            name: {
+                type: String,
+                default: null
             }
         }
     }

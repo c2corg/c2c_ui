@@ -33,20 +33,19 @@
 
 <script>
 
-    import { baseMixin, arrayMixin } from "./mixins.js"
+    import { baseMixin, arrayMixin } from './mixins.js'
 
     export default {
         mixins: [ baseMixin, arrayMixin ],
 
-        props:{
+        props: {
             options: {
-                type:Array,
-                required:true,
-            },
-        },
+                type: Array,
+                required: true
+            }
+        }
     }
 </script>
-
 
 <style scoped lang="scss">
 
@@ -56,6 +55,5 @@
     box-shadow: 0px 0px 8px 0px $danger;
     // border: 1px solid $danger;
 }
-
 
 </style>

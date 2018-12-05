@@ -1,81 +1,80 @@
 import c2c from '@/js/apis/c2c'
-import config from "@/js/config"
+import config from '@/js/config'
 
-export default function install(Vue){
-
+export default function install(Vue) {
     Vue.prototype.$user = new Vue({
-        name: "User",
+        name: 'User',
 
-        data(){
+        data() {
             const data = this.$localStorage.get(config.urls.api, {})
 
             return {
 
                 // The unique name, used to login
-                userName: data["userName"] || null,
+                userName: data['userName'] || null,
 
                 // unique numerical ID
-                id: data["id"] || null,
+                id: data['id'] || null,
 
                 // user lang, read write property everywhere : this.$user.lang
-                lang: data["lang"] || "fr",
+                lang: data['lang'] || 'fr',
 
                 // list of roles
-                roles: data["roles"]  || [],
+                roles: data['roles'] || [],
 
                 // public name, a simple label
-                name: data["name"] || null,
+                name: data['name'] || null,
 
                 // forum name
-                forumUsername: data["forumUsername"] || null,
+                forumUsername: data['forumUsername'] || null,
 
                 // private token used for API auth
-                token: data["token"] || null,
+                token: data['token'] || null,
 
                 // token expiration date
-                expire: data["expire"] || null,
+                expire: data['expire'] || null
             }
         },
 
-        computed:{
-            isModerator(){
-                return this.roles.includes("moderator")
+        computed: {
+            isModerator() {
+                return this.roles.includes('moderator')
             },
-            isLogged(){
+            isLogged() {
                 return Boolean(this.token)
             }
         },
 
-        watch:{
-            "lang":"updateLang",
-            "token":{
-                handler:"updateToken",
-                immediate:true,
+        watch: {
+            'lang': 'updateLang',
+            'token': {
+                handler: 'updateToken',
+                immediate: true
             }
         },
 
-        created(){
+        created() {
             this.checkExpiration()
         },
 
-        methods:{
-            signIn(username, password){
+        methods: {
+            signIn(username, password) {
                 return c2c.userProfile.login(username, password)
-                .then(response => {
-                    this.lang = response.data.lang
-                    this.token = response.data.token
-                    this.roles = response.data.roles
-                    this.id = response.data.id
-                    this.userName = response.data.username
-                    this.name = response.data.name
-                    this.forumUsername = response.data.forum_username
-                    this.expire = response.data.expire
+                    .then(response => {
+                        this.lang = response.data.lang
+                        this.token = response.data.token
+                        this.roles = response.data.roles
+                        this.id = response.data.id
+                        this.userName = response.data.username
+                        this.name = response.data.name
+                        this.forumUsername = response.data.forum_username
+                        this.expire = response.data.expire
 
-                    this.commitToLocaleStorage_()
-                })
+                        this.commitToLocaleStorage_()
+                    })
             },
 
-            signout(){
+            signout() {
                 this.token = null
                 this.roles = []
                 this.id = null
@@ -87,8 +86,7 @@ export default function install(Vue){
                 this.commitToLocaleStorage_()
             },
 
-
-            updateAccount(currentpassword, name, forum_username,  email, is_profile_public, newpassword){
+            updateAccount(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
                 return c2c.userProfile.account.post(
                     currentpassword,
                     name,
@@ -103,39 +101,41 @@ export default function install(Vue){
                 })
             },
 
-            updateToken(){
+            updateToken() {
                 c2c.setAuthorizationToken(this.token)
             },
 
-            updateLang(){
+            updateLang() {
                 this.$language.setCurrent(this.lang)
 
-                //lang is the only read-write property from outside,
+                // lang is the only read-write property from outside,
                 // we need to save this value
                 this.commitToLocaleStorage_()
 
                 // keep in last, because it will fail in read only mode
-                if(this.isLogged)
+                if (this.isLogged) {
                     c2c.userProfile.update_preferred_language(this.lang)
+                }
             },
 
-            commitToLocaleStorage_(){
+            commitToLocaleStorage_() {
                 this.$localStorage.set(config.urls.api, this.$data)
             },
 
-            checkExpiration(){
-                if(!this.expire)
-                    return true;
+            checkExpiration() {
+                if (!this.expire) {
+                    return true
+                }
 
-                const now = Date.now() / 1000; // in seconds
+                const now = Date.now() / 1000 // in seconds
                 const expire = this.expire
 
                 if (now > expire) {
-                    this.signout();
-                    return true;
+                    this.signout()
+                    return true
                 }
 
-                return false;
+                return false
             }
         }
     })

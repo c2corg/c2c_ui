@@ -60,6 +60,6 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins: [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ]
     }
 </script>

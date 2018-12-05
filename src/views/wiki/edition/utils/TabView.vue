@@ -21,30 +21,30 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
-                tabs:[],
+                tabs: []
             }
         },
 
         mounted() {
-             this.tabs = this.$children;
+            this.tabs = this.$children
 
-             for(let tab of this.tabs){
-                 tab.isActive=false
-             }
-    
-             this.tabs[0].isActive=true
+            for (let tab of this.tabs) {
+                tab.isActive = false
+            }
+
+            this.tabs[0].isActive = true
         },
 
-        methods:{
-            selectTab(tab){
-                if(tab.isActive){
+        methods: {
+            selectTab(tab) {
+                if (tab.isActive) {
                     return
                 }
 
-                for(let item of this.tabs){
-                    if(item.isActive){
+                for (let item of this.tabs) {
+                    if (item.isActive) {
                         item.isActive = false
                         break
                     }
@@ -52,7 +52,7 @@
 
                 tab.isActive = true
             }
-        },
+        }
     }
 </script>
 

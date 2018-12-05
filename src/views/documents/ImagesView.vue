@@ -37,49 +37,48 @@
     export default {
         components: {
             QueryItems,
-            PageSelector,
+            PageSelector
         },
-
 
         data() {
             return {
-                promise: null,
+                promise: null
             }
         },
 
-        computed:{
-            documents(){
+        computed: {
+            documents() {
                 return this.promise.data
             },
-            title(){
+            title() {
                 return this.$route.name
             },
-            documentType(){
+            documentType() {
                 return this.$route.name.slice(0, -1)
-            },
+            }
         },
 
         watch: {
-            "$route": {
-                handler: "load",
-                immediate: true,
+            '$route': {
+                handler: 'load',
+                immediate: true
             }
         },
 
-        methods:{
-            load(){
+        methods: {
+            load() {
                 this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
-            go(image){
+            go(image) {
                 this.$router.push({
-                    name: "image",
+                    name: 'image',
                     params: { id: image.document_id }
                 })
             },
 
-            getSmallImageUrl:imageUrls.getSmall,
-        },
+            getSmallImageUrl: imageUrls.getSmall
+        }
     }
 
 </script>

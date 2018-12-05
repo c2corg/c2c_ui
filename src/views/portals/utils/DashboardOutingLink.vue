@@ -20,10 +20,10 @@
 <script>
     export default {
         props: {
-            outing:{
-                type:Object,
-                required:true,
+            outing: {
+                type: Object,
+                required: true
             }
-        },
+        }
     }
 </script>

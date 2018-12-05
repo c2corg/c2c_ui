@@ -116,51 +116,57 @@
 </template>
 
 <script>
-    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
+    import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     export default {
-        mixins : [ DocumentViewMixin ],
+        mixins: [ DocumentViewMixin ],
 
         computed: {
             // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L103
-            gear_articles(){
-
+            gear_articles() {
                 const result = {}
                 const doc = this.document
                 const activities = doc.activities || []
-                const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD' ]
-                const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4' ]
-                const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing' ]
+                const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD']
+                const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4']
+                const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing']
 
-                if(activities.includes('snowshoeing') || activities.includes('skitouring'))
+                if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
                     result['183333'] = this.$gettext('skitouring gear')
-
-                if(activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating))
-                    result['185750'] = this.$gettext('easy snow ice mixed gear')
-
-                if(activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating))
-                    result['185384'] = this.$gettext('easy mountain climbing gear')
-
-                if(activities.includes('rock_climbing')){
-                    if(['P1', 'P1+'].includes(doc.equipment_rating))
-                        result['183332'] = this.$gettext('bolted rock climbing gear')
-
-                    else if(!activities.includes('mountain_climbing')  &&
-                        easy_mountain.includes(doc.global_rating) &&
-                        poor_equiped.includes(doc.equipment_rating))
-                        result['185384'] = this.$gettext('easy mountain climbing gear')
                 }
 
-                if(activities.includes('ice_climbing'))
-                    result['194479'] = this.$gettext('ice and dry climbing gear')
+                if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
+                    result['185750'] = this.$gettext('easy snow ice mixed gear')
+                }
 
-                if(activities.includes('hiking'))
+                if (activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating)) {
+                    result['185384'] = this.$gettext('easy mountain climbing gear')
+                }
+
+                if (activities.includes('rock_climbing')) {
+                    if (['P1', 'P1+'].includes(doc.equipment_rating)) {
+                        result['183332'] = this.$gettext('bolted rock climbing gear')
+                    } else if (!activities.includes('mountain_climbing') &&
+                        easy_mountain.includes(doc.global_rating) &&
+                        poor_equiped.includes(doc.equipment_rating)) {
+                            result['185384'] = this.$gettext('easy mountain climbing gear')
+                        }
+                }
+
+                if (activities.includes('ice_climbing')) {
+                    result['194479'] = this.$gettext('ice and dry climbing gear')
+                }
+
+                if (activities.includes('hiking')) {
                     result['185207'] = this.$gettext('hiking gear')
+                }
 
                 // we should use an anchor for glacier gear, but it's not possible
-                if(doc.glacier_gear && doc.glacier_gear != 'no')
-                    if(activities.filter(act => glacier_activities.includes(act)))
+                if (doc.glacier_gear && doc.glacier_gear != 'no') {
+                    if (activities.filter(act => glacier_activities.includes(act))) {
                         result['185750'] = this.$gettext('easy snow ice mixed gear')
+                    }
+                }
 
                 return result
             }

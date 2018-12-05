@@ -51,14 +51,14 @@
 
         components: {
             DashboardOutingLink,
-            ForumWidget,
+            ForumWidget
         },
 
         data() {
             return {
                 outingsPromise: null,
                 routesPromise: null,
-                imagesPromise: null,
+                imagesPromise: null
             }
         },
 
@@ -67,22 +67,22 @@
                 return this.$refs.mySwiper.swiper
             },
 
-            outings(){
+            outings() {
                 return this.outingsPromise.data
             },
 
-            images(){
+            images() {
                 return this.imagesPromise.data
             },
 
-            routes(){
+            routes() {
                 return this.routesPromise.data
-            },
+            }
         },
 
         created() {
             this.outingsPromise = c2c.outing.getAll()
-            this.routesPromise = c2c.route.getAll({limit:10})
+            this.routesPromise = c2c.route.getAll({ limit: 10 })
             this.imagesPromise = c2c.image.getAll()
         }
     }

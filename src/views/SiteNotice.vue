@@ -13,64 +13,66 @@
 
 <script>
 
-    import forum from "@/js/apis/forum"
+    import forum from '@/js/apis/forum'
 
     export default {
-        name:"SiteNotice",
+        name: 'SiteNotice',
 
-        data(){
+        data() {
             return {
-                hasAnnouncement : false,
+                hasAnnouncement: false,
                 hidden: false,
                 showContent: false,
-                updatedAt:null,
-                lang: this.$user.lang, //store lang, because if user changes lang after getting notice...
+                updatedAt: null,
+                lang: this.$user.lang // store lang, because if user changes lang after getting notice...
             }
         },
 
         computed: {
             readdenPostKey: {
-                get(){
-                    return this.$localStorage.get("readdenPostKey." + this.lang)
+                get() {
+                    return this.$localStorage.get('readdenPostKey.' + this.lang)
                 },
-                set(value){
-                    this.$localStorage.set("readdenPostKey." + this.lang, value)
+                set(value) {
+                    this.$localStorage.set('readdenPostKey.' + this.lang, value)
                 }
             }
         },
 
-        created(){
+        created() {
             this.loadAnnouncement()
         },
 
-        methods:{
-            loadAnnouncement(){
+        methods: {
+            loadAnnouncement() {
                 forum.readAnnouncement(this.lang).then(response => {
                     const data = response['data']
                     if (data['tags'].indexOf('visible') > -1) {
                         let post = data.post_stream.posts[0]
                         this.updatedAt = post.updated_at
 
-                        if(this.readdenPostKey == post.updated_at)
+                        if (this.readdenPostKey == post.updated_at) {
                             return
+                        }
 
                         this.hasAnnouncement = true
 
                         // compute html, to split p
-                        let content = document.createElement( 'div' )
+                        let content = document.createElement('div')
                         content.innerHTML = post.cooked
-                        let paragraphs = content.getElementsByTagName( 'p' )
+                        let paragraphs = content.getElementsByTagName('p')
 
                         this.$refs.header.appendChild(paragraphs[0])
 
-                        for(let p of Array.from(paragraphs).slice(1))
+                        for (let p of Array.from(paragraphs).slice(1)) {
                             this.$refs.content.appendChild(p)
+                        }
                     }
                 })
             },
 
-            hide(){
-                this.hidden=true
+            hide() {
+                this.hidden = true
                 this.readdenPostKey = this.updatedAt
             }
         }

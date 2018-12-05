@@ -18,34 +18,34 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
         props: {
             lang: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                promise:null
+                promise: null
             }
         },
 
-        methods:{
-            show(){
+        methods: {
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            restoreVersion(){
+            restoreVersion() {
                 this.promise = c2c.moderator.revertDocument(
                     this.document.document_id,
                     this.lang,
                     this.$route.params.version
                 ).then(() => {
                     this.$refs.modalWindow.hide()
-                    this.$router.push({name:this.documentType, id:this.document.document_id})
+                    this.$router.push({ name: this.documentType, id: this.document.document_id })
                 })
             }
         }

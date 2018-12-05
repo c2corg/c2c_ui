@@ -43,7 +43,6 @@
 ### Refactors
 
 * does saveAs filesaver dependency really usefull now ?
-* remove swiper : too big...
 
 ### Optims
 
@@ -56,7 +55,6 @@
 * Following view is ugly
 * print CSS
 * choose font family
-* icon size must not be a subjet
 
 ### Bugs
 * on gitlab build, style on pagination fails
@@ -68,3 +66,6 @@
 ### Doc
 
 * Probably https://github.com/vue-styleguidist/vue-cli-plugin-styleguidist
+
+
+"@vue/typescript"

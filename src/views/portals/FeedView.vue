@@ -41,22 +41,21 @@
     import MobileAppAdvertising from './utils/MobileAppAdvertising'
 
     export default {
-        components:{
+        components: {
             HomeBanner,
             FeedWidget,
             ForumWidget,
-            MobileAppAdvertising,
+            MobileAppAdvertising
         },
 
-        data(){
+        data() {
             return {
-                isPersonal:false,
+                isPersonal: false
             }
-        },
+        }
     }
 
 </script>
-
 
 <style scoped lang="scss">
 

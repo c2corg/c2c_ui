@@ -11,17 +11,17 @@
 </template>
 
 <script>
-    import constants from "@/js/constants"
-    import { baseMixin, arrayMixin } from "./mixins.js"
+    import constants from '@/js/constants'
+    import { baseMixin, arrayMixin } from './mixins.js'
 
     export default {
         mixins: [ baseMixin, arrayMixin ],
 
         computed: {
-            activities(){
+            activities() {
                 return constants.activities
             }
-        },
+        }
     }
 </script>
 

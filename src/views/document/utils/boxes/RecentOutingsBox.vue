@@ -41,24 +41,25 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        computed:{
+        computed: {
             // API bug, an outing can be present several times
-            outings(){
+            outings() {
                 const result = new Map()
 
-                for(let outing of this.document.associations.recent_outings.documents)
+                for (let outing of this.document.associations.recent_outings.documents) {
                     result.set(outing.document_id, outing)
+                }
 
                 return [...result.values()]
             },
 
-            query(){
+            query() {
                 const query = {}
                 query[this.document.type] = this.document.document_id
                 return query
-            },
+            }
         }
     }
 </script>

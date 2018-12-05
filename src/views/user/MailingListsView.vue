@@ -20,24 +20,24 @@
 
     export default {
 
-        data(){
+        data() {
             return {
-                mailinglists:null,
-                constants:c2c,
+                mailinglists: null,
+                constants: c2c
             }
         },
 
-        created(){
+        created() {
             c2c.userProfile.mailinglists.get().then(response => {
                 this.mailinglists = response.data
             })
         },
 
-        methods:{
-            save(){
+        methods: {
+            save() {
                 c2c.userProfile.mailinglists.post(this.mailinglists)
             }
-        },
+        }
     }
 </script>
 

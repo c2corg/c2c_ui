@@ -19,22 +19,23 @@
 
 <script>
     export default {
-        props:{
-            data:{
-                type:String,
-                default:null
+        props: {
+            data: {
+                type: String,
+                default: null
             }
         },
 
-        computed:{
-            levels(){
+        computed: {
+            levels() {
                 return this.data ? JSON.parse(this.data) : null
             },
-            hasData(){
-                if(this.levels===null || this.levels.length === 0)
+            hasData() {
+                if (this.levels === null || this.levels.length === 0) {
                     return false
+                }
 
-                const firstLevel = this.levels[0] //goddamn API...
+                const firstLevel = this.levels[0] // goddamn API...
 
                 return Boolean(firstLevel.level_snow_height_total) ||
                     Boolean(firstLevel.level_snow_height_total) ||

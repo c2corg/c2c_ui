@@ -22,25 +22,25 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        data(){
+        data() {
             return {
-                promise:null
+                promise: null
             }
         },
 
-        methods:{
-            show(){
+        methods: {
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            executeDelete(){
+            executeDelete() {
                 this.promise = c2c.moderator.deleteDocument(this.document.document_id)
-                .then(() => {
-                    this.$router.push({name:this.documentType + 's'})
-                })
-                // TODO feedback error
+                    .then(() => {
+                        this.$router.push({ name: this.documentType + 's' })
+                    })
+                    // TODO feedback error
             }
         }
     }

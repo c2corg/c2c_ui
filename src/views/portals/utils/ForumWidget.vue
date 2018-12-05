@@ -28,28 +28,28 @@
 
         props: {
             wide: {
-                type:Boolean,
-                default: false,
+                type: Boolean,
+                default: false
             },
             messageCount: {
-                type:Number,
-                default: -1,
+                type: Number,
+                default: -1
             }
         },
 
         data() {
             return {
-                promise:null,
+                promise: null
             }
         },
 
         forumUrl: forum.url,
 
         computed: {
-            topics(){
+            topics() {
                 return this.promise.data ? this.promise.data.topic_list : null
             },
-            imgSize(){
+            imgSize() {
                 return this.wide ? 24 : 20
             }
         },

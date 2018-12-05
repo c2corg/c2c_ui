@@ -4,10 +4,10 @@
 
 <script>
     export default {
-        props:{
-            activities:{
-                type:Array,
-                default:null,
+        props: {
+            activities: {
+                type: Array,
+                default: null
             }
         }
     }

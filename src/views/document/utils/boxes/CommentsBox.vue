@@ -70,54 +70,57 @@
 
     import forum from '@/js/apis/forum.js'
 
-    const computeCooked = function(cooked){
+    const computeCooked = function(cooked) {
         cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url)
 
         return cooked
     }
 
     export default {
-        mixins : [ requireDocumentProperty, viewModeMixin ],
+        mixins: [ requireDocumentProperty, viewModeMixin ],
 
-        data(){
+        data() {
             return {
-                promise:{},
+                promise: {}
             }
         },
 
         computed: {
 
-            locale(){
+            locale() {
                 return this.document.cooked
             },
 
-            discussionUrl(){
-                if(!this.topic)
+            discussionUrl() {
+                if (!this.topic) {
                     return null
+                }
 
                 return forum.url + '/t/' + this.topic.slug + '/' + this.locale.topic_id + '/' + this.topic.posts_count
             },
 
-            topic(){
+            topic() {
                 return this.promise.data
             },
 
-            comments(){
+            comments() {
                 const result = []
 
-                if(!this.topic || !this.topic.post_stream)
+                if (!this.topic || !this.topic.post_stream) {
                     return result
+                }
 
                 const data = this.topic.post_stream
 
                 let posts = data.posts
 
-                if(posts[0].name =='system')
+                if (posts[0].name == 'system') {
                     posts = posts.slice(1)
+                }
 
                 for (let post of posts) {
                     post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize)
-                    post.cooked =  computeCooked(post.cooked)
+                    post.cooked = computeCooked(post.cooked)
                     result.push(post)
                 }
 
@@ -129,38 +132,38 @@
         forumUrl: forum.url,
         forumAvatarSize: 45,
 
-        created(){
-            this.getComments();
+        created() {
+            this.getComments()
         },
 
-        methods:{
-            createTopic(){
+        methods: {
+            createTopic() {
                 const document_id = this.document.document_id
                 const lang = this.locale.lang
 
                 forum.createTopic(document_id, lang)
-                .then(response => {
-                    const topic_id = response['data']['topic_id']
-                    const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id
-                    window.location = url
-                })
-                .catch(error => {
-                    if (error.response && error.response.status == 400) {
-                        const topic_id = error.response['data']['errors'][0]['topic_id']
-                        if (topic_id !== undefined) {
-                            this.locale.topic_id = topic_id
-                            this.getComments()
+                    .then(response => {
+                        const topic_id = response['data']['topic_id']
+                        const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id
+                        window.location = url
+                    })
+                    .catch(error => {
+                        if (error.response && error.response.status == 400) {
+                            const topic_id = error.response['data']['errors'][0]['topic_id']
+                            if (topic_id !== undefined) {
+                                this.locale.topic_id = topic_id
+                                this.getComments()
+                            }
                         }
-                    }
-                })
+                    })
             },
 
-            getComments(){
-                if(this.locale.topic_id){
+            getComments() {
+                if (this.locale.topic_id) {
                     this.promise = forum.getTopic(this.locale.topic_id)
                 }
             }
-        },
+        }
     }
 </script>
 

@@ -17,6 +17,6 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin.js'
 
     export default {
-        mixins : [ DocumentEditionViewMixin, ],
+        mixins: [ DocumentEditionViewMixin ]
     }
 </script>

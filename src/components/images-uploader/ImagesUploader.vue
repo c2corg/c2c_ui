@@ -52,78 +52,78 @@
     export default {
 
         components: {
-            ImageUploader,
+            ImageUploader
         },
 
         props: {
-            lang:{
-                type:String,
-                required:true,
+            lang: {
+                type: String,
+                required: true
             },
-            parentDocument:{
-                type:Object,
-                required:true,
-            },
-        },
-
-        data(){
-            return {
-                files:{},
-                documents:[],
+            parentDocument: {
+                type: Object,
+                required: true
             }
         },
 
-        methods:{
-            show(){
+        data() {
+            return {
+                files: {},
+                documents: []
+            }
+        },
+
+        methods: {
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            hide(){
+            hide() {
                 this.$refs.modalWindow.hide()
             },
 
-            save(){
+            save() {
                 c2c.createImages(this.documents).then(() => {
                     this.hide()
 
-                    // TODO handle error
-                    // TODO redraw parent
+                // TODO handle error
+                // TODO redraw parent
                 })
             },
 
-            filesChange(event){
+            filesChange(event) {
                 // TODO : it must append, and check doublon...
-                for(let file of event.target.files){
+                for (let file of event.target.files) {
                     let key = this.getFileKey(file)
 
-                    if(this.files[key]===undefined){
+                    if (this.files[key] === undefined) {
                         this.$set(this.files, key, file)
                     }
                 }
             },
 
-            getFileKey(file){
-                return file.name + "#" + file.lastModified
+            getFileKey(file) {
+                return file.name + '#' + file.lastModified
             },
 
-            computeDocuments(){
-
+            computeDocuments() {
                 this.documents = []
 
-                for(let file of Object.values(this.files)){
-                    if(file.document)
+                for (let file of Object.values(this.files)) {
+                    if (file.document) {
                         this.documents.push(file.document)
+                    }
                 }
             },
 
-            onSuccess(file, document){
+            onSuccess(file, document) {
                 file.document = document
                 this.computeDocuments()
             },
 
-            onDeleteFile(file){
+            onDeleteFile(file) {
                 let key = this.getFileKey(file)
-                if(this.files[key]!==undefined){
+                if (this.files[key] !== undefined) {
                     this.$delete(this.files, key)
                     this.computeDocuments()
                 }

@@ -79,7 +79,6 @@
 
 <style scoped lang="scss">
 
-
     .topoguide{
         background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
     }

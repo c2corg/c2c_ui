@@ -6,10 +6,10 @@
 
 <script>
     export default {
-        props : {
-            profiles:{
-                type:Array,
-                required:true,
+        props: {
+            profiles: {
+                type: Array,
+                required: true
             }
         }
     }

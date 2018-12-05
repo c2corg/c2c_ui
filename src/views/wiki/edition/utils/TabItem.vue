@@ -6,50 +6,50 @@
 
 <script>
     export default {
-        props : {
-            title:{
-                type:String,
-                required:true,
+        props: {
+            title: {
+                type: String,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                isActive:true,
+                isActive: true,
                 visible: true,
-                hasError: false,
+                hasError: false
             }
         },
 
-        mounted(){
-
-            for(let child of this.$children){
-                child.$watch("visible", this.checkVisibility)
-                child.$watch("hasError", this.checkHasError)
+        mounted() {
+            for (let child of this.$children) {
+                child.$watch('visible', this.checkVisibility)
+                child.$watch('hasError', this.checkHasError)
             }
 
             this.checkVisibility()
             this.checkHasError()
         },
 
-        methods:{
-            checkVisibility(){
-
+        methods: {
+            checkVisibility() {
                 this.visible = false
 
-                for(let child of this.$children)
-                    if(child.visible){
+                for (let child of this.$children) {
+                    if (child.visible) {
                         this.visible = true
                         return
                     }
+                }
             },
-            checkHasError(){
-
+            checkHasError() {
                 this.hasError = false
 
-                for(let child of this.$children)
-                    if(child.hasError===true)
+                for (let child of this.$children) {
+                    if (child.hasError === true) {
                         this.hasError = true
+                    }
+                }
             }
         }
     }

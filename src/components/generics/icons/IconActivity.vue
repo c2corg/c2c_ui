@@ -2,14 +2,14 @@
     <fa-icon :icon="['activity', activity]" />
 </template>
 
-<script>
+<script lang="ts">
 
     export default {
         props: {
             activity: {
-                type:String,
-                required: true,
+                type: String,
+                required: true
             }
-        },
+        }
     }
 </script>

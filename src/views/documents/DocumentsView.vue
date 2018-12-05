@@ -92,12 +92,12 @@
     import DataTable from '@/components/datatable/DataTable'
 
     export default {
-        name:"DocumentsView",
+        name: 'DocumentsView',
 
         components: {
             QueryItems,
             PageSelector,
-            DataTable,
+            DataTable
         },
 
         data() {
@@ -106,64 +106,65 @@
 
                 // showMap is the user choise, if he wants to see the map, or not
                 showMap: null,
-                listMode: null,
+                listMode: null
             }
         },
 
-        computed:{
-            documents(){
+        computed: {
+            documents() {
                 return this.promise.data
             },
-            title(){
+            title() {
                 var result = this.$route.name
-                return result.charAt(0).toUpperCase() + result.slice(1);
+                return result.charAt(0).toUpperCase() + result.slice(1)
             },
-            documentType(){
+            documentType() {
                 return this.$route.name.slice(0, -1)
             },
-            documentAreGeoLocalized(){
-                return constants.objectDefinitions[this.documentType].geoLocalized===true
+            documentAreGeoLocalized() {
+                return constants.objectDefinitions[this.documentType].geoLocalized === true
             },
-            displayMap(){
+            displayMap() {
                 return this.showMap && this.documentAreGeoLocalized
             },
-            addQuery(){
+            addQuery() {
                 return {
-                    act: this.$route.query.act,
+                    act: this.$route.query.act
                 }
-            },
+            }
         },
 
-        watch:{
-            "$route" : {
+        watch: {
+            '$route': {
                 handler: 'load',
-                immediate: true,
-            },
+                immediate: true
+            }
         },
 
-        methods:{
+        methods: {
 
-            load(){
-
-                this.showMap = this.$localStorage.get(this.documentType + ".showMap", this.documentAreGeoLocalized)
-                this.listMode = this.$localStorage.get(this.documentType + ".listMode", false)
+            load() {
+                this.showMap = this.$localStorage.get(this.documentType + '.showMap', this.documentAreGeoLocalized)
+                this.listMode = this.$localStorage.get(this.documentType + '.listMode', false)
                 this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
-            toogleProperty(property){
+            toogleProperty(property) {
                 this[property] = !this[property]
                 this.$localStorage.set(`${this.documentType}.${property}`, this[property])
             },
 
-            mouseEnter(document){
-                if(this.documentAreGeoLocalized && this.displayMap)
+            mouseEnter(document) {
+                if (this.documentAreGeoLocalized && this.displayMap) {
                     this.$refs.map.highlightedDocument = document
+                }
             },
 
-            mouseLeave(){
-                if(this.documentAreGeoLocalized && this.displayMap)
+            mouseLeave() {
+                if (this.documentAreGeoLocalized && this.displayMap) {
                     this.$refs.map.highlightedDocument = null
-            },
+                }
+            }
         }
     }
 </script>

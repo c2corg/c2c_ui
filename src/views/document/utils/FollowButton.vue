@@ -14,38 +14,42 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [
+        mixins: [
             requireDocumentProperty
         ],
 
-        data(){
+        data() {
             return {
-                followed:null
+                followed: null
             }
         },
 
-        computed:{
-            canFollow(){
-                return this.document.type =='u' && this.$user.isLogged && this.$user.id != this.document.document_id
+        computed: {
+            canFollow() {
+                return this.document.type == 'u' && this.$user.isLogged && this.$user.id != this.document.document_id
             },
 
-            tooltip(){
-                if(this.followed)
+            tooltip() {
+                if (this.followed) {
                     return this.$gettext('Stop following this contributor')
-                else
+                } else {
                     return this.$gettext('See the activity of this contributor in your feed')
+                }
             }
         },
 
-        created(){
-            if(this.canFollow)
+        created() {
+            if (this.canFollow) {
                 c2c.userProfile.following.isFollowing(this.document.document_id)
-                .then(response => this.followed = response.data.is_following)
+                    .then((response) => {
+                        this.followed = response.data.is_following
+                    })
+            }
         },
 
-        methods:{
-            onClick(){
-                if(this.followed){
+        methods: {
+            onClick() {
+                if (this.followed) {
                     c2c.userProfile.following.remove(this.document.document_id).then(() => {
                         this.followed = false
                     })

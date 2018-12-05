@@ -29,45 +29,47 @@
 
 <script>
     export default {
-        props:{
-            value:{
-                type:String,
-                default:null
+        props: {
+            value: {
+                type: String,
+                default: null
             }
         },
 
-        data(){
+        data() {
             return {
-                levels:[],
-                newLevel: {},
+                levels: [],
+                newLevel: {}
 
             }
         },
 
-        watch:{
-            "levels": {
-                handler:"change",
-                deep:true
+        watch: {
+            'levels': {
+                handler: 'change',
+                deep: true
             }
         },
 
-        created(){
+        created() {
             const levels = this.value ? JSON.parse(this.value) : []
 
-            for(let level of levels)
-                if(level.level_place || level.level_place || level.level_place || level.level_place)
+            for (let level of levels) {
+                if (level.level_place || level.level_place || level.level_place || level.level_place) {
                     this.levels.push(level)
+                }
+            }
         },
 
-        methods:{
-            change(){
-                this.$emit("input", JSON.stringify(this.levels))
+        methods: {
+            change() {
+                this.$emit('input', JSON.stringify(this.levels))
             },
 
-            addLevel(){
+            addLevel() {
                 this.levels.push(this.newLevel)
                 this.newLevel = {}
-            },
+            }
         }
     }
 </script>

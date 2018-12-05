@@ -21,67 +21,68 @@
 
 <script>
     export default {
-        props:{
+        props: {
             label: {
-                type:String,
-                default:"",
+                type: String,
+                default: ''
             },
             alwaysVisible: {
                 type: Boolean,
-                default: false,
+                default: false
             },
             isGrouped: {
                 type: Boolean,
-                default: false,
+                default: false
             },
-            isExpanded:{
-                type:Boolean,
-                default:false
+            isExpanded: {
+                type: Boolean,
+                default: false
             },
-            isNarrow:{
-                type:Boolean,
-                default:false
+            isNarrow: {
+                type: Boolean,
+                default: false
             },
-            helper:{
-                type:String,
-                default:undefined,
-            },
-        },
-
-        data(){
-            return {
-                visible: true,
-                hasError: false,
+            helper: {
+                type: String,
+                default: undefined
             }
         },
 
-        mounted(){
+        data() {
+            return {
+                visible: true,
+                hasError: false
+            }
+        },
 
-            for(let child of this.$children){
-                child.$watch("visible", this.checkVisibility)
-                child.$watch("hasError", this.checkHasError)
+        mounted() {
+            for (let child of this.$children) {
+                child.$watch('visible', this.checkVisibility)
+                child.$watch('hasError', this.checkHasError)
             }
 
             this.checkVisibility()
             this.checkHasError()
         },
 
-        methods:{
-            checkVisibility(){
-
+        methods: {
+            checkVisibility() {
                 this.visible = this.alwaysVisible
 
-                for(let child of this.$children)
-                    if(child.visible)
+                for (let child of this.$children) {
+                    if (child.visible) {
                         this.visible = true
+                    }
+                }
             },
-            checkHasError(){
-
+            checkHasError() {
                 this.hasError = false
 
-                for(let child of this.$children)
-                    if(child.hasError===true)
+                for (let child of this.$children) {
+                    if (child.hasError === true) {
                         this.hasError = true
+                    }
+                }
             }
         }
     }

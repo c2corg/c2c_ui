@@ -6,23 +6,23 @@ export default {
     // from https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L194
     stringDivider(str, width, spaceReplacer) {
         if (str && str.length > width) {
-            let p = width;
+            let p = width
             while (p > 0 && (str[p] !== ' ' && str[p] !== '-')) {
-                p--;
+                p--
             }
 
             if (p > 0) {
-                let left;
+                let left
                 if (str.substring(p, p + 1) === '-') {
-                    left = str.substring(0, p + 1);
+                    left = str.substring(0, p + 1)
                 } else {
-                    left = str.substring(0, p);
+                    left = str.substring(0, p)
                 }
-                const right = str.substring(p + 1);
-                return left + spaceReplacer + this.stringDivider(right, width, spaceReplacer);
+                const right = str.substring(p + 1)
+                return left + spaceReplacer + this.stringDivider(right, width, spaceReplacer)
             }
         }
-        return str;
+        return str
     },
 
     // from https://github.com/camptocamp/ngeo/blob/master/src/download/service.js#L27
@@ -34,8 +34,8 @@ export default {
         const agent = navigator.userAgent
         const isSafari = agent.indexOf('Safari') != -1 && agent.indexOf('Chrome') == -1
         const fileType = opt_fileType !== undefined && !isSafari ? opt_fileType : 'text/plain;charset=utf-8'
-        const blob = new Blob([content], {type: fileType})
+        const blob = new Blob([content], { type: fileType })
 
         saveAs(blob, fileName)
-    },
+    }
 }

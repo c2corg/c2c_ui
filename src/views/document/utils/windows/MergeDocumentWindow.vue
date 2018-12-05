@@ -66,25 +66,25 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [
+        mixins: [
             requireDocumentProperty
         ],
 
-        data(){
+        data() {
             return {
-                targetDocument:null,
+                targetDocument: null
             }
         },
 
-        methods:{
-            hide(){
+        methods: {
+            hide() {
                 this.$refs.modalWindow.hide()
             },
-            show(){
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            mergeDocuments(){
+            mergeDocuments() {
                 if (window.confirm(this.$gettext('Are you sure you want to merge?'))) {
                     c2c.moderator.mergeDocuments(
                         this.document.document_id,

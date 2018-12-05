@@ -30,12 +30,12 @@
 
 <script>
     export default {
-        props:{
-            to:{
-                type:Object,
-                required:true,
+        props: {
+            to: {
+                type: Object,
+                required: true
             }
-        },
+        }
     }
 </script>
 
@@ -76,7 +76,5 @@
 .card-content:not(:last-child){
     box-shadow:  0 1px 2px rgba(10, 10, 10, 0.1);
 }
-
-
 
 </style>

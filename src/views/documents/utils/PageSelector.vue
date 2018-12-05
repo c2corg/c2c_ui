@@ -40,29 +40,28 @@
     const queryLimit = 30
 
     export default {
-        props:{
+        props: {
             documents: {
                 type: Object,
-                required: true,
-            },
+                required: true
+            }
         },
 
-        data(){
-            return {queryLimit}
+        data() {
+            return { queryLimit }
         },
 
-        computed:{
-            offset(){
+        computed: {
+            offset() {
                 return parseInt(this.$route.query.offset || 0)
             },
-            pageCount(){
+            pageCount() {
                 return Math.min(Math.floor(this.documents.total / queryLimit) + 1, 99)
             },
-            currentPage(){
+            currentPage() {
                 return Math.floor(this.offset / queryLimit) + 1
             },
-            pageLinks(){
-
+            pageLinks() {
                 // Less than 8 pages :
                 //    (1) (2) (3) (4)
 
@@ -75,30 +74,30 @@
                 // else
                 //    (1) ... (K) (L) (M) ... (Z)
 
-                if(this.pageCount < 8){
+                if (this.pageCount < 8) {
                     let result = []
 
-                    for(let i=1;i<=this.pageCount;i++)
+                    for (let i = 1; i <= this.pageCount; i++) {
                         result.push(i)
+                    }
 
                     return result
-
-                } else if(this.currentPage < 5) {
-                    return [1,2,3,4,5,null,this.pageCount]
-                } else if(this.currentPage > this.pageCount-4) {
-                    return [1,null,this.pageCount-4,this.pageCount-3,this.pageCount-2,this.pageCount-1,this.pageCount]
+                } else if (this.currentPage < 5) {
+                    return [1, 2, 3, 4, 5, null, this.pageCount]
+                } else if (this.currentPage > this.pageCount - 4) {
+                    return [1, null, this.pageCount - 4, this.pageCount - 3, this.pageCount - 2, this.pageCount - 1, this.pageCount]
                 } else {
-                    return [1, null, this.currentPage-1, this.currentPage, this.currentPage+1, null, this.pageCount]
+                    return [1, null, this.currentPage - 1, this.currentPage, this.currentPage + 1, null, this.pageCount]
                 }
-            },
+            }
         },
 
-        methods:{
+        methods: {
 
-            pageQuery(page){
+            pageQuery(page) {
                 var query = Object.assign({}, this.$route.query)
-                query.offset = (page-1) * queryLimit
-                return {name : this.$route.name, params : this.$route.params, query}
+                query.offset = (page - 1) * queryLimit
+                return { name: this.$route.name, params: this.$route.params, query }
             }
         }
     }

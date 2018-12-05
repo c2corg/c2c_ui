@@ -78,47 +78,47 @@
 
     export default {
 
-        data(){
+        data() {
             return {
-                promise:null,
+                promise: null
             }
         },
 
         computed: {
-            preferences(){
+            preferences() {
                 return this.promise.data
             }
         },
 
-        created(){
+        created() {
             this.promise = c2c.userProfile.preferences.get()
         },
 
-        methods:{
-            toggle(item, array){
+        methods: {
+            toggle(item, array) {
                 if (array.indexOf(item) > -1) {
                     array.splice(array.indexOf(item), 1)
                 } else {
-                    array.push(item);
+                    array.push(item)
                 }
 
                 this.save()
             },
 
-            addArea(area){
+            addArea(area) {
                 this.preferences.areas.push(area)
                 this.save()
             },
 
-            removeArea(area){
+            removeArea(area) {
                 this.preferences.areas = this.preferences.areas.filter(doc => doc.document_id != area.document_id)
                 this.save()
             },
 
-            save(){
+            save() {
                 c2c.userProfile.preferences.post(this.preferences)
-            },
-        },
+            }
+        }
     }
 </script>
 

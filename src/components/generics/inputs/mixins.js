@@ -9,72 +9,77 @@ export const baseMixin = {
             type: Boolean,
             default: null
         },
-        errorMessage:{
-            type:String,
-            default:null,
+        errorMessage: {
+            type: String,
+            default: null
         },
         i18n: {
-            type:Boolean,
-            default:false,
+            type: Boolean,
+            default: false
         },
         helper: {
-            type:String,
-            default:null,
-        },
+            type: String,
+            default: null
+        }
     },
 
     computed: {
-        value_:{
-            get(){
+        value_: {
+            get() {
                 return this.value
             },
-            set(value){
-                if(!this.disabled)
-                    this.$emit("input", value)
+            set(value) {
+                if (!this.disabled) {
+                    this.$emit('input', value)
+                }
             }
         },
 
-        hasError(){
+        hasError() {
             return Boolean(this.errorMessage)
-        },
+        }
     }
 }
 
 export const arrayMixin = {
 
-    props:{
+    props: {
         value: {
-            type:Array,
-            default:null,
-        },
+            type: Array,
+            default: null
+        }
     },
 
     computed: {
-        value_:{
-            get(){
+        value_: {
+            get() {
                 return this.value ? this.value : []
             },
-            set(value){
-                if(!this.disabled)
-                    this.$emit("input", value)
+            set(value) {
+                if (!this.disabled) {
+                    this.$emit('input', value)
+                }
             }
-        },
+        }
     },
 
-    methods:{
-        toggle(item){
-            if(this.disabled)
+    methods: {
+        toggle(item) {
+            if (this.disabled) {
                 return
+            }
 
-            let newValue = this.value_.slice(0);
+            let newValue = this.value_.slice(0)
 
-            if(!newValue.includes(item))
+            if (!newValue.includes(item)) {
                 newValue.push(item)
-            else
+            } else {
                 newValue.splice(newValue.indexOf(item), 1)
+            }
 
-            if(newValue.length !== 0 || !this.required)
+            if (newValue.length !== 0 || !this.required) {
                 this.value_ = newValue
+            }
         }
     }
 }

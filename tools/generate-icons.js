@@ -1,7 +1,7 @@
 const fs = require('fs');
 const parser = require('xml2js');
 
-const HEADER = "// Auto-generated file by generate-icons.js\n\n"
+const HEADER = "// Auto-generated file by generate-icons.js\n/* eslint-disable */\n\n"
 
 const getJsTemplate = function(prefix, name, width, height, svgPathData){
     return HEADER + `

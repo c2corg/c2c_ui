@@ -25,31 +25,31 @@
     export default {
         components: {
             FormRow,
-            FormInput,
+            FormInput
         },
 
-        mixins : [ requireFieldProperty, requireDocumentProperty ],
+        mixins: [ requireFieldProperty, requireDocumentProperty ],
 
-        props : {
-            isExpanded:{
-                type:Boolean,
-                default:false
+        props: {
+            isExpanded: {
+                type: Boolean,
+                default: false
             },
-            helper:{
-                type:String,
-                default:undefined,
+            helper: {
+                type: String,
+                default: undefined
             },
-            label:{
-                type:String,
-                default:undefined,
+            label: {
+                type: String,
+                default: undefined
             }
         },
 
         computed: {
-            visible(){
+            visible() {
                 return this.$refs.input.visible
             },
-            hasError(){
+            hasError() {
                 return this.$refs.input.hasError === true
             }
         }

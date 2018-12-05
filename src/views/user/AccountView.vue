@@ -80,35 +80,35 @@
 
 <script>
 
-    import c2c from "@/js/apis/c2c"
+    import c2c from '@/js/apis/c2c'
 
-    import FormField from "./utils/FormField"
-    import BaseForm from "./utils/BaseForm"
+    import FormField from './utils/FormField'
+    import BaseForm from './utils/BaseForm'
 
     export default {
 
         components: {
             FormField,
-            BaseForm,
+            BaseForm
         },
 
-        data(){
+        data() {
             return {
-                username:this.$user.userName,
-                currentpassword:"",
-                newpassword:"",
-                email:"",
-                name:this.$user.name,
-                forum_username:this.$user.forumUsername,
-                is_profile_public:null,
+                username: this.$user.userName,
+                currentpassword: '',
+                newpassword: '',
+                email: '',
+                name: this.$user.name,
+                forum_username: this.$user.forumUsername,
+                is_profile_public: null,
                 original_mail: null,
                 serverErrors: null,
 
-                promise:{},
+                promise: {}
             }
         },
 
-        created(){
+        created() {
             c2c.userProfile.account.get().then(response => {
                 this.email = response.data.email
                 this.is_profile_public = response.data.is_profile_public
@@ -116,11 +116,11 @@
             })
         },
 
-        methods:{
+        methods: {
 
-            save(){
-                function newOrNull(fieldValue, originalValue){
-                    return fieldValue===originalValue ? null : fieldValue
+            save() {
+                function newOrNull(fieldValue, originalValue) {
+                    return fieldValue === originalValue ? null : fieldValue
                 }
 
                 this.promise = this.$user.updateAccount(
@@ -130,9 +130,11 @@
                     newOrNull(this.email, this.original_mail),
                     this.is_profile_public,
                     this.newpassword ? this.newpassword : null)
-                .catch(error => this.serverErrors = error.response.data )
+                    .catch((error) => {
+                        this.serverErrors = error.response.data
+                    })
             }
-        },
+        }
     }
 
 </script>

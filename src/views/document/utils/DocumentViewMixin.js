@@ -33,136 +33,133 @@ export default {
         RecentOutingsBox,
         ToolBox,
         RoutesBox,
-        ImagesBox,
+        ImagesBox
     },
 
-    mixins : [ viewModeMixin ],
+    mixins: [ viewModeMixin ],
 
-
-    props:{
-        draft:{
-            type:Object,
-            default:null,
+    props: {
+        draft: {
+            type: Object,
+            default: null
         }
     },
 
     data() {
         return {
-            promise:null,
+            promise: null
         }
     },
 
-    computed:{
+    computed: {
         /*
-        * properties that are deducted from URL
-        */
-        documentId(){
+         * properties that are deducted from URL
+         */
+        documentId() {
             return parseInt(this.$route.params.id)
         },
-        documentType(){
-            return this.$route.name.split("-")[0]
+        documentType() {
+            return this.$route.name.split('-')[0]
         },
-        fields(){
+        fields() {
             return constants.objectDefinitions[this.documentType].fields
         },
-        expected_lang(){
-            return this.$route.params.lang || this.$language.current || "fr"
+        expected_lang() {
+            return this.$route.params.lang || this.$language.current || 'fr'
         },
 
         /*
-        * properties computed when document is loaded
-        */
-        document(){
-            if(!this.promise || !this.promise.data)
+         * properties computed when document is loaded
+         */
+        document() {
+            if (!this.promise || !this.promise.data) {
                 return null
+            }
 
             let doc = this.isVersionView ? this.promise.data.document : this.promise.data
 
             return doc
         },
 
-        version(){
-            if(!this.promise.data || !this.isVersionView)
+        version() {
+            if (!this.promise.data || !this.isVersionView) {
                 return null
+            }
 
             return this.promise.data.version
         },
 
-        locale(){
+        locale() {
             return this.document ? this.document.cooked : null
         },
 
-        lang(){
+        lang() {
             return this.document ? this.document.cooked.lang : null
         }
     },
 
-    watch:{
+    watch: {
         '$route': {
             handler: 'loadDocument',
             immediate: true
-        },
+        }
     },
 
-    methods:{
-        loadDocument($route){
-
-            if(this.isVersionView){
+    methods: {
+        loadDocument($route) {
+            if (this.isVersionView) {
                 this.promise = c2c[this.documentType].getVersion(
                     this.documentId,
                     this.$route.params.lang,
                     this.$route.params.version,
-                    true,
+                    true
                 ).then(response => {
-
-                    //version object with all data
+                    // version object with all data
                     response.data.version.next_version_id = response.data.next_version_id
                     response.data.version.previous_version_id = response.data.previous_version_id
 
-                    //versionned datas are poor...
+                    // versionned datas are poor...
                     response.data.document.areas = []
                     response.data.document.creator = null
                     response.data.document.associations = {
-                        articles:[],
-                        books:[],
-                        images:[],
-                        users:[],
-                        waypoints:[],
-                        waypoint_children:[],
-                        all_routes:{
-                            documents:[],
+                        articles: [],
+                        books: [],
+                        images: [],
+                        users: [],
+                        waypoints: [],
+                        waypoint_children: [],
+                        all_routes: {
+                            documents: []
                         },
-                        recent_outings:{
-                            documents:[],
+                        recent_outings: {
+                            documents: []
                         }
                     }
                 })
-
-            } else if(this.isDraftView){
+            } else if (this.isDraftView) {
                 this.promise = {}
 
                 c2c.cooker(this.draft.locales[0]).then(response => {
                     this.draft.cooked = response.data
                     this.promise.data = this.draft
                 })
-
             } else { // normal mode
-
-                if(this.document && $route.params.id == this.document.document_id && this.expected_lang === this.lang)
+                if (this.document && $route.params.id == this.document.document_id && this.expected_lang === this.lang) {
                     return
+                }
 
                 this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang).then(this.updateUrl)
             }
         },
 
-        updateUrl(){
+        updateUrl() {
             var title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
 
             // transform any unocde into it'sd ascii value
-            title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
             // and clean
-            title = title.toLowerCase().replace(/[^a-z0-1]+/g, "-")
+            title = title.toLowerCase().replace(/[^a-z0-1]+/g, '-')
 
             const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
             this.$router.replace(path)

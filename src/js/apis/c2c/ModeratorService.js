@@ -1,4 +1,4 @@
-function ModeratorService(api){
+function ModeratorService(api) {
     this.api = api
 }
 
@@ -6,11 +6,11 @@ function ModeratorService(api){
  * Protection service
  */
 ModeratorService.prototype.protectDocument = function(documentId) {
-    return this.api.post('/documents/protect', {'document_id': documentId})
+    return this.api.post('/documents/protect', { 'document_id': documentId })
 }
 
 ModeratorService.prototype.unprotectDocument = function(documentId) {
-    return this.api.post('/documents/unprotect', {'document_id': documentId})
+    return this.api.post('/documents/unprotect', { 'document_id': documentId })
 }
 
 /**
@@ -26,7 +26,6 @@ ModeratorService.prototype.deleteLocale = function(documentId, lang) {
     return this.api.delete(url, {})
 }
 
-
 /**
  * Merge service
  */
@@ -39,7 +38,6 @@ ModeratorService.prototype.mergeDocuments = function(sourceDocumentId, targetDoc
     return this.api.post('/documents/merge', data)
 }
 
-
 ModeratorService.prototype.revertDocument = function(documentId, lang, versionId) {
     return this.api.post('/documents/revert', {
         'document_id': documentId,
@@ -48,20 +46,19 @@ ModeratorService.prototype.revertDocument = function(documentId, lang, versionId
     })
 }
 
-
 /**
  * block account service
  */
 ModeratorService.prototype.isAccountBlocked = function(userId) {
-    return this.api.get('/users/blocked/' + userId);
+    return this.api.get('/users/blocked/' + userId)
 }
 
 ModeratorService.prototype.blockAccount = function(userId) {
-    return this.api.post('/users/block', {'user_id': userId})
+    return this.api.post('/users/block', { 'user_id': userId })
 }
 
 ModeratorService.prototype.unblockAccount = function(userId) {
-    return this.api.post('/users/unblock', {'user_id': userId})
+    return this.api.post('/users/unblock', { 'user_id': userId })
 }
 
 export default ModeratorService

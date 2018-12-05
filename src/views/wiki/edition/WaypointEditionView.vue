@@ -49,7 +49,6 @@
                 <form-input-row :document="document" :field="fields.product_types" />
                 <form-input-row :document="document" :field="fields.slackline_types" />
 
-
             </tab-item>
 
             <tab-item :title="$gettext('Numbers')">
@@ -115,13 +114,12 @@
     </edition-container>
 </template>
 
-
 <script>
 
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ],
+        mixins: [ DocumentEditionViewMixin ]
     }
 
 </script>

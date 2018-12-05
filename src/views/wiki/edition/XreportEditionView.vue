@@ -72,13 +72,12 @@
     </edition-container>
 </template>
 
-
 <script>
 
-import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
+    import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
-export default {
-    mixins: [ DocumentEditionViewMixin ],
-}
+    export default {
+        mixins: [ DocumentEditionViewMixin ]
+    }
 
 </script>

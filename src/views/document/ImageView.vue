@@ -66,13 +66,13 @@
 <script>
     import imageUrls from '@/js/image-urls'
 
-    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
+    import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     export default {
-        mixins : [ DocumentViewMixin ],
+        mixins: [ DocumentViewMixin ],
 
-        methods:{
-            getImageUrl:imageUrls.get,
+        methods: {
+            getImageUrl: imageUrls.get
         }
     }
 </script>

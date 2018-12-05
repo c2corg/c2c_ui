@@ -9,10 +9,10 @@
 
 <script>
     export default {
-        props : {
-            book:{
-                type:Object,
-                required:true,
+        props: {
+            book: {
+                type: Object,
+                required: true
             }
         }
     }

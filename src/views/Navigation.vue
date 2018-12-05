@@ -146,26 +146,26 @@
 </template>
 
 <script>
-    import config from "@/js/config"
+    import config from '@/js/config'
 
     export default {
 
         data() {
             return {
-                searchText:'',
-                hideSearchInput:true, // only on small screen
+                searchText: '',
+                hideSearchInput: true // only on small screen
             }
         },
 
         computed: {
-            siteConfiguration(){
+            siteConfiguration() {
                 return config
             }
         },
 
-        forumUrl : config.urls.forum,
+        forumUrl: config.urls.forum,
 
-        created(){
+        created() {
             window.addEventListener('click', this.onClick)
         },
 
@@ -173,21 +173,22 @@
 
         methods: {
 
-            go(document){
+            go(document) {
                 this.$router.push({
                     name: this.$documentUtils.getDocumentType(document.type),
                     params: { id: document.document_id }
                 })
             },
 
-            setUrlsConfiguration(name){
+            setUrlsConfiguration(name) {
                 config.setUrlsName(name)
                 this.$router.go()
             },
 
-            onClick(event){
-                if(!this.$refs.searchInputContainer.contains(event.target))
+            onClick(event) {
+                if (!this.$refs.searchInputContainer.contains(event.target)) {
                     this.hideSearchInput = true
+                }
             }
         }
     }
@@ -232,7 +233,6 @@
         align-items: center;
         line-height: 1.5;
     }
-
 
     @media screen and (max-width: $tablet) {
         .navigation-brand{

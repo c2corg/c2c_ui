@@ -9,16 +9,16 @@
 </template>
 
 <script>
-    import { requireDocumentProperty } from "@/js/properties-mixins"
+    import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default{
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
         props: {
-            lang:{
-                type:String,
-                required:true,
-            },
-        },
+            lang: {
+                type: String,
+                required: true
+            }
+        }
     }
 </script>

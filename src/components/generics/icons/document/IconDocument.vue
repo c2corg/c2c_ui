@@ -6,6 +6,6 @@
     import { requireDocumentTypeProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentTypeProperty ],
+        mixins: [ requireDocumentTypeProperty ]
     }
 </script>

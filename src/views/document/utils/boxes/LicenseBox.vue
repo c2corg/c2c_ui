@@ -50,43 +50,43 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        computed:{
+        computed: {
             // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L47
             // collaborative means CC-By-Sa
 
-            license(){
-
-                if(['route', 'waypoint', 'area', 'book'].includes(this.documentType))
+            license() {
+                if (['route', 'waypoint', 'area', 'book'].includes(this.documentType)) {
                     return 'by-sa'
+                }
 
-
-                if(['outing', 'profile', 'xreport'].includes(this.documentType))
+                if (['outing', 'profile', 'xreport'].includes(this.documentType)) {
                     return 'by-nc-nd'
-
-                if(this.documentType=="article"){
-
-                    if(this.document.article_type=='collab')
-                        return 'by-sa'
-                    else if (this.document.article_type=='personal')
-                        return 'by-nc-nd' // is_personal : true
-                    else
-                        throw `Unexpected article_type : ${this.document.article_type}`
                 }
 
-                if(this.documentType=="image"){
-
-                    if(this.document.image_type=='collaborative')
+                if (this.documentType == 'article') {
+                    if (this.document.article_type == 'collab') {
                         return 'by-sa'
-                    else if (this.document.image_type=='personal')
+                    } else if (this.document.article_type == 'personal') {
                         return 'by-nc-nd'
-                    else if (this.document.image_type=='copyright')
-                        return 'copyright'
-                    else
-                        throw `Unexpected image_type : ${this.document.image_type}`
+                    } else {
+                        throw new Error(`Unexpected article_type : ${this.document.article_type}`)
+                    }
                 }
-            },
+
+                if (this.documentType == 'image') {
+                    if (this.document.image_type == 'collaborative') {
+                        return 'by-sa'
+                    } else if (this.document.image_type == 'personal') {
+                        return 'by-nc-nd'
+                    } else if (this.document.image_type == 'copyright') {
+                        return 'copyright'
+                    } else {
+                        throw new Error(`Unexpected image_type : ${this.document.image_type}`)
+                    }
+                }
+            }
         }
     }
 </script>

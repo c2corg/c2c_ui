@@ -2,7 +2,7 @@ import config from '@/js/config.js'
 import constants from '@/js/constants'
 import BaseApi from '@/js/apis/BaseApi.js'
 
-import {cook_object} from '@/js/markdown.js'
+import { cook_object } from '@/js/markdown.js'
 
 import UserProfileService from './UserProfileService.js'
 import DocumentService from './DocumentService.js'
@@ -10,7 +10,7 @@ import ModeratorService from './ModeratorService.js'
 import AssociationService from './AssociationService.js'
 import FeedService from './FeedService.js'
 
-function c2c(){
+function CamptocampApi() {
     // inherits properties
     BaseApi.call(this, config.urls.api)
 
@@ -19,7 +19,7 @@ function c2c(){
     this.association = new AssociationService(this)
     this.feed = new FeedService(this)
 
-    for(let type of constants.documentTypes){
+    for (let type of constants.documentTypes) {
         this[type] = new DocumentService(this, type)
     }
 
@@ -36,28 +36,27 @@ function c2c(){
 }
 
 // inherits prototype
-c2c.prototype = Object.create(BaseApi.prototype);
+CamptocampApi.prototype = Object.create(BaseApi.prototype)
 
 // restore good contructor
-c2c.prototype.constructor = c2c;
+CamptocampApi.prototype.constructor = CamptocampApi
 
-c2c.prototype.setAuthorizationToken = function(token){
-    if(token){
+CamptocampApi.prototype.setAuthorizationToken = function(token) {
+    if (token) {
         this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"'
-    } else if(this.axios.defaults.headers.common.Authorization){
+    } else if (this.axios.defaults.headers.common.Authorization) {
         delete this.axios.defaults.headers.common.Authorization
     }
 }
 
 /* some function that not belong to a dedicated service */
 
-c2c.prototype.search = function(params){
-    return this.get('/search', {params})
+CamptocampApi.prototype.search = function(params) {
+    return this.get('/search', { params })
 }
-c2c.prototype.getRecentChanges = function(params){
-    return this.get('/documents/changes', {params})
+CamptocampApi.prototype.getRecentChanges = function(params) {
+    return this.get('/documents/changes', { params })
 }
-
 
 /* image service, I'm lazy. TODO :
  * uploadImage() must be a dedicated API in @/js/uploadFileApi.js
@@ -67,16 +66,16 @@ c2c.prototype.getRecentChanges = function(params){
 /**
  * Upload images service
  */
-c2c.prototype.uploadImage = function(file, onUploadProgress) {
-    const formData = new FormData();
+CamptocampApi.prototype.uploadImage = function(file, onUploadProgress) {
+    const formData = new FormData()
 
-    formData.append('file', file);
+    formData.append('file', file)
 
     const requestConfig = {
         headers: {
             'Content-Type': undefined // overwrite with undefined
         },
-        onUploadProgress,
+        onUploadProgress
     }
 
     /* can't user post_ helper: it's not the API url */
@@ -84,15 +83,14 @@ c2c.prototype.uploadImage = function(file, onUploadProgress) {
     return this.axios.post(config.urls.imageBackend + '/upload', formData, requestConfig)
 }
 
-c2c.prototype.createImages = function(images){
-    return this.post('/images/list', {images})
+CamptocampApi.prototype.createImages = function(images) {
+    return this.post('/images/list', { images })
 }
 
-c2c.prototype.cooker = function(data){
-
+CamptocampApi.prototype.cooker = function(data) {
     const response = {
-        data:cook_object(data),
-        then(callback){
+        data: cook_object(data),
+        then(callback) {
             callback(response)
         }
     }
@@ -101,4 +99,4 @@ c2c.prototype.cooker = function(data){
 }
 
 // export a singleton
-export default new c2c();
+export default new CamptocampApi()

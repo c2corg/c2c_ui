@@ -16,69 +16,69 @@
 <script>
     import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
-    import mixin from "./QueryItemMixin.js"
+    import mixin from './QueryItemMixin.js'
 
     export default {
         mixins: [mixin],
 
-        props:{
-            documentTypes:{
-                type:Array,
-                required: true,
+        props: {
+            documentTypes: {
+                type: Array,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                documents:null,
+                documents: null
             }
         },
 
-        watch:{
-            "$route":{
-                handler:"load",
-                immediate: true,
+        watch: {
+            '$route': {
+                handler: 'load',
+                immediate: true
             }
         },
 
-        methods:{
-            getUrlValue(documentType){
+        methods: {
+            getUrlValue(documentType) {
                 let key = constants.objectDefinitions[documentType].letter
 
                 return this.$route.query[key]
             },
-            setUrlValue(documentType, value){
+            setUrlValue(documentType, value) {
                 let key = constants.objectDefinitions[documentType].letter
 
                 var query = Object.assign({}, this.$route.query)
                 query[key] = value === '' ? undefined : value
 
-                if(query[key]!==this.$route.query[key]){
-                    this.$router.push({query: query})
+                if (query[key] !== this.$route.query[key]) {
+                    this.$router.push({ query: query })
                 }
             },
 
-            getValue(documentType){
+            getValue(documentType) {
                 let urlValue = this.getUrlValue(documentType)
 
-                return urlValue ? String(urlValue).split(",").map(num => parseInt(num, 10)) : []
+                return urlValue ? String(urlValue).split(',').map(num => parseInt(num, 10)) : []
             },
 
-            setValue(documentType, value){
-                this.setUrlValue(documentType, value.join(","))
+            setValue(documentType, value) {
+                this.setUrlValue(documentType, value.join(','))
             },
 
-            load(){
+            load() {
                 this.documents = []
 
-                for(let documentType of this.documentTypes){
-                    for(let documentId of this.getValue(documentType)){
+                for (let documentType of this.documentTypes) {
+                    for (let documentId of this.getValue(documentType)) {
                         this.documents.push(this.getDocument(documentType, documentId))
                     }
                 }
             },
 
-            getDocument(documentType, documentId){
+            getDocument(documentType, documentId) {
                 let result = {
                     document_id: documentId,
                     loading: true
@@ -92,27 +92,28 @@
                 return result
             },
 
-            add(document){
+            add(document) {
                 let documentType = this.$documentUtils.getDocumentType(document.type)
 
                 let value = this.getValue(documentType)
 
-                if(value.includes(document.document_id))
+                if (value.includes(document.document_id)) {
                     return
+                }
 
                 value.push(document.document_id)
 
                 this.setValue(documentType, value)
             },
 
-            remove(document){
+            remove(document) {
                 let documentType = this.$documentUtils.getDocumentType(document.type)
                 let value = this.getValue(documentType)
                 // remove
                 value.splice(value.indexOf(document.document_id), 1)
-                
+
                 this.setValue(documentType, value)
-            },
+            }
         }
     }
 </script>

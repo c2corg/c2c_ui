@@ -42,37 +42,37 @@
 </template>
 
 <script>
-    import c2c from "@/js/apis/c2c"
+    import c2c from '@/js/apis/c2c'
 
     export default {
-        props : {
-            document_id:{
+        props: {
+            document_id: {
                 type: Number,
                 required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                promise:null
+                promise: null
             }
         },
 
         computed: {
-            document(){
+            document() {
                 return this.promise.data ? this.promise.data : null
             }
         },
 
         watch: {
-            document_id:{
-                handler:"load",
-                immediate: true,
+            document_id: {
+                handler: 'load',
+                immediate: true
             }
         },
 
-        methods:{
-            load(){
+        methods: {
+            load() {
                 this.promise = c2c.image.get(this.document_id)
             }
         }

@@ -8,8 +8,8 @@
     export default {
         mixins: [ requireDocumentProperty ],
 
-        computed:{
-            title(){
+        computed: {
+            title() {
                 return this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang)
             }
         }

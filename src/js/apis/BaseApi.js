@@ -1,16 +1,14 @@
 import axios from 'axios'
 import config from '@/js/config'
 
-///////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :
 // let result = axios.get(url).then(response => result.response = response)
 //
 // but, Promise prototype is not writable
 // So let's polyfill it, whith a Promise-like object
 
-
-const ApiData = function(promise){
-
+const ApiData = function(promise) {
     let self = this
 
     this.response = null
@@ -32,32 +30,31 @@ const ApiData = function(promise){
     )
 }
 
-ApiData.prototype.then = function(callback){
+ApiData.prototype.then = function(callback) {
     this.promise_.then(callback)
     return this
 }
 
-ApiData.prototype.catch = function(callback){
+ApiData.prototype.catch = function(callback) {
     this.promise_.catch(callback)
     return this
 }
 
-const BaseApi = function(apiUrl){
-
+const BaseApi = function(apiUrl) {
     this.axios = axios.create({
         // axios instances shares same common headers. this trick fix this.
-        headers:{common:{}},
-        baseURL: apiUrl,
+        headers: { common: {} },
+        baseURL: apiUrl
     })
 }
 
-
-if(config.urls.readWrite){
+if (config.urls.readWrite) {
     BaseApi.prototype.checkReadOnly = function() {}
 } else {
-    BaseApi.prototype.checkReadOnly = function(safeCall){
-        if(!safeCall)
-            throw new Error("This build is read only")
+    BaseApi.prototype.checkReadOnly = function(safeCall) {
+        if (!safeCall) {
+            throw new Error('This build is read only')
+        }
     }
 }
 
@@ -65,21 +62,21 @@ if(config.urls.readWrite){
  * Generic request helpers
  */
 
-BaseApi.prototype.get = function(url, params){
+BaseApi.prototype.get = function(url, params) {
     return new ApiData(this.axios.get(url, params))
 }
 
-BaseApi.prototype.post = function(url, body, safeCall){
+BaseApi.prototype.post = function(url, body, safeCall) {
     this.checkReadOnly(safeCall)
     return new ApiData(this.axios.post(url, body))
 }
 
-BaseApi.prototype.put = function(url, body, safeCall){
+BaseApi.prototype.put = function(url, body, safeCall) {
     this.checkReadOnly(safeCall)
     return new ApiData(this.axios.put(url, body))
 }
 
-BaseApi.prototype.delete = function(url, body, safeCall){
+BaseApi.prototype.delete = function(url, body, safeCall) {
     this.checkReadOnly(safeCall)
     return new ApiData(this.axios.delete(url, body))
 }

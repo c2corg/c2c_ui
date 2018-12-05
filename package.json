@@ -36,13 +36,15 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.10",
-    "@vue/cli-plugin-typescript": "^3.0.3",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.10",
+    "@vue/cli-plugin-typescript": "^3.2.0",
     "@vue/cli-service": "^3.0.0-rc.10",
-    "typescript": "^3.0.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/eslint-config-typescript": "^3.2.0",
     "cross-env": "^5.2.0",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.1.0",
+    "typescript": "^3.0.0",
     "vue-template-compiler": "^2.5.16",
     "webpack-bundle-analyser": "^1.4.0",
     "xml2js": "^0.4.19"
@@ -54,14 +56,26 @@
     },
     "extends": [
       "plugin:vue/recommended",
-      "eslint:recommended"
+      "eslint:recommended",
+      "@vue/standard"
     ],
     "rules": {
       "no-unused-vars": "warn",
       "no-console": "warn",
+      "indent": [
+        "off",
+        4
+      ],
       "vue/html-indent": [
         "warn",
         4
+      ],
+      "vue/script-indent": [
+        "warn",
+        4,
+        {
+          "baseIndent":1
+        }
       ],
       "vue/no-v-html": "error",
       "vue/order-in-components": "warn",
@@ -69,7 +83,11 @@
       "vue/require-prop-types": "warn",
       "vue/require-default-prop": "warn",
       "vue/attributes-order": "off",
-      "vue/max-attributes-per-line": "off"
+      "vue/max-attributes-per-line": "off",
+      "eqeqeq": "off",
+      "camelcase": "off",
+      "brace-style": ["warn", "1tbs", { "allowSingleLine": false }],
+      "space-before-function-paren": ["warn", "never"]
     },
     "parserOptions": {
       "parser": "babel-eslint"

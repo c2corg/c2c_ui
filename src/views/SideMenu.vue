@@ -43,14 +43,14 @@
 
 <script>
     export default {
-        computed:{
-            menuItems(){
+        computed: {
+            menuItems() {
                 return [
-                    {name:'topoguide', icon:'icon-topoguide', text:this.$gettext('Topoguide'), activeFor:['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas']},
-                    {name:'outings', icon:'icon-outing', text:this.$gettext('Outings'), activeFor:['outing']},
-                    {name:'forum', icon:'icon-forum', text:this.$gettext('Forum'), activeFor:[]},
-                    {name:'serac', icon:'icon-xreport', text:this.$gettext('Accident database'), activeFor:['xreports', 'xreport', 'xreport-add']},
-                    {name:'articles', icon:'icon-article', text:this.$gettext('Articles'), activeFor:['article']},
+                    { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
+                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('Outings'), activeFor: ['outing'] },
+                    { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
+                    { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
+                    { name: 'articles', icon: 'icon-article', text: this.$gettext('Articles'), activeFor: ['article'] }
                 ]
             }
         }

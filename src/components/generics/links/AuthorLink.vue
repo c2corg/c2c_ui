@@ -6,11 +6,11 @@
 
 <script>
     export default {
-        props : {
+        props: {
             author: {
-                type:Object,
-                required:true,
-            },
-        },
+                type: Object,
+                required: true
+            }
+        }
     }
 </script>

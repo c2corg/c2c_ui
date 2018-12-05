@@ -18,7 +18,7 @@ import {
     faCalendar,
     faCamera,
     faCheckCircle,
-//    faCheckSquare,
+    //    faCheckSquare,
     faChevronLeft,
     faChevronRight,
     faCircle,
@@ -82,22 +82,21 @@ import {
     faUserCheck,
     faUserLock,
     faUsers,
-    faWrench,
+    faWrench
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
     faCircle as faCircleRegular,
     faClock as faClockRegular,
     faHourglass as faHourglassRegular,
-    faTrashAlt as faTrashAltRegular,
+    faTrashAlt as faTrashAltRegular
 } from '@fortawesome/free-regular-svg-icons'
-
 
 import {
     faCreativeCommons,
     faFacebook,
     faGoogle,
-    faTwitter,
+    faTwitter
 } from '@fortawesome/free-brands-svg-icons'
 
 import {
@@ -105,9 +104,8 @@ import {
     draft as qualityDraft,
     medium as qualityMedium,
     fine as qualityFine,
-    great as qualityGreat,
+    great as qualityGreat
 } from '@/assets/font-awesome-custom/js/quality'
-
 
 import {
     hiking as activityHiking,
@@ -122,7 +120,6 @@ import {
     snow_ice_mixed as activitySnow_ice_mixed,
     via_ferrata as activityVia_ferrata
 } from '@/assets/font-awesome-custom/js/activity'
-
 
 import {
 
@@ -157,15 +154,20 @@ import {
     waterpoint as waypointwaterpoint,
     waypoints as waypointwaypoints,
     weather_station as waypointweather_station,
-    webcam as waypointwebcam,
+    webcam as waypointwebcam
 
 } from '@/assets/font-awesome-custom/js/waypoint'
 
+import {
+    outing as documentTypeOuting
+} from '@/assets/font-awesome-custom/js/document-type'
+
 // registered globally
 
-export default function install(Vue){
-
+export default function install(Vue) {
     library.add(
+
+        documentTypeOuting,
 
         waypointaccess,
         waypointbase_camp,
@@ -218,7 +220,7 @@ export default function install(Vue){
         qualityFine,
         qualityGreat,
 
-        //solid icons
+        // solid icons
         faAngleDown,
         faArrowsAltV,
         faArrowRight,
@@ -233,7 +235,7 @@ export default function install(Vue){
         faCalendar,
         faCamera,
         faCheckCircle,
-    //    faCheckSquare,
+        //    faCheckSquare,
         faChevronLeft,
         faChevronRight,
         faCircle,
@@ -285,7 +287,7 @@ export default function install(Vue){
         faSignOutAlt,
         faSortAmountUp,
         faStar,
-    //    faSquare,
+        //    faSquare,
         faSun,
         faTachometerAlt,
         faTag,
@@ -300,17 +302,17 @@ export default function install(Vue){
         faUsers,
         faWrench,
 
-        //regular icons
+        // regular icons
         faCircleRegular,
         faClockRegular,
         faHourglassRegular,
         faTrashAltRegular,
 
-        //brands icons
+        // brands icons
         faCreativeCommons,
         faFacebook,
         faGoogle,
-        faTwitter,
+        faTwitter
     )
 
     Vue.component('fa-icon', FontAwesomeIcon)

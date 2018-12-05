@@ -63,75 +63,79 @@
 
     </div>
 </template>
+
 <script>
     import c2c from '@/js/apis/c2c'
 
     export default {
 
-        data(){
+        data() {
             return {
-                promise:{},
-                feed:[],
-                endOfFeed:false,
+                promise: {},
+                feed: [],
+                endOfFeed: false
             }
         },
 
         computed: {
-            nextQuery(){
-                if(!this.promise.data)
+            nextQuery() {
+                if (!this.promise.data) {
                     return this.$route.query
+                }
 
-                return Object.assign({}, this.$route.query, {token:this.promise.data.pagination_token})
+                return Object.assign({}, this.$route.query, { token: this.promise.data.pagination_token })
             }
         },
 
-        watch:{
-            "$route":{
-                handler:"initialize",
-                immediate:true,
+        watch: {
+            '$route': {
+                handler: 'initialize',
+                immediate: true
             }
         },
 
         mounted() {
-          window.addEventListener("scroll", this.onScroll)
+            window.addEventListener('scroll', this.onScroll)
         },
 
-        beforeDestroy(){
-            window.removeEventListener("scroll", this.onScroll)
+        beforeDestroy() {
+            window.removeEventListener('scroll', this.onScroll)
         },
 
-        methods:{
-            initialize(){
+        methods: {
+            initialize() {
                 this.feed = []
                 this.endOfFeed = false
                 this.load()
             },
 
-            load(){
-                if(this.promise && this.promise.loading)
+            load() {
+                if (this.promise && this.promise.loading) {
                     return
+                }
 
-                if(this.endOfFeed)
+                if (this.endOfFeed) {
                     return
+                }
 
                 this.promise = c2c.getRecentChanges(this.nextQuery).then(this.onLoad)
             },
 
-            onLoad(){
-
-                for(let change of this.promise.data.feed){
+            onLoad() {
+                for (let change of this.promise.data.feed) {
                     change.document.documentType = this.$documentUtils.getDocumentType(change.document.type)
                     this.feed.push(change)
                 }
 
-                this.endOfFeed = this.promise.data.feed.length == 0
+                this.endOfFeed = this.promise.data.feed.length === 0
             },
 
-            onScroll(){
-                if(document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight)
+            onScroll() {
+                if (document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight) {
                     this.load()
-            },
-        },
+                }
+            }
+        }
     }
 </script>
 

@@ -120,47 +120,49 @@
 </template>
 
 <script>
-    import c2c from "@/js/apis/c2c"
+    import c2c from '@/js/apis/c2c'
 
-    import FormField from "./utils/FormField"
-    import BaseForm from "./utils/BaseForm"
+    import FormField from './utils/FormField'
+    import BaseForm from './utils/BaseForm'
 
     export default {
 
         components: {
             FormField,
-            BaseForm,
+            BaseForm
         },
 
-        data(){
+        data() {
             return {
-                mode:"signin",
+                mode: 'signin',
 
-                username:"",
-                password:"",
-                name:"",
-                forumname:"",
-                email:"",
-                from:null,
+                username: '',
+                password: '',
+                name: '',
+                forumname: '',
+                email: '',
+                from: null,
 
-                serverErrors: null,
+                serverErrors: null
             }
         },
 
         beforeRouteEnter(to, from, next) {
-            next(vm => vm.from = from)
+            next((vm) => {
+                vm.from = from
+            })
         },
 
-        methods:{
-            signin(){
-
+        methods: {
+            signin() {
                 this.$user.signIn(this.username, this.password)
-                .then(() => this.$router.push(this.from.fullPath))
-                .catch(error => this.serverErrors = error.response.data )
-
+                    .then(() => this.$router.push(this.from.fullPath))
+                    .catch((error) => {
+                        this.serverErrors = error.response.data
+                    })
             },
 
-            signup(){
+            signup() {
                 // TODO test that
                 c2c.userProfile.register({
                     name: this.name,
@@ -169,14 +171,18 @@
                     password: this.password,
                     email: this.email,
                     lang: this.$language.current,
-                    captcha: this.captcha, //TODO
+                    captcha: this.captcha // TODO
                 })
-                .catch(error => this.serverErrors = error.response.data )
+                    .catch((error) => {
+                        this.serverErrors = error.response.data
+                    })
             },
-            resetPassword(){
+            resetPassword() {
                 // TODO feedback
                 c2c.userProfile.requestPasswordChange(this.email)
-                .catch(error => this.serverErrors = error.response.data )
+                    .catch((error) => {
+                        this.serverErrors = error.response.data
+                    })
             }
         }
     }

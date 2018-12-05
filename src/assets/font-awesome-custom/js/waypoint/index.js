@@ -1,4 +1,5 @@
 // Auto-generated file by generate-icons.js
+/* eslint-disable */
 
 import access from "./access"
 import base_camp from "./base_camp"
@@ -65,5 +66,5 @@ export {
     waterpoint,
     waypoints,
     weather_station,
-    webcam,
+    webcam
 }

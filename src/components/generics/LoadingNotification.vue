@@ -13,10 +13,10 @@
 
     export default {
         props: {
-            promise:{
-                type:Object,
-                required:true,
-            },
+            promise: {
+                type: Object,
+                required: true
+            }
         }
     }
 </script>

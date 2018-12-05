@@ -12,8 +12,11 @@
         <div slot="row1">
             <div>
                 <document-title :document="item.document" class="has-text-centered has-text-weight-bold"/>
-                <br>
-                <markdown v-if="locale && locale.summary" :content="locale.summary" />
+            </div>
+            <div v-if="locale && locale.summary" class="is-ellipsed">
+                <markdown :content="locale.summary" />
+            </div>
+            <div>
                 <span v-if="documentType=='outing'">{{ dates }}</span>
                 <gallery v-if="images.length!=0" :images="images" />
             </div>
@@ -49,14 +52,14 @@
             <span> {{ item.time | timeAgo }} </span>
             <span>
                 <icon-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
-                <icon-quality :quality="item.document.quality" />
+                <marker-quality :quality="item.document.quality" />
             </span>
         </div>
     </card-container>
 </template>
 
 <script>
-    import forum from '@/js/apis/forum.js'
+    import forum from '@/js/apis/forum'
     import imageUrls from '@/js/image-urls'
 
     import { cardMixin } from './utils/mixins.js'
@@ -64,89 +67,90 @@
     export default{
 
         mixins: [
-            cardMixin,
+            cardMixin
         ],
 
         props: {
-            item:{
-                type:Object,
-                required:true
+            item: {
+                type: Object,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                actionLine:null,
-                images:[],
+                actionLine: null,
+                images: []
             }
         },
 
         computed: {
-            document(){
+            document() {
                 return this.item.document
             },
-            documentType(){
+            documentType() {
                 return this.$documentUtils.getDocumentType(this.document['type'])
             },
-            locale(){
+            locale() {
                 return this.$documentUtils.getLocaleSmart(this.item.document)
             }
         },
 
-        forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace("https://", "") + "/",
+        forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
 
-        created(){
-
-            this.actionLine = '';
+        created() {
+            this.actionLine = ''
 
             switch (this.item['change_type']) {
-                case 'created':
-                    this.actionLine += 'has created a new ';
-                    break;
-                case 'updated':
-                    this.actionLine += 'has updated the ';
-                    break;
-                case 'added_photos':
-                    this.actionLine += 'has added images to ';
-                    break;
-                default:
-                    break;
+            case 'created':
+                this.actionLine += 'has created a new '
+                break
+            case 'updated':
+                this.actionLine += 'has updated the '
+                break
+            case 'added_photos':
+                this.actionLine += 'has added images to '
+                break
+            default:
+                break
             }
 
-            this.actionLine += this.documentType;
+            this.actionLine += this.documentType
 
-            const start = this.$moment(this.item['document']['date_start']);
-            const end = this.$moment(this.item['document']['date_end']);
-            const sameYear = start.year() == end.year();
-            const sameMonth = start.month() == end.month();
-            const sameDay = start.date() == end.date();
+            const start = this.$moment(this.item['document']['date_start'])
+            const end = this.$moment(this.item['document']['date_end'])
+            const sameYear = start.year() == end.year()
+            const sameMonth = start.month() == end.month()
+            const sameDay = start.date() == end.date()
 
-            if (!sameYear)
-                this.dates =  start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY');
-            else if (!sameMonth)
-                this.dates =  start.format('Do MMMM') + ' - ' + end.format('Do MMMM YYYY');
-            else if (!sameDay)
-                this.dates =  start.format('Do') + ' - ' + end.format('Do MMMM YYYY');
-            else
-                this.dates = end.format('Do MMMM YYYY');
+            if (!sameYear) {
+                this.dates = start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY')
+            } else if (!sameMonth) {
+                this.dates = start.format('Do MMMM') + ' - ' + end.format('Do MMMM YYYY')
+            } else if (!sameDay) {
+                this.dates = start.format('Do') + ' - ' + end.format('Do MMMM YYYY')
+            } else {
+                this.dates = end.format('Do MMMM YYYY')
+            }
 
-            if(this.item.image1)
+            if (this.item.image1) {
                 this.images.push(this.item.image1)
+            }
 
-            if(this.item.image2)
+            if (this.item.image2) {
                 this.images.push(this.item.image2)
+            }
 
-            if(this.item.image3)
+            if (this.item.image3) {
                 this.images.push(this.item.image3)
+            }
         },
 
-        methods:{
-            getSmallImageUrl:imageUrls.getSmall
+        methods: {
+            getSmallImageUrl: imageUrls.getSmall
         }
     }
 </script>
-
-
 
 <style scoped lang="scss">
 
@@ -194,6 +198,5 @@
         width:100%;
         box-sizing: border-box;
     }
-
 
 </style>

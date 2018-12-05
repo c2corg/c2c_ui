@@ -9,10 +9,10 @@
 
 <script>
     export default {
-        props : {
-            waypoint:{
-                type:Object,
-                required:true,
+        props: {
+            waypoint: {
+                type: Object,
+                required: true
             }
         }
     }

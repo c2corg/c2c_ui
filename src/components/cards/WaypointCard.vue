@@ -22,7 +22,7 @@
 
     export default {
         mixins: [
-            documentCardMixin,
-        ],
+            documentCardMixin
+        ]
     }
 </script>

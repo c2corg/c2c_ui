@@ -1,10 +1,12 @@
 
 import ol from '@/js/libs/ol.js'
-import utils from "@/js/utils.js"
+import utils from '@/js/utils.js'
 
-const buildTextStyle = function(title, highlight){
-//createTextStyle_ = function(feature, type, highlight) {
-    let text;
+import { icon } from '@fortawesome/fontawesome-svg-core'
+
+const buildTextStyle = function(title, highlight) {
+    // createTextStyle_ = function(feature, type, highlight) {
+    let text
 
     if (highlight) { // on hover in list view
         var def = {
@@ -26,7 +28,7 @@ const buildTextStyle = function(title, highlight){
         text = new ol.style.Text(def)
     }
 
-    return text;
+    return text
 }
 
 export const buildPolygonStyle = function(title, highlight) {
@@ -35,55 +37,47 @@ export const buildPolygonStyle = function(title, highlight) {
     return new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: [51, 122, 183, 0.8 * opacityFactor],
-            width: 1,
+            width: 1
         }),
         fill: new ol.style.Fill({
             color: [51, 122, 183, 0.4 * opacityFactor]
         }),
-        text: buildTextStyle(title, highlight),
+        text: buildTextStyle(title, highlight)
     })
 }
 
-export const buildDiffStyle = function(isOld){
-
+export const buildDiffStyle = function(isOld) {
     return new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: isOld ? 'red' : 'green',
-            width: isOld ? 5 : 3,
+            width: isOld ? 5 : 3
         }),
         image: new ol.style.Circle({
-            fill : new ol.style.Fill({
+            fill: new ol.style.Fill({
                 color: isOld ? 'rgba(255, 0, 0, 0.5)' : 'rgba(0, 255, 0, 0.9)'
             }),
-            radius :  isOld ? 10 : 5,
+            radius: isOld ? 10 : 5
         })
     })
 }
 
+const buildPointStyle = function(title, svgSrc, color, highlight) {
+    var imgSize = highlight ? 30 : 20
+    var circleRadius = highlight ? 20 : 15
 
-const buildPointStyle = function(title, src, color, highlight){
-
-    if(!src)
-        throw "Bad document type"
-
-    var scale = highlight ? 2 : 1
-    var imgSize = highlight ? 20 : 10;
+    svgSrc = svgSrc.replace('<svg ', `<svg width="${imgSize}px" height="${imgSize}px" `)
+    svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`)
 
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon({
-            anchor: [0.5, 0.5],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'fraction',
-            color: color,
-            scale:scale,
-            src: src,
+            src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSrc)
         }),
         text: buildTextStyle(title, highlight)
     })
 
     var circleStyle = new ol.style.Style({
         image: new ol.style.Circle({
-            radius: imgSize,
+            radius: circleRadius,
             fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
             stroke: new ol.style.Stroke({ color: '#ddd', width: 2 })
         })
@@ -92,54 +86,54 @@ const buildPointStyle = function(title, src, color, highlight){
     return [circleStyle, iconStyle]
 }
 
-
-const iconByDocumentType = {
-    i : require('@/assets/img/documents/images.svg'),
-    o : require('@/assets/img/documents/outings.svg'),
-    r : require('@/assets/img/documents/routes.svg'),
-    u : require('@/assets/img/documents/profiles.svg'),
-    x : require('@/assets/img/documents/xreports.svg'),
+const svgSrcByDocumentType = {
+    i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
+    o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
+    r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
+    u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
+    x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0]
 }
 
 const colorByConditionRating = {
-    "excellent":"#008000",
-    "good":"#9ACD32",
-    "average":"#FFFF00",
-    "poor":"#FF0000",
-    "awful":"#8B0000",
+    'excellent': '#008000',
+    'good': '#9ACD32',
+    'average': '#FFFF00',
+    'poor': '#FF0000',
+    'awful': '#8B0000'
 }
 
-export const getDocumentPointStyle = function(document, title, highlight){
-
+export const getDocumentPointStyle = function(document, title, highlight) {
     const type = document.type
     let color = null
-    let icon = null
+    let svgSrc = null
 
-    if(!document.condition_rating)
-        color = '#FFAA45' // Usual icon orange
-    else
+    if (!document.condition_rating) {
+        // Usual icon orange
+        color = '#FFAA45'
+    } else {
         color = colorByConditionRating[document.condition_rating]
+    }
 
-    if(type == "i" || type == "u" || type == "x" || type == "o" || type=="r")
-        icon = iconByDocumentType[type]
-    else if(type == "w")
-        icon = require('@/assets/font-awesome-custom/svg/waypoint/' + document.waypoint_type + '.svg')
-    else if(type == "a")
+    if (type == 'i' || type == 'u' || type == 'x' || type == 'o' || type == 'r') {
+        svgSrc = svgSrcByDocumentType[type]
+    } else if (type == 'w') {
+        svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type }).html[0]
+    } else if (type == 'a') {
         return new ol.style.Style()
-    else
-        throw "Wrong document specification"
+    } else {
+        throw new Error('Wrong document specification')
+    }
 
-    return buildPointStyle(title, icon, color, highlight)
+    return buildPointStyle(title, svgSrc, color, highlight)
 }
 
 export const getDocumentLineStyle = function(title, highlight) {
-
     return new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: highlight ? 'red' : 'yellow',
             width: 3
         }),
-        text: buildTextStyle(title, highlight),
+        text: buildTextStyle(title, highlight)
     })
 }
 

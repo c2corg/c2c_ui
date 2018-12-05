@@ -34,21 +34,21 @@
 
     export default {
 
-        mixins : [ requireDocumentProperty, requireFieldProperty ],
+        mixins: [ requireDocumentProperty, requireFieldProperty ],
 
-        props:{
-            unit:{
-                type:String,
-                default: null,
+        props: {
+            unit: {
+                type: String,
+                default: null
             }
         },
 
-        computed : {
-            value(){
+        computed: {
+            value() {
                 return this.document[this.field.name]
             },
 
-            isArray(){
+            isArray() {
                 return Array.isArray(this.value)
             }
         }

@@ -69,7 +69,6 @@
                                 :field2="fields.height_diff_down"
                                 :label="$gettext('height difference')" />
 
-
                             <label-value v-if="document.length_total" :label="$gettext('length_total')">
                                 {{ document.length_total / 1000 }}&nbsp;km
                             </label-value>
@@ -86,7 +85,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="box">
 
@@ -112,15 +110,15 @@
 </template>
 
 <script>
-    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
-    import ConditionLevels from "./utils/field-viewers/ConditionLevels"
+    import DocumentViewMixin from './utils/DocumentViewMixin.js'
+    import ConditionLevels from './utils/field-viewers/ConditionLevels'
 
     export default {
-        components:{
-            ConditionLevels,
+        components: {
+            ConditionLevels
         },
 
-        mixins : [ DocumentViewMixin ],
+        mixins: [ DocumentViewMixin ]
 
     }
 </script>

@@ -22,32 +22,32 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        props:{
-            localeLang:{
-                type:String,
-                required:true,
+        props: {
+            localeLang: {
+                type: String,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                promise:null
+                promise: null
             }
         },
 
-        methods:{
-            show(){
+        methods: {
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            executeDelete(){
+            executeDelete() {
                 this.promise = c2c.moderator.deleteLocale(
                     this.document.document_id,
                     this.localeLang
                 ).then(() => {
-                    this.$router.push({name:this.documentType, id:this.document.document_id})
+                    this.$router.push({ name: this.documentType, id: this.document.document_id })
                 })
             }
         }

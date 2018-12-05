@@ -7,9 +7,9 @@
 <script>
     export default {
 
-        methods:{
-            click(){
-                this.$emit("click")
+        methods: {
+            click() {
+                this.$emit('click')
             }
         }
     }
@@ -47,7 +47,6 @@ $cb-skin : skin4;
     // $cb-margin-bottom: 1rem;
 }
 
-
 .content-box{
     padding:1rem;
     background:$white;
@@ -60,6 +59,5 @@ $cb-skin : skin4;
     margin-bottom:$cb-margin-bottom;
     border-bottom:$cb-border-bottom;
 }
-
 
 </style>

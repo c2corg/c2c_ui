@@ -5,15 +5,16 @@
 // eslint-disable-next-line no-undef
 const config = CAMPTOCAMP_CONFIG
 
-const LOCAL_STORAGE_KEY = "SiteConfiguration.urlsName"
+const LOCAL_STORAGE_KEY = 'SiteConfiguration.urlsName'
 
-config.setUrlsName = function(name){
+config.setUrlsName = function(name) {
     window.localStorage.setItem(LOCAL_STORAGE_KEY, name)
 }
 
 const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) || config.urls.name
 
-if(!config.isProduction)
+if (!config.isProduction) {
     config.urls = config.urlsConfigurations[urlsName]
+}
 
 export default config

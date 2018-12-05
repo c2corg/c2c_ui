@@ -42,7 +42,6 @@
             {{ postfix }}
         </span>
 
-
         <span v-if="errorMessage" class="has-text-danger has-text-weight-bold">
             {{ errorMessage }}
         </span>
@@ -52,54 +51,54 @@
 
 <script>
 
-import { baseMixin } from "./mixins.js"
+    import { baseMixin } from './mixins.js'
 
-export default {
-    mixins: [ baseMixin ],
+    export default {
+        mixins: [ baseMixin ],
 
-    props:{
-        type: {
-            type: String,
-            default: "text"
-        },
-        min: {
-            type: Number,
-            default: null
-        },
-        max: {
-            type: Number,
-            default: null
-        },
-        placeholder: {
-            type: String,
-            default: null
-        },
-        value: {
-            type: [String, Number, Boolean],
-            default:null
-        },
-        prefix: {
-            type: String,
-            default: null
-        },
-        postfix: {
-            type: String,
-            default: null
-        },
-        options: {
-            type: Array,
-            default: null
-        },
-        isExpanded:{
-            type:Boolean,
-            default:null,
-        },
-        disabled:{
-            type:Boolean,
-            default:false,
-        },
-    },
-}
+        props: {
+            type: {
+                type: String,
+                default: 'text'
+            },
+            min: {
+                type: Number,
+                default: null
+            },
+            max: {
+                type: Number,
+                default: null
+            },
+            placeholder: {
+                type: String,
+                default: null
+            },
+            value: {
+                type: [String, Number, Boolean],
+                default: null
+            },
+            prefix: {
+                type: String,
+                default: null
+            },
+            postfix: {
+                type: String,
+                default: null
+            },
+            options: {
+                type: Array,
+                default: null
+            },
+            isExpanded: {
+                type: Boolean,
+                default: null
+            },
+            disabled: {
+                type: Boolean,
+                default: false
+            }
+        }
+    }
 
 </script>
 

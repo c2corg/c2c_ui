@@ -1,22 +1,22 @@
 <script>
     export default {
         props: {
-            title:{
-                type:String,
-                required:true,
+            title: {
+                type: String,
+                required: true
             }
         },
         watch: {
-            title:{
-                handler(){
-                    document.title = this.title + " - Camptocamp.org"
+            title: {
+                handler() {
+                    document.title = this.title + ' - Camptocamp.org'
                 },
-                immediate:true,
+                immediate: true
             }
         },
 
-        render(){
-            return ""
+        render() {
+            return ''
         }
     }
 </script>

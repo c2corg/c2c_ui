@@ -29,38 +29,39 @@
 
 <script>
     export default {
-        props : {
-            disabled : {
-                type : Boolean,
-                default : null
+        props: {
+            disabled: {
+                type: Boolean,
+                default: null
             }
         },
 
-        data(){
+        data() {
             return {
-                isActive:false
+                isActive: false
             }
         },
 
-        watch:{
-            isActive(){
-                this.$emit("changeDisplay")
+        watch: {
+            isActive() {
+                this.$emit('changeDisplay')
             }
         },
 
-        created(){
+        created() {
             window.addEventListener('click', this.onClick)
         },
 
-        beforeDestroy(){
-            window.removeEventListener("click", this.onClick)
+        beforeDestroy() {
+            window.removeEventListener('click', this.onClick)
         },
 
-        methods:{
-            onClick(event){
+        methods: {
+            onClick(event) {
                 // close dropdown when clicked outside
-                if(!this.$el.contains(event.target))
+                if (!this.$el.contains(event.target)) {
                     this.isActive = false
+                }
             }
         }
     }

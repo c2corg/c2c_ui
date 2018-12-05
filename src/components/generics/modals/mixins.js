@@ -1,20 +1,20 @@
 
 export default {
-    data(){
+    data() {
         return {
             visible: false
         }
     },
 
-    methods:{
-        show(){
+    methods: {
+        show() {
             this.visible = true
-            this.$emit("show")
+            this.$emit('show')
         },
 
-        hide(){
+        hide() {
             this.visible = false
-            this.$emit("hide")
+            this.$emit('hide')
         }
     }
 }

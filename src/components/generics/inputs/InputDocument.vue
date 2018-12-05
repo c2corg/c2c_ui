@@ -94,101 +94,107 @@
 </template>
 
 <script>
-    import c2c from "@/js/apis/c2c"
-    import constants from "@/js/constants"
+    import c2c from '@/js/apis/c2c'
+    import constants from '@/js/constants'
 
-    import { baseMixin, arrayMixin } from "./mixins.js"
+    import { baseMixin, arrayMixin } from './mixins.js'
 
     export default {
         mixins: [ baseMixin, arrayMixin ],
 
-        props:{
+        props: {
 
             value: {
-                type:[Array, Object],
-                default:null,
+                type: [Array, Object],
+                default: null
             },
             multiple: {
-                type:Boolean,
-                default: false,
+                type: Boolean,
+                default: false
             },
-            documentType:{
-                type:[Array, String],
-                required: true,
+            documentType: {
+                type: [Array, String],
+                required: true
             },
-            proposeCreation:{
-                type:Boolean,
-                default: false,
+            proposeCreation: {
+                type: Boolean,
+                default: false
             }
         },
 
-        data(){
+        data() {
             return {
-                searchText:"",
-                promise:{},
+                searchText: '',
+                promise: {}
             }
         },
 
         computed: {
-            value_:{
-                get(){
+            value_: {
+                get() {
                     return this.multiple ? (this.value ? this.value : []) : this.value
                 },
-                set(value){
-                    if(!this.disabled)
-                        this.$emit("input", value)
+                set(value) {
+                    if (!this.disabled) {
+                        this.$emit('input', value)
+                    }
                 }
             },
 
-            documentTypes_(){
+            documentTypes_() {
                 return Array.isArray(this.documentType) ? this.documentType : [this.documentType]
             },
 
-            letterTypes(){
+            letterTypes() {
                 return this.documentTypes_.map(item => constants.objectDefinitions[item].letter)
             }
         },
 
-        methods:{
-            loadOptions(){
-                if(!this.searchText || this.searchText.length < 3){
+        methods: {
+            loadOptions() {
+                if (!this.searchText || this.searchText.length < 3) {
                     this.promise = {}
                     return
                 }
 
                 this.promise = c2c.search({
-                    q:this.searchText,
-                    t:this.letterTypes.join(","),
-                    limit:7,
-                }).then(response => response.data.profiles = response.data.users)
+                    q: this.searchText,
+                    t: this.letterTypes.join(','),
+                    limit: 7
+                }).then((response) => {
+                    response.data.profiles = response.data.users
+                })
             },
 
-            isSelected(value){
-                if(this.multiple)
+            isSelected(value) {
+                if (this.multiple) {
                     return this.$documentUtils.isInArray(this.value_, value)
-                else
+                } else {
                     return this.value ? this.value.document_id == value.document_id : false
+                }
             },
 
-            toggle(value){
-                if(!this.multiple){
+            toggle(value) {
+                if (!this.multiple) {
                     this.value_ = value
-                    if(value)
-                        this.$emit("add", value)
+                    if (value) {
+                        this.$emit('add', value)
+                    }
                 } else {
                     var newValue = []
                     var removed = false
 
-                    for(let document of this.value_){
-                        if(document.document_id == value.document_id)
+                    for (let document of this.value_) {
+                        if (document.document_id == value.document_id) {
                             removed = true
-                        else
+                        } else {
                             newValue.push(document)
+                        }
                     }
 
-                    if(!removed){
+                    if (!removed) {
                         newValue.push(value)
-                        this.$emit("add", value)
+                        this.$emit('add', value)
                     }
 
                     this.value_ = newValue

@@ -116,33 +116,33 @@
         data() {
             return { // theese three data are computed
                 promise: {},
-                versionFrom:undefined,
-                versionTo:undefined,
+                versionFrom: undefined,
+                versionTo: undefined
             }
         },
 
-        computed:{
-            documentId(){
+        computed: {
+            documentId() {
                 return parseInt(this.$route.params.id)
             },
-            documentType(){
-                return this.$route.name.replace("-history", "")
+            documentType() {
+                return this.$route.name.replace('-history', '')
             },
-            lang(){
+            lang() {
                 return this.$route.params.lang
             },
-            veryFirstVersionId(){
-                return this.history.versions[this.history.versions.length-1].version_id
+            veryFirstVersionId() {
+                return this.history.versions[this.history.versions.length - 1].version_id
             },
-            history(){
+            history() {
                 return this.promise.data
-            },
+            }
         },
 
-        watch:{
-            "$route":{
-                handler:"load",
-                immediate: true,
+        watch: {
+            '$route': {
+                handler: 'load',
+                immediate: true
             }
         },
 
@@ -150,15 +150,14 @@
 
             load() {
                 this.promise = c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
-
                     const versions = response.data.versions.reverse()
                     response.data.versions = versions
 
                     this.versionFrom = versions[versions.length > 1 ? 1 : 0].version_id
                     this.versionTo = versions[0].version_id
-                });
-            },
-        },
+                })
+            }
+        }
     }
 
 </script>

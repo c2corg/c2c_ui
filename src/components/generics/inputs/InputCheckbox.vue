@@ -10,22 +10,22 @@
 </template>
 
 <script>
-    import { baseMixin } from "./mixins.js"
+    import { baseMixin } from './mixins.js'
 
     export default {
         mixins: [ baseMixin ],
 
-        props:{
+        props: {
             value: {
-                type:Boolean,
-                default:null,
-            },
+                type: Boolean,
+                default: null
+            }
         },
 
         methods: {
-            onClick(){
+            onClick() {
                 this.value_ = !this.value_
-                this.$emit("change")
+                this.$emit('change')
             }
         }
     }

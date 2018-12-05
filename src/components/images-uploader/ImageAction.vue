@@ -18,26 +18,27 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
-                isActive:false
+                isActive: false
             }
         },
 
-        created(){
+        created() {
             window.addEventListener('click', this.onClick)
         },
 
-        beforeDestroy(){
-            window.removeEventListener("click", this.onClick)
+        beforeDestroy() {
+            window.removeEventListener('click', this.onClick)
         },
 
-        methods:{
-            onClick(event){
-                if (!this.$el.contains(event.target))
+        methods: {
+            onClick(event) {
+                if (!this.$el.contains(event.target)) {
                     this.isActive = false
+                }
             }
-        },
+        }
     }
 </script>
 

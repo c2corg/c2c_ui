@@ -56,7 +56,6 @@
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this document')" />
 
-
             <hr>
         </div>
 
@@ -92,9 +91,8 @@
     import MergeDocumentWindow from '../windows/MergeDocumentWindow'
     import TranslateWindow from '../windows/TranslateWindow'
 
-
     export default {
-        components:{
+        components: {
             ToolBoxButton,
             LicenseBox,
             AssociatedDocuments,
@@ -102,48 +100,52 @@
             DeleteLocaleWindow,
             DeleteDocumentWindow,
             MergeDocumentWindow,
-            TranslateWindow,
+            TranslateWindow
         },
 
-        mixins : [ requireDocumentProperty, viewModeMixin, isEditableMixin ],
+        mixins: [ requireDocumentProperty, viewModeMixin, isEditableMixin ],
 
-        data(){
+        data() {
             return {
-                isAccountBlocked:null,
+                isAccountBlocked: null
             }
         },
 
-        computed:{
+        computed: {
             // TODO : useless ? remove !
             // locale(){
             //     return this.document.cooked
             // },
 
-            missingLangs(){
+            missingLangs() {
                 var result = []
 
-                for(let lang of constants.langs){
-                    if(!this.document.available_langs.includes(lang))
+                for (let lang of constants.langs) {
+                    if (!this.document.available_langs.includes(lang)) {
                         result.push(lang)
+                    }
                 }
 
                 return result
             },
 
-            hasMissingLangs(){
+            hasMissingLangs() {
                 return this.missingLangs.length > 0
-            },
+            }
         },
 
-        created(){
-            if(this.$user.isModerator && this.documentType=="profile")
+        created() {
+            if (this.$user.isModerator && this.documentType == 'profile') {
                 c2c.moderator.isAccountBlocked(this.document.document_id)
-                .then(response => this.isAccountBlocked = response.data.blocked)
+                    .then((response) => {
+                        this.isAccountBlocked = response.data.blocked
+                    })
+            }
         },
 
-        methods:{
-            lockDocumentAction(){
-                if(this.document.protected){
+        methods: {
+            lockDocumentAction() {
+                if (this.document.protected) {
                     c2c.moderator.unprotectDocument(this.document.document_id).then(() => {
                         this.document.protected = false
                     })
@@ -154,8 +156,8 @@
                 }
             },
 
-            lockAccountAction(){
-                if(this.isAccountBlocked){
+            lockAccountAction() {
+                if (this.isAccountBlocked) {
                     c2c.moderator.unblockAccount(this.document.document_id).then(() => {
                         this.isAccountBlocked = false
                     })
@@ -168,7 +170,6 @@
         }
     }
 </script>
-
 
 <style scoped lang="scss">
 

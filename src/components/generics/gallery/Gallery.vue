@@ -2,52 +2,66 @@
     <div>
         <swiper :options="$options.swiperOption" class="swiper">
             <swiper-slide v-for="(image, i) of images" :key="image.document_id">
-                <gallery-image :image="image" class="camptocamp-image" @click="activateFullscreen(i)"/>
+                <gallery-image :image="image" class="camptocamp-image" @click="activateLargeView(i)"/>
             </swiper-slide>
             <div slot="button-prev" class="swiper-button-prev"/>
             <div slot="button-next" class="swiper-button-next"/>
         </swiper>
 
-        <swiper
-            v-if="fullscreen"
-            ref="fullscreenSwiper"
-            :options="$options.fullScreenSwiperOption"
-            class="fullscreen-swiper"
-            @slide-change="onSlideChange">
-            <swiper-slide v-for="image of images" :key="image.document_id">
-                <gallery-image large :image="image" class="camptocamp-image"/>
-            </swiper-slide>
-            <div slot="button-prev" class="swiper-button-prev"/>
-            <div slot="button-next" class="swiper-button-next"/>
-            <div slot="pagination" class="swiper-pagination"/>
-        </swiper>
+        <div ref="largeViewWrapper" v-if="largeView">
+            <swiper
+                ref="largeViewSwiper"
+                :options="$options.largeViewSwiperOption"
+                class="large-view-swiper"
+                @slide-change="onSlideChange">
+                <swiper-slide v-for="image of images" :key="image.document_id">
+                    <gallery-image large :image="image" class="camptocamp-image"/>
+                </swiper-slide>
+                <div slot="button-prev" class="swiper-button-prev"/>
+                <div slot="button-next" class="swiper-button-next"/>
+                <div slot="pagination" class="swiper-pagination"/>
+            </swiper>
 
-        <div v-if="fullscreen" class="is-size-3 has-text-grey-lighter swiper-fullscreen-header">
-            <div class="level is-mobile">
-                <span class="level-left"/>
-                <span class="level-item is-size-2">
-                    {{ activeDocument.locales[0].title }}
-                </span>
-                <span class="level-right">
-                    <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
-                        <fa-icon icon="eye"/>
-                    </document-link>
+            <div class="is-size-3 has-text-grey-lighter swiper-large-view-header">
+                <div class="level is-mobile">
+                    <span class="level-left"/>
+                    <span class="level-item is-size-2">
+                        {{ activeDocument.locales[0].title }}
+                    </span>
+                    <span class="level-right">
+                        <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
+                            <fa-icon icon="eye"/>
+                        </document-link>
 
-                    <edit-link
-                        :document="activeDocument" :lang="activeDocument.available_langs[0]"
-                        class="level-item has-text-grey-lighter">
-                        <fa-icon icon="edit"/>
-                    </edit-link>
+                        <edit-link
+                            :document="activeDocument" :lang="activeDocument.available_langs[0]"
+                            class="level-item has-text-grey-lighter">
+                            <fa-icon icon="edit"/>
+                        </edit-link>
 
-                    <fa-icon class="level-item has-cursor-pointer" icon="info-circle" @click="showInfo = !showInfo"/>
-                    <fa-icon class="level-item has-cursor-pointer" icon="expand"/>
-                    <fa-icon class="level-item has-cursor-pointer" icon="plus" transform="rotate-45" @click="fullscreen=false"/>
-                </span>
+                        <fa-icon
+                            class="level-item has-cursor-pointer"
+                            icon="info-circle"
+                            @click="showInfo = !showInfo"/>
+                        <fa-icon
+                            class="level-item has-cursor-pointer request-fullscreen-button"
+                            icon="expand"
+                            @click="onRequestFullscreen"/>
+                        <fa-icon
+                            class="level-item has-cursor-pointer exit-fullscreen-button"
+                            icon="compress"
+                            @click="onExitFullscreen"/>
+                        <fa-icon
+                            class="level-item has-cursor-pointer"
+                            icon="plus"
+                            transform="rotate-45"
+                            @click="largeView=false"/>
+                    </span>
+                </div>
             </div>
+
+            <image-info v-if="showInfo" class="swiper-info" :document_id="activeDocument.document_id" />
         </div>
-
-        <image-info v-if="fullscreen && showInfo" class="swiper-info" :document_id="activeDocument.document_id" />
-
     </div>
 
 </template>
@@ -65,73 +79,96 @@
 
         props: {
             images: {
-                type:Array,
-                required:true,
+                type: Array,
+                required: true
             }
         },
 
-        data(){
+        data() {
             return {
-                fullscreen:false,
-                showInfo:false,
-                activeIndex:0, // read only
+                largeView: false,
+                showInfo: false,
+                activeIndex: 0 // read only
             }
         },
 
-        computed:{
-            activeDocument(){
+        computed: {
+            activeDocument() {
                 return this.images[this.activeIndex]
             }
         },
 
-        created(){
-            window.addEventListener("keydown", this.onKeydown)
+        created() {
+            window.addEventListener('keydown', this.onKeydown)
         },
 
-        beforeDestroy(){
-            window.removeEventListener("keydown", this.onKeydown)
+        beforeDestroy() {
+            window.removeEventListener('keydown', this.onKeydown)
         },
 
-        methods:{
-            onKeydown(event){
-                if(event.key=="Escape")
-                    this.fullscreen = false
+        methods: {
+            onKeydown(event) {
+                if (event.key == 'Escape') {
+                    this.largeView = false
+                }
             },
-            activateFullscreen(initialSlide){
-                this.$options.fullScreenSwiperOption.initialSlide = initialSlide
+            activateLargeView(initialSlide) {
+                this.$options.largeViewSwiperOption.initialSlide = initialSlide
                 this.activeIndex = initialSlide
-                this.fullscreen = true
+                this.largeView = true
             },
-            onSlideChange(){
-                this.activeIndex = this.$refs.fullscreenSwiper.swiper.activeIndex
+            onSlideChange() {
+                this.activeIndex = this.$refs.largeViewSwiper.swiper.activeIndex
+            },
+            onRequestFullscreen() {
+                if (this.$refs.largeViewWrapper.requestFullscreen) {
+                    this.$refs.largeViewWrapper.requestFullscreen()
+                } else if (this.$el.mozRequestFullScreen) { /* Firefox */
+                    this.$refs.largeViewWrapper.mozRequestFullScreen()
+                } else if (this.$el.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                    this.$refs.largeViewWrapper.webkitRequestFullscreen()
+                } else if (this.$el.msRequestFullscreen) { /* IE/Edge */
+                    this.$refs.largeViewWrapper.msRequestFullscreen()
+                }
+            },
+            onExitFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen()
+                } else if (document.mozCancelFullScreen) { /* Firefox */
+                    document.mozCancelFullScreen()
+                } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                    document.webkitExitFullscreen()
+                } else if (document.msExitFullscreen) { /* IE/Edge */
+                    document.msExitFullscreen()
+                }
             }
         },
 
         swiperOption: {
             slidesPerView: 'auto',
             spaceBetween: 15,
-            navigation:{
+            navigation: {
                 nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+                prevEl: '.swiper-button-prev'
             }
         },
 
-        fullScreenSwiperOption: {
-            initialSlide:0,
+        largeViewSwiperOption: {
+            initialSlide: 0,
             slidesPerView: 1,
             spaceBetween: 15,
-            navigation:{
+            navigation: {
                 nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+                prevEl: '.swiper-button-prev'
             },
             pagination: {
                 el: '.swiper-pagination',
-                clickable: true,
+                clickable: true
             },
             keyboard: {
-              enabled: true,
-            },
-        },
+                enabled: true
+            }
+        }
     }
 </script>
 
@@ -179,7 +216,7 @@
         }
     }
 
-    .swiper-fullscreen-header{
+    .swiper-large-view-header{
         z-index:1000;
         position:fixed;
         top:0;
@@ -201,7 +238,7 @@
         right:0;
     }
 
-    .fullscreen-swiper{
+    .large-view-swiper{
         z-index:1000;
         position:fixed;
         top:0;
@@ -217,6 +254,14 @@
             .camptocamp-image{
             }
         }
+    }
+
+    .request-fullscreen-button:fullscreen, .request-fullscreen-button:-webkit-full-screen{
+        display: none;
+    }
+
+    .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
+        display: none;
     }
 
 </style>

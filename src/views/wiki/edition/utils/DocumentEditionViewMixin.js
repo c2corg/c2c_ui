@@ -17,7 +17,7 @@ import AssociationsInputRow from './AssociationsInputRow'
 
 export default {
 
-    components:{
+    components: {
         EditionContainer,
 
         TabView,
@@ -28,62 +28,62 @@ export default {
         FormInput,
         QualityInputRow,
         MapInputRow,
-        AssociationsInputRow,
+        AssociationsInputRow
 
     },
 
     data() {
         return {
-            promise:{},
-            fields:null, // keep fields here to set them reactive
-            genericErrors:[],
-            comment:"",
+            promise: {},
+            fields: null, // keep fields here to set them reactive
+            genericErrors: [],
+            comment: ''
         }
     },
 
     computed: {
 
-        mode(){
-            return this.$route.name.split("-")[1] // right part of route name : add or edit
+        mode() {
+            return this.$route.name.split('-')[1] // right part of route name : add or edit
         },
 
-        documentType(){
-            return this.$route.name.replace(/-(edit|add)/,"")
+        documentType() {
+            return this.$route.name.replace(/-(edit|add)/, '')
         },
 
-        documentId(){
+        documentId() {
             return this.$route.params.id
         },
 
-        lang(){
+        lang() {
             return this.$route.params.lang
         },
 
-        document(){
+        document() {
             return this.promise.data
         },
 
-        editedLocale(){
+        editedLocale() {
             // in edit mode, there is only one locale
             return this.document ? this.document.locales[0] : null
         }
     },
 
-    created(){
-        if(this.mode=="edit")
+    created() {
+        if (this.mode == 'edit') {
             this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
-        else {
-            this.promise = { data : this.$documentUtils.buildDocument(this.documentType, this.lang) }
+        } else {
+            this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
             // Add associations presents in url query
-            for(let letter of Object.keys(this.$route.query)){
+            for (let letter of Object.keys(this.$route.query)) {
                 let documentType = this.$documentUtils.getDocumentType(letter)
 
-                if(documentType){
+                if (documentType) {
                     // Value may be a number or a string
-                    let documentIds = String(this.$route.query[letter]).split(",")
+                    let documentIds = String(this.$route.query[letter]).split(',')
 
-                    for(let documentId of documentIds){
+                    for (let documentId of documentIds) {
                         c2c[documentType].get(documentId).then(response => {
                             this.$documentUtils.addAssociation(this.document, response.data)
                         })
@@ -91,8 +91,8 @@ export default {
                 }
             }
 
-            if(this.$route.query.act){
-                this.document.activities = this.$route.query.act.split(",")
+            if (this.$route.query.act) {
+                this.document.activities = this.$route.query.act.split(',')
             }
 
             this.afterLoad()
@@ -104,29 +104,30 @@ export default {
     },
 
     methods: {
-        afterLoad(){
+        afterLoad() {
 
         },
 
-        beforeSave(){
+        beforeSave() {
 
         },
 
-        save(comment){
+        save(comment) {
             this.beforeSave() // allow each view to handle some specific cases
 
-            if (this.hasError())
+            if (this.hasError()) {
                 return
+            }
 
             let promise
 
-            if(this.mode=="edit"){
+            if (this.mode == 'edit') {
                 promise = c2c[this.documentType].save(this.document, comment).then(() => {
-                    this.$router.push({name:this.documentType, params:{id:this.document.document_id}})
+                    this.$router.push({ name: this.documentType, params: { id: this.document.document_id } })
                 })
             } else {
                 promise = c2c[this.documentType].create(this.document).then(response => {
-                    this.$router.push({name:this.documentType, params:{id:response.data.document_id}})
+                    this.$router.push({ name: this.documentType, params: { id: response.data.document_id } })
                 })
             }
 
@@ -136,49 +137,48 @@ export default {
             })
         },
 
-        hasError(){
+        hasError() {
             let hasError = false
 
-            for(let field of Object.values(this.fields)){
+            for (let field of Object.values(this.fields)) {
                 let error = field.getError(this.document, this.editedLocale)
-                hasError = hasError || error !==null
+                hasError = hasError || error !== null
                 field.error = error
             }
 
             return hasError
         },
 
-        dispatchErrors(errors){
-
+        dispatchErrors(errors) {
             // TODO : errors == undefined ?
             this.cleanErrors()
 
-            for(let error of errors){
-                let path = error.name.split(".")
+            for (let error of errors) {
+                let path = error.name.split('.')
 
-                if(path[0]=="locales")
+                if (path[0] == 'locales') {
                     this.dispatchError(path[2], error)
-
-                else if(path[0]=="associations")
+                } else if (path[0] == 'associations') {
                     this.dispatchError(path[1], error)
-
-                else
+                } else {
                     this.dispatchError(path[0], error)
-
+                }
             }
         },
 
-        dispatchError(fieldName, error){
-            if(this.fields[fieldName] === undefined)
+        dispatchError(fieldName, error) {
+            if (this.fields[fieldName] === undefined) {
                 this.genericErrors.push(error)
-            else
+            } else {
                 this.fields[fieldName].error = error
+            }
         },
 
-        cleanErrors(){
+        cleanErrors() {
             this.genericErrors = []
-            for(let field of Object.values(this.fields))
+            for (let field of Object.values(this.fields)) {
                 field.error = null
+            }
         }
     }
 }

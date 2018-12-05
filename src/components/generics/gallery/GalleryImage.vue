@@ -20,35 +20,35 @@
     export default {
         props: {
             image: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             },
 
             large: {
-                type:Boolean,
-                default:false,
+                type: Boolean,
+                default: false
             }
         },
 
-        data(){
+        data() {
             return {
-                src:null,
-                loading:true,
-                error:false,
+                src: null,
+                loading: true,
+                error: false
             }
         },
 
-        watch:{
+        watch: {
             large: {
-                handler : "reset",
-                immediate: true,
+                handler: 'reset',
+                immediate: true
             }
         },
 
-        methods:{
-            reset(){
+        methods: {
+            reset() {
                 this.loading = true
-                this.error = false,
+                this.error = false
                 this.src = this.large ? imageUrls.get(this.image) : imageUrls.getSmall(this.image)
             }
         }

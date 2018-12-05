@@ -41,7 +41,6 @@
                     :text="preview ? $gettext('Back to code') : $gettext('Preview')"
                     @click="preview=!preview"/>
 
-
             </div>
         </div>
 
@@ -61,58 +60,57 @@
 
 <script>
     import c2c from '@/js/apis/c2c'
-    import EditorButton from "./EditorButton"
+    import EditorButton from './EditorButton'
 
-    function Selection(textarea, onInput){
+    function Selection(textarea, onInput) {
         this.textarea = textarea
         this.onInput = onInput
     }
 
     Object.defineProperty(Selection.prototype, 'start', {
-        get(){
+        get() {
             return this.textarea.selectionStart
         },
-        set(value){
+        set(value) {
             this.textarea.selectionStart = value
         }
     })
 
     Object.defineProperty(Selection.prototype, 'end', {
-        get(){
+        get() {
             return this.textarea.selectionEnd
         },
-        set(value){
+        set(value) {
             this.textarea.selectionEnd = value
         }
     })
 
     Object.defineProperty(Selection.prototype, 'length', {
-        get(){
+        get() {
             return this.end - this.start
         }
     })
 
     Object.defineProperty(Selection.prototype, 'text', {
-        get(){
+        get() {
             return this.textarea.value.substr(this.start, this.length)
         }
     })
 
-
     Object.defineProperty(Selection.prototype, 'isEmpty', {
-        get(){
-            return this.start==this.end
+        get() {
+            return this.start == this.end
         }
     })
 
-    Selection.prototype.set = function(start, end){
+    Selection.prototype.set = function(start, end) {
         this.start = start
-        this.end = end ? end : start
+        this.end = end || start
     }
 
-    Selection.prototype.setText = function(text, before, after){
-        before = before ? before : ""
-        after = after ? after : ""
+    Selection.prototype.setText = function(text, before, after) {
+        before = before || ''
+        after = after || ''
 
         let chunk = before + text + after
 
@@ -127,7 +125,7 @@
         this.setText(this.text.replace(pattern, replacement))
     }
 
-    Selection.prototype.isSurroundedBy = function(before, after){
+    Selection.prototype.isSurroundedBy = function(before, after) {
         const beforeLength = before.length
         const afterLength = after.length
         const content = this.textarea.value
@@ -135,79 +133,79 @@
         return content.substr(this.start - beforeLength, beforeLength) === before && content.substr(this.end, afterLength) === after
     }
 
-    Selection.prototype.expandToEntireLine = function(){
-        var start = this.textarea.value.lastIndexOf("\n", this.start)
+    Selection.prototype.expandToEntireLine = function() {
+        var start = this.textarea.value.lastIndexOf('\n', this.start)
         this.start = start + 1
         var end = this.textarea.value.indexOf('\n', this.end)
         this.end = end == -1 ? this.textarea.value.length : end
     }
 
-    Selection.prototype.linesStartsWith = function (tag) {
-        for(let line of this.text.split("\n")){
-            if(!line.startsWith(tag))
+    Selection.prototype.linesStartsWith = function(tag) {
+        for (let line of this.text.split('\n')) {
+            if (!line.startsWith(tag)) {
                 return false
+            }
         }
 
         return true
     }
 
-    Selection.prototype.removeLinePrefix = function (tag) {
-        this.setText(this.text.split("\n").map(line => line.substr(tag.length)).join("\n"))
+    Selection.prototype.removeLinePrefix = function(tag) {
+        this.setText(this.text.split('\n').map(line => line.substr(tag.length)).join('\n'))
     }
 
-
-    Selection.prototype.addLinePrefix = function (tag) {
-        this.setText(this.text.split("\n").map(line => tag + line).join("\n"))
+    Selection.prototype.addLinePrefix = function(tag) {
+        this.setText(this.text.split('\n').map(line => tag + line).join('\n'))
     }
 
     export default {
 
         components: {
-            EditorButton,
+            EditorButton
         },
 
-        props:{
-            value:{
-                type:String,
-                default:"",
-            },
+        props: {
+            value: {
+                type: String,
+                default: ''
+            }
         },
 
-        data(){
+        data() {
             return {
                 selection: null,
                 focus: false,
                 preview: false,
                 fullScreen: false,
-                cooked:"",
+                cooked: ''
             }
         },
 
-        watch:{
-            preview:"computePreview"
+        watch: {
+            preview: 'computePreview'
         },
 
-        mounted(){
+        mounted() {
             this.$refs.textarea.value = this.value
             this.selection = new Selection(this.$refs.textarea, this.onInput)
         },
 
-        methods:{
-            onInput(){
-                this.$emit("input", this.$refs.textarea.value)
+        methods: {
+            onInput() {
+                this.$emit('input', this.$refs.textarea.value)
             },
 
-            computePreview(){
-                if(!this.preview)
+            computePreview() {
+                if (!this.preview) {
                     return
+                }
 
-                c2c.cooker({value: this.value}).then(response => {
+                c2c.cooker({ value: this.value }).then(response => {
                     this.cooked = response.data.value
                 })
             },
 
-            handleSimpleMarkdownTag(tag, defaultChunk){
-
+            handleSimpleMarkdownTag(tag, defaultChunk) {
                 const tagLength = tag.length
 
                 if (this.selection.isSurroundedBy(tag, tag)) {
@@ -226,14 +224,13 @@
                 this.$refs.textarea.focus()
             },
 
-            handleBlockMarkdownTag(tag, defaultChunk){
-
+            handleBlockMarkdownTag(tag, defaultChunk) {
                 this.selection.expandToEntireLine()
 
-                if(this.selection.isEmpty){
+                if (this.selection.isEmpty) {
                     this.selection.setText(defaultChunk)
                     this.selection.set(this.selection.start + tag.length)
-                } else if(this.selection.linesStartsWith(tag)){
+                } else if (this.selection.linesStartsWith(tag)) {
                     this.selection.removeLinePrefix(tag)
                     this.selection.set(this.selection.start)
                 } else {
@@ -244,73 +241,73 @@
                 this.$refs.textarea.focus()
             },
 
-            handleBold(){
-                this.handleSimpleMarkdownTag("**", this.$gettext("strong text"))
+            handleBold() {
+                this.handleSimpleMarkdownTag('**', this.$gettext('strong text'))
             },
 
-            handleItalic(){
-                this.handleSimpleMarkdownTag("_", this.$gettext("emphasized text"))
+            handleItalic() {
+                this.handleSimpleMarkdownTag('_', this.$gettext('emphasized text'))
             },
 
-            handleHeading(){
-                const defaultChunk = this.$gettext("heading text")
+            handleHeading() {
+                const defaultChunk = this.$gettext('heading text')
 
                 this.selection.expandToEntireLine()
 
-                if(this.selection.text.startsWith("#")){
-                    this.selection.replace(/^#+ */, "")
+                if (this.selection.text.startsWith('#')) {
+                    this.selection.replace(/^#+ */, '')
                 } else {
                     let chunk = this.selection.isEmpty ? defaultChunk : this.selection.text
-                    this.selection.setText(chunk, "## ")
+                    this.selection.setText(chunk, '## ')
                 }
 
                 this.$refs.textarea.focus()
             },
 
-            handleLink(){
+            handleLink() {
                 // TODO
             },
 
-            handleImage(){
+            handleImage() {
                 // TODO
             },
 
-            handleEmoji(){
+            handleEmoji() {
                 // TODO
             },
 
-            handleHashtag(){
+            handleHashtag() {
                 this.selection.expandToEntireLine()
 
-                if(this.selection.isEmpty){
-                    this.selection.setText("L# | cotation | length | description\nL# | cotation | length | description\nL# | cotation | length | description")
+                if (this.selection.isEmpty) {
+                    this.selection.setText('L# | cotation | length | description\nL# | cotation | length | description\nL# | cotation | length | description')
                     this.selection.set(this.selection.start + 5)
                 } else {
-                    this.selection.addLinePrefix("L# | ")
+                    this.selection.addLinePrefix('L# | ')
                 }
 
                 this.$refs.textarea.focus()
             },
 
-            handleListUl(){
-                this.handleBlockMarkdownTag("* ", "* item 1\n* item 2\n* item 3")
+            handleListUl() {
+                this.handleBlockMarkdownTag('* ', '* item 1\n* item 2\n* item 3')
             },
 
-            handleListOl(){
-                this.handleBlockMarkdownTag("1. ", "1. item 1\n2. item 2\n3. item 3")
+            handleListOl() {
+                this.handleBlockMarkdownTag('1. ', '1. item 1\n2. item 2\n3. item 3')
             },
 
-            handleCode(){
-                if(this.selection.text.includes("\n")){
-                    this.handleBlockMarkdownTag("    ")
+            handleCode() {
+                if (this.selection.text.includes('\n')) {
+                    this.handleBlockMarkdownTag('    ')
                 } else { // inline code mode
-                    this.handleSimpleMarkdownTag("`", this.$gettext("Code fragment"))
+                    this.handleSimpleMarkdownTag('`', this.$gettext('Code fragment'))
                 }
             },
 
-            handleQuote(){
-                this.handleBlockMarkdownTag("> ", "> Citation")
-            },
+            handleQuote() {
+                this.handleBlockMarkdownTag('> ', '> Citation')
+            }
         }
     }
 </script>

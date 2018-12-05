@@ -84,62 +84,63 @@
 
 </template>
 
-
 <script>
     import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
     import InputConditionsLevels from './InputConditionsLevels'
 
-
     export default {
-        components : { InputConditionsLevels },
+        components: { InputConditionsLevels },
 
-        mixins : [ requireFieldProperty, requireDocumentProperty ],
+        mixins: [ requireFieldProperty, requireDocumentProperty ],
 
-        props : {
-            prefix:{
-                type:String,
-                default:null,
+        props: {
+            prefix: {
+                type: String,
+                default: null
             },
-            isExpanded:{
-                type:Boolean,
-                default:null,
+            isExpanded: {
+                type: Boolean,
+                default: null
             },
-            helper:{
-                type:String,
-                default:undefined,
+            helper: {
+                type: String,
+                default: undefined
             }
         },
 
         computed: {
-            editedLocale(){
+            editedLocale() {
                 // in edit mode, there is only one locale
                 return this.document.locales[0]
             },
 
-            object(){
-                if(this.field.parent == "document")
+            object() {
+                if (this.field.parent == 'document') {
                     return this.document
+                }
 
-                if(this.field.parent == "locales")
+                if (this.field.parent == 'locales') {
                     return this.editedLocale
+                }
 
-                if(this.field.parent == "associations")
+                if (this.field.parent == 'associations') {
                     return this.document.associations
+                }
 
-                throw `Unexpected parent value : ${this.field.parent}`
+                throw new Error(`Unexpected parent value : ${this.field.parent}`)
             },
-            visible(){
+            visible() {
                 return this.field.isVisibleFor(this.document)
             },
-            simpleInputType(){
+            simpleInputType() {
                 return ['text', 'number', 'url', 'date', 'tel'].includes(this.field.type)
             },
-            hasError(){
+            hasError() {
                 return this.field.error !== null
             },
-            errorMessage(){
+            errorMessage() {
                 return this.hasError ? this.$gettext(this.field.error.description) : null
             }
-        },
+        }
     }
 </script>

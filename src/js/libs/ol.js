@@ -21,13 +21,12 @@ import Geolocation from 'ol/Geolocation'
 import GeoJSON from 'ol/format/GeoJSON'
 import GPX from 'ol/format/GPX'
 import KML from 'ol/format/KML'
-import { get as getProjection, transform as transformProjection, transformExtent, toLonLat} from 'ol/proj'
+import { get as getProjection, transform as transformProjection, transformExtent, toLonLat } from 'ol/proj'
 import { getWidth } from 'ol/extent'
 
+import { Draw, Modify, Snap, DragAndDrop } from 'ol/interaction'
 
-import {Draw, Modify, Snap, DragAndDrop} from 'ol/interaction'
-
-//build our own ol module
+// build our own ol module
 export default {
     Map,
     View,
@@ -35,36 +34,36 @@ export default {
     Geolocation,
 
     control: {
-        defaults : defaultControls,
+        defaults: defaultControls,
         Control,
         FullScreen,
-        ScaleLine,
+        ScaleLine
     },
 
     extent: {
-        getWidth,
+        getWidth
     },
 
     format: {
         GeoJSON,
         GPX,
-        KML,
+        KML
     },
 
     geom: {
-        Point,
+        Point
     },
 
     interaction: {
         Draw,
         Modify,
         Snap,
-        DragAndDrop,
+        DragAndDrop
     },
 
     layer: {
         Vector: VectorLayer,
-        Tile: TileLayer,
+        Tile: TileLayer
     },
 
     proj: {
@@ -78,7 +77,7 @@ export default {
         Vector: VectorSource,
         BingMaps,
         XYZ,
-        WMTS,
+        WMTS
     },
 
     style: {
@@ -91,6 +90,6 @@ export default {
     },
 
     tilegrid: {
-        WMTS: WMTSTileGrid,
-    },
+        WMTS: WMTSTileGrid
+    }
 }

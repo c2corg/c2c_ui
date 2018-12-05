@@ -88,22 +88,22 @@
 </template>
 
 <script>
-    import constants from "@/js/constants"
+    import constants from '@/js/constants'
 
-    import TopoguideViewLink from "./TopoguideViewLink"
-    import TopoguideViewSmallLink from "./TopoguideViewSmallLink"
+    import TopoguideViewLink from './TopoguideViewLink'
+    import TopoguideViewSmallLink from './TopoguideViewSmallLink'
 
     export default {
         components: {
             TopoguideViewLink,
-            TopoguideViewSmallLink,
+            TopoguideViewSmallLink
         },
 
-        computed:{
-            activities(){
+        computed: {
+            activities() {
                 return constants.activities
             },
-            waypoint_types(){
+            waypoint_types() {
                 return constants.waypoint_types
             }
         }

@@ -34,39 +34,39 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        props : {
-            hideButtons:{
-                type:Boolean,
-                default:false,
+        props: {
+            hideButtons: {
+                type: Boolean,
+                default: false
             }
         },
 
-        data(){
+        data() {
             return {
-                routes : {},
+                routes: {}
             }
         },
 
-        computed:{
-            query(){
+        computed: {
+            query() {
                 const query = {}
                 query[this.document.type] = this.document.document_id
                 return query
             },
 
-            source(){
+            source() {
                 return this.document.associations.routes || this.document.associations.all_routes.documents
-            },
+            }
         },
 
-        created(){
-
-            for(let route of this.source){
-                for(let activity of route.activities){
-                    if(!this.routes[activity])
+        created() {
+            for (let route of this.source) {
+                for (let activity of route.activities) {
+                    if (!this.routes[activity]) {
                         this.routes[activity] = {}
+                    }
 
                     this.routes[activity][route.document_id] = route
                 }

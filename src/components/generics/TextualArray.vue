@@ -8,14 +8,14 @@
 
 <script>
     export default{
-        props:{
-            array:{
-                type:Array,
-                default:null,
+        props: {
+            array: {
+                type: Array,
+                default: null
             },
-            i18n:{
-                type:Boolean,
-                default:true,
+            i18n: {
+                type: Boolean,
+                default: true
             }
         }
     }

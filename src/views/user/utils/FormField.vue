@@ -26,63 +26,64 @@
 
 <script>
     export default {
-        props:{
+        props: {
             name: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             },
             value: {
-                type:[String, Number, Boolean],
-                default:null,
+                type: [String, Number, Boolean],
+                default: null
             },
             label: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             },
             type: { // HTML type of input (text, number...)
-                type:String,
-                required:true,
+                type: String,
+                required: true
             },
             placeholder: {
-                type:String,
-                default:null,
+                type: String,
+                default: null
             },
             icon: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             },
             required: {
                 type: Boolean,
-                default: false,
+                default: false
             },
             disabled: {
                 type: Boolean,
-                default: false,
-            },
-        },
-
-        data(){
-            return {
-                errorMessage: null,
+                default: false
             }
         },
 
-        computed:{
-            value_:{
-                get(){
+        data() {
+            return {
+                errorMessage: null
+            }
+        },
+
+        computed: {
+            value_: {
+                get() {
                     return this.value
                 },
-                set(value){
-                    this.$emit("input", value)
+                set(value) {
+                    this.$emit('input', value)
                 }
             },
 
-            hasError(){
-                if(this.required && !this.value)
+            hasError() {
+                if (this.required && !this.value) {
                     return true
+                }
 
                 return false
             }
-        },
+        }
     }
 </script>

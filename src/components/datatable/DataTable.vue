@@ -27,23 +27,23 @@
 </template>
 
 <script>
-    import columnDefs from "./columnDefs"
-    import { requireDocumentTypeProperty } from "@/js/properties-mixins"
+    import columnDefs from './columnDefs'
+    import { requireDocumentTypeProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentTypeProperty ],
+        mixins: [ requireDocumentTypeProperty ],
 
-        props:{
-            documents:{
-                type:Object,
-                required:true
-            },
+        props: {
+            documents: {
+                type: Object,
+                required: true
+            }
         },
 
         computed: {
-            columns(){
+            columns() {
                 return columnDefs[this.documentType]
-            },
+            }
         },
 
         methods: {

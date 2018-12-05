@@ -15,50 +15,52 @@
 
     export default {
 
-        data(){
+        data() {
             return {
-                value:[null, null]
+                value: [null, null]
             }
         },
 
-        computed:{
-            urlValue:{
-                get(){
-                    return (this.$route.query.date || "") + ","
+        computed: {
+            urlValue: {
+                get() {
+                    return (this.$route.query.date || '') + ','
                 },
-                set(value){
+                set(value) {
                     var query = Object.assign({}, this.$route.query)
                     query.date = value
 
-                    if(query.date!==this.$route.query.date){
-                        this.$router.push({query: query})
+                    if (query.date !== this.$route.query.date) {
+                        this.$router.push({ query: query })
                     }
-                }
-            },
-        },
-
-        watch:{
-            value:"compute",
-        },
-
-        created(){
-            this.value = this.urlValue.split(",")
-        },
-
-        methods:{
-            compute(){
-                if(!this.value[0] && !this.value[1])
-                    this.urlValue = undefined
-                else {
-                    if(!this.value[0] && this.value[1])
-                        this.value = [this.value[1], this.value[0]]
-
-                    if(!this.value[1])
-                        this.urlValue = this.value[0]
-                    else
-                        this.urlValue = this.value[0] + "," + this.value[1]
                 }
             }
         },
+
+        watch: {
+            value: 'compute'
+        },
+
+        created() {
+            this.value = this.urlValue.split(',')
+        },
+
+        methods: {
+            compute() {
+                if (!this.value[0] && !this.value[1]) {
+                    this.urlValue = undefined
+                } else {
+                    if (!this.value[0] && this.value[1]) {
+                        this.value = [this.value[1], this.value[0]]
+                    }
+
+                    if (!this.value[1]) {
+                        this.urlValue = this.value[0]
+                    } else {
+                        this.urlValue = this.value[0] + ',' + this.value[1]
+                    }
+                }
+            }
+        }
     }
 </script>

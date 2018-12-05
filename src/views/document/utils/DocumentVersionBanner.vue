@@ -75,24 +75,24 @@
     import RevertVersionWindow from './windows/RevertVersionWindow'
 
     export default {
-        components : { RevertVersionWindow },
+        components: { RevertVersionWindow },
 
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        props:{
-            version:{
-                type:Object,
-                default:null,
+        props: {
+            version: {
+                type: Object,
+                default: null
             }
         },
 
-        computed:{
-            isFirstVersion(){
+        computed: {
+            isFirstVersion() {
                 return this.version.previous_version_id === null
             },
-            isLastVersion(){
+            isLastVersion() {
                 return this.version.next_version_id === null
-            },
+            }
         }
     }
 </script>

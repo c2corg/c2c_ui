@@ -1,13 +1,15 @@
 <template>
-    <icon-condition v-tooltip="$gettext(condition)" :condition="condition"/>
+    <span :title="$gettext(condition)">
+        <icon-condition :condition="condition"/>
+    </span>
 </template>
 
-<script>
+<script lang="ts">
     export default {
-        props : {
-            condition:{
-                type:String,
-                default:null,
+        props: {
+            condition: {
+                type: String,
+                default: null
             }
         }
     }

@@ -1,11 +1,11 @@
 import common from './common.js'
 import Field from './field.js'
-import documentsProperties from "./documentsProperties.json"
+import documentsProperties from './documentsProperties.json'
 
-const getFieldsObject  = function(fieldsArray){
+const getFieldsObject = function(fieldsArray) {
     var result = {}
 
-    for(let def of fieldsArray){
+    for (let def of fieldsArray) {
         let field = new Field(def.id, def.properties)
         result[field.name] = field
     }
@@ -13,7 +13,7 @@ const getFieldsObject  = function(fieldsArray){
     return result
 }
 
-function Constants(){
+function Constants() {
     this.activities = common.attributes.activities
     this.waypoint_types = common.attributes.waypoint_types
     this.langs = common.attributes.langs
@@ -29,7 +29,7 @@ function Constants(){
     this.objectDefinitions = documentsProperties
     this.letterToDocumentType = {}
 
-    for(let documentType of Object.keys(documentsProperties)){
+    for (let documentType of Object.keys(documentsProperties)) {
         let documentProperties = documentsProperties[documentType]
         documentProperties.fields = getFieldsObject(documentProperties.fields)
         documentProperties.documentType = documentType

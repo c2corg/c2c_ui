@@ -19,8 +19,8 @@
     export default {
         props: {
             outing: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             }
         }
     }

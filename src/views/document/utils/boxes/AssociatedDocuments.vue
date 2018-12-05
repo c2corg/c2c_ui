@@ -48,17 +48,16 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        data(){
+        data() {
             return {
-                associations:null
+                associations: null
             }
         },
 
-        created(){
-
-            function compare(left, right){
+        created() {
+            function compare(left, right) {
                 return left.document_id < right.document_id
             }
 
@@ -67,7 +66,7 @@
             this.associations.books = (this.associations.books || []).sort(compare)
             this.associations.waypoints = this.associations.waypoints || []
             this.associations.articles = this.associations.articles || []
-        },
+        }
     }
 </script>
 

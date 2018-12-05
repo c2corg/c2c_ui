@@ -2,13 +2,13 @@
     <fa-icon :icon="['waypoint', waypointType]"/>
 </template>
 
-<script>
+<script lang="ts">
     export default {
         props: {
             waypointType: {
-                type:String,
-                required:true,
+                type: String,
+                required: true
             }
-        },
+        }
     }
 </script>

@@ -43,13 +43,12 @@
 </template>
 
 <script>
-    import { baseMixin, arrayMixin } from "./mixins.js"
+    import { baseMixin, arrayMixin } from './mixins.js'
 
     export default {
-        mixins: [ baseMixin, arrayMixin ],
+        mixins: [ baseMixin, arrayMixin ]
     }
 </script>
-
 
 <style scoped lang="scss">
 

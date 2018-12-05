@@ -7,22 +7,21 @@
     </div>
 </template>
 
-
 <script>
-    import { requireDocumentProperty, requireFieldProperty} from '@/js/properties-mixins'
+    import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
 
     export default {
 
-        mixins : [ requireDocumentProperty, requireFieldProperty ],
+        mixins: [ requireDocumentProperty, requireFieldProperty ],
 
         props: {
-            hideTitle:{
-                type:Boolean,
-                default:false,
+            hideTitle: {
+                type: Boolean,
+                default: false
             },
-            title:{
-                type:String,
-                default:null,
+            title: {
+                type: String,
+                default: null
             }
         }
     }

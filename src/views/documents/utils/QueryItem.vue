@@ -67,7 +67,7 @@
 <script>
     import { requireFieldProperty } from '@/js/properties-mixins'
 
-    import QueryItemMixin from "./QueryItemMixin.js"
+    import QueryItemMixin from './QueryItemMixin.js'
 
     import Multiselect from 'vue-multiselect'
     import vueSlider from 'vue-slider-component'
@@ -76,14 +76,14 @@
 
     export default {
 
-        components : {
+        components: {
             Multiselect,
             vueSlider,
             QueryItemSliderLabel,
-            DateQueryItem,
+            DateQueryItem
         },
 
-        mixins : [ requireFieldProperty, QueryItemMixin ],
+        mixins: [ requireFieldProperty, QueryItemMixin ],
 
         // debug test, do not remove it
         // created(){
@@ -92,15 +92,14 @@
         // },
 
         methods: {
-            refreshSlider(){
-                if(this.$refs.slider) {
-                    this.$nextTick(() => this.$refs.slider.refresh());
+            refreshSlider() {
+                if (this.$refs.slider) {
+                    this.$nextTick(() => this.$refs.slider.refresh())
                 }
             }
         }
     }
 </script>
-
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 

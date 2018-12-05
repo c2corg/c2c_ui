@@ -24,22 +24,26 @@
             SideMenu,
             Navigation,
             SiteNotice,
-            HelperWindow,
+            HelperWindow
         },
 
-        data(){
+        data() {
             return {
-                alternativeSideMenu:false,
+                alternativeSideMenu: false
             }
         },
 
-        mounted(){
-            document.getElementById("splashscreen").style.display = "none"
+        watch: {
+            $route: 'hideSideMenuOnMobile'
         },
 
-        methods:{
-            toggleSideMenu(){
+        mounted() {
+            document.getElementById('splashscreen').style.display = 'none'
+        },
 
+        methods: {
+            hideSideMenuOnMobile() {
+                this.alternativeSideMenu = false
             }
         }
     }
@@ -73,7 +77,6 @@
         right:0;
         z-index:30;
     }
-
 
     .side-menu{
         padding-top:$navbar-height;

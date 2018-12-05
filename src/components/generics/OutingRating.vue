@@ -16,16 +16,16 @@
     export default {
         props: {
             outing: {
-                type:Object,
-                required:true,
+                type: Object,
+                required: true
             },
             tooltips: {
-                type:Boolean,
-                default:false,
+                type: Boolean,
+                default: false
             }
         },
 
-        ratings:[
+        ratings: [
             'global_rating',
             'rock_free_rating',
             'ice_rating',
@@ -37,7 +37,7 @@
             'hiking_rating',
             'snowshoe_rating',
             'mtb_up_rating',
-            'mtb_down_rating',
+            'mtb_down_rating'
         ]
     }
 

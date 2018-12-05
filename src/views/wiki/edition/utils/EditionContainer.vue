@@ -66,7 +66,7 @@
 
     export default {
 
-        components : {
+        components: {
             FormRow,
             AreaView,
             ArticleView,
@@ -77,34 +77,34 @@
             ProfileView,
             RouteView,
             WaypointView,
-            XreportView,
-         },
+            XreportView
+        },
 
-        props : {
-            document:{
-                type : Object,
-                default: null,
+        props: {
+            document: {
+                type: Object,
+                default: null
             },
-            genericErrors:{
+            genericErrors: {
                 type: Array,
-                required: true,
+                required: true
             },
-            isLoading:{
-                type:Boolean,
-                required:true,
+            isLoading: {
+                type: Boolean,
+                required: true
             },
-            mode:{
+            mode: {
                 type: String,
-                required: true,
+                required: true
             }
         },
 
         data() {
             return {
-                comment:"",
-                isPreview:false,
+                comment: '',
+                isPreview: false
             }
-        },
+        }
     }
 </script>
 

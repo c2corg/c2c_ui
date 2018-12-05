@@ -65,45 +65,45 @@
     import viewModeMixin from './view-mode-mixin'
 
     export default {
-        components:{
+        components: {
             ImagesUploader,
             FollowButton,
-            DocumentVersionBanner,
+            DocumentVersionBanner
         },
 
-        mixins : [
+        mixins: [
             isEditableMixin,
-            viewModeMixin,
+            viewModeMixin
         ],
 
         props: {
-            document:{
-                type : Object,
-                default: null,
-            },
-            version:{
-                type : Object,
-                default: null,
-            },
-            promise:{
+            document: {
                 type: Object,
-                required: true,
+                default: null
             },
+            version: {
+                type: Object,
+                default: null
+            },
+            promise: {
+                type: Object,
+                required: true
+            }
         },
 
-        computed:{
+        computed: {
 
-            lang(){
+            lang() {
                 return this.document ? this.document.cooked.lang : null
             },
 
-            title(){
+            title() {
                 return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.lang) : undefined
             },
 
-            documentType(){ // is-editable mixin needs this property
+            documentType() { // is-editable mixin needs this property
                 return this.$documentUtils.getDocumentType(this.document.type)
-            },
+            }
         }
     }
 

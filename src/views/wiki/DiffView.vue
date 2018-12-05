@@ -106,15 +106,16 @@
     import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
 
-    import { diff_match_patch } from './utils/diff_match_patch_uncompressed'
+    import { diffMatchPatch } from './utils/diff_match_patch_uncompressed'
 
-    const hasChanged = function(oldVal, newVal){
-
-        if(Array.isArray(oldVal) || Array.isArray(newVal))
+    const hasChanged = function(oldVal, newVal) {
+        if (Array.isArray(oldVal) || Array.isArray(newVal)) {
             return JSON.stringify(oldVal) != JSON.stringify(newVal)
+        }
 
-        if (oldVal === null && newVal !== null || oldVal !== null && newVal === null)
+        if ((oldVal === null && newVal !== null) || (oldVal !== null && newVal === null)) {
             return true
+        }
 
         return oldVal !== newVal
     }
@@ -132,88 +133,96 @@
         },
 
         computed: {
-            documentId(){ return parseInt(this.$route.params.id) },
+            documentId() {
+                return parseInt(this.$route.params.id)
+            },
 
-            documentType(){ return this.$route.name.replace("-diff","") },
+            documentType() {
+                return this.$route.name.replace('-diff', '')
+            },
 
-            lang(){ return this.$route.params.lang },
+            lang() {
+                return this.$route.params.lang
+            },
 
             geoLocalized() {
                 return constants.objectDefinitions[this.documentType].geoLocalized
             },
 
-            geometryHasChanged(){
-                if(!this.geoLocalized)
+            geometryHasChanged() {
+                if (!this.geoLocalized) {
                     return false
+                }
 
-                if(this.oldVersion.document.geometry.geom !== this.newVersion.document.geometry.geom)
+                if (this.oldVersion.document.geometry.geom !== this.newVersion.document.geometry.geom) {
                     return true
+                }
 
-                if(this.oldVersion.document.geometry.geom_detail !== this.newVersion.document.geometry.geom_detail)
+                if (this.oldVersion.document.geometry.geom_detail !== this.newVersion.document.geometry.geom_detail) {
                     return true
+                }
 
                 return false
             }
         },
 
-        watch:{
+        watch: {
             '$route': {
                 handler: 'loadVersions',
-                immediate: true,
+                immediate: true
             }
         },
 
         methods: {
-            loadVersions(){
-                this.loadVersionSmart(this.$route.params.versionFrom, "oldVersion", this.$route.params.versionTo)
-                this.loadVersion(this.$route.params.versionTo, "newVersion")
+            loadVersions() {
+                this.loadVersionSmart(this.$route.params.versionFrom, 'oldVersion', this.$route.params.versionTo)
+                this.loadVersion(this.$route.params.versionTo, 'newVersion')
             },
 
-            getKeys(obj1, obj2, excludedKeys){
-
-                var keys = Object.keys(obj1).concat( Object.keys(obj2))
+            getKeys(obj1, obj2, excludedKeys) {
+                var keys = Object.keys(obj1).concat(Object.keys(obj2))
 
                 excludedKeys = excludedKeys || []
 
                 keys = keys.filter(function(item, pos, self) {
-                    return self.indexOf(item) == pos && !excludedKeys.includes(item);
+                    return self.indexOf(item) == pos && !excludedKeys.includes(item)
                 })
 
                 keys.sort()
                 return keys
             },
 
-            buildDiff(){
-                this.diffProperties={}
-                this.diffLocales={}
+            buildDiff() {
+                this.diffProperties = {}
+                this.diffLocales = {}
 
-                if(!this.oldVersion || !this.newVersion) {
-                    return "Waiting for other version"
+                if (!this.oldVersion || !this.newVersion) {
+                    return 'Waiting for other version'
                 }
 
-                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ["version", "locales" , "geometry"])
+                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry'])
 
-                for(let key of keys){
-                    if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])){
+                for (let key of keys) {
+                    if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {
                         this.diffProperties[key] = {
-                            old:this.oldVersion.document[key],
-                            new:this.newVersion.document[key]
+                            old: this.oldVersion.document[key],
+                            new: this.newVersion.document[key]
                         }
                     }
                 }
 
                 var oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang)
                 var newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang)
-                var localeKeys = this.getKeys(oldLocale, newLocale, ["lang", "version"])
+                var localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version'])
 
-                for(let key of localeKeys){
-                    var oldVal = (oldLocale[key] || "").replace(/\r\n?/g, "\n")
-                    var newVal = (newLocale[key] || "").replace(/\r\n?/g, "\n")
+                for (let key of localeKeys) {
+                    var oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n')
+                    var newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n')
 
-                    if (hasChanged(oldVal, newVal)){
-                        let diff = diff_match_patch.diff_main(oldVal, newVal)
-                        diff_match_patch.diff_cleanupSemantic(diff)
-                        let html = diff_match_patch.diff_prettyHtml(diff).split("<br>")
+                    if (hasChanged(oldVal, newVal)) {
+                        let diff = diffMatchPatch.diff_main(oldVal, newVal)
+                        diffMatchPatch.diff_cleanupSemantic(diff)
+                        let html = diffMatchPatch.diff_prettyHtml(diff).split('<br>')
 
                         // TODO bug : a block may be present on several lines...
                         // let result = []
@@ -223,42 +232,42 @@
                         //     }
                         // }
 
-                        this.diffLocales[key] = html.join("<br>")
+                        this.diffLocales[key] = html.join('<br>')
                     }
                 }
             },
 
-            loadVersion(versionId, resultProperty){
-                this[resultProperty]=null
+            loadVersion(versionId, resultProperty) {
+                this[resultProperty] = null
 
                 return c2c[this.documentType].getVersion(this.documentId, this.lang, versionId)
-                .then(response => {
-                    this[resultProperty]=response.data;
-                    if(resultProperty=="newVersion"){
-                        this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
-                    }
+                    .then(response => {
+                        this[resultProperty] = response.data
+                        if (resultProperty == 'newVersion') {
+                            this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
+                        }
 
-                    this.buildDiff()
-                })
+                        this.buildDiff()
+                    })
             },
 
-            loadVersionSmart(versionId, resultProperty, baseVersionId){
-                if(versionId=="prev"){
+            loadVersionSmart(versionId, resultProperty, baseVersionId) {
+                if (versionId == 'prev') {
                     c2c[this.documentType].getHistory(this.documentId, this.lang)
-                    .then(response => {
-                        let versions = response.data.versions
+                        .then(response => {
+                            let versions = response.data.versions
 
-                        for(let i=0;i<versions.length;i++){
-                            if(versions[i].version_id==baseVersionId && i!=0){
-                                this.loadVersion(versions[i-1].version_id, resultProperty)
+                            for (let i = 0; i < versions.length; i++) {
+                                if (versions[i].version_id == baseVersionId && i != 0) {
+                                    this.loadVersion(versions[i - 1].version_id, resultProperty)
+                                }
                             }
-                        }
-                    })
+                        })
                 } else {
                     return this.loadVersion(versionId, resultProperty)
                 }
             }
-        },
+        }
     }
 
 </script>

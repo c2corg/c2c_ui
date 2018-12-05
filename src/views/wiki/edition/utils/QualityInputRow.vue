@@ -17,34 +17,38 @@
     import constants from '@/js/constants'
     import FormRow from './FormRow'
 
-    function hasActivities(doc, activities){
-        for(let activity of activities)
-            if(doc.activities.includes(activity))
+    function hasActivities(doc, activities) {
+        for (let activity of activities) {
+            if (doc.activities.includes(activity)) {
                 return true
+            }
+        }
         return false
     }
 
-    function hasRouteInfo(doc, locale){
+    function hasRouteInfo(doc, locale) {
         return (doc.geometry && doc.geometry.geom_detail) || locale.route_description
     }
 
-    function hasConditionLevel(doc, locale){
-
-        if(locale.conditions)
+    function hasConditionLevel(doc, locale) {
+        if (locale.conditions) {
             return true
+        }
 
-        if(!locale.conditions_levels)
+        if (!locale.conditions_levels) {
             return false
+        }
 
         const level = locale.conditions_levels
 
-        if(level.level_place || level.level_comment || level.level_snow_height_total || level.level_snow_height_soft)
+        if (level.level_place || level.level_comment || level.level_snow_height_total || level.level_snow_height_soft) {
             return true
+        }
 
         return false
     }
 
-    function hasSnowInfo(doc){
+    function hasSnowInfo(doc) {
         return (doc.elevation_up_snow ||
             doc.elevation_down_snow ||
             doc.snow_quantity ||
@@ -53,7 +57,7 @@
             doc.glacier_rating)
     }
 
-    function getImageScore(doc, locale){
+    function getImageScore(doc, locale) {
         let score = 0
 
         score += doc.geometry && doc.geometry.geom ? 1 : 0
@@ -67,8 +71,8 @@
         return score
     }
 
-    function getArticleScore(doc, locale){
-        const description = locale.description || ""
+    function getArticleScore(doc, locale) {
+        const description = locale.description || ''
 
         let score = 0
 
@@ -82,18 +86,18 @@
         return score
     }
 
-    function getOutingScore(doc, locale){
-
-        function getSkiScore(){
+    function getOutingScore(doc, locale) {
+        function getSkiScore() {
             let score = 0
 
             score += hasRouteInfo(doc, locale) ? 0.5 : 0
             score += hasSnowInfo(doc) ? 0.5 : 0
 
-            if(doc.access_condition && doc.access_condition !== 'snowy' && doc.elevation_access)
+            if (doc.access_condition && doc.access_condition !== 'snowy' && doc.elevation_access) {
                 score += 0.5
-            else if (doc.access_condition === 'snowy' && doc.elevation_access && locale.access_comment)
+            } else if (doc.access_condition === 'snowy' && doc.elevation_access && locale.access_comment) {
                 score += 0.5
+            }
 
             score += (doc.avalanche_signs !== 'no') && locale.avalanches ? 0.5 : 0
 
@@ -106,7 +110,7 @@
             return score
         }
 
-        function getIceScore(){
+        function getIceScore() {
             let score = 0
 
             score += hasRouteInfo(doc, locale) ? 0.5 : 0
@@ -119,7 +123,7 @@
             return score
         }
 
-        function getClimbingScore(){
+        function getClimbingScore() {
             let score = 0
 
             score += hasRouteInfo(doc, locale) ? 0.5 : 0
@@ -135,89 +139,97 @@
         let iceScore = 0
         let climbingScore = 0
 
-        if(hasActivities(doc, ['skitouring', 'snowshoeing']))
+        if (hasActivities(doc, ['skitouring', 'snowshoeing'])) {
             skiScore = getSkiScore()
+        }
 
-        if(hasActivities(doc, ['snow_ice_mixed', 'ice_climbing', 'mountain_climbing']))
+        if (hasActivities(doc, ['snow_ice_mixed', 'ice_climbing', 'mountain_climbing'])) {
             iceScore = getIceScore()
+        }
 
-        if(hasActivities(doc, ['rock_climbing', 'hiking', 'mountain_biking', 'via_ferrata', 'paragliding', 'slacklining']))
+        if (hasActivities(doc, ['rock_climbing', 'hiking', 'mountain_biking', 'via_ferrata', 'paragliding', 'slacklining'])) {
             climbingScore = getClimbingScore()
+        }
 
         return Math.max(skiScore, iceScore, climbingScore)
     }
 
     export default {
-        components : { FormRow, },
+        components: { FormRow },
 
-        props : {
-            document:{
-                type : Object,
-                default: null,
-            },
+        props: {
+            document: {
+                type: Object,
+                default: null
+            }
         },
 
-        data(){
+        data() {
             return {
-                autoComputeQuality:true,
-                computedQuality:"empty",
-                manualQuality:null,
+                autoComputeQuality: true,
+                computedQuality: 'empty',
+                manualQuality: null
             }
         },
 
-        computed:{
-            editedLocale(){
+        computed: {
+            editedLocale() {
                 // in edit mode, there is only one locale
-                return this.document ? this.document.locales[0] : null 
+                return this.document ? this.document.locales[0] : null
             }
         },
 
-        watch:{
-            document:{
-                handler:"computeQuality",
-                deep:true,
-                immediate:true,
+        watch: {
+            document: {
+                handler: 'computeQuality',
+                deep: true,
+                immediate: true
             },
-            autoComputeQuality:"storeQuality",
-            manualQuality:"storeQuality",
+            autoComputeQuality: 'storeQuality',
+            manualQuality: 'storeQuality'
         },
 
         methods: {
-            storeQuality(){
+            storeQuality() {
                 this.document.quality = this.autoComputeQuality ? this.computedQuality : this.manualQuality
             },
 
-            computeQuality(){
-                if(!this.document)
+            computeQuality() {
+                if (!this.document) {
                     return null
+                }
 
-                if(this.manualQuality===null) // store orgininal quality
+                // store orgininal quality
+                if (this.manualQuality === null) {
                     this.manualQuality = this.document.quality
+                }
 
                 let score = this.document.quality
 
-                if(this.document.type=="o")
+                if (this.document.type == 'o') {
                     score = getOutingScore(this.document, this.editedLocale)
-                else if(this.document.type=="c")
+                } else if (this.document.type == 'c') {
                     score = getArticleScore(this.document, this.editedLocale)
-                else if(this.document.type=="i")
+                } else if (this.document.type == 'i') {
                     score = getImageScore(this.document, this.editedLocale)
+                }
 
-                if(score<1)
+                if (score < 1) {
                     this.computedQuality = 'empty'
-                else if(score<2)
+                } else if (score < 2) {
                     this.computedQuality = 'draft'
-                else if(score<3)
+                } else if (score < 3) {
                     this.computedQuality = 'medium'
-                else if(score<4)
+                } else if (score < 4) {
                     this.computedQuality = 'fine'
-                else
+                } else {
                     this.computedQuality = 'great'
+                }
 
                 this.storeQuality()
             }
         },
 
-        quality_types:constants.quality_types,
+        quality_types: constants.quality_types
     }
 </script>

@@ -1,8 +1,5 @@
 <template>
-    <icon-geometry-detail v-tooltip="$gettext('GPS Track')"/>
+    <span :title="$gettext('GPS Track')">
+        <icon-geometry-detail />
+    </span>
 </template>
-
-<script>
-    export default {
-    }
-</script>

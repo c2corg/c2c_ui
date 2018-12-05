@@ -11,11 +11,11 @@
 
     export default {
         props: {
-            elevation:{
-                type:Number,
-                default:null,
+            elevation: {
+                type: Number,
+                default: null
             }
-        },
+        }
     }
 
 </script>

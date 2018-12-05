@@ -45,16 +45,16 @@
 
 <script>
 
-    import DocumentViewMixin from "./utils/DocumentViewMixin.js"
+    import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'
 
     export default {
 
-        components:{
+        components: {
             FeedWidget
         },
 
-        mixins : [ DocumentViewMixin ],
+        mixins: [ DocumentViewMixin ]
     }
 </script>

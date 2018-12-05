@@ -14,14 +14,14 @@
 
     export default {
 
-        mixins : [requireDocumentProperty],
+        mixins: [requireDocumentProperty],
 
         props: {
-            lang:{
-                type:String,
-                default: null,
+            lang: {
+                type: String,
+                default: null
             }
-        },
+        }
     }
 
 </script>

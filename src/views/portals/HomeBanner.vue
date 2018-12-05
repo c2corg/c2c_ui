@@ -39,7 +39,7 @@
 
 <script>
     export default {
-        activities : [
+        activities: [
             'skitouring',
             'snow_ice_mixed',
             'mountain_climbing',
@@ -56,6 +56,9 @@
 </script>
 
 <style scoped lang="scss">
+
+    @import '@/assets/sass/variables.scss';
+
     section{
         background-image:url('~@/assets/img/backgrounds/alexbuisse-greenland.jpg');
         background-size: cover;
@@ -63,16 +66,14 @@
     }
 
     .intro-banner {
-        padding: 20px;
+        padding-bottom:40px;
+        padding-top:70px;
         color: #fff;
-        width: 63%;
+        width: 80%;
+        min-width: 730px;
         height: 100%;
         margin: auto;
         align-items: center;
-    }
-
-    .title.is-1{
-        margin-top: 50px;
     }
 
     .title.is-4{
@@ -89,25 +90,33 @@
         line-height: 60px;
         margin-top:60px;
 
-        .outings-link i{
+        .outings-link svg{
             vertical-align: text-bottom;
             margin:5px;
             color: #ffaa45;
             background-color: #fff;
             border-radius: 50%;
-            border: 4px solid #eee;
             font-size: 4rem;
             width:4rem;
             height:4rem;
         }
     }
 
-    .buttons{
-        margin-bottom:40px!important;
-    }
-
     .button{
         display: inline-block;
         height:auto;
     }
+
+    @media screen and (max-width: $tablet) {
+        .intro-banner {
+            width: 100%;
+            min-width: auto;
+            padding:20px;
+        }
+
+        .title.is-4{
+            margin-top: 0;
+        }
+    }
+
 </style>

@@ -8,18 +8,18 @@
 </template>
 
 <script>
-export default{
-    props: {
-        icon:{
-            type:[String, Array],
-            required:true,
-        },
-        label:{
-            type:String,
-            required:true,
+    export default{
+        props: {
+            icon: {
+                type: [String, Array],
+                required: true
+            },
+            label: {
+                type: String,
+                required: true
+            }
         }
     }
-}
 </script>
 
 <style scoped lang="scss">

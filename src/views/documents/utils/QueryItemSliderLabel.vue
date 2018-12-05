@@ -30,20 +30,18 @@
 
     export default{
 
-        mixins : [ requireFieldProperty ],
+        mixins: [ requireFieldProperty ],
 
-        props:{
+        props: {
             value: {
-                type:Array,
-                required:true,
-            },
+                type: Array,
+                required: true
+            }
         }
     }
 </script>
 
-
 <style scoped>
-
 
 .query-label{
     font-style:italic;

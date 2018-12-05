@@ -52,7 +52,6 @@
             <p class="help is-danger" v-if="errorSlope" v-translate>The slope must be between 0 and 80 deg</p>
         </div>
 
-
         <div class="field">
             <label class="label" v-translate>height_diff</label>
             <div class="control">
@@ -84,130 +83,158 @@
 
     export default {
 
-        data(){
+        data() {
             return {
                 skiability: 0,
-                slope:null,
-                elevation:50,
+                slope: null,
+                elevation: 50
             }
         },
 
         computed: {
-            errorSlope(){
+            errorSlope() {
                 return (isNaN(this.slope) || this.slope < 0 || this.slope > 80.0)
             },
 
-            errorElevation(){
+            errorElevation() {
                 return (isNaN(this.elevation) || this.elevation < 50.0 || this.elevation > 3000.0) && this.elevation !== null
             },
 
-            rating(){
-
-                if (this.errorSlope || this.errorElevation)
+            rating() {
+                if (this.errorSlope || this.errorElevation) {
                     return null
+                }
 
                 let inter = Math.tan(Math.PI * this.slope / 180) + 0.1 * Math.log(this.elevation)
                 inter += this.skiability * (inter - 1)
 
                 const diff = (1 + this.skiability) * this.elevation
 
-                if (this.slope <= 17 && diff < 400)
+                if (this.slope <= 17 && diff < 400) {
                     return '1.1'
+                }
 
-                if (this.slope <= 23 && diff < 650)
+                if (this.slope <= 23 && diff < 650) {
                     return '1.2'
+                }
 
-                if (this.slope < 30 && diff < 800)
+                if (this.slope < 30 && diff < 800) {
                     return '1.3'
+                }
 
-                if ((this.slope < 35 && diff < 800) || (this.slope < 23 && diff > 800))
+                if ((this.slope < 35 && diff < 800) || (this.slope < 23 && diff > 800)) {
                     return '2.1'
+                }
 
-                if (this.slope < 35 && diff <= 950)
+                if (this.slope < 35 && diff <= 950) {
                     return '2.2'
+                }
 
-                if (this.slope < 35 && diff > 950)
+                if (this.slope < 35 && diff > 950) {
                     return '2.3'
+                }
 
-                if (this.slope >= 35 && this.slope <= 40 && diff < 650)
+                if (this.slope >= 35 && this.slope <= 40 && diff < 650) {
                     return '3.1'
+                }
 
-                if (this.slope >= 35 && this.slope <= 40 && diff <= 900)
+                if (this.slope >= 35 && this.slope <= 40 && diff <= 900) {
                     return '3.2'
+                }
 
-                if (this.slope >= 35 && this.slope <= 40 && diff > 900)
+                if (this.slope >= 35 && this.slope <= 40 && diff > 900) {
                     return '3.3'
+                }
 
-                if (inter < 0.98)
+                if (inter < 0.98) {
                     return '1.1'
+                }
 
-                if (inter >= 0.98 && inter < 1.02)
+                if (inter >= 0.98 && inter < 1.02) {
                     return '1.2'
+                }
 
-                if (inter >= 1.03 && inter < 1.09)
+                if (inter >= 1.03 && inter < 1.09) {
                     return '+1.3'
+                }
 
-                if (inter >= 1.09 && inter < 1.18)
+                if (inter >= 1.09 && inter < 1.18) {
                     return '+2.1'
+                }
 
-                if (inter >= 1.18 && inter < 1.24)
+                if (inter >= 1.18 && inter < 1.24) {
                     return '2.2'
+                }
 
-                if (inter >= 1.24 && inter < 1.30)
+                if (inter >= 1.24 && inter < 1.30) {
                     return '2.3'
+                }
 
-                if (inter >= 1.30 && inter < 1.34)
+                if (inter >= 1.30 && inter < 1.34) {
                     return '3.1'
+                }
 
-                if (inter >= 1.34 && inter < 1.39)
+                if (inter >= 1.34 && inter < 1.39) {
                     return '3.2'
+                }
 
-                if (inter >= 1.39 && inter < 1.42)
+                if (inter >= 1.39 && inter < 1.42) {
                     return '3.3'
+                }
 
-                if (inter >= 1.42 && inter < 1.46)
+                if (inter >= 1.42 && inter < 1.46) {
                     return '4.1'
+                }
 
-                if (inter >= 1.46 && inter < 1.52)
+                if (inter >= 1.46 && inter < 1.52) {
                     return '4.2'
+                }
 
-                if (inter >= 1.52 && inter < 1.575)
+                if (inter >= 1.52 && inter < 1.575) {
                     return '4.3'
+                }
 
-                if (inter >= 1.575 && inter < 1.67)
+                if (inter >= 1.575 && inter < 1.67) {
                     return '5.1'
+                }
 
-                if (inter >= 1.67 && inter < 1.745)
+                if (inter >= 1.67 && inter < 1.745) {
                     return '5.2'
+                }
 
-                if (inter >= 1.745 && inter < 1.81)
+                if (inter >= 1.745 && inter < 1.81) {
                     return '5.3'
+                }
 
-                if (inter >= 1.81 && inter < 1.95)
+                if (inter >= 1.81 && inter < 1.95) {
                     return '5.4'
+                }
 
-                if (inter >= 1.95 && inter < 2.09)
+                if (inter >= 1.95 && inter < 2.09) {
                     return '5.5'
+                }
 
-                if (inter >= 2.09 && inter < 2.25)
+                if (inter >= 2.09 && inter < 2.25) {
                     return '5.6'
+                }
 
-                if (inter >= 2.25 && inter < 2.4)
+                if (inter >= 2.25 && inter < 2.4) {
                     return '5.7'
+                }
 
                 return '5.8'
             }
         },
 
         methods: {
-            show(){
+            show() {
                 this.$refs.modalWindow.show()
             },
 
-            setResult(){
-                this.$emit("input", this.rating)
+            setResult() {
+                this.$emit('input', this.rating)
                 this.$refs.modalWindow.hide()
-            },
+            }
         }
     }
 </script>

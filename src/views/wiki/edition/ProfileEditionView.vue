@@ -11,7 +11,7 @@
 
         <form-input-row :document="document" :field="fields.summary"/>
         <form-input-row :document="document" :field="fields.description"/>
-        
+
     </edition-container>
 </template>
 
@@ -20,7 +20,7 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ],
+        mixins: [ DocumentEditionViewMixin ]
     }
 
 </script>

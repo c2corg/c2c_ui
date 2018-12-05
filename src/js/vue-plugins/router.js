@@ -1,5 +1,5 @@
 import constants from '@/js/constants'
-import config from "@/js/config.js"
+import config from '@/js/config.js'
 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -50,21 +50,20 @@ const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`)
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`)
 
-
 var routes = [
-    { path: '/',             name: 'home',           component: FeedView },
-    { path: '/dashboard',    name: 'dashboard',      component: DashboardView },
-    { path: '/topoguide',    name: 'topoguide',      component: TopoguideView },
-    { path: '/feed',         name: 'feed',           component: FeedView },
-    { path: '/serac',        name: 'serac',          component: SeracView },
-    { path: '/whatsnew',     name: 'whatsnew',       component: WhatsNewView },
-    { path: '/auth',         name: 'auth',           component: LoginView },
-    { path: '/account',      name: 'account',        component: AccountView },
-    { path: '/following',    name: 'following',      component: FollowingView },
-    { path: '/preferences',  name: 'preferences',    component: PreferencesView },
-    { path: '/mailinglists', name: 'mailinglists',   component: MailingListsView },
+    { path: '/', name: 'home', component: FeedView },
+    { path: '/dashboard', name: 'dashboard', component: DashboardView },
+    { path: '/topoguide', name: 'topoguide', component: TopoguideView },
+    { path: '/feed', name: 'feed', component: FeedView },
+    { path: '/serac', name: 'serac', component: SeracView },
+    { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
+    { path: '/auth', name: 'auth', component: LoginView },
+    { path: '/account', name: 'account', component: AccountView },
+    { path: '/following', name: 'following', component: FollowingView },
+    { path: '/preferences', name: 'preferences', component: PreferencesView },
+    { path: '/mailinglists', name: 'mailinglists', component: MailingListsView },
 
-    { path: '/wip', name: 'workinprogress',   component: WorkInProgressView },
+    { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
     {
         path: '/forum',
@@ -72,72 +71,69 @@ var routes = [
         beforeEnter() {
             location.href = config.urls.forum
         }
-    },
+    }
 ]
 
-
-const addDocumentTypeView = function(def, viewComponent, editionComponent){
-
+const addDocumentTypeView = function(def, viewComponent, editionComponent) {
     routes.push({
         path: '/' + def.documentType + 's',
         name: def.documentType + 's',
-        component: def.documentType=='image' ? ImagesView : DocumentsView},
+        component: def.documentType == 'image' ? ImagesView : DocumentsView }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/:id(\\d+)/:lang?/:title?',
-        name: def.documentType ,
-        component: viewComponent},
+        name: def.documentType,
+        component: viewComponent }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/version/:id(\\d+)/:lang/:version',
-        name: def.documentType + "-version",
-        component: viewComponent},
+        name: def.documentType + '-version',
+        component: viewComponent }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/history/:id(\\d+)/:lang',
-        name: def.documentType + "-history",
-        component: HistoryView},
+        name: def.documentType + '-history',
+        component: HistoryView }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
-        name: def.documentType + "-edit",
-        component: editionComponent},
+        name: def.documentType + '-edit',
+        component: editionComponent }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/add/:lang?',
-        name: def.documentType + "-add",
-        component: editionComponent},
+        name: def.documentType + '-add',
+        component: editionComponent }
     )
 
     routes.push({
         path: '/' + def.documentType + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
-        name: def.documentType + "-diff",
-        component: DiffView},
+        name: def.documentType + '-diff',
+        component: DiffView }
     )
 }
 
+addDocumentTypeView(constants.objectDefinitions.area, AreaView, AreaEditionView)
+addDocumentTypeView(constants.objectDefinitions.article, ArticleView, ArticleEditionView)
+addDocumentTypeView(constants.objectDefinitions.book, BookView, BookEditionView)
+addDocumentTypeView(constants.objectDefinitions.image, ImageView, ImageEditionView)
+addDocumentTypeView(constants.objectDefinitions.map, MapView, MapEditionView)
+addDocumentTypeView(constants.objectDefinitions.outing, OutingView, OutingEditionView)
+addDocumentTypeView(constants.objectDefinitions.profile, ProfileView, ProfileEditionView)
+addDocumentTypeView(constants.objectDefinitions.route, RouteView, RouteEditionView)
+addDocumentTypeView(constants.objectDefinitions.waypoint, WaypointView, WaypointEditionView)
+addDocumentTypeView(constants.objectDefinitions.xreport, XreportView, XreportEditionView)
 
-addDocumentTypeView(constants.objectDefinitions.area,  AreaView, AreaEditionView)
-addDocumentTypeView(constants.objectDefinitions.article,  ArticleView, ArticleEditionView)
-addDocumentTypeView(constants.objectDefinitions.book,  BookView, BookEditionView)
-addDocumentTypeView(constants.objectDefinitions.image,  ImageView, ImageEditionView)
-addDocumentTypeView(constants.objectDefinitions.map,  MapView, MapEditionView)
-addDocumentTypeView(constants.objectDefinitions.outing,  OutingView, OutingEditionView)
-addDocumentTypeView(constants.objectDefinitions.profile,  ProfileView, ProfileEditionView)
-addDocumentTypeView(constants.objectDefinitions.route,  RouteView, RouteEditionView)
-addDocumentTypeView(constants.objectDefinitions.waypoint,  WaypointView, WaypointEditionView)
-addDocumentTypeView(constants.objectDefinitions.xreport,  XreportView, XreportEditionView)
-
-routes.push({ path: '*', name: '404',   component: NotFoundView })
+routes.push({ path: '*', name: '404', component: NotFoundView })
 
 Vue.use(Router)
 
 export default new Router({
     routes,
-    mode: config.routerMode,
+    mode: config.routerMode
 })

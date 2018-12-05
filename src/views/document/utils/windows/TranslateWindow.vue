@@ -20,19 +20,19 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins : [
+        mixins: [
             requireDocumentProperty
         ],
 
         props: {
-            missingLangs:{
-                type:Array,
-                required: true,
+            missingLangs: {
+                type: Array,
+                required: true
             }
         },
 
-        methods:{
-            show(){
+        methods: {
+            show() {
                 this.$refs.modalWindow.show()
             }
         }

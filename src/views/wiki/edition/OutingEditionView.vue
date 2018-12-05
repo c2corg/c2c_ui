@@ -132,40 +132,40 @@
     </edition-container>
 </template>
 
-
 <script>
 
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
-    import CotometerWindow from "./utils/CotometerWindow"
+    import CotometerWindow from './utils/CotometerWindow'
 
     export default {
-        components : { CotometerWindow },
+        components: { CotometerWindow },
 
         mixins: [ DocumentEditionViewMixin ],
 
-        data(){
+        data() {
             return {
-                showBothDates: false,
+                showBothDates: false
             }
         },
 
         methods: {
-            afterLoad(){
+            afterLoad() {
                 this.showBothDates = this.document.date_start !== this.document.date_end
             },
 
-            handleDates(){
-                if(!this.showBothDates)
+            handleDates() {
+                if (!this.showBothDates) {
                     this.document.date_end = this.document.date_start
+                }
             },
 
-            beforeSave(){
+            beforeSave() {
                 this.handleDates()
             },
 
-            showCotometer(){
+            showCotometer() {
                 this.$refs.cotometerWindow.show()
-            },
+            }
         }
     }
 

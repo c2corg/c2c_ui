@@ -523,6 +523,10 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "Infos"
+msgstr ""
+
 #: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Insert emoji"
 msgstr ""
@@ -812,6 +816,10 @@ msgstr ""
 msgid "Send reset email"
 msgstr ""
 
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "Settings"
+msgstr ""
+
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "Several days?"
 msgstr ""
@@ -1032,6 +1040,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "access"
+msgstr ""
+
+#: src/views/document/WaypointView.vue
+msgid "access_period"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1570,6 +1582,10 @@ msgstr ""
 msgid "exposition_rock_rating"
 msgstr ""
 
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "exposure_time"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "external_witness"
 msgstr ""
@@ -1608,6 +1624,14 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "flora"
+msgstr ""
+
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "fnumber"
+msgstr ""
+
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "focal_length"
 msgstr ""
 
 #: src/views/document/ProfileView.vue
@@ -1827,6 +1851,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "internal_witness"
+msgstr ""
+
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "iso_speed"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2126,6 +2154,14 @@ msgstr ""
 msgid "open_non_guarded"
 msgstr ""
 
+#: src/views/document/WaypointView.vue
+msgid "opening_hours"
+msgstr ""
+
+#: src/views/document/WaypointView.vue
+msgid "opening_periods"
+msgstr ""
+
 #: src/views/static-views/NotFoundView.vue
 msgid "or try the following pages:"
 msgstr ""
@@ -2176,6 +2212,10 @@ msgstr ""
 msgid "pass"
 msgstr ""
 
+#: src/views/document/WaypointView.vue
+msgid "pedestrian access"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "people"
 msgstr ""
@@ -2187,6 +2227,11 @@ msgstr ""
 #: src/components/images-uploader/ImageUploader.vue
 #: src/translations/fixed_strings_common_js.vue
 msgid "personal"
+msgstr ""
+
+#: src/views/document/OutingView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "personal comments"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2269,6 +2314,10 @@ msgstr ""
 msgid "psicobloc"
 msgstr ""
 
+#: src/views/document/WaypointView.vue
+msgid "public transportation access"
+msgstr ""
+
 #: src/components/generics/markers/MarkerQuality.vue
 #: src/views/wiki/edition/utils/QualityInputRow.vue
 msgid "quality"
@@ -2313,8 +2362,16 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
+#: src/components/generics/gallery/ImageInfo.vue
+msgid "resolution"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "restaurant"
+msgstr ""
+
+#: src/views/document/WaypointView.vue
+msgid "restricted_access"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2333,6 +2390,10 @@ msgstr ""
 #: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "risk_rating"
+msgstr ""
+
+#: src/views/document/WaypointView.vue
+msgid "road or pedestrian access"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue

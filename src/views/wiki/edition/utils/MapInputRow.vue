@@ -20,36 +20,39 @@
     </div>
 </template>
 
-
 <script>
     import { requireDocumentProperty } from '@/js/properties-mixins'
     import FormRow from './FormRow'
 
     export default {
 
-        components: { FormRow, },
+        components: { FormRow },
 
-        mixins : [ requireDocumentProperty ],
+        mixins: [ requireDocumentProperty ],
 
-        props:{
+        props: {
             geomDetailEditable: {
                 type: Boolean,
-                default: false,
+                default: false
             }
         },
 
         computed: {
-            hasError(){ return false },
-            visible(){ return true },
+            hasError() {
+                return false
+            },
+            visible() {
+                return true
+            }
         },
 
         methods: {
-            uploadGpxTrack(event){
+            uploadGpxTrack(event) {
                 var reader = new FileReader()
 
-                reader.onload = (function(){
+                reader.onload = function() {
                     this.$refs.map.setDocumentGeometryFromGpx(reader.result)
-                }).bind(this)
+                }.bind(this)
 
                 reader.readAsText(event.target.files[0])
             }

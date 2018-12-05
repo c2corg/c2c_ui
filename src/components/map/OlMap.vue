@@ -75,7 +75,6 @@
     </div>
 </template>
 
-
 <script>
     import ol from '@/js/libs/ol'
     import biodivSports from '@/js/apis/biodiv-sports'
@@ -98,150 +97,152 @@
         props: {
             documents: {
                 type: Array,
-                default: null,
+                default: null
             },
 
             showFilterControl: {
                 type: Boolean,
-                default:false,
+                default: false
             },
 
             showRecenterOn: {
                 type: Boolean,
-                default:false,
+                default: false
             },
 
             showCenterOnGeolocation: {
                 type: Boolean,
-                default:false,
+                default: false
             },
 
             showBiodivSportsAreas: {
                 type: Boolean,
-                default:false,
+                default: false
             },
 
             biodivSportsActivities: {
                 type: Array,
-                default: null,
+                default: null
             },
 
             editable: {
                 type: Boolean,
-                default: false,
+                default: false
             },
 
             geomDetailEditable: {
                 type: Boolean,
-                default: false,
+                default: false
             },
 
             oldDocument: {
-                type:Object,
-                default:null,
+                type: Object,
+                default: null
             },
 
             newDocument: {
-                type:Object,
-                default:null,
+                type: Object,
+                default: null
             }
         },
 
-        data(){
+        data() {
             return {
                 map: null,
 
                 // map layers, one of them is visible
-                mapLayers : cartoLayers,
+                mapLayers: cartoLayers,
 
-                //slope layers
-                dataLayers : dataLayers,
+                // slope layers
+                dataLayers: dataLayers,
 
-                //bidiv layer
-                biodivLayer : new ol.layer.Vector({
+                // bidiv layer
+                biodivLayer: new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
 
                 // layer for document icons and paths
-                documentsLayer : new ol.layer.Vector({
+                documentsLayer: new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
 
                 // layer for associated waypoints
-                waypointsLayer : new ol.layer.Vector({
+                waypointsLayer: new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
 
-                geolocation : null,
+                geolocation: null,
 
                 showLayerSwitcher: false,
 
                 filterDocumentsWithMap: Boolean(this.$route.query.bbox),
 
-                highlightedFeature_ : null,
+                highlightedFeature_: null,
 
-                recenterPropositions : null,
-                showRecenterOnPropositions: false,
+                recenterPropositions: null,
+                showRecenterOnPropositions: false
             }
         },
 
         computed: {
 
-            highlightedFeature:{
-                get(){
+            highlightedFeature: {
+                get() {
                     return this.highlightedFeature_
                 },
 
-                set(feature){
-                    if(this.highlightedFeature)
-                        this.highlightedFeature.setStyle(this.highlightedFeature.get("normalStyle"))
+                set(feature) {
+                    if (this.highlightedFeature) {
+                        this.highlightedFeature.setStyle(this.highlightedFeature.get('normalStyle'))
+                    }
 
-                    if(feature && feature.get("highlightedStyle")){
-                        feature.setStyle(feature.get("highlightedStyle"))
+                    if (feature && feature.get('highlightedStyle')) {
+                        feature.setStyle(feature.get('highlightedStyle'))
                     }
 
                     this.highlightedFeature_ = feature
                 }
             },
 
-            highlightedDocument:{
-                get(){
-                    if(this.highlightedFeature)
+            highlightedDocument: {
+                get() {
+                    if (this.highlightedFeature) {
                         return this.highlightedFeature.get('document')
-
+                    }
                 },
-                set(document){
-                    if(document)
+                set(document) {
+                    if (document) {
                         this.highlightedFeature = this.documentsLayer.getSource().getFeatureById(document.document_id)
-                    else
+                    } else {
                         this.highlightedFeature = null
+                    }
                 }
             },
 
-            urlValue:{
-                get(){
+            urlValue: {
+                get() {
                     var result = this.$route.query.bbox
-                    return result ? result.replace("%252C", ",").split(",").map(num => parseInt(num, 10)) : undefined
-                },
+                    return result ? result.replace('%252C', ',').split(',').map(num => parseInt(num, 10)) : undefined
+                }
             },
 
-            view(){
+            view() {
                 return this.map.getView()
             },
 
-            visibleLayer : {
-                get(){
-                    return this.mapLayers.find( layer => layer.getVisible()===true)
+            visibleLayer: {
+                get() {
+                    return this.mapLayers.find(layer => layer.getVisible() === true)
                 },
-                set(layer){
+                set(layer) {
                     this.visibleLayer.setVisible(false)
                     layer.setVisible(true)
                     this.setMaxZoom()
                 }
             },
 
-            editedDocument(){
-                if(this.editable){
+            editedDocument() {
+                if (this.editable) {
                     // documents must be a 1-length array
                     // in this mode, documents array is not reactive
                     // and can't be setted after component creation
@@ -250,56 +251,53 @@
             }
         },
 
-        watch:{
-            documents:{
-                handler:function(){
+        watch: {
+            documents: {
+                handler: function() {
                     this.drawDocumentMarkers()
                     this.fitMapToDocuments()
                 },
-                deep:true, // must look on change inside documents object
+                deep: true // must look on change inside documents object
             },
 
-            filterDocumentsWithMap : 'sendBoundsToUrl',
+            filterDocumentsWithMap: 'sendBoundsToUrl'
         },
 
         mounted() {
-
             this.map = new ol.Map({
-                target : this.$refs.map,
+                target: this.$refs.map,
 
                 controls: ol.control.defaults().extend([
-                    new ol.control.FullScreen({source: this.$el}),
+                    new ol.control.FullScreen({ source: this.$el }),
                     new ol.control.ScaleLine(),
-                    new ol.control.Control({element: this.$refs.layerSwitcherButton}),
-                    new ol.control.Control({element: this.$refs.layerSwitcher}),
-                    new ol.control.Control({element: this.$refs.useMapAsFilter}),
-                    new ol.control.Control({element: this.$refs.centerOnGeolocation}),
-                    new ol.control.Control({element: this.$refs.recenterOnControl}),
-                    new ol.control.Control({element: this.$refs.recenterOnPropositions}),
+                    new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
+                    new ol.control.Control({ element: this.$refs.layerSwitcher }),
+                    new ol.control.Control({ element: this.$refs.useMapAsFilter }),
+                    new ol.control.Control({ element: this.$refs.centerOnGeolocation }),
+                    new ol.control.Control({ element: this.$refs.recenterOnControl }),
+                    new ol.control.Control({ element: this.$refs.recenterOnPropositions })
                 ]),
 
                 layers: this.mapLayers.concat(this.dataLayers).concat([
                     this.biodivLayer,
                     this.waypointsLayer,
-                    this.documentsLayer,
+                    this.documentsLayer
                 ]),
 
                 view: new ol.View({
-                    maxZoom:this.visibleLayer.get("maxZoom"),
+                    maxZoom: this.visibleLayer.get('maxZoom')
                 }),
 
                 loadTilesWhileAnimating: true,
-                loadTilesWhileInteracting: true,
+                loadTilesWhileInteracting: true
 
-
-                //pixelRatio: this.pixelRatio,
-                //renderer: this.renderer,
-                //keyboardEventTarget: this.keyboardEventTarget,
+            // pixelRatio: this.pixelRatio,
+            // renderer: this.renderer,
+            // keyboardEventTarget: this.keyboardEventTarget,
             })
 
-            this.map.on("moveend", this.sendBoundsToUrl)
-            this.map.on("moveend", this.getBiodivSportsAreas)
-
+            this.map.on('moveend', this.sendBoundsToUrl)
+            this.map.on('moveend', this.getBiodivSportsAreas)
 
             this.geolocation = new ol.Geolocation({
                 trackingOptions: {
@@ -311,12 +309,13 @@
 
             this.drawDocumentMarkers()
 
-            if(this.urlValue)
-                this.view.fit(this.urlValue, {size:this.map.getSize()})
-            else
+            if (this.urlValue) {
+                this.view.fit(this.urlValue, { size: this.map.getSize() })
+            } else {
                 this.fitMapToDocuments(true)
+            }
 
-            if(this.editable){
+            if (this.editable) {
                 this.setModifyInteractions()
                 this.setDrawInteraction()
                 this.setDragAndDropInteraction()
@@ -327,112 +326,113 @@
             }
         },
 
-        methods : {
+        methods: {
 
-            setModifyInteractions(){
+            setModifyInteractions() {
                 let source = this.documentsLayer.getSource()
-                let modify = new ol.interaction.Modify({source})
+                let modify = new ol.interaction.Modify({ source })
 
                 this.map.addInteraction(modify)
-                this.map.addInteraction(new ol.interaction.Snap({source}))
+                this.map.addInteraction(new ol.interaction.Snap({ source }))
 
-                modify.on("modifyend", (event) => {
-                    for(let feature of event.features.getArray()){
+                modify.on('modifyend', (event) => {
+                    for (let feature of event.features.getArray()) {
                         this.updateDocumentGeometryFromFeature(feature)
                     }
                 })
             },
 
-            setDrawInteraction(){
+            setDrawInteraction() {
                 let source = this.documentsLayer.getSource()
 
-                if(this.drawInteraction)
+                if (this.drawInteraction) {
                     this.map.removeInteraction(this.drawInteraction)
+                }
 
                 this.drawInteraction = null
 
-                if(!this.editedDocument.geometry.geom){
+                if (!this.editedDocument.geometry.geom) {
                     this.drawInteraction = new ol.interaction.Draw({
                         source: source,
-                        type: "Point"
+                        type: 'Point'
                     })
-                } else if(this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
+                } else if (this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
                     this.drawInteraction = new ol.interaction.Draw({
                         source: source,
-                        type: "LineString"
+                        type: 'LineString'
                     })
                 }
 
-                if(this.drawInteraction){
+                if (this.drawInteraction) {
                     this.map.addInteraction(this.drawInteraction)
 
-                    this.drawInteraction.on("drawend", (event) => {
+                    this.drawInteraction.on('drawend', (event) => {
                         this.setDocumentGeometryFromFeature(event.feature, false)
                     })
                 }
             },
 
             // https://openlayers.org/en/latest/examples/drag-and-drop.html
-            setDragAndDropInteraction(){
+            setDragAndDropInteraction() {
                 let dragAndDrop = new ol.interaction.DragAndDrop({
                     formatConstructors: [ol.format.GPX, ol.format.KML]
                 })
 
-                dragAndDrop.on('addfeatures', (function(event){
+                dragAndDrop.on('addfeatures', function(event) {
                     this.setDocumentGeometryFromFeature(event.features[0])
-                }).bind(this))
+                }.bind(this))
 
                 this.map.addInteraction(dragAndDrop)
             },
 
-            updateDocumentGeometryFromFeature(feature){
-                let document = feature.get("document")
+            updateDocumentGeometryFromFeature(feature) {
+                let document = feature.get('document')
 
-                if(!document)
+                if (!document) {
                     return
+                }
 
-                this.setDocumentGeometry(document, feature.get("geometry"))
+                this.setDocumentGeometry(document, feature.get('geometry'))
             },
 
-            setDocumentGeometryFromGpx(gpx){
+            setDocumentGeometryFromGpx(gpx) {
                 let gpxFormat = new ol.format.GPX()
-                let feature = gpxFormat.readFeature(gpx, {featureProjection: 'EPSG:3857'})
+                let feature = gpxFormat.readFeature(gpx, { featureProjection: 'EPSG:3857' })
 
                 this.setDocumentGeometryFromFeature(feature)
             },
 
-            setDocumentGeometryFromFeature(feature, fitMap=true){
-                this.setDocumentGeometry(this.editedDocument, feature.get("geometry"))
+            setDocumentGeometryFromFeature(feature, fitMap = true) {
+                this.setDocumentGeometry(this.editedDocument, feature.get('geometry'))
                 this.drawDocumentMarkers()
 
-                if(fitMap)
+                if (fitMap) {
                     this.fitMapToDocuments(true)
+                }
 
                 this.setDrawInteraction()
             },
 
-            setDocumentGeometry(document, geometry){
+            setDocumentGeometry(document, geometry) {
                 let geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
 
-                if(geoJsonGeometry.type == "Point"){
-                    //remove elevation and timestamp
+                if (geoJsonGeometry.type == 'Point') {
+                    // remove elevation and timestamp
                     geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2)
                     document.geometry.geom = JSON.stringify(geoJsonGeometry)
-
-                } else if(geoJsonGeometry.type =="LineString" || geoJsonGeometry.type =="MultiLineString") {
+                } else if (geoJsonGeometry.type == 'LineString' || geoJsonGeometry.type == 'MultiLineString') {
                     document.geometry.geom_detail = JSON.stringify(geoJsonGeometry)
 
-                    if(!document.geometry.geom){
-                        let mainLine = geometry.getType() == "MultiLineString" ? geometry.getLineString(0) : geometry
+                    if (!document.geometry.geom) {
+                        let mainLine = geometry.getType() == 'MultiLineString' ? geometry.getLineString(0) : geometry
                         this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
                     }
-
                 } else {
-                    throw `Unexpected geometry type : ${geometry.type}`
+                    throw new Error(`Unexpected geometry type : ${geometry.type}`)
                 }
             },
 
-            drawDocumentMarkers(){
+            drawDocumentMarkers() {
                 var documentsSource = this.documentsLayer.getSource()
                 var waypointsSource = this.waypointsLayer.getSource()
 
@@ -442,54 +442,58 @@
                 this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true))
                 this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false))
 
-                for(let document of this.documents || []){
+                for (let document of this.documents || []) {
                     this.addDocumentFeature(document, documentsSource)
 
-                    if(document.associations && document.associations.waypoints && !this.editable){
-                        for(let waypoint of document.associations.waypoints){
+                    if (document.associations && document.associations.waypoints && !this.editable) {
+                        for (let waypoint of document.associations.waypoints) {
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }
                     }
                 }
             },
 
-            addDocumentFeature(document, source, style){
-                if(!document || !document.geometry)
+            addDocumentFeature(document, source, style) {
+                if (!document || !document.geometry) {
                     return
+                }
 
                 let title = this.$documentUtils.getDocumentTitle(document)
 
-                if(document.geometry.geom){
+                if (document.geometry.geom) {
                     let feature = this.addFeature(
                         source,
                         JSON.parse(document.geometry.geom),
-                        style ? style : getDocumentPointStyle(document, title, false),
+                        style || getDocumentPointStyle(document, title, false),
                         style ? null : getDocumentPointStyle(document, title, true)
                     )
 
-                    feature.set("document", document)
+                    feature.set('document', document)
                     feature.setId(document.document_id)
                 }
 
-                if(document.geometry.geom_detail)
+                if (document.geometry.geom_detail) {
                     this.addFeature(
                         source,
                         JSON.parse(document.geometry.geom_detail),
-                        style ? style : getDocumentLineStyle(title, false),
+                        style || getDocumentLineStyle(title, false),
                         style ? null : getDocumentLineStyle(title, true)
-                    ).set("document", document)
+                    ).set('document', document)
+                }
             },
 
-            addFeature(source, data, normalStyle, highlightedStyle){
-                if(!data)
+            addFeature(source, data, normalStyle, highlightedStyle) {
+                if (!data) {
                     return
+                }
 
                 let feature = geoJSONFormat.readFeature(data)
 
-                feature.set("normalStyle", normalStyle)
+                feature.set('normalStyle', normalStyle)
 
-                if(highlightedStyle)
-                    feature.set("highlightedStyle", highlightedStyle)
+                if (highlightedStyle) {
+                    feature.set('highlightedStyle', highlightedStyle)
+                }
 
                 feature.setStyle(normalStyle)
                 source.addFeature(feature)
@@ -497,14 +501,14 @@
                 return feature
             },
 
-            setMaxZoom(){
-                const maxZoom = this.visibleLayer.get("maxZoom")
+            setMaxZoom() {
+                const maxZoom = this.visibleLayer.get('maxZoom')
 
-                if(this.view.getZoom() > maxZoom){
+                if (this.view.getZoom() > maxZoom) {
                     this.view.setZoom(maxZoom)
                 }
 
-                this.view.set("maxZoom", maxZoom)
+                this.view.set('maxZoom', maxZoom)
             },
 
             addBiodivSportsData(response) {
@@ -514,11 +518,10 @@
                 this.hasBiodivsportAreas = false
 
                 for (let result of results) {
-
                     let geometry = geoJSONFormat.readGeometry(result['geometry'], {
                         dataProjection: 'EPSG:4326',
                         featureProjection: 'EPSG:3857'
-                    });
+                    })
 
                     const feature = new ol.Feature({
                         geometry,
@@ -528,46 +531,50 @@
                         'description': (result['description']),
                         'info_url': (result['info_url']),
                         'kml_url': (result['kml_url']),
-                        'period': (result['period']),
-                    });
+                        'period': (result['period'])
+                    })
 
-                    feature.setId('biodiv_' + (result['id']));
+                    feature.setId('biodiv_' + (result['id']))
 
-                    feature.set("normalStyle", buildPolygonStyle(result.name, false))
-                    feature.set("highlightedStyle", buildPolygonStyle(result.name, true))
+                    feature.set('normalStyle', buildPolygonStyle(result.name, false))
+                    feature.set('highlightedStyle', buildPolygonStyle(result.name, true))
                     feature.setStyle(feature.get('normalStyle'))
 
-                    source.addFeature(feature);
+                    source.addFeature(feature)
                     this.hasBiodivsportAreas = true
                 }
             },
 
             // If user want's to filter with map, it will send extent to url
             // otherwise, it set bbox url to undefined
-            sendBoundsToUrl(){
+            sendBoundsToUrl() {
                 var bounds = this.view.calculateExtent()
                 var query = Object.assign({}, this.$route.query)
 
-                query.bbox =  this.filterDocumentsWithMap ? bounds.map(Math.round).join(",") : undefined
-                if(query.bbox!==this.$route.query.bbox){
-                    this.$router.push({query: query})
+                query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined
+                if (query.bbox !== this.$route.query.bbox) {
+                    this.$router.push({ query: query })
                 }
             },
 
-            fitMapToDocuments(force){
-                if((this.filterDocumentsWithMap || this.editable) && !force)
+            fitMapToDocuments(force) {
+                if ((this.filterDocumentsWithMap || this.editable) && !force) {
                     return
+                }
 
                 var extent = this.documentsLayer.getSource().getExtent()
 
-                if(extent.filter(isFinite).length != 4) // if there is infnity, default extent
-                    extent =  DEFAULT_EXTENT // TODO need to be current extent if it exists ...
+                if (extent.filter(isFinite).length != 4) {
+                    // if there is infnity, default extent
+                    // TODO need to be current extent if it exists ...
+                    extent = DEFAULT_EXTENT
+                }
 
-                this.view.fit(extent, {size:this.map.getSize()})
+                this.view.fit(extent, { size: this.map.getSize() })
                 this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()))
             },
 
-            toogleMapLayer(layer){
+            toogleMapLayer(layer) {
                 layer.setVisible(!layer.getVisible())
             },
 
@@ -576,27 +583,27 @@
 
                 this.highlightedDocument = null
 
-                this.map.forEachFeatureAtPixel(event.pixel, function (feature) {
+                this.map.forEachFeatureAtPixel(event.pixel, function(feature) {
                     this_.highlightedFeature = feature
                     return true
                 })
             },
 
-            onClick(event){
+            onClick(event) {
                 const feature = this.map.forEachFeatureAtPixel(event.pixel, feature => feature)
 
                 if (feature) {
-                    const document = feature.get('document');
-                    if(document){
+                    const document = feature.get('document')
+                    if (document) {
                         this.$router.push({
                             name: this.$documentUtils.getDocumentType(document.type),
-                            params: { id:document.document_id }
+                            params: { id: document.document_id }
                         })
                     }
                 }
             },
 
-            centerOnGeolocation(){
+            centerOnGeolocation() {
                 this.geolocation.setTracking(true)
 
                 // TODO : not tracking mode,
@@ -610,12 +617,12 @@
                 this.geolocation.on('change:position', setCenter.bind(this))
             },
 
-            searchRecenterPropositions(event){
+            searchRecenterPropositions(event) {
                 let query = event.target.value
 
-                if(query && query.length >=3){
+                if (query && query.length >= 3) {
                     const center = this.view.getCenter()
-                    const centerWgs84 = ol.proj.toLonLat(center);
+                    const centerWgs84 = ol.proj.toLonLat(center)
 
                     this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84)
                     this.showRecenterOnPropositions = true
@@ -623,14 +630,14 @@
             },
 
             // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
-            recenterOn(item){
+            recenterOn(item) {
                 const feature = geoJSONFormat.readFeature(item)
                 let extent = feature.get('extent')
                 let coordinates = feature.getGeometry().flatCoordinates
 
-                if(extent) {
-                    extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
-                    this.view.fit(extent, {size:this.map.getSize(), maxZoom: 12})
+                if (extent) {
+                    extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857')
+                    this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 })
                 } else {
                     coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857')
                     this.view.setCenter(coordinates)
@@ -640,18 +647,19 @@
                 this.showRecenterOnPropositions = false
             },
 
-            getBiodivSportsAreas(){
-                if (!this.showBiodivSportsAreas)
+            getBiodivSportsAreas() {
+                if (!this.showBiodivSportsAreas) {
                     return
+                }
 
                 let extent = this.view.calculateExtent(this.map.getSize() || null)
 
                 // get extent in WGS format
                 extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
                 biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current)
-                .then(this.addBiodivSportsData)
-                // .catch(response => console.warn(response))
-            },
+                    .then(this.addBiodivSportsData)
+                    // .catch(response => console.warn(response))
+            }
         }
     }
 </script>
@@ -722,8 +730,6 @@ $control-margin:0.5em;
 }
 
 </style>
-
-
 
 <style lang="scss">
 

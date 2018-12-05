@@ -43,26 +43,26 @@
 
 <script>
 
-export default {
-    props:{
-        showUncancelableWarning:{
-            type:Boolean,
-            default:false,
+    export default {
+        props: {
+            showUncancelableWarning: {
+                type: Boolean,
+                default: false
+            },
+            promise: {
+                type: Object,
+                default: null
+            }
         },
-        promise:{
-            type:Object,
-            default:null,
-        },
-    },
 
-    methods:{
-        show(){
-            this.$refs.modalWindow.show()
-        },
-        hide(){
-            this.$refs.modalWindow.hide()
+        methods: {
+            show() {
+                this.$refs.modalWindow.show()
+            },
+            hide() {
+                this.$refs.modalWindow.hide()
+            }
         }
     }
-}
 
 </script>
