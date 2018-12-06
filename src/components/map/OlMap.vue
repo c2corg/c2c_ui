@@ -445,8 +445,11 @@
                 for (let document of this.documents || []) {
                     this.addDocumentFeature(document, documentsSource)
 
-                    if (document.associations && document.associations.waypoints && !this.editable) {
-                        for (let waypoint of document.associations.waypoints) {
+                    if (document.associations && !this.editable) {
+                        for (let waypoint of document.associations.waypoints || []) {
+                            this.addDocumentFeature(waypoint, waypointsSource)
+                        }
+                        for (let waypoint of document.associations.waypoint_children || []) {
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }
                     }

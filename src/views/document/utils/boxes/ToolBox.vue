@@ -9,7 +9,7 @@
             <span class="lang-switcher-box-list">
                 <span v-for="lang of document.available_langs" :key="lang">
                     <document-link :document="document" :lang="lang">
-                        {{ lang }}
+                        {{ $gettext(lang) }}
                     </document-link>
                 </span>
             </span>

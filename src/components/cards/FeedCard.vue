@@ -28,12 +28,12 @@
 
             <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
-            <span v-if="item.document.height_diff_up">
+            <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
                 <icon-height-diff />
                 {{ item.document.height_diff_up }} m
             </span>
 
-            <span v-if="item.document.height_diff_difficulties">
+            <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
                 <fa-icon icon="arrows-alt-v"/>
                 {{ item.document.height_diff_difficulties }} m
             </span>
@@ -49,9 +49,9 @@
                 <marker-image-count :image-count="item.document.img_count" />
                 <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
             </span>
-            <span> {{ item.time | timeAgo }} </span>
+            <span> {{ $moment.timeAgo(item.time) }} </span>
             <span>
-                <icon-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
+                <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
                 <marker-quality :quality="item.document.quality" />
             </span>
         </div>
@@ -117,8 +117,8 @@
 
             this.actionLine += this.documentType
 
-            const start = this.$moment(this.item['document']['date_start'])
-            const end = this.$moment(this.item['document']['date_end'])
+            const start = this.$moment.parseDate(this.item['document']['date_start'])
+            const end = this.$moment.parseDate(this.item['document']['date_end'])
             const sameYear = start.year() == end.year()
             const sameMonth = start.month() == end.month()
             const sameDay = start.date() == end.date()

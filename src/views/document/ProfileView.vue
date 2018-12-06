@@ -1,7 +1,12 @@
 <template>
     <div class="section">
         <document-view-header :document="document" :version="version" :promise="promise" />
-        <div v-if="document" class="columns">
+
+        <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
+            This profile is only available to authenticated users.
+        </div>
+
+        <div v-if="document && !document.not_authorized" class="columns">
 
             <div class="column is-3">
                 <div class="box">

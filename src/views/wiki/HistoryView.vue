@@ -73,7 +73,7 @@
                         </td>
                         <td>
                             <version-link :document-type="documentType" :id="documentId" :version="version.version_id" :lang="lang">
-                                {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+                                {{ $moment.toTechnicalString(version.written_at) }}
                             </version-link>
                         </td>
                         <td>

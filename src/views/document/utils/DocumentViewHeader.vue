@@ -4,11 +4,7 @@
 
         <loading-notification :promise="promise" />
 
-        <div v-if="document && document.not_authorized" class="notification is-danger" v-translate>
-            Sorry, you're not authorized to see this page.
-        </div>
-
-        <div v-else-if="document">
+        <div v-if="document && !document.not_authorized">
             <html-header v-if="!isDraftView" :title="title"/>
 
             <document-version-banner :version="version" :document="document" />

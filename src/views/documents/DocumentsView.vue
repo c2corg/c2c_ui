@@ -7,7 +7,7 @@
                     <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
                 </span>
 
-                <span class="level-item">
+                <span v-if="!['area', 'profile'].includes(documentType)" class="level-item">
                     <add-link
                         :document-type="documentType"
                         :query="addQuery"

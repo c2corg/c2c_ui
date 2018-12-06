@@ -4,7 +4,7 @@
             v-for="rating of $options.ratings"
             :key="rating"
             v-if="outing[rating]"
-            v-tooltip="tooltips ? $gettext(rating) : null">
+            :title="$gettext(rating)">
             {{ outing[rating] }}
         </span>
     </span>
@@ -19,10 +19,6 @@
                 type: Object,
                 required: true
             },
-            tooltips: {
-                type: Boolean,
-                default: false
-            }
         },
 
         ratings: [

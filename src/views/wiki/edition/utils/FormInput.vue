@@ -3,6 +3,7 @@
         v-if="field.name=='activities'"
         v-show="visible"
         :error-message="errorMessage"
+        show-labels
         v-model="document.activities" />
 
     <input-orientation

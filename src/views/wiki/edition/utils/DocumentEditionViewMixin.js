@@ -69,17 +69,31 @@ export default {
         }
     },
 
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if(!vm.$user.isLogged){
+                vm.$router.push({name: "auth"})
+            }
+        })
+    },
+
     created() {
+
         if (this.mode == 'edit') {
             this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
         } else {
             this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
+            // add current user
+            c2c.profile.get(this.$user.id).then(response => {
+                this.$documentUtils.addAssociation(this.document, response.data)
+            })
+
             // Add associations presents in url query
             for (let letter of Object.keys(this.$route.query)) {
                 let documentType = this.$documentUtils.getDocumentType(letter)
 
-                if (documentType) {
+                if (documentType && this.$route.query[letter]) {
                     // Value may be a number or a string
                     let documentIds = String(this.$route.query[letter]).split(',')
 

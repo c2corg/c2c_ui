@@ -1,9 +1,11 @@
 <template>
-    <router-link
-        v-if="$user.isLogged"
-        :to="{name:documentType + '-add', params:{lang:$language.current}, query:query_}">
+    <!-- We alawys display this link, even when user is not logged
+    In this case, editions vues will redirect user to /auth -->
+    <router-link :to="{name:documentType + '-add', params:{lang:$language.current}, query:query}">
         <slot>
-            {{ text }}
+            <span class="is-first-letter-uppercase">
+                {{ text }}
+            </span>
         </slot>
     </router-link>
 </template>
@@ -22,15 +24,6 @@
         },
 
         computed: {
-            query_() {
-                if (this.documentType != 'outing') {
-                    return this.query
-                }
-
-                // for outings, always add current user
-                return Object.assign({ u: this.$user.id }, this.query)
-            },
-
             text() {
                 if (this.documentType == 'outing') return this.$gettext('add an outing')
                 if (this.documentType == 'route') return this.$gettext('Create a new route')

@@ -2,7 +2,7 @@
     <div v-if="version" class="notification is-warning has-text-centered">
         <!-- TODO : translation -->
         <p>
-            This is an archived version of this page, as of {{ version.written_at | moment("YYYY-MM-DD hh:mm:ss") }}
+            This is an archived version of this page, as of {{ $moment.toLocalizedString(version.written_at, 'LLLL') }}
         </p>
 
         <span v-if="!isFirstVersion">

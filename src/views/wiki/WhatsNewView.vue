@@ -21,7 +21,7 @@
                         :id="change.document.document_id"
                         :version="change.version_id"
                         :lang="change.lang">
-                        {{ change.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
+                        {{ $moment.toTechnicalString(change.written_at) }}
                     </version-link>
                 </td>
                 <td>
@@ -42,7 +42,7 @@
 
                 </td>
                 <td>
-                    <icon-quality :quality="change.document.quality"/>
+                    <marker-quality :quality="change.document.quality"/>
                     {{ change.lang }}
                 </td>
                 <td>

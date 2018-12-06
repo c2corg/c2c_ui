@@ -14,7 +14,7 @@
                         :id="documentId"
                         :version="oldVersion.version.version_id"
                         :lang="lang">
-                        Revision #{{ oldVersion.document.version }} as of {{ oldVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
+                        Revision #{{ oldVersion.document.version }} as of {{ $moment.toTechnicalString(oldVersion.version.written_at) }}
                     </version-link>
                 </div>
                 <div>
@@ -45,7 +45,7 @@
                         :id="documentId"
                         :version="newVersion.version.version_id"
                         :lang="lang">
-                        Revision #{{ newVersion.document.version }} as of {{ newVersion.version.written_at | moment('YYYY-MM-DD hh:mm:ss') }}
+                        Revision #{{ newVersion.document.version }} as of {{ $moment.toTechnicalString(newVersion.version.written_at) }}
                     </version-link>
                 </div>
                 <div>

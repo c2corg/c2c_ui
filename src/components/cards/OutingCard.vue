@@ -22,7 +22,7 @@
 
             <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
-            <span v-if="document.height_diff_up">
+            <span v-if="document.height_diff_up" :title="$gettext('height_diff_up')">
                 <icon-height-diff class="has-text-primary"/>
                 {{ document.height_diff_up }}&nbsp;m
             </span>
@@ -37,7 +37,7 @@
             </span>
 
             <span class="is-nowrap">
-                {{ document.date_start }}
+                {{ $moment.toLocalizedString(document.date_start, "LL") }}
             </span>
 
             <marker-quality :quality="document.quality"/>

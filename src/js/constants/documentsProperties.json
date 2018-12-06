@@ -29,7 +29,8 @@
             {"id": "books", "properties": {"url":"b"}},
             {"id": "outings", "properties": {"url":"o"}},
             {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}}
+            {"id": "waypoints", "properties": {"url":"w"}},
+            {"id": "images"}
         ]
     },
 

@@ -66,6 +66,10 @@
                 </div>
             </div>
 
+            <div class="navigation-item ">
+                <add-link document-type="outing" class="button is-primary"/>
+            </div>
+
             <div v-if="!$user.isLogged" class="navigation-item ">
                 <login-button class="is-link">
                     <span class="is-hidden-touch" v-translate>Login</span>
