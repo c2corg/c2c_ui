@@ -117,8 +117,8 @@
 
             this.actionLine += this.documentType
 
-            const start = this.$moment.parseDate(this.item['document']['date_start'])
-            const end = this.$moment.parseDate(this.item['document']['date_end'])
+            const start = this.$moment.parseDate(this.item['document']['date_start']).locale(this.$language.current)
+            const end = this.$moment.parseDate(this.item['document']['date_end']).locale(this.$language.current)
             const sameYear = start.year() == end.year()
             const sameMonth = start.month() == end.month()
             const sameDay = start.date() == end.date()
