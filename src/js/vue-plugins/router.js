@@ -78,7 +78,7 @@ const addDocumentTypeView = function(def, viewComponent, editionComponent) {
     routes.push({
         path: '/' + def.documentType + 's',
         name: def.documentType + 's',
-        component: def.documentType == 'image' ? ImagesView : DocumentsView }
+        component: def.documentType === 'image' ? ImagesView : DocumentsView }
     )
 
     routes.push({

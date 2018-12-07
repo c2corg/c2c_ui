@@ -79,7 +79,7 @@ export default {
 
     created() {
 
-        if (this.mode == 'edit') {
+        if (this.mode === 'edit') {
             this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
         } else {
             this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
@@ -135,7 +135,7 @@ export default {
 
             let promise
 
-            if (this.mode == 'edit') {
+            if (this.mode === 'edit') {
                 promise = c2c[this.documentType].save(this.document, comment).then(() => {
                     this.$router.push({ name: this.documentType, params: { id: this.document.document_id } })
                 })
@@ -164,15 +164,15 @@ export default {
         },
 
         dispatchErrors(errors) {
-            // TODO : errors == undefined ?
+            // TODO : errors === undefined ?
             this.cleanErrors()
 
             for (let error of errors) {
                 let path = error.name.split('.')
 
-                if (path[0] == 'locales') {
+                if (path[0] === 'locales') {
                     this.dispatchError(path[2], error)
-                } else if (path[0] == 'associations') {
+                } else if (path[0] === 'associations') {
                     this.dispatchError(path[1], error)
                 } else {
                     this.dispatchError(path[0], error)

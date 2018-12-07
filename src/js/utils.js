@@ -32,7 +32,7 @@ export default {
         // do a manual download with "Save as".
         // See also: https://github.com/eligrey/FileSaver.js/issues/12
         const agent = navigator.userAgent
-        const isSafari = agent.indexOf('Safari') != -1 && agent.indexOf('Chrome') == -1
+        const isSafari = agent.indexOf('Safari') !== -1 && agent.indexOf('Chrome') === -1
         const fileType = opt_fileType !== undefined && !isSafari ? opt_fileType : 'text/plain;charset=utf-8'
         const blob = new Blob([content], { type: fileType })
 

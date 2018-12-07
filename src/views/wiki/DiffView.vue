@@ -110,7 +110,7 @@
 
     const hasChanged = function(oldVal, newVal) {
         if (Array.isArray(oldVal) || Array.isArray(newVal)) {
-            return JSON.stringify(oldVal) != JSON.stringify(newVal)
+            return JSON.stringify(oldVal) !== JSON.stringify(newVal)
         }
 
         if ((oldVal === null && newVal !== null) || (oldVal !== null && newVal === null)) {
@@ -185,7 +185,7 @@
                 excludedKeys = excludedKeys || []
 
                 keys = keys.filter(function(item, pos, self) {
-                    return self.indexOf(item) == pos && !excludedKeys.includes(item)
+                    return self.indexOf(item) === pos && !excludedKeys.includes(item)
                 })
 
                 keys.sort()
@@ -227,7 +227,7 @@
                         // TODO bug : a block may be present on several lines...
                         // let result = []
                         // for(let line of html){
-                        //     if(line.search(/<(ins|del)[ >]/) != -1){
+                        //     if(line.search(/<(ins|del)[ >]/) !== -1){
                         //         result.push(line)
                         //     }
                         // }
@@ -243,7 +243,7 @@
                 return c2c[this.documentType].getVersion(this.documentId, this.lang, versionId)
                     .then(response => {
                         this[resultProperty] = response.data
-                        if (resultProperty == 'newVersion') {
+                        if (resultProperty === 'newVersion') {
                             this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
                         }
 
@@ -252,13 +252,13 @@
             },
 
             loadVersionSmart(versionId, resultProperty, baseVersionId) {
-                if (versionId == 'prev') {
+                if (versionId === 'prev') {
                     c2c[this.documentType].getHistory(this.documentId, this.lang)
                         .then(response => {
                             let versions = response.data.versions
 
                             for (let i = 0; i < versions.length; i++) {
-                                if (versions[i].version_id == baseVersionId && i != 0) {
+                                if (versions[i].version_id === baseVersionId && i !== 0) {
                                     this.loadVersion(versions[i - 1].version_id, resultProperty)
                                 }
                             }

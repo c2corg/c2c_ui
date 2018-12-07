@@ -162,7 +162,7 @@
                 }
 
                 // we should use an anchor for glacier gear, but it's not possible
-                if (doc.glacier_gear && doc.glacier_gear != 'no') {
+                if (doc.glacier_gear && doc.glacier_gear !== 'no') {
                     if (activities.filter(act => glacier_activities.includes(act))) {
                         result['185750'] = this.$gettext('easy snow ice mixed gear')
                     }

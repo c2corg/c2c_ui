@@ -80,8 +80,8 @@
         score += doc.associations.images.length ? 1 : 0
         score += locale.summary ? 1 : 0
         score += description ? 1 : -1
-        score += description.search(/(^|\n)##/g) != -1 ? 1 : 0 // title
-        score += description.search(/\[img=/g) != -1 ? 1 : 0 // img
+        score += description.search(/(^|\n)##/g) !== -1 ? 1 : 0 // title
+        score += description.search(/\[img=/g) !== -1 ? 1 : 0 // img
 
         return score
     }
@@ -206,11 +206,11 @@
 
                 let score = this.document.quality
 
-                if (this.document.type == 'o') {
+                if (this.document.type === 'o') {
                     score = getOutingScore(this.document, this.editedLocale)
-                } else if (this.document.type == 'c') {
+                } else if (this.document.type === 'c') {
                     score = getArticleScore(this.document, this.editedLocale)
-                } else if (this.document.type == 'i') {
+                } else if (this.document.type === 'i') {
                     score = getImageScore(this.document, this.editedLocale)
                 }
 

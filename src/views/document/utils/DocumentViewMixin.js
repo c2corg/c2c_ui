@@ -144,7 +144,7 @@ export default {
                     this.promise.data = this.draft
                 })
             } else { // normal mode
-                if (this.document && $route.params.id == this.document.document_id && this.expected_lang === this.lang) {
+                if (this.document && $route.params.id === this.document.document_id && this.expected_lang === this.lang) {
                     return
                 }
 

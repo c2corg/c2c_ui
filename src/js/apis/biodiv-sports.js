@@ -6,7 +6,7 @@ function BiodivSports() {
 }
 
 BiodivSports.prototype.fetchData = function(extent, activities, language) {
-    if (language != 'fr' && language != 'en' && language != 'it') {
+    if (language !== 'fr' && language !== 'en' && language !== 'it') {
         language = 'en'
     }
 

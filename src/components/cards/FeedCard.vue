@@ -119,9 +119,9 @@
 
             const start = this.$moment.parseDate(this.item['document']['date_start']).locale(this.$language.current)
             const end = this.$moment.parseDate(this.item['document']['date_end']).locale(this.$language.current)
-            const sameYear = start.year() == end.year()
-            const sameMonth = start.month() == end.month()
-            const sameDay = start.date() == end.date()
+            const sameYear = start.year() === end.year()
+            const sameMonth = start.month() === end.month()
+            const sameDay = start.date() === end.date()
 
             if (!sameYear) {
                 this.dates = start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY')

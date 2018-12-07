@@ -11,7 +11,7 @@
                 <button
                     v-for="(language, key) of $language.available"
                     :key="key"
-                    :class="{'is-primary' : $language.current == key}"
+                    :class="{'is-primary' : $language.current === key}"
                     type="button"
                     class="button"
                     @click="$user.lang = key">
@@ -111,7 +111,7 @@
             },
 
             removeArea(area) {
-                this.preferences.areas = this.preferences.areas.filter(doc => doc.document_id != area.document_id)
+                this.preferences.areas = this.preferences.areas.filter(doc => doc.document_id !== area.document_id)
                 this.save()
             },
 

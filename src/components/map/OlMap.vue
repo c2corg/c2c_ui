@@ -416,15 +416,15 @@
             setDocumentGeometry(document, geometry) {
                 let geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
 
-                if (geoJsonGeometry.type == 'Point') {
+                if (geoJsonGeometry.type === 'Point') {
                     // remove elevation and timestamp
                     geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2)
                     document.geometry.geom = JSON.stringify(geoJsonGeometry)
-                } else if (geoJsonGeometry.type == 'LineString' || geoJsonGeometry.type == 'MultiLineString') {
+                } else if (geoJsonGeometry.type === 'LineString' || geoJsonGeometry.type === 'MultiLineString') {
                     document.geometry.geom_detail = JSON.stringify(geoJsonGeometry)
 
                     if (!document.geometry.geom) {
-                        let mainLine = geometry.getType() == 'MultiLineString' ? geometry.getLineString(0) : geometry
+                        let mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry
                         this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
                     }
                 } else {
@@ -567,7 +567,7 @@
 
                 var extent = this.documentsLayer.getSource().getExtent()
 
-                if (extent.filter(isFinite).length != 4) {
+                if (extent.filter(isFinite).length !== 4) {
                     // if there is infnity, default extent
                     // TODO need to be current extent if it exists ...
                     extent = DEFAULT_EXTENT

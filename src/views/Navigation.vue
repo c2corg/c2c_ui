@@ -58,7 +58,7 @@
                             v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
                             :key="i"
                             class="dropdown-item is-size-5"
-                            :class="{'is-active': urlsConfiguration.name == siteConfiguration.urls.name}"
+                            :class="{'is-active': urlsConfiguration.name === siteConfiguration.urls.name}"
                             @click="setUrlsConfiguration(urlsConfiguration.name)">
                             <span>{{ urlsConfiguration.name }}</span>
                         </a>

@@ -13,11 +13,11 @@ for (let property of Object.values(fieldsProperties)) {
 const onlyRockClimbing = function(document) {
     const activities = document.activities
 
-    if (!activities || activities.length == 0 || activities.length > 1) {
+    if (!activities || activities.length === 0 || activities.length > 1) {
         return false
     }
 
-    return activities[0] == 'rock_climbing'
+    return activities[0] === 'rock_climbing'
 }
 
 const getIsOnlyRockClimbingTypesHandler = function(types) {
@@ -33,7 +33,7 @@ const getIsOnlyRockClimbingTypesHandler = function(types) {
 
 const extraIsVisibleForHandlers = {
     route_types(document) {
-        if (!document.activities || document.activities.length == 0) {
+        if (!document.activities || document.activities.length === 0) {
             return false
         }
 
@@ -71,15 +71,15 @@ function Field(id, properties = {}) {
 
     // Does the values can be translated
     if (this.i18n === undefined) {
-        this.i18n = Boolean(this.type == 'text' || this.values)
+        this.i18n = Boolean(this.type === 'text' || this.values)
     }
 
     if (this.queryMode === undefined) {
-        if (this.type == 'number') {
+        if (this.type === 'number') {
             this.queryMode = 'numericalRangeSlider'
-        } else if (this.type == 'boolean') {
+        } else if (this.type === 'boolean') {
             this.queryMode = 'checkbox'
-        } else if (this.type == 'document') {
+        } else if (this.type === 'document') {
             this.queryMode = 'input-document'
         } else if (this.values) {
             this.queryMode = 'multiSelect'
@@ -87,19 +87,19 @@ function Field(id, properties = {}) {
     }
 
     if (this.defaultUrlQuery === undefined) {
-        if (this.queryMode == 'numericalRangeSlider') {
+        if (this.queryMode === 'numericalRangeSlider') {
             this.defaultUrlQuery = [this.min, this.max].join(',')
-        } else if (this.queryMode == 'valuesRangeSlider') {
+        } else if (this.queryMode === 'valuesRangeSlider') {
             this.defaultUrlQuery = [this.values[0], this.values[this.values.length - 1]].join(',')
-        } else if (this.queryMode == 'multiSelect' || this.queryMode == 'orientations') {
+        } else if (this.queryMode === 'multiSelect' || this.queryMode === 'orientations') {
             this.defaultUrlQuery = ''
-        } else if (this.queryMode == 'checkbox') {
+        } else if (this.queryMode === 'checkbox') {
             this.defaultUrlQuery = 'false'
-        } else if (this.queryMode == 'input') {
+        } else if (this.queryMode === 'input') {
             this.defaultUrlQuery = { number: 0, text: '' }[this.type]
-        } else if (this.queryMode == 'activities') {
+        } else if (this.queryMode === 'activities') {
             this.defaultUrlQuery = ''
-        } else if (this.queryMode == 'input-document') {
+        } else if (this.queryMode === 'input-document') {
             this.defaultUrlQuery = ''
         } else if (this.url !== undefined) {
             throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode)
@@ -108,23 +108,23 @@ function Field(id, properties = {}) {
 }
 
 Field.prototype.valueToUrl = function(value) {
-    if (this.queryMode == 'numericalRangeSlider' || this.queryMode == 'valuesRangeSlider') {
+    if (this.queryMode === 'numericalRangeSlider' || this.queryMode === 'valuesRangeSlider') {
         return value.join(',')
     }
 
-    if (this.queryMode == 'multiSelect' || this.queryMode == 'orientations' || this.queryMode == 'activities') {
+    if (this.queryMode === 'multiSelect' || this.queryMode === 'orientations' || this.queryMode === 'activities') {
         return value.join(',')
     }
 
-    if (this.queryMode == 'checkbox') {
+    if (this.queryMode === 'checkbox') {
         return JSON.stringify(value)
     }
 
-    if (this.queryMode == 'input') {
+    if (this.queryMode === 'input') {
         return value
     }
 
-    if (this.queryMode == 'input-document') {
+    if (this.queryMode === 'input-document') {
         return value.join(',')
     }
 
@@ -132,18 +132,18 @@ Field.prototype.valueToUrl = function(value) {
 }
 
 Field.prototype.urlToValue = function(url) {
-    if (this.queryMode == 'numericalRangeSlider') {
+    if (this.queryMode === 'numericalRangeSlider') {
         let value = url || this.defaultUrlQuery
         value = value.split(',')
         return [parseInt(value[0]), parseInt(value[1])]
     }
 
-    if (this.queryMode == 'valuesRangeSlider') {
+    if (this.queryMode === 'valuesRangeSlider') {
         let value = url || this.defaultUrlQuery
         return value.split(',')
     }
 
-    if (this.queryMode == 'multiSelect' || this.queryMode == 'orientations' || this.queryMode == 'activities') {
+    if (this.queryMode === 'multiSelect' || this.queryMode === 'orientations' || this.queryMode === 'activities') {
         if (!url) {
             return this.defaultUrlQuery === '' ? [] : this.defaultUrlQuery.split(',')
         }
@@ -151,11 +151,11 @@ Field.prototype.urlToValue = function(url) {
         return url.split(',')
     }
 
-    if (this.queryMode == 'checkbox') {
+    if (this.queryMode === 'checkbox') {
         return !((url === null || url === undefined || url === '' || url === 'false'))
     }
 
-    if (this.queryMode == 'input') {
+    if (this.queryMode === 'input') {
         let value = url || this.defaultUrlQuery
 
         if (this.type === 'number') {
@@ -169,7 +169,7 @@ Field.prototype.urlToValue = function(url) {
         throw new Error(`Unknow field type for ${this.name} : ${this.type}`)
     }
 
-    if (this.queryMode == 'input-document') {
+    if (this.queryMode === 'input-document') {
         return url ? String(url).split(',').map(num => parseInt(num, 10)) : []
     }
 
@@ -188,11 +188,11 @@ Field.prototype.getError = function(document, locale) {
         return null
     }
 
-    if (this.parent == 'document') {
+    if (this.parent === 'document') {
         value = document[this.name]
-    } else if (this.parent == 'locales') {
+    } else if (this.parent === 'locales') {
         value = locale[this.name]
-    } else if (this.parent == 'associations') {
+    } else if (this.parent === 'associations') {
         value = document.associations[this.name]
     } else {
         throw new Error(`Unexpected parent property : ${this.parent}`)
@@ -201,11 +201,11 @@ Field.prototype.getError = function(document, locale) {
     if ((!value || this.multiple) && value.length === 0) {
         let errorName
 
-        if (this.parent == 'document') {
+        if (this.parent === 'document') {
             errorName = this.name
-        } else if (this.parent == 'locales') {
+        } else if (this.parent === 'locales') {
             errorName = `locales.0.${this.name}`
-        } else if (this.parent == 'associations') {
+        } else if (this.parent === 'associations') {
             errorName = `associations.${this.name}`
         }
 

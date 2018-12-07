@@ -41,7 +41,7 @@ D3.prototype.load_ = function(promise, key) {
 
         this.resolvingCount_--
 
-        if (this.resolvingCount_ == 0) {
+        if (this.resolvingCount_ === 0) {
             this.resolving_ = false
             this.resolved_ = true
             this.postResolve_()

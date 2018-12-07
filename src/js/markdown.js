@@ -34,7 +34,7 @@ showdown.extension('c2c_folies', function() {
             options.forEach(function(option) {
                 if (option) {
                     css.push('markdown-image-' + option.replace('_', '-'))
-                    size = option == 'big' ? 'BI' : size
+                    size = option === 'big' ? 'BI' : size
                 }
             })
         }
@@ -215,7 +215,7 @@ showdown.extension('c2c_folies', function() {
                 }
 
                 // build final label
-                var cell1 = tag + number + (number2 != number ? '-' + number2 : '') + label
+                var cell1 = tag + number + (number2 !== number ? '-' + number2 : '') + label
 
                 result.pushLine('td', cell1, cells)
 
@@ -270,7 +270,7 @@ export const cook_object = function(object) {
 }
 
 const cook_locale = function(document, locales, lang) {
-    if (locales[lang] == undefined) {
+    if (locales[lang] === undefined) {
         return false
     }
 

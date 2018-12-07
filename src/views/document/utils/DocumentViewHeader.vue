@@ -15,7 +15,7 @@
                     <follow-button :document="document" />
 
                     <history-link
-                        v-if="documentType!='profile' || $user.isModerator || document.document_id == $user.id"
+                        v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
                         v-tooltip="$gettext('History')"
                         :document="document"
                         :lang="lang">

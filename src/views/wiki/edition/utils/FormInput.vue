@@ -116,15 +116,15 @@
             },
 
             object() {
-                if (this.field.parent == 'document') {
+                if (this.field.parent === 'document') {
                     return this.document
                 }
 
-                if (this.field.parent == 'locales') {
+                if (this.field.parent === 'locales') {
                     return this.editedLocale
                 }
 
-                if (this.field.parent == 'associations') {
+                if (this.field.parent === 'associations') {
                     return this.document.associations
                 }
 

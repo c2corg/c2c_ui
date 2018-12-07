@@ -15,7 +15,7 @@
         </div>
 
         <div
-            v-else-if="locale.topic_id === null || comments.length == 0"
+            v-else-if="locale.topic_id === null || comments.length === 0"
             class="has-text-centered">
             <login-button v-if="!$user.isLogged" v-translate>
                 Log in to post the first comment
@@ -114,7 +114,7 @@
 
                 let posts = data.posts
 
-                if (posts[0].name == 'system') {
+                if (posts[0].name === 'system') {
                     posts = posts.slice(1)
                 }
 
@@ -148,7 +148,7 @@
                         window.location = url
                     })
                     .catch(error => {
-                        if (error.response && error.response.status == 400) {
+                        if (error.response && error.response.status === 400) {
                             const topic_id = error.response['data']['errors'][0]['topic_id']
                             if (topic_id !== undefined) {
                                 this.locale.topic_id = topic_id

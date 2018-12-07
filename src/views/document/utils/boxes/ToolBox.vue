@@ -135,7 +135,7 @@
         },
 
         created() {
-            if (this.$user.isModerator && this.documentType == 'profile') {
+            if (this.$user.isModerator && this.documentType === 'profile') {
                 c2c.moderator.isAccountBlocked(this.document.document_id)
                     .then((response) => {
                         this.isAccountBlocked = response.data.blocked

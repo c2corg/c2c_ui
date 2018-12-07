@@ -19,7 +19,7 @@
                 <div
                     v-for="type of documentTypes_"
                     :key="type"
-                    v-if="promise.data[type + 's'] && promise.data[type + 's'].documents.length != 0">
+                    v-if="promise.data[type + 's'] && promise.data[type + 's'].documents.length !== 0">
                     <div
                         v-if="documentTypes_.length > 1"
                         class="dropdown-item has-text-weight-bold is-size-5 is-first-letter-uppercase">
@@ -170,7 +170,7 @@
                 if (this.multiple) {
                     return this.$documentUtils.isInArray(this.value_, value)
                 } else {
-                    return this.value ? this.value.document_id == value.document_id : false
+                    return this.value ? this.value.document_id === value.document_id : false
                 }
             },
 
@@ -185,7 +185,7 @@
                     var removed = false
 
                     for (let document of this.value_) {
-                        if (document.document_id == value.document_id) {
+                        if (document.document_id === value.document_id) {
                             removed = true
                         } else {
                             newValue.push(document)

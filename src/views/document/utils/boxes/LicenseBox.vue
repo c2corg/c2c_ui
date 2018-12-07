@@ -1,6 +1,6 @@
 <template>
     <div class="has-text-centered">
-        <a v-if="license == 'by-sa'" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr"
+        <a v-if="license === 'by-sa'" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr"
            target="_blank">
             <icon-creative-commons />
             CC
@@ -65,22 +65,22 @@
                     return 'by-nc-nd'
                 }
 
-                if (this.documentType == 'article') {
-                    if (this.document.article_type == 'collab') {
+                if (this.documentType === 'article') {
+                    if (this.document.article_type === 'collab') {
                         return 'by-sa'
-                    } else if (this.document.article_type == 'personal') {
+                    } else if (this.document.article_type === 'personal') {
                         return 'by-nc-nd'
                     } else {
                         throw new Error(`Unexpected article_type : ${this.document.article_type}`)
                     }
                 }
 
-                if (this.documentType == 'image') {
-                    if (this.document.image_type == 'collaborative') {
+                if (this.documentType === 'image') {
+                    if (this.document.image_type === 'collaborative') {
                         return 'by-sa'
-                    } else if (this.document.image_type == 'personal') {
+                    } else if (this.document.image_type === 'personal') {
                         return 'by-nc-nd'
-                    } else if (this.document.image_type == 'copyright') {
+                    } else if (this.document.image_type === 'copyright') {
                         return 'copyright'
                     } else {
                         throw new Error(`Unexpected image_type : ${this.document.image_type}`)

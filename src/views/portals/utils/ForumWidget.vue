@@ -6,7 +6,7 @@
                 class="forum-row"
                 v-for="topic of topics.topics.slice(0, messageCount<0 ? 9999 : messageCount)"
                 :key="topic.id"
-                v-if="topic.category_id != 29"
+                v-if="topic.category_id !== 29"
                 :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
                 target="_blank"
                 :title="topic.last_poster_username">

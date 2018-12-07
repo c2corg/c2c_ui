@@ -29,7 +29,7 @@
             <div class="column is-12">
                 <div class="buttons is-pulled-right">
                     <button
-                        :disabled="documents.length == 0"
+                        :disabled="documents.length === 0"
                         class="button is-primary"
                         @click="save"
                         v-translate>

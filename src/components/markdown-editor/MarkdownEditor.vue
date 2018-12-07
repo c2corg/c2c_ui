@@ -99,7 +99,7 @@
 
     Object.defineProperty(Selection.prototype, 'isEmpty', {
         get() {
-            return this.start == this.end
+            return this.start === this.end
         }
     })
 
@@ -137,7 +137,7 @@
         var start = this.textarea.value.lastIndexOf('\n', this.start)
         this.start = start + 1
         var end = this.textarea.value.indexOf('\n', this.end)
-        this.end = end == -1 ? this.textarea.value.length : end
+        this.end = end === -1 ? this.textarea.value.length : end
     }
 
     Selection.prototype.linesStartsWith = function(tag) {

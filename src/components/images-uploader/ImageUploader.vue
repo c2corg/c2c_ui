@@ -169,12 +169,12 @@
 
         computed: {
             imageType() {
-                if (this.parentDocument.type == 'o' || this.parentDocument.type == 'u' || this.parentDocument.type == 'x') {
+                if (this.parentDocument.type === 'o' || this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
                     return 'personal'
                 }
 
-                if (this.parentDocument.type == 'c') {
-                    return this.parentDocument.article_type == 'collab' ? 'collaborative' : 'personal'
+                if (this.parentDocument.type === 'c') {
+                    return this.parentDocument.article_type === 'collab' ? 'collaborative' : 'personal'
                 }
 
                 return 'collaborative'
@@ -214,7 +214,7 @@
 
             onUploadProgress(event) {
                 // TODO : test that
-                if (event.total != 0) {
+                if (event.total !== 0) {
                     this.percentCompleted = Math.floor((event.loaded * 100) / event.total)
                 }
             },

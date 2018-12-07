@@ -71,13 +71,13 @@ const bundleAnalyzerConfig = {
     openAnalyzer: false
 }
 
-if (process.env.BUILD_ENV == 'local' || process.env.BUILD_ENV === undefined) {
+if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che' // Key valid for localhost (Expires 08/11/2019)
     config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj'
 
     // dev bundles are huge, no check
     result.configureWebpack.performance.hints = false
-} else if (process.env.BUILD_ENV == 'gitlab') {
+} else if (process.env.BUILD_ENV === 'gitlab') {
     // gitlab pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined
 
@@ -91,7 +91,7 @@ if (process.env.BUILD_ENV == 'local' || process.env.BUILD_ENV === undefined) {
     bundleAnalyzerConfig.analyzerMode = 'static'
     bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html'
     bundleAnalyzerConfig.defaultSizes = 'gzip'
-} else if (process.env.BUILD_ENV == 'camptocamp') {
+} else if (process.env.BUILD_ENV === 'camptocamp') {
     config.urls = config.urlsConfigurations.prod
     config.isProduction = true // explicit prod flag
     config.urls.readWrite = true // explicit read-write mode in prod

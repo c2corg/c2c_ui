@@ -35,21 +35,21 @@ function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defa
 }
 
 function getMessages(lang) {
-    if (lang == 'fr') {
+    if (lang === 'fr') {
         // include fr langage in app
         // and lazy load the others
         return french_translations
-    } else if (lang == 'en') {
+    } else if (lang === 'en') {
         return import(/* webpackChunkName: "translations-en" */ `@/translations/dist/en.json`)
-    } else if (lang == 'ca') {
+    } else if (lang === 'ca') {
         return import(/* webpackChunkName: "translations-ca" */`@/translations/dist/ca.json`)
-    } else if (lang == 'eu') {
+    } else if (lang === 'eu') {
         return import(/* webpackChunkName: "translations-eu" */`@/translations/dist/eu.json`)
-    } else if (lang == 'it') {
+    } else if (lang === 'it') {
         return import(/* webpackChunkName: "translations-it" */`@/translations/dist/it.json`)
-    } else if (lang == 'de') {
+    } else if (lang === 'de') {
         return import(/* webpackChunkName: "translations-de" */`@/translations/dist/de.json`)
-    } else if (lang == 'es') {
+    } else if (lang === 'es') {
         return import(/* webpackChunkName: "translations-es" */`@/translations/dist/es.json`)
     }
 

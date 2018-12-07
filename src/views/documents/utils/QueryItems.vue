@@ -170,15 +170,15 @@
             },
 
             associations() {
-                if (this.documentType == 'outing') {
+                if (this.documentType === 'outing') {
                     return ['area', 'profile', 'waypoint', 'route']
                 }
 
-                if (this.documentType == 'route') {
+                if (this.documentType === 'route') {
                     return ['area', 'waypoint']
                 }
 
-                if (this.documentType == 'waypoint') {
+                if (this.documentType === 'waypoint') {
                     return ['area']
                 }
 
@@ -208,7 +208,7 @@
                         if (field !== undefined) {
                             addCategory = true
 
-                            if (this.$route.query[field.url] != undefined) {
+                            if (this.$route.query[field.url] !== undefined) {
                                 temp.activeCount += 1
                             }
 

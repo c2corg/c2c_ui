@@ -70,12 +70,12 @@ function parseTemplate(file, data){
         preserveWhitespace: false,
         directives: {
             translate (node, directiveMeta) {
-                if(node.children.length != 1){
+                if(node.children.length !== 1){
                     console.log(node.children)
                     throw `In ${file}\nNodes with v-translate directive must contains only one child`
                 }
 
-                if(node.children[0].type != NODETYPE_TEXT){
+                if(node.children[0].type !== NODETYPE_TEXT){
                     console.log(node.children[0])
                     throw `In ${file}\nInterploation is not yet supported. Please use $gettext`
                 }

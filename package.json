@@ -84,7 +84,7 @@
       "vue/require-default-prop": "warn",
       "vue/attributes-order": "off",
       "vue/max-attributes-per-line": "off",
-      "eqeqeq": "off",
+      "eqeqeq": "warn",
       "camelcase": "off",
       "brace-style": ["warn", "1tbs", { "allowSingleLine": false }],
       "space-before-function-paren": ["warn", "never"]

@@ -63,7 +63,7 @@
                                     type="radio"
                                     name="versionTo">
                                 <diff-link
-                                    v-if="version.version_id != veryFirstVersionId"
+                                    v-if="version.version_id !== veryFirstVersionId"
                                     :document-type="documentType"
                                     :id="documentId"
                                     :lang="lang"

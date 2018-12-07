@@ -79,11 +79,11 @@
                     u: this.$route.params.id
                 }
 
-                if (this.type == 'personal') {
+                if (this.type === 'personal') {
                     this.promise = c2c.feed.getPersonalFeed(params).then(this.onLoad)
-                } else if (this.type == 'default') {
+                } else if (this.type === 'default') {
                     this.promise = c2c.feed.getDefaultFeed(params).then(this.onLoad)
-                } else if (this.type == 'profile') {
+                } else if (this.type === 'profile') {
                     this.promise = c2c.feed.getProfileFeed(params).then(this.onLoad)
                 }
             },
@@ -95,7 +95,7 @@
                     this.feed.push(item)
                 }
 
-                this.endOfFeed = response.data.feed.length == 0
+                this.endOfFeed = response.data.feed.length === 0
             },
 
             onScroll() {

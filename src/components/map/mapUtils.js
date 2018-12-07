@@ -114,11 +114,11 @@ export const getDocumentPointStyle = function(document, title, highlight) {
         color = colorByConditionRating[document.condition_rating]
     }
 
-    if (type == 'i' || type == 'u' || type == 'x' || type == 'o' || type == 'r') {
+    if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r') {
         svgSrc = svgSrcByDocumentType[type]
-    } else if (type == 'w') {
+    } else if (type === 'w') {
         svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type }).html[0]
-    } else if (type == 'a') {
+    } else if (type === 'a') {
         return new ol.style.Style()
     } else {
         throw new Error('Wrong document specification')

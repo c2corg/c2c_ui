@@ -134,7 +134,7 @@
         computed: {
             // https://github.com/c2corg/v6_ui/blob/f7b8794648e475240fc63bbff7ff6bdbd3968746/c2corg_ui/templates/waypoint/helpers/view.html#L425
             accessFieldTitle() {
-                if (this.document.waypoint_type == 'access') {
+                if (this.document.waypoint_type === 'access') {
                     return this.$gettext('public transportation access')
                 }
 
@@ -150,11 +150,11 @@
                     return this.$gettext('opening_periods')
                 }
 
-                if (this.waypoint_type == 'local_product') {
+                if (this.waypoint_type === 'local_product') {
                     return this.$gettext('opening_hours')
                 }
 
-                if (this.waypoint_type == 'climbing_outdoor') {
+                if (this.waypoint_type === 'climbing_outdoor') {
                     return this.$gettext('restricted_access')
                 }
 

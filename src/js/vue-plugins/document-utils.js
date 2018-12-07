@@ -15,7 +15,7 @@ export default function install(Vue) {
             },
 
             getDocumentTitle(document, lang) {
-                if (document.type == 'u' || !document.type) {
+                if (document.type === 'u' || !document.type) {
                     return document.name
                 }
 
@@ -34,7 +34,7 @@ export default function install(Vue) {
                 }
 
                 for (let result of document.locales) {
-                    if (result.lang == lang) {
+                    if (result.lang === lang) {
                         return result
                     }
                 }
@@ -88,11 +88,11 @@ export default function install(Vue) {
 
             getAssociationArrayName(child) {
                 const documentType = this.getDocumentType(child.type)
-                return documentType == 'profile' ? 'users' : documentType + 's'
+                return documentType === 'profile' ? 'users' : documentType + 's'
             },
 
             isInArray(array, document) {
-                return array.filter(item => item.document_id == document.document_id).length != 0
+                return array.filter(item => item.document_id === document.document_id).length !== 0
             },
 
             addAssociation(document, child) {
@@ -110,12 +110,12 @@ export default function install(Vue) {
                 const arrayName = this.getAssociationArrayName(child)
                 const array = document.associations[arrayName]
 
-                document.associations[arrayName] = array.filter(item => item.document_id != child.document_id)
+                document.associations[arrayName] = array.filter(item => item.document_id !== child.document_id)
             },
 
             propagateAssociationProperties(parent, child) {
                 // propagate route property to outing
-                if (parent.type != 'o' || child.type != 'r') {
+                if (parent.type !== 'o' || child.type !== 'r') {
                     return
                 }
 
@@ -172,7 +172,7 @@ export default function install(Vue) {
                 var result = {}
 
                 for (let field of Object.values(def.fields)) {
-                    if (field.parent == 'locales') {
+                    if (field.parent === 'locales') {
                         result[field.name] = field.multiple ? [] : null
                     }
                 }
@@ -194,14 +194,14 @@ export default function install(Vue) {
                 }
 
                 for (let field of Object.values(def.fields)) {
-                    if (field.parent == 'document') {
+                    if (field.parent === 'document') {
                         result[field.name] = field.multiple ? [] : null
 
                         if (field.default) {
                             result[field.name] = field.default
                         }
-                    } else if (field.parent == 'associations') {
-                        result.associations[(field.documentType == 'profile' ? 'user' : field.documentType) + 's'] = []
+                    } else if (field.parent === 'associations') {
+                        result.associations[(field.documentType === 'profile' ? 'user' : field.documentType) + 's'] = []
                     }
                 }
 

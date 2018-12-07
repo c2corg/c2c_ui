@@ -51,7 +51,7 @@
                         let post = data.post_stream.posts[0]
                         this.updatedAt = post.updated_at
 
-                        if (this.readdenPostKey == post.updated_at) {
+                        if (this.readdenPostKey === post.updated_at) {
                             return
                         }
 
