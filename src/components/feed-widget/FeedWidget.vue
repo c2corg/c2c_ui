@@ -33,7 +33,7 @@
             return {
                 promise: null,
                 feed: null,
-                pagination_token: null,
+                paginationToken: null,
                 endOfFeed: false
             }
         },
@@ -57,7 +57,7 @@
 
         methods: {
             initialize() {
-                this.pagination_token = undefined
+                this.paginationToken = undefined
                 this.feed = []
                 this.endOfFeed = false
 
@@ -75,7 +75,7 @@
 
                 const params = {
                     pl: this.$language.current,
-                    token: this.pagination_token,
+                    token: this.paginationToken,
                     u: this.$route.params.id
                 }
 
@@ -89,7 +89,7 @@
             },
 
             onLoad(response) {
-                this.pagination_token = response.data.pagination_token
+                this.paginationToken = response.data.pagination_token
 
                 for (let item of response.data.feed) {
                     this.feed.push(item)
