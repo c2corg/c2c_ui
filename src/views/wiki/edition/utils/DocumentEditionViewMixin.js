@@ -71,14 +71,13 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if(!vm.$user.isLogged){
-                vm.$router.push({name: "auth"})
+            if (!vm.$user.isLogged) {
+                vm.$router.push({ name: 'auth' })
             }
         })
     },
 
     created() {
-
         if (this.mode === 'edit') {
             this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
         } else {

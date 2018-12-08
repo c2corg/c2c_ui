@@ -18,7 +18,7 @@
             outing: {
                 type: Object,
                 required: true
-            },
+            }
         },
 
         ratings: [

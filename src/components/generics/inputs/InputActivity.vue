@@ -57,7 +57,7 @@
     svg {
         margin:auto
     }
-    
+
     .input-label{
         text-align: center;
     }

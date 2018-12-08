@@ -75,7 +75,7 @@
             submit(event) {
                 event.preventDefault()
 
-                this.check() //must recheck, because auto-fill may ont fire good events
+                this.check() // must recheck, because auto-fill may ont fire good events
 
                 if (this.hasError) {
                     return
