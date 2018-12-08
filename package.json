@@ -74,7 +74,7 @@
         "warn",
         4,
         {
-          "baseIndent":1
+          "baseIndent": 1
         }
       ],
       "vue/no-v-html": "error",
@@ -86,8 +86,17 @@
       "vue/max-attributes-per-line": "off",
       "eqeqeq": "warn",
       "camelcase": "off",
-      "brace-style": ["warn", "1tbs", { "allowSingleLine": false }],
-      "space-before-function-paren": ["warn", "never"]
+      "brace-style": [
+        "warn",
+        "1tbs",
+        {
+          "allowSingleLine": false
+        }
+      ],
+      "space-before-function-paren": [
+        "warn",
+        "never"
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
