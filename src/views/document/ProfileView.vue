@@ -13,7 +13,9 @@
                     <field-view :document="document" :field="fields.activities"/>
 
                     <label-value :label="$gettext('forum')">
-                        @{{ document.forum_username }}
+                        <a :href="$options.forumUrl + '/users/' + document.forum_username + '/activity'">
+                            @{{ document.forum_username }}
+                        </a>
                     </label-value>
 
                     <field-view :document="document" :field="fields.categories"/>
@@ -50,16 +52,19 @@
 
 <script>
 
+    import config from '@/js/config'
     import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'
-
+    
     export default {
 
         components: {
             FeedWidget
         },
 
-        mixins: [ DocumentViewMixin ]
+        mixins: [ DocumentViewMixin ],
+
+        forumUrl: config.urls.forum
     }
 </script>

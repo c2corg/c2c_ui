@@ -20,6 +20,9 @@
                         <author-link :author="document.creator"/>
                     </label-value>
 
+                    <field-view :document="document" :field="fields.image_type" />
+                    <field-view :document="document" :field="fields.quality" />
+
                     <label-value v-if="document.categories.length" :label="$gettext('categories')">
                         {{ document.categories.join(", ") }}
                     </label-value>
@@ -55,6 +58,7 @@
                     :field="fields.description"
                     hide-title/>
 
+                <recent-outings-box :document="document" hide-see-all-results-button />
                 <comments-box :document="document" />
 
             </div>

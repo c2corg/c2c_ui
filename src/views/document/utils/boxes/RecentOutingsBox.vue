@@ -4,13 +4,13 @@
             <span v-translate>Last outings</span>
 
             <add-link
-                v-if="documentType=='route' && outings.length !== 0"
+                v-if="documentType === 'route' && outings.length !== 0"
                 document-type="outing"
                 :query="query"
                 class="button is-small is-rounded is-primary"/>
 
             <router-link
-                v-if="outings.length !== 0"
+                v-if="outings.length !== 0 && !hideSeeAllResultsButton"
                 :to="{name:'outings', query:query}"
                 class="button is-small is-rounded is-primary"
                 v-translate>
@@ -42,6 +42,13 @@
 
     export default {
         mixins: [ requireDocumentProperty ],
+
+        props: {
+            hideSeeAllResultsButton: {
+                type: Boolean,
+                default: false,
+            }
+        },
 
         computed: {
             // API bug, an outing can be present several times

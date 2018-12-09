@@ -24,7 +24,7 @@
 
                     <span
                         v-tooltip="$gettext('Add images')"
-                        v-if="isEditable"
+                        v-if="isEditable && documentType !== 'image'"
                         @click="$refs.imagesUploader.show()">
                         <icon-image />
                     </span>
