@@ -1,4 +1,8 @@
 <script>
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     export default {
         props: {
             title: {
@@ -9,7 +13,7 @@
         watch: {
             title: {
                 handler() {
-                    document.title = this.title + ' - Camptocamp.org'
+                    document.title = capitalizeFirstLetter(this.title) + ' - Camptocamp.org'
                 },
                 immediate: true
             }

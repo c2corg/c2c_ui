@@ -1,6 +1,6 @@
 <template>
     <div class="section documents-view">
-        <html-header :title="$gettext(documentType)"/>
+        <html-header :title="$gettext(documentType) + 's'"/>
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
