@@ -1,16 +1,16 @@
 <template>
-    <div class="box no-print" v-if="documentType=='route' || document.associations.recent_outings.documents.length!=0">
+    <div class="box no-print" v-if="documentType=='route' || outings.length !== 0">
         <div class="title is-2">
             <span v-translate>Last outings</span>
 
             <add-link
-                v-if="documentType=='route' && document.associations.recent_outings.documents.length!=0"
+                v-if="documentType=='route' && outings.length !== 0"
                 document-type="outing"
                 :query="query"
                 class="button is-small is-rounded is-primary"/>
 
             <router-link
-                v-if="document.associations.recent_outings.documents.length!=0"
+                v-if="outings.length !== 0"
                 :to="{name:'outings', query:query}"
                 class="button is-small is-rounded is-primary"
                 v-translate>
@@ -25,7 +25,7 @@
 
         <div v-if="documentType=='route'" class="has-text-centered">
             <add-link
-                v-if="document.associations.recent_outings.documents.length==0"
+                v-if="outings.length === 0"
                 document-type="outing"
                 :query="query"
                 class="button is-primary"
@@ -47,8 +47,15 @@
             // API bug, an outing can be present several times
             outings() {
                 const result = new Map()
+                const associations = this.document.associations
+                let outings = []
 
-                for (let outing of this.document.associations.recent_outings.documents) {
+                if(associations.recent_outings !== undefined)
+                    outings = associations.recent_outings.documents
+                else
+                    outings = associations.outings
+
+                for (let outing of outings) {
                     result.set(outing.document_id, outing)
                 }
 
