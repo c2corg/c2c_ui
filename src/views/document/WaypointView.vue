@@ -104,10 +104,6 @@
                     <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodFieldTitle" />
                 </div>
 
-                <routes-box :document="document"/>
-
-                <recent-outings-box :document="document"/>
-
                 <div class="box" v-if="document.associations.waypoint_children.length">
                     <h2 class="title is-2" v-translate>
                         Waypoints children
@@ -116,6 +112,10 @@
                         <pretty-waypoint-link :waypoint="child" />
                     </div>
                 </div>
+
+                <routes-box :document="document"/>
+
+                <recent-outings-box :document="document"/>
 
                 <images-box :document="document" />
 
