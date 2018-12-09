@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <router-link :to="to">
+        <component :is="document ? 'document-link' : 'span'" :document="document">
             <header class="card-header">
                 <p class="card-header-title">
                     <slot name="header">A very long header that should be ellipsed</slot>
@@ -24,16 +24,17 @@
             <div v-if="this.$slots.row6" class="card-content">
                 <slot name="row6">row6</slot>
             </div>
-        </router-link>
+        </component>
     </div>
 </template>
 
 <script>
+
     export default {
         props: {
-            to: {
+            document: {
                 type: Object,
-                required: true
+                required: false
             }
         }
     }
@@ -45,7 +46,6 @@
 
 .card{
     transition:0.1s;
-    cursor:pointer;
 }
 
 .card:hover{

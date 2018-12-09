@@ -1,5 +1,5 @@
 <template>
-    <card-container class="feed-card" :to="{name:documentType, params:{id:document.document_id}}">
+    <card-container :document="document" class="feed-card" >
         <div slot="header" class="level">
             <span class="level-left">
                 <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">

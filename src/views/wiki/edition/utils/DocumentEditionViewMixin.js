@@ -83,10 +83,11 @@ export default {
         } else {
             this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
-            // add current user
-            c2c.profile.get(this.$user.id).then(response => {
-                this.$documentUtils.addAssociation(this.document, response.data)
-            })
+            // add current user for outings
+            if(this.documentType === 'outing')
+                c2c.profile.get(this.$user.id).then(response => {
+                    this.$documentUtils.addAssociation(this.document, response.data)
+                })
 
             // Add associations presents in url query
             for (let letter of Object.keys(this.$route.query)) {

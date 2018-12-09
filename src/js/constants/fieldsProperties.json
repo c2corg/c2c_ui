@@ -227,7 +227,8 @@
     "configuration":
     {
         "values": "route_configuration_types",
-        "multiple": true
+        "multiple": true,
+        "helper": "route_configuration_types"
     },
     "custodianship":
     {

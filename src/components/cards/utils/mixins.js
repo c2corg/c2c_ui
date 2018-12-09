@@ -13,6 +13,13 @@ export const cardMixin = {
         CardRegionItem,
         CardElevationItem,
         CardActivitiesItem
+    },
+
+    props: {
+        notClickable: {
+            type:Boolean,
+            default: false,
+        }
     }
 }
 

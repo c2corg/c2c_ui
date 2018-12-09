@@ -15,7 +15,8 @@
                     <document-card
                         :document="child"
                         show-delete-button
-                        @delete="$documentUtils.removeAssociation(document, child)"/>
+                        @delete="$documentUtils.removeAssociation(document, child)"
+                        not-clickable/>
                 </div>
             </div>
         </div>
