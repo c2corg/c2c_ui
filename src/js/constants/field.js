@@ -198,7 +198,7 @@ Field.prototype.getError = function(document, locale) {
         throw new Error(`Unexpected parent property : ${this.parent}`)
     }
 
-    if ((!value || this.multiple) && value.length === 0) {
+    if (!value || (this.multiple && value.length === 0)) {
         let errorName
 
         if (this.parent === 'document') {

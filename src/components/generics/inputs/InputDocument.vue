@@ -50,7 +50,7 @@
                             </span>
 
                             <span v-if="document.height_diff_up">
-                                <icon-height-diff class="has-text-primary"/>
+                                <icon-height-diff-up class="has-text-primary"/>
                                 {{ document.height_diff_up }}&nbsp;m
                             </span>
                             <span v-if="document.forum_username" class="is-italic">

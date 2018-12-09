@@ -29,13 +29,13 @@
             <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
             <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
-                <icon-height-diff />
-                {{ item.document.height_diff_up }} m
+                <icon-height-diff-up />
+                {{ item.document.height_diff_up }}&nbsp;m
             </span>
 
             <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
                 <fa-icon icon="arrows-alt-v"/>
-                {{ item.document.height_diff_difficulties }} m
+                {{ item.document.height_diff_difficulties }}&nbsp;m
             </span>
         </div>
 

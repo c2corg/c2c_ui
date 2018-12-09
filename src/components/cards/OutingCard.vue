@@ -23,7 +23,7 @@
             <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
             <span v-if="document.height_diff_up" :title="$gettext('height_diff_up')">
-                <icon-height-diff class="has-text-primary"/>
+                <icon-height-diff-up class="has-text-primary"/>
                 {{ document.height_diff_up }}&nbsp;m
             </span>
         </div>

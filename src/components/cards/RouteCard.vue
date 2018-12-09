@@ -15,7 +15,18 @@
 
             <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
-            <span v-if="document.height_diff_difficulties" class="is-ellipsed">
+            <span
+                v-if="document.height_diff_up"
+                class="is-ellipsed"
+                :title="$gettext('height_diff_up')">
+                <icon-height-diff-up class="has-text-primary"/>
+                {{ document.height_diff_up }}&nbsp;m
+            </span>
+
+            <span
+                v-if="document.height_diff_difficulties"
+                class="is-ellipsed"
+                :title="$gettext('height_diff_difficulties')">
                 <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
                 {{ document.height_diff_difficulties }}&nbsp;m
             </span>
