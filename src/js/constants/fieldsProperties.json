@@ -216,8 +216,7 @@
     "conditions":
     {
         "type": "markdown",
-        "parent": "locales",
-        "helper": "route_configuration_types"
+        "parent": "locales"
     },
     "conditions_levels":
     {
