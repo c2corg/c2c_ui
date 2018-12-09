@@ -8,10 +8,12 @@
                     <h3 class="title is-3">
                         <span v-translate>Activity feed</span>
                         <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">
-                            <router-link :to="{name:'preferences'}">
+                            <router-link :to="{name:'preferences'}" :title="$gettext('My preferences')">
                                 <fa-icon icon="cogs"/>
                             </router-link>
-                            <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="isPersonal=!isPersonal"/>
+                            <span :title="$gettext(isPersonal ? 'Personal feed on': 'Personal feed off')">
+                                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="isPersonal=!isPersonal"/>
+                            </span>
                         </span>
                     </h3>
                     <feed-widget :type="isPersonal ? 'personal' : 'default'" />
