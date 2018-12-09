@@ -161,8 +161,8 @@ export default function install(Vue) {
                     outing[name] = outing[name] === null ? route[name] : outing[name]
                 })
 
-                if (!outing.cooked.title) {
-                    outing.cooked.title = this.getDocumentTitle(route, outing.cooked.lang)
+                if (!outing.locales[0].title) {
+                    outing.locales[0].title = this.getDocumentTitle(route, outing.locales[0].lang)
                 }
             },
 
