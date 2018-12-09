@@ -46,7 +46,7 @@
         props: {
             hideSeeAllResultsButton: {
                 type: Boolean,
-                default: false,
+                default: false
             }
         },
 
@@ -57,10 +57,11 @@
                 const associations = this.document.associations
                 let outings = []
 
-                if(associations.recent_outings !== undefined)
+                if (associations.recent_outings !== undefined) {
                     outings = associations.recent_outings.documents
-                else
+                } else {
                     outings = associations.outings
+                }
 
                 for (let outing of outings) {
                     result.set(outing.document_id, outing)

@@ -19,7 +19,7 @@
                 </div>
 
                 <recent-outings-box :document="document"/>
-                
+
                 <images-box :document="document" />
 
                 <comments-box :document="document" />

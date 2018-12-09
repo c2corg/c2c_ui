@@ -34,7 +34,7 @@
         props: {
             document: {
                 type: Object,
-                required: false
+                default: null
             }
         }
     }

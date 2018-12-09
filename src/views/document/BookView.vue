@@ -32,7 +32,7 @@
                 <routes-box :document="document" hide-buttons/>
 
                 <images-box :document="document" />
-                
+
                 <comments-box :document="document" />
             </div>
         </div>

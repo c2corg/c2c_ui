@@ -56,7 +56,7 @@
     import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'
-    
+
     export default {
 
         components: {

@@ -17,8 +17,8 @@ export const cardMixin = {
 
     props: {
         notClickable: {
-            type:Boolean,
-            default: false,
+            type: Boolean,
+            default: false
         }
     }
 }

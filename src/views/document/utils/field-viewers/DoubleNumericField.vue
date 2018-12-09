@@ -50,10 +50,10 @@
                 return this.document[this.field2.name]
             },
             signPlus() {
-                return this.showSigns ? "+" : ""
+                return this.showSigns ? '+' : ''
             },
             signMinus() {
-                return this.showSigns ? "-" : ""
+                return this.showSigns ? '-' : ''
             }
         }
     }
