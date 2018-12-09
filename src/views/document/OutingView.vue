@@ -67,7 +67,8 @@
                                 :document="document"
                                 :field1="fields.height_diff_up"
                                 :field2="fields.height_diff_down"
-                                :label="$gettext('height difference')" />
+                                :label="$gettext('height difference')"
+                                show-signs />
 
                             <label-value v-if="document.length_total" :label="$gettext('length_total')">
                                 {{ document.length_total / 1000 }}&nbsp;km

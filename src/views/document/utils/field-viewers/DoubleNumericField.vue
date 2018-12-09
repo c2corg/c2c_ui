@@ -1,8 +1,8 @@
 <template>
     <label-value v-if="value1 && value2" :label="label">
-        <span>{{ value1 }}&nbsp;{{ field1.unit }}</span>
+        <span>{{ signPlus }}{{ value1 }}&nbsp;{{ field1.unit }}</span>
         <span>&nbsp;/&nbsp;</span>
-        <span>{{ value2 }}&nbsp;{{ field2.unit }}</span>
+        <span>{{ signMinus }}{{ value2 }}&nbsp;{{ field2.unit }}</span>
     </label-value>
     <field-view v-else-if="value1" :document="document" :field="field1" />
     <field-view v-else-if="value2" :document="document" :field="field2" />
@@ -35,6 +35,10 @@
             label: {
                 type: String,
                 required: true
+            },
+            showSigns: {
+                type: Boolean,
+                default: false
             }
         },
 
@@ -44,6 +48,12 @@
             },
             value2() {
                 return this.document[this.field2.name]
+            },
+            signPlus() {
+                return this.showSigns ? "+" : ""
+            },
+            signMinus() {
+                return this.showSigns ? "-" : ""
             }
         }
     }

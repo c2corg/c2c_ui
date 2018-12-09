@@ -51,13 +51,14 @@
                                 :document="document"
                                 :field1="fields.elevation_min"
                                 :field2="fields.elevation_max"
-                                :label="$gettext('elevation')" />
+                                :label="$gettext('elevation')"/>
 
                             <double-numeric-field
                                 :document="document"
                                 :field1="fields.height_diff_up"
                                 :field2="fields.height_diff_down"
-                                :label="$gettext('height difference')" />
+                                :label="$gettext('height difference')"
+                                show-signs />
 
                             <field-view :document="document" :field="fields.height_diff_difficulties"/>
                             <field-view :document="document" :field="fields.difficulties_height"/>
