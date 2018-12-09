@@ -65,7 +65,7 @@
         :min="field.min"
         :man="field.max"
         :disabled="field.disabled"
-        :placeholder="$gettext(field.name)"
+        :placeholder="placeholder || $gettext(field.name)"
         :required="field.required"
         :i18n="field.i18n"
         :options="field.values"
@@ -104,6 +104,10 @@
                 default: null
             },
             helper: {
+                type: String,
+                default: undefined
+            },
+            placeholder: {
                 type: String,
                 default: undefined
             }

@@ -23,7 +23,12 @@
 
                 <map-input-row :document="document" />
 
-                <form-input-row :document="document" :field="fields.maps_info" />
+                <form-input-row
+                    :document="document"
+                    :field="fields.maps_info"
+                    is-expanded
+                    :label="$gettext('maps_references')"
+                    :placeholder="$gettext('Add here maps not automatically referenced')"/>
 
             </tab-item>
 

@@ -9,6 +9,7 @@
             :document="document"
             :field="field"
             :helper="null"
+            :placeholder="placeholder"
             :is-expanded="isExpanded"/>
     </form-row>
 </template>
@@ -40,6 +41,10 @@
                 default: undefined
             },
             label: {
+                type: String,
+                default: undefined
+            },
+            placeholder: {
                 type: String,
                 default: undefined
             }
