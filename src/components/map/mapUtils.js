@@ -117,7 +117,7 @@ export const getDocumentPointStyle = function(document, title, highlight) {
     if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r') {
         svgSrc = svgSrcByDocumentType[type]
     } else if (type === 'w') {
-        svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || "misc"}).html[0]
+        svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0]
     } else if (type === 'a') {
         return new ol.style.Style()
     } else {

@@ -23,7 +23,7 @@
                     <field-view :document="document" :field="fields.image_type" />
                     <field-view :document="document" :field="fields.quality" />
 
-                    <label-value v-if="document.categories.length" :label="$gettext('categories')">
+                    <label-value v-if="document.categories && document.categories.length" :label="$gettext('categories')">
                         {{ document.categories.join(", ") }}
                     </label-value>
 

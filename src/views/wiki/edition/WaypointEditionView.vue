@@ -14,12 +14,14 @@
                     <form-input :document="document" :field="fields.title" :prefix="$gettext('title')" is-expanded/>
                 </form-row>
 
+                <form-input-row :document="document" :field="fields.elevation_min" />
+                <form-input-row :document="document" :field="fields.prominence" />
+
                 <form-row :label="$gettext('Terrain')" is-grouped>
                     <form-input :document="document" :field="fields.elevation" :prefix="$gettext('elevation')"/>
-                    <form-input :document="document" :field="fields.prominence" :prefix="$gettext('prominence')"/>
+                    <input-simple type="number" :prefix="$gettext('Longitude')" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
+                    <input-simple type="number" :prefix="$gettext('Latitude')" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
                 </form-row>
-
-                <form-input-row :document="document" :field="fields.elevation_min" />
 
                 <map-input-row :document="document" />
 

@@ -1,6 +1,9 @@
 <template>
     <div class="section">
-        <document-view-header :document="document" :version="version" :promise="promise" />
+        <document-view-header :document="document" :version="version" :promise="promise">
+            <icon-waypoint-type v-if="document" slot="icon-document" :waypoint-type="document.waypoint_type"/>
+        </document-view-header>
+
         <div v-if="document" class="columns">
             <div class="column is-3">
                 <map-box :document="document" />

@@ -38,7 +38,9 @@
                     </edit-link>
                 </span>
                 <div class="title is-1">
-                    <icon-document :document-type="documentType"/>
+                    <slot name="icon-document">
+                        <icon-document :document-type="documentType"/>
+                    </slot>
                     <document-title :document="document"/>
                     <!-- outing specific  -->
                     <span v-if="documentType=='outing'" class="tag is-rounded is-primary is-size-6">

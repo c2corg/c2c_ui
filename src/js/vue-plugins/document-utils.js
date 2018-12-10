@@ -213,6 +213,34 @@ export default function install(Vue) {
                 }
 
                 return result
+            },
+
+            getSortedAreaList(document) {
+                let areas = document.areas
+                let sortedAreas = []
+
+                if (areas) {
+                    // the areas often come in different orders within 3 area objects.
+                    const orderedAreas = { 'range': [], 'admin_limits': [], 'country': [] }
+
+                    for (let area of areas) {
+                        orderedAreas[area.area_type].push(this.getLocaleSmart(area).title)
+                    }
+
+                    if (orderedAreas['range'].length) {
+                        sortedAreas = sortedAreas.concat(orderedAreas['range'])
+                    }
+
+                    if (orderedAreas['admin_limits'].length) {
+                        sortedAreas = sortedAreas.concat(orderedAreas['admin_limits'])
+                    }
+
+                    if (orderedAreas['country'].length) {
+                        sortedAreas = sortedAreas.concat(orderedAreas['country'])
+                    }
+                }
+
+                return sortedAreas.join(' - ')
             }
         }
     })

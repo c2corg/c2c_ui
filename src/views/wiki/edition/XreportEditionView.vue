@@ -14,7 +14,13 @@
             </tab-item>
 
             <tab-item :title="$gettext('Geolocation')">
-                <form-input-row :document="document" :field="fields.elevation" />
+
+                <form-row :label="$gettext('Terrain')" is-grouped always-visible>
+                    <form-input :document="document" :field="fields.elevation" :prefix="$gettext('elevation')"/>
+                    <input-simple type="number" :prefix="$gettext('Longitude')" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
+                    <input-simple type="number" :prefix="$gettext('Latitude')" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
+                </form-row>
+
                 <map-input-row :document="document" geom-detail-editable/>
             </tab-item>
 

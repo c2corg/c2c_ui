@@ -159,7 +159,7 @@ export default {
             title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
             // and clean
-            title = title.toLowerCase().replace(/[^a-z0-1]+/g, '-')
+            title = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
             const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
             this.$router.replace(path)

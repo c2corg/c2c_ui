@@ -2,6 +2,8 @@
 import constants from '@/js/constants'
 import c2c from '@/js/apis/c2c'
 
+import ol from '@/js/libs/ol.js'
+
 import TabItem from './TabItem'
 import TabView from './TabView'
 
@@ -14,6 +16,10 @@ import FormInput from './FormInput'
 import QualityInputRow from './QualityInputRow'
 import MapInputRow from './MapInputRow'
 import AssociationsInputRow from './AssociationsInputRow'
+
+const geoJSONFormat = new ol.format.GeoJSON()
+const FORM_PROJ = 'EPSG:4326'
+const DATA_PROJ = 'EPSG:3857'
 
 export default {
 
@@ -37,7 +43,9 @@ export default {
             promise: {},
             fields: null, // keep fields here to set them reactive
             genericErrors: [],
-            comment: ''
+            comment: '',
+            latitude: null,
+            longitude: null
         }
     },
 
@@ -67,6 +75,10 @@ export default {
             // in edit mode, there is only one locale
             return this.document ? this.document.locales[0] : null
         }
+    },
+
+    watch: {
+        'document.geometry.geom': 'setLatitudeLongitude'
     },
 
     beforeRouteEnter(to, from, next) {
@@ -119,6 +131,31 @@ export default {
     },
 
     methods: {
+        setGeometryPoint() {
+            if (this.latitude === null || this.longitude === null) {
+                return
+            }
+
+            const point = new ol.geom.Point([parseFloat(this.longitude), parseFloat(this.latitude)])
+            point.transform(FORM_PROJ, DATA_PROJ)
+            this.document.geometry.geom = geoJSONFormat.writeGeometry(point)
+        },
+
+        setLatitudeLongitude() {
+            if (!this.document.geometry || !this.document.geometry.geom) {
+                return {}
+            }
+
+            const point = geoJSONFormat.readGeometry(this.document.geometry.geom)
+
+            point.transform(DATA_PROJ, FORM_PROJ)
+
+            const coords = point.getCoordinates()
+
+            this.longitude = Math.round(coords[0] * 1000000) / 1000000
+            this.latitude = Math.round(coords[1] * 1000000) / 1000000
+        },
+
         afterLoad() {
 
         },

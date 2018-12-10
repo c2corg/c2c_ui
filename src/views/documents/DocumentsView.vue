@@ -59,12 +59,11 @@
                     </div>
                 </div>
 
-                <data-table
+                <documents-table
                     v-if="documents!=null && listMode"
                     :documents="documents"
-                    :document-type="documentType"/>
-
-                <page-selector v-if="documents!=null" :documents="documents"/>
+                    :document-type="documentType"
+                    class="documents-table"/>
             </div>
             <!--  Note : we use v-if, because v-if introduce a bug. -->
             <!-- Try to swith from /articles to /outings... -->
@@ -78,6 +77,8 @@
                     show-recenter-on/>
             </div>
         </div>
+
+        <page-selector v-if="documents!=null" :documents="documents"/>
     </div>
 </template>
 
@@ -89,7 +90,7 @@
     import QueryItems from './utils/QueryItems'
     import PageSelector from './utils/PageSelector'
 
-    import DataTable from '@/components/datatable/DataTable'
+    const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable')
 
     export default {
         name: 'DocumentsView',
@@ -97,7 +98,7 @@
         components: {
             QueryItems,
             PageSelector,
-            DataTable
+            DocumentsTable
         },
 
         data() {
@@ -178,7 +179,8 @@
     $header-margin-bottom : 1rem; //TODO find this variable
     $filter-height : 32px;
     $filter-padding-bottom : 1.5rem;
-    $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+    $page-selector-height : 5rem;
+    $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
     $cards-gap:0.25rem;
 
     .documents-view{
@@ -198,6 +200,10 @@
             padding-top:2px;
             overflow: auto;
         //    transition:0.3s;
+        }
+
+        .documents-table{
+            height:$result-height;
         }
 
         .map-container{

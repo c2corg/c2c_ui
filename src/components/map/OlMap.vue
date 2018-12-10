@@ -351,6 +351,9 @@
 
                 this.drawInteraction = null
 
+                // sometimes, geom may not be set on edited documents
+                this.editedDocument.geometry = this.editedDocument.geometry || {}
+
                 if (!this.editedDocument.geometry.geom) {
                     this.drawInteraction = new ol.interaction.Draw({
                         source: source,

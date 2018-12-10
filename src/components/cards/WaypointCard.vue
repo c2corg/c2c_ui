@@ -1,6 +1,9 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <span slot="header">
+            <icon-waypoint-type :waypoint-type="document.waypoint_type"/>
+            <document-title :document="document"/>
+        </span>
 
         <div slot="row1" class="level">
             <card-region-item :document="document"/>
