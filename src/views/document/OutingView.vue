@@ -44,7 +44,7 @@
 
                         <div class="column is-4">
                             <label-value :label="$gettext('ratings')">
-                                <outing-rating :outing="document" />
+                                <outing-rating :document="document" />
                             </label-value>
 
                             <field-view :document="document" :field="fields.access_condition"/>

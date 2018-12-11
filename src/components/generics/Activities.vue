@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <span v-if="activities !== null">
         <span v-for="activity of activities" :key="activity" :title="$gettext(activity)">
             <icon-activity :activity="activity"/>
         </span>
@@ -11,7 +11,7 @@
         props: {
             activities: {
                 type: Array,
-                required: true
+                default: null // many object can contains null array for this...
             }
         }
     }

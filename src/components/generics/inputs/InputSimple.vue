@@ -69,10 +69,6 @@
                 type: Number,
                 default: null
             },
-            placeholder: {
-                type: String,
-                default: null
-            },
             value: {
                 type: [String, Number, Boolean],
                 default: null

@@ -48,6 +48,7 @@
             <textarea
                 ref="textarea"
                 class="textarea"
+                :placeholder="placeholder"
                 @input="onInput"
                 @focus="focus=true"
                 @blur="focus=false"/>
@@ -168,6 +169,10 @@
             value: {
                 type: String,
                 default: ''
+            },
+            placeholder: {
+                type: String,
+                default: undefined
             }
         },
 

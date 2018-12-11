@@ -46,7 +46,7 @@
         "values": "aid_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "aid_rating"
+        "helper": "133323#aid"
     },
     "anonymous":
     {
@@ -329,14 +329,14 @@
         "values": "engagement_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "engagement_rating"
+        "helper": "133323#engagement"
     },
     "equipment_rating":
     {
         "values": "equipment_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "equipment_rating"
+        "helper": "133323#equipment"
     },
     "equipment_ratings":
     {
@@ -363,7 +363,7 @@
         "values": "exposition_rock_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "exposition_rock_rating"
+        "helper": "133323#exposition"
     },
     "exposure_time":
     {
@@ -433,7 +433,7 @@
         "values": "global_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "global_rating"
+        "helper": "133323#global-rating"
     },
     "ground_types":
     {
@@ -546,7 +546,7 @@
         "values": "ice_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "ice_rating"
+        "helper": "106871#ice-rating"
     },
     "image_categories":
     {
@@ -632,7 +632,7 @@
         "values": "mixed_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "mixed_rating"
+        "helper": "106871#mixed-rating"
     },
     "modifications":
     {
@@ -837,21 +837,21 @@
         "values": "risk_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "risk_rating"
+        "helper": "133323#objective-danger"
     },
     "rock_free_rating":
     {
         "values": "climbing_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "rock_free_rating"
+        "helper": "133323#rock-free"
     },
     "rock_required_rating":
     {
         "values": "climbing_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "rock_required_rating"
+        "helper": "133323#rock-required"
     },
     "rock_types":
     {

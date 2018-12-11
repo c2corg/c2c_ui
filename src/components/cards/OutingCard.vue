@@ -17,7 +17,7 @@
         <div slot="row2" class="level">
             <span>
                 <fa-icon class="has-text-primary" icon="tachometer-alt"/>
-                <outing-rating :outing="document"/>
+                <outing-rating :document="document"/>
             </span>
 
             <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>

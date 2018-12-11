@@ -103,10 +103,10 @@
 
             <tab-item :title="$gettext('Description')">
 
-                <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.description"/>
-                <form-input-row :document="document" :field="fields.access"/>
-                <form-input-row :document="document" :field="fields.access_period"/>
+                <form-input-row :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')"/>
+                <form-input-row :document="document" :field="fields.description" :placeholder="descriptionPlaceholder"/>
+                <form-input-row :document="document" :field="fields.access" :placeholder="accessPlaceholder"/>
+                <form-input-row :document="document" :field="fields.access_period" :placeholder="accessPeriodPlaceholder"/>
 
             </tab-item>
 
@@ -126,7 +126,49 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ]
+        mixins: [ DocumentEditionViewMixin ],
+
+        computed: {
+            descriptionPlaceholder() {
+                if (this.document.waypoint_type === 'access') {
+                    return this.$gettext('Describe here the waypoint')
+                }
+
+                return this.$gettext('Describe road access')
+            },
+
+            accessPlaceholder() {
+                let type = this.document.waypoint_type
+
+                if (type === 'access') {
+                    return this.$gettext('Describe pt access')
+                }
+
+                if (type === 'hut' || type === 'climbing_indoor' || type === 'climbing_outdoor') {
+                    return this.$gettext('Describe pedestrian access')
+                }
+
+                return this.$gettext('Describe access')
+            },
+
+            accessPeriodPlaceholder() {
+                let type = this.document.waypoint_type
+
+                if (type === 'hut' || type === 'gite' || type === 'camp_site') {
+                    return this.$gettext('Describe opening periods')
+                }
+
+                if (type === 'local_product') {
+                    return this.$gettext('Describe opening hours')
+                }
+
+                if (type === 'climbing_outdoor') {
+                    return this.$gettext('Describe access restrictions')
+                }
+
+                return this.$gettext('Describe access period')
+            }
+        }
     }
 
 </script>

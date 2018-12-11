@@ -20,6 +20,10 @@ export const baseMixin = {
         helper: {
             type: String,
             default: null
+        },
+        placeholder: {
+            type: String,
+            default: null
         }
     },
 

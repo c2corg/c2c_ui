@@ -23,7 +23,7 @@
         </div>
 
         <div slot="row3" v-if="documentType!='article' && documentType!='book'" class="level">
-            <outing-rating v-if="documentType=='outing'" :outing="item.document"/>
+            <outing-rating v-if="documentType=='outing'" :document="item.document"/>
             <route-rating v-else-if="documentType=='route'" :document="item.document"/>
 
             <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>

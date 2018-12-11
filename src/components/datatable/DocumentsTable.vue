@@ -18,18 +18,21 @@
     import DocumentLink from './cell-renderers/DocumentLink'
     import DocumentField from './cell-renderers/DocumentField'
     import RouteRating from './cell-renderers/RouteRating'
+    import OutingRating from './cell-renderers/OutingRating'
     import MarkerGpsTrace from './cell-renderers/MarkerGpsTrace'
     import MarkerImageCount from './cell-renderers/MarkerImageCount'
     import MarkerCondition from './cell-renderers/MarkerCondition'
     import MarkerQuality from './cell-renderers/MarkerQuality'
     import AreaList from './cell-renderers/AreaList'
 
-    function getColDef(vm, field, cellRendererFramework, options) {
+    function getColDef(vm, field, options) {
+        options = options || {}
+
         const result = {
             headerName: vm.$gettext(field.name),
             field: field.name,
             _fieldDefinition: field,
-            cellRendererFramework: cellRendererFramework || DocumentField
+            cellRendererFramework: options.cellRendererFramework || DocumentField
         }
 
         return Object.assign(result, options)
@@ -59,7 +62,7 @@
             if (this.documentType === 'area') {
                 let fields = constants.objectDefinitions.area.fields
                 this.columnDefs = [
-                    getColDef(this, fields.title, DocumentLink),
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, fields.area_type)
                 ]
             }
@@ -67,23 +70,64 @@
             if (this.documentType === 'article') {
                 let fields = constants.objectDefinitions.article.fields
                 this.columnDefs = [
-                    getColDef(this, fields.title, DocumentLink),
-                    getColDef(this, fields.quality),
-                    getColDef(this, fields.activities),
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, fields.activities, { width: 150 }),
                     getColDef(this, fields.categories),
                     getColDef(this, fields.article_type),
-                    getColDef(this, fields.quality)
+                    { cellRendererFramework: MarkerQuality, width: 30 }
+                ]
+            }
+
+            if (this.documentType === 'book') {
+                let fields = constants.objectDefinitions.book.fields
+                this.columnDefs = [
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, fields.book_types),
+                    getColDef(this, fields.author),
+                    getColDef(this, fields.activities, { width: 100 }),
+                    { cellRendererFramework: MarkerQuality, width: 30 }
+                ]
+            }
+
+            if (this.documentType === 'map') {
+                let fields = constants.objectDefinitions.map.fields
+                this.columnDefs = [
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, fields.code),
+                    getColDef(this, fields.editor),
+                    { cellRendererFramework: MarkerQuality, width: 30 }
                 ]
             }
 
             if (this.documentType === 'outing') {
                 let fields = constants.objectDefinitions.outing.fields
                 this.columnDefs = [
-                    getColDef(this, fields.date_start, undefined, { width: 100 }),
-                    getColDef(this, fields.title, DocumentLink),
-                    getColDef(this, { name: 'Areas' }, AreaList),
-                    getColDef(this, fields.activities, undefined, { width: 100 }),
-                    getColDef(this, fields.height_diff_up, undefined, { width: 100 }),
+                    getColDef(this, fields.date_start, { width: 100 }),
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.height_diff_up, { width: 100 }),
+
+                    {
+                        headerName: this.$gettext('ratings'),
+                        children: [
+                            { headerName: this.$gettext('ratings'), cellRendererFramework: OutingRating, columnGroupShow: 'closed' },
+                            getColDef(this, fields.global_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.rock_free_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.ice_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.via_ferrata_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.equipment_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.engagement_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.ski_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.labande_global_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.hiking_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.snowshoe_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.mtb_up_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.mtb_down_rating, { columnGroupShow: 'open', width: 80 })
+                        ]
+                    },
+
                     { cellRendererFramework: MarkerGpsTrace, width: 30 },
                     { cellRendererFramework: MarkerImageCount, width: 30 },
                     { cellRendererFramework: MarkerCondition, width: 30 },
@@ -91,66 +135,78 @@
                 ]
             }
 
-            if (this.documentType === 'xreport') {
-                let fields = constants.objectDefinitions.xreport.fields
-                this.columnDefs = [
-                    getColDef(this, fields.title, DocumentLink),
-                    getColDef(this, fields.date),
-                    getColDef(this, fields.nb_impacted),
-                    getColDef(this, fields.severity),
-                    getColDef(this, fields.activities),
-                    getColDef(this, fields.event_type)
-                ]
-            }
-
             if (this.documentType === 'route') {
                 let fields = constants.objectDefinitions.route.fields
                 this.columnDefs = [
-                    getColDef(this, fields.title, DocumentLink),
-                    getColDef(this, fields.activities),
-                    // { TODO
-                    //
-                    //     sortingAlgorithm : areaSortingAlgorithm,
-                    //     width: '15%',
-                    //     cellTemplate:'<area-link class="ui-grid-cell-contents" area="row.entity.areas[row.entity.areas.length-1]"></area-link>',
-                    // },
-                    getColDef(this, fields.orientations),
-
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, AreaList),
+                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.orientations, { width: 100 }),
                     {
                         headerName: this.$gettext('elevation'),
                         children: [
-                            getColDef(this, fields.elevation_max, undefined, { columnGroupShow: 'closed' }),
-                            getColDef(this, fields.elevation_max, undefined, { columnGroupShow: 'open' }),
-                            getColDef(this, fields.height_diff_up, undefined, { columnGroupShow: 'open' }),
-                            getColDef(this, fields.height_diff_difficulties, undefined, { columnGroupShow: 'open' })
+                            getColDef(this, fields.elevation_max, { width: 120 }),
+                            getColDef(this, fields.elevation_min, { columnGroupShow: 'open', width: 120 }),
+                            getColDef(this, fields.height_diff_up, { columnGroupShow: 'open', width: 120 }),
+                            getColDef(this, fields.height_diff_down, { columnGroupShow: 'open', width: 120 }),
+                            getColDef(this, fields.height_diff_difficulties, { columnGroupShow: 'open', width: 120 })
                         ]
                     },
-
-                    { headerName: this.$gettext('ratings'), cellRendererFramework: RouteRating },
-
-                    // getColDef(this, fields.quality, visible: false ),
-                    // getColDef(this, fields.engagement_rating, visible: false ),
-                    // getColDef(this, fields.equipment_rating, visible: false ),
-                    // getColDef(this, fields.exposition_rock_rating, visible: false ),
-                    // getColDef(this, fields.global_rating, visible: false ),
-                    // getColDef(this, fields.aid_rating, visible: false ),
-                    // getColDef(this, fields.risk_rating, visible: false ),
-                    // getColDef(this, fields.rock_free_rating, visible: false ),
-                    // getColDef(this, fields.rock_required_rating, visible: false ),
-
-                    { cellRendererFramework: MarkerGpsTrace, width: '2rem' }
+                    {
+                        headerName: this.$gettext('ratings'),
+                        children: [
+                            { headerName: this.$gettext('ratings'), cellRendererFramework: RouteRating, columnGroupShow: 'closed' },
+                            getColDef(this, fields.engagement_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.equipment_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.exposition_rock_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.global_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.aid_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.risk_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.rock_free_rating, { columnGroupShow: 'open', width: 80 }),
+                            getColDef(this, fields.rock_required_rating, { columnGroupShow: 'open', width: 80 })
+                        ]
+                    },
+                    { cellRendererFramework: MarkerGpsTrace, width: 30 },
+                    { cellRendererFramework: MarkerQuality, width: 30 }
                 ]
             }
 
             if (this.documentType === 'waypoint') {
                 let fields = constants.objectDefinitions.waypoint.fields
                 this.columnDefs = [
-                    getColDef(this, fields.title, DocumentLink),
-                    // TODO getColDef(this, fields.areas,
-                    //     sortingAlgorithm : areasSortingAlgorithm,
-                    // ),
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.elevation),
-                    getColDef(this, fields.waypoint_type)
+                    getColDef(this, fields.waypoint_type),
+                    { cellRendererFramework: MarkerQuality, width: 30 }
+                ]
+            }
+
+            if (this.documentType === 'xreport') {
+                let fields = constants.objectDefinitions.xreport.fields
+                this.columnDefs = [
+                    getColDef(this, fields.date, { width: 100 }),
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, fields.event_type, { width: 100 }),
+                    getColDef(this, fields.activities, { width: 100 }),
+                    {
+                        headerName: this.$gettext('severity'),
+                        children: [
+                            getColDef(this, fields.severity),
+                            getColDef(this, fields.nb_impacted, { columnGroupShow: 'open' }),
+                            getColDef(this, fields.nb_participants, { columnGroupShow: 'open' })
+                        ]
+                    },
+                    getColDef(this, fields.elevation, { width: 100 }),
+                    {
+                        headerName: this.$gettext('avalanche'),
+                        children: [
+                            getColDef(this, fields.avalanche_level, { width: 150 }),
+                            getColDef(this, fields.avalanche_slope, { columnGroupShow: 'open', width: 120 })
+                        ]
+                    },
+                    { cellRendererFramework: MarkerQuality, width: 30 }
                 ]
             }
         }

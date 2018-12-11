@@ -267,7 +267,8 @@
             this.map = new ol.Map({
                 target: this.$refs.map,
 
-                controls: ol.control.defaults().extend([
+                controls: [
+                    new ol.control.Zoom(),
                     new ol.control.FullScreen({ source: this.$el }),
                     new ol.control.ScaleLine(),
                     new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
@@ -275,8 +276,9 @@
                     new ol.control.Control({ element: this.$refs.useMapAsFilter }),
                     new ol.control.Control({ element: this.$refs.centerOnGeolocation }),
                     new ol.control.Control({ element: this.$refs.recenterOnControl }),
-                    new ol.control.Control({ element: this.$refs.recenterOnPropositions })
-                ]),
+                    new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
+                    new ol.control.Attribution()
+                ],
 
                 layers: this.mapLayers.concat(this.dataLayers).concat([
                     this.biodivLayer,
@@ -669,6 +671,14 @@
         }
     }
 </script>
+
+<style lang="scss">
+    // for styling ol elements
+    .ol-attribution{
+        background: white!important;
+
+    }
+</style>
 
 <style lang="scss" scoped>
 

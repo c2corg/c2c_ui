@@ -2,13 +2,13 @@
 
 They are defined in `vue.config.js` file on root directory, and parameters are available on front side, into the `@/js/config` module.
 
-### `local:demo`
+### `local`
 
 ```
 npm run serve
 ```
 
-This environment is the development environment. It comes with hot-reload feature : modify a file, save it, and you'll see your modification in live!. It uses by default demo API, and it's read-write. 
+This environment is the development environment. It comes with hot-reload feature : modify a file, save it, and you'll see your modification in live!. It uses by default demo API, and it's read-write.
 
 ### `gitlab`
 
@@ -16,7 +16,7 @@ This environment is the development environment. It comes with hot-reload featur
 npm run build:gitlab
 ```
 
-Also on demo API and read-write mode, it's purpose is to be deployed on gitlab pages. Note that if you have forked the official repo, you will have this site deployed here : `https://<your_gitlab_name>.gitlab.io/vue-camptocamp/`
+It's purpose is to be deployed on gitlab pages. Note that if you have forked the official repo, you will have this site deployed here : `https://<your_gitlab_name>.gitlab.io/vue-camptocamp/`
 
 This environment also checks bundles sizes on build step.
 
@@ -26,4 +26,4 @@ This environment also checks bundles sizes on build step.
 npm run build
 ```
 
-The official build. Prod API, and read-write, without API toogler.
+The official build. Prod API, read-write, without API toogler.

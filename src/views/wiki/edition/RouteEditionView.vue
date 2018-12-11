@@ -29,6 +29,8 @@
                 <associations-input-row :document="document" :field="fields.books" />
                 <associations-input-row :document="document" :field="fields.xreports" />
 
+                <quality-input-row :document="document" />
+
             </tab-item>
 
             <tab-item :title="$gettext('configuration')">
@@ -105,14 +107,14 @@
 
             <tab-item :title="$gettext('Comments')">
                 <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.route_history"/>
+                <form-input-row :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')"/>
                 <form-input-row :document="document" :field="fields.description"/>
                 <form-input-row :document="document" :field="fields.slackline_anchor1"/>
                 <form-input-row :document="document" :field="fields.slackline_anchor2"/>
                 <form-input-row :document="document" :field="fields.remarks"/>
-                <form-input-row :document="document" :field="fields.gear"/>
+                <form-input-row :document="document" :field="fields.gear" :placeholder="$gettext('Describe here the gear needed for this route')"/>
                 <form-input-row :document="document" :field="fields.glacier_gear"/>
-                <form-input-row :document="document" :field="fields.external_resources"/>
+                <form-input-row :document="document" :field="fields.external_resources" :placeholder="$gettext('Books and websites not already associated to this route')"/>
             </tab-item>
 
         </tab-view>

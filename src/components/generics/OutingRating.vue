@@ -3,9 +3,9 @@
         <span
             v-for="rating of $options.ratings"
             :key="rating"
-            v-if="outing[rating]"
+            v-if="document[rating]"
             :title="$gettext(rating)">
-            {{ outing[rating] }}
+            {{ document[rating] }}
         </span>
     </span>
 
@@ -15,7 +15,7 @@
 
     export default {
         props: {
-            outing: {
+            document: {
                 type: Object,
                 required: true
             }

@@ -7,10 +7,10 @@
     "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build",
     "build:gitlab": "cross-env BUILD_ENV=gitlab vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "extract-message": "node tools/xgettext.js",
+    "extract-messages": "node tools/extract-messages.js",
     "generate-docs": "node tools/generate-docs.js",
     "generate-icons": "node tools/generate-icons.js",
-    "update-c2c-common": "python3 tools/import_common.py"
+    "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.2.0",
@@ -48,7 +48,7 @@
     "sass-loader": "^7.1.0",
     "typescript": "^3.0.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack-bundle-analyser": "^1.4.0",
+    "webpack-bundle-analyzer": "^3.0.3",
     "xml2js": "^0.4.19"
   },
   "eslintConfig": {

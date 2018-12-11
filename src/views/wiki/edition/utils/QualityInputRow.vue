@@ -1,10 +1,10 @@
 <template>
     <form-row :label="$gettext('quality')" always-visible is-grouped>
 
-        <input-simple v-if="autoComputeQuality" :value="$gettext(computedQuality)" disabled/>
+        <input-simple v-if="autoComputeQuality && automaticComputationAvailable" :value="$gettext(computedQuality)" disabled/>
         <input-simple v-else :options="$options.quality_types" i18n required v-model="manualQuality"/>
 
-        <div class="control">
+        <div class="control" v-if="automaticComputationAvailable">
             <input-checkbox v-model="autoComputeQuality">
                 <span v-translate>Auto-compute quality</span>
             </input-checkbox>
@@ -176,6 +176,9 @@
             editedLocale() {
                 // in edit mode, there is only one locale
                 return this.document ? this.document.locales[0] : null
+            },
+            automaticComputationAvailable() {
+                return ['o', 'c', 'i'].includes(this.document.type)
             }
         },
 
@@ -191,7 +194,7 @@
 
         methods: {
             storeQuality() {
-                this.document.quality = this.autoComputeQuality ? this.computedQuality : this.manualQuality
+                this.document.quality = (this.autoComputeQuality && this.automaticComputationAvailable) ? this.computedQuality : this.manualQuality
             },
 
             computeQuality() {

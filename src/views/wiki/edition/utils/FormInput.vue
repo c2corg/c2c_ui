@@ -33,6 +33,7 @@
     <input-markdown
         v-else-if="field.type=='markdown'"
         v-show="visible"
+        :placeholder="placeholder"
         v-model="object[field.name]"/>
 
     <input-document

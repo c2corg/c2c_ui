@@ -136,7 +136,10 @@ export default {
                 return
             }
 
-            const point = new ol.geom.Point([parseFloat(this.longitude), parseFloat(this.latitude)])
+            const longitude = parseFloat(String(this.longitude).replace(',', '.'))
+            const latitude = parseFloat(String(this.latitude).replace(',', '.'))
+
+            const point = new ol.geom.Point([longitude, latitude])
             point.transform(FORM_PROJ, DATA_PROJ)
             this.document.geometry.geom = geoJSONFormat.writeGeometry(point)
         },

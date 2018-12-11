@@ -1,6 +1,6 @@
 <template>
     <div class="control">
-        <markdown-editor v-model="value_"/>
+        <markdown-editor v-model="value_" :placeholder="placeholder"/>
     </div>
 </template>
 

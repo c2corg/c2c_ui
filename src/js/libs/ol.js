@@ -1,6 +1,6 @@
 import { Map, View, Feature } from 'ol'
 
-import { defaults as defaultControls, Control, FullScreen, ScaleLine } from 'ol/control'
+import { Control, FullScreen, ScaleLine, Zoom, Attribution } from 'ol/control'
 
 import VectorLayer from 'ol/layer/Vector'
 import TileLayer from 'ol/layer/Tile'
@@ -34,10 +34,11 @@ export default {
     Geolocation,
 
     control: {
-        defaults: defaultControls,
         Control,
         FullScreen,
-        ScaleLine
+        ScaleLine,
+        Zoom,
+        Attribution
     },
 
     extent: {

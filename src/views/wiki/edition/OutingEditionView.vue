@@ -15,7 +15,7 @@
                     <form-input v-show="showBothDates" :document="document" :field="fields.date_end" prefix="end"/>
                 </form-row>
 
-                <form-input-row :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
+                <form-input-row :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
 
                 <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
                 <associations-input-row :label="$gettext('Routes')" :document="document" :field="fields.routes" />
@@ -89,12 +89,12 @@
                     <form-input :document="document" :field="fields.snow_quality" prefix="quality"/>
                 </form-row>
 
-                <form-input-row :document="document" :field="fields.conditions" />
+                <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
 
                 <form-input-row :document="document" :field="fields.avalanches" />
                 <form-input-row :document="document" :field="fields.avalanche_signs"/>
 
-                <form-input-row :document="document" :field="fields.weather" />
+                <form-input-row :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')"/>
 
                 <form-input-row :document="document" :field="fields.conditions_levels" />
 
@@ -118,8 +118,8 @@
                     <form-input :document="document" :field="fields.participants" :prefix="$gettext('Without c2c account')" is-expanded/>
                 </form-row>
 
-                <form-input-row :document="document" :field="fields.route_description" />
-                <form-input-row :document="document" :field="fields.timing" />
+                <form-input-row :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')"/>
+                <form-input-row :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')"/>
                 <form-input-row :document="document" :field="fields.disable_comments" />
             </tab-item>
 

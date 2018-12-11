@@ -13,6 +13,7 @@
                     <field-view :document="document" :field="fields.book_types"/>
 
                     <field-view :document="document" :field="fields.editor"/>
+                    <field-view :document="document" :field="fields.langs"/>
                     <field-view :document="document" :field="fields.isbn"/>
                     <field-view :document="document" :field="fields.nb_pages"/>
                     <field-view :document="document" :field="fields.publication_date"/>

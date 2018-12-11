@@ -18,6 +18,7 @@
 
 <script>
     import axios from 'axios'
+    import c2c from '@/js/apis/c2c'
 
     export default {
 
@@ -37,7 +38,12 @@
 
                 this.title = helper.title
                 this.html = this.$gettext('loading')
-                if (helper.url) {
+
+                if (helper.documentId) {
+                    c2c.article.getCooked(helper.documentId, this.$language.current).then(response => {
+                        this.computeHtml2(helper, response.data.cooked)
+                    })
+                } else if (helper.url) {
                     axios.get(`${githubUrl}${path}${helper.url}`)
                         .then(response => {
                             this.computeHtml(response.data)
@@ -70,7 +76,44 @@
                 this.html = content.innerHTML
             },
 
+            computeHtml2(helper, cooked) {
+                let content = document.createElement('div')
+                content.innerHTML = cooked.description
+
+                if (helper.anchor) {
+                    const html = []
+                    let appending = false
+                    let mainNodeTag = null
+
+                    for (let node of content.children) {
+                        if (node.nodeName.match(/^[hH]\d$/)) {
+                            if (!appending) {
+                                if (node.id === helper.anchor) {
+                                    appending = true
+                                    mainNodeTag = node.nodeName
+                                }
+                            } else if (node.nodeName <= mainNodeTag) {
+                                appending = false
+                            }
+                        }
+
+                        if (appending) {
+                            html.push(node.outerHTML)
+                        }
+                    }
+                    this.html = html.length !== 0 ? html.join('\n') : content.innerHTML
+                } else {
+                    this.html = content.innerHTML
+                }
+            },
+
             getHelper(name) {
+                const match = name.match(/^(?<documentId>\d+)(#(?<anchor>[a-z0-9-]+))?$/)
+
+                if (match) {
+                    return match.groups
+                }
+
                 return {
                     'activities': {
                         title: this.$gettext('activities'),
