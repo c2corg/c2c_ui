@@ -1,6 +1,6 @@
 build-npm:
   stage: build
-  image: node:8.11
+  image: node:10.14
   script:
   - npm install
   - npm run build:gitlab
