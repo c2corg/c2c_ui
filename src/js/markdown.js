@@ -14,15 +14,14 @@ showdown.extension('c2c_folies', function() {
 
     var c2c_title = { // trash
         type: 'lang',
-        regex: /(^|\n)(?<hashs>#+)(?<header>.*?)(?<emphasis>#+[^#]*?)?(\{#(?<anchor>[\w-]+)\})?(\n|$)/g,
-        replace: function() {
-            const parts = arguments[arguments.length - 1]
-            const tag = 'h' + (parts.hashs.length + 1)
+        regex: /(?:^|\n)(#+)(.*?)(?:#+([^#]*))?(?:\{#([\w-]+)\})?(?:\n|$)/g,
+        replace: function(match, hashs, header, emphasis, anchor) {
+            const tag = 'h' + (hashs.length + 1)
 
-            parts.emphasis = parts.emphasis ? `<small>${parts.emphasis}</small>` : ''
-            parts.anchor = parts.anchor ? ` id="${parts.anchor}"` : ''
+            emphasis = emphasis ? `<small>${emphasis}</small>` : ''
+            anchor = anchor ? ` id="${anchor}"` : ''
 
-            return `\n<${tag}${parts.anchor}>${parts.header}${parts.emphasis}</${tag}>\n`
+            return `\n<${tag}${anchor}>${header}${emphasis}</${tag}>\n`
         }
     }
 

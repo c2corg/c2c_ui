@@ -108,10 +108,13 @@
             },
 
             getHelper(name) {
-                const match = name.match(/^(?<documentId>\d+)(#(?<anchor>[a-z0-9-]+))?$/)
+                const match = name.match(/^(\d+)(#([a-z0-9-]+))?$/)
 
                 if (match) {
-                    return match.groups
+                    return {
+                        documentId: match[1],
+                        anchor: match[3]
+                    }
                 }
 
                 return {
