@@ -1,5 +1,6 @@
 <template>
     <span>
+        <marker-quality :quality="outing.quality"/>
         <marker-condition :condition="outing.condition_rating"/>
         {{ outing.date_start }}
         :
