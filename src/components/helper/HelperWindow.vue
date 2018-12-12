@@ -1,7 +1,22 @@
 <template>
     <modal-card ref="modalCard">
         <div slot="title">
-            {{ title }}
+            <p>
+                {{ title }}
+            </p>
+            <p class="buttons">
+                <button
+                    class="button"
+                    v-for="(_, otherLang) in $language.available"
+                    :key="otherLang"
+                    :class="{'is-primary': otherLang==lang}"
+                    @click="lang = otherLang">
+                    {{ otherLang }}
+                </button>
+                <a v-if="helper.documentId" :href="'https://www.camptocamp.org/articles/' + helper.documentId">
+                    Got to article
+                </a>
+            </p>
         </div>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <section class="content" v-html="html">
@@ -25,31 +40,45 @@
         data() {
             return {
                 title: null,
-                html: null
+                html: null,
+                lang: null,
+                helper: {},
             }
+        },
+
+        watch: {
+            lang: "load"
+        },
+
+        created(){
+            this.lang = this.$language.current
         },
 
         methods: {
             show(helperId) {
-                const helper = this.getHelper(helperId)
+                this.helper = this.getHelper(helperId)
+                this.load()
+            },
+
+            load(){
 
                 const githubUrl = 'https://raw.githubusercontent.com/c2corg/v6_ui/master/'
                 const path = 'c2corg_ui/static/partials/contexthelp/'
 
-                this.title = helper.title
+                this.title = this.helper.title
                 this.html = this.$gettext('loading')
 
-                if (helper.documentId) {
-                    c2c.article.getCooked(helper.documentId, this.$language.current).then(response => {
-                        this.computeHtml2(helper, response.data.cooked)
+                if (this.helper.documentId) {
+                    c2c.article.getCooked(this.helper.documentId, this.lang).then(response => {
+                        this.computeHtml2(this.helper, response.data.cooked)
                     })
-                } else if (helper.url) {
-                    axios.get(`${githubUrl}${path}${helper.url}`)
+                } else if (this.helper.url) {
+                    axios.get(`${githubUrl}${path}${this.helper.url}`)
                         .then(response => {
                             this.computeHtml(response.data)
                         })
                 } else {
-                    this.computeHtml(`<div translate>${helper.content}</div>`)
+                    this.computeHtml(`<div translate>${this.helper.content}</div>`)
                 }
 
                 this.$refs.modalCard.show()
@@ -86,19 +115,22 @@
                     let mainNodeTag = null
 
                     for (let node of content.children) {
+
+                        // appending at the begining, because we do not want the main title in html
+                        if (appending) {
+                            html.push(node.outerHTML)
+                        }
+
                         if (node.nodeName.match(/^[hH]\d$/)) {
                             if (!appending) {
                                 if (node.id === helper.anchor) {
                                     appending = true
                                     mainNodeTag = node.nodeName
+                                    this.title = node.innerHTML
                                 }
                             } else if (node.nodeName <= mainNodeTag) {
                                 appending = false
                             }
-                        }
-
-                        if (appending) {
-                            html.push(node.outerHTML)
                         }
                     }
                     this.html = html.length !== 0 ? html.join('\n') : content.innerHTML
