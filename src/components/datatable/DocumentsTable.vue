@@ -24,6 +24,7 @@
     import MarkerCondition from './cell-renderers/MarkerCondition'
     import MarkerQuality from './cell-renderers/MarkerQuality'
     import AreaList from './cell-renderers/AreaList'
+    import DocumentAuthor from './cell-renderers/DocumentAuthor'
 
     function getColDef(vm, field, options) {
         options = options || {}
@@ -106,6 +107,7 @@
                     getColDef(this, fields.date_start, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.height_diff_up, { width: 100 }),
 
