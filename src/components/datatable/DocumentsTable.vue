@@ -141,7 +141,7 @@
                 let fields = constants.objectDefinitions.route.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, AreaList),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.orientations, { width: 100 }),
                     {
