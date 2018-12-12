@@ -17,9 +17,9 @@
                     </add-link>
                 </span>
             </div>
-            <div class="level-right" v-if="documentType!='profile'">
 
-                <div class="level-item is-size-3">
+            <div class="level-right" v-if="documentType!='profile'">
+                <div class="level-item is-size-3 is-hidden-mobile">
                     <fa-icon
                         :icon="listMode ? 'th-list' : 'th-large'"
                         @click="toogleProperty('listMode')" />
@@ -29,6 +29,9 @@
                         :class="{'has-text-primary':showMap}"
                         icon="map-marked-alt"
                         @click="toogleProperty('showMap')" />
+                </div>
+                <div class="level-item is-size-3 is-hidden-tablet">
+                    <fa-icon :icon="mobileMapView ? 'map-marked-alt' : 'th-large'" class="has-text-primary" @click="toogleProperty('mobileMapView')"/>
                 </div>
             </div>
         </div>
@@ -41,7 +44,7 @@
             </div>
         </div>
 
-        <div class="columns result-section">
+        <div class="columns result-section" :class="mobileMapView ? 'mobile-result-map' : 'mobile-result-card'">
             <div class="column documents-container"
                  :class="{'is-12': !displayMap, 'is-8': displayMap}">
 
@@ -78,7 +81,7 @@
             </div>
         </div>
 
-        <page-selector v-if="documents!=null" :documents="documents"/>
+        <page-selector :documents="documents"/>
     </div>
 </template>
 
@@ -107,7 +110,9 @@
 
                 // showMap is the user choise, if he wants to see the map, or not
                 showMap: null,
-                listMode: null
+                listMode: null,
+
+                mobileMapView: null,
             }
         },
 
@@ -147,6 +152,7 @@
             load() {
                 this.showMap = this.$localStorage.get(this.documentType + '.showMap', this.documentAreGeoLocalized)
                 this.listMode = this.$localStorage.get(this.documentType + '.listMode', false)
+                this.mobileMapView = this.$localStorage.get(this.documentType + '.mobileMapView', false)
                 this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
@@ -192,32 +198,61 @@
     .filter-section{
     }
 
-    .result-section{
-        margin-top:0;
-        height:$result-height;
 
-        .documents-container{
-            height:100%;
-            overflow: auto;
-
-            .cards-list{
-                padding-top:2px;
-                height:100%;
-            }
-
-            .documents-table{
-                height:100%;
-            }
-
-        //    transition:0.3s;
-        }
+    @media screen and (max-width: $tablet) {
 
         .map-container{
-            min-height: 100%;
+            height: $result-height;
             padding-left:0;
             padding-top:0;
             padding-bottom:0;
-        //    transition:0.3s;
+        }
+
+        .mobile-result-map{
+            margin-top:0;
+            height:$result-height;
+
+            .documents-container{
+                display:None;
+            }
+        }
+
+        .mobile-result-cards{
+
+            .map-container{
+                display:None;
+            }
+        }
+    }
+
+    @media screen and (min-width: $tablet){
+        .result-section{
+            margin-top:0;
+            height:$result-height;
+
+            .documents-container{
+                height:100%;
+                overflow: auto;
+
+                .cards-list{
+                    padding-top:2px;
+                    height:100%;
+                }
+
+                .documents-table{
+                    height:100%;
+                }
+
+            //    transition:0.3s;
+            }
+
+            .map-container{
+                min-height: 100%;
+                padding-left:0;
+                padding-top:0;
+                padding-bottom:0;
+            //    transition:0.3s;
+            }
         }
     }
 
