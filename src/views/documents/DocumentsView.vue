@@ -42,7 +42,7 @@
         </div>
 
         <div class="columns result-section">
-            <div class="column cards-container"
+            <div class="column documents-container"
                  :class="{'is-12': !displayMap, 'is-8': displayMap}">
 
                 <loading-notification :promise="promise"/>
@@ -179,7 +179,7 @@
     $header-margin-bottom : 1rem; //TODO find this variable
     $filter-height : 32px;
     $filter-padding-bottom : 1.5rem;
-    $page-selector-height : 5rem;
+    $page-selector-height : 3rem;
     $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
     $cards-gap:0.25rem;
 
@@ -196,14 +196,20 @@
         margin-top:0;
         height:$result-height;
 
-        .cards-container{
-            padding-top:2px;
+        .documents-container{
+            height:100%;
             overflow: auto;
-        //    transition:0.3s;
-        }
 
-        .documents-table{
-            height:$result-height;
+            .cards-list{
+                padding-top:2px;
+                height:100%;
+            }
+
+            .documents-table{
+                height:100%;
+            }
+
+        //    transition:0.3s;
         }
 
         .map-container{

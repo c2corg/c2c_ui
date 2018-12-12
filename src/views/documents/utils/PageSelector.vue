@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
+        <nav class="pagination is-small is-rounded is-centered" role="navigation" aria-label="pagination">
             <router-link
                 :disabled="currentPage<=1"
                 :to="pageQuery(currentPage-1)"
@@ -28,10 +28,10 @@
                 </li>
             </ul>
         </nav>
-
+<!--
         <div class="has-text-centered">
             {{ offset + 1 }}-{{ offset + documents.documents.length }} / {{ documents.total }}
-        </div>
+        </div> -->
     </div>
 </template>
 
