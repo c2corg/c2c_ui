@@ -1,10 +1,23 @@
 <template>
     <modal-card ref="modalCard">
         <div slot="title">
-            <p>
+            <p :class="{'has-text-danger': !headerFound}">
                 {{ title }}
             </p>
             <p class="buttons">
+            </p>
+        </div>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <section class="content" v-html="html">
+            <!-- <runtime-template :template="'<div>' + html + '</div>'" /> -->
+        </section>
+
+        <div slot="footer">
+            <div class="buttons">
+                <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
+                    Close
+                </button>
+
                 <button
                     class="button"
                     v-for="(_, otherLang) in $language.available"
@@ -16,17 +29,7 @@
                 <a v-if="helper.documentId" :href="'https://www.camptocamp.org/articles/' + helper.documentId">
                     Got to article
                 </a>
-            </p>
-        </div>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <section class="content" v-html="html">
-            <!-- <runtime-template :template="'<div>' + html + '</div>'" /> -->
-        </section>
-
-        <div slot="footer">
-            <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
-                Close
-            </button>
+            </div>
         </div>
     </modal-card>
 </template>
@@ -43,6 +46,7 @@
                 html: null,
                 lang: null,
                 helper: {},
+                headerFound: false,
             }
         },
 
@@ -51,6 +55,7 @@
         },
 
         created(){
+            console.log(this.$language.current)
             this.lang = this.$language.current
         },
 
@@ -113,24 +118,21 @@
                     const html = []
                     let appending = false
                     let mainNodeTag = null
+                    this.title = cooked.title
+                    this.headerFound = false
 
                     for (let node of content.children) {
+                        let isHeader = node.nodeName.match(/^[hH]\d$/)
 
-                        // appending at the begining, because we do not want the main title in html
-                        if (appending) {
+                        if(isHeader && !appending && node.id === helper.anchor){
+                            appending = true
+                            mainNodeTag = node.nodeName
+                            this.title = node.innerHTML
+                            this.headerFound = true
+                        } else if(isHeader && appending && node.nodeName <= mainNodeTag){
+                            appending = false
+                        } else if(appending) {
                             html.push(node.outerHTML)
-                        }
-
-                        if (node.nodeName.match(/^[hH]\d$/)) {
-                            if (!appending) {
-                                if (node.id === helper.anchor) {
-                                    appending = true
-                                    mainNodeTag = node.nodeName
-                                    this.title = node.innerHTML
-                                }
-                            } else if (node.nodeName <= mainNodeTag) {
-                                appending = false
-                            }
                         }
                     }
                     this.html = html.length !== 0 ? html.join('\n') : content.innerHTML
