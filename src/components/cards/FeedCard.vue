@@ -116,22 +116,7 @@
             }
 
             this.actionLine += this.documentType
-
-            const start = this.$moment.parseDate(this.item['document']['date_start']).locale(this.$language.current)
-            const end = this.$moment.parseDate(this.item['document']['date_end']).locale(this.$language.current)
-            const sameYear = start.year() === end.year()
-            const sameMonth = start.month() === end.month()
-            const sameDay = start.date() === end.date()
-
-            if (!sameYear) {
-                this.dates = start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY')
-            } else if (!sameMonth) {
-                this.dates = start.format('Do MMMM') + ' - ' + end.format('Do MMMM YYYY')
-            } else if (!sameDay) {
-                this.dates = start.format('Do') + ' - ' + end.format('Do MMMM YYYY')
-            } else {
-                this.dates = end.format('Do MMMM YYYY')
-            }
+            this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document'])
 
             if (this.item.image1) {
                 this.images.push(this.item.image1)

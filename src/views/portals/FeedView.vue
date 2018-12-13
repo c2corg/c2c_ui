@@ -52,18 +52,18 @@
             MobileAppAdvertising
         },
 
-        data(){
+        data() {
             return {
-                isPersonal: false,
+                isPersonal: false
             }
         },
 
-        created(){
+        created() {
             this.isPersonal = this.$localStorage.get('isPersonal', false)
         },
 
         methods: {
-            toggleIsPersonal(){
+            toggleIsPersonal() {
                 this.isPersonal = !this.isPersonal
                 this.$localStorage.set('isPersonal', this.isPersonal)
             }

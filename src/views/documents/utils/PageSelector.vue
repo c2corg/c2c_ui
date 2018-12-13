@@ -46,18 +46,10 @@
         data() {
             return {
                 queryLimit,
-                offset:0,
+                offset: 0,
                 pageCount: 1,
-                currentPage: 1,
+                currentPage: 1
             }
-        },
-
-        watch: {
-            "$route": {
-                handler:"compute",
-                immediate: true,
-            },
-            "documents": "compute"
         },
 
         computed: {
@@ -92,10 +84,19 @@
             }
         },
 
+        watch: {
+            '$route': {
+                handler: 'compute',
+                immediate: true
+            },
+            'documents': 'compute'
+        },
+
         methods: {
-            compute(){
-                if(!this.documents)
+            compute() {
+                if (!this.documents) {
                     return
+                }
 
                 this.offset = parseInt(this.$route.query.offset || 0)
                 this.pageCount = Math.min(Math.floor(this.documents.total / queryLimit) + 1, 99)

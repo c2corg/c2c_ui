@@ -3,7 +3,6 @@
         v-if="name"
         icon="info-circle"
         class="marker-helper has-text-info"
-        :class="{'has-text-danger':isLegacyHelper}"
         @click="$helper.show(name)" />
 </template>
 
@@ -13,12 +12,6 @@
             name: {
                 type: String,
                 default: null
-            }
-        },
-
-        computed: {
-            isLegacyHelper() {
-                return !this.name.match(/^\d+(#[a-z0-9-]+)?$/)
             }
         }
     }

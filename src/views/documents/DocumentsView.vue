@@ -4,7 +4,23 @@
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
-                    <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                            <span class="title is-1">{{ getDocumentTypeTitle(documentType) }}</span>
+                        </div>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                                <div
+                                    class="dropdown-item"
+                                    v-for="type of ['route', 'waypoint', 'outing', 'image', 'book', 'area']"
+                                    :key="type">
+                                    <router-link :to="{name: type + 's', query:$route.query}">
+                                        {{ getDocumentTypeTitle(type) }}
+                                    </router-link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </span>
 
                 <span v-if="!['area', 'profile'].includes(documentType)" class="level-item">
@@ -31,7 +47,10 @@
                         @click="toogleProperty('showMap')" />
                 </div>
                 <div class="level-item is-size-3 is-hidden-tablet">
-                    <fa-icon :icon="mobileMapView ? 'map-marked-alt' : 'th-large'" class="has-text-primary" @click="toogleProperty('mobileMapView')"/>
+                    <fa-icon
+                        :icon="mobileMapView ? 'map-marked-alt' : 'th-large'"
+                        class="has-text-primary"
+                        @click="toogleProperty('mobileMapView')"/>
                 </div>
             </div>
         </div>
@@ -112,17 +131,13 @@
                 showMap: null,
                 listMode: null,
 
-                mobileMapView: null,
+                mobileMapView: null
             }
         },
 
         computed: {
             documents() {
                 return this.promise.data
-            },
-            title() {
-                var result = this.$route.name
-                return result.charAt(0).toUpperCase() + result.slice(1)
             },
             documentType() {
                 return this.$route.name.slice(0, -1)
@@ -171,6 +186,11 @@
                 if (this.documentAreGeoLocalized && this.displayMap) {
                     this.$refs.map.highlightedDocument = null
                 }
+            },
+
+            getDocumentTypeTitle(documentType) {
+                documentType = documentType.charAt(0).toUpperCase() + documentType.slice(1)
+                return this.$gettext(documentType + 's')
             }
         }
     }
@@ -198,7 +218,6 @@
     .filter-section{
     }
 
-
     @media screen and (max-width: $tablet) {
 
         .map-container{
@@ -217,10 +236,10 @@
             }
         }
 
-        .mobile-result-cards{
+        .mobile-result-card{
 
             .map-container{
-                display:None;
+                visibility: hidden; // map does not like to be in a display none...
             }
         }
     }

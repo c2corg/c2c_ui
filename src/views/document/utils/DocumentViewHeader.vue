@@ -44,7 +44,7 @@
                     <document-title :document="document"/>
                     <!-- outing specific  -->
                     <span v-if="documentType=='outing'" class="tag is-rounded is-primary is-size-6">
-                        {{ document.date_start }}
+                        {{ $documentUtils.getOutingDatesLocalized(document) }}
                     </span>
                 </div>
             </div>

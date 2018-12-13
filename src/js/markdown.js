@@ -14,9 +14,8 @@ showdown.extension('c2c_folies', function() {
 
     var c2c_title = { // trash
         type: 'lang',
-        regex: /(?:^|\n)(#+)(.*?)(?:#+([^#\n\{]*))?(?:\{#([a-z0-9-]+)})?(?:\n|$)/g,
+        regex: /(?:^|\n)(#+)(.*?)(?:#+([^#\n{]*))?(?:\{#([a-z0-9-]+)})?(?:\n|$)/g,
         replace: function(match, hashs, header, emphasis, anchor) {
-
             const tag = 'h' + (hashs.length + 1)
 
             emphasis = emphasis ? `<small>${emphasis}</small>` : ''
