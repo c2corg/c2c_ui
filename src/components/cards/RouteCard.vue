@@ -1,15 +1,17 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <card-title>
+            <document-title :document="document"/>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <card-region-item :document="document"/>
-        </div>
+        </card-row>
 
-        <div slot="row2" class="level is-nowrap">
+        <card-row>
 
             <span>
-                <fa-icon class="has-text-primary" icon="tachometer-alt"/>
+                <icon-ratings class="has-text-primary" />
                 <route-rating :document="document"/>
             </span>
 
@@ -30,9 +32,9 @@
                 <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
                 {{ document.height_diff_difficulties }}&nbsp;m
             </span>
-        </div>
+        </card-row>
 
-        <div slot="row3" class="level">
+        <card-row>
             <card-activities-item :activities="document.activities"/>
 
             <span class="has-text-primary"> <!-- Englobing span is mandatory for tooltip ?? -->
@@ -45,7 +47,8 @@
             </span>
 
             <marker-quality :quality="document.quality"/>
-        </div>
+        </card-row>
+
     </card-container>
 </template>
 

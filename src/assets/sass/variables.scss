@@ -1,3 +1,5 @@
+
+
 //https://bulma.io/documentation/customize/variables/
 
 
@@ -59,6 +61,15 @@ $box-radius: 0;
  * locally other varaible if needded (like $navbar-height)
  */
 $navbar-height: 3.25rem;
+
+// TODO bulkma 0.7.3 will introduce $input-placeholder-color
+// but it's not yet (14/12/2018) available on npm
+$input-placeholder-color:rbg(160,160,160);
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #AAA!important;
+    opacity: 1; /* Firefox */
+}
 
 @import "~bulma/sass/utilities/initial-variables.sass";
 @import "~bulma/sass/utilities/functions.sass";

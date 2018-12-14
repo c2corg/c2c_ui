@@ -1,16 +1,18 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <card-title>
+            <document-title :document="document"/>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <card-region-item :document="document" />
             <span class="is-nowrap">
                 <icon-forum />
                 @{{ document.forum_username }}
             </span>
-        </div>
+        </card-row>
 
-        <div slot="row2" class="level">
+        <card-row>
             <card-activities-item
                 v-if="document.activities"
                 :activities="document.activities"/>
@@ -20,7 +22,7 @@
                 v-if="document.categories"
                 :array="document.categories"
                 class="is-ellipsed"/>
-        </div>
+        </card-row>
     </card-container>
 </template>
 

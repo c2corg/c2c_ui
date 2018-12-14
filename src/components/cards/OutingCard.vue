@@ -1,22 +1,22 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <div slot="header" class="level">
+        <card-title>
             <document-title :document="document" class="is-ellipsed"/>
             <marker-condition :condition="document.condition_rating" class="is-pulled-right"/>
-        </div>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <card-region-item :document="document" />
 
             <span class="is-nowrap">
                 <fa-icon class="has-text-primary" icon="pen"/>
                 {{ document.author.name }}
             </span>
-        </div>
+        </card-row>
 
-        <div slot="row2" class="level">
+        <card-row>
             <span>
-                <fa-icon class="has-text-primary" icon="tachometer-alt"/>
+                <icon-ratings class="has-text-primary" />
                 <outing-rating :document="document"/>
             </span>
 
@@ -26,13 +26,14 @@
                 <icon-height-diff-up class="has-text-primary"/>
                 {{ document.height_diff_up }}&nbsp;m
             </span>
-        </div>
+        </card-row>
 
-        <div slot="row3" class="level">
+        <card-row>
             <card-activities-item :activities="document.activities"/>
 
             <span class="has-text-primary is-nowrap">
                 <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+                &nbsp;
                 <marker-image-count :image-count="document.img_count"/>
             </span>
 
@@ -41,7 +42,7 @@
             </span>
 
             <marker-quality :quality="document.quality"/>
-        </div>
+        </card-row>
     </card-container>
 </template>
 

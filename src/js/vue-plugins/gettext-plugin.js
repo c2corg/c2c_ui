@@ -58,11 +58,12 @@ function getMessages(lang) {
 
 export default function install(Vue) {
     let languageVm = new Vue({
+
         data: {
-            current: null
+            current: 'fr'
         },
 
-        created: function() {
+        created() {
             // Non-reactive data.
             this.available = {
                 fr: 'Français',
@@ -75,7 +76,6 @@ export default function install(Vue) {
             }
 
             this.translations = {}
-
             this.setCurrent('fr')
         },
 

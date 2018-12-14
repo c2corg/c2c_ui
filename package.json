@@ -22,7 +22,7 @@
     "ag-grid-community": "^19.1.4",
     "ag-grid-vue": "^19.1.2",
     "axios": "^0.18.0",
-    "bulma": "^0.7.1",
+    "bulma": "^0.7.2",
     "bulma-checkradio": "^2.1.0",
     "bulma-tooltip": "^2.0.2",
     "d3": "^5.7.0",

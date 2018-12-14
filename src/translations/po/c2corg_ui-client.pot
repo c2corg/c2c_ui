@@ -859,10 +859,6 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "Registered participants can be directly associated to the outing, thus allowing them to modify the outing, add pictures, and associate other registered participants."
-msgstr ""
-
 #: src/views/user/LoginView.vue
 msgid "Reset password"
 msgstr ""
@@ -965,10 +961,6 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "Suggested rating"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "Taken routes"
 msgstr ""
 
 #: src/views/document/utils/windows/MergeDocumentWindow.vue
@@ -1172,7 +1164,6 @@ msgstr ""
 msgid "action"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
 #: src/components/images-uploader/ImageUploader.vue
 #: src/views/document/BookView.vue
 #: src/views/document/ImageView.vue
@@ -1252,7 +1243,6 @@ msgid "aid"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "aid_rating"
 msgstr ""
 
@@ -1270,10 +1260,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "artificial"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "associated_participants"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1297,16 +1283,8 @@ msgstr ""
 msgid "author"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "author_status"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue
 msgid "autonomous"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "autonomy"
 msgstr ""
 
 #: src/components/datatable/DocumentsTable.vue
@@ -1316,18 +1294,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "avalanche_forecaster"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "avalanche_level"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "avalanche_signs"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "avalanche_slope"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1476,13 +1442,8 @@ msgstr ""
 msgid "comments"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "condition_rating"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "conditions_levels"
 msgstr ""
 
 #: src/views/wiki/edition/RouteEditionView.vue
@@ -1602,10 +1563,6 @@ msgstr ""
 msgid "difficult"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "difficulties_height"
-msgstr ""
-
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "down"
 msgstr ""
@@ -1631,7 +1588,6 @@ msgid "edge"
 msgstr ""
 
 #: src/components/datatable/DocumentsTable.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/document/OutingView.vue
 #: src/views/document/RouteView.vue
 #: src/views/wiki/edition/ImageEditionView.vue
@@ -1641,17 +1597,9 @@ msgstr ""
 msgid "elevation"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "elevation_down_snow"
-msgstr ""
-
 #: src/components/cards/utils/CardElevationItem.vue
 #: src/components/generics/inputs/InputDocument.vue
 msgid "elevation_max"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "elevation_up_snow"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue
@@ -1667,7 +1615,6 @@ msgid "empty comment"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "engagement_rating"
 msgstr ""
@@ -1682,12 +1629,7 @@ msgid "equipment"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "equipment_rating"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "event_type"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1711,7 +1653,6 @@ msgid "exposed"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "exposition_rock_rating"
 msgstr ""
@@ -1776,10 +1717,6 @@ msgstr ""
 msgid "free"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "frequentation"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue
 msgid "gear"
 msgstr ""
@@ -1817,16 +1754,11 @@ msgstr ""
 msgid "glacier_crampons"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "glacier_rating"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue
 msgid "glacier_safety_gear"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "global_rating"
 msgstr ""
 
@@ -1883,24 +1815,14 @@ msgstr ""
 msgid "height_diff"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "height_diff_access"
-msgstr ""
-
 #: src/components/cards/FeedCard.vue
 #: src/components/cards/RouteCard.vue
-#: src/components/helper/HelperWindow.vue
 msgid "height_diff_difficulties"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "height_diff_down"
 msgstr ""
 
 #: src/components/cards/FeedCard.vue
 #: src/components/cards/OutingCard.vue
 #: src/components/cards/RouteCard.vue
-#: src/components/helper/HelperWindow.vue
 msgid "height_diff_up"
 msgstr ""
 
@@ -1921,13 +1843,11 @@ msgid "hiking gear"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "hiking_mtb_exposition"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "hiking_rating"
 msgstr ""
 
@@ -1960,16 +1880,11 @@ msgid "ice_climbing"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "ice_rating"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "impossible"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "increase_impact"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2014,14 +1929,6 @@ msgstr ""
 
 #: src/views/document/utils/boxes/ElevationProfile.vue
 msgid "kilometers"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "labande_global_rating"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "labande_ski_rating"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2145,12 +2052,7 @@ msgid "mixed"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "mixed_rating"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "modifications"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2186,12 +2088,10 @@ msgid "mountainbike_instructor"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "mtb_down_rating"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "mtb_up_rating"
 msgstr ""
 
@@ -2209,10 +2109,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "naturally"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "nb_impacted"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2309,10 +2205,6 @@ msgstr ""
 msgid "or try the following pages:"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "orientations"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue
 msgid "other"
 msgstr ""
@@ -2341,7 +2233,6 @@ msgstr ""
 msgid "paragliding_takeoff"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
 #: src/views/document/XreportView.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "participants"
@@ -2490,16 +2381,8 @@ msgstr ""
 msgid "recent_avalanche"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "reduce_impact"
-msgstr ""
-
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "required"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "rescue"
 msgstr ""
 
 #: src/components/generics/gallery/ImageInfo.vue
@@ -2527,7 +2410,6 @@ msgid "rise"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "risk_rating"
 msgstr ""
@@ -2541,12 +2423,10 @@ msgid "rock_climbing"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "rock_free_rating"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 msgid "rock_required_rating"
 msgstr ""
 
@@ -2558,24 +2438,12 @@ msgstr ""
 msgid "roped_fall"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "route_configuration_types"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "route_types"
-msgstr ""
-
 #: src/translations/fixed_strings_manual.vue
 msgid "routes"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "safe"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "safety"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2611,7 +2479,6 @@ msgid "service_on_demand"
 msgstr ""
 
 #: src/components/datatable/DocumentsTable.vue
-#: src/components/helper/HelperWindow.vue
 msgid "severity"
 msgstr ""
 
@@ -2636,7 +2503,6 @@ msgstr ""
 msgid "site_info"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/RouteEditionView.vue
 msgid "ski_exposition"
 msgstr ""
@@ -2650,7 +2516,6 @@ msgid "ski_patroller"
 msgstr ""
 
 #: src/components/generics/RouteRating.vue
-#: src/components/helper/HelperWindow.vue
 #: src/views/wiki/edition/OutingEditionView.vue
 msgid "ski_rating"
 msgstr ""
@@ -2723,10 +2588,6 @@ msgstr ""
 msgid "snow_ice_mixed"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue
-msgid "snowshoe_rating"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue
 msgid "snowshoeing"
 msgstr ""
@@ -2750,10 +2611,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "sometimes"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "specific gear"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2853,10 +2710,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "via_ferrata"
-msgstr ""
-
-#: src/components/helper/HelperWindow.vue
-msgid "via_ferrata_rating"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue

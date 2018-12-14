@@ -1,28 +1,30 @@
 <template>
     <card-container :document="document" class="feed-card" >
-        <div slot="header" class="level">
-            <span class="level-left">
-                <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+        <card-title>
+            <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+
+            <span>
                 <document-title :document="item.user"/>
                 <span class="has-text-weight-normal">&nbsp;{{ $gettext(actionLine) }}</span>
             </span>
 
             <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
-        </div>
-        <div slot="row1">
-            <div>
-                <document-title :document="item.document" class="has-text-centered has-text-weight-bold"/>
-            </div>
-            <div v-if="locale && locale.summary" class="is-ellipsed">
-                <markdown :content="locale.summary" />
-            </div>
-            <div>
-                <span v-if="documentType=='outing'">{{ dates }}</span>
-                <gallery v-if="images.length!=0" :images="images" />
-            </div>
-        </div>
+        </card-title>
 
-        <div slot="row3" v-if="documentType!='article' && documentType!='book'" class="level">
+        <card-row>
+            <document-title :document="item.document" class="is-ellipsed has-text-weight-bold"/>
+            <span v-if="documentType=='outing'" class="is-nowrap">{{ dates }}</span>
+        </card-row>
+
+        <card-row v-if="locale && locale.summary">
+            <markdown :content="locale.summary" class="is-ellipsed"/>
+        </card-row>
+
+        <card-row v-if="images.length!=0">
+            <gallery :images="images" />
+        </card-row>
+
+        <card-row v-if="documentType!='article' && documentType!='book'">
             <outing-rating v-if="documentType=='outing'" :document="item.document"/>
             <route-rating v-else-if="documentType=='route'" :document="item.document"/>
 
@@ -37,13 +39,13 @@
                 <fa-icon icon="arrows-alt-v"/>
                 {{ item.document.height_diff_difficulties }}&nbsp;m
             </span>
-        </div>
+        </card-row>
 
-        <div v-if="item.document.areas" slot="row4" class="level">
+        <card-row v-if="item.document.areas" slot="row4">
             <card-region-item :document="item.document"/>
-        </div>
+        </card-row>
 
-        <div slot="row5" class="level">
+        <card-row>
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
                 <marker-image-count :image-count="item.document.img_count" />
@@ -54,7 +56,7 @@
                 <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
                 <marker-quality :quality="item.document.quality" />
             </span>
-        </div>
+        </card-row>
     </card-container>
 </template>
 

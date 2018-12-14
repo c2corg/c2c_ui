@@ -11,7 +11,7 @@
         <section class="content" v-html="html" />
 
         <div slot="footer">
-            <div class="buttons">
+            <div class="buttons" v-if="helper">
                 <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
                     Close
                 </button>
@@ -20,7 +20,7 @@
                     v-for="(_, otherLang) in $language.available"
                     :key="otherLang"
                     :class="{'is-primary': otherLang==lang}"
-                    @click="lang = otherLang">
+                    @click="load(otherLang)">
                     {{ otherLang }}
                 </button>
                 <a v-if="helper.documentId" :href="'https://www.camptocamp.org/articles/' + helper.documentId">
@@ -41,35 +41,36 @@
                 title: null,
                 html: null,
                 lang: null,
-                helper: {},
+                helperId: '',
                 headerFound: false
             }
         },
 
-        watch: {
-            lang: 'load'
-        },
+        computed: {
+            helper() {
+                const match = this.helperId.match(/^(\d+)(#([a-z0-9-_]+))?$/)
 
-        created() {
-            // TODO this.$language.current is null ????
-            this.lang = this.$language.current
+                return match ? {
+                    documentId: match[1],
+                    anchor: match[3]
+                } : null
+            }
         },
 
         methods: {
 
             show(helperId) {
-                const match = helperId.match(/^(\d+)(#([a-z0-9-_]+))?$/)
-
-                this.helper = {
-                    documentId: match[1],
-                    anchor: match[3]
-                }
-
+                this.lang = this.$language.current
+                this.helperId = helperId
                 this.load()
             },
 
-            load() {
-                this.title = this.helper.title
+            load(lang) {
+                if (!this.helper) {
+                    return
+                }
+
+                this.lang = lang || this.lang
                 this.html = this.$gettext('loading')
                 c2c.article.getCooked(this.helper.documentId, this.lang).then(this.computeHtml)
                 this.$refs.modalCard.show()
@@ -77,14 +78,16 @@
 
             computeHtml(response) {
                 let cooked = response.data.cooked
-                let content = document.createElement('div')
-                content.innerHTML = cooked.description
+
+                this.title = cooked.title
 
                 if (this.helper.anchor) {
+                    let content = document.createElement('div')
+                    content.innerHTML = cooked.description
+
                     const html = []
                     let appending = false
                     let mainNodeTag = null
-                    this.title = cooked.title
                     this.headerFound = false
 
                     for (let node of content.children) {
@@ -103,11 +106,8 @@
                     }
                     this.html = html.length !== 0 ? html.join('\n') : content.innerHTML
                 } else {
-                    this.html = content.innerHTML
+                    this.html = cooked.description
                 }
-            },
-
-            getHelper(name) {
             }
         }
     }

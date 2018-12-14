@@ -63,10 +63,6 @@
         },
 
         computed: {
-            swiper() {
-                return this.$refs.mySwiper.swiper
-            },
-
             outings() {
                 return this.outingsPromise.data
             },

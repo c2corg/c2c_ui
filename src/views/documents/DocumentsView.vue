@@ -11,10 +11,15 @@
                         <div class="dropdown-menu" role="menu">
                             <div class="dropdown-content">
                                 <div
-                                    class="dropdown-item"
                                     v-for="type of ['route', 'waypoint', 'outing', 'image', 'book', 'area']"
-                                    :key="type">
-                                    <router-link :to="{name: type + 's', query:$route.query}">
+                                    :key="type"
+                                    v-if="type!==documentType"
+                                    class="dropdown-item">
+                                    <router-link
+                                        :to="{name: type + 's', query:$route.query}"
+                                        class="has-text-dark">
+                                        <icon-document :document-type="type" />
+                                        &nbsp;
                                         {{ getDocumentTypeTitle(type) }}
                                     </router-link>
                                 </div>
@@ -48,9 +53,9 @@
                 </div>
                 <div class="level-item is-size-3 is-hidden-tablet">
                     <fa-icon
-                        :icon="mobileMapView ? 'map-marked-alt' : 'th-large'"
+                        :icon="showMap ? 'map-marked-alt' : 'th-large'"
                         class="has-text-primary"
-                        @click="toogleProperty('mobileMapView')"/>
+                        @click="toogleProperty('showMap')"/>
                 </div>
             </div>
         </div>
@@ -63,13 +68,15 @@
             </div>
         </div>
 
-        <div class="columns result-section" :class="mobileMapView ? 'mobile-result-map' : 'mobile-result-card'">
+        <div class="columns result-section" :class="showMap ? 'mobile-result-map' : 'mobile-result-card'">
             <div class="column documents-container"
                  :class="{'is-12': !displayMap, 'is-8': displayMap}">
 
                 <loading-notification :promise="promise"/>
 
-                <div v-if="documents && !listMode" class="columns is-multiline cards-list">
+                <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents"/>
+
+                <div v-if="documents && !listMode && documentType !== 'image'" class="columns is-multiline cards-list">
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
@@ -111,6 +118,7 @@
 
     import QueryItems from './utils/QueryItems'
     import PageSelector from './utils/PageSelector'
+    import ImageCards from './utils/ImageCards'
 
     const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable')
 
@@ -120,7 +128,8 @@
         components: {
             QueryItems,
             PageSelector,
-            DocumentsTable
+            DocumentsTable,
+            ImageCards
         },
 
         data() {
@@ -129,9 +138,7 @@
 
                 // showMap is the user choise, if he wants to see the map, or not
                 showMap: null,
-                listMode: null,
-
-                mobileMapView: null
+                listMode: null
             }
         },
 
@@ -167,7 +174,6 @@
             load() {
                 this.showMap = this.$localStorage.get(this.documentType + '.showMap', this.documentAreGeoLocalized)
                 this.listMode = this.$localStorage.get(this.documentType + '.listMode', false)
-                this.mobileMapView = this.$localStorage.get(this.documentType + '.mobileMapView', false)
                 this.promise = c2c[this.documentType].getAll(this.$route.query)
             },
 
