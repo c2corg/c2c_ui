@@ -1,7 +1,7 @@
 
 ## Prerequisites
 
-* [https://git-scm.com/] and [node](https://nodejs.org/en/) installed
+* [git](https://git-scm.com/) and [node](https://nodejs.org/en/) installed
 * [`@vue/cli`](https://cli.vuejs.org/) installed
 * a descent code editor ([Atom](https://atom.io/), [Visual Studio](https://visualstudio.microsoft.com), [Sublime Text](https://www.sublimetext.com/)...)
 * and a basic knowledge of [Vue.js](https://vuejs.org/)
@@ -10,15 +10,15 @@
 ## Install
 
 ```bash
-git clone https://gitlab.com/cbeauchesne/vue-camptocamp.git
-cd vue-camptocamp
+git clone https://github.com/c2corg/c2c_ui.git
+cd c2c_ui
 vue ui
 ```
 
 And then, launch development environment :
 
 * http://localhost:8000
-* Import => select your `vue-camptocamp` folder => Import this folder
+* Import => select your `c2c_ui` folder => Import this folder
 * Tasks => serve => Run task button
 
 :heart: http://localhost:8080 :heart:
@@ -47,13 +47,13 @@ First of all, have a look on source-structure file : it will provide a good summ
 
 Based on vue mono-file component. A component is always a file
 
-* View components : [/src/views](https://gitlab.com/cbeauchesne/vue-camptocamp/tree/master/src/views)
+* View components : [/src/views](https://github.com/c2corg/c2c_ui/tree/master/src/views)
   * They all finish by `View`
   * They may contain `utils` folder for any component that are related to one view
-* Shared components : [/src/components](https://gitlab.com/cbeauchesne/vue-camptocamp/tree/master/src/views)
+* Shared components : [/src/components](https://github.com/c2corg/c2c_ui/tree/master/src/views)
   * They are used by many components
-* Generics components : [/src/components/generics](https://gitlab.com/cbeauchesne/vue-camptocamp/tree/master/src/views/components/generics)
-  * They are used by plenty components, and they are available everywhere ([Here is the trick](https://gitlab.com/cbeauchesne/vue-camptocamp/tree/master/src/js/vue-plugins/generic-components.js))
+* Generics components : [/src/components/generics](https://github.com/c2corg/c2c_ui/tree/master/src/views/components/generics)
+  * They are used by plenty components, and they are available everywhere ([Here is the trick](https://github.com/c2corg/c2c_ui/tree/master/src/js/vue-plugins/generic-components.js))
 
 
 ### Script
@@ -75,7 +75,7 @@ The framework used is [Bulma](https://bulma.io/)
 They are all based on [Font Aweseome](https://fontawesome.com/), more precisely on [SVG Javascript Core package](https://fontawesome.com/how-to-use/on-the-web/advanced/svg-javascript-core)
 
 * in-app javascript info : [bundle](https://cbeauchesne.gitlab.io/vue-camptocamp/bundle-analyzis.html)
-* tree-shaking : [font-awesome-config.js](https://gitlab.com/cbeauchesne/vue-camptocamp/blob/master/src/js/vue-plugins/font-awesome-config.js)
-* and [custom icons](https://gitlab.com/cbeauchesne/vue-camptocamp/tree/master/src/assets/font-awesome-custom)
+* tree-shaking : [font-awesome-config.js](https://github.com/c2corg/c2c_ui/blob/master/src/js/vue-plugins/font-awesome-config.js)
+* and [custom icons](https://github.com/c2corg/c2c_ui/tree/master/src/assets/font-awesome-custom)
 
-Here is a complex example : https://gitlab.com/cbeauchesne/vue-camptocamp/blob/master/src/components/generics/icons/document/IconOuting.vue
+Here is a complex example : https://github.com/c2corg/c2c_ui/blob/master/src/components/generics/icons/document/IconOuting.vue
