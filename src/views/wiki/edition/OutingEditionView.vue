@@ -52,7 +52,7 @@
                 <form-input-row :document="document" :field="fields.engagement_rating"/>
                 <form-input-row :document="document" :field="fields.equipment_rating"/>
 
-                <form-row :label="$gettext('ski_rating')" helper="ski_rating">
+                <form-row :label="$gettext('ski_rating')" :helper="fields.ski_rating.helper">
                     <form-input
                         :document="document"
                         :field="fields.ski_rating"

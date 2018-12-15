@@ -1,22 +1,24 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <card-title>
+            <document-title :document="document"/>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <textual-array :array="document.book_types"/>
-        </div>
+        </card-row>
 
-        <div slot="row2" class="level">
+        <card-row>
             <span>
                 <fa-icon icon="pen"/>
                 {{ document.author }}
             </span>
-        </div>
+        </card-row>
 
-        <div slot="row3" class="level">
+        <card-row>
             <card-activities-item :activities="document.activities"/>
             <marker-quality :quality="document.quality"/>
-        </div>
+        </card-row>
 
     </card-container>
 </template>

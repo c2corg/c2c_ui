@@ -4,7 +4,28 @@
         <div class="level is-mobile header-section">
             <div class="level-left">
                 <span class="level-item">
-                    <span class="title is-1 is-first-letter-uppercase">{{ $gettext(title) }}</span>
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                            <span class="title is-1">{{ getDocumentTypeTitle(documentType) }}</span>
+                        </div>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                                <div
+                                    v-for="type of ['route', 'waypoint', 'outing', 'image', 'book', 'area']"
+                                    :key="type"
+                                    v-if="type!==documentType"
+                                    class="dropdown-item">
+                                    <router-link
+                                        :to="{name: type + 's', query:$route.query}"
+                                        class="has-text-dark">
+                                        <icon-document :document-type="type" />
+                                        &nbsp;
+                                        {{ getDocumentTypeTitle(type) }}
+                                    </router-link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </span>
 
                 <span v-if="!['area', 'profile'].includes(documentType)" class="level-item">
@@ -17,9 +38,9 @@
                     </add-link>
                 </span>
             </div>
-            <div class="level-right" v-if="documentType!='profile'">
 
-                <div class="level-item is-size-3">
+            <div class="level-right" v-if="documentType!='profile'">
+                <div class="level-item is-size-3 is-hidden-mobile">
                     <fa-icon
                         :icon="listMode ? 'th-list' : 'th-large'"
                         @click="toogleProperty('listMode')" />
@@ -29,6 +50,12 @@
                         :class="{'has-text-primary':showMap}"
                         icon="map-marked-alt"
                         @click="toogleProperty('showMap')" />
+                </div>
+                <div class="level-item is-size-3 is-hidden-tablet">
+                    <fa-icon
+                        :icon="showMap ? 'map-marked-alt' : 'th-large'"
+                        class="has-text-primary"
+                        @click="toogleProperty('showMap')"/>
                 </div>
             </div>
         </div>
@@ -41,13 +68,15 @@
             </div>
         </div>
 
-        <div class="columns result-section">
-            <div class="column cards-container"
+        <div class="columns result-section" :class="showMap ? 'mobile-result-map' : 'mobile-result-card'">
+            <div class="column documents-container"
                  :class="{'is-12': !displayMap, 'is-8': displayMap}">
 
                 <loading-notification :promise="promise"/>
 
-                <div v-if="documents && !listMode" class="columns is-multiline cards-list">
+                <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents"/>
+
+                <div v-if="documents && !listMode && documentType !== 'image'" class="columns is-multiline cards-list">
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
@@ -78,7 +107,7 @@
             </div>
         </div>
 
-        <page-selector v-if="documents!=null" :documents="documents"/>
+        <page-selector :documents="documents"/>
     </div>
 </template>
 
@@ -89,6 +118,7 @@
 
     import QueryItems from './utils/QueryItems'
     import PageSelector from './utils/PageSelector'
+    import ImageCards from './utils/ImageCards'
 
     const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable')
 
@@ -98,7 +128,8 @@
         components: {
             QueryItems,
             PageSelector,
-            DocumentsTable
+            DocumentsTable,
+            ImageCards
         },
 
         data() {
@@ -114,10 +145,6 @@
         computed: {
             documents() {
                 return this.promise.data
-            },
-            title() {
-                var result = this.$route.name
-                return result.charAt(0).toUpperCase() + result.slice(1)
             },
             documentType() {
                 return this.$route.name.slice(0, -1)
@@ -165,6 +192,11 @@
                 if (this.documentAreGeoLocalized && this.displayMap) {
                     this.$refs.map.highlightedDocument = null
                 }
+            },
+
+            getDocumentTypeTitle(documentType) {
+                documentType = documentType.charAt(0).toUpperCase() + documentType.slice(1)
+                return this.$gettext(documentType + 's')
             }
         }
     }
@@ -179,7 +211,7 @@
     $header-margin-bottom : 1rem; //TODO find this variable
     $filter-height : 32px;
     $filter-padding-bottom : 1.5rem;
-    $page-selector-height : 5rem;
+    $page-selector-height : 3rem;
     $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
     $cards-gap:0.25rem;
 
@@ -192,26 +224,60 @@
     .filter-section{
     }
 
-    .result-section{
-        margin-top:0;
-        height:$result-height;
-
-        .cards-container{
-            padding-top:2px;
-            overflow: auto;
-        //    transition:0.3s;
-        }
-
-        .documents-table{
-            height:$result-height;
-        }
+    @media screen and (max-width: $tablet) {
 
         .map-container{
-            min-height: 100%;
+            height: $result-height;
             padding-left:0;
             padding-top:0;
             padding-bottom:0;
-        //    transition:0.3s;
+        }
+
+        .mobile-result-map{
+            margin-top:0;
+            height:$result-height;
+
+            .documents-container{
+                display:None;
+            }
+        }
+
+        .mobile-result-card{
+
+            .map-container{
+                visibility: hidden; // map does not like to be in a display none...
+            }
+        }
+    }
+
+    @media screen and (min-width: $tablet){
+        .result-section{
+            margin-top:0;
+            height:$result-height;
+
+            .documents-container{
+                height:100%;
+                overflow: auto;
+
+                .cards-list{
+                    padding-top:2px;
+                    height:100%;
+                }
+
+                .documents-table{
+                    height:100%;
+                }
+
+            //    transition:0.3s;
+            }
+
+            .map-container{
+                min-height: 100%;
+                padding-left:0;
+                padding-top:0;
+                padding-bottom:0;
+            //    transition:0.3s;
+            }
         }
     }
 

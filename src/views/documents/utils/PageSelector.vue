@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
+        <nav class="pagination is-small is-rounded is-centered" role="navigation" aria-label="pagination">
             <router-link
                 :disabled="currentPage<=1"
                 :to="pageQuery(currentPage-1)"
@@ -28,10 +28,6 @@
                 </li>
             </ul>
         </nav>
-
-        <div class="has-text-centered">
-            {{ offset + 1 }}-{{ offset + documents.documents.length }} / {{ documents.total }}
-        </div>
     </div>
 </template>
 
@@ -43,24 +39,20 @@
         props: {
             documents: {
                 type: Object,
-                required: true
+                default: null
             }
         },
 
         data() {
-            return { queryLimit }
+            return {
+                queryLimit,
+                offset: 0,
+                pageCount: 1,
+                currentPage: 1
+            }
         },
 
         computed: {
-            offset() {
-                return parseInt(this.$route.query.offset || 0)
-            },
-            pageCount() {
-                return Math.min(Math.floor(this.documents.total / queryLimit) + 1, 99)
-            },
-            currentPage() {
-                return Math.floor(this.offset / queryLimit) + 1
-            },
             pageLinks() {
                 // Less than 8 pages :
                 //    (1) (2) (3) (4)
@@ -92,7 +84,24 @@
             }
         },
 
+        watch: {
+            '$route': {
+                handler: 'compute',
+                immediate: true
+            },
+            'documents': 'compute'
+        },
+
         methods: {
+            compute() {
+                if (!this.documents) {
+                    return
+                }
+
+                this.offset = parseInt(this.$route.query.offset || 0)
+                this.pageCount = Math.min(Math.floor(this.documents.total / queryLimit) + 1, 99)
+                this.currentPage = Math.floor(this.offset / queryLimit) + 1
+            },
 
             pageQuery(page) {
                 var query = Object.assign({}, this.$route.query)
@@ -106,10 +115,10 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+    @import '@/assets/sass/variables.scss';
 
-.pagination-link, .pagination-next, .pagination-previous{
-    background:$white-bis;
-}
+    .pagination-link, .pagination-next, .pagination-previous{
+        background:$white-bis;
+    }
 
 </style>

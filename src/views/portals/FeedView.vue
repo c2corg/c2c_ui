@@ -12,7 +12,7 @@
                                 <fa-icon icon="cogs"/>
                             </router-link>
                             <span :title="$gettext(isPersonal ? 'Personal feed on': 'Personal feed off')">
-                                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="isPersonal=!isPersonal"/>
+                                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="toggleIsPersonal"/>
                             </span>
                         </span>
                     </h3>
@@ -43,6 +43,8 @@
     import MobileAppAdvertising from './utils/MobileAppAdvertising'
 
     export default {
+        name: 'FeedView',
+
         components: {
             HomeBanner,
             FeedWidget,
@@ -53,6 +55,17 @@
         data() {
             return {
                 isPersonal: false
+            }
+        },
+
+        created() {
+            this.isPersonal = this.$localStorage.get('isPersonal', false)
+        },
+
+        methods: {
+            toggleIsPersonal() {
+                this.isPersonal = !this.isPersonal
+                this.$localStorage.set('isPersonal', this.isPersonal)
             }
         }
     }

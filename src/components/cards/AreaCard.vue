@@ -1,12 +1,14 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <card-title>
+            <document-title :document="document"/>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <span>
                 {{ document.area_type }}
             </span>
-        </div>
+        </card-row>
     </card-container>
 </template>
 

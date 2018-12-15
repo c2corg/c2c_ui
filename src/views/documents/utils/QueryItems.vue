@@ -6,7 +6,10 @@
                          @changeDisplay="refreshSliders()">
 
             <span slot="button">
-                <span>{{ $gettext(category.name) }}</span>
+                <fa-icon :icon="$options.categoryIcon[category.name]" />
+                <span class="is-hidden-mobile">
+                    {{ $gettext(category.name) }}
+                </span>
                 <span v-if="category.activeCount!=0">
                     ({{ category.activeCount }})
                 </span>
@@ -18,7 +21,7 @@
 
         </dropdown-button>
 
-        <association-query-item :document-types="associations"/>
+        <association-query-item class="is-hidden-mobile" :document-types="associations"/>
     </div>
 </template>
 
@@ -147,6 +150,14 @@
     }
 
     export default {
+
+        categoryIcon: {
+            General: 'filter',
+            Miscs: 'database',
+            Terrain: ['waypoint', 'summit'],
+            ratings: 'tachometer-alt'
+        },
+
         components: {
             QueryItem,
             AssociationQueryItem

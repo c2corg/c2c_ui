@@ -24,6 +24,7 @@
     import MarkerCondition from './cell-renderers/MarkerCondition'
     import MarkerQuality from './cell-renderers/MarkerQuality'
     import AreaList from './cell-renderers/AreaList'
+    import DocumentAuthor from './cell-renderers/DocumentAuthor'
 
     function getColDef(vm, field, options) {
         options = options || {}
@@ -59,8 +60,9 @@
         },
 
         beforeMount() {
+            let fields = constants.objectDefinitions[this.documentType].fields
+
             if (this.documentType === 'area') {
-                let fields = constants.objectDefinitions.area.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, fields.area_type)
@@ -68,7 +70,6 @@
             }
 
             if (this.documentType === 'article') {
-                let fields = constants.objectDefinitions.article.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, fields.activities, { width: 150 }),
@@ -79,7 +80,6 @@
             }
 
             if (this.documentType === 'book') {
-                let fields = constants.objectDefinitions.book.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, fields.book_types),
@@ -89,8 +89,16 @@
                 ]
             }
 
+            if (this.documentType === 'image') {
+                this.columnDefs = [
+                    getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
+                    getColDef(this, fields.filename)
+                ]
+            }
+
             if (this.documentType === 'map') {
-                let fields = constants.objectDefinitions.map.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
@@ -101,11 +109,11 @@
             }
 
             if (this.documentType === 'outing') {
-                let fields = constants.objectDefinitions.outing.fields
                 this.columnDefs = [
                     getColDef(this, fields.date_start, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.height_diff_up, { width: 100 }),
 
@@ -136,10 +144,9 @@
             }
 
             if (this.documentType === 'route') {
-                let fields = constants.objectDefinitions.route.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, AreaList),
+                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.orientations, { width: 100 }),
                     {
@@ -172,7 +179,6 @@
             }
 
             if (this.documentType === 'waypoint') {
-                let fields = constants.objectDefinitions.waypoint.fields
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
@@ -183,7 +189,6 @@
             }
 
             if (this.documentType === 'xreport') {
-                let fields = constants.objectDefinitions.xreport.fields
                 this.columnDefs = [
                     getColDef(this, fields.date, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),

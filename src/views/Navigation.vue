@@ -67,7 +67,10 @@
             </div>
 
             <div class="navigation-item ">
-                <add-link document-type="outing" class="button is-primary"/>
+                <add-link document-type="outing" class="button is-primary is-hidden-mobile"/>
+                <add-link document-type="outing" class="button is-primary is-hidden-tablet">
+                    <fa-icon icon="plus"/>
+                </add-link>
             </div>
 
             <div v-if="!$user.isLogged" class="navigation-item ">

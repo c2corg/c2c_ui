@@ -6,6 +6,7 @@
     * ask for an Bing Map dev key
 * signup (CAPTCHA)
 * v-tooltip : may have break lines
+* Markdown
 
 ### Wait for c2c issues
 
@@ -16,11 +17,6 @@
   * validate_change_email
   * validate_register_email
 
-### Wait for decision
-
-* markdown alerts in parser
-* markdown icons in parser
-
 ### Wait for dep issues
 
 * "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
@@ -29,7 +25,6 @@
 ### Nice to have
 
 * Sort on data table
-* add/remove columns on data table
 * export as csv in data table
 
 ### A verifier

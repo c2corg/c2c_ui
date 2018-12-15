@@ -20,7 +20,6 @@ import PreferencesView from '@/views/user/PreferencesView'
 import MailingListsView from '@/views/user/MailingListsView'
 
 import DocumentsView from '@/views//documents/DocumentsView'
-import ImagesView from '@/views/documents/ImagesView'
 
 import AreaView from '@/views/document/AreaView'
 import ArticleView from '@/views/document/ArticleView'
@@ -78,7 +77,7 @@ const addDocumentTypeView = function(def, viewComponent, editionComponent) {
     routes.push({
         path: '/' + def.documentType + 's',
         name: def.documentType + 's',
-        component: def.documentType === 'image' ? ImagesView : DocumentsView }
+        component: DocumentsView }
     )
 
     routes.push({

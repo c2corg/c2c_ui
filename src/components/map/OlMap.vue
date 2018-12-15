@@ -250,7 +250,6 @@
                 }
             }
         },
-
         watch: {
             documents: {
                 handler: function() {

@@ -241,6 +241,24 @@ export default function install(Vue) {
                 }
 
                 return sortedAreas.join(' - ')
+            },
+
+            getOutingDatesLocalized(document) {
+                const start = this.$moment.parseDate(document['date_start']).locale(this.$language.current)
+                const end = this.$moment.parseDate(document['date_end']).locale(this.$language.current)
+                const sameYear = start.year() === end.year()
+                const sameMonth = start.month() === end.month()
+                const sameDay = start.date() === end.date()
+
+                if (!sameYear) {
+                    return start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY')
+                } else if (!sameMonth) {
+                    return start.format('Do MMMM') + ' - ' + end.format('Do MMMM YYYY')
+                } else if (!sameDay) {
+                    return start.format('Do') + ' - ' + end.format('Do MMMM YYYY')
+                } else {
+                    return end.format('Do MMMM YYYY')
+                }
             }
         }
     })

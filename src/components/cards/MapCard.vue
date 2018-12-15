@@ -1,16 +1,16 @@
 <template>
     <card-container :document="notClickable ? null : document">
-        <document-title slot="header" :document="document"/>
+        <card-title>
+            <document-title :document="document"/>
+        </card-title>
 
-        <div slot="row1" class="level">
+        <card-row>
             <card-region-item :document="document"/>
-        </div>
+        </card-row>
 
-        <div slot="row2">
-            <span>{{ document.code }}</span>
-            -
-            <span>{{ document.editor }}</span>
-        </div>
+        <card-row>
+            <span>{{ document.code }} - {{ document.editor }}</span>
+        </card-row>
     </card-container>
 </template>
 

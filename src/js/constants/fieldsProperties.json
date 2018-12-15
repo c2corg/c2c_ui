@@ -28,7 +28,7 @@
         "multiple": true,
         "required": true,
         "queryMode": "activities",
-        "helper": "activities"
+        "helper": "1063015#activities"
     },
     "activity_rate":
     {
@@ -93,28 +93,28 @@
     "author_status":
     {
         "values": "author_statuses",
-        "helper": "author_status"
+        "helper": "1063015#author-status"
     },
     "autonomy":
     {
         "values": "autonomies",
-        "helper": "autonomy"
+        "helper": "1063015#autonomy"
     },
     "avalanche_level":
     {
         "values": "avalanche_levels",
-        "helper": "avalanche_level"
+        "helper": "1063015#avalanche-level"
     },
     "avalanche_signs":
     {
         "values": "avalanche_signs",
         "multiple": true,
-        "helper": "avalanche_signs"
+        "helper": "1063027#avalanche-signs"
     },
     "avalanche_slope":
     {
         "values": "avalanche_slopes",
-        "helper": "avalanche_slope"
+        "helper": "1063015#avalanche-slope"
     },
     "avalanches":
     {
@@ -211,7 +211,7 @@
     {
         "values": "condition_ratings",
         "queryMode": "valuesRangeSlider",
-        "helper": "condition_rating"
+        "helper": "1063027#condition-rating"
     },
     "conditions":
     {
@@ -222,13 +222,13 @@
     {
         "type": "Array",
         "parent": "locales",
-        "helper": "conditions_levels"
+        "helper": "1063027#conditions_levels"
     },
     "configuration":
     {
         "values": "route_configuration_types",
         "multiple": true,
-        "helper": "route_configuration_types"
+        "helper": "1063045#configuration"
     },
     "custodianship":
     {
@@ -264,7 +264,7 @@
         "min": 0,
         "max": 9999,
         "unit": "m",
-        "helper": "difficulties_height"
+        "helper": "1063045#difficulties-height"
     },
     "disable_comments":
     {
@@ -300,7 +300,7 @@
         "min": 0,
         "max": 9999,
         "unit": "m",
-        "helper": "elevation_down_snow"
+        "helper": "1063027#elevation-down_snow"
     },
     "elevation_max":
     {
@@ -322,7 +322,7 @@
         "min": 0,
         "max": 9999,
         "unit": "m",
-        "helper": "elevation_up_snow"
+        "helper": "1063027#elevation-up_snow"
     },
     "engagement_rating":
     {
@@ -343,20 +343,19 @@
         "values": "equipment_ratings",
         "multiple": true,
         "i18n": false,
-        "helper": "equipment_rating"
+        "helper": "133323#equipment"
     },
     "event_type":
     {
         "values": "event_types",
         "multiple": true,
-        "helper": "event_type"
+        "helper": "1063015#event-type"
     },
     "exposition_rating":
     {
         "values": "exposition_ratings",
         "queryMode": "valuesRangeSlider",
-        "i18n": false,
-        "helper": "exposition_rating"
+        "i18n": false
     },
     "exposition_rock_rating":
     {
@@ -400,7 +399,7 @@
     "frequentation":
     {
         "values": "frequentation_types",
-        "helper": "frequentation"
+        "helper": "1063027#frequentation"
     },
     "gas_unstaffed":
     {
@@ -410,7 +409,7 @@
     {
         "type": "markdown",
         "parent": "locales",
-        "helper": "specific gear"
+        "helper": "1063045#gear"
     },
     "gender":
     {
@@ -426,7 +425,7 @@
     {
         "values": "glacier_ratings",
         "queryMode": "valuesRangeSlider",
-        "helper": "glacier_rating"
+        "helper": "1063027#glacier-rating"
     },
     "global_rating":
     {
@@ -460,7 +459,7 @@
         "min": 0,
         "max": 3000,
         "unit": "m",
-        "helper": "height_diff_access"
+        "helper": "1063045#height-diff-access"
     },
     "height_diff_difficulties":
     {
@@ -468,7 +467,7 @@
         "min": 0,
         "max": 3000,
         "unit": "m",
-        "helper": "height_diff_difficulties"
+        "helper": "1063027#height-diff_difficulties"
     },
     "height_diff_down":
     {
@@ -476,7 +475,7 @@
         "min": 0,
         "max": 9999,
         "unit": "m",
-        "helper": "height_diff_down"
+        "helper": "1063027#height-diff_down"
     },
     "height_diff_up":
     {
@@ -484,7 +483,7 @@
         "min": 0,
         "max": 9999,
         "unit": "m",
-        "helper": "height_diff_up"
+        "helper": "1063027#height-diff_up"
     },
     "height_max":
     {
@@ -512,14 +511,14 @@
         "values": "exposition_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "hiking_mtb_exposition"
+        "helper": "1063045#hiking-mtb-exposition"
     },
     "hiking_rating":
     {
         "values": "hiking_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "hiking_rating"
+        "helper": "1063027#hiking-rating"
     },
     "hut_comment":
     {
@@ -563,7 +562,7 @@
     {
         "type": "markdown",
         "parent": "locales",
-        "helper": "increase_impact"
+        "helper": "1063015#increase-impact"
     },
     "isbn":
     {
@@ -581,14 +580,14 @@
         "values": "global_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "labande_global_rating"
+        "helper": "1063027#labande-global_rating"
     },
     "labande_ski_rating":
     {
         "values": "labande_ski_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "labande_ski_rating"
+        "helper": "1063045#labande-ski-rating"
     },
     "langs":
     {
@@ -638,7 +637,7 @@
     {
         "type": "markdown",
         "parent": "locales",
-        "helper": "modifications"
+        "helper": "1063015#modifications"
     },
     "motivations":
     {
@@ -650,7 +649,7 @@
         "values": "mtb_down_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "mtb_down_rating"
+        "helper": "1063027#mtb-down_rating"
     },
     "mtb_height_diff_portages":
     {
@@ -678,7 +677,7 @@
         "values": "mtb_up_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "mtb_up_rating"
+        "helper": "1063027#mtb-up_rating"
     },
     "name":
     {
@@ -689,7 +688,7 @@
         "type": "number",
         "min": 0,
         "max": 1000,
-        "helper": "nb_impacted"
+        "helper": "1063015#nb-impacted"
     },
     "nb_outings":
     {
@@ -713,7 +712,7 @@
         "multiple": true,
         "queryMode": "orientations",
         "i18n": false,
-        "helper": "orientations"
+        "helper": "1063045#orientations"
     },
     "other_comments":
     {
@@ -732,8 +731,7 @@
     {
         "values": "paragliding_ratings",
         "queryMode": "valuesRangeSlider",
-        "i18n": false,
-        "helper": "paragliding_rating"
+        "i18n": false
     },
     "parking_fee":
     {
@@ -752,7 +750,7 @@
     "participants":
     {
         "type": "text",
-        "helper": "participants"
+        "helper": "1063027#participants"
     },
     "phone":
     {
@@ -815,7 +813,7 @@
     {
         "type": "markdown",
         "parent": "locales",
-        "helper": "reduce_impact"
+        "helper": "1063015#reduce-impact"
     },
     "remarks":
     {
@@ -825,7 +823,7 @@
     "rescue":
     {
         "type": "boolean",
-        "helper": "rescue"
+        "helper": "1063015#rescue"
     },
     "risk":
     {
@@ -884,7 +882,7 @@
     {
         "values": "route_types",
         "multiple": true,
-        "helper": "route_types"
+        "helper": "1063045#route-types"
     },
     "routes":
     {
@@ -892,7 +890,7 @@
         "parent": "associations",
         "documentType": "route",
         "multiple": true,
-        "helper": "routes",
+        "helper": "1063027#routes",
         "url":"r"
     },
     "routes_quantity":
@@ -905,7 +903,7 @@
     {
         "type": "markdown",
         "parent": "locales",
-        "helper": "safety"
+        "helper": "1063015#safety"
     },
     "scale":
     {
@@ -914,21 +912,21 @@
     "severity":
     {
         "values": "severities",
-        "helper": "severity"
+        "helper": "1063015#severity"
     },
     "ski_exposition":
     {
         "values": "exposition_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "ski_exposition"
+        "helper": "1063045#ski-exposition"
     },
     "ski_rating":
     {
         "values": "ski_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "ski_rating"
+        "helper": "1063027#ski-rating"
     },
     "slackline_anchor1":
     {
@@ -999,7 +997,7 @@
         "values": "snowshoe_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "snowshoe_rating"
+        "helper": "1063027#snowshoe-rating"
     },
     "summary":
     {
@@ -1039,7 +1037,7 @@
         "parent": "associations",
         "documentType": "profile",
         "multiple": true,
-        "helper": "users",
+        "helper": "1063027#users",
         "url":"u"
     },
     "via_ferrata_rating":
@@ -1047,7 +1045,7 @@
         "values": "via_ferrata_ratings",
         "queryMode": "valuesRangeSlider",
         "i18n": false,
-        "helper": "via_ferrata_rating"
+        "helper": "1063027#via-ferrata_rating"
     },
     "waypoint_type":
     {
