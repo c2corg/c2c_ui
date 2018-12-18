@@ -1,5 +1,5 @@
+
 import showdown from 'showdown'
-import config from '@/js/config.js'
 
 var ltag_memory = { L: 0, R: 0 }
 
@@ -12,13 +12,21 @@ showdown.extension('c2c_folies', function() {
         }
     }
 
+    var ptag = { // trash
+        type: 'lang',
+        regex: /\[p\]/g,
+        replace: function() {
+            return '<div style="clear:both" />'
+        }
+    }
+
     var c2c_title = { // trash
         type: 'lang',
         regex: /(?:^|\n)(#+)(.*?)(?:#+([^#\n{]*))?(?:\{#([a-z0-9-]+)})?(?:\n|$)/g,
         replace: function(match, hashs, header, emphasis, anchor) {
             const tag = 'h' + (hashs.length + 1)
 
-            emphasis = emphasis ? `<small>${emphasis}</small>` : ''
+            emphasis = emphasis ? `<span c2c:role="header-emphasis">${emphasis}</span>` : ''
             anchor = anchor ? ` id="${anchor}"` : ''
 
             return `\n<${tag}${anchor}>${header}${emphasis}</${tag}>\n`
@@ -27,24 +35,34 @@ showdown.extension('c2c_folies', function() {
 
     function image(imgId, options, legend) {
         var size = 'MI'
-        var css = ['markdown-image']
+        var position = 'inline'
 
         if (options) {
             options = options.split(' ')
 
             options.forEach(function(option) {
-                if (option) {
-                    css.push('markdown-image-' + option.replace('_', '-'))
-                    size = option === 'big' ? 'BI' : size
+                if (['right', 'left', 'center'].includes(option)) {
+                    position = option
+                }
+
+                if (option === 'big') {
+                    size = 'BI'
+                }
+
+                if (option === 'small') {
+                    size = 'SI'
+                }
+
+                if (option === 'orig') {
+                    size = 'OI'
                 }
             })
         }
 
-        var url = config.urls.api + '/images/proxy/' + imgId + '?size=' + size
-        var img = '<img src="' + url + '">'
-        var caption = legend ? '<figcaption>' + legend + '</figcaption>' : ''
-
-        return '<figure class="' + css.join(' ') + '"">' + img + caption + '</figure>'
+        var url = '/images/proxy/' + imgId + (size !== 'OI' ? `?size=${size}` : '')
+        var img = `<img c2c:url-proxy="${url}" c2c:role="embedded-image" c2c:document-id="${imgId}" c2c:size="${size}">`
+        var caption = legend ? `<figcaption>${legend}</figcaption>` : ''
+        return `<figure c2c:position="${position}">${img}${caption}</figure>`
     }
 
     var img = {
@@ -67,11 +85,7 @@ showdown.extension('c2c_folies', function() {
         type: 'lang',
         regex: /\[\[\/?(book|waypoint|route|outing|area|article|map|xreport|image|profile)s\/([\d]+)([^|]*)\|([^\]]*)\]\]/g,
         replace: function(match, item, id, lang, text) {
-            if (config.routerMode === 'history') {
-                return '<a href="/' + item + 's/' + id + '">' + text + '</a>'
-            } else {
-                return '<a href="#/' + item + 's/' + id + '">' + text + '</a>'
-            }
+            return `<a c2c:role="internal-link" c2c:document-id="${id}" c2c:document-type="${item}s">${text}</a>`
         }
     }
 
@@ -96,7 +110,7 @@ showdown.extension('c2c_folies', function() {
         this.cellCount = 1
 
         this.compute = function() {
-            var items = ['\n<table class="markdown-ltag">']
+            var items = ['\n<table c2c:role="ltag">']
 
             this.rows.forEach(function(row) {
                 items.push('<tr>')
@@ -238,7 +252,7 @@ showdown.extension('c2c_folies', function() {
         }
     }
 
-    return [c2c_title, video, img, imgLegend, c2cItem, toc, ltag, numberStuckToUnit]
+    return [c2c_title, video, img, imgLegend, c2cItem, toc, ltag, numberStuckToUnit, ptag]
 })
 
 var converter = new showdown.Converter({
