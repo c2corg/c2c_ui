@@ -2,7 +2,7 @@
     <a
         class="button has-text-primary"
         :disabled="disabled"
-        v-tooltip="tooltip"
+        :title="tooltip"
         @click="!disabled ? $emit('click', arguments[0]) : {}">
         <span v-if="icon" class="icon">
             <fa-icon :icon="icon" />

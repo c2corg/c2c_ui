@@ -1,4 +1,3 @@
-import { cook_document } from '@/js/markdown.js'
 
 function DocumentService(api, documentType) {
     this.documentType = documentType
@@ -14,20 +13,14 @@ DocumentService.prototype.get = function(id, lang) {
 }
 
 DocumentService.prototype.getCooked = function(id, prefered_lang) {
-    var promise = this.api.get('/' + this.documentType + 's/' + id)
-
-    promise.then(response => cook_document(response.data, prefered_lang))
+    var promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`)
 
     return promise
 }
 
-DocumentService.prototype.getVersion = function(id, lang, versionId, cooked) {
+DocumentService.prototype.getVersion = function(id, lang, versionId) {
     let url = '/' + this.documentType + 's/' + id + '/' + lang + '/' + versionId
-    return this.api.get(url).then((response) => {
-        if (cooked) {
-            cook_document(response.data.document, lang)
-        }
-    })
+    return this.api.get(url)
 }
 
 DocumentService.prototype.save = function(document, comment) {

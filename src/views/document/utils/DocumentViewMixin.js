@@ -111,8 +111,7 @@ export default {
                 this.promise = c2c[this.documentType].getVersion(
                     this.documentId,
                     this.$route.params.lang,
-                    this.$route.params.version,
-                    true
+                    this.$route.params.version
                 ).then(response => {
                     // version object with all data
                     response.data.version.next_version_id = response.data.next_version_id
@@ -141,7 +140,7 @@ export default {
 
                 c2c.cooker(this.draft.locales[0]).then(response => {
                     this.draft.cooked = response.data
-                    this.promise.data = this.draft
+                    this.$set(this.promise, "data", this.draft)
                 })
             } else { // normal mode
                 if (this.document && $route.params.id === this.document.document_id && this.expected_lang === this.lang) {

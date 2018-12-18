@@ -1,9 +1,7 @@
 import config from '@/js/config.js'
 import constants from '@/js/constants'
+
 import BaseApi from '@/js/apis/BaseApi.js'
-
-import { cook_object } from '@/js/markdown.js'
-
 import UserProfileService from './UserProfileService.js'
 import DocumentService from './DocumentService.js'
 import ModeratorService from './ModeratorService.js'
@@ -88,14 +86,7 @@ CamptocampApi.prototype.createImages = function(images) {
 }
 
 CamptocampApi.prototype.cooker = function(data) {
-    const response = {
-        data: cook_object(data),
-        then(callback) {
-            callback(response)
-        }
-    }
-
-    return response
+    return this.post('/cooker', data)
 }
 
 // export a singleton
