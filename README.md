@@ -1,6 +1,6 @@
 # [camptocamp.org](https://www.camptocamp.org)
 
-[![Build](https://gitlab.com/cbeauchesne/vue-camptocamp/badges/master/build.svg)](https://gitlab.com/cbeauchesne/vue-camptocamp/pipelines) [![Greenkeeper badge](https://badges.greenkeeper.io/c2corg/c2c_ui.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/c2corg/c2c_ui.svg?branch=master)](https://travis-ci.com/c2corg/c2c_ui) [![Greenkeeper badge](https://badges.greenkeeper.io/c2corg/c2c_ui.svg)](https://greenkeeper.io/)
 
 On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then :
 
