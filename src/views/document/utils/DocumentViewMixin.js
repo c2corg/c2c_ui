@@ -1,6 +1,7 @@
 
 import constants from '@/js/constants'
 import c2c from '@/js/apis/c2c'
+import cooker from '@/js/Cooker'
 
 import viewModeMixin from './view-mode-mixin'
 
@@ -138,7 +139,7 @@ export default {
             } else if (this.isDraftView) {
                 this.promise = {}
 
-                c2c.cooker(this.draft.locales[0]).then(response => {
+                cooker.cook(this.draft.locales[0]).then(response => {
                     this.draft.cooked = response.data
                     this.$set(this.promise, 'data', this.draft)
                 })

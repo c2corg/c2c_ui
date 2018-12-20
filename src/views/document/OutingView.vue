@@ -37,9 +37,11 @@
 
                             <field-view :document="document" :field="fields.frequentation"/>
                             <field-view :document="document" :field="fields.condition_rating"/>
+                            <field-view v-if="document.partial_trip" :document="document" :field="fields.partial_trip"/>
                             <field-view :document="document" :field="fields.quality"/>
 
                             <field-view :document="document" :field="fields.participant_count"/>
+
                         </div>
 
                         <div class="column is-4">
@@ -49,7 +51,7 @@
 
                             <field-view :document="document" :field="fields.access_condition"/>
                             <field-view :document="document" :field="fields.lift_status"/>
-                            <field-view :document="document" :field="fields.public_transport"/>
+                            <field-view v-if="document.public_transport" :document="document" :field="fields.public_transport"/>
                             <field-view :document="document" :field="fields.hut_status"/>
 
                         </div>

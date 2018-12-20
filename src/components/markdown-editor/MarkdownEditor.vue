@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import c2c from '@/js/apis/c2c'
+    import cooker from '@/js/Cooker'
     import EditorButton from './EditorButton'
 
     function Selection(textarea, onInput) {
@@ -229,7 +229,7 @@
                     return
                 }
 
-                this.cookerPromise = c2c.cooker({ value: this.value })
+                this.cookerPromise = cooker.cook({ value: this.value })
             },
 
             handleSimpleMarkdownTag(tag, defaultChunk) {
