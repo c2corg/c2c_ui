@@ -91,6 +91,20 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     bundleAnalyzerConfig.analyzerMode = 'static'
     bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html'
     bundleAnalyzerConfig.defaultSizes = 'gzip'
+} else if (process.env.BUILD_ENV === 'github') {
+    // gitlab pages does not support server redirection, can't use pretty urls
+    config.routerMode = undefined
+
+    // gitlab pages url is postfixed
+    result.baseUrl = '/c2c_ui/'
+
+    // set a warning if bundle size is too big
+    result.configureWebpack.performance.hints = 'warning'
+
+    // generate a report on bundle size
+    bundleAnalyzerConfig.analyzerMode = 'static'
+    bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html'
+    bundleAnalyzerConfig.defaultSizes = 'gzip'
 } else if (process.env.BUILD_ENV === 'camptocamp') {
     config.urls = config.urlsConfigurations.prod
     config.isProduction = true // explicit prod flag
