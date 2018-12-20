@@ -31,7 +31,7 @@
             v-else
             :type="type"
             :min="min"
-            :man="max"
+            :max="max"
             :disabled="disabled"
             :placeholder="placeholder"
             v-model="value_"
@@ -66,7 +66,7 @@
                 default: null
             },
             max: {
-                type: Number,
+                type: [Number, String], // string is for date
                 default: null
             },
             value: {

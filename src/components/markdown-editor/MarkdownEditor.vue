@@ -53,7 +53,16 @@
                 @focus="focus=true"
                 @blur="focus=false"/>
 
-            <markdown class="preview" v-if="preview" :content="cooked" />
+            <markdown
+                class="preview"
+                v-if="preview && !cookerPromise.error"
+                :content="cooked" />
+
+            <div
+                v-if="preview && cookerPromise.error"
+                class="preview-error has-background-danger has-text-warning has-text-weight-bold" v-translate>
+                Oups! something went wrong...
+            </div>
         </div>
 
     </div>
@@ -182,12 +191,23 @@
                 focus: false,
                 preview: false,
                 fullScreen: false,
-                cooked: ''
+                cookerPromise: {}
+            }
+        },
+
+        computed: {
+            cooked() {
+                if (!this.cookerPromise) {
+                    return null
+                }
+
+                return this.cookerPromise.loading ? '<em>Loading...</em>' : this.cookerPromise.response.data.value
             }
         },
 
         watch: {
-            preview: 'computePreview'
+            preview: 'computePreview',
+            value: 'updateValue'
         },
 
         mounted() {
@@ -200,14 +220,16 @@
                 this.$emit('input', this.$refs.textarea.value)
             },
 
+            updateValue() {
+                this.$refs.textarea.value = this.value
+            },
+
             computePreview() {
                 if (!this.preview) {
                     return
                 }
 
-                c2c.cooker({ value: this.value }).then(response => {
-                    this.cooked = response.data.value
-                })
+                this.cookerPromise = c2c.cooker({ value: this.value })
             },
 
             handleSimpleMarkdownTag(tag, defaultChunk) {
@@ -353,7 +375,7 @@
             padding:0.5rem;
         }
 
-        .preview{
+        .preview, .preview-error{
             padding:0.5rem;
             position:absolute;
             top:0;

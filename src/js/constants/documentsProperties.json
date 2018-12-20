@@ -175,7 +175,6 @@
         "letter":"u",
         "geoLocalized":true,
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
             {"id": "summary"},
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},

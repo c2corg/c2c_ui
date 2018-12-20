@@ -58,9 +58,10 @@ function getMessages(lang) {
 
 export default function install(Vue) {
     let languageVm = new Vue({
+        name: 'Language',
 
         data: {
-            current: 'fr'
+            current: null
         },
 
         created() {
@@ -76,13 +77,25 @@ export default function install(Vue) {
             }
 
             this.translations = {}
-            this.setCurrent('fr')
         },
 
         methods: {
+            firstLoad() {
+                const lang = this.$localStorage.get('current', 'fr')
+
+                this._getMessages(lang).then(() => {
+                    this.current = lang
+                })
+            },
 
             setCurrent(lang) {
-                // we must defer lang setter
+                // save in locale storage
+                this.$localStorage.set('current', lang)
+
+                // is user is logged, we need to save in db his preference
+                this.$user.saveLangPreference(lang)
+
+                // then, we must defer lang setter
                 // because we may need to lazy load data
                 this._getMessages(lang).then(() => {
                     this.current = lang

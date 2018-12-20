@@ -17,7 +17,7 @@ export default function install(Vue) {
                 id: data['id'] || null,
 
                 // user lang, read write property everywhere : this.$user.lang
-                lang: data['lang'] || 'fr',
+                lang: data['lang'],
 
                 // list of roles
                 roles: data['roles'] || [],
@@ -46,7 +46,6 @@ export default function install(Vue) {
         },
 
         watch: {
-            'lang': 'updateLang',
             'token': {
                 handler: 'updateToken',
                 immediate: true
@@ -70,6 +69,7 @@ export default function install(Vue) {
                         this.forumUsername = response.data.forum_username
                         this.expire = response.data.expire
 
+                        this.$language.setCurrent(this.lang)
                         this.commitToLocaleStorage_()
                     })
             },
@@ -105,15 +105,11 @@ export default function install(Vue) {
                 c2c.setAuthorizationToken(this.token)
             },
 
-            updateLang() {
-                this.$language.setCurrent(this.lang)
-
-                // lang is the only read-write property from outside,
-                // we need to save this value
-                this.commitToLocaleStorage_()
-
+            saveLangPreference(lang) {
                 // keep in last, because it will fail in read only mode
-                if (this.isLogged) {
+                if (this.isLogged && lang !== this.lang) {
+                    this.lang = lang
+                    this.commitToLocaleStorage_()
                     c2c.userProfile.update_preferred_language(this.lang)
                 }
             },

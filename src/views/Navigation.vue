@@ -37,14 +37,14 @@
                 </div>
             </div>
 
-            <div v-if="!siteConfiguration.urls.readWrite" class="navigation-item is-hidden-mobile" v-tooltip:bottom="'Read only site'">
+            <div v-if="!siteConfiguration.urls.readWrite" class="navigation-item is-hidden-mobile" :title="'Read only site'">
                 <fa-layers >
                     <fa-icon icon="pen"/>
                     <fa-icon icon="ban" transform="grow-16" class="has-text-danger"/>
                 </fa-layers>
             </div>
 
-            <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" v-tooltip:bottom="'This page may contains bugs or incomplete features'">
+            <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" :title="'This page may contains bugs or incomplete features'">
                 <fa-icon icon="bug" size="lg" class="has-text-danger"/>
             </div>
 
@@ -76,7 +76,8 @@
             <div v-if="!$user.isLogged" class="navigation-item ">
                 <login-button class="is-link">
                     <span class="is-hidden-touch" v-translate>Login</span>
-                    <fa-icon class="is-hidden-desktop" icon="sign-in-alt" />
+                    &nbsp;
+                    <fa-icon icon="sign-in-alt" />
                 </login-button>
             </div>
 
@@ -142,7 +143,7 @@
                             :key="key"
                             class="dropdown-item is-size-5"
                             :class="{'is-active': key==$language.current}"
-                            @click="$user.lang = key">
+                            @click="$language.setCurrent(key)">
                             {{ language }}
                         </a>
                     </div>

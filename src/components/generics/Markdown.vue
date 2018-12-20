@@ -6,6 +6,8 @@
 </template>
 
 <script>
+    import { icon } from '@fortawesome/fontawesome-svg-core'
+
     import config from '@/js/config.js'
 
     // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
@@ -28,11 +30,24 @@
         return true
     }
 
-    // mapping from svg source to svg CDN
-    const svgCdns = {
-        'emojione': 'https://cdn.jsdelivr.net/emojione/assets/svg/',
-        'c2c-activities': 'https://www.camptocamp.org/static/img/documents/activities/',
-        'c2c-waypoints': 'https://www.camptocamp.org/static/img/documents/waypoints/'
+    const getFontAwesomeSrc = function(prefix, iconeName) {
+        let svgSource = icon({ prefix: prefix, iconName: iconeName }).html[0]
+        svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"')
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource)
+    }
+
+    const getEmojiSrc = function(emojiSource, svgName) {
+        if (emojiSource === 'emojione') {
+            return `https://cdn.jsdelivr.net/emojione/assets/svg/${svgName}.svg`
+        }
+
+        if (emojiSource === 'c2c-activities') {
+            return getFontAwesomeSrc('activity', svgName)
+        }
+
+        if (emojiSource === 'c2c-waypoints') {
+            return getFontAwesomeSrc('waypoint', svgName)
+        }
     }
 
     export default {
@@ -82,7 +97,7 @@
                 for (let emoji of emojis) {
                     let emojiSource = emoji.attributes['c2c:emoji-db'].value
                     let svgName = emoji.attributes['c2c:svg-name'].value
-                    emoji.src = `${svgCdns[emojiSource]}${svgName}.svg`
+                    emoji.src = getEmojiSrc(emojiSource, svgName) // `${svgCdns[emojiSource]}${svgName}.svg`
                 }
             },
 
@@ -90,7 +105,7 @@
                 for (let image of images) {
                     image.src = config.urls.api + image.attributes['c2c:url-proxy'].value
                     image.addEventListener('click', () => {
-                        this.$emit('click-image', image.attributes['c2c:document-id'].value)
+                        this.$emit('click-image', parseInt(image.attributes['c2c:document-id'].value, 10))
                     })
                 }
             },
@@ -122,6 +137,12 @@
     }
 </script>
 
+<style scoped lang="scss">
+    .content{
+        margin-bottom: 1.5rem;
+    }
+</style>
+
 <style lang="scss">
     // Not scoped syle, because CSS selector are not explicitly present in template
 
@@ -133,6 +154,7 @@
     img[c2c\:role=emoji]{
         width: 1.43em;
         height: 1.43em;
+        vertical-align:bottom;
     }
 
     // TODO MARKDOWN PARSER : figure[c2c\:role=figure]

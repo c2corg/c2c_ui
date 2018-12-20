@@ -14,7 +14,7 @@
                     :class="{'is-primary' : $language.current === key}"
                     type="button"
                     class="button"
-                    @click="$user.lang = key">
+                    @click="$language.setCurrent(key)">
                     {{ language }}
                 </button>
             </div>

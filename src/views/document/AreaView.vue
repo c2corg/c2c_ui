@@ -9,8 +9,9 @@
 
             <div class="column is-9">
                 <div class="box" v-if="document.cooked.summary || document.cooked.description">
-                    <markdown-section :document="document" :field="fields.summary"/>
-                    <markdown-section :document="document" :field="fields.description"/>
+                    <markdown-section :document="document" :field="fields.summary" @click-image="onClickImage"/>
+                    <markdown-section :document="document" :field="fields.description" @click-image="onClickImage"/>
+                    <div style="clear:both" />
                 </div>
 
                 <div class="box">
@@ -31,7 +32,7 @@
                     </div>
                 </div>
 
-                <images-box :document="document" />
+                <images-box :document="document" ref="imagesBox"/>
 
                 <comments-box :document="document" />
             </div>

@@ -140,7 +140,7 @@ export default {
 
                 c2c.cooker(this.draft.locales[0]).then(response => {
                     this.draft.cooked = response.data
-                    this.$set(this.promise, "data", this.draft)
+                    this.$set(this.promise, 'data', this.draft)
                 })
             } else { // normal mode
                 if (this.document && $route.params.id === this.document.document_id && this.expected_lang === this.lang) {
@@ -162,6 +162,12 @@ export default {
 
             const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
             this.$router.replace(path)
+        },
+
+        onClickImage(imageId) {
+            if (this.$refs.imagesBox) {
+                this.$refs.imagesBox.showFullscreen(imageId)
+            }
         }
     }
 }

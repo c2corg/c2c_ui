@@ -28,12 +28,12 @@
                     </div>
                 </span>
 
-                <span v-if="!['area', 'profile'].includes(documentType)" class="level-item">
+                <span v-if="!['area', 'profile', 'image'].includes(documentType)" class="level-item">
                     <add-link
                         :document-type="documentType"
                         :query="addQuery"
                         class="is-size-3"
-                        v-tooltip:right="$gettext('Create')">
+                        :title="$gettext('Create')">
                         <fa-icon icon="plus-circle" />
                     </add-link>
                 </span>

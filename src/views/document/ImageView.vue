@@ -44,20 +44,15 @@
 
             <div class="column is-9">
                 <div class="box is-paddingless">
-                    <img :src="getImageUrl(document)">
+                    <a :href="getImageUrl(document)">
+                        <img class="main-image" :src="getImageUrl(document)">
+                    </a>
                 </div>
 
-                <markdown-section
-                    :document="document"
+                <markdown-section :document="document" :field="fields.summary"/>
+                <markdown-section :document="document" :field="fields.description" hide-title/>
 
-                    :field="fields.summary"/>
-
-                <markdown-section
-                    :document="document"
-
-                    :field="fields.description"
-                    hide-title/>
-
+                <routes-box :document="document" hide-buttons/>
                 <recent-outings-box :document="document" hide-see-all-results-button />
                 <comments-box :document="document" />
 
@@ -80,3 +75,10 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+    .main-image{
+        // remove the ugly 4px in the bottom
+        display:block;
+    }
+</style>

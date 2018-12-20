@@ -176,17 +176,29 @@ Field.prototype.urlToValue = function(url) {
     throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode)
 }
 
-Field.prototype.getError = function(document, locale) {
-    let value
+Field.prototype.getErrorObject = function(description) {
+    let errorName
 
-    // for the moment, no coherence check
-    if (!this.required) {
-        return null
+    if (this.parent === 'document') {
+        errorName = this.name
+    } else if (this.parent === 'locales') {
+        errorName = `locales.0.${this.name}`
+    } else if (this.parent === 'associations') {
+        errorName = `associations.${this.name}`
     }
 
+    return {
+        name: errorName,
+        description: description
+    }
+}
+
+Field.prototype.getError = function(document, locale) {
     if (!this.isVisibleFor(document)) {
         return null
     }
+
+    let value
 
     if (this.parent === 'document') {
         value = document[this.name]
@@ -198,21 +210,17 @@ Field.prototype.getError = function(document, locale) {
         throw new Error(`Unexpected parent property : ${this.parent}`)
     }
 
-    if (!value || (this.multiple && value.length === 0)) {
-        let errorName
+    if (value && this.minLength && value.length < this.minLength) {
+        return this.getErrorObject('This field must be a valid ISBN.')
+    }
 
-        if (this.parent === 'document') {
-            errorName = this.name
-        } else if (this.parent === 'locales') {
-            errorName = `locales.0.${this.name}`
-        } else if (this.parent === 'associations') {
-            errorName = `associations.${this.name}`
-        }
+    if (value && this.maxLength && value.length > this.maxLength) {
+        return this.getErrorObject('This field must be a valid ISBN.')
+    }
 
-        return {
-            name: errorName,
-            description: `${this.name} is required`
-        }
+    /* check presence */
+    if (this.required && (!value || (this.multiple && value.length === 0))) {
+        return this.getErrorObject(`${this.name} is required`)
     }
 
     return null

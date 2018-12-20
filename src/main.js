@@ -31,7 +31,7 @@ Vue.use(user) // vm.$user property
 new Vue({
     router: router,
     created() {
-        this.$language.setCurrent(this.$user.lang)
+        this.$language.firstLoad()
     },
     render: h => h(App)
 }).$mount('#app')

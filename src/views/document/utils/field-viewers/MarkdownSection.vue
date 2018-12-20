@@ -3,7 +3,10 @@
         <h3 v-if="field.name !='summary' && !hideTitle" class="title is-3" >
             {{ $gettext(title || field.name) }}
         </h3>
-        <markdown :class="{'is-italic':field.name==='summary'}" :content="document.cooked[field.name]"/>
+        <markdown
+            :class="{'is-italic':field.name==='summary'}"
+            :content="document.cooked[field.name]"
+            @click-image="$emit('click-image', arguments[0])"/>
     </div>
 </template>
 

@@ -6,5 +6,8 @@
 
         <span v-translate>routes</span>
         <!-- TODO 10 types, plural -->
+
+        <!-- strings in field.js -->
+        <span v-translate>This field must be a valid ISBN.</span>
     </span>
 </template>

@@ -117,6 +117,16 @@
                 this.activeIndex = initialSlide
                 this.largeView = true
             },
+
+            showFullscreen(imageId) {
+                for (let i in this.images) {
+                    if (this.images[i].document_id === imageId) {
+                        this.activateLargeView(i)
+                        break
+                    }
+                }
+            },
+
             onSlideChange() {
                 this.activeIndex = this.$refs.largeViewSwiper.swiper.activeIndex
             },

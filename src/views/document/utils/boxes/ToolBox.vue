@@ -7,7 +7,7 @@
             <span v-translate>View in other lang</span>
             <br>
             <span class="lang-switcher-box-list">
-                <span v-for="lang of document.available_langs" :key="lang">
+                <span v-for="lang of document.available_langs" :key="lang" v-if="lang !== $route.params.lang">
                     <document-link :document="document" :lang="lang">
                         {{ $gettext(lang) }}
                     </document-link>
@@ -28,30 +28,33 @@
         <div v-if="$user.isModerator && isEditable">
 
             <tool-box-button
+                v-if="documentType !== 'profile'"
                 @click="lockDocumentAction"
                 :icon="document.protected ? 'lock' : 'unlock'"
                 :class="document.protected ? 'lock-button-red' : 'lock-button-green'"
                 :label="document.protected ? $gettext('Unprotect document') : $gettext('Protect document')" />
 
             <tool-box-button
+                v-if="documentType !== 'profile'"
                 @click="$refs.MergeDocumentWindow.show()"
                 icon="object-group"
                 :label="$gettext('Merge with other document')" />
 
             <tool-box-button
-                v-if="document.available_langs.length > 1"
+                v-if="document.available_langs.length > 1 && documentType !== 'profile'"
                 @click="$refs.DeleteLocaleWindow.show()"
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this locale')" />
 
             <tool-box-button
-                v-if="documentType=='profile'"
+                v-if="documentType === 'profile'"
                 @click="lockAccountAction"
                 icon="user-lock"
                 :class="{'lock-button-red':isAccountBlocked}"
                 :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')" />
 
             <tool-box-button
+                v-if="documentType !== 'profile'"
                 @click="$refs.deleteDocumentWindow.show()"
                 :icon="['fas','trash']"
                 :label="$gettext('Delete this document')" />

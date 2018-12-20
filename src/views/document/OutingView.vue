@@ -2,9 +2,9 @@
     <div class="section">
         <document-view-header :document="document" :version="version" :promise="promise" />
 
-        <images-box v-if="document" :document="document" />
+        <div v-if="document" class="columns is-multiline">
 
-        <div v-if="document" class="columns">
+            <images-box class="column is-12" :document="document" ref="imagesBox"/>
 
             <div class="column is-3">
                 <map-box :document="document"/>

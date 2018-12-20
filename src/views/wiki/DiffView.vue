@@ -200,7 +200,7 @@
                     return 'Waiting for other version'
                 }
 
-                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry'])
+                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry', 'cooked'])
 
                 for (let key of keys) {
                     if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {

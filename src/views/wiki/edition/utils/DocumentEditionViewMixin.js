@@ -78,6 +78,10 @@ export default {
     },
 
     watch: {
+        '$route': {
+            handler: 'load',
+            immediate: true
+        },
         'document.geometry.geom': 'setLatitudeLongitude'
     },
 
@@ -89,48 +93,49 @@ export default {
         })
     },
 
-    created() {
-        if (this.mode === 'edit') {
-            this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
-        } else {
-            this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
+    methods: {
+        load() {
+            this.fields = constants.objectDefinitions[this.documentType].fields
+            this.cleanErrors()
+            this.latitude = null
+            this.longitude = null
 
-            // add current user for outings
-            if (this.documentType === 'outing') {
-                c2c.profile.get(this.$user.id).then(response => {
-                    this.$documentUtils.addAssociation(this.document, response.data)
-                })
-            }
+            if (this.mode === 'edit') {
+                this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
+            } else {
+                this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
-            // Add associations presents in url query
-            for (let letter of Object.keys(this.$route.query)) {
-                let documentType = this.$documentUtils.getDocumentType(letter)
+                // add current user for outings
+                if (this.documentType === 'outing') {
+                    c2c.profile.get(this.$user.id).then(response => {
+                        this.$documentUtils.addAssociation(this.document, response.data)
+                    })
+                }
 
-                if (documentType && this.$route.query[letter]) {
-                    // Value may be a number or a string
-                    let documentIds = String(this.$route.query[letter]).split(',')
+                // Add associations presents in url query
+                for (let letter of Object.keys(this.$route.query)) {
+                    let documentType = this.$documentUtils.getDocumentType(letter)
 
-                    for (let documentId of documentIds) {
-                        c2c[documentType].get(documentId).then(response => {
-                            this.$documentUtils.addAssociation(this.document, response.data)
-                        })
+                    if (documentType && this.$route.query[letter]) {
+                        // Value may be a number or a string
+                        let documentIds = String(this.$route.query[letter]).split(',')
+
+                        for (let documentId of documentIds) {
+                            c2c[documentType].get(documentId).then(response => {
+                                this.$documentUtils.addAssociation(this.document, response.data)
+                            })
+                        }
                     }
                 }
+
+                if (this.$route.query.act) {
+                    this.document.activities = this.$route.query.act.split(',')
+                }
+
+                this.afterLoad()
             }
+        },
 
-            if (this.$route.query.act) {
-                this.document.activities = this.$route.query.act.split(',')
-            }
-
-            this.afterLoad()
-        }
-
-        this.fields = constants.objectDefinitions[this.documentType].fields
-
-        this.cleanErrors()
-    },
-
-    methods: {
         setGeometryPoint() {
             if (this.latitude === null || this.longitude === null) {
                 return
@@ -145,7 +150,7 @@ export default {
         },
 
         setLatitudeLongitude() {
-            if (!this.document.geometry || !this.document.geometry.geom) {
+            if (!this.document || !this.document.geometry || !this.document.geometry.geom) {
                 return {}
             }
 

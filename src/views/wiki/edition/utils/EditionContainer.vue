@@ -104,6 +104,17 @@
                 comment: '',
                 isPreview: false
             }
+        },
+
+        watch: {
+            '$route': 'reset'
+        },
+
+        methods: {
+            reset() {
+                this.comment = ''
+                this.isPreview = false
+            }
         }
     }
 </script>

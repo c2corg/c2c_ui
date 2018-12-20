@@ -64,7 +64,7 @@
         :postfix="field.unit"
         :type="field.type"
         :min="field.min"
-        :man="field.max"
+        :max="field.max"
         :disabled="field.disabled"
         :placeholder="placeholder || $gettext(field.name)"
         :required="field.required"

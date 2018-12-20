@@ -105,7 +105,7 @@
                 </div>
 
                 <routes-box :document="document" hide-buttons />
-                <images-box :document="document" />
+                <images-box :document="document" ref="imagesBox"/>
 
                 <recent-outings-box :document="document" />
 
