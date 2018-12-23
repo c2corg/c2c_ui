@@ -549,6 +549,7 @@
 
                     source.addFeature(feature)
                     this.hasBiodivsportAreas = true
+                    this.$emit('has-sensitive-area')
                 }
             },
 
