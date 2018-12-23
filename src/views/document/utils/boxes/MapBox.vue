@@ -15,7 +15,8 @@
             :documents="new Array(document)"
             :show-biodiv-sports-areas="['r', 'w'].includes(document.type)"
             :biodiv-sports-activities="document.activities"
-            style="height:275px"/>
+            style="height:275px"
+            @has-sensitive-area="$emit('has-sensitive-area')"/>
 
         <elevation-profile :document="document" v-if="documentType=='outing'"/>
 

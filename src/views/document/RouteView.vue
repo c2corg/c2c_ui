@@ -5,7 +5,7 @@
         <div v-if="document" class="columns">
 
             <div class="column is-3">
-                <map-box :document="document"/>
+                <map-box :document="document" @has-sensitive-area="hasSensitiveArea=true"/>
                 <tool-box :document="document"/>
             </div>
 
@@ -87,18 +87,32 @@
                     <markdown-section :document="document" :field="fields.description" />
                     <markdown-section :document="document" :field="fields.slackline_anchor1" />
                     <markdown-section :document="document" :field="fields.slackline_anchor2" />
-                    <markdown-section :document="document" :field="fields.remarks" />
-                    <markdown-section :document="document" :field="fields.gear" />
 
-                    <div class="content">
-                        <ul>
-                            <li v-for="(label, articleId) of gear_articles" :key="articleId">
-                                <router-link :to="{ name: 'article', params: {id: articleId} }">
-                                    {{ label }}
-                                </router-link>
-                            </li>
-                        </ul>
-                    </div>
+                    <markdown-section :document="document" :field="fields.remarks">
+                        <div
+                            slot="after"
+                            v-if="hasSensitiveArea"
+                            class="notification is-info">
+                            <strong v-translate>
+                                Sensitive areas
+                            </strong>
+                            <p v-translate>
+                                There are sensitive areas on this route. Please refer to the map.
+                            </p>
+                        </div>
+                    </markdown-section>
+
+                    <markdown-section :document="document" :field="fields.gear">
+                        <div class="content" slot="after" v-if="gear_articles">
+                            <ul>
+                                <li v-for="(label, articleId) of gear_articles" :key="articleId">
+                                    <router-link :to="{ name: 'article', params: {id: articleId} }">
+                                        {{ label }}
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </markdown-section>
 
                     <markdown-section :document="document" :field="fields.external_resources" />
 
@@ -121,6 +135,12 @@
 
     export default {
         mixins: [ DocumentViewMixin ],
+
+        data() {
+            return {
+                hasSensitiveArea: false
+            }
+        },
 
         computed: {
             // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L103
