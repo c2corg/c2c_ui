@@ -84,7 +84,7 @@ export default function install(Vue) {
             firstLoad() {
                 let lang = this.current
 
-                this._getMessages(this.current).then(()=>{
+                this._getMessages(this.current).then(() => {
                     // dirty : simulate lang update to fire the update of page on load
                     this.current = null
                     this.current = lang
