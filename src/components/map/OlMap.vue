@@ -72,6 +72,7 @@
             </ul>
         </div>
 
+        <biodiv-information ref="BiodivInformation" :data="biodivData"/>
     </div>
 </template>
 
@@ -89,10 +90,16 @@
         buildDiffStyle
     } from './mapUtils.js'
 
+    import BiodivInformation from './BiodivInformation'
+
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
 
     export default {
+
+        components: {
+            BiodivInformation
+        },
 
         props: {
             documents: {
@@ -180,7 +187,9 @@
                 highlightedFeature_: null,
 
                 recenterPropositions: null,
-                showRecenterOnPropositions: false
+                showRecenterOnPropositions: false,
+
+                biodivData: {}
             }
         },
 
@@ -533,12 +542,14 @@
                     const feature = new ol.Feature({
                         geometry,
                         'id': (result['id']),
-                        'source': 'biodivsports',
-                        'title': (result['name']),
-                        'description': (result['description']),
-                        'info_url': (result['info_url']),
-                        'kml_url': (result['kml_url']),
-                        'period': (result['period'])
+                        'biodivData': {
+                            'source': 'biodivsports',
+                            'title': (result['name']),
+                            'description': (result['description']),
+                            'infoUrl': (result['info_url']),
+                            'kmlUrl': (result['kml_url']),
+                            'period': (result['period'])
+                        }
                     })
 
                     feature.setId('biodiv_' + (result['id']))
@@ -607,6 +618,9 @@
                             name: this.$documentUtils.getDocumentType(document.type),
                             params: { id: document.document_id }
                         })
+                    } else if (feature.get('biodivData')) {
+                        this.biodivData = feature.get('biodivData')
+                        this.$refs.BiodivInformation.show()
                     }
                 }
             },
