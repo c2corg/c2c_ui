@@ -62,7 +62,6 @@
 
 <script>
     import forum from '@/js/apis/forum'
-    import imageUrls from '@/js/image-urls'
 
     import { cardMixin } from './utils/mixins.js'
 
@@ -131,10 +130,6 @@
             if (this.item.image3) {
                 this.images.push(this.item.image3)
             }
-        },
-
-        methods: {
-            getSmallImageUrl: imageUrls.getSmall
         }
     }
 </script>

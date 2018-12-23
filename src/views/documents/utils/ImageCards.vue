@@ -4,7 +4,7 @@
             v-for="document in documents.documents"
             :key="document.document_id"
             class="card-image">
-            <img :src="getSmallImageUrl(document)" height="250" @click="go(document)">
+            <img :src="getMediumImageUrl(document)" height="250" @click="go(document)">
         </div>
     </div>
 </template>
@@ -28,7 +28,7 @@
                 })
             },
 
-            getSmallImageUrl: imageUrls.getSmall
+            getMediumImageUrl: imageUrls.getMedium
         }
     }
 

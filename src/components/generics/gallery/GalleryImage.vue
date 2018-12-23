@@ -49,7 +49,7 @@
             reset() {
                 this.loading = true
                 this.error = false
-                this.src = this.large ? imageUrls.get(this.image) : imageUrls.getSmall(this.image)
+                this.src = this.large ? imageUrls.getBig(this.image) : imageUrls.getMedium(this.image)
             }
         }
 
