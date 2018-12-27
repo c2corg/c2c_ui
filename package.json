@@ -8,6 +8,7 @@
     "build:gitlab": "cross-env BUILD_ENV=gitlab vue-cli-service build",
     "build:github": "cross-env BUILD_ENV=github vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "lint:no-fix": "vue-cli-service lint --no-fix",
     "extract-messages": "node tools/extract-messages.js",
     "generate-docs": "node tools/generate-docs.js",
     "generate-icons": "node tools/generate-icons.js",

@@ -1,12 +1,16 @@
 language: node_js
 node_js:
-  - "10.14"
-branches:
-  only:
-  - master
+- 10
+
 install:
-    - npm install
-    - npm run build:github
+- npm install
+
+script:
+- npm run lint:no-fix
+# - npm run test
+
+before_deploy:
+- npm run build:github
 
 deploy:
   provider: pages
