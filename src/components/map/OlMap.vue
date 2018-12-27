@@ -555,7 +555,10 @@
                     feature.setId('biodiv_' + (result['id']))
 
                     feature.set('normalStyle', buildPolygonStyle(result.name, false))
-                    feature.set('highlightedStyle', buildPolygonStyle(result.name, true))
+                    feature.set('highlightedStyle', buildPolygonStyle(
+                        this.$gettext('Sensitive area:') + result.name,
+                        true
+                    ))
                     feature.setStyle(feature.get('normalStyle'))
 
                     source.addFeature(feature)

@@ -9,13 +9,13 @@
             </span>
         </div>
 
-        <p v-if="data.months">
+        <p v-if="data.period">
             <span v-translate>sensitive_months:</span>
-            <span>{{ data.months.join(", ") }}</span>
+            <span>{{ months.join(", ") }}</span>
         </p>
 
         <!-- TODO : find a light way to securely show this content -->
-        <p>{{ data.description }}</p>
+        <p>{{ description }}</p>
         <a :href="data.infoUrl" target="_blank" v-translate>More info</a> |
         <a :href="data.kmlUrl" target="_blank">KML</a>
     </modal-window>
@@ -28,6 +28,29 @@
             data: {
                 type: Object,
                 default: null
+            }
+        },
+
+        computed: {
+            description() {
+                let result = this.data.description || ''
+
+                // very simple html > text interpreter : only html entities
+                result = result.replace(/&eacute;/g, 'é')
+                result = result.replace(/&egrave;/g, 'è')
+                return result
+            },
+
+            months() {
+                let result = []
+
+                for (let month in this.data.period) {
+                    if (this.data.period[month]) {
+                        result.push(this.$moment.month(parseInt(month, 10)))
+                    }
+                }
+
+                return result
             }
         },
 
