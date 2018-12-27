@@ -1,6 +1,6 @@
 # [camptocamp.org](https://www.camptocamp.org)
 
-[![Build Status](https://travis-ci.com/c2corg/c2c_ui.svg?branch=master)](https://travis-ci.com/c2corg/c2c_ui) [![Greenkeeper badge](https://badges.greenkeeper.io/c2corg/c2c_ui.svg)](https://greenkeeper.io/) [![Total alerts](https://img.shields.io/lgtm/alerts/g/c2corg/c2c_ui.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/c2corg/c2c_ui/alerts/)
+[![Build Status](https://travis-ci.com/c2corg/c2c_ui.svg?branch=master)](https://travis-ci.com/c2corg/c2c_ui) [![Greenkeeper badge](https://badges.greenkeeper.io/c2corg/c2c_ui.svg)](https://greenkeeper.io/) [![Total alerts](https://img.shields.io/lgtm/alerts/g/c2corg/c2c_ui.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/c2corg/c2c_ui/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/c2corg/c2c_ui.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/c2corg/c2c_ui/context:javascript)
 
 On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then :
 
