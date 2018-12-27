@@ -34,6 +34,10 @@ export default function install(Vue) {
 
             toTechnicalString(arg) {
                 return moment(arg).format('YYYY-MM-DD hh:mm:ss')
+            },
+
+            month(monthNumber) {
+                return moment.localeData(this.$language.current).months()[monthNumber]
             }
         }
     })
