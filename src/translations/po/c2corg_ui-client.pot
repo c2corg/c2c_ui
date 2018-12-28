@@ -1,7 +1,3 @@
-#: src/components/generics/markers/MarkerImageCount.vue
-msgid " images"
-msgstr ""
-
 #: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "1 or 2 complications (steeper or narrow section...)"
 msgstr ""
@@ -190,8 +186,8 @@ msgstr ""
 msgid "Areas"
 msgstr ""
 
-#: src/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/views/SideMenu.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
 #: src/views/static-views/NotFoundView.vue
 msgid "Articles"
 msgstr ""
@@ -510,9 +506,9 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
+#: src/views/SideMenu.vue
 #: src/views/portals/DashboardView.vue
 #: src/views/portals/HomeBanner.vue
-#: src/views/SideMenu.vue
 #: src/views/static-views/HomeView.vue
 msgid "Forum"
 msgstr ""
@@ -604,7 +600,7 @@ msgid "Images"
 msgstr ""
 
 #: src/views/wiki/edition/XreportEditionView.vue
-msgid "Information on the location of the incident.  Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here).  After completing the report, you can associate it to a route, a climbing site or an outing."
+msgid "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing."
 msgstr ""
 
 #: src/components/generics/gallery/ImageInfo.vue
@@ -709,9 +705,7 @@ msgid "Merge with other document"
 msgstr ""
 
 #: src/views/document/utils/windows/MergeDocumentWindow.vue
-msgid "Merging a source document with a target document transfers all
-                associations of the source document to the target document, and sets up a
-                redirection from the source to the target document."
+msgid "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document."
 msgstr ""
 
 #: src/views/portals/FeedView.vue
@@ -720,6 +714,10 @@ msgstr ""
 
 #: src/views/wiki/WhatsNewView.vue
 msgid "Modified the"
+msgstr ""
+
+#: src/components/map/BiodivInformation.vue
+msgid "More info"
 msgstr ""
 
 #: src/views/Navigation.vue
@@ -813,9 +811,13 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Oups! something went wrong..."
+msgstr ""
+
+#: src/views/SideMenu.vue
 #: src/views/document/ProfileView.vue
 #: src/views/portals/DashboardView.vue
-#: src/views/SideMenu.vue
 #: src/views/static-views/HomeView.vue
 #: src/views/static-views/NotFoundView.vue
 #: src/views/static-views/TopoguideView.vue
@@ -915,6 +917,15 @@ msgstr ""
 msgid "Send reset email"
 msgstr ""
 
+#: src/components/map/BiodivInformation.vue
+#: src/components/map/OlMap.vue
+msgid "Sensitive area:"
+msgstr ""
+
+#: src/views/document/RouteView.vue
+msgid "Sensitive areas"
+msgstr ""
+
 #: src/components/generics/gallery/ImageInfo.vue
 msgid "Settings"
 msgstr ""
@@ -990,6 +1001,10 @@ msgstr ""
 msgid "The slope must be between 50 and 3000m high"
 msgstr ""
 
+#: src/views/document/RouteView.vue
+msgid "There are sensitive areas on this route. Please refer to the map."
+msgstr ""
+
 #: src/views/document/utils/boxes/LicenseBox.vue
 msgid "This book cover is the property of its editor and/or author"
 msgstr ""
@@ -1000,6 +1015,10 @@ msgstr ""
 
 #: src/views/document/utils/boxes/LicenseBox.vue
 msgid "This content is licensed under Creative Commons BY-SA 3.0"
+msgstr ""
+
+#: src/translations/fixed_strings_manual.vue
+msgid "This field must be a valid ISBN."
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue
@@ -1030,8 +1049,8 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: src/views/portals/HomeBanner.vue
 #: src/views/SideMenu.vue
+#: src/views/portals/HomeBanner.vue
 #: src/views/static-views/TopoguideView.vue
 msgid "Topoguide"
 msgstr ""
@@ -1431,10 +1450,10 @@ msgid "collaborative"
 msgstr ""
 
 #: src/views/document/utils/field-viewers/ConditionLevels.vue
-#: src/views/wiki/edition/utils/EditionContainer.vue
-#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 #: src/views/wiki/HistoryView.vue
 #: src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
 msgid "comment"
 msgstr ""
 
@@ -1881,6 +1900,10 @@ msgstr ""
 
 #: src/components/generics/RouteRating.vue
 msgid "ice_rating"
+msgstr ""
+
+#: src/components/generics/markers/MarkerImageCount.vue
+msgid "images"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -2470,6 +2493,10 @@ msgstr ""
 msgid "see actual version"
 msgstr ""
 
+#: src/components/map/BiodivInformation.vue
+msgid "sensitive_months:"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "sep"
 msgstr ""
@@ -2650,8 +2677,8 @@ msgid "temperature"
 msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue
-#: src/views/wiki/edition/WaypointEditionView.vue
 #: src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
 msgid "title"
 msgstr ""
 

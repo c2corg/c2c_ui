@@ -32,6 +32,14 @@ function Results() {
 }
 
 Results.prototype.push = function(file, msgctxt, msgid) {
+
+    // trim
+    msgid = msgid.replace(/^[\r\n\s]*/g, '')
+    msgid = msgid.replace(/[\r\n\s]*$/g, '')
+    msgid = msgid.replace(/\n/g, ' ')
+    msgid = msgid.replace(/\t/g, ' ')
+    msgid = msgid.replace(/\s+/g, ' ')
+
     const key = `${msgctxt}\u0002${msgid}`
 
     if (this.data[key] === undefined) {
@@ -79,10 +87,6 @@ function parseTemplate(file, data) {
                 }
 
                 let msgid = node.children[0].text
-
-                // trim
-                msgid = msgid.replace(/^[\r\n\s]*/, '')
-                msgid = msgid.replace(/[\r\n\s]*$/, '')
 
                 results.push(file, undefined, msgid)
             }
