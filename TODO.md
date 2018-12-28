@@ -1,4 +1,3 @@
-
 # Todo
 
 * maps
@@ -11,6 +10,7 @@
 
 * <https://github.com/c2corg/v6_api/issues/730>
   handle if token is obsolote or corrupted
+
 * no mail from c2c :
   * validate_new_password : callback when requestPasswordChange
   * validate_change_email
