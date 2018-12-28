@@ -5,8 +5,13 @@
     ],
     "jsRules": {},
     "rules": {
-        "quotemark": [ true, "single"],
-        "semicolon": [ true, "never"]
+        "quotemark": [true, "single"],
+        "semicolon": [true, "never"],
+        "object-literal-sort-keys": false,
+        "interface-name": false,
+        "member-access": [true, "no-public"],
+        "ordered-imports": false,
+        "trailing-comma": [true, { "multiline": "never", "singleline": "never", "esSpecCompliant": true}]
     },
     "rulesDirectory": []
 }
