@@ -57,7 +57,7 @@
                                 :document="document"
                                 :field1="fields.height_diff_up"
                                 :field2="fields.height_diff_down"
-                                :label="$gettext('height difference')"
+                                :label="$gettext('height_difference')"
                                 show-signs />
 
                             <field-view :document="document" :field="fields.height_diff_difficulties"/>
