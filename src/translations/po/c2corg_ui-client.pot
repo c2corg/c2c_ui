@@ -1998,6 +1998,94 @@ msgstr ""
 msgid "group_management"
 msgstr ""
 
+#: src/components/cards/FeedCard.vue
+msgid "has added images to area"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to article"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to book"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to outing"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to route"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to waypoint"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to xreport"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new article"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new book"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new image"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new outing"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new route"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new waypoint"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new xreport"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the area"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the article"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the book"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the image"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the outing"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the route"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the waypoint"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the xreport"
+msgstr ""
+
 #: src/components/markdown-editor/MarkdownEditor.vue
 msgid "heading text"
 msgstr ""
@@ -2474,6 +2562,10 @@ msgstr ""
 msgid "nearby service"
 msgstr ""
 
+#: src/views/wiki/DiffView.vue
+msgid "next difference"
+msgstr ""
+
 #: src/views/document/utils/DocumentVersionBanner.vue
 msgid "next version"
 msgstr ""
@@ -2698,6 +2790,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "pressure"
+msgstr ""
+
+#: src/views/wiki/DiffView.vue
+msgid "previous difference"
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue
@@ -3176,6 +3272,14 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
 msgid "temperature"
+msgstr ""
+
+#: src/views/wiki/DiffView.vue
+msgid "this is the first version"
+msgstr ""
+
+#: src/views/wiki/DiffView.vue
+msgid "this is the last version"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
