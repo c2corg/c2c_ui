@@ -64,7 +64,3 @@
 
 "@vue/typescript"
 "@vue/cli-plugin-typescript": "^3.2.0",
-
-## Obsolete stuff
-
-* Remove gitlab-related stuff (CI...)
