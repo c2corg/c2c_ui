@@ -128,7 +128,7 @@
     },
     "blanket_unstaffed":
     {
-        "values": [true, false, null]
+        "type": "boolean"
     },
     "book_types":
     {
@@ -403,7 +403,7 @@
     },
     "gas_unstaffed":
     {
-        "values": [true, false, null]
+        "type": "boolean"
     },
     "gear":
     {
@@ -446,7 +446,7 @@
     },
     "heating_unstaffed":
     {
-        "values": [true, false, null]
+        "type": "boolean"
     },
     "height":
     {
@@ -610,8 +610,7 @@
     },
     "lift_access":
     {
-        "values": [true, false, null],
-        "i18n": false
+        "type": "boolean"
     },
     "lift_status":
     {
@@ -624,7 +623,7 @@
     },
     "matress_unstaffed":
     {
-        "values": [true, false, null]
+        "type": "boolean"
     },
     "mixed_rating":
     {

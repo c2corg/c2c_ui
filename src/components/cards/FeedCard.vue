@@ -5,7 +5,7 @@
 
             <span>
                 <document-title :document="item.user"/>
-                <span class="has-text-weight-normal">&nbsp;{{ $gettext(actionLine) }}</span>
+                <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
             </span>
 
             <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
@@ -100,23 +100,31 @@
         forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
 
         created() {
-            this.actionLine = ''
+            this.actionLine = {
+                'added_photos article': this.$gettext('has added images to article'),
+                'added_photos book': this.$gettext('has added images to book'),
+                'added_photos area': this.$gettext('has added images to area'),
+                'added_photos outing': this.$gettext('has added images to outing'),
+                'added_photos route': this.$gettext('has added images to route'),
+                'added_photos waypoint': this.$gettext('has added images to waypoint'),
+                'added_photos xreport': this.$gettext('has added images to xreport'),
+                'created article': this.$gettext('has created a new article'),
+                'created book': this.$gettext('has created a new book'),
+                'created image': this.$gettext('has created a new image'),
+                'created outing': this.$gettext('has created a new outing'),
+                'created route': this.$gettext('has created a new route'),
+                'created waypoint': this.$gettext('has created a new waypoint'),
+                'created xreport': this.$gettext('has created a new xreport'),
+                'updated area': this.$gettext('has updated the area'),
+                'updated article': this.$gettext('has updated the article'),
+                'updated book': this.$gettext('has updated the book'),
+                'updated image': this.$gettext('has updated the image'),
+                'updated outing': this.$gettext('has updated the outing'),
+                'updated route': this.$gettext('has updated the route'),
+                'updated waypoint': this.$gettext('has updated the waypoint'),
+                'updated xreport': this.$gettext('has updated the xreport')
+            }[[this.item['change_type'], this.documentType].join(' ')]
 
-            switch (this.item['change_type']) {
-            case 'created':
-                this.actionLine += 'has created a new '
-                break
-            case 'updated':
-                this.actionLine += 'has updated the '
-                break
-            case 'added_photos':
-                this.actionLine += 'has added images to '
-                break
-            default:
-                break
-            }
-
-            this.actionLine += this.documentType
             this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document'])
 
             if (this.item.image1) {

@@ -30,9 +30,10 @@
                                :lang="lang"
                                :version-from="oldVersion.previous_version_id"
                                :version-to="oldVersion.version.version_id">
-                        ← previous difference
+                        ←
+                        <span v-translate>previous difference</span>
                     </diff-link>
-                    <span v-else>
+                    <span v-else v-translate>
                         this is the first version
                     </span>
                 </div>
@@ -61,9 +62,10 @@
                                :lang="lang"
                                :version-from="newVersion.version.version_id"
                                :version-to="newVersion.next_version_id">
-                        next difference →
+                        <span v-translate>next difference</span>
+                        →
                     </diff-link>
-                    <span v-else>
+                    <span v-else v-translate>
                         this is the last version
                     </span>
                 </div>
