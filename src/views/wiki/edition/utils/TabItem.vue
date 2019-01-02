@@ -1,5 +1,8 @@
 <template>
-    <section v-show="isActive">
+    <section :class="{'is-active-tab-item':isActive}" v-show="visible">
+        <h2 class="title is-2 is-hidden-tablet">
+            {{ title }}
+        </h2>
         <slot/>
     </section>
 </template>
@@ -54,3 +57,20 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+
+    @import '@/assets/sass/variables.scss';
+
+    // hide sections only if not mobile
+    @media screen and (min-width: $tablet) {
+        section{
+            display:None;
+        }
+    }
+
+    section.is-active-tab-item{
+        display:block;
+    }
+
+</style>
