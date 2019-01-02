@@ -34,7 +34,7 @@
                                 :document="document"
                                 :field1="fields.slackline_length_min"
                                 :field2="fields.slackline_length_max"
-                                :label="$gettext('slackline length')" />
+                                :label="$gettext('slackline_length')" />
                             <field-view :document="document" :field="fields.routes_quantity"/>
                             <field-view :document="document" :field="fields.best_periods"/>
                             <field-view :document="document" :field="fields.quality"/>

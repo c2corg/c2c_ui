@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[c2corg_ui.main]
+minimum_perc = 0
+source_file = src/translations/po/c2corg_ui-client.pot
+source_lang = en_US
+type = PO

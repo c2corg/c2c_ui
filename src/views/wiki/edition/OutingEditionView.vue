@@ -24,7 +24,7 @@
 
             </tab-item>
 
-            <tab-item :title="$gettext('GPS track')">
+            <tab-item :title="$gettext('GPS Track')">
                 <map-input-row :document="document" geom-detail-editable/>
             </tab-item>
 

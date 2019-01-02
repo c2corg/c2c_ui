@@ -1,128 +1,71 @@
+"""
+This script load data from https://github.com/c2corg/v6_common and save it in a relevant format :
+
+* common.json for attributes arrays
+* fixed_strings_common_js.vue, a fake vue component, for attributes values that needs a translation
+
+"""
+
 import requests
 import json
 import os
 
 URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/{}.py'.format
 
+# Load python file from c2corg_common, and parse it
 def get_fields(name):
 
     proxies = {"https" : os.environ["HTTPS_PROXY"]} if "HTTPS_PROXY" in os.environ else None
     text = requests.get(URL(name), proxies = proxies).text
 
+    # exec : only in dev mode, lint exception
     exec(text.encode('utf8'))
 
     return dict(locals())
 
-result = {}
-
-# result["fields"] = {}
-# result["fields"]["area"] = get_fields('fields_area')['fields_area']
-# result["fields"]["article"] = get_fields('fields_article')['fields_article']
-# result["fields"]["book"] = get_fields('fields_book')['fields_book']
-# result["fields"]["image"] = get_fields('fields_image')['fields_image']
-# result["fields"]["outing"] = get_fields('fields_outing')['fields_outing']
-# result["fields"]["route"] = get_fields('fields_route')['fields_route']
-# result["fields"]["map"] = get_fields('fields_topo_map')['fields_topo_map']
-# result["fields"]["profile"] = get_fields('fields_user_profile')['fields_user_profile']
-# result["fields"]["waypoint"] = get_fields('fields_waypoint')['fields_waypoint']
-# result["fields"]["xreport"] = get_fields('fields_xreport')['fields_xreport']
-
+# Load atributes file
+# TODO : replace "values": "langs" by "values": "langs_priority" in fieldsProperties.json
 attributes = get_fields('attributes')
+attributes["langs"] = attributes["langs_priority"]
+
+result = {}
 result["attributes"] = {}
-result["attributes"]["langs"] = attributes["langs_priority"]
 
-# key is attribute name, value is true if content need to be translated
-attribute_names = {
-    "access_conditions":True,
-    "access_times":True,
-    "activities":True,
-    "activity_rates":True,
-    "aid_ratings":False,
-    "area_types":True,
-    "article_categories":True,
-    "article_types":True,
-    "author_statuses":True,
-    "autonomies":True,
-    "avalanche_levels":True,
-    "avalanche_signs":True,
-    "avalanche_slopes":True,
-    "book_types":True,
-    "condition_ratings":True,
-    "children_proof_types":True,
-    "climbing_indoor_types":True,
-    "climbing_outdoor_types":True,
-    "climbing_styles":True,
-    "route_configuration_types":True,
-    "custodianship_types":True,
-    "route_duration_types":False,
-    "engagement_ratings":False,
-    "equipment_ratings":False,
-    "event_types":True,
-    "exposition_rock_ratings":False,
-    "frequentation_types":True,
-    "genders":True,
-    "glacier_gear_types":True,
-    "glacier_ratings":True,
-    "global_ratings":False,
-    "ground_types":True,
-    "hiking_ratings":False,
-    "ice_ratings":False,
-    "image_types":True,
-    "image_categories":True,
-    "labande_ski_ratings":False,
-    "lift_status":True,
-    "mixed_ratings":False,
-    "months":True,
-    "mtb_down_ratings":False,
-    "mtb_up_ratings":False,
-    "nb_outings":True,
-    "orientation_types":False,
-    "paragliding_ratings":False,
-    "parking_fee_types":True,
-    "previous_injuries":True,
-    "product_types":True,
-    "public_transportation_ratings":True,
-    "public_transportation_types":True,
-    "quality_types":True,
-    "rain_proof_types":True,
-    "risk_ratings":False,
-    "climbing_ratings":False,
-    "rock_types":True,
-    "route_types":True,
-    "severities":True,
-    "exposition_ratings":True,
-    "ski_ratings":True,
-    "slackline_types":True,
-    "snow_clearance_ratings":True,
-    "snowshoe_ratings":False,
-    "user_categories":True,
-    "via_ferrata_ratings":False,
-    "waypoint_types":True,
-    "weather_station_types":True,
-    "hut_status":True,
-}
+# get attribute list needed by UI
+attribute_names = dict()
+fields = json.load(open("./src/js/constants/fieldsProperties.json"))
+for field in fields.values():
+    if "values" in field:
+        values = field["values"]
+        if isinstance(values, str):
+            attribute_names[values] = field.get("i18n", True)
 
+# sort by key to help git tracking
+attribute_names = {key: attribute_names[key] for key in sorted(attribute_names)}
+
+# store this attribute in result
 for attribute_name in attribute_names:
     result["attributes"][attribute_name] = attributes[attribute_name]
 
-# del result["attributes"]["langs_priority"]
-# del result["attributes"]["default_langs"]
-
-# result["valid_associations"] = get_fields('associations')['valid_associations']
+# store letter_types
 result["letter_types"] = get_fields('document_types')['ALL']
 
-# result["sortable_search_attributes"] = get_fields('sortable_search_attributes')
-
+# save result
 with open("./src/js/constants/common.js", "w") as f:
     f.write("export default " + json.dumps(result, indent=4))
 
+# and update attributes that need a translation
 with open("./src/translations/fixed_strings_common_js.vue", "w") as f:
     f.write("<template>\n")
-    f.write("    <!-- auto-generated by import_common.py -->\n")
+    f.write("    <!-- auto-generated by tools/update-c2c-common.py -->\n")
     f.write("    <span>\n")
 
-    for attribute_name in attribute_names:
+    for field in sorted(fields):
+        f.write("        <span v-translate>{}</span>\n".format(field))
+
+    for attribute_name in sorted(attribute_names):
         if attribute_names[attribute_name]: # does it need translation ?
+            f.write("        <!-- {} -->\n".format(attribute_name))
             for value in attributes[attribute_name]:
                 f.write("        <span v-translate>{}</span>\n".format(value))
 
