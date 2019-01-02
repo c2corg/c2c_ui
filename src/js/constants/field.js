@@ -227,8 +227,7 @@ Field.prototype.getError = function(document, locale) {
     return null
 }
 
-Field.prototype.isVisibleForActivities = function(activities){
-
+Field.prototype.isVisibleForActivities = function(activities) {
     var result = true
 
     if (this.activities && activities) {
