@@ -199,12 +199,6 @@
             categorizedFields() {
                 var result = []
 
-                // fake doc build from URL filter
-                var documentFromUrlFilter = {
-                    activities: this.urlActivities,
-                    waypoint_types: this.urlWaypoint_types
-                }
-
                 for (let category of Object.keys(categorizedFields[this.documentType])) {
                     let temp = {
                         name: category,
@@ -223,7 +217,7 @@
                                 temp.activeCount += 1
                             }
 
-                            if (field.isVisibleFor(documentFromUrlFilter)) {
+                            if (field.isVisibleForActivities(this.urlActivities)) {
                                 temp.fields.push(field)
                             }
                         }

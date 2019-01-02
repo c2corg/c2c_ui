@@ -37,5 +37,16 @@ export default {
         const blob = new Blob([content], { type: fileType })
 
         saveAs(blob, fileName)
+    },
+
+    // does the intersection of two arrays is empty ?
+    intersectionIsNotNull(arrayA, arrayB) {
+        for (let itemA of arrayA) {
+            if (arrayB.includes(itemA)) {
+                return true
+            }
+        }
+
+        return false
     }
 }

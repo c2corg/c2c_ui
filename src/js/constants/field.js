@@ -1,5 +1,6 @@
 import common from './common.js'
 import fieldsProperties from './fieldsProperties.json'
+import utils from '@/js/utils'
 
 const attrs = common.attributes
 
@@ -226,30 +227,32 @@ Field.prototype.getError = function(document, locale) {
     return null
 }
 
+Field.prototype.isVisibleForActivities = function(activities) {
+    var result = true
+
+    if (this.activities && activities) {
+        result = utils.intersectionIsNotNull(this.activities, activities)
+    }
+
+    return result
+}
+
 Field.prototype.isVisibleFor = function(document) {
     if (!this.extraIsVisibleFor(document)) {
         return false
     }
 
-    var result = true
-
-    const intersectionIsNotNull = function(arrayA, arrayB) {
-        for (let itemA of arrayA) {
-            if (arrayB.includes(itemA)) {
-                return true
-            }
-        }
-
+    if (!this.isVisibleForActivities(document.activities)) {
         return false
     }
 
-    if (this.activities && document.activities) {
-        result = intersectionIsNotNull(this.activities, document.activities)
-    } else if (this.waypoint_types) {
+    var result = true
+
+    if (this.waypoint_types) {
         if (document.waypoint_type) {
             result = this.waypoint_types.includes(document.waypoint_type)
         } else if (document.waypoint_types) {
-            result = intersectionIsNotNull(this.waypoint_types, document.waypoint_types)
+            result = utils.intersectionIsNotNull(this.waypoint_types, document.waypoint_types)
         } else {
             result = false
         }
