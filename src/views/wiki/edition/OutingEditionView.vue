@@ -10,9 +10,17 @@
                 <form-input-row :document="document" :field="fields.title" is-expanded/>
 
                 <form-row :label="$gettext('Dates')" is-grouped>
-                    <form-input :document="document" :field="fields.date_start" prefix="start" @input="handleDates"/>
+                    <form-input
+                        :document="document"
+                        :field="fields.date_start"
+                        :prefix="$gettext('start')"
+                        @input="handleDates"/>
                     <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
-                    <form-input v-show="showBothDates" :document="document" :field="fields.date_end" prefix="end"/>
+                    <form-input
+                        v-show="showBothDates"
+                        :document="document"
+                        :field="fields.date_end"
+                        :prefix="$gettext('end')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
@@ -28,20 +36,20 @@
                 <map-input-row :document="document" geom-detail-editable/>
             </tab-item>
 
-            <tab-item :title="$gettext('detailled informations')">
+            <tab-item :title="$gettext('detailed informations')">
                 <form-input-row :document="document" :field="fields.activities"/>
 
                 <form-input-row :document="document" :field="fields.partial_trip" />
                 <form-input-row :document="document" :field="fields.length_total" />
 
                 <form-row :label="$gettext('Elevation')" is-grouped>
-                    <form-input :document="document" :field="fields.elevation_min" prefix="min"/>
-                    <form-input :document="document" :field="fields.elevation_max" prefix="max"/>
+                    <form-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')"/>
+                    <form-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')"/>
                 </form-row>
 
                 <form-row :label="$gettext('height_diff')" is-grouped>
-                    <form-input :document="document" :field="fields.height_diff_up" prefix="up"/>
-                    <form-input :document="document" :field="fields.height_diff_down" prefix="down"/>
+                    <form-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
+                    <form-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.height_diff_difficulties"/>
@@ -69,8 +77,8 @@
                 <form-input-row :document="document" :field="fields.hiking_rating"/>
 
                 <form-row :label="$gettext('MTB rating')" is-grouped>
-                    <form-input :document="document" :field="fields.mtb_down_rating" prefix="down"/>
-                    <form-input :document="document" :field="fields.mtb_up_rating" prefix="up"/>
+                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('down')"/>
+                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('up')"/>
                 </form-row>
             </tab-item>
 
@@ -85,8 +93,8 @@
                 <form-input-row :document="document" :field="fields.elevation_down_snow"/>
 
                 <form-row :label="$gettext('Snow')" is-grouped>
-                    <form-input :document="document" :field="fields.snow_quantity" prefix="quantity"/>
-                    <form-input :document="document" :field="fields.snow_quality" prefix="quality"/>
+                    <form-input :document="document" :field="fields.snow_quantity" :prefix="$gettext('quantity')"/>
+                    <form-input :document="document" :field="fields.snow_quality" :prefix="$gettext('quality')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>

@@ -2,11 +2,9 @@
     <div v-if="document" class="section" :class="{preview: isPreview}">
         <html-header title="Edit a document"/>
         <h1 class="title">
-            <!-- TODO  v-translate -->
-            Edit
+            {{ $gettext('Edit in ' + $route.params.lang) }}
+            :
             <document-title :document="document"/>
-            in
-            {{ $gettext($route.params.lang) }}
             <button class="button is-size-6" @click="isPreview=!isPreview">
                 <fa-icon :icon="isPreview ? 'edit' : 'eye'" />
                 &nbsp;

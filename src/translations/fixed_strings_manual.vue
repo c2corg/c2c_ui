@@ -7,6 +7,14 @@
         <span v-translate>routes</span>
         <!-- TODO 10 types, plural -->
 
+        <span v-translate>Edit in fr</span>
+        <span v-translate>Edit in de</span>
+        <span v-translate>Edit in it</span>
+        <span v-translate>Edit in en</span>
+        <span v-translate>Edit in es</span>
+        <span v-translate>Edit in eu</span>
+        <span v-translate>Edit in ca</span>
+
         <!-- strings in field.js -->
         <span v-translate>This field must be a valid ISBN.</span>
     </span>
