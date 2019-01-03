@@ -2046,6 +2046,7 @@ msgid "modifications"
 msgstr ""
 
 #: src/views/wiki/WhatsNewView.vue:7
+msgctxt "modification date"
 msgid "Modified the"
 msgstr ""
 
@@ -2602,14 +2603,19 @@ msgstr ""
 msgid "publication_date"
 msgstr ""
 
+#: src/views/wiki/edition/OutingEditionView.vue:97
+msgctxt "snow"
+msgid "quality"
+msgstr ""
+
 #: src/components/generics/markers/MarkerQuality.vue:2
 #: src/translations/fixed_strings_common_js.vue:146
-#: src/views/wiki/edition/OutingEditionView.vue:97
 #: src/views/wiki/edition/utils/QualityInputRow.vue:2
 msgid "quality"
 msgstr ""
 
 #: src/views/wiki/edition/OutingEditionView.vue:96
+msgctxt "snow"
 msgid "quantity"
 msgstr ""
 

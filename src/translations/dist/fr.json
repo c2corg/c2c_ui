@@ -412,6 +412,9 @@
     "mixed_rating": "Cotation mixte",
     "Mobile application": "Application mobile",
     "modifications": "Conséquences sur les pratiques",
+    "Modified the": {
+      "modification date": "Modifié le"
+    },
     "mollasse_calcaire": "molasse",
     "More info": "Plus d'information",
     "more_than_3m": "supérieur à 3 mois",
@@ -532,8 +535,13 @@
     "public_transportation_rating": "Accessibilité en transports en commun",
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
-    "quality": "Complétude",
-    "quantity": "quantité",
+    "quality": {
+      "snow": "qualité",
+      "$$noContext": "Complétude"
+    },
+    "quantity": {
+      "snow": "quantité"
+    },
     "quartzite": "quartzite",
     "quiet": "non fréquenté",
     "raid": "raid",

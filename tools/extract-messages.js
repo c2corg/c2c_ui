@@ -7,6 +7,7 @@ https://www.gnu.org/software/gettext/manual/gettext.html
 Supported patterns in .vue and .js files :
 
     $gettext('msgid')
+    $gettext('msgid', 'msgctx')
 
 Supported pattern in .vue file, inside <template /> part :
 
@@ -94,7 +95,7 @@ Process.prototype.parseScript = function(file, data, regex) {
         while ((msgData = regex.exec(lines[i])) !== null) {
 
             let msgid = msgData[1]
-            let msgctxt = undefined
+            let msgctxt = msgData[2]
 
             this.push(`${file}:` + (i+1), msgctxt, msgid)
         }
@@ -131,6 +132,12 @@ Process.prototype.parseTemplate = function(file, data) {
 
         if (node.children[0].type !== NODETYPE_TEXT) {
             throw new Error(`In ${position}\nInterploation is not yet supported. Please use $gettext`)
+        }
+
+        for(let attribute of node.attrsList){
+            if(attribute.name==='translate-context') {
+                msgctxt = attribute.value
+            }
         }
 
         let msgid = node.children[0].text

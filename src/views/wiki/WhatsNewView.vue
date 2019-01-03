@@ -4,7 +4,7 @@
 
         <table>
             <tr>
-                <th v-translate>Modified the</th>
+                <th v-translate translate-context="modification date">Modified the</th>
                 <th v-translate>Author</th>
                 <th v-translate>Links</th>
                 <th/>

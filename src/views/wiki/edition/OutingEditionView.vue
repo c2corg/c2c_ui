@@ -93,8 +93,8 @@
                 <form-input-row :document="document" :field="fields.elevation_down_snow"/>
 
                 <form-row :label="$gettext('Snow')" is-grouped>
-                    <form-input :document="document" :field="fields.snow_quantity" :prefix="$gettext('quantity')"/>
-                    <form-input :document="document" :field="fields.snow_quality" :prefix="$gettext('quality')"/>
+                    <form-input :document="document" :field="fields.snow_quantity" :prefix="$gettext('quantity', 'snow')"/>
+                    <form-input :document="document" :field="fields.snow_quality" :prefix="$gettext('quality', 'snow')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>

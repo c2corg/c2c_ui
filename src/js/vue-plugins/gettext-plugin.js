@@ -19,19 +19,33 @@ function cleanMessageId(msgid) {
     return msgid
 }
 
-function getTranslation(lang, messages, msgid) { //, n = 1, context = null, defaultPlural = null){
+function getTranslation(lang, messages, msgid, msgctxt) { //, n = 1, context = null, defaultPlural = null){
     if (messages === undefined) {
         // `messages are not yet available`
         return msgid
     }
 
-    if (messages[msgid] === undefined) {
+    const message = messages[msgid]
+
+    if (message === undefined) {
         // eslint-disable-next-line
         // console.warn(`Untranslated ${lang} key found: "${msgid}"`)
         return msgid
     }
 
-    return messages[msgid]
+    // message can be a key-value object, if a context exists for this msgid
+    if (msgctxt !== undefined) {
+        return message[msgctxt] || msgid
+    }
+
+    // if context isn't provided, message may be a string if this msgid hasn't other version with context
+    if (typeof message === 'string') {
+        return message
+    }
+
+    // otherwise, it's store in '$$noContext' key
+    // note that '$$noContext' is a reserved context :)
+    return message['$$noContext'] || msgid
 }
 
 function getMessages(lang) {
@@ -128,8 +142,8 @@ export default function install(Vue) {
                 })
             },
 
-            gettext(msgid) {
-                return getTranslation(this.current, this.translations[this.current], msgid)
+            gettext(msgid, msgctxt) {
+                return getTranslation(this.current, this.translations[this.current], msgid, msgctxt)
             },
 
             updateElement(element) {
@@ -141,9 +155,14 @@ export default function install(Vue) {
                     }
 
                     element.dataset.msgid = cleanMessageId(element.innerText)
+
+                    let context = element.attributes.getNamedItem('translate-context')
+                    if (context) {
+                        element.dataset.msgctxt = context.value
+                    }
                 }
 
-                element.innerText = this.gettext(element.dataset.msgid)
+                element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt)
             }
         }
     })
