@@ -2,7 +2,7 @@
     <div class="markdown-editor" :class="{'is-active':focus, 'fullScreen':fullScreen}">
         <div class="button-bar">
             <div class="buttons has-addons is-pulled-right">
-                <editor-button icon="question-circle" :tooltip="$gettext('Help')"/>
+                <editor-button icon="question-circle" :tooltip="$gettext('help')"/>
 
                 <span>&nbsp;</span>
 
