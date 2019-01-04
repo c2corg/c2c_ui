@@ -72,6 +72,16 @@ const bundleAnalyzerConfig = {
 }
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
+    // add an url conf for local API devloppers :
+    config.urlsConfigurations["localhost"] = {
+        name: 'localhost',
+        api: 'http://localhost:6543',
+        media: 'https://sos.exo.io/c2corg-demov6-active',
+        imageBackend: 'https://images.demov6.camptocamp.org',
+        forum: 'https://forum.demov6.camptocamp.org',
+        readWrite: true
+    }
+
     config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che' // Key valid for localhost (Expires 08/11/2019)
     config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj'
 
