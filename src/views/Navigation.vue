@@ -154,7 +154,7 @@
 </template>
 
 <script>
-    import config from '@/js/config'
+    import config from '@/js/config.ts'
 
     export default {
 

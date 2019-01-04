@@ -1,5 +1,5 @@
 import axios from 'axios'
-import config from '@/js/config'
+import config from '@/js/config.ts'
 
 /// ////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :

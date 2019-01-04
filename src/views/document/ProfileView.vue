@@ -53,7 +53,7 @@
 
 <script>
 
-    import config from '@/js/config'
+    import config from '@/js/config.ts'
     import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'

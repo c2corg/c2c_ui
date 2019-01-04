@@ -1,5 +1,5 @@
 import constants from '@/js/constants'
-import config from '@/js/config.js'
+import config from '@/js/config.ts'
 
 import Vue from 'vue'
 import Router from 'vue-router'
