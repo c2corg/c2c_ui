@@ -1,4 +1,4 @@
-import common from './common.js'
+import common from './common.json'
 import fieldsProperties from './fieldsProperties.json'
 import utils from '@/js/utils'
 

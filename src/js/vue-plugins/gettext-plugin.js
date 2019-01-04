@@ -156,7 +156,7 @@ export default function install(Vue) {
 
                     element.dataset.msgid = cleanMessageId(element.innerText)
 
-                    let context = element.attributes.getNamedItem('translate-context')
+                    const context = element.attributes.getNamedItem('translate-context')
                     if (context) {
                         element.dataset.msgctxt = context.value
                     }
