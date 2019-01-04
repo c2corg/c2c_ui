@@ -35,7 +35,7 @@ They are defined in package.json
 * **extract-messages**: Build `/src/translations/po/c2corg_ui-client.pot` from all source, the list of message that must be translated
 * **generate-docs**: Generate code documentation
 * **generate-icons**: Generate Font-Awesome custom icons
-* **update-c2c-common**: `/src/js/constants/common.js` is build from c2c_common repo. Here is the task for this !
+* **update-c2c-common**: `/src/js/constants/common.json` is build from c2c_common repo. Here is the task for this !
 
 
 ## vue-camptocamp concepts
