@@ -1,4 +1,4 @@
-import config from '@/js/config.js'
+import config from '@/js/config.ts'
 
 export default {
     /* 200*200 px images */
