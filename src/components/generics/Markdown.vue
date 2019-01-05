@@ -88,7 +88,6 @@
                     addClasses('div[c2c\\:role=info]', ['notification', 'is-info'])
                     addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning'])
                     addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger'])
-                    addClasses('figure[c2c\\:position]', ['markdown-figure']) // TODO remove this
                     addClasses('table[c2c\\:role=ltag]', ['table'])
                 }
             },
@@ -157,8 +156,7 @@
         vertical-align:bottom;
     }
 
-    // TODO MARKDOWN PARSER : figure[c2c\:role=figure]
-    .markdown-figure{
+    figure[c2c\:role=embedded-figure]{
         border-radius: 4px;
         border:1px solid #DDD;
         padding:0.5rem;
