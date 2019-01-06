@@ -15,7 +15,7 @@ On <http://localhost:8000>, you will have on-click buttons for all features :
 
 * `serve` : launch a ready-to-code server with hot reload
 * `build` : build a ready-to-deploy production site
-* `build:gitlab` : a demo site, that can be deployed on any static file server.
+* `build:github` : a demo site, that can be deployed on any static file server.
 * `lint` : do you have followed every coding good practices ?
 * `extract-messages` : if you have modified any textual string, please run this task. it will update `.pot` translation files
 * `generates-docs` : Generate documentation files

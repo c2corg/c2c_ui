@@ -10,13 +10,13 @@ npm run serve
 
 This environment is the development environment. It comes with hot-reload feature : modify a file, save it, and you'll see your modification in live!. It uses by default demo API, and it's read-write.
 
-### `gitlab`
+### `github`
 
 ```
-npm run build:gitlab
+npm run build:github
 ```
 
-It's purpose is to be deployed on gitlab pages. Note that if you have forked the official repo, you will have this site deployed here : `https://<your_gitlab_name>.gitlab.io/vue-camptocamp/`
+It's purpose is to be deployed on github pages. 
 
 This environment also checks bundles sizes on build step.
 

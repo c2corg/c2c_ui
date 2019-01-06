@@ -73,7 +73,7 @@ const bundleAnalyzerConfig = {
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     // add an url conf for local API devloppers :
-    config.urlsConfigurations["localhost"] = {
+    config.urlsConfigurations['localhost'] = {
         name: 'localhost',
         api: 'http://localhost:6543',
         media: 'https://sos.exo.io/c2corg-demov6-active',
@@ -87,25 +87,11 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 
     // dev bundles are huge, no check
     result.configureWebpack.performance.hints = false
-} else if (process.env.BUILD_ENV === 'gitlab') {
-    // gitlab pages does not support server redirection, can't use pretty urls
-    config.routerMode = undefined
-
-    // gitlab pages url is postfixed
-    result.baseUrl = '/vue-camptocamp/'
-
-    // set a warning if bundle size is too big
-    result.configureWebpack.performance.hints = 'warning'
-
-    // generate a report on bundle size
-    bundleAnalyzerConfig.analyzerMode = 'static'
-    bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html'
-    bundleAnalyzerConfig.defaultSizes = 'gzip'
 } else if (process.env.BUILD_ENV === 'github') {
-    // gitlab pages does not support server redirection, can't use pretty urls
+    // github pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined
 
-    // gitlab pages url is postfixed
+    // github pages url is postfixed
     result.baseUrl = '/c2c_ui/'
 
     // set a warning if bundle size is too big

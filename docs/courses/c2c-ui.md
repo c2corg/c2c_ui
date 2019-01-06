@@ -30,9 +30,10 @@ They are defined in package.json
 
 * **serve**: Serve development server, with hot relead.
 * **build**: Build production site
-* **build:gitlab**: Build demo site
+* **build:github**: Build demo site
 * **lint**: Check code compliance. Have a look on `no-fix` parameter!
-* **extract-messages**: Build `/src/translations/po/c2corg_ui-client.pot` from all source, the list of message that must be translated
+* **messages:extract**: Build `/src/translations/po/c2corg_ui-client.pot` from all source, the list of message that must be translated
+* **messages:compile**: get translations from transifex and compile them to json files
 * **generate-docs**: Generate code documentation
 * **generate-icons**: Generate Font-Awesome custom icons
 * **update-c2c-common**: `/src/js/constants/common.json` is build from c2c_common repo. Here is the task for this !
@@ -74,7 +75,7 @@ The framework used is [Bulma](https://bulma.io/)
 
 They are all based on [Font Aweseome](https://fontawesome.com/), more precisely on [SVG Javascript Core package](https://fontawesome.com/how-to-use/on-the-web/advanced/svg-javascript-core)
 
-* in-app javascript info : [bundle](https://cbeauchesne.gitlab.io/vue-camptocamp/bundle-analyzis.html)
+* in-app javascript info : [bundle](https://c2corg.github.io/c2c_ui/bundle-analyzis.html)
 * tree-shaking : [font-awesome-config.js](https://github.com/c2corg/c2c_ui/blob/master/src/js/vue-plugins/font-awesome-config.js)
 * and [custom icons](https://github.com/c2corg/c2c_ui/tree/master/src/assets/font-awesome-custom)
 
