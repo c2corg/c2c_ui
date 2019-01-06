@@ -52,7 +52,7 @@
 
 ## Bugs
 
-* on gitlab build, style on pagination fails
+* on github build, style on pagination fails
 
 ## Build
 
