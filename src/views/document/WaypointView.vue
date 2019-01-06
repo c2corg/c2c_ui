@@ -1,7 +1,10 @@
 <template>
     <div class="section">
         <document-view-header :document="document" :version="version" :promise="promise">
-            <icon-waypoint-type v-if="document" slot="icon-document" :waypoint-type="document.waypoint_type"/>
+            <icon-waypoint-type
+                v-if="document && document.waypoint_type"
+                slot="icon-document"
+                :waypoint-type="document.waypoint_type"/>
         </document-view-header>
 
         <div v-if="document" class="columns">
@@ -107,7 +110,7 @@
                     <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodFieldTitle" />
                 </div>
 
-                <div class="box" v-if="document.associations.waypoint_children.length">
+                <div class="box" v-if="document.associations.waypoint_children && document.associations.waypoint_children.length">
                     <h2 class="title is-2" v-translate>
                         Waypoints children
                     </h2>
@@ -116,13 +119,13 @@
                     </div>
                 </div>
 
-                <routes-box :document="document"/>
+                <routes-box v-if="!isDraftView" :document="document"/>
 
-                <recent-outings-box :document="document"/>
+                <recent-outings-box v-if="!isDraftView" :document="document"/>
 
-                <images-box :document="document" ref="imagesBox"/>
+                <images-box v-if="!isDraftView" :document="document" ref="imagesBox"/>
 
-                <comments-box :document="document" />
+                <comments-box v-if="!isDraftView" :document="document" />
             </div>
         </div>
     </div>

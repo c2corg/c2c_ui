@@ -1,5 +1,5 @@
 <template>
-    <div v-if="document.associations && document.associations.images.length" class="box no-print">
+    <div v-if="document.associations && document.associations.images" class="box no-print">
         <gallery :images="document.associations.images" ref="gallery"/>
     </div>
 </template>
