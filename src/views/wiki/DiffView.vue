@@ -182,7 +182,7 @@
             },
 
             getKeys(obj1, obj2, excludedKeys) {
-                var keys = Object.keys(obj1).concat(Object.keys(obj2))
+                let keys = Object.keys(obj1).concat(Object.keys(obj2))
 
                 excludedKeys = excludedKeys || []
 
@@ -202,9 +202,9 @@
                     return 'Waiting for other version'
                 }
 
-                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry', 'cooked'])
+                const keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry', 'cooked'])
 
-                for (let key of keys) {
+                for (const key of keys) {
                     if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {
                         this.diffProperties[key] = {
                             old: this.oldVersion.document[key],
@@ -213,18 +213,18 @@
                     }
                 }
 
-                var oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang)
-                var newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang)
-                var localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version'])
+                const oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang)
+                const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang)
+                const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version'])
 
-                for (let key of localeKeys) {
-                    var oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n')
-                    var newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n')
+                for (const key of localeKeys) {
+                    const oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n')
+                    const newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n')
 
                     if (hasChanged(oldVal, newVal)) {
-                        let diff = diffMatchPatch.diff_main(oldVal, newVal)
+                        const diff = diffMatchPatch.diff_main(oldVal, newVal)
                         diffMatchPatch.diff_cleanupSemantic(diff)
-                        let html = diffMatchPatch.diff_prettyHtml(diff).split('<br>')
+                        const html = diffMatchPatch.diff_prettyHtml(diff).split('<br>')
 
                         // TODO bug : a block may be present on several lines...
                         // let result = []
@@ -257,7 +257,7 @@
                 if (versionId === 'prev') {
                     c2c[this.documentType].getHistory(this.documentId, this.lang)
                         .then(response => {
-                            let versions = response.data.versions
+                            const versions = response.data.versions
 
                             for (let i = 0; i < versions.length; i++) {
                                 if (versions[i].version_id === baseVersionId && i !== 0) {

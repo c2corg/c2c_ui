@@ -29,7 +29,7 @@ Vue.use(tooltip) // v-tooltip directive
 Vue.use(user) // vm.$user property
 
 new Vue({
-    router: router,
+    router,
     created() {
         this.$language.firstLoad()
     },

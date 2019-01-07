@@ -9,7 +9,7 @@ import config from '@/js/config.ts'
 // So let's polyfill it, whith a Promise-like object
 
 const ApiData = function(promise) {
-    let self = this
+    const self = this
 
     this.response = null
     this.error = null

@@ -17,7 +17,7 @@ function CamptocampApi() {
     this.association = new AssociationService(this)
     this.feed = new FeedService(this)
 
-    for (let type of constants.documentTypes) {
+    for (const type of constants.documentTypes) {
         this[type] = new DocumentService(this, type)
     }
 

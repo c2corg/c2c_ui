@@ -5,7 +5,7 @@ import utils from '@/js/utils'
 const attrs = common.attributes
 
 // values  can be a string : it describes a common.attributes fields
-for (let property of Object.values(fieldsProperties)) {
+for (const property of Object.values(fieldsProperties)) {
     if (property.values && typeof property.values === 'string') {
         property.values = attrs[property.values]
     }
@@ -140,7 +140,7 @@ Field.prototype.urlToValue = function(url) {
     }
 
     if (this.queryMode === 'valuesRangeSlider') {
-        let value = url || this.defaultUrlQuery
+        const value = url || this.defaultUrlQuery
         return value.split(',')
     }
 
@@ -157,7 +157,7 @@ Field.prototype.urlToValue = function(url) {
     }
 
     if (this.queryMode === 'input') {
-        let value = url || this.defaultUrlQuery
+        const value = url || this.defaultUrlQuery
 
         if (this.type === 'number') {
             return parseInt(value)
@@ -190,7 +190,7 @@ Field.prototype.getErrorObject = function(description) {
 
     return {
         name: errorName,
-        description: description
+        description
     }
 }
 
@@ -228,7 +228,7 @@ Field.prototype.getError = function(document, locale) {
 }
 
 Field.prototype.isVisibleForActivities = function(activities) {
-    var result = true
+    let result = true
 
     if (this.activities && activities) {
         result = utils.intersectionIsNotNull(this.activities, activities)
@@ -246,7 +246,7 @@ Field.prototype.isVisibleFor = function(document) {
         return false
     }
 
-    var result = true
+    let result = true
 
     if (this.waypoint_types) {
         if (document.waypoint_type) {

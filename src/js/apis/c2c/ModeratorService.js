@@ -41,7 +41,7 @@ ModeratorService.prototype.mergeDocuments = function(sourceDocumentId, targetDoc
 ModeratorService.prototype.revertDocument = function(documentId, lang, versionId) {
     return this.api.post('/documents/revert', {
         'document_id': documentId,
-        'lang': lang,
+        lang,
         'version_id': versionId
     })
 }

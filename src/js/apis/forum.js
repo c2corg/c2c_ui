@@ -24,16 +24,16 @@ Forum.prototype.getTopic = function(topicId) {
 
 Forum.prototype.createTopic = function(document_id, lang) {
     return this.post('/forum/topics', {
-        'document_id': document_id,
-        'lang': lang
+        document_id,
+        lang
     })
 }
 
 Forum.prototype.getLatest = function() {
-    var result = this.get('/latest.json')
+    const result = this.get('/latest.json')
 
     result.then(function(response) {
-        var users = {}
+        const users = {}
 
         response.data.users.forEach(function(user) {
             users[user.username] = user

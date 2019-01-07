@@ -25,7 +25,7 @@
         },
 
         mounted() {
-            for (let child of this.$children) {
+            for (const child of this.$children) {
                 child.$watch('visible', this.checkVisibility)
                 child.$watch('hasError', this.checkHasError)
             }
@@ -38,7 +38,7 @@
             checkVisibility() {
                 this.visible = false
 
-                for (let child of this.$children) {
+                for (const child of this.$children) {
                     if (child.visible) {
                         this.visible = true
                         return
@@ -48,7 +48,7 @@
             checkHasError() {
                 this.hasError = false
 
-                for (let child of this.$children) {
+                for (const child of this.$children) {
                     if (child.hasError === true) {
                         this.hasError = true
                     }

@@ -54,7 +54,7 @@
         created() {
             const levels = this.value ? JSON.parse(this.value) : []
 
-            for (let level of levels) {
+            for (const level of levels) {
                 if (level.level_place || level.level_place || level.level_place || level.level_place) {
                     this.levels.push(level)
                 }

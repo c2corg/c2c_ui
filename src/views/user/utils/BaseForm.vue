@@ -32,7 +32,7 @@
         },
 
         mounted() {
-            for (let child of this.$children) {
+            for (const child of this.$children) {
                 this.inputs[child.name] = child
                 child.$on('input', this.check)
             }
@@ -44,14 +44,14 @@
                     return
                 }
 
-                let errors = this.serverErrors.errors
+                const errors = this.serverErrors.errors
 
                 if (!errors) {
                     // TODO unexpected server error
                 } else {
                     this.serverMetaErrors = []
 
-                    for (let error of errors) {
+                    for (const error of errors) {
                         if (this.inputs[error.name]) {
                             this.inputs[error.name].errorMessage = error.description
                         } else {
@@ -62,7 +62,7 @@
             },
 
             check() {
-                for (let child of this.$children) {
+                for (const child of this.$children) {
                     if (child.hasError) {
                         this.hasError = true
                         return
@@ -81,7 +81,7 @@
                     return
                 }
 
-                for (let input of Object.values(this.inputs)) {
+                for (const input of Object.values(this.inputs)) {
                     input.errorMessage = null
                 }
 

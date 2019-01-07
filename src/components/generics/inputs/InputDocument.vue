@@ -181,10 +181,10 @@
                         this.$emit('add', value)
                     }
                 } else {
-                    var newValue = []
-                    var removed = false
+                    const newValue = []
+                    let removed = false
 
-                    for (let document of this.value_) {
+                    for (const document of this.value_) {
                         if (document.document_id === value.document_id) {
                             removed = true
                         } else {

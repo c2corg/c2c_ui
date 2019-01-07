@@ -3,10 +3,10 @@ import Field from './field.js'
 import documentsProperties from './documentsProperties.json'
 
 const getFieldsObject = function(fieldsArray) {
-    var result = {}
+    const result = {}
 
-    for (let def of fieldsArray) {
-        let field = new Field(def.id, def.properties)
+    for (const def of fieldsArray) {
+        const field = new Field(def.id, def.properties)
         result[field.name] = field
     }
 
@@ -29,8 +29,8 @@ function Constants() {
     this.objectDefinitions = documentsProperties
     this.letterToDocumentType = {}
 
-    for (let documentType of Object.keys(documentsProperties)) {
-        let documentProperties = documentsProperties[documentType]
+    for (const documentType of Object.keys(documentsProperties)) {
+        const documentProperties = documentsProperties[documentType]
         documentProperties.fields = getFieldsObject(documentProperties.fields)
         documentProperties.documentType = documentType
         this.letterToDocumentType[documentProperties.letter] = documentType

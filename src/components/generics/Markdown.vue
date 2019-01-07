@@ -31,7 +31,7 @@
     }
 
     const getFontAwesomeSrc = function(prefix, iconeName) {
-        let svgSource = icon({ prefix: prefix, iconName: iconeName }).html[0]
+        let svgSource = icon({ prefix, iconName: iconeName }).html[0]
         svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"')
         return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource)
     }
@@ -71,9 +71,9 @@
                 const container = this.$refs.container
 
                 const addClasses = function(cssSelector, classes) {
-                    var nodes = container.querySelectorAll(cssSelector)
+                    const nodes = container.querySelectorAll(cssSelector)
 
-                    for (let node of nodes) {
+                    for (const node of nodes) {
                         node.classList.add(...classes)
                     }
                 }
@@ -93,15 +93,15 @@
             },
 
             computeEmojis(emojis) {
-                for (let emoji of emojis) {
-                    let emojiSource = emoji.attributes['c2c:emoji-db'].value
-                    let svgName = emoji.attributes['c2c:svg-name'].value
+                for (const emoji of emojis) {
+                    const emojiSource = emoji.attributes['c2c:emoji-db'].value
+                    const svgName = emoji.attributes['c2c:svg-name'].value
                     emoji.src = getEmojiSrc(emojiSource, svgName) // `${svgCdns[emojiSource]}${svgName}.svg`
                 }
             },
 
             computeImages(images) {
-                for (let image of images) {
+                for (const image of images) {
                     image.src = config.urls.api + image.attributes['c2c:url-proxy'].value
                     image.addEventListener('click', () => {
                         this.$emit('click-image', parseInt(image.attributes['c2c:document-id'].value, 10))
@@ -110,7 +110,7 @@
             },
 
             computeAnchors(anchors) {
-                for (let anchor of anchors) {
+                for (const anchor of anchors) {
                     const attributes = anchor.attributes
 
                     // eslint-disable-next-line

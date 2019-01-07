@@ -37,7 +37,7 @@ LocalStorageItem.prototype.initialize = function(data) {
 }
 
 LocalStorageItem.prototype.assign = function(data) {
-    for (let key of Object.keys(data)) {
+    for (const key of Object.keys(data)) {
         this.data_[key] = data[key]
     }
 

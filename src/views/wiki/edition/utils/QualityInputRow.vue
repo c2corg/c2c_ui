@@ -18,7 +18,7 @@
     import FormRow from './FormRow'
 
     function hasActivities(doc, activities) {
-        for (let activity of activities) {
+        for (const activity of activities) {
             if (doc.activities.includes(activity)) {
                 return true
             }

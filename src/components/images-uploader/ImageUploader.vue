@@ -127,7 +127,7 @@
         },
 
         data() {
-            var result = {
+            const result = {
                 visibleDropdown: null,
                 status: STATUS_INITIAL,
                 percentCompleted: 0,

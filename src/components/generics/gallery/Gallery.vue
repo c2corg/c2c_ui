@@ -119,7 +119,7 @@
             },
 
             showFullscreen(imageId) {
-                for (let i in this.images) {
+                for (const i in this.images) {
                     if (this.images[i].document_id === imageId) {
                         this.activateLargeView(i)
                         break

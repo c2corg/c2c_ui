@@ -103,7 +103,7 @@
                 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
 
                 // compute data
-                var geom_detail = JSON.parse(this.document.geometry.geom_detail)
+                const geom_detail = JSON.parse(this.document.geometry.geom_detail)
 
                 if (geom_detail.type === 'MultiLineString') {
                     this.coords = []
@@ -157,7 +157,7 @@
                     totalDist += d
 
                     return {
-                        date: date,
+                        date,
                         ele: coord[2] || 0,
                         d: totalDist,
                         elapsed: timeAvailable ? date - startDate : undefined

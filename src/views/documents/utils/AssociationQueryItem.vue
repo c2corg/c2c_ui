@@ -43,23 +43,23 @@
 
         methods: {
             getUrlValue(documentType) {
-                let key = constants.objectDefinitions[documentType].letter
+                const key = constants.objectDefinitions[documentType].letter
 
                 return this.$route.query[key]
             },
             setUrlValue(documentType, value) {
-                let key = constants.objectDefinitions[documentType].letter
+                const key = constants.objectDefinitions[documentType].letter
 
-                var query = Object.assign({}, this.$route.query)
+                const query = Object.assign({}, this.$route.query)
                 query[key] = value === '' ? undefined : value
 
                 if (query[key] !== this.$route.query[key]) {
-                    this.$router.push({ query: query })
+                    this.$router.push({ query })
                 }
             },
 
             getValue(documentType) {
-                let urlValue = this.getUrlValue(documentType)
+                const urlValue = this.getUrlValue(documentType)
 
                 return urlValue ? String(urlValue).split(',').map(num => parseInt(num, 10)) : []
             },
@@ -71,15 +71,15 @@
             load() {
                 this.documents = []
 
-                for (let documentType of this.documentTypes) {
-                    for (let documentId of this.getValue(documentType)) {
+                for (const documentType of this.documentTypes) {
+                    for (const documentId of this.getValue(documentType)) {
                         this.documents.push(this.getDocument(documentType, documentId))
                     }
                 }
             },
 
             getDocument(documentType, documentId) {
-                let result = {
+                const result = {
                     document_id: documentId,
                     loading: true
                 }
@@ -93,9 +93,9 @@
             },
 
             add(document) {
-                let documentType = this.$documentUtils.getDocumentType(document.type)
+                const documentType = this.$documentUtils.getDocumentType(document.type)
 
-                let value = this.getValue(documentType)
+                const value = this.getValue(documentType)
 
                 if (value.includes(document.document_id)) {
                     return
@@ -107,8 +107,8 @@
             },
 
             remove(document) {
-                let documentType = this.$documentUtils.getDocumentType(document.type)
-                let value = this.getValue(documentType)
+                const documentType = this.$documentUtils.getDocumentType(document.type)
+                const value = this.getValue(documentType)
                 // remove
                 value.splice(value.indexOf(document.document_id), 1)
 

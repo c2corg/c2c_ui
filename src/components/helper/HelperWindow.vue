@@ -77,12 +77,12 @@
             },
 
             computeHtml(response) {
-                let cooked = response.data.cooked
+                const cooked = response.data.cooked
 
                 this.title = cooked.title
 
                 if (this.helper.anchor) {
-                    let content = document.createElement('div')
+                    const content = document.createElement('div')
                     content.innerHTML = cooked.description
 
                     const html = []
@@ -90,8 +90,8 @@
                     let mainNodeTag = null
                     this.headerFound = false
 
-                    for (let node of content.children) {
-                        let isHeader = node.nodeName.match(/^[hH]\d$/)
+                    for (const node of content.children) {
+                        const isHeader = node.nodeName.match(/^[hH]\d$/)
 
                         if (isHeader && !appending && node.id === this.helper.anchor) {
                             appending = true

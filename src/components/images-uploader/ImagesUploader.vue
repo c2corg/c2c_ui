@@ -93,8 +93,8 @@
 
             filesChange(event) {
                 // TODO : it must append, and check doublon...
-                for (let file of event.target.files) {
-                    let key = this.getFileKey(file)
+                for (const file of event.target.files) {
+                    const key = this.getFileKey(file)
 
                     if (this.files[key] === undefined) {
                         this.$set(this.files, key, file)
@@ -109,7 +109,7 @@
             computeDocuments() {
                 this.documents = []
 
-                for (let file of Object.values(this.files)) {
+                for (const file of Object.values(this.files)) {
                     if (file.document) {
                         this.documents.push(file.document)
                     }
@@ -122,7 +122,7 @@
             },
 
             onDeleteFile(file) {
-                let key = this.getFileKey(file)
+                const key = this.getFileKey(file)
                 if (this.files[key] !== undefined) {
                     this.$delete(this.files, key)
                     this.computeDocuments()

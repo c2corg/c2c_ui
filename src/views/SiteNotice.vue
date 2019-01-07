@@ -48,7 +48,7 @@
                 forum.readAnnouncement(this.lang).then(response => {
                     const data = response['data']
                     if (data['tags'].indexOf('visible') > -1) {
-                        let post = data.post_stream.posts[0]
+                        const post = data.post_stream.posts[0]
                         this.updatedAt = post.updated_at
 
                         if (this.readdenPostKey === post.updated_at) {
@@ -58,13 +58,13 @@
                         this.hasAnnouncement = true
 
                         // compute html, to split p
-                        let content = document.createElement('div')
+                        const content = document.createElement('div')
                         content.innerHTML = post.cooked
-                        let paragraphs = content.getElementsByTagName('p')
+                        const paragraphs = content.getElementsByTagName('p')
 
                         this.$refs.header.appendChild(paragraphs[0])
 
-                        for (let p of Array.from(paragraphs).slice(1)) {
+                        for (const p of Array.from(paragraphs).slice(1)) {
                             this.$refs.content.appendChild(p)
                         }
                     }

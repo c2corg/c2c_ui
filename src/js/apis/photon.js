@@ -16,7 +16,7 @@ Photon.prototype.constructor = Photon
 Photon.prototype.getPropositions = function(query, lang, centerWgs84) {
     const params = {
         q: query,
-        lang: lang,
+        lang,
         lon: centerWgs84[0],
         lat: centerWgs84[1]
     }

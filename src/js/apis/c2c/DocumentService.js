@@ -13,13 +13,13 @@ DocumentService.prototype.get = function(id, lang) {
 }
 
 DocumentService.prototype.getCooked = function(id, prefered_lang) {
-    var promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`)
+    const promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`)
 
     return promise
 }
 
 DocumentService.prototype.getVersion = function(id, lang, versionId) {
-    let url = '/' + this.documentType + 's/' + id + '/' + lang + '/' + versionId
+    const url = '/' + this.documentType + 's/' + id + '/' + lang + '/' + versionId
     return this.api.get(url)
 }
 

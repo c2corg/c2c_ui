@@ -131,7 +131,7 @@
         computed: {
 
             descriptionPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
+                const type = this.document ? this.document.waypoint_type : undefined
 
                 if (type === 'access') {
                     return this.$gettext('Describe here the waypoint')
@@ -141,7 +141,7 @@
             },
 
             accessPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
+                const type = this.document ? this.document.waypoint_type : undefined
 
                 if (type === 'access') {
                     return this.$gettext('Describe pt access')
@@ -155,7 +155,7 @@
             },
 
             accessPeriodPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
+                const type = this.document ? this.document.waypoint_type : undefined
 
                 if (type === 'hut' || type === 'gite' || type === 'camp_site') {
                     return this.$gettext('Describe opening periods')

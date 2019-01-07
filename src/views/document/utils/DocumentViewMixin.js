@@ -77,7 +77,7 @@ export default {
                 return null
             }
 
-            let doc = this.isVersionView ? this.promise.data.document : this.promise.data
+            const doc = this.isVersionView ? this.promise.data.document : this.promise.data
 
             return doc
         },
@@ -153,7 +153,7 @@ export default {
         },
 
         updateUrl() {
-            var title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
+            let title = this.$documentUtils.getDocumentTitle(this.document, this.lang)
 
             // transform any unocde into it'sd ascii value
             title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '')

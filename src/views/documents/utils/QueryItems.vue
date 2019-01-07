@@ -197,10 +197,10 @@
             },
 
             categorizedFields() {
-                var result = []
+                const result = []
 
-                for (let category of Object.keys(categorizedFields[this.documentType])) {
-                    let temp = {
+                for (const category of Object.keys(categorizedFields[this.documentType])) {
+                    const temp = {
                         name: category,
                         activeCount: 0,
                         fields: []
@@ -208,8 +208,8 @@
 
                     let addCategory = false
 
-                    for (let name of categorizedFields[this.documentType][category]) {
-                        let field = this.fields[name]
+                    for (const name of categorizedFields[this.documentType][category]) {
+                        const field = this.fields[name]
                         if (field !== undefined) {
                             addCategory = true
 
@@ -234,9 +234,9 @@
 
         methods: {
             refreshSliders() {
-                for (let dropdown of this.$children) {
+                for (const dropdown of this.$children) {
                     if (dropdown.isActive) {
-                        for (let queryItem of dropdown.$children) {
+                        for (const queryItem of dropdown.$children) {
                             queryItem.refreshSlider()
                         }
                     }

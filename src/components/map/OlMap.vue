@@ -161,7 +161,7 @@
                 mapLayers: cartoLayers,
 
                 // slope layers
-                dataLayers: dataLayers,
+                dataLayers,
 
                 // bidiv layer
                 biodivLayer: new ol.layer.Vector({
@@ -230,7 +230,7 @@
 
             urlValue: {
                 get() {
-                    var result = this.$route.query.bbox
+                    const result = this.$route.query.bbox
                     return result ? result.replace('%252C', ',').split(',').map(num => parseInt(num, 10)) : undefined
                 }
             },
@@ -261,7 +261,7 @@
         },
         watch: {
             documents: {
-                handler: function() {
+                handler() {
                     this.drawDocumentMarkers()
                     this.fitMapToDocuments()
                 },
@@ -339,21 +339,21 @@
         methods: {
 
             setModifyInteractions() {
-                let source = this.documentsLayer.getSource()
-                let modify = new ol.interaction.Modify({ source })
+                const source = this.documentsLayer.getSource()
+                const modify = new ol.interaction.Modify({ source })
 
                 this.map.addInteraction(modify)
                 this.map.addInteraction(new ol.interaction.Snap({ source }))
 
                 modify.on('modifyend', (event) => {
-                    for (let feature of event.features.getArray()) {
+                    for (const feature of event.features.getArray()) {
                         this.updateDocumentGeometryFromFeature(feature)
                     }
                 })
             },
 
             setDrawInteraction() {
-                let source = this.documentsLayer.getSource()
+                const source = this.documentsLayer.getSource()
 
                 if (this.drawInteraction) {
                     this.map.removeInteraction(this.drawInteraction)
@@ -366,12 +366,12 @@
 
                 if (!this.editedDocument.geometry.geom) {
                     this.drawInteraction = new ol.interaction.Draw({
-                        source: source,
+                        source,
                         type: 'Point'
                     })
                 } else if (this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
                     this.drawInteraction = new ol.interaction.Draw({
-                        source: source,
+                        source,
                         type: 'LineString'
                     })
                 }
@@ -387,7 +387,7 @@
 
             // https://openlayers.org/en/latest/examples/drag-and-drop.html
             setDragAndDropInteraction() {
-                let dragAndDrop = new ol.interaction.DragAndDrop({
+                const dragAndDrop = new ol.interaction.DragAndDrop({
                     formatConstructors: [ol.format.GPX, ol.format.KML]
                 })
 
@@ -399,7 +399,7 @@
             },
 
             updateDocumentGeometryFromFeature(feature) {
-                let document = feature.get('document')
+                const document = feature.get('document')
 
                 if (!document) {
                     return
@@ -409,8 +409,8 @@
             },
 
             setDocumentGeometryFromGpx(gpx) {
-                let gpxFormat = new ol.format.GPX()
-                let feature = gpxFormat.readFeature(gpx, { featureProjection: 'EPSG:3857' })
+                const gpxFormat = new ol.format.GPX()
+                const feature = gpxFormat.readFeature(gpx, { featureProjection: 'EPSG:3857' })
 
                 this.setDocumentGeometryFromFeature(feature)
             },
@@ -427,7 +427,7 @@
             },
 
             setDocumentGeometry(document, geometry) {
-                let geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
+                const geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry)
 
                 if (geoJsonGeometry.type === 'Point') {
                     // remove elevation and timestamp
@@ -437,7 +437,7 @@
                     document.geometry.geom_detail = JSON.stringify(geoJsonGeometry)
 
                     if (!document.geometry.geom) {
-                        let mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry
+                        const mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry
                         this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
                     }
                 } else {
@@ -446,8 +446,8 @@
             },
 
             drawDocumentMarkers() {
-                var documentsSource = this.documentsLayer.getSource()
-                var waypointsSource = this.waypointsLayer.getSource()
+                const documentsSource = this.documentsLayer.getSource()
+                const waypointsSource = this.waypointsLayer.getSource()
 
                 documentsSource.clear()
                 waypointsSource.clear()
@@ -455,14 +455,14 @@
                 this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true))
                 this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false))
 
-                for (let document of this.documents || []) {
+                for (const document of this.documents || []) {
                     this.addDocumentFeature(document, documentsSource)
 
                     if (document.associations && !this.editable) {
-                        for (let waypoint of document.associations.waypoints || []) {
+                        for (const waypoint of document.associations.waypoints || []) {
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }
-                        for (let waypoint of document.associations.waypoint_children || []) {
+                        for (const waypoint of document.associations.waypoint_children || []) {
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }
                     }
@@ -474,10 +474,10 @@
                     return
                 }
 
-                let title = this.$documentUtils.getDocumentTitle(document)
+                const title = this.$documentUtils.getDocumentTitle(document)
 
                 if (document.geometry.geom) {
-                    let feature = this.addFeature(
+                    const feature = this.addFeature(
                         source,
                         JSON.parse(document.geometry.geom),
                         style || getDocumentPointStyle(document, title, false),
@@ -503,7 +503,7 @@
                     return
                 }
 
-                let feature = geoJSONFormat.readFeature(data)
+                const feature = geoJSONFormat.readFeature(data)
 
                 feature.set('normalStyle', normalStyle)
 
@@ -533,8 +533,8 @@
 
                 this.hasBiodivsportAreas = false
 
-                for (let result of results) {
-                    let geometry = geoJSONFormat.readGeometry(result['geometry'], {
+                for (const result of results) {
+                    const geometry = geoJSONFormat.readGeometry(result['geometry'], {
                         dataProjection: 'EPSG:4326',
                         featureProjection: 'EPSG:3857'
                     })
@@ -570,12 +570,12 @@
             // If user want's to filter with map, it will send extent to url
             // otherwise, it set bbox url to undefined
             sendBoundsToUrl() {
-                var bounds = this.view.calculateExtent()
-                var query = Object.assign({}, this.$route.query)
+                const bounds = this.view.calculateExtent()
+                const query = Object.assign({}, this.$route.query)
 
                 query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined
                 if (query.bbox !== this.$route.query.bbox) {
-                    this.$router.push({ query: query })
+                    this.$router.push({ query })
                 }
             },
 
@@ -584,7 +584,7 @@
                     return
                 }
 
-                var extent = this.documentsLayer.getSource().getExtent()
+                let extent = this.documentsLayer.getSource().getExtent()
 
                 if (extent.filter(isFinite).length !== 4) {
                     // if there is infnity, default extent
@@ -601,7 +601,7 @@
             },
 
             onPointerMove(event) {
-                var this_ = this
+                const this_ = this
 
                 this.highlightedDocument = null
 
@@ -635,7 +635,7 @@
                 // * add a spinner showing that it's waiting
                 // * remove handler once it's loaded
                 const setCenter = function() {
-                    var position = this.geolocation.getPosition()
+                    const position = this.geolocation.getPosition()
                     this.view.setCenter(position)
                 }
 
@@ -643,7 +643,7 @@
             },
 
             searchRecenterPropositions(event) {
-                let query = event.target.value
+                const query = event.target.value
 
                 if (query && query.length >= 3) {
                     const center = this.view.getCenter()

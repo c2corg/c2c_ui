@@ -60,7 +60,7 @@
         },
 
         beforeMount() {
-            let fields = constants.objectDefinitions[this.documentType].fields
+            const fields = constants.objectDefinitions[this.documentType].fields
 
             if (this.documentType === 'area') {
                 this.columnDefs = [

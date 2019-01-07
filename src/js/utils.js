@@ -41,7 +41,7 @@ export default {
 
     // does the intersection of two arrays is empty ?
     intersectionIsNotNull(arrayA, arrayB) {
-        for (let itemA of arrayA) {
+        for (const itemA of arrayA) {
             if (arrayB.includes(itemA)) {
                 return true
             }

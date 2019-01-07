@@ -27,11 +27,11 @@
                     return (this.$route.query.date || '') + ','
                 },
                 set(value) {
-                    var query = Object.assign({}, this.$route.query)
+                    const query = Object.assign({}, this.$route.query)
                     query.date = value
 
                     if (query.date !== this.$route.query.date) {
-                        this.$router.push({ query: query })
+                        this.$router.push({ query })
                     }
                 }
             }

@@ -30,7 +30,7 @@
         mounted() {
             this.tabs = this.$children
 
-            for (let tab of this.tabs) {
+            for (const tab of this.tabs) {
                 tab.isActive = false
             }
 
@@ -43,7 +43,7 @@
                     return
                 }
 
-                for (let item of this.tabs) {
+                for (const item of this.tabs) {
                     if (item.isActive) {
                         item.isActive = false
                         break

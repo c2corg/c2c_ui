@@ -113,14 +113,14 @@ export default {
                 }
 
                 // Add associations presents in url query
-                for (let letter of Object.keys(this.$route.query)) {
-                    let documentType = this.$documentUtils.getDocumentType(letter)
+                for (const letter of Object.keys(this.$route.query)) {
+                    const documentType = this.$documentUtils.getDocumentType(letter)
 
                     if (documentType && this.$route.query[letter]) {
                         // Value may be a number or a string
-                        let documentIds = String(this.$route.query[letter]).split(',')
+                        const documentIds = String(this.$route.query[letter]).split(',')
 
-                        for (let documentId of documentIds) {
+                        for (const documentId of documentIds) {
                             c2c[documentType].get(documentId).then(response => {
                                 this.$documentUtils.addAssociation(this.document, response.data)
                             })
@@ -200,8 +200,8 @@ export default {
         hasError() {
             let hasError = false
 
-            for (let field of Object.values(this.fields)) {
-                let error = field.getError(this.document, this.editedLocale)
+            for (const field of Object.values(this.fields)) {
+                const error = field.getError(this.document, this.editedLocale)
                 hasError = hasError || error !== null
                 field.error = error
             }
@@ -213,8 +213,8 @@ export default {
             // TODO : errors === undefined ?
             this.cleanErrors()
 
-            for (let error of errors) {
-                let path = error.name.split('.')
+            for (const error of errors) {
+                const path = error.name.split('.')
 
                 if (path[0] === 'locales') {
                     this.dispatchError(path[2], error)
@@ -236,7 +236,7 @@ export default {
 
         cleanErrors() {
             this.genericErrors = []
-            for (let field of Object.values(this.fields)) {
+            for (const field of Object.values(this.fields)) {
                 field.error = null
             }
         }

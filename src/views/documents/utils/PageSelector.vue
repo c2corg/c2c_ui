@@ -67,7 +67,7 @@
                 //    (1) ... (K) (L) (M) ... (Z)
 
                 if (this.pageCount < 8) {
-                    let result = []
+                    const result = []
 
                     for (let i = 1; i <= this.pageCount; i++) {
                         result.push(i)
@@ -104,7 +104,7 @@
             },
 
             pageQuery(page) {
-                var query = Object.assign({}, this.$route.query)
+                const query = Object.assign({}, this.$route.query)
                 query.offset = (page - 1) * queryLimit
                 return { name: this.$route.name, params: this.$route.params, query }
             }

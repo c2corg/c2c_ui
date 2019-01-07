@@ -62,8 +62,8 @@
         },
 
         created() {
-            for (let route of this.source) {
-                for (let activity of route.activities) {
+            for (const route of this.source) {
+                for (const activity of route.activities) {
                     if (!this.routes[activity]) {
                         this.routes[activity] = {}
                     }
