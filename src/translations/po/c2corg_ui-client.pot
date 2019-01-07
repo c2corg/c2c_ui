@@ -508,6 +508,7 @@ msgstr ""
 #: src/components/generics/modals/ModalConfirmation.vue:36
 #: src/components/images-uploader/ImageUploader.vue:40
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:56
+#: src/views/user/LoginView.vue:141
 #: src/views/wiki/edition/utils/CotometerWindow.vue:75
 #: src/views/wiki/edition/utils/EditionContainer.vue:42
 msgid "Cancel"
@@ -537,6 +538,15 @@ msgstr ""
 
 #: src/views/user/AccountView.vue:6
 msgid "Change account parameters"
+msgstr ""
+
+#: src/views/user/LoginView.vue:126
+#: src/views/user/LoginView.vue:138
+msgid "Change password"
+msgstr ""
+
+#: src/views/user/LoginView.vue:152
+msgid "Checking..."
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:34
@@ -1084,7 +1094,7 @@ msgid "elevation_up_snow"
 msgstr ""
 
 #: src/views/user/AccountView.vue:36
-#: src/views/user/LoginView.vue:107
+#: src/views/user/LoginView.vue:102
 #: src/views/user/LoginView.vue:74
 msgid "Email"
 msgstr ""
@@ -1269,7 +1279,7 @@ msgstr ""
 msgid "Followed users"
 msgstr ""
 
-#: src/views/user/LoginView.vue:32
+#: src/views/user/LoginView.vue:31
 msgid "Forgot password?"
 msgstr ""
 
@@ -1520,7 +1530,7 @@ msgstr ""
 msgid "has updated the xreport"
 msgstr ""
 
-#: src/views/user/LoginView.vue:86
+#: src/views/user/LoginView.vue:81
 msgid "Have an account?"
 msgstr ""
 
@@ -1916,6 +1926,7 @@ msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
 #: src/views/Navigation.vue:78
+#: src/views/user/LoginView.vue:109
 #: src/views/user/LoginView.vue:28
 #: src/views/user/LoginView.vue:3
 msgid "Login"
@@ -2209,6 +2220,7 @@ msgid "New outing"
 msgstr ""
 
 #: src/views/user/AccountView.vue:28
+#: src/views/user/LoginView.vue:134
 msgid "New password"
 msgstr ""
 
@@ -2241,7 +2253,7 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: src/views/user/LoginView.vue:35
+#: src/views/user/LoginView.vue:34
 msgid "No account yet?"
 msgstr ""
 
@@ -2667,7 +2679,7 @@ msgstr ""
 msgid "reduce_impact"
 msgstr ""
 
-#: src/views/user/LoginView.vue:81
+#: src/views/user/LoginView.vue:78
 msgid "Register"
 msgstr ""
 
@@ -2683,7 +2695,7 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
-#: src/views/user/LoginView.vue:99
+#: src/views/user/LoginView.vue:94
 msgid "Reset password"
 msgstr ""
 
@@ -2858,7 +2870,7 @@ msgstr ""
 msgid "See the latest version"
 msgstr ""
 
-#: src/views/user/LoginView.vue:112
+#: src/views/user/LoginView.vue:106
 msgid "Send reset email"
 msgstr ""
 
@@ -3469,6 +3481,10 @@ msgstr ""
 
 #: src/views/document/WaypointView.vue:114
 msgid "Waypoints children"
+msgstr ""
+
+#: src/views/user/LoginView.vue:114
+msgid "We sent you an email, please click on the link to reset password."
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:191

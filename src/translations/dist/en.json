@@ -95,6 +95,7 @@
     "categories": "categories",
     "cave": "cave",
     "Change account parameters": "Change account parameters",
+    "Change password": "Change password",
     "children_proof": "Children",
     "cleared": "cleared",
     "climbing_indoor": "climbing indoor",
@@ -517,7 +518,10 @@
     "public_transportation_rating": "Public transportation",
     "public_transportation_types": "Public transportation types",
     "publication_date": "Publication date",
-    "quality": "Completeness",
+    "quality": {
+      "snow": "quality",
+      "$$noContext": "Completeness"
+    },
     "quartzite": "quartzite",
     "quiet": "quiet",
     "raid": "raid",
@@ -692,6 +696,7 @@
     "waypoint": "waypoint",
     "waypoint_type": "Waypoint type",
     "Waypoints": "Waypoints",
+    "We sent you an email, please click on the link to reset password.": "We sent you an email, please click on the link to reset password.",
     "weather": "Weather",
     "weather and conditions": "Weather and conditions",
     "weather_station": "weather station",

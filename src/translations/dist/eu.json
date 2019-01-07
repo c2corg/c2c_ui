@@ -64,6 +64,7 @@
     "categories": "kategoriak",
     "cave": "haitzuloa",
     "Change account parameters": "Kontuaren xehetasunak aldatu",
+    "Change password": "Pasahitza aldatu",
     "children_proof": "Umeentzako egokia",
     "cleared": "elurrik gabe",
     "climbing_indoor": "rokodromoa",
@@ -400,7 +401,10 @@
     "public_transportation_rating": "garraio publikoan heltzeko aukera",
     "public_transportation_types": "garraiobide publiko mota",
     "publication_date": "Argitalpen data",
-    "quality": "kalitatea",
+    "quality": {
+      "snow": "kalitatea",
+      "$$noContext": "kalitatea"
+    },
     "quartzite": "kuartzita",
     "quiet": "jendetzarik ez",
     "raid": "egun ugariko ibilbidea",
@@ -515,6 +519,7 @@
     "waypoint": "waypoint",
     "waypoint_type": "waypoint mota",
     "Waypoints": "Waypointak",
+    "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",
     "weather and conditions": "Egoera eta eguraldia",
     "weather_station": "metereologia estazioa",
