@@ -80,8 +80,14 @@ Process.prototype.push = function(file, msgctxt, msgid) {
     this.data[key].addFile(file)
 }
 
-Process.prototype.addFile = function(file, data) {
+Process.prototype.addVueComponent = function(file, data) {
     this.parseTemplate(file, data)
+    this.parseScript(file, data, gettext_template1)
+    this.parseScript(file, data, gettext_template2)
+}
+
+
+Process.prototype.addScript = function(file, data) {
     this.parseScript(file, data, gettext_template1)
     this.parseScript(file, data, gettext_template2)
 }
@@ -162,7 +168,11 @@ Process.prototype.compute = function(file_or_dir) {
         }
     } else if (file_or_dir.endsWith('.vue')) {
         let data = fs.readFileSync(file_or_dir, 'utf-8')
-        this.addFile(file_or_dir, data)
+        this.addVueComponent(file_or_dir, data)
+
+    } else if (file_or_dir.endsWith('.js')) {
+        let data = fs.readFileSync(file_or_dir, 'utf-8')
+        this.addScript(file_or_dir, data)
     }
 }
 

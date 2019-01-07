@@ -105,8 +105,16 @@
 
                 <form-input-row :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')"/>
                 <form-input-row :document="document" :field="fields.description" :placeholder="descriptionPlaceholder"/>
-                <form-input-row :document="document" :field="fields.access" :placeholder="accessPlaceholder"/>
-                <form-input-row :document="document" :field="fields.access_period" :placeholder="accessPeriodPlaceholder"/>
+                <form-input-row
+                    :document="document"
+                    :field="fields.access"
+                    :placeholder="accessPlaceholder"
+                    :label="accessTitle"/>
+                <form-input-row
+                    :document="document"
+                    :field="fields.access_period"
+                    :placeholder="accessPeriodPlaceholder"
+                    :label="accessPeriodTitle"/>
 
             </tab-item>
 
@@ -124,54 +132,10 @@
 <script>
 
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
+    import waypointLabels from '@/js/waypoint-labels-mixin.js'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ],
-
-        computed: {
-
-            descriptionPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
-
-                if (type === 'access') {
-                    return this.$gettext('Describe here the waypoint')
-                }
-
-                return this.$gettext('Describe road access')
-            },
-
-            accessPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
-
-                if (type === 'access') {
-                    return this.$gettext('Describe pt access')
-                }
-
-                if (type === 'hut' || type === 'climbing_indoor' || type === 'climbing_outdoor') {
-                    return this.$gettext('Describe pedestrian access')
-                }
-
-                return this.$gettext('Describe access')
-            },
-
-            accessPeriodPlaceholder() {
-                let type = this.document ? this.document.waypoint_type : undefined
-
-                if (type === 'hut' || type === 'gite' || type === 'camp_site') {
-                    return this.$gettext('Describe opening periods')
-                }
-
-                if (type === 'local_product') {
-                    return this.$gettext('Describe opening hours')
-                }
-
-                if (type === 'climbing_outdoor') {
-                    return this.$gettext('Describe access restrictions')
-                }
-
-                return this.$gettext('Describe access period')
-            }
-        }
+        mixins: [ DocumentEditionViewMixin, waypointLabels ]
     }
 
 </script>

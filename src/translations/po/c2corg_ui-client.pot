@@ -80,8 +80,8 @@ msgstr ""
 msgid "access_condition"
 msgstr ""
 
+#: src/js/waypoint-labels-mixin.js:36
 #: src/translations/fixed_strings_common_js.vue:7
-#: src/views/document/WaypointView.vue:164
 msgid "access_period"
 msgstr ""
 
@@ -299,7 +299,7 @@ msgstr ""
 #: src/views/wiki/edition/ArticleEditionView.vue:20
 #: src/views/wiki/edition/BookEditionView.vue:28
 #: src/views/wiki/edition/ImageEditionView.vue:57
-#: src/views/wiki/edition/WaypointEditionView.vue:113
+#: src/views/wiki/edition/WaypointEditionView.vue:121
 #: src/views/wiki/edition/XreportEditionView.vue:71
 msgid "associations"
 msgstr ""
@@ -547,7 +547,7 @@ msgstr ""
 msgid "cleared"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:63
+#: src/views/document/WaypointView.vue:66
 msgid "climbing rating"
 msgstr ""
 
@@ -848,15 +848,15 @@ msgstr ""
 msgid "descent"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:154
+#: src/js/waypoint-labels-mixin.js:60
 msgid "Describe access"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:172
+#: src/js/waypoint-labels-mixin.js:78
 msgid "Describe access period"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:169
+#: src/js/waypoint-labels-mixin.js:75
 msgid "Describe access restrictions"
 msgstr ""
 
@@ -868,7 +868,7 @@ msgstr ""
 msgid "Describe here the gear needed for this route"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:137
+#: src/js/waypoint-labels-mixin.js:43
 msgid "Describe here the waypoint"
 msgstr ""
 
@@ -876,23 +876,23 @@ msgstr ""
 msgid "Describe historical information about the route (date, names..) here"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:165
+#: src/js/waypoint-labels-mixin.js:71
 msgid "Describe opening hours"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:161
+#: src/js/waypoint-labels-mixin.js:67
 msgid "Describe opening periods"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:151
+#: src/js/waypoint-labels-mixin.js:57
 msgid "Describe pedestrian access"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:147
+#: src/js/waypoint-labels-mixin.js:53
 msgid "Describe pt access"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:140
+#: src/js/waypoint-labels-mixin.js:46
 msgid "Describe road access"
 msgstr ""
 
@@ -1541,7 +1541,7 @@ msgid "heating_unstaffed"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:85
-#: src/views/document/WaypointView.vue:76
+#: src/views/document/WaypointView.vue:79
 #: src/views/wiki/edition/ImageEditionView.vue:25
 #: src/views/wiki/edition/WaypointEditionView.vue:72
 msgid "height"
@@ -2325,11 +2325,11 @@ msgstr ""
 msgid "open_non_guarded"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:157
+#: src/js/waypoint-labels-mixin.js:29
 msgid "opening_hours"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:153
+#: src/js/waypoint-labels-mixin.js:25
 msgid "opening_periods"
 msgstr ""
 
@@ -2439,7 +2439,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:145
+#: src/js/waypoint-labels-mixin.js:17
 msgid "pedestrian access"
 msgstr ""
 
@@ -2583,7 +2583,7 @@ msgstr ""
 msgid "psicobloc"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:141
+#: src/js/waypoint-labels-mixin.js:13
 msgid "public transportation access"
 msgstr ""
 
@@ -2700,7 +2700,7 @@ msgstr ""
 msgid "Restore this version"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:161
+#: src/js/waypoint-labels-mixin.js:33
 msgid "restricted_access"
 msgstr ""
 
@@ -2730,7 +2730,7 @@ msgstr ""
 msgid "risk_rating"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:148
+#: src/js/waypoint-labels-mixin.js:20
 msgid "road or pedestrian access"
 msgstr ""
 
@@ -2988,7 +2988,7 @@ msgstr ""
 msgid "slackline_height"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:37
+#: src/views/document/WaypointView.vue:40
 msgid "slackline_length"
 msgstr ""
 
@@ -3467,7 +3467,7 @@ msgstr ""
 msgid "waypoints"
 msgstr ""
 
-#: src/views/document/WaypointView.vue:111
+#: src/views/document/WaypointView.vue:114
 msgid "Waypoints children"
 msgstr ""
 
