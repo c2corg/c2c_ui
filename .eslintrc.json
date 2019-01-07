@@ -49,7 +49,14 @@
     "space-before-function-paren": [
       "warn",
       "never"
-    ]
+    ],
+    "object-shorthand": [
+      "error",
+      "always"
+    ],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-multi-assign": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"
