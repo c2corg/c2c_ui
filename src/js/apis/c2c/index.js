@@ -86,7 +86,7 @@ CamptocampApi.prototype.createImages = function(images) {
 }
 
 CamptocampApi.prototype.cooker = function(data) {
-    return this.post('/cooker', data)
+    return this.post('/cooker', data, true)
 }
 
 // export a singleton
