@@ -101,4 +101,12 @@ UserProfileService.prototype.register = function(data) {
     return this.api.post('/users/register', data)
 }
 
+UserProfileService.prototype.validateChangeEmail = function(nonce) {
+    return this.api.post('/users/validate_change_email/' + nonce)
+}
+
+UserProfileService.prototype.validateRegisterEmail = function(nonce) {
+    return this.api.post('/users/validate_register_email/' + nonce)
+}
+
 export default UserProfileService
