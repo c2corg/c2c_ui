@@ -1,11 +1,11 @@
 <template>
-    <div class="section columns">
+    <div class="section columns is-vcentered login-view is-paddingless">
         <html-header :title="$gettext('Login')"/>
 
         <base-form
             v-show="mode=='signin'"
             class="column is-half is-offset-one-quarter"
-            :server-errors="serverErrors"
+            :promise="promise"
             @submit="signin">
 
             <form-field
@@ -24,15 +24,14 @@
                 :label="$gettext('Password')"
                 icon="key"/>
 
-            <div class="buttons">
-                <button type="submit" class="button is-primary" v-translate>
+            <div class="buttons is-centered">
+                <button type="submit" class="button is-primary" :class="{'is-loading':promise.loading}" v-translate>
                     Login
                 </button>
-                <!-- TODO : handler -->
-                <button type="button" class="button is-warning" @click="mode='resetPassword'" v-translate>
+                <button type="button" class="button is-warning" @click="setMode('resetPassword')" v-translate>
                     Forgot password?
                 </button>
-                <button type="button" class="button is-link" @click="mode='signup'" v-translate>
+                <button type="button" class="button is-link" @click="setMode('signup')" v-translate>
                     No account yet?
                 </button>
             </div>
@@ -41,6 +40,7 @@
         <base-form
             v-show="mode=='signup'"
             class="column is-half is-offset-one-quarter"
+            :promise="promise"
             @submit="signup">
 
             <form-field
@@ -74,29 +74,24 @@
                 :label="$gettext('Email')"
                 icon="at"/>
 
-            <!-- TODO : bug sur $gettext -->
-            <div class="field is-grouped">
-                <div class="control">
-                    <!-- TODO : handler -->
-                    <button type="submit" class="button is-primary" v-translate>
-                        Register
-                    </button>
-                </div>
-                <div class="control">
-                    <button type="button" class="button is-link" @click="mode='signin'" v-translate>
-                        Have an account?
-                    </button>
-                </div>
+            <div class="buttons is-centered">
+                <button type="submit" class="button is-primary" :class="{'is-loading':promise.loading}" v-translate>
+                    Register
+                </button>
+                <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+                    Have an account?
+                </button>
             </div>
         </base-form>
 
         <base-form
             ref="resetPasswordForm"
             v-show="mode=='resetPassword'"
-            class="column is-half is-offset-one-quarter"
+            class="column is-one-third is-offset-one-third"
+            :promise="promise"
             @submit="resetPassword">
 
-            <h3 class="title is-3" v-translate>
+            <h3 slot="header" class="title is-3" v-translate>
                 Reset password
             </h3>
 
@@ -107,12 +102,55 @@
                 :label="$gettext('Email')"
                 icon="at"/>
 
-            <div class="field is-grouped">
-                <div class="control">
-                    <button type="submit" class="button is-link" v-translate>
-                        Send reset email
-                    </button>
-                </div>
+            <div class="buttons is-centered">
+                <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>
+                    Send reset email
+                </button>
+                <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+                    Login
+                </button>
+            </div>
+
+            <div v-if="promise.success" class="notification is-info" v-translate>
+                We sent you an email, please click on the link to reset password.
+            </div>
+        </base-form>
+
+        <base-form
+            ref="changePasswordForm"
+            v-show="mode=='changePassword'"
+            class="column is-one-third is-offset-one-third"
+            :promise="promise"
+            @submit="validateNewPassword">
+
+            <h3 slot="header" class="title is-3" v-translate>
+                Change password
+            </h3>
+
+            <form-field
+                name="password"
+                v-model="password"
+                type="password"
+                :label="$gettext('New password')"
+                icon="key"/>
+
+            <div class="buttons is-centered">
+                <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>
+                    Change password
+                </button>
+                <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+                    Cancel
+                </button>
+            </div>
+
+        </base-form>
+
+        <base-form
+            v-show="mode=='changeEmail' || mode=='validateAccountCreation'"
+            class="column is-half is-offset-one-quarter"
+            :promise="promise">
+            <div v-if="promise.loading" v-translate>
+                Checking...
             </div>
         </base-form>
 
@@ -124,6 +162,15 @@
 
     import FormField from './utils/FormField'
     import BaseForm from './utils/BaseForm'
+
+    // possible mode values :
+    //
+    // * sigin, default : sign in with your account
+    // * signup : create account
+    // * resetPassword : get a mail with an secret URL to reset your password
+    // * changePassword : with url from precedent mode, set a new password
+    // * changeEmail : if user has asked a new mail, a secret url has been sent
+    // * validateAccountCreation : idem, but when account is created
 
     export default {
 
@@ -143,10 +190,26 @@
                 email: '',
                 from: null,
 
-                serverErrors: null
+                promise: {}
             }
         },
 
+        computed: {
+        },
+
+        watch: {
+            '$route': {
+                handler: 'load',
+                immediate: true
+            }
+        },
+
+        // here is the trick : all auth action are on the same component.
+        // vue won't reload it, even on route modification.
+        // watch on $route will perform any action needed by url state.
+        // but this function will be called only once : at the very first load of component
+        // so we'll keep the page to go back
+        // that's all !
         beforeRouteEnter(to, from, next) {
             next((vm) => {
                 vm.from = from
@@ -154,17 +217,46 @@
         },
 
         methods: {
+            setMode(mode) {
+                this.mode = mode
+                this.promise = {}
+            },
+
+            load() {
+                if (this.$route.hash) { // keep compatible with v6 AngularJs hacks...
+                    this.$router.replace(this.$route.fullPath.replace('#', '?'))
+                }
+
+                if (this.$route.query.change_password) {
+                    // change password mode
+                    // mode when user has forgotten his password.
+                    // an url is sent to his mail, with an secret param
+                    this.setMode('changePassword')
+                } else if (this.$route.query.validate_change_email) {
+                    // when user changes his email.
+                    // he receives on his new mail a secret url to validate
+                    // that  he is the owner
+                    this.setMode('changeEmail')
+                    this.promise = c2c.userProfile.validateChangeEmail(this.$route.query.validate_change_email)
+                        .then(() => this.$router.push({ name: 'home' }))
+                } else if (this.$route.query.validate_register_email) {
+                    // after account creation
+                    this.setMode('validateAccountCreation')
+                    this.promise = c2c.userProfile.validateRegisterEmail(this.$route.query.validate_register_email)
+                        .then(() => this.$router.push({ name: 'home' }))
+                } else {
+                    this.setMode('signin')
+                }
+            },
+
             signin() {
-                this.$user.signIn(this.username, this.password)
+                this.promise = this.$user.signIn(this.username, this.password)
                     .then(() => this.$router.push(this.from.fullPath))
-                    .catch((error) => {
-                        this.serverErrors = error.response.data
-                    })
             },
 
             signup() {
                 // TODO test that
-                c2c.userProfile.register({
+                this.promise = c2c.userProfile.register({
                     name: this.name,
                     username: this.username,
                     forum_username: this.forum_username,
@@ -173,17 +265,27 @@
                     lang: this.$language.current,
                     captcha: this.captcha // TODO
                 })
-                    .catch((error) => {
-                        this.serverErrors = error.response.data
-                    })
             },
+
             resetPassword() {
-                // TODO feedback
-                c2c.userProfile.requestPasswordChange(this.email)
-                    .catch((error) => {
-                        this.serverErrors = error.response.data
-                    })
+                this.promise = c2c.userProfile.requestPasswordChange(this.email)
+            },
+
+            validateNewPassword() {
+                const password = this.password
+                const nonce = this.$route.query.change_password
+
+                this.promise = c2c.userProfile.validateNewPassword(nonce, password)
+                    .then(() => this.$router.push({ name: 'auth' }))
             }
         }
     }
 </script>
+
+<style scoped lang="scss">
+    @import '@/assets/sass/variables.scss';
+
+    .login-view{
+        min-height: calc(100vh - #{$navbar-height});
+    }
+</style>

@@ -1,7 +1,8 @@
 <template>
     <form @submit="submit">
-        <div v-for="(error,i) of serverMetaErrors" :key="i" class="notification is-danger">
-            {{ $gettext(error.description) }}
+        <slot name="header" />
+        <div v-for="(error,i) of serverMetaErrors" :key="i" class="notification is-danger has-text-centered">
+            {{ error.description }}
         </div>
 
         <slot />
@@ -13,7 +14,7 @@
     export default {
 
         props: {
-            serverErrors: {
+            promise: {
                 type: Object,
                 default: null
             }
@@ -28,7 +29,10 @@
         },
 
         watch: {
-            serverErrors: 'computeErrors'
+            promise: {
+                handler: 'computeErrors',
+                deep: true
+            }
         },
 
         mounted() {
@@ -39,19 +43,28 @@
         },
 
         methods: {
+            cleanErrors() {
+                this.serverMetaErrors = []
+
+                for (let input of Object.values(this.inputs)) {
+                    input.errorMessage = undefined
+                }
+            },
+
             computeErrors() {
-                if (!this.serverErrors) {
+                this.cleanErrors()
+
+                if (!this.promise || !this.promise.error) {
                     return
                 }
 
-                let errors = this.serverErrors.errors
+                const serverErrors = this.promise.error.response.data
 
-                if (!errors) {
-                    // TODO unexpected server error
+                if (!serverErrors.errors) {
+                    // unpexted error structure from API
+                    this.serverMetaErrors.push(serverErrors)
                 } else {
-                    this.serverMetaErrors = []
-
-                    for (let error of errors) {
+                    for (let error of serverErrors.errors) {
                         if (this.inputs[error.name]) {
                             this.inputs[error.name].errorMessage = error.description
                         } else {
