@@ -510,7 +510,7 @@ msgstr ""
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:56
 #: src/views/user/LoginView.vue:141
 #: src/views/wiki/edition/utils/CotometerWindow.vue:75
-#: src/views/wiki/edition/utils/EditionContainer.vue:42
+#: src/views/wiki/edition/utils/EditionContainer.vue:46
 msgid "Cancel"
 msgstr ""
 
@@ -654,7 +654,7 @@ msgstr ""
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:8
 #: src/views/wiki/HistoryView.vue:46
 #: src/views/wiki/WhatsNewView.vue:14
-#: src/views/wiki/edition/utils/EditionContainer.vue:39
+#: src/views/wiki/edition/utils/EditionContainer.vue:43
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:8
 msgid "comment"
 msgstr ""
@@ -1764,6 +1764,10 @@ msgstr ""
 msgid "internal_witness"
 msgstr ""
 
+#: src/js/vue-plugins/document-utils.js:248
+msgid "Invalid date"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:102
 msgid "isbn"
 msgstr ""
@@ -2543,7 +2547,7 @@ msgid "pressure"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:41
-#: src/views/wiki/edition/utils/EditionContainer.vue:12
+#: src/views/wiki/edition/utils/EditionContainer.vue:15
 msgid "Preview"
 msgstr ""
 
@@ -2821,7 +2825,7 @@ msgstr ""
 
 #: src/components/images-uploader/ImagesUploader.vue:35
 #: src/views/user/AccountView.vue:71
-#: src/views/wiki/edition/utils/EditionContainer.vue:34
+#: src/views/wiki/edition/utils/EditionContainer.vue:38
 msgid "Save"
 msgstr ""
 
