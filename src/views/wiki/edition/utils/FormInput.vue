@@ -63,8 +63,8 @@
         :is-expanded="isExpanded"
         :postfix="field.unit"
         :type="field.type"
-        :min="field.min"
-        :max="field.max"
+        :min="min || field.min"
+        :max="max || field.max"
         :disabled="field.disabled"
         :placeholder="placeholder || $gettext(field.name)"
         :required="field.required"
@@ -109,6 +109,14 @@
                 default: undefined
             },
             placeholder: {
+                type: String,
+                default: undefined
+            },
+            min: {
+                type: String,
+                default: undefined
+            },
+            max: {
                 type: String,
                 default: undefined
             }
