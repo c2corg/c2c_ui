@@ -197,7 +197,7 @@ export default function install(Vue) {
                     if (field.parent === 'document') {
                         result[field.name] = field.multiple ? [] : null
 
-                        if (field.default) {
+                        if (field.default !== undefined) {
                             result[field.name] = field.default
                         }
                     } else if (field.parent === 'associations') {

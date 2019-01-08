@@ -738,7 +738,8 @@
     },
     "partial_trip":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "participant_count":
     {
