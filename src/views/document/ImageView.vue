@@ -44,8 +44,8 @@
 
             <div class="column is-9">
                 <div class="box is-paddingless">
-                    <a :href="getImageUrl(document)">
-                        <img class="main-image" :src="getImageUrl(document)">
+                    <a :href="getOriginalImageUrl(document)">
+                        <img class="main-image" :src="getBigImageUrl(document)">
                     </a>
                 </div>
 
@@ -71,7 +71,8 @@
         mixins: [ DocumentViewMixin ],
 
         methods: {
-            getImageUrl: imageUrls.get
+            getOriginalImageUrl: imageUrls.get,
+            getBigImageUrl: imageUrls.getBig
         }
     }
 </script>
