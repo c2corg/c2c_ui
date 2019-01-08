@@ -177,7 +177,7 @@
 
         methods: {
             loadVersions() {
-                this.loadVersionSmart(this.$route.params.versionFrom, 'oldVersion', this.$route.params.versionTo)
+                this.loadVersion(this.$route.params.versionFrom, 'oldVersion')
                 this.loadVersion(this.$route.params.versionTo, 'newVersion')
             },
 
@@ -242,32 +242,30 @@
             loadVersion(versionId, resultProperty) {
                 this[resultProperty] = null
 
+                if (versionId === 'prev' || versionId === 'next') {
+                    return
+                }
+
                 return c2c[this.documentType].getVersion(this.documentId, this.lang, versionId)
                     .then(response => {
                         this[resultProperty] = response.data
+
+                        // handle when url version is prev or next
+                        // the other version contains the good id
+                        if (this.$route.params.versionFrom === 'prev' && resultProperty === 'newVersion') {
+                            this.loadVersion(this.newVersion.previous_version_id, 'oldVersion')
+                        }
+
+                        if (this.$route.params.versionTo === 'next' && resultProperty === 'oldVersion') {
+                            this.loadVersion(this.newVersion.next_version_id, 'newVersion')
+                        }
+
                         if (resultProperty === 'newVersion') {
                             this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title
                         }
 
                         this.buildDiff()
                     })
-            },
-
-            loadVersionSmart(versionId, resultProperty, baseVersionId) {
-                if (versionId === 'prev') {
-                    c2c[this.documentType].getHistory(this.documentId, this.lang)
-                        .then(response => {
-                            let versions = response.data.versions
-
-                            for (let i = 0; i < versions.length; i++) {
-                                if (versions[i].version_id === baseVersionId && i !== 0) {
-                                    this.loadVersion(versions[i - 1].version_id, resultProperty)
-                                }
-                            }
-                        })
-                } else {
-                    return this.loadVersion(versionId, resultProperty)
-                }
             }
         }
     }
