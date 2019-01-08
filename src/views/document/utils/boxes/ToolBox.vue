@@ -65,14 +65,12 @@
         <license-box :document="document" />
 
         <!-- Modal windows -->
-        <merge-document-window ref="MergeDocumentWindow" :document="document"/>
-        <delete-document-window ref="deleteDocumentWindow" :document="document"/>
-        <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang"/>
-        <translate-window
-            v-if="isEditable"
-            ref="translateWindow"
-            :document="document"
-            :missing-langs="missingLangs"/>
+        <div v-if="isEditable">
+            <merge-document-window ref="MergeDocumentWindow" :document="document"/>
+            <delete-document-window ref="deleteDocumentWindow" :document="document"/>
+            <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang"/>
+            <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
+        </div>
 
     </div>
 </template>
