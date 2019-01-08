@@ -14,13 +14,15 @@
                         :document="document"
                         :field="fields.date_start"
                         :prefix="$gettext('start')"
+                        :max="showBothDates ? document.date_end : undefined"
                         @input="handleDates"/>
                     <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
                     <form-input
                         v-show="showBothDates"
                         :document="document"
                         :field="fields.date_end"
-                        :prefix="$gettext('end')"/>
+                        :prefix="$gettext('end')"
+                        :min="showBothDates ? document.date_start : undefined"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
