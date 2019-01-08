@@ -244,6 +244,10 @@ export default function install(Vue) {
             },
 
             getOutingDatesLocalized(document) {
+                if (!document.date_start) {
+                    return this.$gettext('Invalid date')
+                }
+
                 const start = this.$moment.parseDate(document['date_start']).locale(this.$language.current)
                 const end = this.$moment.parseDate(document['date_end']).locale(this.$language.current)
                 const sameYear = start.year() === end.year()

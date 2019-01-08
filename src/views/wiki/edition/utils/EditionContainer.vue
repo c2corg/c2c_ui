@@ -6,10 +6,14 @@
             :
             <document-title :document="document"/>
             <button class="button is-size-6" @click="isPreview=!isPreview">
-                <fa-icon :icon="isPreview ? 'edit' : 'eye'" />
-                &nbsp;
-                <span v-if="isPreview" v-translate>Back to edit mode</span>
-                <span v-else v-translate>Preview</span>
+                <span v-show="isPreview">
+                    <fa-icon icon="edit" />&nbsp;
+                    <span v-translate>Back to edit mode</span>
+                </span>
+                <span v-show="!isPreview">
+                    <fa-icon icon="eye" />&nbsp;
+                    <span v-translate>Preview</span>
+                </span>
             </button>
         </h1>
 
