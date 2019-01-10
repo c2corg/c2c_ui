@@ -46,13 +46,16 @@ const BaseApi = function(apiUrl) {
         headers: { common: {} },
         baseURL: apiUrl
     })
+
+    // for project phase, allow moderators to edit
+    this.isSafeUser = false
 }
 
 if (config.urls.readWrite) {
     BaseApi.prototype.checkReadOnly = function() {}
 } else {
     BaseApi.prototype.checkReadOnly = function(safeCall) {
-        if (!safeCall) {
+        if (!safeCall && !this.isSafeUser) {
             throw new Error('This build is read only')
         }
     }

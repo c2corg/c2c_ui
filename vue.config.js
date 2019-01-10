@@ -64,7 +64,7 @@ const config = {
     }
 }
 
-config.urls = config.urlsConfigurations.demo // conservative default : demo
+config.urls = config.urlsConfigurations.prod // default : prod
 
 const bundleAnalyzerConfig = {
     analyzerMode: 'disabled',
