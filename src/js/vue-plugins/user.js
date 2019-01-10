@@ -42,6 +42,13 @@ export default function install(Vue) {
             },
             isLogged() {
                 return Boolean(this.token)
+            },
+
+            // for project phase, allow some user to edit prod
+            isSafeUser() {
+                return this.isModerator || [
+                    286726 // charles b
+                ].includes(this.id)
             }
         },
 
@@ -54,6 +61,7 @@ export default function install(Vue) {
 
         created() {
             this.checkExpiration()
+            c2c.isSafeUser = this.isSafeUser
         },
 
         methods: {
@@ -71,6 +79,8 @@ export default function install(Vue) {
 
                         this.$language.setCurrent(this.lang)
                         this.commitToLocaleStorage_()
+
+                        c2c.isSafeUser = this.isSafeUser
                     })
             },
 

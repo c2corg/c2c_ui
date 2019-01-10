@@ -1,5 +1,5 @@
 <template>
-    <nav class="no-print is-size-5">
+    <nav class="no-print is-size-5" :class="{'has-background-warning':siteConfiguration.urls.name != 'prod'}">
 
         <span
             class="navigation-item is-hidden-desktop"
@@ -37,7 +37,9 @@
                 </div>
             </div>
 
-            <div v-if="!siteConfiguration.urls.readWrite" class="navigation-item is-hidden-mobile" :title="'Read only site'">
+            <div
+                v-if="!siteConfiguration.urls.readWrite && !$user.isSafeUser"
+                class="navigation-item is-hidden-mobile" :title="'Read only site'">
                 <fa-layers >
                     <fa-icon icon="pen"/>
                     <fa-icon icon="ban" transform="grow-16" class="has-text-danger"/>
