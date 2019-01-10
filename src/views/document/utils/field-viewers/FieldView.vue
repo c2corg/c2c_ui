@@ -1,6 +1,6 @@
 <template>
     <label-value v-if="hasValue && visible" :label="$gettext(field.name)">
-        <document-field :document="document" :field="field" :unit="unit || field.unit"/>
+        <document-field :document="document" :field="field" :unit="unit || field.unit" :divisor="divisor"/>
     </label-value>
 </template>
 
@@ -17,6 +17,10 @@
         props: {
             unit: {
                 type: String,
+                default: null
+            },
+            divisor: {
+                type: Number,
                 default: null
             }
         },
