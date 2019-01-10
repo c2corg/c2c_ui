@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="control">
-            <label class="label is-first-letter-uppercase" v-translate>date_start</label>
+            <label class="label">{{ $gettext('date_start') | uppercaseFirstLetter }}</label>
             <input class="input" type="date" v-model="value[0]">
         </div>
         <div class="control">
-            <label class="label is-first-letter-uppercase" v-translate>date_end</label>
+            <label class="label">{{ $gettext('date_end') | uppercaseFirstLetter }}</label>
             <input class="input" type="date" v-model="value[1]">
         </div>
     </div>

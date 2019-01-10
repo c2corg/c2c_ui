@@ -9,8 +9,8 @@
                 </span>
             </span>
             <span class="level-item">
-                <span class=" query-label is-first-letter-uppercase">
-                    {{ $gettext(field.name) }}
+                <span class=" query-label">
+                    {{ $gettext(field.name) | uppercaseFirstLetter }}
                 </span>
             </span>
             <span class="level-right">

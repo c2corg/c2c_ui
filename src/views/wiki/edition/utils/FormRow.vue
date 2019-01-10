@@ -1,9 +1,9 @@
 <template>
     <div v-show="visible" class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label is-first-letter-uppercase">
+            <label class="label">
                 <marker-helper :name="helper" />
-                {{ label }}
+                {{ label | uppercaseFirstLetter }}
             </label>
         </div>
         <div class="field-body">

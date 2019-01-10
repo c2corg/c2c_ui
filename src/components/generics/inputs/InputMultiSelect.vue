@@ -6,28 +6,8 @@
             @click="toggle(option)"
             class="button is-primary is-rounded"
             :class="{ 'is-outlined': !value_.includes(option) }">
-            <span class="is-first-letter-uppercase">
-                {{ i18n ? $gettext(option) : option }}
-            </span>
+            {{ (i18n ? $gettext(option) : option) | uppercaseFirstLetter }}
         </button>
-
-        <!-- <div
-            class="field"
-            v-for="option of options"
-            :key="option"
-            @click="toggle(option)">
-            <input
-                class="is-checkradio is-block is-success is-medium"
-                :id="option + 'exampleCheckboxBlockDefault'"
-                type="checkbox"
-                :checked="value_.includes(option)">
-            <label
-                :for="option + 'exampleCheckboxBlockDefault'"
-                class="is-first-letter-uppercase">
-                {{ i18n ? $gettext(option) : option }}
-            </label>
-        </div> -->
-
     </div>
 </template>
 

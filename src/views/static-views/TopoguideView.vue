@@ -72,7 +72,7 @@
                         :key="waypoint_type"
                         :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
                         <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
-                        <span class="has-text-dark has-text-weight-semibold is-first-letter-uppercase">
+                        <span class="has-text-dark has-text-weight-semibold">
                             {{ $gettext(waypoint_type) | uppercaseFirstLetter }}
                         </span>
                     </topoguide-view-small-link>

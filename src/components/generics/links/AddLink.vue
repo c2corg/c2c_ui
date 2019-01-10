@@ -3,8 +3,8 @@
     In this case, editions vues will redirect user to /auth -->
     <router-link :to="{name:documentType + '-add', params:{lang:$language.current}, query:query}">
         <slot>
-            <span class="is-first-letter-uppercase">
-                {{ text }}
+            <span>
+                {{ text | uppercaseFirstLetter }}
             </span>
         </slot>
     </router-link>

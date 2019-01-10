@@ -22,10 +22,8 @@
                     v-if="promise.data[type + 's'] && promise.data[type + 's'].documents.length !== 0">
                     <div
                         v-if="documentTypes_.length > 1"
-                        class="dropdown-item has-text-weight-bold is-size-5 is-first-letter-uppercase">
-                        <span>
-                            {{ $gettext(type + 's') }}
-                        </span>
+                        class="dropdown-item has-text-weight-bold is-size-5">
+                        {{ $gettext(type + 's') | uppercaseFirstLetter }}
                     </div>
                     <div
                         v-for="document of promise.data[type + 's'].documents"
@@ -74,10 +72,7 @@
 
                 <div v-if="proposeCreation">
                     <hr class="dropdown-divider">
-                    <div
-
-                        class="dropdown-item has-text-weight-bold is-size-5 is-first-letter-uppercase"
-                        v-translate>
+                    <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>
                         No match?
                     </div>
                     <add-link

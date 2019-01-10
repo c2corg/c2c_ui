@@ -10,8 +10,8 @@
             @click="$emit('click:prefix')">
             <marker-helper class="marker-helper" :name="helper" />
 
-            <span v-if="prefix" class="is-first-letter-uppercase">
-                {{ prefix }}
+            <span v-if="prefix">
+                {{ prefix | uppercaseFirstLetter }}
             </span>
         </span>
 
