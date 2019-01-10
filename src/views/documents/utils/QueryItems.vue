@@ -168,7 +168,7 @@
                 return (this.$route.query.act || '').split(',')
             },
 
-            urlWaypoint_types() {
+            urlWaypointTypes() {
                 return (this.$route.query.wtyp || '').split(',')
             },
 
@@ -217,7 +217,11 @@
                                 temp.activeCount += 1
                             }
 
-                            if (field.isVisibleForActivities(this.urlActivities)) {
+                            if (this.documentType === 'waypoint') {
+                                if (field.isVisibleForWaypointTypes(this.urlWaypointTypes)) {
+                                    temp.fields.push(field)
+                                }
+                            } else if (field.isVisibleForActivities(this.urlActivities)) {
                                 temp.fields.push(field)
                             }
                         }
