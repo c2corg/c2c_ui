@@ -15,16 +15,12 @@
                 <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
                     Close
                 </button>
-                <button
-                    class="button"
-                    v-for="(_, otherLang) in $language.available"
-                    :key="otherLang"
-                    :class="{'is-primary': otherLang==lang}"
-                    @click="load(otherLang)">
-                    {{ otherLang }}
-                </button>
-                <a v-if="helper.documentId" :href="'https://www.camptocamp.org/articles/' + helper.documentId">
-                    Got to article
+                <a
+                    v-if="$user.isLogged"
+                    class="button is-info"
+                    target="_blank"
+                    :href="'https://www.camptocamp.org/articles/' + helper.documentId" v-translate>
+                    Edit
                 </a>
             </div>
         </div>
