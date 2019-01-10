@@ -32,6 +32,16 @@
                             <span v-translate>Outings</span>
                         </router-link>
                     </div>
+
+                    <div class="buttons is-centered">
+                        <button
+                            class="button is-primary"
+                            @click="downloadOutings"
+                            v-translate>
+                            Download outings
+                        </button>
+                    </div>
+
                 </div>
 
                 <map-box :document="document" />
@@ -54,6 +64,8 @@
 <script>
 
     import config from '@/js/config.ts'
+    import c2c from '@/js/apis/c2c'
+    import utils from '@/js/utils'
     import DocumentViewMixin from './utils/DocumentViewMixin.js'
 
     import FeedWidget from '@/components/feed-widget/FeedWidget'
@@ -66,6 +78,27 @@
 
         mixins: [ DocumentViewMixin ],
 
-        forumUrl: config.urls.forum
+        forumUrl: config.urls.forum,
+
+        methods: {
+            downloadOutings() {
+                let outings = []
+
+                const download = function(offset) {
+                    c2c.outing.getAll({ u: this.documentId, limit: 50, offset }).then(response => {
+                        for (let document of response.data.documents) {
+                            outings.push(document)
+                        }
+                        if (response.data.documents.length === 0 || outings.length === response.data.total) {
+                            utils.downloadCsv(outings, 'outings.csv')
+                        } else {
+                            download(offset + 50)
+                        }
+                    })
+                }.bind(this)
+
+                download(0)
+            }
+        }
     }
 </script>
