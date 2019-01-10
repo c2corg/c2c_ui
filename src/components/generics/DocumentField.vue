@@ -23,7 +23,7 @@
             {{ $gettext(value) }}
         </span>
 
-        <span v-else>{{ value }}</span><!--
+        <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span><!--
      --><span v-if="(unit || field.unit) && value !== null">&nbsp;{{ unit || field.unit }}</span>
 
     </span>
@@ -39,6 +39,10 @@
         props: {
             unit: {
                 type: String,
+                default: null
+            },
+            divisor: {
+                type: Number,
                 default: null
             }
         },
