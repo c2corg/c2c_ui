@@ -21,9 +21,9 @@
             </div>
 
             <div class="column is-4 is-flex images-uploader-message">
-                <div v-translate>
-                    Drop images here or click to upload
-                </div>
+                <!-- this message contains HTML -->
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="$gettext('Drop images here or click to upload')" />
             </div>
 
             <div class="column is-12">
