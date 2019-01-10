@@ -237,6 +237,30 @@ Field.prototype.isVisibleForActivities = function(activities) {
     return result
 }
 
+Field.prototype.isVisibleForWaypointType = function(waypointType) {
+    if (!this.waypoint_types) {
+        return true
+    }
+
+    if (!waypointType) {
+        return false
+    }
+
+    return this.waypoint_types.includes(waypointType)
+}
+
+Field.prototype.isVisibleForWaypointTypes = function(waypointTypes) {
+    if (!this.waypoint_types) {
+        return true
+    }
+
+    if (!waypointTypes) {
+        return false
+    }
+
+    return utils.intersectionIsNotNull(this.waypoint_types, waypointTypes)
+}
+
 Field.prototype.isVisibleFor = function(document) {
     if (!this.extraIsVisibleFor(document)) {
         return false
@@ -246,19 +270,11 @@ Field.prototype.isVisibleFor = function(document) {
         return false
     }
 
-    var result = true
-
-    if (this.waypoint_types) {
-        if (document.waypoint_type) {
-            result = this.waypoint_types.includes(document.waypoint_type)
-        } else if (document.waypoint_types) {
-            result = utils.intersectionIsNotNull(this.waypoint_types, document.waypoint_types)
-        } else {
-            result = false
-        }
+    if (!this.isVisibleForWaypointType(document.waypoint_type)) {
+        return false
     }
 
-    return result
+    return true
 }
 
 export default Field
