@@ -128,6 +128,8 @@
                 }
 
                 this.endOfFeed = this.promise.data.feed.length === 0
+
+                this.$nextTick(this.onScroll)
             },
 
             onScroll() {
