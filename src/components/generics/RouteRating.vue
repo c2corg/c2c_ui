@@ -40,6 +40,20 @@
         <span v-if="document.ski_rating" :title="$gettext('ski_rating')">
             {{ document.ski_rating }}
         </span>
+        <span v-if="document.ski_exposition || document.labande_global_rating">
+            /
+            <span v-if="document.ski_exposition" :title="$gettext('ski_exposition')">
+                {{ document.ski_exposition }}
+            </span>
+            <span v-if="document.labande_global_rating" :title="$gettext('labande_global_rating')">
+                {{ document.labande_global_rating }}
+            </span>
+        </span>
+
+        <span v-if="document.labande_ski_rating" :title="$gettext('labande_ski_rating')">
+            /
+            {{ document.labande_ski_rating }}
+        </span>
         <span v-if="document.hiking_rating" :title="$gettext('hiking_rating')">
             {{ document.hiking_rating }}
         </span>
