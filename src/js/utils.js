@@ -39,6 +39,60 @@ export default {
         saveAs(blob, fileName)
     },
 
+    // transform a list of c2c object to a CSV content, and download it
+
+    downloadCsv(objects, fileName) {
+        const convertToCsv = function(value) {
+            if (value === null || value === undefined) {
+                return ''
+            }
+
+            if (typeof value === 'string') {
+                return `"${value.replace(/"/g, '\\"')}"`
+            }
+
+            if (typeof value === 'boolean' || typeof value === 'number') {
+                return value
+            }
+
+            if (Array.isArray(value)) {
+                return `"${value.join(',')}"`
+            }
+
+            return ''
+        }
+
+        if (!objects) {
+            return
+        }
+
+        let keys = new Set()
+        let excludedKeys = new Set(['areas', 'locales', 'geometry', 'author'])
+
+        for (let object of objects) {
+            for (let key in object) {
+                if (!excludedKeys.has(key)) {
+                    keys.add(key)
+                }
+            }
+        }
+
+        keys = Array.from(keys).sort()
+
+        let lines = [keys.join(';')]
+
+        for (let object of objects) {
+            let line = []
+            for (let key of keys) {
+                line.push(convertToCsv(object[key]))
+            }
+
+            lines.push(line.join(';'))
+        }
+
+        this.download(lines.join('\n'), fileName, 'text/csv;charset=utf-8')
+    },
+
     // does the intersection of two arrays is empty ?
     intersectionIsNotNull(arrayA, arrayB) {
         for (let itemA of arrayA) {
