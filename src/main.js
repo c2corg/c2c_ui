@@ -10,6 +10,7 @@ import getText from '@/js/vue-plugins/gettext-plugin'
 import globalComponents from '@/js/vue-plugins/generic-components'
 import localStorage from '@/js/vue-plugins/local-storage'
 import tooltip from '@/js/vue-plugins/tooltip'
+import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter'
 import user from '@/js/vue-plugins/user'
 import vueMoment from '@/js/vue-plugins/vue-moment.js'
 
@@ -26,6 +27,7 @@ Vue.use(getText) // vm.$gettext() function and v-translate directive
 Vue.use(helperWindow) // vm.$helper property
 Vue.use(globalComponents) // Components available everywhere
 Vue.use(tooltip) // v-tooltip directive
+Vue.use(upperCaseFirstLetter) // upperCaseFirstLetter filter
 Vue.use(user) // vm.$user property
 
 new Vue({

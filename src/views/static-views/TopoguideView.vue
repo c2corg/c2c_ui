@@ -24,7 +24,9 @@
                         :key="activity"
                         :to="{name:'outings', query:{act:activity}}">
                         <span class="is-size-2"><icon-activity :activity="activity" /></span>
-                        <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
+                        <span class="has-text-dark has-text-weight-semibold">
+                            {{ $gettext(activity) | uppercaseFirstLetter }}
+                        </span>
                     </topoguide-view-small-link>
 
                     <topoguide-view-small-link
@@ -46,7 +48,9 @@
                         :key="activity"
                         :to="{name:'routes', query:{act:activity}}">
                         <span class="is-size-2"><icon-activity :activity="activity" /></span>
-                        <span class="has-text-dark has-text-weight-semibold">{{ $gettext(activity) }}</span>
+                        <span class="has-text-dark has-text-weight-semibold">
+                            {{ $gettext(activity) | uppercaseFirstLetter }}
+                        </span>
                     </topoguide-view-small-link>
 
                     <topoguide-view-small-link
@@ -69,7 +73,7 @@
                         :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
                         <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
                         <span class="has-text-dark has-text-weight-semibold is-first-letter-uppercase">
-                            {{ $gettext(waypoint_type) }}
+                            {{ $gettext(waypoint_type) | uppercaseFirstLetter }}
                         </span>
                     </topoguide-view-small-link>
 
