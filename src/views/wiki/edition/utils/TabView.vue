@@ -8,8 +8,8 @@
                     v-show="tab.visible"
                     :class="{'is-active':tab.isActive}">
                     <a @click="selectTab(tab)">
-                        <span class="is-first-letter-uppercase" :class="{'has-text-danger':tab.hasError}">
-                            {{ tab.title }}
+                        <span :class="{'has-text-danger':tab.hasError}">
+                            {{ tab.title | uppercaseFirstLetter }}
                         </span>
                     </a>
                 </li>

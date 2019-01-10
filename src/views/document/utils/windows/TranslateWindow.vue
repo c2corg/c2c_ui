@@ -7,10 +7,10 @@
         </div>
         <div v-for="lang in missingLangs" :key="lang" class="has-text-centered">
             <edit-link
-                class="is-first-letter-uppercase is-size-4"
+                class="is-size-4"
                 :document="document"
                 :lang="lang">
-                {{ $gettext(lang) }}
+                {{ $gettext(lang) | uppercaseFirstLetter }}
             </edit-link>
         </div>
     </modal-window>

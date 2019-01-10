@@ -22,8 +22,8 @@
         </div>
 
         <div v-else-if="field.queryMode==='multiSelect'" class="control">
-            <label class="label is-first-letter-uppercase">
-                {{ $gettext(field.name) }}
+            <label class="label">
+                {{ $gettext(field.name) | uppercaseFirstLetter }}
             </label>
 
             <multiselect v-model="value"
@@ -37,8 +37,8 @@
         </div>
 
         <div v-else-if="field.queryMode==='input'" class="control">
-            <label class="label is-first-letter-uppercase">
-                {{ $gettext(field.name) }}
+            <label class="label">
+                {{ $gettext(field.name) | uppercaseFirstLetter }}
             </label>
             <input :type="field.type" v-model="value" class="input is-primary">
         </div>

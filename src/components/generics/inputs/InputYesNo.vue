@@ -7,7 +7,7 @@
             :value="true"
             class="is-checkradio is-info"
             v-model="value_">
-        <label class="is-first-letter-uppercase" :for="'c2c-' + _uid + '_yes'" v-translate>yes</label>
+        <label :for="'c2c-' + _uid + '_yes'">{{ $gettext('yes') | uppercaseFirstLetter }}</label>
 
         <input
             :id="'c2c-' + _uid + '_no'"
@@ -15,7 +15,7 @@
             :value="false"
             class="is-checkradio is-info"
             v-model="value_">
-        <label class="is-first-letter-uppercase" :for="'c2c-' + _uid + '_no'" v-translate>no</label>
+        <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
 
     </div>
 </template>
