@@ -101,7 +101,15 @@ export default {
             this.longitude = null
 
             if (this.mode === 'edit') {
-                this.promise = c2c[this.documentType].get(this.documentId, this.lang).then(this.afterLoad)
+                this.promise = c2c[this.documentType].get(this.documentId, this.lang).then((response) => {
+                    let locales = response.data.locales
+
+                    if (locales.length === 0) { // it's a translation from an existing doc
+                        locales.push(this.$documentUtils.buildLocale(this.documentType, this.lang))
+                    }
+
+                    this.afterLoad(response)
+                })
             } else {
                 this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) }
 
