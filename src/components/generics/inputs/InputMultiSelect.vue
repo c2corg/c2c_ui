@@ -66,4 +66,11 @@
         text-overflow: ellipsis;
     }
 
+    .button.is-outlined:focus,
+    .button.is-outlined:hover {
+        background-color: transparent;
+        border-color: $primary;
+        color: $primary;
+    }
+
 </style>
