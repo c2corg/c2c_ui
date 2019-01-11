@@ -78,10 +78,10 @@
             </div>
 
             <div v-for="key of Object.keys(diffProperties)" :key="key">
-                <h2 class="title is-2">{{ $gettext(key) }}</h2>
+                <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
                 <div class="columns">
                     <div class="column is-6">
-                        <del>{{ diffProperties[key].old }}</del>
+                        <del class="is-pulled-right">{{ diffProperties[key].old }}</del>
                     </div>
                     <div class="column is-6">
                         <ins>{{ diffProperties[key].new }}</ins>
@@ -90,8 +90,32 @@
             </div>
 
             <div v-for="key of Object.keys(diffLocales)" :key="key">
-                <h2 class="title is-2">{{ $gettext(key) }}</h2>
-                <div class="locale-diff">
+
+                <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
+
+                <div v-if="splittedMode" class="columns is-mobile">
+                    <div class="column is-6">
+                        <div class="splitted-diff">
+                            <component
+                                v-for="(diff, i) of diffLocales2[key]"
+                                :key="i"
+                                v-if="diff[0] <= 0"
+                                :is="diff[0] === 0 ? 'span' : 'del'">{{ diff[1] }}</component>
+                        </div>
+                    </div>
+
+                    <div class="column is-6">
+                        <div class="splitted-diff">
+                            <component
+                                v-for="(diff, i) of diffLocales2[key]"
+                                :key="i"
+                                v-if="diff[0] >= 0"
+                                :is="diff[0] === 0 ? 'span' : 'ins'">{{ diff[1] }}</component>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else class="locale-diff">
                     <div>
                         <pre>
                             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -109,6 +133,17 @@
     import constants from '@/js/constants'
 
     import { diffMatchPatch } from './utils/diff_match_patch_uncompressed'
+
+    const ensureSameCountOfNewLine = function(diff1, diff2) {
+        let diff1Count = diff1[1].split('\n').length - 1
+        let diff2Count = diff2[1].split('\n').length - 1
+
+        if (diff1Count < diff2Count) {
+            diff1[1] += '\n'.repeat(diff2Count - diff1Count)
+        } else if (diff2Count < diff1Count) {
+            diff2[1] += '\n'.repeat(diff1Count - diff2Count)
+        }
+    }
 
     const hasChanged = function(oldVal, newVal) {
         if (Array.isArray(oldVal) || Array.isArray(newVal)) {
@@ -130,7 +165,9 @@
                 oldVersion: null,
                 newVersion: null,
                 diffProperties: {},
-                diffLocales: {}
+                diffLocales: {},
+                diffLocales2: {},
+                splittedMode: true
             }
         },
 
@@ -197,12 +234,17 @@
             buildDiff() {
                 this.diffProperties = {}
                 this.diffLocales = {}
+                this.diffLocales2 = {}
 
                 if (!this.oldVersion || !this.newVersion) {
                     return 'Waiting for other version'
                 }
 
-                var keys = this.getKeys(this.oldVersion.document, this.newVersion.document, ['version', 'locales', 'geometry', 'cooked'])
+                var keys = this.getKeys(
+                    this.oldVersion.document,
+                    this.newVersion.document,
+                    ['version', 'locales', 'geometry', 'cooked']
+                )
 
                 for (let key of keys) {
                     if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {
@@ -225,16 +267,40 @@
                         let diff = diffMatchPatch.diff_main(oldVal, newVal)
                         diffMatchPatch.diff_cleanupSemantic(diff)
                         let html = diffMatchPatch.diff_prettyHtml(diff).split('<br>')
-
-                        // TODO bug : a block may be present on several lines...
-                        // let result = []
-                        // for(let line of html){
-                        //     if(line.search(/<(ins|del)[ >]/) !== -1){
-                        //         result.push(line)
-                        //     }
-                        // }
-
                         this.diffLocales[key] = html.join('<br>')
+
+                        let computedDiff = []
+
+                        // ensure that a removed diff always precede an added diff
+                        // and ensure they contain same count of new lines
+                        for (let i = 0; i < diff.length; i++) {
+                            if (diff[i][0] === 0) {
+                                computedDiff.push(diff[i])
+                            } else if (diff[i][0] === 1) {
+                                computedDiff.push([-1, ''])
+                                computedDiff.push(diff[i])
+
+                                ensureSameCountOfNewLine(
+                                    computedDiff[computedDiff.length - 2],
+                                    computedDiff[computedDiff.length - 1]
+                                )
+                            } else if (diff[i][0] === -1) {
+                                computedDiff.push(diff[i])
+                                if (i + 1 > diff.length || diff[i + 1][0] !== 1) {
+                                    computedDiff.push([1, ''])
+                                } else {
+                                    computedDiff.push(diff[i + 1])
+                                    i += 1
+                                }
+
+                                ensureSameCountOfNewLine(
+                                    computedDiff[computedDiff.length - 2],
+                                    computedDiff[computedDiff.length - 1]
+                                )
+                            }
+                        }
+
+                        this.diffLocales2[key] = computedDiff
                     }
                 }
             },
@@ -273,27 +339,36 @@
 </script>
 
 <style scoped>
-    table{
-        width:100%;
-    }
-
-    td{
-        width: 50%;
-    }
 
     .locale-diff  pre{
         white-space: pre-line;
         line-height:1.3;
     }
 
+    .splitted-diff{
+        padding:0.5rem;
+        background: #EAEAEA;
+        font-family: monospace;
+        font-size:14px;
+        white-space: pre;
+        line-height:1.3;
+        overflow: hidden;
+        overflow-x: scroll;
+    }
+
     ins{
-        background:green !important;
+        background:lightgreen !important;
         text-decoration:none;
     }
 
     del{
         background:pink !important;
         text-decoration:none;
+    }
+
+    h2{
+        margin-top: 2rem;
+        margin-bottom: 0.5rem!important;
     }
 
 </style>
