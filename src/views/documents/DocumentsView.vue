@@ -42,13 +42,23 @@
             <div class="level-right" v-if="documentType!='profile'">
                 <div class="level-item is-size-3 is-hidden-mobile">
                     <fa-icon
-                        :icon="listMode ? 'th-list' : 'th-large'"
+                        icon="th-list"
+                        class="has-cursor-pointer"
+                        :class="listMode ? 'has-text-primary' : ''"
                         @click="toogleProperty('listMode')" />
-                    <div class="level-item is-size-3"/>
+                    &nbsp;
+                    <fa-icon
+                        icon="th-large"
+                        class="has-cursor-pointer"
+                        :class="!listMode ? 'has-text-primary' : ''"
+                        @click="toogleProperty('listMode')" />
+                    &nbsp;
+                    &nbsp;
                     <fa-icon
                         v-if="documentAreGeoLocalized"
-                        :class="{'has-text-primary':showMap}"
                         icon="map-marked-alt"
+                        class="has-cursor-pointer"
+                        :class="{'has-text-primary':showMap}"
                         @click="toogleProperty('showMap')" />
                 </div>
                 <div class="level-item is-size-3 is-hidden-tablet">
