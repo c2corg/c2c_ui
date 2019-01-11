@@ -21,12 +21,44 @@
         </div>
 
         <div class="card-content">
-            <input
-                v-if="!isFailed"
-                :placeholder="$gettext('title')"
-                class="file-input-title"
-                type="text"
-                v-model="document.locales[0].title">
+            <div v-if="!isFailed">
+
+                <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
+                    <div v-for="item of imageCategories" :key="item" class="column is-4">
+                        <label class="checkbox" >
+                            <input
+                                type="checkbox"
+                                :checked="document.image_categories.includes(item)"
+                                @input="toggleCategory(item)">
+                            {{ $gettext(item) | uppercaseFirstLetter }}
+                        </label>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <div class="field title-input">
+                        <div class="control">
+                            <input
+                                type="text"
+                                :placeholder="$gettext('title')"
+                                v-model="document.locales[0].title">
+                        </div>
+                    </div>
+
+                    <div class="columns is-mobile is-gapless licence-select">
+                        <div
+                            v-for="[licence, label] in Array.from(licences)"
+                            class="column has-text-centered"
+                            :class="{'has-background-success': document.image_type==licence, 'is-4':licences.size===3, 'is-6':licences.size===2}"
+                            :key="licence"
+                            @click="document.image_type=licence">
+
+                            <label>{{ licences.length }} {{ label | uppercaseFirstLetter }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div v-else class="buttons">
                 <button
                     @click="upload"
@@ -42,53 +74,6 @@
                 </button>
             </div>
         </div>
-
-        <div class="card-footer" v-if="!isFailed">
-            <image-action>
-                <span slot="button" v-translate>
-                    activities
-                </span>
-
-                <input-activity v-model="document.activities" />
-            </image-action>
-
-            <image-action>
-                <span slot="button" v-translate>
-                    categories
-                </span>
-
-                <div class="columns is-multiline is-gapless">
-                    <div v-for="item of imageCategories" :key="item" class="column is-4">
-                        <label class="checkbox">
-                            <input type="checkbox" value="document.image_categories.includes(item)">
-                            <span>{{ $gettext(item) }}</span>
-                        </label>
-                    </div>
-                </div>
-
-            </image-action>
-
-            <image-action>
-                <span slot="button" v-translate>
-                    Type
-                </span>
-
-                <div style="position:relative">
-                    <p v-for="(label, licence) of licences" :key="licence">
-                        <input
-                            class="is-checkradio"
-                            name="c2c-image_type"
-                            :id="_uid + '-c2c-image_type-' + licence"
-                            :value="licence"
-                            type="radio"
-                            v-model="document.image_type"
-                            :checked="document.image_type==licence">
-                        <label :for="_uid + '-c2c-image_type-' + licence">{{ label }}</label>
-                    </p>
-                </div>
-            </image-action>
-        </div>
-
     </div>
 
 </template>
@@ -99,17 +84,12 @@
     import imageUrls from '@/js/image-urls'
     import constants from '@/js/constants'
 
-    import ImageAction from './ImageAction'
-
     const STATUS_INITIAL = 'Initial'
     const STATUS_SAVING = 'Saving'
     const STATUS_SUCCESS = 'Success'
     const STATUS_FAILED = 'Failed'
 
     export default {
-        components: {
-            ImageAction
-        },
 
         props: {
             file: {
@@ -123,6 +103,10 @@
             parentDocument: {
                 type: Object,
                 required: true
+            },
+            categoriesEdition: {
+                type: Boolean,
+                required: true
             }
         },
 
@@ -134,14 +118,15 @@
                 errorMessage: null,
                 src: null,
 
-                licences: {
-                    collaborative: this.$gettext('collab'),
-                    personal: this.$gettext('personal')
-                },
+                licences: new Map([
+                    ['collaborative', this.$gettext('collab')],
+                    ['personal', this.$gettext('personal')]
+                ]),
 
                 document: {
                     image_type: null,
                     activities: this.parentDocument.activities.slice(0),
+                    image_categories: [],
                     filename: null,
                     fnumber: null,
                     focal_length: null,
@@ -161,7 +146,7 @@
             }
 
             if (this.$user.isModerator) {
-                result.licences.copyright = this.$gettext('copyright')
+                result.licences.set('copyright', this.$gettext('copyright'))
             }
 
             return result
@@ -251,6 +236,18 @@
                 reader.onload = callback.bind(this)
 
                 reader.readAsDataURL(this.file)
+            },
+
+            toggleCategory(category) {
+                let newValue = this.document.image_categories.slice(0)
+
+                if (!newValue.includes(category)) {
+                    newValue.push(category)
+                } else {
+                    newValue.splice(newValue.indexOf(category), 1)
+                }
+
+                this.document.image_categories = newValue
             }
         }
     }
@@ -291,11 +288,53 @@
     }
 }
 
-.file-input-title, .file-input-title:focus{
-    display:block;
-    width:100%;
-    border:0;
-    outline:0;
+.card-content{
+    height:115px;
+    overflow-y: hidden;
+    padding:0;
+
+    .category-select{
+        padding:0.5rem;
+
+        label{
+            display: inherit;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .title-input{
+        margin-bottom: 0;
+
+        input{
+            padding:19px 0.5rem;
+            border:0;
+            outline:0;
+            display:block;
+            width:100%;
+            user-select: none;
+        }
+    }
+
+    .licence-select{
+        border-top: 1px solid #DDD;
+        max-width: 100%;
+
+        .column:not(:last-child){
+            border-right: 1px solid #DDD;
+        }
+
+        label{
+            padding:19px 0.5rem;
+            display: inherit;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor:pointer;
+            user-select: none;
+        }
+    }
 }
 
 .delete-button{

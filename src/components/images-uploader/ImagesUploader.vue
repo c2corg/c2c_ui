@@ -1,5 +1,5 @@
 <template>
-    <modal-window ref="modalWindow" class="images-uploader" wide>
+    <modal-card ref="modalWindow" class="images-uploader" wide>
         <input
             type="file"
             @change="filesChange"
@@ -11,37 +11,47 @@
             <div
                 v-for="(file, key) of files"
                 :key="key"
-                class="column is-4">
+                class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
                 <image-uploader
                     :file="file"
                     :lang="lang"
+                    :categories-edition="categoriesEdition"
                     :parent-document="parentDocument"
                     @success="onSuccess"
                     @deleteFile="onDeleteFile"/>
             </div>
 
-            <div class="column is-4 is-flex images-uploader-message">
+            <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile images-uploader-message">
                 <!-- this message contains HTML -->
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="$gettext('Drop images here or click to upload')" />
             </div>
-
-            <div class="column is-12">
-                <div class="buttons is-pulled-right">
-                    <button
-                        :disabled="documents.length === 0"
-                        class="button is-primary"
-                        @click="save"
-                        v-translate>
-                        Save
-                    </button>
-                    <button class="button is-warning" @click="hide" v-translate>
-                        Close
-                    </button>
-                </div>
-            </div>
         </div>
-    </modal-window>
+
+        <div slot="footer" class="buttons">
+            <button
+                :disabled="documents.length === 0"
+                class="button is-information"
+                @click="categoriesEdition=!categoriesEdition">
+                <span v-if="categoriesEdition">
+                    Edit titles
+                </span>
+                <span v-else>
+                    Edit categories
+                </span>
+            </button>
+            <button
+                :disabled="documents.length === 0"
+                class="button is-primary"
+                @click="save"
+                v-translate>
+                Save
+            </button>
+            <button class="button is-warning" @click="hide" v-translate>
+                Close
+            </button>
+        </div>
+    </modal-card>
 </template>
 
 <script>
@@ -69,7 +79,8 @@
         data() {
             return {
                 files: {},
-                documents: []
+                documents: [],
+                categoriesEdition: false
             }
         },
 
@@ -150,7 +161,7 @@
     }
 
     .images-uploader-message > div{
-        min-height:300px;
+        height:315px;
         text-align: center;
         border: 5px dashed #ddd;
         background: #f8f8f8;
