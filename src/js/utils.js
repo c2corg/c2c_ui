@@ -48,7 +48,7 @@ export default {
             }
 
             if (typeof value === 'string') {
-                return `"${value.replace(/"/g, '\\"')}"`
+                return `"${value.replace(/"/g, '\\"')}"` // lgtm [js/incomplete-sanitization]
             }
 
             if (typeof value === 'boolean' || typeof value === 'number') {
