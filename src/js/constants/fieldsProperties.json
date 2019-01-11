@@ -749,6 +749,7 @@
     },
     "participants":
     {
+        "parent": "locales",
         "type": "text",
         "helper": "1063027#participants"
     },
