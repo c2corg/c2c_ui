@@ -41,14 +41,16 @@ export default {
 
     // transform a list of c2c object to a CSV content, and download it
 
-    downloadCsv(objects, fileName) {
+    downloadCsv(objects, fileName, keys) {
+        const defaultGetter = (object, key) => object[key]
+
         const convertToCsv = function(value) {
             if (value === null || value === undefined) {
                 return ''
             }
 
             if (typeof value === 'string') {
-                return `"${value.replace(/"/g, '\\"')}"` // lgtm [js/incomplete-sanitization]
+                return `"${value.replace(/"/g, '\\"')}"`
             }
 
             if (typeof value === 'boolean' || typeof value === 'number') {
@@ -66,25 +68,24 @@ export default {
             return
         }
 
-        let keys = new Set()
         let excludedKeys = new Set(['areas', 'locales', 'geometry', 'author'])
 
         for (let object of objects) {
             for (let key in object) {
                 if (!excludedKeys.has(key)) {
-                    keys.add(key)
+                    keys.set(key, defaultGetter)
                 }
             }
         }
 
-        keys = Array.from(keys).sort()
+        keys = new Map([...keys.entries()].sort())
 
-        let lines = [keys.join(';')]
+        let lines = [[...keys.keys()].join(';')]
 
         for (let object of objects) {
             let line = []
-            for (let key of keys) {
-                line.push(convertToCsv(object[key]))
+            for (let [key, getter] of keys) {
+                line.push(convertToCsv(getter(object, key)))
             }
 
             lines.push(line.join(';'))
