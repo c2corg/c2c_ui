@@ -1,8 +1,9 @@
+
 <template>
-    <div class="modal" :class="{'is-active': visible}">
+    <div class="modal" :class="{'is-active': visible, 'is-wide': wide}">
         <div class="modal-background" @click="hide" />
         <div class="modal-card">
-            <header class="modal-card-head">
+            <header v-if="$slots.title" class="modal-card-head">
                 <p class="modal-card-title">
                     <slot name="title">Modal title</slot>
                 </p>
@@ -24,7 +25,23 @@
     import mixins from './mixins'
 
     export default {
-        mixins: [ mixins ]
+        mixins: [ mixins ],
+
+        props: {
+            wide: {
+                type: Boolean,
+                default: false
+            }
+        }
     }
 
 </script>
+
+<style scoped>
+
+    .is-wide .modal-card{
+        width:95%;
+        padding:2%;
+    }
+
+</style>
