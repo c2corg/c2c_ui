@@ -20,42 +20,42 @@
 
             <router-link to="outings">
                 <icon-outing/>
-                <div v-translate>Outings</div>
+                <div v-translate>outings</div>
             </router-link>
 
             <router-link to="waypoints">
                 <icon-waypoint/>
-                <div v-translate>Waypoints</div>
+                <div v-translate>waypoints</div>
             </router-link>
 
             <router-link to="routes">
                 <icon-route/>
-                <div v-translate>Routes</div>
+                <div v-translate>routes</div>
             </router-link>
 
             <router-link to="articles">
                 <icon-article/>
-                <div v-translate>Articles</div>
+                <div v-translate>articles</div>
             </router-link>
 
             <router-link to="books">
                 <icon-book/>
-                <div v-translate>Books</div>
+                <div v-translate>books</div>
             </router-link>
 
             <router-link to="xreports">
                 <icon-xreport/>
-                <div v-translate>Xreports</div>
+                <div v-translate>xreports</div>
             </router-link>
 
             <router-link to="images">
                 <icon-image/>
-                <div v-translate>Images</div>
+                <div v-translate>images</div>
             </router-link>
 
             <router-link to="areas">
                 <icon-area/>
-                <div v-translate>Areas</div>
+                <div v-translate>areas</div>
             </router-link>
         </div>
 

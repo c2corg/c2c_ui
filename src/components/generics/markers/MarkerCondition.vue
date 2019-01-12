@@ -1,5 +1,5 @@
 <template>
-    <span :title="$gettext(condition)">
+    <span :title="$gettext(condition, 'condition_ratings')">
         <icon-condition :condition="condition"/>
     </span>
 </template>

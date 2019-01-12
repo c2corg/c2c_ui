@@ -29,7 +29,7 @@
                     <div>
                         <router-link :to="{ name: 'outings', query: {u:$route.params.id} }">
                             <icon-outing />
-                            <span v-translate>Outings</span>
+                            <span>{{ $gettext('outings') | uppercaseFirstLetter }}</span>
                         </router-link>
                     </div>
 

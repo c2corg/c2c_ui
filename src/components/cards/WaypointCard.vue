@@ -14,7 +14,7 @@
         <card-row>
             <card-elevation-item :elevation="document.elevation"/>
 
-            <textual-array :array="document.slackline_types" />
+            <textual-array :array="document.slackline_types" i18n i18n-context="slackline_types"/>
 
             <marker-quality :quality="document.quality"/>
         </card-row>

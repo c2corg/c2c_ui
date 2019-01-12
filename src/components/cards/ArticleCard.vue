@@ -5,13 +5,13 @@
         </card-title>
 
         <card-row>
-            <textual-array :array="document.categories"/>
+            <textual-array :array="document.categories" i18n i18n-context="article_categories"/>
         </card-row>
 
         <card-row>
             <span>
                 <icon-creative-commons />
-                <span>{{ $gettext(document.article_type) }}</span>
+                <span>{{ $gettext(document.article_type, 'article_types') }}</span>
             </span>
         </card-row>
 

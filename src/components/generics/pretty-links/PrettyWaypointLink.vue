@@ -1,7 +1,7 @@
 <template>
 
     <document-link :document="waypoint">
-        <span :title="$gettext(waypoint.waypoint_type)">
+        <span :title="$gettext(waypoint.waypoint_type, 'waypoint_types')">
             <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="has-text-dark"/>
         </span>
         <document-title :document="waypoint"/><span class="has-text-dark">, {{ waypoint.elevation }}&nbsp;m</span>

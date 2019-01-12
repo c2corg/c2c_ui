@@ -1,76 +1,141 @@
 {
   "eu": {
-    "access": "abiapuntua",
+    "access": {
+      "$$noContext": "abiapuntua",
+      "waypoint_types": "abiapuntua"
+    },
     "access_comment": "Abiapuntuaren xehetasunak",
     "access_condition": "Abiapuntuaren egoera",
     "access_period": "Abiapuntuaren sartze denboraldia",
     "access_time": "Iristeko denbora",
-    "accessible_when_wardened": "Gordetako sasoian soilik irekia",
+    "accessible_when_wardened": {
+      "custodianship_types": "Gordetako sasoian soilik irekia"
+    },
     "Accident database": "Istripu datu-basea",
-    "accidental_avalanche": "elur-jausi_istripua",
-    "action": "Akzioa",
+    "accidental_avalanche": {
+      "avalanche_signs": "elur-jausi_istripua"
+    },
+    "action": {
+      "image_categories": "Akzioa"
+    },
     "activities": "Jarduerak",
     "Activity feed": "aktibitate jarioa",
     "add an outing": "Irteera bat gehitu",
     "Add here maps not automatically referenced": "Automatikoki kargatu ez diren mapak hemen gehitu",
     "Add images": "Irudia gehitu",
-    "admin_limits": "administratzaile limiteak",
+    "admin_limits": {
+      "area_types": "administratzaile limiteak"
+    },
     "aid_rating": "Eskalada artifizialeko zailtasuna",
-    "always_accessible": "Beti irekia",
-    "amateur": "amateur",
-    "apr": "apirila",
+    "always_accessible": {
+      "custodianship_types": "Beti irekia"
+    },
+    "amateur": {
+      "user_categories": "amateur"
+    },
+    "apr": {
+      "months": "apirila"
+    },
     "area_type": "eskualde mota",
-    "Areas": "eskualdea",
     "article_type": "Artikulu mota",
-    "Articles": "Artikulua",
-    "artificial": "artifiziala",
+    "artificial": {
+      "rock_types": "artifiziala"
+    },
     "Association": "Camptocamp Elkartea",
-    "association": "elkartea",
+    "association": {
+      "article_categories": "elkartea"
+    },
     "associations": "Elkarteak",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Atribuzioa — Lanaren egilea zein den esan, lizentziara bideratzen duen lotura bat eman eta aldaketarik egin den esan behar da",
-    "aug": "abuztua",
+    "aug": {
+      "months": "abuztua"
+    },
     "Author": "Egilea",
     "author": "egilea",
-    "avalanche_forecaster": "elurjausi_iragarpena",
+    "avalanche_forecaster": {
+      "user_categories": "elurjausi_iragarpena"
+    },
     "avalanche_signs": "elur-jausi zeinuak",
     "avalanches": "Elur-jausien behaketa",
-    "average": "batazbestekoa",
-    "awful": "gaitzeskarriak",
-    "bar": "taberna",
-    "basalte": "basaltoa",
-    "base_camp": "Oinarrizko kanpamendua",
+    "average": {
+      "condition_ratings": "batazbestekoa"
+    },
+    "awful": {
+      "condition_ratings": "gaitzeskarriak"
+    },
+    "bar": {
+      "product_types": "taberna"
+    },
+    "basalte": {
+      "rock_types": "basaltoa"
+    },
+    "base_camp": {
+      "waypoint_types": "Oinarrizko kanpamendua"
+    },
     "best_periods": "Denboraldi egokienak",
-    "biography": "biografia",
-    "bisse": "Bisse",
-    "bivouac": "Bibak",
+    "biography": {
+      "book_types": "biografia"
+    },
+    "bisse": {
+      "waypoint_types": "Bisse"
+    },
+    "bivouac": {
+      "waypoint_types": "Bibak"
+    },
     "blanket_unstaffed": "Gordetako sasoitik kanpo mantak daude",
-    "bloc": "blokea",
-    "boat": "itsasontzia",
-    "book": "liburua",
+    "bloc": {
+      "climbing_indoor_types": "blokea",
+      "climbing_outdoor_types": "blokea"
+    },
+    "boat": {
+      "public_transportation_types": "itsasontzia"
+    },
+    "book": {
+      "image_categories": "liburua"
+    },
     "book_types": "Liburu mota",
-    "Books": "Liburuak",
     "Books and websites not already associated to this route": "Ibilbide honetan ez daude loturiko liburu edo web orririk",
-    "bus": "autobusa",
-    "c2c_meetings": "c2c bilerak",
-    "ca": "katalana",
-    "calcaire": "kareharria",
+    "bus": {
+      "public_transportation_types": "autobusa"
+    },
+    "c2c_meetings": {
+      "article_categories": "c2c bilerak"
+    },
+    "ca": {
+      "langs": "katalana"
+    },
+    "calcaire": {
+      "rock_types": "kareharria"
+    },
     "camera settings": "argazki kameraren parametroak",
     "camera_name": "Argazki kameraren izena",
-    "camp_site": "Kanpina",
+    "camp_site": {
+      "waypoint_types": "Kanpina"
+    },
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
     "Cancel": "Ezeztatu",
     "capacity": "Gordetako sasoian kanpora duen edukiera",
     "capacity_staffed": "Gordetako sasoian duen edukiera",
     "categories": "kategoriak",
-    "cave": "haitzuloa",
+    "cave": {
+      "waypoint_types": "haitzuloa"
+    },
     "Change account parameters": "Kontuaren xehetasunak aldatu",
     "Change password": "Pasahitza aldatu",
     "children_proof": "Umeentzako egokia",
-    "cleared": "elurrik gabe",
-    "climbing_indoor": "rokodromoa",
+    "cleared": {
+      "access_conditions": "elurrik gabe"
+    },
+    "climbing_indoor": {
+      "waypoint_types": "rokodromoa"
+    },
     "climbing_indoor_types": "rokodromo motak",
-    "climbing_instructor": "eskalada_irakaslea",
-    "climbing_outdoor": "eskalada eskola",
+    "climbing_instructor": {
+      "user_categories": "eskalada_irakaslea"
+    },
+    "climbing_outdoor": {
+      "waypoint_types": "eskalada eskola"
+    },
     "climbing_outdoor_type": "bide mota",
     "climbing_outdoor_types": "eskalada eskola mota",
     "climbing_rating_max": "zailtasun haundiena",
@@ -78,14 +143,31 @@
     "climbing_rating_min": "zailtasun txikiena",
     "climbing_styles": "eskalada estiloa",
     "Close": "Itxi",
-    "closed": "itxiak",
-    "closed_cleared": "elurrik gabe denean ere itxia",
-    "closed_hut": "Aterpea itxita",
-    "closed_in_winter": "neguan itxia",
-    "closed_snow": "elurtuta denean itxia",
-    "club": "kluba",
-    "collab": "elkarlanean",
-    "collaborative": "elkarlanean",
+    "closed": {
+      "lift_status": "itxiak"
+    },
+    "closed_cleared": {
+      "access_conditions": "elurrik gabe denean ere itxia"
+    },
+    "closed_hut": {
+      "hut_status": "Aterpea itxita"
+    },
+    "closed_in_winter": {
+      "snow_clearance_ratings": "neguan itxia"
+    },
+    "closed_snow": {
+      "access_conditions": "elurtuta denean itxia"
+    },
+    "club": {
+      "user_categories": "kluba"
+    },
+    "collab": {
+      "article_types": "elkarlanean",
+      "$$noContext": "elkarlanean"
+    },
+    "collaborative": {
+      "image_types": "elkarlanean"
+    },
     "comment": "Iruzkina",
     "Comments": "Iruzkinak",
     "comments": "Iruzkinak",
@@ -95,30 +177,59 @@
     "Conditions, summits, routes": "Egoera, gailurrak, ibilbideak",
     "conditions_levels": "Eskualdeetako elur egoera",
     "configuration": "Konfigurazioa",
-    "conglomerat": "konglomeratua",
+    "conglomerat": {
+      "rock_types": "konglomeratua"
+    },
     "Contact": "Kontaktua",
     "contact": "Kontaktua",
-    "copyright": "copyright",
-    "corridor": "korridorea",
-    "country": "nazioa",
-    "crack_dihedral": "fisura, diedroa",
-    "craie": "klera",
-    "crampons_req": "kranpoiak ezinbestekoak",
-    "crampons_spring": "sasoi hasieran kranpoiak",
+    "copyright": {
+      "image_types": "copyright",
+      "$$noContext": "copyright"
+    },
+    "corridor": {
+      "route_configuration_types": "korridorea"
+    },
+    "country": {
+      "area_types": "nazioa"
+    },
+    "crack_dihedral": {
+      "climbing_styles": "fisura, diedroa"
+    },
+    "craie": {
+      "rock_types": "klera"
+    },
+    "crampons_req": {
+      "glacier_gear_types": "kranpoiak ezinbestekoak"
+    },
+    "crampons_spring": {
+      "glacier_gear_types": "sasoi hasieran kranpoiak"
+    },
     "Create a new route": "Ibilbide berri bat sortu",
     "Created on": "Sortze data",
-    "crowded": "jende ugari",
+    "crowded": {
+      "frequentation_types": "jende ugari"
+    },
     "Current password": "Oraingo pasahitza",
     "custodianship": "Gordeta",
-    "danger_sign": "arrisku ikurra",
-    "dangerous": "arriskutsua",
+    "danger_sign": {
+      "avalanche_signs": "arrisku ikurra"
+    },
+    "dangerous": {
+      "children_proof_types": "arriskutsua"
+    },
     "date": "data",
     "date_end": "amaiera data",
     "date_start": "hasiera data",
     "day(s)": "eguna(k)",
-    "de": "alemana",
-    "dec": "abendua",
-    "descent": "jeitsiera",
+    "de": {
+      "langs": "alemana"
+    },
+    "dec": {
+      "months": "abendua"
+    },
+    "descent": {
+      "image_categories": "jeitsiera"
+    },
     "Describe access": "Abiagunea deskribatu",
     "Describe access period": "Sarbidearen denboraldia zehaztu",
     "describe conditions": "Aurkitutako kondizioak, ekipamendua eta harkaitzaren kalitatea (gerturatzean, ibilbidean eta inguruan)",
@@ -130,17 +241,27 @@
     "describe timing": "Irteera ordua / iraupena",
     "describe weather": "Irteeran aurkitutako eguraldiaren egoera: lainoak, euria, haizea, tenperatura.",
     "description": "Deskribapena",
-    "detail": "xehetasuna",
-    "difficult": "zaila",
+    "detail": {
+      "image_categories": "xehetasuna"
+    },
+    "difficult": {
+      "glacier_ratings": "zaila"
+    },
     "difficulties_height": "Zailtasunaren altuera",
     "Distance": "Distantzia",
     "Distance (km)": "Distantzia (km)",
-    "draft": "zirriborroa",
+    "draft": {
+      "quality_types": "zirriborroa"
+    },
     "Drop images here or click to upload": "Irudia jaregin edo klikatu aukera egiteko",
     "durations": "Iraupena",
-    "easy": "erreza",
+    "easy": {
+      "glacier_ratings": "erreza"
+    },
     "easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
-    "edge": "arista",
+    "edge": {
+      "route_configuration_types": "arista"
+    },
     "Edit": "Aldatu",
     "Edit in ca": "Katalanez editatu",
     "Edit in de": "Alemanez editatu",
@@ -157,60 +278,125 @@
     "elevation_min": "Altitude minimoa",
     "elevation_up_snow": "Eskiak jarritako altitudea",
     "Email": "email helbidea",
-    "empty": "hutsa",
-    "en": "ingelesa",
+    "empty": {
+      "quality_types": "hutsa"
+    },
+    "en": {
+      "langs": "ingelesa"
+    },
     "engagement_rating": "Konpromisoa",
-    "environment": "ingurumena",
-    "equipment": "ekipamendua",
+    "environment": {
+      "book_types": "ingurumena"
+    },
+    "equipment": {
+      "image_categories": "ekipamendua",
+      "$$noContext": "ekipamendua"
+    },
     "equipment_rating": "Ekipamenduaren kalitatea",
     "equipment_ratings": "ekipamenduen kalitateak",
-    "es": "gaztelera",
-    "eu": "euskara",
-    "excellent": "bikaina",
-    "expedition": "espedizioa",
-    "expeditions": "expedizioa",
-    "exposed": "Arriskutsua",
+    "es": {
+      "langs": "gaztelera"
+    },
+    "eu": {
+      "langs": "euskara"
+    },
+    "excellent": {
+      "condition_ratings": "bikaina"
+    },
+    "expedition": {
+      "route_types": "espedizioa"
+    },
+    "expeditions": {
+      "article_categories": "expedizioa"
+    },
+    "exposed": {
+      "rain_proof_types": "Arriskutsua"
+    },
     "exposition_rating": "Arriskua",
     "exposition_rock_rating": "eskalada arriskua",
     "exposure_time": "arriskuaren iraupena",
     "external_resources": "kanpoko baliabideak",
-    "face": "aurpegia",
-    "farm_sale": "produktu lokalen salme ta zuzena",
-    "fauna": "fauna",
-    "feb": "otsaila",
+    "face": {
+      "route_configuration_types": "aurpegia"
+    },
+    "farm_sale": {
+      "product_types": "produktu lokalen salme ta zuzena"
+    },
+    "fauna": {
+      "image_categories": "fauna"
+    },
+    "feb": {
+      "months": "otsaila"
+    },
     "filename": "fitxategiaren izena",
     "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
-    "fine": "ona",
-    "flora": "flora",
+    "fine": {
+      "quality_types": "ona"
+    },
+    "flora": {
+      "image_categories": "flora"
+    },
     "fnumber": "irudiaren xehetasunak",
     "focal_length": "distantzia fokala",
     "Forgot password?": "Pasahitza ahaztu al duzu ?",
     "Forum": "Foroa",
     "Forum username": "Goitizena",
-    "fr": "frantsesa",
+    "fr": {
+      "langs": "frantsesa"
+    },
     "frequentation": "Jendetza",
     "Fullname": "Izena",
     "gas_unstaffed": "gasa gordetako sasoitik kanpora",
-    "gear": "Materiala",
+    "gear": {
+      "article_categories": "Materiala",
+      "$$noContext": "Materiala"
+    },
     "general informations": "Informazio orokorrak",
     "geolocation": "geolokalizazioa",
-    "geology": "geologia",
-    "gite": "ostatua",
-    "glacier": "glaziarra",
-    "glacier_crampons": "kranpoiak eta glaziarreko segurtasun materiala",
+    "geology": {
+      "image_categories": "geologia"
+    },
+    "gite": {
+      "waypoint_types": "ostatua"
+    },
+    "glacier": {
+      "route_configuration_types": "glaziarra",
+      "$$noContext": "glaziarra"
+    },
+    "glacier_crampons": {
+      "glacier_gear_types": "kranpoiak eta glaziarreko segurtasun materiala"
+    },
     "glacier_gear": "glaziarreko materiala",
     "glacier_rating": "glaziarra",
-    "glacier_safety_gear": "Glaziarrerako segurtasun materiala",
+    "glacier_safety_gear": {
+      "glacier_gear_types": "Glaziarrerako segurtasun materiala"
+    },
     "global_rating": "zailtasun orokorra",
-    "gneiss": "gneiss",
+    "gneiss": {
+      "rock_types": "gneiss"
+    },
     "Go to the previous page": "Aurreko orrira itzuli",
-    "good": "ona",
-    "good service": "ohizko zerbitzua",
-    "goulotte": "goulottea",
-    "granit": "granitoa",
-    "great": "ezinhobea",
-    "gres": "areharria",
-    "grocery": "janari denda",
+    "good": {
+      "condition_ratings": "ona"
+    },
+    "good service": {
+      "public_transportation_ratings": "ohizko zerbitzua"
+    },
+    "goulotte": {
+      "route_configuration_types": "goulottea"
+    },
+    "granit": {
+      "rock_types": "granitoa"
+    },
+    "great": {
+      "quality_types": "ezinhobea"
+    },
+    "gres": {
+      "rock_types": "areharria"
+    },
+    "grocery": {
+      "product_types": "janari denda"
+    },
     "ground_types": "lur mota",
     "has added images to area": "eskualde hontan irudiak gehitu ditu",
     "has added images to article": "artikulu honetan irudiak gehitu ditu",
@@ -242,43 +428,80 @@
     "height_max": "altuera maximoa",
     "height_median": "batazbesteko altuera",
     "height_min": "altuera minimoa",
-    "help": "laguntza",
+    "help": {
+      "image_categories": "laguntza",
+      "$$noContext": "laguntza"
+    },
     "Here you may change your subscriptions to snow forecast mailing lists.": "Elur-jausi arriskuaren iragarpenen harpidetza hemen aldatu dezakezu",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
-    "hiking": "Ibilaldia / Trail",
+    "hiking": {
+      "activities": "Ibilaldia / Trail"
+    },
     "hiking_mtb_exposition": "ibilaldi, trail eta mendiko bizikleta arriskua",
     "hiking_rating": "ibilaldi / trail kotazioa",
-    "historical": "historia",
+    "historical": {
+      "book_types": "historia"
+    },
     "History": "Bertsioak",
     "Home": "Sarrera orria",
-    "humidity": "hezetasuna",
-    "hut": "aterpea",
+    "humidity": {
+      "weather_station_types": "hezetasuna"
+    },
+    "hut": {
+      "image_categories": "aterpea",
+      "waypoint_types": "aterpea"
+    },
     "hut_comment": "aterpeari buruzko iruzkinak",
     "hut_status": "Aterpea",
-    "hut_warden": "aterpe zaintzailea",
+    "hut_warden": {
+      "user_categories": "aterpe zaintzailea"
+    },
     "ice and dry climbing gear": "Escalada en hielo y dry-tooling",
-    "ice_climbing": "izotz jauzia",
+    "ice_climbing": {
+      "activities": "izotz jauzia"
+    },
     "ice_rating": "izotz kotazioa",
     "image_categories": "Kategoriak",
     "image_type": "Irudi mota (lizentzia)",
-    "Images": "Irudiak",
-    "impossible": "igarogaitz - ezin da pasatu",
+    "impossible": {
+      "glacier_ratings": "igarogaitz - ezin da pasatu"
+    },
     "Infos": "Argibideak",
-    "inside": "barnean",
-    "insolation": "eguzkialdia",
-    "institution": "erakundea",
+    "inside": {
+      "rain_proof_types": "barnean"
+    },
+    "insolation": {
+      "weather_station_types": "eguzkialdia"
+    },
+    "institution": {
+      "user_categories": "erakundea"
+    },
     "isbn": "ISBN",
     "iso_speed": "Sentsibilitatea",
-    "it": "italiera",
-    "jan": "urtarrila",
-    "jul": "uztaila",
-    "jun": "ekaina",
-    "key_needed": "sartzeko giltza behar da",
+    "it": {
+      "langs": "italiera"
+    },
+    "jan": {
+      "months": "urtarrila"
+    },
+    "jul": {
+      "months": "uztaila"
+    },
+    "jun": {
+      "months": "ekaina"
+    },
+    "key_needed": {
+      "custodianship_types": "sartzeko giltza behar da"
+    },
     "kilometers": "kilometro",
     "labande_global_rating": "Eski kotazio orokorra",
     "labande_ski_rating": "Eski kotazio zehatza",
-    "lake": "lakua",
-    "landscapes": "paisaia",
+    "lake": {
+      "waypoint_types": "lakua"
+    },
+    "landscapes": {
+      "image_categories": "paisaia"
+    },
     "lang": "Hizkuntza",
     "langs": "Hiukuntzak",
     "Last outings": "Azken irteerak",
@@ -288,115 +511,234 @@
     "lift_access": "igogailu mekanikoak",
     "lift_status": "Igogailu mekanikoak",
     "List of versions for language:": "Hizkuntzaren araberako bertsio zerrenda",
-    "local_product": "bertako produktuak",
-    "locality": "lekua",
+    "local_product": {
+      "waypoint_types": "bertako produktuak"
+    },
+    "locality": {
+      "waypoint_types": "lekua"
+    },
     "Log in to post the first comment": "Konektatu zaitez lehen iruzkina emateko",
     "Login": "Konektatu",
     "Logout": "Deskonektatu",
-    "loop": "zirkuitoa",
-    "loop_hut": "zirkuitua (aterpea)",
-    "magazine": "aldizkaria",
+    "loop": {
+      "route_types": "zirkuitoa"
+    },
+    "loop_hut": {
+      "route_types": "zirkuitua (aterpea)"
+    },
+    "magazine": {
+      "book_types": "aldizkaria"
+    },
     "main waypoint": "Waypoint nagusia",
     "Make profile page public": "Profilaren orria publikoa egin",
-    "Maps": "Mapak",
     "maps_info": "Mapak",
     "maps_references": "Erreferentzia kartografikoa",
-    "mar": "martxoa",
+    "mar": {
+      "months": "martxoa"
+    },
     "matress_unstaffed": "Gordetako sasoitik kanpora koltxoiak daude",
     "max": "max",
-    "may": "maiatza",
-    "medium": "batazbeste",
+    "may": {
+      "months": "maiatza"
+    },
+    "medium": {
+      "quality_types": "batazbeste"
+    },
     "meters": "metro",
-    "migmatite": "migmatita",
+    "migmatite": {
+      "rock_types": "migmatita"
+    },
     "min": "min",
-    "misc": "askotarikoa",
+    "misc": {
+      "image_categories": "askotarikoa",
+      "waypoint_types": "askotarikoa"
+    },
     "mixed_rating": "misto kotazioa",
-    "mollasse_calcaire": "molasa",
-    "mountain_biking": "Mendiko bizikleta",
-    "mountain_climbing": "Harkaitza goi mendian",
-    "mountain_environment": "mendiko ingurumena",
-    "mountain_guide": "Goi mendiko gida",
-    "mountain_leader": "irekitzailea",
-    "mountainbike_instructor": "Mediko bizikleta irakaslea",
+    "mollasse_calcaire": {
+      "rock_types": "molasa"
+    },
+    "mountain_biking": {
+      "activities": "Mendiko bizikleta"
+    },
+    "mountain_climbing": {
+      "activities": "Harkaitza goi mendian"
+    },
+    "mountain_environment": {
+      "article_categories": "mendiko ingurumena"
+    },
+    "mountain_guide": {
+      "user_categories": "Goi mendiko gida"
+    },
+    "mountain_leader": {
+      "user_categories": "irekitzailea"
+    },
+    "mountainbike_instructor": {
+      "user_categories": "Mediko bizikleta irakaslea"
+    },
     "mtb_down_rating": "Mendiko bizikleta jeitsiera kotazioa",
     "mtb_height_diff_portages": "Mendiko bizikleta garraiatu",
     "mtb_length_asphalt": "Asfaltatutako distantzia",
     "mtb_length_trail": "Bidexkan distantzia",
     "mtb_up_rating": "Mendiko bizikletan igoera kotazioa",
-    "multi": "Bide luzea",
+    "multi": {
+      "climbing_outdoor_types": "Bide luzea"
+    },
     "My account": "Nire kontua",
     "My mailing lists": "Harpideturik zauden buletinak",
     "My preferences": "Nire lehentasunak",
     "My profile": "Nire profila",
     "name": "Izena",
-    "natural_avalanche": "Elur-jausi naturala irteera egindako egunean",
-    "naturally": "Elur garbiketa naturala",
+    "natural_avalanche": {
+      "avalanche_signs": "Elur-jausi naturala irteera egindako egunean"
+    },
+    "naturally": {
+      "snow_clearance_ratings": "Elur garbiketa naturala"
+    },
     "nb_pages": "Orrialde kopurua",
-    "nearby service": "gertuko zerbitzua",
+    "nearby service": {
+      "public_transportation_ratings": "gertuko zerbitzua"
+    },
     "New password": "Pasahitz berria",
     "next difference": "hurrengo desberdintasuna",
-    "nivology": "nibologia eta elur-jausiak",
-    "no": "ez",
+    "nivology": {
+      "image_categories": "nibologia eta elur-jausiak"
+    },
+    "no": {
+      "avalanche_signs": "ez",
+      "glacier_gear_types": "ez",
+      "parking_fee_types": "ez",
+      "previous_injuries": "ez",
+      "$$noContext": "ez"
+    },
     "No account yet?": "Konturik ez al duzu ?",
-    "no service": "ez dago zerbitzurik",
-    "no_warden": "zaintzailerik ez",
+    "no service": {
+      "public_transportation_ratings": "ez dago zerbitzurik"
+    },
+    "no_warden": {
+      "custodianship_types": "zaintzailerik ez"
+    },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Aldaketarik ez — Aldaketa edo konposiziorik egin ezkero ez duzu banatzeko eskubiderik",
-    "non_applicable": "ezin da aplikatu",
+    "non_applicable": {
+      "snow_clearance_ratings": "ezin da aplikatu"
+    },
     "NonCommercial — You may not use the material for commercial purposes.": "Erabilera komertzialik ez — Ez duzu lan honen erabilera komertzialik egiteko eskubiderik.",
-    "nov": "azaroa",
-    "novel": "berria",
+    "nov": {
+      "months": "azaroa"
+    },
+    "novel": {
+      "book_types": "berria"
+    },
     "Numbers": "Datuak",
     "numbers": "Ezaugarriak",
-    "oct": "urria",
-    "often": "Elurra sarri garbitzen da",
+    "oct": {
+      "months": "urria"
+    },
+    "often": {
+      "snow_clearance_ratings": "Elurra sarri garbitzen da"
+    },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Orri nagusiko jarioan aukeratutako eskualde et aktibitateen eguneratzeak soilik erakusten dira.\nJarraitutako erabiltzaileen eguneratzeak beti erakusten dira",
-    "open": "irekiak",
-    "open_guarded": "irekia zaintzailearekin",
-    "open_non_guarded": "irekia zaintzailerik gabe",
+    "open": {
+      "lift_status": "irekiak"
+    },
+    "open_guarded": {
+      "hut_status": "irekia zaintzailearekin"
+    },
+    "open_non_guarded": {
+      "hut_status": "irekia zaintzailerik gabe"
+    },
     "opening_hours": "ordutegia",
     "opening_periods": "gordetako sasoia",
     "or try the following pages:": "edo beste orrialde hauek saiatu",
     "orientations": "Norabidea",
-    "Outings": "Irteerak",
-    "overcrowded": "jendetza haundia",
-    "overhang": "desplomea",
+    "overcrowded": {
+      "frequentation_types": "jendetza haundia"
+    },
+    "overhang": {
+      "climbing_styles": "desplomea"
+    },
     "Page not found": "Orria ez da aurkitu",
-    "paragliding": "Parapentea",
-    "paragliding_instructor": "parapente irakaslea",
-    "paragliding_landing": "parapente lurreratzea",
+    "paragliding": {
+      "activities": "Parapentea"
+    },
+    "paragliding_instructor": {
+      "user_categories": "parapente irakaslea"
+    },
+    "paragliding_landing": {
+      "waypoint_types": "parapente lurreratzea"
+    },
     "paragliding_rating": "parapente kotazioa",
-    "paragliding_takeoff": "parapente aireratzea",
+    "paragliding_takeoff": {
+      "waypoint_types": "parapente aireratzea"
+    },
     "parking_fee": "Ordaineko aparkalekua",
     "partial_trip": "Ibilbide partziala",
     "participant_count": "Partehartzaile kopurua",
     "participants": "Parte-hartzaileak",
-    "partly_protected": "babespen partziala",
-    "pass": "lepoa",
+    "partly_protected": {
+      "rain_proof_types": "babespen partziala"
+    },
+    "pass": {
+      "waypoint_types": "lepoa"
+    },
     "Password": "Pasahitza",
-    "people": "nortasuna",
-    "personal": "pribatua",
+    "people": {
+      "image_categories": "nortasuna"
+    },
+    "personal": {
+      "article_types": "pribatua",
+      "image_types": "pribatua",
+      "$$noContext": "pribatua"
+    },
     "personal comments": "iruzkin pribatuak",
     "phone": "telefonoa",
     "phone_custodian": "zaintzailearen telefonoa",
-    "photos-art": "argazki-artea",
-    "pillar": "pilarea",
-    "pitch": "bidea",
-    "poor": "txarrak",
-    "poor service": "zerbitzu murritza",
-    "possible": "delikatua - pasabidea posible da",
+    "photos-art": {
+      "book_types": "argazki-artea"
+    },
+    "pillar": {
+      "route_configuration_types": "pilarea"
+    },
+    "pitch": {
+      "climbing_indoor_types": "bidea"
+    },
+    "poor": {
+      "condition_ratings": "txarrak"
+    },
+    "poor service": {
+      "public_transportation_ratings": "zerbitzu murritza"
+    },
+    "possible": {
+      "glacier_ratings": "delikatua - pasabidea posible da"
+    },
     "Post the first comment": "Lehen iruzkina eman",
-    "pouding": "pouding",
-    "prairie": "zelaia",
-    "precipitation": "prezipitazioa (euria soilik)",
-    "precipitation_heater": "prezipitazioa (euria edo elurra)",
-    "pressure": "presioa",
+    "pouding": {
+      "rock_types": "pouding"
+    },
+    "prairie": {
+      "ground_types": "zelaia"
+    },
+    "precipitation": {
+      "weather_station_types": "prezipitazioa (euria soilik)"
+    },
+    "precipitation_heater": {
+      "weather_station_types": "prezipitazioa (euria edo elurra)"
+    },
+    "pressure": {
+      "weather_station_types": "presioa"
+    },
     "Preview": "Aurreikusi",
     "previous difference": "aurreko desberdintasuna",
     "product_types": "bertako produktu mota",
-    "progressive": "elur garbiketa progresiboa",
+    "progressive": {
+      "snow_clearance_ratings": "elur garbiketa progresiboa"
+    },
     "prominence": "prominentzia",
-    "protected": "eriaren babesean",
-    "psicobloc": "psikobloka",
+    "protected": {
+      "rain_proof_types": "eriaren babesean"
+    },
+    "psicobloc": {
+      "climbing_outdoor_types": "psikobloka"
+    },
     "public_transport": "garraio publikoa",
     "public_transportation_rating": "garraio publikoan heltzeko aukera",
     "public_transportation_types": "garraiobide publiko mota",
@@ -405,85 +747,166 @@
       "snow": "kalitatea",
       "$$noContext": "kalitatea"
     },
-    "quartzite": "kuartzita",
-    "quiet": "jendetzarik ez",
-    "raid": "egun ugariko ibilbidea",
+    "quartzite": {
+      "rock_types": "kuartzita"
+    },
+    "quiet": {
+      "frequentation_types": "jendetzarik ez"
+    },
+    "raid": {
+      "route_types": "egun ugariko ibilbidea"
+    },
     "rain_proof": "Euria",
-    "range": "mendilerroa",
+    "range": {
+      "area_types": "mendilerroa"
+    },
     "ratings": "Kotazioak",
-    "recent_avalanche": "Elur-jausi berri baten aztarnak",
+    "recent_avalanche": {
+      "avalanche_signs": "Elur-jausi berri baten aztarnak"
+    },
     "Recenter on...": "Zentratu",
     "Register": "Izena eman",
     "remarks": "Oharrak",
     "Reset password": "Pasahitza berrasieratu",
     "resolution": "bereizpena",
-    "restaurant": "jatetxea",
-    "return_same_way": "joan eta etorri",
-    "rhyolite": "erriolita",
-    "rise": "igoera",
+    "restaurant": {
+      "product_types": "jatetxea"
+    },
+    "return_same_way": {
+      "route_types": "joan eta etorri"
+    },
+    "rhyolite": {
+      "rock_types": "erriolita"
+    },
+    "rise": {
+      "image_categories": "igoera"
+    },
     "risk_rating": "Arrisku objetitboak",
-    "rock_climbing": "eskalada",
+    "rock_climbing": {
+      "activities": "eskalada"
+    },
     "rock_free_rating": "kotazioa librean",
     "rock_required_rating": "Ezinbesteko kotazioa",
     "rock_types": "Harkaitz mota",
-    "roof": "teilatua",
+    "roof": {
+      "climbing_styles": "teilatua"
+    },
     "route_description": "Ibilbidearen deskripzioa",
     "route_history": "ibilbidearen historioa",
     "route_length": "ibilbidearen luzeera",
     "route_types": "ibilbide mota",
-    "Routes": "Ibilbideak",
     "routes_quantity": "bide kopurua",
-    "safe": "egokia",
+    "safe": {
+      "children_proof_types": "egokia"
+    },
     "Save": "Gorde",
-    "schiste": "eskistoa",
-    "scree": "harritza",
+    "schiste": {
+      "rock_types": "eskistoa"
+    },
+    "scree": {
+      "ground_types": "harritza"
+    },
     "Search ...": "Bilatu ...",
-    "seasonal": "sasoikoa",
-    "seasonal service": "sasoiko zerbitzua",
+    "seasonal": {
+      "parking_fee_types": "sasoikoa"
+    },
+    "seasonal service": {
+      "public_transportation_ratings": "sasoiko zerbitzua"
+    },
     "See the activity of this contributor in your feed": "Kolaboratzaile honen aktibitateak zure web-jarioan ikusi",
     "See the latest version": "Azken bertsioa ikusi",
     "Send reset email": "Berrasiera email-a bidali",
-    "sep": "iraila",
-    "service_on_demand": "eskatutako zerbitzua",
+    "sep": {
+      "months": "iraila"
+    },
+    "service_on_demand": {
+      "public_transportation_types": "eskatutako zerbitzua"
+    },
     "Settings": "Parametroak",
     "Several days?": "Egun bat baino gehiago ?",
     "Share with us!": "Gurekin banatu",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Baldintza berdinetan partekatu — Aldaketarik edo konposiziorik egin ezkero, lan originalak zituen baldintza berdinetan soilik banatzeko eskubidea duzu, hau da, lizentzia berdina erabiliz",
-    "shelter": "estalpea",
+    "shelter": {
+      "waypoint_types": "estalpea"
+    },
     "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
-    "single": "kirol eskalada",
-    "site_info": "info gune",
+    "single": {
+      "climbing_outdoor_types": "kirol eskalada"
+    },
+    "site_info": {
+      "article_categories": "info gune"
+    },
     "ski_exposition": "eski arriskua",
-    "ski_instructor": "eski irakaslea",
-    "ski_patroller": "pistazaina",
+    "ski_instructor": {
+      "user_categories": "eski irakaslea"
+    },
+    "ski_patroller": {
+      "user_categories": "pistazaina"
+    },
     "ski_rating": "eski kotazioa",
-    "skitouring": "Eskia, surfa",
+    "skitouring": {
+      "activities": "Eskia, surfa"
+    },
     "skitouring gear": "Esquí y snowboard de montaña, raquetas",
-    "slab": "plaka",
+    "slab": {
+      "climbing_styles": "plaka"
+    },
     "slope": "Malda",
-    "small_pillar": "txorrerak",
-    "snow": "Elurra",
+    "small_pillar": {
+      "climbing_styles": "txorrerak"
+    },
+    "snow": {
+      "ground_types": "Elurra"
+    },
     "snow_clearance_rating": "Elur garbiketa",
-    "snow_height": "elur altuera",
-    "snow_ice_mixed": "Elurra, izotza eta mistoa",
+    "snow_height": {
+      "weather_station_types": "elur altuera"
+    },
+    "snow_ice_mixed": {
+      "activities": "Elurra, izotza eta mistoa"
+    },
     "snow_quality": "Elur kalitatea",
     "snow_quantity": "Elur kopurua",
     "snowshoe_rating": "erraketa kotazioa",
-    "snowshoeing": "Erraketa",
-    "snowy": "elurtua",
+    "snowshoeing": {
+      "activities": "Erraketa"
+    },
+    "snowy": {
+      "access_conditions": "elurtua"
+    },
     "soft snow": "elur berria",
-    "soft_mobility": "mugikortasun leuna",
-    "some": "jende gutxi",
-    "sometimes": "noiz behinkako elur garbiketa",
-    "sport_shop": "kirol denda",
+    "soft_mobility": {
+      "article_categories": "mugikortasun leuna"
+    },
+    "some": {
+      "frequentation_types": "jende gutxi"
+    },
+    "sometimes": {
+      "snow_clearance_ratings": "noiz behinkako elur garbiketa"
+    },
+    "sport_shop": {
+      "product_types": "kirol denda"
+    },
     "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
-    "stories": "kontakizuna",
+    "stories": {
+      "article_categories": "kontakizuna"
+    },
     "summary": "laburpena",
-    "summit": "gaillurra",
-    "tags": "tag",
-    "technical": "teknikoa",
-    "technics": "teknikoak",
-    "temperature": "tenperatura",
+    "summit": {
+      "waypoint_types": "gaillurra"
+    },
+    "tags": {
+      "article_categories": "tag"
+    },
+    "technical": {
+      "article_categories": "teknikoa"
+    },
+    "technics": {
+      "book_types": "teknikoak"
+    },
+    "temperature": {
+      "weather_station_types": "tenperatura"
+    },
     "The mountain sports community": "Mendi kirolen elkartea",
     "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Irudi honek liburuaren azala erakusten du. Irudia editore edo/eta egileaeren jabetza da.",
@@ -492,44 +915,83 @@
     "timing": "Iraupena",
     "title": "Titulua",
     "Toggle fullscreen": "Pantaila osoa erabili",
-    "topo": "krokisa",
+    "topo": {
+      "book_types": "krokisa",
+      "image_categories": "krokisa"
+    },
     "Topoguide": "Topogida",
-    "topoguide_supplements": "gidaren gehigarriak",
+    "topoguide_supplements": {
+      "article_categories": "gidaren gehigarriak"
+    },
     "total snow": "Lodiera guztia",
-    "tourism": "turismoa",
-    "trachyte": "trachyte",
-    "track": "hurratsa ",
-    "train": "trena",
+    "tourism": {
+      "book_types": "turismoa"
+    },
+    "trachyte": {
+      "rock_types": "trachyte"
+    },
+    "track": {
+      "image_categories": "hurratsa "
+    },
+    "train": {
+      "public_transportation_types": "trena"
+    },
     "Translate into an other lang": "Beste hizkuntza batera itzuli",
-    "traverse": "trabesia",
+    "traverse": {
+      "route_types": "trabesia"
+    },
     "type": "Mota",
     "Types and styles": "Mota eta estiloa",
     "Upload a GPS track": "GPS hurratsa gehitu",
     "url": "URL",
     "Username": "Identifikazioa",
-    "vertical": "bertikala",
-    "very_dangerous": "arriskutsua",
-    "very_safe": "oso egokia",
-    "via_ferrata": "Bide ferrata",
+    "vertical": {
+      "climbing_styles": "bertikala"
+    },
+    "very_dangerous": {
+      "children_proof_types": "arriskutsua"
+    },
+    "very_safe": {
+      "children_proof_types": "oso egokia"
+    },
+    "via_ferrata": {
+      "activities": "Bide ferrata"
+    },
     "via_ferrata_rating": "Bide ferrata kotazioa",
     "View in other lang": "Beste hizkuntza batean ikusi",
-    "virtual": "birtuala",
-    "waterfall": "urjausia",
-    "waterpoint": "iturria",
+    "virtual": {
+      "waypoint_types": "birtuala"
+    },
+    "waterfall": {
+      "waypoint_types": "urjausia"
+    },
+    "waterpoint": {
+      "waypoint_types": "iturria"
+    },
     "waypoint": "waypoint",
     "waypoint_type": "waypoint mota",
-    "Waypoints": "Waypointak",
     "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",
     "weather and conditions": "Egoera eta eguraldia",
-    "weather_station": "metereologia estazioa",
+    "weather_station": {
+      "waypoint_types": "metereologia estazioa"
+    },
     "weather_station_types": "Meteorologia estazioak neurtutako aldagaiak",
-    "webcam": "webcam",
+    "webcam": {
+      "waypoint_types": "webcam"
+    },
     "width": "zabalera",
-    "wind_direction": "haizearen norabidea",
-    "wind_speed": "haizearen abiadura",
+    "wind_direction": {
+      "weather_station_types": "haizearen norabidea"
+    },
+    "wind_speed": {
+      "weather_station_types": "haizearen abiadura"
+    },
     "write a summary": "Laburpena hemen adierazi",
     "write your comments": "Zure iruzkina utzi",
-    "yes": "bai"
+    "yes": {
+      "parking_fee_types": "bai",
+      "$$noContext": "bai"
+    }
   }
 }

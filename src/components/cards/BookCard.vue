@@ -5,7 +5,7 @@
         </card-title>
 
         <card-row>
-            <textual-array :array="document.book_types"/>
+            <textual-array :array="document.book_types" i18n i18n-context="book_types"/>
         </card-row>
 
         <card-row>

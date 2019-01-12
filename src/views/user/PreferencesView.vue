@@ -47,7 +47,7 @@
                     <input-activity v-model="preferences.activities" @input="save"/>
                 </div>
 
-                <h3 v-translate>Areas</h3>
+                <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
 
                 <div class="columns is-multiline">
 

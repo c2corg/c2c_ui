@@ -1,5 +1,5 @@
 <template>
-    <span :title="$gettext('quality') + ' : ' + $gettext(quality)">
+    <span :title="$gettext('quality') + ' : ' + $gettext(quality, 'quality_types')">
         <icon-quality :quality="quality"/>
     </span>
 </template>

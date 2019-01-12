@@ -8,7 +8,7 @@
             class="menu-item is-ellipsed"
             :class="{'router-link-active':item.activeFor.includes($route.name)}">
             <component :is="item.icon" />
-            <span class="menu-item-text"> {{ item.text }} </span>
+            <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
         </router-link>
 
         <div class="menu-footer is-size-7">
@@ -47,10 +47,10 @@
             menuItems() {
                 return [
                     { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
-                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('Outings'), activeFor: ['outing'] },
+                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'] },
                     { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
                     { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
-                    { name: 'articles', icon: 'icon-article', text: this.$gettext('Articles'), activeFor: ['article'] }
+                    { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
                 ]
             }
         }

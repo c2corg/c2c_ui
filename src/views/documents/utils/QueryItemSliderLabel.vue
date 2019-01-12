@@ -3,7 +3,7 @@
         <div class="level is-mobile"> <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
             <span class="level-left">
                 <span class="level-item query-bound-value">
-                    <span v-if="field.i18n">{{ $gettext(value[0]) }}</span>
+                    <span v-if="field.i18n">{{ $gettext(value[0], field.i18nContext) }}</span>
                     <span v-else>{{ value[0] }}</span>
                     <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
                 </span>
@@ -15,7 +15,7 @@
             </span>
             <span class="level-right">
                 <span class="level-item query-bound-value">
-                    <span v-if="field.i18n">{{ $gettext(value[1]) }}</span>
+                    <span v-if="field.i18n">{{ $gettext(value[1], field.i18nContext) }}</span>
                     <span v-else>{{ value[1] }}</span>
                     <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
                 </span>

@@ -21,6 +21,8 @@
             <textual-array
                 v-if="document.categories"
                 :array="document.categories"
+                i18n
+                i18n-context="user_categories"
                 class="is-ellipsed"/>
         </card-row>
     </card-container>
