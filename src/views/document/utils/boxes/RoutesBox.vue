@@ -1,7 +1,7 @@
 <template>
     <div class="box" v-if="source.length !=0 || !hideButtons">
         <h2 class="title is-2">
-            <span v-translate>Routes</span>
+            <span>{{ $gettext('routes') | uppercaseFirstLetter }}</span>
             <add-link
                 v-if="!hideButtons"
                 document-type="route"
@@ -19,7 +19,7 @@
         <div v-for="activity of Object.keys(routes)" :key="activity">
             <h3 class="title is-3">
                 <icon-activity :activity="activity" />
-                {{ $gettext(activity) }}
+                {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
             </h3>
             <div v-for="(route, i) of Object.values(routes[activity])" :key="i">
                 <document-link :document="route" />,

@@ -28,7 +28,7 @@
                 <form-input-row :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
 
                 <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
-                <associations-input-row :label="$gettext('Routes')" :document="document" :field="fields.routes" />
+                <associations-input-row :label="$gettext('routes')" :document="document" :field="fields.routes" />
 
                 <quality-input-row :document="document" />
 

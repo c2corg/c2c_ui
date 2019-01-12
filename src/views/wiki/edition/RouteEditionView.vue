@@ -20,7 +20,7 @@
                     :field="fields.main_waypoint_id"/>
 
                 <associations-input-row
-                    :label="$gettext('Waypoints')"
+                    :label="$gettext('waypoints')"
                     :document="document"
                     :field="fields.waypoints" />
 

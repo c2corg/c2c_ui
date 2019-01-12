@@ -8,7 +8,11 @@
             {{ value }}
         </a>
 
-        <textual-array v-else-if="isArray" :array="value" :i18n="field.i18n"/>
+        <textual-array
+            v-else-if="isArray"
+            :array="value"
+            :i18n="field.i18n"
+            :i18n-context="field.i18nContext"/>
 
         <span v-else-if="typeof(value) === 'boolean'">
             <span v-if="value" v-translate>
@@ -20,7 +24,7 @@
         </span>
 
         <span v-else-if="field.i18n">
-            {{ $gettext(value) }}
+            {{ $gettext(value, field.i18nContext) }}
         </span>
 
         <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span><!--

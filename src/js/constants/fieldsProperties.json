@@ -782,6 +782,10 @@
         "max": 9999,
         "unit": "m"
     },
+    "protected":
+    {
+        "type": "boolean"
+    },
     "public_transport":
     {
         "type": "boolean"

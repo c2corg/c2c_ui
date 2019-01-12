@@ -1,7 +1,7 @@
 <template>
     <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after">
         <h3 v-if="field.name !='summary' && !hideTitle" class="title is-3" >
-            {{ $gettext(title || field.name) }}
+            {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
         </h3>
         <markdown
             v-if="document.cooked[field.name]"

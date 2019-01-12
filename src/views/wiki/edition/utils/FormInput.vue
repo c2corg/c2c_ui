@@ -50,6 +50,7 @@
         :options="field.values"
         :required="field.required"
         :i18n="field.i18n"
+        :i18n-context="field.i18nContext"
         :error-message="errorMessage"
         v-model="object[field.name]"/>
 
@@ -69,6 +70,7 @@
         :placeholder="placeholder || $gettext(field.name)"
         :required="field.required"
         :i18n="field.i18n"
+        :i18n-context="field.i18nContext"
         :options="field.values"
         :error-message="errorMessage"
         @input="$emit('input', arguments[0])"

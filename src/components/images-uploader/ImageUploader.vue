@@ -30,7 +30,7 @@
                                 type="checkbox"
                                 :checked="document.image_categories.includes(item)"
                                 @input="toggleCategory(item)">
-                            {{ $gettext(item) | uppercaseFirstLetter }}
+                            {{ $gettext(item, 'image_categories') | uppercaseFirstLetter }}
                         </label>
                     </div>
                 </div>

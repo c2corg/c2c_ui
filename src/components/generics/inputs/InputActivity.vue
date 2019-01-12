@@ -5,11 +5,11 @@
             v-for="activity of activities" :key="activity"
             :class="{'selected':value_.includes(activity), 'with-labels' :showLabels }"
             class="input-item"
-            :title="showLabels ? null : $gettext(activity)"
+            :title="showLabels ? null : $gettext(activity, 'activities')"
             @click="toggle(activity)">
             <icon-activity :activity="activity" />
             <span v-if="showLabels" class="is-size-6 input-label">
-                {{ $gettext(activity) }}
+                {{ $gettext(activity, 'activities') }}
             </span>
         </span>
     </div>

@@ -6,17 +6,19 @@
                 Topoguide
             </h1>
             <div class="links is-flex">
-                <topoguide-view-link to="outings" :label="$gettext('Outings')" icon="icon-outing"/>
-                <topoguide-view-link to="routes" :label="$gettext('Routes')" icon="icon-route"/>
-                <topoguide-view-link to="waypoints" :label="$gettext('Waypoints')" icon="icon-waypoint"/>
-                <topoguide-view-link to="images" :label="$gettext('Images')" icon="icon-image"/>
-                <topoguide-view-link to="books" :label="$gettext('Books')" icon="icon-book"/>
-                <topoguide-view-link to="areas" :label="$gettext('Areas')" icon="icon-area"/>
+                <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing"/>
+                <topoguide-view-link to="routes" :label="$gettext('routes')" icon="icon-route"/>
+                <topoguide-view-link to="waypoints" :label="$gettext('waypoints')" icon="icon-waypoint"/>
+                <topoguide-view-link to="images" :label="$gettext('images')" icon="icon-image"/>
+                <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book"/>
+                <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area"/>
             </div>
         </div>
         <div class="section columns is-multiline is-variable is-8">
             <div class="column is-6">
-                <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Outings</h2>
+                <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+                    {{ $gettext('outings') | uppercaseFirstLetter }}
+                </h2>
                 <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-3"
@@ -25,7 +27,7 @@
                         :to="{name:'outings', query:{act:activity}}">
                         <span class="is-size-2"><icon-activity :activity="activity" /></span>
                         <span class="has-text-dark has-text-weight-semibold">
-                            {{ $gettext(activity) | uppercaseFirstLetter }}
+                            {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
                         </span>
                     </topoguide-view-small-link>
 
@@ -40,7 +42,9 @@
                 </div>
             </div>
             <div class="column is-6">
-                <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Routes</h2>
+                <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+                    {{ $gettext('routes') | uppercaseFirstLetter }}
+                </h2>
                 <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-3"
@@ -49,7 +53,7 @@
                         :to="{name:'routes', query:{act:activity}}">
                         <span class="is-size-2"><icon-activity :activity="activity" /></span>
                         <span class="has-text-dark has-text-weight-semibold">
-                            {{ $gettext(activity) | uppercaseFirstLetter }}
+                            {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
                         </span>
                     </topoguide-view-small-link>
 
@@ -64,7 +68,9 @@
                 </div>
             </div>
             <div class="column is-12">
-                <h2 class="title is-2 has-text-centered has-background-primary has-text-light" v-translate>Waypoints</h2>
+                <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+                    {{ $gettext('waypoints') | uppercaseFirstLetter }}
+                </h2>
                 <div class="columns is-multiline is-variable is-mobile is-1">
                     <topoguide-view-small-link
                         class="column is-2"
@@ -73,7 +79,7 @@
                         :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
                         <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
                         <span class="has-text-dark has-text-weight-semibold">
-                            {{ $gettext(waypoint_type) | uppercaseFirstLetter }}
+                            {{ $gettext(waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}
                         </span>
                     </topoguide-view-small-link>
 

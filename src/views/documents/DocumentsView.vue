@@ -20,7 +20,7 @@
                                         class="has-text-dark">
                                         <icon-document :document-type="type" />
                                         &nbsp;
-                                        {{ getDocumentTypeTitle(type) }}
+                                        {{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}
                                     </router-link>
                                 </div>
                             </div>
@@ -205,7 +205,6 @@
             },
 
             getDocumentTypeTitle(documentType) {
-                documentType = documentType.charAt(0).toUpperCase() + documentType.slice(1)
                 return this.$gettext(documentType + 's')
             }
         }

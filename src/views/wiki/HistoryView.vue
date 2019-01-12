@@ -32,7 +32,7 @@
                         List of versions for language:
                     </span>
                     <span>
-                        &nbsp;{{ $gettext(lang) }}
+                        &nbsp;{{ $gettext(lang, 'langs') }}
                     </span>
                 </button>
             </div>
