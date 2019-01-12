@@ -70,9 +70,9 @@
                 <form-input-row :document="document" :field="fields.global_rating"/>
 
                 <form-row :label="$gettext('Climbing ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free')"/>
-                    <form-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required')"/>
-                    <form-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid')"/>
+                    <form-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free', 'free climbing rating')"/>
+                    <form-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required', 'required climbing rating')"/>
+                    <form-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid', 'aid climbing rating')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.labande_global_rating"/>

@@ -24,7 +24,7 @@
                 <map-input-row :document="document" geom-detail-editable/>
             </tab-item>
 
-            <tab-item :title="$gettext('General informations')">
+            <tab-item :title="$gettext('general informations')">
                 <form-input-row :document="document" :field="fields.date" />
                 <form-input-row :document="document" :field="fields.event_type"/>
                 <form-input-row :document="document" :field="fields.nb_participants" />
@@ -35,7 +35,7 @@
                 <form-input-row :document="document" :field="fields.avalanche_slope"/>
             </tab-item>
 
-            <tab-item :title="$gettext('General informations')">
+            <tab-item :title="$gettext('general informations')">
                 <form-input-row :document="document" :field="fields.age" />
                 <form-input-row :document="document" :field="fields.gender" />
                 <form-input-row :document="document" :field="fields.author_status"/>
