@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <h2 v-translate>Home page feed</h2>
+        <h2 v-translate>Home page feed parameters</h2>
         <loading-notification :promise="promise" />
         <div v-if="preferences">
             <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>

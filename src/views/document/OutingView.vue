@@ -69,7 +69,7 @@
                                 :document="document"
                                 :field1="fields.height_diff_up"
                                 :field2="fields.height_diff_down"
-                                :label="$gettext('height_difference')"
+                                :label="$gettext('height_diff')"
                                 show-signs />
 
                             <label-value v-if="document.length_total" :label="$gettext('length_total')">

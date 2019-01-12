@@ -34,7 +34,7 @@
                         <span v-translate>previous difference</span>
                     </diff-link>
                     <span v-else v-translate>
-                        this is the first version
+                        This is the first version
                     </span>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                         →
                     </diff-link>
                     <span v-else v-translate>
-                        this is the last version
+                        This is the last version
                     </span>
                 </div>
             </div>

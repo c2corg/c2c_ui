@@ -332,7 +332,7 @@
                 if (this.selection.text.includes('\n')) {
                     this.handleBlockMarkdownTag('    ')
                 } else { // inline code mode
-                    this.handleSimpleMarkdownTag('`', this.$gettext('Code fragment'))
+                    this.handleSimpleMarkdownTag('`', this.$gettext('Unformatted text'))
                 }
             },
 

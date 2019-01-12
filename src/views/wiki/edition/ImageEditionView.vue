@@ -6,7 +6,7 @@
         :generic-errors="genericErrors"
         @save="save">
         <tab-view>
-            <tab-item :title="$gettext('general information')">
+            <tab-item :title="$gettext('general informations')">
                 <form-input-row :document="document" :field="fields.title" is-expanded/>
                 <form-input-row :document="document" :field="fields.image_type" />
                 <form-input-row :document="document" :field="fields.activities" />
@@ -49,7 +49,7 @@
                 <form-input-row :document="document" :field="fields.iso_speed" />
             </tab-item>
 
-            <tab-item :title="$gettext('general information')">
+            <tab-item :title="$gettext('general informations')">
                 <form-input-row :document="document" :field="fields.summary"/>
                 <form-input-row :document="document" :field="fields.description"/>
             </tab-item>
