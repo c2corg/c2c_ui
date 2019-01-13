@@ -135,6 +135,9 @@
     "artificial": {
       "rock_types": "artificiel"
     },
+    "ascent": {
+      "MTB rating": "montée"
+    },
     "Association": "Camptocamp Association",
     "association": {
       "article_categories": "association"
@@ -371,6 +374,7 @@
     "Delete this document": "Supprimer ce document",
     "Delete this locale": "Supprimer cette version linguistique",
     "descent": {
+      "MTB rating": "descente",
       "image_categories": "descente"
     },
     "Describe access": "Décrivez ici l'accès",
@@ -492,7 +496,6 @@
     "face": {
       "route_configuration_types": "face"
     },
-    "Factors": "Facteurs",
     "falling_ice": {
       "event_types": "chute de glace"
     },

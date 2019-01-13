@@ -89,8 +89,8 @@
                 <form-input-row :document="document" :field="fields.hiking_rating"/>
 
                 <form-row :label="$gettext('MTB ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('down')"/>
-                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('up')"/>
+                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('descent', 'MTB rating')"/>
+                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('ascent', 'MTB rating')"/>
                 </form-row>
 
                 <form-row :label="$gettext('Exposition & engagement')" is-grouped>
