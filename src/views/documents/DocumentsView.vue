@@ -6,7 +6,9 @@
                 <span class="level-item">
                     <div class="dropdown is-hoverable">
                         <div class="dropdown-trigger">
-                            <span class="title is-1">{{ getDocumentTypeTitle(documentType) }}</span>
+                            <span class="title is-1">
+                                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+                            </span>
                         </div>
                         <div class="dropdown-menu" role="menu">
                             <div class="dropdown-content">
