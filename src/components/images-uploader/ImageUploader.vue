@@ -301,6 +301,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            user-select: none;
         }
     }
 
@@ -313,7 +314,7 @@
             outline:0;
             display:block;
             width:100%;
-            user-select: none;
+            font-size:1rem;
         }
     }
 
