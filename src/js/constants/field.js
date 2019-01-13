@@ -22,8 +22,13 @@ const onlyRockClimbing = function(document) {
     return activities[0] === 'rock_climbing'
 }
 
+// this handler is only for routes
 const getIsOnlyRockClimbingTypesHandler = function(types) {
     return function(document) {
+        if (document.type !== 'r') {
+            return true 
+        }
+
         if (onlyRockClimbing(document) && !types.includes(document.climbing_outdoor_type)) {
             return false
         }
