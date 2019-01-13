@@ -11,6 +11,11 @@
             <tab-item :title="$gettext('Comments')">
                 <form-input-row :document="document" :field="fields.title"/>
                 <form-input-row :document="document" :field="fields.activities"/>
+
+                <associations-input-row :document="document" :field="fields.articles" />
+                <associations-input-row :document="document" :field="fields.routes" />
+                <associations-input-row :document="document" :field="fields.outings" />
+
             </tab-item>
 
             <tab-item :title="$gettext('Geolocation')">
@@ -33,9 +38,6 @@
                 <form-input-row :document="document" :field="fields.rescue"/>
                 <form-input-row :document="document" :field="fields.avalanche_level"/>
                 <form-input-row :document="document" :field="fields.avalanche_slope"/>
-            </tab-item>
-
-            <tab-item :title="$gettext('general informations')">
                 <form-input-row :document="document" :field="fields.age" />
                 <form-input-row :document="document" :field="fields.gender" />
                 <form-input-row :document="document" :field="fields.author_status"/>
@@ -49,10 +51,7 @@
                 <form-input-row :document="document" :field="fields.summary"/>
                 <form-input-row :document="document" :field="fields.description" :placeholder="$gettext('Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)')"/>
                 <form-input-row :document="document" :field="fields.anonymous" />
-            </tab-item>
-
-            <tab-item :title="$gettext('Factors')">
-                <form-input-row :document="document" :field="fields.place" :placeholder="$gettext('Information on the location of the incident.  Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here).  After completing the report, you can associate it to a route, a climbing site or an outing.')"/>
+                <form-input-row :document="document" :field="fields.place" :placeholder="$gettext('Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.')"/>
                 <form-input-row :document="document" :field="fields.route_study" :placeholder="$gettext('Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.')"/>
                 <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.')"/>
                 <form-input-row :document="document" :field="fields.training" :placeholder="$gettext('At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.')"/>
@@ -66,12 +65,6 @@
                 <form-input-row :document="document" :field="fields.modifications" />
                 <form-input-row :document="document" :field="fields.other_comments" :placeholder="$gettext('Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.')"/>
                 <form-input-row :document="document" :field="fields.disable_comments" />
-            </tab-item>
-
-            <tab-item :title="$gettext('associations')">
-                <associations-input-row :document="document" :field="fields.articles" />
-                <associations-input-row :document="document" :field="fields.routes" />
-                <associations-input-row :document="document" :field="fields.outings" />
             </tab-item>
 
         </tab-view>
