@@ -18,6 +18,8 @@
                 <form-input-row :document="document" :field="fields.nb_pages" />
                 <form-input-row :document="document" :field="fields.isbn" />
                 <form-input-row :document="document" :field="fields.url" is-expanded />
+
+                <quality-input-row :document="document" />
             </tab-item>
 
             <tab-item :title="$gettext('description')">

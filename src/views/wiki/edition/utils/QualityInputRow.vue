@@ -1,8 +1,17 @@
 <template>
     <form-row :label="$gettext('quality')" always-visible is-grouped>
 
-        <input-simple v-if="autoComputeQuality && automaticComputationAvailable" :value="$gettext(computedQuality)" disabled/>
-        <input-simple v-else :options="$options.quality_types" i18n required v-model="manualQuality"/>
+        <input-simple
+            v-if="autoComputeQuality && automaticComputationAvailable"
+            :value="$gettext(computedQuality)"
+            disabled/>
+        <input-simple
+            v-else
+            :options="$options.quality_types"
+            i18n
+            i18n-context="quality_types"
+            required
+            v-model="manualQuality"/>
 
         <div class="control" v-if="automaticComputationAvailable">
             <input-checkbox v-model="autoComputeQuality">
