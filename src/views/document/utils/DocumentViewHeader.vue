@@ -16,14 +16,14 @@
 
                     <history-link
                         v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
-                        v-tooltip="$gettext('History')"
+                        :title="$gettext('History')"
                         :document="document"
                         :lang="lang">
                         <icon-history />
                     </history-link>
 
                     <span
-                        v-tooltip="$gettext('Add images')"
+                        :title="$gettext('Add images')"
                         v-if="isEditable && documentType !== 'image'"
                         @click="$refs.imagesUploader.show()">
                         <icon-image />
@@ -33,7 +33,7 @@
                         v-if="isEditable"
                         :document="document"
                         :lang="lang"
-                        v-tooltip="$gettext('Edit')">
+                        :title="$gettext('Edit')">
                         <icon-edit />
                     </edit-link>
                 </span>

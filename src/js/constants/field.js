@@ -26,7 +26,7 @@ const onlyRockClimbing = function(document) {
 const getIsOnlyRockClimbingTypesHandler = function(types) {
     return function(document) {
         if (document.type !== 'r') {
-            return true 
+            return true
         }
 
         if (onlyRockClimbing(document) && !types.includes(document.climbing_outdoor_type)) {

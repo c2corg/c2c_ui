@@ -41,7 +41,7 @@
                             <document-title :document="document"/>
                             <br>
                             <span v-if="document.elevation || document.elevation_max">
-                                <span v-tooltip="$gettext('elevation_max')">
+                                <span :title="$gettext('elevation_max')">
                                     <fa-icon icon="sort-amount-up" class="has-text-primary"/>
                                 </span>
                                 {{ document.elevation || document.elevation_max }}&nbsp;m
