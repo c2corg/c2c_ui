@@ -268,7 +268,8 @@
     },
     "disable_comments":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "durations":
     {
