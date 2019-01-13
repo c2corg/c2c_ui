@@ -43,6 +43,7 @@
             <button
                 :disabled="documents.length === 0"
                 class="button is-primary"
+                :class="{'is-loading': promise.loading}"
                 @click="save"
                 v-translate>
                 Save
@@ -80,7 +81,8 @@
             return {
                 files: {},
                 documents: [],
-                categoriesEdition: false
+                categoriesEdition: false,
+                promise: {}
             }
         },
 
@@ -94,11 +96,15 @@
             },
 
             save() {
-                c2c.createImages(this.documents).then(() => {
+                this.promise = c2c.createImages(this.documents).then(() => {
+                    // clean
+                    this.files = {}
+                    this.documents = []
+
                     this.hide()
 
-                // TODO handle error
-                // TODO redraw parent
+                    // TODO handle error
+                    // TODO redraw parent
                 })
             },
 
