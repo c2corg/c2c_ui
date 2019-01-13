@@ -32,6 +32,7 @@
                     :label="$gettext('maps_references')"
                     :placeholder="$gettext('Add here maps not automatically referenced')"/>
 
+                <quality-input-row :document="document" />
             </tab-item>
 
             <tab-item :title="$gettext('Transport &amp; road or PT access')">
