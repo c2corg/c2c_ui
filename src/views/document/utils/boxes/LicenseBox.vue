@@ -4,10 +4,10 @@
            target="_blank">
             <icon-creative-commons />
             CC
-            <span v-tooltip="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
+            <span :title="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
                 BY
             </span>
-            <span v-tooltip="$gettext('ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.')">
+            <span :title="$gettext('ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.')">
                 SA
             </span>
             3.0
@@ -20,13 +20,13 @@
            target="_blank">
             <icon-creative-commons />
             CC
-            <span v-tooltip="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
+            <span :title="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
                 BY
             </span>
-            <span v-tooltip="$gettext('NonCommercial — You may not use the material for commercial purposes.')">
+            <span :title="$gettext('NonCommercial — You may not use the material for commercial purposes.')">
                 NC
             </span>
-            <span v-tooltip="$gettext('NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.')">
+            <span :title="$gettext('NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.')">
                 ND
             </span>
             3.0
@@ -37,7 +37,7 @@
         </a>
         <span
             v-else-if="license=='copyright'"
-            v-tooltip="$gettext('This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.')">
+            :title="$gettext('This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.')">
             <fa-icon icon="ban"/>
             <span v-translate>
                 This book cover is the property of its editor and/or author
