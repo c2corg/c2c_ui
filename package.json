@@ -26,7 +26,6 @@
     "axios": "0.18.0",
     "bulma": "0.7.2",
     "bulma-checkradio": "2.1.0",
-    "bulma-tooltip": "2.0.2",
     "d3": "5.7.0",
     "file-saver": "2.0.0",
     "moment": "2.23.0",
