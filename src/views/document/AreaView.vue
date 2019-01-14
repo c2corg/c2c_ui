@@ -3,6 +3,10 @@
         <document-view-header :document="document" :version="version" :promise="promise" />
         <div v-if="document" class="columns">
             <div class="column is-3">
+                <div class="box">
+                    <field-view :document="document" :field="fields.area_type"/>
+                    <field-view :document="document" :field="fields.quality"/>
+                </div>
                 <map-box :document="document"/>
                 <tool-box :document="document"/>
             </div>

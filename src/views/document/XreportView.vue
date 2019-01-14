@@ -27,6 +27,7 @@
                     <field-view :document="document" :field="fields.nb_impacted"/>
                     <field-view :document="document" :field="fields.rescue"/>
                     <field-view :document="document" :field="fields.severity"/>
+                    <field-view :document="document" :field="fields.quality"/>
                 </div>
 
                 <map-box :document="document"/>
