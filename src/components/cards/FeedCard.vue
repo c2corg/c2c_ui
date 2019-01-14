@@ -8,7 +8,7 @@
                 <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
             </span>
 
-            <icon-document :document-type="documentType" class="is-pulled-right is-size-3"/>
+            <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3"/>
         </card-title>
 
         <card-row>
@@ -49,7 +49,7 @@
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
                 <marker-image-count :image-count="item.document.img_count" />
-                <icon-geometry-detail v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
+                <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
             </span>
             <span> {{ $moment.timeAgo(item.time) }} </span>
             <span>
