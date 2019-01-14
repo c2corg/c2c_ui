@@ -3,7 +3,6 @@
 * maps
   * ask for an Bing Map dev key
 * signup (CAPTCHA)
-* v-tooltip : may have break lines
 * Markdown
 
 ## Wait for c2c issues
@@ -15,11 +14,6 @@
   * validate_new_password : callback when requestPasswordChange
   * validate_change_email
   * validate_register_email
-
-## Wait for dep issues
-
-* "vue/attributes-order" put v-tooltip in first, not recognized as OTHER_ATTR :
-     need to update eslint-plugin-vue to 5.4, but it's a dependancies of vue-cli, so wait...
 
 ## Nice to have
 

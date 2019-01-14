@@ -66,7 +66,7 @@ with open("./src/translations/fixed_strings_common_js.vue", "w") as f:
         if attribute_names[attribute_name]: # does it need translation ?
             f.write("        <!-- {} -->\n".format(attribute_name))
             for value in attributes[attribute_name]:
-                f.write("        <span v-translate>{}</span>\n".format(value))
+                f.write('        <span v-translate translate-context="{}">{}</span>\n'.format(attribute_name, value))
 
     f.write("    </span>\n")
     f.write("</template>\n")

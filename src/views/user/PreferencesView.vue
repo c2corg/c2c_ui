@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <h2 v-translate>Home page feed</h2>
+        <h2 v-translate>Home page feed parameters</h2>
         <loading-notification :promise="promise" />
         <div v-if="preferences">
             <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
@@ -47,7 +47,7 @@
                     <input-activity v-model="preferences.activities" @input="save"/>
                 </div>
 
-                <h3 v-translate>Areas</h3>
+                <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
 
                 <div class="columns is-multiline">
 

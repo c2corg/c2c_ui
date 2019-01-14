@@ -28,11 +28,11 @@
 
             <ul>
                 <li v-if="document.camera_name"> {{ document.camera_name }}</li>
-                <li v-if="document.exposure_time" v-tooltip="$gettext('exposure_time')">{{ document.exposure_time }}s</li>
-                <li v-if="document.fnumber" v-tooltip="$gettext('fnumber')">f/{{ document.fnumber }}</li>
-                <li v-if="document.focal_length" v-tooltip="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
-                <li v-if="document.iso_speed" v-tooltip="$gettext('iso_speed')">{{ document.iso_speed }} ISO</li>
-                <li v-if="document.width && height" v-tooltip="$gettext('resolution')">
+                <li v-if="document.exposure_time" :title="$gettext('exposure_time')">{{ document.exposure_time }}s</li>
+                <li v-if="document.fnumber" :title="$gettext('fnumber')">f/{{ document.fnumber }}</li>
+                <li v-if="document.focal_length" :title="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
+                <li v-if="document.iso_speed" :title="$gettext('iso_speed')">{{ document.iso_speed }} ISO</li>
+                <li v-if="document.width && height" :title="$gettext('resolution')">
                     {{ document.height }} x {{ document.width }} <span translate>pixels</span>
                 </li>
             </ul>

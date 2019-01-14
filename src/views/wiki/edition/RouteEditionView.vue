@@ -20,7 +20,7 @@
                     :field="fields.main_waypoint_id"/>
 
                 <associations-input-row
-                    :label="$gettext('Waypoints')"
+                    :label="$gettext('waypoints')"
                     :document="document"
                     :field="fields.waypoints" />
 
@@ -70,9 +70,9 @@
                 <form-input-row :document="document" :field="fields.global_rating"/>
 
                 <form-row :label="$gettext('Climbing ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free')"/>
-                    <form-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required')"/>
-                    <form-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid')"/>
+                    <form-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free', 'free climbing rating')"/>
+                    <form-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required', 'required climbing rating')"/>
+                    <form-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid', 'aid climbing rating')"/>
                 </form-row>
 
                 <form-input-row :document="document" :field="fields.labande_global_rating"/>
@@ -89,8 +89,8 @@
                 <form-input-row :document="document" :field="fields.hiking_rating"/>
 
                 <form-row :label="$gettext('MTB ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('down')"/>
-                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('up')"/>
+                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('descent', 'MTB rating')"/>
+                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('ascent', 'MTB rating')"/>
                 </form-row>
 
                 <form-row :label="$gettext('Exposition & engagement')" is-grouped>

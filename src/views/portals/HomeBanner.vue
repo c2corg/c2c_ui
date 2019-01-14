@@ -10,8 +10,9 @@
                     v-for="activity of $options.activities"
                     :key="activity"
                     :to="{name:'outings', query:{act:activity}}"
+                    :title="$gettext(activity, 'activities')"
                     class="outings-link">
-                    <icon-activity :activity="activity" x-v-tooltip="$gettext(activity)"/>
+                    <icon-activity :activity="activity"/>
                 </router-link>
             </div>
 

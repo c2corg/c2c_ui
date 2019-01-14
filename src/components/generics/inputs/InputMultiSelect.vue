@@ -6,7 +6,7 @@
             @click="toggle(option)"
             class="button is-primary is-rounded"
             :class="{ 'is-outlined': !value_.includes(option) }">
-            {{ (i18n ? $gettext(option) : option) | uppercaseFirstLetter }}
+            {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
         </button>
     </div>
 </template>
@@ -22,6 +22,14 @@
             options: {
                 type: Array,
                 required: true
+            },
+            i18n: {
+                type: Boolean,
+                default: false
+            },
+            i18nContext: {
+                type: String,
+                default: undefined
             }
         }
     }

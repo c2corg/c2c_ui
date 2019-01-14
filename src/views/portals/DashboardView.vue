@@ -2,7 +2,9 @@
     <div class="section">
         <html-header title="Dashboard"/>
         <div class="box">
-            <h3 class="title is-3" v-translate>Images</h3>
+            <h3 class="title is-3">
+                {{ $gettext('images') | uppercaseFirstLetter }}
+            </h3>
             <loading-notification :promise="imagesPromise" />
             <gallery v-if="images!=null" :images="images.documents" />
         </div>
@@ -10,7 +12,9 @@
         <div class="columns">
             <div class="column is-7">
                 <div class="box">
-                    <h3 class="title is-2" v-translate>Outings</h3>
+                    <h3 class="title is-2">
+                        {{ $gettext('outings') | uppercaseFirstLetter }}
+                    </h3>
                     <loading-notification :promise="outingsPromise" />
                     <div v-if="outings!=null">
                         <div v-for="outing of outings.documents" :key="outing.document_id">
@@ -27,7 +31,9 @@
                 </div>
 
                 <div class="box">
-                    <h3 class="title is-3" v-translate>Routes</h3>
+                    <h3 class="title is-3">
+                        {{ $gettext('routes') | uppercaseFirstLetter }}
+                    </h3>
                     <loading-notification :promise="routesPromise" />
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">

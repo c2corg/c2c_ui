@@ -1,6 +1,6 @@
 <template>
 
-    <fa-layers class="fa-lg" @click="$emit('click')" :class="{'hidden-button':!visible}">
+    <fa-layers class="fa-lg" @click="visible ? $emit('click') : undefined" :class="{'hidden-button':!visible}">
         <fa-icon icon="circle" />
         <fa-icon
             :icon="['far','trash-alt']"

@@ -4,7 +4,6 @@ import config from '@/js/config.ts'
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// import HomeView from '@/views/staticViews/HomeView'
 import TopoguideView from '@/views/static-views/TopoguideView'
 import SeracView from '@/views/static-views/SeracView'
 import WorkInProgressView from '@/views/static-views/WorkInProgressView'

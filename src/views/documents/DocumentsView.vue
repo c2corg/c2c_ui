@@ -6,7 +6,9 @@
                 <span class="level-item">
                     <div class="dropdown is-hoverable">
                         <div class="dropdown-trigger">
-                            <span class="title is-1">{{ getDocumentTypeTitle(documentType) }}</span>
+                            <span class="title is-1">
+                                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+                            </span>
                         </div>
                         <div class="dropdown-menu" role="menu">
                             <div class="dropdown-content">
@@ -20,7 +22,7 @@
                                         class="has-text-dark">
                                         <icon-document :document-type="type" />
                                         &nbsp;
-                                        {{ getDocumentTypeTitle(type) }}
+                                        {{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}
                                     </router-link>
                                 </div>
                             </div>
@@ -42,13 +44,23 @@
             <div class="level-right" v-if="documentType!='profile'">
                 <div class="level-item is-size-3 is-hidden-mobile">
                     <fa-icon
-                        :icon="listMode ? 'th-list' : 'th-large'"
+                        icon="th-list"
+                        class="has-cursor-pointer"
+                        :class="listMode ? 'has-text-primary' : ''"
                         @click="toogleProperty('listMode')" />
-                    <div class="level-item is-size-3"/>
+                    &nbsp;
+                    <fa-icon
+                        icon="th-large"
+                        class="has-cursor-pointer"
+                        :class="!listMode ? 'has-text-primary' : ''"
+                        @click="toogleProperty('listMode')" />
+                    &nbsp;
+                    &nbsp;
                     <fa-icon
                         v-if="documentAreGeoLocalized"
-                        :class="{'has-text-primary':showMap}"
                         icon="map-marked-alt"
+                        class="has-cursor-pointer"
+                        :class="{'has-text-primary':showMap}"
                         @click="toogleProperty('showMap')" />
                 </div>
                 <div class="level-item is-size-3 is-hidden-tablet">
@@ -195,7 +207,6 @@
             },
 
             getDocumentTypeTitle(documentType) {
-                documentType = documentType.charAt(0).toUpperCase() + documentType.slice(1)
                 return this.$gettext(documentType + 's')
             }
         }

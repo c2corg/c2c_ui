@@ -7,6 +7,7 @@ const attrs = common.attributes
 // values  can be a string : it describes a common.attributes fields
 for (let property of Object.values(fieldsProperties)) {
     if (property.values && typeof property.values === 'string') {
+        property.i18nContext = property.values
         property.values = attrs[property.values]
     }
 }
@@ -21,8 +22,13 @@ const onlyRockClimbing = function(document) {
     return activities[0] === 'rock_climbing'
 }
 
+// this handler is only for routes
 const getIsOnlyRockClimbingTypesHandler = function(types) {
     return function(document) {
+        if (document.type !== 'r') {
+            return true
+        }
+
         if (onlyRockClimbing(document) && !types.includes(document.climbing_outdoor_type)) {
             return false
         }

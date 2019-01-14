@@ -22,7 +22,7 @@
                     v-for="option of options"
                     :key="option"
                     :value="option">
-                    {{ i18n ? $gettext(option) : option }}
+                    {{ i18n ? $gettext(option, i18nContext) : option }}
                 </option>
             </select>
         </div>
@@ -92,6 +92,14 @@
             disabled: {
                 type: Boolean,
                 default: false
+            },
+            i18n: {
+                type: Boolean,
+                default: false
+            },
+            i18nContext: {
+                type: String,
+                default: undefined
             }
         }
     }

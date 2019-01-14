@@ -11,7 +11,11 @@
         </card-row>
 
         <card-row>
-            <textual-array class="is-ellipsed" :array="document.event_type" />
+            <textual-array
+                class="is-ellipsed"
+                :array="document.event_type"
+                i18n
+                i18n-context="event_types"/>
 
         </card-row>
 

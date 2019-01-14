@@ -268,7 +268,8 @@
     },
     "disable_comments":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "durations":
     {
@@ -749,6 +750,7 @@
     },
     "participants":
     {
+        "parent": "locales",
         "type": "text",
         "helper": "1063027#participants"
     },
@@ -780,6 +782,10 @@
         "min": 0,
         "max": 9999,
         "unit": "m"
+    },
+    "protected":
+    {
+        "type": "boolean"
     },
     "public_transport":
     {

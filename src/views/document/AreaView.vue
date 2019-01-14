@@ -17,16 +17,16 @@
                 <div class="box">
                     <div class="level is-mobile">
                         <div class="level-item has-text-centered"
-                             v-for="documentType of ['Waypoint', 'Route', 'Outing']"
+                             v-for="documentType of ['waypoint', 'route', 'outing']"
                              :key="documentType">
 
                             <router-link
-                                :to="{ name: documentType.toLowerCase() + 's', query: {a:documentId} }"
+                                :to="{ name: documentType + 's', query: {a:documentId} }"
                                 class="">
                                 <div>
                                     <icon-document class="is-size-1" :document-type="documentType.toLowerCase()" />
                                 </div>
-                                <p>{{ $gettext(documentType + 's') }}</p>
+                                <p>{{ $gettext(documentType + 's') | uppercaseFirstLetter }}</p>
                             </router-link>
                         </div>
                     </div>

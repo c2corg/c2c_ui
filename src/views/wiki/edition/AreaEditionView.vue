@@ -9,6 +9,7 @@
         <form-input-row :document="document" :field="fields.area_type"/>
         <form-input-row :document="document" :field="fields.summary"/>
         <form-input-row :document="document" :field="fields.description"/>
+        <quality-input-row :document="document" />
     </edition-container>
 </template>
 

@@ -10,7 +10,7 @@
                 :lazy="true"
                 :piecewise="true"
                 tooltip="hover"
-                :formatter="field.i18n ? $gettext : undefined"/>
+                :formatter="field.i18n ? gettext : undefined"/>
 
         </div>
 
@@ -28,7 +28,7 @@
 
             <multiselect v-model="value"
                          :options="field.values"
-                         :custom-label="field.i18n ? $gettext : undefined"
+                         :custom-label="field.i18n ? gettext : undefined"
                          :multiple="true"/>
         </div>
 
@@ -96,6 +96,10 @@
                 if (this.$refs.slider) {
                     this.$nextTick(() => this.$refs.slider.refresh())
                 }
+            },
+
+            gettext(key) {
+                return this.$gettext(key, this.field.i18nContext)
             }
         }
     }

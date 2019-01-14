@@ -139,6 +139,7 @@
         <span v-translate>previous_injuries</span>
         <span v-translate>product_types</span>
         <span v-translate>prominence</span>
+        <span v-translate>protected</span>
         <span v-translate>public_transport</span>
         <span v-translate>public_transportation_rating</span>
         <span v-translate>public_transportation_types</span>
@@ -193,353 +194,353 @@
         <span v-translate>width</span>
         <span v-translate>xreports</span>
         <!-- access_conditions -->
-        <span v-translate>cleared</span>
-        <span v-translate>snowy</span>
-        <span v-translate>closed_snow</span>
-        <span v-translate>closed_cleared</span>
+        <span v-translate translate-context="access_conditions">cleared</span>
+        <span v-translate translate-context="access_conditions">snowy</span>
+        <span v-translate translate-context="access_conditions">closed_snow</span>
+        <span v-translate translate-context="access_conditions">closed_cleared</span>
         <!-- access_times -->
-        <span v-translate>1min</span>
-        <span v-translate>5min</span>
-        <span v-translate>10min</span>
-        <span v-translate>15min</span>
-        <span v-translate>20min</span>
-        <span v-translate>30min</span>
-        <span v-translate>45min</span>
-        <span v-translate>1h</span>
-        <span v-translate>1h30</span>
-        <span v-translate>2h</span>
-        <span v-translate>2h30</span>
-        <span v-translate>3h</span>
-        <span v-translate>3h+</span>
+        <span v-translate translate-context="access_times">1min</span>
+        <span v-translate translate-context="access_times">5min</span>
+        <span v-translate translate-context="access_times">10min</span>
+        <span v-translate translate-context="access_times">15min</span>
+        <span v-translate translate-context="access_times">20min</span>
+        <span v-translate translate-context="access_times">30min</span>
+        <span v-translate translate-context="access_times">45min</span>
+        <span v-translate translate-context="access_times">1h</span>
+        <span v-translate translate-context="access_times">1h30</span>
+        <span v-translate translate-context="access_times">2h</span>
+        <span v-translate translate-context="access_times">2h30</span>
+        <span v-translate translate-context="access_times">3h</span>
+        <span v-translate translate-context="access_times">3h+</span>
         <!-- activities -->
-        <span v-translate>skitouring</span>
-        <span v-translate>snow_ice_mixed</span>
-        <span v-translate>mountain_climbing</span>
-        <span v-translate>rock_climbing</span>
-        <span v-translate>ice_climbing</span>
-        <span v-translate>hiking</span>
-        <span v-translate>snowshoeing</span>
-        <span v-translate>paragliding</span>
-        <span v-translate>mountain_biking</span>
-        <span v-translate>via_ferrata</span>
-        <span v-translate>slacklining</span>
+        <span v-translate translate-context="activities">skitouring</span>
+        <span v-translate translate-context="activities">snow_ice_mixed</span>
+        <span v-translate translate-context="activities">mountain_climbing</span>
+        <span v-translate translate-context="activities">rock_climbing</span>
+        <span v-translate translate-context="activities">ice_climbing</span>
+        <span v-translate translate-context="activities">hiking</span>
+        <span v-translate translate-context="activities">snowshoeing</span>
+        <span v-translate translate-context="activities">paragliding</span>
+        <span v-translate translate-context="activities">mountain_biking</span>
+        <span v-translate translate-context="activities">via_ferrata</span>
+        <span v-translate translate-context="activities">slacklining</span>
         <!-- activity_rates -->
-        <span v-translate>activity_rate_150</span>
-        <span v-translate>activity_rate_50</span>
-        <span v-translate>activity_rate_30</span>
-        <span v-translate>activity_rate_20</span>
-        <span v-translate>activity_rate_10</span>
-        <span v-translate>activity_rate_5</span>
-        <span v-translate>activity_rate_1</span>
+        <span v-translate translate-context="activity_rates">activity_rate_150</span>
+        <span v-translate translate-context="activity_rates">activity_rate_50</span>
+        <span v-translate translate-context="activity_rates">activity_rate_30</span>
+        <span v-translate translate-context="activity_rates">activity_rate_20</span>
+        <span v-translate translate-context="activity_rates">activity_rate_10</span>
+        <span v-translate translate-context="activity_rates">activity_rate_5</span>
+        <span v-translate translate-context="activity_rates">activity_rate_1</span>
         <!-- area_types -->
-        <span v-translate>range</span>
-        <span v-translate>admin_limits</span>
-        <span v-translate>country</span>
+        <span v-translate translate-context="area_types">range</span>
+        <span v-translate translate-context="area_types">admin_limits</span>
+        <span v-translate translate-context="area_types">country</span>
         <!-- article_categories -->
-        <span v-translate>mountain_environment</span>
-        <span v-translate>gear</span>
-        <span v-translate>technical</span>
-        <span v-translate>topoguide_supplements</span>
-        <span v-translate>soft_mobility</span>
-        <span v-translate>expeditions</span>
-        <span v-translate>stories</span>
-        <span v-translate>c2c_meetings</span>
-        <span v-translate>tags</span>
-        <span v-translate>site_info</span>
-        <span v-translate>association</span>
+        <span v-translate translate-context="article_categories">mountain_environment</span>
+        <span v-translate translate-context="article_categories">gear</span>
+        <span v-translate translate-context="article_categories">technical</span>
+        <span v-translate translate-context="article_categories">topoguide_supplements</span>
+        <span v-translate translate-context="article_categories">soft_mobility</span>
+        <span v-translate translate-context="article_categories">expeditions</span>
+        <span v-translate translate-context="article_categories">stories</span>
+        <span v-translate translate-context="article_categories">c2c_meetings</span>
+        <span v-translate translate-context="article_categories">tags</span>
+        <span v-translate translate-context="article_categories">site_info</span>
+        <span v-translate translate-context="article_categories">association</span>
         <!-- article_types -->
-        <span v-translate>collab</span>
-        <span v-translate>personal</span>
+        <span v-translate translate-context="article_types">collab</span>
+        <span v-translate translate-context="article_types">personal</span>
         <!-- author_statuses -->
-        <span v-translate>primary_impacted</span>
-        <span v-translate>secondary_impacted</span>
-        <span v-translate>internal_witness</span>
-        <span v-translate>external_witness</span>
+        <span v-translate translate-context="author_statuses">primary_impacted</span>
+        <span v-translate translate-context="author_statuses">secondary_impacted</span>
+        <span v-translate translate-context="author_statuses">internal_witness</span>
+        <span v-translate translate-context="author_statuses">external_witness</span>
         <!-- autonomies -->
-        <span v-translate>non_autonomous</span>
-        <span v-translate>autonomous</span>
-        <span v-translate>initiator</span>
-        <span v-translate>expert</span>
+        <span v-translate translate-context="autonomies">non_autonomous</span>
+        <span v-translate translate-context="autonomies">autonomous</span>
+        <span v-translate translate-context="autonomies">initiator</span>
+        <span v-translate translate-context="autonomies">expert</span>
         <!-- avalanche_levels -->
-        <span v-translate>level_1</span>
-        <span v-translate>level_2</span>
-        <span v-translate>level_3</span>
-        <span v-translate>level_4</span>
-        <span v-translate>level_5</span>
-        <span v-translate>level_na</span>
+        <span v-translate translate-context="avalanche_levels">level_1</span>
+        <span v-translate translate-context="avalanche_levels">level_2</span>
+        <span v-translate translate-context="avalanche_levels">level_3</span>
+        <span v-translate translate-context="avalanche_levels">level_4</span>
+        <span v-translate translate-context="avalanche_levels">level_5</span>
+        <span v-translate translate-context="avalanche_levels">level_na</span>
         <!-- avalanche_signs -->
-        <span v-translate>no</span>
-        <span v-translate>danger_sign</span>
-        <span v-translate>recent_avalanche</span>
-        <span v-translate>natural_avalanche</span>
-        <span v-translate>accidental_avalanche</span>
+        <span v-translate translate-context="avalanche_signs">no</span>
+        <span v-translate translate-context="avalanche_signs">danger_sign</span>
+        <span v-translate translate-context="avalanche_signs">recent_avalanche</span>
+        <span v-translate translate-context="avalanche_signs">natural_avalanche</span>
+        <span v-translate translate-context="avalanche_signs">accidental_avalanche</span>
         <!-- avalanche_slopes -->
-        <span v-translate>slope_lt_30</span>
-        <span v-translate>slope_30_35</span>
-        <span v-translate>slope_35_40</span>
-        <span v-translate>slope_40_45</span>
-        <span v-translate>slope_gt_45</span>
+        <span v-translate translate-context="avalanche_slopes">slope_lt_30</span>
+        <span v-translate translate-context="avalanche_slopes">slope_30_35</span>
+        <span v-translate translate-context="avalanche_slopes">slope_35_40</span>
+        <span v-translate translate-context="avalanche_slopes">slope_40_45</span>
+        <span v-translate translate-context="avalanche_slopes">slope_gt_45</span>
         <!-- book_types -->
-        <span v-translate>topo</span>
-        <span v-translate>environment</span>
-        <span v-translate>historical</span>
-        <span v-translate>biography</span>
-        <span v-translate>photos-art</span>
-        <span v-translate>novel</span>
-        <span v-translate>technics</span>
-        <span v-translate>tourism</span>
-        <span v-translate>magazine</span>
+        <span v-translate translate-context="book_types">topo</span>
+        <span v-translate translate-context="book_types">environment</span>
+        <span v-translate translate-context="book_types">historical</span>
+        <span v-translate translate-context="book_types">biography</span>
+        <span v-translate translate-context="book_types">photos-art</span>
+        <span v-translate translate-context="book_types">novel</span>
+        <span v-translate translate-context="book_types">technics</span>
+        <span v-translate translate-context="book_types">tourism</span>
+        <span v-translate translate-context="book_types">magazine</span>
         <!-- children_proof_types -->
-        <span v-translate>very_safe</span>
-        <span v-translate>safe</span>
-        <span v-translate>dangerous</span>
-        <span v-translate>very_dangerous</span>
+        <span v-translate translate-context="children_proof_types">very_safe</span>
+        <span v-translate translate-context="children_proof_types">safe</span>
+        <span v-translate translate-context="children_proof_types">dangerous</span>
+        <span v-translate translate-context="children_proof_types">very_dangerous</span>
         <!-- climbing_indoor_types -->
-        <span v-translate>pitch</span>
-        <span v-translate>bloc</span>
+        <span v-translate translate-context="climbing_indoor_types">pitch</span>
+        <span v-translate translate-context="climbing_indoor_types">bloc</span>
         <!-- climbing_outdoor_types -->
-        <span v-translate>single</span>
-        <span v-translate>multi</span>
-        <span v-translate>bloc</span>
-        <span v-translate>psicobloc</span>
+        <span v-translate translate-context="climbing_outdoor_types">single</span>
+        <span v-translate translate-context="climbing_outdoor_types">multi</span>
+        <span v-translate translate-context="climbing_outdoor_types">bloc</span>
+        <span v-translate translate-context="climbing_outdoor_types">psicobloc</span>
         <!-- climbing_styles -->
-        <span v-translate>slab</span>
-        <span v-translate>vertical</span>
-        <span v-translate>overhang</span>
-        <span v-translate>roof</span>
-        <span v-translate>small_pillar</span>
-        <span v-translate>crack_dihedral</span>
+        <span v-translate translate-context="climbing_styles">slab</span>
+        <span v-translate translate-context="climbing_styles">vertical</span>
+        <span v-translate translate-context="climbing_styles">overhang</span>
+        <span v-translate translate-context="climbing_styles">roof</span>
+        <span v-translate translate-context="climbing_styles">small_pillar</span>
+        <span v-translate translate-context="climbing_styles">crack_dihedral</span>
         <!-- condition_ratings -->
-        <span v-translate>excellent</span>
-        <span v-translate>good</span>
-        <span v-translate>average</span>
-        <span v-translate>poor</span>
-        <span v-translate>awful</span>
+        <span v-translate translate-context="condition_ratings">excellent</span>
+        <span v-translate translate-context="condition_ratings">good</span>
+        <span v-translate translate-context="condition_ratings">average</span>
+        <span v-translate translate-context="condition_ratings">poor</span>
+        <span v-translate translate-context="condition_ratings">awful</span>
         <!-- custodianship_types -->
-        <span v-translate>accessible_when_wardened</span>
-        <span v-translate>always_accessible</span>
-        <span v-translate>key_needed</span>
-        <span v-translate>no_warden</span>
+        <span v-translate translate-context="custodianship_types">accessible_when_wardened</span>
+        <span v-translate translate-context="custodianship_types">always_accessible</span>
+        <span v-translate translate-context="custodianship_types">key_needed</span>
+        <span v-translate translate-context="custodianship_types">no_warden</span>
         <!-- event_types -->
-        <span v-translate>avalanche</span>
-        <span v-translate>stone_fall</span>
-        <span v-translate>falling_ice</span>
-        <span v-translate>person_fall</span>
-        <span v-translate>crevasse_fall</span>
-        <span v-translate>roped_fall</span>
-        <span v-translate>physical_failure</span>
-        <span v-translate>lightning</span>
-        <span v-translate>other</span>
+        <span v-translate translate-context="event_types">avalanche</span>
+        <span v-translate translate-context="event_types">stone_fall</span>
+        <span v-translate translate-context="event_types">falling_ice</span>
+        <span v-translate translate-context="event_types">person_fall</span>
+        <span v-translate translate-context="event_types">crevasse_fall</span>
+        <span v-translate translate-context="event_types">roped_fall</span>
+        <span v-translate translate-context="event_types">physical_failure</span>
+        <span v-translate translate-context="event_types">lightning</span>
+        <span v-translate translate-context="event_types">other</span>
         <!-- frequentation_types -->
-        <span v-translate>quiet</span>
-        <span v-translate>some</span>
-        <span v-translate>crowded</span>
-        <span v-translate>overcrowded</span>
+        <span v-translate translate-context="frequentation_types">quiet</span>
+        <span v-translate translate-context="frequentation_types">some</span>
+        <span v-translate translate-context="frequentation_types">crowded</span>
+        <span v-translate translate-context="frequentation_types">overcrowded</span>
         <!-- genders -->
-        <span v-translate>male</span>
-        <span v-translate>female</span>
+        <span v-translate translate-context="genders">male</span>
+        <span v-translate translate-context="genders">female</span>
         <!-- glacier_gear_types -->
-        <span v-translate>no</span>
-        <span v-translate>glacier_safety_gear</span>
-        <span v-translate>crampons_spring</span>
-        <span v-translate>crampons_req</span>
-        <span v-translate>glacier_crampons</span>
+        <span v-translate translate-context="glacier_gear_types">no</span>
+        <span v-translate translate-context="glacier_gear_types">glacier_safety_gear</span>
+        <span v-translate translate-context="glacier_gear_types">crampons_spring</span>
+        <span v-translate translate-context="glacier_gear_types">crampons_req</span>
+        <span v-translate translate-context="glacier_gear_types">glacier_crampons</span>
         <!-- glacier_ratings -->
-        <span v-translate>easy</span>
-        <span v-translate>possible</span>
-        <span v-translate>difficult</span>
-        <span v-translate>impossible</span>
+        <span v-translate translate-context="glacier_ratings">easy</span>
+        <span v-translate translate-context="glacier_ratings">possible</span>
+        <span v-translate translate-context="glacier_ratings">difficult</span>
+        <span v-translate translate-context="glacier_ratings">impossible</span>
         <!-- ground_types -->
-        <span v-translate>prairie</span>
-        <span v-translate>scree</span>
-        <span v-translate>snow</span>
+        <span v-translate translate-context="ground_types">prairie</span>
+        <span v-translate translate-context="ground_types">scree</span>
+        <span v-translate translate-context="ground_types">snow</span>
         <!-- hut_status -->
-        <span v-translate>open_guarded</span>
-        <span v-translate>open_non_guarded</span>
-        <span v-translate>closed_hut</span>
+        <span v-translate translate-context="hut_status">open_guarded</span>
+        <span v-translate translate-context="hut_status">open_non_guarded</span>
+        <span v-translate translate-context="hut_status">closed_hut</span>
         <!-- image_categories -->
-        <span v-translate>landscapes</span>
-        <span v-translate>detail</span>
-        <span v-translate>action</span>
-        <span v-translate>track</span>
-        <span v-translate>rise</span>
-        <span v-translate>descent</span>
-        <span v-translate>topo</span>
-        <span v-translate>people</span>
-        <span v-translate>fauna</span>
-        <span v-translate>flora</span>
-        <span v-translate>nivology</span>
-        <span v-translate>geology</span>
-        <span v-translate>hut</span>
-        <span v-translate>equipment</span>
-        <span v-translate>book</span>
-        <span v-translate>help</span>
-        <span v-translate>misc</span>
+        <span v-translate translate-context="image_categories">landscapes</span>
+        <span v-translate translate-context="image_categories">detail</span>
+        <span v-translate translate-context="image_categories">action</span>
+        <span v-translate translate-context="image_categories">track</span>
+        <span v-translate translate-context="image_categories">rise</span>
+        <span v-translate translate-context="image_categories">descent</span>
+        <span v-translate translate-context="image_categories">topo</span>
+        <span v-translate translate-context="image_categories">people</span>
+        <span v-translate translate-context="image_categories">fauna</span>
+        <span v-translate translate-context="image_categories">flora</span>
+        <span v-translate translate-context="image_categories">nivology</span>
+        <span v-translate translate-context="image_categories">geology</span>
+        <span v-translate translate-context="image_categories">hut</span>
+        <span v-translate translate-context="image_categories">equipment</span>
+        <span v-translate translate-context="image_categories">book</span>
+        <span v-translate translate-context="image_categories">help</span>
+        <span v-translate translate-context="image_categories">misc</span>
         <!-- image_types -->
-        <span v-translate>collaborative</span>
-        <span v-translate>personal</span>
-        <span v-translate>copyright</span>
+        <span v-translate translate-context="image_types">collaborative</span>
+        <span v-translate translate-context="image_types">personal</span>
+        <span v-translate translate-context="image_types">copyright</span>
         <!-- langs -->
-        <span v-translate>fr</span>
-        <span v-translate>en</span>
-        <span v-translate>it</span>
-        <span v-translate>de</span>
-        <span v-translate>es</span>
-        <span v-translate>ca</span>
-        <span v-translate>eu</span>
+        <span v-translate translate-context="langs">fr</span>
+        <span v-translate translate-context="langs">en</span>
+        <span v-translate translate-context="langs">it</span>
+        <span v-translate translate-context="langs">de</span>
+        <span v-translate translate-context="langs">es</span>
+        <span v-translate translate-context="langs">ca</span>
+        <span v-translate translate-context="langs">eu</span>
         <!-- lift_status -->
-        <span v-translate>open</span>
-        <span v-translate>closed</span>
+        <span v-translate translate-context="lift_status">open</span>
+        <span v-translate translate-context="lift_status">closed</span>
         <!-- months -->
-        <span v-translate>jan</span>
-        <span v-translate>feb</span>
-        <span v-translate>mar</span>
-        <span v-translate>apr</span>
-        <span v-translate>may</span>
-        <span v-translate>jun</span>
-        <span v-translate>jul</span>
-        <span v-translate>aug</span>
-        <span v-translate>sep</span>
-        <span v-translate>oct</span>
-        <span v-translate>nov</span>
-        <span v-translate>dec</span>
+        <span v-translate translate-context="months">jan</span>
+        <span v-translate translate-context="months">feb</span>
+        <span v-translate translate-context="months">mar</span>
+        <span v-translate translate-context="months">apr</span>
+        <span v-translate translate-context="months">may</span>
+        <span v-translate translate-context="months">jun</span>
+        <span v-translate translate-context="months">jul</span>
+        <span v-translate translate-context="months">aug</span>
+        <span v-translate translate-context="months">sep</span>
+        <span v-translate translate-context="months">oct</span>
+        <span v-translate translate-context="months">nov</span>
+        <span v-translate translate-context="months">dec</span>
         <!-- nb_outings -->
-        <span v-translate>nb_outings_4</span>
-        <span v-translate>nb_outings_9</span>
-        <span v-translate>nb_outings_14</span>
-        <span v-translate>nb_outings_15</span>
+        <span v-translate translate-context="nb_outings">nb_outings_4</span>
+        <span v-translate translate-context="nb_outings">nb_outings_9</span>
+        <span v-translate translate-context="nb_outings">nb_outings_14</span>
+        <span v-translate translate-context="nb_outings">nb_outings_15</span>
         <!-- parking_fee_types -->
-        <span v-translate>yes</span>
-        <span v-translate>seasonal</span>
-        <span v-translate>no</span>
+        <span v-translate translate-context="parking_fee_types">yes</span>
+        <span v-translate translate-context="parking_fee_types">seasonal</span>
+        <span v-translate translate-context="parking_fee_types">no</span>
         <!-- previous_injuries -->
-        <span v-translate>no</span>
-        <span v-translate>previous_injuries_2</span>
-        <span v-translate>previous_injuries_3</span>
+        <span v-translate translate-context="previous_injuries">no</span>
+        <span v-translate translate-context="previous_injuries">previous_injuries_2</span>
+        <span v-translate translate-context="previous_injuries">previous_injuries_3</span>
         <!-- product_types -->
-        <span v-translate>farm_sale</span>
-        <span v-translate>restaurant</span>
-        <span v-translate>grocery</span>
-        <span v-translate>bar</span>
-        <span v-translate>sport_shop</span>
+        <span v-translate translate-context="product_types">farm_sale</span>
+        <span v-translate translate-context="product_types">restaurant</span>
+        <span v-translate translate-context="product_types">grocery</span>
+        <span v-translate translate-context="product_types">bar</span>
+        <span v-translate translate-context="product_types">sport_shop</span>
         <!-- public_transportation_ratings -->
-        <span v-translate>good service</span>
-        <span v-translate>seasonal service</span>
-        <span v-translate>poor service</span>
-        <span v-translate>nearby service</span>
-        <span v-translate>no service</span>
+        <span v-translate translate-context="public_transportation_ratings">good service</span>
+        <span v-translate translate-context="public_transportation_ratings">seasonal service</span>
+        <span v-translate translate-context="public_transportation_ratings">poor service</span>
+        <span v-translate translate-context="public_transportation_ratings">nearby service</span>
+        <span v-translate translate-context="public_transportation_ratings">no service</span>
         <!-- public_transportation_types -->
-        <span v-translate>train</span>
-        <span v-translate>bus</span>
-        <span v-translate>service_on_demand</span>
-        <span v-translate>boat</span>
+        <span v-translate translate-context="public_transportation_types">train</span>
+        <span v-translate translate-context="public_transportation_types">bus</span>
+        <span v-translate translate-context="public_transportation_types">service_on_demand</span>
+        <span v-translate translate-context="public_transportation_types">boat</span>
         <!-- quality_types -->
-        <span v-translate>empty</span>
-        <span v-translate>draft</span>
-        <span v-translate>medium</span>
-        <span v-translate>fine</span>
-        <span v-translate>great</span>
+        <span v-translate translate-context="quality_types">empty</span>
+        <span v-translate translate-context="quality_types">draft</span>
+        <span v-translate translate-context="quality_types">medium</span>
+        <span v-translate translate-context="quality_types">fine</span>
+        <span v-translate translate-context="quality_types">great</span>
         <!-- rain_proof_types -->
-        <span v-translate>exposed</span>
-        <span v-translate>partly_protected</span>
-        <span v-translate>protected</span>
-        <span v-translate>inside</span>
+        <span v-translate translate-context="rain_proof_types">exposed</span>
+        <span v-translate translate-context="rain_proof_types">partly_protected</span>
+        <span v-translate translate-context="rain_proof_types">protected</span>
+        <span v-translate translate-context="rain_proof_types">inside</span>
         <!-- rock_types -->
-        <span v-translate>basalte</span>
-        <span v-translate>calcaire</span>
-        <span v-translate>conglomerat</span>
-        <span v-translate>craie</span>
-        <span v-translate>gneiss</span>
-        <span v-translate>gres</span>
-        <span v-translate>granit</span>
-        <span v-translate>migmatite</span>
-        <span v-translate>mollasse_calcaire</span>
-        <span v-translate>pouding</span>
-        <span v-translate>quartzite</span>
-        <span v-translate>rhyolite</span>
-        <span v-translate>schiste</span>
-        <span v-translate>trachyte</span>
-        <span v-translate>artificial</span>
+        <span v-translate translate-context="rock_types">basalte</span>
+        <span v-translate translate-context="rock_types">calcaire</span>
+        <span v-translate translate-context="rock_types">conglomerat</span>
+        <span v-translate translate-context="rock_types">craie</span>
+        <span v-translate translate-context="rock_types">gneiss</span>
+        <span v-translate translate-context="rock_types">gres</span>
+        <span v-translate translate-context="rock_types">granit</span>
+        <span v-translate translate-context="rock_types">migmatite</span>
+        <span v-translate translate-context="rock_types">mollasse_calcaire</span>
+        <span v-translate translate-context="rock_types">pouding</span>
+        <span v-translate translate-context="rock_types">quartzite</span>
+        <span v-translate translate-context="rock_types">rhyolite</span>
+        <span v-translate translate-context="rock_types">schiste</span>
+        <span v-translate translate-context="rock_types">trachyte</span>
+        <span v-translate translate-context="rock_types">artificial</span>
         <!-- route_configuration_types -->
-        <span v-translate>edge</span>
-        <span v-translate>pillar</span>
-        <span v-translate>face</span>
-        <span v-translate>corridor</span>
-        <span v-translate>goulotte</span>
-        <span v-translate>glacier</span>
+        <span v-translate translate-context="route_configuration_types">edge</span>
+        <span v-translate translate-context="route_configuration_types">pillar</span>
+        <span v-translate translate-context="route_configuration_types">face</span>
+        <span v-translate translate-context="route_configuration_types">corridor</span>
+        <span v-translate translate-context="route_configuration_types">goulotte</span>
+        <span v-translate translate-context="route_configuration_types">glacier</span>
         <!-- route_types -->
-        <span v-translate>return_same_way</span>
-        <span v-translate>loop</span>
-        <span v-translate>loop_hut</span>
-        <span v-translate>traverse</span>
-        <span v-translate>raid</span>
-        <span v-translate>expedition</span>
+        <span v-translate translate-context="route_types">return_same_way</span>
+        <span v-translate translate-context="route_types">loop</span>
+        <span v-translate translate-context="route_types">loop_hut</span>
+        <span v-translate translate-context="route_types">traverse</span>
+        <span v-translate translate-context="route_types">raid</span>
+        <span v-translate translate-context="route_types">expedition</span>
         <!-- severities -->
-        <span v-translate>severity_no</span>
-        <span v-translate>1d_to_3d</span>
-        <span v-translate>4d_to_1m</span>
-        <span v-translate>1m_to_3m</span>
-        <span v-translate>more_than_3m</span>
+        <span v-translate translate-context="severities">severity_no</span>
+        <span v-translate translate-context="severities">1d_to_3d</span>
+        <span v-translate translate-context="severities">4d_to_1m</span>
+        <span v-translate translate-context="severities">1m_to_3m</span>
+        <span v-translate translate-context="severities">more_than_3m</span>
         <!-- slackline_types -->
-        <span v-translate>slackline</span>
-        <span v-translate>highline</span>
-        <span v-translate>waterline</span>
+        <span v-translate translate-context="slackline_types">slackline</span>
+        <span v-translate translate-context="slackline_types">highline</span>
+        <span v-translate translate-context="slackline_types">waterline</span>
         <!-- snow_clearance_ratings -->
-        <span v-translate>often</span>
-        <span v-translate>sometimes</span>
-        <span v-translate>progressive</span>
-        <span v-translate>naturally</span>
-        <span v-translate>closed_in_winter</span>
-        <span v-translate>non_applicable</span>
+        <span v-translate translate-context="snow_clearance_ratings">often</span>
+        <span v-translate translate-context="snow_clearance_ratings">sometimes</span>
+        <span v-translate translate-context="snow_clearance_ratings">progressive</span>
+        <span v-translate translate-context="snow_clearance_ratings">naturally</span>
+        <span v-translate translate-context="snow_clearance_ratings">closed_in_winter</span>
+        <span v-translate translate-context="snow_clearance_ratings">non_applicable</span>
         <!-- user_categories -->
-        <span v-translate>amateur</span>
-        <span v-translate>mountain_guide</span>
-        <span v-translate>mountain_leader</span>
-        <span v-translate>ski_instructor</span>
-        <span v-translate>climbing_instructor</span>
-        <span v-translate>mountainbike_instructor</span>
-        <span v-translate>paragliding_instructor</span>
-        <span v-translate>hut_warden</span>
-        <span v-translate>ski_patroller</span>
-        <span v-translate>avalanche_forecaster</span>
-        <span v-translate>club</span>
-        <span v-translate>institution</span>
+        <span v-translate translate-context="user_categories">amateur</span>
+        <span v-translate translate-context="user_categories">mountain_guide</span>
+        <span v-translate translate-context="user_categories">mountain_leader</span>
+        <span v-translate translate-context="user_categories">ski_instructor</span>
+        <span v-translate translate-context="user_categories">climbing_instructor</span>
+        <span v-translate translate-context="user_categories">mountainbike_instructor</span>
+        <span v-translate translate-context="user_categories">paragliding_instructor</span>
+        <span v-translate translate-context="user_categories">hut_warden</span>
+        <span v-translate translate-context="user_categories">ski_patroller</span>
+        <span v-translate translate-context="user_categories">avalanche_forecaster</span>
+        <span v-translate translate-context="user_categories">club</span>
+        <span v-translate translate-context="user_categories">institution</span>
         <!-- waypoint_types -->
-        <span v-translate>summit</span>
-        <span v-translate>pass</span>
-        <span v-translate>lake</span>
-        <span v-translate>waterfall</span>
-        <span v-translate>locality</span>
-        <span v-translate>bisse</span>
-        <span v-translate>canyon</span>
-        <span v-translate>access</span>
-        <span v-translate>climbing_outdoor</span>
-        <span v-translate>climbing_indoor</span>
-        <span v-translate>hut</span>
-        <span v-translate>gite</span>
-        <span v-translate>shelter</span>
-        <span v-translate>bivouac</span>
-        <span v-translate>camp_site</span>
-        <span v-translate>base_camp</span>
-        <span v-translate>local_product</span>
-        <span v-translate>paragliding_takeoff</span>
-        <span v-translate>paragliding_landing</span>
-        <span v-translate>cave</span>
-        <span v-translate>waterpoint</span>
-        <span v-translate>weather_station</span>
-        <span v-translate>webcam</span>
-        <span v-translate>virtual</span>
-        <span v-translate>slackline_spot</span>
-        <span v-translate>misc</span>
+        <span v-translate translate-context="waypoint_types">summit</span>
+        <span v-translate translate-context="waypoint_types">pass</span>
+        <span v-translate translate-context="waypoint_types">lake</span>
+        <span v-translate translate-context="waypoint_types">waterfall</span>
+        <span v-translate translate-context="waypoint_types">locality</span>
+        <span v-translate translate-context="waypoint_types">bisse</span>
+        <span v-translate translate-context="waypoint_types">canyon</span>
+        <span v-translate translate-context="waypoint_types">access</span>
+        <span v-translate translate-context="waypoint_types">climbing_outdoor</span>
+        <span v-translate translate-context="waypoint_types">climbing_indoor</span>
+        <span v-translate translate-context="waypoint_types">hut</span>
+        <span v-translate translate-context="waypoint_types">gite</span>
+        <span v-translate translate-context="waypoint_types">shelter</span>
+        <span v-translate translate-context="waypoint_types">bivouac</span>
+        <span v-translate translate-context="waypoint_types">camp_site</span>
+        <span v-translate translate-context="waypoint_types">base_camp</span>
+        <span v-translate translate-context="waypoint_types">local_product</span>
+        <span v-translate translate-context="waypoint_types">paragliding_takeoff</span>
+        <span v-translate translate-context="waypoint_types">paragliding_landing</span>
+        <span v-translate translate-context="waypoint_types">cave</span>
+        <span v-translate translate-context="waypoint_types">waterpoint</span>
+        <span v-translate translate-context="waypoint_types">weather_station</span>
+        <span v-translate translate-context="waypoint_types">webcam</span>
+        <span v-translate translate-context="waypoint_types">virtual</span>
+        <span v-translate translate-context="waypoint_types">slackline_spot</span>
+        <span v-translate translate-context="waypoint_types">misc</span>
         <!-- weather_station_types -->
-        <span v-translate>temperature</span>
-        <span v-translate>wind_speed</span>
-        <span v-translate>wind_direction</span>
-        <span v-translate>humidity</span>
-        <span v-translate>pressure</span>
-        <span v-translate>precipitation</span>
-        <span v-translate>precipitation_heater</span>
-        <span v-translate>snow_height</span>
-        <span v-translate>insolation</span>
+        <span v-translate translate-context="weather_station_types">temperature</span>
+        <span v-translate translate-context="weather_station_types">wind_speed</span>
+        <span v-translate translate-context="weather_station_types">wind_direction</span>
+        <span v-translate translate-context="weather_station_types">humidity</span>
+        <span v-translate translate-context="weather_station_types">pressure</span>
+        <span v-translate translate-context="weather_station_types">precipitation</span>
+        <span v-translate translate-context="weather_station_types">precipitation_heater</span>
+        <span v-translate translate-context="weather_station_types">snow_height</span>
+        <span v-translate translate-context="weather_station_types">insolation</span>
     </span>
 </template>

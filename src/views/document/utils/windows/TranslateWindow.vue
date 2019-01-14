@@ -10,7 +10,7 @@
                 class="is-size-4"
                 :document="document"
                 :lang="lang">
-                {{ $gettext(lang) | uppercaseFirstLetter }}
+                {{ $gettext(lang, 'langs') | uppercaseFirstLetter }}
             </edit-link>
         </div>
     </modal-window>
