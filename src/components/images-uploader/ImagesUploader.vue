@@ -9,16 +9,15 @@
 
         <div class="columns is-multiline images-uploader-files">
             <div
-                v-for="(file, key) of files"
+                v-for="(image, key) of images"
                 :key="key"
                 class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
                 <image-uploader
-                    :file="file"
-                    :lang="lang"
+                    :image="image"
                     :categories-edition="categoriesEdition"
                     :parent-document="parentDocument"
-                    @success="onSuccess"
-                    @deleteFile="onDeleteFile"/>
+                    @success="computeReadyForSaving"
+                    @deleteImage="onDeleteImage"/>
             </div>
 
             <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile images-uploader-message">
@@ -41,7 +40,7 @@
                 </span>
             </button>
             <button
-                :disabled="documents.length === 0"
+                :disabled="!readyForSaving"
                 class="button is-primary"
                 :class="{'is-loading': promise.loading}"
                 @click="save"
@@ -56,8 +55,9 @@
 </template>
 
 <script>
-    import c2c from '@/js/apis/c2c'
+    import loadImage from 'blueimp-load-image'
 
+    import c2c from '@/js/apis/c2c'
     import ImageUploader from './ImageUploader'
 
     export default {
@@ -79,10 +79,34 @@
 
         data() {
             return {
-                files: {},
-                documents: [],
+                images: {},
                 categoriesEdition: false,
-                promise: {}
+                promise: {},
+                readyForSaving: false
+            }
+        },
+
+        computed: {
+            imageType() {
+                if (this.parentDocument.type === 'o' || this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
+                    return 'personal'
+                }
+
+                if (this.parentDocument.type === 'c') {
+                    return this.parentDocument.article_type === 'collab' ? 'collaborative' : 'personal'
+                }
+
+                return 'collaborative'
+            },
+
+            documents() {
+                const documents = []
+
+                for (let image of Object.values(this.images)) {
+                    documents.push(image.document)
+                }
+
+                return documents
             }
         },
 
@@ -98,9 +122,7 @@
             save() {
                 this.promise = c2c.createImages(this.documents).then(() => {
                     // clean
-                    this.files = {}
-                    this.documents = []
-
+                    this.images = {}
                     this.hide()
 
                     // TODO handle error
@@ -109,40 +131,85 @@
             },
 
             filesChange(event) {
-                // TODO : it must append, and check doublon...
                 for (let file of event.target.files) {
-                    let key = this.getFileKey(file)
+                    let key = file.name + '#' + file.lastModified
 
-                    if (this.files[key] === undefined) {
-                        this.$set(this.files, key, file)
+                    if (this.images[key] === undefined) {
+                        this.computeFile(file, key)
                     }
+                }
+
+                this.computeReadyForSaving()
+            },
+
+            computeFile(file, key) {
+                const image = {
+                    file,
+                    key,
+                    exif: null,
+                    blob: null,
+                    src: '',
+                    orientation: 0,
+                    document: this.$documentUtils.buildDocument('image', this.lang)
+                }
+
+                image.document = this.$documentUtils.buildDocument('image', this.lang)
+
+                image.document.activities = this.parentDocument.activities.slice(0)
+                image.document.file_size = file.size
+                image.document.image_type = this.imageType
+                image.document.image_categories = []
+
+                image.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + 's'] = [
+                    { document_id: this.parentDocument.document_id }
+                ]
+
+                loadImage.parseMetaData(file, (metaData) => {
+                    this.parseMetaData(image, metaData)
+                    this.$set(this.images, image.key, image)
+                })
+            },
+
+            parseMetaData(image, metaData) {
+                const exif = metaData.exif ? metaData.exif.getAll() : null
+
+                if (exif) {
+                    image.orientation = metaData.exif.get('Orientation')
+
+                    const exifDate = exif.DateTimeOriginal || exif.DateTime
+
+                    if (exifDate) {
+                        const date = this.$moment.parseDate(exifDate, 'YYYY:MM:DD HH:mm:ss')
+                        image.document.date_time = date.isValid() ? date.format() : null
+                    }
+
+                    image.document.exposure_time = exif.ExposureTime
+                    image.document.iso_speed = exif.PhotographicSensitivity
+                    image.document.focal_length = exif.FocalLengthIn35mmFilm
+                    image.document.fnumber = exif.FNumber
+                    image.document.camera_name = (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : null
                 }
             },
 
-            getFileKey(file) {
-                return file.name + '#' + file.lastModified
-            },
-
-            computeDocuments() {
-                this.documents = []
-
-                for (let file of Object.values(this.files)) {
-                    if (file.document) {
-                        this.documents.push(file.document)
-                    }
+            onDeleteImage(image) {
+                if (this.images[image.key] !== undefined) {
+                    this.$delete(this.images, image.key)
                 }
+
+                this.computeReadyForSaving()
             },
 
-            onSuccess(file, document) {
-                file.document = document
-                this.computeDocuments()
-            },
+            computeReadyForSaving() {
+                if (this.documents.length === 0) {
+                    this.readyForSaving = false
+                } else {
+                    this.readyForSaving = true
 
-            onDeleteFile(file) {
-                let key = this.getFileKey(file)
-                if (this.files[key] !== undefined) {
-                    this.$delete(this.files, key)
-                    this.computeDocuments()
+                    for (let document of this.documents) {
+                        if (!document.filename) {
+                            this.readyForSaving = false
+                        }
+                    }
                 }
             }
         }
