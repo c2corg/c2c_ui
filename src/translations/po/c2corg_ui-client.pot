@@ -326,6 +326,12 @@ msgctxt "rock_types"
 msgid "artificial"
 msgstr ""
 
+#: src/views/wiki/edition/OutingEditionView.vue:83
+#: src/views/wiki/edition/RouteEditionView.vue:93
+msgctxt "MTB rating"
+msgid "ascent"
+msgstr ""
+
 #: src/views/SideMenu.vue:26
 msgid "Association"
 msgstr ""
@@ -336,9 +342,9 @@ msgid "association"
 msgstr ""
 
 #: src/views/wiki/edition/ArticleEditionView.vue:20
-#: src/views/wiki/edition/BookEditionView.vue:28
+#: src/views/wiki/edition/BookEditionView.vue:30
 #: src/views/wiki/edition/ImageEditionView.vue:57
-#: src/views/wiki/edition/WaypointEditionView.vue:121
+#: src/views/wiki/edition/WaypointEditionView.vue:122
 msgid "associations"
 msgstr ""
 
@@ -371,7 +377,7 @@ msgstr ""
 msgid "author_status"
 msgstr ""
 
-#: src/views/wiki/edition/utils/QualityInputRow.vue:9
+#: src/views/wiki/edition/utils/QualityInputRow.vue:18
 msgid "Auto-compute quality"
 msgstr ""
 
@@ -791,7 +797,7 @@ msgctxt "rock_types"
 msgid "conglomerat"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:98
+#: src/views/wiki/edition/WaypointEditionView.vue:99
 msgid "Contact"
 msgstr ""
 
@@ -850,7 +856,7 @@ msgctxt "glacier_gear_types"
 msgid "crampons_spring"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:36
+#: src/views/documents/DocumentsView.vue:38
 msgid "Create"
 msgstr ""
 
@@ -957,6 +963,12 @@ msgstr ""
 msgid "Delete this locale"
 msgstr ""
 
+#: src/views/wiki/edition/OutingEditionView.vue:82
+#: src/views/wiki/edition/RouteEditionView.vue:92
+msgctxt "MTB rating"
+msgid "descent"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:367
 msgctxt "image_categories"
 msgid "descent"
@@ -1026,13 +1038,13 @@ msgstr ""
 msgid "describe weather"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:104
+#: src/views/wiki/edition/WaypointEditionView.vue:105
 #: src/views/wiki/edition/XreportEditionView.vue:50
 msgid "Description"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:52
-#: src/views/wiki/edition/BookEditionView.vue:23
+#: src/views/wiki/edition/BookEditionView.vue:25
 msgid "description"
 msgstr ""
 
@@ -1076,9 +1088,7 @@ msgid "Distance (km)"
 msgstr ""
 
 #: src/views/wiki/edition/OutingEditionView.vue:54
-#: src/views/wiki/edition/OutingEditionView.vue:82
 #: src/views/wiki/edition/RouteEditionView.vue:51
-#: src/views/wiki/edition/RouteEditionView.vue:92
 msgid "down"
 msgstr ""
 
@@ -1700,7 +1710,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:85
 #: src/views/document/WaypointView.vue:79
 #: src/views/wiki/edition/ImageEditionView.vue:25
-#: src/views/wiki/edition/WaypointEditionView.vue:72
+#: src/views/wiki/edition/WaypointEditionView.vue:73
 msgid "height"
 msgstr ""
 
@@ -2542,7 +2552,7 @@ msgctxt "book_types"
 msgid "novel"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:61
+#: src/views/wiki/edition/WaypointEditionView.vue:62
 msgid "Numbers"
 msgstr ""
 
@@ -2966,8 +2976,8 @@ msgstr ""
 #: src/views/document/OutingView.vue:48
 #: src/views/document/RouteView.vue:34
 #: src/views/wiki/edition/RouteEditionView.vue:68
-#: src/views/wiki/edition/WaypointEditionView.vue:85
-#: src/views/wiki/edition/WaypointEditionView.vue:88
+#: src/views/wiki/edition/WaypointEditionView.vue:86
+#: src/views/wiki/edition/WaypointEditionView.vue:89
 msgid "ratings"
 msgstr ""
 
@@ -3683,7 +3693,7 @@ msgstr ""
 msgid "Translate into an other lang"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:37
+#: src/views/wiki/edition/WaypointEditionView.vue:38
 msgid "Transport &amp; road or PT access"
 msgstr ""
 
@@ -3696,7 +3706,7 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:45
+#: src/views/wiki/edition/WaypointEditionView.vue:46
 msgid "Types and styles"
 msgstr ""
 
@@ -3722,9 +3732,7 @@ msgid "Unprotect document"
 msgstr ""
 
 #: src/views/wiki/edition/OutingEditionView.vue:53
-#: src/views/wiki/edition/OutingEditionView.vue:83
 #: src/views/wiki/edition/RouteEditionView.vue:50
-#: src/views/wiki/edition/RouteEditionView.vue:93
 msgid "up"
 msgstr ""
 
@@ -3895,7 +3903,7 @@ msgstr ""
 msgid "Without c2c account"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:106
+#: src/views/wiki/edition/WaypointEditionView.vue:107
 msgid "write a summary"
 msgstr ""
 

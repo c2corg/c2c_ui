@@ -2,7 +2,7 @@
     <a
         v-if="canFollow"
         @click="onClick"
-        v-tooltip="tooltip"
+        :title="tooltip"
         :class="{'follow-button-yellow' : followed}">
         <fa-icon icon="star" />
     </a>
