@@ -20,8 +20,8 @@ require('moment/locale/en-gb.js') // keep en in last.
 export default function install(Vue) {
     let momentVm = new Vue({
         methods: {
-            parseDate(arg) {
-                return moment(arg)
+            parseDate(arg, format) {
+                return moment(arg, format)
             },
 
             timeAgo(arg) {

@@ -1,10 +1,10 @@
 <template>
     <div class="card">
-        <div class="card-image img-container" :style="'background-image: url(' + src + ')'">
+        <div class="card-image img-container" :style="'background-image: url(' + image.src + ')'">
             <delete-button
                 :visible="isSuccess || isFailed"
                 class="delete-button"
-                @click="$emit('deleteFile', file)"/>
+                @click="$emit('deleteImage', image)"/>
 
             <progress
                 v-if="isSaving || isFailed"
@@ -67,7 +67,7 @@
                     Retry
                 </button>
                 <button
-                    @click="$emit('deleteFile', file)"
+                    @click="$emit('deleteImage', image)"
                     class="button is-danger"
                     v-translate>
                     Cancel
@@ -79,9 +79,10 @@
 </template>
 
 <script>
-// https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
+    import loadImage from 'blueimp-load-image'
+
+    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
     import c2c from '@/js/apis/c2c'
-    import imageUrls from '@/js/image-urls'
     import constants from '@/js/constants'
 
     const STATUS_INITIAL = 'Initial'
@@ -92,12 +93,8 @@
     export default {
 
         props: {
-            file: {
-                type: File,
-                required: true
-            },
-            lang: {
-                type: String,
+            image: {
+                type: Object,
                 required: true
             },
             parentDocument: {
@@ -116,33 +113,12 @@
                 status: STATUS_INITIAL,
                 percentCompleted: 0,
                 errorMessage: null,
-                src: null,
 
                 licences: new Map([
                     ['collaborative', this.$gettext('collab')],
                     ['personal', this.$gettext('personal')]
-                ]),
+                ])
 
-                document: {
-                    image_type: null,
-                    activities: this.parentDocument.activities.slice(0),
-                    image_categories: [],
-                    filename: null,
-                    fnumber: null,
-                    focal_length: null,
-                    camera_name: null,
-                    iso_speed: null,
-                    exposure_time: null,
-                    date_time: null,
-                    file_size: this.file.size,
-                    associations: {
-
-                    },
-                    locales: [{
-                        lang: this.lang,
-                        title: ''
-                    }]
-                }
             }
 
             if (this.$user.isModerator) {
@@ -153,16 +129,8 @@
         },
 
         computed: {
-            imageType() {
-                if (this.parentDocument.type === 'o' || this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
-                    return 'personal'
-                }
-
-                if (this.parentDocument.type === 'c') {
-                    return this.parentDocument.article_type === 'collab' ? 'collaborative' : 'personal'
-                }
-
-                return 'collaborative'
+            document() {
+                return this.image.document
             },
             imageCategories() {
                 return constants.objectDefinitions.image.fields.categories.values
@@ -178,27 +146,49 @@
             },
             isFailed() {
                 return this.status === STATUS_FAILED
-            },
-            imageUrl() {
-                return imageUrls.get(this.document)
             }
         },
 
         created() {
-            this.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + 's'] = [
-                { document_id: this.parentDocument.document_id }
-            ]
+            let image = this.image
+            let upload = this.upload
 
-            this.document.image_type = this.imageType
+            // test files for orientation stuff :
+            // https://github.com/recurser/exif-orientation-examples
+            // and a very good article :
+            // https://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/
 
-            this.computeSrc_()
-            this.upload()
+            // pre processing is mandatory. Reasons :
+            // * file is rotated
+            if (image.orientation !== 0 && image.file.type === 'image/jpeg') {
+                loadImage(
+                    image.file,
+                    (canvas) => {
+                        image.src = canvas.toDataURL(image.file.type)
+                        canvas.toBlob(
+                            (blob) => {
+                                image.blob = blob
+                                upload()
+                            },
+                            image.file.type
+                        )
+                    },
+                    { canvas: true, orientation: image.orientation } // this will fix orientation from exif
+                )
+            } else {
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                    image.src = e.target.result
+                }
+                reader.readAsDataURL(image.file)
+
+                upload()
+            }
         },
 
         methods: {
 
             onUploadProgress(event) {
-                // TODO : test that
                 if (event.total !== 0) {
                     this.percentCompleted = Math.floor((event.loaded * 100) / event.total)
                 }
@@ -207,7 +197,7 @@
             onSuccess(event) {
                 this.status = STATUS_SUCCESS
                 this.document.filename = event.data.filename
-                this.$emit('success', this.file, this.document)
+                this.$emit('success')
             },
 
             onFailure(event) {
@@ -217,25 +207,12 @@
                 this.$emit('fail', event)
             },
 
-            upload(event) {
+            upload() {
                 this.percentCompleted = 0
                 this.status = STATUS_SAVING
-                this.$emit('startUpload', event)
-                c2c.uploadImage(this.file, this.onUploadProgress.bind(this))
+                c2c.uploadImage(this.image.blob, this.onUploadProgress.bind(this))
                     .then(this.onSuccess.bind(this))
                     .catch(this.onFailure.bind(this))
-            },
-
-            computeSrc_() {
-                const reader = new FileReader()
-
-                const callback = function(e) {
-                    this.src = e.target.result
-                }
-
-                reader.onload = callback.bind(this)
-
-                reader.readAsDataURL(this.file)
             },
 
             toggleCategory(category) {
