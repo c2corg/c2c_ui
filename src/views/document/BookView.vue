@@ -18,6 +18,7 @@
                     <field-view :document="document" :field="fields.nb_pages"/>
                     <field-view :document="document" :field="fields.publication_date"/>
                     <field-view :document="document" :field="fields.url" style="overflow:hidden"/>
+                    <field-view :document="document" :field="fields.quality"/>
                 </div>
 
                 <tool-box :document="document"/>
