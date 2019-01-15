@@ -72,6 +72,15 @@
             </ul>
         </div>
 
+        <div
+            v-show="editable"
+            ref="resetGeometry"
+            class="ol-control ol-control-reset-geometry">
+            <button @click="resetGeometry" v-translate>
+                Reset geometry
+            </button>
+        </div>
+
         <biodiv-information ref="BiodivInformation" :data="biodivData"/>
     </div>
 </template>
@@ -285,6 +294,7 @@
                     new ol.control.Control({ element: this.$refs.centerOnGeolocation }),
                     new ol.control.Control({ element: this.$refs.recenterOnControl }),
                     new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
+                    new ol.control.Control({ element: this.$refs.resetGeometry }),
                     new ol.control.Attribution()
                 ],
 
@@ -684,6 +694,12 @@
                 biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current)
                     .then(this.addBiodivSportsData)
                     // .catch(response => console.warn(response))
+            },
+
+            resetGeometry() {
+                this.editedDocument.geometry = { geom: null, geom_detail: null }
+                this.drawDocumentMarkers() // redraw markers
+                this.setDrawInteraction() // reset interaction mode
             }
         }
     }
@@ -749,6 +765,17 @@ $control-margin:0.5em;
     li:hover{
         background: lightgrey;
         cursor: pointer;
+    }
+}
+
+.ol-control-reset-geometry{
+    top: 5px;
+    right:5px;
+
+    button{
+        padding:5px;
+        width: auto!important;
+        font-weight: normal;
     }
 }
 
