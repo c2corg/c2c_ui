@@ -191,17 +191,29 @@ export default {
 
             if (this.mode === 'edit') {
                 promise = c2c[this.documentType].save(this.document, comment).then(() => {
-                    this.$router.push({ name: this.documentType, params: { id: this.document.document_id } })
+                    this.goToDocument(this.document.document_id)
                 })
             } else {
                 promise = c2c[this.documentType].create(this.document).then(response => {
-                    this.$router.push({ name: this.documentType, params: { id: response.data.document_id } })
+                    this.goToDocument(response.data.document_id)
                 })
             }
 
             promise.catch(error => {
                 const data = error.response.data
                 this.dispatchErrors(data.errors)
+            })
+        },
+
+        // after saving, go to document
+        // when it's a creation, id is in request's response.
+        goToDocument(documentId) {
+            this.$router.push({
+                name: this.documentType,
+                params: {
+                    id: documentId,
+                    lang: this.lang
+                }
             })
         },
 

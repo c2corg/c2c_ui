@@ -68,7 +68,8 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
     import viewModeMixin from '.././view-mode-mixin'
 
-    import forum from '@/js/apis/forum.js'
+    import forum from '@/js/apis/forum'
+    import c2c from '@/js/apis/c2c'
 
     const computeCooked = function(cooked) {
         cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url)
@@ -141,7 +142,9 @@
                 const document_id = this.document.document_id
                 const lang = this.locale.lang
 
-                forum.createTopic(document_id, lang)
+                // create topic must go threw c2c API, because system has to create
+                // first message with good link
+                c2c.forum.createTopic(document_id, lang)
                     .then(response => {
                         const topic_id = response['data']['topic_id']
                         const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id
