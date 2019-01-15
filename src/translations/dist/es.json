@@ -258,7 +258,6 @@
     },
     "comment": "Comentario",
     "Comments": "Comentarios",
-    "comments": "comentarios",
     "Compare selected versions": "Comparar versiones seleccionadas",
     "condition_rating": "Condiciones",
     "conditions": "Condiciones",
@@ -1097,7 +1096,6 @@
     "waypoint_type": "Tipo de waypoint",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
     "weather": "Meteo observada",
-    "weather and conditions": "Condiciones y meteo",
     "weather_station": {
       "waypoint_types": " estación meteorológica"
     },

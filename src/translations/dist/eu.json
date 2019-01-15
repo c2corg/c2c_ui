@@ -170,7 +170,6 @@
     },
     "comment": "Iruzkina",
     "Comments": "Iruzkinak",
-    "comments": "Iruzkinak",
     "Compare selected versions": "Aukeratutako bertsioak alderatu",
     "condition_rating": "Egoeraren azterketa",
     "conditions": "Egoera",
@@ -972,7 +971,6 @@
     "waypoint_type": "waypoint mota",
     "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",
-    "weather and conditions": "Egoera eta eguraldia",
     "weather_station": {
       "waypoint_types": "metereologia estazioa"
     },

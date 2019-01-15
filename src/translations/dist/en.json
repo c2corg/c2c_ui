@@ -226,7 +226,6 @@
     },
     "comment": "Comment",
     "Comments": "Comments",
-    "comments": "comments",
     "Comments are disabled.": "Comments are disabled.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.",
     "Compare selected versions": "Compare selected versions",
@@ -1255,7 +1254,6 @@
     "waypoint_type": "Waypoint type",
     "We sent you an email, please click on the link to reset password.": "We sent you an email, please click on the link to reset password.",
     "weather": "Weather",
-    "weather and conditions": "Weather and conditions",
     "weather_station": {
       "waypoint_types": "weather station"
     },

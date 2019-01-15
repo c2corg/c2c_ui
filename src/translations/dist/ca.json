@@ -225,7 +225,6 @@
     },
     "comment": "Comentari",
     "Comments": "Comentaris",
-    "comments": "comentaris",
     "Comments are disabled.": "No s'autoritzen comentaris en aquest document.",
     "Compare selected versions": "Compara les versions seleccionades",
     "condition_rating": "Avaluació de les condicions",
@@ -1243,7 +1242,6 @@
     "waypoint_type": "Tipus de punt de pas",
     "We sent you an email, please click on the link to reset password.": "Us hem enviat un correu, si us plau, cliqueu-ne l'enllaç per restablir la contrasenya.",
     "weather": "Méteo",
-    "weather and conditions": "Condicions i méteo",
     "weather_station": {
       "waypoint_types": "estació meteorològica"
     },

@@ -265,7 +265,6 @@
     },
     "comment": "Kommentar",
     "Comments": "Kommentare",
-    "comments": "Kommentare",
     "Comments are disabled.": "Kommentare sind deaktiviert.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
@@ -1306,7 +1305,6 @@
     "waypoint_type": "Wegpunktart",
     "We sent you an email, please click on the link to reset password.": "Wir haben Ihnen eine Email zu gesendet. Bitten klicken Sie auf den gesendeten Link um das Passwort zurückzusetzen.",
     "weather": "Wetter",
-    "weather and conditions": "Wetter und Verhältnisse",
     "weather_station": {
       "waypoint_types": "Wetterstation"
     },

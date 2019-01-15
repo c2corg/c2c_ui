@@ -3,7 +3,7 @@
 
         <input-simple
             v-if="autoComputeQuality && automaticComputationAvailable"
-            :value="$gettext(computedQuality)"
+            :value="$gettext(computedQuality, 'quality_types')"
             disabled/>
         <input-simple
             v-else
