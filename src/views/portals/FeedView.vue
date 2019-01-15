@@ -11,7 +11,7 @@
                             <router-link :to="{name:'preferences'}" :title="$gettext('My preferences')">
                                 <fa-icon icon="cogs"/>
                             </router-link>
-                            <span :title="$gettext(isPersonal ? 'Personal feed on': 'Personal feed off')">
+                            <span :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')">
                                 <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="toggleIsPersonal"/>
                             </span>
                         </span>

@@ -92,7 +92,7 @@
             if (this.documentType === 'image') {
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
                     getColDef(this, fields.filename)
                 ]
@@ -101,7 +101,7 @@
             if (this.documentType === 'map') {
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.code),
                     getColDef(this, fields.editor),
                     { cellRendererFramework: MarkerQuality, width: 30 }
@@ -112,7 +112,7 @@
                 this.columnDefs = [
                     getColDef(this, fields.date_start, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.height_diff_up, { width: 100 }),
@@ -146,7 +146,7 @@
             if (this.documentType === 'route') {
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.activities, { width: 100 }),
                     getColDef(this, fields.orientations, { width: 100 }),
                     {
@@ -181,7 +181,7 @@
             if (this.documentType === 'waypoint') {
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.elevation),
                     getColDef(this, fields.waypoint_type),
                     { cellRendererFramework: MarkerQuality, width: 30 }
@@ -192,7 +192,7 @@
                 this.columnDefs = [
                     getColDef(this, fields.date, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, { name: 'Areas' }, { cellRendererFramework: AreaList }),
+                    getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.event_type, { width: 100 }),
                     getColDef(this, fields.activities, { width: 100 }),
                     {

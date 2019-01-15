@@ -297,7 +297,6 @@
     },
     "comment": "Commentaire",
     "Comments": "Commentaires",
-    "comments": "commentaires",
     "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication des objectifs et attentes de chacun, des craintes et observations en cours de sortie, briefing pour établir de nouvelles stratégies, éléments de conduite de groupe et de responsabilités, groupe habitué à fonctionner ensemble ou non, émulation, etc.",
     "Compare selected versions": "Comparer les versions sélectionnées",
@@ -398,7 +397,7 @@
     "detail": {
       "image_categories": "détail"
     },
-    "detailed informations": "informations détaillées",
+    "Details": "Détails",
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Décrivez le déroulement de la sortie et de l'incident/accident. Si vous avez déjà saisi une sortie, vous pouvez décrire uniquement l'évènement, puis associez ce compte rendu à la sortie (après l'avoir enregistré).",
     "Differences between versions": "Différences entre les versions",
     "difficult": {
@@ -426,6 +425,7 @@
       "route_configuration_types": "arête"
     },
     "Edit": "Modifier",
+    "Edit categories": "Modifier les catégories",
     "Edit in ca": "Édition en catalan",
     "Edit in de": "Édition en allemand",
     "Edit in en": "Édition en anglais",
@@ -433,6 +433,7 @@
     "Edit in eu": "Édition en basque",
     "Edit in fr": "Édition en français",
     "Edit in it": "Édition en italien",
+    "Edit titles": "Modifier les titres",
     "editor": "Éditeur",
     "Elevation": "Altitude",
     "elevation": "Altitude",
@@ -1007,6 +1008,9 @@
       "$$noContext": "personnel (CC by-nc-nd)"
     },
     "personal comments": "Commentaires personnels",
+    "Personal feed off": "Fil personnel désactivé",
+    "Personal feed on": "Fil personnel activé",
+    "Personal informations": "Informations personnelles",
     "phone": "Téléphone",
     "phone_custodian": "Téléphone gardien/gérant",
     "photos-art": {
@@ -1114,6 +1118,7 @@
       "required climbing rating": "obligatoire"
     },
     "rescue": "Intervention des services de secours",
+    "Reset geometry": "Réinitialiser",
     "Reset password": "Réinitialiser le mot de passe",
     "resolution": "résolution",
     "restaurant": {
@@ -1198,6 +1203,7 @@
     "severity_no": {
       "severities": "pas de blessure"
     },
+    "Share": "Partager",
     "Share with us!": "Partagez avec nous!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
     "shelter": {
@@ -1421,7 +1427,7 @@
     "waypoints": "points de passage",
     "We sent you an email, please click on the link to reset password.": "Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il contient pour réinitialiser votre mot de passe.",
     "weather": "Météo",
-    "weather and conditions": "Météo et Conditions",
+    "Weather & conditions": "Météo & conditions",
     "weather_station": {
       "waypoint_types": "station météo"
     },

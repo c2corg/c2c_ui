@@ -224,7 +224,6 @@
     },
     "comment": "Commento",
     "Comments": "Commenti",
-    "comments": "commenti",
     "Comments are disabled.": "I commenti non sono autorizzati su questo documento.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicazione degli obiettivi e aspirazioni di ognuno, delle paure e osservazioni durante la gita. Briefing per le nuove strategie, elementi di gestione del gruppo e di responsabilità, gruppo di persone che si conoscono, emulazione, etc.",
     "Compare selected versions": "Comparare le versioni selezionate",
@@ -1241,7 +1240,6 @@
     "waypoint_type": "Tipo di punto di passaggio",
     "We sent you an email, please click on the link to reset password.": "Riceverai entro poco una mail. Segui il link  per reimpostare la password.",
     "weather": "Meteo",
-    "weather and conditions": "Condizioni e meteo",
     "weather_station": {
       "waypoint_types": "stazione meteo"
     },
