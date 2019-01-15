@@ -22,13 +22,6 @@ Forum.prototype.getTopic = function(topicId) {
     return this.get('/t/title/' + topicId + '.json')
 }
 
-Forum.prototype.createTopic = function(document_id, lang) {
-    return this.post('/forum/topics', {
-        'document_id': document_id,
-        'lang': lang
-    })
-}
-
 Forum.prototype.getLatest = function() {
     var result = this.get('/latest.json')
 
