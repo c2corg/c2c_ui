@@ -54,6 +54,18 @@
         :error-message="errorMessage"
         v-model="object[field.name]"/>
 
+    <datepicker
+        v-else-if="field.type === 'date'"
+        monday-first
+        input-class="input"
+        wrapper-class="control"
+        :language="$options.datepickerLocales[$language.current]"
+        :highlighted="{dates:[new Date()]}"
+        :disabled-dates="disabledDates"
+        :required="field.required"
+        @input="object[field.name]=$moment.parseDate(arguments[0]).format('YYYY-MM-DD')"
+        :value="object[field.name]"/>
+
     <input-simple
         ref="input"
         v-else-if="simpleInputType"
@@ -89,11 +101,25 @@
 </template>
 
 <script>
+
+    import Datepicker from 'vuejs-datepicker'
+    import { fr, en, es, ca, de, it, eu } from 'vuejs-datepicker/dist/locale'
+
     import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
     import InputConditionsLevels from './InputConditionsLevels'
 
+    // note that eu is missing. Sorry euskara...
+    const datepickerLocales = {
+        fr,
+        en,
+        es,
+        ca,
+        de,
+        it
+    }
+
     export default {
-        components: { InputConditionsLevels },
+        components: { InputConditionsLevels, Datepicker },
 
         mixins: [ requireFieldProperty, requireDocumentProperty ],
 
@@ -125,6 +151,16 @@
         },
 
         computed: {
+            disabledDates() {
+                const min = this.min || this.field.min
+                const max = this.max || this.field.max
+
+                return {
+                    to: min ? this.$moment.parseDate(min).toDate() : undefined,
+                    from: max ? (this.$moment.parseDate(max).add(1, 'd').toDate()) : undefined
+                }
+            },
+
             editedLocale() {
                 // in edit mode, there is only one locale
                 return this.document.locales[0]
@@ -149,7 +185,7 @@
                 return this.field.isVisibleFor(this.document)
             },
             simpleInputType() {
-                return ['text', 'number', 'url', 'date', 'tel'].includes(this.field.type)
+                return ['text', 'number', 'url', 'tel'].includes(this.field.type)
             },
             hasError() {
                 return this.field.error !== null
@@ -157,6 +193,8 @@
             errorMessage() {
                 return this.hasError ? this.$gettext(this.field.error.description) : null
             }
-        }
+        },
+
+        datepickerLocales: datepickerLocales
     }
 </script>
