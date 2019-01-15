@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import config from '@/config'
+    import config from '@/js/config'
 
     const cdn = '//s7.addthis.com/js/300/addthis_widget.js'
 
