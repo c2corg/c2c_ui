@@ -28,13 +28,19 @@
 
             <div class="columns is-gapless has-text-centered is-mobile menu-socials">
                 <div class="column">
-                    <img src="@/assets/img/social/twitter.png" alt="Twitter">
+                    <a href="https://twitter.com/camptocamporg">
+                        <img src="@/assets/img/social/twitter.png" alt="Twitter">
+                    </a>
                 </div>
                 <div class="column">
-                    <img src="@/assets/img/social/google-plus.png" alt="Google+">
+                    <a href="https://plus.google.com/104270548458536561874/posts">
+                        <img src="@/assets/img/social/google-plus.png" alt="Google+">
+                    </a>
                 </div>
                 <div class="column">
-                    <img src="@/assets/img/social/facebook.png" alt="Facebook">
+                    <a href="https://www.facebook.com/camptocamp.org/">
+                        <img src="@/assets/img/social/facebook.png" alt="Facebook">
+                    </a>
                 </div>
             </div>
         </div>

@@ -103,7 +103,7 @@
 <script>
 
     import Datepicker from 'vuejs-datepicker'
-    import { fr, en, es, ca, de, it, eu } from 'vuejs-datepicker/dist/locale'
+    import { fr, en, es, ca, de, it } from 'vuejs-datepicker/dist/locale'
 
     import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins'
     import InputConditionsLevels from './InputConditionsLevels'
