@@ -14,6 +14,8 @@
 
                     <follow-button :document="document" />
 
+                    <social-network-sharing v-if="documentType!='profile' && isNormalView"/>
+
                     <history-link
                         v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
                         :title="$gettext('History')"
@@ -57,6 +59,7 @@
 <script>
     import ImagesUploader from '@/components/images-uploader/ImagesUploader'
     import FollowButton from './FollowButton'
+    import SocialNetworkSharing from './SocialNetworkSharing'
     import DocumentVersionBanner from './DocumentVersionBanner'
 
     import isEditableMixin from './is-editable-mixin'
@@ -66,6 +69,7 @@
         components: {
             ImagesUploader,
             FollowButton,
+            SocialNetworkSharing,
             DocumentVersionBanner
         },
 

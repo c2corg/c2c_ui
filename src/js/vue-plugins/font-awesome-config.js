@@ -65,6 +65,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle'
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute'
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
+import { faShareSquare } from '@fortawesome/free-solid-svg-icons/faShareSquare'
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt'
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp'
@@ -266,6 +267,7 @@ export default function install(Vue) {
         faQuestionCircle,
         faRoute,
         faSearch,
+        faShareSquare,
         faSignInAlt,
         faSignOutAlt,
         faSortAmountUp,
