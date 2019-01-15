@@ -18,6 +18,15 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin.js'
 
     export default {
-        mixins: [ DocumentEditionViewMixin ]
+        mixins: [ DocumentEditionViewMixin ],
+
+        methods: {
+            beforeSave() {
+                if (!this.$user.isModerator) {
+                    // need to delete geomtry : API won't allow any modification otherwise
+                    delete this.document.geometry
+                }
+            }
+        }
     }
 </script>
