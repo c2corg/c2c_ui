@@ -44,6 +44,7 @@ const config = {
     ignApiKey: undefined,
     bingApiKey: undefined,
     isProduction: false,
+    addthisPublicId: 'ra-58abf6b4f3a680cb',
     urlsConfigurations: {
         demo: {
             name: 'demo',

@@ -10,7 +10,8 @@
 </template>
 
 <script>
-    const publicId = 'ra-58abf6b4f3a680cb'
+    import config from '@/config'
+
     const cdn = '//s7.addthis.com/js/300/addthis_widget.js'
 
     export default {
@@ -30,7 +31,7 @@
                 const el = document.createElement('script')
 
                 el.setAttribute('id', 'addthis-script')
-                el.setAttribute('src', `${cdn}#pubid=${publicId}`)
+                el.setAttribute('src', `${cdn}#pubid=${config.addthisPublicId}`)
                 el.onload = this.onAddthisLoad
                 document.body.appendChild(el)
             }
