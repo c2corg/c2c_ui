@@ -7,6 +7,7 @@ import DocumentService from './DocumentService.js'
 import ModeratorService from './ModeratorService.js'
 import AssociationService from './AssociationService.js'
 import FeedService from './FeedService.js'
+import ForumService from './ForumService.js'
 
 function CamptocampApi() {
     // inherits properties
@@ -16,6 +17,7 @@ function CamptocampApi() {
     this.moderator = new ModeratorService(this)
     this.association = new AssociationService(this)
     this.feed = new FeedService(this)
+    this.forum = new ForumService(this)
 
     for (let type of constants.documentTypes) {
         this[type] = new DocumentService(this, type)
