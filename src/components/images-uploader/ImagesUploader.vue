@@ -32,10 +32,10 @@
                 :disabled="documents.length === 0"
                 class="button is-information"
                 @click="categoriesEdition=!categoriesEdition">
-                <span v-if="categoriesEdition">
+                <span v-if="categoriesEdition" v-translate>
                     Edit titles
                 </span>
-                <span v-else>
+                <span v-else v-translate>
                     Edit categories
                 </span>
             </button>
@@ -58,7 +58,23 @@
     import loadImage from 'blueimp-load-image'
 
     import c2c from '@/js/apis/c2c'
+    import ol from '@/js/libs/ol.js'
+
     import ImageUploader from './ImageUploader'
+
+    // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
+    const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
+        let decimal = Number(degrees) + (Number(minutes) / 60) + (parseFloat(seconds) / 3600)
+
+        // Don't do anything for N or E
+        if (direction === 'S' || direction === 'W') {
+            decimal = decimal * -1
+        }
+
+        return decimal
+    }
+
+    const worldExtent = ol.proj.get('EPSG:4326').getExtent()
 
     export default {
 
@@ -188,6 +204,26 @@
                     image.document.focal_length = exif.FocalLengthIn35mmFilm
                     image.document.fnumber = exif.FNumber
                     image.document.camera_name = (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : null
+
+                    if (exif.GPSLatitude && exif.GPSLongitude) {
+                        let lat = exif.GPSLatitude.split(',')
+                        let lon = exif.GPSLongitude.split(',')
+
+                        lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSLatitudeRef)
+                        lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSLongitudeRef)
+
+                        if (!isNaN(lat) && !isNaN(lon) && ol.extent.containsXY(worldExtent, lon, lat)) {
+                            const location = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857')
+                            const geom = { 'coordinates': location, 'type': 'Point' }
+
+                            image.document.geometry = { 'geom': JSON.stringify(geom) }
+                        }
+                    }
+
+                    if (exif.GPSAltitude) {
+                        const elevation = parseFloat(exif.GPSAltitude)
+                        image.document.elevation = isNaN(elevation) ? null : elevation
+                    }
                 }
             },
 
