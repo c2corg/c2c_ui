@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <document-link :document="outing" class="outing-row">
         <span>
-            <activities :activities="outing.activities"/>
-            <document-link :document="outing"/>
+            <activities :activities="outing.activities" class="is-size-3 activity-icon"/>
+            <document-title :document="outing"/>
             &hairsp;&bull;&hairsp;
             <em v-for="area in outing.areas" v-if="area.area_type=='range'" :key="area.document_id">
                 <small>
@@ -14,7 +14,7 @@
             <marker-image-count :image-count="outing.img_count"/>
             <marker-condition :condition="outing.condition_rating"/>
         </span>
-    </div>
+    </document-link>
 </template>
 
 <script>
@@ -27,3 +27,33 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+
+    @import '@/assets/sass/variables.scss';
+
+    .outing-row{
+        display:block;
+        color:$text;
+        padding:0 2px;
+
+        .activity-icon{
+            display: inline-block;
+            line-height: 1;
+            vertical-align: bottom;
+        }
+
+        > span{
+            vertical-align: top
+        }
+
+    }
+
+    .outing-row:hover{
+        background: $hover-background;
+    }
+
+    .outing-row:visited{
+        color: $grey-light;
+    }
+</style>
