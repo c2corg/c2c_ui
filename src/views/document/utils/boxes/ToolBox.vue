@@ -16,8 +16,14 @@
             <hr>
         </div>
 
-        <div v-if="isEditable && hasMissingLangs">
+        <div v-if="isEditable">
             <tool-box-button
+                @click="$refs.associationsWindow.show()"
+                icon="link"
+                :label="$gettext('Edit associations')" />
+
+            <tool-box-button
+                v-if="hasMissingLangs"
                 @click="$refs.translateWindow.show()"
                 icon="edit"
                 :label="$gettext('Translate into an other lang')" />
@@ -70,6 +76,7 @@
             <delete-document-window ref="deleteDocumentWindow" :document="document"/>
             <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang"/>
             <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
+            <associations-window ref="associationsWindow" :document="document"/>
         </div>
 
     </div>
@@ -87,6 +94,7 @@
     import LicenseBox from './LicenseBox'
     import AssociatedDocuments from './AssociatedDocuments'
 
+    import AssociationsWindow from '../windows/AssociationsWindow'
     import DeleteDocumentWindow from '../windows/DeleteDocumentWindow'
     import DeleteLocaleWindow from '../windows/DeleteLocaleWindow'
     import MergeDocumentWindow from '../windows/MergeDocumentWindow'
@@ -98,6 +106,7 @@
             LicenseBox,
             AssociatedDocuments,
 
+            AssociationsWindow,
             DeleteLocaleWindow,
             DeleteDocumentWindow,
             MergeDocumentWindow,
