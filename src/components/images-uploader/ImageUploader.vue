@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div v-else class="buttons">
+            <div v-else class="buttons is-centered buttons-if-failed">
                 <button
                     @click="upload"
                     class="button is-primary"
@@ -165,13 +165,7 @@
                     image.file,
                     (canvas) => {
                         image.src = canvas.toDataURL(image.file.type)
-                        canvas.toBlob(
-                            (blob) => {
-                                image.blob = blob
-                                upload()
-                            },
-                            image.file.type
-                        )
+                        canvas.toBlob(upload, image.file.type)
                     },
                     { canvas: true, orientation: image.orientation } // this will fix orientation from exif
                 )
@@ -182,7 +176,7 @@
                 }
                 reader.readAsDataURL(image.file)
 
-                upload()
+                upload(image.file)
             }
         },
 
@@ -207,10 +201,10 @@
                 this.$emit('fail', event)
             },
 
-            upload() {
+            upload(data) {
                 this.percentCompleted = 0
                 this.status = STATUS_SAVING
-                c2c.uploadImage(this.image.blob, this.onUploadProgress.bind(this))
+                c2c.uploadImage(data, this.onUploadProgress.bind(this))
                     .then(this.onSuccess.bind(this))
                     .catch(this.onFailure.bind(this))
             },
@@ -320,6 +314,10 @@
     top:-1rem;
     right:-1rem;
     font-size:3rem;
+}
+
+.buttons-if-failed{
+    margin-top: 3em;
 }
 
  </style>
