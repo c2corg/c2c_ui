@@ -27,7 +27,7 @@ This row will be visible if, and only if at least one of its children has `visib
 <!-- with one input, always visible -->
 
 <form-row label="" always-visible>
-    <map-view :documents="[document]" editable/>
+    <map-view :edited-document="document" />
 
 </form-row>
 ```

@@ -47,6 +47,7 @@
         <div
             v-show="showCenterOnGeolocation"
             ref="centerOnGeolocation"
+            :title="$gettext('Recenter on your current position')"
             class="ol-control ol-control-center-on-geolocation">
             <button @click="centerOnGeolocation">
                 <fa-icon icon="bullseye"/>
@@ -78,6 +79,15 @@
             class="ol-control ol-control-reset-geometry">
             <button @click="resetGeometry" v-translate>
                 Reset geometry
+            </button>
+        </div>
+
+        <div
+            v-show="editable"
+            ref="clearGeometry"
+            class="ol-control ol-control-clear-geometry">
+            <button @click="clearGeometry" v-translate>
+                Clear
             </button>
         </div>
 
@@ -141,14 +151,14 @@
                 default: null
             },
 
-            editable: {
+            geomDetailEditable: {
                 type: Boolean,
                 default: false
             },
 
-            geomDetailEditable: {
-                type: Boolean,
-                default: false
+            editedDocument: {
+                type: Object,
+                default: null
             },
 
             oldDocument: {
@@ -198,11 +208,19 @@
                 recenterPropositions: null,
                 showRecenterOnPropositions: false,
 
-                biodivData: {}
+                biodivData: {},
+
+                // on editable mode, there a button reset
+                // we must save initial geometry
+                initialGeometry: null
             }
         },
 
         computed: {
+
+            editable() {
+                return this.editedDocument !== null
+            },
 
             highlightedFeature: {
                 get() {
@@ -257,22 +275,24 @@
                     layer.setVisible(true)
                     this.setMaxZoom()
                 }
-            },
-
-            editedDocument() {
-                if (this.editable) {
-                    // documents must be a 1-length array
-                    // in this mode, documents array is not reactive
-                    // and can't be setted after component creation
-                    return this.documents[0]
-                }
             }
         },
+
         watch: {
             documents: {
                 handler: function() {
                     this.drawDocumentMarkers()
                     this.fitMapToDocuments()
+                }
+            },
+
+            editedDocument: {
+                handler: function() {
+                    this.drawDocumentMarkers()
+                    this.fitMapToDocuments()
+
+                    // when route is set on outing edition, geom may be updated
+                    this.setDrawInteraction()
                 },
                 deep: true // must look on change inside documents object
             },
@@ -295,6 +315,7 @@
                     new ol.control.Control({ element: this.$refs.recenterOnControl }),
                     new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
                     new ol.control.Control({ element: this.$refs.resetGeometry }),
+                    new ol.control.Control({ element: this.$refs.clearGeometry }),
                     new ol.control.Attribution()
                 ],
 
@@ -336,6 +357,9 @@
             }
 
             if (this.editable) {
+                // deep clone : https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript
+                this.initialGeometry = JSON.parse(JSON.stringify(this.editedDocument.geometry))
+
                 this.setModifyInteractions()
                 this.setDrawInteraction()
                 this.setDragAndDropInteraction()
@@ -465,10 +489,12 @@
                 this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true))
                 this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false))
 
+                this.addDocumentFeature(this.editedDocument, documentsSource)
+
                 for (let document of this.documents || []) {
                     this.addDocumentFeature(document, documentsSource)
 
-                    if (document.associations && !this.editable) {
+                    if (document.associations) {
                         for (let waypoint of document.associations.waypoints || []) {
                             this.addDocumentFeature(waypoint, waypointsSource)
                         }
@@ -696,8 +722,15 @@
                     // .catch(response => console.warn(response))
             },
 
+            clearGeometry() {
+                this.editedDocument.geometry.geom = null
+                this.editedDocument.geometry.geom_detail = null
+                this.drawDocumentMarkers() // redraw markers
+                this.setDrawInteraction() // reset interaction mode
+            },
+
             resetGeometry() {
-                this.editedDocument.geometry = { geom: null, geom_detail: null }
+                this.editedDocument.geometry = JSON.parse(JSON.stringify(this.initialGeometry))
                 this.drawDocumentMarkers() // redraw markers
                 this.setDrawInteraction() // reset interaction mode
             }
@@ -770,6 +803,17 @@ $control-margin:0.5em;
 
 .ol-control-reset-geometry{
     top: 5px;
+    right:5px;
+
+    button{
+        padding:5px;
+        width: auto!important;
+        font-weight: normal;
+    }
+}
+
+.ol-control-clear-geometry{
+    top: 35px;
     right:5px;
 
     button{

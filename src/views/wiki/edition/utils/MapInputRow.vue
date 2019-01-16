@@ -15,7 +15,7 @@
         </form-row>
 
         <form-row label="" always-visible>
-            <map-view ref="map" :documents="[document]" editable :geom-detail-editable="geomDetailEditable"/>
+            <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
         </form-row>
     </div>
 </template>

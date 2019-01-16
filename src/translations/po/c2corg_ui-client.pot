@@ -625,6 +625,10 @@ msgstr ""
 msgid "children_proof"
 msgstr ""
 
+#: src/components/map/OlMap.vue:89
+msgid "Clear"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:197
 msgctxt "access_conditions"
 msgid "cleared"
@@ -3001,7 +3005,11 @@ msgctxt "avalanche_signs"
 msgid "recent_avalanche"
 msgstr ""
 
-#: src/components/map/OlMap.vue:60
+#: src/components/map/OlMap.vue:50
+msgid "Recenter on your current position"
+msgstr ""
+
+#: src/components/map/OlMap.vue:61
 msgid "Recenter on..."
 msgstr ""
 
@@ -3026,7 +3034,7 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
-#: src/components/map/OlMap.vue:79
+#: src/components/map/OlMap.vue:80
 msgid "Reset geometry"
 msgstr ""
 
@@ -3223,7 +3231,7 @@ msgid "Send reset email"
 msgstr ""
 
 #: src/components/map/BiodivInformation.vue:4
-#: src/components/map/OlMap.vue:569
+#: src/components/map/OlMap.vue:595
 msgid "Sensitive area:"
 msgstr ""
 
