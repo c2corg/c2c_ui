@@ -30,7 +30,9 @@
             {"id": "outings", "properties": {"url":"o"}},
             {"id": "routes", "properties": {"url":"r"}},
             {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "images"}
+            {"id": "images"},
+            {"id": "users"},
+            {"id": "xreports"}
         ]
     },
 
@@ -55,7 +57,8 @@
 
             {"id": "articles", "properties": {"url":"c"}},
             {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}}
+            {"id": "waypoints", "properties": {"url":"w"}},
+            {"id": "images"}
         ]
     },
 
@@ -85,10 +88,15 @@
             {"id": "quality", "properties": {"url":"qa"}},
             {"id": "width"},
 
+            {"id": "areas"},
             {"id": "articles", "properties": {"url":"c"}},
             {"id": "books", "properties": {"url":"b"}},
+            {"id": "outings"},
             {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}}
+            {"id": "users"},
+            {"id": "waypoints", "properties": {"url":"w"}},
+            {"id": "waypoints"},
+            {"id": "xreports"}
         ]
     },
 
@@ -164,10 +172,10 @@
             {"id": "via_ferrata_rating", "properties": {"url":"krat", "activities":["via_ferrata"]}},
 
             {"id": "articles", "properties": {"url":"c"}},
+            {"id": "images"},
             {"id": "routes", "properties": {"url":"r", "required":true}},
             {"id": "users", "properties": {"url":"u", "required":true}},
-            {"id": "xreports", "properties": {"url":"x"}},
-            {"id": "images"}
+            {"id": "xreports", "properties": {"url":"x"}}
         ]
     },
 
@@ -181,7 +189,9 @@
 
             {"id": "activities", "properties": {"url":"act"}},
             {"id": "categories"},
-            {"id": "name"}
+            {"id": "name"},
+
+            {"id": "images"}
         ]
     },
 
@@ -248,6 +258,7 @@
 
             {"id": "articles", "properties": {"url":"c"}},
             {"id": "books", "properties": {"url":"b"}},
+            {"id": "images"},
             {"id": "routes", "properties": {"url":"r"}},
             {"id": "waypoints", "properties": {"url":"w"}},
             {"id": "xreports", "properties": {"url":"x"}}
@@ -316,8 +327,8 @@
 
             {"id": "articles", "properties": {"url":"c"}},
             {"id": "books", "properties": {"url":"b"}},
-            {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "xreports", "properties": {"url":"x"}}
+            {"id": "images"},
+            {"id": "waypoints", "properties": {"url":"w"}}
         ]
     },
 
@@ -365,8 +376,11 @@
             {"id": "quality", "properties": {"url":"qa"}},
 
             {"id": "articles", "properties": {"url":"c", "helper": null}},
+            {"id": "images"},
             {"id": "outings", "properties": {"url":"o", "helper": null}},
-            {"id": "routes", "properties": {"url":"r", "helper": null}}
+            {"id": "routes", "properties": {"url":"r", "helper": null}},
+            {"id": "users"},
+            {"id": "waypoints"}
         ]
     }
 }
