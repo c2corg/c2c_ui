@@ -10,12 +10,12 @@ AssociationService.prototype.create = function(parent, child) {
 
     // parent and child type are predetermined
     if (
-        (pType === 'c' && (cType === 'w' || cType === 'o' || cType === 'r' || cType === 'b' || cType === 'c')) ||
+        (pType === 'c' && (cType === 'w' || cType === 'o' || cType === 'r' || cType === 'b' || cType === 'c' || cType === 'x' || cType === 'u')) ||
         pType === 'i' ||
         (pType === 'o' && (cType === 'r' || cType === 'u')) ||
         (pType === 'r' && (cType === 'w' || cType === 'b')) ||
         (pType === 'w' && cType === 'b') ||
-        (pType === 'x' && (cType === 'r' || cType === 'o' || cType === 'w'))
+        (pType === 'x' && (cType === 'r' || cType === 'o' || cType === 'w' || cType === 'u'))
     ) {
         data.parent_document_id = child.document_id
         data.child_document_id = parent.document_id

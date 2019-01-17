@@ -17,7 +17,7 @@
             :child-type="item.documentType"
             :parent="document"
             :current="item.current"
-            :propositions="propositions[item.documentType]" />
+            :propositions="propositions[item.arrayName]" />
 
         <div slot="footer">
             <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">
@@ -30,6 +30,8 @@
 
 <script>
     import c2c from '@/js/apis/c2c'
+    import constants from '@/js/constants'
+
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     import AssociationItems from './AssociationItems'
@@ -43,7 +45,8 @@
             return {
                 promise: null,
                 data: null,
-                propositions: {}
+                propositions: {},
+                letterTypes: []
             }
         },
 
@@ -55,15 +58,16 @@
 
         created() {
             const associations = this.document.associations
+            const fields = Object.values(constants.objectDefinitions[this.documentType].fields)
+
             this.data = {}
 
-            this.addToData('routes', associations.all_routes)
-            this.addToData('routes', associations.routes)
-            this.addToData('waypoints', associations.waypoints)
-            this.addToData('articles', associations.articles)
-            this.addToData('books', associations.books)
-            this.addToData('images', associations.images)
-            this.addToData('xreports', associations.xreports)
+            for (let field of fields) {
+                if (field.parent === 'associations') {
+                    this.addToData(field.name, field.documentType + 's', associations[field.name])
+                    this.letterTypes.push(constants.objectDefinitions[field.documentType].letter)
+                }
+            }
         },
 
         methods: {
@@ -72,12 +76,11 @@
             },
 
             // used by created function
-            addToData(documentType, documents) {
-                if (documents !== undefined) {
-                    this.data[documentType] = {
-                        documentType: documentType,
-                        current: documents.documents ? documents.documents : documents
-                    }
+            addToData(arrayName, documentType, documents) {
+                this.data[documentType] = {
+                    arrayName: arrayName,
+                    documentType: documentType,
+                    current: documents.documents ? documents.documents : documents
                 }
             },
 
@@ -85,7 +88,7 @@
                 const text = event.target.value
 
                 if (text.length >= 3) {
-                    c2c.search({ q: text, t: 'r,w,x,b,c', limit: 5 }).then(this.computePropositions)
+                    c2c.search({ q: text, t: this.letterTypes.join(','), limit: 5 }).then(this.computePropositions)
                 }
             },
 

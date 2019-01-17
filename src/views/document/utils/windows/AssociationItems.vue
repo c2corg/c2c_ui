@@ -5,39 +5,28 @@
         </h2>
 
         <div
-            v-for="child of current"
-            :key="child.document_id"
+            v-for="child of childs"
+            :key="child.document.document_id"
             class="columns is-mobile is-gapless document-row">
             <div class="column">
-                <document-link :document="child" />
+                <document-link :document="child.document" />
             </div>
             <div class="column is-narrow">
                 <button
-                    class="button is-small is-pulled-right is-danger"
-                    :class="{'is-loading': promise.loading}"
-                    :disabled="!canRemove(child)"
-                    @click="remove(child)">
-                    Remove
+                    class="button is-small is-pulled-right"
+                    :class="{
+                        'is-loading': promise.loading,
+                        'is-danger': child.status === 'current',
+                        'is-info': child.status === 'deleted',
+                        'is-success': child.status === 'proposition',
+                    }"
+                    :disabled="child.disabled"
+                    @click="onclick(child)">
+                    {{ child.buttonLabel }}
                 </button>
             </div>
         </div>
 
-        <div
-            v-for="child of filteredPropositions"
-            :key="child.document_id"
-            class="columns is-mobile is-gapless document-row">
-            <div class="column">
-                <document-link :document="child" />
-            </div>
-            <div class="column is-narrow">
-                <button
-                    class="button is-small is-pulled-right is-success"
-                    :class="{'is-loading': promise.loading}"
-                    @click="add(child)">
-                    Add
-                </button>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -67,39 +56,73 @@
 
         data() {
             return {
-                promise: {}
+                promise: {},
+                deleted: []
             }
         },
 
         computed: {
-            // do not propose a document still in current
-            filteredPropositions() {
-                if (!this.propositions) {
-                    return []
-                }
 
-                const currentIds = new Set(this.current.map(doc => doc.document_id))
+            childs() {
+                const uniqueDocuments = new Map()
 
-                return this.propositions.documents.filter(doc => !currentIds.has(doc.document_id))
+                const append = function(array, status, buttonLabel) {
+                    for (let document of array || []) {
+                        if (!uniqueDocuments.has(document.document_id)) {
+                            uniqueDocuments.set(document.document_id, {
+                                sortKey: this.$documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,
+                                document,
+                                status,
+                                buttonLabel,
+                                disabled: !this.canRemove(document) && status === 'current'
+                            })
+                        }
+                    }
+                }.bind(this)
+
+                append(this.current, 'current', this.$gettext('Remove'))
+                append(this.deleted, 'deleted', this.$gettext('Put it back'))
+                append(this.propositions ? this.propositions.documents : undefined, 'proposition', this.$gettext('Add'))
+
+                let result = [...uniqueDocuments.values()]
+                result.sort((a, b) => {
+                    return a.sortKey < b.sortKey ? -1 : 1
+                })
+
+                return result
             }
         },
 
         methods: {
             canRemove(document) {
-                return this.$user.isModerator
+                if (this.parent.type === 'o' && this.childType === 'routes') {
+                    return this.current.length > 1
+                }
+
+                return (this.$user.isModerator || this.parent.document_id === this.$user.id)
+            },
+
+            onclick(child) {
+                if (child.status === 'current') {
+                    this.remove(child.document)
+                } else {
+                    this.add(child.document)
+                }
             },
 
             add(child) {
                 this.promise = c2c.association.create(this.parent, child)
                     .then((response) => {
                         this.current.push(child)
+                        this.deleted = this.deleted.filter(doc => doc.document_id !== child.document_id)
                     })
             },
 
             remove(child) {
                 this.promise = c2c.association.remove(this.parent, child)
                     .then((response) => {
-                        this.current = this.current.filter(doc => doc.document_id !== child.document_id)
+                        this.current.splice(this.current.indexOf(child), 1)
+                        this.deleted.push(child)
                     })
             }
         }
@@ -110,20 +133,19 @@
 
     @import '@/assets/sass/variables.scss';
 
-    .association-items{
-        margin-bottom: 1rem;
+.association-items{
+    margin-bottom: 1rem;
 
-        h2{
-            margin-bottom: 0.1rem!important;
-        }
+    h2{
+        margin-bottom: 0.1rem!important;
     }
+}
 
-    .document-row{
-        padding:2px;
-        margin-bottom: 0!important;
-    }
-    .document-row:hover{
-        background: $hover-background;
-    }
-
+.document-row{
+    padding:2px;
+    margin-bottom: 0!important;
+}
+.document-row:hover{
+    background: $hover-background;
+}
 </style>

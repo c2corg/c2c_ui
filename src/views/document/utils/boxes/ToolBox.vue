@@ -16,8 +16,9 @@
             <hr>
         </div>
 
-        <div v-if="isEditable">
+        <div v-if="isEditable && (showAssociationEditor || hasMissingLangs)">
             <tool-box-button
+                v-if="showAssociationEditor"
                 @click="$refs.associationsWindow.show()"
                 icon="link"
                 :label="$gettext('Edit associations')" />
@@ -126,6 +127,10 @@
             // locale(){
             //     return this.document.cooked
             // },
+
+            showAssociationEditor() {
+                return !['area'].includes(this.documentType)
+            },
 
             missingLangs() {
                 var result = []
