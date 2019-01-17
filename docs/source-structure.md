@@ -43,7 +43,7 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;constants| |
 |&nbsp;&nbsp;&nbsp;&nbsp;libs|Wrappers, with small functionalities, around existing libraries |
 |&nbsp;&nbsp;&nbsp;&nbsp;vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|
-|translations| |
+|translations|Data for i18n|
 |&nbsp;&nbsp;&nbsp;&nbsp;dist|Do not edit these files, thee are generated from .po files|
 |&nbsp;&nbsp;&nbsp;&nbsp;po| |
 |views|Main views called by vue-router.|
@@ -60,6 +60,6 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;user|Profile related views|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |
 |&nbsp;&nbsp;&nbsp;&nbsp;wiki| |
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|Edition views, one per document's type|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|# Edition views, one per document's type|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils|Utilities for edition views.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils| |

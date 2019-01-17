@@ -17,7 +17,9 @@ On <http://localhost:8000>, you will have on-click buttons for all features :
 * `build` : build a ready-to-deploy production site
 * `build:github` : a demo site, that can be deployed on any static file server.
 * `lint` : do you have followed every coding good practices ?
-* `extract-messages` : if you have modified any textual string, please run this task. it will update `.pot` translation files
+  * `lint:no-fix`is the same process, but it won't correct your files
+* `messages:extract` : if you have modified any textual string, please run this task. it will update `.pot` translation files
+* `messages:compile` : get new translation from Transifex, and compile them to `.json`files.
 * `generates-docs` : Generate documentation files
 * `generates-icons` : Generate icons .js files in `/src/assets/font-awesome-custom`
 * `update-c2c-common` : c2c core data has been updated ? keep UI syncronised with them. We will need python 3 for this task

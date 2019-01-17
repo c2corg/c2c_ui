@@ -3,7 +3,6 @@
 * maps
   * ask for an Bing Map dev key
 * signup (CAPTCHA)
-* Markdown
 
 ## Wait for c2c issues
 
@@ -23,10 +22,7 @@
 ## A verifier
 
 * bien TESTER la fusion avec un autre document
-* test forum.createTopic()
 * test all doc's comments functions
-* test requestPasswordChange and validate_new_password
-* test changemail
 
 ## Refactors
 
@@ -42,7 +38,6 @@
 * Preferences view is ugly
 * Following view is ugly
 * print CSS
-* choose font family
 
 ## Bugs
 
