@@ -124,12 +124,6 @@ export default function install(Vue) {
                 let route = child
                 let outing = parent
 
-                for (let activity of route.activities) {
-                    if (!outing.activities.includes(activity)) {
-                        outing.activities.push(activity)
-                    }
-                }
-
                 outing.geometry.geom = outing.geometry.geom === null ? route.geometry.geom : outing.geometry.geom
 
                 const names = [
