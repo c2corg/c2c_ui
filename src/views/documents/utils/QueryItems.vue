@@ -39,7 +39,6 @@
             'book_types',
             'waypoint_type',
             'event_type',
-            'condition_rating',
             'climbing_outdoor_type',
             'route_types',
             'lang',
@@ -81,6 +80,7 @@
         ],
 
         Terrain: [
+            'condition_rating',
             'orientations',
             'configuration',
             'elevation_max',
