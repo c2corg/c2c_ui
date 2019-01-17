@@ -187,7 +187,7 @@
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},
 
-            {"id": "activities", "properties": {"url":"act"}},
+            {"id": "activities", "properties": {"url":"act", "required":false}},
             {"id": "categories"},
             {"id": "name"},
 
