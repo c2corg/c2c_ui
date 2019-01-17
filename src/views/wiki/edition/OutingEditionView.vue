@@ -45,8 +45,8 @@
                     <form-input :document="document" :field="fields.snow_quality" :prefix="$gettext('quality', 'snow')"/>
                 </form-row>
                 <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
-                <form-input-row :document="document" :field="fields.avalanches" />
                 <form-input-row :document="document" :field="fields.avalanche_signs"/>
+                <form-input-row :document="document" :field="fields.avalanches" />
                 <form-input-row :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')"/>
             </tab-item>
 
