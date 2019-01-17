@@ -168,15 +168,14 @@
                     orientation: 0,
                     document: this.$documentUtils.buildDocument('image', this.lang)
                 }
+                const associationsArrayName = this.$documentUtils.getAssociationArrayName(this.parentDocument)
 
                 image.document = this.$documentUtils.buildDocument('image', this.lang)
-
                 image.document.activities = this.parentDocument.activities.slice(0)
                 image.document.file_size = file.size
                 image.document.image_type = this.imageType
                 image.document.image_categories = []
-
-                image.document.associations[this.$documentUtils.getDocumentType(this.parentDocument.type) + 's'] = [
+                image.document.associations[associationsArrayName] = [
                     { document_id: this.parentDocument.document_id }
                 ]
 
