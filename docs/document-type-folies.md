@@ -4,15 +4,15 @@ C2C api has two small anti patterns :
 
 ## Anti-pattern #1 : Document identifier is not only id (even it's unique) but id/type
 
-`document_id` is an unique document identifier. But you have to know it's document type in order to request it. document types are like `route`, `outing`. Let's call this typology *explicit universe*. And you'll have to know your document type in *explicit universe* before asking something to API.
+`document_id` is an unique document identifier. But you have to know its document type in order to request it. document types are like `route`, `outing`... Let's call this typology *explicit universe* : You'll have to know your document type in *explicit universe* before asking something to API.
 
     https://api.camptocamp.org/outings/1053242
 
-It could have been, without any collision issue
+The anti-pattern is that : It could have been possible to use, without any collision issue :
 
     https://www.camptocamp.org/documents/1053242
 
-As now, only history service does not ask document's type :
+And actually, ss now, history service does not ask document's type :
 
     https://www.camptocamp.org/document/1053242/history/fr
 
