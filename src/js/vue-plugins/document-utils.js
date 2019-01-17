@@ -83,7 +83,9 @@ export default function install(Vue) {
                     document.hiking_rating ||
                     document.mtb_up_rating ||
                     document.mtb_down_rating ||
-                    document.hiking_mtb_exposition
+                    document.hiking_mtb_exposition ||
+                    document.labande_global_rating ||
+                    document.labande_ski_rating
             },
 
             getAssociationArrayName(child) {
