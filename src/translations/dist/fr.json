@@ -247,6 +247,7 @@
     "Change password": "Modifier le mot de passe",
     "Checking...": "En cours de vérification ...",
     "children_proof": "Enfants",
+    "Clear": "Effacer",
     "cleared": {
       "access_conditions": "déneigé"
     },
@@ -425,6 +426,7 @@
       "route_configuration_types": "arête"
     },
     "Edit": "Modifier",
+    "Edit associations": "Modifier les associations",
     "Edit categories": "Modifier les catégories",
     "Edit in ca": "Édition en catalan",
     "Edit in de": "Édition en allemand",
@@ -1110,6 +1112,7 @@
     "recent_avalanche": {
       "avalanche_signs": "trace d'avalanche récente (après la dernière chute de neige, pluie, vent ou redoux)"
     },
+    "Recenter on your current position": "Centrage sur votre position actuelle",
     "Recenter on...": "Recentrer sur...",
     "reduce_impact": "Éléments ayant atténué les conséquences de l'évènement",
     "Register": "S'inscrire",
@@ -1172,6 +1175,7 @@
       "ground_types": "éboulis"
     },
     "Search ...": "Rechercher ...",
+    "Search a document to associate...": "Rechercher un document à associer",
     "seasonal": {
       "parking_fee_types": "saisonnier"
     },
