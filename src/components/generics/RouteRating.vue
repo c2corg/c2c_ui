@@ -40,8 +40,10 @@
         <span v-if="document.ski_rating" :title="$gettext('ski_rating')">
             {{ document.ski_rating }}
         </span>
-        <span v-if="document.ski_exposition || document.labande_global_rating">
+        <span v-if="document.ski_rating && (document.ski_exposition || document.labande_global_rating)">
             /
+        </span>
+        <span v-if="document.ski_exposition || document.labande_global_rating">
             <span v-if="document.ski_exposition" :title="$gettext('ski_exposition')">
                 {{ document.ski_exposition }}
             </span>
