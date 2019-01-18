@@ -8,14 +8,15 @@ AssociationService.prototype.create = function(parent, child) {
 
     const data = {}
 
+    // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/addassociation.js#L91
     // parent and child type are predetermined
     if (
-        (pType === 'c' && (cType === 'w' || cType === 'o' || cType === 'r' || cType === 'b' || cType === 'c' || cType === 'x' || cType === 'u')) ||
+        (pType === 'c' && ['w', 'o', 'r', 'b', 'c', 'x', 'u'].includes(cType)) ||
         pType === 'i' ||
         (pType === 'o' && (cType === 'r' || cType === 'u')) ||
         (pType === 'r' && (cType === 'w' || cType === 'b')) ||
         (pType === 'w' && cType === 'b') ||
-        (pType === 'x' && (cType === 'r' || cType === 'o' || cType === 'w' || cType === 'u'))
+        (pType === 'x' && ['w', 'o', 'r', 'u'].includes(cType))
     ) {
         data.parent_document_id = child.document_id
         data.child_document_id = parent.document_id

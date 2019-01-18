@@ -91,6 +91,7 @@
     "activity_rate_50": {
       "activity_rates": "1 à 2 fois par semaine"
     },
+    "Add": "Ajouter",
     "add a book": "ajouter un livre",
     "add a map": "ajouter une carte",
     "add a waypoint": "ajouter un point de passage",
@@ -1087,6 +1088,7 @@
     "public_transportation_rating": "Accessibilité en transports en commun",
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
+    "Put it back": "Remettre",
     "quality": {
       "snow": "qualité",
       "$$noContext": "Complétude"
@@ -1117,6 +1119,7 @@
     "reduce_impact": "Éléments ayant atténué les conséquences de l'évènement",
     "Register": "S'inscrire",
     "remarks": "Remarques",
+    "Remove": "Retier",
     "required": {
       "required climbing rating": "obligatoire"
     },
@@ -1427,6 +1430,8 @@
       "waypoint_types": "point d'eau/source"
     },
     "waypoint": "point de passage",
+    "waypoint_children": "sous-points de passage",
+    "waypoint_slope": "pente du terrain",
     "waypoint_type": "Type de point de passage",
     "waypoints": "points de passage",
     "We sent you an email, please click on the link to reset password.": "Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il contient pour réinitialiser votre mot de passe.",

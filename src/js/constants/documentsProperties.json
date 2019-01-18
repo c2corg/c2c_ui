@@ -25,14 +25,14 @@
             {"id": "quality", "properties": {"url":"qa"}},
             {"id": "article_type", "properties": {"url":"atyp"}},
 
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "books", "properties": {"url":"b"}},
-            {"id": "outings", "properties": {"url":"o"}},
-            {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "images"},
-            {"id": "users"},
-            {"id": "xreports"}
+            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 1}},
+            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 4}},
+            {"id": "outings", "properties": {"url":"o", "associationEditorOrder": 5}},
+            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 3}},
+            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 2}},
+            {"id": "images", "properties":{"associationEditorOrder": 8}},
+            {"id": "users", "properties":{"associationEditorOrder": 7}},
+            {"id": "xreports", "properties":{"associationEditorOrder": 6}}
         ]
     },
 
@@ -88,15 +88,15 @@
             {"id": "quality", "properties": {"url":"qa"}},
             {"id": "width"},
 
-            {"id": "areas"},
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "books", "properties": {"url":"b"}},
-            {"id": "outings"},
-            {"id": "routes", "properties": {"url":"r"}},
-            {"id": "users"},
-            {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "waypoints"},
-            {"id": "xreports"}
+            {"id": "areas", "properties":{"associationEditorOrder": 6}},
+            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 5}},
+            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 7}},
+            {"id": "outings", "properties":{"associationEditorOrder": 3}},
+            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 1}},
+            {"id": "users", "properties":{"associationEditorOrder": 8}},
+            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 2}},
+            {"id": "xreports", "properties":{"associationEditorOrder": 4}},
+            {"id": "images", "properties":{"associationEditorOrder": 9}}
         ]
     },
 
@@ -171,11 +171,11 @@
             {"id": "snowshoe_rating", "properties": {"url":"wrat", "activities":["snowshoeing"]}},
             {"id": "via_ferrata_rating", "properties": {"url":"krat", "activities":["via_ferrata"]}},
 
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "images"},
-            {"id": "routes", "properties": {"url":"r", "required":true}},
-            {"id": "users", "properties": {"url":"u", "required":true}},
-            {"id": "xreports", "properties": {"url":"x"}}
+            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 5}},
+            {"id": "images", "properties": {"associationEditorOrder": 3}},
+            {"id": "routes", "properties": {"url":"r", "required":true, "associationEditorOrder": 1}},
+            {"id": "users", "properties": {"url":"u", "required":true, "associationEditorOrder": 2}},
+            {"id": "xreports", "properties": {"url":"x", "associationEditorOrder": 4}}
         ]
     },
 
@@ -256,12 +256,12 @@
             {"id": "snowshoe_rating", "properties": {"url":"wrat", "activities":["snowshoeing"]}},
             {"id": "via_ferrata_rating", "properties": {"url":"krat", "activities":["via_ferrata"]}},
 
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "books", "properties": {"url":"b"}},
-            {"id": "images"},
-            {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "xreports", "properties": {"url":"x"}}
+            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 4}},
+            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 2}},
+            {"id": "images", "properties": {"associationEditorOrder": 5}},
+            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 3}},
+            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 1}},
+            {"id": "xreports", "properties": {"url":"x", "associationEditorOrder": 6}}
         ]
     },
 
@@ -325,10 +325,11 @@
             {"id": "waypoint_type", "properties": {"url":"wtyp"}},
             {"id": "weather_station_types", "properties": {"url":"whtyp"}},
 
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "books", "properties": {"url":"b"}},
-            {"id": "images"},
-            {"id": "waypoints", "properties": {"url":"w"}}
+            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 3}},
+            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 2}},
+            {"id": "images", "properties": {"associationEditorOrder": 4}},
+            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 1}},
+            {"id": "waypoints", "properties": {"name": "waypoint_children", "url":"w", "associationEditorOrder": 1}}
         ]
     },
 
@@ -375,12 +376,12 @@
             {"id": "anonymous"},
             {"id": "quality", "properties": {"url":"qa"}},
 
-            {"id": "articles", "properties": {"url":"c", "helper": null}},
-            {"id": "images"},
-            {"id": "outings", "properties": {"url":"o", "helper": null}},
-            {"id": "routes", "properties": {"url":"r", "helper": null}},
-            {"id": "users"},
-            {"id": "waypoints"}
+            {"id": "articles", "properties": {"url":"c", "helper": null,  "associationEditorOrder": 6}},
+            {"id": "images", "properties": {"associationEditorOrder":5}},
+            {"id": "outings", "properties": {"url":"o", "helper": null,  "associationEditorOrder": 1}},
+            {"id": "routes", "properties": {"url":"r", "helper": null,  "associationEditorOrder": 3}},
+            {"id": "users", "properties": {"associationEditorOrder":2}},
+            {"id": "waypoints", "properties": {"associationEditorOrder":4}}
         ]
     }
 }

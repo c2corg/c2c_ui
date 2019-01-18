@@ -13,11 +13,13 @@
 
         <association-items
             v-for="item of data"
-            :key="item.documentType"
-            :child-type="item.documentType"
+            :key="item.arrayName"
             :parent="document"
+            :array-name="item.arrayName"
+            :child-type="item.documentType"
             :current="item.current"
-            :propositions="propositions[item.arrayName]" />
+            :forbidden-children="item.forbiddenChildren"
+            :propositions="propositions[item.documentType + 's']" />
 
         <div slot="footer">
             <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">
@@ -44,9 +46,9 @@
         data() {
             return {
                 promise: null,
-                data: null,
+                data: {},
                 propositions: {},
-                letterTypes: []
+                letterTypes: null
             }
         },
 
@@ -57,17 +59,20 @@
         },
 
         created() {
-            const associations = this.document.associations
-            const fields = Object.values(constants.objectDefinitions[this.documentType].fields)
+            // get fields of for parent's document type
+            var fields = Object.values(constants.objectDefinitions[this.documentType].fields)
 
-            this.data = {}
+            // keep only fields that belong to association
+            fields = fields.filter(field => field.parent === 'associations')
 
-            for (let field of fields) {
-                if (field.parent === 'associations') {
-                    this.addToData(field.name, field.documentType + 's', associations[field.name])
-                    this.letterTypes.push(constants.objectDefinitions[field.documentType].letter)
-                }
-            }
+            // sort this field, given associationEditorOrder property
+            fields.sort((a, b) => a.associationEditorOrder < b.associationEditorOrder ? -1 : 1)
+
+            // get field's document types, and store letters for API search service
+            this.letterTypes = fields.map(field => constants.objectDefinitions[field.documentType].letter)
+
+            // and finally add field in result
+            fields.map(this.addToData)
         },
 
         methods: {
@@ -75,12 +80,19 @@
                 this.$refs.modalCard.show()
             },
 
-            // used by created function
-            addToData(arrayName, documentType, documents) {
-                this.data[documentType] = {
-                    arrayName: arrayName,
-                    documentType: documentType,
-                    current: documents.documents ? documents.documents : documents
+            // used by created() method
+            addToData(field) {
+                this.data[field.name] = {
+                    arrayName: field.name,
+                    documentType: field.documentType,
+                    current: this.document.associations[field.name]
+                }
+
+                // can't have both (X,Y) and (Y,X) associations on waypoints
+                if (field.name === 'waypoints') {
+                    this.data[field.name].forbiddenChildren = this.document.associations.waypoint_children
+                } else if (field.name === 'waypoint_children') {
+                    this.data[field.name].forbiddenChildren = this.document.associations.waypoints
                 }
             },
 
