@@ -169,6 +169,11 @@
             newDocument: {
                 type: Object,
                 default: null
+            },
+
+            highlightedDocument: {
+                type: Object,
+                default: null
             }
         },
 
@@ -203,8 +208,6 @@
 
                 filterDocumentsWithMap: Boolean(this.$route.query.bbox),
 
-                highlightedFeature_: null,
-
                 recenterPropositions: null,
                 showRecenterOnPropositions: false,
 
@@ -212,7 +215,9 @@
 
                 // on editable mode, there a button reset
                 // we must save initial geometry
-                initialGeometry: null
+                initialGeometry: null,
+
+                highlightedFeature: null
             }
         },
 
@@ -220,39 +225,6 @@
 
             editable() {
                 return this.editedDocument !== null
-            },
-
-            highlightedFeature: {
-                get() {
-                    return this.highlightedFeature_
-                },
-
-                set(feature) {
-                    if (this.highlightedFeature) {
-                        this.highlightedFeature.setStyle(this.highlightedFeature.get('normalStyle'))
-                    }
-
-                    if (feature && feature.get('highlightedStyle')) {
-                        feature.setStyle(feature.get('highlightedStyle'))
-                    }
-
-                    this.highlightedFeature_ = feature
-                }
-            },
-
-            highlightedDocument: {
-                get() {
-                    if (this.highlightedFeature) {
-                        return this.highlightedFeature.get('document')
-                    }
-                },
-                set(document) {
-                    if (document) {
-                        this.highlightedFeature = this.documentsLayer.getSource().getFeatureById(document.document_id)
-                    } else {
-                        this.highlightedFeature = null
-                    }
-                }
             },
 
             urlValue: {
@@ -297,7 +269,15 @@
                 deep: true // must look on change inside documents object
             },
 
-            filterDocumentsWithMap: 'sendBoundsToUrl'
+            filterDocumentsWithMap: 'sendBoundsToUrl',
+
+            highlightedDocument(newValue, oldValue) {
+                if (this.highlightedDocument) {
+                    this.setHighlightedFeature(this.documentsLayer.getSource().getFeatureById(this.highlightedDocument.document_id))
+                } else {
+                    this.setHighlightedFeature(null)
+                }
+            }
         },
 
         mounted() {
@@ -637,14 +617,31 @@
             },
 
             onPointerMove(event) {
-                var this_ = this
-
-                this.highlightedDocument = null
+                var resultFeature = null
 
                 this.map.forEachFeatureAtPixel(event.pixel, function(feature) {
-                    this_.highlightedFeature = feature
+                    resultFeature = feature
                     return true
                 })
+
+                this.setHighlightedFeature(resultFeature)
+                this.$emit('highlightDocument', resultFeature ? resultFeature.get('document') : null)
+            },
+
+            setHighlightedFeature(feature) {
+                if (feature === this.highlightedFeature) {
+                    return
+                }
+
+                if (this.highlightedFeature) {
+                    this.highlightedFeature.setStyle(this.highlightedFeature.get('normalStyle'))
+                }
+
+                this.highlightedFeature = feature
+
+                if (feature && feature.get('highlightedStyle')) {
+                    feature.setStyle(feature.get('highlightedStyle'))
+                }
             },
 
             onClick(event) {

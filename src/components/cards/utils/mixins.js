@@ -1,4 +1,3 @@
-
 import { requireDocumentProperty } from '@/js/properties-mixins'
 
 import CardContainer from './CardContainer'
@@ -21,6 +20,11 @@ export const cardMixin = {
 
     props: {
         notClickable: {
+            type: Boolean,
+            default: false
+        },
+
+        highlighted: {
             type: Boolean,
             default: false
         }

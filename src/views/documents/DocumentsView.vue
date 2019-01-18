@@ -92,27 +92,30 @@
                     <div
                         v-for="(document, index) in documents.documents"
                         :key="index"
-                        :class="{'is-half':displayMap, 'is-one-third':!displayMap}"
+                        :class="{
+                            'is-half':displayMap,
+                            'is-one-third':!displayMap,
+                        }"
                         class="column card-container"
-                        @mouseleave="mouseLeave(document)"
-                        @mouseenter="mouseEnter(document)">
-                        <document-card :document="document"/>
+                        @mouseenter="highlightedDocument = document"
+                        @mouseleave="highlightedDocument = null">
+                        <document-card :highlighted="highlightedDocument===document" :document="document"/>
                     </div>
                 </div>
 
                 <documents-table
-                    v-if="documents!=null && listMode"
-                    :documents="documents"
+                    v-if="listMode"
+                    :documents="documents ? documents : {}"
                     :document-type="documentType"
                     class="documents-table"/>
             </div>
-            <!--  Note : we use v-if, because v-if introduce a bug. -->
-            <!-- Try to swith from /articles to /outings... -->
             <div v-show="documentAreGeoLocalized" class="column map-container">
                 <map-view
                     v-if="displayMap"
                     ref="map"
                     :documents="documents ? documents.documents : []"
+                    :highlighted-document="highlightedDocument"
+                    @highlightDocument="highlightedDocument = arguments[0]"
                     show-filter-control
                     show-center-on-geolocation
                     show-recenter-on/>
@@ -150,7 +153,9 @@
 
                 // showMap is the user choise, if he wants to see the map, or not
                 showMap: null,
-                listMode: null
+                listMode: null,
+
+                highlightedDocument: null
             }
         },
 
@@ -192,18 +197,6 @@
             toogleProperty(property) {
                 this[property] = !this[property]
                 this.$localStorage.set(`${this.documentType}.${property}`, this[property])
-            },
-
-            mouseEnter(document) {
-                if (this.documentAreGeoLocalized && this.displayMap) {
-                    this.$refs.map.highlightedDocument = document
-                }
-            },
-
-            mouseLeave() {
-                if (this.documentAreGeoLocalized && this.displayMap) {
-                    this.$refs.map.highlightedDocument = null
-                }
             },
 
             getDocumentTypeTitle(documentType) {
