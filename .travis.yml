@@ -22,3 +22,5 @@ deploy:
       branch: master
   - provider: script
     script: sh scripts/travis-publish.sh
+    on:
+      all-branches: true
