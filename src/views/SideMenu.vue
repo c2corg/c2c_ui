@@ -1,10 +1,9 @@
 <template>
     <aside class="no-print">
-
         <router-link
             v-for="item of menuItems"
             :key="item.name"
-            :to="{name:item.name}"
+            :to="{name:item.name, query: item.query}"
             class="menu-item is-ellipsed"
             :class="{'router-link-active':item.activeFor.includes($route.name)}">
             <component :is="item.icon" />
@@ -53,7 +52,7 @@
             menuItems() {
                 return [
                     { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
-                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'] },
+                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'], query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
                     { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
                     { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
                     { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }

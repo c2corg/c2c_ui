@@ -1,6 +1,10 @@
 <template>
     <div class="card-container">
-        <component :is="documentType + '-card'" :document="document" :not-clickable="notClickable"/>
+        <component
+            :is="documentType + '-card'"
+            :document="document"
+            :not-clickable="notClickable"
+            :highlighted="highlighted"/>
         <delete-button
             v-if="showDeleteButton"
             @click="$emit('delete')"
@@ -44,6 +48,11 @@
             },
 
             notClickable: {
+                type: Boolean,
+                default: false
+            },
+
+            highlighted: {
                 type: Boolean,
                 default: false
             }
