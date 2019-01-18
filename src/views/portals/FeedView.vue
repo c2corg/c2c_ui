@@ -18,7 +18,7 @@
                     </h3>
                     <feed-widget :type="isPersonal ? 'personal' : 'default'" />
                 </div>
-                <div class="column">
+                <div class="column is-hidden-mobile">
                     <h3 class="title is-3" v-translate>
                         Mobile application
                     </h3>
