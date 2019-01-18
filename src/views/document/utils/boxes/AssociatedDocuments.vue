@@ -10,6 +10,16 @@
             <hr>
         </div>
 
+        <div v-if="associations.waypoint_children && associations.waypoint_children.length" class="associations-list">
+            <div class="title">
+                {{ $gettext('waypoint_children') | uppercaseFirstLetter }}
+            </div>
+            <div v-for="waypoint of associations.waypoint_children" :key="waypoint.document_id" class="is-ellipsed">
+                <pretty-waypoint-link :waypoint="waypoint"/>
+            </div>
+            <hr>
+        </div>
+
         <!-- books -->
         <div v-if="associations.books.length!=0" class="associations-list">
             <div class="title">

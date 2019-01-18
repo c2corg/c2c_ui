@@ -110,21 +110,9 @@
                     <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
                 </div>
 
-                <div class="box" v-if="document.associations.waypoint_children && document.associations.waypoint_children.length">
-                    <h2 class="title is-2" v-translate>
-                        Waypoints children
-                    </h2>
-                    <div v-for="child of document.associations.waypoint_children" :key="child.document_id">
-                        <pretty-waypoint-link :waypoint="child" />
-                    </div>
-                </div>
-
                 <routes-box v-if="!isDraftView" :document="document"/>
-
                 <recent-outings-box v-if="!isDraftView" :document="document"/>
-
                 <images-box v-if="!isDraftView" :document="document" ref="imagesBox"/>
-
                 <comments-box v-if="!isDraftView" :document="document" />
             </div>
         </div>
