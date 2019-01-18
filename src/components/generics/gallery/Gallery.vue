@@ -4,8 +4,6 @@
             <swiper-slide v-for="(image, i) of images" :key="image.document_id">
                 <gallery-image :image="image" class="camptocamp-image" @click="activateLargeView(i)"/>
             </swiper-slide>
-            <div slot="button-prev" class="swiper-button-prev"/>
-            <div slot="button-next" class="swiper-button-next"/>
         </swiper>
 
         <div ref="largeViewWrapper" v-if="largeView">
@@ -156,11 +154,7 @@
 
         swiperOption: {
             slidesPerView: 'auto',
-            spaceBetween: 15,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev'
-            }
+            spaceBetween: 15
         },
 
         largeViewSwiperOption: {
@@ -201,24 +195,6 @@
         .swiper-slide{
             // width:200px;
             width:auto;
-        }
-
-        .swiper-button-prev, .swiper-button-next{
-            background:rgba(256,256,256,0.9);
-            width:$navigation-button-size;
-            height:2*$navigation-button-size;
-        }
-
-        .swiper-button-prev{
-            left:0px;
-            border-top-right-radius:$navigation-button-size;
-            border-bottom-right-radius:$navigation-button-size;
-        }
-
-        .swiper-button-next{
-            right:0px;
-            border-top-left-radius:$navigation-button-size;
-            border-bottom-left-radius:$navigation-button-size;
         }
 
         .swiper-button-disabled{
