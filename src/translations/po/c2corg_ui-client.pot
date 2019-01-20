@@ -113,7 +113,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:58
+#: src/views/SideMenu.vue:57
 #: src/views/static-views/SeracView.vue:7
 msgid "Accident database"
 msgstr ""
@@ -318,7 +318,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:9
-#: src/views/SideMenu.vue:59
+#: src/views/SideMenu.vue:58
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:39
 #: src/views/static-views/NotFoundView.vue:38
 msgid "articles"
@@ -335,7 +335,7 @@ msgctxt "MTB rating"
 msgid "ascent"
 msgstr ""
 
-#: src/views/SideMenu.vue:26
+#: src/views/SideMenu.vue:25
 msgid "Association"
 msgstr ""
 
@@ -602,6 +602,10 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
+#: src/views/documents/DocumentsView.vue:57
+msgid "Cards mode"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:33
 #: src/views/document/ImageView.vue:26
 msgid "categories"
@@ -806,7 +810,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: src/views/SideMenu.vue:20
+#: src/views/SideMenu.vue:19
 msgid "contact"
 msgstr ""
 
@@ -1302,7 +1306,7 @@ msgctxt "langs"
 msgid "eu"
 msgstr ""
 
-#: src/views/SideMenu.vue:22
+#: src/views/SideMenu.vue:21
 msgid "EULA"
 msgstr ""
 
@@ -1443,7 +1447,7 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:57
+#: src/views/SideMenu.vue:56
 #: src/views/portals/DashboardView.vue:29
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -1792,6 +1796,10 @@ msgstr ""
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
+#: src/views/documents/DocumentsView.vue:66
+msgid "Hide map"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:486
 msgctxt "slackline_types"
 msgid "highline"
@@ -1956,7 +1964,7 @@ msgctxt "author_statuses"
 msgid "internal_witness"
 msgstr ""
 
-#: src/js/vue-plugins/document-utils.js:250
+#: src/js/vue-plugins/document-utils.js:244
 msgid "Invalid date"
 msgstr ""
 
@@ -2086,7 +2094,7 @@ msgctxt "avalanche_levels"
 msgid "level_na"
 msgstr ""
 
-#: src/views/SideMenu.vue:24
+#: src/views/SideMenu.vue:23
 msgid "Licenses"
 msgstr ""
 
@@ -2105,6 +2113,10 @@ msgstr ""
 
 #: src/views/wiki/WhatsNewView.vue:9
 msgid "Links"
+msgstr ""
+
+#: src/views/documents/DocumentsView.vue:50
+msgid "List mode"
 msgstr ""
 
 #: src/views/wiki/HistoryView.vue:31
@@ -2656,7 +2668,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:14
-#: src/views/SideMenu.vue:56
+#: src/views/SideMenu.vue:55
 #: src/views/document/ProfileView.vue:32
 #: src/views/portals/DashboardView.vue:16
 #: src/views/static-views/NotFoundView.vue:23
@@ -3252,7 +3264,7 @@ msgid "Send reset email"
 msgstr ""
 
 #: src/components/map/BiodivInformation.vue:4
-#: src/components/map/OlMap.vue:595
+#: src/components/map/OlMap.vue:575
 msgid "Sensitive area:"
 msgstr ""
 
@@ -3320,6 +3332,10 @@ msgstr ""
 #: src/views/document/utils/boxes/RecentOutingsBox.vue:16
 #: src/views/document/utils/boxes/RoutesBox.vue:15
 msgid "show all"
+msgstr ""
+
+#: src/views/documents/DocumentsView.vue:66
+msgid "Show map"
 msgstr ""
 
 #: src/views/user/PreferencesView.vue:30
@@ -3695,7 +3711,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:55
+#: src/views/SideMenu.vue:54
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5

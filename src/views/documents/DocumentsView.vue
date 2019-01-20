@@ -47,12 +47,14 @@
                         icon="th-list"
                         class="has-cursor-pointer"
                         :class="listMode ? 'has-text-primary' : ''"
+                        :title="$gettext('List mode')"
                         @click="toogleProperty('listMode')" />
                     &nbsp;
                     <fa-icon
                         icon="th-large"
                         class="has-cursor-pointer"
                         :class="!listMode ? 'has-text-primary' : ''"
+                        :title="$gettext('Cards mode')"
                         @click="toogleProperty('listMode')" />
                     &nbsp;
                     &nbsp;
@@ -61,6 +63,7 @@
                         icon="map-marked-alt"
                         class="has-cursor-pointer"
                         :class="{'has-text-primary':showMap}"
+                        :title="showMap ? $gettext('Hide map') : $gettext('Show map')"
                         @click="toogleProperty('showMap')" />
                 </div>
                 <div class="level-item is-size-3 is-hidden-tablet">
