@@ -27,18 +27,13 @@
 
             <div class="columns is-gapless has-text-centered is-mobile menu-socials">
                 <div class="column">
-                    <a href="https://twitter.com/camptocamporg">
-                        <img src="@/assets/img/social/twitter.png" alt="Twitter">
+                    <a href="https://twitter.com/camptocamporg" title="twitter">
+                        <fa-icon :icon="['fab', 'twitter']" class="twitter-icon"/>
                     </a>
                 </div>
                 <div class="column">
-                    <a href="https://plus.google.com/104270548458536561874/posts">
-                        <img src="@/assets/img/social/google-plus.png" alt="Google+">
-                    </a>
-                </div>
-                <div class="column">
-                    <a href="https://www.facebook.com/camptocamp.org/">
-                        <img src="@/assets/img/social/facebook.png" alt="Facebook">
+                    <a href="https://www.facebook.com/camptocamp.org/" title="facebook">
+                        <fa-icon :icon="['fab', 'facebook']" class="facebook-icon"/>
                     </a>
                 </div>
             </div>
@@ -49,6 +44,7 @@
 <script>
     export default {
         computed: {
+            // This must be computed, because it needs $gettext() function
             menuItems() {
                 return [
                     { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
@@ -101,6 +97,7 @@
 
         .menu-socials, .menu-add, .menu-links {
             margin-bottom: 15px!important;
+            line-height: 1;
         }
 
         .menu-add{
@@ -108,6 +105,18 @@
             height: 320px;
             margin-left: calc((200px - 160px)/2);
             margin-right: calc((200px - 160px)/2);
+        }
+
+        .twitter-icon, .facebook-icon{
+            font-size: 30px;
+        }
+
+        .twitter-icon, .twitter-icon:hover{
+            color:#4198fb;
+        }
+
+        .facebook-icon, .facebook-icon:hover{
+            color:#6d8bc9;
         }
     }
 
