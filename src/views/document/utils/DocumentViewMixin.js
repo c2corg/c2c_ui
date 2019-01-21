@@ -144,11 +144,33 @@ export default {
                     this.$set(this.promise, 'data', this.draft)
                 })
             } else { // normal mode
-                if (this.document && $route.params.id === this.document.document_id && this.expected_lang === this.lang) {
+                // because of updateUrl(), we may have nothing to do
+                if (this.document && parseInt($route.params.id, 10) === this.document.document_id && this.expected_lang === this.lang) {
                     return
                 }
 
-                this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang).then(this.updateUrl)
+                this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang)
+                    .then(this.scrollToHash)
+                    .then(this.updateUrl)
+            }
+        },
+
+        scrollToHash() {
+            if (this.$route.hash) {
+                // we'll have to wait for DOM update
+                this.$nextTick(() => {
+                    const el = document.querySelector(this.$route.hash)
+
+                    if (el) {
+                        const docEl = document.documentElement
+                        const docRect = docEl.getBoundingClientRect()
+                        const elRect = el.getBoundingClientRect()
+                        const y = elRect.top - docRect.top
+                        window.scrollTo(0, y - 50) // navbar height ...
+                    } else {
+                        window.scrollTo(0, 0) // if anchor is not found, go to top
+                    }
+                })
             }
         },
 
@@ -161,7 +183,12 @@ export default {
             // and clean
             title = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
-            const path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
+            let path = `/${this.documentType}s/${this.documentId}/${this.lang}/${title}`
+
+            if (this.$route.hash) {
+                path += this.$route.hash
+            }
+
             this.$router.replace(path)
         },
 
