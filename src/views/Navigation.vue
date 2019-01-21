@@ -83,8 +83,11 @@
                 </login-button>
             </div>
 
-            <div v-else class="navigation-item dropdown is-hoverable">
-                <div class="dropdown-trigger button">
+            <div
+                v-else
+                class="navigation-item dropdown"
+                :class="{'is-active':showUserMenu}">
+                <div ref="userMenuButton" class="dropdown-trigger button" @click="showUserMenu=true">
                     <img
                         width="24" height="24"
                         :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
@@ -134,8 +137,12 @@
                     </div>
                 </div>
             </div>
-            <div v-if="!$user.isLogged" class="navigation-item dropdown is-hoverable">
-                <div class="dropdown-trigger button">
+            <div
+                v-if="!$user.isLogged"
+                ref="langSwitch"
+                class="navigation-item dropdown"
+                :class="{'is-active':showLangSwitch}">
+                <div class="dropdown-trigger button" @click="showLangSwitch=true">
                     {{ $language.current }}
                 </div>
                 <div class="dropdown-menu">
@@ -163,7 +170,9 @@
         data() {
             return {
                 searchText: '',
-                hideSearchInput: true // only on small screen
+                hideSearchInput: true, // only on small screen,
+                showLangSwitch: false,
+                showUserMenu: false
             }
         },
 
@@ -198,6 +207,14 @@
             onClick(event) {
                 if (!this.$refs.searchInputContainer.contains(event.target)) {
                     this.hideSearchInput = true
+                }
+
+                if (this.$refs.langSwitch && !this.$refs.langSwitch.contains(event.target)) {
+                    this.showLangSwitch = false
+                }
+
+                if (this.$refs.userMenuButton && !this.$refs.userMenuButton.contains(event.target)) {
+                    this.showUserMenu = false
                 }
             }
         }
