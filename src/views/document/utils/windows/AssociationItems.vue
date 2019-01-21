@@ -27,6 +27,13 @@
             </div>
         </div>
 
+        <div
+            v-if="propositions && propositions.total !== propositions.documents.length"
+            class="has-text-grey-light has-text-centered"
+            v-translate>
+            Too many results: please refine your search.
+        </div>
+
     </div>
 </template>
 

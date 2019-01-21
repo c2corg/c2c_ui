@@ -240,6 +240,7 @@
     },
     "capacity": "Nombre de places hors gardiennage",
     "capacity_staffed": "Nombre de places en gardiennage",
+    "Cards mode": "Vue en cards",
     "categories": "Catégories",
     "cave": {
       "waypoint_types": "grotte"
@@ -641,6 +642,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
     "Here you may change your subscriptions to snow forecast mailing lists.": "Vous pouvez modifier ici vos abonnements aux bulletins de prévisions des risques d'avalanches.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
+    "Hide map": "Cacher la carte",
     "highline": {
       "slackline_types": "Highline"
     },
@@ -762,6 +764,7 @@
       "event_types": "foudre"
     },
     "Links": "Liens",
+    "List mode": "Vue en liste",
     "List of versions for language:": "Liste des versions pour la langue :",
     "loading": "chargement en cours",
     "local_product": {
@@ -1119,7 +1122,7 @@
     "reduce_impact": "Éléments ayant atténué les conséquences de l'évènement",
     "Register": "S'inscrire",
     "remarks": "Remarques",
-    "Remove": "Retier",
+    "Remove": "Retirer",
     "required": {
       "required climbing rating": "obligatoire"
     },
@@ -1217,6 +1220,7 @@
       "waypoint_types": "abri"
     },
     "show all": "Voir tous les résultats",
+    "Show map": "Voir la carte",
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "single": {
       "climbing_outdoor_types": "couenne"
@@ -1358,6 +1362,7 @@
     "timing": "Durée",
     "title": "Titre",
     "Toggle fullscreen": "Basculer en plein écran",
+    "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
     "topo": {
       "book_types": "schéma / tracé",
       "image_categories": "schéma / tracé"

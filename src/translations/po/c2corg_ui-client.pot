@@ -113,7 +113,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:57
+#: src/views/SideMenu.vue:53
 #: src/views/static-views/SeracView.vue:7
 msgid "Accident database"
 msgstr ""
@@ -181,7 +181,7 @@ msgctxt "activity_rates"
 msgid "activity_rate_50"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:93
+#: src/views/document/utils/windows/AssociationItems.vue:100
 msgid "Add"
 msgstr ""
 
@@ -318,7 +318,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:9
-#: src/views/SideMenu.vue:58
+#: src/views/SideMenu.vue:54
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:39
 #: src/views/static-views/NotFoundView.vue:38
 msgid "articles"
@@ -1447,7 +1447,7 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:56
+#: src/views/SideMenu.vue:52
 #: src/views/portals/DashboardView.vue:29
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -2668,7 +2668,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:14
-#: src/views/SideMenu.vue:55
+#: src/views/SideMenu.vue:51
 #: src/views/document/ProfileView.vue:32
 #: src/views/portals/DashboardView.vue:16
 #: src/views/static-views/NotFoundView.vue:23
@@ -2965,7 +2965,7 @@ msgstr ""
 msgid "publication_date"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:92
+#: src/views/document/utils/windows/AssociationItems.vue:99
 msgid "Put it back"
 msgstr ""
 
@@ -3050,7 +3050,7 @@ msgstr ""
 msgid "remarks"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:91
+#: src/views/document/utils/windows/AssociationItems.vue:98
 msgid "Remove"
 msgstr ""
 
@@ -3701,6 +3701,10 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
+#: src/views/document/utils/windows/AssociationItems.vue:33
+msgid "Too many results: please refine your search."
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:284
 msgctxt "book_types"
 msgid "topo"
@@ -3711,7 +3715,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:54
+#: src/views/SideMenu.vue:50
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5
