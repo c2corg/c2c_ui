@@ -158,6 +158,7 @@
         },
 
         largeViewSwiperOption: {
+            loop: true,
             initialSlide: 0,
             slidesPerView: 1,
             spaceBetween: 15,
