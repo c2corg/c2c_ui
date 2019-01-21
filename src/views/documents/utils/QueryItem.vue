@@ -40,7 +40,7 @@
             <label class="label">
                 {{ $gettext(field.name) | uppercaseFirstLetter }}
             </label>
-            <input :type="field.type" v-model="value" class="input is-primary">
+            <input ref="input" :type="field.type" :value="value" @input="oninput" class="input is-primary">
         </div>
 
         <div v-else-if="field.queryMode==='checkbox'" class="control">
@@ -91,6 +91,8 @@
         //         throw `Please enter url property for field ${this.field.name}`
         // },
 
+        timeoutId: null,
+
         methods: {
             refreshSlider() {
                 if (this.$refs.slider) {
@@ -100,6 +102,19 @@
 
             gettext(key) {
                 return this.$gettext(key, this.field.i18nContext)
+            },
+
+            // for simple input, add a small delay (avoir spamming API, and url history)
+            oninput() {
+                if (this.$options.timeoutId) {
+                    clearTimeout(this.$options.timeoutId)
+                }
+
+                this.$options.timeoutId = setTimeout(this.updateValue, 300)
+            },
+
+            updateValue() {
+                this.value = this.$refs.input.value
             }
         }
     }
