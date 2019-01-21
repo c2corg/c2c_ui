@@ -19,7 +19,7 @@
             :child-type="item.documentType"
             :current="item.current"
             :forbidden-children="item.forbiddenChildren"
-            :propositions="propositions[item.documentType + 's']" />
+            :propositions="propositions[item.searchArrayName]" />
 
         <div slot="footer">
             <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">
@@ -85,7 +85,8 @@
                 this.data[field.name] = {
                     arrayName: field.name,
                     documentType: field.documentType,
-                    current: this.document.associations[field.name]
+                    current: this.document.associations[field.name],
+                    searchArrayName: field.documentType + 's'
                 }
 
                 // can't have both (X,Y) and (Y,X) associations on waypoints
@@ -93,6 +94,10 @@
                     this.data[field.name].forbiddenChildren = this.document.associations.waypoint_children
                 } else if (field.name === 'waypoint_children') {
                     this.data[field.name].forbiddenChildren = this.document.associations.waypoints
+                }
+
+                if (field.name === 'users') { // api anti pattern ...
+                    this.data[field.name].searchArrayName = 'users'
                 }
             },
 
