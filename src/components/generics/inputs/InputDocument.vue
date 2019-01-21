@@ -6,8 +6,8 @@
                 :class="{'is-danger':hasError}"
                 type="text"
                 :placeholder="$gettext('Search ...')"
-                @input="loadOptions"
-                @focus="loadOptions"
+                @input="onInput"
+                @focus="onInput"
                 @blur="promise={}"
                 v-model="searchText">
             <span class="icon is-left">
@@ -146,12 +146,20 @@
         },
 
         methods: {
-            loadOptions() {
+            onInput() {
+                if (this.$options.timeoutId) {
+                    clearTimeout(this.$options.timeoutId)
+                }
+
                 if (!this.searchText || this.searchText.length < 3) {
                     this.promise = {}
                     return
                 }
 
+                this.$options.timeoutId = setTimeout(this.loadOptions, 300)
+            },
+
+            loadOptions() {
                 this.promise = c2c.search({
                     q: this.searchText,
                     t: this.letterTypes.join(','),
