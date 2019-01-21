@@ -131,7 +131,29 @@ routes.push({ path: '*', name: '404', component: NotFoundView })
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
     routes,
-    mode: config.routerMode
+    mode: config.routerMode,
+
+    // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
+    scrollBehavior(to, from, savedPosition) {
+        if (to.hash) {
+            // hash scroll is deferred to DocumentViewMixin.scrollToHash()
+            return false
+        } else if (savedPosition) {
+            // scroll to saved position
+            // not that it does not works on document
+            // because this function is call way to early ...
+            return new Promise((resolve, reject) => {
+                this.app.$nextTick(() => {
+                    resolve(savedPosition)
+                })
+            })
+        } else {
+            // otherwise, scroll to top
+            return { x: 0, y: 0 }
+        }
+    }
 })
+
+export default router
