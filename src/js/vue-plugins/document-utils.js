@@ -16,7 +16,7 @@ export default function install(Vue) {
 
             getDocumentTitle(document, lang) {
                 if (document.type === 'u' || !document.type) {
-                    return document.name
+                    return document.name || ''
                 }
 
                 var locale = this.$documentUtils.getLocaleSmart(document, lang)
@@ -25,7 +25,7 @@ export default function install(Vue) {
                     return locale.title_prefix + ' : ' + locale.title
                 }
 
-                return locale.title
+                return locale.title || ''
             },
 
             getLocaleStupid(document, lang) {
