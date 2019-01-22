@@ -37,7 +37,7 @@
                     <loading-notification :promise="routesPromise" />
                     <div v-if="routes!=null">
                         <div v-for="route of routes.documents" :key="route.document_id">
-                            <pretty-route-link :route="route" :show-area="true"/>
+                            <pretty-route-link :route="route"/>
                         </div>
                     </div>
                 </div>

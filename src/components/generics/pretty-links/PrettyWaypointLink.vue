@@ -1,6 +1,6 @@
 <template>
 
-    <document-link :document="waypoint">
+    <document-link :document="waypoint" class="pretty-waypoint-link has-hover-background">
         <span :title="$gettext(waypoint.waypoint_type, 'waypoint_types')">
             <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="has-text-dark"/>
         </span>
@@ -19,3 +19,11 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+
+    .pretty-waypoint-link{
+        display:block
+    }
+
+</style>

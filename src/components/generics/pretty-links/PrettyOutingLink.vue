@@ -1,20 +1,22 @@
 <template>
-    <span>
-        <marker-quality :quality="outing.quality"/>
+    <document-link :document="outing" class="pretty-outing-link has-hover-background">
+        <marker-quality :quality="outing.quality" class="has-text-dark"/>
         <marker-condition :condition="outing.condition_rating"/>
-        {{ outing.date_start }}
-        :
-        <document-link :document="outing"/>
-        &hairsp;&bull;&hairsp;
-        <router-link :to="{name:'profile', params:{id:outing.author.user_id}}">
+        <span class="has-text-dark">
+            {{ outing.date_start }}
+            :
+        </span>
+        <document-title :document="outing"/>
+        <span class="has-text-dark">
+            &hairsp;&bull;&hairsp;
             {{ outing.author.name }}
-        </router-link>
-        <span v-if="outing.img_count!=0 || outing.geometry.has_geom_detail">
+        </span>
+        <span v-if="outing.img_count!=0 || outing.geometry.has_geom_detail" class="has-text-dark">
             &hairsp;&bull;&hairsp;
             <marker-image-count v-if="outing.img_count!=0" :image-count="outing.img_count"/>
             <marker-gps-trace v-if="outing.geometry.has_geom_detail"/>
         </span>
-    </span>
+    </document-link>
 </template>
 
 <script>
@@ -27,3 +29,11 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+
+    .pretty-outing-link{
+        display:block
+    }
+
+</style>

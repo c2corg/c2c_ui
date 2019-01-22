@@ -7,9 +7,25 @@
         <div
             v-for="child of childs"
             :key="child.document.document_id"
-            class="columns is-mobile is-gapless document-row">
+            class="columns is-mobile is-gapless document-row has-hover-background">
             <div class="column">
-                <document-link :document="child.document" />
+
+                <document-link v-if="childType==='profile'" :document="child.document">
+                    @{{ child.document.forum_username }}
+                    (<document-title :document="child.document" />)
+                </document-link>
+
+                <pretty-waypoint-link v-else-if="childType==='waypoint'" :waypoint="child.document" />
+
+                <pretty-book-link v-else-if="childType==='book'" :book="child.document" />
+
+                <pretty-route-link
+                    v-else-if="childType==='route'"
+                    :route="child.document"
+                    hide-orientation
+                    hide-height-diff-difficulties/>
+
+                <document-link v-else :document="child.document" />
             </div>
             <div class="column is-narrow">
                 <button
@@ -247,8 +263,5 @@
 .document-row{
     padding:2px;
     margin-bottom: 0!important;
-}
-.document-row:hover{
-    background: $hover-background;
 }
 </style>

@@ -25,7 +25,7 @@
                     </div>
 
                     <div v-for="route of document.associations.routes" :key="route.document_id">
-                        <pretty-route-link :route="route"/>
+                        <pretty-route-link :route="route" hide-area hide-orientation/>
                     </div>
 
                     <div class="columns">

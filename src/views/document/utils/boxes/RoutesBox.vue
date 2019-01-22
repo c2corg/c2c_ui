@@ -16,14 +16,18 @@
                 show all
             </router-link>
         </h2>
-        <div v-for="activity of Object.keys(routes)" :key="activity">
+        <div v-if="disableActivitySplit">
+            <div v-for="route of source" :key="route.document_id">
+                <pretty-route-link :route="route" hide-area/>
+            </div>
+        </div>
+        <div v-else v-for="activity of Object.keys(routes)" :key="activity">
             <h3 class="title is-3">
                 <icon-activity :activity="activity" />
                 {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
             </h3>
             <div v-for="(route, i) of Object.values(routes[activity])" :key="i">
-                <document-link :document="route" />,
-                <route-rating :document="route"/>
+                <pretty-route-link :route="route" hide-activities hide-area/>
             </div>
         </div>
 
@@ -40,12 +44,11 @@
             hideButtons: {
                 type: Boolean,
                 default: false
-            }
-        },
+            },
 
-        data() {
-            return {
-                routes: {}
+            disableActivitySplit: {
+                type: Boolean,
+                default: false
             }
         },
 
@@ -58,18 +61,22 @@
 
             source() {
                 return this.document.associations.routes || this.document.associations.all_routes.documents
-            }
-        },
+            },
 
-        created() {
-            for (let route of this.source) {
-                for (let activity of route.activities) {
-                    if (!this.routes[activity]) {
-                        this.routes[activity] = {}
+            routes() {
+                const result = {}
+
+                for (let route of this.source) {
+                    for (let activity of route.activities) {
+                        if (!result[activity]) {
+                            result[activity] = {}
+                        }
+
+                        result[activity][route.document_id] = route
                     }
-
-                    this.routes[activity][route.document_id] = route
                 }
+
+                return result
             }
         }
     }

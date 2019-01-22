@@ -119,7 +119,7 @@
 
                 </div>
 
-                <routes-box :document="document" hide-buttons />
+                <routes-box :document="document" hide-buttons disable-activity-split/>
                 <images-box :document="document" ref="imagesBox"/>
 
                 <recent-outings-box :document="document" />
