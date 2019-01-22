@@ -102,10 +102,18 @@
 
             computeImages(images) {
                 for (let image of images) {
+                    image.c2cExtrapoledDocument = {
+                        document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
+                        locales: [{ title: '...' }],
+                        available_langs: [this.$language.current]
+                    }
+
                     image.src = config.urls.api + image.attributes['c2c:url-proxy'].value
                     image.addEventListener('click', () => {
-                        this.$emit('click-image', parseInt(image.attributes['c2c:document-id'].value, 10))
+                        this.$imageViewer.show(image.c2cExtrapoledDocument)
                     })
+
+                    this.$imageViewer.push(image.c2cExtrapoledDocument)
                 }
             },
 

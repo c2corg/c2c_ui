@@ -6,8 +6,7 @@
         <markdown
             v-if="document.cooked[field.name]"
             :class="{'is-italic':field.name==='summary'}"
-            :content="document.cooked[field.name]"
-            @click-image="$emit('click-image', arguments[0])"/>
+            :content="document.cooked[field.name]"/>
         <slot name="after" />
     </div>
 </template>

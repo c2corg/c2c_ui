@@ -3,11 +3,14 @@
         <side-menu class="side-menu" :class="{'alternative-side-menu': alternativeSideMenu}"/>
         <navigation class="navigation" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
         <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
+        <image-viewer ref="imageViewer"/>
+        <helper-window ref="helper"/>
+        <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
+
+        <!-- keep router view in last  -->
         <div class="page-content">
             <router-view class="router-view"/>
         </div>
-        <helper-window ref="helper"/>
-        <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
     </div>
 </template>
 
@@ -16,6 +19,7 @@
     import SideMenu from './views/SideMenu'
     import SiteNotice from './views/SiteNotice'
     import HelperWindow from './components/helper/HelperWindow'
+    import ImageViewer from './components/image-viewer/ImageViewer'
 
     export default {
         name: 'App',
@@ -24,7 +28,8 @@
             SideMenu,
             Navigation,
             SiteNotice,
-            HelperWindow
+            HelperWindow,
+            ImageViewer
         },
 
         data() {

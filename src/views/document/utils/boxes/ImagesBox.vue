@@ -8,12 +8,6 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
-        mixins: [ requireDocumentProperty ],
-
-        methods: {
-            showFullscreen(imageId) {
-                this.$refs.gallery.showFullscreen(imageId)
-            }
-        }
+        mixins: [ requireDocumentProperty ]
     }
 </script>

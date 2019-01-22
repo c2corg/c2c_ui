@@ -109,6 +109,7 @@ export default {
     methods: {
         loadDocument($route) {
             if (this.isVersionView) {
+                this.$imageViewer.clear()
                 this.promise = c2c[this.documentType].getVersion(
                     this.documentId,
                     this.$route.params.lang,
@@ -139,6 +140,7 @@ export default {
             } else if (this.isDraftView) {
                 this.promise = {}
 
+                this.$imageViewer.clear()
                 cooker.cook(this.draft.locales[0]).then(response => {
                     this.draft.cooked = response.data
                     this.$set(this.promise, 'data', this.draft)
@@ -149,6 +151,7 @@ export default {
                     return
                 }
 
+                this.$imageViewer.clear()
                 this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang)
                     .then(this.scrollToHash)
                     .then(this.updateUrl)
@@ -190,12 +193,6 @@ export default {
             }
 
             this.$router.replace(path)
-        },
-
-        onClickImage(imageId) {
-            if (this.$refs.imagesBox) {
-                this.$refs.imagesBox.showFullscreen(imageId)
-            }
         }
     }
 }

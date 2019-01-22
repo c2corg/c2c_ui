@@ -8,6 +8,7 @@ import fontAwesome from '@/js/vue-plugins/font-awesome-config'
 import helperWindow from '@/js/vue-plugins/helper-window'
 import getText from '@/js/vue-plugins/gettext-plugin'
 import globalComponents from '@/js/vue-plugins/generic-components'
+import imageViewer from '@/js/vue-plugins/image-viewer'
 import localStorage from '@/js/vue-plugins/local-storage'
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter'
 import user from '@/js/vue-plugins/user'
@@ -19,11 +20,13 @@ Vue.config.productionTip = false
 Vue.config.silent = false
 
 Vue.use(localStorage) // First, vm.$localStorage property
+
 Vue.use(vueMoment) // moment functions
 Vue.use(documentUtils) // getDocumentType, getLocale functions
 Vue.use(fontAwesome) // <fa-icon /> component
 Vue.use(getText) // vm.$gettext() function and v-translate directive
 Vue.use(helperWindow) // vm.$helper property
+Vue.use(imageViewer)
 Vue.use(globalComponents) // Components available everywhere
 Vue.use(upperCaseFirstLetter) // upperCaseFirstLetter filter
 Vue.use(user) // vm.$user property
