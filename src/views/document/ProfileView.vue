@@ -45,8 +45,8 @@
 
             <div class="column is-9">
                 <div class="box" v-if="locale.summary || locale.description">
-                    <markdown-section :document="document" :field="fields.summary" @click-image="onClickImage"/>
-                    <markdown-section :document="document" :field="fields.description" hide-title @click-image="onClickImage"/>
+                    <markdown-section :document="document" :field="fields.summary"/>
+                    <markdown-section :document="document" :field="fields.description" hide-title/>
                     <div style="clear:both" />
                 </div>
                 <feed-widget type="profile" />

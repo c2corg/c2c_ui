@@ -1,23 +1,38 @@
 import config from '@/js/config.ts'
 
+
+const getUrl = function(image, size){
+
+    size = size || ''
+
+    if(!image.filename){
+        let sizeArg = size ? `?$size=${size}` : ''
+        return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}`
+    }
+
+    let backendFilename = image.filename.replace('.', `${size}.`).replace('.svg', '.jpg')
+
+    return `${config.urls.media}/${backendFilename}`
+}
+
 export default {
     /* 200*200 px images */
     getSquared(image) {
-        return config.urls.media + '/' + image.filename.replace('.', 'SI.').replace('.svg', '.jpg')
+        return getUrl(image, 'SI')
     },
 
     // max 400*400
     getMedium(image) {
-        return config.urls.media + '/' + image.filename.replace('.', 'MI.').replace('.svg', '.jpg')
+        return getUrl(image, 'MI')
     },
 
-    // max 400*400
+    //
     getBig(image) {
-        return config.urls.media + '/' + image.filename.replace('.', 'BI.').replace('.svg', '.jpg')
+        return getUrl(image, 'BI')
     },
 
     /* Original size */
     get(image) {
-        return config.urls.media + '/' + image.filename
+        return getUrl(image)
     }
 }
