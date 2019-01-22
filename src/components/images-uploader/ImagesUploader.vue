@@ -137,12 +137,16 @@
 
             save() {
                 this.promise = c2c.createImages(this.documents).then(() => {
+                    // add result to parent, it will update page
+                    for (let image of this.documents) {
+                        this.parentDocument.associations.images.push(image)
+                    }
+
                     // clean
                     this.images = {}
                     this.hide()
 
                     // TODO handle error
-                    // TODO redraw parent
                 })
             },
 
