@@ -102,11 +102,10 @@
 
             computeImages(images) {
                 for (let image of images) {
-
                     image.c2cExtrapoledDocument = {
                         document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
-                        locales:[{title:'...'}],
-                        available_langs:[this.$language.current]
+                        locales: [{ title: '...' }],
+                        available_langs: [this.$language.current]
                     }
 
                     image.src = config.urls.api + image.attributes['c2c:url-proxy'].value

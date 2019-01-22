@@ -19,7 +19,7 @@
     import SideMenu from './views/SideMenu'
     import SiteNotice from './views/SiteNotice'
     import HelperWindow from './components/helper/HelperWindow'
-    import HelperWindow from './components/image-viewer/ImageViewer'
+    import ImageViewer from './components/image-viewer/ImageViewer'
 
     export default {
         name: 'App',

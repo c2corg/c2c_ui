@@ -193,6 +193,6 @@ export default {
             }
 
             this.$router.replace(path)
-        },
+        }
     }
 }

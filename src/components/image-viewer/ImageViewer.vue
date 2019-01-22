@@ -110,7 +110,7 @@
         methods: {
 
             push(image) {
-                if(this.images.findIndex(item => item.document_id === image.document_id) === -1) {
+                if (this.images.findIndex(item => item.document_id === image.document_id) === -1) {
                     this.images.push(image)
                 }
             },
@@ -118,7 +118,7 @@
             show(image) {
                 let index = this.images.findIndex(item => item.document_id === image.document_id)
 
-                if(index === -1){
+                if (index === -1) {
                     index = this.images.length
                     this.push(image)
                 }
@@ -141,7 +141,7 @@
             },
 
             onSlideChange() {
-                this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex-1]
+                this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex - 1]
             },
 
             onRequestFullscreen() {
