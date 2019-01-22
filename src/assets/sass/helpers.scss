@@ -1,3 +1,9 @@
+@import './variables.scss';
+
+.has-hover-background:hover{
+    background: $hover-background;
+}
+
 // force nowrap
 .is-nowrap{
     white-space: nowrap;
