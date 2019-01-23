@@ -18,9 +18,7 @@ deploy:
     local-dir: dist
     github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
     keep-history: true
-    on:
-      branch: master
   - provider: script
     script: sh scripts/travis-publish.sh
     on:
-      all-branches: true
+      branch: deployment
