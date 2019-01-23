@@ -1,7 +1,7 @@
 <template>
     <swiper :options="$options.swiperOption" class="swiper">
         <swiper-slide v-for="image of images" :key="image.document_id">
-            <gallery-image :image="image" class="camptocamp-image" @click="$imageViewer.show(image)"/>
+            <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)">
         </swiper-slide>
     </swiper>
 
@@ -10,6 +10,7 @@
 <script>
 
     import { swiper, swiperSlide } from 'vue-awesome-swiper'
+    import imageUrls from '@/js/image-urls'
 
     export default {
 
@@ -29,6 +30,12 @@
             this.images.map(this.$imageViewer.push)
         },
 
+        methods: {
+            getUrl(image) {
+                return imageUrls.getBig(image)
+            }
+        },
+
         swiperOption: {
             slidesPerView: 'auto',
             spaceBetween: 15
@@ -43,17 +50,11 @@
     .swiper{
         .swiper-slide{
             height:200px;
-            // display:block;
-        }
-
-        .camptocamp-image{
-            height:200px;
-        }
-
-        //
-        .swiper-slide{
-            // width:200px;
             width:auto;
+
+            img{
+                height:200px;
+            }
         }
 
         .swiper-button-disabled{

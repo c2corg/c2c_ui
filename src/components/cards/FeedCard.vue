@@ -62,10 +62,14 @@
 
 <script>
     import forum from '@/js/apis/forum'
-
+    import Gallery from '@/components/gallery/Gallery'
     import { cardMixin } from './utils/mixins.js'
 
     export default{
+
+        components: {
+            Gallery
+        },
 
         mixins: [
             cardMixin

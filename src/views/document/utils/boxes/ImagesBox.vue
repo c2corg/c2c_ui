@@ -5,9 +5,12 @@
 </template>
 
 <script>
+    import Gallery from '@/components/gallery/Gallery'
+
     import { requireDocumentProperty } from '@/js/properties-mixins'
 
     export default {
+        components: { Gallery },
         mixins: [ requireDocumentProperty ]
     }
 </script>
