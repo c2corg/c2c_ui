@@ -12,9 +12,7 @@
                         <areas-links :areas="document.areas"/>
                     </label-value>
 
-                    <label-value v-if="document.author" :label="$gettext('author')">
-                        <author-link :author="document.author"/>
-                    </label-value>
+                    <field-view :document="document" :field="fields.author"/>
 
                     <label-value v-if="document.creator" :label="$gettext('creator')">
                         <author-link :author="document.creator"/>
