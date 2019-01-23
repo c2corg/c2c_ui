@@ -2,9 +2,9 @@
     <div class="section">
         <document-view-header :document="document" :version="version" :promise="promise" />
 
-        <div v-if="document" class="columns is-multiline">
+        <images-box v-if="document" :document="document" ref="imagesBox"/>
 
-            <images-box class="column is-12" :document="document" ref="imagesBox"/>
+        <div v-if="document" class="columns is-multiline">
 
             <div class="column is-3">
                 <map-box :document="document"/>
@@ -21,7 +21,7 @@
                         let stay profile coherent and call this component profiles-links
                         and not users-links -->
                         <profiles-links :profiles="document.associations.users"/>
-                        {{ document.cooked.participants }}
+                        <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
                     </div>
 
                     <div v-for="route of document.associations.routes" :key="route.document_id">
@@ -49,14 +49,16 @@
                                 <outing-rating :document="document" />
                             </label-value>
 
+                            <!-- Access block -->
+                            <field-view v-if="document.public_transport" :document="document" :field="fields.public_transport"/>
                             <field-view :document="document" :field="fields.access_condition"/>
                             <field-view :document="document" :field="fields.lift_status"/>
-                            <field-view v-if="document.public_transport" :document="document" :field="fields.public_transport"/>
                             <field-view :document="document" :field="fields.hut_status"/>
 
                         </div>
 
                         <div class="column is-4">
+                            <!-- elevation block  -->
                             <double-numeric-field
                                 :document="document"
                                 :field1="fields.elevation_min"
@@ -64,24 +66,21 @@
                                 :label="$gettext('elevation')" />
 
                             <field-view :document="document" :field="fields.elevation_access"/>
-
                             <double-numeric-field
                                 :document="document"
                                 :field1="fields.height_diff_up"
                                 :field2="fields.height_diff_down"
                                 :label="$gettext('height_diff')"
                                 show-signs />
-
                             <label-value v-if="document.length_total" :label="$gettext('length_total')">
                                 {{ document.length_total / 1000 }}&nbsp;km
                             </label-value>
 
+                            <!-- snow block -->
                             <field-view :document="document" :field="fields.elevation_up_snow"/>
                             <field-view :document="document" :field="fields.elevation_down_snow"/>
-
                             <field-view :document="document" :field="fields.snow_quantity"/>
                             <field-view :document="document" :field="fields.snow_quality"/>
-
                             <field-view :document="document" :field="fields.glacier_rating"/>
                             <field-view :document="document" :field="fields.avalanche_signs"/>
 
@@ -91,17 +90,17 @@
 
                 <div class="box">
 
+                    <markdown-section :document="document" :field="fields.route_description" />
                     <markdown-section :document="document" :field="fields.weather"/>
                     <markdown-section :document="document" :field="fields.conditions"/>
 
                     <condition-levels :data="locale.conditions_levels"/>
 
                     <markdown-section :document="document" :field="fields.avalanches"/>
-                    <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
-                    <markdown-section :document="document" :field="fields.access_comment" />
-                    <markdown-section :document="document" :field="fields.route_description" />
-                    <markdown-section :document="document" :field="fields.hut_comment"/>
                     <markdown-section :document="document" :field="fields.timing"/>
+                    <markdown-section :document="document" :field="fields.access_comment" />
+                    <markdown-section :document="document" :field="fields.hut_comment"/>
+                    <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
 
                 </div>
 
