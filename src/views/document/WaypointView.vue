@@ -112,7 +112,7 @@
 
                 <routes-box v-if="!isDraftView" :document="document"/>
                 <recent-outings-box v-if="!isDraftView" :document="document"/>
-                <images-box v-if="!isDraftView" :document="document" ref="imagesBox"/>
+                <images-box v-if="!isDraftView" :document="document"/>
                 <comments-box v-if="!isDraftView" :document="document" />
             </div>
         </div>

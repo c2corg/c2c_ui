@@ -600,7 +600,7 @@
                     return
                 }
 
-                var extent = ol.extent.createEmpty()
+                let extent = ol.extent.createEmpty()
 
                 for (let layer of [this.documentsLayer, this.waypointsLayer]) {
                     ol.extent.extend(extent, layer.getSource().getExtent())

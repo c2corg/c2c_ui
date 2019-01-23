@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <images-box :document="document" ref="imagesBox"/>
+                <images-box :document="document"/>
 
                 <comments-box :document="document" />
             </div>
