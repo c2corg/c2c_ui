@@ -1,5 +1,5 @@
 <template>
-    <div class="image-info has-text-light">
+    <div class="image-info has-text-light" v-if="visible">
         <h3 class="title is-3 has-text-light" v-translate>
             Infos
         </h3>
@@ -38,23 +38,16 @@
             </ul>
         </div>
     </div>
-
 </template>
 
 <script>
     import c2c from '@/js/apis/c2c'
 
     export default {
-        props: {
-            document_id: {
-                type: Number,
-                required: true
-            }
-        },
-
         data() {
             return {
-                promise: null
+                promise: {},
+                visible: false
             }
         },
 
@@ -64,16 +57,14 @@
             }
         },
 
-        watch: {
-            document_id: {
-                handler: 'load',
-                immediate: true
-            }
-        },
-
         methods: {
-            load() {
-                this.promise = c2c.image.get(this.document_id)
+            show(document_id) {
+                this.visible = true
+                this.promise = c2c.image.get(document_id)
+            },
+
+            hide() {
+                this.visible = false
             }
         }
     }
@@ -83,7 +74,7 @@
 <style scoped lang="scss">
 
     .image-info{
-        background: rgba(0,0,0,0.5);
+        background: rgba(0,0,0,0.7);
         padding:1rem;
     }
 </style>

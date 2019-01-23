@@ -52,12 +52,14 @@
 
     import DashboardOutingLink from './utils/DashboardOutingLink'
     import ForumWidget from './utils/ForumWidget'
+    import Gallery from '@/components/gallery/Gallery'
 
     export default {
 
         components: {
             DashboardOutingLink,
-            ForumWidget
+            ForumWidget,
+            Gallery
         },
 
         data() {

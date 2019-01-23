@@ -5,53 +5,56 @@
             :options="$options.swiperOptions"
             class="image-viewer-swiper"
             @slide-change="onSlideChange">
+
             <swiper-slide v-for="image of images" :key="image.document_id">
-                <gallery-image large :image="image" class="camptocamp-image"/>
+
+                <div class="is-size-3 has-text-grey-lighter image-viewer-header">
+                    <div class="level is-mobile">
+                        <span class="level-item is-size-2">
+                            {{ image.locales[0].title }}
+                        </span>
+                        <span class="level-right">
+                            <document-link :document="image" class="level-item has-text-grey-lighter">
+                                <fa-icon icon="eye"/>
+                            </document-link>
+
+                            <edit-link
+                                :document="image" :lang="image.available_langs[0]"
+                                class="level-item has-text-grey-lighter">
+                                <fa-icon icon="edit"/>
+                            </edit-link>
+
+                            <fa-icon
+                                class="level-item has-cursor-pointer"
+                                icon="info-circle"
+                                @click="showInfo(image)"/>
+                            <fa-icon
+                                class="level-item has-cursor-pointer request-fullscreen-button"
+                                icon="expand"
+                                @click="onRequestFullscreen"/>
+                            <fa-icon
+                                class="level-item has-cursor-pointer exit-fullscreen-button"
+                                icon="compress"
+                                @click="onExitFullscreen"/>
+                            <fa-icon
+                                class="level-item has-cursor-pointer"
+                                icon="plus"
+                                transform="rotate-45"
+                                @click="visible=false"/>
+                        </span>
+                    </div>
+                </div>
+
+                <img :data-src="getUrl(image)" class="swiper-lazy" :title="image.locales[0].title">
+                <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
             </swiper-slide>
+
             <div slot="button-prev" class="swiper-button-prev"/>
             <div slot="button-next" class="swiper-button-next"/>
             <div slot="pagination" class="swiper-pagination"/>
         </swiper>
 
-        <div v-if="activeDocument" class="is-size-3 has-text-grey-lighter image-viewer-header">
-            <div class="level is-mobile">
-                <span class="level-left"/>
-                <span class="level-item is-size-2">
-                    {{ activeDocument.locales[0].title }}
-                </span>
-                <span class="level-right">
-                    <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
-                        <fa-icon icon="eye"/>
-                    </document-link>
-
-                    <edit-link
-                        :document="activeDocument" :lang="activeDocument.available_langs[0]"
-                        class="level-item has-text-grey-lighter">
-                        <fa-icon icon="edit"/>
-                    </edit-link>
-
-                    <fa-icon
-                        class="level-item has-cursor-pointer"
-                        icon="info-circle"
-                        @click="showInfo = !showInfo"/>
-                    <fa-icon
-                        class="level-item has-cursor-pointer request-fullscreen-button"
-                        icon="expand"
-                        @click="onRequestFullscreen"/>
-                    <fa-icon
-                        class="level-item has-cursor-pointer exit-fullscreen-button"
-                        icon="compress"
-                        @click="onExitFullscreen"/>
-                    <fa-icon
-                        class="level-item has-cursor-pointer"
-                        icon="plus"
-                        transform="rotate-45"
-                        @click="visible=false"/>
-                </span>
-            </div>
-        </div>
-
-        <image-info v-if="showInfo && activeDocument" class="image-viewer-info" :document_id="activeDocument.document_id" />
+        <image-info ref="imageInfo" class="image-viewer-info" />
     </div>
 
 </template>
@@ -59,6 +62,8 @@
 <script>
 
     import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
+    import imageUrls from '@/js/image-urls'
     import ImageInfo from './ImageInfo'
 
     const requestFullscreen = function(wrapper) {
@@ -96,7 +101,6 @@
         data() {
             return {
                 visible: false,
-                showInfo: false,
                 images: [],
                 activeDocument: null
             }
@@ -123,7 +127,6 @@
                     this.push(image)
                 }
 
-                this.activeDocument = this.images[index]
                 this.$options.swiperOptions.initialSlide = index
                 this.visible = true
             },
@@ -131,7 +134,10 @@
             clear() {
                 this.images = []
                 this.visible = false
-                this.showInfo = false
+            },
+
+            getUrl(image) {
+                return imageUrls.getBig(image)
             },
 
             onKeydown(event) {
@@ -140,7 +146,12 @@
                 }
             },
 
+            showInfo(image) {
+                this.$refs.imageInfo.show(image.document_id)
+            },
+
             onSlideChange() {
+                this.$refs.imageInfo.hide()
                 this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex - 1]
             },
 
@@ -154,14 +165,23 @@
         },
 
         swiperOptions: {
+            // Disable preloading of all images
+            preloadImages: false,
+            // Enable lazy loading
+            lazy: {
+                // enable loading of closest images
+                loadPrevNext: true
+            },
+
             loop: true,
             initialSlide: 0,
             slidesPerView: 1,
-            spaceBetween: 15,
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev'
             },
+
+            // https://idangero.us/swiper/api/#pagination
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true
@@ -173,11 +193,26 @@
     }
 </script>
 
+<style lang="scss">
+    @import '@/assets/sass/variables.scss';
+
+    .swiper-pagination{
+        .swiper-pagination-bullet{
+            background: white;
+            opacity: 1;
+            width: 16px;
+            height: 16px;
+        }
+
+        .swiper-pagination-bullet-active{
+            background: $primary;
+        }
+    }
+</style>
+
 <style scoped lang="scss">
 
     @import '~swiper/dist/css/swiper.css';
-
-    $navigation-button-size:2rem;
 
     .image-viewer-swiper{
         z-index:1000;
@@ -189,24 +224,30 @@
         background: rgba(0,0,0,0.9);
 
         .swiper-slide{
-            max-height:80vh;
-            margin-top:10vh;
+            max-height:100vh;
+            // background: yellow;
 
-            .camptocamp-image{
+            .image-viewer-header{
+                padding:0.5rem 1rem;
+                background: rgba(0,0,0,0.8);
+
+                svg:hover{
+                    color:white;
+                }
             }
-        }
-    }
 
-    .image-viewer-header{
-        z-index:1000;
-        position:fixed;
-        top:0;
-        left:0;
-        width:100vw;
-        padding:0.5rem 1rem;
-
-        svg:hover{
-            color:white;
+            img{
+                max-height: 80vh;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
         }
     }
 
@@ -215,7 +256,7 @@
         width:20rem;
         z-index:1000;
         position:fixed;
-        top:4rem;
+        top:3.7rem;
         right:0;
     }
 
@@ -225,6 +266,13 @@
 
     .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
         display: none;
+    }
+
+    .swiper-button-prev{
+        margin-left: 1rem;
+    }
+    .swiper-button-next{
+        margin-right: 1rem;
     }
 
 </style>
