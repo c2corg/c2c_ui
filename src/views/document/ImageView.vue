@@ -4,7 +4,7 @@
         <div v-if="document" class="columns">
             <div class="column is-3">
                 <div class="box">
-                    <label-value v-if="document.activities.length" :label="$gettext('activities')">
+                    <label-value v-if="document.activities && document.activities.length" :label="$gettext('activities')">
                         <activities :activities="document.activities"/>
                     </label-value>
 
@@ -12,9 +12,7 @@
                         <areas-links :areas="document.areas"/>
                     </label-value>
 
-                    <label-value v-if="document.author" :label="$gettext('author')">
-                        <author-link :author="document.author"/>
-                    </label-value>
+                    <field-view :document="document" :field="fields.author"/>
 
                     <label-value v-if="document.creator" :label="$gettext('creator')">
                         <author-link :author="document.creator"/>
