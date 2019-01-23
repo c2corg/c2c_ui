@@ -2,7 +2,7 @@
     <div class="section">
         <document-view-header :document="document" :version="version" :promise="promise" />
 
-        <images-box v-if="document" :document="document" ref="imagesBox"/>
+        <images-box v-if="document" :document="document"/>
 
         <div v-if="document" class="columns is-multiline">
 
