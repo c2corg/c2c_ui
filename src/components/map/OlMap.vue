@@ -600,7 +600,11 @@
                     return
                 }
 
-                var extent = this.documentsLayer.getSource().getExtent()
+                var extent = ol.extent.createEmpty()
+
+                for (let layer of [this.documentsLayer, this.waypointsLayer]) {
+                    ol.extent.extend(extent, layer.getSource().getExtent())
+                }
 
                 if (extent.filter(isFinite).length !== 4) {
                     // if there is infnity, default extent
@@ -609,6 +613,8 @@
                 }
 
                 this.view.fit(extent, { size: this.map.getSize() })
+
+                // set a minimum zoom level
                 this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()))
             },
 
