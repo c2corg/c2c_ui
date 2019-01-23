@@ -67,7 +67,10 @@
                             <field-view :document="document" :field="fields.height_diff_access"/>
                             <field-view :document="document" :field="fields.lift_access"/>
 
-                            <field-view :document="document" :field="fields.route_length"/>
+                            <label-value v-if="document.route_length" :label="$gettext('route_length')">
+                                {{ document.route_length / 1000 }}&nbsp;km
+                            </label-value>
+
                             <field-view :document="document" :field="fields.mtb_height_diff_portages"/>
                             <field-view :document="document" :field="fields.mtb_length_asphalt"/>
                             <field-view :document="document" :field="fields.mtb_length_trail"/>
@@ -104,7 +107,7 @@
                     </markdown-section>
 
                     <markdown-section :document="document" :field="fields.gear">
-                        <div class="content" slot="after" v-if="gear_articles">
+                        <div class="content" slot="after" v-if="Object.keys(gear_articles).length !== 0">
                             <ul>
                                 <li v-for="(label, articleId) of gear_articles" :key="articleId">
                                     <router-link :to="{ name: 'article', params: {id: articleId} }">
@@ -120,7 +123,7 @@
                 </div>
 
                 <routes-box :document="document" hide-buttons disable-activity-split/>
-                <images-box :document="document" ref="imagesBox"/>
+                <images-box :document="document"/>
 
                 <recent-outings-box :document="document" />
 
