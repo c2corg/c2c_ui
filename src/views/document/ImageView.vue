@@ -4,7 +4,7 @@
         <div v-if="document" class="columns">
             <div class="column is-3">
                 <div class="box">
-                    <label-value v-if="document.activities.length" :label="$gettext('activities')">
+                    <label-value v-if="document.activities && document.activities.length" :label="$gettext('activities')">
                         <activities :activities="document.activities"/>
                     </label-value>
 
