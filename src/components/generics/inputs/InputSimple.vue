@@ -57,10 +57,6 @@
         mixins: [ baseMixin ],
 
         props: {
-            type: {
-                type: String,
-                default: 'text'
-            },
             min: {
                 type: Number,
                 default: null

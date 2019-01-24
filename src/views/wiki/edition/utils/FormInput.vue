@@ -74,7 +74,8 @@
         @click:prefix="$emit('click:prefix')"
         :helper="helper===undefined ? field.helper : helper"
         :is-expanded="isExpanded"
-        :postfix="field.unit"
+        :postfix="unit || field.unit"
+        :divisor="divisor"
         :type="field.type"
         :min="min || field.min"
         :max="max || field.max"
@@ -146,6 +147,14 @@
             },
             max: {
                 type: String,
+                default: undefined
+            },
+            unit: {
+                type: String,
+                default: undefined
+            },
+            divisor: {
+                type: Number,
                 default: undefined
             }
         },
