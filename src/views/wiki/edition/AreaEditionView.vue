@@ -7,6 +7,7 @@
         @save="save">
         <form-input-row :document="document" :field="fields.title"/>
         <form-input-row :document="document" :field="fields.area_type"/>
+        <map-input-row v-if="$user.isModerator" :document="document" geom-detail-editable/>
         <form-input-row :document="document" :field="fields.summary"/>
         <form-input-row :document="document" :field="fields.description"/>
         <quality-input-row :document="document" />
