@@ -189,7 +189,10 @@
             },
 
             geometryHasChanged() {
-                if (!this.geoLocalized) {
+                // areas are flagged as not geolocalized because you cant display
+                // ol map componenent on /areas
+                // but it contains geometry
+                if (!this.geoLocalized && this.documentType !== 'area') {
                     return false
                 }
 

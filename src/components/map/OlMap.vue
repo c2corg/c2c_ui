@@ -454,6 +454,8 @@
                         let mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry
                         this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)))
                     }
+                } else if (geoJsonGeometry.type === 'Polygon') {
+                    document.geometry.geom_detail = JSON.stringify(geoJsonGeometry)
                 } else {
                     throw new Error(`Unexpected geometry type : ${geometry.type}`)
                 }
