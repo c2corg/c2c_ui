@@ -10,6 +10,20 @@ import constants from '@/js/constants'
 export default function install(Vue) {
     Vue.prototype.$documentUtils = new Vue({
         methods: {
+            getCreationTitle(documentType) {
+                if (documentType === 'outing') return this.$gettext('add an outing')
+                if (documentType === 'route') return this.$gettext('Create a new route')
+                if (documentType === 'image') return this.$gettext('add an image')
+                if (documentType === 'waypoint') return this.$gettext('add a waypoint')
+                if (documentType === 'map') return this.$gettext('add a map')
+                if (documentType === 'xreport') return this.$gettext('add an incident/accident report')
+                if (documentType === 'area') return this.$gettext('add an area')
+                if (documentType === 'book') return this.$gettext('add a book')
+                if (documentType === 'article') return this.$gettext('add an article')
+
+                throw new Error(`Unexpected type : ${this.documentType}`)
+            },
+
             getDocumentType(letterType) {
                 return constants.letterToDocumentType[letterType]
             },

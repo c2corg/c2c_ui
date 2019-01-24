@@ -1,10 +1,25 @@
 <template>
     <div v-if="document" class="section" :class="{preview: isPreview}">
-        <html-header title="Edit a document"/>
         <h1 class="title">
-            {{ $gettext('Edit in ' + $route.params.lang) }}
-            :
-            <document-title :document="document"/>
+            <span v-if="mode === 'edit'">
+                <html-header :title="$gettext('Edit a document')"/>
+                <!-- fixed string translations -->
+                <!-- $gettext('Edit in fr') -->
+                <!-- $gettext('Edit in eu') -->
+                <!-- $gettext('Edit in ca') -->
+                <!-- $gettext('Edit in it') -->
+                <!-- $gettext('Edit in de') -->
+                <!-- $gettext('Edit in en') -->
+                <!-- $gettext('Edit in es') -->
+                {{ $gettext('Edit in ' + $route.params.lang) }}
+                :
+                <document-title :document="document"/>
+            </span>
+            <span v-else>
+                <html-header :title="$documentUtils.getCreationTitle(documentType)"/>
+                {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+            </span>
+
             <button class="button is-size-6" @click="isPreview=!isPreview">
                 <span v-show="isPreview">
                     <fa-icon icon="edit" />&nbsp;
@@ -23,7 +38,7 @@
             {{ error.description }}
         </div>
 
-        <component :is="$documentUtils.getDocumentType(document.type) + '-view'" v-if="isPreview" :draft="document"/>
+        <component :is="documentType + '-view'" v-if="isPreview" :draft="document"/>
 
         <slot v-else>
             ...
@@ -39,8 +54,8 @@
                     Save
                 </button>
             </div>
-            <div v-show="mode=='edit'" class="control is-expanded">
-                <input v-model="comment" type="text" class="input" :placeholder="$gettext('comment')">
+            <div class="control is-expanded">
+                <input v-model="comment" type="text" class="input" :disabled="mode !== 'edit'" :placeholder="$gettext('comment')">
             </div>
             <div class="control">
                 <button class="button is-danger" @click="$router.go(-1)" v-translate>
@@ -105,6 +120,12 @@
             return {
                 comment: '',
                 isPreview: false
+            }
+        },
+
+        computed: {
+            documentType() {
+                return this.$documentUtils.getDocumentType(this.document.type)
             }
         },
 
