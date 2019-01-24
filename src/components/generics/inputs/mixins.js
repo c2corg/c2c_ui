@@ -1,6 +1,9 @@
 export const baseMixin = {
     props: {
-
+        type: {
+            type: String,
+            default: 'text'
+        },
         disabled: {
             type: Boolean,
             default: null
@@ -17,6 +20,10 @@ export const baseMixin = {
             type: Boolean,
             default: false
         },
+        divisor: {
+            type: Number,
+            default: undefined
+        },
         helper: {
             type: String,
             default: null
@@ -30,10 +37,11 @@ export const baseMixin = {
     computed: {
         value_: {
             get() {
-                return this.value
+                return this.type !== 'number' || this.divisor === undefined || !this.value ? this.value : this.value / this.divisor
             },
             set(value) {
                 if (!this.disabled) {
+                    value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor
                     this.$emit('input', value)
                 }
             }

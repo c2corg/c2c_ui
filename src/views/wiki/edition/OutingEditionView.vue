@@ -71,7 +71,7 @@
                 <form-input-row :document="document" :field="fields.hut_status" />
                 <form-input-row :document="document" :field="fields.hut_comment" />
 
-                <form-input-row :document="document" :field="fields.length_total" />
+                <form-input-row :document="document" :field="fields.length_total" unit="km" :divisor="1000"/>
                 <form-row :label="$gettext('height_diff')" is-grouped>
                     <form-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
                     <form-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>

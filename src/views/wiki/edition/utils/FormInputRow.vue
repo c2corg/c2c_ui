@@ -10,6 +10,8 @@
             :field="field"
             :helper="null"
             :placeholder="placeholder"
+            :unit="unit"
+            :divisor="divisor"
             :is-expanded="isExpanded"/>
     </form-row>
 </template>
@@ -46,6 +48,14 @@
             },
             placeholder: {
                 type: String,
+                default: undefined
+            },
+            unit: {
+                type: String,
+                default: undefined
+            },
+            divisor: {
+                type: Number,
                 default: undefined
             }
         },
