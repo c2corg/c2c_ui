@@ -8,6 +8,10 @@
 
 export default {
     computed: {
+        descriptionTitle() {
+            return this.document.waypoint_type === 'access' ? this.$gettext('road access') : this.$gettext('description')
+        },
+
         accessTitle() {
             if (this.document.waypoint_type === 'access') {
                 return this.$gettext('public transportation access')

@@ -99,7 +99,7 @@ msgstr ""
 msgid "access_condition"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:36
+#: src/js/waypoint-labels-mixin.js:40
 #: src/translations/fixed_strings_common_js.vue:7
 msgid "access_period"
 msgstr ""
@@ -181,7 +181,7 @@ msgctxt "activity_rates"
 msgid "activity_rate_50"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:100
+#: src/views/document/utils/windows/AssociationItems.vue:116
 msgid "Add"
 msgstr ""
 
@@ -371,7 +371,6 @@ msgid "Author"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:19
-#: src/views/document/ImageView.vue:15
 #: src/views/document/XreportView.vue:13
 msgid "author"
 msgstr ""
@@ -510,7 +509,7 @@ msgctxt "public_transportation_types"
 msgid "boat"
 msgstr ""
 
-#: src/views/document/RouteView.vue:170
+#: src/views/document/RouteView.vue:173
 msgid "bolted rock climbing gear"
 msgstr ""
 
@@ -607,7 +606,7 @@ msgid "Cards mode"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:33
-#: src/views/document/ImageView.vue:26
+#: src/views/document/ImageView.vue:24
 msgid "categories"
 msgstr ""
 
@@ -894,7 +893,7 @@ msgstr ""
 msgid "Created on"
 msgstr ""
 
-#: src/views/document/ImageView.vue:19
+#: src/views/document/ImageView.vue:17
 msgid "creator"
 msgstr ""
 
@@ -983,15 +982,15 @@ msgctxt "image_categories"
 msgid "descent"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:60
+#: src/js/waypoint-labels-mixin.js:64
 msgid "Describe access"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:78
+#: src/js/waypoint-labels-mixin.js:82
 msgid "Describe access period"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:75
+#: src/js/waypoint-labels-mixin.js:79
 msgid "Describe access restrictions"
 msgstr ""
 
@@ -1003,7 +1002,7 @@ msgstr ""
 msgid "Describe here the gear needed for this route"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:43
+#: src/js/waypoint-labels-mixin.js:47
 msgid "Describe here the waypoint"
 msgstr ""
 
@@ -1011,23 +1010,23 @@ msgstr ""
 msgid "Describe historical information about the route (date, names..) here"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:71
+#: src/js/waypoint-labels-mixin.js:75
 msgid "Describe opening hours"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:67
+#: src/js/waypoint-labels-mixin.js:71
 msgid "Describe opening periods"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:57
+#: src/js/waypoint-labels-mixin.js:61
 msgid "Describe pedestrian access"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:53
+#: src/js/waypoint-labels-mixin.js:57
 msgid "Describe pt access"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:46
+#: src/js/waypoint-labels-mixin.js:50
 msgid "Describe road access"
 msgstr ""
 
@@ -1052,6 +1051,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: src/js/waypoint-labels-mixin.js:12
 #: src/translations/fixed_strings_common_js.vue:52
 #: src/views/wiki/edition/BookEditionView.vue:25
 msgid "description"
@@ -1131,13 +1131,13 @@ msgctxt "glacier_ratings"
 msgid "easy"
 msgstr ""
 
-#: src/views/document/RouteView.vue:165
-#: src/views/document/RouteView.vue:174
+#: src/views/document/RouteView.vue:168
+#: src/views/document/RouteView.vue:177
 msgid "easy mountain climbing gear"
 msgstr ""
 
-#: src/views/document/RouteView.vue:161
-#: src/views/document/RouteView.vue:189
+#: src/views/document/RouteView.vue:164
+#: src/views/document/RouteView.vue:192
 msgid "easy snow ice mixed gear"
 msgstr ""
 
@@ -1203,7 +1203,7 @@ msgstr ""
 
 #: src/components/datatable/DocumentsTable.vue:153
 #: src/translations/fixed_strings_common_js.vue:57
-#: src/views/document/OutingView.vue:64
+#: src/views/document/OutingView.vue:66
 #: src/views/document/RouteView.vue:55
 #: src/views/wiki/edition/ImageEditionView.vue:36
 #: src/views/wiki/edition/RouteEditionView.vue:44
@@ -1353,7 +1353,7 @@ msgstr ""
 msgid "exposition_rock_rating"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:31
+#: src/components/image-viewer/ImageInfo.vue:31
 #: src/translations/fixed_strings_common_js.vue:69
 msgid "exposure_time"
 msgstr ""
@@ -1428,12 +1428,12 @@ msgctxt "image_categories"
 msgid "flora"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:32
+#: src/components/image-viewer/ImageInfo.vue:32
 #: src/translations/fixed_strings_common_js.vue:73
 msgid "fnumber"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:33
+#: src/components/image-viewer/ImageInfo.vue:33
 #: src/translations/fixed_strings_common_js.vue:74
 msgid "focal_length"
 msgstr ""
@@ -1619,91 +1619,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:106
+#: src/components/cards/FeedCard.vue:110
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:104
+#: src/components/cards/FeedCard.vue:108
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:105
+#: src/components/cards/FeedCard.vue:109
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:107
+#: src/components/cards/FeedCard.vue:111
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:108
+#: src/components/cards/FeedCard.vue:112
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:109
+#: src/components/cards/FeedCard.vue:113
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:110
+#: src/components/cards/FeedCard.vue:114
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:111
+#: src/components/cards/FeedCard.vue:115
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:112
+#: src/components/cards/FeedCard.vue:116
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:113
+#: src/components/cards/FeedCard.vue:117
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:114
+#: src/components/cards/FeedCard.vue:118
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:115
+#: src/components/cards/FeedCard.vue:119
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:116
+#: src/components/cards/FeedCard.vue:120
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:117
+#: src/components/cards/FeedCard.vue:121
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:118
+#: src/components/cards/FeedCard.vue:122
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:119
+#: src/components/cards/FeedCard.vue:123
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:120
+#: src/components/cards/FeedCard.vue:124
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:121
+#: src/components/cards/FeedCard.vue:125
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:122
+#: src/components/cards/FeedCard.vue:126
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:123
+#: src/components/cards/FeedCard.vue:127
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:124
+#: src/components/cards/FeedCard.vue:128
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:129
 msgid "has updated the xreport"
 msgstr ""
 
@@ -1734,7 +1734,7 @@ msgstr ""
 msgid "height"
 msgstr ""
 
-#: src/views/document/OutingView.vue:72
+#: src/views/document/OutingView.vue:73
 #: src/views/document/RouteView.vue:61
 #: src/views/wiki/edition/OutingEditionView.vue:75
 #: src/views/wiki/edition/RouteEditionView.vue:49
@@ -1748,6 +1748,7 @@ msgstr ""
 
 #: src/components/cards/FeedCard.vue:38
 #: src/components/cards/RouteCard.vue:31
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:7
 #: src/translations/fixed_strings_common_js.vue:87
 msgid "height_diff_difficulties"
 msgstr ""
@@ -1810,7 +1811,7 @@ msgctxt "activities"
 msgid "hiking"
 msgstr ""
 
-#: src/views/document/RouteView.vue:183
+#: src/views/document/RouteView.vue:186
 msgid "hiking gear"
 msgstr ""
 
@@ -1879,7 +1880,7 @@ msgstr ""
 msgid "Ice & mixed"
 msgstr ""
 
-#: src/views/document/RouteView.vue:179
+#: src/views/document/RouteView.vue:182
 msgid "ice and dry climbing gear"
 msgstr ""
 
@@ -1927,7 +1928,7 @@ msgstr ""
 msgid "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing."
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:3
+#: src/components/image-viewer/ImageInfo.vue:3
 msgid "Infos"
 msgstr ""
 
@@ -1972,7 +1973,7 @@ msgstr ""
 msgid "isbn"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:34
+#: src/components/image-viewer/ImageInfo.vue:34
 #: src/translations/fixed_strings_common_js.vue:103
 msgid "iso_speed"
 msgstr ""
@@ -2158,7 +2159,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: src/views/Navigation.vue:132
+#: src/views/Navigation.vue:135
 msgid "Logout"
 msgstr ""
 
@@ -2388,34 +2389,34 @@ msgctxt "climbing_outdoor_types"
 msgid "multi"
 msgstr ""
 
-#: src/views/Navigation.vue:105
+#: src/views/Navigation.vue:108
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:117
+#: src/views/Navigation.vue:120
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:121
+#: src/views/Navigation.vue:124
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:125
+#: src/views/Navigation.vue:128
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:113
+#: src/views/Navigation.vue:116
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:109
+#: src/views/Navigation.vue:112
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:101
+#: src/views/Navigation.vue:104
 msgid "My profile"
 msgstr ""
 
@@ -2625,11 +2626,11 @@ msgctxt "hut_status"
 msgid "open_non_guarded"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:29
+#: src/js/waypoint-labels-mixin.js:33
 msgid "opening_hours"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:25
+#: src/js/waypoint-labels-mixin.js:29
 msgid "opening_periods"
 msgstr ""
 
@@ -2641,6 +2642,7 @@ msgstr ""
 msgid "Ordered list"
 msgstr ""
 
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:13
 #: src/translations/fixed_strings_common_js.vue:128
 msgid "orientations"
 msgstr ""
@@ -2749,7 +2751,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:17
+#: src/js/waypoint-labels-mixin.js:21
 msgid "pedestrian access"
 msgstr ""
 
@@ -2777,7 +2779,7 @@ msgstr ""
 msgid "personal"
 msgstr ""
 
-#: src/views/document/OutingView.vue:100
+#: src/views/document/OutingView.vue:103
 #: src/views/wiki/edition/OutingEditionView.vue:59
 msgid "personal comments"
 msgstr ""
@@ -2945,7 +2947,7 @@ msgctxt "climbing_outdoor_types"
 msgid "psicobloc"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:13
+#: src/js/waypoint-labels-mixin.js:17
 msgid "public transportation access"
 msgstr ""
 
@@ -2965,7 +2967,7 @@ msgstr ""
 msgid "publication_date"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:99
+#: src/views/document/utils/windows/AssociationItems.vue:115
 msgid "Put it back"
 msgstr ""
 
@@ -3050,7 +3052,7 @@ msgstr ""
 msgid "remarks"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:98
+#: src/views/document/utils/windows/AssociationItems.vue:114
 msgid "Remove"
 msgstr ""
 
@@ -3071,7 +3073,7 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:35
+#: src/components/image-viewer/ImageInfo.vue:35
 msgid "resolution"
 msgstr ""
 
@@ -3085,7 +3087,7 @@ msgstr ""
 msgid "Restore this version"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:33
+#: src/js/waypoint-labels-mixin.js:37
 msgid "restricted_access"
 msgstr ""
 
@@ -3118,7 +3120,11 @@ msgstr ""
 msgid "risk_rating"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:20
+#: src/js/waypoint-labels-mixin.js:12
+msgid "road access"
+msgstr ""
+
+#: src/js/waypoint-labels-mixin.js:24
 msgid "road or pedestrian access"
 msgstr ""
 
@@ -3164,6 +3170,7 @@ msgid "route_history"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:159
+#: src/views/document/RouteView.vue:70
 msgid "route_length"
 msgstr ""
 
@@ -3268,7 +3275,7 @@ msgstr ""
 msgid "Sensitive area:"
 msgstr ""
 
-#: src/views/document/RouteView.vue:97
+#: src/views/document/RouteView.vue:100
 msgid "Sensitive areas"
 msgstr ""
 
@@ -3294,7 +3301,7 @@ msgctxt "public_transportation_types"
 msgid "service_on_demand"
 msgstr ""
 
-#: src/components/generics/gallery/ImageInfo.vue:25
+#: src/components/image-viewer/ImageInfo.vue:25
 msgid "Settings"
 msgstr ""
 
@@ -3383,7 +3390,7 @@ msgctxt "activities"
 msgid "skitouring"
 msgstr ""
 
-#: src/views/document/RouteView.vue:157
+#: src/views/document/RouteView.vue:160
 msgid "skitouring gear"
 msgstr ""
 
@@ -3440,7 +3447,7 @@ msgid "slacklining"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:176
-#: src/views/document/RouteView.vue:75
+#: src/views/document/RouteView.vue:78
 msgid "slope"
 msgstr ""
 
@@ -3635,7 +3642,7 @@ msgstr ""
 msgid "The slope must be between 50 and 3000m high"
 msgstr ""
 
-#: src/views/document/RouteView.vue:100
+#: src/views/document/RouteView.vue:103
 msgid "There are sensitive areas on this route. Please refer to the map."
 msgstr ""
 
@@ -3701,7 +3708,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:33
+#: src/views/document/utils/windows/AssociationItems.vue:49
 msgid "Too many results: please refine your search."
 msgstr ""
 
