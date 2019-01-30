@@ -13,10 +13,10 @@
         <map-view
             class="map-view"
             :documents="new Array(document)"
-            :show-biodiv-sports-areas="['r', 'w'].includes(document.type)"
+            :show-protection-areas="['r', 'w'].includes(document.type)"
             :biodiv-sports-activities="document.activities"
             style="height:275px"
-            @has-sensitive-area="$emit('has-sensitive-area')"/>
+            @has-protection-area="$emit('has-protection-area')"/>
 
         <div class="has-text-centered nearby-link">
             <router-link :to="linkToClosestDocuments" class="button is-small is-link" v-translate>

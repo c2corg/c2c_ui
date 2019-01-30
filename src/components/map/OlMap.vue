@@ -96,9 +96,13 @@
 </template>
 
 <script>
+    import proj4 from 'proj4';
+    import {register} from 'ol/proj/proj4';
+
     import ol from '@/js/libs/ol'
     import biodivSports from '@/js/apis/biodiv-sports'
     import photon from '@/js/apis/photon'
+    import respecterCestProteger from '@/js/apis/respecter-cest-proteger'
 
     import { cartoLayers, dataLayers } from './mapLayers.js'
     import {
@@ -141,7 +145,7 @@
                 default: false
             },
 
-            showBiodivSportsAreas: {
+            showProtectionAreas: {
                 type: Boolean,
                 default: false
             },
@@ -187,8 +191,8 @@
                 // slope layers
                 dataLayers: dataLayers,
 
-                // bidiv layer
-                biodivLayer: new ol.layer.Vector({
+                // protection areas layer
+                protectionAreasLayer: new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
 
@@ -300,7 +304,7 @@
                 ],
 
                 layers: this.mapLayers.concat(this.dataLayers).concat([
-                    this.biodivLayer,
+                    this.protectionAreasLayer,
                     this.waypointsLayer,
                     this.documentsLayer
                 ]),
@@ -318,7 +322,7 @@
             })
 
             this.map.on('moveend', this.sendBoundsToUrl)
-            this.map.on('moveend', this.getBiodivSportsAreas)
+            this.map.on('moveend', this.getProtectionAreas)
 
             this.geolocation = new ol.Geolocation({
                 trackingOptions: {
@@ -547,9 +551,7 @@
 
             addBiodivSportsData(response) {
                 const results = response['data']['results']
-                const source = this.biodivLayer.getSource()
-
-                this.hasBiodivsportAreas = false
+                const source = this.protectionAreasLayer.getSource()
 
                 for (let result of results) {
                     let geometry = geoJSONFormat.readGeometry(result['geometry'], {
@@ -580,8 +582,7 @@
                     feature.setStyle(feature.get('normalStyle'))
 
                     source.addFeature(feature)
-                    this.hasBiodivsportAreas = true
-                    this.$emit('has-sensitive-area')
+                    this.$emit('has-protection-area')
                 }
             },
 
@@ -713,18 +714,42 @@
                 this.showRecenterOnPropositions = false
             },
 
-            getBiodivSportsAreas() {
-                if (!this.showBiodivSportsAreas) {
+            getProtectionAreas() {
+                if (!this.showProtectionAreas) {
                     return
                 }
 
-                let extent = this.view.calculateExtent(this.map.getSize() || null)
+                const extent = this.view.calculateExtent(this.map.getSize() || null)
 
                 // get extent in WGS format
-                extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
-                biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current)
+                const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
+                biodivSports.fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
                     .then(this.addBiodivSportsData)
                     // .catch(response => console.warn(response))
+
+                // To use other projections, you have to register the projection in OpenLayers.
+                // This can easily be done with [https://proj4js.org](proj4)
+                //
+                // By default OpenLayers does not know about the EPSG:21781 (Swiss) projection.
+                // So we create a projection instance for EPSG:21781 and pass it to
+                // register to make it available to the library for lookup by its
+                // code.
+                proj4.defs(
+                    'EPSG:21781',
+                    '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 ' +
+                        '+x_0=600000 +y_0=200000 +ellps=bessel ' +
+                        '+towgs84=660.077,13.551,369.344,2.484,1.783,2.939,5.66 +units=m +no_defs'
+                );
+                register(proj4);
+
+
+                const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
+                respecterCestProteger.fetchData(
+                    rcpExtent,
+                    this.map.getSize()[0],
+                    this.map.getSize()[1],
+                    this.$language.current
+                ); // TODO
             },
 
             clearGeometry() {
