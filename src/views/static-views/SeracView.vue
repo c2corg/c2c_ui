@@ -10,20 +10,23 @@
                 SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.
             </p>
 
-            <div>
+            <div class="buttons is-centered">
 
                 <add-link document-type="xreport" class="button is-primary">
                     <fa-icon icon="plus"/>
+                    &nbsp;
                     <span v-translate>Create a new report</span>
                 </add-link>
 
                 <router-link to="xreports" class="button is-link">
                     <fa-icon icon="list"/>
+                    &nbsp;
                     <span v-translate>View xreports</span>
                 </router-link>
 
                 <router-link :to="{name:'article', params:{id:697210}}" class="button is-info">
                     <fa-icon icon="info"/>
+                    &nbsp;
                     <span v-translate>Know more about SERAC</span>
                 </router-link>
             </div>
@@ -31,41 +34,63 @@
 
         <div class="serac-view-part">
             <h2 class="title is-2">
-                Camptocamp, source de données pour les traveaux de recherche
+                {{ $gettext('xreports') | uppercaseFirstLetter }}
             </h2>
 
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
-
-            <h3 class="title is-3">
-                Travaux de recherche 1
-            </h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
-
-            <h3 class="title is-3">
-                Travaux de recherche 2
-            </h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
-
-            <h3 class="title is-3">
-                Travaux de recherche 3
-            </h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.
+            <div class="columns is-multiline is-variable is-mobile">
+                <topoguide-view-small-link
+                    class="column topoguide-view-small-link"
+                    v-for="activity of $options.activities"
+                    :key="activity"
+                    :to="{name:'xreports', query:{act:activity}}">
+                    <span class="is-size-2"><icon-activity :activity="activity" /></span>
+                    <span class="has-text-weight-semibold has-text-black">
+                        {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+                    </span>
+                </topoguide-view-small-link>
+            </div>
         </div>
 
     </div>
 </template>
 
+<script>
+    import constants from '@/js/constants'
+
+    import TopoguideViewSmallLink from './TopoguideViewSmallLink'
+
+    export default {
+        components: {
+            TopoguideViewSmallLink
+        },
+
+        activities: constants.activities
+    }
+
+</script>
+
 <style scoped lang="scss">
 
 .serac-view{
     background-image:url('~@/assets/img/backgrounds/cermygian-crevasse.jpg');
+    background-size: cover;
+    background-position-y: 50%;
     text-align: center;
+    min-height: calc(100vh - 3.5rem);
+    padding:30px;
+    padding-top:60px;
 }
 
-.serac-view .serac-view-part{
+.serac-view-part{
+    margin:auto;
+    max-width: 880px;
     margin-bottom:30px;
-    padding:15px;
-    background-color:rgba(21,50,69,0.2);
+    padding:30px;
+    background-color:rgba(21,50,69,0.4);
+
+    .buttons {
+        margin-top: 2rem;
+    }
 }
 
 .serac-view,
@@ -73,10 +98,6 @@
 .serac-view h2,
 .serac-view h3{
     color:white;
-}
-
-.serac-view .button{
-    margin:10px;
 }
 
 </style>

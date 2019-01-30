@@ -20,11 +20,18 @@
 <style scoped lang="scss">
     @import '@/assets/sass/variables.scss';
 
+    div {
+        min-width:10rem;
+    }
+
     a{
         box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
         display: block;
         height:100px;
         padding:5px;
+        background-color: rgba(256,256,256,0.85);
+        transition: box-shadow 300ms background-color 300ms;
+        color:$primary;
 
         // child positions
         display:flex;
@@ -34,10 +41,8 @@
     }
 
     a:hover{
-        background: $light;
-    }
-
-    a > span{
-        color:$danger;
+        box-shadow: 2px 3px 4px 0 rgba(0,0,0,.14);
+        background-color: rgba(256,256,256,0.95);
+        color:$primary;
     }
 </style>
