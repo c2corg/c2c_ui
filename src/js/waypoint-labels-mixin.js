@@ -1,3 +1,4 @@
+
 /************************************************************************************************************
  Waypoint fields access and access_period has a different signification, depending of waypoint_type
  It implies different label/titles/placeholders. And this logic is needed in both document views and
@@ -9,10 +10,14 @@
 export default {
     computed: {
         descriptionTitle() {
-            return this.document.waypoint_type === 'access' ? this.$gettext('road access') : this.$gettext('description')
+            return this.document && this.document.waypoint_type === 'access' ? this.$gettext('road access') : this.$gettext('description')
         },
 
         accessTitle() {
+            if (!this.document) {
+                return ''
+            }
+
             if (this.document.waypoint_type === 'access') {
                 return this.$gettext('public transportation access')
             }
@@ -25,6 +30,10 @@ export default {
         },
 
         accessPeriodTitle() {
+            if (!this.document) {
+                return ''
+            }
+
             if (['hut', 'gite', 'camp_site'].includes(this.document.waypoint_type)) {
                 return this.$gettext('opening_periods')
             }
