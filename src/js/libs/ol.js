@@ -22,7 +22,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import GPX from 'ol/format/GPX'
 import KML from 'ol/format/KML'
 import { get as getProjection, transform as transformProjection, transformExtent, toLonLat } from 'ol/proj'
-import { getWidth, containsXY, createEmpty, extend } from 'ol/extent'
+import { getWidth, containsXY, createEmpty, extend, buffer } from 'ol/extent'
 
 import { Draw, Modify, Snap, DragAndDrop } from 'ol/interaction'
 
@@ -42,6 +42,7 @@ export default {
     },
 
     extent: {
+        buffer,
         getWidth,
         containsXY,
         createEmpty,

@@ -18,17 +18,19 @@
             style="height:275px"
             @has-sensitive-area="$emit('has-sensitive-area')"/>
 
+        <div class="has-text-centered nearby-link">
+            <router-link :to="linkToClosestDocuments" class="button is-small is-link" v-translate>
+                See other documents nearby
+            </router-link>
+        </div>
+
         <elevation-profile :document="document" v-if="documentType=='outing'"/>
 
         <div v-if="document.geometry && document.geometry.geom_detail" class="buttons is-centered">
-            <button
-                class="button is-primary"
-                @click="downloadGpx">
+            <button class="button is-primary" @click="downloadGpx">
                 GPX
             </button>
-            <button
-                class="button is-primary"
-                @click="downloadKml">
+            <button class="button is-primary" @click="downloadKml">
                 KML
             </button>
         </div>
@@ -42,6 +44,8 @@
     import { requireDocumentProperty } from '@/js/properties-mixins'
     import ElevationProfile from './ElevationProfile'
 
+    const GeoJSON = new ol.format.GeoJSON()
+
     export default {
         components: {
             ElevationProfile
@@ -49,26 +53,37 @@
 
         mixins: [ requireDocumentProperty ],
 
+        computed: {
+            linkToClosestDocuments() {
+                let result = {
+                    name: this.documentType + 's',
+                    query: {
+                        wtyp: this.documentType === 'waypoint' ? this.document.waypoint_type : undefined
+                    }
+                }
+
+                if (this.document.geometry && this.document.geometry.geom) {
+                    const point = GeoJSON.readFeatures(this.document.geometry.geom)[0]
+                    const extent = ol.extent.buffer(point.getGeometry().getExtent(), 10000)
+
+                    result.query.bbox = extent.map(Math.floor).join(',')
+                }
+
+                return result
+            }
+        },
+
         methods: {
             downloadKml() {
-                this.downloadFeatures(
-                    new ol.format.KML(),
-                    '.kml',
-                    'application/vnd.google-earth.kml+xml'
-                )
+                this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml')
             },
 
             downloadGpx() {
-                this.downloadFeatures(
-                    new ol.format.GPX(),
-                    '.gpx',
-                    'application/gpx+xml'
-                )
+                this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml')
             },
 
             downloadFeatures(format, extension, mimetype) {
-                const geojson = new ol.format.GeoJSON()
-                const features = geojson.readFeatures(this.document.geometry.geom_detail)
+                const features = GeoJSON.readFeatures(this.document.geometry.geom_detail)
 
                 if (features.length) {
                     // Export only the current document geometry, not the associated features
@@ -90,7 +105,7 @@
 </script>
 
 <style scoped>
-    .map-view{
+    .map-view, .nearby-link{
         margin-top:1rem;
         margin-bottom:1rem;
     }
