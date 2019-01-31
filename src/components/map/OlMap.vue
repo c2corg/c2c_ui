@@ -92,17 +92,15 @@
         </div>
 
         <biodiv-information ref="BiodivInformation" :data="biodivData"/>
+        <swiss-protection-area-information ref="SwissProtectionAreaInformation" :data="swissProtectionAreaData"/>
     </div>
 </template>
 
 <script>
-    import proj4 from 'proj4';
-    import {register} from 'ol/proj/proj4';
-
     import ol from '@/js/libs/ol'
-    import biodivSports from '@/js/apis/biodiv-sports'
+    import biodivSportsService from '@/js/apis/BiodivSportsService'
     import photon from '@/js/apis/photon'
-    import respecterCestProteger from '@/js/apis/respecter-cest-proteger'
+    import respecterCestProtegerService from '@/js/apis/RespecterCestProtegerService'
 
     import { cartoLayers, dataLayers } from './mapLayers.js'
     import {
@@ -114,6 +112,7 @@
     } from './mapUtils.js'
 
     import BiodivInformation from './BiodivInformation'
+    import SwissProtectionAreaInformation from './SwissProtectionAreaInformation'
 
     const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000]
     const DEFAULT_POINT_ZOOM = 12
@@ -121,7 +120,8 @@
     export default {
 
         components: {
-            BiodivInformation
+            BiodivInformation,
+            SwissProtectionAreaInformation
         },
 
         props: {
@@ -216,6 +216,7 @@
                 showRecenterOnPropositions: false,
 
                 biodivData: {},
+                swissProtectionAreaData: {},
 
                 // on editable mode, there a button reset
                 // we must save initial geometry
@@ -675,32 +676,21 @@
                 } else {
                     // handle clicks on enabled layers TODO
                     if (this.showProtectionAreas && !this.editable) { // FIXME rather check visible layers
-                        // To use other projections, you have to register the projection in OpenLayers.
-                        // This can easily be done with [https://proj4js.org](proj4)
-                        //
-                        // By default OpenLayers does not know about the EPSG:21781 (Swiss) projection.
-                        // So we create a projection instance for EPSG:21781 and pass it to
-                        // register to make it available to the library for lookup by its
-                        // code.
-                        // http://spatialreference.org/ref/epsg/21781/
-                        proj4.defs(
-                            'EPSG:21781',
-                            '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 ' +
-                                '+x_0=600000 +y_0=200000 +ellps=bessel ' +
-                                '+towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
-                        );
-                        register(proj4);
-
                         const extent = this.view.calculateExtent(this.map.getSize() || null)
                         const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
                         const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
-                        respecterCestProteger.identify(
+                        respecterCestProtegerService.identify(
                             position,
                             rcpExtent,
                             this.map.getSize()[0],
                             this.map.getSize()[1],
                             this.$language.current
-                        ).then(response => response.data.results.map(zone => zone.properties.label).forEach(label => console.log(label))); // TODO
+                        ).then(response => {
+                            this.swissProtectionAreaData = response.data.results
+                                .flatMap(zone => zone.properties)[0]
+                                console.log(this.swissProtectionAreaData)
+                            this.$refs.SwissProtectionAreaInformation.show()
+                        })
                     }
                 }
             },
@@ -758,7 +748,7 @@
 
                 // get extent in WGS format
                 const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
-                biodivSports.fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
+                biodivSportsService.fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
                     .then(this.addBiodivSportsData)
                     // .catch(response => console.warn(response))
             },

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-function RespecterCestProteger() {
+function RespecterCestProtegerService() {
     this.axios = axios.create()
 }
 
-RespecterCestProteger.prototype.identify = function(position, extent, mapWidth, mapHeight, language) {
+RespecterCestProtegerService.prototype.identify = function(position, extent, mapWidth, mapHeight, language) {
     if (language !== 'fr' && language !== 'de' && language !== 'it') {
         language = 'en'
     }
@@ -23,4 +23,4 @@ RespecterCestProteger.prototype.identify = function(position, extent, mapWidth, 
     return axios.get(`${baseUrl}?geometry=${geometry}&geometryType=${geometryType}&geometryFormat=${geometryFormat}&layers=${layers}&mapExtent=${mapExtent}&imageDisplay=${imageDisplay}&tolerance=${tolerance}&lang=${language}`)
 }
 
-export default new RespecterCestProteger()
+export default new RespecterCestProtegerService()
