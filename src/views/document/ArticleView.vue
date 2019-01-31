@@ -18,11 +18,10 @@
                     <markdown-section :document="document" :field="fields.description" hide-title/>
                 </div>
 
-                <recent-outings-box :document="document"/>
-
-                <images-box :document="document"/>
-
-                <comments-box :document="document" />
+                <routes-box v-if="!isDraftView" :document="document"/>
+                <recent-outings-box v-if="!isDraftView" :document="document"/>
+                <images-box v-if="!isDraftView" :document="document"/>
+                <comments-box v-if="!isDraftView" :document="document" />
             </div>
         </div>
     </div>
