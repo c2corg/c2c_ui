@@ -5,7 +5,10 @@
             :helper="helper === undefined ? field.helper : helper"
             :is-expanded="isExpanded || field.type=='markdown'"
             :is-narrow="!isExpanded && field.type!='markdown'">
-            <label class="label"> {{ label || $gettext(field.name) }} </label>
+            <label class="label">
+                <marker-helper :name="helper || field.helper" />
+                {{ label || $gettext(field.name) }}
+            </label>
             <form-input
                 ref="input"
                 :document="document"

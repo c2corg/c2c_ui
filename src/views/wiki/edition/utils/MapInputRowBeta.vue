@@ -1,22 +1,38 @@
 <template>
     <div>
-
-        <div class="columns">
-            <div class="column">
+        <div class="columns is-multiline">
+            <div class="column is-6">
                 <div class="field">
                     <label class="label">{{ $gettext('Longitude') }}</label>
                     <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
                 </div>
             </div>
-            <div class="column">
+            <div class="column is-6">
                 <div class="field">
                     <label class="label">{{ $gettext('Latitude') }}</label>
                     <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
                 </div>
             </div>
+            <div class="column is-12">
+                <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
+            </div>
         </div>
 
-        <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
+        <div class="columns" v-if="geomDetailEditable" :label="$gettext('Trace')">
+            <div class="column is-narrow">
+                <div class="control upload-button">
+                    <input ref="gpxFileInput" type="file" @change="uploadGpxTrack" accept=".gpx">
+                    <button class="button is-primary is-small" @click="$refs.gpxFileInput.click()" v-translate>
+                        Upload a GPS track
+                    </button>
+                </div>
+            </div>
+            <div class="column">
+                <em v-translate>
+                    You may also drag, draw or edit the track on the map.
+                </em>
+            </div>
+        </div>
     </div>
 </template>
 

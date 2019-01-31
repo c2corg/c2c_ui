@@ -13,8 +13,8 @@
             :is-loading="!!promise.loading"
             :enable-comment="mode == 'edit'">
             <div class="columns">
-                <form-field :document="document" :field="fields.waypoint_type" :prefix="$gettext('type')" class="is-narrow"/>
-                <form-field :document="document" :field="fields.title" :prefix="$gettext('title')"/>
+                <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
+                <form-field :document="document" :field="fields.title" />
             </div>
 
             <div class="columns">
@@ -29,19 +29,12 @@
                 <form-field
                     :document="document"
                     :field="fields.maps_info"
-                    is-expanded
                     :label="$gettext('maps_references')"
                     :placeholder="$gettext('Add here maps not automatically referenced')"/>
             </div>
 
-            <!-- TODO -->
-            <!-- <quality-input-row :document="document" /> -->
-            <div class="columns">
-                <form-field
-                    :document="document"
-                    :field="fields.quality"
-                    is-expanded/>
-            </div>
+            <quality-input-row-beta :document="document" />
+
         </form-section>
 
         <form-section :title="$gettext('Transport &amp; road or PT access')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
@@ -144,13 +137,12 @@
             </div>
         </form-section>
 
-        <!--
         <form-section :title="$gettext('associations')">
-            <associations-input-row :document="document" :field="fields.articles" />
-            <associations-input-row :document="document" :field="fields.waypoints" />
-            <associations-input-row :document="document" :field="fields.xreports" />
-            <associations-input-row :document="document" :field="fields.books" />
-        </form-section> -->
+            <associations-input-row-beta :document="document" :field="fields.articles" />
+            <associations-input-row-beta :document="document" :field="fields.waypoints" />
+            <associations-input-row-beta :document="document" :field="fields.xreports" />
+            <associations-input-row-beta :document="document" :field="fields.books" />
+        </form-section>
 
     </edition-container-beta>
 </template>

@@ -1,40 +1,41 @@
 <template>
-    <edition-container
+    <edition-container-beta
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
+        :generic-errors="genericErrors">
 
-        <tab-view>
-            <tab-item :title="$gettext('general informations')">
-                <form-input-row :document="document" :field="fields.title" is-expanded/>
-                <form-input-row :document="document" :field="fields.activities"/>
-                <form-input-row :document="document" :field="fields.book_types" />
-                <form-input-row :document="document" :field="fields.author" />
-                <form-input-row :document="document" :field="fields.editor" />
-                <form-input-row :document="document" :field="fields.langs" />
-                <form-input-row :document="document" :field="fields.publication_date" />
-                <form-input-row :document="document" :field="fields.nb_pages" />
-                <form-input-row :document="document" :field="fields.isbn" />
-                <form-input-row :document="document" :field="fields.url" is-expanded />
+        <form-section :title="$gettext('general informations')" expanded @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.title"/>
+                <form-field class="is-12" :document="document" :field="fields.activities"/>
+                <form-field class="is-12" :document="document" :field="fields.book_types" />
+                <form-field class="is-12" :document="document" :field="fields.langs" />
+                <form-field class="is-4" :document="document" :field="fields.author" />
+                <form-field class="is-4" :document="document" :field="fields.editor" />
+                <form-field class="is-4" :document="document" :field="fields.publication_date" />
+                <form-field class="is-4" :document="document" :field="fields.nb_pages" />
+                <form-field class="is-4" :document="document" :field="fields.isbn" />
+                <form-field class="is-4" :document="document" :field="fields.url" />
+            </div>
 
-                <quality-input-row :document="document" />
-            </tab-item>
+            <quality-input-row-beta :document="document" />
 
-            <tab-item :title="$gettext('description')">
-                <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.description"/>
-            </tab-item>
+        </form-section>
 
-            <tab-item :title="$gettext('associations')">
-                <associations-input-row :document="document" :field="fields.articles" />
-                <associations-input-row :document="document" :field="fields.waypoints" />
-                <associations-input-row :document="document" :field="fields.routes" />
-            </tab-item>
+        <form-section :title="$gettext('description')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.summary"/>
+                <form-field class="is-12" :document="document" :field="fields.description"/>
+            </div>
+        </form-section>
 
-        </tab-view>
-    </edition-container>
+        <form-section :title="$gettext('associations')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <associations-input-row-beta :document="document" :field="fields.articles" />
+            <associations-input-row-beta :document="document" :field="fields.waypoints" />
+            <associations-input-row-beta :document="document" :field="fields.routes" />
+        </form-section>
+
+    </edition-container-beta>
 </template>
 
 <script>

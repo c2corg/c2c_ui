@@ -110,6 +110,10 @@
         min-width:15rem;
     }
 
+    .select, select{
+        width: 100%;
+    }
+
     .has-prefix{
         display:flex;
 
