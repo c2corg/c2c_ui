@@ -3,7 +3,7 @@ import ol from '@/js/libs/ol.js'
 
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     return new ol.layer.Tile({
-        title: title,
+        title,
         maxZoom: 19,
         type: 'base',
         visible: false,
@@ -108,15 +108,20 @@ var openTopoMap = new ol.layer.Tile({
     })
 })
 
-var ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS')
-var ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS')
-var swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe')
+const ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS')
+const ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS')
+const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe')
 
-var ign_slopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png')
-var swiss_slopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101')
-
-ign_slopes.setOpacity(0.4)
-swiss_slopes.setOpacity(0.4)
+const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png')
+ignSlopes.setOpacity(0.4)
+const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101')
+swissSlopes.setOpacity(0.4)
+const swissTranquilityZones = createSwisstopoLayer('XXXX', 'ch.bafu.wrz-wildruhezonen_portal', 'png')
+swissTranquilityZones.setProperties({ isProtectionLayer: true }, true)
+swissTranquilityZones.setOpacity(0.4)
+const swissFaunaProtectionZones = createSwisstopoLayer('YYYYY', 'ch.bafu.wrz-jagdbanngebiete_select', 'png')
+swissFaunaProtectionZones.setProperties({ isProtectionLayer: true }, true)
+swissFaunaProtectionZones.setOpacity(0.4)
 
 export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
-export const dataLayers = [ign_slopes, swiss_slopes]
+export const dataLayers = [ignSlopes, swissSlopes, swissTranquilityZones, swissFaunaProtectionZones]
