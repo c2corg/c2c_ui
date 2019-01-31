@@ -1,125 +1,130 @@
 <template>
-    <edition-container
+    <edition-container-beta
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
+        :generic-errors="genericErrors">
 
-        <tab-view>
-            <tab-item :title="$gettext('general informations')">
-                <form-input-row :document="document" :field="fields.title" is-expanded/>
-                <form-input-row :document="document" :field="fields.activities"/>
-                <form-input-row :document="document" :field="fields.climbing_outdoor_type"/>
+        <form-section :title="$gettext('general informations')" expanded @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field :document="document" :field="fields.title"/>
+                <form-field class="is-narrow" :document="document" :field="fields.climbing_outdoor_type"/>
+                <form-field class="is-12" :document="document" :field="fields.activities"/>
+            </div>
 
-                <map-input-row :document="document" geom-detail-editable/>
+            <map-input-row-beta :document="document" geom-detail-editable/>
 
-                <form-input-row
-                    :label="$gettext('main waypoint')"
+            <div class="columns is-multiline">
+                <form-field
+                    class="is-4"
                     :document="document"
                     :field="fields.main_waypoint_id"/>
+            </div>
 
-                <associations-input-row
-                    :label="$gettext('waypoints')"
-                    :document="document"
-                    :field="fields.waypoints" />
+            <associations-input-row-beta :document="document" :field="fields.waypoints" />
+            <associations-input-row-beta :document="document" :field="fields.routes" />
+            <associations-input-row-beta :document="document" :field="fields.articles" />
+            <associations-input-row-beta :document="document" :field="fields.books" />
+            <associations-input-row-beta :document="document" :field="fields.xreports" />
 
-                <associations-input-row :document="document" :field="fields.routes" />
-                <associations-input-row :document="document" :field="fields.articles" />
-                <associations-input-row :document="document" :field="fields.books" />
-                <associations-input-row :document="document" :field="fields.xreports" />
+            <quality-input-row-beta :document="document" />
 
-                <quality-input-row :document="document" />
+        </form-section>
 
-            </tab-item>
+        <form-section :title="$gettext('configuration')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.orientations"/>
+                <form-field class="is-12" :document="document" :field="fields.route_types"/>
+                <form-field class="is-12" :document="document" :field="fields.configuration"/>
+                <form-field class="is-12" :document="document" :field="fields.rock_types"/>
+            </div>
+        </form-section>
 
-            <tab-item :title="$gettext('configuration')">
-                <form-input-row :document="document" :field="fields.orientations"/>
-                <form-input-row :document="document" :field="fields.route_types"/>
-                <form-input-row :document="document" :field="fields.configuration"/>
-                <form-input-row :document="document" :field="fields.rock_types"/>
-            </tab-item>
+        <form-section :title="$gettext('numbers')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.elevation_min" />
+                <form-field class="is-6" :document="document" :field="fields.elevation_max" />
 
-            <tab-item :title="$gettext('numbers')">
-                <form-row :label="$gettext('elevation')" is-grouped helper="1063027#height-diff_up">
-                    <form-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')" />
-                    <form-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')" />
-                </form-row>
+                <form-field class="is-6" :document="document" :field="fields.height_diff_up" />
+                <form-field class="is-6" :document="document" :field="fields.height_diff_down" />
+                <form-field class="is-6" :document="document" :field="fields.height_diff_access"/>
+                <form-field class="is-6" :document="document" :field="fields.height_diff_difficulties"/>
 
-                <form-row :label="$gettext('height_diff')" is-grouped>
-                    <form-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
-                    <form-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>
-                </form-row>
+                <form-field class="is-6" :document="document" :field="fields.difficulties_height"/>
+                <form-field class="is-6" :document="document" :field="fields.route_length"/>
 
-                <form-input-row :document="document" :field="fields.height_diff_access"/>
-                <form-input-row :document="document" :field="fields.height_diff_difficulties"/>
-                <form-input-row :document="document" :field="fields.difficulties_height"/>
-                <form-input-row :document="document" :field="fields.route_length"/>
-                <form-input-row :document="document" :field="fields.mtb_length_asphalt"/>
-                <form-input-row :document="document" :field="fields.mtb_length_trail"/>
-                <form-input-row :document="document" :field="fields.mtb_height_diff_portages"/>
-                <form-input-row :document="document" :field="fields.durations"/>
-                <form-input-row :document="document" :field="fields.lift_access"/>
+            </div>
+            <div class="columns is-multiline">
+                <form-field class="is-4" :document="document" :field="fields.mtb_length_asphalt"/>
+                <form-field class="is-4" :document="document" :field="fields.mtb_length_trail"/>
+                <form-field class="is-4" :document="document" :field="fields.mtb_height_diff_portages"/>
+            </div>
 
-                <form-input-row :document="document" :field="fields.slackline_type"/>
-                <form-input-row :document="document" :field="fields.slackline_height"/>
-            </tab-item>
+            <div class="columns is-multiline">
+                <form-field class="is-4" :document="document" :field="fields.lift_access"/>
+                <form-field class="is-12" :document="document" :field="fields.durations"/>
+            </div>
 
-            <tab-item :title="$gettext('ratings')">
+            <div class="columns is-multiline">
+                <form-field class="is-4" :document="document" :field="fields.slackline_type"/>
+                <form-field class="is-4" :document="document" :field="fields.slackline_height"/>
+            </div>
+        </form-section>
 
-                <form-input-row :document="document" :field="fields.global_rating"/>
+        <form-section :title="$gettext('ratings')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
 
-                <form-row :label="$gettext('Climbing ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.rock_free_rating" :prefix="$gettext('free', 'free climbing rating')"/>
-                    <form-input :document="document" :field="fields.rock_required_rating" :prefix="$gettext('required', 'required climbing rating')"/>
-                    <form-input :document="document" :field="fields.aid_rating" :prefix="$gettext('aid', 'aid climbing rating')"/>
-                </form-row>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.global_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.rock_free_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.rock_required_rating" />
+                <form-field class="is-6" :document="document" :field="fields.aid_rating" />
+            </div>
 
-                <form-input-row :document="document" :field="fields.labande_global_rating"/>
-                <form-input-row :document="document" :field="fields.labande_ski_rating"/>
-                <form-input-row :document="document" :field="fields.ski_rating"/>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.labande_global_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.labande_ski_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.ski_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.ski_exposition" />
+            </div>
 
-                <form-row :label="$gettext('Ice & mixed')" is-grouped>
-                    <form-input :document="document" :field="fields.ice_rating" :prefix="$gettext('ice')" />
-                    <form-input :document="document" :field="fields.mixed_rating" :prefix="$gettext('mixed')"/>
-                </form-row>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.ice_rating" />
+                <form-field class="is-6" :document="document" :field="fields.mixed_rating" />
+                <form-field class="is-6" :document="document" :field="fields.snowshoe_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.via_ferrata_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.hiking_rating"/>
+            </div>
 
-                <form-input-row :document="document" :field="fields.snowshoe_rating"/>
-                <form-input-row :document="document" :field="fields.via_ferrata_rating"/>
-                <form-input-row :document="document" :field="fields.hiking_rating"/>
+            <div class="columns is-multiline">
+                <form-field :document="document" :field="fields.mtb_down_rating"/>
+                <form-field :document="document" :field="fields.mtb_up_rating"/>
+                <form-field :document="document" :field="fields.hiking_mtb_exposition" />
+            </div>
 
-                <form-row :label="$gettext('MTB ratings')" is-grouped>
-                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('descent', 'MTB rating')"/>
-                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('ascent', 'MTB rating')"/>
-                </form-row>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.equipment_rating" />
+                <form-field class="is-6" :document="document" :field="fields.engagement_rating" />
+                <form-field class="is-6" :document="document" :field="fields.exposition_rock_rating" />
+                <form-field class="is-6" :document="document" :field="fields.risk_rating" />
+            </div>
 
-                <form-row :label="$gettext('Exposition & engagement')" is-grouped>
-                    <form-input :document="document" :field="fields.equipment_rating" :prefix="$gettext('equipment')"/>
-                    <form-input :document="document" :field="fields.ski_exposition" :prefix="$gettext('ski_exposition')"/>
-                    <form-input :document="document" :field="fields.engagement_rating" :prefix="$gettext('engagement_rating')"/>
-                    <form-input :document="document" :field="fields.risk_rating" :prefix="$gettext('risk_rating')"/>
-                    <form-input :document="document" :field="fields.exposition_rock_rating" :prefix="$gettext('exposition_rock_rating')"/>
-                    <form-input :document="document" :field="fields.hiking_mtb_exposition" :prefix="$gettext('hiking_mtb_exposition')"/>
-                </form-row>
+            <!-- TODO slope -->
+        </form-section>
 
-                <!-- TODO slope -->
-            </tab-item>
+        <form-section :title="$gettext('Comments')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.summary"/>
+                <form-field class="is-12" :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')"/>
+                <form-field class="is-12" :document="document" :field="fields.description"/>
+                <form-field class="is-12" :document="document" :field="fields.slackline_anchor1"/>
+                <form-field class="is-12" :document="document" :field="fields.slackline_anchor2"/>
+                <form-field class="is-12" :document="document" :field="fields.remarks"/>
+                <form-field class="is-12" :document="document" :field="fields.gear" :placeholder="$gettext('Describe here the gear needed for this route')"/>
+                <form-field class="is-12" :document="document" :field="fields.glacier_gear"/>
+                <form-field class="is-12" :document="document" :field="fields.external_resources" :placeholder="$gettext('Books and websites not already associated to this route')"/>
+            </div>
+        </form-section>
 
-            <tab-item :title="$gettext('Comments')">
-                <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')"/>
-                <form-input-row :document="document" :field="fields.description"/>
-                <form-input-row :document="document" :field="fields.slackline_anchor1"/>
-                <form-input-row :document="document" :field="fields.slackline_anchor2"/>
-                <form-input-row :document="document" :field="fields.remarks"/>
-                <form-input-row :document="document" :field="fields.gear" :placeholder="$gettext('Describe here the gear needed for this route')"/>
-                <form-input-row :document="document" :field="fields.glacier_gear"/>
-                <form-input-row :document="document" :field="fields.external_resources" :placeholder="$gettext('Books and websites not already associated to this route')"/>
-            </tab-item>
-
-        </tab-view>
-
-    </edition-container>
+    </edition-container-beta>
 </template>
 
 <script>

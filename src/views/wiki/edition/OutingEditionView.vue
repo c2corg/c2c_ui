@@ -1,117 +1,158 @@
 <template>
-    <edition-container
+    <edition-container-beta
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
-        <tab-view>
+        :generic-errors="genericErrors">
 
-            <tab-item :title="$gettext('general informations')">
-                <form-row :label="$gettext('Dates')" is-grouped>
-                    <form-input
-                        :document="document"
-                        :field="fields.date_start"
-                        :prefix="$gettext('start')"
-                        :max="showBothDates ? document.date_end : undefined"
-                        @input="handleDates"/>
+        <form-section
+            :title="$gettext('general informations')"
+            :sub-title="$gettext('Main informations about your outing')"
+            @save="save"
+            :is-loading="!!promise.loading"
+            :enable-comment="mode == 'edit'"
+            expanded>
+            <div class="columns">
+                <form-field
+                    class="is-narrow"
+                    :document="document"
+                    :field="fields.date_start"
+                    :max="showBothDates ? document.date_end : undefined"
+                    @input="handleDates"/>
+                <form-field
+                    class="is-narrow"
+                    v-show="showBothDates"
+                    :document="document"
+                    :field="fields.date_end"
+                    :min="showBothDates ? document.date_start : undefined"/>
+                <div class="column is-narrow">
                     <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
-                    <form-input
-                        v-show="showBothDates"
-                        :document="document"
-                        :field="fields.date_end"
-                        :prefix="$gettext('end')"
-                        :min="showBothDates ? document.date_start : undefined"/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.activities"/>
-                <map-input-row :document="document" geom-detail-editable/>
-                <associations-input-row :label="$gettext('routes')" :document="document" :field="fields.routes" />
-                <form-input-row :document="document" :field="fields.title" is-expanded/>
-                <form-input-row :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')"/>
-                <form-input-row :document="document" :field="fields.partial_trip" />
-                <quality-input-row :document="document" />
-            </tab-item>
+                </div>
+            </div>
+            <div class="columns">
+                <form-field :document="document" :field="fields.activities"/>
+            </div>
+            <map-input-row-beta :document="document" geom-detail-editable/>
 
-            <tab-item :title="$gettext('Weather & conditions')">
-                <form-row :label="$gettext('condition_rating')" is-grouped>
-                    <form-input :document="document" :field="fields.condition_rating"/>
-                    <form-input :document="document" :field="fields.glacier_rating" :prefix="$gettext('glacier')"/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.conditions_levels" />
-                <form-input-row :document="document" :field="fields.elevation_up_snow"/>
-                <form-input-row :document="document" :field="fields.elevation_down_snow"/>
-                <form-row :label="$gettext('Snow')" is-grouped>
-                    <form-input :document="document" :field="fields.snow_quantity" :prefix="$gettext('quantity', 'snow')"/>
-                    <form-input :document="document" :field="fields.snow_quality" :prefix="$gettext('quality', 'snow')"/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
-                <form-input-row :document="document" :field="fields.avalanche_signs"/>
-                <form-input-row :document="document" :field="fields.avalanches" />
-                <form-input-row :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')"/>
-            </tab-item>
+            <associations-input-row-beta :label="$gettext('routes')" :document="document" :field="fields.routes" />
 
-            <tab-item :title="$gettext('Personal informations')">
-                <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
-                <form-row :label="$gettext('participants')" is-grouped>
-                    <form-input :document="document" :field="fields.participant_count" :prefix="$gettext('count')"/>
-                    <form-input :document="document" :field="fields.participants" :prefix="$gettext('Without c2c account')" is-expanded/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
-                <form-input-row :document="document" :field="fields.disable_comments" />
-            </tab-item>
+            <div class="columns is-multiline">
+                <form-field :document="document" :field="fields.title" />
+                <form-field class="is-narrow" :document="document" :field="fields.partial_trip" />
+                <form-field class="is-12" :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')"/>
+            </div>
 
-            <tab-item :title="$gettext('Details')">
-                <form-input-row :document="document" :field="fields.frequentation"/>
-                <form-input-row :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')"/>
-                <form-input-row :document="document" :field="fields.elevation_access" />
-                <form-input-row :document="document" :field="fields.access_condition" />
-                <form-input-row :document="document" :field="fields.access_comment" />
-                <form-input-row :document="document" :field="fields.public_transport" />
-                <form-input-row :document="document" :field="fields.lift_status" />
-                <form-input-row :document="document" :field="fields.hut_status" />
-                <form-input-row :document="document" :field="fields.hut_comment" />
+            <quality-input-row-beta :document="document" />
+        </form-section>
 
-                <form-input-row :document="document" :field="fields.length_total" unit="km" :divisor="1000"/>
-                <form-row :label="$gettext('height_diff')" is-grouped>
-                    <form-input :document="document" :field="fields.height_diff_up" :prefix="$gettext('up')"/>
-                    <form-input :document="document" :field="fields.height_diff_down" :prefix="$gettext('down')"/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.height_diff_difficulties"/>
-                <form-row :label="$gettext('Elevation')" is-grouped>
-                    <form-input :document="document" :field="fields.elevation_min" :prefix="$gettext('min')"/>
-                    <form-input :document="document" :field="fields.elevation_max" :prefix="$gettext('max')"/>
-                </form-row>
+        <form-section
+            :title="$gettext('Weather & conditions')"
+            :sub-title="$gettext('Describe the conditions you encountered during your outing')"
+            @save="save"
+            :is-loading="!!promise.loading"
+            :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.condition_rating"/>
+                <form-field class="is-6" :document="document" :field="fields.glacier_rating"/>
+                <form-field class="is-12" :document="document" :field="fields.conditions_levels" />
+            </div>
+            <div class="columns">
+                <form-field :document="document" :field="fields.elevation_up_snow"/>
+                <form-field :document="document" :field="fields.elevation_down_snow"/>
+            </div>
+            <div class="columns">
+                <form-field :document="document" :field="fields.snow_quantity" />
+                <form-field :document="document" :field="fields.snow_quality" />
+            </div>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
+                <form-field class="is-6" :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')"/>
+                <form-field class="is-12" :document="document" :field="fields.avalanche_signs"/>
+                <form-field class="is-12" :document="document" :field="fields.avalanches" />
+            </div>
+        </form-section>
 
-                <form-input-row :document="document" :field="fields.global_rating"/>
-                <form-input-row :document="document" :field="fields.rock_free_rating"/>
-                <form-input-row :document="document" :field="fields.engagement_rating"/>
-                <form-input-row :document="document" :field="fields.equipment_rating"/>
-                <form-row :label="$gettext('ski_rating')" :helper="fields.ski_rating.helper">
-                    <form-input
-                        :document="document"
-                        :field="fields.ski_rating"
-                        :helper="null"
-                        prefix="?"
-                        @click:prefix="showCotometer"/>
-                </form-row>
-                <form-input-row :document="document" :field="fields.labande_global_rating"/>
-                <form-input-row :document="document" :field="fields.snowshoe_rating"/>
-                <form-input-row :document="document" :field="fields.ice_rating"/>
-                <form-input-row :document="document" :field="fields.via_ferrata_rating"/>
-                <form-input-row :document="document" :field="fields.hiking_rating"/>
-                <form-row :label="$gettext('MTB rating')" is-grouped>
-                    <form-input :document="document" :field="fields.mtb_down_rating" :prefix="$gettext('descent', 'MTB rating')"/>
-                    <form-input :document="document" :field="fields.mtb_up_rating" :prefix="$gettext('ascent', 'MTB rating')"/>
-                </form-row>
-            </tab-item>
+        <form-section
+            :title="$gettext('Personal informations')"
+            :sub-title="$gettext('People who were with you, and your feelings about this outing')"
+            @save="save"
+            :is-loading="!!promise.loading"
+            :enable-comment="mode == 'edit'">
+            <associations-input-row-beta :label="$gettext('participants')" :document="document" :field="fields.users" />
+            <div class="columns">
+                <form-field :document="document" :field="fields.participant_count" class="is-narrow"/>
+                <form-field :document="document" :field="fields.participants" :placeholder="$gettext('Without c2c account')"/>
+            </div>
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')"/>
+                <form-field :document="document" :field="fields.disable_comments" />
+            </div>
+        </form-section>
 
-        </tab-view>
+        <form-section
+            :title="$gettext('Details')"
+            :sub-title="$gettext('Detailled figures, like ratings, height differences, frequentation...')"
+            @save="save"
+            :is-loading="!!promise.loading"
+            :enable-comment="mode == 'edit'">
+
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.frequentation"/>
+                <form-field class="is-12" :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')"/>
+
+                <form-field class="is-narrow" :document="document" :field="fields.elevation_access" />
+                <form-field class="is-narrow" :document="document" :field="fields.access_condition" />
+                <form-field class="is-12" :document="document" :field="fields.access_comment" />
+
+                <form-field class="is-4" :document="document" :field="fields.public_transport" />
+                <form-field class="is-4" :document="document" :field="fields.lift_status" />
+                <form-field class="is-4" :document="document" :field="fields.hut_status" />
+                <form-field class="is-12" :document="document" :field="fields.hut_comment" />
+            </div>
+
+            <div class="columns">
+                <form-field :document="document" :field="fields.height_diff_up" />
+                <form-field :document="document" :field="fields.height_diff_down" />
+                <form-field :document="document" :field="fields.height_diff_difficulties"/>
+            </div>
+
+            <div class="columns">
+                <form-field :document="document" :field="fields.length_total" unit="km" :divisor="1000"/>
+                <form-field :document="document" :field="fields.elevation_min" />
+                <form-field :document="document" :field="fields.elevation_max" />
+            </div>
+
+            <div class="columns is-multiline">
+                <form-field class="is-4" :document="document" :field="fields.global_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.rock_free_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.engagement_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.equipment_rating"/>
+
+                <!-- TODO cotometer -->
+                <form-field
+                    class="is-4"
+                    :document="document"
+                    :field="fields.ski_rating"
+                    prefix="?"
+                    @click:prefix="showCotometer"/>
+                <form-field class="is-4" :document="document" :field="fields.labande_global_rating"/>
+
+                <form-field class="is-4" :document="document" :field="fields.ice_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.snowshoe_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.via_ferrata_rating"/>
+                <form-field class="is-4" :document="document" :field="fields.hiking_rating"/>
+            </div>
+
+            <div class="columns">
+                <form-field class="is-4" :document="document" :field="fields.mtb_down_rating" />
+                <form-field class="is-4" :document="document" :field="fields.mtb_up_rating" />
+            </div>
+        </form-section>
 
         <!-- TODO where is that ??
             <form-input-row :document="document" :field="fields.summary"/>
         -->
         <cotometer-window ref="cotometerWindow" v-if="document" v-model="document.ski_rating"/>
-    </edition-container>
+    </edition-container-beta>
 </template>
 
 <script>

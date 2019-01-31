@@ -21,6 +21,8 @@ import FormSection from './FormSection'
 import FormField from './FormField'
 import MapInputRowBeta from './MapInputRowBeta'
 import EditionContainerBeta from './EditionContainerBeta'
+import QualityInputRowBeta from './QualityInputRowBeta'
+import AssociationsInputRowBeta from './AssociationsInputRowBeta'
 
 const geoJSONFormat = new ol.format.GeoJSON()
 const FORM_PROJ = 'EPSG:4326'
@@ -44,7 +46,9 @@ export default {
         FormSection,
         FormField,
         MapInputRowBeta,
-        EditionContainerBeta
+        EditionContainerBeta,
+        QualityInputRowBeta,
+        AssociationsInputRowBeta
     },
 
     data() {

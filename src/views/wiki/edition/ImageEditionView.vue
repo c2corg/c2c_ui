@@ -1,68 +1,62 @@
 <template>
-    <edition-container
+    <edition-container-beta
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
-        <tab-view>
-            <tab-item :title="$gettext('general informations')">
-                <form-input-row :document="document" :field="fields.title" is-expanded/>
-                <form-input-row :document="document" :field="fields.image_type" />
-                <form-input-row :document="document" :field="fields.activities" />
-                <form-input-row :document="document" :field="fields.categories" />
+        :generic-errors="genericErrors">
+        <form-section :title="$gettext('general informations')" expanded @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field :document="document" :field="fields.title"/>
+                <form-field class="is-narrow" :document="document" :field="fields.image_type" />
+                <form-field class="is-12" :document="document" :field="fields.activities" />
+                <form-field class="is-12" :document="document" :field="fields.categories" />
 
                 <!--<form-input-row :document="document" :field="fields.author" />-->
+                <!-- <form-input-row :document="document" :field="fields.date_time" /> -->
 
-                <form-input-row :document="document" :field="fields.date_time" />
+                <form-field class="is-6" :document="document" :field="fields.filename"/>
+                <form-field class="is-6" :document="document" :field="fields.file_size"/>
+                <form-field class="is-6" :document="document" :field="fields.height"/>
+                <form-field class="is-6" :document="document" :field="fields.width"/>
+            </div>
 
-                <form-row :label="$gettext('File')" is-grouped>
-                    <form-input :document="document" :field="fields.filename" :prefix="$gettext('name')"/>
-                    <form-input :document="document" :field="fields.file_size" :prefix="$gettext('file_size')"/>
-                </form-row>
+            <quality-input-row-beta :document="document" />
 
-                <form-row is-grouped>
-                    <form-input :document="document" :field="fields.height" :prefix="$gettext('height')"/>
-                    <form-input :document="document" :field="fields.width" :prefix="$gettext('width')"/>
-                </form-row>
+        </form-section>
 
-                <quality-input-row :document="document" />
+        <form-section :title="$gettext('geolocation')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
 
-            </tab-item>
+            <div class="columns is-multiline">
+                <form-field class="is-6" :document="document" :field="fields.elevation"/>
+            </div>
 
-            <tab-item :title="$gettext('geolocation')">
+            <map-input-row-beta :document="document" />
+        </form-section>
 
-                <form-row :label="$gettext('Terrain')" is-grouped>
-                    <form-input :document="document" :field="fields.elevation" :prefix="$gettext('elevation')"/>
-                    <input-simple type="number" :prefix="$gettext('Longitude')" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
-                    <input-simple type="number" :prefix="$gettext('Latitude')" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
-                </form-row>
+        <form-section :title="$gettext('camera settings')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-4" :document="document" :field="fields.camera_name" />
+                <form-field class="is-4" :document="document" :field="fields.fnumber" />
+                <form-field class="is-4" :document="document" :field="fields.focal_length" />
+                <form-field class="is-4" :document="document" :field="fields.exposure_time" />
+                <form-field class="is-4" :document="document" :field="fields.iso_speed" />
+            </div>
+        </form-section>
 
-                <map-input-row :document="document" />
-            </tab-item>
+        <form-section :title="$gettext('general informations')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <div class="columns is-multiline">
+                <form-field class="is-12" :document="document" :field="fields.summary"/>
+                <form-field class="is-12" :document="document" :field="fields.description"/>
+            </div>
+        </form-section>
 
-            <tab-item :title="$gettext('camera settings')">
-                <form-input-row :document="document" :field="fields.camera_name" />
-                <form-input-row :document="document" :field="fields.fnumber" />
-                <form-input-row :document="document" :field="fields.focal_length" />
-                <form-input-row :document="document" :field="fields.exposure_time" />
-                <form-input-row :document="document" :field="fields.iso_speed" />
-            </tab-item>
+        <form-section :title="$gettext('associations')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+            <associations-input-row-beta :document="document" :field="fields.articles" />
+            <associations-input-row-beta :document="document" :field="fields.waypoints" />
+            <associations-input-row-beta :document="document" :field="fields.routes" />
+            <associations-input-row-beta :document="document" :field="fields.books" />
+        </form-section>
 
-            <tab-item :title="$gettext('general informations')">
-                <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.description"/>
-            </tab-item>
-
-            <tab-item :title="$gettext('associations')">
-                <associations-input-row :document="document" :field="fields.articles" />
-                <associations-input-row :document="document" :field="fields.waypoints" />
-                <associations-input-row :document="document" :field="fields.routes" />
-                <associations-input-row :document="document" :field="fields.books" />
-            </tab-item>
-
-        </tab-view>
-    </edition-container>
+    </edition-container-beta>
 </template>
 
 <script>
@@ -72,5 +66,4 @@
     export default {
         mixins: [ DocumentEditionViewMixin ]
     }
-
 </script>
