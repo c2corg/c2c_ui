@@ -17,6 +17,11 @@ import QualityInputRow from './QualityInputRow'
 import MapInputRow from './MapInputRow'
 import AssociationsInputRow from './AssociationsInputRow'
 
+import FormSection from './FormSection'
+import FormField from './FormField'
+import MapInputRowBeta from './MapInputRowBeta'
+import EditionContainerBeta from './EditionContainerBeta'
+
 const geoJSONFormat = new ol.format.GeoJSON()
 const FORM_PROJ = 'EPSG:4326'
 const DATA_PROJ = 'EPSG:3857'
@@ -34,8 +39,12 @@ export default {
         FormInput,
         QualityInputRow,
         MapInputRow,
-        AssociationsInputRow
+        AssociationsInputRow,
 
+        FormSection,
+        FormField,
+        MapInputRowBeta,
+        EditionContainerBeta
     },
 
     data() {
