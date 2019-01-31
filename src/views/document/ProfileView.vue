@@ -38,7 +38,7 @@
 
                 </div>
 
-                <map-box :document="document" v-if="document.geometry" />
+                <map-box :document="document" v-if="document.geometry && document.geometry.geom" />
                 <tool-box :document="document" />
 
             </div>
