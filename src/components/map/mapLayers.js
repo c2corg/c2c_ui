@@ -118,10 +118,10 @@ const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-
 swissSlopes.setOpacity(0.4)
 const swissTranquilityZones = createSwisstopoLayer('XXXX', 'ch.bafu.wrz-wildruhezonen_portal', 'png')
 swissTranquilityZones.setProperties({ isProtectionLayer: true }, true)
-swissTranquilityZones.setOpacity(0.4)
+swissTranquilityZones.setOpacity(0.7)
 const swissFaunaProtectionZones = createSwisstopoLayer('YYYYY', 'ch.bafu.wrz-jagdbanngebiete_select', 'png')
 swissFaunaProtectionZones.setProperties({ isProtectionLayer: true }, true)
-swissFaunaProtectionZones.setOpacity(0.4)
+swissFaunaProtectionZones.setOpacity(0.7)
 
 export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
 export const dataLayers = [ignSlopes, swissSlopes, swissTranquilityZones, swissFaunaProtectionZones]

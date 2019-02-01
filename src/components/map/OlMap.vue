@@ -580,11 +580,7 @@
 
                     feature.setId('biodiv_' + (result['id']))
 
-                    feature.set('normalStyle', buildPolygonStyle(result.name, false))
-                    feature.set('highlightedStyle', buildPolygonStyle(
-                        this.$gettext('Sensitive area:') + result.name,
-                        true
-                    ))
+                    feature.set('normalStyle', buildPolygonStyle())
                     feature.setStyle(feature.get('normalStyle'))
 
                     source.addFeature(feature)
@@ -686,9 +682,7 @@
                             this.map.getSize()[1],
                             this.$language.current
                         ).then(response => {
-                            this.swissProtectionAreaData = response.data.results
-                                .flatMap(zone => zone.properties)[0]
-                                console.log(this.swissProtectionAreaData)
+                            this.swissProtectionAreaData = response.data.results[0]
                             this.$refs.SwissProtectionAreaInformation.show()
                         })
                     }

@@ -1,30 +1,37 @@
 <template>
     <modal-window ref="modalWindow">
         <div slot="header" class="has-text-centered">
-            <span v-translate>
-                Sensitive area:
+            <span>
+                {{ type }}
             </span>
             <span>
-                {{ data.label }}
+                {{ data.properties.label }}
             </span>
         </div>
-        <p v-if="protectionStatus">
-            <span v-translate>Protection status:</span>
-            <span>{{ protectionStatus }}</span>
-        </p>
-        <p v-if="data.schutzzeit">
-            <span v-translate>Period of protection:</span>
-            <span>{{ data.schutzzeit }}</span>
-        </p>
-
-
-        <!-- TODO : find a light way to securely show this content -->
-        <p>{{ description }}</p>
+        <table>
+            <tbody>
+                <tr v-if="protectionStatus">
+                    <td v-translate>Protection status</td>
+                    <td>{{ protectionStatus }}</td>
+                </tr>
+                <tr v-if="data.properties.schutzzeit">
+                    <td v-translate>Period of protection</td>
+                    <td>{{ data.properties.schutzzeit }}</td>
+                </tr>
+                <tr v-if="dispositions.length > 0">
+                    <td v-translate>Dispositions</td>
+                    <td>{{ dispositions }}</td>
+                </tr>
+                <tr v-if="additionalInformation.length > 0">
+                    <td v-translate>Additional information</td>
+                    <td>{{ additionalInformation }}</td>
+                </tr>
+            </tbody>
+        </table>
     </modal-window>
 </template>
 
 <script>
-
     export default {
         props: {
             data: {
@@ -34,8 +41,31 @@
         },
 
         computed: {
-            description() {
-                let result = this.data.zusatzinformation || ''
+            type() {
+                switch (this.data.layerBodId) {
+                    // FIXME
+                    case "ch.bafu.wrz-wildruhezonen_portal":
+                        return "Zone de protection:"
+                    case "ch.bafu.wrz-jagdbanngebiete_select":
+                        return "Site de protection de la faune:"
+                    default:
+                        return "Zone sensible:"
+                }
+            },
+            dispositions() {
+                let lang = this.$language.current
+                if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
+                    lang = 'fr'
+                }
+                let result = this.data.properties[`best_${lang}`] || ''
+
+                // very simple html > text interpreter : only html entities
+                result = result.replace(/&eacute;/g, 'é')
+                result = result.replace(/&egrave;/g, 'è')
+                return result
+            },
+            additionalInformation() {
+                let result = this.data.properties.zusatzinformation || ''
 
                 // very simple html > text interpreter : only html entities
                 result = result.replace(/&eacute;/g, 'é')
@@ -47,7 +77,7 @@
                 if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
                     lang = 'fr'
                 }
-                return this.data[`schutzs_${lang}`]
+                return this.data.properties[`schutzs_${lang}`]
             }
         },
 
