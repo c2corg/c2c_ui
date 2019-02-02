@@ -1,31 +1,25 @@
 <template>
     <edition-container
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
-        <tab-view>
-            <tab-item :title="$gettext('general informations')">
-                <form-input-row :document="document" :field="fields.title" is-expanded/>
-                <form-input-row :document="document" :field="fields.article_type" />
-                <form-input-row :document="document" :field="fields.activities"/>
-                <form-input-row :document="document" :field="fields.categories" />
-                <form-input-row :document="document" :field="fields.summary"/>
-                <form-input-row :document="document" :field="fields.description"/>
+        :generic-errors="genericErrors">
+        <div class="columns is-multiline">
+            <form-field :document="document" :field="fields.title" is-expanded/>
+            <form-field class="is-narrow" :document="document" :field="fields.article_type" />
+            <form-field class="is-12" :document="document" :field="fields.activities"/>
+            <form-field class="is-12" :document="document" :field="fields.categories" />
+            <form-field class="is-12" :document="document" :field="fields.summary"/>
+            <form-field class="is-12" :document="document" :field="fields.description"/>
+        </div>
 
-                <quality-input-row :document="document" />
-            </tab-item>
+        <quality-input-row :document="document" />
+        <associations-input-row :document="document" :field="fields.articles" />
+        <associations-input-row :document="document" :field="fields.waypoints" />
+        <associations-input-row :document="document" :field="fields.outings" />
+        <associations-input-row :document="document" :field="fields.routes" />
+        <associations-input-row :document="document" :field="fields.books" />
 
-            <tab-item :title="$gettext('associations')">
-                <associations-input-row :document="document" :field="fields.articles" />
-                <associations-input-row :document="document" :field="fields.waypoints" />
-                <associations-input-row :document="document" :field="fields.outings" />
-                <associations-input-row :document="document" :field="fields.routes" />
-                <associations-input-row :document="document" :field="fields.books" />
-            </tab-item>
-
-        </tab-view>
+        <save-document-row @save="save" :is-loading="!!promise.loading" />
     </edition-container>
 </template>
 
@@ -34,6 +28,7 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin'
 
     export default {
+
         mixins: [ DocumentEditionViewMixin ]
     }
 

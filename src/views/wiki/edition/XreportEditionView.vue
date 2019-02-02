@@ -1,31 +1,31 @@
 <template>
-    <edition-container-beta
+    <edition-container
         :mode="mode"
         :document="document"
         :generic-errors="genericErrors">
 
-        <form-section :title="$gettext('Comments')" expanded @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Comments')" expanded @save="save" :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.title"/>
                 <form-field class="is-12" :document="document" :field="fields.activities"/>
             </div>
 
-            <associations-input-row-beta :document="document" :field="fields.articles" />
-            <associations-input-row-beta :document="document" :field="fields.routes" />
-            <associations-input-row-beta :document="document" :field="fields.outings" />
+            <associations-input-row :document="document" :field="fields.articles" />
+            <associations-input-row :document="document" :field="fields.routes" />
+            <associations-input-row :document="document" :field="fields.outings" />
 
         </form-section>
 
-        <form-section :title="$gettext('Geolocation')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Geolocation')" @save="save" :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-3" :document="document" :field="fields.elevation"/>
             </div>
 
-            <map-input-row-beta :document="document" geom-detail-editable/>
+            <map-input-row :document="document" geom-detail-editable/>
         </form-section>
 
-        <form-section :title="$gettext('general informations')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('general informations')" @save="save" :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-4" :document="document" :field="fields.date" />
                 <form-field class="is-4" :document="document" :field="fields.nb_participants" />
@@ -48,7 +48,7 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.description" :placeholder="$gettext('Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)')"/>
@@ -70,7 +70,7 @@
             </div>
         </form-section>
 
-    </edition-container-beta>
+    </edition-container>
 </template>
 
 <script>
