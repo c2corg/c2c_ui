@@ -1,5 +1,7 @@
 <template>
     <div>
+        <query-item :field="fields.title" class="query-item" hide-label/>
+
         <dropdown-button v-for="category of categorizedFields" :key="category.name"
                          :disabled="category.fields.length===0"
                          class="category-button"
@@ -32,7 +34,6 @@
 
     const categorizedFieldsDefault = {
         General: [
-            'title',
             'activities',
             'article_type',
             'area_type',
@@ -41,7 +42,6 @@
             'event_type',
             'climbing_outdoor_type',
             'route_types',
-            'lang',
             'quality',
             'categories',
             'date_start'
@@ -119,6 +119,7 @@
             'glacier_gear'
         ],
         Miscs: [
+            'lang',
             'frequentation',
             'public_transport',
             //            "lift_access",
@@ -251,6 +252,12 @@
 </script>
 
 <style scoped>
+
+    .query-item{
+        margin-right:1em;
+        display: inline-flex;
+        margin-bottom: 0!important;
+    }
 
     .category-button{
         margin-right:1em;
