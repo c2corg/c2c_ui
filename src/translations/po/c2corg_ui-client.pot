@@ -114,7 +114,6 @@ msgid "accessible_when_wardened"
 msgstr ""
 
 #: src/views/SideMenu.vue:53
-#: src/views/static-views/SeracView.vue:7
 msgid "Accident database"
 msgstr ""
 
@@ -251,6 +250,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:496
 msgctxt "user_categories"
 msgid "amateur"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:44
+msgid "Anonimity and confidentiality"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:13
@@ -861,7 +864,7 @@ msgstr ""
 msgid "Create a new book"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:18
+#: src/views/static-views/SeracView.vue:55
 msgid "Create a new report"
 msgstr ""
 
@@ -1776,6 +1779,10 @@ msgstr ""
 msgid "Home page feed parameters"
 msgstr ""
 
+#: src/views/static-views/SeracView.vue:34
+msgid "How is my testimony used ? How / why is it useful ?"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:539
 msgctxt "weather_station_types"
 msgid "humidity"
@@ -1935,7 +1942,7 @@ msgstr ""
 msgid "kilometers"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:30
+#: src/views/static-views/SeracView.vue:71
 msgid "Know more about SERAC"
 msgstr ""
 
@@ -1988,6 +1995,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:109
 #: src/views/document/OutingView.vue:75
 msgid "length_total"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:10
+msgid "Let's make our feedbacks valuable"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:265
@@ -2376,6 +2387,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:127
 msgid "nb_participants"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:22
+msgid "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event."
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:430
@@ -3209,11 +3224,11 @@ msgctxt "months"
 msgid "sep"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:6
+#: src/views/static-views/SeracView.vue:9
 msgid "SERAC"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:9
+#: src/views/static-views/SeracView.vue:12
 msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
@@ -3530,6 +3545,10 @@ msgctxt "weather_station_types"
 msgid "temperature"
 msgstr ""
 
+#: src/views/static-views/SeracView.vue:37
+msgid "Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means."
+msgstr ""
+
 #: src/views/portals/HomeBanner.vue:4
 msgid "The mountain sports community"
 msgstr ""
@@ -3775,7 +3794,7 @@ msgstr ""
 msgid "View in other lang"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:24
+#: src/views/static-views/SeracView.vue:63
 msgid "View xreports"
 msgstr ""
 
@@ -3897,7 +3916,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:195
 #: src/translations/fixed_strings_manual.vue:18
 #: src/views/static-views/NotFoundView.vue:48
-#: src/views/static-views/SeracView.vue:37
+#: src/views/static-views/SeracView.vue:78
 msgid "xreports"
 msgstr ""
 
@@ -3909,6 +3928,10 @@ msgstr ""
 #: src/components/generics/DocumentField.vue:18
 #: src/components/generics/inputs/InputYesNo.vue:10
 msgid "yes"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:45
+msgid "You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators."
 msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue:31
