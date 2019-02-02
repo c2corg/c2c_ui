@@ -4,25 +4,17 @@ import c2c from '@/js/apis/c2c'
 
 import ol from '@/js/libs/ol.js'
 
-import TabItem from './TabItem'
-import TabView from './TabView'
-
-import EditionContainer from './EditionContainer'
-
 import FormRow from './FormRow'
-import FormInputRow from './FormInputRow'
 import FormInput from './FormInput'
-
-import QualityInputRow from './QualityInputRow'
-import MapInputRow from './MapInputRow'
-import AssociationsInputRow from './AssociationsInputRow'
 
 import FormSection from './FormSection'
 import FormField from './FormField'
-import MapInputRowBeta from './MapInputRowBeta'
-import EditionContainerBeta from './EditionContainerBeta'
-import QualityInputRowBeta from './QualityInputRowBeta'
-import AssociationsInputRowBeta from './AssociationsInputRowBeta'
+import MapInputRow from './MapInputRow'
+import EditionContainer from './EditionContainer'
+import QualityInputRow from './QualityInputRow'
+import AssociationsInputRow from './AssociationsInputRow'
+
+import SaveDocumentRow from './SaveDocumentRow'
 
 const geoJSONFormat = new ol.format.GeoJSON()
 const FORM_PROJ = 'EPSG:4326'
@@ -31,24 +23,17 @@ const DATA_PROJ = 'EPSG:3857'
 export default {
 
     components: {
-        EditionContainer,
-
-        TabView,
-        TabItem,
 
         FormRow,
-        FormInputRow,
-        FormInput,
-        QualityInputRow,
-        MapInputRow,
-        AssociationsInputRow,
 
         FormSection,
         FormField,
-        MapInputRowBeta,
-        EditionContainerBeta,
-        QualityInputRowBeta,
-        AssociationsInputRowBeta
+        FormInput,
+        MapInputRow,
+        EditionContainer,
+        QualityInputRow,
+        AssociationsInputRow,
+        SaveDocumentRow
     },
 
     data() {

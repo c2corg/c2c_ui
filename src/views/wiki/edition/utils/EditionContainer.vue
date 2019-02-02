@@ -1,68 +1,47 @@
 <template>
     <div v-if="document" class="section" :class="{preview: isPreview}">
-        <h1 class="title">
-            <span v-if="mode === 'edit'">
-                <html-header :title="$gettext('Edit a document')"/>
-                <!-- fixed string translations -->
-                <!-- $gettext('Edit in fr') -->
-                <!-- $gettext('Edit in eu') -->
-                <!-- $gettext('Edit in ca') -->
-                <!-- $gettext('Edit in it') -->
-                <!-- $gettext('Edit in de') -->
-                <!-- $gettext('Edit in en') -->
-                <!-- $gettext('Edit in es') -->
-                {{ $gettext('Edit in ' + $route.params.lang) }}
+        <div class="has-edition-width">
+            <h1 class="title is-1">
+                <icon-edit />
+                <span v-if="mode === 'edit'">
+                    <html-header :title="$gettext('Edit a document')"/>
+                    <document-title :document="document"/>
+                </span>
+                <span v-else>
+                    <html-header :title="$documentUtils.getCreationTitle(documentType)"/>
+                    {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+                </span>
+                <span> ({{ $route.params.lang }})</span>
+
+                <button class="button is-size-6 is-pulled-right" @click="isPreview=!isPreview">
+                    <span v-show="isPreview">
+                        <fa-icon icon="edit" />&nbsp;
+                        <span v-translate>Back to edit mode</span>
+                    </span>
+                    <span v-show="!isPreview">
+                        <fa-icon icon="eye" />&nbsp;
+                        <span v-translate>Preview</span>
+                    </span>
+                </button>
+            </h1>
+
+            <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
+                {{ error.name }}
                 :
-                <document-title :document="document"/>
-            </span>
-            <span v-else>
-                <html-header :title="$documentUtils.getCreationTitle(documentType)"/>
-                {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
-            </span>
+                {{ error.description }}
+            </div>
 
-            <button class="button is-size-6" @click="isPreview=!isPreview">
-                <span v-show="isPreview">
-                    <fa-icon icon="edit" />&nbsp;
-                    <span v-translate>Back to edit mode</span>
-                </span>
-                <span v-show="!isPreview">
-                    <fa-icon icon="eye" />&nbsp;
-                    <span v-translate>Preview</span>
-                </span>
-            </button>
-        </h1>
-
-        <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
-            {{ error.name }}
-            :
-            {{ error.description }}
         </div>
 
         <component :is="documentType + '-view'" v-if="isPreview" :draft="document"/>
 
-        <slot v-else>
-            ...
-        </slot>
+        <div v-show="!isPreview" class="has-edition-width">
+            <hr>
 
-        <form-row label="" always-visible is-grouped>
-            <div class="control">
-                <button
-                    class="button is-primary"
-                    :class="{'is-loading':isLoading}"
-                    @click="$emit('save', comment)"
-                    v-translate>
-                    Save
-                </button>
-            </div>
-            <div class="control is-expanded">
-                <input v-model="comment" type="text" class="input" :disabled="mode !== 'edit'" :placeholder="$gettext('comment')">
-            </div>
-            <div class="control">
-                <button class="button is-danger" @click="$router.go(-1)" v-translate>
-                    Cancel
-                </button>
-            </div>
-        </form-row>
+            <slot >
+                ...
+            </slot>
+        </div>
     </div>
 </template>
 
@@ -106,10 +85,6 @@
                 type: Array,
                 required: true
             },
-            isLoading: {
-                type: Boolean,
-                required: true
-            },
             mode: {
                 type: String,
                 required: true
@@ -118,7 +93,6 @@
 
         data() {
             return {
-                comment: '',
                 isPreview: false
             }
         },
@@ -142,8 +116,14 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .preview{
         background: #ffffe0;
+    }
+
+    .has-edition-width{
+        margin:auto;
+        width: 100%;
+        max-width: 840px;
     }
 </style>

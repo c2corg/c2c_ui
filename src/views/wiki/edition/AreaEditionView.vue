@@ -1,16 +1,19 @@
 <template>
     <edition-container
         :mode="mode"
-        :is-loading="!!promise.loading"
         :document="document"
-        :generic-errors="genericErrors"
-        @save="save">
-        <form-input-row :document="document" :field="fields.title"/>
-        <form-input-row :document="document" :field="fields.area_type"/>
+        :generic-errors="genericErrors">
+        <div class="columns">
+            <form-field :document="document" :field="fields.title"/>
+            <form-field class="is-narrow" :document="document" :field="fields.area_type"/>
+        </div>
         <map-input-row v-if="$user.isModerator" :document="document" geom-detail-editable/>
-        <form-input-row :document="document" :field="fields.summary"/>
-        <form-input-row :document="document" :field="fields.description"/>
+        <div class="columns is-multiline">
+            <form-field class="is-12" :document="document" :field="fields.summary"/>
+            <form-field class="is-12" :document="document" :field="fields.description"/>
+        </div>
         <quality-input-row :document="document" />
+        <save-document-row @save="save" :is-loading="!!promise.loading" />
     </edition-container>
 </template>
 
@@ -19,6 +22,7 @@
     import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin.js'
 
     export default {
+
         mixins: [ DocumentEditionViewMixin ],
 
         methods: {

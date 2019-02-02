@@ -13,24 +13,7 @@
         </div>
         <div ref="content" class="section-content section-content-hidden">
             <slot />
-            <div class="columns">
-                <div class="column is-narrow">
-                    <div class="control">
-                        <button
-                            class="button is-primary"
-                            :class="{'is-loading':isLoading}"
-                            @click="$emit('save', comment)"
-                            v-translate>
-                            Save
-                        </button>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="control is-expanded">
-                        <input v-model="comment" type="text" class="input" :disabled="!enableComment" :placeholder="$gettext('comment')">
-                    </div>
-                </div>
-            </div>
+            <save-document-row @save="$emit('save', arguments[0])" :is-loading="isLoading"/>
         </div>
         <hr>
     </div>
@@ -38,7 +21,14 @@
 
 <script>
 
+    import SaveDocumentRow from './SaveDocumentRow'
+
     export default {
+
+        components: {
+            SaveDocumentRow
+        },
+
         props: {
             title: {
                 type: String,
@@ -53,10 +43,6 @@
                 default: false
             },
             isLoading: {
-                type: Boolean,
-                required: true
-            },
-            enableComment: {
                 type: Boolean,
                 required: true
             }

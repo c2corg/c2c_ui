@@ -1,5 +1,5 @@
 <template>
-    <edition-container-beta
+    <edition-container
         :mode="mode"
         :document="document"
         :generic-errors="genericErrors">
@@ -9,7 +9,6 @@
             :sub-title="$gettext('Main informations about your outing')"
             @save="save"
             :is-loading="!!promise.loading"
-            :enable-comment="mode == 'edit'"
             expanded>
             <div class="columns">
                 <form-field
@@ -31,9 +30,9 @@
             <div class="columns">
                 <form-field :document="document" :field="fields.activities"/>
             </div>
-            <map-input-row-beta :document="document" geom-detail-editable/>
+            <map-input-row :document="document" geom-detail-editable/>
 
-            <associations-input-row-beta :label="$gettext('routes')" :document="document" :field="fields.routes" />
+            <associations-input-row :label="$gettext('routes')" :document="document" :field="fields.routes" />
 
             <div class="columns is-multiline">
                 <form-field :document="document" :field="fields.title" />
@@ -41,15 +40,14 @@
                 <form-field class="is-12" :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')"/>
             </div>
 
-            <quality-input-row-beta :document="document" />
+            <quality-input-row :document="document" />
         </form-section>
 
         <form-section
             :title="$gettext('Weather & conditions')"
             :sub-title="$gettext('Describe the conditions you encountered during your outing')"
             @save="save"
-            :is-loading="!!promise.loading"
-            :enable-comment="mode == 'edit'">
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.condition_rating"/>
                 <form-field class="is-6" :document="document" :field="fields.glacier_rating"/>
@@ -75,9 +73,8 @@
             :title="$gettext('Personal informations')"
             :sub-title="$gettext('People who were with you, and your feelings about this outing')"
             @save="save"
-            :is-loading="!!promise.loading"
-            :enable-comment="mode == 'edit'">
-            <associations-input-row-beta :label="$gettext('participants')" :document="document" :field="fields.users" />
+            :is-loading="!!promise.loading">
+            <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
             <div class="columns">
                 <form-field :document="document" :field="fields.participant_count" class="is-narrow"/>
                 <form-field :document="document" :field="fields.participants" :placeholder="$gettext('Without c2c account')"/>
@@ -90,10 +87,9 @@
 
         <form-section
             :title="$gettext('Details')"
-            :sub-title="$gettext('Detailled figures, like ratings, height differences, frequentation...')"
+            :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')"
             @save="save"
-            :is-loading="!!promise.loading"
-            :enable-comment="mode == 'edit'">
+            :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.frequentation"/>
@@ -149,10 +145,10 @@
         </form-section>
 
         <!-- TODO where is that ??
-            <form-input-row :document="document" :field="fields.summary"/>
+            <form-field :document="document" :field="fields.summary"/>
         -->
         <cotometer-window ref="cotometerWindow" v-if="document" v-model="document.ski_rating"/>
-    </edition-container-beta>
+    </edition-container>
 </template>
 
 <script>

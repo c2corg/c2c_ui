@@ -7,7 +7,7 @@
             :is-narrow="!isExpanded && field.type!='markdown'">
             <label class="label">
                 <marker-helper :name="helper || field.helper" />
-                {{ label || $gettext(field.name) }}
+                {{ label || $gettext(field.name) | uppercaseFirstLetter }}
             </label>
             <form-input
                 ref="input"

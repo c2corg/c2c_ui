@@ -1,36 +1,44 @@
 <template>
-    <edition-container-beta
+    <edition-container
         :mode="mode"
         :document="document"
         :generic-errors="genericErrors">
 
-        <form-section :title="$gettext('general informations')" expanded @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section
+            :title="$gettext('general informations')"
+            :sub-title="$gettext('Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).')"
+            @save="save"
+            :is-loading="!!promise.loading" >
+            <div class="columns is-1">
+                <form-field
+                    class="is-narrow"
+                    :label="$gettext('waypoint')"
+                    :document="document"
+                    :field="fields.main_waypoint_id"/>
+                <form-field :document="document" :field="fields.title" />
+            </div>
             <div class="columns is-multiline">
-                <form-field :document="document" :field="fields.title"/>
                 <form-field class="is-narrow" :document="document" :field="fields.climbing_outdoor_type"/>
                 <form-field class="is-12" :document="document" :field="fields.activities"/>
             </div>
 
-            <map-input-row-beta :document="document" geom-detail-editable/>
+            <map-input-row :document="document" geom-detail-editable/>
 
-            <div class="columns is-multiline">
-                <form-field
-                    class="is-4"
-                    :document="document"
-                    :field="fields.main_waypoint_id"/>
-            </div>
+            <associations-input-row :document="document" :field="fields.waypoints" />
+            <associations-input-row :document="document" :field="fields.routes" />
+            <associations-input-row :document="document" :field="fields.articles" />
+            <associations-input-row :document="document" :field="fields.books" />
+            <associations-input-row :document="document" :field="fields.xreports" />
 
-            <associations-input-row-beta :document="document" :field="fields.waypoints" />
-            <associations-input-row-beta :document="document" :field="fields.routes" />
-            <associations-input-row-beta :document="document" :field="fields.articles" />
-            <associations-input-row-beta :document="document" :field="fields.books" />
-            <associations-input-row-beta :document="document" :field="fields.xreports" />
-
-            <quality-input-row-beta :document="document" />
+            <quality-input-row :document="document" />
 
         </form-section>
 
-        <form-section :title="$gettext('configuration')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section
+            :title="$gettext('configuration')"
+            :sub-title="$gettext('Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.orientations"/>
                 <form-field class="is-12" :document="document" :field="fields.route_types"/>
@@ -39,7 +47,11 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('numbers')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section
+            :title="$gettext('numbers')"
+            :sub-title="$gettext('Information about the terrain, like elevations, lengths...')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.elevation_min" />
                 <form-field class="is-6" :document="document" :field="fields.elevation_max" />
@@ -70,7 +82,11 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('ratings')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section
+            :title="$gettext('ratings')"
+            :sub-title="$gettext('Everything about ratings : difficulties, exposition...')"
+            @save="save"
+            :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.global_rating"/>
@@ -110,7 +126,11 @@
             <!-- TODO slope -->
         </form-section>
 
-        <form-section :title="$gettext('Comments')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section
+            :title="$gettext('Comments')"
+            :sub-title="$gettext('This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')"/>
@@ -124,7 +144,7 @@
             </div>
         </form-section>
 
-    </edition-container-beta>
+    </edition-container>
 </template>
 
 <script>

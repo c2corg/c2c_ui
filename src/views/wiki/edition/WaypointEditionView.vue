@@ -1,5 +1,5 @@
 <template>
-    <edition-container-beta
+    <edition-container
         class="edition-container"
         :mode="mode"
         :document="document"
@@ -10,8 +10,7 @@
             sub-title="Waypoint's main properties"
             expanded
             @save="save"
-            :is-loading="!!promise.loading"
-            :enable-comment="mode == 'edit'">
+            :is-loading="!!promise.loading">
             <div class="columns">
                 <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
                 <form-field :document="document" :field="fields.title" />
@@ -23,7 +22,7 @@
                 <form-field class="is-6" :document="document" :field="fields.prominence" />
             </div>
 
-            <map-input-row-beta :document="document" />
+            <map-input-row :document="document" />
 
             <div class="columns">
                 <form-field
@@ -33,11 +32,11 @@
                     :placeholder="$gettext('Add here maps not automatically referenced')"/>
             </div>
 
-            <quality-input-row-beta :document="document" />
+            <quality-input-row :document="document" />
 
         </form-section>
 
-        <form-section :title="$gettext('Transport &amp; road or PT access')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Transport &amp; road or PT access')" @save="save" :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-4" :document="document" :field="fields.snow_clearance_rating" />
                 <form-field class="is-4" :document="document" :field="fields.lift_access" />
@@ -47,7 +46,7 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('Types and styles')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Types and styles')" @save="save" :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.climbing_outdoor_types" />
                 <form-field class="is-12" :document="document" :field="fields.climbing_indoor_types" />
@@ -68,7 +67,7 @@
 
         </form-section>
 
-        <form-section :title="$gettext('Numbers')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Numbers')" @save="save" :is-loading="!!promise.loading">
             <div class="columns">
                 <form-field :document="document" :field="fields.length" />
                 <form-field :document="document" :field="fields.slope" />
@@ -101,7 +100,7 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('ratings')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('ratings')" @save="save" :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.exposition_rating" />
@@ -116,7 +115,7 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading" :enable-comment="mode == 'edit'">
+        <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')"/>
@@ -137,14 +136,13 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('associations')">
-            <associations-input-row-beta :document="document" :field="fields.articles" />
-            <associations-input-row-beta :document="document" :field="fields.waypoints" />
-            <associations-input-row-beta :document="document" :field="fields.xreports" />
-            <associations-input-row-beta :document="document" :field="fields.books" />
+        <form-section :title="$gettext('associations')" @save="save" :is-loading="!!promise.loading">
+            <associations-input-row :document="document" :field="fields.articles" />
+            <associations-input-row :document="document" :field="fields.waypoints" />
+            <associations-input-row :document="document" :field="fields.books" />
         </form-section>
 
-    </edition-container-beta>
+    </edition-container>
 </template>
 
 <script>
