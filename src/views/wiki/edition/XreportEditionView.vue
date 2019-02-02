@@ -4,7 +4,12 @@
         :document="document"
         :generic-errors="genericErrors">
 
-        <form-section :title="$gettext('Comments')" expanded @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('General information')"
+            :sub-title="$gettext('Report title, activity, linked routes or outings.')"
+            expanded
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.title"/>
                 <form-field class="is-12" :document="document" :field="fields.activities"/>
@@ -16,7 +21,11 @@
 
         </form-section>
 
-        <form-section :title="$gettext('Geolocation')" @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('Geolocation')"
+            :sub-title="$gettext('Precise location of the event.')"
+            @save="save"
+            :is-loading="!!promise.loading">
 
             <div class="columns is-multiline">
                 <form-field class="is-3" :document="document" :field="fields.elevation"/>
@@ -25,7 +34,11 @@
             <map-input-row :document="document" geom-detail-editable/>
         </form-section>
 
-        <form-section :title="$gettext('general informations')" @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('Participants and context')"
+            :sub-title="$gettext('Details on participants and event context')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-4" :document="document" :field="fields.date" />
                 <form-field class="is-4" :document="document" :field="fields.nb_participants" />
@@ -48,7 +61,11 @@
             </div>
         </form-section>
 
-        <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('Narration')"
+            :sub-title="$gettext('Open fields to deeply explain the event circumstances.')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.description" :placeholder="$gettext('Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)')"/>

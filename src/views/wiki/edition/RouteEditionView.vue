@@ -7,7 +7,6 @@
         <form-section
             :title="$gettext('general informations')"
             :sub-title="$gettext('Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).')"
-            expanded
             @save="save"
             :is-loading="!!promise.loading" >
             <div class="columns is-1">

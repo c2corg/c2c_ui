@@ -4,7 +4,12 @@
         :document="document"
         :generic-errors="genericErrors">
 
-        <form-section :title="$gettext('general informations')" expanded @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('general informations')"
+            :sub-title="$gettext('Title of the book, author, language and date of publication.')"
+            expanded
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.title"/>
                 <form-field class="is-12" :document="document" :field="fields.activities"/>
@@ -22,14 +27,22 @@
 
         </form-section>
 
-        <form-section :title="$gettext('description')" @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('description')"
+            :sub-title="$gettext('Book content')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.description"/>
             </div>
         </form-section>
 
-        <form-section :title="$gettext('associations')" @save="save" :is-loading="!!promise.loading">
+        <form-section
+            :title="$gettext('associations')"
+            :sub-title="$gettext('Articles, waypoints or routes to be linked.')"
+            @save="save"
+            :is-loading="!!promise.loading">
             <associations-input-row :document="document" :field="fields.articles" />
             <associations-input-row :document="document" :field="fields.waypoints" />
             <associations-input-row :document="document" :field="fields.routes" />

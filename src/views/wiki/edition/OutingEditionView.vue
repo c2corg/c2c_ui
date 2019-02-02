@@ -87,7 +87,7 @@
 
         <form-section
             :title="$gettext('Details')"
-            :sub-title="$gettext('Detailled figures, like ratings, height differences, frequentation...')"
+            :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')"
             @save="save"
             :is-loading="!!promise.loading">
 
