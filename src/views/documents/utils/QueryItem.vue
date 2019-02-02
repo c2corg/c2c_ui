@@ -37,10 +37,10 @@
         </div>
 
         <div v-else-if="field.queryMode==='input'" class="control">
-            <label class="label">
+            <label class="label" v-if="!hideLabel">
                 {{ $gettext(field.name) | uppercaseFirstLetter }}
             </label>
-            <input ref="input" :type="field.type" :value="value" @input="oninput" class="input is-primary">
+            <input ref="input" :type="field.type" :value="value" @input="oninput" class="input is-primary" :placeholder="$gettext(field.name)">
         </div>
 
         <div v-else-if="field.queryMode==='checkbox'" class="control">
@@ -85,6 +85,12 @@
 
         mixins: [ requireFieldProperty, QueryItemMixin ],
 
+        props: {
+            hideLabel: {
+                type: Boolean,
+                default: false
+            }
+        },
         // debug test, do not remove it
         // created(){
         //     if(!this.field.url)
