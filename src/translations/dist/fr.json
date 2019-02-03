@@ -295,6 +295,7 @@
     "collaborative": {
       "image_types": "collaboratif (CC by-sa)"
     },
+    "Collapse": "Replier",
     "comment": "Commentaire",
     "Comments": "Commentaires",
     "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
@@ -468,6 +469,7 @@
     "excellent": {
       "condition_ratings": "excellentes"
     },
+    "Expand": "Déplier",
     "expedition": {
       "route_types": "expédition"
     },

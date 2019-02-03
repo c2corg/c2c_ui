@@ -8,7 +8,9 @@
                 <p><em> {{ subTitle }} </em></p>
             </div>
             <div class="column is-narrow">
-                <button class="button is-info" @click="toggleVisibility">{{ expanded_ ? 'Collapse' : 'Expand' }}</button>
+                <button class="button is-info" @click="toggleVisibility">
+                    {{ expanded_ ? $gettext('Collapse') : $gettext('Expand') }}
+                </button>
             </div>
         </div>
         <div ref="content" class="section-content section-content-hidden">

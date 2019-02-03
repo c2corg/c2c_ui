@@ -744,6 +744,10 @@ msgctxt "image_types"
 msgid "collaborative"
 msgstr ""
 
+#: src/views/wiki/edition/utils/FormSection.vue:12
+msgid "Collapse"
+msgstr ""
+
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:8
 #: src/views/wiki/HistoryView.vue:46
 #: src/views/wiki/WhatsNewView.vue:14
@@ -1275,6 +1279,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:314
 msgctxt "condition_ratings"
 msgid "excellent"
+msgstr ""
+
+#: src/views/wiki/edition/utils/FormSection.vue:12
+msgid "Expand"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:477
