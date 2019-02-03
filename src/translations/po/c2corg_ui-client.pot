@@ -744,6 +744,10 @@ msgctxt "image_types"
 msgid "collaborative"
 msgstr ""
 
+#: src/views/wiki/edition/utils/FormSection.vue:12
+msgid "Collapse"
+msgstr ""
+
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:8
 #: src/views/wiki/HistoryView.vue:46
 #: src/views/wiki/WhatsNewView.vue:14
@@ -1275,6 +1279,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:314
 msgctxt "condition_ratings"
 msgid "excellent"
+msgstr ""
+
+#: src/views/wiki/edition/utils/FormSection.vue:12
+msgid "Expand"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:477
@@ -2391,6 +2399,10 @@ msgstr ""
 
 #: src/views/static-views/SeracView.vue:22
 msgid "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event."
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:20
+msgid "Near-accidents are valuable"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:430
@@ -3567,6 +3579,10 @@ msgstr ""
 
 #: src/views/document/RouteView.vue:103
 msgid "There are sensitive areas on this route. Please refer to the map."
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:26
+msgid "These are positive experiences that reveal usefull risk-management skills."
 msgstr ""
 
 #: src/views/document/utils/boxes/LicenseBox.vue:42
