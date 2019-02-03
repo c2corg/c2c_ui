@@ -24,13 +24,11 @@
 
                 <span>&nbsp;</span>
 
-                <!--
-                <editor-button icon="link" @click="handleLink" :tooltip="$gettext('URL/Link')"/>
-                <editor-button icon="image" @click="handleImage" :tooltip="$gettext('Insert image')"/>
-                <editor-button icon="grin" @click="handleEmoji" :tooltip="$gettext('Insert emoji')"/>
+                <editor-button icon="image" :disabled="preview" @click="handleImage" :tooltip="$gettext('Insert image')"/>
+                <editor-button icon="link" :disabled="preview" @click="handleLink" :tooltip="$gettext('URL/Link')"/>
+                <editor-button icon="grin" :disabled="preview" @click="handleEmoji" :tooltip="$gettext('Insert emoji')"/>
 
                 <span>&nbsp;</span>
-                -->
 
                 <editor-button icon="hashtag" :disabled="preview" @click="handleHashtag" :tooltip="$gettext('Pitch description tag')"/>
                 <editor-button icon="list-ul" :disabled="preview" @click="handleListUl" :tooltip="$gettext('Unordered list')"/>
@@ -296,15 +294,30 @@
             },
 
             handleLink() {
-                // TODO
+                this.selection.set(this.selection.start, this.selection.start)
+                this.selection.setText(this.$gettext('text to display'), '[', '](https://)')
+
+                // give back focus to textarea
+                // event may have given focus to a button
+                this.$refs.textarea.focus()
             },
 
             handleImage() {
-                // TODO
+                this.selection.set(this.selection.start, this.selection.start)
+                this.selection.setText('IMAGE_ID', '\n\n[img=', ' right]Legend[/img]\n\n')
+
+                // give back focus to textarea
+                // event may have given focus to a button
+                this.$refs.textarea.focus()
             },
 
             handleEmoji() {
-                // TODO
+                this.selection.set(this.selection.start, this.selection.start)
+                this.selection.setText('smile', ':', ':')
+
+                // give back focus to textarea
+                // event may have given focus to a button
+                this.$refs.textarea.focus()
             },
 
             handleHashtag() {
