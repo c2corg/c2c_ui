@@ -17,13 +17,13 @@
 
                 <div class="column is-4">
                     <div class="serac-block has-text-light">
-                        <h3 class="title is-3 has-text-light" v-tranlate>Near-accidents are valuable</h3>
+                        <h3 class="title is-3 has-text-light" v-translate>Near-accidents are valuable</h3>
                         <p>
                             <span v-translate>
                                 Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.
                             </span>
                             <br>
-                            <span v-tranlate>
+                            <span v-translate>
                                 These are positive experiences that reveal usefull risk-management skills.
                             </span>
                         </p>

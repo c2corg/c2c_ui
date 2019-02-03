@@ -235,7 +235,6 @@
     "conglomerat": {
       "rock_types": "conglomerat"
     },
-    "Contact": "Contacte",
     "contact": "Contacte",
     "Continue the discussion": "Segueix la discussió",
     "copyright": {
@@ -331,13 +330,6 @@
       "route_configuration_types": "aresta"
     },
     "Edit": "Edita",
-    "Edit in ca": "Edita en català",
-    "Edit in de": "Edita en alemany",
-    "Edit in en": "Edita en anglès",
-    "Edit in es": "Edita en castellà",
-    "Edit in eu": "Edita en euskera",
-    "Edit in fr": "Edita en francès",
-    "Edit in it": "Edita en italià",
     "editor": "Editor",
     "Elevation": "Altitud",
     "elevation": "Altitud",
@@ -360,8 +352,7 @@
       "book_types": "medi ambient"
     },
     "equipment": {
-      "image_categories": "equipament",
-      "$$noContext": "equipament"
+      "image_categories": "equipament"
     },
     "equipment_rating": "Qualitat de l'equipament",
     "equipment_ratings": "Qualitats d'equipament",
@@ -448,8 +439,7 @@
       "waypoint_types": "Hostal"
     },
     "glacier": {
-      "route_configuration_types": "glacera",
-      "$$noContext": "glacera"
+      "route_configuration_types": "glacera"
     },
     "glacier_crampons": {
       "glacier_gear_types": "grampons i material de seguretat en glacera"
@@ -660,7 +650,6 @@
     "magazine": {
       "book_types": "revista"
     },
-    "main waypoint": "Punt de pas principal",
     "Make profile page public": "Fes pública la pàgina de perfil",
     "male": {
       "genders": "home"
@@ -672,7 +661,6 @@
       "months": "març"
     },
     "matress_unstaffed": "matalassos en període no guardat",
-    "max": "màx",
     "may": {
       "months": "maig"
     },
@@ -685,7 +673,6 @@
     "migmatite": {
       "rock_types": "migmatita"
     },
-    "min": "mín",
     "misc": {
       "image_categories": "varis",
       "waypoint_types": "varis"
@@ -934,10 +921,7 @@
     "public_transportation_rating": "Accessibilitat amb transport públic",
     "public_transportation_types": "Tipus de transport públic",
     "publication_date": "Data de publicació",
-    "quality": {
-      "snow": "Qualitat",
-      "$$noContext": "Qualitat"
-    },
+    "quality": "Qualitat",
     "quartzite": {
       "rock_types": "quarsita"
     },
@@ -1204,7 +1188,6 @@
     "traverse": {
       "route_types": "travessa"
     },
-    "type": "Tipus",
     "Types and styles": "Tipus i estils",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Tipus d'assegurança i de proteccions, verificacions entre escaladors, tests d'estabilitat del mantell nivós, tests dels ARVAs, etc.",
     "Unblock account": "Desbloqueja aquest usuari",

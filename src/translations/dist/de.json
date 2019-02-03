@@ -276,7 +276,6 @@
     "conglomerat": {
       "rock_types": "Konglomerat"
     },
-    "Contact": "Kontakt",
     "contact": "Kontakt",
     "Continue the discussion": "Diskussion fortsetzen",
     "copyright": {
@@ -374,13 +373,6 @@
       "route_configuration_types": "Grat"
     },
     "Edit": "Bearbeiten",
-    "Edit in ca": "Auf Katalanisch bearbeiten",
-    "Edit in de": "Auf Deutsch bearbeiten",
-    "Edit in en": "Auf Englisch bearbeiten",
-    "Edit in es": "Auf Spanisch bearbeiten",
-    "Edit in eu": "Auf Baskisch bearbeiten",
-    "Edit in fr": "Auf Französisch bearbeiten",
-    "Edit in it": "Auf Italienisch bearbeiten",
     "editor": "Herausgeber",
     "Elevation": "Höhe",
     "elevation": "Höhe",
@@ -403,8 +395,7 @@
       "book_types": "Umwelt"
     },
     "equipment": {
-      "image_categories": "Ausrüstung",
-      "$$noContext": "Ausrüstung"
+      "image_categories": "Ausrüstung"
     },
     "equipment_rating": "Ausrüstungsqualität",
     "equipment_ratings": "Ausrüstungsqualitäten",
@@ -475,9 +466,6 @@
     "fr": {
       "langs": "französisch"
     },
-    "free": {
-      "free climbing rating": "frei"
-    },
     "frequentation": "Begehungsfrequenz",
     "Fullname": "Name und Vorname",
     "gas_unstaffed": "Gas (nicht bewartet)",
@@ -496,8 +484,7 @@
       "waypoint_types": "Unterkunft"
     },
     "glacier": {
-      "route_configuration_types": "Gletscher",
-      "$$noContext": "Gletscher"
+      "route_configuration_types": "Gletscher"
     },
     "glacier_crampons": {
       "glacier_gear_types": "Steigeisen + Gletscherausrüstung"
@@ -606,7 +593,6 @@
     "hut_warden": {
       "user_categories": "Hüttenwirt"
     },
-    "ice": "Eis",
     "ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "ice_climbing": {
       "activities": "Eisklettern"
@@ -714,7 +700,6 @@
     "magazine": {
       "book_types": "Zeitschrift"
     },
-    "main waypoint": "Hauptwegpunkt",
     "Make profile page public": "Profil öffentlich verfügbar machen",
     "male": {
       "genders": "männlich"
@@ -726,7 +711,6 @@
       "months": "März"
     },
     "matress_unstaffed": "Matratzen (nicht bewartet)",
-    "max": "Max.",
     "may": {
       "months": "Mai"
     },
@@ -739,7 +723,6 @@
     "migmatite": {
       "rock_types": "Migmatite"
     },
-    "min": "Min.",
     "misc": {
       "image_categories": "sonstiges",
       "waypoint_types": "sonstiges"
@@ -773,7 +756,6 @@
     "mountainbike_instructor": {
       "user_categories": "MTB-Lehrer"
     },
-    "MTB rating": "MTB Schwierigkeitsgrade ",
     "mtb_down_rating": "MTB-Schwierigkeitsgrad (Downhill)",
     "mtb_height_diff_portages": "Portagen-Länge",
     "mtb_length_asphalt": "Asphalt-Länge",
@@ -990,10 +972,7 @@
     "public_transportation_rating": "Anbindung an öffentlichen Verkehr",
     "public_transportation_types": "Öffentlicher Verkehr",
     "publication_date": "Veröffentlichung",
-    "quality": {
-      "snow": "Qualität",
-      "$$noContext": "Qualität"
-    },
+    "quality": "Qualität",
     "quartzite": {
       "rock_types": "Quarzit"
     },
@@ -1263,7 +1242,6 @@
     "traverse": {
       "route_types": "Überquerung"
     },
-    "type": "Art",
     "Types and styles": "Art & Stile",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-geräte, usw…",
     "Unblock account": "Konto entsperren",
