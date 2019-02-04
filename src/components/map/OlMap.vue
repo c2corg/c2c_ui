@@ -27,6 +27,11 @@
                                 {{ layer.get('title') }}
                             </div>
                         </td>
+                        <td v-if="showProtectionAreas && !isEditable">
+                            <header v-translate>Protection areas</header>
+                            <input type="checkbox">
+                            <span v-translate>Fauna protection areas</span>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -102,7 +107,7 @@
     import photon from '@/js/apis/photon'
     import respecterCestProtegerService from '@/js/apis/RespecterCestProtegerService'
 
-    import { cartoLayers, dataLayers } from './mapLayers.js'
+    import { cartoLayers, dataLayers, protectionAreasLayers } from './mapLayers.js'
     import {
         getDocumentPointStyle,
         getDocumentLineStyle,
@@ -189,9 +194,12 @@
                 mapLayers: cartoLayers,
 
                 // slope layers
-                dataLayers: dataLayers,
+                dataLayers,
 
-                // protection areas layer
+                // protectiona areas are tiles
+                protectionAreasLayers,
+
+                // protection areas layer as features
                 protectionAreasLayer: new ol.layer.Vector({
                     source: new ol.source.Vector()
                 }),
@@ -216,7 +224,7 @@
                 showRecenterOnPropositions: false,
 
                 biodivData: {},
-                swissProtectionAreaData: {},
+                swissProtectionAreaData: { properties: {} },
 
                 // on editable mode, there a button reset
                 // we must save initial geometry
@@ -304,11 +312,14 @@
                     new ol.control.Attribution()
                 ],
 
-                layers: this.mapLayers.concat(this.dataLayers).concat([
+                layers: [
+                    ...this.mapLayers,
+                    ...this.dataLayers,
+                    ...this.protectionAreasLayers,
                     this.protectionAreasLayer,
                     this.waypointsLayer,
                     this.documentsLayer
-                ]),
+                ],
 
                 view: new ol.View({
                     maxZoom: this.visibleLayer.get('maxZoom')
@@ -325,9 +336,7 @@
             this.map.on('moveend', this.sendBoundsToUrl)
             this.map.on('moveend', this.getProtectionAreas)
             if (this.showProtectionAreas && !this.editable) {
-                this.dataLayers
-                    .filter(layer => layer.getProperties().isProtectionLayer)
-                    .forEach(layer => layer.setVisible(true));
+                this.protectionAreasLayers.forEach(layer => layer.setVisible(true))
             }
 
             this.geolocation = new ol.Geolocation({
@@ -681,9 +690,11 @@
                             this.map.getSize()[0],
                             this.map.getSize()[1],
                             this.$language.current
-                        ).then(response => {
-                            this.swissProtectionAreaData = response.data.results[0]
-                            this.$refs.SwissProtectionAreaInformation.show()
+                        ).then(({ data }) => {
+                            if (data.results && data.results.length > 0) {
+                                this.swissProtectionAreaData = data.results[0]
+                                this.$refs.SwissProtectionAreaInformation.show()
+                            }
                         })
                     }
                 }

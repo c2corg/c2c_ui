@@ -36,7 +36,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
         matrixIds: matrixIds
     })
 
-    var source = new ol.source.WMTS({
+    const source = new ol.source.WMTS({
         url: '//wxs.ign.fr/' + config.ignApiKey + '/wmts',
         layer: layer,
         matrixSet: 'PM',
@@ -52,7 +52,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     })
 
     return new ol.layer.Tile({
-        title: title,
+        title,
         type: 'base',
         maxZoom: 19,
         visible: false,
@@ -60,7 +60,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     })
 }
 
-var esri = new ol.layer.Tile({
+const esri = new ol.layer.Tile({
     title: 'Esri',
     maxZoom: 19,
     type: 'base',
@@ -79,13 +79,13 @@ var esri = new ol.layer.Tile({
 })
 
 /*
-var openStreetMap = new ol.layer.Tile({
+const openStreetMap = new ol.layer.Tile({
     title: 'OpenStreetMap',
     source: new OSM(),
     visible: false,
 }) */
 
-var bingMap = new ol.layer.Tile({
+const bingMap = new ol.layer.Tile({
     title: 'Bing',
     maxZoom: 19,
     source: new ol.source.BingMaps({
@@ -95,7 +95,7 @@ var bingMap = new ol.layer.Tile({
     visible: false
 })
 
-var openTopoMap = new ol.layer.Tile({
+const openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
     type: 'base',
     maxZoom: 14,
@@ -117,11 +117,10 @@ ignSlopes.setOpacity(0.4)
 const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101')
 swissSlopes.setOpacity(0.4)
 const swissTranquilityZones = createSwisstopoLayer('XXXX', 'ch.bafu.wrz-wildruhezonen_portal', 'png')
-swissTranquilityZones.setProperties({ isProtectionLayer: true }, true)
 swissTranquilityZones.setOpacity(0.7)
 const swissFaunaProtectionZones = createSwisstopoLayer('YYYYY', 'ch.bafu.wrz-jagdbanngebiete_select', 'png')
-swissFaunaProtectionZones.setProperties({ isProtectionLayer: true }, true)
 swissFaunaProtectionZones.setOpacity(0.7)
 
 export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
-export const dataLayers = [ignSlopes, swissSlopes, swissTranquilityZones, swissFaunaProtectionZones]
+export const dataLayers = [ignSlopes, swissSlopes]
+export const protectionAreasLayers = [swissTranquilityZones, swissFaunaProtectionZones]

@@ -43,13 +43,13 @@
         computed: {
             type() {
                 switch (this.data.layerBodId) {
-                    // FIXME
-                    case "ch.bafu.wrz-wildruhezonen_portal":
-                        return "Zone de protection:"
-                    case "ch.bafu.wrz-jagdbanngebiete_select":
-                        return "Site de protection de la faune:"
-                    default:
-                        return "Zone sensible:"
+                // FIXME
+                case 'ch.bafu.wrz-wildruhezonen_portal':
+                    return 'Zone de protection:'
+                case 'ch.bafu.wrz-jagdbanngebiete_select':
+                    return 'Site de protection de la faune:'
+                default:
+                    return 'Zone sensible:'
                 }
             },
             dispositions() {
