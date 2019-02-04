@@ -27,9 +27,12 @@
                                 {{ layer.get('title') }}
                             </div>
                         </td>
-                        <td v-if="showProtectionAreas && !isEditable">
+                        <td v-if="showProtectionAreas && !editable">
                             <header v-translate>Protection areas</header>
-                            <input type="checkbox">
+                            <input
+                                type="checkbox"
+                                :checked="protectionAreasVisible"
+                                @click="toggleProtectionAreas">
                             <span v-translate>Fauna protection areas</span>
                         </td>
                     </tr>
@@ -226,6 +229,8 @@
                 biodivData: {},
                 swissProtectionAreaData: { properties: {} },
 
+                protectionAreasVisible: this.showProtectionAreas && !this.editable,
+
                 // on editable mode, there a button reset
                 // we must save initial geometry
                 initialGeometry: null,
@@ -335,7 +340,7 @@
 
             this.map.on('moveend', this.sendBoundsToUrl)
             this.map.on('moveend', this.getProtectionAreas)
-            if (this.showProtectionAreas && !this.editable) {
+            if (this.protectionAreasVisible) {
                 this.protectionAreasLayers.forEach(layer => layer.setVisible(true))
             }
 
@@ -597,6 +602,12 @@
                 }
             },
 
+            toggleProtectionAreas() {
+                this.protectionAreasVisible = !this.protectionAreasVisible
+                this.protectionAreasLayers.forEach(layer => layer.setVisible(!layer.getVisible()))
+                this.protectionAreasLayer.setVisible(!this.protectionAreasLayer.getVisible())
+            },
+
             // If user want's to filter with map, it will send extent to url
             // otherwise, it set bbox url to undefined
             sendBoundsToUrl() {
@@ -680,7 +691,7 @@
                     }
                 } else {
                     // handle clicks on enabled layers TODO
-                    if (this.showProtectionAreas && !this.editable) { // FIXME rather check visible layers
+                    if (this.protectionAreasVisible) {
                         const extent = this.view.calculateExtent(this.map.getSize() || null)
                         const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
                         const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
@@ -745,7 +756,7 @@
             },
 
             getProtectionAreas() {
-                if (!this.showProtectionAreas || this.editable) {
+                if (!this.protectionAreasVisible) {
                     return
                 }
 
