@@ -116,9 +116,9 @@ const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAI
 ignSlopes.setOpacity(0.4)
 const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101')
 swissSlopes.setOpacity(0.4)
-const swissTranquilityZones = createSwisstopoLayer('XXXX', 'ch.bafu.wrz-wildruhezonen_portal', 'png')
+const swissTranquilityZones = createSwisstopoLayer('Swiss tranquility zones', 'ch.bafu.wrz-wildruhezonen_portal', 'png')
 swissTranquilityZones.setOpacity(0.7)
-const swissFaunaProtectionZones = createSwisstopoLayer('YYYYY', 'ch.bafu.wrz-jagdbanngebiete_select', 'png')
+const swissFaunaProtectionZones = createSwisstopoLayer('Swiss fauna protection zones', 'ch.bafu.wrz-jagdbanngebiete_select', 'png')
 swissFaunaProtectionZones.setOpacity(0.7)
 
 export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]

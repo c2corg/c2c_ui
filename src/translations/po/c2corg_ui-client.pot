@@ -228,6 +228,10 @@ msgstr ""
 msgid "Add the first outing"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:26
+msgid "Additional information"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:237
 msgctxt "area_types"
 msgid "admin_limits"
@@ -439,7 +443,7 @@ msgctxt "condition_ratings"
 msgid "awful"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:45
+#: src/components/markdown-editor/MarkdownEditor.vue:43
 msgid "Back to code"
 msgstr ""
 
@@ -634,7 +638,7 @@ msgstr ""
 msgid "children_proof"
 msgstr ""
 
-#: src/components/map/OlMap.vue:89
+#: src/components/map/OlMap.vue:97
 msgid "Clear"
 msgstr ""
 
@@ -1088,6 +1092,10 @@ msgstr ""
 msgid "disable_comments"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:22
+msgid "Dispositions"
+msgstr ""
+
 #: src/views/document/utils/boxes/ElevationProfile.vue:14
 #: src/views/document/utils/boxes/ElevationProfile.vue:75
 msgid "Distance"
@@ -1212,7 +1220,7 @@ msgid "Email"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:22
-#: src/components/markdown-editor/MarkdownEditor.vue:280
+#: src/components/markdown-editor/MarkdownEditor.vue:278
 msgid "emphasized text"
 msgstr ""
 
@@ -1348,6 +1356,10 @@ msgctxt "image_categories"
 msgid "fauna"
 msgstr ""
 
+#: src/components/map/OlMap.vue:36
+msgid "Fauna protection areas"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:396
 msgctxt "months"
 msgid "feb"
@@ -1366,7 +1378,7 @@ msgstr ""
 msgid "filename"
 msgstr ""
 
-#: src/components/map/OlMap.vue:43
+#: src/components/map/OlMap.vue:51
 msgid "Filter on map extent"
 msgstr ""
 
@@ -1667,7 +1679,7 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:284
+#: src/components/markdown-editor/MarkdownEditor.vue:282
 msgid "heading text"
 msgstr ""
 
@@ -1880,11 +1892,11 @@ msgctxt "autonomies"
 msgid "initiator"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:30
+#: src/components/markdown-editor/MarkdownEditor.vue:29
 msgid "Insert emoji"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:29
+#: src/components/markdown-editor/MarkdownEditor.vue:27
 msgid "Insert image"
 msgstr ""
 
@@ -2576,7 +2588,7 @@ msgstr ""
 msgid "or try the following pages:"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:37
+#: src/components/markdown-editor/MarkdownEditor.vue:35
 msgid "Ordered list"
 msgstr ""
 
@@ -2598,7 +2610,7 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:67
+#: src/components/markdown-editor/MarkdownEditor.vue:65
 msgid "Oups! something went wrong..."
 msgstr ""
 
@@ -2709,6 +2721,10 @@ msgstr ""
 msgid "People who were with you, and your feelings about this outing"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:18
+msgid "Period of protection"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:328
 msgctxt "event_types"
 msgid "person_fall"
@@ -2773,7 +2789,7 @@ msgctxt "climbing_indoor_types"
 msgid "pitch"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:35
+#: src/components/markdown-editor/MarkdownEditor.vue:33
 msgid "Pitch description tag"
 msgstr ""
 
@@ -2833,7 +2849,7 @@ msgctxt "weather_station_types"
 msgid "pressure"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:45
+#: src/components/markdown-editor/MarkdownEditor.vue:43
 #: src/views/wiki/edition/utils/EditionContainer.vue:23
 msgid "Preview"
 msgstr ""
@@ -2899,6 +2915,14 @@ msgstr ""
 msgid "protected"
 msgstr ""
 
+#: src/components/map/OlMap.vue:31
+msgid "Protection areas"
+msgstr ""
+
+#: src/components/map/SwissProtectionAreaInformation.vue:14
+msgid "Protection status"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:305
 msgctxt "climbing_outdoor_types"
 msgid "psicobloc"
@@ -2944,7 +2968,7 @@ msgctxt "frequentation_types"
 msgid "quiet"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:39
+#: src/components/markdown-editor/MarkdownEditor.vue:37
 msgid "Quote"
 msgstr ""
 
@@ -2978,11 +3002,11 @@ msgctxt "avalanche_signs"
 msgid "recent_avalanche"
 msgstr ""
 
-#: src/components/map/OlMap.vue:50
+#: src/components/map/OlMap.vue:58
 msgid "Recenter on your current position"
 msgstr ""
 
-#: src/components/map/OlMap.vue:61
+#: src/components/map/OlMap.vue:69
 msgid "Recenter on..."
 msgstr ""
 
@@ -3010,7 +3034,7 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
-#: src/components/map/OlMap.vue:80
+#: src/components/map/OlMap.vue:88
 msgid "Reset geometry"
 msgstr ""
 
@@ -3219,7 +3243,6 @@ msgid "Send reset email"
 msgstr ""
 
 #: src/components/map/BiodivInformation.vue:4
-#: src/components/map/OlMap.vue:577
 msgid "Sensitive area:"
 msgstr ""
 
@@ -3516,7 +3539,7 @@ msgid "stories"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:21
-#: src/components/markdown-editor/MarkdownEditor.vue:276
+#: src/components/markdown-editor/MarkdownEditor.vue:274
 msgid "strong text"
 msgstr ""
 
@@ -3559,6 +3582,10 @@ msgstr ""
 
 #: src/views/static-views/SeracView.vue:37
 msgid "Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means."
+msgstr ""
+
+#: src/components/markdown-editor/MarkdownEditor.vue:298
+msgid "text to display"
 msgstr ""
 
 #: src/views/portals/HomeBanner.vue:4
@@ -3739,12 +3766,12 @@ msgstr ""
 msgid "Unblock account"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:335
-#: src/components/markdown-editor/MarkdownEditor.vue:38
+#: src/components/markdown-editor/MarkdownEditor.vue:348
+#: src/components/markdown-editor/MarkdownEditor.vue:36
 msgid "Unformatted text"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:36
+#: src/components/markdown-editor/MarkdownEditor.vue:34
 msgid "Unordered list"
 msgstr ""
 
