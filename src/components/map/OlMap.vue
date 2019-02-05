@@ -339,7 +339,7 @@
             })
 
             this.map.on('moveend', this.sendBoundsToUrl)
-            this.map.on('moveend', this.getProtectionAreas)
+            this.map.on('moveend', this.getBiodivSportsAreas)
             if (this.protectionAreasVisible) {
                 this.protectionAreasLayers.forEach(layer => layer.setVisible(true))
             }
@@ -690,11 +690,19 @@
                         this.$refs.BiodivInformation.show()
                     }
                 } else {
-                    // handle clicks on enabled layers TODO
+                    // handle clicks on enabled layers
                     if (this.protectionAreasVisible) {
                         const extent = this.view.calculateExtent(this.map.getSize() || null)
-                        const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
-                        const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
+                        const rcpExtent = ol.proj.transformExtent(
+                            extent,
+                            ol.proj.get('EPSG:3857'),
+                            ol.proj.get('EPSG:21781')
+                        )
+                        const position = ol.proj.transform(
+                            event.coordinate,
+                            ol.proj.get('EPSG:3857'),
+                            ol.proj.get('EPSG:21781')
+                        )
                         respecterCestProtegerService.identify(
                             position,
                             rcpExtent,
@@ -755,7 +763,7 @@
                 this.showRecenterOnPropositions = false
             },
 
-            getProtectionAreas() {
+            getBiodivSportsAreas() {
                 if (!this.protectionAreasVisible) {
                     return
                 }
@@ -766,7 +774,6 @@
                 const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'))
                 biodivSportsService.fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
                     .then(this.addBiodivSportsData)
-                    // .catch(response => console.warn(response))
             },
 
             clearGeometry() {
