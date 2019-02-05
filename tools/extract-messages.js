@@ -22,7 +22,6 @@ Supported pattern in .vue file, inside <template /> part :
 
 ******************************************/
 
-
 const fs = require('fs')
 const compiler = require('vue-template-compiler')
 
@@ -31,7 +30,6 @@ const NODETYPE_TEXT = 3
 const template_regex = /(<template>[\s\S]*<\/template>)/
 const gettext_template1 = /\$gettext\('([^']*?)'\)/g
 const gettext_template2 = /\$gettext\('([^']*?)', *'([^']*?)'\)/g
-
 
 /**************************************************************************
   a "Result" is a .pot item (msgctxt/msgid), with every associated meta-data
@@ -62,7 +60,6 @@ function Process() {
 }
 
 Process.prototype.push = function(file, msgctxt, msgid) {
-
     // trim
     msgid = msgid.replace(/^[\r\n\s]*/g, '')
     msgid = msgid.replace(/[\r\n\s]*$/g, '')
@@ -86,7 +83,6 @@ Process.prototype.addVueComponent = function(file, data) {
     this.parseScript(file, data, gettext_template2)
 }
 
-
 Process.prototype.addScript = function(file, data) {
     this.parseScript(file, data, gettext_template1)
     this.parseScript(file, data, gettext_template2)
@@ -97,13 +93,12 @@ Process.prototype.parseScript = function(file, data, regex) {
 
     const lines = data.split("\n")
 
-    for(let i = 0; i<lines.length; i++){
+    for (let i = 0; i < lines.length; i++) {
         while ((msgData = regex.exec(lines[i])) !== null) {
-
             let msgid = msgData[1]
             let msgctxt = msgData[2]
 
-            this.push(`${file}:` + (i+1), msgctxt, msgid)
+            this.push(`${file}:` + (i + 1), msgctxt, msgid)
         }
     }
 }
@@ -113,11 +108,11 @@ Process.prototype.parseTemplate = function(file, data) {
     // let use a trick : we do not use directive argument, so
     // we will modifiy our script by adding v-translate:N
     // where N is the line number
-    data = data.split("\n")
-    for(let i = 0; i<data.length; i++){
-        data[i] = data[i].replace(/v-translate/g, "v-translate:" + (i+1))
+    data = data.split('\n')
+    for (let i = 0; i < data.length; i++) {
+        data[i] = data[i].replace(/v-translate/g, 'v-translate:' + (i + 1))
     }
-    data = data.join("\n")
+    data = data.join('\n')
 
     // get template part
     const template = template_regex.exec(data)
@@ -129,8 +124,8 @@ Process.prototype.parseTemplate = function(file, data) {
 
     const parseTranslateDirective = function(node, directiveMeta) {
         let line = directiveMeta.arg // the trick: arg is the line number
-        let position = file + ":" + line
-        let msgctxt = undefined
+        let position = file + ':' + line
+        let msgctxt
 
         if (node.children.length !== 1) {
             throw new Error(`In ${position}\nNodes with v-translate directive must contains only one child`)
@@ -140,8 +135,8 @@ Process.prototype.parseTemplate = function(file, data) {
             throw new Error(`In ${position}\nInterploation is not yet supported. Please use $gettext`)
         }
 
-        for(let attribute of node.attrsList){
-            if(attribute.name==='translate-context') {
+        for (let attribute of node.attrsList) {
+            if (attribute.name === 'translate-context') {
                 msgctxt = attribute.value
             }
         }
@@ -158,7 +153,6 @@ Process.prototype.parseTemplate = function(file, data) {
     })
 }
 
-
 Process.prototype.compute = function(file_or_dir) {
     if (fs.statSync(file_or_dir).isDirectory()) {
         let files = fs.readdirSync(file_or_dir)
@@ -169,15 +163,13 @@ Process.prototype.compute = function(file_or_dir) {
     } else if (file_or_dir.endsWith('.vue')) {
         let data = fs.readFileSync(file_or_dir, 'utf-8')
         this.addVueComponent(file_or_dir, data)
-
     } else if (file_or_dir.endsWith('.js')) {
         let data = fs.readFileSync(file_or_dir, 'utf-8')
         this.addScript(file_or_dir, data)
     }
 }
 
-Process.prototype.save = function(potFile){
-
+Process.prototype.save = function(potFile) {
     let result = []
 
     for (let key of Object.keys(this.data).sort()) {
@@ -188,7 +180,6 @@ Process.prototype.save = function(potFile){
 }
 
 function main(sourceDir, potFile) {
-
     const process = new Process()
 
     process.compute(sourceDir)
