@@ -100,7 +100,7 @@
     import biodivSports from '@/js/apis/biodiv-sports'
     import photon from '@/js/apis/photon'
 
-    import { cartoLayers, dataLayers } from './mapLayers.js'
+    import { cartoLayers, dataLayers, swissTopoLayers } from './mapLayers.js'
     import {
         getDocumentPointStyle,
         getDocumentLineStyle,
@@ -178,14 +178,23 @@
         },
 
         data() {
+            var cartoLayers_ = cartoLayers
+            var dataLayers_ = dataLayers
+
+            // swiss topo only for logged users
+            if (!this.$user.isLogged) {
+                cartoLayers_ = cartoLayers_.filter(layer => !swissTopoLayers.includes(layer))
+                dataLayers_ = dataLayers.filter(layer => !swissTopoLayers.includes(layer))
+            }
+
             return {
                 map: null,
 
-                // map layers, one of them is visible
-                mapLayers: cartoLayers,
+                // map layers, only one of them is visible
+                mapLayers: cartoLayers_,
 
                 // slope layers
-                dataLayers: dataLayers,
+                dataLayers: dataLayers_,
 
                 // bidiv layer
                 biodivLayer: new ol.layer.Vector({

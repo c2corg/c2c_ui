@@ -120,3 +120,4 @@ swiss_slopes.setOpacity(0.4)
 
 export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo]
 export const dataLayers = [ign_slopes, swiss_slopes]
+export const swissTopoLayers = [swissTopo, swiss_slopes]
