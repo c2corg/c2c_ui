@@ -88,6 +88,9 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 
     // dev bundles are huge, no check
     result.configureWebpack.performance.hints = false
+
+    // add map for debbuging tools
+    result.configureWebpack.devtool = 'source-map'
 } else if (process.env.BUILD_ENV === 'github') {
     // github pages does not support server redirection, can't use pretty urls
     config.routerMode = undefined

@@ -2,13 +2,13 @@
     <edition-container
         :mode="mode"
         :document="document"
-        :generic-errors="genericErrors">
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
 
         <form-section
             :title="$gettext('general informations')"
             :sub-title="$gettext('Main informations about your outing')"
-            @save="save"
-            :is-loading="!!promise.loading"
             expanded>
             <div class="columns">
                 <form-field
@@ -40,14 +40,11 @@
                 <form-field class="is-12" :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')"/>
             </div>
 
-            <quality-input-row :document="document" />
         </form-section>
 
         <form-section
             :title="$gettext('Weather & conditions')"
-            :sub-title="$gettext('Describe the conditions you encountered during your outing')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Describe the conditions you encountered during your outing')">
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.condition_rating"/>
                 <form-field class="is-6" :document="document" :field="fields.glacier_rating"/>
@@ -71,9 +68,7 @@
 
         <form-section
             :title="$gettext('Personal informations')"
-            :sub-title="$gettext('People who were with you, and your feelings about this outing')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('People who were with you, and your feelings about this outing')">
             <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
             <div class="columns">
                 <form-field :document="document" :field="fields.participant_count" class="is-narrow"/>
@@ -87,9 +82,7 @@
 
         <form-section
             :title="$gettext('Details')"
-            :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')">
 
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.frequentation"/>

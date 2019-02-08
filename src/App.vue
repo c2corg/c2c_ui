@@ -112,7 +112,8 @@
     }
 
     .page-content{
-        margin-top:$navbar-height;
+        min-height: 100vh;
+        padding-top:$navbar-height;
         display: flex;
         flex-flow: column;
     }

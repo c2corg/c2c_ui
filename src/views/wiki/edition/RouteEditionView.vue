@@ -2,13 +2,13 @@
     <edition-container
         :mode="mode"
         :document="document"
-        :generic-errors="genericErrors">
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
 
         <form-section
             :title="$gettext('general informations')"
-            :sub-title="$gettext('Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).')"
-            @save="save"
-            :is-loading="!!promise.loading" >
+            :sub-title="$gettext('Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).')" >
             <div class="columns is-1">
                 <form-field
                     class="is-narrow"
@@ -30,15 +30,11 @@
             <associations-input-row :document="document" :field="fields.books" />
             <associations-input-row :document="document" :field="fields.xreports" />
 
-            <quality-input-row :document="document" />
-
         </form-section>
 
         <form-section
             :title="$gettext('configuration')"
-            :sub-title="$gettext('Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).')">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.orientations"/>
                 <form-field class="is-12" :document="document" :field="fields.route_types"/>
@@ -49,9 +45,7 @@
 
         <form-section
             :title="$gettext('numbers')"
-            :sub-title="$gettext('Information about the terrain, like elevations, lengths...')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Information about the terrain, like elevations, lengths...')">
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.elevation_min" />
                 <form-field class="is-6" :document="document" :field="fields.elevation_max" />
@@ -84,9 +78,7 @@
 
         <form-section
             :title="$gettext('ratings')"
-            :sub-title="$gettext('Everything about ratings : difficulties, exposition...')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Everything about ratings : difficulties, exposition...')">
 
             <div class="columns is-multiline">
                 <form-field class="is-6" :document="document" :field="fields.global_rating"/>
@@ -128,9 +120,7 @@
 
         <form-section
             :title="$gettext('Comments')"
-            :sub-title="$gettext('This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.')">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')"/>
