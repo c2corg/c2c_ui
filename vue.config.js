@@ -62,10 +62,6 @@ const config = {
             forum: 'https://forum.camptocamp.org',
             readWrite: false // conservative approach : you have to explicity set it to true
         }
-    },
-    affiz: {
-        id: '323739345f343337315f3232393832',
-        url: '//server1.affiz.net/tracking/ads_display.php'
     }
 }
 
