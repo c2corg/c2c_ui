@@ -32,7 +32,7 @@
 
         methods: {
             getUrl(image) {
-                return imageUrls.getBig(image)
+                return imageUrls.getMedium(image)
             }
         },
 
