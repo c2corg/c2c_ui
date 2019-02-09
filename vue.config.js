@@ -113,6 +113,8 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     throw new Error('Unknown BUILD_ENV')
 }
 
+config.baseUrl = result.baseUrl
+
 result.configureWebpack.plugins.push(
     new BundleAnalyzerPlugin(bundleAnalyzerConfig)
 )
