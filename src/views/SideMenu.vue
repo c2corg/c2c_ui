@@ -11,9 +11,7 @@
         </router-link>
 
         <div class="menu-footer is-size-7">
-            <div class="menu-add">
-                .
-            </div>
+            <advertisement class="menu-add" v-if="windowHeight>=654"/>
 
             <div class="has-text-centered menu-links">
                 <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
@@ -42,7 +40,17 @@
 </template>
 
 <script>
+    import Advertisement from './Advertisement'
+
     export default {
+        components: { Advertisement },
+
+        data() {
+            return {
+                windowHeight: 0
+            }
+        },
+
         computed: {
             // This must be computed, because it needs $gettext() function
             menuItems() {
@@ -53,6 +61,17 @@
                     { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
                     { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
                 ]
+            }
+        },
+
+        mounted() {
+            this.onResize()
+            window.addEventListener('resize', this.onResize)
+        },
+
+        methods: {
+            onResize() {
+                this.windowHeight = window.innerHeight
             }
         }
     }
@@ -101,7 +120,6 @@
         }
 
         .menu-add{
-            background:$grey-lighter;
             height: 320px;
             margin-left: calc((200px - 160px)/2);
             margin-right: calc((200px - 160px)/2);
@@ -120,11 +138,11 @@
         }
     }
 
-    @media screen and (max-height: 645px){
-        .menu-add{
-            display:none!important;
-        }
-    }
+    // @media screen and (max-height: 645px){
+    //     .menu-add{
+    //         display:none!important;
+    //     }
+    // }
 
     @media screen and (max-height: 340px){
         .menu-socials{
