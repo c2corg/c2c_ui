@@ -2,8 +2,6 @@
     <div class="advertisement">
         <iframe
             :src="$options.baseUrl + 'affiz.html'"
-            width="160"
-            height="320"
             frameborder="0"
             scrolling="no" />
 
@@ -36,6 +34,11 @@
         width: 160px;
         height: 320px;
         position: relative;
+
+        iframe {
+            height: 320px;
+            width: 160px;
+        }
 
         .advertisement-fallback{
             display:block;
