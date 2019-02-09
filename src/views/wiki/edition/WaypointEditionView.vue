@@ -3,14 +3,14 @@
         class="edition-container"
         :mode="mode"
         :document="document"
-        :generic-errors="genericErrors">
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
 
         <form-section
             :title="$gettext('general informations')"
             sub-title="Waypoint's main properties"
-            expanded
-            @save="save"
-            :is-loading="!!promise.loading">
+            expanded>
             <div class="columns">
                 <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
                 <form-field :document="document" :field="fields.title" />
@@ -31,8 +31,6 @@
                     :label="$gettext('maps_references')"
                     :placeholder="$gettext('Add here maps not automatically referenced')"/>
             </div>
-
-            <quality-input-row :document="document" />
 
         </form-section>
 

@@ -41,6 +41,9 @@
             <slot >
                 ...
             </slot>
+
+            <save-document-row @save="$emit('save', arguments[0])" :is-loading="isLoading"/>
+            <quality-input-row v-if="!['map', 'profile'].includes(documentType)" :document="document" />
         </div>
     </div>
 </template>
@@ -60,6 +63,9 @@
     import XreportView from '@/views/document/XreportView'
     import ProfileView from '@/views/document/ProfileView'
 
+    import QualityInputRow from './QualityInputRow'
+    import SaveDocumentRow from './SaveDocumentRow'
+
     export default {
 
         components: {
@@ -73,7 +79,10 @@
             ProfileView,
             RouteView,
             WaypointView,
-            XreportView
+            XreportView,
+
+            QualityInputRow,
+            SaveDocumentRow
         },
 
         props: {
@@ -87,6 +96,10 @@
             },
             mode: {
                 type: String,
+                required: true
+            },
+            isLoading: {
+                type: Boolean,
                 required: true
             }
         },
@@ -109,7 +122,6 @@
 
         methods: {
             reset() {
-                this.comment = ''
                 this.isPreview = false
             }
         }

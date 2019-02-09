@@ -1,5 +1,10 @@
 <template>
-    <edition-container :mode="mode" :document="document" :generic-errors="genericErrors">
+    <edition-container
+        :mode="mode"
+        :document="document"
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
         <div class="columns is-multiline">
             <form-field class="is-12" :document="document" :field="fields.activities" />
             <form-field class="is-12" :document="document" :field="fields.categories" />
@@ -8,7 +13,8 @@
         </div>
 
         <map-input-row :document="document" />
-        <save-document-row @save="save" :is-loading="!!promise.loading" />
+
+        <hr>
 
     </edition-container>
 </template>

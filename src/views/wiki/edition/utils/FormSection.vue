@@ -15,7 +15,6 @@
         </div>
         <div ref="content" class="section-content section-content-hidden">
             <slot />
-            <save-document-row @save="$emit('save', arguments[0])" :is-loading="isLoading"/>
         </div>
         <hr>
     </div>
@@ -23,13 +22,7 @@
 
 <script>
 
-    import SaveDocumentRow from './SaveDocumentRow'
-
     export default {
-
-        components: {
-            SaveDocumentRow
-        },
 
         props: {
             title: {
@@ -52,7 +45,6 @@
 
         data() {
             return {
-                comment: '',
                 expanded_: false,
                 style: null,
                 visible: true,

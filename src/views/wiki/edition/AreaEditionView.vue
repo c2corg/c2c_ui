@@ -2,7 +2,9 @@
     <edition-container
         :mode="mode"
         :document="document"
-        :generic-errors="genericErrors">
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
         <div class="columns">
             <form-field :document="document" :field="fields.title"/>
             <form-field class="is-narrow" :document="document" :field="fields.area_type"/>
@@ -12,8 +14,8 @@
             <form-field class="is-12" :document="document" :field="fields.summary"/>
             <form-field class="is-12" :document="document" :field="fields.description"/>
         </div>
-        <quality-input-row :document="document" />
-        <save-document-row @save="save" :is-loading="!!promise.loading" />
+
+        <hr>
     </edition-container>
 </template>
 

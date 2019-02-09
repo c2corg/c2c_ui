@@ -2,14 +2,14 @@
     <edition-container
         :mode="mode"
         :document="document"
-        :generic-errors="genericErrors">
+        :generic-errors="genericErrors"
+        :is-loading="saving"
+        @save="save">
 
         <form-section
             :title="$gettext('general informations')"
             :sub-title="$gettext('Title of the book, author, language and date of publication.')"
-            expanded
-            @save="save"
-            :is-loading="!!promise.loading">
+            expanded>
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.title"/>
                 <form-field class="is-12" :document="document" :field="fields.activities"/>
@@ -23,15 +23,11 @@
                 <form-field class="is-4" :document="document" :field="fields.url" />
             </div>
 
-            <quality-input-row :document="document" />
-
         </form-section>
 
         <form-section
             :title="$gettext('description')"
-            :sub-title="$gettext('Book content')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Book content')">
             <div class="columns is-multiline">
                 <form-field class="is-12" :document="document" :field="fields.summary"/>
                 <form-field class="is-12" :document="document" :field="fields.description"/>
@@ -40,9 +36,7 @@
 
         <form-section
             :title="$gettext('associations')"
-            :sub-title="$gettext('Articles, waypoints or routes to be linked.')"
-            @save="save"
-            :is-loading="!!promise.loading">
+            :sub-title="$gettext('Articles, waypoints or routes to be linked.')">
             <associations-input-row :document="document" :field="fields.articles" />
             <associations-input-row :document="document" :field="fields.waypoints" />
             <associations-input-row :document="document" :field="fields.routes" />

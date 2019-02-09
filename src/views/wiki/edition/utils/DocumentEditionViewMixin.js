@@ -11,10 +11,7 @@ import FormSection from './FormSection'
 import FormField from './FormField'
 import MapInputRow from './MapInputRow'
 import EditionContainer from './EditionContainer'
-import QualityInputRow from './QualityInputRow'
 import AssociationsInputRow from './AssociationsInputRow'
-
-import SaveDocumentRow from './SaveDocumentRow'
 
 const geoJSONFormat = new ol.format.GeoJSON()
 const FORM_PROJ = 'EPSG:4326'
@@ -31,9 +28,7 @@ export default {
         FormInput,
         MapInputRow,
         EditionContainer,
-        QualityInputRow,
-        AssociationsInputRow,
-        SaveDocumentRow
+        AssociationsInputRow
     },
 
     data() {
@@ -41,9 +36,7 @@ export default {
             promise: {},
             fields: null, // keep fields here to set them reactive
             genericErrors: [],
-            comment: '',
-            latitude: null,
-            longitude: null
+            saving: false
         }
     },
 
@@ -186,6 +179,8 @@ export default {
             }
 
             let promise
+
+            this.saving = true
 
             if (this.mode === 'edit') {
                 promise = c2c[this.documentType].save(this.document, comment).then(() => {
