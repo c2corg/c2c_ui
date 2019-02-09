@@ -41,7 +41,7 @@
             </span>
         </card-row>
 
-        <card-row v-if="item.document.areas" slot="row4">
+        <card-row v-if="item.document.areas">
             <card-region-item :document="item.document"/>
         </card-row>
 
