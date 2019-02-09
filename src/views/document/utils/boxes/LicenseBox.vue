@@ -1,6 +1,6 @@
 <template>
     <div class="has-text-centered">
-        <a v-if="license === 'by-sa'" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr"
+        <a v-if="license === 'by-sa'" :href="'https://creativecommons.org/licenses/by-sa/3.0/deed.' + $language.current"
            target="_blank">
             <icon-creative-commons />
             CC
@@ -16,7 +16,7 @@
                 This content is licensed under Creative Commons BY-SA 3.0
             </span>
         </a>
-        <a v-else-if="license=='by-nc-nd'" href="https://creativecommons.org/licenses/by-nc-nd/3.0/deed.fr"
+        <a v-else-if="license=='by-nc-nd'" :href="'https://creativecommons.org/licenses/by-nc-nd/3.0/deed.' + $language.current"
            target="_blank">
             <icon-creative-commons />
             CC
