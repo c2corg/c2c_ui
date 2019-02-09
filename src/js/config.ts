@@ -17,7 +17,6 @@ class Config {
     bingApiKey: string
     isProduction: boolean
     urlsConfigurations: any
-    affiz: any
 
     constructor() {
         const config = CAMPTOCAMP_CONFIG
@@ -27,7 +26,6 @@ class Config {
         this.bingApiKey = config.bingApiKey
         this.isProduction = config.isProduction
         this.urlsConfigurations = config.urlsConfigurations
-        this.affiz = config.affiz
 
         const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) || config.urls.name
 
