@@ -52,7 +52,8 @@ const config = {
             media: 'https://sos.exo.io/c2corg-demov6-active',
             imageBackend: 'https://images.demov6.camptocamp.org',
             forum: 'https://forum.demov6.camptocamp.org',
-            readWrite: true
+            readWrite: true,
+            recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc'
         },
         prod: {
             name: 'prod',
@@ -60,7 +61,8 @@ const config = {
             media: 'https://media.camptocamp.org/c2corg_active',
             imageBackend: 'https://images.camptocamp.org',
             forum: 'https://forum.camptocamp.org',
-            readWrite: false // conservative approach : you have to explicity set it to true
+            readWrite: false, // conservative approach : you have to explicity set it to true
+            recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2'
         }
     }
 }

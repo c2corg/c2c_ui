@@ -56,8 +56,8 @@
                 :label="$gettext('Username')"
                 icon="user"/>
             <form-field
-                name="forumname"
-                v-model="forumname"
+                name="forum_username"
+                v-model="forum_username"
                 type="text"
                 :label="$gettext('Forum username')"
                 icon="comments"/>
@@ -73,9 +73,38 @@
                 type="email"
                 :label="$gettext('Email')"
                 icon="at"/>
+            <div class="field">
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" v-model="termsAgreed">
+                        &nbsp;
+                        <span v-translate>
+                            I have read and agree to the terms of use
+                        </span>
+                        <span> (</span>
+                        <router-link :to="{name:'article', params:{id:106731}}" v-translate>
+                            link
+                        </router-link>
+                        <span>).</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="field">
+                <vue-recaptcha
+                    ref="recaptcha"
+                    :sitekey="$options.recaptchaKey"
+                    @expired="onCaptchaExpired"
+                    @verify="onCaptchaVerify"/>
+            </div>
 
             <div class="buttons is-centered">
-                <button type="submit" class="button is-primary" :class="{'is-loading':promise.loading}" v-translate>
+                <button
+                    type="submit"
+                    class="button is-primary"
+                    :class="{'is-loading':promise.loading}"
+                    :disabled="!termsAgreed || !captcha"
+                    v-translate>
                     Register
                 </button>
                 <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
@@ -159,9 +188,12 @@
 
 <script>
     import c2c from '@/js/apis/c2c'
+    import config from '@/js/config'
 
     import FormField from './utils/FormField'
     import BaseForm from './utils/BaseForm'
+
+    import VueRecaptcha from 'vue-recaptcha'
 
     // possible mode values :
     //
@@ -174,9 +206,12 @@
 
     export default {
 
+        recaptchaKey: config.urls.recaptchaKey,
+
         components: {
             FormField,
-            BaseForm
+            BaseForm,
+            VueRecaptcha
         },
 
         data() {
@@ -186,8 +221,13 @@
                 username: '',
                 password: '',
                 name: '',
-                forumname: '',
+                forum_username: '',
                 email: '',
+                recaptchaAvailable: false,
+                captcha: null,
+
+                termsAgreed: false,
+
                 from: null,
 
                 promise: {}
@@ -214,6 +254,13 @@
             next((vm) => {
                 vm.from = from
             })
+        },
+
+        mounted() {
+            let recaptchaScript = document.createElement('script')
+            recaptchaScript.async = true
+            recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit')
+            document.head.appendChild(recaptchaScript)
         },
 
         methods: {
@@ -255,7 +302,6 @@
             },
 
             signup() {
-                // TODO test that
                 this.promise = c2c.userProfile.register({
                     name: this.name,
                     username: this.username,
@@ -263,8 +309,11 @@
                     password: this.password,
                     email: this.email,
                     lang: this.$language.current,
-                    captcha: this.captcha // TODO
+                    captcha: this.captcha
                 })
+
+                this.captcha = null
+                this.$refs.recaptcha.reset()
             },
 
             resetPassword() {
@@ -277,6 +326,14 @@
 
                 this.promise = c2c.userProfile.validateNewPassword(nonce, password)
                     .then(() => this.$router.push({ name: 'auth' }))
+            },
+
+            onCaptchaExpired() {
+                this.$refs.recaptcha.reset()
+            },
+
+            onCaptchaVerify(captchaKey) {
+                this.captcha = captchaKey
             }
         }
     }
