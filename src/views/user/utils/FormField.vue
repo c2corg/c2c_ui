@@ -4,8 +4,20 @@
             {{ label }}
             <span v-if="required">*</span>
 
+            <!-- $gettext('Required', 'API message') -->
+            <!-- $gettext('Password too short', 'API message') -->
+            <!-- $gettext('Missing captcha', 'API message') -->
+            <!-- $gettext('already used username', 'API message') -->
+            <!-- $gettext('Invalid email address', 'API message') -->
+            <!-- $gettext('Shorter than minimum length 3', 'API message') -->
+            <!-- $gettext('already used forum_username', 'API message') -->
+            <!-- $gettext('Login failed', 'API message') -->
+            <!-- $gettext('No user with this email', 'API message') -->
+
+            <!-- $gettext('please consult the server logs', 'API message') -->
+
             <span class="has-text-danger has-text-weight-bold" v-if="errorMessage">
-                {{ errorMessage }}
+                {{ $gettext(errorMessage, 'API message') }}
             </span>
         </label>
         <div class="control has-icons-left">
