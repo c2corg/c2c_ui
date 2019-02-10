@@ -23,3 +23,12 @@ On <http://localhost:8000>, you will have on-click buttons for all features :
 * `generates-docs` : Generate documentation files
 * `generates-icons` : Generate icons .js files in `/src/assets/font-awesome-custom`
 * `update-c2c-common` : c2c core data has been updated ? keep UI syncronised with them. We will need python 3 for this task
+
+## Editor
+
+I **strongly** recommend the awesome VS code, with this extensions :
+
+* *Vetur*, **the** Vue plugin. Mandatory.
+* *EditorConfig for CS code*, it will set your editor with c2c_ui conventions
+* *ESLint*, what else ?
+* *Debugger for chrome*, it definitly rocks! [doc](https://fr.vuejs.org/v2/cookbook/debugging-in-vscode.html) and also [here](https://github.com/Microsoft/vscode-recipes/tree/master/vuejs-cli) :rocket:
