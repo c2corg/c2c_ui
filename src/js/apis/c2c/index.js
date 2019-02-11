@@ -66,7 +66,7 @@ CamptocampApi.prototype.getRecentChanges = function(params) {
 /**
  * Upload images service
  */
-CamptocampApi.prototype.uploadImage = function(file, onUploadProgress) {
+CamptocampApi.prototype.uploadImage = function(file, onUploadProgress, onSucess, onFailure) {
     const formData = new FormData()
 
     formData.append('file', file)
@@ -81,6 +81,8 @@ CamptocampApi.prototype.uploadImage = function(file, onUploadProgress) {
     /* can't user post_ helper: it's not the API url */
     /* TODO : move this function in another service... */
     return this.axios.post(config.urls.imageBackend + '/upload', formData, requestConfig)
+        .then(onSucess)
+        .catch(onFailure)
 }
 
 CamptocampApi.prototype.createImages = function(images) {

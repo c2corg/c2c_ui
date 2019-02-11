@@ -84,11 +84,14 @@
     // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
     import c2c from '@/js/apis/c2c'
     import constants from '@/js/constants'
+    import Worker from '@/js/Worker'
 
     const STATUS_INITIAL = 'Initial'
     const STATUS_SAVING = 'Saving'
     const STATUS_SUCCESS = 'Success'
     const STATUS_FAILED = 'Failed'
+
+    const worker = new Worker()
 
     export default {
 
@@ -204,9 +207,7 @@
             upload(data) {
                 this.percentCompleted = 0
                 this.status = STATUS_SAVING
-                c2c.uploadImage(data, this.onUploadProgress.bind(this))
-                    .then(this.onSuccess.bind(this))
-                    .catch(this.onFailure.bind(this))
+                worker.push(c2c.uploadImage.bind(c2c), data, this.onUploadProgress, this.onSuccess, this.onFailure)
             },
 
             toggleCategory(category) {
