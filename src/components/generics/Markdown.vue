@@ -105,7 +105,8 @@
                     image.c2cExtrapoledDocument = {
                         document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
                         locales: [{ title: '...' }],
-                        available_langs: [this.$language.current]
+                        available_langs: [this.$language.current],
+                        type: 'i'
                     }
 
                     image.src = config.urls.api + image.attributes['c2c:url-proxy'].value

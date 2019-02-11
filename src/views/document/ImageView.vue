@@ -8,6 +8,8 @@
                         <activities :activities="document.activities"/>
                     </label-value>
 
+                    <field-view :document="document" :field="fields.date_time"/>
+
                     <label-value v-if="document.areas.length">
                         <areas-links :areas="document.areas"/>
                     </label-value>

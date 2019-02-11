@@ -59,8 +59,9 @@
                 <form-field :document="document" :field="fields.snow_quality" />
             </div>
             <div class="columns is-multiline">
-                <form-field class="is-6" :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
+                <form-field class="is-12" :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')"/>
                 <form-field class="is-6" :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')"/>
+                <form-field class="is-6" :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')"/>
                 <form-field class="is-12" :document="document" :field="fields.avalanche_signs"/>
                 <form-field class="is-12" :document="document" :field="fields.avalanches" />
             </div>
@@ -84,30 +85,36 @@
             :title="$gettext('Details')"
             :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')">
 
+            <div class="columns">
+                <form-field class="is-4" :document="document" :field="fields.frequentation"/>
+            </div>
+
             <div class="columns is-multiline">
-                <form-field class="is-12" :document="document" :field="fields.frequentation"/>
-                <form-field class="is-12" :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')"/>
 
-                <form-field class="is-narrow" :document="document" :field="fields.elevation_access" />
-                <form-field class="is-narrow" :document="document" :field="fields.access_condition" />
-                <form-field class="is-12" :document="document" :field="fields.access_comment" />
+                <div class="column is-4">
+                    <form-field no-wrapper :document="document" :field="fields.elevation_access" />
+                    <form-field no-wrapper :document="document" :field="fields.access_condition" />
+                    <form-field no-wrapper :document="document" :field="fields.public_transport" />
+                </div>
+                <form-field class="is-8" :document="document" :field="fields.access_comment" />
 
-                <form-field class="is-4" :document="document" :field="fields.public_transport" />
-                <form-field class="is-4" :document="document" :field="fields.lift_status" />
-                <form-field class="is-4" :document="document" :field="fields.hut_status" />
-                <form-field class="is-12" :document="document" :field="fields.hut_comment" />
+                <div class="column is-4">
+                    <form-field no-wrapper :document="document" :field="fields.lift_status" />
+                    <form-field no-wrapper :document="document" :field="fields.hut_status" />
+                </div>
+                <form-field class="is-8" :document="document" :field="fields.hut_comment" />
             </div>
 
             <div class="columns">
-                <form-field :document="document" :field="fields.height_diff_up" />
-                <form-field :document="document" :field="fields.height_diff_down" />
-                <form-field :document="document" :field="fields.height_diff_difficulties"/>
+                <form-field class="is-4" :document="document" :field="fields.height_diff_up" />
+                <form-field class="is-4" :document="document" :field="fields.height_diff_down" />
+                <form-field class="is-4" :document="document" :field="fields.height_diff_difficulties"/>
             </div>
 
             <div class="columns">
-                <form-field :document="document" :field="fields.length_total" unit="km" :divisor="1000"/>
-                <form-field :document="document" :field="fields.elevation_min" />
-                <form-field :document="document" :field="fields.elevation_max" />
+                <form-field class="is-4" :document="document" :field="fields.length_total" unit="km" :divisor="1000"/>
+                <form-field class="is-4" :document="document" :field="fields.elevation_min" />
+                <form-field class="is-4" :document="document" :field="fields.elevation_max" />
             </div>
 
             <div class="columns is-multiline">
