@@ -1,5 +1,5 @@
 <template>
-    <div class="column" v-show="visible">
+    <div :class="noWrapper ? '' : 'column'" v-show="visible">
         <div
             class="field"
             :helper="helper === undefined ? field.helper : helper"
@@ -58,6 +58,10 @@
             divisor: {
                 type: Number,
                 default: undefined
+            },
+            noWrapper: {
+                type: Boolean,
+                default: false
             }
         },
 

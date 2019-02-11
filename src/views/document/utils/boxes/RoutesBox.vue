@@ -1,7 +1,7 @@
 <template>
     <div class="box" v-if="source.length !=0 || !hideButtons">
         <h2 class="title is-2">
-            <span>{{ $gettext('routes') | uppercaseFirstLetter }}</span>
+            <span>{{ $gettext('Associated routes') }}</span>
             <add-link
                 v-if="!hideButtons"
                 document-type="route"

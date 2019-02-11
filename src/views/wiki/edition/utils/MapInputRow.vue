@@ -1,24 +1,6 @@
 <template>
     <div>
-        <div class="columns is-multiline">
-            <div class="column is-6">
-                <div class="field">
-                    <label class="label">{{ $gettext('Longitude') }}</label>
-                    <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
-                </div>
-            </div>
-            <div class="column is-6">
-                <div class="field">
-                    <label class="label">{{ $gettext('Latitude') }}</label>
-                    <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
-                </div>
-            </div>
-            <div class="column is-12">
-                <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
-            </div>
-        </div>
-
-        <div class="columns" v-if="geomDetailEditable" :label="$gettext('Trace')">
+        <div class="columns is-mobile" v-if="geomDetailEditable">
             <div class="column is-narrow">
                 <div class="control upload-button">
                     <input ref="gpxFileInput" type="file" @change="uploadGpxTrack" accept=".gpx">
@@ -33,6 +15,25 @@
                 </em>
             </div>
         </div>
+
+        <div class="columns is-multiline">
+            <div class="column is-12">
+                <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
+            </div>
+            <div class="column is-6">
+                <div class="field">
+                    <label class="label">{{ $gettext('Longitude') }}</label>
+                    <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint"/>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="field">
+                    <label class="label">{{ $gettext('Latitude') }}</label>
+                    <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint"/>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
