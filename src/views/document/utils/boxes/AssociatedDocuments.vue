@@ -47,9 +47,15 @@
         </div>
 
         <!-- maps -->
-        <div v-if="document.maps && document.maps.length" class="associations-list">
+        <div v-if="document.maps || document.maps_info" class="associations-list">
             <div class="title">
                 {{ $gettext('maps') | uppercaseFirstLetter }}
+            </div>
+            <div v-if="document.maps_info">
+                <icon-map />
+                <span>
+                    {{ document.maps_info }}
+                </span>
             </div>
             <div v-for="map of document.maps" :key="map.document_id" class="is-ellipsed">
                 <icon-map />
