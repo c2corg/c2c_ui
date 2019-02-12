@@ -25,7 +25,7 @@
                 <span>&nbsp;</span>
 
                 <editor-button icon="image" :disabled="preview" @click="handleImage" :tooltip="$gettext('Insert image')"/>
-                <editor-button icon="link" :disabled="preview" @click="handleLink" :tooltip="$gettext('URL/Link')"/>
+                <editor-button icon="link" :disabled="preview" @click="handleLink" :tooltip="$gettext('Insert link')"/>
                 <editor-button icon="grin" :disabled="preview" @click="handleEmoji" :tooltip="$gettext('Insert emoji')"/>
 
                 <span>&nbsp;</span>
@@ -66,13 +66,14 @@
                 Oups! something went wrong...
             </div>
         </div>
-
+        <link-helper ref="linkHelper" @insert="insertLink"/>
     </div>
 </template>
 
 <script>
     import cooker from '@/js/Cooker'
     import EditorButton from './EditorButton'
+    import LinkHelper from './LinkHelper'
 
     function Selection(textarea, onInput) {
         this.textarea = textarea
@@ -120,6 +121,7 @@
         this.end = end || start
     }
 
+    // TODO : remove before and after, and rewite calls with f-strings
     Selection.prototype.setText = function(text, before, after) {
         before = before || ''
         after = after || ''
@@ -173,7 +175,8 @@
     export default {
 
         components: {
-            EditorButton
+            EditorButton,
+            LinkHelper
         },
 
         props: {
@@ -294,9 +297,11 @@
             },
 
             handleLink() {
-                this.selection.set(this.selection.start, this.selection.start)
-                this.selection.setText(this.$gettext('text to display'), '[', '](https://)')
+                this.$refs.linkHelper.show(this.selection.text, '')
+            },
 
+            insertLink(chunk, url) {
+                this.selection.setText(`[${chunk}](${url})`)
                 // give back focus to textarea
                 // event may have given focus to a button
                 this.$refs.textarea.focus()
