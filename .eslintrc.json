@@ -13,15 +13,15 @@
     "no-console": "warn",
     "indent": [
       "off",
-      4
+      2
     ],
     "vue/html-indent": [
       "warn",
-      4
+      2
     ],
     "vue/script-indent": [
       "warn",
-      4,
+      2,
       {
         "baseIndent": 1
       }
@@ -36,7 +36,10 @@
     "eqeqeq": "warn",
     "camelcase": "off",
     "no-trailing-spaces": "warn",
-    "semi": "warn",
+    "semi": [
+      "warn",
+      "always"
+    ],
     "quotes": "warn",
     "object-curly-spacing": "warn",
     "brace-style": [
