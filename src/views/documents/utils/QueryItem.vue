@@ -26,10 +26,13 @@
                 {{ $gettext(field.name) | uppercaseFirstLetter }}
             </label>
 
-            <multiselect v-model="value"
-                         :options="field.values"
-                         :custom-label="field.i18n ? gettext : undefined"
-                         :multiple="true"/>
+            <multiselect
+                v-model="value"
+                :options="field.values"
+                :custom-label="field.i18n ? gettext : undefined"
+                :placeholder="$gettext('Select option')"
+                :select-label="$gettext('Press enter to select')"
+                :multiple="true"/>
         </div>
 
         <div v-else-if="field.queryMode==='orientations'" class="level">

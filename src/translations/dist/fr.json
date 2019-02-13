@@ -542,6 +542,7 @@
       "$$noContext": "Matériel"
     },
     "gender": "Sexe",
+    "General": "Général",
     "General information": "Informations générales",
     "general informations": "Informations générales",
     "Geolocation": "Géolocalisation",
@@ -826,6 +827,7 @@
       "image_categories": "divers",
       "waypoint_types": "divers"
     },
+    "Miscs": "Divers",
     "Missing captcha": {
       "API message": "Captcha manquant"
     },
@@ -1077,6 +1079,7 @@
     },
     "Precise localisation of the shooting": "Localisation précise de la prise de vue",
     "Precise location of the event.": "Localisation précise de l'évènement",
+    "Press enter to select": "Entrée pour selectionner",
     "pressure": {
       "weather_station_types": "pression"
     },
@@ -1214,6 +1217,7 @@
     "See profile based on:": "Profil d'altitude selon :",
     "See the activity of this contributor in your feed": "Voir les activités de ce contributeur dans votre fil",
     "See the latest version": "Voir la dernière version",
+    "Select option": "Choisissez une option",
     "Send reset email": "Envoyer l'email de réinitialisation",
     "Sensitive area:": "Zone sensible :",
     "Sensitive areas": "Zones sensibles",
@@ -1362,6 +1366,7 @@
     "temperature": {
       "weather_station_types": "température"
     },
+    "Terrain": "Terrain",
     "Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means.": "Le retour d’expérience permet d’améliorer la connaissance des risques. Les récits déposés donnent lieu à des travaux de recherche afin de mieux comprendre les scénarios accidentogènes et dégager des pistes de prévention.",
     "text to display": "texte à afficher",
     "The mountain sports community": "La communauté des sports de montagne",

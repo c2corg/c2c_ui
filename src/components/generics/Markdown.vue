@@ -225,8 +225,12 @@
         // display: inline-block;
     }
 
-    table[c2c\:role=ltag] td:first-child{
-        font-weight:bold;
+    table[c2c\:role=ltag]{
+        width: auto;
+
+        .pitch{
+            font-weight:bold;
+        }
     }
 
     div[c2c\:role=info], div[c2c\:role=warning], div[c2c\:role=danger]{
