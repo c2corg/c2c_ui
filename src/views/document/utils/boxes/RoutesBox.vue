@@ -83,10 +83,6 @@
 </script>
 
 <style scoped>
-    h2{
-        margin-bottom:
-
-    }
     h3{
         margin-top:1.5rem!important;
         margin-bottom: 0.5rem!important;
