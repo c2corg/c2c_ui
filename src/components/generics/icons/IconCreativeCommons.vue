@@ -1,3 +1,3 @@
 <template>
-    <fa-icon :icon="['fab', 'creative-commons']" />
+  <fa-icon :icon="['fab', 'creative-commons']" />
 </template>

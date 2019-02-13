@@ -1,82 +1,82 @@
 <template>
-    <div
-        v-show="hasAnnouncement && !hidden"
-        class="has-background-info has-text-light no-print"
-        @click="showContent=!showContent">
-        <div class="section is-info">
-            <button class="delete" @click="hide"/>
-            <div ref="header"/>
-            <div v-show="showContent" ref="content"/>
-        </div>
+  <div
+    v-show="hasAnnouncement && !hidden"
+    class="has-background-info has-text-light no-print"
+    @click="showContent=!showContent">
+    <div class="section is-info">
+      <button class="delete" @click="hide"/>
+      <div ref="header"/>
+      <div v-show="showContent" ref="content"/>
     </div>
+  </div>
 </template>
 
 <script>
 
-    import forum from '@/js/apis/forum'
+  import forum from '@/js/apis/forum';
 
-    export default {
-        name: 'SiteNotice',
+  export default {
+    name: 'SiteNotice',
 
-        data() {
-            return {
-                hasAnnouncement: false,
-                hidden: false,
-                showContent: false,
-                updatedAt: null,
-                lang: this.$user.lang // store lang, because if user changes lang after getting notice...
-            }
+    data() {
+      return {
+        hasAnnouncement: false,
+        hidden: false,
+        showContent: false,
+        updatedAt: null,
+        lang: this.$user.lang // store lang, because if user changes lang after getting notice...
+      };
+    },
+
+    computed: {
+      readdenPostKey: {
+        get() {
+          return this.$localStorage.get('readdenPostKey.' + this.lang);
         },
-
-        computed: {
-            readdenPostKey: {
-                get() {
-                    return this.$localStorage.get('readdenPostKey.' + this.lang)
-                },
-                set(value) {
-                    this.$localStorage.set('readdenPostKey.' + this.lang, value)
-                }
-            }
-        },
-
-        created() {
-            this.loadAnnouncement()
-        },
-
-        methods: {
-            loadAnnouncement() {
-                forum.readAnnouncement(this.lang).then(response => {
-                    const data = response['data']
-                    if (data['tags'].indexOf('visible') > -1) {
-                        let post = data.post_stream.posts[0]
-                        this.updatedAt = post.updated_at
-
-                        if (this.readdenPostKey === post.updated_at) {
-                            return
-                        }
-
-                        this.hasAnnouncement = true
-
-                        // compute html, to split p
-                        let content = document.createElement('div')
-                        content.innerHTML = post.cooked
-                        let paragraphs = content.getElementsByTagName('p')
-
-                        this.$refs.header.appendChild(paragraphs[0])
-
-                        for (let p of Array.from(paragraphs).slice(1)) {
-                            this.$refs.content.appendChild(p)
-                        }
-                    }
-                })
-            },
-
-            hide() {
-                this.hidden = true
-                this.readdenPostKey = this.updatedAt
-            }
+        set(value) {
+          this.$localStorage.set('readdenPostKey.' + this.lang, value);
         }
+      }
+    },
+
+    created() {
+      this.loadAnnouncement();
+    },
+
+    methods: {
+      loadAnnouncement() {
+        forum.readAnnouncement(this.lang).then(response => {
+          const data = response['data'];
+          if (data['tags'].indexOf('visible') > -1) {
+            let post = data.post_stream.posts[0];
+            this.updatedAt = post.updated_at;
+
+            if (this.readdenPostKey === post.updated_at) {
+              return;
+            }
+
+            this.hasAnnouncement = true;
+
+            // compute html, to split p
+            let content = document.createElement('div');
+            content.innerHTML = post.cooked;
+            let paragraphs = content.getElementsByTagName('p');
+
+            this.$refs.header.appendChild(paragraphs[0]);
+
+            for (let p of Array.from(paragraphs).slice(1)) {
+              this.$refs.content.appendChild(p);
+            }
+          }
+        });
+      },
+
+      hide() {
+        this.hidden = true;
+        this.readdenPostKey = this.updatedAt;
+      }
     }
+  };
 
 </script>
 

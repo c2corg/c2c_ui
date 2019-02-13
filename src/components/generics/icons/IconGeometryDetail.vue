@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="flag"/>
+  <fa-icon icon="flag"/>
 </template>

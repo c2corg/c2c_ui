@@ -1,63 +1,63 @@
 <template>
-    <div :class="{wide:wide}">
-        <loading-notification :promise="promise" />
-        <div v-if="topics" >
-            <a
-                class="forum-row"
-                v-for="topic of topics.topics.slice(0, messageCount<0 ? 9999 : messageCount)"
-                :key="topic.id"
-                v-if="topic.category_id !== 29"
-                :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
-                target="_blank"
-                :title="topic.last_poster_username">
-                <img
-                    :src="$options.forumUrl + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
-                    :style="'width:' + imgSize + 'px'">
-                <span>
-                    {{ topic.title }}
-                </span>
-            </a>
-        </div>
+  <div :class="{wide:wide}">
+    <loading-notification :promise="promise" />
+    <div v-if="topics" >
+      <a
+        class="forum-row"
+        v-for="topic of topics.topics.slice(0, messageCount<0 ? 9999 : messageCount)"
+        :key="topic.id"
+        v-if="topic.category_id !== 29"
+        :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
+        target="_blank"
+        :title="topic.last_poster_username">
+        <img
+          :src="$options.forumUrl + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
+          :style="'width:' + imgSize + 'px'">
+        <span>
+          {{ topic.title }}
+        </span>
+      </a>
     </div>
+  </div>
 </template>
 
 <script>
-    import forum from '@/js/apis/forum.js'
+  import forum from '@/js/apis/forum.js';
 
-    export default {
+  export default {
 
-        props: {
-            wide: {
-                type: Boolean,
-                default: false
-            },
-            messageCount: {
-                type: Number,
-                default: -1
-            }
-        },
+    props: {
+      wide: {
+        type: Boolean,
+        default: false
+      },
+      messageCount: {
+        type: Number,
+        default: -1
+      }
+    },
 
-        data() {
-            return {
-                promise: null
-            }
-        },
+    data() {
+      return {
+        promise: null
+      };
+    },
 
-        forumUrl: forum.url,
+    forumUrl: forum.url,
 
-        computed: {
-            topics() {
-                return this.promise.data ? this.promise.data.topic_list : null
-            },
-            imgSize() {
-                return this.wide ? 24 : 20
-            }
-        },
+    computed: {
+      topics() {
+        return this.promise.data ? this.promise.data.topic_list : null;
+      },
+      imgSize() {
+        return this.wide ? 24 : 20;
+      }
+    },
 
-        created() {
-            this.promise = forum.getLatest()
-        }
+    created() {
+      this.promise = forum.getLatest();
     }
+  };
 </script>
 
 <style scoped lang="scss">

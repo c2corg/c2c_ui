@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="route" />
+  <fa-icon icon="route" />
 </template>

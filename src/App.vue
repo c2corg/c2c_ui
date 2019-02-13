@@ -1,57 +1,57 @@
 <template>
-    <div id="app">
-        <side-menu class="side-menu" :class="{'alternative-side-menu': alternativeSideMenu}"/>
-        <navigation class="navigation" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
-        <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
-        <image-viewer ref="imageViewer"/>
-        <helper-window ref="helper"/>
-        <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
+  <div id="app">
+    <side-menu class="side-menu" :class="{'alternative-side-menu': alternativeSideMenu}"/>
+    <navigation class="navigation" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
+    <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
+    <image-viewer ref="imageViewer"/>
+    <helper-window ref="helper"/>
+    <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
 
-        <!-- keep router view in last  -->
-        <div class="page-content">
-            <router-view class="router-view"/>
-        </div>
+    <!-- keep router view in last  -->
+    <div class="page-content">
+      <router-view class="router-view"/>
     </div>
+  </div>
 </template>
 
 <script>
-    import Navigation from './views/Navigation'
-    import SideMenu from './views/SideMenu'
-    import SiteNotice from './views/SiteNotice'
-    import HelperWindow from './components/helper/HelperWindow'
-    import ImageViewer from './components/image-viewer/ImageViewer'
+  import Navigation from './views/Navigation';
+  import SideMenu from './views/SideMenu';
+  import SiteNotice from './views/SiteNotice';
+  import HelperWindow from './components/helper/HelperWindow';
+  import ImageViewer from './components/image-viewer/ImageViewer';
 
-    export default {
-        name: 'App',
+  export default {
+    name: 'App',
 
-        components: {
-            SideMenu,
-            Navigation,
-            SiteNotice,
-            HelperWindow,
-            ImageViewer
-        },
+    components: {
+      SideMenu,
+      Navigation,
+      SiteNotice,
+      HelperWindow,
+      ImageViewer
+    },
 
-        data() {
-            return {
-                alternativeSideMenu: false
-            }
-        },
+    data() {
+      return {
+        alternativeSideMenu: false
+      };
+    },
 
-        watch: {
-            $route: 'hideSideMenuOnMobile'
-        },
+    watch: {
+      $route: 'hideSideMenuOnMobile'
+    },
 
-        mounted() {
-            document.getElementById('splashscreen').style.display = 'none'
-        },
+    mounted() {
+      document.getElementById('splashscreen').style.display = 'none';
+    },
 
-        methods: {
-            hideSideMenuOnMobile() {
-                this.alternativeSideMenu = false
-            }
-        }
+    methods: {
+      hideSideMenuOnMobile() {
+        this.alternativeSideMenu = false;
+      }
     }
+  };
 </script>
 
 <style lang="scss">

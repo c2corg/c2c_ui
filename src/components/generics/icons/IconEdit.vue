@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="edit" />
+  <fa-icon icon="edit" />
 </template>

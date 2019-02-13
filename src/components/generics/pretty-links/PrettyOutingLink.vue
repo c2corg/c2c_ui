@@ -1,33 +1,33 @@
 <template>
-    <document-link :document="outing" class="pretty-outing-link has-hover-background">
-        <marker-quality :quality="outing.quality" class="has-text-dark"/>
-        <marker-condition :condition="outing.condition_rating"/>
-        <span class="has-text-dark">
-            {{ outing.date_start }}
-            :
-        </span>
-        <document-title :document="outing"/>
-        <span class="has-text-dark">
-            &hairsp;&bull;&hairsp;
-            {{ outing.author.name }}
-        </span>
-        <span v-if="outing.img_count!=0 || outing.geometry.has_geom_detail" class="has-text-dark">
-            &hairsp;&bull;&hairsp;
-            <marker-image-count v-if="outing.img_count!=0" :image-count="outing.img_count"/>
-            <marker-gps-trace v-if="outing.geometry.has_geom_detail"/>
-        </span>
-    </document-link>
+  <document-link :document="outing" class="pretty-outing-link has-hover-background">
+    <marker-quality :quality="outing.quality" class="has-text-dark"/>
+    <marker-condition :condition="outing.condition_rating"/>
+    <span class="has-text-dark">
+      {{ outing.date_start }}
+      :
+    </span>
+    <document-title :document="outing"/>
+    <span class="has-text-dark">
+      &hairsp;&bull;&hairsp;
+      {{ outing.author.name }}
+    </span>
+    <span v-if="outing.img_count!=0 || outing.geometry.has_geom_detail" class="has-text-dark">
+      &hairsp;&bull;&hairsp;
+      <marker-image-count v-if="outing.img_count!=0" :image-count="outing.img_count"/>
+      <marker-gps-trace v-if="outing.geometry.has_geom_detail"/>
+    </span>
+  </document-link>
 </template>
 
 <script>
-    export default {
-        props: {
-            outing: {
-                type: Object,
-                required: true
-            }
-        }
+  export default {
+    props: {
+      outing: {
+        type: Object,
+        required: true
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

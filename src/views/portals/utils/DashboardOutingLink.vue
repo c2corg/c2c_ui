@@ -1,31 +1,31 @@
 <template>
-    <document-link :document="outing" class="outing-row">
-        <span>
-            <activities :activities="outing.activities" class="is-size-3 activity-icon"/>
-            <document-title :document="outing"/>
-            &hairsp;&bull;&hairsp;
-            <em v-for="area in outing.areas" v-if="area.area_type=='range'" :key="area.document_id">
-                <small>
-                    <document-title :document="area"/>
-                </small>
-            </em>
-        </span>
-        <span class="is-pulled-right">
-            <marker-image-count :image-count="outing.img_count"/>
-            <marker-condition :condition="outing.condition_rating"/>
-        </span>
-    </document-link>
+  <document-link :document="outing" class="outing-row">
+    <span>
+      <activities :activities="outing.activities" class="is-size-3 activity-icon"/>
+      <document-title :document="outing"/>
+      &hairsp;&bull;&hairsp;
+      <em v-for="area in outing.areas" v-if="area.area_type=='range'" :key="area.document_id">
+        <small>
+          <document-title :document="area"/>
+        </small>
+      </em>
+    </span>
+    <span class="is-pulled-right">
+      <marker-image-count :image-count="outing.img_count"/>
+      <marker-condition :condition="outing.condition_rating"/>
+    </span>
+  </document-link>
 </template>
 
 <script>
-    export default {
-        props: {
-            outing: {
-                type: Object,
-                required: true
-            }
-        }
+  export default {
+    props: {
+      outing: {
+        type: Object,
+        required: true
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="atlas" />
+  <fa-icon icon="atlas" />
 </template>

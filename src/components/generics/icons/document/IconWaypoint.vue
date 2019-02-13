@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="map-pin" />
+  <fa-icon icon="map-pin" />
 </template>

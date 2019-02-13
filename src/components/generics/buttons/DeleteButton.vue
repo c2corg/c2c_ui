@@ -1,24 +1,24 @@
 <template>
 
-    <fa-layers class="fa-lg" @click="visible ? $emit('click') : undefined" :class="{'hidden-button':!visible}">
-        <fa-icon icon="circle" />
-        <fa-icon
-            :icon="['far','trash-alt']"
-            transform="shrink-6"
-            :style="{ color: 'white' }" />
-    </fa-layers>
+  <fa-layers class="fa-lg" @click="visible ? $emit('click') : undefined" :class="{'hidden-button':!visible}">
+    <fa-icon icon="circle" />
+    <fa-icon
+      :icon="['far','trash-alt']"
+      transform="shrink-6"
+      :style="{ color: 'white' }" />
+  </fa-layers>
 
 </template>
 
 <script>
-    export default {
-        props: {
-            visible: {
-                type: Boolean,
-                default: true
-            }
-        }
+  export default {
+    props: {
+      visible: {
+        type: Boolean,
+        default: true
+      }
     }
+  };
 
 </script>
 

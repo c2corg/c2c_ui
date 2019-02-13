@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="newspaper" />
+  <fa-icon icon="newspaper" />
 </template>

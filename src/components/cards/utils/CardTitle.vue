@@ -1,9 +1,9 @@
 <template>
-    <header class="card-header">
-        <p class="card-header-title">
-            <slot>A very long header that should be ellipsed</slot>
-        </p>
-    </header>
+  <header class="card-header">
+    <p class="card-header-title">
+      <slot>A very long header that should be ellipsed</slot>
+    </p>
+  </header>
 </template>
 
 <style scoped lang="scss">

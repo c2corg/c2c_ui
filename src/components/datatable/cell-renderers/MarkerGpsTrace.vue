@@ -1,9 +1,9 @@
 <template>
-    <marker-gps-trace v-show="params.data.geometry.has_geom_detail" />
+  <marker-gps-trace v-show="params.data.geometry.has_geom_detail" />
 </template>
 
 <script>
-    import Vue from 'vue'
+  import Vue from 'vue';
 
-    export default Vue.extend({ })
+  export default Vue.extend({ });
 </script>

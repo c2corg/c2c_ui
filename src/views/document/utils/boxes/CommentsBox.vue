@@ -1,173 +1,173 @@
 <template>
-    <div v-if="isNormalView" class="box discourse-comments no-print">
-        <h2 class="title is-2" v-translate>Comments</h2>
+  <div v-if="isNormalView" class="box discourse-comments no-print">
+    <h2 class="title is-2" v-translate>Comments</h2>
 
-        <div v-if="document.disable_comments">
-            <p v-translate>Comments are disabled.</p>
-        </div>
-
-        <div v-else-if="promise && promise.error" class="notification is-danger">
-            <p>
-                <span v-translate>Oups! Something went wrong with forum. Here is the message :</span>
-                <br>
-                {{ promise.error.message }}
-            </p>
-        </div>
-
-        <div
-            v-else-if="locale.topic_id === null || comments.length === 0"
-            class="has-text-centered">
-            <login-button v-if="!$user.isLogged" v-translate>
-                Log in to post the first comment
-            </login-button>
-            <button v-else class="button is-primary" @click="createTopic" v-translate>
-                Post the first comment
-            </button>
-        </div>
-
-        <div v-else>
-            <div v-for="post of comments" :key="post.id" class="discourse-post">
-                <div class="columns is-gapless">
-                    <div class="column is-narrow discourse-post-avatar">
-                        <img
-                            :src="$options.forumUrl + '/' + post.avatar_template"
-                            :width="$options.forumAvatarSize"
-                            :height="$options.forumAvatarSize">
-                    </div>
-                    <div class="column">
-                        <div class="discourse-post-header">
-                            <a :href="$options.forumUrl + '/users/' + post.username" :title="post.username"
-                               class="discourse-post-header-username">
-                                {{ post.username }}
-                            </a>
-                            <span class="is-pulled-right">
-                                {{ $moment.timeAgo(post['created_at']) }}
-                            </span>
-                        </div>
-
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <div class="discourse-content" v-html="post.cooked"/>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="has-text-centered">
-                <login-button v-if="!$user.isLogged" v-translate>
-                    Log in to post a comment
-                </login-button>
-                <a v-else :href="discussionUrl" class="button is-primary" v-translate>
-                    Continue the discussion
-                </a>
-            </div>
-        </div>
+    <div v-if="document.disable_comments">
+      <p v-translate>Comments are disabled.</p>
     </div>
+
+    <div v-else-if="promise && promise.error" class="notification is-danger">
+      <p>
+        <span v-translate>Oups! Something went wrong with forum. Here is the message :</span>
+        <br>
+        {{ promise.error.message }}
+      </p>
+    </div>
+
+    <div
+      v-else-if="locale.topic_id === null || comments.length === 0"
+      class="has-text-centered">
+      <login-button v-if="!$user.isLogged" v-translate>
+        Log in to post the first comment
+      </login-button>
+      <button v-else class="button is-primary" @click="createTopic" v-translate>
+        Post the first comment
+      </button>
+    </div>
+
+    <div v-else>
+      <div v-for="post of comments" :key="post.id" class="discourse-post">
+        <div class="columns is-gapless">
+          <div class="column is-narrow discourse-post-avatar">
+            <img
+              :src="$options.forumUrl + '/' + post.avatar_template"
+              :width="$options.forumAvatarSize"
+              :height="$options.forumAvatarSize">
+          </div>
+          <div class="column">
+            <div class="discourse-post-header">
+              <a :href="$options.forumUrl + '/users/' + post.username" :title="post.username"
+                 class="discourse-post-header-username">
+                {{ post.username }}
+              </a>
+              <span class="is-pulled-right">
+                {{ $moment.timeAgo(post['created_at']) }}
+              </span>
+            </div>
+
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div class="discourse-content" v-html="post.cooked"/>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="has-text-centered">
+        <login-button v-if="!$user.isLogged" v-translate>
+          Log in to post a comment
+        </login-button>
+        <a v-else :href="discussionUrl" class="button is-primary" v-translate>
+          Continue the discussion
+        </a>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    import { requireDocumentProperty } from '@/js/properties-mixins'
-    import viewModeMixin from '.././view-mode-mixin'
+  import { requireDocumentProperty } from '@/js/properties-mixins';
+  import viewModeMixin from '.././view-mode-mixin';
 
-    import forum from '@/js/apis/forum'
-    import c2c from '@/js/apis/c2c'
+  import forum from '@/js/apis/forum';
+  import c2c from '@/js/apis/c2c';
 
-    const computeCooked = function(cooked) {
-        cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url)
+  const computeCooked = function(cooked) {
+    cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url);
 
-        return cooked
-    }
+    return cooked;
+  };
 
-    export default {
-        mixins: [ requireDocumentProperty, viewModeMixin ],
+  export default {
+    mixins: [ requireDocumentProperty, viewModeMixin ],
 
-        data() {
-            return {
-                promise: {}
-            }
-        },
+    data() {
+      return {
+        promise: {}
+      };
+    },
 
-        computed: {
+    computed: {
 
-            locale() {
-                return this.document.cooked
-            },
+      locale() {
+        return this.document.cooked;
+      },
 
-            discussionUrl() {
-                if (!this.topic) {
-                    return null
-                }
-
-                return forum.url + '/t/' + this.topic.slug + '/' + this.locale.topic_id + '/' + this.topic.posts_count
-            },
-
-            topic() {
-                return this.promise.data
-            },
-
-            comments() {
-                const result = []
-
-                if (!this.topic || !this.topic.post_stream) {
-                    return result
-                }
-
-                const data = this.topic.post_stream
-
-                let posts = data.posts
-
-                if (posts[0].name === 'system') {
-                    posts = posts.slice(1)
-                }
-
-                for (let post of posts) {
-                    post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize)
-                    post.cooked = computeCooked(post.cooked)
-                    result.push(post)
-                }
-
-                return result
-            }
-
-        },
-
-        forumUrl: forum.url,
-        forumAvatarSize: 45,
-
-        created() {
-            this.getComments()
-        },
-
-        methods: {
-            createTopic() {
-                const document_id = this.document.document_id
-                const lang = this.locale.lang
-
-                // create topic must go threw c2c API, because system has to create
-                // first message with good link
-                c2c.forum.createTopic(document_id, lang)
-                    .then(response => {
-                        const topic_id = response['data']['topic_id']
-                        const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id
-                        window.location = url
-                    })
-                    .catch(error => {
-                        if (error.response && error.response.status === 400) {
-                            const topic_id = error.response['data']['errors'][0]['topic_id']
-                            if (topic_id !== undefined) {
-                                this.locale.topic_id = topic_id
-                                this.getComments()
-                            }
-                        }
-                    })
-            },
-
-            getComments() {
-                if (this.locale.topic_id) {
-                    this.promise = forum.getTopic(this.locale.topic_id)
-                }
-            }
+      discussionUrl() {
+        if (!this.topic) {
+          return null;
         }
+
+        return forum.url + '/t/' + this.topic.slug + '/' + this.locale.topic_id + '/' + this.topic.posts_count;
+      },
+
+      topic() {
+        return this.promise.data;
+      },
+
+      comments() {
+        const result = [];
+
+        if (!this.topic || !this.topic.post_stream) {
+          return result;
+        }
+
+        const data = this.topic.post_stream;
+
+        let posts = data.posts;
+
+        if (posts[0].name === 'system') {
+          posts = posts.slice(1);
+        }
+
+        for (let post of posts) {
+          post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize);
+          post.cooked = computeCooked(post.cooked);
+          result.push(post);
+        }
+
+        return result;
+      }
+
+    },
+
+    forumUrl: forum.url,
+    forumAvatarSize: 45,
+
+    created() {
+      this.getComments();
+    },
+
+    methods: {
+      createTopic() {
+        const document_id = this.document.document_id;
+        const lang = this.locale.lang;
+
+        // create topic must go threw c2c API, because system has to create
+        // first message with good link
+        c2c.forum.createTopic(document_id, lang)
+          .then(response => {
+            const topic_id = response['data']['topic_id'];
+            const url = forum.url + '/t/' + document_id + '_' + lang + '/' + topic_id;
+            window.location = url;
+          })
+          .catch(error => {
+            if (error.response && error.response.status === 400) {
+              const topic_id = error.response['data']['errors'][0]['topic_id'];
+              if (topic_id !== undefined) {
+                this.locale.topic_id = topic_id;
+                this.getComments();
+              }
+            }
+        });
+      },
+
+      getComments() {
+        if (this.locale.topic_id) {
+          this.promise = forum.getTopic(this.locale.topic_id);
+        }
+      }
     }
+  };
 </script>
 
 <style lang="scss">

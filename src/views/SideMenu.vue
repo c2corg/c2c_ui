@@ -1,80 +1,80 @@
 <template>
-    <aside class="no-print">
-        <router-link
-            v-for="item of menuItems"
-            :key="item.name"
-            :to="{name:item.name, query: item.query}"
-            class="menu-item is-ellipsed"
-            :class="{'router-link-active':item.activeFor.includes($route.name)}">
-            <component :is="item.icon" />
-            <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
-        </router-link>
+  <aside class="no-print">
+    <router-link
+      v-for="item of menuItems"
+      :key="item.name"
+      :to="{name:item.name, query: item.query}"
+      class="menu-item is-ellipsed"
+      :class="{'router-link-active':item.activeFor.includes($route.name)}">
+      <component :is="item.icon" />
+      <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
+    </router-link>
 
-        <div class="menu-footer is-size-7">
-            <advertisement class="menu-add" v-if="windowHeight>=654"/>
+    <div class="menu-footer is-size-7">
+      <advertisement class="menu-add" v-if="windowHeight>=654"/>
 
-            <div class="has-text-centered menu-links">
-                <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
-                <span> &bull; </span>
-                <router-link :to="{name:'article', params:{id:106731}}" v-translate>EULA</router-link>
-                <span> &bull; </span>
-                <router-link :to="{name:'article', params:{id:106728}}" v-translate>Licenses</router-link>
-                <br>
-                <router-link :to="{name:'article', params:{id:106726}}" v-translate>Association</router-link>
-            </div>
+      <div class="has-text-centered menu-links">
+        <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
+        <span> &bull; </span>
+        <router-link :to="{name:'article', params:{id:106731}}" v-translate>EULA</router-link>
+        <span> &bull; </span>
+        <router-link :to="{name:'article', params:{id:106728}}" v-translate>Licenses</router-link>
+        <br>
+        <router-link :to="{name:'article', params:{id:106726}}" v-translate>Association</router-link>
+      </div>
 
-            <div class="columns is-gapless has-text-centered is-mobile menu-socials">
-                <div class="column">
-                    <a href="https://twitter.com/camptocamporg" title="twitter">
-                        <fa-icon :icon="['fab', 'twitter']" class="twitter-icon"/>
-                    </a>
-                </div>
-                <div class="column">
-                    <a href="https://www.facebook.com/camptocamp.org/" title="facebook">
-                        <fa-icon :icon="['fab', 'facebook']" class="facebook-icon"/>
-                    </a>
-                </div>
-            </div>
+      <div class="columns is-gapless has-text-centered is-mobile menu-socials">
+        <div class="column">
+          <a href="https://twitter.com/camptocamporg" title="twitter">
+            <fa-icon :icon="['fab', 'twitter']" class="twitter-icon"/>
+          </a>
         </div>
-    </aside>
+        <div class="column">
+          <a href="https://www.facebook.com/camptocamp.org/" title="facebook">
+            <fa-icon :icon="['fab', 'facebook']" class="facebook-icon"/>
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
 </template>
 
 <script>
-    import Advertisement from './Advertisement'
+  import Advertisement from './Advertisement';
 
-    export default {
-        components: { Advertisement },
+  export default {
+    components: { Advertisement },
 
-        data() {
-            return {
-                windowHeight: 0
-            }
-        },
+    data() {
+      return {
+        windowHeight: 0
+      };
+    },
 
-        computed: {
-            // This must be computed, because it needs $gettext() function
-            menuItems() {
-                return [
-                    { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
-                    { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'], query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
-                    { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
-                    { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
-                    { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
-                ]
-            }
-        },
+    computed: {
+      // This must be computed, because it needs $gettext() function
+      menuItems() {
+        return [
+          { name: 'topoguide', icon: 'icon-topoguide', text: this.$gettext('Topoguide'), activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'] },
+          { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'], query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
+          { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
+          { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
+          { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
+        ];
+      }
+    },
 
-        mounted() {
-            this.onResize()
-            window.addEventListener('resize', this.onResize)
-        },
+    mounted() {
+      this.onResize();
+      window.addEventListener('resize', this.onResize);
+    },
 
-        methods: {
-            onResize() {
-                this.windowHeight = window.innerHeight
-            }
-        }
+    methods: {
+      onResize() {
+        this.windowHeight = window.innerHeight;
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

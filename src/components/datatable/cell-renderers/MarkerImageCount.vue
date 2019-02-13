@@ -1,9 +1,9 @@
 <template>
-    <marker-image-count :image-count="params.data.img_count" />
+  <marker-image-count :image-count="params.data.img_count" />
 </template>
 
 <script>
-    import Vue from 'vue'
+  import Vue from 'vue';
 
-    export default Vue.extend({ })
+  export default Vue.extend({ });
 </script>

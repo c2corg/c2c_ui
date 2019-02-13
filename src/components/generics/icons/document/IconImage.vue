@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="image" />
+  <fa-icon icon="image" />
 </template>

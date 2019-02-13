@@ -1,39 +1,39 @@
 <template>
-    <div class="control buttons" :class="{'has-error':hasError}">
-        <span
-            v-for="option of options"
-            :key="option"
-            @click="toggle(option)"
-            class="multi-select-item"
-            :class="{ 'multi-select-item-active': value_.includes(option) }">
-            {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
-        </span>
+  <div class="control buttons" :class="{'has-error':hasError}">
+    <span
+      v-for="option of options"
+      :key="option"
+      @click="toggle(option)"
+      class="multi-select-item"
+      :class="{ 'multi-select-item-active': value_.includes(option) }">
+      {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
+    </span>
 
-    </div>
+  </div>
 </template>
 
 <script>
 
-    import { baseMixin, arrayMixin } from './mixins.js'
+  import { baseMixin, arrayMixin } from './mixins.js';
 
-    export default {
-        mixins: [ baseMixin, arrayMixin ],
+  export default {
+    mixins: [ baseMixin, arrayMixin ],
 
-        props: {
-            options: {
-                type: Array,
-                required: true
-            },
-            i18n: {
-                type: Boolean,
-                default: false
-            },
-            i18nContext: {
-                type: String,
-                default: undefined
-            }
-        }
+    props: {
+      options: {
+        type: Array,
+        required: true
+      },
+      i18n: {
+        type: Boolean,
+        default: false
+      },
+      i18nContext: {
+        type: String,
+        default: undefined
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

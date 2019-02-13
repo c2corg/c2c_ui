@@ -1,148 +1,148 @@
 
 <template>
-    <div class="content" ref="container"/>
-    <!-- TODO find a way without aditionnal element
+  <div class="content" ref="container"/>
+  <!-- TODO find a way without aditionnal element
     <div style="clear:both"/> -->
 </template>
 
 <script>
-    import { icon } from '@fortawesome/fontawesome-svg-core'
+  import { icon } from '@fortawesome/fontawesome-svg-core';
 
-    import config from '@/js/config.ts'
+  import config from '@/js/config.ts';
 
-    // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
-    function guardEvent(e) {
-        // don't redirect with control keys
-        if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return
-        // don't redirect when preventDefault called
-        if (e.defaultPrevented) return
-        // don't redirect on right click
-        if (e.button !== undefined && e.button !== 0) return
-        // don't redirect if `target="_blank"`
-        if (e.currentTarget && e.currentTarget.getAttribute) {
-            const target = e.currentTarget.getAttribute('target')
-            if (/\b_blank\b/i.test(target)) return
-        }
-        // this may be a Weex event which doesn't have this method
-        if (e.preventDefault) {
-            e.preventDefault()
-        }
-        return true
+  // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
+  function guardEvent(e) {
+    // don't redirect with control keys
+    if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return;
+    // don't redirect when preventDefault called
+    if (e.defaultPrevented) return;
+    // don't redirect on right click
+    if (e.button !== undefined && e.button !== 0) return;
+    // don't redirect if `target="_blank"`
+    if (e.currentTarget && e.currentTarget.getAttribute) {
+      const target = e.currentTarget.getAttribute('target');
+      if (/\b_blank\b/i.test(target)) return;
+    }
+    // this may be a Weex event which doesn't have this method
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    return true;
+  }
+
+  const getFontAwesomeSrc = function(prefix, iconeName) {
+    let svgSource = icon({ prefix: prefix, iconName: iconeName }).html[0];
+    svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"');
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource);
+  };
+
+  const getEmojiSrc = function(emojiSource, svgName) {
+    if (emojiSource === 'emojione') {
+      return `https://cdn.jsdelivr.net/emojione/assets/svg/${svgName}.svg`;
     }
 
-    const getFontAwesomeSrc = function(prefix, iconeName) {
-        let svgSource = icon({ prefix: prefix, iconName: iconeName }).html[0]
-        svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"')
-        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource)
+    if (emojiSource === 'c2c-activities') {
+      return getFontAwesomeSrc('activity', svgName);
     }
 
-    const getEmojiSrc = function(emojiSource, svgName) {
-        if (emojiSource === 'emojione') {
-            return `https://cdn.jsdelivr.net/emojione/assets/svg/${svgName}.svg`
-        }
-
-        if (emojiSource === 'c2c-activities') {
-            return getFontAwesomeSrc('activity', svgName)
-        }
-
-        if (emojiSource === 'c2c-waypoints') {
-            return getFontAwesomeSrc('waypoint', svgName)
-        }
+    if (emojiSource === 'c2c-waypoints') {
+      return getFontAwesomeSrc('waypoint', svgName);
     }
+  };
 
-    export default {
-        props: {
-            content: {
-                type: String,
-                required: true
-            }
-        },
+  export default {
+    props: {
+      content: {
+        type: String,
+        required: true
+      }
+    },
 
-        watch: {
-            content: 'compute'
-        },
+    watch: {
+      content: 'compute'
+    },
 
-        mounted() {
-            this.compute()
-        },
+    mounted() {
+      this.compute();
+    },
 
-        methods: {
-            compute() {
-                const container = this.$refs.container
+    methods: {
+      compute() {
+        const container = this.$refs.container;
 
-                const addClasses = function(cssSelector, classes) {
-                    var nodes = container.querySelectorAll(cssSelector)
+        const addClasses = function(cssSelector, classes) {
+          var nodes = container.querySelectorAll(cssSelector);
 
-                    for (let node of nodes) {
-                        node.classList.add(...classes)
-                    }
-                }
+          for (let node of nodes) {
+            node.classList.add(...classes);
+          }
+        };
 
-                container.innerHTML = this.content
+        container.innerHTML = this.content;
 
-                if (this.content.includes('c2c:role')) {
-                    this.computeImages(container.querySelectorAll('img[c2c\\:role=embedded-image]'))
-                    this.computeEmojis(container.querySelectorAll('img[c2c\\:role=emoji]'))
-                    this.computeAnchors(container.querySelectorAll('a[c2c\\:role=internal-link]'))
+        if (this.content.includes('c2c:role')) {
+          this.computeImages(container.querySelectorAll('img[c2c\\:role=embedded-image]'));
+          this.computeEmojis(container.querySelectorAll('img[c2c\\:role=emoji]'));
+          this.computeAnchors(container.querySelectorAll('a[c2c\\:role=internal-link]'));
 
-                    addClasses('div[c2c\\:role=info]', ['notification', 'is-info'])
-                    addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning'])
-                    addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger'])
-                    addClasses('table[c2c\\:role=ltag]', ['table'])
-                }
-            },
+          addClasses('div[c2c\\:role=info]', ['notification', 'is-info']);
+          addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
+          addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
+          addClasses('table[c2c\\:role=ltag]', ['table']);
+        }
+      },
 
-            computeEmojis(emojis) {
-                for (let emoji of emojis) {
-                    let emojiSource = emoji.attributes['c2c:emoji-db'].value
-                    let svgName = emoji.attributes['c2c:svg-name'].value
-                    emoji.src = getEmojiSrc(emojiSource, svgName) // `${svgCdns[emojiSource]}${svgName}.svg`
-                }
-            },
+      computeEmojis(emojis) {
+        for (let emoji of emojis) {
+          let emojiSource = emoji.attributes['c2c:emoji-db'].value;
+          let svgName = emoji.attributes['c2c:svg-name'].value;
+          emoji.src = getEmojiSrc(emojiSource, svgName); // `${svgCdns[emojiSource]}${svgName}.svg`
+        }
+      },
 
-            computeImages(images) {
-                for (let image of images) {
-                    image.c2cExtrapoledDocument = {
-                        document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
-                        locales: [{ title: '...' }],
-                        available_langs: [this.$language.current],
-                        type: 'i'
-                    }
+      computeImages(images) {
+        for (let image of images) {
+          image.c2cExtrapoledDocument = {
+            document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
+            locales: [{ title: '...' }],
+            available_langs: [this.$language.current],
+            type: 'i'
+          };
 
-                    image.src = config.urls.api + image.attributes['c2c:url-proxy'].value
-                    image.addEventListener('click', () => {
-                        this.$imageViewer.show(image.c2cExtrapoledDocument)
-                    })
+          image.src = config.urls.api + image.attributes['c2c:url-proxy'].value;
+          image.addEventListener('click', () => {
+            this.$imageViewer.show(image.c2cExtrapoledDocument);
+          });
 
-                    this.$imageViewer.push(image.c2cExtrapoledDocument)
-                }
-            },
+          this.$imageViewer.push(image.c2cExtrapoledDocument);
+        }
+      },
 
-            computeAnchors(anchors) {
-                for (let anchor of anchors) {
-                    const attributes = anchor.attributes
+      computeAnchors(anchors) {
+        for (let anchor of anchors) {
+          const attributes = anchor.attributes;
 
-                    // eslint-disable-next-line
+          // eslint-disable-next-line
                     const { location, route, href } = this.$router.resolve({
-                        name: attributes['c2c:document-type'].value.slice(0, -1),
-                        params: {
-                            id: parseInt(attributes['c2c:document-id'].value, 10),
-                            lang: attributes['c2c:lang'] ? attributes['c2c:lang'].value : undefined,
-                            title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined,
-                            anchor: attributes['c2c:anchor'] ? attributes['c2c:anchor'].value : undefined
-                        }
-                    })
-
-                    anchor.href = href
-                    anchor.addEventListener('click', (e) => {
-                        if (guardEvent(e)) {
-                            this.$router.push(location)
-                        }
-                    })
-                }
+            name: attributes['c2c:document-type'].value.slice(0, -1),
+            params: {
+              id: parseInt(attributes['c2c:document-id'].value, 10),
+              lang: attributes['c2c:lang'] ? attributes['c2c:lang'].value : undefined,
+              title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined,
+              anchor: attributes['c2c:anchor'] ? attributes['c2c:anchor'].value : undefined
             }
+          });
+
+          anchor.href = href;
+          anchor.addEventListener('click', (e) => {
+            if (guardEvent(e)) {
+              this.$router.push(location);
+            }
+          });
         }
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

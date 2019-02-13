@@ -1,29 +1,29 @@
 <template>
-    <div class="topoguide-link-view">
-        <router-link :to="to">
-            <span class="is-size-2"><component :is="icon" /></span>
-            <span class="is-size-4">{{ label | uppercaseFirstLetter }}</span>
-        </router-link>
-    </div>
+  <div class="topoguide-link-view">
+    <router-link :to="to">
+      <span class="is-size-2"><component :is="icon" /></span>
+      <span class="is-size-4">{{ label | uppercaseFirstLetter }}</span>
+    </router-link>
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            to: {
-                type: String,
-                required: true
-            },
-            label: {
-                type: String,
-                required: true
-            },
-            icon: {
-                type: String,
-                required: true
-            }
-        }
+  export default {
+    props: {
+      to: {
+        type: String,
+        required: true
+      },
+      label: {
+        type: String,
+        required: true
+      },
+      icon: {
+        type: String,
+        required: true
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

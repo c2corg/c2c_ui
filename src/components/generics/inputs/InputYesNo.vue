@@ -1,38 +1,38 @@
 <template>
-    <div class="control">
+  <div class="control">
 
-        <input
-            :id="'c2c-' + _uid + '_yes'"
-            type="radio"
-            :value="true"
-            class="is-checkradio is-info"
-            v-model="value_">
-        <label :for="'c2c-' + _uid + '_yes'">{{ $gettext('yes') | uppercaseFirstLetter }}</label>
+    <input
+      :id="'c2c-' + _uid + '_yes'"
+      type="radio"
+      :value="true"
+      class="is-checkradio is-info"
+      v-model="value_">
+    <label :for="'c2c-' + _uid + '_yes'">{{ $gettext('yes') | uppercaseFirstLetter }}</label>
 
-        <input
-            :id="'c2c-' + _uid + '_no'"
-            type="radio"
-            :value="false"
-            class="is-checkradio is-info"
-            v-model="value_">
-        <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
+    <input
+      :id="'c2c-' + _uid + '_no'"
+      type="radio"
+      :value="false"
+      class="is-checkradio is-info"
+      v-model="value_">
+    <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
 
-    </div>
+  </div>
 </template>
 
 <script>
-    import { baseMixin } from './mixins.js'
+  import { baseMixin } from './mixins.js';
 
-    export default {
-        mixins: [ baseMixin ],
+  export default {
+    mixins: [ baseMixin ],
 
-        props: {
-            value: {
-                type: Boolean,
-                default: null
-            }
-        }
+    props: {
+      value: {
+        type: Boolean,
+        default: null
+      }
     }
+  };
 
 </script>
 

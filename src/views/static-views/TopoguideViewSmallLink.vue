@@ -1,20 +1,20 @@
 <template>
-    <div>
-        <router-link :to="to">
-            <slot />
-        </router-link>
-    </div>
+  <div>
+    <router-link :to="to">
+      <slot />
+    </router-link>
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            to: {
-                type: Object,
-                required: true
-            }
-        }
+  export default {
+    props: {
+      to: {
+        type: Object,
+        required: true
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">
