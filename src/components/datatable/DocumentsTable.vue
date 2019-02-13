@@ -114,7 +114,7 @@
                     getColDef(this, fields.date_start, { width: 100 }),
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-                    getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
+                    getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor, width: 100 }),
                     getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
                     getColDef(this, fields.height_diff_up, { width: 100 }),
 

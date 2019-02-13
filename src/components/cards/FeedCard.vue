@@ -49,6 +49,7 @@
             <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
             <span>
                 <marker-image-count :image-count="item.document.img_count" />
+                <span>&nbsp;</span>
                 <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
             </span>
             <span> {{ $moment.timeAgo(item.time) }} </span>
