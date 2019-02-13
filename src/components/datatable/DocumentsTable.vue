@@ -25,6 +25,7 @@
     import MarkerQuality from './cell-renderers/MarkerQuality'
     import AreaList from './cell-renderers/AreaList'
     import DocumentAuthor from './cell-renderers/DocumentAuthor'
+    import DocumentActivities from './cell-renderers/DocumentActivities'
 
     function getColDef(vm, field, options) {
         options = options || {}
@@ -72,7 +73,7 @@
             if (this.documentType === 'article') {
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-                    getColDef(this, fields.activities, { width: 150 }),
+                    getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 150 }),
                     getColDef(this, fields.categories),
                     getColDef(this, fields.article_type),
                     { cellRendererFramework: MarkerQuality, width: 30 }
@@ -84,7 +85,7 @@
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, fields.book_types),
                     getColDef(this, fields.author),
-                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
                     { cellRendererFramework: MarkerQuality, width: 30 }
                 ]
             }
@@ -114,7 +115,7 @@
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor }),
-                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
                     getColDef(this, fields.height_diff_up, { width: 100 }),
 
                     {
@@ -147,7 +148,7 @@
                 this.columnDefs = [
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
                     getColDef(this, fields.orientations, { width: 100 }),
                     {
                         headerName: this.$gettext('elevation'),
@@ -194,7 +195,7 @@
                     getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
                     getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
                     getColDef(this, fields.event_type, { width: 100 }),
-                    getColDef(this, fields.activities, { width: 100 }),
+                    getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
                     {
                         headerName: this.$gettext('severity'),
                         children: [
