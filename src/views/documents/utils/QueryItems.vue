@@ -10,6 +10,10 @@
             <span slot="button">
                 <fa-icon :icon="$options.categoryIcon[category.name]" />
                 <span class="is-hidden-mobile">
+                    <!-- $gettext('General') -->
+                    <!-- $gettext('ratings') -->
+                    <!-- $gettext('Terrain') -->
+                    <!-- $gettext('Miscs') -->
                     {{ $gettext(category.name) }}
                 </span>
                 <span v-if="category.activeCount!=0">
