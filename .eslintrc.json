@@ -54,7 +54,8 @@
       "never"
     ],
     "no-var": "error",
-    "prefer-const": "error"
+    "prefer-const": "error",
+    "no-multi-assign": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"
