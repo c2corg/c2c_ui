@@ -271,7 +271,7 @@ export default function install(Vue) {
         } else if (!sameDay) {
           return start.format('Do') + ' - ' + end.format('Do MMMM YYYY');
         } else {
-          return end.format('Do MMMM YYYY');
+          return end.format('dddd Do MMMM YYYY');
         }
       }
     }
