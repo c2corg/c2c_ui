@@ -226,7 +226,7 @@
     }
 
     table[c2c\:role=ltag]{
-        width: auto;
+        width: auto!important; // on prod, bulma CSS is after this CSS ??
 
         .pitch{
             font-weight:bold;

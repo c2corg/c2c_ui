@@ -1207,7 +1207,7 @@ msgid "elevation_down_snow"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue:2
-#: src/components/generics/inputs/InputDocument.vue:44
+#: src/components/generics/inputs/InputDocument.vue:42
 #: src/translations/fixed_strings_common_js.vue:60
 msgid "elevation_max"
 msgstr ""
@@ -1586,91 +1586,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:110
+#: src/components/cards/FeedCard.vue:111
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:108
+#: src/components/cards/FeedCard.vue:109
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:109
+#: src/components/cards/FeedCard.vue:110
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:111
+#: src/components/cards/FeedCard.vue:112
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:112
+#: src/components/cards/FeedCard.vue:113
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:113
+#: src/components/cards/FeedCard.vue:114
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:114
+#: src/components/cards/FeedCard.vue:115
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:115
+#: src/components/cards/FeedCard.vue:116
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:116
+#: src/components/cards/FeedCard.vue:117
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:117
+#: src/components/cards/FeedCard.vue:118
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:118
+#: src/components/cards/FeedCard.vue:119
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:119
+#: src/components/cards/FeedCard.vue:120
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:120
+#: src/components/cards/FeedCard.vue:121
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:121
+#: src/components/cards/FeedCard.vue:122
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:122
+#: src/components/cards/FeedCard.vue:123
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:123
+#: src/components/cards/FeedCard.vue:124
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:124
+#: src/components/cards/FeedCard.vue:125
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:126
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:126
+#: src/components/cards/FeedCard.vue:127
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:127
+#: src/components/cards/FeedCard.vue:128
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:129
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:130
 msgid "has updated the xreport"
 msgstr ""
 
@@ -2137,7 +2137,7 @@ msgid "Log in to post the first comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:80
+#: src/views/Navigation.vue:71
 #: src/views/user/LoginView.vue:138
 #: src/views/user/LoginView.vue:28
 #: src/views/user/LoginView.vue:3
@@ -2149,7 +2149,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:135
+#: src/views/Navigation.vue:126
 msgid "Logout"
 msgstr ""
 
@@ -2367,34 +2367,34 @@ msgctxt "climbing_outdoor_types"
 msgid "multi"
 msgstr ""
 
-#: src/views/Navigation.vue:108
+#: src/views/Navigation.vue:99
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:120
+#: src/views/Navigation.vue:111
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:124
+#: src/views/Navigation.vue:115
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:128
+#: src/views/Navigation.vue:119
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:116
+#: src/views/Navigation.vue:107
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:112
+#: src/views/Navigation.vue:103
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:104
+#: src/views/Navigation.vue:95
 msgid "My profile"
 msgstr ""
 
@@ -2524,7 +2524,7 @@ msgstr ""
 msgid "No account yet?"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:75
+#: src/components/generics/inputs/InputDocument.vue:73
 msgid "No match?"
 msgstr ""
 
@@ -2898,7 +2898,7 @@ msgstr ""
 msgid "Precise location of the event."
 msgstr ""
 
-#: src/views/documents/utils/QueryItem.vue:34
+#: src/views/documents/utils/QueryItem.vue:39
 msgid "Press enter to select"
 msgstr ""
 
@@ -3293,7 +3293,7 @@ msgstr ""
 msgid "See the latest version"
 msgstr ""
 
-#: src/views/documents/utils/QueryItem.vue:33
+#: src/views/documents/utils/QueryItem.vue:38
 msgid "Select option"
 msgstr ""
 
@@ -3812,7 +3812,7 @@ msgid "Translate into an other lang"
 msgstr ""
 
 #: src/views/wiki/edition/WaypointEditionView.vue:37
-msgid "Transport &amp; road or PT access"
+msgid "Transport & road or PT access"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:475

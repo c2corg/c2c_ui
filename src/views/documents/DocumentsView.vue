@@ -12,11 +12,7 @@
             </div>
             <div class="dropdown-menu" role="menu">
               <div class="dropdown-content">
-                <div
-                  v-for="type of ['route', 'waypoint', 'outing', 'image', 'book', 'area']"
-                  :key="type"
-                  v-if="type!==documentType"
-                  class="dropdown-item">
+                <div v-for="type of otherDocumentTypes" :key="type" class="dropdown-item">
                   <router-link
                     :to="{name: type + 's', query:$route.query}"
                     class="has-text-dark">
@@ -169,6 +165,9 @@
       documentType() {
         return this.$route.name.slice(0, -1);
       },
+      otherDocumentTypes() {
+        return ['route', 'waypoint', 'outing', 'image', 'book', 'area'].filter((type) => type !== this.documentType);
+      },
       documentAreGeoLocalized() {
         return constants.objectDefinitions[this.documentType].geoLocalized === true;
       },
@@ -221,15 +220,6 @@
     $page-selector-height : 3rem;
     $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
     $cards-gap:0.25rem;
-
-    .documents-view{
-    }
-
-    .header-section{
-    }
-
-    .filter-section{
-    }
 
     @media screen and (max-width: $tablet) {
 

@@ -16,9 +16,14 @@
 
     <div v-else-if="field.queryMode==='numericalRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value"/>
-      <vue-slider ref="slider" v-model="value"
-                  :min="field.min" :max="field.max" :lazy="true"
-                  tooltip="hover"/>
+      <vue-slider
+        ref="slider"
+        v-model="value"
+        :min="field.min"
+        :max="field.max"
+        :interval="interval"
+        :lazy="true"
+        tooltip="hover"/>
     </div>
 
     <div v-else-if="field.queryMode==='multiSelect'" class="control">
@@ -94,13 +99,23 @@
         default: false
       }
     },
-    // debug test, do not remove it
-    // created(){
-    //     if(!this.field.url)
-    //         throw `Please enter url property for field ${this.field.name}`
-    // },
 
     timeoutId: null,
+    computed: {
+      interval() {
+        const scope = this.field.max - this.field.min;
+
+        if (scope < 300) {
+          return 1;
+        } else if (scope < 1000) {
+          return 5;
+        } else if (scope < 3000) {
+          return 10;
+        } else {
+          return 25;
+        }
+      }
+    },
 
     methods: {
       refreshSlider() {

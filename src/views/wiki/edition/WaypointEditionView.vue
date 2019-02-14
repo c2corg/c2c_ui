@@ -34,7 +34,7 @@
 
     </form-section>
 
-    <form-section :title="$gettext('Transport &amp; road or PT access')" @save="save" :is-loading="!!promise.loading">
+    <form-section :title="$gettext('Transport & road or PT access')" @save="save" :is-loading="!!promise.loading">
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.snow_clearance_rating" />
         <form-field class="is-4" :document="document" :field="fields.lift_access" />
