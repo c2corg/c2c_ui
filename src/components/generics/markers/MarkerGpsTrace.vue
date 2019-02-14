@@ -1,5 +1,5 @@
 <template>
-    <span :title="$gettext('GPS Track')">
-        <icon-geometry-detail />
-    </span>
+  <span :title="$gettext('GPS Track')">
+    <icon-geometry-detail />
+  </span>
 </template>

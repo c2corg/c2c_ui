@@ -13,15 +13,15 @@
     "no-console": "warn",
     "indent": [
       "off",
-      4
+      2
     ],
     "vue/html-indent": [
       "warn",
-      4
+      2
     ],
     "vue/script-indent": [
       "warn",
-      4,
+      2,
       {
         "baseIndent": 1
       }
@@ -36,7 +36,10 @@
     "eqeqeq": "warn",
     "camelcase": "off",
     "no-trailing-spaces": "warn",
-    "semi": "warn",
+    "semi": [
+      "error",
+      "always"
+    ],
     "quotes": "warn",
     "object-curly-spacing": "warn",
     "brace-style": [
@@ -49,7 +52,14 @@
     "space-before-function-paren": [
       "warn",
       "never"
-    ]
+    ],
+    "object-shorthand": [
+      "error",
+      "always"
+    ],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-multi-assign": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"

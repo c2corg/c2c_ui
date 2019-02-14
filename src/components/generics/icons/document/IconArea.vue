@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="globe-americas" />
+  <fa-icon icon="globe-americas" />
 </template>

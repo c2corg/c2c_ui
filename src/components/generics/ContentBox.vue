@@ -1,18 +1,18 @@
 <template>
-    <div class="box" @click="click" >
-        <slot/>
-    </div>
+  <div class="box" @click="click" >
+    <slot/>
+  </div>
 </template>
 
 <script>
-    export default {
+  export default {
 
-        methods: {
-            click() {
-                this.$emit('click')
-            }
-        }
+    methods: {
+      click() {
+        this.$emit('click');
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

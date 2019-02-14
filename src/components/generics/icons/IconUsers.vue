@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="users" />
+  <fa-icon icon="users" />
 </template>

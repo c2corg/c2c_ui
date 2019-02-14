@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="arrow-right" />
+  <fa-icon icon="arrow-right" />
 </template>

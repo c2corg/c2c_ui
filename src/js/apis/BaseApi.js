@@ -1,5 +1,5 @@
-import axios from 'axios'
-import config from '@/js/config.ts'
+import axios from 'axios';
+import config from '@/js/config.ts';
 
 /// ////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :
@@ -9,56 +9,56 @@ import config from '@/js/config.ts'
 // So let's polyfill it, whith a Promise-like object
 
 const ApiData = function(promise) {
-    let self = this
+  const self = this;
 
-    this.response = null
-    this.error = null
-    this.promise_ = promise
-    this.data = null
-    this.loading = true
+  this.response = null;
+  this.error = null;
+  this.promise_ = promise;
+  this.data = null;
+  this.loading = true;
 
-    promise.then(
-        response => {
-            self.loading = false
-            self.response = response
-            self.data = response.data
-        },
-        error => {
-            self.loading = false
-            self.error = error
-        }
-    )
-}
+  promise.then(
+    response => {
+      self.loading = false;
+      self.response = response;
+      self.data = response.data;
+    },
+    error => {
+      self.loading = false;
+      self.error = error;
+    }
+  );
+};
 
 ApiData.prototype.then = function(callback) {
-    this.promise_.then(callback)
-    return this
-}
+  this.promise_.then(callback);
+  return this;
+};
 
 ApiData.prototype.catch = function(callback) {
-    this.promise_.catch(callback)
-    return this
-}
+  this.promise_.catch(callback);
+  return this;
+};
 
 const BaseApi = function(apiUrl) {
-    this.axios = axios.create({
-        // axios instances shares same common headers. this trick fix this.
-        headers: { common: {} },
-        baseURL: apiUrl
-    })
+  this.axios = axios.create({
+    // axios instances shares same common headers. this trick fix this.
+    headers: { common: {} },
+    baseURL: apiUrl
+  });
 
-    // for project phase, allow moderators to edit
-    this.isSafeUser = false
-}
+  // for project phase, allow moderators to edit
+  this.isSafeUser = false;
+};
 
 if (config.urls.readWrite) {
-    BaseApi.prototype.checkReadOnly = function() {}
+  BaseApi.prototype.checkReadOnly = function() {};
 } else {
-    BaseApi.prototype.checkReadOnly = function(safeCall) {
-        if (!safeCall && !this.isSafeUser) {
-            throw new Error('This build is read only')
-        }
+  BaseApi.prototype.checkReadOnly = function(safeCall) {
+    if (!safeCall && !this.isSafeUser) {
+      throw new Error('This build is read only');
     }
+  };
 }
 
 /**
@@ -66,22 +66,22 @@ if (config.urls.readWrite) {
  */
 
 BaseApi.prototype.get = function(url, params) {
-    return new ApiData(this.axios.get(url, params))
-}
+  return new ApiData(this.axios.get(url, params));
+};
 
 BaseApi.prototype.post = function(url, body, safeCall) {
-    this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.post(url, body))
-}
+  this.checkReadOnly(safeCall);
+  return new ApiData(this.axios.post(url, body));
+};
 
 BaseApi.prototype.put = function(url, body, safeCall) {
-    this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.put(url, body))
-}
+  this.checkReadOnly(safeCall);
+  return new ApiData(this.axios.put(url, body));
+};
 
 BaseApi.prototype.delete = function(url, body, safeCall) {
-    this.checkReadOnly(safeCall)
-    return new ApiData(this.axios.delete(url, body))
-}
+  this.checkReadOnly(safeCall);
+  return new ApiData(this.axios.delete(url, body));
+};
 
-export default BaseApi
+export default BaseApi;

@@ -1,59 +1,59 @@
 <template>
-    <section>
-        <div class="intro-banner has-text-centered">
-            <div class="title is-1 with-background" v-translate>
-                The mountain sports community
-            </div>
+  <section>
+    <div class="intro-banner has-text-centered">
+      <div class="title is-1 with-background" v-translate>
+        The mountain sports community
+      </div>
 
-            <div class="outings-links">
-                <router-link
-                    v-for="activity of $options.activities"
-                    :key="activity"
-                    :to="{name:'outings', query:{act:activity}}"
-                    :title="$gettext(activity, 'activities')"
-                    class="outings-link">
-                    <icon-activity :activity="activity"/>
-                </router-link>
-            </div>
+      <div class="outings-links">
+        <router-link
+          v-for="activity of $options.activities"
+          :key="activity"
+          :to="{name:'outings', query:{act:activity}}"
+          :title="$gettext(activity, 'activities')"
+          class="outings-link">
+          <icon-activity :activity="activity"/>
+        </router-link>
+      </div>
 
-            <div class="title is-4 has-text-weight-normal with-background" v-translate>
-                Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.
-            </div>
+      <div class="title is-4 has-text-weight-normal with-background" v-translate>
+        Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.
+      </div>
 
-            <div class="buttons is-centered">
+      <div class="buttons is-centered">
 
-                <router-link :to="{ name: 'topoguide'}" class="button is-primary">
-                    <icon-topoguide />&nbsp;
-                    <span v-translate="">Topoguide</span><br>
-                    <span v-translate="" class="is-size-4">Conditions, summits, routes</span>...
-                </router-link>
+        <router-link :to="{ name: 'topoguide'}" class="button is-primary">
+          <icon-topoguide />&nbsp;
+          <span v-translate="">Topoguide</span><br>
+          <span v-translate="" class="is-size-4">Conditions, summits, routes</span>...
+        </router-link>
 
-                <router-link :to="{ name: 'forum'}" class="button is-info">
-                    <icon-forum />&nbsp;
-                    <span v-translate>Forum</span><br>
-                    <span v-translate class="is-size-4">Share with us!</span>
-                </router-link>
-            </div>
-        </div>
-    </section>
+        <router-link :to="{ name: 'forum'}" class="button is-info">
+          <icon-forum />&nbsp;
+          <span v-translate>Forum</span><br>
+          <span v-translate class="is-size-4">Share with us!</span>
+        </router-link>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-    export default {
-        activities: [
-            'skitouring',
-            'snow_ice_mixed',
-            'mountain_climbing',
-            'rock_climbing',
-            'ice_climbing',
-            'hiking',
-            'snowshoeing',
-            'paragliding',
-            'mountain_biking',
-            'via_ferrata',
-            'slacklining'
-        ]
-    }
+  export default {
+    activities: [
+      'skitouring',
+      'snow_ice_mixed',
+      'mountain_climbing',
+      'rock_climbing',
+      'ice_climbing',
+      'hiking',
+      'snowshoeing',
+      'paragliding',
+      'mountain_biking',
+      'via_ferrata',
+      'slacklining'
+    ]
+  };
 </script>
 
 <style scoped lang="scss">

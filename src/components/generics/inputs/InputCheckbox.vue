@@ -1,34 +1,34 @@
 <template>
 
-    <div class="control">
-        <input class="is-checkradio is-info" type="checkbox" v-model="value_" @change="$emit('change')">
-        <label @click="onClick">
-            <slot />
-        </label>
-    </div>
+  <div class="control">
+    <input class="is-checkradio is-info" type="checkbox" v-model="value_" @change="$emit('change')">
+    <label @click="onClick">
+      <slot />
+    </label>
+  </div>
 
 </template>
 
 <script>
-    import { baseMixin } from './mixins.js'
+  import { baseMixin } from './mixins.js';
 
-    export default {
-        mixins: [ baseMixin ],
+  export default {
+    mixins: [ baseMixin ],
 
-        props: {
-            value: {
-                type: Boolean,
-                default: null
-            }
-        },
+    props: {
+      value: {
+        type: Boolean,
+        default: null
+      }
+    },
 
-        methods: {
-            onClick() {
-                this.value_ = !this.value_
-                this.$emit('change')
-            }
-        }
+    methods: {
+      onClick() {
+        this.value_ = !this.value_;
+        this.$emit('change');
+      }
     }
+  };
 
 </script>
 

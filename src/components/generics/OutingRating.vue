@@ -1,40 +1,40 @@
 <template>
-    <span>
-        <span
-            v-for="rating of $options.ratings"
-            :key="rating"
-            v-if="document[rating]"
-            :title="$gettext(rating)">
-            {{ document[rating] }}
-        </span>
+  <span>
+    <span
+      v-for="rating of $options.ratings"
+      :key="rating"
+      v-if="document[rating]"
+      :title="$gettext(rating)">
+      {{ document[rating] }}
     </span>
+  </span>
 
 </template>
 
 <script>
 
-    export default {
-        props: {
-            document: {
-                type: Object,
-                required: true
-            }
-        },
+  export default {
+    props: {
+      document: {
+        type: Object,
+        required: true
+      }
+    },
 
-        ratings: [
-            'global_rating',
-            'rock_free_rating',
-            'ice_rating',
-            'via_ferrata_rating',
-            'engagement_rating',
-            'equipment_rating',
-            'ski_rating',
-            'labande_global_rating',
-            'hiking_rating',
-            'snowshoe_rating',
-            'mtb_up_rating',
-            'mtb_down_rating'
-        ]
-    }
+    ratings: [
+      'global_rating',
+      'rock_free_rating',
+      'ice_rating',
+      'via_ferrata_rating',
+      'engagement_rating',
+      'equipment_rating',
+      'ski_rating',
+      'labande_global_rating',
+      'hiking_rating',
+      'snowshoe_rating',
+      'mtb_up_rating',
+      'mtb_down_rating'
+    ]
+  };
 
 </script>

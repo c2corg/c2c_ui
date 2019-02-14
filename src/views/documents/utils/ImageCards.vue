@@ -1,36 +1,36 @@
 <template>
-    <div v-if="documents" class="cards-container is-flex">
-        <div
-            v-for="document in documents.documents"
-            :key="document.document_id"
-            class="card-image">
-            <img :src="getMediumImageUrl(document)" height="250" @click="go(document)">
-        </div>
+  <div v-if="documents" class="cards-container is-flex">
+    <div
+      v-for="document in documents.documents"
+      :key="document.document_id"
+      class="card-image">
+      <img :src="getMediumImageUrl(document)" height="250" @click="go(document)">
     </div>
+  </div>
 </template>
 
 <script>
-    import imageUrls from '@/js/image-urls'
+  import imageUrls from '@/js/image-urls';
 
-    export default {
-        props: {
-            documents: {
-                type: Object,
-                required: true
-            }
-        },
+  export default {
+    props: {
+      documents: {
+        type: Object,
+        required: true
+      }
+    },
 
-        methods: {
-            go(document) {
-                this.$router.push({
-                    name: 'image',
-                    params: { id: document.document_id }
-                })
-            },
+    methods: {
+      go(document) {
+        this.$router.push({
+          name: 'image',
+          params: { id: document.document_id }
+        });
+      },
 
-            getMediumImageUrl: imageUrls.getMedium
-        }
+      getMediumImageUrl: imageUrls.getMedium
     }
+  };
 
 </script>
 

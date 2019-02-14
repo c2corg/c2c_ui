@@ -1,46 +1,46 @@
 <template>
-    <swiper :options="$options.swiperOption" class="swiper">
-        <swiper-slide v-for="image of images" :key="image.document_id">
-            <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)">
-        </swiper-slide>
-    </swiper>
+  <swiper :options="$options.swiperOption" class="swiper">
+    <swiper-slide v-for="image of images" :key="image.document_id">
+      <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)">
+    </swiper-slide>
+  </swiper>
 
 </template>
 
 <script>
 
-    import { swiper, swiperSlide } from 'vue-awesome-swiper'
-    import imageUrls from '@/js/image-urls'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import imageUrls from '@/js/image-urls';
 
-    export default {
+  export default {
 
-        components: {
-            swiper,
-            swiperSlide
-        },
+    components: {
+      swiper,
+      swiperSlide
+    },
 
-        props: {
-            images: {
-                type: Array,
-                required: true
-            }
-        },
+    props: {
+      images: {
+        type: Array,
+        required: true
+      }
+    },
 
-        created() {
-            this.images.map(this.$imageViewer.push)
-        },
+    created() {
+      this.images.map(this.$imageViewer.push);
+    },
 
-        methods: {
-            getUrl(image) {
-                return imageUrls.getMedium(image)
-            }
-        },
+    methods: {
+      getUrl(image) {
+        return imageUrls.getMedium(image);
+      }
+    },
 
-        swiperOption: {
-            slidesPerView: 'auto',
-            spaceBetween: 15
-        }
+    swiperOption: {
+      slidesPerView: 'auto',
+      spaceBetween: 15
     }
+  };
 </script>
 
 <style scoped lang="scss">

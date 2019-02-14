@@ -1,31 +1,31 @@
 <template>
-    <div class="advertisement">
-        <iframe
-            :src="$options.baseUrl + 'affiz.html'"
-            frameborder="0"
-            scrolling="no" />
+  <div class="advertisement">
+    <iframe
+      :src="$options.baseUrl + 'affiz.html'"
+      frameborder="0"
+      scrolling="no" />
 
-        <router-link v-if="enableFallback" :to="{name:'serac'}" class="advertisement-fallback">
-            <img src="@/assets/img/serac.png">
-        </router-link>
-    </div>
+    <router-link v-if="enableFallback" :to="{name:'serac'}" class="advertisement-fallback">
+      <img src="@/assets/img/serac.png">
+    </router-link>
+  </div>
 </template>
 
 <script>
-    import config from '@/js/config'
+  import config from '@/js/config';
 
-    // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/affiz.html
+  // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/affiz.html
 
-    export default {
+  export default {
 
-        data() {
-            return {
-                enableFallback: false
-            }
-        },
+    data() {
+      return {
+        enableFallback: false
+      };
+    },
 
-        baseUrl: config.baseUrl
-    }
+    baseUrl: config.baseUrl
+  };
 
 </script>
 

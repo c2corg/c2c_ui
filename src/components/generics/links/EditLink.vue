@@ -1,24 +1,24 @@
 <template>
-    <router-link
-        v-if="$user.isLogged"
-        :to="{name:documentType + '-edit', params:{id:document.document_id, lang:lang}}">
-        <slot>
-            <span v-translate>Edit</span>
-        </slot>
-    </router-link>
+  <router-link
+    v-if="$user.isLogged"
+    :to="{name:documentType + '-edit', params:{id:document.document_id, lang:lang}}">
+    <slot>
+      <span v-translate>Edit</span>
+    </slot>
+  </router-link>
 </template>
 
 <script>
-    import { requireDocumentProperty } from '@/js/properties-mixins'
+  import { requireDocumentProperty } from '@/js/properties-mixins';
 
-    export default{
-        mixins: [ requireDocumentProperty ],
+  export default{
+    mixins: [ requireDocumentProperty ],
 
-        props: {
-            lang: {
-                type: String,
-                required: true
-            }
-        }
+    props: {
+      lang: {
+        type: String,
+        required: true
+      }
     }
+  };
 </script>

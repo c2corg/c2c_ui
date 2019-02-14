@@ -1,32 +1,32 @@
 <template>
-    <div class="modal" :class="{'is-active': visible, 'is-wide': wide}">
-        <div class="modal-background" @click="hide" />
-        <div class="modal-content">
-            <header v-if="$slots.header" class="title is-3">
-                <button class="delete is-pulled-right" aria-label="close" @click="hide" />
-                <slot name="header"/>
-            </header>
-            <slot>
-                Modal content
-            </slot>
-        </div>
+  <div class="modal" :class="{'is-active': visible, 'is-wide': wide}">
+    <div class="modal-background" @click="hide" />
+    <div class="modal-content">
+      <header v-if="$slots.header" class="title is-3">
+        <button class="delete is-pulled-right" aria-label="close" @click="hide" />
+        <slot name="header"/>
+      </header>
+      <slot>
+        Modal content
+      </slot>
     </div>
+  </div>
 </template>
 
 <script>
-    import mixins from './mixins'
+  import mixins from './mixins';
 
-    export default {
+  export default {
 
-        mixins: [ mixins ],
+    mixins: [ mixins ],
 
-        props: {
-            wide: {
-                type: Boolean,
-                default: false
-            }
-        }
+    props: {
+      wide: {
+        type: Boolean,
+        default: false
+      }
     }
+  };
 
 </script>
 

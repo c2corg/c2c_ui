@@ -1,47 +1,47 @@
 
-import BaseApi from '@/js/apis/BaseApi.js'
-import config from '@/js/config.ts'
+import BaseApi from '@/js/apis/BaseApi.js';
+import config from '@/js/config.ts';
 
 function Forum() {
-    BaseApi.call(this, config.urls.forum)
+  BaseApi.call(this, config.urls.forum);
 }
 
 // inherits prototype
-Forum.prototype = Object.create(BaseApi.prototype)
+Forum.prototype = Object.create(BaseApi.prototype);
 
 // restore good contructor
-Forum.prototype.constructor = Forum
+Forum.prototype.constructor = Forum;
 
 Object.defineProperty(Forum.prototype, 'url', {
-    get() {
-        return config.urls.forum
-    }
-})
+  get() {
+    return config.urls.forum;
+  }
+});
 
 Forum.prototype.getTopic = function(topicId) {
-    return this.get('/t/title/' + topicId + '.json')
-}
+  return this.get('/t/title/' + topicId + '.json');
+};
 
 Forum.prototype.getLatest = function() {
-    var result = this.get('/latest.json')
+  const result = this.get('/latest.json');
 
-    result.then(function(response) {
-        var users = {}
+  result.then(function(response) {
+    const users = {};
 
-        response.data.users.forEach(function(user) {
-            users[user.username] = user
-        })
+    response.data.users.forEach(function(user) {
+      users[user.username] = user;
+    });
 
-        response.data.topic_list.topics.map(function(topic) {
-            topic.last_poster_user = users[topic.last_poster_username]
-        })
-    })
+    response.data.topic_list.topics.map(function(topic) {
+      topic.last_poster_user = users[topic.last_poster_username];
+    });
+  });
 
-    return result
-}
+  return result;
+};
 
 Forum.prototype.readAnnouncement = function(lang) {
-    return this.get('/t/annonce-' + lang + '.json')
-}
+  return this.get('/t/annonce-' + lang + '.json');
+};
 
-export default new Forum()
+export default new Forum();

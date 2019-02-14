@@ -1,3 +1,3 @@
 <template>
-    <fa-icon icon="flag-checkered" />
+  <fa-icon icon="flag-checkered" />
 </template>

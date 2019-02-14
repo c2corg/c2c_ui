@@ -1,69 +1,69 @@
 <template>
-    <div class="section">
-        <document-view-header :document="document" :version="version" :promise="promise" />
-        <div v-if="document" class="columns">
-            <div class="column is-3">
+  <div class="section">
+    <document-view-header :document="document" :version="version" :promise="promise" />
+    <div v-if="document" class="columns">
+      <div class="column is-3">
 
-                <div class="box">
+        <div class="box">
 
-                    <label-value :label="$gettext('activities')">
-                        <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
-                    </label-value>
+          <label-value :label="$gettext('activities')">
+            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+          </label-value>
 
-                    <label-value v-if="document.author" :label="$gettext('author')">
-                        <author-link :author="document.author"/>
-                    </label-value>
+          <label-value v-if="document.author" :label="$gettext('author')">
+            <author-link :author="document.author"/>
+          </label-value>
 
-                    <field-view :document="document" :field="fields.event_type"/>
+          <field-view :document="document" :field="fields.event_type"/>
 
-                    <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
-                        <users-links :users="document.associations.users"/>
-                    </label-value>
+          <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
+            <users-links :users="document.associations.users"/>
+          </label-value>
 
-                    <field-view :document="document" :field="fields.avalanche_level"/>
-                    <field-view :document="document" :field="fields.avalanche_slope"/>
-                    <field-view :document="document" :field="fields.elevation"/>
-                    <field-view :document="document" :field="fields.nb_participants"/>
-                    <field-view :document="document" :field="fields.nb_impacted"/>
-                    <field-view :document="document" :field="fields.rescue"/>
-                    <field-view :document="document" :field="fields.severity"/>
-                    <field-view :document="document" :field="fields.quality"/>
-                </div>
-
-                <map-box :document="document"/>
-                <tool-box :document="document"/>
-            </div>
-
-            <div class="column is-9">
-                <div class="box">
-                    <markdown-section :document="document" :field="fields.summary"/>
-                    <markdown-section :document="document" :field="fields.description"/>
-                    <markdown-section :document="document" :field="fields.place"/>
-                    <markdown-section :document="document" :field="fields.route_study"/>
-                    <markdown-section :document="document" :field="fields.conditions"/>
-                    <markdown-section :document="document" :field="fields.training"/>
-                    <markdown-section :document="document" :field="fields.motivations"/>
-                    <markdown-section :document="document" :field="fields.group_management"/>
-                    <markdown-section :document="document" :field="fields.risk"/>
-                    <markdown-section :document="document" :field="fields.time_management"/>
-                    <markdown-section :document="document" :field="fields.safety"/>
-                    <markdown-section :document="document" :field="fields.increase_impact"/>
-                    <markdown-section :document="document" :field="fields.reduce_impact"/>
-                    <markdown-section :document="document" :field="fields.modifications"/>
-                    <markdown-section :document="document" :field="fields.other_comments"/>
-                </div>
-
-                <comments-box :document="document" />
-
-            </div>
+          <field-view :document="document" :field="fields.avalanche_level"/>
+          <field-view :document="document" :field="fields.avalanche_slope"/>
+          <field-view :document="document" :field="fields.elevation"/>
+          <field-view :document="document" :field="fields.nb_participants"/>
+          <field-view :document="document" :field="fields.nb_impacted"/>
+          <field-view :document="document" :field="fields.rescue"/>
+          <field-view :document="document" :field="fields.severity"/>
+          <field-view :document="document" :field="fields.quality"/>
         </div>
+
+        <map-box :document="document"/>
+        <tool-box :document="document"/>
+      </div>
+
+      <div class="column is-9">
+        <div class="box">
+          <markdown-section :document="document" :field="fields.summary"/>
+          <markdown-section :document="document" :field="fields.description"/>
+          <markdown-section :document="document" :field="fields.place"/>
+          <markdown-section :document="document" :field="fields.route_study"/>
+          <markdown-section :document="document" :field="fields.conditions"/>
+          <markdown-section :document="document" :field="fields.training"/>
+          <markdown-section :document="document" :field="fields.motivations"/>
+          <markdown-section :document="document" :field="fields.group_management"/>
+          <markdown-section :document="document" :field="fields.risk"/>
+          <markdown-section :document="document" :field="fields.time_management"/>
+          <markdown-section :document="document" :field="fields.safety"/>
+          <markdown-section :document="document" :field="fields.increase_impact"/>
+          <markdown-section :document="document" :field="fields.reduce_impact"/>
+          <markdown-section :document="document" :field="fields.modifications"/>
+          <markdown-section :document="document" :field="fields.other_comments"/>
+        </div>
+
+        <comments-box :document="document" />
+
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    import DocumentViewMixin from './utils/DocumentViewMixin.js'
+  import DocumentViewMixin from './utils/DocumentViewMixin.js';
 
-    export default {
-        mixins: [ DocumentViewMixin ]
-    }
+  export default {
+    mixins: [ DocumentViewMixin ]
+  };
 </script>

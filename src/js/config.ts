@@ -8,7 +8,7 @@
 // note that it does not work with const, but why ???
 declare var CAMPTOCAMP_CONFIG: any;
 
-const LOCAL_STORAGE_KEY:string = 'SiteConfiguration.urlsName'
+const LOCAL_STORAGE_KEY:string = 'SiteConfiguration.urlsName';
 
 class Config {
     routerMode: string
@@ -20,27 +20,27 @@ class Config {
     baseUrl: string
 
     constructor() {
-        const config = CAMPTOCAMP_CONFIG
+        const config = CAMPTOCAMP_CONFIG;
 
-        this.routerMode = config.routerMode
-        this.ignApiKey = config.ignApiKey
-        this.bingApiKey = config.bingApiKey
-        this.isProduction = config.isProduction
-        this.urlsConfigurations = config.urlsConfigurations
-        this.baseUrl = config.baseUrl
+        this.routerMode = config.routerMode;
+        this.ignApiKey = config.ignApiKey;
+        this.bingApiKey = config.bingApiKey;
+        this.isProduction = config.isProduction;
+        this.urlsConfigurations = config.urlsConfigurations;
+        this.baseUrl = config.baseUrl;
 
-        const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) || config.urls.name
+        const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) || config.urls.name;
 
         if (!this.isProduction) {
-            this.urls = config.urlsConfigurations[urlsName]
+            this.urls = config.urlsConfigurations[urlsName];
         } else {
-            this.urls = config.urls
+            this.urls = config.urls;
         }
     }
 
     setUrlsName(name: string):void {
-        window.localStorage.setItem(LOCAL_STORAGE_KEY, name)
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, name);
     }
 }
 
-export default new Config()
+export default new Config();

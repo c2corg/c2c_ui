@@ -1,22 +1,22 @@
 <template>
 
-    <document-link :document="book" class="pretty-book-link has-hover-background">
-        <icon-book class="has-text-dark"/>
-        <document-title :document="book"/>,
-        <em class="has-text-dark">{{ book.author }}</em>
-    </document-link>
+  <document-link :document="book" class="pretty-book-link has-hover-background">
+    <icon-book class="has-text-dark"/>
+    <document-title :document="book"/>,
+    <em class="has-text-dark">{{ book.author }}</em>
+  </document-link>
 
 </template>
 
 <script>
-    export default {
-        props: {
-            book: {
-                type: Object,
-                required: true
-            }
-        }
+  export default {
+    props: {
+      book: {
+        type: Object,
+        required: true
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

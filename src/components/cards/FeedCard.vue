@@ -1,150 +1,150 @@
 <template>
-    <card-container :document="document" class="feed-card" >
-        <card-title>
-            <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+  <card-container :document="document" class="feed-card" >
+    <card-title>
+      <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
 
-            <span>
-                <document-title :document="item.user"/>
-                <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
-            </span>
+      <span>
+        <document-title :document="item.user"/>
+        <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
+      </span>
 
-            <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3"/>
-        </card-title>
+      <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3"/>
+    </card-title>
 
-        <card-row>
-            <document-title :document="item.document" class="is-ellipsed has-text-weight-bold"/>
-            <span v-if="documentType=='outing'" class="is-nowrap">{{ dates }}</span>
-        </card-row>
+    <card-row>
+      <document-title :document="item.document" class="is-ellipsed has-text-weight-bold"/>
+      <span v-if="documentType=='outing'" class="is-nowrap">{{ dates }}</span>
+    </card-row>
 
-        <card-row v-if="locale && locale.summary">
-            <markdown :content="locale.summary" class="is-ellipsed"/>
-        </card-row>
+    <card-row v-if="locale && locale.summary">
+      <markdown :content="locale.summary" class="is-ellipsed"/>
+    </card-row>
 
-        <card-row v-if="images.length!=0">
-            <gallery :images="images" />
-        </card-row>
+    <card-row v-if="images.length!=0">
+      <gallery :images="images" />
+    </card-row>
 
-        <card-row v-if="documentType!='article' && documentType!='book'">
-            <outing-rating v-if="documentType=='outing'" :document="item.document"/>
-            <route-rating v-else-if="documentType=='route'" :document="item.document"/>
+    <card-row v-if="documentType!='article' && documentType!='book'">
+      <outing-rating v-if="documentType=='outing'" :document="item.document"/>
+      <route-rating v-else-if="documentType=='route'" :document="item.document"/>
 
-            <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
+      <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
-            <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
-                <icon-height-diff-up />
-                {{ item.document.height_diff_up }}&nbsp;m
-            </span>
+      <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
+        <icon-height-diff-up />
+        {{ item.document.height_diff_up }}&nbsp;m
+      </span>
 
-            <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
-                <fa-icon icon="arrows-alt-v"/>
-                {{ item.document.height_diff_difficulties }}&nbsp;m
-            </span>
-        </card-row>
+      <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
+        <fa-icon icon="arrows-alt-v"/>
+        {{ item.document.height_diff_difficulties }}&nbsp;m
+      </span>
+    </card-row>
 
-        <card-row v-if="item.document.areas">
-            <card-region-item :document="item.document"/>
-        </card-row>
+    <card-row v-if="item.document.areas">
+      <card-region-item :document="item.document"/>
+    </card-row>
 
-        <card-row>
-            <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
-            <span>
-                <marker-image-count :image-count="item.document.img_count" />
-                <span>&nbsp;</span>
-                <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
-            </span>
-            <span> {{ $moment.timeAgo(item.time) }} </span>
-            <span>
-                <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
-                <marker-quality :quality="item.document.quality" />
-            </span>
-        </card-row>
-    </card-container>
+    <card-row>
+      <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
+      <span>
+        <marker-image-count :image-count="item.document.img_count" />
+        <span>&nbsp;</span>
+        <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
+      </span>
+      <span> {{ $moment.timeAgo(item.time) }} </span>
+      <span>
+        <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
+        <marker-quality :quality="item.document.quality" />
+      </span>
+    </card-row>
+  </card-container>
 </template>
 
 <script>
-    import forum from '@/js/apis/forum'
-    import Gallery from '@/components/gallery/Gallery'
-    import { cardMixin } from './utils/mixins.js'
+  import forum from '@/js/apis/forum';
+  import Gallery from '@/components/gallery/Gallery';
+  import { cardMixin } from './utils/mixins.js';
 
-    export default{
+  export default{
 
-        components: {
-            Gallery
-        },
+    components: {
+      Gallery
+    },
 
-        mixins: [
-            cardMixin
-        ],
+    mixins: [
+      cardMixin
+    ],
 
-        props: {
-            item: {
-                type: Object,
-                required: true
-            }
-        },
+    props: {
+      item: {
+        type: Object,
+        required: true
+      }
+    },
 
-        data() {
-            return {
-                actionLine: null,
-                images: []
-            }
-        },
+    data() {
+      return {
+        actionLine: null,
+        images: []
+      };
+    },
 
-        computed: {
-            document() {
-                return this.item.document
-            },
-            documentType() {
-                return this.$documentUtils.getDocumentType(this.document['type'])
-            },
-            locale() {
-                return this.$documentUtils.getLocaleSmart(this.item.document)
-            }
-        },
+    computed: {
+      document() {
+        return this.item.document;
+      },
+      documentType() {
+        return this.$documentUtils.getDocumentType(this.document['type']);
+      },
+      locale() {
+        return this.$documentUtils.getLocaleSmart(this.item.document);
+      }
+    },
 
-        forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
+    forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
 
-        created() {
-            this.actionLine = {
-                'added_photos article': this.$gettext('has added images to article'),
-                'added_photos book': this.$gettext('has added images to book'),
-                'added_photos area': this.$gettext('has added images to area'),
-                'added_photos outing': this.$gettext('has added images to outing'),
-                'added_photos route': this.$gettext('has added images to route'),
-                'added_photos waypoint': this.$gettext('has added images to waypoint'),
-                'added_photos xreport': this.$gettext('has added images to xreport'),
-                'created article': this.$gettext('has created a new article'),
-                'created book': this.$gettext('has created a new book'),
-                'created image': this.$gettext('has created a new image'),
-                'created outing': this.$gettext('has created a new outing'),
-                'created route': this.$gettext('has created a new route'),
-                'created waypoint': this.$gettext('has created a new waypoint'),
-                'created xreport': this.$gettext('has created a new xreport'),
-                'updated area': this.$gettext('has updated the area'),
-                'updated article': this.$gettext('has updated the article'),
-                'updated book': this.$gettext('has updated the book'),
-                'updated image': this.$gettext('has updated the image'),
-                'updated outing': this.$gettext('has updated the outing'),
-                'updated route': this.$gettext('has updated the route'),
-                'updated waypoint': this.$gettext('has updated the waypoint'),
-                'updated xreport': this.$gettext('has updated the xreport')
-            }[[this.item['change_type'], this.documentType].join(' ')]
+    created() {
+      this.actionLine = {
+        'added_photos article': this.$gettext('has added images to article'),
+        'added_photos book': this.$gettext('has added images to book'),
+        'added_photos area': this.$gettext('has added images to area'),
+        'added_photos outing': this.$gettext('has added images to outing'),
+        'added_photos route': this.$gettext('has added images to route'),
+        'added_photos waypoint': this.$gettext('has added images to waypoint'),
+        'added_photos xreport': this.$gettext('has added images to xreport'),
+        'created article': this.$gettext('has created a new article'),
+        'created book': this.$gettext('has created a new book'),
+        'created image': this.$gettext('has created a new image'),
+        'created outing': this.$gettext('has created a new outing'),
+        'created route': this.$gettext('has created a new route'),
+        'created waypoint': this.$gettext('has created a new waypoint'),
+        'created xreport': this.$gettext('has created a new xreport'),
+        'updated area': this.$gettext('has updated the area'),
+        'updated article': this.$gettext('has updated the article'),
+        'updated book': this.$gettext('has updated the book'),
+        'updated image': this.$gettext('has updated the image'),
+        'updated outing': this.$gettext('has updated the outing'),
+        'updated route': this.$gettext('has updated the route'),
+        'updated waypoint': this.$gettext('has updated the waypoint'),
+        'updated xreport': this.$gettext('has updated the xreport')
+      }[[this.item['change_type'], this.documentType].join(' ')];
 
-            this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document'])
+      this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document']);
 
-            if (this.item.image1) {
-                this.images.push(this.item.image1)
-            }
+      if (this.item.image1) {
+        this.images.push(this.item.image1);
+      }
 
-            if (this.item.image2) {
-                this.images.push(this.item.image2)
-            }
+      if (this.item.image2) {
+        this.images.push(this.item.image2);
+      }
 
-            if (this.item.image3) {
-                this.images.push(this.item.image3)
-            }
-        }
+      if (this.item.image3) {
+        this.images.push(this.item.image3);
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

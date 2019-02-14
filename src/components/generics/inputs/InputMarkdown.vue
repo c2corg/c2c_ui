@@ -1,28 +1,28 @@
 <template>
-    <div class="control">
-        <markdown-editor v-model="value_" :placeholder="placeholder"/>
-    </div>
+  <div class="control">
+    <markdown-editor v-model="value_" :placeholder="placeholder"/>
+  </div>
 </template>
 
 <script>
-    import { baseMixin } from './mixins.js'
+  import { baseMixin } from './mixins.js';
 
-    import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor'
+  import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
-    export default {
+  export default {
 
-        components: {
-            MarkdownEditor
-        },
+    components: {
+      MarkdownEditor
+    },
 
-        mixins: [ baseMixin ],
+    mixins: [ baseMixin ],
 
-        props: {
-            value: {
-                type: String,
-                default: null
-            }
-        }
+    props: {
+      value: {
+        type: String,
+        default: null
+      }
     }
+  };
 
 </script>

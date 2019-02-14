@@ -1,148 +1,148 @@
-import c2c from '@/js/apis/c2c'
-import config from '@/js/config.ts'
+import c2c from '@/js/apis/c2c';
+import config from '@/js/config.ts';
 
 export default function install(Vue) {
-    Vue.prototype.$user = new Vue({
-        name: 'User',
+  Vue.prototype.$user = new Vue({
+    name: 'User',
 
-        data() {
-            const data = this.$localStorage.get(config.urls.api, {})
+    data() {
+      const data = this.$localStorage.get(config.urls.api, {});
 
-            return {
+      return {
 
-                // The unique name, used to login
-                userName: data['userName'] || null,
+        // The unique name, used to login
+        userName: data['userName'] || null,
 
-                // unique numerical ID
-                id: data['id'] || null,
+        // unique numerical ID
+        id: data['id'] || null,
 
-                // user lang, read write property everywhere : this.$user.lang
-                lang: data['lang'],
+        // user lang, read write property everywhere : this.$user.lang
+        lang: data['lang'],
 
-                // list of roles
-                roles: data['roles'] || [],
+        // list of roles
+        roles: data['roles'] || [],
 
-                // public name, a simple label
-                name: data['name'] || null,
+        // public name, a simple label
+        name: data['name'] || null,
 
-                // forum name
-                forumUsername: data['forumUsername'] || null,
+        // forum name
+        forumUsername: data['forumUsername'] || null,
 
-                // private token used for API auth
-                token: data['token'] || null,
+        // private token used for API auth
+        token: data['token'] || null,
 
-                // token expiration date
-                expire: data['expire'] || null
-            }
-        },
+        // token expiration date
+        expire: data['expire'] || null
+      };
+    },
 
-        computed: {
-            isModerator() {
-                return this.roles.includes('moderator')
-            },
-            isLogged() {
-                return Boolean(this.token)
-            },
+    computed: {
+      isModerator() {
+        return this.roles.includes('moderator');
+      },
+      isLogged() {
+        return Boolean(this.token);
+      },
 
-            // for project phase, allow some user to edit prod
-            isSafeUser() {
-                return this.isModerator || [
-                    286726 // charles b
-                ].includes(this.id)
-            }
-        },
+      // for project phase, allow some user to edit prod
+      isSafeUser() {
+        return this.isModerator || [
+          286726 // charles b
+        ].includes(this.id);
+      }
+    },
 
-        watch: {
-            'token': {
-                handler: 'updateToken',
-                immediate: true
-            }
-        },
+    watch: {
+      'token': {
+        handler: 'updateToken',
+        immediate: true
+      }
+    },
 
-        created() {
-            this.checkExpiration()
-            c2c.isSafeUser = this.isSafeUser
-        },
+    created() {
+      this.checkExpiration();
+      c2c.isSafeUser = this.isSafeUser;
+    },
 
-        methods: {
-            signIn(username, password) {
-                return c2c.userProfile.login(username, password)
-                    .then(response => {
-                        this.lang = response.data.lang
-                        this.token = response.data.token
-                        this.roles = response.data.roles
-                        this.id = response.data.id
-                        this.userName = response.data.username
-                        this.name = response.data.name
-                        this.forumUsername = response.data.forum_username
-                        this.expire = response.data.expire
+    methods: {
+      signIn(username, password) {
+        return c2c.userProfile.login(username, password)
+          .then(response => {
+            this.lang = response.data.lang;
+            this.token = response.data.token;
+            this.roles = response.data.roles;
+            this.id = response.data.id;
+            this.userName = response.data.username;
+            this.name = response.data.name;
+            this.forumUsername = response.data.forum_username;
+            this.expire = response.data.expire;
 
-                        this.$language.setCurrent(this.lang)
-                        this.commitToLocaleStorage_()
+            this.$language.setCurrent(this.lang);
+            this.commitToLocaleStorage_();
 
-                        c2c.isSafeUser = this.isSafeUser
-                    })
-            },
+            c2c.isSafeUser = this.isSafeUser;
+        });
+      },
 
-            signout() {
-                this.token = null
-                this.roles = []
-                this.id = null
-                this.userName = null
-                this.name = null
-                this.forumUsername = null
-                this.expire = null
+      signout() {
+        this.token = null;
+        this.roles = [];
+        this.id = null;
+        this.userName = null;
+        this.name = null;
+        this.forumUsername = null;
+        this.expire = null;
 
-                this.commitToLocaleStorage_()
-            },
+        this.commitToLocaleStorage_();
+      },
 
-            updateAccount(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
-                return c2c.userProfile.account.post(
-                    currentpassword,
-                    name,
-                    forum_username,
-                    email,
-                    is_profile_public,
-                    newpassword
-                ).then(() => {
-                    this.forumUsername = forum_username
-                    this.name = name
-                    this.commitToLocaleStorage_()
-                })
-            },
+      updateAccount(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
+        return c2c.userProfile.account.post(
+          currentpassword,
+          name,
+          forum_username,
+          email,
+          is_profile_public,
+          newpassword
+        ).then(() => {
+          this.forumUsername = forum_username;
+          this.name = name;
+          this.commitToLocaleStorage_();
+        });
+      },
 
-            updateToken() {
-                c2c.setAuthorizationToken(this.token)
-            },
+      updateToken() {
+        c2c.setAuthorizationToken(this.token);
+      },
 
-            saveLangPreference(lang) {
-                // keep in last, because it will fail in read only mode
-                if (this.isLogged && lang !== this.lang) {
-                    this.lang = lang
-                    this.commitToLocaleStorage_()
-                    c2c.userProfile.update_preferred_language(this.lang)
-                }
-            },
-
-            commitToLocaleStorage_() {
-                this.$localStorage.set(config.urls.api, this.$data)
-            },
-
-            checkExpiration() {
-                if (!this.expire) {
-                    return true
-                }
-
-                const now = Date.now() / 1000 // in seconds
-                const expire = this.expire
-
-                if (now > expire) {
-                    this.signout()
-                    return true
-                }
-
-                return false
-            }
+      saveLangPreference(lang) {
+        // keep in last, because it will fail in read only mode
+        if (this.isLogged && lang !== this.lang) {
+          this.lang = lang;
+          this.commitToLocaleStorage_();
+          c2c.userProfile.update_preferred_language(this.lang);
         }
-    })
+      },
+
+      commitToLocaleStorage_() {
+        this.$localStorage.set(config.urls.api, this.$data);
+      },
+
+      checkExpiration() {
+        if (!this.expire) {
+          return true;
+        }
+
+        const now = Date.now() / 1000; // in seconds
+        const expire = this.expire;
+
+        if (now > expire) {
+          this.signout();
+          return true;
+        }
+
+        return false;
+      }
+    }
+  });
 }

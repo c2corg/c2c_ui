@@ -1,40 +1,40 @@
 <template>
-    <!-- Do NOT add tooltip -->
-    <div class="control" :class="{'has-error':hasError}">
-        <span
-            v-for="activity of activities" :key="activity"
-            :class="{'selected':value_.includes(activity), 'with-labels' :showLabels }"
-            class="input-item"
-            :title="showLabels ? null : $gettext(activity, 'activities')"
-            @click="toggle(activity)">
-            <icon-activity :activity="activity" />
-            <span v-if="showLabels" class="is-size-6 input-label">
-                {{ $gettext(activity, 'activities') }}
-            </span>
-        </span>
-    </div>
+  <!-- Do NOT add tooltip -->
+  <div class="control" :class="{'has-error':hasError}">
+    <span
+      v-for="activity of activities" :key="activity"
+      :class="{'selected':value_.includes(activity), 'with-labels' :showLabels }"
+      class="input-item"
+      :title="showLabels ? null : $gettext(activity, 'activities')"
+      @click="toggle(activity)">
+      <icon-activity :activity="activity" />
+      <span v-if="showLabels" class="is-size-6 input-label">
+        {{ $gettext(activity, 'activities') }}
+      </span>
+    </span>
+  </div>
 </template>
 
 <script>
-    import constants from '@/js/constants'
-    import { baseMixin, arrayMixin } from './mixins.js'
+  import constants from '@/js/constants';
+  import { baseMixin, arrayMixin } from './mixins.js';
 
-    export default {
-        mixins: [ baseMixin, arrayMixin ],
+  export default {
+    mixins: [ baseMixin, arrayMixin ],
 
-        props: {
-            showLabels: {
-                type: Boolean,
-                default: false
-            }
-        },
+    props: {
+      showLabels: {
+        type: Boolean,
+        default: false
+      }
+    },
 
-        computed: {
-            activities() {
-                return constants.activities
-            }
-        }
+    computed: {
+      activities() {
+        return constants.activities;
+      }
     }
+  };
 </script>
 
 <style scoped lang="scss">

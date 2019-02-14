@@ -1,111 +1,111 @@
 <template>
 
-    <div>
-        <feed-card
-            v-for="(item, index) of feed"
-            :key="index"
-            :item="item"
-            class="feed-card"/>
-        <loading-notification :promise="promise" />
-    </div>
+  <div>
+    <feed-card
+      v-for="(item, index) of feed"
+      :key="index"
+      :item="item"
+      class="feed-card"/>
+    <loading-notification :promise="promise" />
+  </div>
 
 </template>
 
 <script>
-    import c2c from '@/js/apis/c2c'
-    import FeedCard from '@/components/cards/FeedCard'
+  import c2c from '@/js/apis/c2c';
+  import FeedCard from '@/components/cards/FeedCard';
 
-    // https://alligator.io/vuejs/implementing-infinite-scroll/
+  // https://alligator.io/vuejs/implementing-infinite-scroll/
 
-    export default {
-        components: {
-            FeedCard
-        },
+  export default {
+    components: {
+      FeedCard
+    },
 
-        props: {
-            type: { // valid input : personal Default Profile
-                type: String,
-                required: true
-            }
-        },
+    props: {
+      type: { // valid input : personal Default Profile
+        type: String,
+        required: true
+      }
+    },
 
-        data() {
-            return {
-                promise: null,
-                feed: null,
-                paginationToken: null,
-                endOfFeed: false
-            }
-        },
+    data() {
+      return {
+        promise: null,
+        feed: null,
+        paginationToken: null,
+        endOfFeed: false
+      };
+    },
 
-        watch: {
-            '$route': 'initialize',
+    watch: {
+      '$route': 'initialize',
 
-            type: {
-                handler: 'initialize',
-                immediate: true
-            }
-        },
+      type: {
+        handler: 'initialize',
+        immediate: true
+      }
+    },
 
-        mounted() {
-            window.addEventListener('scroll', this.onScroll)
-        },
+    mounted() {
+      window.addEventListener('scroll', this.onScroll);
+    },
 
-        beforeDestroy() {
-            window.removeEventListener('scroll', this.onScroll)
-        },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.onScroll);
+    },
 
-        methods: {
-            initialize() {
-                this.paginationToken = undefined
-                this.feed = []
-                this.endOfFeed = false
+    methods: {
+      initialize() {
+        this.paginationToken = undefined;
+        this.feed = [];
+        this.endOfFeed = false;
 
-                this.load()
-            },
+        this.load();
+      },
 
-            load() {
-                if (this.promise && this.promise.loading) {
-                    return
-                }
-
-                if (this.endOfFeed) {
-                    return
-                }
-
-                const params = {
-                    pl: this.$language.current,
-                    token: this.paginationToken,
-                    u: this.$route.params.id
-                }
-
-                if (this.type === 'personal') {
-                    this.promise = c2c.feed.getPersonalFeed(params).then(this.onLoad)
-                } else if (this.type === 'default') {
-                    this.promise = c2c.feed.getDefaultFeed(params).then(this.onLoad)
-                } else if (this.type === 'profile') {
-                    this.promise = c2c.feed.getProfileFeed(params).then(this.onLoad)
-                }
-            },
-
-            onLoad(response) {
-                this.paginationToken = response.data.pagination_token
-
-                for (let item of response.data.feed) {
-                    this.feed.push(item)
-                }
-
-                this.endOfFeed = response.data.feed.length === 0
-            },
-
-            onScroll() {
-                // bottomOfWindow ?
-                if (document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight) {
-                    this.load()
-                }
-            }
+      load() {
+        if (this.promise && this.promise.loading) {
+          return;
         }
+
+        if (this.endOfFeed) {
+          return;
+        }
+
+        const params = {
+          pl: this.$language.current,
+          token: this.paginationToken,
+          u: this.$route.params.id
+        };
+
+        if (this.type === 'personal') {
+          this.promise = c2c.feed.getPersonalFeed(params).then(this.onLoad);
+        } else if (this.type === 'default') {
+          this.promise = c2c.feed.getDefaultFeed(params).then(this.onLoad);
+        } else if (this.type === 'profile') {
+          this.promise = c2c.feed.getProfileFeed(params).then(this.onLoad);
+        }
+      },
+
+      onLoad(response) {
+        this.paginationToken = response.data.pagination_token;
+
+        for (const item of response.data.feed) {
+          this.feed.push(item);
+        }
+
+        this.endOfFeed = response.data.feed.length === 0;
+      },
+
+      onScroll() {
+        // bottomOfWindow ?
+        if (document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight) {
+          this.load();
+        }
+      }
     }
+  };
 
 </script>
 

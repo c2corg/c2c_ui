@@ -1,19 +1,19 @@
 <template>
-    <fa-icon
-        :class="'icon-condition-' + condition"
-        :icon="[condition !== null ? 'fas' : 'far', 'circle']" />
+  <fa-icon
+    :class="'icon-condition-' + condition"
+    :icon="[condition !== null ? 'fas' : 'far', 'circle']" />
 </template>
 
 <script lang="ts">
-    export default {
-        props: {
-            condition: {
-                type: String,
-                required: false,
-                default: null
-            }
-        }
+  export default {
+    props: {
+      condition: {
+        type: String,
+        required: false,
+        default: null
+      }
     }
+  };
 </script>
 
 <style scoped>
