@@ -52,7 +52,8 @@
     "space-before-function-paren": [
       "warn",
       "never"
-    ]
+    ],
+    "no-var": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"
