@@ -52,7 +52,6 @@ const config = {
       media: 'https://sos.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
-      readWrite: true,
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc'
     },
     prod: {
@@ -61,7 +60,6 @@ const config = {
       media: 'https://media.camptocamp.org/c2corg_active',
       imageBackend: 'https://images.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
-      readWrite: false, // conservative approach : you have to explicity set it to true
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2'
     }
   }
@@ -81,8 +79,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     api: 'http://localhost:6543',
     media: 'https://sos.exo.io/c2corg-demov6-active',
     imageBackend: 'https://images.demov6.camptocamp.org',
-    forum: 'https://forum.demov6.camptocamp.org',
-    readWrite: true
+    forum: 'https://forum.demov6.camptocamp.org'
   };
 
   config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
@@ -110,7 +107,6 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 } else if (process.env.BUILD_ENV === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
   config.isProduction = true; // explicit prod flag
-  config.urls.readWrite = true; // explicit read-write mode in prod
 } else {
   throw new Error('Unknown BUILD_ENV');
 }

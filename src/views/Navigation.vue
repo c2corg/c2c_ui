@@ -37,15 +37,6 @@
         </div>
       </div>
 
-      <div
-        v-if="!siteConfiguration.urls.readWrite && !$user.isSafeUser"
-        class="navigation-item is-hidden-mobile" :title="'Read only site'">
-        <fa-layers >
-          <fa-icon icon="pen"/>
-          <fa-icon icon="ban" transform="grow-16" class="has-text-danger"/>
-        </fa-layers>
-      </div>
-
       <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" :title="'This page may contains bugs or incomplete features'">
         <fa-icon icon="bug" size="lg" class="has-text-danger"/>
       </div>
