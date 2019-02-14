@@ -53,7 +53,8 @@
       "warn",
       "never"
     ],
-    "no-var": "error"
+    "no-var": "error",
+    "prefer-const": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"
