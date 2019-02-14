@@ -37,7 +37,7 @@
     "camelcase": "off",
     "no-trailing-spaces": "warn",
     "semi": [
-      "warn",
+      "error",
       "always"
     ],
     "quotes": "warn",

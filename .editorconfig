@@ -11,5 +11,4 @@ trim_trailing_whitespace = true
 indent_size = 2
 
 [*.js,*.ts,*.json,*.xml]
-# to be modified soon :)
 indent_size = 2
