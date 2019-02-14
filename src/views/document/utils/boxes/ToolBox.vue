@@ -3,11 +3,11 @@
 
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && document.available_langs.length>1">
+    <div class="has-text-centered" v-if="isNormalView && available_langs.length>0">
       <span v-translate>View in other lang</span>
       <br>
       <span class="lang-switcher-box-list">
-        <span v-for="lang of document.available_langs" :key="lang" v-if="lang !== $route.params.lang">
+        <span v-for="lang of available_langs" :key="lang">
           <document-link :document="document" :lang="lang">
             {{ $gettext(lang, 'langs') }}
           </document-link>
@@ -123,10 +123,9 @@
     },
 
     computed: {
-      // TODO : useless ? remove !
-      // locale(){
-      //     return this.document.cooked
-      // },
+      available_langs() {
+        return this.document.available_langs.filter((lang) => this.$route.params.lang !== lang);
+      },
 
       showAssociationEditor() {
         return !['area'].includes(this.documentType);
