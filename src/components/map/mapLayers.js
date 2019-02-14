@@ -3,7 +3,7 @@ import ol from '@/js/libs/ol.js';
 
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
   return new ol.layer.Tile({
-    title: title,
+    title,
     maxZoom: 19,
     type: 'base',
     visible: false,
@@ -32,17 +32,17 @@ function createIgnSource(title, layer, format = 'jpeg') {
 
   const tileGrid = new ol.tilegrid.WMTS({
     origin: [-20037508, 20037508],
-    resolutions: resolutions,
-    matrixIds: matrixIds
+    resolutions,
+    matrixIds
   });
 
   const source = new ol.source.WMTS({
     url: '//wxs.ign.fr/' + config.ignApiKey + '/wmts',
-    layer: layer,
+    layer,
     matrixSet: 'PM',
     format: `image/${format}`,
     projection: 'EPSG:3857',
-    tileGrid: tileGrid,
+    tileGrid,
     style: 'normal',
     attributions: [
       '<a href="http://www.geoportail.fr/" target="_blank">' +
@@ -52,11 +52,11 @@ function createIgnSource(title, layer, format = 'jpeg') {
   });
 
   return new ol.layer.Tile({
-    title: title,
+    title,
     type: 'base',
     maxZoom: 19,
     visible: false,
-    source: source
+    source
   });
 }
 

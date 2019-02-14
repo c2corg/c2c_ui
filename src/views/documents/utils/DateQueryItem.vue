@@ -31,7 +31,7 @@
           query.date = value;
 
           if (query.date !== this.$route.query.date) {
-            this.$router.push({ query: query });
+            this.$router.push({ query });
           }
         }
       }

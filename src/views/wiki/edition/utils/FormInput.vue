@@ -204,6 +204,6 @@
       }
     },
 
-    datepickerLocales: datepickerLocales
+    datepickerLocales
   };
 </script>

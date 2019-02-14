@@ -32,7 +32,7 @@ Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
 
 new Vue({
-  router: router,
+  router,
   created() {
     this.$language.firstLoad();
   },

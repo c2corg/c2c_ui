@@ -157,7 +157,7 @@
           totalDist += d;
 
           return {
-            date: date,
+            date,
             ele: coord[2] || 0,
             d: totalDist,
             elapsed: timeAvailable ? date - startDate : undefined

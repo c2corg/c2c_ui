@@ -54,7 +54,7 @@
         query[key] = value === '' ? undefined : value;
 
         if (query[key] !== this.$route.query[key]) {
-          this.$router.push({ query: query });
+          this.$router.push({ query });
         }
       },
 

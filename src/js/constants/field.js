@@ -196,7 +196,7 @@ Field.prototype.getErrorObject = function(description) {
 
   return {
     name: errorName,
-    description: description
+    description
   };
 };
 

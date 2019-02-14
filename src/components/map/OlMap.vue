@@ -261,14 +261,14 @@
 
     watch: {
       documents: {
-        handler: function() {
+        handler() {
           this.drawDocumentMarkers();
           this.fitMapToDocuments();
         }
       },
 
       editedDocument: {
-        handler: function() {
+        handler() {
           this.drawDocumentMarkers();
           this.fitMapToDocuments();
 
@@ -389,12 +389,12 @@
 
         if (!this.editedDocument.geometry.geom) {
           this.drawInteraction = new ol.interaction.Draw({
-            source: source,
+            source,
             type: 'Point'
           });
         } else if (this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
           this.drawInteraction = new ol.interaction.Draw({
-            source: source,
+            source,
             type: 'LineString'
           });
         }
@@ -602,7 +602,7 @@
 
         query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined;
         if (query.bbox !== this.$route.query.bbox) {
-          this.$router.push({ query: query });
+          this.$router.push({ query });
         }
       },
 
