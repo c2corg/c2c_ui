@@ -90,7 +90,7 @@ CamptocampApi.prototype.createImages = function(images) {
 };
 
 CamptocampApi.prototype.cooker = function(data) {
-  return this.post('/cooker', data, true);
+  return this.post('/cooker', data);
 };
 
 // export a singleton

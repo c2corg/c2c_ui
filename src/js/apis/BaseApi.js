@@ -1,5 +1,4 @@
 import axios from 'axios';
-import config from '@/js/config.ts';
 
 /// ////////////////////////////////////////////////////////////////////////////////
 // Technicly, we should do this in any API call to enhance promise with response :
@@ -46,20 +45,7 @@ const BaseApi = function(apiUrl) {
     headers: { common: {} },
     baseURL: apiUrl
   });
-
-  // for project phase, allow moderators to edit
-  this.isSafeUser = false;
 };
-
-if (config.urls.readWrite) {
-  BaseApi.prototype.checkReadOnly = function() {};
-} else {
-  BaseApi.prototype.checkReadOnly = function(safeCall) {
-    if (!safeCall && !this.isSafeUser) {
-      throw new Error('This build is read only');
-    }
-  };
-}
 
 /**
  * Generic request helpers
@@ -69,18 +55,15 @@ BaseApi.prototype.get = function(url, params) {
   return new ApiData(this.axios.get(url, params));
 };
 
-BaseApi.prototype.post = function(url, body, safeCall) {
-  this.checkReadOnly(safeCall);
+BaseApi.prototype.post = function(url, body) {
   return new ApiData(this.axios.post(url, body));
 };
 
-BaseApi.prototype.put = function(url, body, safeCall) {
-  this.checkReadOnly(safeCall);
+BaseApi.prototype.put = function(url, body) {
   return new ApiData(this.axios.put(url, body));
 };
 
-BaseApi.prototype.delete = function(url, body, safeCall) {
-  this.checkReadOnly(safeCall);
+BaseApi.prototype.delete = function(url, body) {
   return new ApiData(this.axios.delete(url, body));
 };
 

@@ -77,12 +77,10 @@ function UserProfileService(api) {
 
 UserProfileService.prototype.login = function(username, password) {
   return this.api.post('/users/login', {
-                         username,
-                         password,
-                         discourse: false
-                       },
-                       true // safe call : you can do it, even in read-only mode
-  );
+    username,
+    password,
+    discourse: false
+  });
 };
 
 UserProfileService.prototype.update_preferred_language = function(lang) {
