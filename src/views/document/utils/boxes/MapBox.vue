@@ -55,7 +55,7 @@
 
     computed: {
       linkToClosestDocuments() {
-        let result = {
+        const result = {
           name: this.documentType + 's',
           query: {
             wtyp: this.documentType === 'waypoint' ? this.document.waypoint_type : undefined

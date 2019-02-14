@@ -36,7 +36,7 @@
     },
 
     mounted() {
-      for (let child of this.$children) {
+      for (const child of this.$children) {
         this.inputs[child.name] = child;
         child.$on('input', this.check);
       }
@@ -46,7 +46,7 @@
       cleanErrors() {
         this.serverMetaErrors = [];
 
-        for (let input of Object.values(this.inputs)) {
+        for (const input of Object.values(this.inputs)) {
           input.errorMessage = undefined;
         }
       },
@@ -64,7 +64,7 @@
           // unpexted error structure from API
           this.serverMetaErrors.push(serverErrors);
         } else {
-          for (let error of serverErrors.errors) {
+          for (const error of serverErrors.errors) {
             if (this.inputs[error.name]) {
               this.inputs[error.name].errorMessage = error.description;
             } else {
@@ -75,7 +75,7 @@
       },
 
       check() {
-        for (let child of this.$children) {
+        for (const child of this.$children) {
           if (child.hasError) {
             this.hasError = true;
             return;
@@ -94,7 +94,7 @@
           return;
         }
 
-        for (let input of Object.values(this.inputs)) {
+        for (const input of Object.values(this.inputs)) {
           input.errorMessage = null;
         }
 

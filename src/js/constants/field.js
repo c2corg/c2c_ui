@@ -5,7 +5,7 @@ import utils from '@/js/utils';
 const attrs = common.attributes;
 
 // values  can be a string : it describes a common.attributes fields
-for (let property of Object.values(fieldsProperties)) {
+for (const property of Object.values(fieldsProperties)) {
   if (property.values && typeof property.values === 'string') {
     property.i18nContext = property.values;
     property.values = attrs[property.values];
@@ -146,7 +146,7 @@ Field.prototype.urlToValue = function(url) {
   }
 
   if (this.queryMode === 'valuesRangeSlider') {
-    let value = url || this.defaultUrlQuery;
+    const value = url || this.defaultUrlQuery;
     return value.split(',');
   }
 
@@ -163,7 +163,7 @@ Field.prototype.urlToValue = function(url) {
   }
 
   if (this.queryMode === 'input') {
-    let value = url || this.defaultUrlQuery;
+    const value = url || this.defaultUrlQuery;
 
     if (this.type === 'number') {
       return parseInt(value);

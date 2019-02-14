@@ -36,7 +36,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     matrixIds: matrixIds
   });
 
-  let source = new ol.source.WMTS({
+  const source = new ol.source.WMTS({
     url: '//wxs.ign.fr/' + config.ignApiKey + '/wmts',
     layer: layer,
     matrixSet: 'PM',
@@ -60,7 +60,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
   });
 }
 
-let esri = new ol.layer.Tile({
+const esri = new ol.layer.Tile({
   title: 'Esri',
   maxZoom: 19,
   type: 'base',
@@ -85,7 +85,7 @@ var openStreetMap = new ol.layer.Tile({
     visible: false,
 }) */
 
-let bingMap = new ol.layer.Tile({
+const bingMap = new ol.layer.Tile({
   title: 'Bing',
   maxZoom: 19,
   source: new ol.source.BingMaps({
@@ -95,7 +95,7 @@ let bingMap = new ol.layer.Tile({
   visible: false
 });
 
-let openTopoMap = new ol.layer.Tile({
+const openTopoMap = new ol.layer.Tile({
   title: 'OpenTopoMap',
   type: 'base',
   maxZoom: 14,
@@ -108,12 +108,12 @@ let openTopoMap = new ol.layer.Tile({
   })
 });
 
-let ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
-let ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
-let swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
+const ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+const ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
 
-let ign_slopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
-let swiss_slopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
+const ign_slopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+const swiss_slopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
 
 ign_slopes.setOpacity(0.4);
 swiss_slopes.setOpacity(0.4);

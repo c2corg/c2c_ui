@@ -48,7 +48,7 @@ const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
 
-let routes = [
+const routes = [
   { path: '/', name: 'home', component: FeedView },
   { path: '/dashboard', name: 'dashboard', component: DashboardView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },

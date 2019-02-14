@@ -118,7 +118,7 @@
       documents() {
         const documents = [];
 
-        for (let image of Object.values(this.images)) {
+        for (const image of Object.values(this.images)) {
           documents.push(image.document);
         }
 
@@ -138,7 +138,7 @@
       save() {
         this.promise = c2c.createImages(this.documents).then(() => {
           // add result to parent, it will update page
-          for (let image of this.documents) {
+          for (const image of this.documents) {
             this.parentDocument.associations.images.push(image);
           }
 
@@ -151,8 +151,8 @@
       },
 
       filesChange(event) {
-        for (let file of event.target.files) {
-          let key = file.name + '#' + file.lastModified;
+        for (const file of event.target.files) {
+          const key = file.name + '#' + file.lastModified;
 
           if (this.images[key] === undefined) {
             this.computeFile(file, key);
@@ -244,7 +244,7 @@
         } else {
           this.readyForSaving = true;
 
-          for (let document of this.documents) {
+          for (const document of this.documents) {
             if (!document.filename) {
               this.readyForSaving = false;
             }

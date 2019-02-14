@@ -119,7 +119,7 @@
           posts = posts.slice(1);
         }
 
-        for (let post of posts) {
+        for (const post of posts) {
           post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize);
           post.cooked = computeCooked(post.cooked);
           result.push(post);

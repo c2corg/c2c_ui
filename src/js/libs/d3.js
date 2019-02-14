@@ -34,7 +34,7 @@ D3.prototype.load_ = function(promise, key) {
     if (response.default) {
       this[key] = response.default;
     } else {
-      for (let service of Object.keys(response)) {
+      for (const service of Object.keys(response)) {
         this[service] = response[service];
       }
     }
@@ -50,7 +50,7 @@ D3.prototype.load_ = function(promise, key) {
 };
 
 D3.prototype.postResolve_ = function() {
-  for (let callback of this.callbacks_) {
+  for (const callback of this.callbacks_) {
     callback();
   }
 };

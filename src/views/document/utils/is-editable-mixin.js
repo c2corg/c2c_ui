@@ -30,7 +30,7 @@ export default {
       }
 
       if (['outing', 'xreport'].includes(this.documentType)) {
-        for (let user of this.document.associations.users) {
+        for (const user of this.document.associations.users) {
           if (user.document_id === this.$user.id) {
             return true;
           }

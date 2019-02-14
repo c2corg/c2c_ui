@@ -42,9 +42,9 @@
       },
 
       months() {
-        let result = [];
+        const result = [];
 
-        for (let month in this.data.period) {
+        for (const month in this.data.period) {
           if (this.data.period[month]) {
             result.push(this.$moment.month(parseInt(month, 10)));
           }

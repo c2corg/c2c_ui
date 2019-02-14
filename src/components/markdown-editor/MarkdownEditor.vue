@@ -126,9 +126,9 @@
     before = before || '';
     after = after || '';
 
-    let chunk = before + text + after;
+    const chunk = before + text + after;
 
-    let start = this.start;
+    const start = this.start;
     this.textarea.value = this.textarea.value.substr(0, this.start) + chunk + this.textarea.value.substr(this.end, this.textarea.value.length);
     this.set(start + before.length, start + before.length + text.length);
 
@@ -148,14 +148,14 @@
   };
 
   Selection.prototype.expandToEntireLine = function() {
-    let start = this.textarea.value.lastIndexOf('\n', this.start);
+    const start = this.textarea.value.lastIndexOf('\n', this.start);
     this.start = start + 1;
-    let end = this.textarea.value.indexOf('\n', this.end);
+    const end = this.textarea.value.indexOf('\n', this.end);
     this.end = end === -1 ? this.textarea.value.length : end;
   };
 
   Selection.prototype.linesStartsWith = function(tag) {
-    for (let line of this.text.split('\n')) {
+    for (const line of this.text.split('\n')) {
       if (!line.startsWith(tag)) {
         return false;
       }
@@ -242,12 +242,12 @@
 
         if (this.selection.isSurroundedBy(tag, tag)) {
           // remove tag
-          let chunk = this.selection.text;
+          const chunk = this.selection.text;
           this.selection.set(this.selection.start - tagLength, this.selection.end + tagLength);
           this.selection.setText(chunk);
         } else {
           // add tag
-          let chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
+          const chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
           this.selection.setText(chunk, tag, tag);
         }
 
@@ -289,7 +289,7 @@
         if (this.selection.text.startsWith('#')) {
           this.selection.replace(/^#+ */, '');
         } else {
-          let chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
+          const chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
           this.selection.setText(chunk, '## ');
         }
 

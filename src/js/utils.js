@@ -68,10 +68,10 @@ export default {
       return;
     }
 
-    let excludedKeys = new Set(['areas', 'locales', 'geometry', 'author']);
+    const excludedKeys = new Set(['areas', 'locales', 'geometry', 'author']);
 
-    for (let object of objects) {
-      for (let key in object) {
+    for (const object of objects) {
+      for (const key in object) {
         if (!excludedKeys.has(key)) {
           keys.set(key, defaultGetter);
         }
@@ -80,11 +80,11 @@ export default {
 
     keys = new Map([...keys.entries()].sort());
 
-    let lines = [[...keys.keys()].join(';')];
+    const lines = [[...keys.keys()].join(';')];
 
-    for (let object of objects) {
-      let line = [];
-      for (let [key, getter] of keys) {
+    for (const object of objects) {
+      const line = [];
+      for (const [key, getter] of keys) {
         line.push(convertToCsv(getter(object, key)));
       }
 
@@ -96,7 +96,7 @@ export default {
 
   // does the intersection of two arrays is empty ?
   intersectionIsNotNull(arrayA, arrayB) {
-    for (let itemA of arrayA) {
+    for (const itemA of arrayA) {
       if (arrayB.includes(itemA)) {
         return true;
       }

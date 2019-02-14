@@ -81,7 +81,7 @@ export const arrayMixin = {
         return;
       }
 
-      let newValue = this.value_.slice(0);
+      const newValue = this.value_.slice(0);
 
       if (!newValue.includes(item)) {
         newValue.push(item);

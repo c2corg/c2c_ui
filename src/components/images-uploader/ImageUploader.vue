@@ -111,7 +111,7 @@
     },
 
     data() {
-      let result = {
+      const result = {
         visibleDropdown: null,
         status: STATUS_INITIAL,
         percentCompleted: 0,
@@ -153,8 +153,8 @@
     },
 
     created() {
-      let image = this.image;
-      let upload = this.upload;
+      const image = this.image;
+      const upload = this.upload;
 
       // test files for orientation stuff :
       // https://github.com/recurser/exif-orientation-examples
@@ -211,7 +211,7 @@
       },
 
       toggleCategory(category) {
-        let newValue = this.document.image_categories.slice(0);
+        const newValue = this.document.image_categories.slice(0);
 
         if (!newValue.includes(category)) {
           newValue.push(category);

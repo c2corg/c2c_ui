@@ -85,7 +85,7 @@
 
     methods: {
       uploadGpxTrack(event) {
-        let reader = new FileReader();
+        const reader = new FileReader();
 
         reader.onload = function() {
           this.$refs.map.setDocumentGeometryFromGpx(reader.result);

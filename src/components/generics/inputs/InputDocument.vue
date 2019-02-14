@@ -184,10 +184,10 @@
             this.$emit('add', value);
           }
         } else {
-          let newValue = [];
+          const newValue = [];
           let removed = false;
 
-          for (let document of this.value_) {
+          for (const document of this.value_) {
             if (document.document_id === value.document_id) {
               removed = true;
             } else {

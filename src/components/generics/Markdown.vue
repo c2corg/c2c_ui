@@ -71,9 +71,9 @@
         const container = this.$refs.container;
 
         const addClasses = function(cssSelector, classes) {
-          let nodes = container.querySelectorAll(cssSelector);
+          const nodes = container.querySelectorAll(cssSelector);
 
-          for (let node of nodes) {
+          for (const node of nodes) {
             node.classList.add(...classes);
           }
         };
@@ -93,15 +93,15 @@
       },
 
       computeEmojis(emojis) {
-        for (let emoji of emojis) {
-          let emojiSource = emoji.attributes['c2c:emoji-db'].value;
-          let svgName = emoji.attributes['c2c:svg-name'].value;
+        for (const emoji of emojis) {
+          const emojiSource = emoji.attributes['c2c:emoji-db'].value;
+          const svgName = emoji.attributes['c2c:svg-name'].value;
           emoji.src = getEmojiSrc(emojiSource, svgName); // `${svgCdns[emojiSource]}${svgName}.svg`
         }
       },
 
       computeImages(images) {
-        for (let image of images) {
+        for (const image of images) {
           image.c2cExtrapoledDocument = {
             document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
             locales: [{ title: '...' }],
@@ -119,7 +119,7 @@
       },
 
       computeAnchors(anchors) {
-        for (let anchor of anchors) {
+        for (const anchor of anchors) {
           const attributes = anchor.attributes;
 
           // eslint-disable-next-line

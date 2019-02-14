@@ -3,8 +3,8 @@ function AssociationService(api) {
 }
 
 AssociationService.prototype.create = function(parent, child) {
-  let pType = parent.type;
-  let cType = child.type;
+  const pType = parent.type;
+  const cType = child.type;
 
   const data = {};
 

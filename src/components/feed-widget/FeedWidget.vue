@@ -91,7 +91,7 @@
       onLoad(response) {
         this.paginationToken = response.data.pagination_token;
 
-        for (let item of response.data.feed) {
+        for (const item of response.data.feed) {
           this.feed.push(item);
         }
 

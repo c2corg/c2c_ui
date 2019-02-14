@@ -29,7 +29,7 @@
     methods: {
       downloadOutings() {
         this.isLoading = true;
-        let outings = [];
+        const outings = [];
 
         const extraKeys = new Map([
           ['title', this.$documentUtils.getDocumentTitle],
@@ -42,7 +42,7 @@
         const download = function(offset) {
           c2c.outing.getAll({ u: this.profileId, limit: 50, offset })
             .then(response => {
-              for (let document of response.data.documents) {
+              for (const document of response.data.documents) {
                 outings.push(document);
               }
               if (response.data.documents.length === 0 || outings.length === response.data.total) {

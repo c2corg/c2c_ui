@@ -19,7 +19,7 @@ function CamptocampApi() {
   this.feed = new FeedService(this);
   this.forum = new ForumService(this);
 
-  for (let type of constants.documentTypes) {
+  for (const type of constants.documentTypes) {
     this[type] = new DocumentService(this, type);
   }
 

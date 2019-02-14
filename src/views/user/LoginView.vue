@@ -257,7 +257,7 @@
     },
 
     mounted() {
-      let recaptchaScript = document.createElement('script');
+      const recaptchaScript = document.createElement('script');
       recaptchaScript.async = true;
       recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit');
       document.head.appendChild(recaptchaScript);

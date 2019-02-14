@@ -77,7 +77,7 @@ export default {
         return null;
       }
 
-      let doc = this.isVersionView ? this.promise.data.document : this.promise.data;
+      const doc = this.isVersionView ? this.promise.data.document : this.promise.data;
 
       return doc;
     },

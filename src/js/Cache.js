@@ -31,7 +31,7 @@ Cache.prototype.feed = function(key, value) {
   this._size += key.length + value.length;
 
   if (this._size > this._maxSize) {
-    let keys = this._data.keys();
+    const keys = this._data.keys();
     while (this._size > this._maxSize) {
       this.delete(keys.next().value);
     }

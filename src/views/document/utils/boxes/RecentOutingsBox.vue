@@ -63,7 +63,7 @@
           outings = associations.outings;
         }
 
-        for (let outing of outings) {
+        for (const outing of outings) {
           result.set(outing.document_id, outing);
         }
 

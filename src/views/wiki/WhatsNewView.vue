@@ -122,7 +122,7 @@
       },
 
       onLoad() {
-        for (let change of this.promise.data.feed) {
+        for (const change of this.promise.data.feed) {
           change.document.documentType = this.$documentUtils.getDocumentType(change.document.type);
           this.feed.push(change);
         }

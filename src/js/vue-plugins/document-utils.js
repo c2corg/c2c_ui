@@ -33,7 +33,7 @@ export default function install(Vue) {
           return document.name || '';
         }
 
-        let locale = this.$documentUtils.getLocaleSmart(document, lang);
+        const locale = this.$documentUtils.getLocaleSmart(document, lang);
 
         if (locale.title_prefix) {
           return locale.title_prefix + ' : ' + locale.title;
@@ -47,7 +47,7 @@ export default function install(Vue) {
           return null;
         }
 
-        for (let result of document.locales) {
+        for (const result of document.locales) {
           if (result.lang === lang) {
             return result;
           }
@@ -71,7 +71,7 @@ export default function install(Vue) {
         }
 
         // else try langs by order
-        for (let lang of constants.langs) {
+        for (const lang of constants.langs) {
           result = this.$documentUtils.getLocaleStupid(document, lang);
           if (result) {
             return result;
@@ -135,8 +135,8 @@ export default function install(Vue) {
           return;
         }
 
-        let route = child;
-        let outing = parent;
+        const route = child;
+        const outing = parent;
 
         outing.geometry.geom = outing.geometry.geom === null ? route.geometry.geom : outing.geometry.geom;
 
@@ -177,11 +177,11 @@ export default function install(Vue) {
       },
 
       buildLocale(documentType, lang) {
-        let def = constants.objectDefinitions[documentType];
+        const def = constants.objectDefinitions[documentType];
 
-        let result = {};
+        const result = {};
 
-        for (let field of Object.values(def.fields)) {
+        for (const field of Object.values(def.fields)) {
           if (field.parent === 'locales') {
             result[field.name] = field.multiple ? [] : null;
           }
@@ -193,9 +193,9 @@ export default function install(Vue) {
       },
 
       buildDocument(documentType, lang) {
-        let def = constants.objectDefinitions[documentType];
+        const def = constants.objectDefinitions[documentType];
 
-        let result = {
+        const result = {
           type: def.letter,
           locales: [
             this.buildLocale(documentType, lang)
@@ -203,7 +203,7 @@ export default function install(Vue) {
           associations: {}
         };
 
-        for (let field of Object.values(def.fields)) {
+        for (const field of Object.values(def.fields)) {
           if (field.parent === 'document') {
             result[field.name] = field.multiple ? [] : null;
 
@@ -226,14 +226,14 @@ export default function install(Vue) {
       },
 
       getSortedAreaList(document) {
-        let areas = document.areas;
+        const areas = document.areas;
         let sortedAreas = [];
 
         if (areas) {
           // the areas often come in different orders within 3 area objects.
           const orderedAreas = { 'range': [], 'admin_limits': [], 'country': [] };
 
-          for (let area of areas) {
+          for (const area of areas) {
             orderedAreas[area.area_type].push(this.getLocaleSmart(area).title);
           }
 

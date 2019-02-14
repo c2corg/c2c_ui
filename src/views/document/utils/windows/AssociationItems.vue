@@ -98,7 +98,7 @@
         const uniqueDocuments = new Map();
 
         const append = function(array, status, buttonLabel) {
-          for (let document of array || []) {
+          for (const document of array || []) {
             if (!uniqueDocuments.has(document.document_id)) {
               uniqueDocuments.set(document.document_id, {
                 sortKey: this.$documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,
@@ -115,7 +115,7 @@
         append(this.deleted, 'deleted', this.$gettext('Put it back'));
         append(this.propositions ? this.propositions.documents : undefined, 'proposition', this.$gettext('Add'));
 
-        let result = [...uniqueDocuments.values()];
+        const result = [...uniqueDocuments.values()];
         result.sort((a, b) => a.sortKey < b.sortKey ? -1 : 1);
 
         return result;

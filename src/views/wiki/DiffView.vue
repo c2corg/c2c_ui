@@ -135,8 +135,8 @@
   import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
   const ensureSameCountOfNewLine = function(diff1, diff2) {
-    let diff1Count = diff1[1].split('\n').length - 1;
-    let diff2Count = diff2[1].split('\n').length - 1;
+    const diff1Count = diff1[1].split('\n').length - 1;
+    const diff2Count = diff2[1].split('\n').length - 1;
 
     if (diff1Count < diff2Count) {
       diff1[1] += '\n'.repeat(diff2Count - diff1Count);
@@ -243,13 +243,13 @@
           return 'Waiting for other version';
         }
 
-        let keys = this.getKeys(
+        const keys = this.getKeys(
           this.oldVersion.document,
           this.newVersion.document,
           ['version', 'locales', 'geometry', 'cooked']
         );
 
-        for (let key of keys) {
+        for (const key of keys) {
           if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {
             this.diffProperties[key] = {
               old: this.oldVersion.document[key],
@@ -258,21 +258,21 @@
           }
         }
 
-        let oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang);
-        let newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
-        let localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
+        const oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang);
+        const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
+        const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
 
-        for (let key of localeKeys) {
-          let oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n');
-          let newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n');
+        for (const key of localeKeys) {
+          const oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n');
+          const newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n');
 
           if (hasChanged(oldVal, newVal)) {
-            let diff = diffMatchPatch.diff_main(oldVal, newVal);
+            const diff = diffMatchPatch.diff_main(oldVal, newVal);
             diffMatchPatch.diff_cleanupSemantic(diff);
-            let html = diffMatchPatch.diff_prettyHtml(diff).split('<br>');
+            const html = diffMatchPatch.diff_prettyHtml(diff).split('<br>');
             this.diffLocales[key] = html.join('<br>');
 
-            let computedDiff = [];
+            const computedDiff = [];
 
             // ensure that a removed diff always precede an added diff
             // and ensure they contain same count of new lines

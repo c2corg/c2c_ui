@@ -71,7 +71,7 @@ function getMessages(lang) {
 }
 
 export default function install(Vue) {
-  let languageVm = new Vue({
+  const languageVm = new Vue({
     name: 'Language',
 
     data: {
@@ -96,7 +96,7 @@ export default function install(Vue) {
 
     methods: {
       firstLoad() {
-        let lang = this.current;
+        const lang = this.current;
 
         this._getMessages(this.current).then(() => {
           // dirty : simulate lang update to fire the update of page on load
@@ -127,7 +127,7 @@ export default function install(Vue) {
           });
         }
 
-        let messages = getMessages(lang);
+        const messages = getMessages(lang);
 
         return new Promise(resolve => {
           if (messages.then) { // messages is a promise

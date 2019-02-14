@@ -31,7 +31,7 @@ Cooker.prototype.get = function(markdown) {
 };
 
 Cooker.prototype.feed = function(locale, cooked) {
-  for (let key of Object.keys(locale)) {
+  for (const key of Object.keys(locale)) {
     if (!NOT_MARKDOWN_PROPERTY.has(key) && locale[key]) {
       this._cache.feed(locale[key], cooked[key]);
     }
@@ -43,7 +43,7 @@ Cooker.prototype.cook = function(locale) {
   const result = {};
   let mustCallServer = false;
 
-  for (let key of Object.keys(locale)) {
+  for (const key of Object.keys(locale)) {
     if (NOT_MARKDOWN_PROPERTY.has(key) || !locale[key]) {
       result[key] = locale[key];
     } else if (this.has(locale[key])) {
@@ -64,7 +64,7 @@ Cooker.prototype.cook = function(locale) {
   } else {
     // otherwise, return a fake promise
 
-    let response = {
+    const response = {
       data: result
     };
 

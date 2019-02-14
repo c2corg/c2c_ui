@@ -50,7 +50,7 @@ export default {
     },
 
     descriptionPlaceholder() {
-      let type = this.document ? this.document.waypoint_type : undefined;
+      const type = this.document ? this.document.waypoint_type : undefined;
 
       if (type === 'access') {
         return this.$gettext('Describe here the waypoint');
@@ -60,7 +60,7 @@ export default {
     },
 
     accessPlaceholder() {
-      let type = this.document ? this.document.waypoint_type : undefined;
+      const type = this.document ? this.document.waypoint_type : undefined;
 
       if (type === 'access') {
         return this.$gettext('Describe pt access');
@@ -74,7 +74,7 @@ export default {
     },
 
     accessPeriodPlaceholder() {
-      let type = this.document ? this.document.waypoint_type : undefined;
+      const type = this.document ? this.document.waypoint_type : undefined;
 
       if (type === 'hut' || type === 'gite' || type === 'camp_site') {
         return this.$gettext('Describe opening periods');

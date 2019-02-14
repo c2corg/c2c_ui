@@ -133,9 +133,9 @@
       },
 
       missingLangs() {
-        let result = [];
+        const result = [];
 
-        for (let lang of constants.langs) {
+        for (const lang of constants.langs) {
           if (!this.document.available_langs.includes(lang)) {
             result.push(lang);
           }
