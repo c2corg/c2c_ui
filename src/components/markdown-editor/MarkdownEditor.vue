@@ -128,7 +128,7 @@
 
     let chunk = before + text + after;
 
-    var start = this.start;
+    let start = this.start;
     this.textarea.value = this.textarea.value.substr(0, this.start) + chunk + this.textarea.value.substr(this.end, this.textarea.value.length);
     this.set(start + before.length, start + before.length + text.length);
 
@@ -148,9 +148,9 @@
   };
 
   Selection.prototype.expandToEntireLine = function() {
-    var start = this.textarea.value.lastIndexOf('\n', this.start);
+    let start = this.textarea.value.lastIndexOf('\n', this.start);
     this.start = start + 1;
-    var end = this.textarea.value.indexOf('\n', this.end);
+    let end = this.textarea.value.indexOf('\n', this.end);
     this.end = end === -1 ? this.textarea.value.length : end;
   };
 

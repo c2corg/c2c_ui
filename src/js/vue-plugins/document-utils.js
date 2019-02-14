@@ -33,7 +33,7 @@ export default function install(Vue) {
           return document.name || '';
         }
 
-        var locale = this.$documentUtils.getLocaleSmart(document, lang);
+        let locale = this.$documentUtils.getLocaleSmart(document, lang);
 
         if (locale.title_prefix) {
           return locale.title_prefix + ' : ' + locale.title;
@@ -58,7 +58,7 @@ export default function install(Vue) {
 
       getLocaleSmart(document, lang) {
         // first of all try to search asked lang
-        var result = lang ? this.$documentUtils.getLocaleStupid(document, lang) : null;
+        let result = lang ? this.$documentUtils.getLocaleStupid(document, lang) : null;
 
         if (result) {
           return result;
@@ -177,9 +177,9 @@ export default function install(Vue) {
       },
 
       buildLocale(documentType, lang) {
-        var def = constants.objectDefinitions[documentType];
+        let def = constants.objectDefinitions[documentType];
 
-        var result = {};
+        let result = {};
 
         for (let field of Object.values(def.fields)) {
           if (field.parent === 'locales') {
@@ -193,9 +193,9 @@ export default function install(Vue) {
       },
 
       buildDocument(documentType, lang) {
-        var def = constants.objectDefinitions[documentType];
+        let def = constants.objectDefinitions[documentType];
 
-        var result = {
+        let result = {
           type: def.letter,
           locales: [
             this.buildLocale(documentType, lang)

@@ -13,7 +13,7 @@ DocumentService.prototype.get = function(id, lang) {
 };
 
 DocumentService.prototype.getCooked = function(id, prefered_lang) {
-  var promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`);
+  let promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`);
 
   return promise;
 };

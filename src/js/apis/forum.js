@@ -23,10 +23,10 @@ Forum.prototype.getTopic = function(topicId) {
 };
 
 Forum.prototype.getLatest = function() {
-  var result = this.get('/latest.json');
+  let result = this.get('/latest.json');
 
   result.then(function(response) {
-    var users = {};
+    let users = {};
 
     response.data.users.forEach(function(user) {
       users[user.username] = user;

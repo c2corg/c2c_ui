@@ -3,7 +3,7 @@ import Field from './field.js';
 import documentsProperties from './documentsProperties.json';
 
 const getFieldsObject = function(fieldsArray) {
-  var result = {};
+  let result = {};
 
   for (let def of fieldsArray) {
     let field = new Field(def.id, def.properties);

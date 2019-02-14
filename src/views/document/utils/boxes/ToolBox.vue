@@ -133,7 +133,7 @@
       },
 
       missingLangs() {
-        var result = [];
+        let result = [];
 
         for (let lang of constants.langs) {
           if (!this.document.available_langs.includes(lang)) {

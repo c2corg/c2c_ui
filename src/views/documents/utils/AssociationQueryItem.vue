@@ -50,7 +50,7 @@
       setUrlValue(documentType, value) {
         let key = constants.objectDefinitions[documentType].letter;
 
-        var query = Object.assign({}, this.$route.query);
+        let query = Object.assign({}, this.$route.query);
         query[key] = value === '' ? undefined : value;
 
         if (query[key] !== this.$route.query[key]) {

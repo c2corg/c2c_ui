@@ -222,7 +222,7 @@
       },
 
       getKeys(obj1, obj2, excludedKeys) {
-        var keys = Object.keys(obj1).concat(Object.keys(obj2));
+        let keys = Object.keys(obj1).concat(Object.keys(obj2));
 
         excludedKeys = excludedKeys || [];
 
@@ -243,7 +243,7 @@
           return 'Waiting for other version';
         }
 
-        var keys = this.getKeys(
+        let keys = this.getKeys(
           this.oldVersion.document,
           this.newVersion.document,
           ['version', 'locales', 'geometry', 'cooked']
@@ -258,13 +258,13 @@
           }
         }
 
-        var oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang);
-        var newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
-        var localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
+        let oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang);
+        let newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
+        let localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
 
         for (let key of localeKeys) {
-          var oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n');
-          var newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n');
+          let oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n');
+          let newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n');
 
           if (hasChanged(oldVal, newVal)) {
             let diff = diffMatchPatch.diff_main(oldVal, newVal);

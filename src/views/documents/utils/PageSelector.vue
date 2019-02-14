@@ -104,7 +104,7 @@
       },
 
       pageQuery(page) {
-        var query = Object.assign({}, this.$route.query);
+        let query = Object.assign({}, this.$route.query);
         query.offset = (page - 1) * queryLimit;
         return { name: this.$route.name, params: this.$route.params, query };
       }

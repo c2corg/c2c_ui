@@ -178,8 +178,8 @@
     },
 
     data() {
-      var cartoLayers_ = cartoLayers;
-      var dataLayers_ = dataLayers;
+      let cartoLayers_ = cartoLayers;
+      let dataLayers_ = dataLayers;
 
       // swiss topo only for logged users
       if (!this.$user.isLogged) {
@@ -238,7 +238,7 @@
 
       urlValue: {
         get() {
-          var result = this.$route.query.bbox;
+          let result = this.$route.query.bbox;
           return result ? result.replace('%252C', ',').split(',').map(num => parseInt(num, 10)) : undefined;
         }
       },
@@ -471,8 +471,8 @@
       },
 
       drawDocumentMarkers() {
-        var documentsSource = this.documentsLayer.getSource();
-        var waypointsSource = this.waypointsLayer.getSource();
+        let documentsSource = this.documentsLayer.getSource();
+        let waypointsSource = this.waypointsLayer.getSource();
 
         documentsSource.clear();
         waypointsSource.clear();
@@ -597,8 +597,8 @@
       // If user want's to filter with map, it will send extent to url
       // otherwise, it set bbox url to undefined
       sendBoundsToUrl() {
-        var bounds = this.view.calculateExtent();
-        var query = Object.assign({}, this.$route.query);
+        let bounds = this.view.calculateExtent();
+        let query = Object.assign({}, this.$route.query);
 
         query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined;
         if (query.bbox !== this.$route.query.bbox) {
@@ -634,7 +634,7 @@
       },
 
       onPointerMove(event) {
-        var resultFeature = null;
+        let resultFeature = null;
 
         this.map.forEachFeatureAtPixel(event.pixel, function(feature) {
           resultFeature = feature;
@@ -685,7 +685,7 @@
         // * add a spinner showing that it's waiting
         // * remove handler once it's loaded
         const setCenter = function() {
-          var position = this.geolocation.getPosition();
+          let position = this.geolocation.getPosition();
           this.view.setCenter(position);
         };
 

@@ -27,7 +27,7 @@
           return (this.$route.query.date || '') + ',';
         },
         set(value) {
-          var query = Object.assign({}, this.$route.query);
+          let query = Object.assign({}, this.$route.query);
           query.date = value;
 
           if (query.date !== this.$route.query.date) {

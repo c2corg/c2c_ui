@@ -71,7 +71,7 @@
         const container = this.$refs.container;
 
         const addClasses = function(cssSelector, classes) {
-          var nodes = container.querySelectorAll(cssSelector);
+          let nodes = container.querySelectorAll(cssSelector);
 
           for (let node of nodes) {
             node.classList.add(...classes);

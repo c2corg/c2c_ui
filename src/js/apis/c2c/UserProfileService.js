@@ -46,7 +46,7 @@ function UserProfileService(api) {
     },
 
     post(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
-      var payload = {
+      let payload = {
         currentpassword
       };
 

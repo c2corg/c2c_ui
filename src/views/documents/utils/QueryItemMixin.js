@@ -5,7 +5,7 @@ export default {
         return this.$route.query[this.field.url];
       },
       set(value) {
-        var query = Object.assign({}, this.$route.query);
+        let query = Object.assign({}, this.$route.query);
         query[this.field.url] = value === this.field.defaultUrlQuery ? undefined : value;
 
         if (query[this.field.url] !== this.$route.query[this.field.url]) {

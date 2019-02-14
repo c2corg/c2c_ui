@@ -234,7 +234,7 @@ Field.prototype.getError = function(document, locale) {
 };
 
 Field.prototype.isVisibleForActivities = function(activities) {
-  var result = true;
+  let result = true;
 
   if (this.activities && activities) {
     result = utils.intersectionIsNotNull(this.activities, activities);

@@ -202,7 +202,7 @@
       },
 
       categorizedFields() {
-        var result = [];
+        let result = [];
 
         for (let category of Object.keys(categorizedFields[this.documentType])) {
           let temp = {

@@ -9,7 +9,7 @@ const buildTextStyle = function(title, highlight) {
   let text;
 
   if (highlight) { // on hover in list view
-    var def = {
+    let def = {
       text: utils.stringDivider(title, 30, '\n'),
       textAlign: 'left',
       overflow: true,
@@ -62,20 +62,20 @@ export const buildDiffStyle = function(isOld) {
 };
 
 const buildPointStyle = function(title, svgSrc, color, highlight) {
-  var imgSize = highlight ? 30 : 20;
-  var circleRadius = highlight ? 20 : 15;
+  let imgSize = highlight ? 30 : 20;
+  let circleRadius = highlight ? 20 : 15;
 
   svgSrc = svgSrc.replace('<svg ', `<svg width="${imgSize}px" height="${imgSize}px" `);
   svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
 
-  var iconStyle = new ol.style.Style({
+  let iconStyle = new ol.style.Style({
     image: new ol.style.Icon({
       src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSrc)
     }),
     text: buildTextStyle(title, highlight)
   });
 
-  var circleStyle = new ol.style.Style({
+  let circleStyle = new ol.style.Style({
     image: new ol.style.Circle({
       radius: circleRadius,
       fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),

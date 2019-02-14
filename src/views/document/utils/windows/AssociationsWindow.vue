@@ -60,7 +60,7 @@
 
     created() {
       // get fields of for parent's document type
-      var fields = Object.values(constants.objectDefinitions[this.documentType].fields);
+      let fields = Object.values(constants.objectDefinitions[this.documentType].fields);
 
       // keep only fields that belong to association
       fields = fields.filter(field => field.parent === 'associations');
