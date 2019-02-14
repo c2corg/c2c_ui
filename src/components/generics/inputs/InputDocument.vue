@@ -16,13 +16,11 @@
     </div>
     <div class="dropdown-menu" role="menu" v-if="promise.data">
       <div class="dropdown-content">
-        <div
-          v-for="type of documentTypes_"
-          :key="type"
-          v-if="promise.data[type + 's'] && promise.data[type + 's'].documents.length !== 0">
+        <div v-for="type of documentTypesWithResults" :key="type">
           <div
             v-if="documentTypes_.length > 1"
             class="dropdown-item has-text-weight-bold is-size-5">
+            <!-- if several type are requested, add an header -->
             {{ $gettext(type + 's') | uppercaseFirstLetter }}
           </div>
           <div
@@ -138,6 +136,12 @@
 
       documentTypes_() {
         return Array.isArray(this.documentType) ? this.documentType : [this.documentType];
+      },
+
+      documentTypesWithResults() {
+        const result = this.promise.data;
+
+        return this.documentTypes_.filter((type) => result[type + 's'] && result[type + 's'].documents.length !== 0);
       },
 
       letterTypes() {
