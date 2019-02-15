@@ -964,6 +964,7 @@
       "lift_status": "ouvertes"
     },
     "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
+    "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
     "open_guarded": {
       "hut_status": "ouvert gardé"
     },
@@ -1381,6 +1382,7 @@
     "This field must be a valid ISBN.": "Ce champ doit être un ISBN valide.",
     "This is the first version": "Ceci est la première version",
     "This is the last version": "Ceci est la dernière version",
+    "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Description complète de l'itinéraire (résumé, approche, descente, etc.) N'oubliez pas l'historique si vous le connaissez.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Cette image montre une couverture de livre. Elle est la propriété de l'éditeur et/ou de l'auteur et n'est présentée ici qu'à des fins d'illustration.",
     "This profile is only available to authenticated users.": "Ce profil est accessible aux seuls utilisateurs authentifiés.",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Cet outil permet d'estimer la difficulté technique d'un itinéraire à ski (cotation ski)",
