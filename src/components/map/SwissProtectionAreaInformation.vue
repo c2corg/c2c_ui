@@ -56,11 +56,11 @@
         if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
           lang = 'fr';
         }
-        let result = this.data.properties[`best_${lang}`] || '';
+        const result = this.data.properties[`best_${lang}`] || '';
         return he.decode(result, { strict: true });
       },
       additionalInformation() {
-        let result = this.data.properties.zusatzinformation || '';
+        const result = this.data.properties.zusatzinformation || '';
         return he.decode(result, { strict: true });
       },
       protectionStatus() {
