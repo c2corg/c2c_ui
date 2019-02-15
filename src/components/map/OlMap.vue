@@ -27,6 +27,14 @@
                 {{ layer.get('title') }}
               </div>
             </td>
+            <td v-if="showProtectionAreas && !editable">
+              <header v-translate>Protection areas</header>
+              <input
+                type="checkbox"
+                :checked="protectionAreasVisible"
+                @click="toggleProtectionAreas">
+              <span v-translate>Fauna protection areas</span>
+            </td>
           </tr>
         </table>
       </div>
@@ -92,15 +100,17 @@
     </div>
 
     <biodiv-information ref="BiodivInformation" :data="biodivData"/>
+    <swiss-protection-area-information ref="SwissProtectionAreaInformation" :data="swissProtectionAreaData"/>
   </div>
 </template>
 
 <script>
   import ol from '@/js/libs/ol';
-  import biodivSports from '@/js/apis/biodiv-sports';
+  import biodivSportsService from '@/js/apis/BiodivSportsService';
+  import respecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
   import photon from '@/js/apis/photon';
 
-  import { cartoLayers, dataLayers, swissTopoLayers } from './mapLayers.js';
+  import { cartoLayers, dataLayers, swissTopoLayers, protectionAreasLayers } from './mapLayers.js';
   import {
     getDocumentPointStyle,
     getDocumentLineStyle,
@@ -110,6 +120,7 @@
   } from './mapUtils.js';
 
   import BiodivInformation from './BiodivInformation';
+  import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 
   const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
   const DEFAULT_POINT_ZOOM = 12;
@@ -117,7 +128,8 @@
   export default {
 
     components: {
-      BiodivInformation
+      BiodivInformation,
+      SwissProtectionAreaInformation
     },
 
     props: {
@@ -141,7 +153,7 @@
         default: false
       },
 
-      showBiodivSportsAreas: {
+      showProtectionAreas: {
         type: Boolean,
         default: false
       },
@@ -196,10 +208,13 @@
         // slope layers
         dataLayers: dataLayers_,
 
-        // bidiv layer
-        biodivLayer: new ol.layer.Vector({
+        // protection areas layer as features
+        protectionAreasLayer: new ol.layer.Vector({
           source: new ol.source.Vector()
         }),
+
+        // protection areas layers
+        protectionAreasLayers,
 
         // layer for document icons and paths
         documentsLayer: new ol.layer.Vector({
@@ -221,6 +236,8 @@
         showRecenterOnPropositions: false,
 
         biodivData: {},
+        swissProtectionAreaData: { properties: {} },
+        protectionAreasVisible: this.showProtectionAreas && !this.editable,
 
         // on editable mode, there a button reset
         // we must save initial geometry
@@ -308,11 +325,14 @@
           new ol.control.Attribution()
         ],
 
-        layers: this.mapLayers.concat(this.dataLayers).concat([
-          this.biodivLayer,
+        layers: [
+          ...this.mapLayers,
+          ...this.dataLayers,
+          ...this.protectionAreasLayers,
+          this.protectionAreasLayer,
           this.waypointsLayer,
           this.documentsLayer
-        ]),
+        ],
 
         view: new ol.View({
           maxZoom: this.visibleLayer.get('maxZoom')
@@ -328,6 +348,9 @@
 
       this.map.on('moveend', this.sendBoundsToUrl);
       this.map.on('moveend', this.getBiodivSportsAreas);
+      if (this.protectionAreasVisible) {
+        this.protectionAreasLayers.forEach(layer => layer.setVisible(true));
+      }
 
       this.geolocation = new ol.Geolocation({
         trackingOptions: {
@@ -556,9 +579,7 @@
 
       addBiodivSportsData(response) {
         const results = response['data']['results'];
-        const source = this.biodivLayer.getSource();
-
-        this.hasBiodivsportAreas = false;
+        const source = this.protectionAreasLayer.getSource();
 
         for (const result of results) {
           const geometry = geoJSONFormat.readGeometry(result['geometry'], {
@@ -581,17 +602,18 @@
 
           feature.setId('biodiv_' + (result['id']));
 
-          feature.set('normalStyle', buildPolygonStyle(result.name, false));
-          feature.set('highlightedStyle', buildPolygonStyle(
-            this.$gettext('Sensitive area:') + result.name,
-            true
-          ));
+          feature.set('normalStyle', buildPolygonStyle());
           feature.setStyle(feature.get('normalStyle'));
 
           source.addFeature(feature);
-          this.hasBiodivsportAreas = true;
-          this.$emit('has-sensitive-area');
+          this.$emit('has-protection-area');
         }
+      },
+
+      toggleProtectionAreas() {
+        this.protectionAreasVisible = !this.protectionAreasVisible;
+        this.protectionAreasLayers.forEach(layer => layer.setVisible(!layer.getVisible()));
+        this.protectionAreasLayer.setVisible(!this.protectionAreasLayer.getVisible());
       },
 
       // If user want's to filter with map, it will send extent to url
@@ -675,6 +697,33 @@
             this.biodivData = feature.get('biodivData');
             this.$refs.BiodivInformation.show();
           }
+        } else {
+          // handle clicks on enabled layers
+          if (this.protectionAreasVisible) {
+            const extent = this.view.calculateExtent(this.map.getSize() || null);
+            const rcpExtent = ol.proj.transformExtent(
+              extent,
+              ol.proj.get('EPSG:3857'),
+              ol.proj.get('EPSG:21781')
+            );
+            const position = ol.proj.transform(
+              event.coordinate,
+              ol.proj.get('EPSG:3857'),
+              ol.proj.get('EPSG:21781')
+            );
+            respecterCestProtegerService.identify(
+              position,
+              rcpExtent,
+              this.map.getSize()[0],
+              this.map.getSize()[1],
+              this.$language.current
+            ).then(({ data }) => {
+              if (data.results && data.results.length > 0) {
+                this.swissProtectionAreaData = data.results[0];
+                this.$refs.SwissProtectionAreaInformation.show();
+              }
+            });
+          }
         }
       },
 
@@ -723,17 +772,16 @@
       },
 
       getBiodivSportsAreas() {
-        if (!this.showBiodivSportsAreas) {
+        if (!this.protectionAreasVisible) {
           return;
         }
 
-        let extent = this.view.calculateExtent(this.map.getSize() || null);
+        const extent = this.view.calculateExtent(this.map.getSize() || null);
 
         // get extent in WGS format
-        extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-        biodivSports.fetchData(extent, this.biodivSportsActivities, this.$language.current)
+        const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+        biodivSportsService.fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
           .then(this.addBiodivSportsData);
-          // .catch(response => console.warn(response))
       },
 
       clearGeometry() {

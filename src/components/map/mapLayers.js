@@ -108,16 +108,29 @@ const openTopoMap = new ol.layer.Tile({
   })
 });
 
-const ign_maps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
-const ign_ortho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+const ignOrtho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
 const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
 
-const ign_slopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
-const swiss_slopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
+const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+ignSlopes.setOpacity(0.4);
+const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
+swissSlopes.setOpacity(0.4);
 
-ign_slopes.setOpacity(0.4);
-swiss_slopes.setOpacity(0.4);
+const swissTranquilityZones = createSwisstopoLayer(
+  'Swiss tranquility zones',
+  'ch.bafu.wrz-wildruhezonen_portal',
+  'png'
+);
+swissTranquilityZones.setOpacity(0.7);
+const swissFaunaProtectionZones = createSwisstopoLayer(
+  'Swiss fauna protection zones',
+  'ch.bafu.wrz-jagdbanngebiete_select',
+  'png'
+);
+swissFaunaProtectionZones.setOpacity(0.7);
 
-export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ign_maps, ign_ortho, swissTopo];
-export const dataLayers = [ign_slopes, swiss_slopes];
-export const swissTopoLayers = [swissTopo, swiss_slopes];
+export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ignMaps, ignOrtho, swissTopo];
+export const dataLayers = [ignSlopes, swissSlopes];
+export const swissTopoLayers = [swissTopo, swissSlopes];
+export const protectionAreasLayers = [swissTranquilityZones, swissFaunaProtectionZones];

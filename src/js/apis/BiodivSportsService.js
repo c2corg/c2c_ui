@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-function BiodivSports() {
+function BiodivSportsService() {
   this.url = 'https://biodiv-sports.fr/api/v2/sensitivearea/';
   this.axios = axios.create();
 }
 
-BiodivSports.prototype.fetchData = function(extent, activities, language) {
+BiodivSportsService.prototype.fetchData = function(extent, activities, language) {
   if (language !== 'fr' && language !== 'en' && language !== 'it') {
     language = 'en';
   }
@@ -28,4 +28,4 @@ BiodivSports.prototype.fetchData = function(extent, activities, language) {
   return this.axios.get(this.url, { params });
 };
 
-export default new BiodivSports();
+export default new BiodivSportsService();
