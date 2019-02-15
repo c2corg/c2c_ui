@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import he from 'he';
   export default {
     props: {
       data: {
@@ -56,24 +57,18 @@
           lang = 'fr';
         }
         let result = this.data.properties[`best_${lang}`] || '';
-        // very simple html > text interpreter : only html entities FIXME
-        result = result.replace(/&eacute;/g, 'é');
-        result = result.replace(/&egrave;/g, 'è');
-        return result;
+        return he.decode(result, { strict: true });
       },
       additionalInformation() {
         let result = this.data.properties.zusatzinformation || '';
-        // very simple html > text interpreter : only html entities
-        result = result.replace(/&eacute;/g, 'é');
-        result = result.replace(/&egrave;/g, 'è');
-        return result;
+        return he.decode(result, { strict: true });
       },
       protectionStatus() {
         let lang = this.$language.current;
         if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
           lang = 'fr';
         }
-        return this.data.properties[`schutzs_${lang}`];
+        return he.decode(this.data.properties[`schutzs_${lang}`], { strict: true });
       }
     },
     methods: {
