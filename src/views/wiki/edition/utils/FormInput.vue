@@ -2,7 +2,7 @@
   <input-activity
     v-if="field.name=='activities'"
     v-show="visible"
-    :error-message="errorMessage"
+    :has-error="hasError"
     show-labels
     v-model="document.activities" />
 
@@ -40,7 +40,7 @@
     v-else-if="field.parent=='associations'"
     :document-type="field.documentType"
     multiple
-    :error-message="errorMessage"
+    :has-error="hasError"
     @add="$documentUtils.propagateAssociationProperties(document, arguments[0])"
     v-model="object[field.name]"/>
 
@@ -51,13 +51,13 @@
     :required="field.required"
     :i18n="field.i18n"
     :i18n-context="field.i18nContext"
-    :error-message="errorMessage"
+    :has-error="hasError"
     v-model="object[field.name]"/>
 
   <datepicker
     v-else-if="field.type === 'date'"
     monday-first
-    input-class="input"
+    :input-class="hasError ? 'input is-danger' : 'input'"
     wrapper-class="control"
     :language="$options.datepickerLocales[$language.current]"
     :highlighted="{dates:[new Date()]}"
@@ -85,7 +85,7 @@
     :i18n="field.i18n"
     :i18n-context="field.i18nContext"
     :options="field.values"
-    :error-message="errorMessage"
+    :has-error="hasError"
     @input="$emit('input', arguments[0])"
     v-model="object[field.name]"/>
 
@@ -198,9 +198,6 @@
       },
       hasError() {
         return this.field.error !== null;
-      },
-      errorMessage() {
-        return this.hasError ? this.$gettext(this.field.error.description) : null;
       }
     },
 
