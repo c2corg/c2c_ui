@@ -8,8 +8,7 @@
 
     <form-section
       :title="$gettext('general informations')"
-      :sub-title="$gettext('Title of the book, author, language and date of publication.')"
-      expanded>
+      :sub-title="$gettext('Title of the book, author, language and date of publication.')">
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.title"/>
         <form-field class="is-12" :document="document" :field="fields.activities"/>

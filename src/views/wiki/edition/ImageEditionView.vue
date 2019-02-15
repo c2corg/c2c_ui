@@ -7,8 +7,7 @@
     @save="save">
     <form-section
       :title="$gettext('general informations')"
-      :sub-title="$gettext('Title, activity and characteristics of the picture')"
-      expanded>
+      :sub-title="$gettext('Title, activity and characteristics of the picture')">
       <div class="columns is-multiline">
         <form-field :document="document" :field="fields.title"/>
         <form-field class="is-narrow" :document="document" :field="fields.image_type" />

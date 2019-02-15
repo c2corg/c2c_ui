@@ -9,8 +9,7 @@
 
     <form-section
       :title="$gettext('general informations')"
-      sub-title="Waypoint's main properties"
-      expanded>
+      sub-title="Waypoint's main properties">
       <div class="columns">
         <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
         <form-field :document="document" :field="fields.title" />

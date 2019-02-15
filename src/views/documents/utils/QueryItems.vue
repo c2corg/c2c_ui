@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="query-items">
     <query-item :field="fields.title" class="query-item" hide-label/>
 
     <dropdown-button v-for="category of categorizedFields" :key="category.name"
@@ -255,20 +255,40 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
-    .query-item{
-        margin-right:1em;
-        display: inline-flex;
-        margin-bottom: 0!important;
-    }
+  @import '@/assets/sass/variables.scss';
 
-    .category-button{
-        margin-right:1em;
-    }
+  .query-item{
+    margin-right:1em;
+    display: inline-flex;
+    margin-bottom: 0!important;
+  }
 
-    .sub-query-items{
-        width:300px
+  .category-button{
+    margin-right:1em;
+  }
+
+  .sub-query-items{
+    min-width:300px;
+  }
+
+  @media screen and (max-width: $tablet) {
+    .query-items{
+      position:relative; // important; to force dropdown to be on stick to left
+
+      .dropdown {
+        position: unset;
+
+        .dropdown-menu {
+          width: 100%;
+        }
+      }
     }
+  }
+  @media screen and (min-width: $tablet) and (max-width: $desktop){
+  }
+  @media screen and (min-width: $desktop) {
+  }
 
 </style>

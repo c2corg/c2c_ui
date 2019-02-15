@@ -16,20 +16,39 @@
       <hr>
     </div>
 
-    <div v-if="isEditable && (showAssociationEditor || hasMissingLangs)">
-      <tool-box-button
-        v-if="showAssociationEditor"
-        @click="$refs.associationsWindow.show()"
-        icon="link"
-        :label="$gettext('Edit associations')" />
+    <tool-box-button
+      v-if="documentType==='profile'"
+      :to="{ name: 'outings', query: {u:document.document_id} }"
+      :label="$gettext('outings')"
+      icon="edit">
+      <icon-outing slot="icon" />
+    </tool-box-button>
 
-      <tool-box-button
-        v-if="hasMissingLangs"
-        @click="$refs.translateWindow.show()"
-        icon="edit"
-        :label="$gettext('Translate into an other lang')" />
-      <hr>
-    </div>
+    <tool-box-button
+      v-if="documentType==='profile'"
+      :to="{ name: 'whatsnew', query: {u:document.document_id} }"
+      :label="$gettext('Contributions')"
+      icon="edit"/>
+
+    <tool-box-button
+      v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
+      :to="{name:documentType + '-history', params:{id:document.document_id, lang:document.cooked.lang}}"
+      :label="$gettext('History')"
+      icon="history"/>
+
+    <tool-box-button
+      v-if="isEditable && showAssociationEditor"
+      @click="$refs.associationsWindow.show()"
+      icon="link"
+      :label="$gettext('Edit associations')" />
+
+    <tool-box-button
+      v-if="isEditable && hasMissingLangs"
+      @click="$refs.translateWindow.show()"
+      icon="edit"
+      :label="$gettext('Translate into an other lang')" />
+
+    <hr>
 
     <!-- Moderator zone -->
     <div v-if="$user.isModerator && isEditable">

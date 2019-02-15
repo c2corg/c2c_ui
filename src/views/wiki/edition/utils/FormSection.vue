@@ -8,7 +8,7 @@
         <p><em> {{ subTitle }} </em></p>
       </div>
       <div class="column is-narrow">
-        <button class="button is-info" @click="toggleVisibility">
+        <button class="button is-info" @click="toggleExpandedState">
           {{ expanded_ ? $gettext('Collapse') : $gettext('Expand') }}
         </button>
       </div>
@@ -32,14 +32,6 @@
       subTitle: {
         type: String,
         default: 'Lorem ipsum'
-      },
-      expanded: {
-        type: Boolean,
-        default: false
-      },
-      isLoading: {
-        type: Boolean,
-        required: true
       }
     },
 
@@ -65,13 +57,15 @@
       this.checkVisibility();
       this.checkHasError();
 
-      if (this.expanded) {
-        this.toggleVisibility();
-      }
+      window.addEventListener('keyup', this.onKeyup);
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('keyup', this.onKeyup);
     },
 
     methods: {
-      toggleVisibility() {
+      toggleExpandedState() {
         const content = this.$refs.content;
         const className = `section-content-expanded${this._uid}`;
 
@@ -94,6 +88,16 @@
         }
 
         this.expanded_ = !this.expanded_;
+      },
+
+      onKeyup(event) {
+        if (event.altKey && event.shiftKey) {
+          if (event.key === 'ArrowUp' && this.expanded_) {
+            this.toggleExpandedState();
+          } else if (event.key === 'ArrowDown' && !this.expanded_) {
+            this.toggleExpandedState();
+          }
+        }
       },
 
       checkVisibility() {

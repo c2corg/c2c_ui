@@ -1,10 +1,14 @@
 <template>
-  <div @click="$emit('click')" class="toolbox-button">
-    <fa-icon :icon="icon" class="toolbox-button-icon"/>
-    <span>
-      {{ label }}
+  <component :is="to ? 'router-link' : 'div'" :to="to" @click="$emit('click')" class="toolbox-button">
+    <span class="toolbox-button-icon">
+      <slot name="icon">
+        <fa-icon :icon="icon"/>
+      </slot>
     </span>
-  </div>
+    <span>
+      {{ label | uppercaseFirstLetter }}
+    </span>
+  </component>
 </template>
 
 <script>
@@ -17,6 +21,10 @@
       label: {
         type: String,
         required: true
+      },
+      to: {
+        type: Object,
+        default: null
       }
     }
   };
@@ -24,22 +32,23 @@
 
 <style scoped lang="scss">
 
-@import "@/assets/sass/variables.scss";
+  @import "@/assets/sass/variables.scss";
 
-.toolbox-button{
+  .toolbox-button{
+    display:block;
     cursor:pointer;
 
     span{
-        color:$link;
+      color:$link;
     }
 
     :hover{
-        color:$text;
+      color:$text;
     }
 
     .toolbox-button-icon{
-        width: 1rem;
+      width: 1rem;
+      color:$text;
     }
-
-}
+  }
 </style>
