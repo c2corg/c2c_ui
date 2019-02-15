@@ -31,18 +31,15 @@ const buildTextStyle = function(title, highlight) {
   return text;
 };
 
-export const buildPolygonStyle = function(title, highlight) {
-  const opacityFactor = highlight ? 1.5 : 1;
-
+export const buildPolygonStyle = function() {
   return new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: [51, 122, 183, 0.8 * opacityFactor],
+      color: [190, 190, 190, 1],
       width: 1
     }),
     fill: new ol.style.Fill({
-      color: [51, 122, 183, 0.4 * opacityFactor]
-    }),
-    text: buildTextStyle(title, highlight)
+      color: [254, 228, 120, 0.7]
+    })
   });
 };
 

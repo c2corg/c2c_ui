@@ -5,7 +5,7 @@
     <div v-if="document" class="columns">
 
       <div class="column is-3">
-        <map-box :document="document" @has-sensitive-area="hasSensitiveArea=true"/>
+        <map-box :document="document" @has-protection-area="hasProtectionArea=true"/>
         <tool-box :document="document"/>
       </div>
 
@@ -95,7 +95,7 @@
           <markdown-section :document="document" :field="fields.remarks">
             <div
               slot="after"
-              v-if="hasSensitiveArea"
+              v-if="hasProtectionArea"
               class="notification is-info">
               <strong v-translate>
                 Sensitive areas
@@ -142,7 +142,7 @@
 
     data() {
       return {
-        hasSensitiveArea: false
+        hasProtectionArea: false
       };
     },
 
