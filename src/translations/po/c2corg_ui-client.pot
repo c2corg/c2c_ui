@@ -228,6 +228,10 @@ msgstr ""
 msgid "Add the first outing"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:26
+msgid "Additional information"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:237
 msgctxt "area_types"
 msgid "admin_limits"
@@ -618,7 +622,7 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:57
+#: src/views/documents/DocumentsView.vue:53
 msgid "Cards mode"
 msgstr ""
 
@@ -649,7 +653,7 @@ msgstr ""
 msgid "children_proof"
 msgstr ""
 
-#: src/components/map/OlMap.vue:89
+#: src/components/map/OlMap.vue:97
 msgid "Clear"
 msgstr ""
 
@@ -871,7 +875,7 @@ msgctxt "glacier_gear_types"
 msgid "crampons_spring"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:38
+#: src/views/documents/DocumentsView.vue:34
 msgid "Create"
 msgstr ""
 
@@ -1101,6 +1105,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:54
 msgid "disable_comments"
+msgstr ""
+
+#: src/components/map/SwissProtectionAreaInformation.vue:22
+msgid "Dispositions"
 msgstr ""
 
 #: src/views/document/utils/boxes/ElevationProfile.vue:14
@@ -1363,6 +1371,14 @@ msgctxt "image_categories"
 msgid "fauna"
 msgstr ""
 
+#: src/components/map/OlMap.vue:36
+msgid "Fauna protection areas"
+msgstr ""
+
+#: src/components/map/SwissProtectionAreaInformation.vue:48
+msgid "Fauna protection site:"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:396
 msgctxt "months"
 msgid "feb"
@@ -1381,7 +1397,7 @@ msgstr ""
 msgid "filename"
 msgstr ""
 
-#: src/components/map/OlMap.vue:43
+#: src/components/map/OlMap.vue:51
 msgid "Filter on map extent"
 msgstr ""
 
@@ -1760,7 +1776,7 @@ msgstr ""
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:66
+#: src/views/documents/DocumentsView.vue:62
 msgid "Hide map"
 msgstr ""
 
@@ -2101,7 +2117,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:50
+#: src/views/documents/DocumentsView.vue:46
 msgid "List mode"
 msgstr ""
 
@@ -2774,6 +2790,10 @@ msgstr ""
 msgid "People who were with you, and your feelings about this outing"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:18
+msgid "Period of protection"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:328
 msgctxt "event_types"
 msgid "person_fall"
@@ -2973,6 +2993,18 @@ msgstr ""
 msgid "protected"
 msgstr ""
 
+#: src/components/map/SwissProtectionAreaInformation.vue:46
+msgid "Protection area:"
+msgstr ""
+
+#: src/components/map/OlMap.vue:31
+msgid "Protection areas"
+msgstr ""
+
+#: src/components/map/SwissProtectionAreaInformation.vue:14
+msgid "Protection status"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:305
 msgctxt "climbing_outdoor_types"
 msgid "psicobloc"
@@ -3053,11 +3085,11 @@ msgctxt "avalanche_signs"
 msgid "recent_avalanche"
 msgstr ""
 
-#: src/components/map/OlMap.vue:50
+#: src/components/map/OlMap.vue:58
 msgid "Recenter on your current position"
 msgstr ""
 
-#: src/components/map/OlMap.vue:61
+#: src/components/map/OlMap.vue:69
 msgid "Recenter on..."
 msgstr ""
 
@@ -3090,7 +3122,7 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
-#: src/components/map/OlMap.vue:80
+#: src/components/map/OlMap.vue:88
 msgid "Reset geometry"
 msgstr ""
 
@@ -3302,7 +3334,7 @@ msgid "Send reset email"
 msgstr ""
 
 #: src/components/map/BiodivInformation.vue:4
-#: src/components/map/OlMap.vue:586
+#: src/components/map/SwissProtectionAreaInformation.vue:50
 msgid "Sensitive area:"
 msgstr ""
 
@@ -3377,7 +3409,7 @@ msgstr ""
 msgid "show all"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:66
+#: src/views/documents/DocumentsView.vue:62
 msgid "Show map"
 msgstr ""
 

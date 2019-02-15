@@ -42,13 +42,12 @@
     computed: {
       type() {
         switch (this.data.layerBodId) {
-        // FIXME
         case 'ch.bafu.wrz-wildruhezonen_portal':
-          return 'Zone de protection:';
+          return this.$gettext('Protection area:');
         case 'ch.bafu.wrz-jagdbanngebiete_select':
-          return 'Site de protection de la faune:';
+          return this.$gettext('Fauna protection site:');
         default:
-          return 'Zone sensible:';
+          return this.$gettext('Sensitive area:');
         }
       },
       dispositions() {
