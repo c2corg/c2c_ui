@@ -3122,6 +3122,10 @@ msgctxt "API message"
 msgid "Required"
 msgstr ""
 
+#: src/views/wiki/edition/utils/FormField.vue:12
+msgid "required field"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:151
 msgid "rescue"
 msgstr ""

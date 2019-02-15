@@ -4,6 +4,7 @@
     <div v-if="document.areas && document.areas.length" class="has-text-centered">
 
       <icon-area/>
+      <span>&nbsp;</span>
       <span v-for="area of document.areas" :key="area.document_id" class="area-link">
         <document-link :document="area"/>&#0032;
       </span>
@@ -19,7 +20,7 @@
       @has-protection-area="$emit('has-protection-area')"/>
 
     <div class="has-text-centered nearby-link">
-      <router-link :to="linkToClosestDocuments" class="button is-small is-link" v-translate>
+      <router-link :to="linkToClosestDocuments" v-translate>
         See other documents nearby
       </router-link>
     </div>

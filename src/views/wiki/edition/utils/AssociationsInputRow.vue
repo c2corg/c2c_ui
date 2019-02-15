@@ -56,7 +56,7 @@
         return this.$refs.input.visible;
       },
       hasError() {
-        return this.$refs.input.hasError === true;
+        return this.field.error !== null;
       }
     }
   };

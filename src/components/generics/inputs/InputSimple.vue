@@ -41,10 +41,6 @@
     <span v-if="postfix" class="icon is-right">
       {{ postfix }}
     </span>
-
-    <span v-if="errorMessage" class="has-text-danger has-text-weight-bold">
-      {{ errorMessage }}
-    </span>
   </div>
 
 </template>

@@ -99,8 +99,15 @@
       </button>
     </div>
 
-    <biodiv-information ref="BiodivInformation" :data="biodivData"/>
-    <swiss-protection-area-information ref="SwissProtectionAreaInformation" :data="swissProtectionAreaData"/>
+    <biodiv-information
+      v-if="protectionAreasVisible"
+      ref="BiodivInformation"
+      :data="biodivData"/>
+
+    <swiss-protection-area-information
+      v-if="protectionAreasVisible"
+      ref="SwissProtectionAreaInformation"
+      :data="swissProtectionAreaData"/>
   </div>
 </template>
 

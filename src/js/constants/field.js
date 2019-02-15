@@ -227,7 +227,7 @@ Field.prototype.getError = function(document, locale) {
 
   /* check presence */
   if (this.required && (!value || (this.multiple && value.length === 0))) {
-    return this.getErrorObject(`${this.name} is required`);
+    return this.getErrorObject(`required field`);
   }
 
   return null;

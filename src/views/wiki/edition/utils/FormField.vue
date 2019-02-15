@@ -8,6 +8,10 @@
       <label class="label">
         <marker-helper :name="helper || field.helper" />
         {{ label || $gettext(field.name) | uppercaseFirstLetter }}
+        <span v-if="hasError" class="has-text-danger">
+          <!-- $gettext('required field') -->
+          {{ errorMessage | uppercaseFirstLetter }}
+        </span>
       </label>
       <form-input
         ref="input"
@@ -67,21 +71,25 @@
 
     data() {
       return {
-        visible: true,
-        hasError: false
+        visible: true
       };
+    },
+
+    computed: {
+      hasError() {
+        return this.field.error !== null;
+      },
+      errorMessage() {
+        return this.hasError ? this.$gettext(this.field.error.description) : null;
+      }
     },
 
     mounted() {
       this.$refs.input.$watch('visible', () => {
         this.visible = this.$refs.input.visible;
       });
-      this.$refs.input.$watch('hasError', () => {
-        this.hasError = this.$refs.input.hasError;
-      });
 
       this.visible = this.$refs.input.visible;
-      this.hasError = this.$refs.input.hasError;
     }
   };
 </script>

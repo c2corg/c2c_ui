@@ -12,9 +12,9 @@ export const baseMixin = {
       type: Boolean,
       default: null
     },
-    errorMessage: {
-      type: String,
-      default: null
+    hasError: {
+      type: Boolean,
+      default: false
     },
     i18n: {
       type: Boolean,
@@ -45,10 +45,6 @@ export const baseMixin = {
           this.$emit('input', value);
         }
       }
-    },
-
-    hasError() {
-      return Boolean(this.errorMessage);
     }
   }
 };
