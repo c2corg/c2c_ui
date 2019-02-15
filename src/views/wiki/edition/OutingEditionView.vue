@@ -8,8 +8,7 @@
 
     <form-section
       :title="$gettext('general informations')"
-      :sub-title="$gettext('Main informations about your outing')"
-      expanded>
+      :sub-title="$gettext('Main informations about your outing')">
       <div class="columns">
         <form-field
           class="is-narrow"

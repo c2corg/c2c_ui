@@ -1,8 +1,8 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after">
-    <h3 v-if="field.name !='summary' && !hideTitle" class="title is-3" >
+    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" >
       {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
-    </h3>
+    </h2>
     <markdown
       v-if="document.cooked[field.name]"
       :class="{'is-italic':field.name==='summary'}"
@@ -30,3 +30,11 @@
     }
   };
 </script>
+
+<style lang="scss" scoped>
+  .title{
+    font-size:1.8rem!important;
+    margin-bottom:0.5em!important;
+    border-bottom:1px solid #DDD;
+  }
+</style>

@@ -16,14 +16,6 @@
 
           <social-network-sharing v-if="documentType!='profile' && isNormalView"/>
 
-          <history-link
-            v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
-            :title="$gettext('History')"
-            :document="document"
-            :lang="lang">
-            <icon-history />
-          </history-link>
-
           <span
             :title="$gettext('Add images')"
             v-if="isEditable && documentType !== 'image'"
@@ -45,8 +37,8 @@
           </slot>
           <document-title :document="document"/>
           <!-- outing specific  -->
-          <span v-if="documentType=='outing'" class="tag is-rounded is-primary is-size-6">
-            {{ $documentUtils.getOutingDatesLocalized(document) }}
+          <span v-if="documentType=='outing'" class="outing-date is-size-5">
+            {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
           </span>
         </div>
       </div>
@@ -132,9 +124,8 @@
     }
 
     .title{
-        .tag{
-            margin-left:1rem;
-            height: auto;
+        .outing-date{
+            margin-left:0.5rem;
         }
     }
 

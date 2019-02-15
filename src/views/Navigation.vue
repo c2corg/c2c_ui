@@ -92,30 +92,37 @@
 
             <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="dropdown-item is-size-5">
               <fa-icon icon="user"/>
+              <span>&nbsp;</span>
               <span v-translate>My profile</span>
             </router-link>
             <router-link :to="{ name: 'account' }" class="dropdown-item is-size-5">
               <fa-icon icon="check-circle"/>
+              <span>&nbsp;</span>
               <span v-translate>My account</span>
             </router-link>
             <router-link :to="{ name: 'preferences' }" class="dropdown-item is-size-5">
               <fa-icon icon="cogs"/>
+              <span>&nbsp;</span>
               <span v-translate>My preferences</span>
             </router-link>
             <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="dropdown-item is-size-5">
               <icon-outing />
+              <span>&nbsp;</span>
               <span v-translate>My outings</span>
             </router-link>
             <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="dropdown-item is-size-5">
               <fa-icon icon="edit"/>
+              <span>&nbsp;</span>
               <span v-translate>My changes</span>
             </router-link>
             <router-link :to="{ name: 'following' }" class="dropdown-item is-size-5">
               <fa-icon icon="heart"/>
+              <span>&nbsp;</span>
               <span v-translate>My followed users</span>
             </router-link>
             <router-link :to="{ name: 'mailinglists' }" class="dropdown-item is-size-5">
               <fa-icon icon="at"/>
+              <span>&nbsp;</span>
               <span v-translate>My mailing lists</span>
             </router-link>
 
@@ -123,6 +130,7 @@
 
             <a class="dropdown-item is-size-5" @click="$user.signout()">
               <fa-icon icon="sign-out-alt"/>
+              <span>&nbsp;</span>
               <span v-translate>Logout</span>
             </a>
           </div>
@@ -311,11 +319,13 @@
 
         .search-input{
             width:250px;
-            transition: width .5s ease;
+            margin-right:50px;
+            transition: width .5s ease, margin-right .5s ease;
         }
 
         .search-input:hover{
             width:300px;
+            margin-right:0;
         }
     }
 
@@ -336,11 +346,13 @@
 
         .search-input{
             width:250px;
-            transition: width .5s ease;
+            margin-right:50px;
+            transition: width .5s ease, margin-right .5s ease;
         }
 
         .search-input:hover{
             width:300px;
+            margin-right:0;
         }
     }
 

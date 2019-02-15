@@ -20,19 +20,6 @@
 
           <field-view :document="document" :field="fields.categories"/>
 
-          <div>
-            <router-link :to="{ name: 'whatsnew', query: {u:$route.params.id} }">
-              <fa-icon icon="edit" />
-              <span v-translate>Contributions</span>
-            </router-link>
-          </div>
-          <div>
-            <router-link :to="{ name: 'outings', query: {u:$route.params.id} }">
-              <icon-outing />
-              <span>{{ $gettext('outings') | uppercaseFirstLetter }}</span>
-            </router-link>
-          </div>
-
           <div class="buttons is-centered">
           <outings-downloader :profile-id="documentId"/></div>
 

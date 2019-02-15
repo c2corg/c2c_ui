@@ -8,8 +8,7 @@
 
     <form-section
       :title="$gettext('General information')"
-      :sub-title="$gettext('Report title, activity, linked routes or outings.')"
-      expanded>
+      :sub-title="$gettext('Report title, activity, linked routes or outings.')">
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.title"/>
         <form-field class="is-12" :document="document" :field="fields.activities"/>
@@ -29,7 +28,7 @@
         <form-field class="is-3" :document="document" :field="fields.elevation"/>
       </div>
 
-      <map-input-row :document="document" geom-detail-editable/>
+      <map-input-row :document="document" />
     </form-section>
 
     <form-section

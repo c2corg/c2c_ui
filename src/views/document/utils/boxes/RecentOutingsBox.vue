@@ -1,21 +1,21 @@
 <template>
   <div class="box no-print" v-if="documentType=='route' || outings.length !== 0">
     <div class="title is-2">
-      <span v-translate>Last outings</span>
+      <span v-translate>Last outings</span>,
+
+      <router-link
+        v-if="outings.length !== 0 && !hideSeeAllResultsButton"
+        :to="{name:'outings', query:query}"
+        class="is-size-5"
+        v-translate>
+        show all
+      </router-link>
 
       <add-link
         v-if="documentType === 'route' && outings.length !== 0"
         document-type="outing"
         :query="query"
         class="button is-small is-rounded is-primary"/>
-
-      <router-link
-        v-if="outings.length !== 0 && !hideSeeAllResultsButton"
-        :to="{name:'outings', query:query}"
-        class="button is-small is-rounded is-primary"
-        v-translate>
-        show all
-      </router-link>
 
     </div>
 

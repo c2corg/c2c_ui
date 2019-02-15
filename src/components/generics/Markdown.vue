@@ -1,6 +1,6 @@
 
 <template>
-  <div class="content" ref="container"/>
+  <div class="content markdown-content" ref="container"/>
   <!-- TODO find a way without aditionnal element
     <div style="clear:both"/> -->
 </template>
@@ -153,6 +153,25 @@
 
 <style lang="scss">
     // Not scoped syle, because CSS selector are not explicitly present in template
+
+    .markdown-content{
+      h3{
+        font-size:1.5rem!important;
+        margin-bottom:0.5em!important;
+        border-bottom: 1px solid #EEE;
+      }
+      h4{
+        font-size:1.1rem!important;
+        margin-bottom:0.25em!important;
+      }
+      h5{
+        font-size:1rem!important;
+        margin-bottom:0.25em!important;
+      }
+      hr{
+        margin: 1rem 0!important;
+      }
+    }
 
     span[c2c\:role=header-emphasis]{
         font-size: 80%;
