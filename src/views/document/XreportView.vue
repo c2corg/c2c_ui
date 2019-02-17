@@ -53,6 +53,8 @@
           <markdown-section :document="document" :field="fields.other_comments"/>
         </div>
 
+        <images-box v-if="document" :document="document"/>
+
         <comments-box :document="document" />
 
       </div>

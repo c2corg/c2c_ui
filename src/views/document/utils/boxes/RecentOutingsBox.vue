@@ -1,15 +1,16 @@
 <template>
   <div class="box no-print" v-if="documentType=='route' || outings.length !== 0">
     <div class="title is-2">
-      <span v-translate>Last outings</span>,
-
-      <router-link
-        v-if="outings.length !== 0 && !hideSeeAllResultsButton"
-        :to="{name:'outings', query:query}"
-        class="is-size-5"
-        v-translate>
-        show all
-      </router-link>
+      <span v-translate>Last outings</span>
+      <span v-if="outings.length !== 0 && !hideSeeAllResultsButton">
+        <span>, </span>
+        <router-link
+          :to="{name:'outings', query:query}"
+          class="is-size-5"
+          v-translate>
+          show all
+        </router-link>
+      </span>
 
       <add-link
         v-if="documentType === 'route' && outings.length !== 0"

@@ -20,8 +20,9 @@
 
           <field-view :document="document" :field="fields.categories"/>
 
-          <div class="buttons is-centered">
-          <outings-downloader :profile-id="documentId"/></div>
+          <div class="buttons is-centered button-outings">
+            <outings-downloader :profile-id="documentId"/>
+          </div>
 
         </div>
 
@@ -66,3 +67,9 @@
   };
 
 </script>
+
+<style lang="scss" scoped>
+  .button-outings{
+    margin-top: 1rem;
+  }
+</style>
