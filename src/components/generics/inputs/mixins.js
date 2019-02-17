@@ -24,10 +24,6 @@ export const baseMixin = {
       type: Number,
       default: undefined
     },
-    helper: {
-      type: String,
-      default: null
-    },
     placeholder: {
       type: String,
       default: null
