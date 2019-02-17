@@ -2,15 +2,14 @@
 
   <div
     class="control"
-    :class="{'has-icons-right':postfix, 'has-prefix':prefix || helper, 'is-expanded':isExpanded}">
+    :class="{'has-icons-right':postfix, 'has-prefix':prefix, 'is-expanded':isExpanded}">
     <span
-      v-if="prefix || helper"
+      v-if="prefix"
       class="button prefix"
       :class="{'is-danger':hasError}"
       @click="$emit('click:prefix')">
-      <marker-helper class="marker-helper" :name="helper" />
 
-      <span v-if="prefix">
+      <span>
         {{ prefix | uppercaseFirstLetter }}
       </span>
     </span>
@@ -128,13 +127,6 @@
             border-bottom-left-radius: 0;
             border-top-left-radius: 0;
         }
-    }
-
-    $icon-size: 1.3rem;
-    .marker-helper{
-        font-size:$icon-size;
-        margin:calc(2.25rem/2 - #{$icon-size}/2);
-        margin-left:0;
     }
 
     .prefix.is-danger{

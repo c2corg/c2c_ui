@@ -1,10 +1,6 @@
 <template>
   <div :class="noWrapper ? '' : 'column'" v-show="visible">
-    <div
-      class="field"
-      :helper="helper === undefined ? field.helper : helper"
-      :is-expanded="isExpanded || field.type=='markdown'"
-      :is-narrow="!isExpanded && field.type!='markdown'">
+    <div class="field">
       <label class="label">
         <marker-helper :name="helper || field.helper" />
         {{ label || $gettext(field.name) | uppercaseFirstLetter }}

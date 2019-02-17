@@ -54,17 +54,12 @@
     :has-error="hasError"
     v-model="object[field.name]"/>
 
-  <datepicker
+  <input-date
     v-else-if="field.type === 'date'"
-    monday-first
-    :input-class="hasError ? 'input is-danger' : 'input'"
-    wrapper-class="control"
-    :language="$options.datepickerLocales[$language.current]"
-    :highlighted="{dates:[new Date()]}"
+    :has-error="hasError"
     :disabled-dates="disabledDates"
     :required="field.required"
-    @input="object[field.name]=$moment.parseDate(arguments[0]).format('YYYY-MM-DD')"
-    :value="object[field.name]"/>
+    v-model="object[field.name]"/>
 
   <input-simple
     ref="input"
@@ -72,7 +67,6 @@
     v-show="visible"
     :prefix="prefix"
     @click:prefix="$emit('click:prefix')"
-    :helper="helper===undefined ? field.helper : helper"
     :is-expanded="isExpanded"
     :postfix="unit || field.unit"
     :divisor="divisor"
@@ -94,6 +88,11 @@
     v-show="visible"
     v-model="object[field.name]" />
 
+  <input-datetime
+    v-else-if="field.type=='date_time'"
+    v-show="visible"
+    v-model="object[field.name]" />
+
   <div v-else class="notification is-danger">
     <!-- Should not happen, message to devs -->
     Unknown field type : {{ field.type }}
@@ -103,24 +102,11 @@
 
 <script>
 
-  import Datepicker from 'vuejs-datepicker';
-  import { fr, en, es, ca, de, it } from 'vuejs-datepicker/dist/locale';
-
   import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
   import InputConditionsLevels from './InputConditionsLevels';
 
-  // note that eu is missing. Sorry euskara...
-  const datepickerLocales = {
-    fr,
-    en,
-    es,
-    ca,
-    de,
-    it
-  };
-
   export default {
-    components: { InputConditionsLevels, Datepicker },
+    components: { InputConditionsLevels },
 
     mixins: [ requireFieldProperty, requireDocumentProperty ],
 
@@ -132,10 +118,6 @@
       isExpanded: {
         type: Boolean,
         default: null
-      },
-      helper: {
-        type: String,
-        default: undefined
       },
       placeholder: {
         type: String,
@@ -199,8 +181,6 @@
       hasError() {
         return this.field.error !== null;
       }
-    },
-
-    datepickerLocales
+    }
   };
 </script>
