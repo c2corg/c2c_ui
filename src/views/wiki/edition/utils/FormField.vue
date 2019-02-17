@@ -6,6 +6,8 @@
         {{ label || $gettext(field.name) | uppercaseFirstLetter }}
         <span v-if="hasError" class="has-text-danger">
           <!-- $gettext('required field') -->
+          <!-- $gettext('This field is too short') -->
+          <!-- $gettext('This field is too long') -->
           {{ errorMessage | uppercaseFirstLetter }}
         </span>
       </label>

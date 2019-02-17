@@ -218,11 +218,11 @@ Field.prototype.getError = function(document, locale) {
   }
 
   if (value && this.minLength && value.length < this.minLength) {
-    return this.getErrorObject('This field must be a valid ISBN.');
+    return this.getErrorObject('This field is too short');
   }
 
   if (value && this.maxLength && value.length > this.maxLength) {
-    return this.getErrorObject('This field must be a valid ISBN.');
+    return this.getErrorObject('This field is too long');
   }
 
   /* check presence */

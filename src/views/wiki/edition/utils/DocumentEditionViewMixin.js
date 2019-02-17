@@ -193,6 +193,7 @@ export default {
       }
 
       promise.catch(error => {
+        this.saving = false;
         const data = error.response.data;
         this.dispatchErrors(data.errors);
       });
