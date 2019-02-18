@@ -176,6 +176,7 @@
 
         image.document = this.$documentUtils.buildDocument('image', this.lang);
         image.document.activities = this.parentDocument.activities.slice(0);
+        image.document.geometry.geom = this.parentDocument.geometry.geom;
         image.document.file_size = file.size;
         image.document.image_type = this.imageType;
         image.document.image_categories = [];
