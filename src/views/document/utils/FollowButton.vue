@@ -66,10 +66,10 @@
 
 <style scoped lang="scss">
 
-@import "@/assets/sass/variables.scss";
+  @import "@/assets/sass/variables.scss";
 
-.follow-button-yellow{
-    color:$yellow;
-}
+  .follow-button-yellow{
+    color:$yellow!important;
+  }
 
 </style>

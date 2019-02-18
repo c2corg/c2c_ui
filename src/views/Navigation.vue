@@ -222,162 +222,147 @@
 
 <style scoped lang="scss">
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    nav{
-        max-width: 100vw;
-        height:$navbar-height;
-        background-color: $white;
-        // border-bottom:1px solid $grey-lighter
-        box-shadow: 0 2px 2px rgba($black, 0.1);
-        display: flex;
+  nav{
+    max-width: 100vw;
+    height:$navbar-height;
+    background-color: $white;
+    // border-bottom:1px solid $grey-lighter
+    box-shadow: 0 2px 2px rgba($black, 0.1);
+    display: flex;
+  }
+
+  .navigation-brand{
+    img{
+      height:calc(#{$navbar-height} - 1rem);
+    }
+  }
+
+  .navigation-end{
+    justify-content: flex-end;
+    margin-left: auto;
+    display:flex;
+
+    .user-avatar{
+      vertical-align: bottom;
     }
 
+    .dropdown-menu{
+      left:auto;
+      right:5px;
+    }
+  }
+
+  .navigation-item{
+    display:flex;
+    align-items: center;
+    line-height: 1.5;
+  }
+
+  @media screen and (max-width: $tablet) {
     .navigation-brand{
-        img{
-            height:calc(#{$navbar-height} - 1rem);
-        }
-    }
 
-    .navigation-end{
-        justify-content: flex-end;
-        margin-left: auto;
-        display:flex;
-
-        .user-avatar{
-            vertical-align: bottom;
-        }
-
-        .dropdown-menu{
-            left:auto;
-            right:5px;
-        }
+      img{
+        margin-left:0px;
+        // height:31px;
+      }
     }
 
     .navigation-item{
-        display:flex;
-        align-items: center;
-        line-height: 1.5;
+      padding: 0.5rem 5px;
     }
 
-    @media screen and (max-width: $tablet) {
-        .navigation-brand{
-
-            img{
-                margin-left:0px;
-                // height:31px;
-            }
-        }
-
-        .navigation-item{
-            padding: 0.5rem 5px;
-        }
-
-        .navigation-end{
-            margin-right: 5px;
-        }
-
-        .search-input{
-            width:160px;
-        }
+    .navigation-end{
+      margin-right: 5px;
     }
 
-    @media screen and (min-width: $tablet) and (max-width: $desktop){
-        .navigation-brand{
-            img{
-                margin-left:5px;
-            }
-        }
+    .search-input{
+      width:160px;
+    }
+  }
 
-        .navigation-item{
-            padding: 0.5rem 5px;
-        }
-
-        .navigation-end{
-            margin-right: 5px;
-        }
-
-        .search-input{
-            width:250px;
-        }
+  @media screen and (min-width: $tablet) and (max-width: $desktop){
+    .navigation-brand{
+      img{
+        margin-left:5px;
+      }
     }
 
-    @media screen and (min-width: $desktop) and (max-width: $widescreen){
-        .navigation-brand{
-            img{
-                margin-left:20px;
-            }
-        }
-
-        .navigation-item{
-            padding: 0.5rem 0.75rem;
-        }
-
-        .navigation-end{
-            margin-right: 1rem;
-        }
-
-        .search-input{
-            width:250px;
-            margin-right:50px;
-            transition: width .5s ease, margin-right .5s ease;
-        }
-
-        .search-input:hover{
-            width:300px;
-            margin-right:0;
-        }
+    .navigation-item{
+      padding: 0.5rem 5px;
     }
 
-    @media screen and (min-width: $widescreen) and (max-width: $fullhd){
-        .navigation-brand{
-            img{
-                margin-left:20px;
-            }
-        }
-
-        .navigation-item{
-            padding: 0.5rem 0.75rem;
-        }
-
-        .navigation-end{
-            margin-right: 1rem;
-        }
-
-        .search-input{
-            width:250px;
-            margin-right:50px;
-            transition: width .5s ease, margin-right .5s ease;
-        }
-
-        .search-input:hover{
-            width:300px;
-            margin-right:0;
-        }
+    .navigation-end{
+      margin-right: 5px;
     }
 
-    @media screen and (min-width: $fullhd){
-        .navigation-brand{
-            img{
-                margin-left:20px;
-            }
-        }
-
-        .navigation-item{
-            padding: 0.5rem 0.75rem;
-        }
-
-        .navigation-end{
-            margin-right: 1rem;
-        }
-
-        .search-input{
-            width:250px;
-            transition: width .5s ease;
-        }
-
-        .search-input:hover{
-            width:300px;
-        }
+    .search-input{
+      width:250px;
     }
+  }
+
+  @media screen and (min-width: $desktop) and (max-width: $widescreen){
+    .navigation-brand{
+      img{
+        margin-left:20px;
+      }
+    }
+
+    .navigation-item{
+      padding: 0.5rem 0.75rem;
+    }
+
+    .navigation-end{
+      margin-right: 1rem;
+    }
+  }
+
+  @media screen and (min-width: $widescreen) and (max-width: $fullhd){
+    .navigation-brand{
+      img{
+        margin-left:20px;
+      }
+    }
+
+    .navigation-item{
+      padding: 0.5rem 0.75rem;
+    }
+
+    .navigation-end{
+      margin-right: 1rem;
+    }
+  }
+
+  @media screen and (min-width: $fullhd){
+    .navigation-brand{
+      img{
+        margin-left:20px;
+      }
+    }
+
+    .navigation-item{
+      padding: 0.5rem 0.75rem;
+    }
+
+    .navigation-end{
+      margin-right: 1rem;
+    }
+  }
+
+  // search input : increase size to right on hover
+  // only on screen wider than desktop
+  @media screen and (min-width: $desktop) {
+
+    .search-input{
+      width:250px;
+      margin-right:50px;
+      transition: width .5s ease, margin-right .5s ease;
+    }
+
+    .search-input:hover{
+      width:300px;
+      margin-right:0;
+    }
+  }
 </style>

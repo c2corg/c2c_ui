@@ -35,6 +35,7 @@
           <slot name="icon-document">
             <icon-document :document-type="documentType"/>
           </slot>
+          <span>&#8239;</span>
           <document-title :document="document"/>
           <!-- outing specific  -->
           <span v-if="documentType=='outing'" class="outing-date is-size-5">

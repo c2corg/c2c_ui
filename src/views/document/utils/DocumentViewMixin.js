@@ -153,8 +153,15 @@ export default {
 
         this.$imageViewer.clear();
         this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang)
+          .then(this.handleRedirection)
           .then(this.scrollToHash)
           .then(this.updateUrl);
+      }
+    },
+
+    handleRedirection() {
+      if (this.document.redirects_to) {
+        this.$router.push({ params: { id: this.document.redirects_to } });
       }
     },
 
