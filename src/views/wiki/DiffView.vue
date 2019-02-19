@@ -3,6 +3,7 @@
     <html-header :title="$gettext('Differences between versions')"/>
     <h1>
       <icon-document :document-type="documentType" class="is-large"/>
+      <span>&#8239;</span>
       <span>diff</span> ({{ lang }}) :
       <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ title }}</router-link>
     </h1>
@@ -89,41 +90,51 @@
         </div>
       </div>
 
-      <div v-for="key of Object.keys(diffLocales)" :key="key">
+      <div v-for="(diffLocale, key) of diffLocales" :key="key">
 
         <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
 
-        <div v-if="splittedMode" class="columns is-mobile">
+        <div class="columns is-mobile">
           <div class="column is-6">
             <div class="splitted-diff">
-              <component
-                v-for="(diff, i) of diffLocales2[key]"
-                :key="i"
-                v-if="diff[0] <= 0"
-                :is="diff[0] === 0 ? 'span' : 'del'">{{ diff[1] }}</component>
+              <div v-for="(block, i) of diffLocale" :key="i">
+                <div v-if="block.ellipsed" class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic">
+                  {{ block.rows.length }} identical rows
+                </div>
+                <div v-else>
+                  <div
+                    v-for="(row, i) of block.rows"
+                    :key="i"
+                    class="row-diff"
+                    :class="{'row-del': !row.isIdentical && !row.isFakeOld, 'row-fake': row.isFakeOld}">
+                    <component v-for="(item, i) of row.oldPart" :key="i" :is="item.isIdentical ? 'span' : 'del'">{{ item.text }}</component>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="column is-6">
             <div class="splitted-diff">
-              <component
-                v-for="(diff, i) of diffLocales2[key]"
-                :key="i"
-                v-if="diff[0] >= 0"
-                :is="diff[0] === 0 ? 'span' : 'ins'">{{ diff[1] }}</component>
+              <div v-for="(block, i) of diffLocale" :key="i">
+                <div v-if="block.ellipsed" class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic">
+                  {{ block.rows.length }} identical rows
+                </div>
+                <div v-else>
+                  <div
+                    v-for="(row, i) of block.rows"
+                    :key="i"
+                    class="row-diff"
+                    :class="{'row-ins': !row.isIdentical && !row.isFakeNew, 'row-fake': row.isFakeNew}">
+                    <component v-for="(item, i) of row.newPart" :key="i" :is="item.isIdentical ? 'span' : 'ins'">{{ item.text }}</component>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div v-else class="locale-diff">
-          <div>
-            <pre>
-                            <!-- eslint-disable-next-line vue/no-v-html -->
-                            <code v-html="diffLocales[key]"/>
-            </pre>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -134,18 +145,11 @@
 
   import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
-  const ensureSameCountOfNewLine = function(diff1, diff2) {
-    const diff1Count = diff1[1].split('\n').length - 1;
-    const diff2Count = diff2[1].split('\n').length - 1;
-
-    if (diff1Count < diff2Count) {
-      diff1[1] += '\n'.repeat(diff2Count - diff1Count);
-    } else if (diff2Count < diff1Count) {
-      diff2[1] += '\n'.repeat(diff1Count - diff2Count);
-    }
-  };
-
   const hasChanged = function(oldVal, newVal) {
+    // does oldVal equals to newVal ?
+    // handle arrays and immutables values
+    // and considerer that null equal to null, and nothing else
+
     if (Array.isArray(oldVal) || Array.isArray(newVal)) {
       return JSON.stringify(oldVal) !== JSON.stringify(newVal);
     }
@@ -157,6 +161,171 @@
     return oldVal !== newVal;
   };
 
+  const computeDiff = function(diff, callback) {
+    // this function transform a diff from diffMatchPatch
+    //
+    // it calls sequentially callback with three argument :
+    //
+    // * old part of diff
+    // * new part of diff
+    // * isIdentical (obvioulsy when old === new)
+    //
+    // if isIdentical is false, there are three use cases :
+    //
+    // * both part are not null : it means that a replacement has been made
+    // * old part is null : it's an addition
+    // * new part is null : it's a deletion
+    //
+    // Note about diff structure : it's an array of (mode, text) where mode can be :
+    //
+    // * -1 : means a deletion
+    // * 0  : means that text has not been modified
+    // * 1  : means an addition
+    //
+    // this structure has a particularity : deletion, if it exists, always precedes addition. So, the logic is :
+    //
+    // * if mode === 0 : callback(text, text, true)
+    // * else if mode === 1 : next mode will be 0, so call callback(null, text, false)
+    // * else if mode === -1 (last possibility) :
+    //   * if next mode is 0, it means that an addition can't be linked to this deletion : callback(text, null, false)
+    //   * else, next diff item can be linked to this deletion : callback(text, nextText, false)
+
+    for (let i = 0; i < diff.length; i++) {
+      if (diff[i][0] === 0) {
+        // no modification, old part and new part are equals
+        callback(diff[i][1], diff[i][1], true);
+      } else if (diff[i][0] === 1) {
+        // an addition, and there is no suppression
+        callback(null, diff[i][1], false);
+      } else if (diff[i][0] === -1) {
+        if (i + 1 < diff.length && diff[i + 1][0] === 1) {
+          // an added part follows this removed part
+          callback(diff[i][1], diff[i + 1][1], false);
+          i += 1;
+        } else {
+          // there is not added part that can be linked to this removed part
+          callback(diff[i][1], null, false);
+        }
+      }
+    }
+  };
+
+  const Item = function(text, isIdentical) {
+    // an Item is a small amount of text, with a flag that tell if this text has been modified, or not
+    this.text = text;
+    this.isIdentical = isIdentical;
+  };
+
+  const Row = function(oldPart, newPart, isIdentical) {
+    // a row is a object with old and new part
+    // each part is an array of items
+    // isIdentical is obvious
+    // ellipsed is a UI flag : if true, w'ont be displayed.
+    //   it will be computed by Row.computeEllipsisStates()
+
+    this.oldPart = [];
+    this.newPart = [];
+
+    this.ellipsed = true;
+    this.isIdentical = isIdentical;
+
+    if (isIdentical) {
+      this.oldPart = [new Item(oldPart, true)];
+      this.newPart = this.oldPart; // same object (reduce memory footprint)
+    } else if (oldPart === undefined) {
+      this.newPart.push(new Item(newPart, false));
+    } else if (newPart === undefined) {
+      this.oldPart.push(new Item(oldPart, false));
+    } else {
+      // two different row on the same location, let's compute a precise diff
+      const diff = diffMatchPatch.diff_main(oldPart, newPart);
+      computeDiff(diff, this.addItem.bind(this));
+    }
+  };
+
+  Object.defineProperty(Row.prototype, 'isFakeOld', {
+    // boolean, true if old part does not exists
+    get() {
+      return this.oldPart.length === 0;
+    }
+  });
+
+  Object.defineProperty(Row.prototype, 'isFakeNew', {
+    // boolean, true if new part does not exists
+    get() {
+      return this.newPart.length === 0;
+    }
+  });
+
+  Row.prototype.addItem = function(oldPart, newPart, isIdentical) {
+    // this function is a callback for computeDiff
+    // oldPart and newPart are a small amount of text
+    if (isIdentical) {
+      const item = new Item(oldPart, true);
+      this.oldPart.push(item);
+      this.newPart.push(item);
+    } else {
+      if (oldPart !== undefined) {
+        this.oldPart.push(new Item(oldPart, false));
+      }
+
+      if (newPart !== undefined) {
+        this.newPart.push(new Item(newPart, false));
+      }
+    }
+  };
+
+  const Rows = function(oldText, newText) {
+    // simple array of Row() objects, with computation methods
+    this.items = [];
+  };
+
+  Rows.prototype.build = function(oldText, newText) {
+    // compute a line diff
+    const linesData = diffMatchPatch.diff_linesToChars_(oldText, newText);
+    const diff = diffMatchPatch.diff_main(linesData.chars1, linesData.chars2, false);
+    diffMatchPatch.diff_charsToLines_(diff, linesData.lineArray);
+
+    computeDiff(diff, this.add.bind(this));
+  };
+
+  Rows.prototype.add = function(oldPart, newPart, isIdentical) {
+    // callback for computDiff()
+    // oldPart and newPart are text containing EOLs and finishing with a last EOL
+    // it performs a split on this text, and add equivalent rows
+    // note that if oldPart is different from newPart, and if there is not the same
+    // quantity of EOL, Row object can be initialized with one of oldPart/newPart
+    // argument equals to undefined
+    const rows = this.items;
+
+    if (isIdentical) {
+      const rowTexts = oldPart.split('\n');
+      for (const rowText of rowTexts.slice(0, rowTexts.length - 1)) {
+        rows.push(new Row(rowText, rowText, true));
+      }
+    } else {
+      oldPart = oldPart !== null ? oldPart.split('\n') : [];
+      newPart = newPart !== null ? newPart.split('\n') : [];
+      for (let i = 0; i < Math.max(oldPart.length - 1, newPart.length - 1); i++) {
+        rows.push(new Row(oldPart[i], newPart[i], false));
+      }
+    }
+  };
+
+  Rows.prototype.computeEllipsisStates = function() {
+    // set Row.ellipsed to false on all rows where Row.isIdentical === false
+    // and also on 2 surrouding rows
+    // the idea is to display context rows on top and bottom of a modified row
+    const rows = this.items;
+    for (let i = 0; i < rows.length; i++) {
+      if (!rows[i].isIdentical) {
+        for (let j = Math.max(0, i - 2); j <= Math.min(rows.length - 1, i + 2); j++) {
+          rows[j].ellipsed = false;
+        }
+      }
+    }
+  };
+
   export default {
 
     data() {
@@ -165,9 +334,7 @@
         oldVersion: null,
         newVersion: null,
         diffProperties: {},
-        diffLocales: {},
-        diffLocales2: {},
-        splittedMode: true
+        diffLocales: {}
       };
     },
 
@@ -237,7 +404,6 @@
       buildDiff() {
         this.diffProperties = {};
         this.diffLocales = {};
-        this.diffLocales2 = {};
 
         if (!this.oldVersion || !this.newVersion) {
           return 'Waiting for other version';
@@ -262,48 +428,43 @@
         const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
         const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
 
+        const prepareText = function(text) {
+          text = text || '';
+          text = text.replace(/\r\n?/g, '\n');
+          text += text.endsWith('\n') ? '' : '\n';
+
+          return text;
+        };
+
         for (const key of localeKeys) {
-          const oldVal = (oldLocale[key] || '').replace(/\r\n?/g, '\n');
-          const newVal = (newLocale[key] || '').replace(/\r\n?/g, '\n');
+          const oldVal = prepareText(oldLocale[key]);
+          const newVal = prepareText(newLocale[key]);
 
           if (hasChanged(oldVal, newVal)) {
-            const diff = diffMatchPatch.diff_main(oldVal, newVal);
-            diffMatchPatch.diff_cleanupSemantic(diff);
-            const html = diffMatchPatch.diff_prettyHtml(diff).split('<br>');
-            this.diffLocales[key] = html.join('<br>');
+            const rows = new Rows();
+            rows.build(oldVal, newVal);
+            rows.computeEllipsisStates();
 
-            const computedDiff = [];
+            const Block = function(ellipsed) {
+              this.rows = [];
+              this.ellipsed = ellipsed;
+            };
 
-            // ensure that a removed diff always precede an added diff
-            // and ensure they contain same count of new lines
-            for (let i = 0; i < diff.length; i++) {
-              if (diff[i][0] === 0) {
-                computedDiff.push(diff[i]);
-              } else if (diff[i][0] === 1) {
-                computedDiff.push([-1, '']);
-                computedDiff.push(diff[i]);
+            const blocks = [
+              new Block(rows.items[0].ellipsed)
+            ];
 
-                ensureSameCountOfNewLine(
-                  computedDiff[computedDiff.length - 2],
-                  computedDiff[computedDiff.length - 1]
-                );
-              } else if (diff[i][0] === -1) {
-                computedDiff.push(diff[i]);
-                if (i + 1 > diff.length || diff[i + 1][0] !== 1) {
-                  computedDiff.push([1, '']);
-                } else {
-                  computedDiff.push(diff[i + 1]);
-                  i += 1;
-                }
+            let currentBlock = blocks[0];
 
-                ensureSameCountOfNewLine(
-                  computedDiff[computedDiff.length - 2],
-                  computedDiff[computedDiff.length - 1]
-                );
+            for (const row of rows.items) {
+              if (currentBlock.ellipsed !== row.ellipsed) {
+                currentBlock = new Block(row.ellipsed);
+                blocks.push(currentBlock);
               }
+              currentBlock.rows.push(row);
             }
 
-            this.diffLocales2[key] = computedDiff;
+            this.diffLocales[key] = blocks;
           }
         }
       },
@@ -341,7 +502,7 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
     .locale-diff  pre{
         white-space: pre-line;
@@ -349,14 +510,44 @@
     }
 
     .splitted-diff{
-        padding:0.5rem;
-        background: #EAEAEA;
+      overflow: hidden;
+      overflow-x: scroll;
+      background: #EAEAEA;
+
+      .block-ellipsed{
+        background: white;
+        user-select: none;
+      }
+
+      .row-diff{
         font-family: monospace;
         font-size:14px;
         white-space: pre;
         line-height:1.3;
-        overflow: hidden;
-        overflow-x: scroll;
+        padding:0 0.5rem;
+        height: 18px;
+        border-left: 5px solid lightgrey;
+      }
+
+      .row-del {
+        background:#ffeeee !important;
+        border-left-color: red;
+      }
+
+      .row-ins {
+        background:#eefff4 !important;
+        border-left-color: green;
+      }
+
+      .row-fake {
+        background:#F2F2F2 !important;
+        border-left-color: #EEE;
+      }
+
+      .row-ellipsed{
+        color: red;
+        display: None;
+      }
     }
 
     ins{
