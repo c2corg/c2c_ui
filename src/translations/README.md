@@ -42,11 +42,11 @@ Actually, everything is manual. Target in semi-automatic, with only on last look
 At target, when someone modify a messages :
 
 1. pot file is automaticly updated
-2. when the PR is merged, this pot file is sen to transifex
+2. when the PR is merged, this pot file is sent to transifex
 3. when the message is translated, an new branch is created, with the .json updated, and a PR ready-to-merge is created
-4. last, and only manual step : the merge of this PR
+4. last, and only manual step : the merge of this PR after a last look by a devlopper
 
 With this workflow, we have :
 
 * Data sent to transifex are tracked by .pot file
-* Data inlcuded in build are tracked by .json files
+* Data included in builds are tracked by .json files
