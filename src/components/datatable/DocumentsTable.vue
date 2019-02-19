@@ -15,6 +15,7 @@
 
   import constants from '@/js/constants';
 
+  import OutingDate from './cell-renderers/OutingDate';
   import DocumentLink from './cell-renderers/DocumentLink';
   import DocumentField from './cell-renderers/DocumentField';
   import RouteRating from './cell-renderers/RouteRating';
@@ -111,7 +112,7 @@
 
       if (this.documentType === 'outing') {
         this.columnDefs = [
-          getColDef(this, fields.date_start, { width: 100 }),
+          getColDef(this, fields.date_start, { width: 120, cellRendererFramework: OutingDate }),
           getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
           getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor, width: 100 }),

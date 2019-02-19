@@ -107,7 +107,7 @@
           </markdown-section>
 
           <markdown-section :document="document" :field="fields.gear">
-            <div class="content" slot="after" v-if="Object.keys(gear_articles).length !== 0">
+            <div class="content automatic-gears" slot="after" v-if="Object.keys(gear_articles).length !== 0">
               <ul>
                 <li v-for="(label, articleId) of gear_articles" :key="articleId">
                   <router-link :to="{ name: 'article', params: {id: articleId} }">
@@ -198,3 +198,9 @@
     }
   };
 </script>
+
+<style lang="scss" scoped>
+  .automatic-gears{
+    margin-bottom: 1.5rem;
+  }
+</style>
