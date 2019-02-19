@@ -19,18 +19,18 @@
 |components|This folder contains all Vue components.|
 |&nbsp;&nbsp;&nbsp;&nbsp;cards|Document's cards. Simply use them with `<document-card :document="myOuting" />`.|
 |&nbsp;&nbsp;&nbsp;&nbsp;datatable|A table that display a list of document. |
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cell-renderers| |
-|&nbsp;&nbsp;&nbsp;&nbsp;feed-widget| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cell-renderers|Table's cells. For every data that can't be simply displayed|
+|&nbsp;&nbsp;&nbsp;&nbsp;feed-widget|List of feed cards, with infinite scroll feature|
 |&nbsp;&nbsp;&nbsp;&nbsp;gallery|Small images gallery|
 |&nbsp;&nbsp;&nbsp;&nbsp;generics|Generic components. Any component present in this folder is available everywhere. |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttons| |
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icons|Components in this folder are simple icon, without any behavior|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document|Icons by document type (outing, route...)|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputs|All input must be wrapped into a `.control` container|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;links| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;links|Miscallenaous inline links.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;markers|A `marker` is an icon, with some feature, like a tooltip, inside logic, or anything else.|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modals|Generic modal windows|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pretty-links| |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pretty-links|Inline links to documents. Theese links includes some info about linked document|
 |&nbsp;&nbsp;&nbsp;&nbsp;helper|Global helper window. Call it with a simple `this.$helper.show(helperId)`.|
 |&nbsp;&nbsp;&nbsp;&nbsp;image-viewer|Large image viewer. This component is a singleton present on all pages.|
 |&nbsp;&nbsp;&nbsp;&nbsp;images-uploader|Image uploader component. It's included in all document views.|
@@ -39,7 +39,7 @@
 |js|Pure Javascript files.|
 |&nbsp;&nbsp;&nbsp;&nbsp;apis|API tools (c2c API, discourse API, biodiv API).|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c2c|c2c API service|
-|&nbsp;&nbsp;&nbsp;&nbsp;constants| |
+|&nbsp;&nbsp;&nbsp;&nbsp;constants|Constants data from API objects' structure|
 |&nbsp;&nbsp;&nbsp;&nbsp;libs|Wrappers, with small functionalities, around existing libraries |
 |&nbsp;&nbsp;&nbsp;&nbsp;vue-plugins|All files here are Vue plugins. They are included in `@/main.js` with `Vue.use(plugin)`.|
 |translations|Data for i18n|
@@ -51,5 +51,5 @@
 |&nbsp;&nbsp;&nbsp;&nbsp;portals|Dynamics views, that display a specific content (dashboard, feed)|
 |&nbsp;&nbsp;&nbsp;&nbsp;static-views|Static views that display a specific content (Serac, intro...)|
 |&nbsp;&nbsp;&nbsp;&nbsp;user|Profile related views|
-|&nbsp;&nbsp;&nbsp;&nbsp;wiki| |
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|# Edition views, one per document's type|
+|&nbsp;&nbsp;&nbsp;&nbsp;wiki|All views related to wiki (edition, diff, history, whatsnew...)|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edition|Edition views, one per document's type|

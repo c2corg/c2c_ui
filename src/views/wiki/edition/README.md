@@ -1,4 +1,4 @@
-# Edition views, one per document's type
+Edition views, one per document's type
 
 ## Some infos
 
@@ -12,7 +12,7 @@ What is the logic behind field distribution in edition views ?
     * all mandatory fields
     * and the shortest possible list of most used fields.
 2. then, in other tabs
-    * Ideally, this tab must not have vertical scroll  
+    * Ideally, this tab must not have vertical scroll
     * fields with common sense are kept together, on the same row if possible
     * then, rows are ordered by useness
 
