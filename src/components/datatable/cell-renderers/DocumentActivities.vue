@@ -10,10 +10,10 @@
 
 <style lang="scss" scoped>
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    .cell-activities{
-        font-size:1.5rem;
-        color:$primary;
-    }
+  .cell-activities{
+    font-size:26px;
+    color:$text;
+  }
 </style>

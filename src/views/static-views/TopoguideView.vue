@@ -34,8 +34,8 @@
           <topoguide-view-small-link
             class="column is-3"
             :to="{name:'outing-add'}">
-            <span class="is-size-2"><fa-icon icon="plus" /></span>
-            <span class="has-text-dark has-text-weight-semibold" v-translate>
+            <span class="is-size-2 has-text-success"><fa-icon icon="plus" /></span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>
               New outing
             </span>
           </topoguide-view-small-link>
@@ -60,8 +60,8 @@
           <topoguide-view-small-link
             class="column is-3"
             :to="{name:'route-add'}">
-            <span class="is-size-2"><fa-icon icon="plus" /></span>
-            <span class="has-text-dark has-text-weight-semibold" v-translate>
+            <span class="has-text-success is-size-2"><fa-icon icon="plus" /></span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>
               New route
             </span>
           </topoguide-view-small-link>
@@ -86,8 +86,8 @@
           <topoguide-view-small-link
             class="column is-2"
             :to="{name:'waypoint-add'}">
-            <span class="is-size-2"><fa-icon icon="plus" /></span>
-            <span class="has-text-dark has-text-weight-semibold" v-translate>
+            <span class="has-text-success is-size-2"><fa-icon icon="plus" /></span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>
               New waypoint
             </span>
           </topoguide-view-small-link>

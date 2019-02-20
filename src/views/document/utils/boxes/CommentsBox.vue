@@ -31,8 +31,7 @@
           <div class="column is-narrow discourse-post-avatar">
             <img
               :src="$options.forumUrl + '/' + post.avatar_template"
-              :width="$options.forumAvatarSize"
-              :height="$options.forumAvatarSize">
+              :style="'width:' + $options.forumAvatarSize + 'px;height:' + $options.forumAvatarSize + 'px'">
           </div>
           <div class="column">
             <div class="discourse-post-header">

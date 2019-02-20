@@ -47,7 +47,7 @@
     </div>
 
     <!-- maps -->
-    <div v-if="document.maps || document.maps_info" class="associations-list">
+    <div v-if="document.maps.length !== 0 || document.maps_info" class="associations-list">
       <div class="title">
         {{ $gettext('maps') | uppercaseFirstLetter }}
       </div>

@@ -57,7 +57,7 @@ export default {
      * properties that are deducted from URL
      */
     documentId() {
-      return parseInt(this.$route.params.id);
+      return parseInt(this.$route.params.id, 10);
     },
     documentType() {
       return this.$route.name.split('-')[0];
