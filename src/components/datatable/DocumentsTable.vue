@@ -117,8 +117,15 @@
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
           getColDef(this, { name: 'Author' }, { cellRendererFramework: DocumentAuthor, width: 100 }),
           getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
-          getColDef(this, fields.height_diff_up, { width: 100 }),
-
+          {
+            headerName: this.$gettext('elevation'),
+            children: [
+              getColDef(this, fields.elevation_max, { columnGroupShow: 'closed', width: 100 }),
+              getColDef(this, fields.elevation_max, { columnGroupShow: 'open', width: 100 }),
+              getColDef(this, fields.height_diff_up, { columnGroupShow: 'open', width: 100 }),
+              getColDef(this, fields.height_diff_difficulties, { columnGroupShow: 'open', width: 100 })
+            ]
+          },
           {
             headerName: this.$gettext('ratings'),
             children: [
