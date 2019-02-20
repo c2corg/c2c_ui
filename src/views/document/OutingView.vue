@@ -16,10 +16,10 @@
         <div class="box">
           <div>
             <!-- API anti-pattern :
-                        associations.users should have been called associations.profiles
-                        as it refers to profiles document
-                        let stay profile coherent and call this component profiles-links
-                        and not users-links -->
+                associations.users should have been called associations.profiles
+                as it refers to profiles document
+                let stay profile coherent and call this component profiles-links
+                and not users-links -->
             <profiles-links :profiles="document.associations.users"/>
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>

@@ -17,8 +17,7 @@
     <route-rating :document="route" class="has-text-dark"/>
     <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-dark"/>
     <span v-if="!hideArea" class="has-text-dark">
-      <em v-for="area in route.areas" v-if="area.area_type=='range'"
-          :key="area.document_id">
+      <em v-for="area in rangeAreas" :key="area.document_id">
         &hairsp;&bull;&hairsp;
         <small>
           <document-title :document="area"/>
@@ -52,7 +51,12 @@
         type: Boolean,
         default: false
       }
+    },
 
+    computed: {
+      rangeAreas() {
+        return this.route.areas.filter((area) => area.area_type === 'range');
+      }
     }
   };
 </script>

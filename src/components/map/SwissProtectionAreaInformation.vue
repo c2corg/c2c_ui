@@ -38,7 +38,7 @@
     props: {
       data: {
         type: Object,
-        default: null
+        required: true
       }
     },
     computed: {
@@ -69,7 +69,8 @@
         if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
           lang = 'fr';
         }
-        return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`]);
+
+        return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] || '');
       }
     },
     methods: {
