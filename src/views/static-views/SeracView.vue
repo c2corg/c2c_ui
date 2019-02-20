@@ -144,4 +144,8 @@
     width: 100%;
 }
 
+.topoguide-view-small-link{
+  min-width: 10rem;
+}
+
 </style>
