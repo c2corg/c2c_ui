@@ -47,7 +47,7 @@
     "@vue/cli-service": "3.4.1",
     "@vue/eslint-config-standard": "4.0.0",
     "@vue/eslint-config-typescript": "3.2.0",
-    "angular-gettext-tools": "2.3.16",
+    "angular-gettext-tools": "2.4.1",
     "cross-env": "5.2.0",
     "iniparser": "1.0.5",
     "node-sass": "4.11.0",
