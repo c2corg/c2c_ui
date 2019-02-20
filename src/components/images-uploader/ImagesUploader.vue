@@ -1,11 +1,5 @@
 <template>
   <modal-card ref="modalWindow" class="images-uploader" wide>
-    <input
-      type="file"
-      @change="filesChange"
-      multiple
-      accept="image/*"
-      class="input-file">
 
     <div class="columns is-multiline images-uploader-files">
       <div
@@ -20,10 +14,22 @@
           @deleteImage="onDeleteImage"/>
       </div>
 
-      <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile images-uploader-message">
-        <!-- this message contains HTML -->
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div v-html="$gettext('Drop images here or click to upload')" />
+      <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
+        <div class="images-uploader-message" :class="{'images-uploader-message-dragover': dragOver}">
+          <input
+            ref="fileInput"
+            type="file"
+            @change="filesChange"
+            @dragenter="dragOver=true"
+            @dragleave="dragOver=false"
+            @drop="dragOver=false"
+            multiple
+            accept="image/*"
+            class="input-file">
+          <!-- this message contains HTML -->
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="$gettext('Drop images here or click to upload')"/>
+        </div>
       </div>
     </div>
 
@@ -98,7 +104,8 @@
         images: {},
         categoriesEdition: false,
         promise: {},
-        readyForSaving: false
+        readyForSaving: false,
+        dragOver: false
       };
     },
 
@@ -126,7 +133,23 @@
       }
     },
 
+    mounted() {
+      window.addEventListener('dragover', this.preventDrag, false);
+      window.addEventListener('drop', this.preventDrag, false);
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('dragover', this.preventDrag);
+      window.removeEventListener('drop', this.preventDrag);
+    },
+
     methods: {
+      preventDrag(event) {
+        if (event.target !== this.$refs.fileInput) {
+          event.preventDefault();
+        }
+      },
+
       show() {
         this.$refs.modalWindow.show();
       },
@@ -263,28 +286,34 @@
 
 .images-uploader{
 
+  .images-uploader-message{
+    position: relative;
+    height:315px;
+    text-align: center;
+    border: 5px dashed #ddd;
+    background: #f8f8f8;
+    transition:0.2s;
+    padding:1rem;
+
     input {
-        opacity: 0; /* invisible but it's there! */
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top:0;
-        left:0;
-        cursor: pointer;
+      opacity: 0; /* invisible but it's there! */
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top:0;
+      left:0;
+      cursor: pointer;
     }
+  }
 
-    .images-uploader-message > div{
-        height:315px;
-        text-align: center;
-        border: 5px dashed #ddd;
-        background: #f8f8f8;
-        padding:25px;
-        transition:0.2s;
+  .images-uploader-message:hover {
+    background: #eee;
+    border: 5px dashed #bbb;
+  }
 
-        :hover {
-            background: #EEEEFF;
-            transition:0.2s;
-        }
-    }
+  .images-uploader-message-dragover {
+    background: rgb(184, 238, 177);
+    border: 5px dashed green;
+  }
 }
 </style>
