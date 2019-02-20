@@ -17,7 +17,7 @@
           <field-view :document="document" :field="fields.event_type"/>
 
           <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
-            <users-links :users="document.associations.users"/>
+            <profiles-links :profiles="document.associations.users"/>
           </label-value>
 
           <field-view :document="document" :field="fields.avalanche_level"/>

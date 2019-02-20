@@ -27,7 +27,7 @@
     props: {
       data: {
         type: Object,
-        default: null
+        required: true
       }
     },
 

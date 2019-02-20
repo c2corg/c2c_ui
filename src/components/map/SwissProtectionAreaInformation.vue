@@ -37,7 +37,7 @@
     props: {
       data: {
         type: Object,
-        default: null
+        required: true
       }
     },
     computed: {
@@ -68,7 +68,7 @@
         if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
           lang = 'fr';
         }
-        return he.decode(this.data.properties[`schutzs_${lang}`], { strict: true });
+        return he.decode(this.data.properties[`schutzs_${lang}`] || '', { strict: true });
       }
     },
     methods: {

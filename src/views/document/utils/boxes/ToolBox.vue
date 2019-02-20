@@ -31,6 +31,12 @@
       icon="edit"/>
 
     <tool-box-button
+      v-if="['outing', 'route', 'waypoint'].includes(documentType)"
+      :to="linkToClosestDocuments"
+      :label="$gettext('See other documents nearby')"
+      icon="compass"/>
+
+    <tool-box-button
       v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
       :to="{name:documentType + '-history', params:{id:document.document_id, lang:document.cooked.lang}}"
       :label="$gettext('History')"
@@ -103,6 +109,8 @@
 </template>
 
 <script>
+  import ol from '@/js/libs/ol';
+
   import c2c from '@/js/apis/c2c';
   import constants from '@/js/constants';
 
@@ -119,6 +127,8 @@
   import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
   import MergeDocumentWindow from '../windows/MergeDocumentWindow';
   import TranslateWindow from '../windows/TranslateWindow';
+
+  const GeoJSON = new ol.format.GeoJSON();
 
   export default {
     components: {
@@ -164,6 +174,24 @@
 
       hasMissingLangs() {
         return this.missingLangs.length > 0;
+      },
+
+      linkToClosestDocuments() {
+        const result = {
+          name: this.documentType + 's',
+          query: {
+            wtyp: this.documentType === 'waypoint' ? this.document.waypoint_type : undefined
+          }
+        };
+
+        if (this.document.geometry && this.document.geometry.geom) {
+          const point = GeoJSON.readFeatures(this.document.geometry.geom)[0];
+          const extent = ol.extent.buffer(point.getGeometry().getExtent(), 10000);
+
+          result.query.bbox = extent.map(Math.floor).join(',');
+        }
+
+        return result;
       }
     },
 

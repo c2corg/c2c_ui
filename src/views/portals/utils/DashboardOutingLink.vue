@@ -4,7 +4,7 @@
       <activities :activities="outing.activities" class="is-size-3 activity-icon"/>
       <document-title :document="outing"/>
       &hairsp;&bull;&hairsp;
-      <em v-for="area in outing.areas" v-if="area.area_type=='range'" :key="area.document_id">
+      <em v-for="area of rangeAreas" :key="area.document_id">
         <small>
           <document-title :document="area"/>
         </small>
@@ -23,6 +23,12 @@
       outing: {
         type: Object,
         required: true
+      }
+    },
+
+    computed: {
+      rangeAreas() {
+        return this.outing.areas.filter((area) => area.area_type === 'range');
       }
     }
   };

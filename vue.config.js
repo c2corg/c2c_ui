@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const result = {
-  baseUrl: '/',
+  publicPath: '/',
 
   // remove prefetch plugin, in order to prevent loading of translations
   // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
@@ -95,7 +95,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.routerMode = undefined;
 
   // github pages url is postfixed
-  result.baseUrl = '/c2c_ui/';
+  result.publicPath = '/c2c_ui/';
 
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';
@@ -111,7 +111,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   throw new Error('Unknown BUILD_ENV');
 }
 
-config.baseUrl = result.baseUrl;
+config.publicPath = result.publicPath;
 
 result.configureWebpack.plugins.push(
   new BundleAnalyzerPlugin(bundleAnalyzerConfig)
