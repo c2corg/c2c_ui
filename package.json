@@ -44,7 +44,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.4.1",
     "@vue/cli-plugin-eslint": "3.4.1",
-    "@vue/cli-plugin-typescript": "3.3.0",
+    "@vue/cli-plugin-typescript": "3.4.1",
     "@vue/cli-service": "3.4.1",
     "@vue/eslint-config-standard": "4.0.0",
     "@vue/eslint-config-typescript": "3.2.0",
