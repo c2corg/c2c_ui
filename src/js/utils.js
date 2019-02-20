@@ -103,5 +103,15 @@ export default {
     }
 
     return false;
+  },
+
+  // decode html entities in a text. Remove any html markup
+  decodeHtmlEntities(input) {
+    if (!DOMParser) { // prevent errors on old browsers
+      return input;
+    }
+
+    const doc = new DOMParser().parseFromString(input, 'text/html');
+    return doc.documentElement.textContent;
   }
 };
