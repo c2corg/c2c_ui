@@ -72,9 +72,6 @@
         min-height:$body-height;
     }
 
-    #app{
-    }
-
     .navigation{
         position:fixed;
         top:0;

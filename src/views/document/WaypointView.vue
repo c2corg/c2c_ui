@@ -30,7 +30,7 @@
               <field-view :document="document" :field="fields.weather_station_types"/>
               <field-view :document="document" :field="fields.rain_proof"/>
               <field-view :document="document" :field="fields.children_proof"/>
-              <field-view :document="document" :field="fields.capacity"/>
+              <field-view :document="document" :field="fields.capacity" v-if="document.capacity"/>
               <field-view :document="document" :field="fields.capacity_staffed"/>
               <field-view :document="document" :field="fields.length"/>
               <double-numeric-field
@@ -97,7 +97,7 @@
               <field-view :document="document" :field="fields.public_transportation_rating"/>
               <field-view :document="document" :field="fields.parking_fee"/>
               <field-view :document="document" :field="fields.snow_clearance_rating"/>
-              <field-view :document="document" :field="fields.lift_access"/>
+              <field-view :document="document" :field="fields.lift_access" v-if="document.lift_access"/>
 
             </div>
           </div>

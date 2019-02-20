@@ -1,7 +1,7 @@
 <template>
   <div class="advertisement">
     <iframe
-      :src="$options.baseUrl + 'affiz.html'"
+      :src="$options.publicPath + 'affiz.html'"
       frameborder="0"
       scrolling="no" />
 
@@ -24,7 +24,7 @@
       };
     },
 
-    baseUrl: config.baseUrl
+    publicPath: config.publicPath
   };
 
 </script>
