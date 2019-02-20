@@ -51,7 +51,7 @@
         ref="textarea"
         class="textarea"
         :placeholder="placeholder"
-        @input="onInput"
+        @change="onInput"
         @focus="focus=true"
         @blur="focus=false"/>
 

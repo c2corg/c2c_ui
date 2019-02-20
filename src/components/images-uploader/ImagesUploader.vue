@@ -21,6 +21,7 @@
             type="file"
             @change="filesChange"
             @dragenter="dragOver=true"
+            @dragover="dragOver=true"
             @dragleave="dragOver=false"
             @drop="dragOver=false"
             multiple
