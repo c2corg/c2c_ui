@@ -32,7 +32,8 @@
 </template>
 
 <script>
-  import he from 'he';
+  import utils from '@/js/utils';
+
   export default {
     props: {
       data: {
@@ -57,18 +58,19 @@
           lang = 'fr';
         }
         const result = this.data.properties[`best_${lang}`] || '';
-        return he.decode(result, { strict: true });
+        return utils.decodeHtmlEntities(result);
       },
       additionalInformation() {
         const result = this.data.properties.zusatzinformation || '';
-        return he.decode(result, { strict: true });
+        return utils.decodeHtmlEntities(result);
       },
       protectionStatus() {
         let lang = this.$language.current;
         if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
           lang = 'fr';
         }
-        return he.decode(this.data.properties[`schutzs_${lang}`] || '', { strict: true });
+
+        return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] || '');
       }
     },
     methods: {
