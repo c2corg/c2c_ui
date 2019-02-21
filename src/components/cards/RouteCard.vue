@@ -11,7 +11,7 @@
     <card-row>
 
       <span>
-        <icon-ratings class="has-text-primary" />
+        <icon-ratings class="card-icon" />
         <route-rating :document="document"/>
       </span>
 
@@ -21,7 +21,7 @@
         v-if="document.height_diff_up"
         class="is-ellipsed"
         :title="$gettext('height_diff_up')">
-        <icon-height-diff-up class="has-text-primary"/>
+        <icon-height-diff-up class="card-icon"/>
         {{ document.height_diff_up }}&nbsp;m
       </span>
 
@@ -29,7 +29,7 @@
         v-if="document.height_diff_difficulties"
         class="is-ellipsed"
         :title="$gettext('height_diff_difficulties')">
-        <fa-icon icon="arrows-alt-v" class="has-text-primary"/>
+        <fa-icon icon="arrows-alt-v" class="card-icon"/>
         {{ document.height_diff_difficulties }}&nbsp;m
       </span>
     </card-row>
@@ -37,12 +37,12 @@
     <card-row>
       <card-activities-item :activities="document.activities"/>
 
-      <span class="has-text-primary"> <!-- Englobing span is mandatory for tooltip ?? -->
+      <span class="card-icon"> <!-- Englobing span is mandatory for tooltip ?? -->
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
       </span>
 
       <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
-        <fa-icon icon="compass" class="has-text-primary"/>
+        <fa-icon icon="compass" class="card-icon"/>
         {{ document.orientations.join(", ") }}
       </span>
 

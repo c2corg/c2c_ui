@@ -73,6 +73,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faSun } from '@fortawesome/free-solid-svg-icons/faSun';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faTag } from '@fortawesome/free-solid-svg-icons/faTag';
+import { faTh } from '@fortawesome/free-solid-svg-icons/faTh';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faThList } from '@fortawesome/free-solid-svg-icons/faThList';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -276,6 +277,7 @@ export default function install(Vue) {
     faSun,
     faTachometerAlt,
     faTag,
+    faTh,
     faThLarge,
     faThList,
     faTrash,

@@ -7,12 +7,14 @@
  * here is custom c2c variables
  */
 $color-base-c2c: #ffaa45; // orange
-$color-complementary: #a9d361; // green
-$color-link: #337ab7; // actually, primary color, but used for links...
+$color-base-c2c-darker: #B26F1E;
+$color-base-c2c-lighter: rgb(255, 212, 159);
 
-$color-base-darker: #B26F1E;
-$color-base-lighter: #FFAA45;
-$color-complementary-lighter: #45C5FF;
+$color-complementary-c2c: #337ab7; // must fit with c2c orange, and will be main color
+$color-complementary-c2c-lighter: #7699b8;
+
+$color-link: #337ab7; // We use the same blue as complementary-c2c
+
 
 /**
  * Bulma variables
@@ -34,8 +36,8 @@ $size-7 : 0.7857rem;   // 12/14
 /**
  * customize bulma colors
  */
-$primary: $color-link;
-$secondary: $color-complementary;
+$primary: $color-complementary-c2c;
+$secondary: $color-base-c2c;
 $link: $color-link;
 //$info: $cyan
 //$success: $green
@@ -46,6 +48,9 @@ $link: $color-link;
 $pagination-current-background-color:$primary;
 $pagination-current-border-color:$primary;
 $body-background-color : white;
+
+$input-focus-border-color: $color-base-c2c;
+$input-focus-box-shadow-size: 0 0 0 0; // with border orange, input focus shadow is terrible
 
 // Paddings and margins
 $section-padding : 1.5rem 1.5rem;
@@ -81,3 +86,7 @@ $input-placeholder-color:rbg(160,160,160);
  */
 
 $hover-background: hsl(0, 0%, 92%);
+
+.card-icon {
+    color: $text;
+}

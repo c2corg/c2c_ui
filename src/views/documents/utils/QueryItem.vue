@@ -48,7 +48,7 @@
       <label class="label" v-if="!hideLabel">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </label>
-      <input ref="input" :type="field.type" :value="value" @input="oninput" class="input is-primary" :placeholder="$gettext(field.name)">
+      <input ref="input" :type="field.type" :value="value" @input="oninput" class="input" :placeholder="$gettext(field.name)">
     </div>
 
     <div v-else-if="field.queryMode==='checkbox'" class="control">

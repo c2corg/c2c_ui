@@ -228,8 +228,7 @@
     max-width: 100vw;
     height:$navbar-height;
     background-color: $white;
-    // border-bottom:1px solid $grey-lighter
-    box-shadow: 0 2px 2px rgba($black, 0.1);
+    box-shadow: 0 2px 0 $color-base-c2c;
     display: flex;
   }
 
