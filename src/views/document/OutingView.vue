@@ -112,7 +112,7 @@
 </template>
 
 <script>
-  import DocumentViewMixin from './utils/DocumentViewMixin.js';
+  import documentViewMixin from './utils/document-view-mixin.js';
   import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
   export default {
@@ -120,7 +120,7 @@
       ConditionLevels
     },
 
-    mixins: [ DocumentViewMixin ]
+    mixins: [ documentViewMixin ]
 
   };
 </script>

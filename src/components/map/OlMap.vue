@@ -113,24 +113,27 @@
 
 <script>
   import ol from '@/js/libs/ol';
-  import biodivSportsService from '@/js/apis/BiodivSportsService';
-  import respecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
+  import BiodivSportsService from '@/js/apis/BiodivSportsService';
+  import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
   import photon from '@/js/apis/photon';
 
-  import { cartoLayers, dataLayers, swissTopoLayers, protectionAreasLayers } from './mapLayers.js';
+  import { cartoLayers, dataLayers, swissTopoLayers, protectionAreasLayers } from './map-layers.js';
   import {
     getDocumentPointStyle,
     getDocumentLineStyle,
     geoJSONFormat,
     buildPolygonStyle,
     buildDiffStyle
-  } from './mapUtils.js';
+  } from './map-utils.js';
 
   import BiodivInformation from './BiodivInformation';
   import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 
   const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
   const DEFAULT_POINT_ZOOM = 12;
+
+  const biodivSportsService = new BiodivSportsService();
+  const respecterCestProtegerService = new RespecterCestProtegerService();
 
   export default {
 

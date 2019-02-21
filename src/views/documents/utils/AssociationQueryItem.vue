@@ -16,7 +16,7 @@
 <script>
   import c2c from '@/js/apis/c2c';
   import constants from '@/js/constants';
-  import mixin from './QueryItemMixin.js';
+  import mixin from './query-item-mixin.js';
 
   export default {
     mixins: [mixin],

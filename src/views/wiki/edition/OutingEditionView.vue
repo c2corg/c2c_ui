@@ -152,13 +152,13 @@
 
 <script>
 
-  import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin';
+  import documentEditionViewMixin from './utils/document-edition-view-mixin';
   import CotometerWindow from './utils/CotometerWindow';
 
   export default {
     components: { CotometerWindow },
 
-    mixins: [ DocumentEditionViewMixin ],
+    mixins: [ documentEditionViewMixin ],
 
     data() {
       return {

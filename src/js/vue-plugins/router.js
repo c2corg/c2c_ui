@@ -138,7 +138,7 @@ const router = new Router({
   // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
-      // hash scroll is deferred to DocumentViewMixin.scrollToHash()
+      // hash scroll is deferred to documentViewMixin.scrollToHash()
       return false;
     } else if (savedPosition) {
       // scroll to saved position

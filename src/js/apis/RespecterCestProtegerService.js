@@ -33,4 +33,4 @@ RespecterCestProtegerService.prototype.identify = function(position, extent, map
   );
 };
 
-export default new RespecterCestProtegerService();
+export default RespecterCestProtegerService;

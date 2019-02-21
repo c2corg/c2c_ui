@@ -75,7 +75,7 @@
 <script>
   import { requireFieldProperty } from '@/js/properties-mixins';
 
-  import QueryItemMixin from './QueryItemMixin.js';
+  import queryItemMixin from './query-item-mixin.js';
 
   import Multiselect from 'vue-multiselect';
   import vueSlider from 'vue-slider-component';
@@ -91,7 +91,7 @@
       DateQueryItem
     },
 
-    mixins: [ requireFieldProperty, QueryItemMixin ],
+    mixins: [ requireFieldProperty, queryItemMixin ],
 
     props: {
       hideLabel: {

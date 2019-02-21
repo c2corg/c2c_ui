@@ -1,5 +1,5 @@
 import common from './common.json';
-import Field from './field.js';
+import Field from './Field.js';
 import documentsProperties from './documentsProperties.json';
 
 const getFieldsObject = function(fieldsArray) {

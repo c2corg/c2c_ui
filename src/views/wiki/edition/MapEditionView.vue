@@ -18,11 +18,11 @@
 
 <script>
 
-  import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin';
+  import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
   export default {
 
-    mixins: [ DocumentEditionViewMixin ]
+    mixins: [ documentEditionViewMixin ]
   };
 
 </script>
