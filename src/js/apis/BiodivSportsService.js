@@ -28,4 +28,4 @@ BiodivSportsService.prototype.fetchData = function(extent, activities, language)
   return this.axios.get(this.url, { params });
 };
 
-export default new BiodivSportsService();
+export default BiodivSportsService;

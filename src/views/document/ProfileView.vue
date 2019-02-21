@@ -49,7 +49,7 @@
 <script>
 
   import config from '@/js/config.ts';
-  import DocumentViewMixin from './utils/DocumentViewMixin.js';
+  import documentViewMixin from './utils/document-view-mixin.js';
 
   import OutingsDownloader from './utils/OutingsDownloader';
   import FeedWidget from '@/components/feed-widget/FeedWidget';
@@ -61,7 +61,7 @@
       OutingsDownloader
     },
 
-    mixins: [ DocumentViewMixin ],
+    mixins: [ documentViewMixin ],
 
     forumUrl: config.urls.forum
   };

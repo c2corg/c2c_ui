@@ -22,7 +22,7 @@ By "describing", we means which data/object is exported.
 * Vue single file components are PascalCase : `MyAwesomeComponent.vue`
 * Javascript
   * If the file describes a single object constructor, it must be in PascalCase : `AwesomeObject.vue`
-  * If the file describes a singleton/object, in must be in kebab-case : `config.js`
+  * If the file describes a singleton/object instance, in must be in kebab-case : `config.js`
   * If the file describes one or more mixins, it must be in kebab-case : `document-mixin.js`
 
 ## HTML templates
@@ -35,7 +35,7 @@ Don't :
 <template>
     <MyAwesomeComponent FancyProperty="yes" />
 </template>
-```  
+```
 
 Do :
 

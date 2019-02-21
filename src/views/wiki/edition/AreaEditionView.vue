@@ -21,11 +21,11 @@
 
 <script>
 
-  import DocumentEditionViewMixin from './utils/DocumentEditionViewMixin.js';
+  import documentEditionViewMixin from './utils/document-edition-view-mixin.js';
 
   export default {
 
-    mixins: [ DocumentEditionViewMixin ],
+    mixins: [ documentEditionViewMixin ],
 
     methods: {
       beforeSave() {

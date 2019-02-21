@@ -1,7 +1,7 @@
 
 import constants from '@/js/constants';
 import c2c from '@/js/apis/c2c';
-import cooker from '@/js/Cooker';
+import cooker from '@/js/cooker';
 
 import viewModeMixin from './view-mode-mixin';
 

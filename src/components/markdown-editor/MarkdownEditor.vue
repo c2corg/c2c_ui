@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import cooker from '@/js/Cooker';
+  import cooker from '@/js/cooker';
   import EditorButton from './EditorButton';
   import LinkHelper from './LinkHelper';
 
