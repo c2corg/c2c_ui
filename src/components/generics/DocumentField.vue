@@ -28,7 +28,7 @@
     </span>
 
     <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span><!--
-     --><span v-if="(unit || field.unit) && value !== null">&nbsp;{{ unit || field.unit }}</span>
+     --><span v-if="(unit || field.unit) && value !== null && value !== undefined">&nbsp;{{ unit || field.unit }}</span>
 
   </span>
 </template>

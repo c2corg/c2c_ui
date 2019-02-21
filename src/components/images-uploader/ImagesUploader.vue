@@ -199,8 +199,8 @@
         const associationsArrayName = this.$documentUtils.getAssociationArrayName(this.parentDocument);
 
         image.document = this.$documentUtils.buildDocument('image', this.lang);
-        image.document.activities = this.parentDocument.activities.slice(0);
-        image.document.geometry.geom = this.parentDocument.geometry.geom;
+        image.document.activities = this.parentDocument.activities ? this.parentDocument.activities.slice(0) : [];
+        image.document.geometry.geom = this.parentDocument.geometry ? this.parentDocument.geometry.geom : null;
         image.document.file_size = file.size;
         image.document.image_type = this.imageType;
         image.document.image_categories = [];
