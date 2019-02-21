@@ -18,7 +18,12 @@
 
     <div class="columns is-multiline">
       <div class="column is-12">
-        <map-view ref="map" :edited-document="document" :geom-detail-editable="geomDetailEditable"/>
+        <map-view
+          ref="map"
+          :edited-document="document"
+          :geom-detail-editable="geomDetailEditable"
+          show-center-on-geolocation
+          show-recenter-on/>
       </div>
       <div class="column is-6">
         <div class="field">

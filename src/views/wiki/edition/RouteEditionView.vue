@@ -92,6 +92,7 @@
         <form-field class="is-6" :document="document" :field="fields.labande_ski_rating"/>
         <form-field class="is-6" :document="document" :field="fields.ski_rating"/>
         <form-field class="is-6" :document="document" :field="fields.ski_exposition" />
+        <form-field class="is-12" :document="document" :field="fields.slope" />
       </div>
 
       <div class="columns is-multiline">
