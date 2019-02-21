@@ -1,3 +1,7 @@
+#: src/views/wiki/edition/WaypointEditionView.vue:50
+msgid "..."
+msgstr ""
+
 #: src/views/wiki/edition/utils/CotometerWindow.vue:29
 msgid "1 or 2 complications (steeper or narrow section...)"
 msgstr ""
@@ -224,7 +228,7 @@ msgstr ""
 msgid "Add images"
 msgstr ""
 
-#: src/views/document/utils/boxes/RecentOutingsBox.vue:32
+#: src/views/document/utils/boxes/RecentOutingsBox.vue:33
 msgid "Add the first outing"
 msgstr ""
 
@@ -353,6 +357,10 @@ msgstr ""
 msgid "Associated routes"
 msgstr ""
 
+#: src/views/wiki/edition/WaypointEditionView.vue:108
+msgid "Associated routes cotations"
+msgstr ""
+
 #: src/views/SideMenu.vue:23
 msgid "Association"
 msgstr ""
@@ -364,7 +372,7 @@ msgstr ""
 
 #: src/views/wiki/edition/BookEditionView.vue:37
 #: src/views/wiki/edition/ImageEditionView.vue:61
-#: src/views/wiki/edition/WaypointEditionView.vue:136
+#: src/views/wiki/edition/WaypointEditionView.vue:147
 msgid "associations"
 msgstr ""
 
@@ -414,7 +422,7 @@ msgctxt "event_types"
 msgid "avalanche"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:209
+#: src/components/datatable/DocumentsTable.vue:217
 msgid "avalanche"
 msgstr ""
 
@@ -517,7 +525,7 @@ msgctxt "climbing_outdoor_types"
 msgid "bloc"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:80
+#: src/views/document/utils/boxes/ToolBox.vue:86
 msgid "Block account"
 msgstr ""
 
@@ -555,7 +563,7 @@ msgstr ""
 msgid "books"
 msgstr ""
 
-#: src/views/wiki/edition/RouteEditionView.vue:133
+#: src/views/wiki/edition/RouteEditionView.vue:134
 msgid "Books and websites not already associated to this route"
 msgstr ""
 
@@ -653,7 +661,7 @@ msgstr ""
 msgid "children_proof"
 msgstr ""
 
-#: src/components/map/OlMap.vue:97
+#: src/components/map/OlMap.vue:99
 msgid "Clear"
 msgstr ""
 
@@ -710,7 +718,7 @@ msgid "climbing_styles"
 msgstr ""
 
 #: src/components/helper/HelperWindow.vue:15
-#: src/components/images-uploader/ImagesUploader.vue:50
+#: src/components/images-uploader/ImagesUploader.vue:57
 #: src/views/document/utils/windows/AssociationsWindow.vue:25
 msgid "Close"
 msgstr ""
@@ -767,7 +775,8 @@ msgstr ""
 msgid "Collapse"
 msgstr ""
 
-#: src/views/document/utils/field-viewers/ConditionLevels.vue:8
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:17
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:9
 #: src/views/wiki/HistoryView.vue:46
 #: src/views/wiki/WhatsNewView.vue:14
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:8
@@ -776,7 +785,7 @@ msgid "comment"
 msgstr ""
 
 #: src/views/document/utils/boxes/CommentsBox.vue:3
-#: src/views/wiki/edition/RouteEditionView.vue:122
+#: src/views/wiki/edition/RouteEditionView.vue:123
 msgid "Comments"
 msgstr ""
 
@@ -828,7 +837,7 @@ msgstr ""
 msgid "contact"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:59
+#: src/views/document/utils/boxes/CommentsBox.vue:58
 msgid "Continue the discussion"
 msgstr ""
 
@@ -972,12 +981,12 @@ msgctxt "months"
 msgid "dec"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:86
+#: src/views/document/utils/boxes/ToolBox.vue:92
 #: src/views/document/utils/windows/DeleteDocumentWindow.vue:8
 msgid "Delete this document"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:73
+#: src/views/document/utils/boxes/ToolBox.vue:79
 #: src/views/document/utils/windows/DeleteLocaleWindow.vue:8
 msgid "Delete this locale"
 msgstr ""
@@ -1003,7 +1012,7 @@ msgstr ""
 msgid "describe conditions"
 msgstr ""
 
-#: src/views/wiki/edition/RouteEditionView.vue:131
+#: src/views/wiki/edition/RouteEditionView.vue:132
 msgid "Describe here the gear needed for this route"
 msgstr ""
 
@@ -1011,7 +1020,7 @@ msgstr ""
 msgid "Describe here the waypoint"
 msgstr ""
 
-#: src/views/wiki/edition/RouteEditionView.vue:126
+#: src/views/wiki/edition/RouteEditionView.vue:127
 msgid "Describe historical information about the route (date, names..) here"
 msgstr ""
 
@@ -1055,7 +1064,7 @@ msgstr ""
 msgid "describe weather"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:115
+#: src/views/wiki/edition/WaypointEditionView.vue:124
 msgid "Description"
 msgstr ""
 
@@ -1129,7 +1138,7 @@ msgctxt "quality_types"
 msgid "draft"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:26
+#: src/components/images-uploader/ImagesUploader.vue:32
 msgid "Drop images here or click to upload"
 msgstr ""
 
@@ -1175,15 +1184,15 @@ msgstr ""
 msgid "Edit a document"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:43
+#: src/views/document/utils/boxes/ToolBox.vue:49
 msgid "Edit associations"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:38
+#: src/components/images-uploader/ImagesUploader.vue:45
 msgid "Edit categories"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:35
+#: src/components/images-uploader/ImagesUploader.vue:42
 msgid "Edit titles"
 msgstr ""
 
@@ -1195,7 +1204,8 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:154
+#: src/components/datatable/DocumentsTable.vue:121
+#: src/components/datatable/DocumentsTable.vue:162
 #: src/translations/fixed_strings_common_js.vue:57
 #: src/views/document/OutingView.vue:66
 #: src/views/document/RouteView.vue:55
@@ -1375,7 +1385,7 @@ msgstr ""
 msgid "Fauna protection areas"
 msgstr ""
 
-#: src/components/map/SwissProtectionAreaInformation.vue:49
+#: src/components/map/SwissProtectionAreaInformation.vue:50
 msgid "Fauna protection site:"
 msgstr ""
 
@@ -1397,7 +1407,7 @@ msgstr ""
 msgid "filename"
 msgstr ""
 
-#: src/components/map/OlMap.vue:51
+#: src/components/map/OlMap.vue:61
 msgid "Filter on map extent"
 msgstr ""
 
@@ -1727,7 +1737,7 @@ msgstr ""
 
 #: src/components/cards/FeedCard.vue:38
 #: src/components/cards/RouteCard.vue:31
-#: src/components/generics/pretty-links/PrettyRouteLink.vue:7
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:8
 #: src/translations/fixed_strings_common_js.vue:87
 msgid "height_diff_difficulties"
 msgstr ""
@@ -1809,7 +1819,7 @@ msgctxt "book_types"
 msgid "historical"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:36
+#: src/views/document/utils/boxes/ToolBox.vue:42
 msgid "History"
 msgstr ""
 
@@ -1908,6 +1918,10 @@ msgstr ""
 
 #: src/views/wiki/edition/XreportEditionView.vue:66
 msgid "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing."
+msgstr ""
+
+#: src/views/wiki/edition/WaypointEditionView.vue:38
+msgid "Informations about the access"
 msgstr ""
 
 #: src/components/image-viewer/ImageInfo.vue:3
@@ -2045,7 +2059,7 @@ msgstr ""
 msgid "Last outings"
 msgstr ""
 
-#: src/views/wiki/edition/utils/MapInputRow.vue:31
+#: src/views/wiki/edition/utils/MapInputRow.vue:36
 msgid "Latitude"
 msgstr ""
 
@@ -2139,12 +2153,13 @@ msgctxt "waypoint_types"
 msgid "locality"
 msgstr ""
 
-#: src/views/document/utils/field-viewers/ConditionLevels.vue:5
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:14
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:6
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:5
 msgid "Location / elevation / orientation"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:56
+#: src/views/document/utils/boxes/CommentsBox.vue:55
 msgid "Log in to post a comment"
 msgstr ""
 
@@ -2169,7 +2184,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: src/views/wiki/edition/utils/MapInputRow.vue:25
+#: src/views/wiki/edition/utils/MapInputRow.vue:30
 msgid "Longitude"
 msgstr ""
 
@@ -2254,7 +2269,7 @@ msgstr ""
 msgid "Merge documents"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:67
+#: src/views/document/utils/boxes/ToolBox.vue:73
 msgid "Merge with other document"
 msgstr ""
 
@@ -2279,6 +2294,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:534
 msgctxt "waypoint_types"
 msgid "misc"
+msgstr ""
+
+#: src/views/wiki/edition/WaypointEditionView.vue:73
+msgid "Misc data about the waypoint"
 msgstr ""
 
 #: src/views/documents/utils/QueryItems.vue:16
@@ -2498,7 +2517,7 @@ msgstr ""
 msgid "New waypoint"
 msgstr ""
 
-#: src/views/wiki/DiffView.vue:65
+#: src/views/wiki/DiffView.vue:66
 msgid "next difference"
 msgstr ""
 
@@ -2591,7 +2610,7 @@ msgctxt "book_types"
 msgid "novel"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:67
+#: src/views/wiki/edition/WaypointEditionView.vue:72
 msgid "Numbers"
 msgstr ""
 
@@ -2660,7 +2679,7 @@ msgstr ""
 msgid "Ordered list"
 msgstr ""
 
-#: src/components/generics/pretty-links/PrettyRouteLink.vue:13
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:14
 #: src/translations/fixed_strings_common_js.vue:128
 msgid "orientations"
 msgstr ""
@@ -2936,7 +2955,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: src/views/wiki/DiffView.vue:34
+#: src/views/wiki/DiffView.vue:35
 msgid "previous difference"
 msgstr ""
 
@@ -2984,7 +3003,7 @@ msgstr ""
 msgid "prominence"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:61
+#: src/views/document/utils/boxes/ToolBox.vue:67
 msgid "Protect document"
 msgstr ""
 
@@ -2997,7 +3016,7 @@ msgstr ""
 msgid "protected"
 msgstr ""
 
-#: src/components/map/SwissProtectionAreaInformation.vue:47
+#: src/components/map/SwissProtectionAreaInformation.vue:48
 msgid "Protection area:"
 msgstr ""
 
@@ -3072,15 +3091,15 @@ msgctxt "area_types"
 msgid "range"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:122
-#: src/components/datatable/DocumentsTable.vue:124
-#: src/components/datatable/DocumentsTable.vue:164
-#: src/components/datatable/DocumentsTable.vue:166
+#: src/components/datatable/DocumentsTable.vue:130
+#: src/components/datatable/DocumentsTable.vue:132
+#: src/components/datatable/DocumentsTable.vue:172
+#: src/components/datatable/DocumentsTable.vue:174
 #: src/views/document/OutingView.vue:48
 #: src/views/document/RouteView.vue:35
 #: src/views/documents/utils/QueryItems.vue:14
 #: src/views/wiki/edition/RouteEditionView.vue:80
-#: src/views/wiki/edition/WaypointEditionView.vue:100
+#: src/views/wiki/edition/WaypointEditionView.vue:107
 msgid "ratings"
 msgstr ""
 
@@ -3089,11 +3108,11 @@ msgctxt "avalanche_signs"
 msgid "recent_avalanche"
 msgstr ""
 
-#: src/components/map/OlMap.vue:58
+#: src/components/map/OlMap.vue:46
 msgid "Recenter on your current position"
 msgstr ""
 
-#: src/components/map/OlMap.vue:69
+#: src/components/map/OlMap.vue:70
 msgid "Recenter on..."
 msgstr ""
 
@@ -3122,7 +3141,7 @@ msgctxt "API message"
 msgid "Required"
 msgstr ""
 
-#: src/views/wiki/edition/utils/FormField.vue:12
+#: src/views/wiki/edition/utils/FormField.vue:8
 msgid "required field"
 msgstr ""
 
@@ -3130,7 +3149,7 @@ msgstr ""
 msgid "rescue"
 msgstr ""
 
-#: src/components/map/OlMap.vue:88
+#: src/components/map/OlMap.vue:90
 msgid "Reset geometry"
 msgstr ""
 
@@ -3269,7 +3288,7 @@ msgstr ""
 msgid "safety"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:47
+#: src/components/images-uploader/ImagesUploader.vue:54
 #: src/views/user/AccountView.vue:71
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:9
 msgid "Save"
@@ -3316,7 +3335,7 @@ msgstr ""
 msgid "see actual version"
 msgstr ""
 
-#: src/views/document/utils/boxes/MapBox.vue:23
+#: src/views/document/utils/boxes/ToolBox.vue:36
 msgid "See other documents nearby"
 msgstr ""
 
@@ -3342,7 +3361,7 @@ msgid "Send reset email"
 msgstr ""
 
 #: src/components/map/BiodivInformation.vue:4
-#: src/components/map/SwissProtectionAreaInformation.vue:51
+#: src/components/map/SwissProtectionAreaInformation.vue:52
 msgid "Sensitive area:"
 msgstr ""
 
@@ -3380,7 +3399,7 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:200
+#: src/components/datatable/DocumentsTable.vue:208
 #: src/translations/fixed_strings_common_js.vue:166
 msgid "severity"
 msgstr ""
@@ -3600,7 +3619,8 @@ msgctxt "access_conditions"
 msgid "snowy"
 msgstr ""
 
-#: src/views/document/utils/field-viewers/ConditionLevels.vue:6
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:15
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:7
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:6
 msgid "soft snow"
 msgstr ""
@@ -3734,21 +3754,29 @@ msgstr ""
 msgid "This content is licensed under Creative Commons BY-SA 3.0"
 msgstr ""
 
+#: src/views/wiki/edition/utils/FormField.vue:10
+msgid "This field is too long"
+msgstr ""
+
+#: src/views/wiki/edition/utils/FormField.vue:9
+msgid "This field is too short"
+msgstr ""
+
 #: src/translations/fixed_strings_manual.vue:34
 msgid "This field must be a valid ISBN."
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue:24
-#: src/views/wiki/DiffView.vue:36
+#: src/views/wiki/DiffView.vue:37
 msgid "This is the first version"
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue:52
-#: src/views/wiki/DiffView.vue:68
+#: src/views/wiki/DiffView.vue:69
 msgid "This is the last version"
 msgstr ""
 
-#: src/views/wiki/edition/RouteEditionView.vue:123
+#: src/views/wiki/edition/RouteEditionView.vue:124
 msgid "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it."
 msgstr ""
 
@@ -3821,7 +3849,8 @@ msgctxt "article_categories"
 msgid "topoguide_supplements"
 msgstr ""
 
-#: src/views/document/utils/field-viewers/ConditionLevels.vue:7
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:16
+#: src/views/document/utils/field-viewers/ConditionLevels.vue:8
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:7
 msgid "total snow"
 msgstr ""
@@ -3850,12 +3879,12 @@ msgstr ""
 msgid "training"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:49
+#: src/views/document/utils/boxes/ToolBox.vue:55
 #: src/views/document/utils/windows/TranslateWindow.vue:4
 msgid "Translate into an other lang"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:36
+#: src/views/wiki/edition/WaypointEditionView.vue:37
 msgid "Transport & road or PT access"
 msgstr ""
 
@@ -3864,7 +3893,7 @@ msgctxt "route_types"
 msgid "traverse"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:46
+#: src/views/wiki/edition/WaypointEditionView.vue:49
 msgid "Types and styles"
 msgstr ""
 
@@ -3872,7 +3901,7 @@ msgstr ""
 msgid "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:80
+#: src/views/document/utils/boxes/ToolBox.vue:86
 msgid "Unblock account"
 msgstr ""
 
@@ -3885,7 +3914,7 @@ msgstr ""
 msgid "Unordered list"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:61
+#: src/views/document/utils/boxes/ToolBox.vue:67
 msgid "Unprotect document"
 msgstr ""
 
@@ -3981,6 +4010,14 @@ msgstr ""
 msgid "waypoint"
 msgstr ""
 
+#: src/views/wiki/edition/WaypointEditionView.vue:12
+msgid "Waypoint's main properties"
+msgstr ""
+
+#: src/views/wiki/edition/WaypointEditionView.vue:125
+msgid "Waypoint's textual description"
+msgstr ""
+
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:15
 msgid "waypoint_children"
 msgstr ""
@@ -4054,7 +4091,7 @@ msgstr ""
 msgid "Without c2c account"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:118
+#: src/views/wiki/edition/WaypointEditionView.vue:128
 msgid "write a summary"
 msgstr ""
 
@@ -4085,6 +4122,10 @@ msgstr ""
 
 #: src/views/static-views/SeracView.vue:45
 msgid "You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators."
+msgstr ""
+
+#: src/views/wiki/edition/WaypointEditionView.vue:148
+msgid "You may add associated waypoints, books and articles"
 msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue:13

@@ -76,17 +76,30 @@ $input-placeholder-color:rbg(160,160,160);
     opacity: 1; /* Firefox */
 }
 
+
 @import "~bulma/sass/utilities/initial-variables.sass";
 @import "~bulma/sass/utilities/functions.sass";
 @import "~bulma/sass/utilities/derived-variables.sass";
 
+/**
+ * bulma card shadow is used to set a border. Remove the border part
+ */
+$card-shadow: 0 2px 3px rgba($black, 0.1);
+$card-hover-shadow: 1px 3px 4px rgba($black, 0.1);
+
+ // and set a variable for card border :
+$card-border: 1px solid rgba($black, 0.15);
 
 /**
  * Another custom C2C var, but that are computed from bulma variables
  */
 
-$hover-background: hsl(0, 0%, 92%);
+$hover-background: hsl(0, 0%, 95%);
 
 .card-icon {
     color: $text;
+}
+
+.has-text-secondary {
+    color: $secondary;
 }

@@ -36,10 +36,16 @@
             <icon-document :document-type="documentType"/>
           </slot>
           <span>&#8239;</span>
-          <document-title :document="document"/>
+          <document-title :document="document" uppercase-first-letter/>
+
           <!-- outing specific  -->
           <span v-if="documentType=='outing'" class="outing-date is-size-5">
             {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+          </span>
+
+          <!-- xreport specific  -->
+          <span v-else-if="documentType=='xreport'" class="outing-date is-size-5">
+            {{ $moment.toLocalizedString(document.date, 'LL') | uppercaseFirstLetter }}
           </span>
         </div>
       </div>

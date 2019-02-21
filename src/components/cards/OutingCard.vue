@@ -33,7 +33,7 @@
 
       <span class="card-icon is-nowrap">
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
-        &nbsp;
+        <span>&nbsp;</span>
         <marker-image-count :image-count="document.img_count"/>
       </span>
 

@@ -1,6 +1,7 @@
 <template>
   <document-link :document="route" class="pretty-route-link has-hover-background">
     <activities v-if="!hideActivities" :activities="route.activities" class="is-size-4 has-text-dark"/>
+    <span>&nbsp;</span>
     <document-title :document="route"/>,
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"

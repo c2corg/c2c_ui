@@ -1,5 +1,5 @@
 <template>
-  <div class="columns">
+  <div class="columns is-mobile">
     <div class="column is-narrow">
       <div class="control">
         <button
@@ -15,6 +15,13 @@
       <div class="control is-expanded">
         <input v-model="comment" type="text" class="input" :disabled="mode !== 'edit'" :placeholder="$gettext('comment')">
       </div>
+    </div>
+    <div class="column is-narrow">
+      <button class="button" @click="$emit('preview')">
+        <fa-icon icon="eye" />
+        <span>&nbsp;</span>
+        <span v-translate>Preview</span>
+      </button>
     </div>
   </div>
 </template>
