@@ -41,6 +41,16 @@
     </div>
 
     <div
+      v-show="showCenterOnGeolocation"
+      ref="centerOnGeolocation"
+      :title="$gettext('Recenter on your current position')"
+      class="ol-control ol-control-center-on-geolocation">
+      <button @click="centerOnGeolocation">
+        <fa-icon icon="bullseye"/>
+      </button>
+    </div>
+
+    <div
       v-show="showFilterControl"
       ref="useMapAsFilter"
       class="ol-control ol-control-use-map-as-filter">
@@ -53,26 +63,18 @@
     </div>
 
     <div
-      v-show="showCenterOnGeolocation"
-      ref="centerOnGeolocation"
-      :title="$gettext('Recenter on your current position')"
-      class="ol-control ol-control-center-on-geolocation">
-      <button @click="centerOnGeolocation">
-        <fa-icon icon="bullseye"/>
-      </button>
-    </div>
-
-    <div
       v-show="showRecenterOn"
       ref="recenterOnControl"
-      class="ol-control ol-control-recenter-on">
+      class="ol-control ol-control-recenter-on"
+      :class="{'ol-control-recenter-on_on-top': !showFilterControl}">
       <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions">
     </div>
 
     <div
       v-show="showRecenterOnPropositions"
       ref="recenterOnPropositions"
-      class="ol-control ol-control-recenter-on-propositions">
+      class="ol-control ol-control-recenter-on-propositions"
+      :class="{'ol-control-recenter-on-propositions_on-top': !showFilterControl}">
       <ul v-if="recenterPropositions && recenterPropositions.data && recenterPropositions.data.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
           {{ item.properties.name }},
@@ -861,6 +863,10 @@ $control-margin:0.5em;
     left:3em;
 }
 
+.ol-control-recenter-on_on-top{
+  top: $control-margin;
+}
+
 .ol-control-recenter-on-propositions{
     top: 65px;
     left:3em;
@@ -871,6 +877,10 @@ $control-margin:0.5em;
         background: lightgrey;
         cursor: pointer;
     }
+}
+
+.ol-control-recenter-on-propositions_on-top{
+  top: 35px;
 }
 
 .ol-control-reset-geometry{
