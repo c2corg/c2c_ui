@@ -9,21 +9,21 @@
       <card-region-item :document="document" />
 
       <span class="is-nowrap">
-        <fa-icon class="has-text-primary" icon="pen"/>
+        <fa-icon class="card-icon" icon="pen"/>
         {{ document.author.name }}
       </span>
     </card-row>
 
     <card-row>
       <span>
-        <icon-ratings class="has-text-primary" />
+        <icon-ratings class="card-icon" />
         <outing-rating :document="document"/>
       </span>
 
       <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed"/>
 
       <span v-if="document.height_diff_up" :title="$gettext('height_diff_up')">
-        <icon-height-diff-up class="has-text-primary"/>
+        <icon-height-diff-up class="card-icon"/>
         {{ document.height_diff_up }}&nbsp;m
       </span>
     </card-row>
@@ -31,7 +31,7 @@
     <card-row>
       <card-activities-item :activities="document.activities"/>
 
-      <span class="has-text-primary is-nowrap">
+      <span class="card-icon is-nowrap">
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
         &nbsp;
         <marker-image-count :image-count="document.img_count"/>

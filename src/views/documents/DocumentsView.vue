@@ -47,7 +47,7 @@
             @click="toogleProperty('listMode')" />
           &nbsp;
           <fa-icon
-            icon="th-large"
+            icon="th"
             class="has-cursor-pointer"
             :class="!listMode ? 'has-text-primary' : ''"
             :title="$gettext('Cards mode')"
@@ -64,7 +64,7 @@
         </div>
         <div class="level-item is-size-3 is-hidden-tablet">
           <fa-icon
-            :icon="showMap ? 'map-marked-alt' : 'th-large'"
+            :icon="showMap ? 'map-marked-alt' : 'th'"
             class="has-text-primary"
             @click="toogleProperty('showMap')"/>
         </div>

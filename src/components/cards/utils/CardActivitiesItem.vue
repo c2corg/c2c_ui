@@ -1,5 +1,5 @@
 <template>
-  <activities :activities="activities" class="has-text-primary is-size-4 is-ellipsed"/>
+  <activities :activities="activities" class="card-icon is-size-4 is-ellipsed"/>
 </template>
 
 <script>

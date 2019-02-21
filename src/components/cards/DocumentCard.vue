@@ -62,16 +62,18 @@
 </script>
 
 <style scoped lang="scss">
+  @import '@/assets/sass/variables.scss';
 
-    .card-container{
-        position:relative;
-    }
+  .card-container{
+    position:relative;
+    border-left:2px solid $color-base-c2c;
+  }
 
-    .delete-button{
-        position:absolute;
-        top:-0.5rem;
-        right:-0.5rem;
-        font-size:2rem;
-    }
+  .delete-button{
+    position:absolute;
+    top:-0.5rem;
+    right:-0.5rem;
+    font-size:2rem;
+  }
 
 </style>

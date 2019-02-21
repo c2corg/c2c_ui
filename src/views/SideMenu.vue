@@ -78,76 +78,76 @@
 </script>
 
 <style scoped lang="scss">
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    aside{
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
-        background: $white;
+  aside{
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+    background: $white;
+  }
+
+  .menu-item{
+    display: block;
+    height: 37px;
+    // border-top: 1px solid #ccc;
+    padding: 8px 10px;
+    border-left:5px solid $white;
+    color:$grey-dark;
+  }
+
+  .menu-item:hover{
+    background:$light;
+    border-left:5px solid $color-base-c2c-lighter;
+  }
+
+  .menu-item-text{
+    margin-left: 0;
+    font-size:1.1rem;
+  }
+
+  .menu-item.router-link-active{
+    border-left:5px solid $color-base-c2c;
+    font-weight: bold;
+  }
+
+  .menu-footer{
+    position: absolute;
+    width:100%;
+    bottom: 0;
+
+    .menu-socials, .menu-add, .menu-links {
+      margin-bottom: 15px!important;
+      line-height: 1;
     }
 
-    .menu-item{
-        display: block;
-        height: 37px;
-        // border-top: 1px solid #ccc;
-        padding: 8px 10px;
-        border-left:5px solid $white;
-        color:$grey-dark;
+    .menu-add{
+      height: 320px;
+      margin-left: calc((200px - 160px)/2);
+      margin-right: calc((200px - 160px)/2);
     }
 
-    .menu-item:hover{
-        background:$light;
-        // color:$white;
+    .twitter-icon, .facebook-icon{
+      font-size: 30px;
     }
 
-    .menu-item-text{
-        margin-left: 0;
-        font-size:1.1rem;
+    .twitter-icon, .twitter-icon:hover{
+      color:#4198fb; // twitter color
     }
 
-    .menu-item.router-link-active{
-        border-left:5px solid $primary;
-        font-weight: bold;
+    .facebook-icon, .facebook-icon:hover{
+      color:#6d8bc9; //facebook color
     }
+  }
 
-    .menu-footer{
-        position: absolute;
-        width:100%;
-        bottom: 0;
+  // @media screen and (max-height: 645px){
+  //     .menu-add{
+  //         display:none!important;
+  //     }
+  // }
 
-        .menu-socials, .menu-add, .menu-links {
-            margin-bottom: 15px!important;
-            line-height: 1;
-        }
-
-        .menu-add{
-            height: 320px;
-            margin-left: calc((200px - 160px)/2);
-            margin-right: calc((200px - 160px)/2);
-        }
-
-        .twitter-icon, .facebook-icon{
-            font-size: 30px;
-        }
-
-        .twitter-icon, .twitter-icon:hover{
-            color:#4198fb;
-        }
-
-        .facebook-icon, .facebook-icon:hover{
-            color:#6d8bc9;
-        }
+  @media screen and (max-height: 340px){
+    .menu-socials{
+      display:none!important;
     }
-
-    // @media screen and (max-height: 645px){
-    //     .menu-add{
-    //         display:none!important;
-    //     }
-    // }
-
-    @media screen and (max-height: 340px){
-        .menu-socials{
-            display:none!important;
-        }
-    }
+  }
 
 </style>
