@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="section has-background-light">
 
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="columns">

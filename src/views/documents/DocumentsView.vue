@@ -12,13 +12,12 @@
             </div>
             <div class="dropdown-menu" role="menu">
               <div class="dropdown-content">
-                <div v-for="type of otherDocumentTypes" :key="type" class="dropdown-item">
+                <div v-for="type of otherDocumentTypes" :key="type" class="dropdown-item is-size-6">
                   <router-link
                     :to="{name: type + 's', query:$route.query}"
-                    class="has-text-dark">
+                    class="has-text-normal">
                     <icon-document :document-type="type" />
-                    &nbsp;
-                    {{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}
+                    <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
                   </router-link>
                 </div>
               </div>

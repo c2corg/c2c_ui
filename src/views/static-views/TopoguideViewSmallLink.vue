@@ -18,27 +18,27 @@
 </script>
 
 <style scoped lang="scss">
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    a{
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
-        display: block;
-        height:100px;
-        padding:5px;
-        background-color: rgba(256,256,256,0.85);
-        transition: box-shadow 300ms background-color 300ms;
-        color:$primary;
+  a{
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
+    display: block;
+    height:100px;
+    padding:5px;
+    background-color: rgba(256,256,256,0.85);
+    transition: box-shadow 300ms background-color 300ms;
+    color:$text;
 
-        // child positions
-        display:flex;
-        flex-direction: column;
-        text-align:center;
-        justify-content:center;
-    }
+    // child positions
+    display:flex;
+    flex-direction: column;
+    text-align:center;
+    justify-content:center;
+  }
 
-    a:hover{
-        box-shadow: 2px 3px 4px 0 rgba(0,0,0,.14);
-        background-color: rgba(256,256,256,0.95);
-        color:$primary;
-    }
+  a:hover{
+    box-shadow: 2px 3px 4px 0 rgba(0,0,0,.14);
+    background-color: rgba(256,256,256,0.95);
+    color:$text;
+  }
 </style>

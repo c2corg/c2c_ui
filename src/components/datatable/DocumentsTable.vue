@@ -73,10 +73,10 @@
 
       if (this.documentType === 'article') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 150 }),
-          getColDef(this, fields.categories),
-          getColDef(this, fields.article_type),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, width: 300 }),
+          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 300 }),
+          getColDef(this, fields.categories, { width: 120 }),
+          getColDef(this, fields.article_type, { width: 120 }),
           { cellRendererFramework: MarkerQuality, width: 30 }
         ];
       }

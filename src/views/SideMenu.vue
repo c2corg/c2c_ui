@@ -81,7 +81,8 @@
   @import '@/assets/sass/variables.scss';
 
   aside{
-    box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+    border-right: 1px solid $secondary;
+    // box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
     background: $white;
   }
 

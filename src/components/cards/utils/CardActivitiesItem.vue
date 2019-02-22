@@ -1,5 +1,5 @@
 <template>
-  <activities :activities="activities" class="card-icon is-size-4 is-ellipsed"/>
+  <activities :activities="activities" class="card-icon is-size-2 is-ellipsed icon-activities"/>
 </template>
 
 <script>
@@ -12,3 +12,9 @@
     }
   };
 </script>
+
+<style lang="scss">
+  .icon-activities{
+    line-height: 1;
+  }
+</style>

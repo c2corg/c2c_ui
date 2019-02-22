@@ -22,13 +22,13 @@
 
 <style scoped>
 
+/*
 .label-value span{
-    /*
     // TODO : icon activities is bigger. vertical align, and be careful to other items
     // vertical-align: middle;
     // display: inline-block;
-    */
 }
+*/
 
 .label-value-label:after{
     content:" :\00a0"; /* \00a0 is nbsp */
