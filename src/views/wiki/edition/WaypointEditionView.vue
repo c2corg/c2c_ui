@@ -9,7 +9,7 @@
 
     <form-section
       :title="$gettext('general informations')"
-      sub-title="Waypoint's main properties">
+      :sub-title="$gettext('Waypoint\'s main properties')">
       <div class="columns">
         <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
         <form-field :document="document" :field="fields.title" />
@@ -33,7 +33,9 @@
 
     </form-section>
 
-    <form-section :title="$gettext('Transport & road or PT access')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('Transport & road or PT access')"
+      :sub-title="$gettext('Informations about the access')">
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.snow_clearance_rating" />
         <form-field class="is-4" :document="document" :field="fields.lift_access" />
@@ -43,7 +45,9 @@
       </div>
     </form-section>
 
-    <form-section :title="$gettext('Types and styles')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('Types and styles')"
+      :sub-title="$gettext('...')">
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.climbing_outdoor_types" />
         <form-field class="is-12" :document="document" :field="fields.climbing_indoor_types" />
@@ -64,7 +68,9 @@
 
     </form-section>
 
-    <form-section :title="$gettext('Numbers')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('Numbers')"
+      :sub-title="$gettext('Misc data about the waypoint')">
       <div class="columns">
         <form-field :document="document" :field="fields.length" />
         <form-field :document="document" :field="fields.slope" />
@@ -97,7 +103,9 @@
       </div>
     </form-section>
 
-    <form-section :title="$gettext('ratings')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('ratings')"
+      :sub-title="$gettext('Associated routes cotations')">
 
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.exposition_rating" />
@@ -112,7 +120,9 @@
       </div>
     </form-section>
 
-    <form-section :title="$gettext('Description')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('Description')"
+      :sub-title="$gettext('Waypoint\'s textual description')">
 
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')"/>
@@ -133,7 +143,9 @@
       </div>
     </form-section>
 
-    <form-section :title="$gettext('associations')" @save="save" :is-loading="!!promise.loading">
+    <form-section
+      :title="$gettext('associations')"
+      :sub-title="$gettext('You may add associated waypoints, books and articles')">
       <associations-input-row :document="document" :field="fields.articles" />
       <associations-input-row :document="document" :field="fields.waypoints" />
       <associations-input-row :document="document" :field="fields.books" />

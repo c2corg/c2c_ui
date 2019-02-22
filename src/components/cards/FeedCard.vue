@@ -149,49 +149,50 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    .feed-card{
-        background-color:#FFF!important;
-        transition:0.2s;
-        max-width:600px
-    }
+  .feed-card{
+    background-color:#FFF!important;
+    border: $card-border;
+    transition:0.2s;
+    max-width:600px
+  }
 
-    .feed-card:hover{
-        background-color:$hover-background!important;
-        transition:0.2s;
-    }
+  .feed-card:hover{
+    background-color:$hover-background!important;
+    transition:0.2s;
+  }
 
-    .card-image-content{
-        display:flex;
-        overflow: hidden;
-    }
+  .card-image-content{
+    display:flex;
+    overflow: hidden;
+  }
 
-    .avatar{
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        vertical-align: bottom;
-        margin-right: 0.5rem;
-    }
+  .avatar{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    vertical-align: bottom;
+    margin-right: 0.5rem;
+  }
 
-    .has-3-images > div{
-        width:33.33%;
-        max-height: 275px;
-        overflow: hidden;
-    }
+  .has-3-images > div{
+    width:33.33%;
+    max-height: 275px;
+    overflow: hidden;
+  }
 
-    .has-2-images > div{
-        width:50%;
-    }
+  .has-2-images > div{
+    width:50%;
+  }
 
-    .has-2-images > div{
-        width:100%;
-    }
+  .has-2-images > div{
+    width:100%;
+  }
 
-    .card-image-content > div > img{
-        width:100%;
-        box-sizing: border-box;
-    }
+  .card-image-content > div > img{
+    width:100%;
+    box-sizing: border-box;
+  }
 
 </style>

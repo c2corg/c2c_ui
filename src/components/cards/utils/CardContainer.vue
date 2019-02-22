@@ -25,16 +25,16 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-.card{
+  .card{
     transition:0.1s;
-}
+  }
 
-.card:hover, .is-highlighted{
+  .card:hover, .is-highlighted{
     transition:0.2s;
-    box-shadow:1px 3px 4px rgba(10, 10, 10, 0.12), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    box-shadow: $card-hover-shadow;
     background: $hover-background;
-}
+  }
 
 </style>

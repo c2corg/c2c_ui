@@ -66,6 +66,7 @@
 
   .card-container{
     position:relative;
+    border: $card-border;
     border-left:2px solid $color-base-c2c;
   }
 

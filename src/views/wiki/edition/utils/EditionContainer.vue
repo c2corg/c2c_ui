@@ -15,11 +15,13 @@
 
         <button class="button is-size-6 is-pulled-right" @click="isPreview=!isPreview">
           <span v-show="isPreview">
-            <fa-icon icon="edit" />&nbsp;
+            <fa-icon icon="edit" />
+            <span>&nbsp;</span>
             <span v-translate>Back to edit mode</span>
           </span>
           <span v-show="!isPreview">
-            <fa-icon icon="eye" />&nbsp;
+            <fa-icon icon="eye" />
+            <span>&nbsp;</span>
             <span v-translate>Preview</span>
           </span>
         </button>
@@ -42,7 +44,7 @@
         ...
       </slot>
 
-      <save-document-row @save="$emit('save', arguments[0])" :is-loading="isLoading"/>
+      <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview=true" :is-loading="isLoading"/>
       <quality-input-row v-if="!['map', 'profile'].includes(documentType)" :document="document" />
     </div>
   </div>

@@ -64,7 +64,7 @@
         </div>
         <div class="level-item is-size-3 is-hidden-tablet">
           <fa-icon
-            :icon="showMap ? 'map-marked-alt' : 'th'"
+            :icon="showMap ? 'th' : 'map-marked-alt'"
             class="has-text-primary"
             @click="toogleProperty('showMap')"/>
         </div>
