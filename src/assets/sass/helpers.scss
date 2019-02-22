@@ -19,3 +19,20 @@
 .has-cursor-pointer{
     cursor:pointer;
 }
+
+.card-icon {
+    color: $text;
+}
+
+.has-text-secondary {
+    color: $secondary;
+}
+
+.has-background-secondary {
+    background-color: $secondary;
+}
+
+.has-text-normal {
+    color: $text;
+}
+

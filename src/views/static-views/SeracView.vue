@@ -1,6 +1,6 @@
 <template>
   <div class="serac-view">
-    <html-header title="incidents and accidents"/>
+    <html-header :title="$gettext('Incidents and accidents')"/>
     <div class="serac-view-content">
       <div class="columns is-multiline">
         <div class="column is-12">
@@ -85,7 +85,7 @@
                 :key="activity"
                 :to="{name:'xreports', query:{act:activity}}">
                 <span class="is-size-1"><icon-activity :activity="activity" /></span>
-                <span class="has-text-weight-semibold has-text-black">
+                <span class="has-text-weight-semibold ">
                   {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
                 </span>
               </topoguide-view-small-link>

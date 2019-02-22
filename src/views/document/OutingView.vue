@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="section has-background-light">
     <document-view-header :document="document" :version="version" :promise="promise" />
 
     <images-box v-if="document" :document="document"/>
@@ -14,6 +14,11 @@
       <div class="column is-9">
 
         <div class="box">
+
+          <div v-for="route of document.associations.routes" :key="route.document_id">
+            <pretty-route-link :route="route" hide-area hide-orientation/>
+          </div>
+
           <div>
             <!-- API anti-pattern :
                 associations.users should have been called associations.profiles
@@ -24,15 +29,11 @@
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>
 
-          <div v-for="route of document.associations.routes" :key="route.document_id">
-            <pretty-route-link :route="route" hide-area hide-orientation/>
-          </div>
-
           <div class="columns">
 
             <div class="column is-4">
               <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+                <activities :activities="document.activities" class="is-size-3"/>
               </label-value>
 
               <field-view :document="document" :field="fields.frequentation"/>

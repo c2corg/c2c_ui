@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class=" markdown-editor-content">
+    <div class="markdown-editor-content">
       <textarea
         ref="textarea"
         class="textarea"
@@ -362,72 +362,72 @@
 </script>
 
 <style scoped lang="scss">
-    .markdown-editor{
-        border:1px solid lightgrey;
-        box-shadow: none;
-        transition: 300ms;
-        border-radius: 3px;
-        background: white;
+  .markdown-editor{
+    border:1px solid lightgrey;
+    box-shadow: none;
+    transition: 300ms;
+    border-radius: 3px;
+    background: white;
 
-        .button-bar{
-            padding:0.5rem;
-            background: #EEE;
-            margin-bottom: 0;
-            padding-bottom:0;
-        }
-
-        .button-bar{
-            border-bottom: 1px dashed lightgrey;
-        }
-
-        .buttons{
-            margin:0
-        }
-
-        .markdown-editor-content{
-            position: relative;
-        }
-
-        textarea, textarea:focus{
-            font-family: monospace;
-            padding:0;
-            border:0;
-            box-shadow: none;
-            min-height:200px;
-            padding:0.5rem;
-        }
-
-        .preview, .preview-error{
-            padding:0.5rem;
-            position:absolute;
-            top:0;
-            left:0;
-            height:100%;
-            width: 100%;
-            background: #ffffe0;
-            overflow-y: auto;
-        }
+    .button-bar{
+      padding:0.5rem;
+      background: #EEE;
+      margin-bottom: 0;
+      padding-bottom:0;
     }
 
-    .is-active{
-        border: 1px solid #66afe9;
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
-        transition: 300ms;
+    .button-bar{
+      border-bottom: 1px dashed lightgrey;
     }
 
-    .fullScreen{
-        position:fixed;
-        top:0;
-        left:0;
-        z-index:999;
-        width:100%;
-        height:100%;
-
-        .markdown-editor-content, textarea{
-            height:100%;
-            resize: None;
-            max-height:None;
-        }
+    .buttons{
+      margin:0
     }
+
+    .markdown-editor-content{
+      position: relative;
+    }
+
+    textarea, textarea:focus{
+      font-family: monospace;
+      padding:0;
+      border:0;
+      box-shadow: none;
+      min-height:100px;
+      padding:0.5rem;
+    }
+
+    .preview, .preview-error{
+      padding:0.5rem;
+      position:absolute;
+      top:0;
+      left:0;
+      height:100%;
+      width: 100%;
+      background: #ffffe0;
+      overflow-y: auto;
+    }
+  }
+
+  .is-active{
+    border: 1px solid #66afe9;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    transition: 300ms;
+  }
+
+  .fullScreen{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:999;
+    width:100%;
+    height:100%;
+
+    .markdown-editor-content, textarea{
+      height:100%;
+      resize: None;
+      max-height:None;
+    }
+  }
 
 </style>

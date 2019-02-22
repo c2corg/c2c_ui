@@ -16,7 +16,7 @@
     </div>
     <div class="section columns is-multiline is-variable is-8">
       <div class="column is-6">
-        <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
           {{ $gettext('outings') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -25,8 +25,8 @@
             v-for="activity of activities"
             :key="activity"
             :to="{name:'outings', query:{act:activity}}">
-            <span class="is-size-2"><icon-activity :activity="activity" /></span>
-            <span class="has-text-dark has-text-weight-semibold">
+            <span class="is-size-1"><icon-activity :activity="activity" /></span>
+            <span class="has-text-weight-semibold">
               {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
             </span>
           </topoguide-view-small-link>
@@ -34,7 +34,7 @@
           <topoguide-view-small-link
             class="column is-3"
             :to="{name:'outing-add'}">
-            <span class="is-size-2 has-text-success"><fa-icon icon="plus" /></span>
+            <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New outing
             </span>
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="column is-6">
-        <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
           {{ $gettext('routes') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -51,8 +51,8 @@
             v-for="activity of activities"
             :key="activity"
             :to="{name:'routes', query:{act:activity}}">
-            <span class="is-size-2"><icon-activity :activity="activity" /></span>
-            <span class="has-text-dark has-text-weight-semibold">
+            <span class="is-size-1"><icon-activity :activity="activity" /></span>
+            <span class="has-text-weight-semibold">
               {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
             </span>
           </topoguide-view-small-link>
@@ -60,7 +60,7 @@
           <topoguide-view-small-link
             class="column is-3"
             :to="{name:'route-add'}">
-            <span class="has-text-success is-size-2"><fa-icon icon="plus" /></span>
+            <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New route
             </span>
@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="column is-12">
-        <h2 class="title is-2 has-text-centered has-background-primary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
           {{ $gettext('waypoints') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -77,8 +77,8 @@
             v-for="waypoint_type of waypoint_types"
             :key="waypoint_type"
             :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
-            <span class="is-size-2"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
-            <span class="has-text-dark has-text-weight-semibold">
+            <span class="is-size-1"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
+            <span class="has-text-weight-semibold">
               {{ $gettext(waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}
             </span>
           </topoguide-view-small-link>
@@ -86,7 +86,7 @@
           <topoguide-view-small-link
             class="column is-2"
             :to="{name:'waypoint-add'}">
-            <span class="has-text-success is-size-2"><fa-icon icon="plus" /></span>
+            <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New waypoint
             </span>
@@ -122,25 +122,26 @@
 </script>
 
 <style scoped lang="scss">
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    .topoguide{
-        background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
-        background-size:cover;
-        padding-top:10px;
-        padding-bottom:100px;
-        justify-content:center;
+  .topoguide{
+    background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
+    background-size:cover;
+    padding-top:90px; //keep the header on a deep color zone
+    padding-bottom:25px;
+    justify-content:center;
 
-        h1{
-            font-size:3rem;
-            color:$light;
-        }
-
-        .links{
-            justify-content:center;
-            flex-flow:wrap row;
-            max-width:550px;
-            margin:auto;
-        }
+    h1{
+      font-size:3rem;
+      color:$light;
+      margin-bottom: 25px;;
     }
+
+    .links{
+      justify-content:center;
+      flex-flow:wrap row;
+      max-width:550px;
+      margin:auto;
+    }
+  }
 </style>

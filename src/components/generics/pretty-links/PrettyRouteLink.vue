@@ -1,23 +1,26 @@
 <template>
   <document-link :document="route" class="pretty-route-link has-hover-background">
-    <activities v-if="!hideActivities" :activities="route.activities" class="is-size-4 has-text-dark"/>
+    <activities
+      v-if="!hideActivities"
+      :activities="route.activities"
+      class="is-size-3 has-text-normal icon-activities"/>
     <span>&nbsp;</span>
     <document-title :document="route"/>,
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
       :title="$gettext('height_diff_difficulties')"
-      class="has-text-dark">
+      class="has-text-normal">
       {{ route.height_diff_difficulties }}&nbsp;m,
     </span>
     <span
       v-if="route.orientations && !hideOrientation"
       :title="$gettext('orientations')"
-      class="has-text-dark">
+      class="has-text-normal">
       {{ route.orientations.join(', ') }},
     </span>
-    <route-rating :document="route" class="has-text-dark"/>
-    <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-dark"/>
-    <span v-if="!hideArea" class="has-text-dark">
+    <route-rating :document="route" class="has-text-normal"/>
+    <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-normal"/>
+    <span v-if="!hideArea" class="has-text-normal">
       <em v-for="area in rangeAreas" :key="area.document_id">
         &hairsp;&bull;&hairsp;
         <small>
@@ -64,8 +67,12 @@
 
 <style scoped lang="scss">
 
-    .pretty-route-link{
-        display:block
-    }
+  .pretty-route-link{
+    display:block
+  }
+
+  .icon-activities{
+    line-height: 1;
+  }
 
 </style>

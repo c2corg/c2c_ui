@@ -131,13 +131,13 @@
 </script>
 
 <style scoped lang="scss">
-    .preview{
-        background: #ffffe0;
-    }
+  .preview{
+    background: #ffffe0;
+  }
 
-    .has-edition-width{
-        margin:auto;
-        width: 100%;
-        max-width: 840px;
-    }
+  .has-edition-width{
+    margin:auto;
+    width: 100%;
+    max-width: 1000px;
+  }
 </style>
