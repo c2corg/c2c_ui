@@ -14,17 +14,6 @@
       </p>
     </div>
 
-    <div
-      v-else-if="locale.topic_id === null || comments.length === 0"
-      class="has-text-centered">
-      <login-button v-if="!$user.isLogged" v-translate>
-        Log in to post the first comment
-      </login-button>
-      <button v-else class="button is-primary" @click="createTopic" v-translate>
-        Post the first comment
-      </button>
-    </div>
-
     <div v-else>
       <div v-for="post of comments" :key="post.id" class="discourse-post">
         <div class="columns is-gapless">
@@ -55,8 +44,15 @@
         <login-button v-if="!$user.isLogged" v-translate>
           Log in to post a comment
         </login-button>
-        <a v-else :href="discussionUrl" class="button is-primary" v-translate>
-          Continue the discussion
+        <button v-else-if="locale.topic_id === null" class="button is-primary" @click="createTopic" v-translate>
+          Post the first comment
+        </button>
+        <!-- Only the system comment exists -->
+        <a v-else-if="comments.length === 0" :href="discussionUrl" class="button is-primary" v-translate>
+          Post the first comment
+        </a>
+        <a v-else :href="discussionUrl" class="button is-primary">
+          <span v-translate>Continue the discussion</span>
         </a>
       </div>
     </div>
