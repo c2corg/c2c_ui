@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <side-menu class="side-menu" :class="{'alternative-side-menu': alternativeSideMenu}"/>
-    <navigation class="navigation" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
-    <site-notice ref="siteNotice" v-if="$route.name!='home'" class="no-print site-notice"/>
+    <side-menu class="side-menu no-print" :class="{'alternative-side-menu': alternativeSideMenu}"/>
+    <navigation class="navigation no-print" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
+    <site-notice ref="siteNotice no-print" v-if="$route.name!='home'" class="no-print site-notice"/>
     <image-viewer ref="imageViewer"/>
     <helper-window ref="helper"/>
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
@@ -184,8 +184,8 @@
 
     @media print {
         /* print styles go here */
-        .no-print {
-            display: none;
+        .page-content{
+            padding-top: 0;
         }
     }
 

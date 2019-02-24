@@ -36,3 +36,24 @@
     color: $text;
 }
 
+
+@media print {
+    /* print styles go here */
+    .no-print {
+        display: none!important;
+    }
+
+    .has-background-white-print {
+        background-color: white!important;
+    }
+
+    .box {
+        padding: 0;
+        box-shadow: none;
+        border-bottom: 1px solid lightGrey;
+    }
+
+    .is-12-print{
+        width: 100%!important;
+    }
+}

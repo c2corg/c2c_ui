@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box no-print">
 
     <div v-if="document.areas && document.areas.length" class="has-text-centered">
 

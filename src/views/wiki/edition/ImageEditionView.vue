@@ -12,7 +12,8 @@
         <form-field :document="document" :field="fields.title"/>
         <form-field class="is-narrow" :document="document" :field="fields.image_type" />
         <form-field class="is-12" :document="document" :field="fields.activities" />
-        <form-field class="is-12" :document="document" :field="fields.date_time" />
+        <form-field class="is-4" :document="document" :field="fields.author" />
+        <form-field class="is-8" :document="document" :field="fields.date_time" />
         <form-field class="is-12" :document="document" :field="fields.categories" />
 
         <!--<form-field :document="document" :field="fields.author" />-->

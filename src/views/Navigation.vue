@@ -1,5 +1,5 @@
 <template>
-  <nav class="no-print is-size-5" :class="{'has-background-warning':siteConfiguration.urls.name != 'prod'}">
+  <nav class="is-size-5" :class="{'has-background-warning':siteConfiguration.urls.name != 'prod'}">
 
     <span
       class="navigation-item is-hidden-desktop"

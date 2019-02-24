@@ -1,5 +1,5 @@
 <template>
-  <div class="section has-background-light">
+  <div class="section has-background-light has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
 
     <div v-if="document && document.not_authorized" v-translate class="notification is-danger">

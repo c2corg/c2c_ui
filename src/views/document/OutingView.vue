@@ -1,17 +1,17 @@
 <template>
-  <div class="section has-background-light">
+  <div class="section has-background-light has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
 
     <images-box v-if="document" :document="document"/>
 
     <div v-if="document" class="columns is-multiline">
 
-      <div class="column is-3">
+      <div class="column is-3 no-print">
         <map-box :document="document"/>
         <tool-box :document="document"/>
       </div>
 
-      <div class="column is-9">
+      <div class="column is-9 is-12-print">
 
         <div class="box">
 
