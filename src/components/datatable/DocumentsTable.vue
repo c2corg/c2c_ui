@@ -2,7 +2,6 @@
   <ag-grid-vue style="width: 100%; "
                class="ag-theme-balham"
                :column-defs="columnDefs"
-               enable-col-resize
                suppress-property-names-check
                :row-data="documents.documents"/>
 </template>
@@ -35,7 +34,8 @@
       headerName: vm.$gettext(field.name),
       field: field.name,
       _fieldDefinition: field,
-      cellRendererFramework: options.cellRendererFramework || DocumentField
+      cellRendererFramework: options.cellRendererFramework || DocumentField,
+      resizable: true
     };
 
     return Object.assign(result, options);
