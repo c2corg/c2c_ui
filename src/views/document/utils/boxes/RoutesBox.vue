@@ -1,5 +1,5 @@
 <template>
-  <div class="box" v-if="source.length !=0 || !hideButtons">
+  <div class="box no-print" v-if="source.length !=0 || !hideButtons">
     <h2 class="title is-2">
       <span>{{ $gettext('Associated routes') }}</span>
       <add-link

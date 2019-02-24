@@ -1,5 +1,4 @@
 @import './variables.scss';
-@import './helpers.scss';
 @import './scrollbar.scss';
 
 @import "~bulma/sass/utilities/_all.sass";
@@ -29,3 +28,5 @@
 @import "~bulma/sass/layout/section.sass";
 
 @import '~bulma-checkradio';
+
+@import './helpers.scss';

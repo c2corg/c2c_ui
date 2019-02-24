@@ -1,5 +1,5 @@
 <template>
-  <aside class="no-print">
+  <aside>
     <router-link
       v-for="item of menuItems"
       :key="item.name"
