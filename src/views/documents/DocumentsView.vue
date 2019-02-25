@@ -9,6 +9,7 @@
               <span class="title is-1">
                 {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
               </span>
+              <fa-icon icon="angle-down" aria-hidden="true"/>
             </div>
             <div class="dropdown-menu" role="menu">
               <div class="dropdown-content">

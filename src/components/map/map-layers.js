@@ -4,7 +4,6 @@ import ol from '@/js/libs/ol.js';
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
   return new ol.layer.Tile({
     title,
-    maxZoom: 19,
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
@@ -54,7 +53,6 @@ function createIgnSource(title, layer, format = 'jpeg') {
   return new ol.layer.Tile({
     title,
     type: 'base',
-    maxZoom: 19,
     visible: false,
     source
   });
@@ -62,7 +60,6 @@ function createIgnSource(title, layer, format = 'jpeg') {
 
 const esri = new ol.layer.Tile({
   title: 'Esri',
-  maxZoom: 19,
   type: 'base',
   visible: true,
   source: new ol.source.XYZ({
@@ -74,7 +71,8 @@ const esri = new ol.layer.Tile({
     attributions: [
       '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
         ' target="_blank">Esri</a>'
-    ]
+    ],
+    maxZoom: 19
   })
 });
 
@@ -87,7 +85,6 @@ var openStreetMap = new ol.layer.Tile({
 
 const bingMap = new ol.layer.Tile({
   title: 'Bing',
-  maxZoom: 19,
   source: new ol.source.BingMaps({
     key: config.bingApiKey,
     imagerySet: 'AerialWithLabels'
@@ -98,13 +95,13 @@ const bingMap = new ol.layer.Tile({
 const openTopoMap = new ol.layer.Tile({
   title: 'OpenTopoMap',
   type: 'base',
-  maxZoom: 14,
   visible: false,
   source: new ol.source.XYZ({
     url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attributions:
       '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
-      '© <a href="//opentopomap.org" target="_blank">OpenTopoMap</a>'
+      '© <a href="//opentopomap.org" target="_blank">OpenTopoMap</a>',
+    maxZoom: 17
   })
 });
 

@@ -133,6 +133,7 @@
 
   const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
   const DEFAULT_POINT_ZOOM = 12;
+  const MAX_ZOOM = 19;
 
   const biodivSportsService = new BiodivSportsService();
   const respecterCestProtegerService = new RespecterCestProtegerService();
@@ -283,7 +284,6 @@
         set(layer) {
           this.visibleLayer.setVisible(false);
           layer.setVisible(true);
-          this.setMaxZoom();
         }
       }
     },
@@ -347,7 +347,7 @@
         ],
 
         view: new ol.View({
-          maxZoom: this.visibleLayer.get('maxZoom')
+          maxZoom: MAX_ZOOM
         }),
 
         loadTilesWhileAnimating: true,
@@ -577,16 +577,6 @@
         source.addFeature(feature);
 
         return feature;
-      },
-
-      setMaxZoom() {
-        const maxZoom = this.visibleLayer.get('maxZoom');
-
-        if (this.view.getZoom() > maxZoom) {
-          this.view.setZoom(maxZoom);
-        }
-
-        this.view.set('maxZoom', maxZoom);
       },
 
       addBiodivSportsData(response) {
