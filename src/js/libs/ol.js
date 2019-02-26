@@ -4,11 +4,13 @@ import { Control, FullScreen, ScaleLine, Zoom, Attribution } from 'ol/control';
 
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
+import ImageLayer from 'ol/layer/Image';
 
 import VectorSource from 'ol/source/Vector';
 import BingMaps from 'ol/source/BingMaps';
 import XYZ from 'ol/source/XYZ';
 import WMTS from 'ol/source/WMTS';
+import ImageStatic from 'ol/source/ImageStatic';
 
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
@@ -87,7 +89,8 @@ export default {
 
   layer: {
     Vector: VectorLayer,
-    Tile: TileLayer
+    Tile: TileLayer,
+    Image: ImageLayer
   },
 
   proj: {
@@ -101,7 +104,8 @@ export default {
     Vector: VectorSource,
     BingMaps,
     XYZ,
-    WMTS
+    WMTS,
+    ImageStatic
   },
 
   style: {

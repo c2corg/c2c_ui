@@ -358,6 +358,8 @@
         // keyboardEventTarget: this.keyboardEventTarget,
       });
 
+      this.view.on('change:resolution', this.onChangeResolution);
+
       this.map.on('moveend', this.sendBoundsToUrl);
       this.map.on('moveend', this.getBiodivSportsAreas);
       if (this.protectionAreasVisible) {
@@ -655,6 +657,25 @@
 
       toogleMapLayer(layer) {
         layer.setVisible(!layer.getVisible());
+      },
+
+      getExtent(projection) {
+        let extent = this.view.calculateExtent(this.map.getSize() || null);
+
+        if (projection) {
+          extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get(projection));
+        }
+
+        return extent;
+      },
+
+      onChangeResolution(event) {
+        const zoom = event.target.getZoom();
+
+        // we do not fire event for intermediate zoom
+        if (zoom === parseInt(zoom, 10)) {
+          this.$emit('zoom', zoom);
+        }
       },
 
       onPointerMove(event) {

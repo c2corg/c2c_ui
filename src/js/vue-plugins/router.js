@@ -11,6 +11,7 @@ import NotFoundView from '@/views/static-views/NotFoundView';
 
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
+import YetiView from '@/views/portals/YetiView';
 
 import LoginView from '@/views/user/LoginView';
 import AccountView from '@/views/user/AccountView';
@@ -60,6 +61,7 @@ const routes = [
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
   { path: '/mailinglists', name: 'mailinglists', component: MailingListsView },
+  { path: '/yeti', name: 'yeti', component: YetiView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
