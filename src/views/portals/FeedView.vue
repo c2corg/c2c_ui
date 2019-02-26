@@ -4,7 +4,7 @@
     <home-banner v-if="!$user.isLogged"/>
     <div class="section">
       <div class="columns">
-        <div class="column is-7">
+        <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
           <h3 class="title is-3">
             <span v-translate>Activity feed</span>
             <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">

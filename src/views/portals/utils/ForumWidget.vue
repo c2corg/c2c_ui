@@ -4,14 +4,13 @@
     <div v-if="topics" >
       <a
         class="forum-row"
-        v-for="topic of topics.topics.slice(0, messageCount<0 ? 9999 : messageCount)"
+        v-for="topic of topics"
         :key="topic.id"
-        v-if="topic.category_id !== 29"
-        :href="$options.forumUrl + '/t/' + topic.slug + '/' + topic.id + '/' + topic.highest_post_number"
+        :href="getTopicUrl(topic)"
         target="_blank"
         :title="topic.last_poster_username">
         <img
-          :src="$options.forumUrl + topic.last_poster_user.avatar_template.replace('{size}',imgSize)"
+          :src="getAvatarUrl(topic.last_poster_user)"
           :style="'width:' + imgSize + 'px'">
         <span>
           {{ topic.title }}
@@ -23,6 +22,8 @@
 
 <script>
   import forum from '@/js/apis/forum.js';
+
+  const DOCUMENT_COMMENT_CATEGORY_ID = 29;
 
   export default {
 
@@ -43,11 +44,21 @@
       };
     },
 
-    forumUrl: forum.url,
-
     computed: {
       topics() {
-        return this.promise.data ? this.promise.data.topic_list : null;
+        if (!this.promise.data) {
+          return null;
+        }
+
+        let topics = this.promise.data.topic_list.topics;
+
+        topics = topics.filter((topic) => topic.category_id !== DOCUMENT_COMMENT_CATEGORY_ID);
+
+        if (this.messageCount >= 0) {
+          topics = topics.slice(0, this.messageCount);
+        }
+
+        return topics;
       },
       imgSize() {
         return this.wide ? 24 : 20;
@@ -56,44 +67,54 @@
 
     created() {
       this.promise = forum.getLatest();
+    },
+
+    methods: {
+      getAvatarUrl(user) {
+        const template = user.avatar_template.startsWith('/') ? forum.url + user.avatar_template : user.avatar_template;
+        return template.replace('{size}', this.imgSize);
+      },
+
+      getTopicUrl(topic) {
+        return `${forum.url}/t/${topic.slug}/${topic.id}/${topic.highest_post_number}`;
+      }
     }
   };
 </script>
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
+
+  .forum-row{
+    display:block;
+    color:$text;
+    padding-bottom:0.2rem;
+
+    img {
+      border-radius: 50%;
+      vertical-align: bottom;
+    }
+
+    span{
+      vertical-align: top
+    }
+  }
+
+  .forum-row:hover{
+    background: $hover-background;
+  }
+
+  .wide{
 
     .forum-row{
-        display:block;
-        color:$text;
-        padding-bottom:0.2rem;
+      padding:1rem;
+      border-bottom: 1px solid #EEE;
+      font-weight:bold;
 
-        img {
-            border-radius: 50%;
-            vertical-align: bottom;
-        }
-
-        span{
-            vertical-align: top
-        }
-
+      img {
+        margin-right: 0.5rem;
+      }
     }
-
-    .forum-row:hover{
-        background: $hover-background;
-    }
-
-    .wide{
-
-        .forum-row{
-            padding:1rem;
-            border-bottom: 1px solid #EEE;
-            font-weight:bold;
-
-            img {
-                margin-right: 0.5rem;
-            }
-        }
-    }
+  }
 </style>

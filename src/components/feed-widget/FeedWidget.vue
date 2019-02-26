@@ -1,12 +1,13 @@
 <template>
-
-  <div>
-    <feed-card
-      v-for="(item, index) of feed"
-      :key="index"
-      :item="item"
-      class="feed-card"/>
-    <loading-notification :promise="promise" />
+  <div class="columns">
+    <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
+      <feed-card
+        v-for="(item, index) of column.items"
+        :key="index"
+        :item="item"
+        class="feed-card"/>
+    </div>
+    <!-- <loading-notification :promise="promise" /> -->
   </div>
 
 </template>
@@ -32,36 +33,77 @@
     data() {
       return {
         promise: null,
-        feed: null,
+        feed: [],
         paginationToken: null,
-        endOfFeed: false
+        endOfFeed: false,
+        columns: null,
+        cssColumnsClass: null
       };
     },
 
     watch: {
       '$route': 'initialize',
-
-      type: {
-        handler: 'initialize',
-        immediate: true
-      }
+      'type': 'initialize'
     },
 
     mounted() {
       window.addEventListener('scroll', this.onScroll);
+      window.addEventListener('resize', this.initializeColumns);
+      this.initialize();
     },
 
     beforeDestroy() {
       window.removeEventListener('scroll', this.onScroll);
+      window.removeEventListener('resize', this.initializeColumns);
     },
 
     methods: {
       initialize() {
         this.paginationToken = undefined;
-        this.feed = [];
         this.endOfFeed = false;
+        this.feed = [];
+
+        this.initializeColumns();
 
         this.load();
+      },
+
+      initializeColumns() {
+        const availableWidth = this.$el.clientWidth;
+        const cardLargestWidth = 400;
+
+        let columnCount;
+
+        if (availableWidth < 2 * cardLargestWidth) {
+          this.cssColumnsClass = 'is-full';
+          columnCount = 1;
+        } else if (availableWidth < 3 * cardLargestWidth) {
+          this.cssColumnsClass = 'is-half';
+          columnCount = 2;
+        } else if (availableWidth < 4 * cardLargestWidth) {
+          this.cssColumnsClass = 'is-one-third';
+          columnCount = 3;
+        } else if (availableWidth < 5 * cardLargestWidth) {
+          this.cssColumnsClass = 'is-one-quarter';
+          columnCount = 4;
+        } else if (availableWidth < 6 * cardLargestWidth) {
+          this.cssColumnsClass = 'is-two-fifths';
+          columnCount = 5;
+        } else {
+          this.cssColumnsClass = 'is-2';
+          columnCount = 6;
+        }
+
+        this.columns = [];
+
+        for (let i = 0; i < columnCount; i++) {
+          this.columns.push({
+            items: [],
+            height: 0
+          });
+        }
+
+        this.dispatchToColumns(this.feed);
       },
 
       load() {
@@ -96,6 +138,8 @@
         }
 
         this.endOfFeed = response.data.feed.length === 0;
+
+        this.dispatchToColumns(response.data.feed);
       },
 
       onScroll() {
@@ -103,6 +147,38 @@
         if (document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight) {
           this.load();
         }
+      },
+
+      dispatchToColumns(items) {
+        let destColumn = this.columns[0];
+
+        for (const item of items) {
+          for (const column of this.columns) {
+            if (column.height < destColumn.height) {
+              destColumn = column;
+            }
+          }
+
+          destColumn.items.push(item);
+          destColumn.height += this.estimateSize(item);
+        }
+      },
+
+      estimateSize(item) {
+        let size = 225;
+        if (item.document.locales[0].summary !== null) {
+          size += 22;
+        }
+        if (document.elevation_max !== null || document.height_diff_up !== null || document.height_diff_difficulties !== null) {
+          size += 51;
+        }
+        if (item.image1 !== null) {
+          size += 275;
+        }
+        if (item.image2 !== null) {
+          size += 100;
+        }
+        return size;
       }
     }
   };
@@ -111,9 +187,8 @@
 
 <style scoped lang="scss">
 
-    .feed-card{
-        margin:auto;
-        margin-bottom: 2rem;
-    }
+  .feed-card{
+      margin-bottom: 1.5rem;
+  }
 
 </style>
