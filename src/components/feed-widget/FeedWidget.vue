@@ -144,7 +144,8 @@
 
       onScroll() {
         // bottomOfWindow ?
-        if (document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight) {
+        const el = document.scrollingElement || document.documentElement;
+        if (el.scrollTop + window.innerHeight === el.offsetHeight) {
           this.load();
         }
       },

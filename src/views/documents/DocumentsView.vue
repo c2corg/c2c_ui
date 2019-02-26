@@ -92,8 +92,8 @@
             v-for="(document, index) in documents.documents"
             :key="index"
             :class="{
-              'is-half':displayMap,
-              'is-one-third':!displayMap,
+              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-one-third-fullhd':displayMap,
+              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd':!displayMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"

@@ -35,7 +35,7 @@
           <slot name="icon-document">
             <icon-document :document-type="documentType"/>
           </slot>
-          <span>&#8239;</span>
+          <span>&thinsp;</span>
           <document-title :document="document" uppercase-first-letter/>
 
           <!-- outing specific  -->
