@@ -44,7 +44,14 @@
         <login-button v-if="!$user.isLogged" v-translate>
           Log in to post a comment
         </login-button>
-        <button v-else-if="locale.topic_id === null" class="button is-primary" @click="createTopic" v-translate>
+
+        <!-- API bug with first comment creation?  -->
+        <button
+          v-else-if="locale.topic_id === null"
+          class="button is-primary"
+          @click="createTopic"
+          :disabled="!$options.isProduction"
+          v-translate>
           Post the first comment
         </button>
         <!-- Only the system comment exists -->
@@ -65,6 +72,7 @@
 
   import forum from '@/js/apis/forum';
   import c2c from '@/js/apis/c2c';
+  import config from '@/js/config';
 
   const computeCooked = function(cooked) {
     cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url);
@@ -73,6 +81,8 @@
   };
 
   export default {
+    isProduction: config.isProduction,
+
     mixins: [ requireDocumentProperty, viewModeMixin ],
 
     data() {
