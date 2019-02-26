@@ -21,7 +21,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-3"
+            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             v-for="activity of activities"
             :key="activity"
             :to="{name:'outings', query:{act:activity}}">
@@ -32,7 +32,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-3"
+            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             :to="{name:'outing-add'}">
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
@@ -47,7 +47,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-3"
+            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             v-for="activity of activities"
             :key="activity"
             :to="{name:'routes', query:{act:activity}}">
@@ -58,7 +58,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-3"
+            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             :to="{name:'route-add'}">
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
@@ -73,7 +73,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-2"
+            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
             v-for="waypoint_type of waypoint_types"
             :key="waypoint_type"
             :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
@@ -84,7 +84,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-2"
+            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
             :to="{name:'waypoint-add'}">
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>

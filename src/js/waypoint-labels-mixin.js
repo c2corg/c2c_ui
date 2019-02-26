@@ -38,11 +38,11 @@ export default {
         return this.$gettext('opening_periods');
       }
 
-      if (this.waypoint_type === 'local_product') {
+      if (this.document.waypoint_type === 'local_product') {
         return this.$gettext('opening_hours');
       }
 
-      if (this.waypoint_type === 'climbing_outdoor') {
+      if (this.document.waypoint_type === 'climbing_outdoor') {
         return this.$gettext('restricted_access');
       }
 
