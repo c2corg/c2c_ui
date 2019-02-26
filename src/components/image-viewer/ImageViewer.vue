@@ -20,7 +20,8 @@
 
               <edit-link
                 :document="image" :lang="image.available_langs[0]"
-                class="level-item has-text-grey-lighter">
+                class="level-item has-text-grey-lighter"
+                @click="visible=false">
                 <fa-icon icon="edit"/>
               </edit-link>
 

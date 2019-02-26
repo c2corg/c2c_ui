@@ -342,8 +342,8 @@
           ...this.dataLayers,
           ...this.protectionAreasLayers,
           this.protectionAreasLayer,
-          this.waypointsLayer,
-          this.documentsLayer
+          this.documentsLayer,
+          this.waypointsLayer // keep waypoint above trace and documents
         ],
 
         view: new ol.View({

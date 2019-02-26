@@ -1,13 +1,22 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after">
     <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" >
-      {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
+      <span>
+        {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
+      </span>
+      <fa-icon
+        class="is-size-6 is-pulled-right has-cursor-pointer"
+        icon="angle-down"
+        :rotation="visible ? undefined : 180"
+        @click="visible=!visible"/>
     </h2>
-    <markdown
-      v-if="document.cooked[field.name]"
-      :class="{'is-italic':field.name==='summary'}"
-      :content="document.cooked[field.name]"/>
-    <slot name="after" />
+    <div v-show="visible">
+      <markdown
+        v-if="document.cooked[field.name]"
+        :class="{'is-italic':field.name==='summary'}"
+        :content="document.cooked[field.name]"/>
+      <slot name="after" />
+    </div>
   </div>
 </template>
 
@@ -27,6 +36,12 @@
         type: String,
         default: null
       }
+    },
+
+    data() {
+      return {
+        visible: true
+      };
     }
   };
 </script>
