@@ -46,7 +46,9 @@
     </card-row>
 
     <card-row>
-      <activities v-if="item.document.activities" :activities="item.document.activities" class="is-size-3"/>
+      <span>
+        <card-activities-item v-if="item.document.activities" :activities="item.document.activities"/>
+      </span>
       <span>
         <marker-image-count :image-count="item.document.img_count" />
         <span>&nbsp;</span>
@@ -155,7 +157,6 @@
     background-color:#FFF!important;
     border: $card-border;
     transition:0.2s;
-    max-width:600px
   }
 
   .feed-card:hover{
