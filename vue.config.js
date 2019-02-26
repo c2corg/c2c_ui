@@ -25,10 +25,22 @@ const result = {
       // But they did not merge it....
       // waiting this, we increase the limit by 4
       // approx the decrease Gzip ratio on a .js minified files
-      maxAssetSize: 250000 * 4,
+      maxAssetSize: 300000 * 4,
 
       // and we allow a entry point of 450 kb gzipped
-      maxEntrypointSize: 450000 * 4
+      maxEntrypointSize: 500000 * 4,
+
+      assetFilter(assetFilename) {
+        if (/\.map$/.test(assetFilename)) {
+          return false;
+        }
+
+        if (/\.pdf$/.test(assetFilename)) {
+          return false;
+        }
+
+        return true;
+      }
     },
 
     plugins: [
