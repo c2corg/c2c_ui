@@ -129,7 +129,13 @@
           {
             headerName: this.$gettext('ratings'),
             children: [
-              { headerName: this.$gettext('ratings'), cellRendererFramework: OutingRating, columnGroupShow: 'closed' },
+              {
+                headerName: this.$gettext('ratings'),
+                cellRendererFramework: OutingRating,
+                columnGroupShow: 'closed',
+                resizable: true,
+                width: 120
+              },
               getColDef(this, fields.global_rating, { columnGroupShow: 'open', width: 80 }),
               getColDef(this, fields.rock_free_rating, { columnGroupShow: 'open', width: 80 }),
               getColDef(this, fields.ice_rating, { columnGroupShow: 'open', width: 80 }),
@@ -171,7 +177,13 @@
           {
             headerName: this.$gettext('ratings'),
             children: [
-              { headerName: this.$gettext('ratings'), cellRendererFramework: RouteRating, columnGroupShow: 'closed' },
+              {
+                headerName: this.$gettext('ratings'),
+                cellRendererFramework: RouteRating,
+                columnGroupShow: 'closed',
+                resizable: true,
+                width: 120
+              },
               getColDef(this, fields.engagement_rating, { columnGroupShow: 'open', width: 80 }),
               getColDef(this, fields.equipment_rating, { columnGroupShow: 'open', width: 80 }),
               getColDef(this, fields.exposition_rock_rating, { columnGroupShow: 'open', width: 80 }),

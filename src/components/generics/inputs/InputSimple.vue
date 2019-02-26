@@ -33,7 +33,7 @@
       :max="max"
       :disabled="disabled"
       :placeholder="placeholder"
-      v-model="value_"
+      v-model.lazy="value_"
       class="input"
       :class="{'is-danger':hasError}">
 
