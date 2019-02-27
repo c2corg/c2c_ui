@@ -1,5 +1,9 @@
 <template>
-  <div class="columns">
+  <div
+    class="columns"
+    v-infinite-scroll="load"
+    infinite-scroll-disabled="loading"
+    infinite-scroll-distance="100">
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
       <feed-card
         v-for="(item, index) of column.items"
@@ -13,15 +17,17 @@
 </template>
 
 <script>
+  import infiniteScroll from 'vue-infinite-scroll';
+
   import c2c from '@/js/apis/c2c';
   import FeedCard from '@/components/cards/FeedCard';
-
-  // https://alligator.io/vuejs/implementing-infinite-scroll/
 
   export default {
     components: {
       FeedCard
     },
+
+    directives: { infiniteScroll },
 
     props: {
       type: { // valid input : personal Default Profile
@@ -41,19 +47,23 @@
       };
     },
 
+    computed: {
+      loading() {
+        return this.promise ? this.promise.loading : false;
+      }
+    },
+
     watch: {
       '$route': 'initialize',
       'type': 'initialize'
     },
 
     mounted() {
-      window.addEventListener('scroll', this.onScroll);
       window.addEventListener('resize', this.initializeColumns);
       this.initialize();
     },
 
     beforeDestroy() {
-      window.removeEventListener('scroll', this.onScroll);
       window.removeEventListener('resize', this.initializeColumns);
     },
 
@@ -140,14 +150,6 @@
         this.endOfFeed = response.data.feed.length === 0;
 
         this.dispatchToColumns(response.data.feed);
-      },
-
-      onScroll() {
-        // bottomOfWindow ?
-        const el = document.scrollingElement || document.documentElement;
-        if (el.scrollTop + window.innerHeight === el.offsetHeight) {
-          this.load();
-        }
       },
 
       dispatchToColumns(items) {
