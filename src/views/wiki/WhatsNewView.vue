@@ -2,7 +2,10 @@
   <div class="section content">
     <html-header title="Recents changes"/>
 
-    <table>
+    <table
+      v-infinite-scroll="load"
+      infinite-scroll-disabled="disableInfiniteSCroll"
+      infinite-scroll-distance="100">
       <tr>
         <th v-translate translate-context="modification date">Modified the</th>
         <th v-translate>Author</th>
@@ -65,9 +68,13 @@
 </template>
 
 <script>
+  import infiniteScroll from 'vue-infinite-scroll';
+
   import c2c from '@/js/apis/c2c';
 
   export default {
+
+    directives: { infiniteScroll },
 
     data() {
       return {
@@ -78,6 +85,14 @@
     },
 
     computed: {
+      loading() {
+        return this.promise ? this.promise.loading : false;
+      },
+
+      disableInfiniteSCroll() {
+        return this.loading || this.endOfFeed;
+      },
+
       nextQuery() {
         if (!this.promise.data) {
           return this.$route.query;
@@ -92,14 +107,6 @@
         handler: 'initialize',
         immediate: true
       }
-    },
-
-    mounted() {
-      window.addEventListener('scroll', this.onScroll);
-    },
-
-    beforeDestroy() {
-      window.removeEventListener('scroll', this.onScroll);
     },
 
     methods: {
@@ -130,13 +137,6 @@
         this.endOfFeed = this.promise.data.feed.length === 0;
 
         this.$nextTick(this.onScroll);
-      },
-
-      onScroll() {
-        const el = document.scrollingElement || document.documentElement;
-        if (el.scrollTop + window.innerHeight === el.offsetHeight) {
-          this.load();
-        }
       }
     }
   };
