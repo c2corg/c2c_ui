@@ -1,7 +1,7 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document"/>
+      <document-title :document="document" class="is-ellipsed"/>
     </card-title>
 
     <card-row>
@@ -10,7 +10,7 @@
 
     <card-row>
 
-      <span>
+      <span class="is-nowrap">
         <icon-ratings class="card-icon" />
         <route-rating :document="document"/>
       </span>

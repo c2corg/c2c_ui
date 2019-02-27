@@ -17,7 +17,7 @@
     </card-row>
 
     <card-row v-if="locale && locale.summary">
-      <markdown :content="locale.summary" class="is-ellipsed"/>
+      <p class="is-ellipsed">{{ locale.summary }}</p>
     </card-row>
 
     <card-row v-if="images.length!=0">
@@ -25,8 +25,11 @@
     </card-row>
 
     <card-row v-if="documentType!='article' && documentType!='book'">
-      <outing-rating v-if="documentType=='outing'" :document="item.document"/>
-      <route-rating v-else-if="documentType=='route'" :document="item.document"/>
+      <span v-if="documentType=='outing' || documentType=='route'">
+        <icon-ratings class="card-icon" />
+        <outing-rating v-if="documentType=='outing'" :document="item.document"/>
+        <route-rating v-else-if="documentType=='route'" :document="item.document"/>
+      </span>
 
       <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
 
@@ -39,9 +42,16 @@
         <fa-icon icon="arrows-alt-v"/>
         {{ item.document.height_diff_difficulties }}&nbsp;m
       </span>
+
+      <card-elevation-item v-if="item.document.elevation" :elevation="item.document.elevation" />
+
+      <span v-if="item.document.waypoint_type">
+        <icon-waypoint-type :waypoint-type="item.document.waypoint_type" />
+        <span>{{ $gettext(item.document.waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}</span>
+      </span>
     </card-row>
 
-    <card-row v-if="item.document.areas">
+    <card-row v-if="item.document.areas && item.document.areas.length">
       <card-region-item :document="item.document"/>
     </card-row>
 

@@ -13,10 +13,11 @@
             </div>
             <div class="dropdown-menu" role="menu">
               <div class="dropdown-content">
-                <div v-for="type of otherDocumentTypes" :key="type" class="dropdown-item is-size-6">
+                <div v-for="type of documentTypes" :key="type" class="dropdown-item is-size-6 has-hover-background">
                   <router-link
                     :to="{name: type + 's', query:$route.query}"
-                    class="has-text-normal">
+                    class="has-text-normal"
+                    :class="{'has-text-primary has-text-weight-bold': type === documentType}">
                     <icon-document :document-type="type" />
                     <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
                   </router-link>
@@ -40,6 +41,7 @@
       <div class="level-right" v-if="documentType!='profile'">
         <div class="level-item is-size-3 is-hidden-mobile">
           <fa-icon
+            v-show="displayMode!=='map'"
             icon="th-list"
             class="has-cursor-pointer"
             :class="listMode ? 'has-text-primary' : ''"
@@ -47,6 +49,7 @@
             @click="toogleProperty('listMode')" />
           &nbsp;
           <fa-icon
+            v-show="displayMode!=='map'"
             icon="th"
             class="has-cursor-pointer"
             :class="!listMode ? 'has-text-primary' : ''"
@@ -54,19 +57,60 @@
             @click="toogleProperty('listMode')" />
           &nbsp;
           &nbsp;
-          <fa-icon
-            v-if="documentAreGeoLocalized"
-            icon="map-marked-alt"
-            class="has-cursor-pointer"
-            :class="{'has-text-primary':showMap}"
-            :title="showMap ? $gettext('Hide map') : $gettext('Show map')"
-            @click="toogleProperty('showMap')" />
+          <div v-if="documentAreGeoLocalized" class="dropdown is-hoverable is-right display-mode-switcher">
+            <div class="dropdown-trigger">
+              <fa-icon
+                :icon="['fas', 'eye']"
+                class="has-cursor-pointer"/>
+            </div>
+            <div class="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <table class="dropdown-item is-size-6">
+                  <tr
+                    class="has-hover-background has-cursor-pointer"
+                    :class="{'has-text-primary has-text-weight-bold': displayMode==='result'}"
+                    @click="setProperty('displayMode', 'result')">
+                    <td class="has-text-centered">
+                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
+                    </td>
+                    <td class="is-nowrap" v-translate>Results only</td>
+                  </tr>
+                  <tr
+                    class="has-hover-background has-cursor-pointer"
+                    :class="{'has-text-primary has-text-weight-bold': displayMode==='both'}"
+                    @click="setProperty('displayMode', 'both')">
+                    <td class="is-nowrap">
+                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
+                      <span>&thinsp;</span>
+                      <fa-icon icon="map-marked-alt"/>
+                    </td>
+                    <td class="is-nowrap" v-translate>Both results and map</td>
+                  </tr>
+                  <tr
+                    class="has-hover-background has-cursor-pointer"
+                    :class="{'has-text-primary has-text-weight-bold': displayMode==='map'}"
+                    @click="setProperty('displayMode', 'map')">
+                    <td class="has-text-centered">
+                      <fa-icon icon="map-marked-alt"/>
+                    </td>
+                    <td class="is-nowrap" v-translate>Map only</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div class="level-item is-size-3 is-hidden-tablet">
           <fa-icon
-            :icon="showMap ? 'th' : 'map-marked-alt'"
-            class="has-text-primary"
-            @click="toogleProperty('showMap')"/>
+            icon="map-marked-alt"
+            :class="{'has-text-primary': displayMode === 'map'}"
+            @click="setProperty('displayMode', 'map')"/>
+          <span>&thinsp;</span>
+          <fa-icon
+            icon="th"
+            :class="{'has-text-primary': displayMode !== 'map'}"
+            @click="setProperty('displayMode', 'both')"/>
         </div>
       </div>
     </div>
@@ -79,21 +123,20 @@
       </div>
     </div>
 
-    <div class="columns result-section" :class="showMap ? 'mobile-result-map' : 'mobile-result-card'">
-      <div class="column documents-container"
-           :class="{'is-12': !displayMap, 'is-8': displayMap}">
+    <div class="columns result-section" :class="'mobile-mode-' + displayMode">
+      <div v-if="showResults" class="column documents-container" :class="{'is-12': !showMap, 'is-8': showMap}">
 
         <loading-notification :promise="promise"/>
 
         <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents"/>
 
-        <div v-if="documents && !listMode && documentType !== 'image'" class="columns is-multiline cards-list">
+        <div v-if="documents && !listMode && documentType !== 'image'" class="columns is-multiline is-variable is-1 cards-list">
           <div
             v-for="(document, index) in documents.documents"
             :key="index"
             :class="{
-              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-one-third-fullhd':displayMap,
-              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd':!displayMap,
+              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-one-third-fullhd':showMap,
+              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':!showMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"
@@ -108,9 +151,8 @@
           :document-type="documentType"
           class="documents-table"/>
       </div>
-      <div v-show="documentAreGeoLocalized" class="column map-container">
+      <div v-if="showMap" class="column map-container">
         <map-view
-          v-if="displayMap"
           ref="map"
           :documents="documents ? documents.documents : []"
           :highlighted-document="highlightedDocument"
@@ -150,29 +192,33 @@
       return {
         promise: null,
 
-        // showMap is the user choise, if he wants to see the map, or not
-        showMap: null,
+        displayMode: 'both',
         listMode: null,
+
+        isMobile: null,
 
         highlightedDocument: null
       };
     },
 
     computed: {
+      showMap() {
+        return ['both', 'map'].includes(this.displayMode);
+      },
+      showResults() {
+        return ['result', 'both'].includes(this.displayMode);
+      },
       documents() {
         return this.promise.data;
       },
       documentType() {
         return this.$route.name.slice(0, -1);
       },
-      otherDocumentTypes() {
-        return ['route', 'waypoint', 'outing', 'image', 'book', 'area'].filter((type) => type !== this.documentType);
+      documentTypes() {
+        return ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
       },
       documentAreGeoLocalized() {
         return constants.objectDefinitions[this.documentType].geoLocalized === true;
-      },
-      displayMap() {
-        return this.showMap && this.documentAreGeoLocalized;
       },
       addQuery() {
         return {
@@ -185,24 +231,37 @@
       '$route': {
         handler: 'load',
         immediate: true
-      }
+      },
+      'displayMode': 'updateMapSize'
     },
 
     methods: {
 
       load() {
-        this.showMap = this.$localStorage.get(this.documentType + '.showMap', this.documentAreGeoLocalized);
+        this.displayMode = this.$localStorage.get(this.documentType + '.displayMode', this.documentAreGeoLocalized ? 'both' : 'result');
         this.listMode = this.$localStorage.get(this.documentType + '.listMode', false);
         this.promise = c2c[this.documentType].getAll(this.$route.query);
       },
 
       toogleProperty(property) {
-        this[property] = !this[property];
+        this.setProperty(property, !this[property]);
+      },
+
+      setProperty(property, value) {
+        this[property] = value;
         this.$localStorage.set(`${this.documentType}.${property}`, this[property]);
       },
 
       getDocumentTypeTitle(documentType) {
         return this.$gettext(documentType + 's');
+      },
+
+      // when map container is resized (which happen when displayMode switchs between both and map),
+      // openLayer need an explicit resize
+      updateMapSize(newValue, oldValue) {
+        if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
+          this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
+        }
       }
     }
   };
@@ -210,72 +269,77 @@
 
 <style scoped lang="scss">
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    $section-padding: 1.5rem; //TODO find this variable
-    $header-height : 34px;
-    $header-margin-bottom : 1rem; //TODO find this variable
-    $filter-height : 32px;
-    $filter-padding-bottom : 1.5rem;
-    $page-selector-height : 3rem;
-    $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
-    $cards-gap:0.25rem;
+  $section-padding: 1.5rem; //TODO find this variable
+  $header-height : 34px;
+  $header-margin-bottom : 1rem; //TODO find this variable
+  $filter-height : 32px;
+  $filter-padding-bottom : 1.5rem;
+  $page-selector-height : 3rem;
+  $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+  $cards-gap:0.25rem;
 
-    @media screen and (max-width: $tablet) {
+  @media screen and (max-width: $tablet) {
 
-        .map-container{
-            height: $result-height;
-            padding-left:0;
-            padding-top:0;
-            padding-bottom:0;
-        }
-
-        .mobile-result-map{
-            margin-top:0;
-            height:$result-height;
-
-            .documents-container{
-                display:None;
-            }
-        }
-
-        .mobile-result-card{
-
-            .map-container{
-                visibility: hidden; // map does not like to be in a display none...
-            }
-        }
+    .map-container{
+      height: $result-height;
+      padding-left:0;
+      padding-top:0;
+      padding-bottom:0;
     }
 
-    @media screen and (min-width: $tablet){
-        .result-section{
-            margin-top:0;
-            height:$result-height;
+    .mobile-mode-map{
+      margin-top:0;
+      height:$result-height;
 
-            .documents-container{
-                height:100%;
-                overflow: auto;
-
-                .cards-list{
-                    padding-top:2px;
-                    height:100%;
-                }
-
-                .documents-table{
-                    height:100%;
-                }
-
-            //    transition:0.3s;
-            }
-
-            .map-container{
-                min-height: 100%;
-                padding-left:0;
-                padding-top:0;
-                padding-bottom:0;
-            //    transition:0.3s;
-            }
-        }
+      .documents-container{
+        display:None;
+      }
     }
+
+    .mobile-mode-result, .mobile-mode-both{
+      .map-container{
+        visibility: hidden; // map does not like to be in a display none...
+      }
+    }
+  }
+
+  @media screen and (min-width: $tablet){
+    .result-section{
+      margin-top:0;
+      height:$result-height;
+
+      .documents-container{
+        height:100%;
+        overflow: auto;
+
+        .cards-list{
+          padding-top:2px;
+          height:100%;
+        }
+
+        .documents-table{
+          height:100%;
+        }
+
+      //    transition:0.3s;
+      }
+
+      .map-container{
+        min-height: 100%;
+        padding-left:0;
+        padding-top:0;
+        padding-bottom:0;
+      //    transition:0.3s;
+      }
+    }
+
+    .display-mode-switcher{
+      td:nth-child(2){
+        padding-left:0.5rem;
+      }
+    }
+  }
 
 </style>

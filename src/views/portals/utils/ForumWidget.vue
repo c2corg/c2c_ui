@@ -71,8 +71,7 @@
 
     methods: {
       getAvatarUrl(user) {
-        const template = user.avatar_template.startsWith('/') ? forum.url + user.avatar_template : user.avatar_template;
-        return template.replace('{size}', this.imgSize);
+        return forum.getAvatarUrl(user, this.imgSize);
       },
 
       getTopicUrl(topic) {
