@@ -15,16 +15,19 @@ script:
 - npm run lint:no-fix
 # - npm run test
 
+# always build docker image
+after_success:
+- sh scripts/travis-publish.sh
+
 before_deploy:
 - npm run build:github
 
+# deploy to github pages on master
 deploy:
-  - provider: pages
-    skip-cleanup: true
-    local-dir: dist
-    github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-    keep-history: true
-  - provider: script
-    script: sh scripts/travis-publish.sh
-    on:
-      branch: deployment
+  provider: pages
+  skip-cleanup: true
+  local-dir: dist
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
