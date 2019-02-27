@@ -1,7 +1,7 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document" uppercase-first-letter/>
+      <document-title :document="document" uppercase-first-letter class="is-ellipsed"/>
     </card-title>
 
     <card-row>

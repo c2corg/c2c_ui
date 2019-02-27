@@ -1,7 +1,7 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <span>
+      <span class="is-ellipsed">
         <icon-waypoint-type :waypoint-type="document.waypoint_type"/>
         <document-title :document="document"/>
       </span>

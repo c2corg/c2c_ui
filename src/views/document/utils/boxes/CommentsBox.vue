@@ -19,7 +19,7 @@
         <div class="columns is-gapless">
           <div class="column is-narrow discourse-post-avatar">
             <img
-              :src="$options.forumUrl + '/' + post.avatar_template"
+              :src="getAvatarUrl(post)"
               :style="'width:' + $options.forumAvatarSize + 'px;height:' + $options.forumAvatarSize + 'px'">
           </div>
           <div class="column">
@@ -125,7 +125,6 @@
         }
 
         for (const post of posts) {
-          post.avatar_template = post.avatar_template.replace('{size}', this.$options.forumAvatarSize);
           post.cooked = computeCooked(post.cooked);
           result.push(post);
         }
@@ -170,6 +169,10 @@
         if (this.locale.topic_id) {
           this.promise = forum.getTopic(this.locale.topic_id);
         }
+      },
+
+      getAvatarUrl(user) {
+        return forum.getAvatarUrl(user, this.$options.forumAvatarSize);
       }
     }
   };

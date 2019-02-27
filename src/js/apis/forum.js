@@ -44,4 +44,11 @@ Forum.prototype.readAnnouncement = function(lang) {
   return this.get('/t/annonce-' + lang + '.json');
 };
 
+// Tehcniccly not part of the API, but this helper
+// is probably at the best place here...
+Forum.prototype.getAvatarUrl = function(user, size) {
+  const template = user.avatar_template.startsWith('/') ? this.url + user.avatar_template : user.avatar_template;
+  return template.replace('{size}', size);
+};
+
 export default new Forum();

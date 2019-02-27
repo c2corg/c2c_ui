@@ -166,19 +166,27 @@
       },
 
       estimateSize(item) {
-        let size = 225;
-        if (item.document.locales[0].summary !== null) {
-          size += 22;
+        const headerSize = 47;
+        const titleSize = 29;
+        const summarySize = 30;
+        const figuresSize = 30;
+        const areaSize = 29;
+        const footerSize = 38;
+        const gallerySize = 223;
+        const marginSize = 22;
+
+        let size = headerSize + titleSize + areaSize + footerSize + marginSize;
+
+        if (item.document.locales[0].summary) {
+          size += summarySize;
         }
-        if (document.elevation_max !== null || document.height_diff_up !== null || document.height_diff_difficulties !== null) {
-          size += 51;
+        if (document.elevation_max || document.elevation || document.height_diff_up || document.height_diff_difficulties) {
+          size += figuresSize;
         }
         if (item.image1 !== null) {
-          size += 275;
+          size += gallerySize;
         }
-        if (item.image2 !== null) {
-          size += 100;
-        }
+
         return size;
       }
     }
