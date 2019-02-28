@@ -22,8 +22,14 @@ Forum.prototype.getTopic = function(topicId) {
   return this.get('/t/title/' + topicId + '.json');
 };
 
-Forum.prototype.getLatest = function() {
-  const result = this.get('/latest.json');
+Forum.prototype.getLatest = function(excludeCategoryIds) {
+  if (excludeCategoryIds) {
+    excludeCategoryIds = '?' + excludeCategoryIds.map((id) => `exclude_category_ids[]=${id}`).join('&');
+  } else {
+    excludeCategoryIds = '';
+  }
+
+  const result = this.get(`/latest.json${excludeCategoryIds}`);
 
   result.then(function(response) {
     const users = {};
