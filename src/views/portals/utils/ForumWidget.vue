@@ -23,7 +23,68 @@
 <script>
   import forum from '@/js/apis/forum.js';
 
-  const DOCUMENT_COMMENT_CATEGORY_ID = 29;
+  const EXCLUDED_CATEGORIES = [
+    // https://forum.camptocamp.org/c/comments
+    // document's comments
+    29,
+
+    // https://forum.camptocamp.org/c/petites-annonces
+    // offers (petites annonces in french)
+    40, // ski surf snowshoeing gears
+    41, // ice, snow, mixt gears
+    42, // climnbing gears
+    43, // Misc gears
+    44, // other offers
+    45, // professionals
+
+    // https://forum.camptocamp.org/c/apres-l-effort/partenaires
+    // tinder for camptocamp ? ;)
+    47,
+
+    // https://forum.camptocamp.org/c/apres-l-effort/bistrot
+    // all but subjects about mountain...
+    54,
+
+    // https://forum.camptocamp.org/c/archives/le-site-suggestions-bugs-et-problemes
+    // Old V5 site's bugs reporting
+    55,
+
+    // https://forum.camptocamp.org/c/site-et-association/moderation-forums-topoguide-articles
+    // Forum moderation
+    56,
+
+    // https://forum.camptocamp.org/c/site-et-association/traduction
+    // traduction issues
+    64,
+
+    // https://forum.camptocamp.org/c/partenaires/partenaires-ski-surf-raquette-randonnee-trai
+    // ski buddy finder
+    94,
+
+    // https://forum.camptocamp.org/c/partenaires/partenaires-escalade-sae
+    // climbing buddy finder
+    95,
+
+    // https://forum.camptocamp.org/c/partenaires/co-voiturage
+    // car-pooling
+    96,
+
+    // https://forum.camptocamp.org/c/petites-annonces/perdu-trouve
+    // have you find/lost something in the moutain ? it's here!
+    97,
+
+    // https://forum.camptocamp.org/c/partenaires/partenaires-alpinisme-cascade-de-glace
+    // mountaineering buddy finder
+    113,
+
+    // https://forum.camptocamp.org/c/site-et-association/v6-suggestions-bugs-et-problemes
+    // Site's bugs reporting
+    136,
+
+    // https://forum.camptocamp.org/c/site-et-association/appli-mobile-suggestions-bugs
+    // mobile application bugs reporting
+    146
+  ];
 
   export default {
 
@@ -52,8 +113,6 @@
 
         let topics = this.promise.data.topic_list.topics;
 
-        topics = topics.filter((topic) => topic.category_id !== DOCUMENT_COMMENT_CATEGORY_ID);
-
         if (this.messageCount >= 0) {
           topics = topics.slice(0, this.messageCount);
         }
@@ -66,7 +125,7 @@
     },
 
     created() {
-      this.promise = forum.getLatest();
+      this.promise = forum.getLatest(EXCLUDED_CATEGORIES);
     },
 
     methods: {
