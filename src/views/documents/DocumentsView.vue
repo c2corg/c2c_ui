@@ -39,6 +39,15 @@
       </div>
 
       <div class="level-right" v-if="documentType!='profile'">
+        <div v-if="$user.isLogged" class="level-item">
+          <button class="button is-small is-primary" @click="loadPreferences">
+            <fa-icon icon="star"/>
+            <span class="is-hidden-mobile">&nbsp;</span>
+            <span class="is-hidden-mobile" v-translate>
+              Load my preferences
+            </span>
+          </button>
+        </div>
         <div class="level-item is-size-3 is-hidden-mobile">
           <fa-icon
             v-show="displayMode!=='map'"
@@ -47,7 +56,7 @@
             :class="listMode ? 'has-text-primary' : ''"
             :title="$gettext('List mode')"
             @click="toogleProperty('listMode')" />
-          &nbsp;
+          <span>&thinsp;</span>
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th"
@@ -55,8 +64,8 @@
             :class="!listMode ? 'has-text-primary' : ''"
             :title="$gettext('Cards mode')"
             @click="toogleProperty('listMode')" />
-          &nbsp;
-          &nbsp;
+        </div>
+        <div class="level-item is-size-3 is-hidden-mobile">
           <div v-if="documentAreGeoLocalized" class="dropdown is-hoverable is-right display-mode-switcher">
             <div class="dropdown-trigger">
               <fa-icon
@@ -256,6 +265,26 @@
         if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
           this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
         }
+      },
+
+      loadPreferences() {
+        c2c.userProfile.preferences.get().then((result) => {
+          const preferences = result.data;
+          const query = Object.assign({}, this.$route.query);
+
+          if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(this.documentType)) {
+            const activities = preferences.activities.join(',');
+            query.act = activities === '' ? undefined : activities;
+          }
+
+          if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(this.documentType)) {
+            const areas = preferences.areas.map((area) => area.document_id).join(',');
+            query.a = areas === '' ? undefined : areas;
+            query.bbox = undefined;
+          }
+
+          this.$router.push({ query });
+        });
       }
     }
   };
@@ -299,6 +328,7 @@
     .mobile-mode-result, .mobile-mode-both{
       .map-container{
         visibility: hidden; // map does not like to be in a display none...
+        height: 0;
       }
     }
   }
