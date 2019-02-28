@@ -6,12 +6,26 @@
         <span v-if="mode === 'edit'">
           <html-header :title="$gettext('Edit a document')"/>
           <document-title :document="document"/>
+          <span class="is-size-5"> ({{ $language.available[$route.params.lang] }})</span>
         </span>
         <span v-else>
           <html-header :title="$documentUtils.getCreationTitle(documentType)"/>
           {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+          <span>
+            <dropdown-button>
+              <span slot="button">
+                {{ $language.available[document.locales[0].lang] }}
+              </span>
+              <div
+                v-for="lang of Object.keys($language.available)"
+                :key="lang"
+                class="has-hover-background has-cursor-pointer"
+                @click="document.locales[0].lang = lang">
+                {{ $language.available[lang] }}
+              </div>
+            </dropdown-button>
+          </span>
         </span>
-        <span> ({{ $route.params.lang }})</span>
 
         <button class="button is-size-6 is-pulled-right" @click="isPreview=!isPreview">
           <span v-show="isPreview">

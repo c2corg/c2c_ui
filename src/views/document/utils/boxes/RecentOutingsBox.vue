@@ -11,27 +11,21 @@
           show all
         </router-link>
       </span>
-
-      <add-link
-        v-if="documentType === 'route' && outings.length !== 0"
-        document-type="outing"
-        :query="query"
-        class="button is-small is-rounded is-primary"/>
-
     </div>
 
     <div v-for="(outing, i) of outings" :key="i">
       <pretty-outing-link :outing="outing"/>
     </div>
 
-    <div v-if="documentType=='route'" class="has-text-centered">
+    <div v-if="documentType=='route'" class="has-text-centered add-section">
       <add-link
-        v-if="outings.length === 0"
         document-type="outing"
         :query="query"
         class="button is-primary"
         v-translate>
-        Add the first outing
+        <span v-if="outings.length === 0" v-translate>
+          Add the first outing
+        </span>
       </add-link>
     </div>
 
@@ -81,8 +75,12 @@
 </script>
 
 <style scoped>
-    .button{
-        vertical-align: bottom;
-        margin-left: 1rem;
-    }
+  .button{
+    vertical-align: bottom;
+    margin-left: 1rem;
+  }
+
+  .add-section{
+    margin-top: 1.5rem;
+  }
 </style>
