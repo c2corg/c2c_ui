@@ -1,6 +1,6 @@
 <template>
   <div class="query-items">
-    <query-item :field="fields.title" class="query-item" hide-label/>
+    <query-item :field="fields.title" class="title-input is-hidden-mobile" hide-label/>
 
     <dropdown-button v-for="category of categorizedFields" :key="category.name"
                      :disabled="category.fields.length===0"
@@ -22,12 +22,16 @@
       </span>
 
       <div class="sub-query-items">
-        <query-item v-for="field of category.fields" :key="field.name" :field="field"/>
+        <query-item
+          v-for="field of category.fields"
+          :key="field.name"
+          :field="field"
+          :class="field.name === 'title' ? 'is-hidden-tablet': ''"/>
       </div>
 
     </dropdown-button>
 
-    <association-query-item class="is-hidden-mobile" :document-types="associations"/>
+    <association-query-item class="association-query-item is-hidden-mobile" :document-types="associations"/>
   </div>
 </template>
 
@@ -38,6 +42,7 @@
 
   const categorizedFieldsDefault = {
     General: [
+      'title',
       'activities',
       'article_type',
       'area_type',
@@ -259,23 +264,33 @@
 
   @import '@/assets/sass/variables.scss';
 
-  .query-item{
-    margin-right:1em;
+  .title-input{
     display: inline-flex;
     margin-bottom: 0!important;
-  }
-
-  .category-button{
-    margin-right:1em;
   }
 
   .sub-query-items{
     min-width:300px;
   }
 
+  @media screen and (min-width: $tablet) {
+    .query-items{
+      display: flex;
+    }
+    .title-input, .category-button{
+      margin-right:1em;
+    }
+  }
+
   @media screen and (max-width: $tablet) {
     .query-items{
       position:relative; // important; to force dropdown to be on stick to left
+      display: flex;
+      justify-content: flex-start;
+
+      .title-input, .category-button{
+        margin-right:1em;
+      }
 
       .dropdown {
         position: unset;
@@ -284,6 +299,21 @@
           width: 100%;
         }
       }
+
+      // .category-button{
+      //   flex-grow: 1;
+      //   flex-shrink: 1;
+      // }
+
+      // .title-input{
+      //   flex-basis: 3rem;
+      //   flex-grow: 3;
+      //   flex-shrink: 0.01;
+      // }
+
+      // .title-input:focus-within{
+      //   flex-basis: 3rem;
+      // }
     }
   }
   @media screen and (min-width: $tablet) and (max-width: $desktop){
