@@ -115,13 +115,7 @@
       </div>
     </div>
 
-    <div class="level is-mobile filter-section">
-      <div class="level-left">
-        <div class="level-item">
-          <query-items/>
-        </div>
-      </div>
-    </div>
+    <query-items class="filter-section"/>
 
     <div class="columns result-section" :class="'mobile-mode-' + displayMode">
       <div v-if="showResults" class="column documents-container" :class="{'is-12': !showMap, 'is-8': showMap}">
@@ -279,6 +273,10 @@
   $page-selector-height : 3rem;
   $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
   $cards-gap:0.25rem;
+
+  .filter-section{
+    padding-bottom: $filter-padding-bottom;
+  }
 
   @media screen and (max-width: $tablet) {
 
