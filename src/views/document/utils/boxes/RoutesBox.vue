@@ -2,19 +2,12 @@
   <div class="box no-print" v-if="source.length !=0 || !hideButtons">
     <h2 class="title is-2">
       <span>{{ $gettext('Associated routes') }}</span>
-      <add-link
-        v-if="!hideButtons"
-        document-type="route"
-        :query="query"
-        class="button is-small is-rounded is-primary"/>
-
-      <router-link
-        v-if="!hideButtons"
-        :to="{name:'routes', query:query}"
-        class="button is-small is-rounded is-primary"
-        v-translate>
-        show all
-      </router-link>
+      <span v-if="!hideButtons" class="is-size-5">
+        <span>, </span>
+        <router-link :to="{name:'routes', query:query}" v-translate>
+          show all
+        </router-link>
+      </span>
     </h2>
     <div v-if="disableActivitySplit">
       <div v-for="route of source" :key="route.document_id">
@@ -29,6 +22,12 @@
       <div v-for="(route, i) of Object.values(routes[activity])" :key="i">
         <pretty-route-link :route="route" hide-activities hide-area/>
       </div>
+    </div>
+    <div v-if="!hideButtons" class="has-text-centered add-section">
+      <add-link
+        document-type="route"
+        :query="query"
+        class="button is-primary"/>
     </div>
 
   </div>
@@ -83,13 +82,17 @@
 </script>
 
 <style scoped>
-    h3{
-        margin-top:1.5rem!important;
-        margin-bottom: 0.5rem!important;
-    }
+  h3{
+    margin-top:1.5rem!important;
+    margin-bottom: 0.5rem!important;
+  }
 
-    .button{
-        vertical-align: bottom;
-        margin-left: 1rem;
-    }
+  .button{
+    vertical-align: bottom;
+    margin-left: 1rem;
+  }
+
+  .add-section {
+    margin-top: 1.5rem;
+  }
 </style>

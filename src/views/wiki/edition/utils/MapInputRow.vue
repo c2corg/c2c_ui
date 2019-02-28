@@ -17,7 +17,7 @@
     </div>
 
     <div class="columns is-multiline">
-      <div class="column is-12">
+      <div class="column is-12 map-container">
         <map-view
           ref="map"
           :edited-document="document"
@@ -131,18 +131,28 @@
 </script>
 
 <style scoped lang="scss">
-    .upload-button{
-        position: relative;
-    }
 
-    input {
-        opacity: 0; /* invisible but it's there! */
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top:0;
-        left:0;
-        cursor: pointer;
+  @import '@/assets/sass/variables.scss';
+
+  .upload-button{
+    position: relative;
+  }
+
+  input {
+    opacity: 0; /* invisible but it's there! */
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    cursor: pointer;
+  }
+
+  // on mobile set heigth to 400px, otherwise it's too small
+  @media screen and (max-width: $tablet) {
+    .map-container{
+      height: 400px;
     }
+  }
 
 </style>
