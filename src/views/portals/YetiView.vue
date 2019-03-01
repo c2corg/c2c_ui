@@ -1,5 +1,5 @@
 <template>
-  <div class="section has-background-light">
+  <div class="section">
     <html-header title="Yeti"/>
     <div class="box">
       <h1 class="title is-1">
