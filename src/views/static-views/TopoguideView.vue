@@ -16,7 +16,7 @@
     </div>
     <div class="section columns is-multiline is-variable is-8">
       <div class="column is-6">
-        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
           {{ $gettext('outings') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="column is-6">
-        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
           {{ $gettext('routes') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="column is-12">
-        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light">
+        <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
           {{ $gettext('waypoints') | uppercaseFirstLetter }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
@@ -134,7 +134,7 @@
     h1{
       font-size:3rem;
       color:$light;
-      margin-bottom: 25px;;
+      margin-bottom: 25px;
     }
 
     .links{
@@ -144,4 +144,9 @@
       margin:auto;
     }
   }
+
+  .title{
+    line-height:1.5 !important;
+  }
+
 </style>
