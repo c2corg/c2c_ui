@@ -96,7 +96,7 @@
             <div
               slot="after"
               v-if="hasProtectionArea"
-              class="notification is-info">
+              class="notification is-info protection-area-info">
               <strong v-translate>
                 Sensitive areas
               </strong>
@@ -201,6 +201,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .protection-area-info{
+    overflow:hidden;
+    margin-bottom: 1.5rem;
+  }
   .automatic-gears{
     margin-bottom: 1.5rem;
   }

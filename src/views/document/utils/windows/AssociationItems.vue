@@ -129,14 +129,19 @@
           return false;
         }
 
+        // can't associate a document to itself
+        if (this.parent.document_id === child.document_id) {
+          return false;
+        }
+
         // moderator can always add
         if (this.$user.isModerator) {
           return true;
         }
 
         /**********************************
-                / rules for standard user. Do not forget that if he can open this window, he can edit parent
-                **********************************/
+        /* rules for standard users. Do not forget that if he can open this window, he can edit parent
+        **********************************/
 
         // only moderator can add waypoint/waypoint association
         if (this.parent.type === 'w' && this.childType === 'waypoint') {
@@ -250,18 +255,18 @@
 
 <style scoped lang="scss">
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-.association-items{
+  .association-items{
     margin-bottom: 1rem;
 
     h2{
-        margin-bottom: 0.1rem!important;
+      margin-bottom: 0.1rem!important;
     }
-}
+  }
 
-.document-row{
+  .document-row{
     padding:2px;
     margin-bottom: 0!important;
-}
+  }
 </style>

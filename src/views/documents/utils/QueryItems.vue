@@ -192,7 +192,7 @@
 
       associations() {
         if (this.documentType === 'outing') {
-          return ['area', 'profile', 'waypoint', 'route'];
+          return ['area', 'route', 'waypoint', 'profile'];
         }
 
         if (this.documentType === 'route') {
