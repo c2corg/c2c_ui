@@ -48,66 +48,26 @@
             </span>
           </button>
         </div>
-        <div class="level-item is-size-3 is-hidden-mobile">
+        <div
+          @click="toogleProperty('listMode')"
+          class="level-item is-size-3 has-cursor-pointer is-hidden-mobile">
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th-list"
-            class="has-cursor-pointer"
             :class="listMode ? 'has-text-primary' : ''"
-            :title="$gettext('List mode')"
-            @click="toogleProperty('listMode')" />
+            :title="$gettext('List mode')"/>
           <span>&thinsp;</span>
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th"
-            class="has-cursor-pointer"
             :class="!listMode ? 'has-text-primary' : ''"
-            :title="$gettext('Cards mode')"
-            @click="toogleProperty('listMode')" />
+            :title="$gettext('Cards mode')"/>
         </div>
-        <div class="level-item is-size-3 is-hidden-mobile">
-          <div v-if="documentAreGeoLocalized" class="dropdown is-hoverable is-right display-mode-switcher">
-            <div class="dropdown-trigger">
-              <fa-icon
-                :icon="['fas', 'eye']"
-                class="has-cursor-pointer"/>
-            </div>
-            <div class="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <table class="dropdown-item is-size-6">
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='result'}"
-                    @click="setProperty('displayMode', 'result')">
-                    <td class="has-text-centered">
-                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Results only</td>
-                  </tr>
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='both'}"
-                    @click="setProperty('displayMode', 'both')">
-                    <td class="is-nowrap">
-                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-                      <span>&thinsp;</span>
-                      <fa-icon icon="map-marked-alt"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Both results and map</td>
-                  </tr>
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='map'}"
-                    @click="setProperty('displayMode', 'map')">
-                    <td class="has-text-centered">
-                      <fa-icon icon="map-marked-alt"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Map only</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
+        <div v-if="documentAreGeoLocalized" class="level-item is-hidden-mobile">
+          <display-mode-switch
+            list-mode="listMode"
+            :value="displayMode"
+            @input="setProperty('displayMode', arguments[0])" />
         </div>
 
         <div class="level-item is-size-3 is-hidden-tablet">
@@ -178,6 +138,7 @@
   import QueryItems from './utils/QueryItems';
   import PageSelector from './utils/PageSelector';
   import ImageCards from './utils/ImageCards';
+  import DisplayModeSwitch from './utils/DisplayModeSwitch';
 
   const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 
@@ -188,7 +149,8 @@
       QueryItems,
       PageSelector,
       DocumentsTable,
-      ImageCards
+      ImageCards,
+      DisplayModeSwitch
     },
 
     data() {
@@ -360,12 +322,6 @@
         padding-top:0;
         padding-bottom:0;
       //    transition:0.3s;
-      }
-    }
-
-    .display-mode-switcher{
-      td:nth-child(2){
-        padding-left:0.5rem;
       }
     }
   }

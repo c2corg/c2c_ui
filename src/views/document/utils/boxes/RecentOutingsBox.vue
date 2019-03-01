@@ -21,8 +21,7 @@
       <add-link
         document-type="outing"
         :query="query"
-        class="button is-primary"
-        v-translate>
+        class="button is-primary">
         <span v-if="outings.length === 0" v-translate>
           Add the first outing
         </span>

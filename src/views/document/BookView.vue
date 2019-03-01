@@ -29,6 +29,7 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary"/>
           <markdown-section :document="document" :field="fields.description" hide-title/>
+          <div style="clear:both" />
         </div>
 
         <routes-box :document="document" hide-buttons/>

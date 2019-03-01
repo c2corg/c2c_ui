@@ -205,6 +205,7 @@
         // medium image
         img[c2c\:size=MI]{
             width: 25vw;
+            max-width:400px;
         }
 
         // big image
