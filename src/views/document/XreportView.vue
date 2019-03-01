@@ -1,5 +1,5 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="columns">
       <div class="column is-3">

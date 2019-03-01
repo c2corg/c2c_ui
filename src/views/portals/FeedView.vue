@@ -1,5 +1,5 @@
 <template>
-  <div class="has-background-light">
+  <div>
     <html-header :title="$gettext('Home')"/>
     <home-banner v-if="!$user.isLogged"/>
     <div class="section">
