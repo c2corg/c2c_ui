@@ -22,11 +22,7 @@
 
           <field-view :document="document" :field="fields.image_type" />
           <field-view :document="document" :field="fields.quality" />
-
-          <label-value v-if="document.categories && document.categories.length" :label="$gettext('categories')">
-            {{ document.categories.join(", ") }}
-          </label-value>
-
+          <field-view :document="document" :field="fields.categories"/>
           <field-view :document="document" :field="fields.camera_name"/>
           <field-view :document="document" :field="fields.exposure_time"/>
           <field-view :document="document" :field="fields.fnumber"/>
