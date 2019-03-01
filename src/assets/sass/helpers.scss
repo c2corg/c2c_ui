@@ -36,6 +36,9 @@
     color: $text;
 }
 
+.has-rounded-corner {
+    border-radius: 5px;
+}
 
 @media print {
     /* print styles go here */
