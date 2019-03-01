@@ -3,7 +3,7 @@
     <html-header title="Yeti"/>
     <div class="box">
       <h1 class="title is-1">
-        <span v-translate>YETI - Un outil pour la vie</span>
+        <span>YETI - Un outil pour la vie</span>
         <span class="is-pulled-right has-text-primary">
           <fa-icon icon="map-marked-alt" />
         </span>
