@@ -16,7 +16,7 @@
           Close
         </button>
         <a
-          v-if="$user.isLogged"
+          v-if="$user.isLogged && showModifyButton"
           class="button is-info"
           target="_blank"
           :href="'https://www.camptocamp.org/articles/' + helper.documentId" v-translate>
@@ -36,6 +36,7 @@
       return {
         title: null,
         html: null,
+        showModifyButton: false,
         lang: null,
         helperId: '',
         headerFound: false
@@ -66,6 +67,7 @@
           return;
         }
 
+        this.showModifyButton = false;
         this.lang = lang || this.lang;
         this.html = this.$gettext('loading');
         c2c.article.getCooked(this.helper.documentId, this.lang).then(this.computeHtml);
@@ -73,6 +75,7 @@
       },
 
       computeHtml(response) {
+        this.showModifyButton = !response.data.protected;
         const cooked = response.data.cooked;
 
         this.title = cooked.title;

@@ -120,6 +120,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
+          <div style="clear:both" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split/>

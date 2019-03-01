@@ -51,6 +51,7 @@
           <markdown-section :document="document" :field="fields.reduce_impact"/>
           <markdown-section :document="document" :field="fields.modifications"/>
           <markdown-section :document="document" :field="fields.other_comments"/>
+          <div style="clear:both" />
         </div>
 
         <images-box v-if="document" :document="document"/>

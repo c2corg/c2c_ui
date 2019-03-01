@@ -49,8 +49,11 @@
           </a>
         </div>
 
-        <markdown-section :document="document" :field="fields.summary"/>
-        <markdown-section :document="document" :field="fields.description" hide-title/>
+        <div v-if="locale.summary || locale.description" class="box">
+          <markdown-section :document="document" :field="fields.summary"/>
+          <markdown-section :document="document" :field="fields.description" hide-title/>
+          <div style="clear:both" />
+        </div>
 
         <routes-box :document="document" hide-buttons/>
         <recent-outings-box :document="document" hide-see-all-results-button />
