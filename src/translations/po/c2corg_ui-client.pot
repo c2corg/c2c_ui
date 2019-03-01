@@ -134,7 +134,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:9
 #: src/views/document/BookView.vue:7
 #: src/views/document/ImageView.vue:7
-#: src/views/document/OutingView.vue:34
+#: src/views/document/OutingView.vue:35
 #: src/views/document/RouteView.vue:20
 #: src/views/document/XreportView.vue:9
 #: src/views/user/PreferencesView.vue:45
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Add images"
 msgstr ""
 
-#: src/views/document/utils/boxes/RecentOutingsBox.vue:33
+#: src/views/document/utils/boxes/RecentOutingsBox.vue:26
 msgid "Add the first outing"
 msgstr ""
 
@@ -344,13 +344,17 @@ msgstr ""
 msgid "Articles, waypoints or routes to be linked."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:62
+#: src/views/wiki/edition/ImageEditionView.vue:63
 msgid "Articles, waypoints, routes or books to be linked."
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:463
 msgctxt "rock_types"
 msgid "artificial"
+msgstr ""
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue:4
+msgid "Associated outings"
 msgstr ""
 
 #: src/views/document/utils/boxes/RoutesBox.vue:4
@@ -371,7 +375,7 @@ msgid "association"
 msgstr ""
 
 #: src/views/wiki/edition/BookEditionView.vue:37
-#: src/views/wiki/edition/ImageEditionView.vue:61
+#: src/views/wiki/edition/ImageEditionView.vue:62
 #: src/views/wiki/edition/WaypointEditionView.vue:147
 msgid "associations"
 msgstr ""
@@ -391,7 +395,7 @@ msgid "aug"
 msgstr ""
 
 #: src/views/wiki/HistoryView.vue:45
-#: src/views/wiki/WhatsNewView.vue:8
+#: src/views/wiki/WhatsNewView.vue:11
 msgid "Author"
 msgstr ""
 
@@ -422,7 +426,7 @@ msgctxt "event_types"
 msgid "avalanche"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:217
+#: src/components/datatable/DocumentsTable.vue:237
 msgid "avalanche"
 msgstr ""
 
@@ -469,7 +473,7 @@ msgstr ""
 msgid "Back to code"
 msgstr ""
 
-#: src/views/wiki/edition/utils/EditionContainer.vue:19
+#: src/views/wiki/edition/utils/EditionContainer.vue:34
 msgid "Back to edit mode"
 msgstr ""
 
@@ -534,7 +538,7 @@ msgctxt "public_transportation_types"
 msgid "boat"
 msgstr ""
 
-#: src/views/document/RouteView.vue:173
+#: src/views/document/RouteView.vue:174
 msgid "bolted rock climbing gear"
 msgstr ""
 
@@ -567,6 +571,10 @@ msgstr ""
 msgid "Books and websites not already associated to this route"
 msgstr ""
 
+#: src/views/documents/utils/DisplayModeSwitch.vue:26
+msgid "Both results and map"
+msgstr ""
+
 #: src/views/wiki/edition/XreportEditionView.vue:78
 msgid "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here."
 msgstr ""
@@ -591,7 +599,7 @@ msgctxt "rock_types"
 msgid "calcaire"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:40
+#: src/views/wiki/edition/ImageEditionView.vue:41
 msgid "camera settings"
 msgstr ""
 
@@ -630,7 +638,7 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:53
+#: src/views/documents/DocumentsView.vue:64
 msgid "Cards mode"
 msgstr ""
 
@@ -778,7 +786,7 @@ msgstr ""
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:17
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:9
 #: src/views/wiki/HistoryView.vue:46
-#: src/views/wiki/WhatsNewView.vue:14
+#: src/views/wiki/WhatsNewView.vue:17
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:8
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:16
 msgid "comment"
@@ -837,7 +845,7 @@ msgstr ""
 msgid "contact"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:58
+#: src/views/document/utils/boxes/CommentsBox.vue:62
 msgid "Continue the discussion"
 msgstr ""
 
@@ -884,7 +892,7 @@ msgctxt "glacier_gear_types"
 msgid "crampons_spring"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:34
+#: src/views/documents/DocumentsView.vue:35
 msgid "Create"
 msgstr ""
 
@@ -1083,7 +1091,7 @@ msgstr ""
 msgid "Detailed figures, like ratings, height differences, frequentation..."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:52
+#: src/views/wiki/edition/ImageEditionView.vue:53
 msgid "Detailed information"
 msgstr ""
 
@@ -1159,13 +1167,13 @@ msgctxt "glacier_ratings"
 msgid "easy"
 msgstr ""
 
-#: src/views/document/RouteView.vue:168
-#: src/views/document/RouteView.vue:177
+#: src/views/document/RouteView.vue:169
+#: src/views/document/RouteView.vue:178
 msgid "easy mountain climbing gear"
 msgstr ""
 
-#: src/views/document/RouteView.vue:164
-#: src/views/document/RouteView.vue:192
+#: src/views/document/RouteView.vue:165
+#: src/views/document/RouteView.vue:193
 msgid "easy snow ice mixed gear"
 msgstr ""
 
@@ -1174,7 +1182,7 @@ msgctxt "route_configuration_types"
 msgid "edge"
 msgstr ""
 
-#: src/components/generics/links/EditLink.vue:6
+#: src/components/generics/links/EditLink.vue:7
 #: src/components/helper/HelperWindow.vue:22
 #: src/views/document/utils/DocumentViewHeader.vue:30
 msgid "Edit"
@@ -1204,10 +1212,10 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:121
-#: src/components/datatable/DocumentsTable.vue:162
+#: src/components/datatable/DocumentsTable.vue:129
+#: src/components/datatable/DocumentsTable.vue:176
 #: src/translations/fixed_strings_common_js.vue:57
-#: src/views/document/OutingView.vue:66
+#: src/views/document/OutingView.vue:67
 #: src/views/document/RouteView.vue:55
 msgid "elevation"
 msgstr ""
@@ -1254,7 +1262,7 @@ msgctxt "quality_types"
 msgid "empty"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:55
+#: src/views/wiki/WhatsNewView.vue:58
 msgid "empty comment"
 msgstr ""
 
@@ -1510,7 +1518,7 @@ msgstr ""
 msgid "Geolocation"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:29
+#: src/views/wiki/edition/ImageEditionView.vue:30
 msgid "geolocation"
 msgstr ""
 
@@ -1612,91 +1620,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:111
+#: src/components/cards/FeedCard.vue:123
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:109
+#: src/components/cards/FeedCard.vue:121
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:110
+#: src/components/cards/FeedCard.vue:122
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:112
+#: src/components/cards/FeedCard.vue:124
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:113
+#: src/components/cards/FeedCard.vue:125
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:114
+#: src/components/cards/FeedCard.vue:126
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:115
+#: src/components/cards/FeedCard.vue:127
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:116
+#: src/components/cards/FeedCard.vue:128
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:117
+#: src/components/cards/FeedCard.vue:129
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:118
+#: src/components/cards/FeedCard.vue:130
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:119
+#: src/components/cards/FeedCard.vue:131
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:120
+#: src/components/cards/FeedCard.vue:132
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:121
+#: src/components/cards/FeedCard.vue:133
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:122
+#: src/components/cards/FeedCard.vue:134
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:123
+#: src/components/cards/FeedCard.vue:135
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:124
+#: src/components/cards/FeedCard.vue:136
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:137
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:126
+#: src/components/cards/FeedCard.vue:138
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:127
+#: src/components/cards/FeedCard.vue:139
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:140
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:141
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:130
+#: src/components/cards/FeedCard.vue:142
 msgid "has updated the xreport"
 msgstr ""
 
@@ -1725,7 +1733,7 @@ msgstr ""
 msgid "height"
 msgstr ""
 
-#: src/views/document/OutingView.vue:73
+#: src/views/document/OutingView.vue:74
 #: src/views/document/RouteView.vue:61
 #: src/views/wiki/edition/utils/CotometerWindow.vue:56
 msgid "height_diff"
@@ -1735,9 +1743,9 @@ msgstr ""
 msgid "height_diff_access"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:38
+#: src/components/cards/FeedCard.vue:41
 #: src/components/cards/RouteCard.vue:31
-#: src/components/generics/pretty-links/PrettyRouteLink.vue:8
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:11
 #: src/translations/fixed_strings_common_js.vue:87
 msgid "height_diff_difficulties"
 msgstr ""
@@ -1746,7 +1754,7 @@ msgstr ""
 msgid "height_diff_down"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:33
+#: src/components/cards/FeedCard.vue:36
 #: src/components/cards/OutingCard.vue:25
 #: src/components/cards/RouteCard.vue:23
 #: src/translations/fixed_strings_common_js.vue:89
@@ -1786,10 +1794,6 @@ msgstr ""
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:62
-msgid "Hide map"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue:486
 msgctxt "slackline_types"
 msgid "highline"
@@ -1800,7 +1804,7 @@ msgctxt "activities"
 msgid "hiking"
 msgstr ""
 
-#: src/views/document/RouteView.vue:186
+#: src/views/document/RouteView.vue:187
 msgid "hiking gear"
 msgstr ""
 
@@ -1868,7 +1872,7 @@ msgstr ""
 msgid "I have read and agree to the terms of use"
 msgstr ""
 
-#: src/views/document/RouteView.vue:182
+#: src/views/document/RouteView.vue:183
 msgid "ice and dry climbing gear"
 msgstr ""
 
@@ -1906,6 +1910,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:352
 msgctxt "glacier_ratings"
 msgid "impossible"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:3
+msgid "Incidents and accidents"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:101
@@ -2055,7 +2063,7 @@ msgstr ""
 msgid "Last forum topics"
 msgstr ""
 
-#: src/views/document/utils/boxes/RecentOutingsBox.vue:4
+#: src/views/document/utils/boxes/RecentOutingsBox.vue:5
 msgid "Last outings"
 msgstr ""
 
@@ -2068,7 +2076,7 @@ msgid "length"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:109
-#: src/views/document/OutingView.vue:75
+#: src/views/document/OutingView.vue:76
 msgid "length_total"
 msgstr ""
 
@@ -2127,11 +2135,11 @@ msgstr ""
 msgid "link"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:9
+#: src/views/wiki/WhatsNewView.vue:12
 msgid "Links"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:46
+#: src/views/documents/DocumentsView.vue:58
 msgid "List mode"
 msgstr ""
 
@@ -2139,7 +2147,11 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue:70
+#: src/views/documents/DocumentsView.vue:46
+msgid "Load my preferences"
+msgstr ""
+
+#: src/components/helper/HelperWindow.vue:72
 msgid "loading"
 msgstr ""
 
@@ -2159,12 +2171,8 @@ msgstr ""
 msgid "Location / elevation / orientation"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:55
+#: src/views/document/utils/boxes/CommentsBox.vue:44
 msgid "Log in to post a comment"
-msgstr ""
-
-#: src/views/document/utils/boxes/CommentsBox.vue:20
-msgid "Log in to post the first comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
@@ -2226,6 +2234,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_manual.vue:26
 msgid "map"
+msgstr ""
+
+#: src/views/documents/utils/DisplayModeSwitch.vue:35
+msgid "Map only"
 msgstr ""
 
 #: src/translations/fixed_strings_manual.vue:15
@@ -2322,7 +2334,7 @@ msgstr ""
 msgid "modifications"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:7
+#: src/views/wiki/WhatsNewView.vue:10
 msgctxt "modification date"
 msgid "Modified the"
 msgstr ""
@@ -2649,7 +2661,7 @@ msgstr ""
 msgid "Open fields to deeply explain the event circumstances."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:53
+#: src/views/wiki/edition/ImageEditionView.vue:54
 msgid "Open fields to detail the picture's context"
 msgstr ""
 
@@ -2679,7 +2691,7 @@ msgstr ""
 msgid "Ordered list"
 msgstr ""
 
-#: src/components/generics/pretty-links/PrettyRouteLink.vue:14
+#: src/components/generics/pretty-links/PrettyRouteLink.vue:17
 #: src/translations/fixed_strings_common_js.vue:128
 msgid "orientations"
 msgstr ""
@@ -2754,7 +2766,7 @@ msgctxt "waypoint_types"
 msgid "paragliding_takeoff"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:41
+#: src/views/wiki/edition/ImageEditionView.vue:42
 msgid "Parameters of the Digital Camera"
 msgstr ""
 
@@ -2836,7 +2848,7 @@ msgstr ""
 msgid "personal"
 msgstr ""
 
-#: src/views/document/OutingView.vue:103
+#: src/views/document/OutingView.vue:104
 #: src/views/wiki/edition/OutingEditionView.vue:78
 msgid "personal comments"
 msgstr ""
@@ -2909,7 +2921,8 @@ msgctxt "glacier_ratings"
 msgid "possible"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:23
+#: src/views/document/utils/boxes/CommentsBox.vue:54
+#: src/views/document/utils/boxes/CommentsBox.vue:58
 msgid "Post the first comment"
 msgstr ""
 
@@ -2933,7 +2946,7 @@ msgctxt "weather_station_types"
 msgid "precipitation_heater"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:30
+#: src/views/wiki/edition/ImageEditionView.vue:31
 msgid "Precise localisation of the shooting"
 msgstr ""
 
@@ -2951,7 +2964,8 @@ msgid "pressure"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:43
-#: src/views/wiki/edition/utils/EditionContainer.vue:23
+#: src/views/wiki/edition/utils/EditionContainer.vue:39
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue:23
 msgid "Preview"
 msgstr ""
 
@@ -3091,11 +3105,11 @@ msgctxt "area_types"
 msgid "range"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:130
-#: src/components/datatable/DocumentsTable.vue:132
-#: src/components/datatable/DocumentsTable.vue:172
-#: src/components/datatable/DocumentsTable.vue:174
-#: src/views/document/OutingView.vue:48
+#: src/components/datatable/DocumentsTable.vue:138
+#: src/components/datatable/DocumentsTable.vue:141
+#: src/components/datatable/DocumentsTable.vue:186
+#: src/components/datatable/DocumentsTable.vue:189
+#: src/views/document/OutingView.vue:49
 #: src/views/document/RouteView.vue:35
 #: src/views/documents/utils/QueryItems.vue:14
 #: src/views/wiki/edition/RouteEditionView.vue:80
@@ -3173,6 +3187,10 @@ msgstr ""
 
 #: src/js/waypoint-labels-mixin.js:46
 msgid "restricted_access"
+msgstr ""
+
+#: src/views/documents/utils/DisplayModeSwitch.vue:15
+msgid "Results only"
 msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue:66
@@ -3399,7 +3417,7 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:208
+#: src/components/datatable/DocumentsTable.vue:228
 #: src/translations/fixed_strings_common_js.vue:166
 msgid "severity"
 msgstr ""
@@ -3431,13 +3449,9 @@ msgctxt "API message"
 msgid "Shorter than minimum length 3"
 msgstr ""
 
-#: src/views/document/utils/boxes/RecentOutingsBox.vue:10
-#: src/views/document/utils/boxes/RoutesBox.vue:15
+#: src/views/document/utils/boxes/RecentOutingsBox.vue:11
+#: src/views/document/utils/boxes/RoutesBox.vue:7
 msgid "show all"
-msgstr ""
-
-#: src/views/documents/DocumentsView.vue:62
-msgid "Show map"
 msgstr ""
 
 #: src/views/user/PreferencesView.vue:30
@@ -3483,7 +3497,7 @@ msgctxt "activities"
 msgid "skitouring"
 msgstr ""
 
-#: src/views/document/RouteView.vue:160
+#: src/views/document/RouteView.vue:161
 msgid "skitouring gear"
 msgstr ""
 
@@ -3807,7 +3821,7 @@ msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue:43
 #: src/translations/fixed_strings_common_js.vue:184
-#: src/views/wiki/WhatsNewView.vue:12
+#: src/views/wiki/WhatsNewView.vue:15
 msgid "title"
 msgstr ""
 

@@ -53,7 +53,7 @@
                 @{{ document.forum_username }}
               </span>
               <span v-if="document.area_type" class="is-italic">
-                {{ $gettext(document.area_type) }}
+                {{ $gettext(document.area_type, 'area_types') | uppercaseFirstLetter }}
               </span>
 
               &nbsp;
