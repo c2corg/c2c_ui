@@ -1,10 +1,11 @@
 <template>
   <dropdown-button class="is-right">
-    <fa-icon
-      slot="button"
-      :icon="['fas', 'eye']"
-      class="is-size-4 has-cursor-pointer"/>
-    <table class="is-size-6">
+    <span slot="button" class="button">
+      <fa-icon :icon="['fas', 'eye']" class="is-size-4"/>
+      <span>&nbsp;</span>
+      <fa-icon icon="angle-down" aria-hidden="true"/>
+    </span>
+    <table class="dropdown-item is-size-6">
       <tr
         class="has-hover-background has-cursor-pointer"
         :class="{'has-text-primary has-text-weight-bold': value==='result'}"
