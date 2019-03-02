@@ -66,7 +66,7 @@
         </add-link>
       </div>
 
-      <div v-if="!$user.isLogged" class="navigation-item ">
+      <div v-if="!$user.isLogged" class="navigation-item">
         <login-button class="is-link">
           <span class="is-hidden-touch" v-translate>Login</span>
           &nbsp;
@@ -74,67 +74,61 @@
         </login-button>
       </div>
 
-      <div
-        v-else
-        class="navigation-item dropdown"
-        :class="{'is-active':showUserMenu}">
-        <div ref="userMenuButton" class="dropdown-trigger button" @click="showUserMenu=true">
-          <img
-            width="24" height="24"
-            :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-            class="user-avatar">
-          <span class="has-text-weight-bold is-hidden-mobile">
-            &nbsp;{{ $user.name }}
+      <div v-else class="navigation-item">
+        <dropdown-button class="is-right">
+          <span slot="button" class="button">
+            <img
+              width="24" height="24"
+              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'">
+            <span class="has-text-weight-bold is-hidden-mobile">
+              &nbsp;{{ $user.name }}
+            </span>
           </span>
-        </div>
-        <div class="dropdown-menu">
-          <div class="dropdown-content">
 
-            <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="dropdown-item is-size-5">
-              <fa-icon icon="user"/>
-              <span>&nbsp;</span>
-              <span v-translate>My profile</span>
-            </router-link>
-            <router-link :to="{ name: 'account' }" class="dropdown-item is-size-5">
-              <fa-icon icon="check-circle"/>
-              <span>&nbsp;</span>
-              <span v-translate>My account</span>
-            </router-link>
-            <router-link :to="{ name: 'preferences' }" class="dropdown-item is-size-5">
-              <fa-icon icon="cogs"/>
-              <span>&nbsp;</span>
-              <span v-translate>My preferences</span>
-            </router-link>
-            <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="dropdown-item is-size-5">
-              <icon-outing />
-              <span>&nbsp;</span>
-              <span v-translate>My outings</span>
-            </router-link>
-            <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="dropdown-item is-size-5">
-              <fa-icon icon="edit"/>
-              <span>&nbsp;</span>
-              <span v-translate>My changes</span>
-            </router-link>
-            <router-link :to="{ name: 'following' }" class="dropdown-item is-size-5">
-              <fa-icon icon="heart"/>
-              <span>&nbsp;</span>
-              <span v-translate>My followed users</span>
-            </router-link>
-            <router-link :to="{ name: 'mailinglists' }" class="dropdown-item is-size-5">
-              <fa-icon icon="at"/>
-              <span>&nbsp;</span>
-              <span v-translate>My mailing lists</span>
-            </router-link>
+          <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="dropdown-item is-size-5">
+            <fa-icon icon="user"/>
+            <span>&nbsp;</span>
+            <span v-translate>My profile</span>
+          </router-link>
+          <router-link :to="{ name: 'account' }" class="dropdown-item is-size-5">
+            <fa-icon icon="check-circle"/>
+            <span>&nbsp;</span>
+            <span v-translate>My account</span>
+          </router-link>
+          <router-link :to="{ name: 'preferences' }" class="dropdown-item is-size-5">
+            <fa-icon icon="cogs"/>
+            <span>&nbsp;</span>
+            <span v-translate>My preferences</span>
+          </router-link>
+          <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="dropdown-item is-size-5">
+            <icon-outing />
+            <span>&nbsp;</span>
+            <span v-translate>My outings</span>
+          </router-link>
+          <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="dropdown-item is-size-5">
+            <fa-icon icon="edit"/>
+            <span>&nbsp;</span>
+            <span v-translate>My changes</span>
+          </router-link>
+          <router-link :to="{ name: 'following' }" class="dropdown-item is-size-5">
+            <fa-icon icon="heart"/>
+            <span>&nbsp;</span>
+            <span v-translate>My followed users</span>
+          </router-link>
+          <router-link :to="{ name: 'mailinglists' }" class="dropdown-item is-size-5">
+            <fa-icon icon="at"/>
+            <span>&nbsp;</span>
+            <span v-translate>My mailing lists</span>
+          </router-link>
 
-            <hr class="dropdown-divider">
+          <hr class="dropdown-divider">
 
-            <a class="dropdown-item is-size-5" @click="$user.signout()">
-              <fa-icon icon="sign-out-alt"/>
-              <span>&nbsp;</span>
-              <span v-translate>Logout</span>
-            </a>
-          </div>
-        </div>
+          <a class="dropdown-item is-size-5" @click="$user.signout()">
+            <fa-icon icon="sign-out-alt"/>
+            <span>&nbsp;</span>
+            <span v-translate>Logout</span>
+          </a>
+        </dropdown-button>
       </div>
       <div
         v-if="!$user.isLogged"
@@ -170,8 +164,7 @@
       return {
         searchText: '',
         hideSearchInput: true, // only on small screen,
-        showLangSwitch: false,
-        showUserMenu: false
+        showLangSwitch: false
       };
     },
 
@@ -211,10 +204,6 @@
         if (this.$refs.langSwitch && !this.$refs.langSwitch.contains(event.target)) {
           this.showLangSwitch = false;
         }
-
-        if (this.$refs.userMenuButton && !this.$refs.userMenuButton.contains(event.target)) {
-          this.showUserMenu = false;
-        }
       }
     }
   };
@@ -242,15 +231,6 @@
     justify-content: flex-end;
     margin-left: auto;
     display:flex;
-
-    .user-avatar{
-      vertical-align: bottom;
-    }
-
-    .dropdown-menu{
-      left:auto;
-      right:5px;
-    }
   }
 
   .navigation-item{

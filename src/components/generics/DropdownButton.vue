@@ -1,27 +1,15 @@
 <template>
   <div :class="{'is-active': isActive}" class="dropdown">
 
-    <div class="dropdown-trigger">
-      <span
-        :disabled="disabled"
-        class="button"
-        aria-haspopup="true"
-        aria-controls="dropdown-menu"
-        @click="isActive=(!isActive && !disabled)" >
-
-        <slot name="button"/>
-
-        <span class="icon is-small">
-          <fa-icon icon="angle-down" aria-hidden="true"/>
-        </span>
+    <div class="dropdown-trigger" @click="isActive=(!isActive && !disabled)">
+      <span aria-haspopup="true" aria-controls="dropdown-menu">
+        <slot name="button" />
       </span>
     </div>
 
     <div id="dropdown-menu" class="dropdown-menu" role="menu">
       <div class="dropdown-content">
-        <div class="dropdown-item">
-          <slot/>
-        </div>
+        <slot/>
       </div>
     </div>
   </div>

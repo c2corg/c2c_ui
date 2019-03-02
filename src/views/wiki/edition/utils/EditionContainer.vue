@@ -13,13 +13,16 @@
           {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
           <span>
             <dropdown-button>
-              <span slot="button">
-                {{ $language.available[document.locales[0].lang] }}
+              <span slot="button" class="button">
+                <span>
+                  {{ $language.available[document.locales[0].lang] }}&nbsp;
+                </span>
+                <fa-icon icon="angle-down" aria-hidden="true"/>
               </span>
               <div
                 v-for="lang of Object.keys($language.available)"
                 :key="lang"
-                class="has-hover-background has-cursor-pointer"
+                class="dropdown-item has-hover-background has-cursor-pointer"
                 @click="document.locales[0].lang = lang">
                 {{ $language.available[lang] }}
               </div>
