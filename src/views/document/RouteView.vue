@@ -18,7 +18,7 @@
             <div class="column is-4">
 
               <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3"/>
+                <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
               </label-value>
 
               <field-view :document="document" :field="fields.route_types" />

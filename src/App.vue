@@ -2,7 +2,7 @@
   <div id="app">
     <side-menu class="side-menu no-print" :class="{'alternative-side-menu': alternativeSideMenu}"/>
     <navigation class="navigation no-print" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
-    <site-notice ref="siteNotice no-print" v-if="$route.name!='home'" class="no-print site-notice"/>
+    <site-notice ref="siteNotice no-print" class="no-print site-notice"/>
     <image-viewer ref="imageViewer"/>
     <helper-window ref="helper"/>
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
@@ -56,138 +56,137 @@
 
 <style lang="scss">
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    $sidemenu-width: 200px;
-    $body-height : calc(100vh - #{$navbar-height});
+  $sidemenu-width: 200px;
+  $body-height : calc(100vh - #{$navbar-height});
 
-    html{
-        overflow-x: hidden;
-        overflow-y: scroll;
-        text-rendering: optimizeLegibility;
-        text-size-adjust: 100%;
-    }
+  html{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-rendering: optimizeLegibility;
+    text-size-adjust: 100%;
+  }
 
-    html, body, #app{
-        min-height:$body-height;
-    }
+  html, body, #app{
+    min-height:$body-height;
+  }
 
-    .navigation{
-        position:fixed;
-        top:0;
-        left:0;
-        right:0;
-        z-index:30;
-    }
+  .navigation{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:25;
+  }
+
+  .side-menu{
+    width:$sidemenu-width;
+    height:100vh;
+    position:fixed;
+    top:0px;
+    z-index:30;
+    transition: 0.3s;
+  }
+
+  .alternative-side-menu-shader{
+    z-index: 29;
+    position:fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height:100vh;
+    background: rgba(0,0,0,0.2)
+  }
+
+  .site-notice{
+    cursor:pointer;
+    position:absolute;
+    top:$navbar-height;
+    width:100%;
+    z-index:20;
+    box-shadow:0 5px 10px 0px rgba(10, 10, 10, 0.50);
+  }
+
+  .page-content{
+    min-height: 100vh;
+    padding-top:$navbar-height;
+    display: flex;
+    flex-flow: column;
+  }
+
+  @media screen and (max-width: $tablet) {
 
     .side-menu{
-        padding-top:$navbar-height;
-        width:$sidemenu-width;
-        height:100vh;
-        position:fixed;
-        top:0px;
-        z-index:25;
-        transition: 0.3s;
+      left:-$sidemenu-width;
     }
 
-    .alternative-side-menu-shader{
-        z-index: 2;
-        position:fixed;
-        top:0;
-        left:0;
-        width: 100vw;
-        height:100vh;
-        background: rgba(0,0,0,0.2)
-    }
-
-    .site-notice{
-        cursor:pointer;
-        position:absolute;
-        top:$navbar-height;
-        width:100%;
-        z-index:20;
-        box-shadow:0 5px 10px 0px rgba(10, 10, 10, 0.50);
+    .alternative-side-menu{
+      left:0;
     }
 
     .page-content{
-        min-height: 100vh;
-        padding-top:$navbar-height;
-        display: flex;
-        flex-flow: column;
+      margin-left:0;
+    }
+  }
+
+  @media screen and (min-width: $tablet) and (max-width: $desktop){
+
+    .side-menu{
+      left:-$sidemenu-width;
     }
 
-    @media screen and (max-width: $tablet) {
-
-        .side-menu{
-            left:-$sidemenu-width;
-        }
-
-        .alternative-side-menu{
-            left:0;
-        }
-
-        .page-content{
-            margin-left:0;
-        }
+    .alternative-side-menu{
+      left:0;
     }
 
-    @media screen and (min-width: $tablet) and (max-width: $desktop){
+    .page-content{
+      margin-left:0;
+    }
+  }
 
-        .side-menu{
-            left:-$sidemenu-width;
-        }
+  @media screen and (min-width: $desktop) and (max-width: $widescreen){
 
-        .alternative-side-menu{
-            left:0;
-        }
-
-        .page-content{
-            margin-left:0;
-        }
+    .page-content{
+      margin-left:$sidemenu-width;
     }
 
-    @media screen and (min-width: $desktop) and (max-width: $widescreen){
+    .site-notice{
+      padding-left: $sidemenu-width;
+    }
+  }
 
-        .page-content{
-            margin-left:$sidemenu-width;
-        }
+  @media screen and (min-width: $widescreen) and (max-width: $fullhd){
 
-        .site-notice{
-            padding-left: $sidemenu-width;
-        }
+    .page-content{
+      margin-left:$sidemenu-width;
     }
 
-    @media screen and (min-width: $widescreen) and (max-width: $fullhd){
+    .site-notice{
+      padding-left: $sidemenu-width;
+    }
+  }
 
-        .page-content{
-            margin-left:$sidemenu-width;
-        }
+  @media screen and (min-width: $fullhd){
 
-        .site-notice{
-            padding-left: $sidemenu-width;
-        }
+    .page-content{
+      margin-left:$sidemenu-width;
     }
 
-    @media screen and (min-width: $fullhd){
-
-        .page-content{
-            margin-left:$sidemenu-width;
-        }
-
-        .site-notice{
-            padding-left: $sidemenu-width;
-        }
+    .site-notice{
+      padding-left: $sidemenu-width;
     }
+  }
 
-    .router-view{
-        flex-grow : 1;
-    }
+  .router-view{
+    flex-grow : 1;
+  }
 
-    @media print {
-        /* print styles go here */
-        .page-content{
-            padding-top: 0;
-        }
+  @media print {
+    /* print styles go here */
+    .page-content{
+      padding-top: 0;
     }
+  }
 
 </style>
