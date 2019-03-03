@@ -1,51 +1,48 @@
 <template>
-  <div v-if="visible">
+  <div v-if="visible" class="image-viewer">
+    <div class="level is-mobile has-text-grey-lighter image-viewer-header">
+      <span class="level-item is-size-2">
+        {{ activeDocument.locales[0].title || '&nbsp;' }}
+      </span>
+      <span class="level-right is-size-3">
+        <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
+          <fa-icon icon="eye"/>
+        </document-link>
+
+        <edit-link
+          :document="activeDocument" :lang="activeDocument.available_langs[0]"
+          class="level-item has-text-grey-lighter"
+          @click="visible=false">
+          <fa-icon icon="edit"/>
+        </edit-link>
+
+        <fa-icon
+          class="level-item has-cursor-pointer"
+          icon="info-circle"
+          @click="toggleImageInfo(activeDocument)"/>
+        <fa-icon
+          class="level-item has-cursor-pointer request-fullscreen-button"
+          icon="expand"
+          @click="onRequestFullscreen"/>
+        <fa-icon
+          class="level-item has-cursor-pointer exit-fullscreen-button"
+          icon="compress"
+          @click="onExitFullscreen"/>
+        <fa-icon
+          class="level-item has-cursor-pointer"
+          icon="plus"
+          transform="rotate-45"
+          @click="visible=false"/>
+      </span>
+    </div>
+
     <swiper
       ref="swiper"
-      :options="$options.swiperOptions"
       class="image-viewer-swiper"
+      :options="$options.swiperOptions"
       @slide-change="onSlideChange">
 
       <swiper-slide v-for="image of images" :key="image.document_id">
-
-        <div class="is-size-3 has-text-grey-lighter image-viewer-header">
-          <div class="level is-mobile">
-            <span class="level-item is-size-2">
-              {{ image.locales[0].title }}
-            </span>
-            <span class="level-right">
-              <document-link :document="image" class="level-item has-text-grey-lighter">
-                <fa-icon icon="eye"/>
-              </document-link>
-
-              <edit-link
-                :document="image" :lang="image.available_langs[0]"
-                class="level-item has-text-grey-lighter"
-                @click="visible=false">
-                <fa-icon icon="edit"/>
-              </edit-link>
-
-              <fa-icon
-                class="level-item has-cursor-pointer"
-                icon="info-circle"
-                @click="showInfo(image)"/>
-              <fa-icon
-                class="level-item has-cursor-pointer request-fullscreen-button"
-                icon="expand"
-                @click="onRequestFullscreen"/>
-              <fa-icon
-                class="level-item has-cursor-pointer exit-fullscreen-button"
-                icon="compress"
-                @click="onExitFullscreen"/>
-              <fa-icon
-                class="level-item has-cursor-pointer"
-                icon="plus"
-                transform="rotate-45"
-                @click="visible=false"/>
-            </span>
-          </div>
-        </div>
-
         <img :data-src="getUrl(image)" class="swiper-lazy" :title="image.locales[0].title">
         <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
       </swiper-slide>
@@ -129,6 +126,7 @@
         }
 
         this.$options.swiperOptions.initialSlide = index;
+        this.activeDocument = this.images[index];
         this.visible = true;
       },
 
@@ -147,13 +145,18 @@
         }
       },
 
-      showInfo(image) {
-        this.$refs.imageInfo.show(image.document_id);
+      toggleImageInfo(image) {
+        this.$refs.imageInfo.toggle(image.document_id);
       },
 
       onSlideChange() {
         this.$refs.imageInfo.hide();
-        this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex - 1];
+        let index = this.$refs.swiper.swiper.activeIndex - 1;
+
+        index = (index + this.images.length) % this.images.length;
+
+        console.log(index);
+        this.activeDocument = this.images[index];
       },
 
       onRequestFullscreen() {
@@ -195,85 +198,91 @@
 </script>
 
 <style lang="scss">
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    .swiper-pagination{
-        .swiper-pagination-bullet{
-            background: white;
-            opacity: 1;
-            width: 16px;
-            height: 16px;
-        }
-
-        .swiper-pagination-bullet-active{
-            background: $primary;
-        }
+  .swiper-pagination{
+    .swiper-pagination-bullet{
+      background: white;
+      opacity: 1;
+      width: 16px;
+      height: 16px;
     }
+
+    .swiper-pagination-bullet-active{
+      background: $primary;
+    }
+  }
 </style>
 
 <style scoped lang="scss">
 
-    @import '~swiper/dist/css/swiper.css';
+  @import '~swiper/dist/css/swiper.css';
+
+  .image-viewer{
+    z-index:1000;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background: rgba(0,0,0,0.9);
+
+    .image-viewer-header{
+      padding:0.5rem 1rem;
+      background: rgba(0,0,0,0.9);
+      margin-bottom: 0!important;
+
+      svg:hover{
+        color:white;
+      }
+    }
 
     .image-viewer-swiper{
-        z-index:1000;
-        position:fixed;
-        top:0;
-        left:0;
-        width:100vw;
-        height:100vh;
-        background: rgba(0,0,0,0.9);
-
-        .swiper-slide{
-            max-height:100vh;
-            // background: yellow;
-
-            .image-viewer-header{
-                padding:0.5rem 1rem;
-                background: rgba(0,0,0,0.8);
-
-                svg:hover{
-                    color:white;
-                }
-            }
-
-            img{
-                max-height: 80vh;
-                max-width: 100%;
-                width: auto;
-                height: auto;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
-            }
-        }
+      width:100vw;
+      height:calc(100vh - 3.8rem);
     }
 
-    .image-viewer-info{
-        height:100vh;
-        width:20rem;
-        z-index:1000;
-        position:fixed;
-        top:3.7rem;
-        right:0;
-    }
+    .swiper-slide{
+      max-height:100vh;
+      // background: yellow;
 
-    .request-fullscreen-button:fullscreen, .request-fullscreen-button:-webkit-full-screen{
-        display: none;
+      img{
+        max-height: 80vh;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
     }
+  }
 
-    .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
-        display: none;
-    }
+  .image-viewer-info{
+      height:100vh;
+      width:20rem;
+      z-index:1000;
+      position:fixed;
+      top:3.7rem;
+      right:0;
+  }
 
-    .swiper-button-prev{
-        margin-left: 1rem;
-    }
-    .swiper-button-next{
-        margin-right: 1rem;
-    }
+  .request-fullscreen-button:fullscreen, .request-fullscreen-button:-webkit-full-screen{
+      display: none;
+  }
+
+  .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
+      display: none;
+  }
+
+  .swiper-button-prev{
+      margin-left: 1rem;
+  }
+  .swiper-button-next{
+      margin-right: 1rem;
+  }
 
 </style>
