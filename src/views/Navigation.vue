@@ -14,8 +14,8 @@
       :to="{name:'home'}"
       class="navigation-item navigation-brand has-text-centered"
       :class="{'is-hidden-mobile': !hideSearchInput}">
-      <img src="@/assets/img/logo_small.svg"
-           url="@/assets/img/logo_small.svg"
+      <img src="@/assets/img/logo.svg"
+           url="@/assets/img/logo.svg"
            alt="Camptocamp.org">
     </router-link>
 
@@ -222,8 +222,9 @@
   }
 
   .navigation-brand{
+    padding: 4px 5px!important;
     img{
-      height:calc(#{$navbar-height} - 1rem);
+      height:calc(#{$navbar-height} - 8px);
     }
   }
 

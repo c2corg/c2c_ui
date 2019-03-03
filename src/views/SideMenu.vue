@@ -1,5 +1,14 @@
 <template>
   <aside>
+
+    <router-link
+      :to="{name:'home'}"
+      class="menu-brand has-text-centered">
+      <img src="@/assets/img/logo.svg"
+           url="@/assets/img/logo.svg"
+           alt="Camptocamp.org">
+    </router-link>
+
     <router-link
       v-for="item of menuItems"
       :key="item.name"
@@ -11,7 +20,8 @@
     </router-link>
 
     <div class="menu-footer is-size-7">
-      <advertisement class="menu-add" v-if="windowHeight>=654"/>
+      <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
+      <advertisement class="menu-add" v-if="windowHeight>=630"/>
 
       <div class="has-text-centered menu-links">
         <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
@@ -80,19 +90,32 @@
 <style scoped lang="scss">
   @import '@/assets/sass/variables.scss';
 
+  $brandLogoHeight: 70px;
+  $brandLogoMargin: 5px;
+
+  $menuLinkHeightPadding: 6px;
+
   aside{
     border-right: 1px solid $secondary;
     // box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
     background: $white;
   }
 
+  .menu-brand{
+    display: block;
+    line-height: 0;
+
+    img{
+      height: $brandLogoHeight;
+      margin: $brandLogoMargin 0;
+    }
+  }
+
   .menu-item{
     display: block;
-    height: 37px;
-    // border-top: 1px solid #ccc;
-    padding: 8px 10px;
+    padding: $menuLinkHeightPadding 10px;
     border-left:5px solid $white;
-    color:$grey-dark;
+    color:$text;
   }
 
   .menu-item:hover{
@@ -145,7 +168,7 @@
   //     }
   // }
 
-  @media screen and (max-height: 340px){
+  @media screen and (max-height: 680px){
     .menu-socials{
       display:none!important;
     }

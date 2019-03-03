@@ -3,7 +3,7 @@
     <activities
       v-if="!hideActivities"
       :activities="route.activities"
-      class="is-size-3 has-text-normal icon-activities"/>
+      class="is-size-3 has-text-secondary icon-activities"/>
     <span>&nbsp;</span>
     <document-title :document="route"/>,
     <span

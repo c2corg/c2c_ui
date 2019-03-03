@@ -7,7 +7,7 @@
         <div class="box">
 
           <label-value :label="$gettext('activities')">
-            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+            <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
           </label-value>
 
           <label-value v-if="document.author" :label="$gettext('author')">

@@ -1,5 +1,5 @@
 <template>
-  <activities class="cell-activities" :activities="params.data.activities" />
+  <activities class="cell-activities has-text-secondary" :activities="params.data.activities" />
 </template>
 
 <script>
@@ -14,6 +14,5 @@
 
   .cell-activities{
     font-size:26px;
-    color:$text;
   }
 </style>
