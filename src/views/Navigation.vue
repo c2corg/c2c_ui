@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div class="navigation-item ">
+      <div class="navigation-item">
         <add-link document-type="outing" class="button is-primary is-hidden-mobile"/>
         <add-link document-type="outing" class="button is-primary is-hidden-tablet">
           <fa-icon icon="plus"/>
@@ -130,26 +130,20 @@
           </a>
         </dropdown-button>
       </div>
-      <div
-        v-if="!$user.isLogged"
-        ref="langSwitch"
-        class="navigation-item dropdown"
-        :class="{'is-active':showLangSwitch}">
-        <div class="dropdown-trigger button" @click="showLangSwitch=true">
-          {{ $language.current }}
-        </div>
-        <div class="dropdown-menu">
-          <div class="dropdown-content">
-            <a
-              v-for="(language, key) in $language.available"
-              :key="key"
-              class="dropdown-item is-size-5"
-              :class="{'is-active': key==$language.current}"
-              @click="$language.setCurrent(key)">
-              {{ language }}
-            </a>
-          </div>
-        </div>
+      <div v-if="!$user.isLogged" class="navigation-item">
+        <dropdown-button class="is-right">
+          <button class="button" slot="button">
+            {{ $language.current }}
+          </button>
+          <a
+            v-for="(language, key) in $language.available"
+            :key="key"
+            class="dropdown-item is-size-5"
+            :class="{'is-active': key==$language.current}"
+            @click="$language.setCurrent(key)">
+            {{ language }}
+          </a>
+        </dropdown-button>
       </div>
     </div>
   </nav>
@@ -163,8 +157,7 @@
     data() {
       return {
         searchText: '',
-        hideSearchInput: true, // only on small screen,
-        showLangSwitch: false
+        hideSearchInput: true // only on small screen,
       };
     },
 
@@ -199,10 +192,6 @@
       onClick(event) {
         if (!this.$refs.searchInputContainer.contains(event.target)) {
           this.hideSearchInput = true;
-        }
-
-        if (this.$refs.langSwitch && !this.$refs.langSwitch.contains(event.target)) {
-          this.showLangSwitch = false;
         }
       }
     }

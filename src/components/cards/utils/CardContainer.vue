@@ -29,6 +29,8 @@
 
   .card{
     transition:0.1s;
+    border: $card-border;
+    background: white;
   }
 
   .card:hover, .is-highlighted{

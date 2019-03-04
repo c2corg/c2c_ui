@@ -16,6 +16,15 @@
     text-overflow: ellipsis;
 }
 
+
+@media screen and (min-width: $tablet) {
+    .is-ellipsed-tablet{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 .has-cursor-pointer{
     cursor:pointer;
 }
@@ -37,7 +46,7 @@
 }
 
 .has-rounded-corner {
-    border-radius: 5px;
+    border-radius: $radius;
 }
 
 @media print {

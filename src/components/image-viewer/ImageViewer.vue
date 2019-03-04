@@ -155,7 +155,6 @@
 
         index = (index + this.images.length) % this.images.length;
 
-        console.log(index);
         this.activeDocument = this.images[index];
       },
 

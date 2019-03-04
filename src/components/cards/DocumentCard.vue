@@ -1,8 +1,9 @@
 <template>
-  <div class="card-container">
+  <div class="document-card-container">
     <component
       :is="documentType + '-card'"
       :document="document"
+      class="document-card"
       :not-clickable="notClickable"
       :highlighted="highlighted"/>
     <delete-button
@@ -64,10 +65,19 @@
 <style scoped lang="scss">
   @import '@/assets/sass/variables.scss';
 
-  .card-container{
+  .document-card-container{
     position:relative;
-    border: $card-border;
-    border-left:2px solid $color-base-c2c;
+
+    .document-card{
+      border-left:2px solid $color-base-c2c;
+    }
+  }
+
+  @media screen and (max-width: $tablet) {
+    .document-card{
+      border-left:0!important;
+      border-right:0!important;
+    }
   }
 
   .delete-button{
