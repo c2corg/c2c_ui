@@ -1,57 +1,47 @@
 <template>
   <div class="section documents-view">
     <html-header :title="$gettext(documentType) + 's'"/>
+    <div class="header-section">
 
-    <div class="level is-mobile header-section">
-      <div class="level-left">
-        <span class="level-item">
-          <div class="dropdown is-hoverable">
-            <div class="dropdown-trigger">
-              <span class="title is-1">
-                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
-              </span>
-              <fa-icon icon="angle-down" aria-hidden="true"/>
-            </div>
-            <div class="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <router-link
-                  v-for="type of documentTypes"
-                  :key="type"
-                  class="dropdown-item is-size-6"
-                  :class="{'is-active': type === documentType}"
-                  :to="{name: type + 's', query:$route.query}">
-                  <icon-document :document-type="type" />
-                  <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
-                </router-link>
-              </div>
-            </div>
-          </div>
+      <dropdown-button class="header-item">
+        <span slot="button">
+          <span class="title is-1">
+            {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+          </span>
+          <fa-icon icon="angle-down" aria-hidden="true"/>
         </span>
+        <router-link
+          v-for="type of documentTypes"
+          :key="type"
+          class="dropdown-item is-size-6"
+          :class="{'is-active': type === documentType}"
+          :to="{name: type + 's', query:$route.query}">
+          <icon-document :document-type="type" />
+          <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+        </router-link>
+      </dropdown-button>
 
-        <span v-if="!['area', 'profile', 'image'].includes(documentType)" class="level-item">
-          <add-link
-            :document-type="documentType"
-            :query="addQuery"
-            class="is-size-3"
-            :title="$gettext('Create')">
-            <fa-icon icon="plus-circle" />
-          </add-link>
-        </span>
-      </div>
+      <add-link
+        v-if="!['area', 'profile', 'image'].includes(documentType)"
+        :document-type="documentType"
+        :query="addQuery"
+        class="is-size-3 header-item"
+        :title="$gettext('Create')">
+        <fa-icon icon="plus-circle" />
+      </add-link>
 
-      <div class="level-right" v-if="documentType!='profile'">
-        <div v-if="$user.isLogged" class="level-item">
-          <button class="button is-small is-primary" @click="loadPreferences">
-            <fa-icon icon="star"/>
-            <span class="is-hidden-mobile">&nbsp;</span>
-            <span class="is-hidden-mobile" v-translate>
-              Load my preferences
-            </span>
-          </button>
-        </div>
-        <div
+      <span class="is-pulled-right is-flex header-right" v-if="documentType!='profile'">
+        <button v-if="$user.isLogged" class="button is-small is-primary header-item" @click="loadPreferences">
+          <fa-icon icon="star"/>
+          <span class="is-hidden-mobile">&nbsp;</span>
+          <span class="is-hidden-mobile" v-translate>
+            Load my preferences
+          </span>
+        </button>
+
+        <span
           @click="toogleProperty('listMode')"
-          class="level-item is-size-3 has-cursor-pointer is-hidden-mobile">
+          class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th-list"
@@ -63,15 +53,15 @@
             icon="th"
             :class="!listMode ? 'has-text-primary' : ''"
             :title="$gettext('Cards mode')"/>
-        </div>
-        <div v-if="documentAreGeoLocalized" class="level-item is-hidden-mobile">
-          <display-mode-switch
-            list-mode="listMode"
-            :value="displayMode"
-            @input="setProperty('displayMode', arguments[0])" />
-        </div>
+        </span>
+        <display-mode-switch
+          v-if="documentAreGeoLocalized"
+          class="header-item is-hidden-mobile"
+          list-mode="listMode"
+          :value="displayMode"
+          @input="setProperty('displayMode', arguments[0])" />
 
-        <div class="level-item is-size-3 is-hidden-tablet">
+        <span class="header-item is-size-3 is-hidden-tablet">
           <fa-icon
             icon="map-marked-alt"
             :class="{'has-text-primary': displayMode === 'map'}"
@@ -81,8 +71,9 @@
             icon="th"
             :class="{'has-text-primary': displayMode !== 'map'}"
             @click="setProperty('displayMode', 'both')"/>
-        </div>
-      </div>
+        </span>
+      </span>
+
     </div>
 
     <query-items class="filter-section"/>
@@ -259,15 +250,29 @@
 
   $section-padding: 1.5rem; //TODO find this variable
   $header-height : 34px;
-  $header-margin-bottom : 1rem; //TODO find this variable
+  $header-margin-bottom : 1.5rem; //TODO find this variable
   $filter-height : 32px;
   $filter-padding-bottom : 1.5rem;
   $page-selector-height : 3rem;
   $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
   $cards-gap:0.25rem;
 
+  .header-section{
+    margin-bottom: $header-margin-bottom;
+  }
+
+  .header-right{
+    align-items: center;
+  }
+
+  .header-item:not(:first-child) {
+    margin-bottom: 0;
+    margin-left: .75rem;
+  }
+
   .filter-section{
     padding-bottom: $filter-padding-bottom;
+    clear:both;
   }
 
   @media screen and (max-width: $tablet) {
