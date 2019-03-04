@@ -1,6 +1,7 @@
 <template>
   <div class="section documents-view">
     <html-header :title="$gettext(documentType) + 's'"/>
+
     <div class="level is-mobile header-section">
       <div class="level-left">
         <span class="level-item">
@@ -13,15 +14,15 @@
             </div>
             <div class="dropdown-menu" role="menu">
               <div class="dropdown-content">
-                <div v-for="type of documentTypes" :key="type" class="dropdown-item is-size-6 has-hover-background">
-                  <router-link
-                    :to="{name: type + 's', query:$route.query}"
-                    class="has-text-normal"
-                    :class="{'has-text-primary has-text-weight-bold': type === documentType}">
-                    <icon-document :document-type="type" />
-                    <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
-                  </router-link>
-                </div>
+                <router-link
+                  v-for="type of documentTypes"
+                  :key="type"
+                  class="dropdown-item is-size-6"
+                  :class="{'is-active': type === documentType}"
+                  :to="{name: type + 's', query:$route.query}">
+                  <icon-document :document-type="type" />
+                  <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+                </router-link>
               </div>
             </div>
           </div>
@@ -270,6 +271,16 @@
   }
 
   @media screen and (max-width: $tablet) {
+
+    .documents-view{
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .filter-section, .header-section{
+      padding-left:0.5rem;
+      padding-right:0.5rem;
+    }
 
     .map-container{
       height: $result-height;

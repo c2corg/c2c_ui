@@ -5,41 +5,39 @@
       <span>&nbsp;</span>
       <fa-icon icon="angle-down" aria-hidden="true"/>
     </span>
-    <table class="dropdown-item is-size-6">
-      <tr
-        class="has-hover-background has-cursor-pointer"
-        :class="{'has-text-primary has-text-weight-bold': value==='result'}"
-        @click="$emit('input', 'result')">
-        <td class="has-text-centered">
-          <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-        </td>
-        <td class="is-nowrap" v-translate>Results only</td>
-      </tr>
-      <tr
-        class="has-hover-background has-cursor-pointer"
-        :class="{'has-text-primary has-text-weight-bold': value==='both'}"
-        @click="$emit('input', 'both')">
-        <td class="is-nowrap">
-          <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-          <span>&thinsp;</span>
-          <fa-icon icon="map-marked-alt"/>
-        </td>
-        <td class="is-nowrap" v-translate>Both results and map</td>
-      </tr>
-      <tr
-        class="has-hover-background has-cursor-pointer"
-        :class="{'has-text-primary has-text-weight-bold': value==='map'}"
-        @click="$emit('input', 'map')">
-        <td class="has-text-centered">
-          <fa-icon icon="map-marked-alt"/>
-        </td>
-        <td class="is-nowrap" v-translate>Map only</td>
-      </tr>
-    </table>
+    <a
+      class="dropdown-item is-size-6"
+      :class="{'is-active': value==='result'}"
+      @click="$emit('input', 'result')">
+      <span class="has-text-centered item-icons">
+        <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
+      </span>
+      <span class="is-nowrap" v-translate>Results only</span>
+    </a>
+    <a
+      class="dropdown-item is-size-6"
+      :class="{'is-active': value==='both'}"
+      @click="$emit('input', 'both')">
+      <span class="is-nowrap item-icons">
+        <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
+        <fa-icon icon="map-marked-alt"/>
+      </span>
+      <span class="is-nowrap" v-translate>Both results and map</span>
+    </a>
+    <a
+      class="dropdown-item is-size-6"
+      :class="{'is-active': value==='map'}"
+      @click="$emit('input', 'map')">
+      <span class="has-text-centered item-icons">
+        <fa-icon icon="map-marked-alt"/>
+      </span>
+      <span class="is-nowrap" v-translate>Map only</span>
+    </a>
   </dropdown-button>
 </template>
 
 <script>
+
   export default {
     props: {
       value: {
@@ -55,9 +53,16 @@
 </script>
 
 <style lang="scss" scoped>
+  .item-icons{
+    display:inline-block;
+    width:2.2rem;
 
-  td:nth-child(2){
-    padding-left:0.5rem;
+    svg{
+      margin:0 0.1rem;
+    }
   }
 
+  span:nth-child(2) {
+    padding-left: 0.5rem;
+  }
 </style>
