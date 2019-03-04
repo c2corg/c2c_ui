@@ -29,6 +29,8 @@
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>
 
+          <hr>
+
           <div class="columns">
 
             <div class="column is-4">

@@ -1,6 +1,6 @@
 <template>
   <dropdown-button class="is-right">
-    <span slot="button" class="button">
+    <span slot="button" class="button is-small">
       <fa-icon :icon="['fas', 'eye']" class="is-size-4"/>
       <span>&nbsp;</span>
       <fa-icon icon="angle-down" aria-hidden="true"/>
