@@ -1,10 +1,8 @@
 <template>
-  <div class="section columns is-vcentered login-view is-paddingless">
+  <div class="login-view is-flex">
     <html-header :title="$gettext('Login')"/>
-
     <base-form
       v-show="mode=='signin'"
-      class="column is-half is-offset-one-quarter"
       :promise="promise"
       @submit="signin">
 
@@ -39,7 +37,6 @@
 
     <base-form
       v-show="mode=='signup'"
-      class="column is-half is-offset-one-quarter"
       :promise="promise"
       @submit="signup">
 
@@ -116,7 +113,6 @@
     <base-form
       ref="resetPasswordForm"
       v-show="mode=='resetPassword'"
-      class="column is-one-third is-offset-one-third"
       :promise="promise"
       @submit="resetPassword">
 
@@ -148,7 +144,6 @@
     <base-form
       ref="changePasswordForm"
       v-show="mode=='changePassword'"
-      class="column is-one-third is-offset-one-third"
       :promise="promise"
       @submit="validateNewPassword">
 
@@ -176,7 +171,6 @@
 
     <base-form
       v-show="mode=='changeEmail' || mode=='validateAccountCreation'"
-      class="column is-half is-offset-one-quarter"
       :promise="promise">
       <div v-if="promise.loading" v-translate>
         Checking...
@@ -339,10 +333,20 @@
   };
 </script>
 
-<style scoped lang="scss">
-    @import '@/assets/sass/variables.scss';
+<style lang="scss" scoped>
+  @import '@/assets/sass/variables.scss';
 
-    .login-view{
-        min-height: calc(100vh - #{$navbar-height});
+  .login-view {
+    height:100%;
+    align-items:center;
+    width:30rem;
+    max-width:100vw;
+    margin:auto;
+
+    form{
+      width: 100%;
+      padding: 1.5rem;
     }
+  }
+
 </style>
