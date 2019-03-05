@@ -106,7 +106,7 @@ export const getDocumentPointStyle = function(document, title, highlight) {
 
   if (!document.condition_rating) {
     // Usual icon orange
-    color = '#FFAA45';
+    color = '#F93';
   } else {
     color = colorByConditionRating[document.condition_rating];
   }
