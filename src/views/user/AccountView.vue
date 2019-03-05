@@ -1,80 +1,74 @@
 <template>
-  <div class="columns">
+  <div class="section account-view">
     <html-header title="Account"/>
-    <div class="column is-three-fifths is-offset-one-fifth">
 
-      <h1 class="title is-1" v-translate>Change account parameters</h1>
-      <base-form ref="form" @submit="save" :server-errors="serverErrors">
-        <form-field
-          name="username"
-          v-model="username"
-          type="text"
-          disabled
-          :label="$gettext('Username')"
-          icon="user"/>
+    <h1 class="title is-1" v-translate>Change account parameters</h1>
+    <base-form ref="form" @submit="save" :server-errors="serverErrors">
+      <form-field
+        name="username"
+        v-model="username"
+        type="text"
+        disabled
+        :label="$gettext('Username')"
+        icon="user"/>
 
-        <form-field
-          name="currentpassword"
-          v-model="currentpassword"
-          type="password"
-          required
-          :label="$gettext('Current password')"
-          icon="key"/>
+      <form-field
+        name="currentpassword"
+        v-model="currentpassword"
+        type="password"
+        required
+        :label="$gettext('Current password')"
+        icon="key"/>
 
-        <form-field
-          name="newpassword"
-          v-model="newpassword"
-          type="password"
-          :label="$gettext('New password')"
-          icon="key"/>
+      <form-field
+        name="newpassword"
+        v-model="newpassword"
+        type="password"
+        :label="$gettext('New password')"
+        icon="key"/>
 
-        <form-field
-          name="email"
-          v-model="email"
-          type="text"
-          required
-          :label="$gettext('Email')"
-          icon="at"/>
+      <form-field
+        name="email"
+        v-model="email"
+        type="text"
+        required
+        :label="$gettext('Email')"
+        icon="at"/>
 
-        <form-field
-          name="name"
-          v-model="name"
-          type="text"
-          required
-          :label="$gettext('Fullname')"
-          icon="user-check"/>
+      <form-field
+        name="name"
+        v-model="name"
+        type="text"
+        required
+        :label="$gettext('Fullname')"
+        icon="user-check"/>
 
-        <form-field
-          name="forum_username"
-          v-model="forum_username"
-          type="text"
-          required
-          :label="$gettext('Forum username')"
-          icon="comments"/>
+      <form-field
+        name="forum_username"
+        v-model="forum_username"
+        type="text"
+        required
+        :label="$gettext('Forum username')"
+        icon="comments"/>
 
-        <div class="field is-grouped">
-          <label class="checkbox">
-            <input
-              name="is_profile_public"
-              v-model="is_profile_public"
-              type="checkbox">
-            <span v-translate>Make profile page public</span>
-          </label>
+      <div class="field">
+        <input-checkbox v-model="is_profile_public">
+          <span v-translate>Make profile page public</span>
+        </input-checkbox>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button
+            type="submit"
+            class="button is-primary"
+            :class="{'is-loading': promise.loading}"
+            v-translate>
+            Save
+          </button>
         </div>
-
-        <div class="field is-grouped">
-          <div class="control">
-            <button
-              type="submit"
-              class="button is-primary"
-              :class="{'is-loading': promise.loading}"
-              v-translate>
-              Save
-            </button>
-          </div>
-        </div>
-      </base-form>
-    </div>
+      </div>
+    </base-form>
   </div>
 </template>
 
@@ -138,3 +132,12 @@
   };
 
 </script>
+
+<style lang="scss" scoped>
+  .account-view{
+    form{
+      width:30rem;
+      max-width:100%;
+    }
+  }
+</style>
