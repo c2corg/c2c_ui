@@ -1,0 +1,79 @@
+@import './variables.scss';
+
+// modify layouts of checkradio
+
+// radio and checkbox must have white background
+.is-checkradio[type=checkbox] + label::before,
+.is-checkradio[type=checkbox] + label:before,
+.is-checkradio[type=radio] + label::before,
+.is-checkradio[type=radio] + label:before {
+  background: white;
+}
+
+// checkbox unchecked : 0-sized tick centered
+.is-checkradio[type=checkbox] + label::after,
+.is-checkradio[type=checkbox] + label:after {
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  width: 0;
+  height: 0;
+  top: .8rem;
+  left: .8rem;
+  transition: 0.1s;
+  display: inline-block;
+}
+
+// checkbox checked : visible tick, with good placement
+.is-checkradio[type=checkbox]:checked + label::after,
+.is-checkradio[type=checkbox]:checked + label:after {
+  border-right-width: 3px;
+  border-bottom-width: 3px;
+  width: .4rem;
+  height: .7rem;
+  top: .35rem;
+  left: .6rem;
+}
+
+// ra:dio unchecked : 0-sized tick centerd
+.is-checkradio[type=radio] + label::after,
+.is-checkradio[type=radio] + label:after {
+  left: 0.75rem!important;
+  top: 0.75rem!important;
+  border-radius: 50%;
+  left: 0;
+  transform: scale(0.5);
+  display: inline-block;
+  width: 0;
+  height: 0;
+  transition: 0.1s;
+}
+
+// radio checked : visible tick, with good placement
+.is-checkradio[type=radio]:checked + label::after,
+.is-checkradio[type=radio]:checked + label:after {
+  left: 0!important;
+  top: 0!important;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+// use good primary color
+.is-checkradio[type=radio].is-primary:hover:not([disabled]) + label::before,
+.is-checkradio[type=radio].is-primary:hover:not([disabled]) + label:before,
+.is-checkradio[type=checkbox].is-primary:hover:not([disabled]) + label::before,
+.is-checkradio[type=checkbox].is-primary:hover:not([disabled]) + label:before {
+  border-color: $primary !important;
+}
+
+.is-checkradio[type=checkbox].is-primary:checked + label::after,
+.is-checkradio[type=checkbox].is-primary:checked + label:after {
+  border-color: $primary!important;
+}
+
+.is-checkradio[type=radio].is-primary:checked + label::after,
+.is-checkradio[type=radio].is-primary:checked + label:after {
+  border-color: $primary !important;
+  background-color: $primary !important;
+}
