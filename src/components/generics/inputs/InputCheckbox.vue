@@ -1,8 +1,13 @@
 <template>
 
   <div class="control">
-    <input class="is-checkradio is-info" type="checkbox" v-model="value_" @change="$emit('change')">
-    <label @click="onClick">
+    <input
+      :id="'c2c-checkbox' + _uid"
+      class="is-checkradio is-primary"
+      type="checkbox"
+      v-model="value_"
+      @change="$emit('change')">
+    <label :for="'c2c-checkbox' + _uid">
       <slot />
     </label>
   </div>
@@ -19,13 +24,6 @@
       value: {
         type: Boolean,
         default: null
-      }
-    },
-
-    methods: {
-      onClick() {
-        this.value_ = !this.value_;
-        this.$emit('change');
       }
     }
   };

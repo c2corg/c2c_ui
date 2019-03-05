@@ -5,7 +5,7 @@
       :id="'c2c-' + _uid + '_yes'"
       type="radio"
       :value="true"
-      class="is-checkradio is-info"
+      class="is-checkradio is-primary"
       v-model="value_">
     <label :for="'c2c-' + _uid + '_yes'">{{ $gettext('yes') | uppercaseFirstLetter }}</label>
 
@@ -13,7 +13,7 @@
       :id="'c2c-' + _uid + '_no'"
       type="radio"
       :value="false"
-      class="is-checkradio is-info"
+      class="is-checkradio is-primary"
       v-model="value_">
     <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
 
