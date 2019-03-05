@@ -36,30 +36,21 @@
       </span>
     </div>
 
-    <swiper
-      ref="swiper"
-      class="image-viewer-swiper"
-      :options="$options.swiperOptions"
-      @slide-change="onSlideChange">
-
-      <swiper-slide v-for="image of images" :key="image.document_id">
-        <img :data-src="getUrl(image)" class="swiper-lazy" :title="image.locales[0].title">
-        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
-      </swiper-slide>
-
-      <div slot="button-prev" class="swiper-button-prev"/>
-      <div slot="button-next" class="swiper-button-next"/>
-      <div slot="pagination" class="swiper-pagination"/>
-    </swiper>
+    <div ref="swiper" class="image-viewer-swiper">
+      <div class="swiper-wrapper"/>
+      <div class="swiper-button-prev"/>
+      <div class="swiper-button-next"/>
+      <div class="swiper-pagination"/>
+    </div>
 
     <image-info ref="imageInfo" class="image-viewer-info" />
+
   </div>
 
 </template>
 
 <script>
-
-  import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import Swiper from 'swiper/dist/js/swiper.esm.bundle';
 
   import imageUrls from '@/js/image-urls';
   import ImageInfo from './ImageInfo';
@@ -91,8 +82,6 @@
   export default {
 
     components: {
-      swiper,
-      swiperSlide,
       ImageInfo
     },
 
@@ -110,7 +99,6 @@
     },
 
     methods: {
-
       push(image) {
         if (this.images.findIndex(item => item.document_id === image.document_id) === -1) {
           this.images.push(image);
@@ -118,25 +106,68 @@
       },
 
       show(image) {
-        let index = this.images.findIndex(item => item.document_id === image.document_id);
+        let initialSlide = this.images.findIndex(item => item.document_id === image.document_id);
 
-        if (index === -1) {
-          index = this.images.length;
+        if (initialSlide === -1) {
+          initialSlide = this.images.length;
           this.push(image);
         }
 
-        this.$options.swiperOptions.initialSlide = index;
-        this.activeDocument = this.images[index];
+        this.activeDocument = this.images[initialSlide];
         this.visible = true;
+
+        this.$nextTick(function() {
+          const swiperOptions = {
+            initialSlide,
+            slidesPerView: 1,
+
+            // Disable preloading of all images
+            preloadImages: false,
+            // Enable lazy loading
+            lazy: {
+              // enable loading of closest images
+              loadPrevNext: true
+            },
+
+            // not possible with virtual
+            // https://idangero.us/swiper/api/#virtual
+            // loop: true,
+
+            // virtual because it may be too slow uf there is too many image
+            // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
+            virtual: {
+              slides: this.images,
+              renderSlide(image, index) {
+                return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
+                  <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
+                </div>`;
+              }
+            },
+
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev'
+            },
+
+            // https://idangero.us/swiper/api/#pagination
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true
+            },
+            keyboard: {
+              enabled: true
+            }
+          };
+
+          const swiper = new Swiper(this.$refs.swiper, swiperOptions);
+          swiper.on('slideChange', this.onSlideChange);
+        });
       },
 
       clear() {
         this.images = [];
         this.visible = false;
-      },
-
-      getUrl(image) {
-        return imageUrls.getBig(image);
       },
 
       onKeydown(event) {
@@ -165,33 +196,6 @@
       onExitFullscreen() {
         exitFullscreen();
       }
-    },
-
-    swiperOptions: {
-      // Disable preloading of all images
-      preloadImages: false,
-      // Enable lazy loading
-      lazy: {
-        // enable loading of closest images
-        loadPrevNext: true
-      },
-
-      loop: true,
-      initialSlide: 0,
-      slidesPerView: 1,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-
-      // https://idangero.us/swiper/api/#pagination
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-      },
-      keyboard: {
-        enabled: true
-      }
     }
   };
 </script>
@@ -211,6 +215,24 @@
       background: $primary;
     }
   }
+
+  .image-viewer-slide{
+    max-height:100vh;
+
+    img{
+      max-height: 80vh;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+  }
+
 </style>
 
 <style scoped lang="scss">
@@ -240,24 +262,6 @@
       width:100vw;
       height:calc(100vh - 3.8rem);
     }
-
-    .swiper-slide{
-      max-height:100vh;
-      // background: yellow;
-
-      img{
-        max-height: 80vh;
-        max-width: 100%;
-        width: auto;
-        height: auto;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-      }
-    }
   }
 
   .image-viewer-info{
@@ -269,11 +273,11 @@
       right:0;
   }
 
-  .request-fullscreen-button:fullscreen, .request-fullscreen-button:-webkit-full-screen{
+  .request-fullscreen-button:fullscreen{
       display: none;
   }
 
-  .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
+  .exit-fullscreen-button:not(:fullscreen){
       display: none;
   }
 
