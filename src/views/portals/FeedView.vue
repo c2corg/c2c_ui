@@ -16,7 +16,7 @@
               </span>
             </span>
           </h3>
-          <feed-widget :type="isPersonal ? 'personal' : 'default'" />
+          <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" />
         </div>
         <div class="column is-hidden-mobile">
           <h3 class="title is-3" v-translate>

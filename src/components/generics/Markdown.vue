@@ -32,7 +32,7 @@
 
   const getFontAwesomeSrc = function(prefix, iconeName) {
     let svgSource = icon({ prefix, iconName: iconeName }).html[0];
-    svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"');
+    svgSource = svgSource.replace('fill="currentColor"', 'fill="#F93"');
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource);
   };
 

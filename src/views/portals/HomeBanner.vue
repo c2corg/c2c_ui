@@ -94,7 +94,7 @@
         .outings-link svg{
             vertical-align: text-bottom;
             margin:5px;
-            color: #ffaa45;
+            color: $color-base-c2c;
             background-color: #fff;
             border-radius: 50%;
             font-size: 4rem;

@@ -6,16 +6,19 @@
 /**
  * here is custom c2c variables
  */
-$color-base-c2c: #ffaa45; // orange defined in V6
-// $color-base-c2c: #F93; // orange defined in V5
+
+ // orange defined in V5
+ // please have a look on this discussion :
+ // https://forum.camptocamp.org/t/projet-ui-quel-est-le-orange-c2c/238878
+$color-base-c2c: #F93;
 
 $color-base-c2c-darker: #B26F1E;
-$color-base-c2c-lighter: rgb(255, 212, 159);
+$color-base-c2c-lighter: rgb(255, 206, 158);
 
-$color-complementary-c2c: #337ab7; // must fit with c2c orange, and will be main color
-$color-complementary-c2c-lighter: #7699b8;
+$color-complementary-c2c: #337AB7; // must fit with c2c orange, and will be main color
+$color-complementary-c2c-lighter: #7699B8;
 
-$color-link: #337ab7; // We use the same blue as complementary-c2c
+$color-link: #337AB7; // We use the same blue as complementary-c2c
 
 
 /**
@@ -49,7 +52,7 @@ $link: $color-link;
 //$text: $grey-dark
 $pagination-current-background-color:$primary;
 $pagination-current-border-color:$primary;
-$body-background-color : #fbfaf6;
+$body-background-color : #fbfaf6; // if you modify this, please also modify it for spashscreen on public/index.html
 
 $input-focus-border-color: $color-base-c2c;
 $input-focus-box-shadow-size: 0 0 0 0; // with border orange, input focus shadow is terrible
