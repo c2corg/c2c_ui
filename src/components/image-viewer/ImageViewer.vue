@@ -40,7 +40,7 @@
       <div class="swiper-wrapper"/>
       <div class="swiper-button-prev"/>
       <div class="swiper-button-next"/>
-      <div class="swiper-pagination"/>
+      <div class="swiper-pagination" @click="onPaginationClick"/>
     </div>
 
     <image-info ref="imageInfo" class="image-viewer-info" />
@@ -81,6 +81,8 @@
 
   export default {
 
+    swiper: null,
+
     components: {
       ImageInfo
     },
@@ -117,6 +119,8 @@
         this.visible = true;
 
         this.$nextTick(function() {
+          const slides = this.images;
+
           const swiperOptions = {
             initialSlide,
             slidesPerView: 1,
@@ -133,10 +137,10 @@
             // https://idangero.us/swiper/api/#virtual
             // loop: true,
 
-            // virtual because it may be too slow uf there is too many image
+            // virtual because it may be too slow if there is too many image
             // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
             virtual: {
-              slides: this.images,
+              slides,
               renderSlide(image, index) {
                 return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
@@ -153,16 +157,40 @@
             // https://idangero.us/swiper/api/#pagination
             pagination: {
               el: '.swiper-pagination',
-              clickable: true
+
+              // clickable is a performance killer.
+              // try on chrome with https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
+              // so we handle ourself click on pagination bullet (see onPaginationClick())
+              // clickable: true,
+
+              renderBullet(index, className) {
+                return `<span
+                  class="${className} has-cursor-pointer"
+                  data-pagination-slide-index="${index}"
+                  title="${slides[index].locales[0].title}"></span>`;
+              }
             },
+
             keyboard: {
               enabled: true
             }
           };
 
-          const swiper = new Swiper(this.$refs.swiper, swiperOptions);
-          swiper.on('slideChange', this.onSlideChange);
+          if (this.$options.swiper) {
+            this.$options.swiper.destroy();
+          }
+
+          this.$options.swiper = new Swiper(this.$refs.swiper, swiperOptions);
+          this.$options.swiper.on('slideChange', this.onSlideChange);
         });
+      },
+
+      onPaginationClick() {
+        const attribute = event.target.attributes['data-pagination-slide-index'];
+
+        if (attribute !== undefined) {
+          this.$options.swiper.slideTo(parseInt(attribute.value, 10), 0, false);
+        }
       },
 
       clear() {
@@ -182,11 +210,7 @@
 
       onSlideChange() {
         this.$refs.imageInfo.hide();
-        let index = this.$refs.swiper.swiper.activeIndex - 1;
-
-        index = (index + this.images.length) % this.images.length;
-
-        this.activeDocument = this.images[index];
+        this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex];
       },
 
       onRequestFullscreen() {
@@ -204,11 +228,14 @@
   @import '@/assets/sass/variables.scss';
 
   .swiper-pagination{
+    padding: 0 1.5rem;
+
     .swiper-pagination-bullet{
       background: white;
       opacity: 1;
-      width: 16px;
-      height: 16px;
+      margin: 0 2px!important;
+      width: 10px;
+      height: 10px;
     }
 
     .swiper-pagination-bullet-active{

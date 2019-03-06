@@ -44,6 +44,9 @@
         </button>
       </h1>
 
+      <!-- On mobile, expand button may go too low -->
+      <div style="clear:both" />
+
       <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
         {{ error.name }}
         :
