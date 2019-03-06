@@ -5,6 +5,7 @@
     <site-notice ref="siteNotice no-print" class="no-print site-notice"/>
     <image-viewer ref="imageViewer"/>
     <helper-window ref="helper"/>
+    <alert-window ref="alertWindow"/>
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
 
     <!-- keep router view in last  -->
@@ -18,6 +19,7 @@
   import Navigation from './views/Navigation';
   import SideMenu from './views/SideMenu';
   import SiteNotice from './views/SiteNotice';
+  import AlertWindow from './components/alert-window/AlertWindow';
   import HelperWindow from './components/helper/HelperWindow';
   import ImageViewer from './components/image-viewer/ImageViewer';
 
@@ -29,7 +31,8 @@
       Navigation,
       SiteNotice,
       HelperWindow,
-      ImageViewer
+      ImageViewer,
+      AlertWindow
     },
 
     data() {
