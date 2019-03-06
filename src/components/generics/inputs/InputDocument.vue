@@ -5,7 +5,7 @@
         class="input"
         :class="{'is-danger':hasError}"
         type="text"
-        :placeholder="$gettext('Search ...')"
+        :placeholder="placeholder || $gettext('Search ...')"
         @input="onInput"
         @focus="onInput"
         @blur="promise={}"
