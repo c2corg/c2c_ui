@@ -1,5 +1,5 @@
 <template>
-  <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after">
+  <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
     <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" >
       <span>
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
@@ -47,9 +47,15 @@
 </script>
 
 <style lang="scss" scoped>
-  .title{
-    font-size:1.8rem!important;
-    margin-bottom:0.5em!important;
-    border-bottom:1px solid #DDD;
+  .markdown-section:nth-last-child(n+3){
+    margin-bottom: 1.5rem;
+  }
+
+  .markdown-section{
+    .title{
+      font-size:1.8rem!important;
+      margin-bottom:0.5em!important;
+      border-bottom:1px solid #DDD;
+    }
   }
 </style>
