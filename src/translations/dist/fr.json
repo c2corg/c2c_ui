@@ -151,6 +151,12 @@
       "article_categories": "association"
     },
     "associations": "Associations",
+    "at least one route required": {
+      "API message": "Sélectionnez au moins un participant"
+    },
+    "at least one user required": {
+      "API message": "Sélectionnez au moins un itinéraire"
+    },
     "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.": "Décrivez votre niveau technique à la date de l'évènement, votre condition physique, la fatigue accumulée avant l'évènement, l'acclimatation pour une sortie en haute altitude, etc.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
     "aug": {
@@ -881,6 +887,7 @@
     "multi": {
       "climbing_outdoor_types": "grande voie"
     },
+    "Multi-criteria search": "Recherche multi-critère",
     "My account": "Mon compte",
     "My changes": "Mes contributions",
     "My followed users": "Mes amis",
@@ -1258,6 +1265,9 @@
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
     "shelter": {
       "waypoint_types": "abri"
+    },
+    "Shorter than minimum length 1": {
+      "API message": "Champ obligatoire"
     },
     "Shorter than minimum length 3": {
       "API message": "Champ trop court (minimum 3 caractères)"

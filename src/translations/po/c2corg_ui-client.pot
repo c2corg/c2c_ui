@@ -117,7 +117,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:61
+#: src/views/SideMenu.vue:71
 msgid "Accident database"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:9
 #: src/views/document/BookView.vue:7
 #: src/views/document/ImageView.vue:7
-#: src/views/document/OutingView.vue:35
+#: src/views/document/OutingView.vue:37
 #: src/views/document/RouteView.vue:20
 #: src/views/document/XreportView.vue:9
 #: src/views/user/PreferencesView.vue:45
@@ -334,7 +334,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:11
-#: src/views/SideMenu.vue:62
+#: src/views/SideMenu.vue:72
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:39
 #: src/views/static-views/NotFoundView.vue:38
 msgid "articles"
@@ -365,7 +365,7 @@ msgstr ""
 msgid "Associated routes cotations"
 msgstr ""
 
-#: src/views/SideMenu.vue:23
+#: src/views/SideMenu.vue:33
 msgid "Association"
 msgstr ""
 
@@ -378,6 +378,16 @@ msgstr ""
 #: src/views/wiki/edition/ImageEditionView.vue:62
 #: src/views/wiki/edition/WaypointEditionView.vue:147
 msgid "associations"
+msgstr ""
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:182
+msgctxt "API message"
+msgid "at least one route required"
+msgstr ""
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:183
+msgctxt "API message"
+msgid "at least one user required"
 msgstr ""
 
 #: src/views/wiki/edition/XreportEditionView.vue:69
@@ -473,7 +483,7 @@ msgstr ""
 msgid "Back to code"
 msgstr ""
 
-#: src/views/wiki/edition/utils/EditionContainer.vue:34
+#: src/views/wiki/edition/utils/EditionContainer.vue:37
 msgid "Back to edit mode"
 msgstr ""
 
@@ -571,7 +581,7 @@ msgstr ""
 msgid "Books and websites not already associated to this route"
 msgstr ""
 
-#: src/views/documents/utils/DisplayModeSwitch.vue:26
+#: src/views/documents/utils/DisplayModeSwitch.vue:25
 msgid "Both results and map"
 msgstr ""
 
@@ -620,7 +630,7 @@ msgstr ""
 #: src/components/images-uploader/ImageUploader.vue:72
 #: src/components/markdown-editor/LinkHelper.vue:26
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:56
-#: src/views/user/LoginView.vue:170
+#: src/views/user/LoginView.vue:165
 #: src/views/wiki/edition/utils/CotometerWindow.vue:75
 msgid "Cancel"
 msgstr ""
@@ -638,12 +648,11 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:64
+#: src/views/documents/DocumentsView.vue:55
 msgid "Cards mode"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:33
-#: src/views/document/ImageView.vue:26
 msgid "categories"
 msgstr ""
 
@@ -652,16 +661,16 @@ msgctxt "waypoint_types"
 msgid "cave"
 msgstr ""
 
-#: src/views/user/AccountView.vue:6
+#: src/views/user/AccountView.vue:5
 msgid "Change account parameters"
 msgstr ""
 
-#: src/views/user/LoginView.vue:155
-#: src/views/user/LoginView.vue:167
+#: src/views/user/LoginView.vue:150
+#: src/views/user/LoginView.vue:162
 msgid "Change password"
 msgstr ""
 
-#: src/views/user/LoginView.vue:181
+#: src/views/user/LoginView.vue:175
 msgid "Checking..."
 msgstr ""
 
@@ -841,7 +850,7 @@ msgctxt "rock_types"
 msgid "conglomerat"
 msgstr ""
 
-#: src/views/SideMenu.vue:17
+#: src/views/SideMenu.vue:27
 msgid "contact"
 msgstr ""
 
@@ -892,7 +901,7 @@ msgctxt "glacier_gear_types"
 msgid "crampons_spring"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:35
+#: src/views/documents/DocumentsView.vue:29
 msgid "Create"
 msgstr ""
 
@@ -935,7 +944,7 @@ msgctxt "frequentation_types"
 msgid "crowded"
 msgstr ""
 
-#: src/views/user/AccountView.vue:21
+#: src/views/user/AccountView.vue:20
 msgid "Current password"
 msgstr ""
 
@@ -1215,7 +1224,7 @@ msgstr ""
 #: src/components/datatable/DocumentsTable.vue:129
 #: src/components/datatable/DocumentsTable.vue:176
 #: src/translations/fixed_strings_common_js.vue:57
-#: src/views/document/OutingView.vue:67
+#: src/views/document/OutingView.vue:69
 #: src/views/document/RouteView.vue:55
 msgid "elevation"
 msgstr ""
@@ -1246,9 +1255,9 @@ msgstr ""
 msgid "elevation_up_snow"
 msgstr ""
 
-#: src/views/user/AccountView.vue:36
-#: src/views/user/LoginView.vue:131
-#: src/views/user/LoginView.vue:74
+#: src/views/user/AccountView.vue:35
+#: src/views/user/LoginView.vue:127
+#: src/views/user/LoginView.vue:71
 msgid "Email"
 msgstr ""
 
@@ -1305,7 +1314,7 @@ msgctxt "langs"
 msgid "eu"
 msgstr ""
 
-#: src/views/SideMenu.vue:19
+#: src/views/SideMenu.vue:29
 msgid "EULA"
 msgstr ""
 
@@ -1448,11 +1457,11 @@ msgstr ""
 msgid "Followed users"
 msgstr ""
 
-#: src/views/user/LoginView.vue:31
+#: src/views/user/LoginView.vue:29
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:60
+#: src/views/SideMenu.vue:70
 #: src/views/portals/DashboardView.vue:29
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -1462,8 +1471,8 @@ msgstr ""
 msgid "forum"
 msgstr ""
 
-#: src/views/user/AccountView.vue:52
-#: src/views/user/LoginView.vue:62
+#: src/views/user/AccountView.vue:51
+#: src/views/user/LoginView.vue:59
 msgid "Forum username"
 msgstr ""
 
@@ -1476,8 +1485,8 @@ msgstr ""
 msgid "frequentation"
 msgstr ""
 
-#: src/views/user/AccountView.vue:44
-#: src/views/user/LoginView.vue:50
+#: src/views/user/AccountView.vue:43
+#: src/views/user/LoginView.vue:47
 msgid "Fullname"
 msgstr ""
 
@@ -1498,7 +1507,7 @@ msgstr ""
 msgid "gender"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:13
+#: src/views/documents/utils/QueryItems.vue:14
 msgid "General"
 msgstr ""
 
@@ -1708,7 +1717,7 @@ msgstr ""
 msgid "has updated the xreport"
 msgstr ""
 
-#: src/views/user/LoginView.vue:110
+#: src/views/user/LoginView.vue:107
 msgid "Have an account?"
 msgstr ""
 
@@ -1733,7 +1742,7 @@ msgstr ""
 msgid "height"
 msgstr ""
 
-#: src/views/document/OutingView.vue:74
+#: src/views/document/OutingView.vue:76
 #: src/views/document/RouteView.vue:61
 #: src/views/wiki/edition/utils/CotometerWindow.vue:56
 msgid "height_diff"
@@ -1868,7 +1877,7 @@ msgctxt "user_categories"
 msgid "hut_warden"
 msgstr ""
 
-#: src/views/user/LoginView.vue:81
+#: src/views/user/LoginView.vue:78
 msgid "I have read and agree to the terms of use"
 msgstr ""
 
@@ -2076,7 +2085,7 @@ msgid "length"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:109
-#: src/views/document/OutingView.vue:76
+#: src/views/document/OutingView.vue:78
 msgid "length_total"
 msgstr ""
 
@@ -2114,7 +2123,7 @@ msgctxt "avalanche_levels"
 msgid "level_na"
 msgstr ""
 
-#: src/views/SideMenu.vue:21
+#: src/views/SideMenu.vue:31
 msgid "Licenses"
 msgstr ""
 
@@ -2131,7 +2140,7 @@ msgctxt "event_types"
 msgid "lightning"
 msgstr ""
 
-#: src/views/user/LoginView.vue:85
+#: src/views/user/LoginView.vue:82
 msgid "link"
 msgstr ""
 
@@ -2139,7 +2148,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:58
+#: src/views/documents/DocumentsView.vue:49
 msgid "List mode"
 msgstr ""
 
@@ -2147,7 +2156,7 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:46
+#: src/views/documents/DocumentsView.vue:37
 msgid "Load my preferences"
 msgstr ""
 
@@ -2177,8 +2186,8 @@ msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
 #: src/views/Navigation.vue:71
-#: src/views/user/LoginView.vue:138
-#: src/views/user/LoginView.vue:28
+#: src/views/user/LoginView.vue:134
+#: src/views/user/LoginView.vue:26
 #: src/views/user/LoginView.vue:3
 msgid "Login"
 msgstr ""
@@ -2188,7 +2197,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:134
+#: src/views/Navigation.vue:129
 msgid "Logout"
 msgstr ""
 
@@ -2223,7 +2232,7 @@ msgstr ""
 msgid "main_waypoint_id"
 msgstr ""
 
-#: src/views/user/AccountView.vue:61
+#: src/views/user/AccountView.vue:56
 msgid "Make profile page public"
 msgstr ""
 
@@ -2236,7 +2245,7 @@ msgstr ""
 msgid "map"
 msgstr ""
 
-#: src/views/documents/utils/DisplayModeSwitch.vue:35
+#: src/views/documents/utils/DisplayModeSwitch.vue:34
 msgid "Map only"
 msgstr ""
 
@@ -2312,7 +2321,7 @@ msgstr ""
 msgid "Misc data about the waypoint"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:16
+#: src/views/documents/utils/QueryItems.vue:17
 msgid "Miscs"
 msgstr ""
 
@@ -2414,34 +2423,38 @@ msgctxt "climbing_outdoor_types"
 msgid "multi"
 msgstr ""
 
-#: src/views/Navigation.vue:101
+#: src/views/documents/utils/AssociationQueryItem.vue:8
+msgid "Multi-criteria search"
+msgstr ""
+
+#: src/views/Navigation.vue:96
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:116
+#: src/views/Navigation.vue:111
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:121
+#: src/views/Navigation.vue:116
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:126
+#: src/views/Navigation.vue:121
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:111
+#: src/views/Navigation.vue:106
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:106
+#: src/views/Navigation.vue:101
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:96
+#: src/views/Navigation.vue:91
 msgid "My profile"
 msgstr ""
 
@@ -2516,8 +2529,8 @@ msgstr ""
 msgid "New outing"
 msgstr ""
 
-#: src/views/user/AccountView.vue:28
-#: src/views/user/LoginView.vue:163
+#: src/views/user/AccountView.vue:27
+#: src/views/user/LoginView.vue:158
 msgid "New password"
 msgstr ""
 
@@ -2567,7 +2580,7 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: src/views/user/LoginView.vue:34
+#: src/views/user/LoginView.vue:32
 msgid "No account yet?"
 msgstr ""
 
@@ -2719,7 +2732,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:16
-#: src/views/SideMenu.vue:59
+#: src/views/SideMenu.vue:69
 #: src/views/document/utils/boxes/ToolBox.vue:22
 #: src/views/portals/DashboardView.vue:16
 #: src/views/static-views/NotFoundView.vue:23
@@ -2802,8 +2815,8 @@ msgctxt "waypoint_types"
 msgid "pass"
 msgstr ""
 
-#: src/views/user/LoginView.vue:24
-#: src/views/user/LoginView.vue:68
+#: src/views/user/LoginView.vue:22
+#: src/views/user/LoginView.vue:65
 msgid "Password"
 msgstr ""
 
@@ -2848,7 +2861,7 @@ msgstr ""
 msgid "personal"
 msgstr ""
 
-#: src/views/document/OutingView.vue:104
+#: src/views/document/OutingView.vue:106
 #: src/views/wiki/edition/OutingEditionView.vue:78
 msgid "personal comments"
 msgstr ""
@@ -2964,7 +2977,7 @@ msgid "pressure"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:43
-#: src/views/wiki/edition/utils/EditionContainer.vue:39
+#: src/views/wiki/edition/utils/EditionContainer.vue:42
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:23
 msgid "Preview"
 msgstr ""
@@ -3109,9 +3122,9 @@ msgstr ""
 #: src/components/datatable/DocumentsTable.vue:141
 #: src/components/datatable/DocumentsTable.vue:186
 #: src/components/datatable/DocumentsTable.vue:189
-#: src/views/document/OutingView.vue:49
+#: src/views/document/OutingView.vue:51
 #: src/views/document/RouteView.vue:35
-#: src/views/documents/utils/QueryItems.vue:14
+#: src/views/documents/utils/QueryItems.vue:15
 #: src/views/wiki/edition/RouteEditionView.vue:80
 #: src/views/wiki/edition/WaypointEditionView.vue:107
 msgid "ratings"
@@ -3134,7 +3147,7 @@ msgstr ""
 msgid "reduce_impact"
 msgstr ""
 
-#: src/views/user/LoginView.vue:107
+#: src/views/user/LoginView.vue:104
 msgid "Register"
 msgstr ""
 
@@ -3167,7 +3180,7 @@ msgstr ""
 msgid "Reset geometry"
 msgstr ""
 
-#: src/views/user/LoginView.vue:123
+#: src/views/user/LoginView.vue:119
 msgid "Reset password"
 msgstr ""
 
@@ -3307,7 +3320,7 @@ msgid "safety"
 msgstr ""
 
 #: src/components/images-uploader/ImagesUploader.vue:54
-#: src/views/user/AccountView.vue:71
+#: src/views/user/AccountView.vue:66
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:9
 msgid "Save"
 msgstr ""
@@ -3374,7 +3387,7 @@ msgstr ""
 msgid "Select option"
 msgstr ""
 
-#: src/views/user/LoginView.vue:135
+#: src/views/user/LoginView.vue:131
 msgid "Send reset email"
 msgstr ""
 
@@ -3442,6 +3455,11 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:521
 msgctxt "waypoint_types"
 msgid "shelter"
+msgstr ""
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:181
+msgctxt "API message"
+msgid "Shorter than minimum length 1"
 msgstr ""
 
 #: src/views/user/utils/FormField.vue:12
@@ -3719,7 +3737,7 @@ msgctxt "weather_station_types"
 msgid "temperature"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:15
+#: src/views/documents/utils/QueryItems.vue:16
 msgid "Terrain"
 msgstr ""
 
@@ -3851,7 +3869,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:58
+#: src/views/SideMenu.vue:68
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5
@@ -3944,9 +3962,9 @@ msgstr ""
 msgid "url"
 msgstr ""
 
-#: src/views/user/AccountView.vue:13
-#: src/views/user/LoginView.vue:16
-#: src/views/user/LoginView.vue:56
+#: src/views/user/AccountView.vue:12
+#: src/views/user/LoginView.vue:14
+#: src/views/user/LoginView.vue:53
 msgid "Username"
 msgstr ""
 
@@ -4053,7 +4071,7 @@ msgstr ""
 msgid "waypoints"
 msgstr ""
 
-#: src/views/user/LoginView.vue:143
+#: src/views/user/LoginView.vue:139
 msgid "We sent you an email, please click on the link to reset password."
 msgstr ""
 
