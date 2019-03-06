@@ -10,7 +10,7 @@
         v-model="mode"
         type="radio"
         value="distance"
-        class="is-checkradio is-small">
+        class="is-checkradio is-small is-primary">
       <label v-translate for="c2c-elevation-profile-distance">Distance</label>
 
       <input
@@ -18,7 +18,7 @@
         v-model="mode"
         type="radio"
         value="time"
-        class="is-checkradio is-small">
+        class="is-checkradio is-small is-primary">
       <label v-translate for="c2c-elevation-profile-time">Time</label>
     </form>
 
