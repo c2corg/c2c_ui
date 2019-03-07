@@ -2,7 +2,7 @@
   <div class="section has-background-white-print">
 
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns is-block-print">
 
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea=true"/>

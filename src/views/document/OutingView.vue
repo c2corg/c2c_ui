@@ -4,7 +4,7 @@
 
     <images-box v-if="document" :document="document"/>
 
-    <div v-if="document" class="columns is-multiline">
+    <div v-if="document" class="columns is-multiline is-block-print">
 
       <div class="column is-3 no-print">
         <map-box :document="document"/>

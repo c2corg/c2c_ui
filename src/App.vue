@@ -9,7 +9,7 @@
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
 
     <!-- keep router view in last  -->
-    <div class="page-content">
+    <div class="page-content is-block-print">
       <router-view class="router-view"/>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns is-block-print">
       <div class="column is-3">
         <div class="box">
           <label-value :label="$gettext('activities')">
