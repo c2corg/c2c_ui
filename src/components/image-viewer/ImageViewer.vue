@@ -1,35 +1,35 @@
 <template>
   <div v-if="visible" class="image-viewer">
-    <div class="level is-mobile has-text-grey-lighter image-viewer-header">
-      <span class="level-item is-size-2">
+    <div class="is-flex has-text-grey-lighter image-viewer-header">
+      <span class="is-size-2 is-ellipsed image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
       </span>
-      <span class="level-right is-size-3">
-        <document-link :document="activeDocument" class="level-item has-text-grey-lighter">
+      <span class="is-size-3 is-nowrap image-viewer-buttons">
+        <document-link :document="activeDocument" class="has-text-grey-lighter">
           <fa-icon icon="eye"/>
         </document-link>
 
         <edit-link
           :document="activeDocument" :lang="activeDocument.available_langs[0]"
-          class="level-item has-text-grey-lighter"
+          class="has-text-grey-lighter"
           @click="visible=false">
           <fa-icon icon="edit"/>
         </edit-link>
 
         <fa-icon
-          class="level-item has-cursor-pointer"
+          class="has-cursor-pointer"
           icon="info-circle"
           @click="toggleImageInfo(activeDocument)"/>
         <fa-icon
-          class="level-item has-cursor-pointer request-fullscreen-button"
+          class="has-cursor-pointer request-fullscreen-button"
           icon="expand"
           @click="onRequestFullscreen"/>
         <fa-icon
-          class="level-item has-cursor-pointer exit-fullscreen-button"
+          class="has-cursor-pointer exit-fullscreen-button"
           icon="compress"
           @click="onExitFullscreen"/>
         <fa-icon
-          class="level-item has-cursor-pointer"
+          class="has-cursor-pointer"
           icon="plus"
           transform="rotate-45"
           @click="visible=false"/>
@@ -40,7 +40,17 @@
       <div class="swiper-wrapper"/>
       <div class="swiper-button-prev"/>
       <div class="swiper-button-next"/>
-      <div class="swiper-pagination" @click="onPaginationClick"/>
+    </div>
+
+    <div class="image-viewer-pagination">
+      <span
+        v-for="(image, index) of images"
+        :key="image.document_id"
+        class="image-viewer-bullet has-cursor-pointer"
+        :class="{'image-viewer-bullet-active': image === activeDocument}"
+        :title="image.locales[0].title"
+        @click="onPaginationClick(index)"
+        :style="`width: calc((100vw - 1.5rem) / ${images.length});`"/>
     </div>
 
     <image-info ref="imageInfo" class="image-viewer-info" />
@@ -154,23 +164,6 @@
               prevEl: '.swiper-button-prev'
             },
 
-            // https://idangero.us/swiper/api/#pagination
-            pagination: {
-              el: '.swiper-pagination',
-
-              // clickable is a performance killer.
-              // try on chrome with https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
-              // so we handle ourself click on pagination bullet (see onPaginationClick())
-              // clickable: true,
-
-              renderBullet(index, className) {
-                return `<span
-                  class="${className} has-cursor-pointer"
-                  data-pagination-slide-index="${index}"
-                  title="${slides[index].locales[0].title}"></span>`;
-              }
-            },
-
             keyboard: {
               enabled: true
             }
@@ -185,12 +178,8 @@
         });
       },
 
-      onPaginationClick() {
-        const attribute = event.target.attributes['data-pagination-slide-index'];
-
-        if (attribute !== undefined) {
-          this.$options.swiper.slideTo(parseInt(attribute.value, 10), 0, false);
-        }
+      onPaginationClick(index) {
+        this.$options.swiper.slideTo(index, 0, false);
       },
 
       clear() {
@@ -225,29 +214,15 @@
 </script>
 
 <style lang="scss">
-  @import '@/assets/sass/variables.scss';
+  @import '~swiper/dist/css/swiper.css';
 
-  .swiper-pagination{
-    padding: 0 1.5rem;
-
-    .swiper-pagination-bullet{
-      background: white;
-      opacity: 1;
-      margin: 0 2px!important;
-      width: 10px;
-      height: 10px;
-    }
-
-    .swiper-pagination-bullet-active{
-      background: $primary;
-    }
-  }
+  // class not explicitly present in template, can't use scope
 
   .image-viewer-slide{
-    max-height:100vh;
+    max-height:100%;
 
     img{
-      max-height: 80vh;
+      max-height: 100%;
       max-width: 100%;
       width: auto;
       height: auto;
@@ -263,31 +238,74 @@
 </style>
 
 <style scoped lang="scss">
+  @import '@/assets/sass/variables.scss';
 
-  @import '~swiper/dist/css/swiper.css';
+  $headerHeight: 52px;
+  $paginationHeight: 30px;
 
   .image-viewer{
     z-index:1000;
     position:fixed;
     top:0;
     left:0;
-    width:100vw;
-    height:100vh;
-    background: rgba(0,0,0,0.9);
+    width:100%; // not 100vw, otherwise the viewer goes under the scrollbar
+    height:100%;
+    background: rgba(0,0,0,0.95);
 
     .image-viewer-header{
+      justify-content: space-between;
       padding:0.5rem 1rem;
-      background: rgba(0,0,0,0.9);
       margin-bottom: 0!important;
 
-      svg:hover{
-        color:white;
+      .image-viewer-title{
+        margin:auto;
+      }
+
+      .image-viewer-buttons > *:not(:last-child){
+        margin-right:.75rem;
+      }
+
+      .image-viewer-buttons{
+
+        svg:hover{
+          color:white;
+        }
       }
     }
 
     .image-viewer-swiper{
       width:100vw;
-      height:calc(100vh - 3.8rem);
+      height:calc(100% - #{$headerHeight} - #{$paginationHeight});
+    }
+
+    .image-viewer-pagination{
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      bottom:0;
+      height: $paginationHeight;
+
+      .image-viewer-bullet:first-child{
+        border-bottom-left-radius:50%;
+        border-top-left-radius:50%;
+      }
+
+      .image-viewer-bullet:last-child{
+        border-bottom-right-radius:50%;
+        border-top-right-radius:50%;
+      }
+
+      .image-viewer-bullet{
+        display: inline-block;
+        background: white;
+        max-width: 16px;
+        height: 16px;
+        border: 25% solid black;
+      }
+
+      .image-viewer-bullet-active{
+        background: $primary;
+      }
     }
   }
 
