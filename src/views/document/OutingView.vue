@@ -11,7 +11,7 @@
         <tool-box :document="document"/>
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="column is-9 is-12-print is-block-print">
 
         <div class="box">
 
