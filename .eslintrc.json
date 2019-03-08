@@ -33,6 +33,7 @@
     "vue/require-default-prop": "warn",
     "vue/attributes-order": "off",
     "vue/max-attributes-per-line": "off",
+    "vue/no-use-v-if-with-v-for": "error",
     "eqeqeq": "warn",
     "camelcase": "off",
     "no-trailing-spaces": "warn",

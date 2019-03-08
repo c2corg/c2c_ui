@@ -1,9 +1,8 @@
 <template>
   <span>
     <span
-      v-for="rating of $options.ratings"
+      v-for="rating of availableRatings"
       :key="rating"
-      v-if="document[rating]"
       :title="$gettext(rating)">
       {{ document[rating] }}
     </span>
@@ -18,6 +17,12 @@
       document: {
         type: Object,
         required: true
+      }
+    },
+
+    computed: {
+      availableRatings() {
+        return this.$options.ratings.filter((rating) => this.document[rating] !== undefined);
       }
     },
 
