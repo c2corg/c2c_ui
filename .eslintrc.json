@@ -69,7 +69,8 @@
     ],
     "no-var": "error",
     "prefer-const": "error",
-    "no-multi-assign": "error"
+    "no-multi-assign": "error",
+    "space-infix-ops": "warn"
   },
   "parserOptions": {
     "parser": "babel-eslint"
