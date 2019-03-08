@@ -22,13 +22,9 @@
           icon="info-circle"
           @click="toggleImageInfo(activeDocument)" />
         <fa-icon
-          class="has-cursor-pointer request-fullscreen-button"
-          icon="expand"
-          @click="onRequestFullscreen" />
-        <fa-icon
-          class="has-cursor-pointer exit-fullscreen-button"
-          icon="compress"
-          @click="onExitFullscreen" />
+          class="has-cursor-pointer"
+          :icon="isFullscreen ? 'compress' : 'expand'"
+          @click="toggleFullscreen" />
         <fa-icon
           class="has-cursor-pointer"
           icon="plus"
@@ -102,7 +98,8 @@
       return {
         visible: false,
         images: [],
-        activeDocument: null
+        activeDocument: null,
+        isFullscreen: false
       };
     },
 
@@ -203,12 +200,14 @@
         this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex];
       },
 
-      onRequestFullscreen() {
-        requestFullscreen(this.$el);
-      },
+      toggleFullscreen() {
+        if (this.isFullscreen) {
+          exitFullscreen();
+        } else {
+          requestFullscreen(this.$el);
+        }
 
-      onExitFullscreen() {
-        exitFullscreen();
+        this.isFullscreen = !this.isFullscreen;
       }
     }
   };
@@ -317,14 +316,6 @@
       position:fixed;
       top:3.7rem;
       right:0;
-  }
-
-  .request-fullscreen-button:fullscreen{
-      display: none;
-  }
-
-  .exit-fullscreen-button:not(:fullscreen){
-      display: none;
   }
 
   .swiper-button-prev{
