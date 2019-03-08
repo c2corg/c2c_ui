@@ -57,6 +57,19 @@
         :placeholder="$gettext(field.name)">
     </div>
 
+    <div v-else-if="field.queryMode==='tristate'" class="control">
+      <label class="label">
+        {{ $gettext(field.name) | uppercaseFirstLetter }}
+      </label>
+
+      <multiselect
+        v-model="value"
+        :options="['yes', 'no', 'no info']"
+        :custom-label="gettext"
+        :placeholder="$gettext('Select option')"
+        :select-label="$gettext('Press enter to select')" />
+    </div>
+
     <div v-else-if="field.queryMode==='checkbox'" class="control">
       <input-checkbox v-model="value">
         {{ $gettext(field.name) }}

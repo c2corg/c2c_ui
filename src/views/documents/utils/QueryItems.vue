@@ -135,7 +135,7 @@
       'lang',
       'frequentation',
       'public_transport',
-      //            "lift_access",
+      'lift_access',
       'access_time',
       'best_periods',
       'capacity',

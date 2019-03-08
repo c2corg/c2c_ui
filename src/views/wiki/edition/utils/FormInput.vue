@@ -86,7 +86,8 @@
   <input-yes-no
     v-else-if="field.type=='boolean'"
     v-show="visible"
-    v-model="object[field.name]" />
+    v-model="object[field.name]"
+    :nullable="field.nullable" />
 
   <input-datetime
     v-else-if="field.type=='date_time'"

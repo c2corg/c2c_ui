@@ -84,10 +84,12 @@
         <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
         <div class="columns">
           <div class="column is-6">
-            <del class="is-pulled-right">{{ diffProperties[key].old }}</del>
+            <del v-if="diffProperties[key].old === null" class="is-pulled-right is-italic">null</del>
+            <del v-else class="is-pulled-right">{{ diffProperties[key].old }}</del>
           </div>
           <div class="column is-6">
-            <ins>{{ diffProperties[key].new }}</ins>
+            <ins v-if="diffProperties[key].new === null" class="is-italic">null</ins>
+            <ins v-else>{{ diffProperties[key].new }}</ins>
           </div>
         </div>
       </div>

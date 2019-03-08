@@ -97,7 +97,7 @@
               <field-view :document="document" :field="fields.public_transportation_rating" />
               <field-view :document="document" :field="fields.parking_fee" />
               <field-view :document="document" :field="fields.snow_clearance_rating" />
-              <field-view :document="document" :field="fields.lift_access" v-if="document.lift_access" />
+              <field-view :document="document" :field="fields.lift_access" />
 
             </div>
           </div>

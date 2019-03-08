@@ -85,7 +85,8 @@ function Field(id, properties = {}) {
     if (this.type === 'number') {
       this.queryMode = 'numericalRangeSlider';
     } else if (this.type === 'boolean') {
-      this.queryMode = 'checkbox';
+      // console.assert(this.nullable || this.default !== undefined, `${this.name} must be nullable, or have a default value`);
+      this.queryMode = this.nullable ? 'tristate' : 'checkbox';
     } else if (this.type === 'document') {
       this.queryMode = 'input-document';
     } else if (this.values) {
@@ -102,6 +103,8 @@ function Field(id, properties = {}) {
       this.defaultUrlQuery = '';
     } else if (this.queryMode === 'checkbox') {
       this.defaultUrlQuery = 'false';
+    } else if (this.queryMode === 'tristate') {
+      this.defaultUrlQuery = '';
     } else if (this.queryMode === 'input') {
       this.defaultUrlQuery = { number: 0, text: '' }[this.type];
     } else if (this.queryMode === 'activities') {
@@ -125,6 +128,18 @@ Field.prototype.valueToUrl = function(value) {
 
   if (this.queryMode === 'checkbox') {
     return JSON.stringify(value);
+  }
+
+  if (this.queryMode === 'tristate') {
+    if (value === 'no info') {
+      return 'null';
+    } else if (value === 'yes') {
+      return 'true';
+    } else if (value === 'no') {
+      return 'false';
+    } else {
+      return '';
+    }
   }
 
   if (this.queryMode === 'input') {
@@ -156,6 +171,18 @@ Field.prototype.urlToValue = function(url) {
     }
 
     return url.split(',');
+  }
+
+  if (this.queryMode === 'tristate') {
+    if (url === 'true' || url === true) {
+      return 'yes';
+    } else if (url === 'false' || url === false) {
+      return 'no';
+    } else if (url === 'null' || url === null) {
+      return 'no info';
+    } else {
+      return undefined;
+    }
   }
 
   if (this.queryMode === 'checkbox') {
