@@ -60,10 +60,12 @@
       return false;
     }
 
-    const level = locale.conditions_levels;
+    const levels = JSON.parse(locale.conditions_levels);
 
-    if (level.level_place || level.level_comment || level.level_snow_height_total || level.level_snow_height_soft) {
-      return true;
+    if (levels && levels.length !== 0) {
+      if (levels[0].level_place || levels[0].level_comment || levels[0].level_snow_height_total || levels[0].level_snow_height_soft) {
+        return true;
+      }
     }
 
     return false;
@@ -124,7 +126,7 @@
 
       score += locale.description ? 0.5 : 0;
       score += locale.weather ? 0.5 : 0;
-      score += locale.condition_rating ? 0.5 : 0;
+      score += doc.condition_rating ? 0.5 : 0;
 
       score = hasConditionLevel(doc, locale) ? score + 1 : Math.min(score, 2);
 
