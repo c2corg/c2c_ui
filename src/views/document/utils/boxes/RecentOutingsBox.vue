@@ -1,7 +1,8 @@
 <template>
-  <div class="box no-print" v-if="documentType=='route' || outings.length !== 0">
+  <div class="box no-print" v-if="!isDraftView && (documentType=='route' || outings.length !== 0)">
     <div class="title is-2">
-      <span v-translate>Last outings</span>
+      <span v-if="documentType === 'image'" v-translate>Associated outings</span>
+      <span v-else v-translate>Last outings</span>
       <span v-if="outings.length !== 0 && !hideSeeAllResultsButton">
         <span>, </span>
         <router-link
@@ -21,8 +22,7 @@
       <add-link
         document-type="outing"
         :query="query"
-        class="button is-primary"
-        v-translate>
+        class="button is-primary">
         <span v-if="outings.length === 0" v-translate>
           Add the first outing
         </span>
@@ -34,9 +34,10 @@
 
 <script>
   import { requireDocumentProperty } from '@/js/properties-mixins';
+  import viewModeMixin from '../view-mode-mixin';
 
   export default {
-    mixins: [ requireDocumentProperty ],
+    mixins: [ requireDocumentProperty, viewModeMixin ],
 
     props: {
       hideSeeAllResultsButton: {

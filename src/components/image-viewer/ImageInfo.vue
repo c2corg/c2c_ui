@@ -15,7 +15,7 @@
         <label>{{ document.locales[0].title }}</label>
       </p>
 
-      <p v-if="document.locales[0].description"> {{ document.locales[0].description }}</p>
+      <p v-if="locale.description"> {{ locale.description }}</p>
 
       <p v-if="document.image_type">
         <icon-creative-commons />
@@ -32,7 +32,7 @@
         <li v-if="document.fnumber" :title="$gettext('fnumber')">f/{{ document.fnumber }}</li>
         <li v-if="document.focal_length" :title="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
         <li v-if="document.iso_speed" :title="$gettext('iso_speed')">{{ document.iso_speed }} ISO</li>
-        <li v-if="document.width && height" :title="$gettext('resolution')">
+        <li v-if="document.width && document.height" :title="$gettext('resolution')">
           {{ document.height }} x {{ document.width }} <span translate>pixels</span>
         </li>
       </ul>
@@ -54,17 +54,29 @@
     computed: {
       document() {
         return this.promise.data ? this.promise.data : null;
+      },
+
+      locale() {
+        return this.document ? this.$documentUtils.getLocaleSmart(this.document) : null;
       }
     },
 
     methods: {
-      show(document_id) {
+      show(documentId) {
         this.visible = true;
-        this.promise = c2c.image.get(document_id);
+        this.promise = c2c.image.get(documentId);
       },
 
       hide() {
         this.visible = false;
+      },
+
+      toggle(documentId) {
+        if (this.visible) {
+          this.hide();
+        } else {
+          this.show(documentId);
+        }
       }
     }
   };

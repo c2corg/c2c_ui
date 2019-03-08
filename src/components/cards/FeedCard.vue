@@ -163,15 +163,11 @@
 
   @import '@/assets/sass/variables.scss';
 
-  .feed-card{
-    background-color:#FFF!important;
-    border: $card-border;
-    transition:0.2s;
-  }
-
-  .feed-card:hover{
-    background-color:$hover-background!important;
-    transition:0.2s;
+  @media screen and (max-width: $tablet) {
+    .feed-card{
+      border-left:0!important;
+      border-right:0!important;
+    }
   }
 
   .card-image-content{

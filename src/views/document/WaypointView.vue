@@ -1,5 +1,5 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise">
       <icon-waypoint-type
         v-if="document && document.waypoint_type"
@@ -108,6 +108,7 @@
           <markdown-section :document="document" :field="fields.description" :title="descriptionTitle"/>
           <markdown-section :document="document" :field="fields.access" :title="accessTitle"/>
           <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
+          <div style="clear:both" />
         </div>
 
         <routes-box v-if="!isDraftView" :document="document"/>

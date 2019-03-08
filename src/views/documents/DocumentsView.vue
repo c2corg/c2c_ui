@@ -1,116 +1,67 @@
 <template>
   <div class="section documents-view">
     <html-header :title="$gettext(documentType) + 's'"/>
-    <div class="level is-mobile header-section">
-      <div class="level-left">
-        <span class="level-item">
-          <div class="dropdown is-hoverable">
-            <div class="dropdown-trigger">
-              <span class="title is-1">
-                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
-              </span>
-              <fa-icon icon="angle-down" aria-hidden="true"/>
-            </div>
-            <div class="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <div v-for="type of documentTypes" :key="type" class="dropdown-item is-size-6 has-hover-background">
-                  <router-link
-                    :to="{name: type + 's', query:$route.query}"
-                    class="has-text-normal"
-                    :class="{'has-text-primary has-text-weight-bold': type === documentType}">
-                    <icon-document :document-type="type" />
-                    <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
-                  </router-link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </span>
+    <div class="header-section">
 
-        <span v-if="!['area', 'profile', 'image'].includes(documentType)" class="level-item">
-          <add-link
-            :document-type="documentType"
-            :query="addQuery"
-            class="is-size-3"
-            :title="$gettext('Create')">
-            <fa-icon icon="plus-circle" />
-          </add-link>
+      <dropdown-button class="header-item">
+        <span slot="button">
+          <span class="title is-1">
+            {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+          </span>
+          <fa-icon icon="angle-down" aria-hidden="true"/>
         </span>
-      </div>
+        <router-link
+          v-for="type of documentTypes"
+          :key="type"
+          class="dropdown-item is-size-6"
+          :class="{'is-active': type === documentType}"
+          :to="{name: type + 's', query:$route.query}">
+          <icon-document :document-type="type" />
+          <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+        </router-link>
+      </dropdown-button>
 
-      <div class="level-right" v-if="documentType!='profile'">
-        <div v-if="$user.isLogged" class="level-item">
-          <button class="button is-small is-primary" @click="loadPreferences">
-            <fa-icon icon="star"/>
-            <span class="is-hidden-mobile">&nbsp;</span>
-            <span class="is-hidden-mobile" v-translate>
-              Load my preferences
-            </span>
-          </button>
-        </div>
-        <div class="level-item is-size-3 is-hidden-mobile">
+      <add-link
+        v-if="!['area', 'profile', 'image'].includes(documentType)"
+        :document-type="documentType"
+        :query="addQuery"
+        class="is-size-3 header-item"
+        :title="$gettext('Create')">
+        <fa-icon icon="plus-circle" />
+      </add-link>
+
+      <span class="is-pulled-right is-flex header-right" v-if="documentType!='profile'">
+        <button v-if="$user.isLogged" class="button is-small is-primary header-item" @click="loadPreferences">
+          <fa-icon icon="star"/>
+          <span class="is-hidden-mobile">&nbsp;</span>
+          <span class="is-hidden-mobile" v-translate>
+            Load my preferences
+          </span>
+        </button>
+
+        <span
+          @click="toogleProperty('listMode')"
+          class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th-list"
-            class="has-cursor-pointer"
             :class="listMode ? 'has-text-primary' : ''"
-            :title="$gettext('List mode')"
-            @click="toogleProperty('listMode')" />
+            :title="$gettext('List mode')"/>
           <span>&thinsp;</span>
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th"
-            class="has-cursor-pointer"
             :class="!listMode ? 'has-text-primary' : ''"
-            :title="$gettext('Cards mode')"
-            @click="toogleProperty('listMode')" />
-        </div>
-        <div class="level-item is-size-3 is-hidden-mobile">
-          <div v-if="documentAreGeoLocalized" class="dropdown is-hoverable is-right display-mode-switcher">
-            <div class="dropdown-trigger">
-              <fa-icon
-                :icon="['fas', 'eye']"
-                class="has-cursor-pointer"/>
-            </div>
-            <div class="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <table class="dropdown-item is-size-6">
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='result'}"
-                    @click="setProperty('displayMode', 'result')">
-                    <td class="has-text-centered">
-                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Results only</td>
-                  </tr>
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='both'}"
-                    @click="setProperty('displayMode', 'both')">
-                    <td class="is-nowrap">
-                      <fa-icon :icon="listMode ? 'th-list' : 'th'"/>
-                      <span>&thinsp;</span>
-                      <fa-icon icon="map-marked-alt"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Both results and map</td>
-                  </tr>
-                  <tr
-                    class="has-hover-background has-cursor-pointer"
-                    :class="{'has-text-primary has-text-weight-bold': displayMode==='map'}"
-                    @click="setProperty('displayMode', 'map')">
-                    <td class="has-text-centered">
-                      <fa-icon icon="map-marked-alt"/>
-                    </td>
-                    <td class="is-nowrap" v-translate>Map only</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+            :title="$gettext('Cards mode')"/>
+        </span>
+        <display-mode-switch
+          v-if="documentAreGeoLocalized"
+          class="header-item is-hidden-mobile"
+          list-mode="listMode"
+          :value="displayMode"
+          @input="setProperty('displayMode', arguments[0])" />
 
-        <div class="level-item is-size-3 is-hidden-tablet">
+        <span class="header-item is-size-3 is-hidden-tablet">
           <fa-icon
             icon="map-marked-alt"
             :class="{'has-text-primary': displayMode === 'map'}"
@@ -120,8 +71,9 @@
             icon="th"
             :class="{'has-text-primary': displayMode !== 'map'}"
             @click="setProperty('displayMode', 'both')"/>
-        </div>
-      </div>
+        </span>
+      </span>
+
     </div>
 
     <query-items class="filter-section"/>
@@ -178,6 +130,7 @@
   import QueryItems from './utils/QueryItems';
   import PageSelector from './utils/PageSelector';
   import ImageCards from './utils/ImageCards';
+  import DisplayModeSwitch from './utils/DisplayModeSwitch';
 
   const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 
@@ -188,7 +141,8 @@
       QueryItems,
       PageSelector,
       DocumentsTable,
-      ImageCards
+      ImageCards,
+      DisplayModeSwitch
     },
 
     data() {
@@ -296,18 +250,42 @@
 
   $section-padding: 1.5rem; //TODO find this variable
   $header-height : 34px;
-  $header-margin-bottom : 1rem; //TODO find this variable
+  $header-margin-bottom : 1.5rem; //TODO find this variable
   $filter-height : 32px;
   $filter-padding-bottom : 1.5rem;
   $page-selector-height : 3rem;
   $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
   $cards-gap:0.25rem;
 
+  .header-section{
+    margin-bottom: $header-margin-bottom;
+  }
+
+  .header-right{
+    align-items: center;
+  }
+
+  .header-item:not(:first-child) {
+    margin-bottom: 0;
+    margin-left: .75rem;
+  }
+
   .filter-section{
     padding-bottom: $filter-padding-bottom;
+    clear:both;
   }
 
   @media screen and (max-width: $tablet) {
+
+    .documents-view{
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .filter-section, .header-section{
+      padding-left:0.5rem;
+      padding-right:0.5rem;
+    }
 
     .map-container{
       height: $result-height;
@@ -360,12 +338,6 @@
         padding-top:0;
         padding-bottom:0;
       //    transition:0.3s;
-      }
-    }
-
-    .display-mode-switcher{
-      td:nth-child(2){
-        padding-left:0.5rem;
       }
     }
   }

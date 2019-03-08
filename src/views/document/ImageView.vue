@@ -1,5 +1,5 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="columns">
       <div class="column is-3">
@@ -22,11 +22,7 @@
 
           <field-view :document="document" :field="fields.image_type" />
           <field-view :document="document" :field="fields.quality" />
-
-          <label-value v-if="document.categories && document.categories.length" :label="$gettext('categories')">
-            {{ document.categories.join(", ") }}
-          </label-value>
-
+          <field-view :document="document" :field="fields.categories"/>
           <field-view :document="document" :field="fields.camera_name"/>
           <field-view :document="document" :field="fields.exposure_time"/>
           <field-view :document="document" :field="fields.fnumber"/>
@@ -49,8 +45,11 @@
           </a>
         </div>
 
-        <markdown-section :document="document" :field="fields.summary"/>
-        <markdown-section :document="document" :field="fields.description" hide-title/>
+        <div v-if="locale.summary || locale.description" class="box">
+          <markdown-section :document="document" :field="fields.summary"/>
+          <markdown-section :document="document" :field="fields.description" hide-title/>
+          <div style="clear:both" />
+        </div>
 
         <routes-box :document="document" hide-buttons/>
         <recent-outings-box :document="document" hide-see-all-results-button />

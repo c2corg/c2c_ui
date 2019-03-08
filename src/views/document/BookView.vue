@@ -1,7 +1,7 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns is-block-print">
       <div class="column is-3">
         <div class="box">
           <label-value :label="$gettext('activities')">
@@ -29,6 +29,7 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary"/>
           <markdown-section :document="document" :field="fields.description" hide-title/>
+          <div style="clear:both" />
         </div>
 
         <routes-box :document="document" hide-buttons/>

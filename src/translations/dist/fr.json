@@ -103,6 +103,7 @@
     "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
     "Add images": "Ajouter des images",
     "Add the first outing": "Ajouter la première sortie",
+    "Additional information": "Informations supplémentaires",
     "admin_limits": {
       "area_types": "limite administrative"
     },
@@ -142,12 +143,20 @@
     "artificial": {
       "rock_types": "artificiel"
     },
+    "Associated outings": "Sorties associées",
     "Associated routes": "Itinéraires associés",
+    "Associated routes cotations": "Cotations des itinéraires associés au point de passage",
     "Association": "Camptocamp Association",
     "association": {
       "article_categories": "association"
     },
     "associations": "Associations",
+    "at least one route required": {
+      "API message": "Sélectionnez au moins un participant"
+    },
+    "at least one user required": {
+      "API message": "Sélectionnez au moins un itinéraire"
+    },
     "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.": "Décrivez votre niveau technique à la date de l'évènement, votre condition physique, la fatigue accumulée avant l'évènement, l'acclimatation pour une sortie en haute altitude, etc.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
     "aug": {
@@ -220,6 +229,7 @@
     "book_types": "Type de livre",
     "books": "livres",
     "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
+    "Both results and map": "Résultats et carte",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
     "bus": {
       "public_transportation_types": "bus"
@@ -414,6 +424,7 @@
     },
     "difficulties_height": "Altitude du début des difficultés",
     "disable_comments": "Désactiver les commentaires",
+    "Dispositions": "Dispositions",
     "Distance": "Distance",
     "Distance (km)": "Distance (km)",
     "Download outings": "Télécharger les sorties",
@@ -508,6 +519,8 @@
     "fauna": {
       "image_categories": "faune"
     },
+    "Fauna protection areas": "Zone de protection de la faune",
+    "Fauna protection site:": "Site de protection de la faune :",
     "feb": {
       "months": "février"
     },
@@ -637,7 +650,6 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
     "Here you may change your subscriptions to snow forecast mailing lists.": "Vous pouvez modifier ici vos abonnements aux bulletins de prévisions des risques d'avalanches.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
-    "Hide map": "Cacher la carte",
     "highline": {
       "slackline_types": "Highline"
     },
@@ -679,9 +691,11 @@
     "impossible": {
       "glacier_ratings": "infranchissable - passage impossible"
     },
+    "Incidents and accidents": "Incidents et accidents",
     "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
     "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Information sur la localisation de l'incident. Positionner la localisation sur la carte ci-dessus, même de manière peu précise (auquel cas vous pouvez ajouter plus de détails dans ce champ). Après avoir complété le rapport, vous pouvez associer un itinéraire, un point de passage ou une sortie.",
+    "Informations about the access": "Information à propos de l'accès routier/transport en commun",
     "Infos": "Informations",
     "initiator": {
       "autonomies": "débrouillé"
@@ -769,6 +783,7 @@
     "Links": "Liens",
     "List mode": "Vue en liste",
     "List of versions for language:": "Liste des versions pour la langue :",
+    "Load my preferences": "Activer mes préférences",
     "loading": "chargement en cours",
     "local_product": {
       "waypoint_types": "produits locaux"
@@ -778,7 +793,6 @@
     },
     "Location / elevation / orientation": "Lieu / altitude / orientation",
     "Log in to post a comment": "Se connecter pour poster un commentaire",
-    "Log in to post the first comment": "Connectez-vous pour poster un commentaire",
     "Login": "Se connecter",
     "Login failed": {
       "API message": "Identifiant ou mot de passe incorrects"
@@ -802,6 +816,7 @@
       "genders": "homme"
     },
     "map": "carte",
+    "Map only": "Uniquement la carte",
     "maps": "cartes",
     "Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.": "Cartes, topos, compte rendus de sorties consultés. Réévaluation de l'itinéraire au cours de la sortie.",
     "maps_info": "Cartes",
@@ -827,6 +842,7 @@
       "image_categories": "divers",
       "waypoint_types": "divers"
     },
+    "Misc data about the waypoint": "Données diverses sur le point de passage",
     "Miscs": "Divers",
     "Missing captcha": {
       "API message": "Captcha manquant"
@@ -871,6 +887,7 @@
     "multi": {
       "climbing_outdoor_types": "grande voie"
     },
+    "Multi-criteria search": "Recherche multi-critère",
     "My account": "Mon compte",
     "My changes": "Mes contributions",
     "My followed users": "Mes amis",
@@ -1025,6 +1042,7 @@
       "image_categories": "personnages"
     },
     "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos sentiments personnels sur la sortie",
+    "Period of protection": "Période de protection",
     "person_fall": {
       "event_types": "chute d'une personne"
     },
@@ -1109,6 +1127,9 @@
       "rain_proof_types": "protégé de la pluie",
       "$$noContext": "protégé"
     },
+    "Protection area:": "Zone de protection :",
+    "Protection areas": "Zones de protection",
+    "Protection status": "Status de la protection",
     "psicobloc": {
       "climbing_outdoor_types": "psicobloc"
     },
@@ -1147,6 +1168,7 @@
     "Required": {
       "API message": "Requis"
     },
+    "required field": "champ obligatoire",
     "rescue": "Intervention des services de secours",
     "Reset geometry": "Réinitialiser",
     "Reset password": "Réinitialiser le mot de passe",
@@ -1156,6 +1178,7 @@
     },
     "Restore this version": "Restaurer cette version",
     "restricted_access": "Restrictions d'accès",
+    "Results only": "Uniquement les résultats",
     "Retry": "Réessayer",
     "return_same_way": {
       "route_types": "aller-retour"
@@ -1214,7 +1237,7 @@
       "author_statuses": "victime secondaire"
     },
     "see actual version": "voir la version actuelle",
-    "See other documents nearby": "À proximité de ...",
+    "See other documents nearby": "À proximité de...",
     "See profile based on:": "Profil d'altitude selon :",
     "See the activity of this contributor in your feed": "Voir les activités de ce contributeur dans votre fil",
     "See the latest version": "Voir la dernière version",
@@ -1243,11 +1266,13 @@
     "shelter": {
       "waypoint_types": "abri"
     },
+    "Shorter than minimum length 1": {
+      "API message": "Champ obligatoire"
+    },
     "Shorter than minimum length 3": {
       "API message": "Champ trop court (minimum 3 caractères)"
     },
     "show all": "Voir tous les résultats",
-    "Show map": "Voir la carte",
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "single": {
       "climbing_outdoor_types": "couenne"
@@ -1379,6 +1404,8 @@
     "This book cover is the property of its editor and/or author": "Cette couverture de livre est la propriété de son éditeur et/ou auteur",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
+    "This field is too long": "Texte trop long",
+    "This field is too short": "Texte trop court",
     "This field must be a valid ISBN.": "Ce champ doit être un ISBN valide.",
     "This is the first version": "Ceci est la première version",
     "This is the last version": "Ceci est la dernière version",
@@ -1463,6 +1490,8 @@
       "waypoint_types": "point d'eau/source"
     },
     "waypoint": "point de passage",
+    "Waypoint's main properties": "Principales données du point de passage",
+    "Waypoint's textual description": "Descriptions textuelles du point de passage",
     "waypoint_children": "sous-points de passage",
     "waypoint_slope": "pente du terrain",
     "waypoint_type": "Type de point de passage",
@@ -1496,6 +1525,7 @@
       "$$noContext": "oui"
     },
     "You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators.": "Vous pouvez choisir de rester anonyme. Les informations personnelles sont confidentielles, visibles uniquement par les chercheurs et modérateurs.",
+    "You may add associated waypoints, books and articles": "Associez d'autres document de camptocamp à ce point de passage",
     "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
   }
 }

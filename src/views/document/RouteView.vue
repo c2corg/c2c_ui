@@ -1,8 +1,8 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
 
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns is-block-print">
 
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea=true"/>
@@ -18,7 +18,7 @@
             <div class="column is-4">
 
               <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3"/>
+                <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
               </label-value>
 
               <field-view :document="document" :field="fields.route_types" />
@@ -96,7 +96,7 @@
             <div
               slot="after"
               v-if="hasProtectionArea"
-              class="notification is-info">
+              class="notification is-info protection-area-info">
               <strong v-translate>
                 Sensitive areas
               </strong>
@@ -120,6 +120,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
+          <div style="clear:both" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split/>
@@ -200,6 +201,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .protection-area-info{
+    overflow:hidden;
+    margin-bottom: 1.5rem;
+  }
   .automatic-gears{
     margin-bottom: 1.5rem;
   }

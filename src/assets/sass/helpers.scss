@@ -16,6 +16,15 @@
     text-overflow: ellipsis;
 }
 
+
+@media screen and (min-width: $tablet) {
+    .is-ellipsed-tablet{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 .has-cursor-pointer{
     cursor:pointer;
 }
@@ -36,9 +45,20 @@
     color: $text;
 }
 
+.has-rounded-corner {
+    border-radius: $radius;
+}
 
 @media print {
     /* print styles go here */
+
+    /* Printing from Firefox with content display:flex will print only the first page.
+    https://bugzilla.mozilla.org/show_bug.cgi?id=1241323
+    */
+    .is-block-print {
+        display:block !important;
+    }
+
     .no-print {
         display: none!important;
     }
@@ -56,4 +76,5 @@
     .is-12-print{
         width: 100%!important;
     }
+
 }

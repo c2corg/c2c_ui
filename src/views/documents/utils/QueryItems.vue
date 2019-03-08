@@ -2,23 +2,26 @@
   <div class="query-items">
     <query-item :field="fields.title" class="title-input is-hidden-mobile" hide-label/>
 
-    <dropdown-button v-for="category of categorizedFields" :key="category.name"
-                     :disabled="category.fields.length===0"
-                     class="category-button"
-                     @changeDisplay="refreshSliders()">
+    <dropdown-button
+      v-for="category of categorizedFields"
+      :key="category.name"
+      class="category-button"
+      @changeDisplay="refreshSliders()">
 
-      <span slot="button">
+      <span slot="button" class="button" :disabled="category.fields.length===0">
         <fa-icon :icon="$options.categoryIcon[category.name]" />
         <span class="is-hidden-mobile">
           <!-- $gettext('General') -->
           <!-- $gettext('ratings') -->
           <!-- $gettext('Terrain') -->
           <!-- $gettext('Miscs') -->
-          {{ $gettext(category.name) }}
+          &nbsp;{{ $gettext(category.name) }}
         </span>
         <span v-if="category.activeCount!=0">
-          ({{ category.activeCount }})
+          &nbsp;({{ category.activeCount }})
         </span>
+        <span>&nbsp;</span>
+        <fa-icon icon="angle-down" aria-hidden="true"/>
       </span>
 
       <div class="sub-query-items">
@@ -26,6 +29,7 @@
           v-for="field of category.fields"
           :key="field.name"
           :field="field"
+          class="dropdown-item"
           :class="field.name === 'title' ? 'is-hidden-tablet': ''"/>
       </div>
 
@@ -192,7 +196,7 @@
 
       associations() {
         if (this.documentType === 'outing') {
-          return ['area', 'profile', 'waypoint', 'route'];
+          return ['area', 'route', 'waypoint', 'profile'];
         }
 
         if (this.documentType === 'route') {

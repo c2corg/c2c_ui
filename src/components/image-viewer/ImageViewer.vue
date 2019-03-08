@@ -1,68 +1,66 @@
 <template>
-  <div v-if="visible">
-    <swiper
-      ref="swiper"
-      :options="$options.swiperOptions"
-      class="image-viewer-swiper"
-      @slide-change="onSlideChange">
+  <div v-if="visible" class="image-viewer">
+    <div class="is-flex has-text-grey-lighter image-viewer-header">
+      <span class="is-size-2 is-ellipsed image-viewer-title">
+        {{ activeDocument.locales[0].title || '&nbsp;' }}
+      </span>
+      <span class="is-size-3 is-nowrap image-viewer-buttons">
+        <document-link :document="activeDocument" class="has-text-grey-lighter">
+          <fa-icon icon="eye"/>
+        </document-link>
 
-      <swiper-slide v-for="image of images" :key="image.document_id">
+        <edit-link
+          :document="activeDocument" :lang="activeDocument.available_langs[0]"
+          class="has-text-grey-lighter"
+          @click="visible=false">
+          <fa-icon icon="edit"/>
+        </edit-link>
 
-        <div class="is-size-3 has-text-grey-lighter image-viewer-header">
-          <div class="level is-mobile">
-            <span class="level-item is-size-2">
-              {{ image.locales[0].title }}
-            </span>
-            <span class="level-right">
-              <document-link :document="image" class="level-item has-text-grey-lighter">
-                <fa-icon icon="eye"/>
-              </document-link>
+        <fa-icon
+          class="has-cursor-pointer"
+          icon="info-circle"
+          @click="toggleImageInfo(activeDocument)"/>
+        <fa-icon
+          class="has-cursor-pointer request-fullscreen-button"
+          icon="expand"
+          @click="onRequestFullscreen"/>
+        <fa-icon
+          class="has-cursor-pointer exit-fullscreen-button"
+          icon="compress"
+          @click="onExitFullscreen"/>
+        <fa-icon
+          class="has-cursor-pointer"
+          icon="plus"
+          transform="rotate-45"
+          @click="visible=false"/>
+      </span>
+    </div>
 
-              <edit-link
-                :document="image" :lang="image.available_langs[0]"
-                class="level-item has-text-grey-lighter"
-                @click="visible=false">
-                <fa-icon icon="edit"/>
-              </edit-link>
+    <div ref="swiper" class="image-viewer-swiper">
+      <div class="swiper-wrapper"/>
+      <div class="swiper-button-prev"/>
+      <div class="swiper-button-next"/>
+    </div>
 
-              <fa-icon
-                class="level-item has-cursor-pointer"
-                icon="info-circle"
-                @click="showInfo(image)"/>
-              <fa-icon
-                class="level-item has-cursor-pointer request-fullscreen-button"
-                icon="expand"
-                @click="onRequestFullscreen"/>
-              <fa-icon
-                class="level-item has-cursor-pointer exit-fullscreen-button"
-                icon="compress"
-                @click="onExitFullscreen"/>
-              <fa-icon
-                class="level-item has-cursor-pointer"
-                icon="plus"
-                transform="rotate-45"
-                @click="visible=false"/>
-            </span>
-          </div>
-        </div>
-
-        <img :data-src="getUrl(image)" class="swiper-lazy" :title="image.locales[0].title">
-        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
-      </swiper-slide>
-
-      <div slot="button-prev" class="swiper-button-prev"/>
-      <div slot="button-next" class="swiper-button-next"/>
-      <div slot="pagination" class="swiper-pagination"/>
-    </swiper>
+    <div class="image-viewer-pagination">
+      <span
+        v-for="(image, index) of images"
+        :key="image.document_id"
+        class="image-viewer-bullet has-cursor-pointer"
+        :class="{'image-viewer-bullet-active': image === activeDocument}"
+        :title="image.locales[0].title"
+        @click="onPaginationClick(index)"
+        :style="`width: calc((100vw - 1.5rem) / ${images.length});`"/>
+    </div>
 
     <image-info ref="imageInfo" class="image-viewer-info" />
+
   </div>
 
 </template>
 
 <script>
-
-  import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import Swiper from 'swiper/dist/js/swiper.esm.bundle';
 
   import imageUrls from '@/js/image-urls';
   import ImageInfo from './ImageInfo';
@@ -93,9 +91,9 @@
 
   export default {
 
+    swiper: null,
+
     components: {
-      swiper,
-      swiperSlide,
       ImageInfo
     },
 
@@ -113,7 +111,6 @@
     },
 
     methods: {
-
       push(image) {
         if (this.images.findIndex(item => item.document_id === image.document_id) === -1) {
           this.images.push(image);
@@ -121,24 +118,73 @@
       },
 
       show(image) {
-        let index = this.images.findIndex(item => item.document_id === image.document_id);
+        let initialSlide = this.images.findIndex(item => item.document_id === image.document_id);
 
-        if (index === -1) {
-          index = this.images.length;
+        if (initialSlide === -1) {
+          initialSlide = this.images.length;
           this.push(image);
         }
 
-        this.$options.swiperOptions.initialSlide = index;
+        this.activeDocument = this.images[initialSlide];
         this.visible = true;
+
+        this.$nextTick(function() {
+          const slides = this.images;
+
+          const swiperOptions = {
+            initialSlide,
+            slidesPerView: 1,
+
+            // Disable preloading of all images
+            preloadImages: false,
+            // Enable lazy loading
+            lazy: {
+              // enable loading of closest images
+              loadPrevNext: true
+            },
+
+            // not possible with virtual
+            // https://idangero.us/swiper/api/#virtual
+            // loop: true,
+
+            // virtual because it may be too slow if there is too many image
+            // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
+            virtual: {
+              slides,
+              renderSlide(image, index) {
+                return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
+                  <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
+                </div>`;
+              }
+            },
+
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev'
+            },
+
+            keyboard: {
+              enabled: true
+            }
+          };
+
+          if (this.$options.swiper) {
+            this.$options.swiper.destroy();
+          }
+
+          this.$options.swiper = new Swiper(this.$refs.swiper, swiperOptions);
+          this.$options.swiper.on('slideChange', this.onSlideChange);
+        });
+      },
+
+      onPaginationClick(index) {
+        this.$options.swiper.slideTo(index, 0, false);
       },
 
       clear() {
         this.images = [];
         this.visible = false;
-      },
-
-      getUrl(image) {
-        return imageUrls.getBig(image);
       },
 
       onKeydown(event) {
@@ -147,13 +193,13 @@
         }
       },
 
-      showInfo(image) {
-        this.$refs.imageInfo.show(image.document_id);
+      toggleImageInfo(image) {
+        this.$refs.imageInfo.toggle(image.document_id);
       },
 
       onSlideChange() {
         this.$refs.imageInfo.hide();
-        this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex - 1];
+        this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex];
       },
 
       onRequestFullscreen() {
@@ -163,117 +209,128 @@
       onExitFullscreen() {
         exitFullscreen();
       }
-    },
-
-    swiperOptions: {
-      // Disable preloading of all images
-      preloadImages: false,
-      // Enable lazy loading
-      lazy: {
-        // enable loading of closest images
-        loadPrevNext: true
-      },
-
-      loop: true,
-      initialSlide: 0,
-      slidesPerView: 1,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-
-      // https://idangero.us/swiper/api/#pagination
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-      },
-      keyboard: {
-        enabled: true
-      }
     }
   };
 </script>
 
 <style lang="scss">
-    @import '@/assets/sass/variables.scss';
+  @import '~swiper/dist/css/swiper.css';
 
-    .swiper-pagination{
-        .swiper-pagination-bullet{
-            background: white;
-            opacity: 1;
-            width: 16px;
-            height: 16px;
-        }
+  // class not explicitly present in template, can't use scope
 
-        .swiper-pagination-bullet-active{
-            background: $primary;
-        }
+  .image-viewer-slide{
+    max-height:100%;
+
+    img{
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
     }
+  }
+
 </style>
 
 <style scoped lang="scss">
+  @import '@/assets/sass/variables.scss';
 
-    @import '~swiper/dist/css/swiper.css';
+  $headerHeight: 52px;
+  $paginationHeight: 30px;
+
+  .image-viewer{
+    z-index:1000;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%; // not 100vw, otherwise the viewer goes under the scrollbar
+    height:100%;
+    background: rgba(0,0,0,0.95);
+
+    .image-viewer-header{
+      justify-content: space-between;
+      padding:0.5rem 1rem;
+      margin-bottom: 0!important;
+
+      .image-viewer-title{
+        margin:auto;
+      }
+
+      .image-viewer-buttons > *:not(:last-child){
+        margin-right:.75rem;
+      }
+
+      .image-viewer-buttons{
+
+        svg:hover{
+          color:white;
+        }
+      }
+    }
 
     .image-viewer-swiper{
-        z-index:1000;
-        position:fixed;
-        top:0;
-        left:0;
-        width:100vw;
-        height:100vh;
-        background: rgba(0,0,0,0.9);
-
-        .swiper-slide{
-            max-height:100vh;
-            // background: yellow;
-
-            .image-viewer-header{
-                padding:0.5rem 1rem;
-                background: rgba(0,0,0,0.8);
-
-                svg:hover{
-                    color:white;
-                }
-            }
-
-            img{
-                max-height: 80vh;
-                max-width: 100%;
-                width: auto;
-                height: auto;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
-            }
-        }
+      width:100vw;
+      height:calc(100% - #{$headerHeight} - #{$paginationHeight});
     }
 
-    .image-viewer-info{
-        height:100vh;
-        width:20rem;
-        z-index:1000;
-        position:fixed;
-        top:3.7rem;
-        right:0;
-    }
+    .image-viewer-pagination{
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      bottom:0;
+      height: $paginationHeight;
 
-    .request-fullscreen-button:fullscreen, .request-fullscreen-button:-webkit-full-screen{
-        display: none;
-    }
+      .image-viewer-bullet:first-child{
+        border-bottom-left-radius:50%;
+        border-top-left-radius:50%;
+      }
 
-    .exit-fullscreen-button:not(:fullscreen), .exit-fullscreen-button:not(:-webkit-full-screen){
-        display: none;
-    }
+      .image-viewer-bullet:last-child{
+        border-bottom-right-radius:50%;
+        border-top-right-radius:50%;
+      }
 
-    .swiper-button-prev{
-        margin-left: 1rem;
+      .image-viewer-bullet{
+        display: inline-block;
+        background: white;
+        max-width: 16px;
+        height: 16px;
+        border: 25% solid black;
+      }
+
+      .image-viewer-bullet-active{
+        background: $primary;
+      }
     }
-    .swiper-button-next{
-        margin-right: 1rem;
-    }
+  }
+
+  .image-viewer-info{
+      height:100vh;
+      width:20rem;
+      z-index:1000;
+      position:fixed;
+      top:3.7rem;
+      right:0;
+  }
+
+  .request-fullscreen-button:fullscreen{
+      display: none;
+  }
+
+  .exit-fullscreen-button:not(:fullscreen){
+      display: none;
+  }
+
+  .swiper-button-prev{
+      margin-left: 1rem;
+  }
+  .swiper-button-next{
+      margin-right: 1rem;
+  }
 
 </style>

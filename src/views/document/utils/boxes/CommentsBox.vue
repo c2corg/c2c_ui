@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isNormalView" class="box discourse-comments no-print">
+  <div v-if="isNormalView" class="box no-print">
     <h2 class="title is-2" v-translate>Comments</h2>
 
     <div v-if="document.disable_comments">
@@ -181,10 +181,6 @@
 <style lang="scss">
 
 @import '@/assets/sass/variables.scss';
-
-.discourse-comments{
-    background: #fbfaf6 !important;
-}
 
 .discourse-post{
     border-top:6px solid $color-base-c2c;

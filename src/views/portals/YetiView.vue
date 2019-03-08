@@ -1,9 +1,9 @@
 <template>
-  <div class="section has-background-light">
+  <div class="section">
     <html-header title="Yeti"/>
     <div class="box">
       <h1 class="title is-1">
-        <span v-translate>YETI - Un outil pour la vie</span>
+        <span>YETI - Un outil pour la vie</span>
         <span class="is-pulled-right has-text-primary">
           <fa-icon icon="map-marked-alt" />
         </span>
@@ -20,11 +20,11 @@
           <div class="columns">
             <div class="column">
               <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
-                <svg viewBox="0 0 100 100" width="150" height="150">
+                <svg viewBox="0 0 100 100" width="120" height="120">
                   <polygon style="fill:none;stroke:#000;stroke-miterlimit:10;" points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 "/>
                   <line v-show="bra.isDifferent" style="fill:none;stroke:#000;stroke-miterlimit:10;" x1="10" y1="61.5" x2="90" y2="61.5"/>
                 </svg>
-                <div class="input-bra-high select">
+                <div class="input-bra-high select is-small">
                   <select
                     v-model="bra.high"
                     class="form-control"
@@ -39,15 +39,17 @@
 
                 <div v-show="bra.isDifferent" class="input-bra-threshold control">
                   <input
-                    class="input"
+                    class="input is-small"
                     type="number"
-                    step="50"
+                    min="0"
+                    max="4800"
+                    step="100"
                     v-model="bra.altiThreshold"
                     maxlength="4"
                     aria-label="Altitude seuil">
                 </div>
 
-                <div v-show="bra.isDifferent" class="input-bra-low select">
+                <div v-show="bra.isDifferent" class="input-bra-low select is-small">
                   <select v-model="bra.low" aria-label="Niveau de risque BRA bas">
                     <option :value="null" selected/>
                     <option :value="1">1</option>
@@ -223,7 +225,7 @@
 
             <ul>
               <li class="control" v-for = "(item, i) of groupSizes" :key="i">
-                <input :id="'c2c-group-size-' + i" type="radio" class="is-checkradio" v-model="groupSize" :value="item.value">
+                <input :id="'c2c-group-size-' + i" type="radio" class="is-checkradio is-primary" v-model="groupSize" :value="item.value">
                 <label :for="'c2c-group-size-' + i">{{ item.text }}</label>
               </li>
             </ul>
@@ -248,7 +250,7 @@
         </div>
 
         <div class="box yeti-logos">
-          <div class="columns">
+          <div class="columns is-mobile is-vcentered">
             <div class="column has-text-centered">
               <a href="http://www.ensg.eu">
                 <img src="@/assets/img/yeti/logo-ensg.png" alt="Logo ENSG">
@@ -549,16 +551,16 @@
 
       getYetiUrl(bbox) {
         // set bra.low / altiThreshold
-        const braLow = this.bra['low'] || this.bra.high;
-        const braAltiThreshold = this.bra['altiThreshold'] || 0;
+        const braLow = this.bra.isDifferent ? this.bra.low : this.bra.high;
+        const braAltiThreshold = this.bra.isDifferent ? this.bra.altiThreshold : 0;
 
         // mre
-        const compass = this.method === 'mre' ? this.orientation.join(',') : 'none';
+        const compass = this.method === 'mre' && this.orientation.length !== 0 ? 'none,' + this.orientation.join(',').toLowerCase() : 'none';
 
         // mrp
         const potentialDanger = this.method === 'mrp' ? this.potentialDanger : 0;
         const wetSnow = this.method === 'mrp' ? this.wetSnow : false;
-        const groupSize = this.method === 'mrp' ? this.groupSize : 0;
+        const groupSize = this.method === 'mrp' ? Math.floor(this.groupSize) : 0;
 
         // create url
         let result = YETI_URL_BASE;
@@ -683,27 +685,27 @@
 
     .input-bra-high {
       position:absolute;
-      left: 47px;
-      top: 70px;
+      left: 39px;
+      top: 62px;
     }
 
     .input-bra-threshold{
       position:absolute;
-      left: 140px;
-      top: 75px;
+      left: 115px;
+      top: 60px;
       width: 85px;
     }
 
     .input-bra-low {
       position:absolute;
-      left: 47px;
-      top: 97px;
+      left: 39px;
+      top: 78px;
     }
   }
 
   .inputs-bra-different{
     .input-bra-high {
-      top: 54px;
+      top: 45px;
     }
   }
 
@@ -781,7 +783,7 @@
 
   .yeti-logos{
       img{
-          height: 40px;
+        max-width: 65%;
       }
   }
 </style>

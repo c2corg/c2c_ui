@@ -45,7 +45,7 @@
       ref="centerOnGeolocation"
       :title="$gettext('Recenter on your current position')"
       class="ol-control ol-control-center-on-geolocation">
-      <button @click="centerOnGeolocation">
+      <button @click="activateCenterOnGeolocation">
         <fa-icon icon="bullseye"/>
       </button>
     </div>
@@ -134,6 +134,7 @@
   const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
   const DEFAULT_POINT_ZOOM = 12;
   const MAX_ZOOM = 19;
+  const TRACKING_INITIAL_ZOOM = 13;
 
   const biodivSportsService = new BiodivSportsService();
   const respecterCestProtegerService = new RespecterCestProtegerService();
@@ -373,6 +374,8 @@
 
         projection: this.view.getProjection()
       });
+
+      this.geolocation.on('change:position', this.setCenterOnGeoLocation);
 
       this.drawDocumentMarkers();
 
@@ -750,18 +753,15 @@
         }
       },
 
-      centerOnGeolocation() {
+      activateCenterOnGeolocation() {
         this.geolocation.setTracking(true);
+      },
 
-        // TODO : not tracking mode,
-        // * add a spinner showing that it's waiting
-        // * remove handler once it's loaded
-        const setCenter = function() {
-          const position = this.geolocation.getPosition();
-          this.view.setCenter(position);
-        };
-
-        this.geolocation.on('change:position', setCenter.bind(this));
+      setCenterOnGeoLocation() {
+        const position = this.geolocation.getPosition();
+        this.view.setZoom(TRACKING_INITIAL_ZOOM);
+        this.view.setCenter(position);
+        this.geolocation.setTracking(false);
       },
 
       searchRecenterPropositions(event) {
@@ -824,11 +824,15 @@
 </script>
 
 <style lang="scss">
-    // for styling ol elements
-    .ol-attribution{
-        background: white!important;
+  // for styling ol elements
+  .ol-attribution{
+    background: white!important;
+  }
 
-    }
+  // disable mobile CSS for controls.
+  .ol-touch .ol-control button {
+    font-size: 1.14em!important;
+  }
 </style>
 
 <style lang="scss" scoped>

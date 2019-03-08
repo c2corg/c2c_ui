@@ -5,7 +5,7 @@
         class="input"
         :class="{'is-danger':hasError}"
         type="text"
-        :placeholder="$gettext('Search ...')"
+        :placeholder="placeholder || $gettext('Search ...')"
         @input="onInput"
         @focus="onInput"
         @blur="promise={}"
@@ -53,7 +53,7 @@
                 @{{ document.forum_username }}
               </span>
               <span v-if="document.area_type" class="is-italic">
-                {{ $gettext(document.area_type) }}
+                {{ $gettext(document.area_type, 'area_types') | uppercaseFirstLetter }}
               </span>
 
               &nbsp;

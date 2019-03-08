@@ -171,10 +171,36 @@ export default {
 
     },
 
+    // display a popup with info from fields taht contains an error
+    // return true if popup is displayed, false otherwise
+    displayErrors(isApiMassage) {
+      const fieldsWithError = this.getFieldsWithError();
+      const i18nContext = isApiMassage ? 'API message' : undefined;
+
+      // list of possible API message (keep js syntax, for messages extraction)
+      // $gettext('Shorter than minimum length 1', 'API message');
+      // $gettext('at least one route required', 'API message');
+      // $gettext('at least one user required', 'API message');
+
+      if (fieldsWithError.length !== 0) {
+        const messages = fieldsWithError.map((field) => {
+          return `${this.$gettext(field.name)} : ${this.$gettext(field.error.description, i18nContext)}`;
+        });
+
+        this.$alert.show(messages);
+
+        return true;
+      }
+
+      return false;
+    },
+
     save(comment) {
       this.beforeSave(); // allow each view to handle some specific cases
 
-      if (this.hasError()) {
+      this.computeErrors();
+
+      if (this.displayErrors(false)) {
         return;
       }
 
@@ -211,16 +237,14 @@ export default {
       });
     },
 
-    hasError() {
-      let hasError = false;
-
+    computeErrors() {
       for (const field of Object.values(this.fields)) {
-        const error = field.getError(this.document, this.editedLocale);
-        hasError = hasError || error !== null;
-        field.error = error;
+        field.error = field.getError(this.document, this.editedLocale);
       }
+    },
 
-      return hasError;
+    getFieldsWithError() {
+      return Object.values(this.fields).filter((field) => field.error !== null);
     },
 
     dispatchErrors(errors) {
@@ -238,6 +262,8 @@ export default {
           this.dispatchError(path[0], error);
         }
       }
+
+      this.displayErrors(true);
     },
 
     dispatchError(fieldName, error) {

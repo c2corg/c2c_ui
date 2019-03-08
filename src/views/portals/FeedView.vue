@@ -1,11 +1,11 @@
 <template>
-  <div class="has-background-light">
+  <div>
     <html-header :title="$gettext('Home')"/>
     <home-banner v-if="!$user.isLogged"/>
-    <div class="section">
+    <div class="section feed-view">
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
-          <h3 class="title is-3">
+          <h3 class="title is-3 feed-title">
             <span v-translate>Activity feed</span>
             <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">
               <router-link :to="{name:'preferences'}" :title="$gettext('My preferences')">
@@ -16,7 +16,7 @@
               </span>
             </span>
           </h3>
-          <feed-widget :type="isPersonal ? 'personal' : 'default'" />
+          <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" />
         </div>
         <div class="column is-hidden-mobile">
           <h3 class="title is-3" v-translate>
@@ -74,22 +74,33 @@
 
 <style scoped lang="scss">
 
-    @import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-    .cards-container > div{
-        justify-content:center;
-        margin:auto;
+  @media screen and (max-width: $tablet) {
+    .feed-view{
+      padding-left: 0;
+      padding-right: 0;
+
+      .feed-title{
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+  }
+
+  .cards-container > div{
+    justify-content:center;
+    margin:auto;
+  }
+
+  .feed-buttons{
+    a, svg{
+      color:$text;
     }
 
-    .feed-buttons{
-        a, svg{
-            color:$text;
-        }
-
-        svg{
-            margin-right:0.3rem;
-            cursor: pointer;
-        }
+    svg{
+      margin-right:0.3rem;
+      cursor: pointer;
     }
-
+  }
 </style>

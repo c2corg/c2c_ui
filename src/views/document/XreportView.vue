@@ -1,13 +1,13 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
-      <div class="column is-3">
+    <div v-if="document" class="columns is-block-print">
+      <div class="column is-3 is-12-print">
 
         <div class="box">
 
           <label-value :label="$gettext('activities')">
-            <activities :activities="document.activities" class="is-size-3 has-text-primary"/>
+            <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
           </label-value>
 
           <label-value v-if="document.author" :label="$gettext('author')">
@@ -34,7 +34,7 @@
         <tool-box :document="document"/>
       </div>
 
-      <div class="column is-9">
+      <div class="column is-9 is-12-print">
         <div class="box">
           <markdown-section :document="document" :field="fields.summary"/>
           <markdown-section :document="document" :field="fields.description"/>
@@ -51,6 +51,7 @@
           <markdown-section :document="document" :field="fields.reduce_impact"/>
           <markdown-section :document="document" :field="fields.modifications"/>
           <markdown-section :document="document" :field="fields.other_comments"/>
+          <div style="clear:both" />
         </div>
 
         <images-box v-if="document" :document="document"/>

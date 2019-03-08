@@ -1,10 +1,10 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
 
     <images-box v-if="document" :document="document"/>
 
-    <div v-if="document" class="columns is-multiline">
+    <div v-if="document" class="columns is-multiline is-block-print">
 
       <div class="column is-3 no-print">
         <map-box :document="document"/>
@@ -29,11 +29,13 @@
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>
 
+          <hr>
+
           <div class="columns">
 
             <div class="column is-4">
               <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3"/>
+                <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
               </label-value>
 
               <field-view :document="document" :field="fields.frequentation"/>
@@ -103,6 +105,7 @@
           <markdown-section :document="document" :field="fields.hut_comment"/>
           <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')"/>
 
+          <div style="clear:both" />
         </div>
 
         <comments-box :document="document" />

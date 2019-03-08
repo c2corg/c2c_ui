@@ -32,7 +32,7 @@
 
   const getFontAwesomeSrc = function(prefix, iconeName) {
     let svgSource = icon({ prefix, iconName: iconeName }).html[0];
-    svgSource = svgSource.replace('fill="currentColor"', 'fill="#ffaa45"');
+    svgSource = svgSource.replace('fill="currentColor"', 'fill="#F93"');
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource);
   };
 
@@ -145,115 +145,114 @@
   };
 </script>
 
-<style scoped lang="scss">
-    .content{
-        margin-bottom: 1.5rem;
-    }
-</style>
-
 <style lang="scss">
-    // Not scoped syle, because CSS selector are not explicitly present in template
+  // Not scoped syle, because CSS selector are not explicitly present in template
 
-    .markdown-content{
-      h3{
-        font-size:1.5rem!important;
-        margin-bottom:0.5em!important;
-        border-bottom: 1px solid #EEE;
-      }
-      h4{
-        font-size:1.1rem!important;
-        margin-bottom:0.25em!important;
-      }
-      h5{
-        font-size:1rem!important;
-        margin-bottom:0.25em!important;
-      }
-      hr{
-        margin: 1rem 0!important;
-      }
+  .markdown-content:not(:last-child){
+    margin-bottom: 1.5rem;
+  }
+
+  .markdown-content{
+    h3{
+      font-size:1.5rem!important;
+      margin-bottom:0.5em!important;
+      border-bottom: 1px solid #EEE;
+    }
+    h4{
+      font-size:1.1rem!important;
+      margin-bottom:0.25em!important;
+    }
+    h5{
+      font-size:1rem!important;
+      margin-bottom:0.25em!important;
+    }
+    hr{
+      margin: 1rem 0!important;
+    }
+  }
+
+  span[c2c\:role=header-emphasis]{
+    font-size: 80%;
+    font-style: italic;
+  }
+
+  img[c2c\:role=emoji]{
+    width: 1.43em;
+    height: 1.43em;
+    vertical-align:bottom;
+  }
+
+  figure[c2c\:role=embedded-figure]{
+    border-radius: 4px;
+    border:1px solid #DDD;
+    padding:0.5rem;
+    background: #FAFAFA;
+    max-width:100%;
+    display: table;
+
+    img{
+      cursor: pointer
     }
 
-    span[c2c\:role=header-emphasis]{
-        font-size: 80%;
-        font-style: italic;
+    // small image
+    // SI is a 200*200 image, no need to specify anything
+    // img[c2c\:size=SI]{
+
+    // }
+
+    // medium image
+    img[c2c\:size=MI]{
+      width: 25vw;
+      max-width:400px;
     }
 
-    img[c2c\:role=emoji]{
-        width: 1.43em;
-        height: 1.43em;
-        vertical-align:bottom;
+    // big image
+    // img[c2c\:size=BI]{
+
+    // }
+
+    // original size image
+    // TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY
+    // img[c2c\:size=OI]{
+
+    // }
+  }
+
+  figure[c2c\:position=right]{
+    float: right;
+    clear: right;
+    margin-right:0 !important;
+  }
+
+  figure[c2c\:position=left]{
+    float: left;
+    clear: left;
+    margin-left:0 !important;
+  }
+
+  figure[c2c\:position=center]{
+    margin-left:auto !important;
+    margin-right:auto !important;
+    clear: both;
+  }
+
+  figure[c2c\:position=inline]{
+    margin-right:0 !important;
+    margin-left:0 !important;
+    // well, no :(
+    // display: inline-block;
+  }
+
+  table[c2c\:role=ltag]{
+    width: auto!important; // on prod, bulma CSS is after this CSS ??
+
+    .pitch{
+      font-weight:bold;
     }
+  }
 
-    figure[c2c\:role=embedded-figure]{
-        border-radius: 4px;
-        border:1px solid #DDD;
-        padding:0.5rem;
-        background: #FAFAFA;
-        max-width:100%;
-        display: table;
-
-        img{
-            cursor: pointer
-        }
-
-        // small image
-        img[c2c\:size=SI]{
-            // SI is a 200*200 image, no need to specify anything
-
-        }
-
-        // medium image
-        img[c2c\:size=MI]{
-            width: 25vw;
-        }
-
-        // big image
-        img[c2c\:size=BI]{
-
-        }
-
-        // original size image
-        img[c2c\:size=OI]{ // TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY
-            // nothing to do
-
-        }
-    }
-
-    figure[c2c\:position=right]{
-        float: right;
-        clear: right;
-        margin-right:0 !important;
-    }
-
-    figure[c2c\:position=left]{
-        float: left;
-        clear: left;
-        margin-left:0 !important;
-    }
-
-    figure[c2c\:position=center]{
-        margin-left:auto !important;
-        margin-right:auto !important;
-        clear: both;
-    }
-
-    figure[c2c\:position=inline]{
-        margin-right:0 !important;
-        margin-left:0 !important;
-        // well, no :(
-        // display: inline-block;
-    }
-
-    table[c2c\:role=ltag]{
-        width: auto!important; // on prod, bulma CSS is after this CSS ??
-
-        .pitch{
-            font-weight:bold;
-        }
-    }
-
-    div[c2c\:role=info], div[c2c\:role=warning], div[c2c\:role=danger]{
-        overflow: hidden;
-    }
+  div[c2c\:role=info], div[c2c\:role=warning], div[c2c\:role=danger]{
+    overflow: hidden;
+  }
 
 </style>

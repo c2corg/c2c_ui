@@ -1,8 +1,8 @@
 <template>
-  <div class="section has-background-light has-background-white-print">
+  <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
-      <div class="column is-3">
+    <div v-if="document" class="columns is-block-print">
+      <div class="column is-3 is-12-print">
         <div class="box">
           <field-view :document="document" :field="fields.activities" />
           <field-view :document="document" :field="fields.categories" />
@@ -12,10 +12,11 @@
 
         <tool-box :document="document"/>
       </div>
-      <div class="column is-9">
+      <div class="column is-9 is-12-print">
         <div class="box">
           <markdown-section :document="document" :field="fields.summary"/>
           <markdown-section :document="document" :field="fields.description" hide-title/>
+          <div style="clear:both" />
         </div>
 
         <routes-box v-if="!isDraftView" :document="document"/>
