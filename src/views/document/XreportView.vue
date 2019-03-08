@@ -7,54 +7,54 @@
         <div class="box">
 
           <label-value :label="$gettext('activities')">
-            <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
+            <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
           </label-value>
 
           <label-value v-if="document.author" :label="$gettext('author')">
-            <author-link :author="document.author"/>
+            <author-link :author="document.author" />
           </label-value>
 
-          <field-view :document="document" :field="fields.event_type"/>
+          <field-view :document="document" :field="fields.event_type" />
 
           <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
-            <profiles-links :profiles="document.associations.users"/>
+            <profiles-links :profiles="document.associations.users" />
           </label-value>
 
-          <field-view :document="document" :field="fields.avalanche_level"/>
-          <field-view :document="document" :field="fields.avalanche_slope"/>
-          <field-view :document="document" :field="fields.elevation"/>
-          <field-view :document="document" :field="fields.nb_participants"/>
-          <field-view :document="document" :field="fields.nb_impacted"/>
-          <field-view :document="document" :field="fields.rescue"/>
-          <field-view :document="document" :field="fields.severity"/>
-          <field-view :document="document" :field="fields.quality"/>
+          <field-view :document="document" :field="fields.avalanche_level" />
+          <field-view :document="document" :field="fields.avalanche_slope" />
+          <field-view :document="document" :field="fields.elevation" />
+          <field-view :document="document" :field="fields.nb_participants" />
+          <field-view :document="document" :field="fields.nb_impacted" />
+          <field-view :document="document" :field="fields.rescue" />
+          <field-view :document="document" :field="fields.severity" />
+          <field-view :document="document" :field="fields.quality" />
         </div>
 
-        <map-box :document="document"/>
-        <tool-box :document="document"/>
+        <map-box :document="document" />
+        <tool-box :document="document" />
       </div>
 
       <div class="column is-9 is-12-print">
         <div class="box">
-          <markdown-section :document="document" :field="fields.summary"/>
-          <markdown-section :document="document" :field="fields.description"/>
-          <markdown-section :document="document" :field="fields.place"/>
-          <markdown-section :document="document" :field="fields.route_study"/>
-          <markdown-section :document="document" :field="fields.conditions"/>
-          <markdown-section :document="document" :field="fields.training"/>
-          <markdown-section :document="document" :field="fields.motivations"/>
-          <markdown-section :document="document" :field="fields.group_management"/>
-          <markdown-section :document="document" :field="fields.risk"/>
-          <markdown-section :document="document" :field="fields.time_management"/>
-          <markdown-section :document="document" :field="fields.safety"/>
-          <markdown-section :document="document" :field="fields.increase_impact"/>
-          <markdown-section :document="document" :field="fields.reduce_impact"/>
-          <markdown-section :document="document" :field="fields.modifications"/>
-          <markdown-section :document="document" :field="fields.other_comments"/>
+          <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.description" />
+          <markdown-section :document="document" :field="fields.place" />
+          <markdown-section :document="document" :field="fields.route_study" />
+          <markdown-section :document="document" :field="fields.conditions" />
+          <markdown-section :document="document" :field="fields.training" />
+          <markdown-section :document="document" :field="fields.motivations" />
+          <markdown-section :document="document" :field="fields.group_management" />
+          <markdown-section :document="document" :field="fields.risk" />
+          <markdown-section :document="document" :field="fields.time_management" />
+          <markdown-section :document="document" :field="fields.safety" />
+          <markdown-section :document="document" :field="fields.increase_impact" />
+          <markdown-section :document="document" :field="fields.reduce_impact" />
+          <markdown-section :document="document" :field="fields.modifications" />
+          <markdown-section :document="document" :field="fields.other_comments" />
           <div style="clear:both" />
         </div>
 
-        <images-box v-if="document" :document="document"/>
+        <images-box v-if="document" :document="document" />
 
         <comments-box :document="document" />
 

@@ -1,8 +1,8 @@
 <template>
   <div class="section content">
-    <html-header :title="$gettext('Differences between versions')"/>
+    <html-header :title="$gettext('Differences between versions')" />
     <h1>
-      <icon-document :document-type="documentType" class="is-large"/>
+      <icon-document :document-type="documentType" class="is-large" />
       <span>&#8239;</span>
       <span>diff</span> ({{ lang }}) :
       <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ title }}</router-link>
@@ -19,7 +19,7 @@
           </version-link>
         </div>
         <div>
-          by <contributor-link :contributor="oldVersion.version"/>
+          by <contributor-link :contributor="oldVersion.version" />
         </div>
         <div>
           {{ oldVersion.version.comment }}
@@ -51,7 +51,7 @@
           </version-link>
         </div>
         <div>
-          by <contributor-link :contributor="newVersion.version"/>
+          by <contributor-link :contributor="newVersion.version" />
         </div>
         <div>
           {{ newVersion.version.comment }}

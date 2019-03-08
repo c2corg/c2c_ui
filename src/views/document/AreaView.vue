@@ -4,17 +4,17 @@
     <div v-if="document" class="columns">
       <div class="column is-3">
         <div class="box">
-          <field-view :document="document" :field="fields.area_type"/>
-          <field-view :document="document" :field="fields.quality"/>
+          <field-view :document="document" :field="fields.area_type" />
+          <field-view :document="document" :field="fields.quality" />
         </div>
-        <map-box :document="document"/>
-        <tool-box :document="document"/>
+        <map-box :document="document" />
+        <tool-box :document="document" />
       </div>
 
       <div class="column is-9">
         <div class="box" v-if="document.cooked.summary || document.cooked.description">
-          <markdown-section :document="document" :field="fields.summary"/>
-          <markdown-section :document="document" :field="fields.description"/>
+          <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.description" />
           <div style="clear:both" />
         </div>
 
@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <images-box :document="document"/>
+        <images-box :document="document" />
 
         <comments-box :document="document" />
       </div>

@@ -1,6 +1,6 @@
 <template>
   <span v-if="text" class="is-ellipsed">
-    <icon-area class="card-icon"/>
+    <icon-area class="card-icon" />
     {{ text }}
   </span>
 

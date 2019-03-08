@@ -10,18 +10,18 @@
           <field-view :document="document" :field="fields.quality" />
         </div>
 
-        <tool-box :document="document"/>
+        <tool-box :document="document" />
       </div>
       <div class="column is-9 is-12-print">
         <div class="box">
-          <markdown-section :document="document" :field="fields.summary"/>
-          <markdown-section :document="document" :field="fields.description" hide-title/>
+          <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear:both" />
         </div>
 
-        <routes-box v-if="!isDraftView" :document="document"/>
-        <recent-outings-box v-if="!isDraftView" :document="document"/>
-        <images-box v-if="!isDraftView" :document="document"/>
+        <routes-box v-if="!isDraftView" :document="document" />
+        <recent-outings-box v-if="!isDraftView" :document="document" />
+        <images-box v-if="!isDraftView" :document="document" />
         <comments-box v-if="!isDraftView" :document="document" />
       </div>
     </div>

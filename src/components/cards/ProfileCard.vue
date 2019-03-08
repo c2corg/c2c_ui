@@ -1,7 +1,7 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document"/>
+      <document-title :document="document" />
     </card-title>
 
     <card-row>
@@ -15,7 +15,7 @@
     <card-row>
       <card-activities-item
         v-if="document.activities"
-        :activities="document.activities"/>
+        :activities="document.activities" />
       &nbsp;
 
       <textual-array
@@ -23,7 +23,7 @@
         :array="document.categories"
         i18n
         i18n-context="user_categories"
-        class="is-ellipsed"/>
+        class="is-ellipsed" />
     </card-row>
   </card-container>
 </template>

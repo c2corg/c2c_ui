@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <html-header title="Yeti"/>
+    <html-header title="Yeti" />
     <div class="box">
       <h1 class="title is-1">
         <span>YETI - Un outil pour la vie</span>
@@ -21,15 +21,15 @@
             <div class="column">
               <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
                 <svg viewBox="0 0 100 100" width="120" height="120">
-                  <polygon style="fill:none;stroke:#000;stroke-miterlimit:10;" points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 "/>
-                  <line v-show="bra.isDifferent" style="fill:none;stroke:#000;stroke-miterlimit:10;" x1="10" y1="61.5" x2="90" y2="61.5"/>
+                  <polygon style="fill:none;stroke:#000;stroke-miterlimit:10;" points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 " />
+                  <line v-show="bra.isDifferent" style="fill:none;stroke:#000;stroke-miterlimit:10;" x1="10" y1="61.5" x2="90" y2="61.5" />
                 </svg>
                 <div class="input-bra-high select is-small">
                   <select
                     v-model="bra.high"
                     class="form-control"
                     aria-label="Niveau de risque BRA haut">
-                    <option :value="null" selected/>
+                    <option :value="null" selected />
                     <option :value="1">1</option>
                     <option :value="2">2</option>
                     <option :value="3">3</option>
@@ -51,7 +51,7 @@
 
                 <div v-show="bra.isDifferent" class="input-bra-low select is-small">
                   <select v-model="bra.low" aria-label="Niveau de risque BRA bas">
-                    <option :value="null" selected/>
+                    <option :value="null" selected />
                     <option :value="1">1</option>
                     <option :value="2">2</option>
                     <option :value="3">3</option>
@@ -143,7 +143,7 @@
             </p>
 
             <p>
-              <input-orientation v-model="orientation" class="has-text-centered"/>
+              <input-orientation v-model="orientation" class="has-text-centered" />
             </p>
 
             <p class="is-italic">
@@ -155,7 +155,7 @@
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                 <td>Danger faible</td>
                 <td>Skier avec précaution</td>
-                <td/>
+                <td />
               </tr>
               <tr class="yetiForm-danger--medium">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
@@ -284,7 +284,7 @@
             <div v-else>
               <ul>
                 <li v-for="(item, i) of mapLegend.items" :key="i">
-                  <span class="legend-color" :style="'background:' + item.color"/>
+                  <span class="legend-color" :style="'background:' + item.color" />
                   <span>{{ item.text['fr'] }}</span>
                 </li>
               </ul>
@@ -292,7 +292,7 @@
             </div>
           </div>
         </div>
-        <map-view ref="map" @zoom="mapZoom = arguments[0]"/>
+        <map-view ref="map" @zoom="mapZoom = arguments[0]" />
       </div>
     </div>
   </div>

@@ -3,10 +3,10 @@
 
     <div v-if="document.areas && document.areas.length" class="has-text-centered">
 
-      <icon-area/>
+      <icon-area />
       <span>&nbsp;</span>
       <span v-for="area of document.areas" :key="area.document_id" class="area-link">
-        <document-link :document="area"/>&#0032;
+        <document-link :document="area" />&#0032;
       </span>
 
     </div>
@@ -17,9 +17,9 @@
       :show-protection-areas="['r', 'w'].includes(document.type)"
       :biodiv-sports-activities="document.activities"
       style="height:275px"
-      @has-protection-area="$emit('has-protection-area')"/>
+      @has-protection-area="$emit('has-protection-area')" />
 
-    <elevation-profile :document="document" v-if="documentType=='outing'"/>
+    <elevation-profile :document="document" v-if="documentType=='outing'" />
 
     <div v-if="document.geometry && document.geometry.geom_detail" class="buttons is-centered">
       <button class="button is-primary" @click="downloadGpx">

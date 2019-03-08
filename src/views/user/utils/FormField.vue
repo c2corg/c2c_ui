@@ -30,7 +30,7 @@
         class="input"
         :class="{'is-danger':hasError || errorMessage}">
       <span class="icon is-small is-left">
-        <fa-icon :icon="icon"/>
+        <fa-icon :icon="icon" />
       </span>
     </div>
   </div>

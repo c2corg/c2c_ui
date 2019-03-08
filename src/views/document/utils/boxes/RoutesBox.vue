@@ -11,7 +11,7 @@
     </h2>
     <div v-if="disableActivitySplit">
       <div v-for="route of source" :key="route.document_id">
-        <pretty-route-link :route="route" hide-area/>
+        <pretty-route-link :route="route" hide-area />
       </div>
     </div>
     <div v-else v-for="activity of Object.keys(routes)" :key="activity">
@@ -20,14 +20,14 @@
         {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
       </h3>
       <div v-for="(route, i) of Object.values(routes[activity])" :key="i">
-        <pretty-route-link :route="route" hide-activities hide-area/>
+        <pretty-route-link :route="route" hide-activities hide-area />
       </div>
     </div>
     <div v-if="!hideButtons" class="has-text-centered add-section">
       <add-link
         document-type="route"
         :query="query"
-        class="button is-primary"/>
+        class="button is-primary" />
     </div>
 
   </div>

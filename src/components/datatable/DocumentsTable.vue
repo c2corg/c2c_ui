@@ -3,7 +3,7 @@
                class="ag-theme-balham"
                :column-defs="columnDefs"
                suppress-property-names-check
-               :row-data="documents.documents"/>
+               :row-data="documents.documents" />
 </template>
 
 <script>

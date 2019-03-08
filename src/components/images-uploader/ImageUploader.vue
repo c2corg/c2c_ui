@@ -4,7 +4,7 @@
       <delete-button
         :visible="isSuccess || isFailed"
         class="delete-button"
-        @click="$emit('deleteImage', image)"/>
+        @click="$emit('deleteImage', image)" />
 
       <progress
         v-if="isSaving || isFailed"
@@ -25,7 +25,7 @@
 
         <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
           <div v-for="item of imageCategories" :key="item" class="column is-4">
-            <label class="checkbox" >
+            <label class="checkbox">
               <input
                 type="checkbox"
                 :checked="document.image_categories.includes(item)"

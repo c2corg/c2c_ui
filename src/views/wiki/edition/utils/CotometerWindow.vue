@@ -1,7 +1,7 @@
 <template>
 
   <modal-card ref="modalWindow">
-    <span slot="title" >
+    <span slot="title">
       <span v-translate>
         This tool estimates the technical difficulty of a ski route (ski rating).
       </span>
@@ -16,7 +16,7 @@
           class="is-checkradio is-info"
           type="radio"
           v-model="skiability"
-          :value="0" >
+          :value="0">
         <label v-translate for="c2c-skiability-0">Wide and constant</label>
       </div>
       <div class="control">
@@ -25,7 +25,7 @@
                name="c2c-skiability"
                class="is-checkradio is-info"
                v-model="skiability"
-               :value="0.1" >
+               :value="0.1">
         <label v-translate for="c2c-skiability-1">1 or 2 complications (steeper or narrow section...)</label>
       </div>
 
@@ -35,7 +35,7 @@
                name="c2c-skiability"
                class="is-checkradio is-info"
                v-model="skiability"
-               :value="0.2" >
+               :value="0.2">
         <label v-translate for="c2c-skiability-2">Very complex (steps, narrow sections, ridges...)</label>
       </div>
     </div>

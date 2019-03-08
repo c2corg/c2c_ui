@@ -19,7 +19,7 @@
         :placeholder="placeholder"
         :unit="unit"
         :divisor="divisor"
-        :is-expanded="isExpanded"/>
+        :is-expanded="isExpanded" />
     </div>
   </div>
 </template>

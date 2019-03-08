@@ -1,6 +1,6 @@
 <template>
   <div class="section documents-view">
-    <html-header :title="$gettext(documentType) + 's'"/>
+    <html-header :title="$gettext(documentType) + 's'" />
     <div class="header-section">
 
       <dropdown-button class="header-item">
@@ -8,7 +8,7 @@
           <span class="title is-1">
             {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
           </span>
-          <fa-icon icon="angle-down" aria-hidden="true"/>
+          <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
         <router-link
           v-for="type of documentTypes"
@@ -32,7 +32,7 @@
 
       <span class="is-pulled-right is-flex header-right" v-if="documentType!='profile'">
         <button v-if="$user.isLogged" class="button is-small is-primary header-item" @click="loadPreferences">
-          <fa-icon icon="star"/>
+          <fa-icon icon="star" />
           <span class="is-hidden-mobile">&nbsp;</span>
           <span class="is-hidden-mobile" v-translate>
             Load my preferences
@@ -46,13 +46,13 @@
             v-show="displayMode!=='map'"
             icon="th-list"
             :class="listMode ? 'has-text-primary' : ''"
-            :title="$gettext('List mode')"/>
+            :title="$gettext('List mode')" />
           <span>&thinsp;</span>
           <fa-icon
             v-show="displayMode!=='map'"
             icon="th"
             :class="!listMode ? 'has-text-primary' : ''"
-            :title="$gettext('Cards mode')"/>
+            :title="$gettext('Cards mode')" />
         </span>
         <display-mode-switch
           v-if="documentAreGeoLocalized"
@@ -65,25 +65,25 @@
           <fa-icon
             icon="map-marked-alt"
             :class="{'has-text-primary': displayMode === 'map'}"
-            @click="setProperty('displayMode', 'map')"/>
+            @click="setProperty('displayMode', 'map')" />
           <span>&thinsp;</span>
           <fa-icon
             icon="th"
             :class="{'has-text-primary': displayMode !== 'map'}"
-            @click="setProperty('displayMode', 'both')"/>
+            @click="setProperty('displayMode', 'both')" />
         </span>
       </span>
 
     </div>
 
-    <query-items class="filter-section"/>
+    <query-items class="filter-section" />
 
     <div class="columns result-section" :class="'mobile-mode-' + displayMode">
       <div v-if="showResults" class="column documents-container" :class="{'is-12': !showMap, 'is-8': showMap}">
 
-        <loading-notification :promise="promise"/>
+        <loading-notification :promise="promise" />
 
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents"/>
+        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
 
         <div v-if="documents && !listMode && documentType !== 'image'" class="columns is-multiline is-variable is-1 cards-list">
           <div
@@ -96,7 +96,7 @@
             class="column card-container"
             @mouseenter="highlightedDocument = document"
             @mouseleave="highlightedDocument = null">
-            <document-card :highlighted="highlightedDocument===document" :document="document"/>
+            <document-card :highlighted="highlightedDocument===document" :document="document" />
           </div>
         </div>
 
@@ -104,7 +104,7 @@
           v-if="listMode"
           :documents="documents ? documents : {}"
           :document-type="documentType"
-          class="documents-table"/>
+          class="documents-table" />
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
@@ -114,11 +114,11 @@
           @highlightDocument="highlightedDocument = arguments[0]"
           show-filter-control
           show-center-on-geolocation
-          show-recenter-on/>
+          show-recenter-on />
       </div>
     </div>
 
-    <page-selector :documents="documents"/>
+    <page-selector :documents="documents" />
   </div>
 </template>
 

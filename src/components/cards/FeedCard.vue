@@ -1,18 +1,18 @@
 <template>
-  <card-container :document="document" class="feed-card" >
+  <card-container :document="document" class="feed-card">
     <card-title>
       <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
 
       <span>
-        <document-title :document="item.user"/>
+        <document-title :document="item.user" />
         <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
       </span>
 
-      <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3"/>
+      <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3" />
     </card-title>
 
     <card-row>
-      <document-title :document="item.document" class="is-ellipsed has-text-weight-bold"/>
+      <document-title :document="item.document" class="is-ellipsed has-text-weight-bold" />
       <span v-if="documentType=='outing'" class="is-nowrap">{{ dates }}</span>
     </card-row>
 
@@ -27,11 +27,11 @@
     <card-row v-if="documentType!='article' && documentType!='book'">
       <span v-if="documentType=='outing' || documentType=='route'">
         <icon-ratings class="card-icon" />
-        <outing-rating v-if="documentType=='outing'" :document="item.document"/>
-        <route-rating v-else-if="documentType=='route'" :document="item.document"/>
+        <outing-rating v-if="documentType=='outing'" :document="item.document" />
+        <route-rating v-else-if="documentType=='route'" :document="item.document" />
       </span>
 
-      <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed"/>
+      <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed" />
 
       <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
         <icon-height-diff-up />
@@ -39,7 +39,7 @@
       </span>
 
       <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
-        <fa-icon icon="arrows-alt-v"/>
+        <fa-icon icon="arrows-alt-v" />
         {{ item.document.height_diff_difficulties }}&nbsp;m
       </span>
 
@@ -52,21 +52,21 @@
     </card-row>
 
     <card-row v-if="item.document.areas && item.document.areas.length">
-      <card-region-item :document="item.document"/>
+      <card-region-item :document="item.document" />
     </card-row>
 
     <card-row>
       <span>
-        <card-activities-item v-if="item.document.activities" :activities="item.document.activities"/>
+        <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
       </span>
       <span>
         <marker-image-count :image-count="item.document.img_count" />
         <span>&nbsp;</span>
-        <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail"/>
+        <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
       </span>
       <span> {{ $moment.timeAgo(item.time) }} </span>
       <span>
-        <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating"/>
+        <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
     </card-row>

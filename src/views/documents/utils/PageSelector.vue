@@ -5,15 +5,15 @@
         :disabled="currentPage<=1"
         :to="pageQuery(currentPage-1)"
         class="pagination-previous">
-        <fa-icon icon="chevron-left"/>
+        <fa-icon icon="chevron-left" />
       </router-link>
 
       <router-link
         :disabled="currentPage>=pageCount"
         :to="pageQuery(currentPage+1)"
         class="pagination-next">
-        <fa-icon icon="chevron-right"/>
-      </router-link >
+        <fa-icon icon="chevron-right" />
+      </router-link>
 
       <ul class="pagination-list">
         <li v-for="page of pageLinks" :key="page">

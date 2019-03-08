@@ -1,7 +1,7 @@
 <template>
   <div :class="{wide:wide}">
     <loading-notification :promise="promise" />
-    <div v-if="topics" >
+    <div v-if="topics">
       <a
         class="forum-row"
         v-for="topic of topics"

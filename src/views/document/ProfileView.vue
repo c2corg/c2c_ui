@@ -10,7 +10,7 @@
 
       <div class="column is-3">
         <div class="box">
-          <field-view :document="document" :field="fields.activities"/>
+          <field-view :document="document" :field="fields.activities" />
 
           <label-value :label="$gettext('forum')">
             <a :href="$options.forumUrl + '/users/' + document.forum_username + '/activity'">
@@ -18,10 +18,10 @@
             </a>
           </label-value>
 
-          <field-view :document="document" :field="fields.categories"/>
+          <field-view :document="document" :field="fields.categories" />
 
           <div class="buttons is-centered button-outings">
-            <outings-downloader :profile-id="documentId"/>
+            <outings-downloader :profile-id="documentId" />
           </div>
 
         </div>
@@ -33,12 +33,12 @@
 
       <div class="column is-9">
         <div class="box" v-if="locale.summary || locale.description">
-          <markdown-section :document="document" :field="fields.summary"/>
-          <markdown-section :document="document" :field="fields.description" hide-title/>
+          <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear:both" />
         </div>
 
-        <images-box :document="document"/>
+        <images-box :document="document" />
 
         <feed-widget type="profile" />
       </div>

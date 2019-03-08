@@ -11,7 +11,7 @@
         :id="document.document_id"
         :lang="$route.params.lang"
         :version-from="version.previous_version_id"
-        :version-to="$route.params.version"/>)
+        :version-to="$route.params.version" />)
       <version-link
         :document-type="documentType"
         :id="document.document_id"
@@ -31,7 +31,7 @@
       :id="document.document_id"
       :lang="$route.params.lang"
       :version-from="$route.params.version"
-      version-to="last"/>)
+      version-to="last" />)
       |
     <span v-if="!isLastVersion">
       <version-link
@@ -47,13 +47,13 @@
         :id="document.document_id"
         :lang="$route.params.lang"
         :version-to="version.next_version_id"
-        :version-from="$route.params.version"/>)
+        :version-from="$route.params.version" />)
     </span>
     <span v-else v-translate>This is the last version</span>
 
     <p>
-      <icon-document document-type="profile"/>
-      <contributor-link :contributor="version"/> : <em>{{ version.comment }}</em>
+      <icon-document document-type="profile" />
+      <contributor-link :contributor="version" /> : <em>{{ version.comment }}</em>
     </p>
     <p v-if="$user.isModerator">
       <button
@@ -65,7 +65,7 @@
       </button>
     </p>
 
-    <revert-version-window ref="restoreVersionConfirmationWindow" :document="document" :lang="document.cooked.lang"/>
+    <revert-version-window ref="restoreVersionConfirmationWindow" :document="document" :lang="document.cooked.lang" />
   </div>
 </template>
 

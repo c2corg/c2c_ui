@@ -1,6 +1,6 @@
 <template>
   <div class="section content">
-    <html-header title="Recents changes"/>
+    <html-header title="Recents changes" />
 
     <table
       v-infinite-scroll="load"
@@ -10,7 +10,7 @@
         <th v-translate translate-context="modification date">Modified the</th>
         <th v-translate>Author</th>
         <th v-translate>Links</th>
-        <th/>
+        <th />
         <th>
           <span v-translate>title</span>
           :
@@ -28,7 +28,7 @@
           </version-link>
         </td>
         <td>
-          <contributor-link :contributor="change.user"/>
+          <contributor-link :contributor="change.user" />
         </td>
         <td>
           <document-link :document="change.document" :lang="change.lang">
@@ -39,17 +39,17 @@
                      :id="change.document.document_id"
                      :lang="change.lang"
                      version-from="prev"
-                     :version-to="change.version_id"/>
+                     :version-to="change.version_id" />
 
-          <history-link :document="change.document" :lang="change.lang"/>
+          <history-link :document="change.document" :lang="change.lang" />
 
         </td>
         <td>
-          <marker-quality :quality="change.document.quality"/>
+          <marker-quality :quality="change.document.quality" />
           {{ change.lang }}
         </td>
         <td>
-          <icon-document :document-type="change.document.documentType"/>
+          <icon-document :document-type="change.document.documentType" />
           {{ change.document.title }}
           :
           <span v-if="change.comment">

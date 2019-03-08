@@ -2,7 +2,7 @@
 
   <router-link :to="{name:documentType, params:{id:document.document_id, lang:lang}}">
     <slot>
-      <document-title v-if="document.type!='u'" :document="document" :uppercase-first-letter="uppercaseFirstLetter"/>
+      <document-title v-if="document.type!='u'" :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
       <span v-else-if="uppercaseFirstLetter">{{ document.name | uppercaseFirstLetter }}</span>
       <span v-else>{{ document.name }}</span>
     </slot>

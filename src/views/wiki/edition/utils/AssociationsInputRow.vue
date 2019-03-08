@@ -20,7 +20,7 @@
           :document="child"
           show-delete-button
           @delete="$documentUtils.removeAssociation(document, child)"
-          not-clickable/>
+          not-clickable />
       </div>
     </div>
   </div>

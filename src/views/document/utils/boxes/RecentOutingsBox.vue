@@ -15,7 +15,7 @@
     </div>
 
     <div v-for="(outing, i) of outings" :key="i">
-      <pretty-outing-link :outing="outing"/>
+      <pretty-outing-link :outing="outing" />
     </div>
 
     <div v-if="documentType=='route'" class="has-text-centered add-section">

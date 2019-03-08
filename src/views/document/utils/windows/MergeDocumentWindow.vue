@@ -1,6 +1,6 @@
 <template>
   <modal-card ref="modalWindow">
-    <span slot="title" >
+    <span slot="title">
       <span v-translate>Merge documents</span>
     </span>
 

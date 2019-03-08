@@ -11,12 +11,12 @@
       :title="$gettext('general informations')"
       :sub-title="$gettext('Waypoint\'s main properties')">
       <div class="columns">
-        <form-field :document="document" :field="fields.waypoint_type" class="is-narrow"/>
+        <form-field :document="document" :field="fields.waypoint_type" class="is-narrow" />
         <form-field :document="document" :field="fields.title" />
       </div>
 
       <div class="columns">
-        <form-field class="is-6" :document="document" :field="fields.elevation"/>
+        <form-field class="is-6" :document="document" :field="fields.elevation" />
         <form-field class="is-6" :document="document" :field="fields.elevation_min" />
         <form-field class="is-6" :document="document" :field="fields.prominence" />
       </div>
@@ -28,7 +28,7 @@
           :document="document"
           :field="fields.maps_info"
           :label="$gettext('maps_references')"
-          :placeholder="$gettext('Add here maps not automatically referenced')"/>
+          :placeholder="$gettext('Add here maps not automatically referenced')" />
       </div>
 
     </form-section>
@@ -125,8 +125,8 @@
       :sub-title="$gettext('Waypoint\'s textual description')">
 
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')"/>
-        <form-field class="is-12" :document="document" :field="fields.description" :placeholder="descriptionPlaceholder"/>
+        <form-field class="is-12" :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')" />
+        <form-field class="is-12" :document="document" :field="fields.description" :placeholder="descriptionPlaceholder" />
       </div>
 
       <div class="columns is-multiline">
@@ -134,12 +134,12 @@
           :document="document"
           :field="fields.access"
           :placeholder="accessPlaceholder"
-          :label="accessTitle"/>
+          :label="accessTitle" />
         <form-field
           :document="document"
           :field="fields.access_period"
           :placeholder="accessPeriodPlaceholder"
-          :label="accessPeriodTitle"/>
+          :label="accessPeriodTitle" />
       </div>
     </form-section>
 

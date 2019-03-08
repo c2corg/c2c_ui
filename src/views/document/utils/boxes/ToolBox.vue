@@ -28,19 +28,19 @@
       v-if="documentType==='profile'"
       :to="{ name: 'whatsnew', query: {u:document.document_id} }"
       :label="$gettext('Contributions')"
-      icon="edit"/>
+      icon="edit" />
 
     <tool-box-button
       v-if="['outing', 'route', 'waypoint'].includes(documentType)"
       :to="linkToClosestDocuments"
       :label="$gettext('See other documents nearby')"
-      icon="compass"/>
+      icon="compass" />
 
     <tool-box-button
       v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
       :to="{name:documentType + '-history', params:{id:document.document_id, lang:document.cooked.lang}}"
       :label="$gettext('History')"
-      icon="history"/>
+      icon="history" />
 
     <tool-box-button
       v-if="isEditable && showAssociationEditor"
@@ -98,11 +98,11 @@
 
     <!-- Modal windows -->
     <div v-if="isEditable">
-      <merge-document-window ref="MergeDocumentWindow" :document="document"/>
-      <delete-document-window ref="deleteDocumentWindow" :document="document"/>
-      <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang"/>
-      <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs"/>
-      <associations-window ref="associationsWindow" :document="document"/>
+      <merge-document-window ref="MergeDocumentWindow" :document="document" />
+      <delete-document-window ref="deleteDocumentWindow" :document="document" />
+      <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang" />
+      <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs" />
+      <associations-window ref="associationsWindow" :document="document" />
     </div>
 
   </div>

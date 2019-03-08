@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <html-header :title="$gettext('Followed users')"/>
+    <html-header :title="$gettext('Followed users')" />
     <h1 class="title is-1" v-translate>
       Followed users
     </h1>
@@ -22,7 +22,7 @@
             <document-card
               :document="document"
               show-delete-button
-              @delete="remove(document)"/>
+              @delete="remove(document)" />
           </div>
         </div>
       </div>

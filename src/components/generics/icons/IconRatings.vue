@@ -1,3 +1,3 @@
 <template>
-  <fa-icon icon="tachometer-alt"/>
+  <fa-icon icon="tachometer-alt" />
 </template>

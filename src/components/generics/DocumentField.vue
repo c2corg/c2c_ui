@@ -2,7 +2,7 @@
   <!-- This a generic component that display field value of a document for any kind of field  -->
   <span>
 
-    <activities v-if="field.name=='activities'" :activities="document.activities" class="has-text-secondary"/>
+    <activities v-if="field.name=='activities'" :activities="document.activities" class="has-text-secondary" />
 
     <a v-else-if="field.type==='url'" :href="value">
       {{ value }}
@@ -12,7 +12,7 @@
       v-else-if="isArray"
       :array="value"
       :i18n="field.i18n"
-      :i18n-context="field.i18nContext"/>
+      :i18n-context="field.i18nContext" />
 
     <span v-else-if="typeof(value) === 'boolean'">
       <span v-if="value" v-translate>

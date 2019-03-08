@@ -1,6 +1,6 @@
 <template>
   <div class="section content">
-    <html-header :title="$gettext('My preferences')"/>
+    <html-header :title="$gettext('My preferences')" />
 
     <h2 v-translate>
       lang
@@ -44,7 +44,7 @@
 
         <h3 v-translate>activities</h3>
         <div class="field is-grouped">
-          <input-activity v-model="preferences.activities" @input="save"/>
+          <input-activity v-model="preferences.activities" @input="save" />
         </div>
 
         <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
@@ -63,7 +63,7 @@
                 <document-card
                   :document="document"
                   show-delete-button
-                  @delete="removeArea(document)"/>
+                  @delete="removeArea(document)" />
               </div>
             </div>
           </div>

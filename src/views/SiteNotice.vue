@@ -4,9 +4,9 @@
     class="has-background-info has-text-light no-print"
     @click="showContent=!showContent">
     <div class="section is-info">
-      <button class="delete" @click="hide"/>
-      <div ref="header"/>
-      <div v-show="showContent" ref="content"/>
+      <button class="delete" @click="hide" />
+      <div ref="header" />
+      <div v-show="showContent" ref="content" />
     </div>
   </div>
 </template>

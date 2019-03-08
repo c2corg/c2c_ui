@@ -1,18 +1,18 @@
 <template>
   <document-link :document="outing" class="outing-row">
     <span>
-      <activities :activities="outing.activities" class="is-size-3 activity-icon"/>
-      <document-title :document="outing"/>
+      <activities :activities="outing.activities" class="is-size-3 activity-icon" />
+      <document-title :document="outing" />
       &hairsp;&bull;&hairsp;
       <em v-for="area of rangeAreas" :key="area.document_id">
         <small>
-          <document-title :document="area"/>
+          <document-title :document="area" />
         </small>
       </em>
     </span>
     <span class="is-pulled-right">
-      <marker-image-count :image-count="outing.img_count"/>
-      <marker-condition :condition="outing.condition_rating"/>
+      <marker-image-count :image-count="outing.img_count" />
+      <marker-condition :condition="outing.condition_rating" />
     </span>
   </document-link>
 </template>

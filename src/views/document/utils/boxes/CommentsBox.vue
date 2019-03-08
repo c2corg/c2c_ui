@@ -34,7 +34,7 @@
             </div>
 
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="discourse-content" v-html="post.cooked"/>
+            <div class="discourse-content" v-html="post.cooked" />
 
           </div>
         </div>

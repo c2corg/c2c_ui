@@ -1,8 +1,8 @@
 <template>
   <div v-if="mailinglists" class="section content">
-    <html-header title="My mailing lists"/>
+    <html-header title="My mailing lists" />
     <h1>
-      <fa-icon icon="at"/>
+      <fa-icon icon="at" />
       <span v-translate>My mailing lists</span>
     </h1>
 

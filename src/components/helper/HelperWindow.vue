@@ -4,7 +4,7 @@
       <p :class="{'has-text-danger': !headerFound}">
         {{ title }}
       </p>
-      <p class="buttons"/>
+      <p class="buttons" />
     </div>
 
     <!-- eslint-disable-next-line vue/no-v-html -->

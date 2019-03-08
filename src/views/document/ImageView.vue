@@ -5,34 +5,34 @@
       <div class="column is-3">
         <div class="box">
           <label-value v-if="document.activities && document.activities.length" :label="$gettext('activities')">
-            <activities :activities="document.activities"/>
+            <activities :activities="document.activities" />
           </label-value>
 
-          <field-view :document="document" :field="fields.date_time"/>
+          <field-view :document="document" :field="fields.date_time" />
 
           <label-value v-if="document.areas.length">
-            <areas-links :areas="document.areas"/>
+            <areas-links :areas="document.areas" />
           </label-value>
 
-          <field-view :document="document" :field="fields.author"/>
+          <field-view :document="document" :field="fields.author" />
 
           <label-value v-if="document.creator" :label="$gettext('creator')">
-            <author-link :author="document.creator"/>
+            <author-link :author="document.creator" />
           </label-value>
 
           <field-view :document="document" :field="fields.image_type" />
           <field-view :document="document" :field="fields.quality" />
-          <field-view :document="document" :field="fields.categories"/>
-          <field-view :document="document" :field="fields.camera_name"/>
-          <field-view :document="document" :field="fields.exposure_time"/>
-          <field-view :document="document" :field="fields.fnumber"/>
-          <field-view :document="document" :field="fields.focal_length"/>
-          <field-view :document="document" :field="fields.iso_speed"/>
-          <field-view :document="document" :field="fields.filename"/>
-          <field-view :document="document" :field="fields.file_size" unit="ko" :divisor="1024"/>
-          <field-view :document="document" :field="fields.height"/>
-          <field-view :document="document" :field="fields.width"/>
-          <field-view :document="document" :field="fields.elevation"/>
+          <field-view :document="document" :field="fields.categories" />
+          <field-view :document="document" :field="fields.camera_name" />
+          <field-view :document="document" :field="fields.exposure_time" />
+          <field-view :document="document" :field="fields.fnumber" />
+          <field-view :document="document" :field="fields.focal_length" />
+          <field-view :document="document" :field="fields.iso_speed" />
+          <field-view :document="document" :field="fields.filename" />
+          <field-view :document="document" :field="fields.file_size" unit="ko" :divisor="1024" />
+          <field-view :document="document" :field="fields.height" />
+          <field-view :document="document" :field="fields.width" />
+          <field-view :document="document" :field="fields.elevation" />
         </div>
 
         <tool-box :document="document" />
@@ -46,12 +46,12 @@
         </div>
 
         <div v-if="locale.summary || locale.description" class="box">
-          <markdown-section :document="document" :field="fields.summary"/>
-          <markdown-section :document="document" :field="fields.description" hide-title/>
+          <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear:both" />
         </div>
 
-        <routes-box :document="document" hide-buttons/>
+        <routes-box :document="document" hide-buttons />
         <recent-outings-box :document="document" hide-see-all-results-button />
         <comments-box :document="document" />
 

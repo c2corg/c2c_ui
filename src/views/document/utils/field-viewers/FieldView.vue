@@ -1,6 +1,6 @@
 <template>
   <label-value v-if="hasValue && visible" :label="$gettext(field.name)">
-    <document-field :document="document" :field="field" :unit="unit || field.unit" :divisor="divisor"/>
+    <document-field :document="document" :field="field" :unit="unit || field.unit" :divisor="divisor" />
   </label-value>
 </template>
 

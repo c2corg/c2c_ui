@@ -1,6 +1,6 @@
 
 <template>
-  <div class="content markdown-content" ref="container"/>
+  <div class="content markdown-content" ref="container" />
   <!-- TODO find a way without aditionnal element
     <div style="clear:both"/> -->
 </template>

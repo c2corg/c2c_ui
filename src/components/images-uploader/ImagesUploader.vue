@@ -11,7 +11,7 @@
           :categories-edition="categoriesEdition"
           :parent-document="parentDocument"
           @success="computeReadyForSaving"
-          @deleteImage="onDeleteImage"/>
+          @deleteImage="onDeleteImage" />
       </div>
 
       <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
@@ -29,7 +29,7 @@
             class="input-file">
           <!-- this message contains HTML -->
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <span v-html="$gettext('Drop images here or click to upload')"/>
+          <span v-html="$gettext('Drop images here or click to upload')" />
         </div>
       </div>
     </div>

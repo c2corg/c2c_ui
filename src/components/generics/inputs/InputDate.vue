@@ -8,7 +8,7 @@
     :disabled-dates="disabledDates"
     :required="required"
     @input="onInput"
-    :value="value"/>
+    :value="value" />
 </template>
 
 <script>

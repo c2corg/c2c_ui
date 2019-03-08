@@ -1,6 +1,6 @@
 <template>
   <div class="login-view is-flex">
-    <html-header :title="$gettext('Login')"/>
+    <html-header :title="$gettext('Login')" />
     <base-form
       v-show="mode=='signin'"
       :promise="promise"
@@ -12,7 +12,7 @@
         required
         type="text"
         :label="$gettext('Username')"
-        icon="user"/>
+        icon="user" />
 
       <form-field
         :name="password"
@@ -20,7 +20,7 @@
         required
         type="password"
         :label="$gettext('Password')"
-        icon="key"/>
+        icon="key" />
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-primary" :class="{'is-loading':promise.loading}" v-translate>
@@ -45,31 +45,31 @@
         v-model="name"
         type="text"
         :label="$gettext('Fullname')"
-        icon="user-check"/>
+        icon="user-check" />
       <form-field
         name="username"
         v-model="username"
         type="text"
         :label="$gettext('Username')"
-        icon="user"/>
+        icon="user" />
       <form-field
         name="forum_username"
         v-model="forum_username"
         type="text"
         :label="$gettext('Forum username')"
-        icon="comments"/>
+        icon="comments" />
       <form-field
         name="password"
         v-model="password"
         type="password"
         :label="$gettext('Password')"
-        icon="key"/>
+        icon="key" />
       <form-field
         name="email"
         v-model="email"
         type="email"
         :label="$gettext('Email')"
-        icon="at"/>
+        icon="at" />
       <div class="field">
         <div class="control">
           <label class="checkbox">
@@ -92,7 +92,7 @@
           ref="recaptcha"
           :sitekey="$options.recaptchaKey"
           @expired="onCaptchaExpired"
-          @verify="onCaptchaVerify"/>
+          @verify="onCaptchaVerify" />
       </div>
 
       <div class="buttons is-centered">
@@ -125,7 +125,7 @@
         v-model="email"
         type="email"
         :label="$gettext('Email')"
-        icon="at"/>
+        icon="at" />
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>
@@ -156,7 +156,7 @@
         v-model="password"
         type="password"
         :label="$gettext('New password')"
-        icon="key"/>
+        icon="key" />
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>

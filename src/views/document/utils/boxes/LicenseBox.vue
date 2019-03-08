@@ -38,7 +38,7 @@
     <span
       v-else-if="license=='copyright'"
       :title="$gettext('This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.')">
-      <fa-icon icon="ban"/>
+      <fa-icon icon="ban" />
       <span v-translate>
         This book cover is the property of its editor and/or author
       </span>

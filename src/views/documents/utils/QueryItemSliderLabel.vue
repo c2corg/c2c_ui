@@ -20,7 +20,7 @@
         <span v-else>{{ value[1] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
-    </div >
+    </div>
   </div>
 
 </template>

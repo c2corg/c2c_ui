@@ -4,12 +4,12 @@
       <h1 class="title is-1">
         <icon-edit />
         <span v-if="mode === 'edit'">
-          <html-header :title="$gettext('Edit a document')"/>
-          <document-title :document="document"/>
+          <html-header :title="$gettext('Edit a document')" />
+          <document-title :document="document" />
           <span class="is-size-5"> ({{ $language.available[$route.params.lang] }})</span>
         </span>
         <span v-else>
-          <html-header :title="$documentUtils.getCreationTitle(documentType)"/>
+          <html-header :title="$documentUtils.getCreationTitle(documentType)" />
           {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
           <span>
             <dropdown-button>
@@ -17,7 +17,7 @@
                 <span>
                   {{ $language.available[document.locales[0].lang] }}&nbsp;
                 </span>
-                <fa-icon icon="angle-down" aria-hidden="true"/>
+                <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
               <div
                 v-for="lang of Object.keys($language.available)"
@@ -55,16 +55,16 @@
 
     </div>
 
-    <component :is="documentType + '-view'" v-if="isPreview" :draft="document"/>
+    <component :is="documentType + '-view'" v-if="isPreview" :draft="document" />
 
     <div v-show="!isPreview" class="has-edition-width">
       <hr>
 
-      <slot >
+      <slot>
         ...
       </slot>
 
-      <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview=true" :is-loading="isLoading"/>
+      <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview=true" :is-loading="isLoading" />
       <quality-input-row v-if="!['map', 'profile'].includes(documentType)" :document="document" />
     </div>
   </div>

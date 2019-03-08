@@ -1,6 +1,6 @@
 <template>
   <div class="query-items">
-    <query-item :field="fields.title" class="title-input is-hidden-mobile" hide-label/>
+    <query-item :field="fields.title" class="title-input is-hidden-mobile" hide-label />
 
     <dropdown-button
       v-for="category of categorizedFields"
@@ -21,7 +21,7 @@
           &nbsp;({{ category.activeCount }})
         </span>
         <span>&nbsp;</span>
-        <fa-icon icon="angle-down" aria-hidden="true"/>
+        <fa-icon icon="angle-down" aria-hidden="true" />
       </span>
 
       <div class="sub-query-items">
@@ -30,12 +30,12 @@
           :key="field.name"
           :field="field"
           class="dropdown-item"
-          :class="field.name === 'title' ? 'is-hidden-tablet': ''"/>
+          :class="field.name === 'title' ? 'is-hidden-tablet': ''" />
       </div>
 
     </dropdown-button>
 
-    <association-query-item class="association-query-item is-hidden-mobile" :document-types="associations"/>
+    <association-query-item class="association-query-item is-hidden-mobile" :document-types="associations" />
   </div>
 </template>
 

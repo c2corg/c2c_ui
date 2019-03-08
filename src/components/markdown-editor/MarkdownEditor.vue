@@ -6,42 +6,42 @@
           icon="question-circle"
           :tooltip="$gettext('help')"
           href="https://www.camptocamp.org/articles/151910"
-          target="_blank"/>
+          target="_blank" />
 
         <span>&nbsp;</span>
 
         <editor-button
           :icon="fullScreen ? 'compress' : 'expand'"
           :tooltip="$gettext('Toggle fullscreen')"
-          @click="fullScreen=!fullScreen"/>
+          @click="fullScreen=!fullScreen" />
       </div>
 
       <div class="buttons has-addons">
 
-        <editor-button icon="bold" :disabled="preview" @click="handleBold" :tooltip="$gettext('strong text')"/>
-        <editor-button icon="italic" :disabled="preview" @click="handleItalic" :tooltip="$gettext('emphasized text')"/>
-        <editor-button icon="heading" :disabled="preview" @click="handleHeading" :tooltip="$gettext('Heading')"/>
+        <editor-button icon="bold" :disabled="preview" @click="handleBold" :tooltip="$gettext('strong text')" />
+        <editor-button icon="italic" :disabled="preview" @click="handleItalic" :tooltip="$gettext('emphasized text')" />
+        <editor-button icon="heading" :disabled="preview" @click="handleHeading" :tooltip="$gettext('Heading')" />
 
         <span>&nbsp;</span>
 
-        <editor-button icon="image" :disabled="preview" @click="handleImage" :tooltip="$gettext('Insert image')"/>
-        <editor-button icon="link" :disabled="preview" @click="handleLink" :tooltip="$gettext('Insert link')"/>
-        <editor-button icon="grin" :disabled="preview" @click="handleEmoji" :tooltip="$gettext('Insert emoji')"/>
+        <editor-button icon="image" :disabled="preview" @click="handleImage" :tooltip="$gettext('Insert image')" />
+        <editor-button icon="link" :disabled="preview" @click="handleLink" :tooltip="$gettext('Insert link')" />
+        <editor-button icon="grin" :disabled="preview" @click="handleEmoji" :tooltip="$gettext('Insert emoji')" />
 
         <span>&nbsp;</span>
 
-        <editor-button icon="hashtag" :disabled="preview" @click="handleHashtag" :tooltip="$gettext('Pitch description tag')"/>
-        <editor-button icon="list-ul" :disabled="preview" @click="handleListUl" :tooltip="$gettext('Unordered list')"/>
-        <editor-button icon="list-ol" :disabled="preview" @click="handleListOl" :tooltip="$gettext('Ordered list')"/>
-        <editor-button icon="code" :disabled="preview" @click="handleCode" :tooltip="$gettext('Unformatted text')"/>
-        <editor-button icon="comment" :disabled="preview" @click="handleQuote" :tooltip="$gettext('Quote')"/>
+        <editor-button icon="hashtag" :disabled="preview" @click="handleHashtag" :tooltip="$gettext('Pitch description tag')" />
+        <editor-button icon="list-ul" :disabled="preview" @click="handleListUl" :tooltip="$gettext('Unordered list')" />
+        <editor-button icon="list-ol" :disabled="preview" @click="handleListOl" :tooltip="$gettext('Ordered list')" />
+        <editor-button icon="code" :disabled="preview" @click="handleCode" :tooltip="$gettext('Unformatted text')" />
+        <editor-button icon="comment" :disabled="preview" @click="handleQuote" :tooltip="$gettext('Quote')" />
 
         <span>&nbsp;</span>
 
         <editor-button
           :icon="preview ? 'code' : 'eye'"
           :text="preview ? $gettext('Back to code') : $gettext('Preview')"
-          @click="preview=!preview"/>
+          @click="preview=!preview" />
 
       </div>
     </div>
@@ -53,7 +53,7 @@
         :placeholder="placeholder"
         @change="onInput"
         @focus="focus=true"
-        @blur="focus=false"/>
+        @blur="focus=false" />
 
       <markdown
         class="preview"
@@ -66,7 +66,7 @@
         Oups! something went wrong...
       </div>
     </div>
-    <link-helper ref="linkHelper" @insert="insertLink"/>
+    <link-helper ref="linkHelper" @insert="insertLink" />
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <span :title="$gettext(documentType)">
-    <icon-document :document-type="documentType"/>
+    <icon-document :document-type="documentType" />
   </span>
 </template>
 

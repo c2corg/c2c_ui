@@ -16,7 +16,7 @@
     class="control select"
     :class="{'is-danger': hasError}">
     <select v-model="document.main_waypoint_id">
-      <option :value="null"/>
+      <option :value="null" />
       <option
         v-for="waypoint of document.associations.waypoints"
         :key="waypoint.document_id"
@@ -28,13 +28,13 @@
 
   <input-conditions-levels
     v-else-if="field.name=='conditions_levels'"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-markdown
     v-else-if="field.type=='markdown'"
     v-show="visible"
     :placeholder="placeholder"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-document
     v-else-if="field.parent=='associations'"
@@ -42,7 +42,7 @@
     multiple
     :has-error="hasError"
     @add="$documentUtils.propagateAssociationProperties(document, arguments[0])"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-multi-select
     v-else-if="field.values && field.multiple"
@@ -52,14 +52,14 @@
     :i18n="field.i18n"
     :i18n-context="field.i18nContext"
     :has-error="hasError"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-date
     v-else-if="field.type === 'date'"
     :has-error="hasError"
     :disabled-dates="disabledDates"
     :required="field.required"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-simple
     ref="input"
@@ -81,7 +81,7 @@
     :options="field.values"
     :has-error="hasError"
     @input="$emit('input', arguments[0])"
-    v-model="object[field.name]"/>
+    v-model="object[field.name]" />
 
   <input-yes-no
     v-else-if="field.type=='boolean'"

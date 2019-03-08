@@ -1,7 +1,7 @@
 <template>
   <div>
-    <html-header :title="$gettext('Home')"/>
-    <home-banner v-if="!$user.isLogged"/>
+    <html-header :title="$gettext('Home')" />
+    <home-banner v-if="!$user.isLogged" />
     <div class="section feed-view">
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
@@ -9,10 +9,10 @@
             <span v-translate>Activity feed</span>
             <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">
               <router-link :to="{name:'preferences'}" :title="$gettext('My preferences')">
-                <fa-icon icon="cogs"/>
+                <fa-icon icon="cogs" />
               </router-link>
               <span :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')">
-                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="toggleIsPersonal"/>
+                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="toggleIsPersonal" />
               </span>
             </span>
           </h3>
@@ -22,13 +22,13 @@
           <h3 class="title is-3" v-translate>
             Mobile application
           </h3>
-          <mobile-app-advertising class="box"/>
+          <mobile-app-advertising class="box" />
 
           <h3 class="title is-3" v-translate>
             Last forum topics
           </h3>
 
-          <forum-widget wide class="box is-paddingless"/>
+          <forum-widget wide class="box is-paddingless" />
         </div>
       </div>
     </div>
