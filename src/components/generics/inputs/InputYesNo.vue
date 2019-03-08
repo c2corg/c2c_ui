@@ -17,6 +17,17 @@
       v-model="value_">
     <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
 
+    <input
+      v-if="nullable"
+      :id="'c2c-' + _uid + '_null'"
+      type="radio"
+      :value="null"
+      class="is-checkradio is-primary"
+      v-model="value_">
+    <label v-if="nullable" :for="'c2c-' + _uid + '_null'" class="is-italic">
+      {{ $gettext('no info') | uppercaseFirstLetter }}
+    </label>
+
   </div>
 </template>
 
@@ -30,6 +41,10 @@
       value: {
         type: Boolean,
         default: null
+      },
+      nullable: {
+        type: Boolean,
+        default: false
       }
     }
   };

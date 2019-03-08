@@ -50,7 +50,8 @@
     },
     "anonymous":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "area_type":
     {
@@ -128,7 +129,8 @@
     },
     "blanket_unstaffed":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "nullable": true
     },
     "book_types":
     {
@@ -275,7 +277,8 @@
     {
         "values": "route_duration_types",
         "multiple": true,
-        "i18n": false
+        "i18n": false,
+        "default": ["1"]
     },
     "editor":
     {
@@ -404,7 +407,8 @@
     },
     "gas_unstaffed":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "nullable": true
     },
     "gear":
     {
@@ -447,7 +451,8 @@
     },
     "heating_unstaffed":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "nullable": true
     },
     "height":
     {
@@ -611,7 +616,8 @@
     },
     "lift_access":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "nullable": true
     },
     "lift_status":
     {
@@ -624,7 +630,8 @@
     },
     "matress_unstaffed":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "nullable": true
     },
     "mixed_rating":
     {
@@ -785,11 +792,13 @@
     },
     "protected":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "public_transport":
     {
-        "type": "boolean"
+        "type": "boolean",
+        "default": false
     },
     "public_transportation_rating":
     {
@@ -829,6 +838,7 @@
     "rescue":
     {
         "type": "boolean",
+        "nullable": true,
         "helper": "1063015#rescue"
     },
     "risk":

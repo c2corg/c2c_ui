@@ -2,7 +2,7 @@
 msgid "..."
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:29
+#: src/views/wiki/edition/utils/CotometerWindow.vue:30
 msgid "1 or 2 complications (steeper or narrow section...)"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:71
+#: src/views/SideMenu.vue:72
 msgid "Accident database"
 msgstr ""
 
@@ -137,7 +137,7 @@ msgstr ""
 #: src/views/document/OutingView.vue:37
 #: src/views/document/RouteView.vue:20
 #: src/views/document/XreportView.vue:9
-#: src/views/user/PreferencesView.vue:45
+#: src/views/user/PreferencesView.vue:48
 msgid "activities"
 msgstr ""
 
@@ -316,7 +316,7 @@ msgstr ""
 #: src/translations/fixed_strings_manual.vue:12
 #: src/views/static-views/NotFoundView.vue:58
 #: src/views/static-views/TopoguideView.vue:14
-#: src/views/user/PreferencesView.vue:50
+#: src/views/user/PreferencesView.vue:53
 msgid "areas"
 msgstr ""
 
@@ -334,7 +334,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:11
-#: src/views/SideMenu.vue:72
+#: src/views/SideMenu.vue:73
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:39
 #: src/views/static-views/NotFoundView.vue:38
 msgid "articles"
@@ -365,7 +365,7 @@ msgstr ""
 msgid "Associated routes cotations"
 msgstr ""
 
-#: src/views/SideMenu.vue:33
+#: src/views/SideMenu.vue:34
 msgid "Association"
 msgstr ""
 
@@ -394,8 +394,8 @@ msgstr ""
 msgid "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:23
-#: src/views/document/utils/boxes/LicenseBox.vue:7
+#: src/views/document/utils/boxes/LicenseBox.vue:27
+#: src/views/document/utils/boxes/LicenseBox.vue:9
 msgid "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made."
 msgstr ""
 
@@ -436,7 +436,7 @@ msgctxt "event_types"
 msgid "avalanche"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:237
+#: src/components/datatable/DocumentsTable.vue:238
 msgid "avalanche"
 msgstr ""
 
@@ -466,11 +466,11 @@ msgctxt "condition_ratings"
 msgid "average"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:44
+#: src/views/wiki/edition/utils/CotometerWindow.vue:46
 msgid "Average slope (degrees)"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:49
+#: src/views/wiki/edition/utils/CotometerWindow.vue:51
 msgid "Average slope in degree"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr ""
 #: src/components/markdown-editor/LinkHelper.vue:26
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:56
 #: src/views/user/LoginView.vue:165
-#: src/views/wiki/edition/utils/CotometerWindow.vue:75
+#: src/views/wiki/edition/utils/CotometerWindow.vue:87
 msgid "Cancel"
 msgstr ""
 
@@ -797,7 +797,7 @@ msgstr ""
 #: src/views/wiki/HistoryView.vue:46
 #: src/views/wiki/WhatsNewView.vue:17
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:8
-#: src/views/wiki/edition/utils/SaveDocumentRow.vue:16
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue:21
 msgid "comment"
 msgstr ""
 
@@ -850,11 +850,11 @@ msgctxt "rock_types"
 msgid "conglomerat"
 msgstr ""
 
-#: src/views/SideMenu.vue:27
+#: src/views/SideMenu.vue:28
 msgid "contact"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:62
+#: src/views/document/utils/boxes/CommentsBox.vue:64
 msgid "Continue the discussion"
 msgstr ""
 
@@ -1096,7 +1096,7 @@ msgctxt "image_categories"
 msgid "detail"
 msgstr ""
 
-#: src/views/wiki/edition/OutingEditionView.vue:85
+#: src/views/wiki/edition/OutingEditionView.vue:90
 msgid "Detailed figures, like ratings, height differences, frequentation..."
 msgstr ""
 
@@ -1104,7 +1104,7 @@ msgstr ""
 msgid "Detailed information"
 msgstr ""
 
-#: src/views/wiki/edition/OutingEditionView.vue:84
+#: src/views/wiki/edition/OutingEditionView.vue:89
 msgid "Details"
 msgstr ""
 
@@ -1192,7 +1192,7 @@ msgid "edge"
 msgstr ""
 
 #: src/components/generics/links/EditLink.vue:7
-#: src/components/helper/HelperWindow.vue:22
+#: src/components/helper/HelperWindow.vue:23
 #: src/views/document/utils/DocumentViewHeader.vue:30
 msgid "Edit"
 msgstr ""
@@ -1221,8 +1221,8 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:129
-#: src/components/datatable/DocumentsTable.vue:176
+#: src/components/datatable/DocumentsTable.vue:130
+#: src/components/datatable/DocumentsTable.vue:177
 #: src/translations/fixed_strings_common_js.vue:57
 #: src/views/document/OutingView.vue:69
 #: src/views/document/RouteView.vue:55
@@ -1262,7 +1262,7 @@ msgid "Email"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:22
-#: src/components/markdown-editor/MarkdownEditor.vue:281
+#: src/components/markdown-editor/MarkdownEditor.vue:282
 msgid "emphasized text"
 msgstr ""
 
@@ -1271,7 +1271,7 @@ msgctxt "quality_types"
 msgid "empty"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:58
+#: src/views/wiki/WhatsNewView.vue:59
 msgid "empty comment"
 msgstr ""
 
@@ -1314,7 +1314,7 @@ msgctxt "langs"
 msgid "eu"
 msgstr ""
 
-#: src/views/SideMenu.vue:29
+#: src/views/SideMenu.vue:30
 msgid "EULA"
 msgstr ""
 
@@ -1461,7 +1461,7 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:70
+#: src/views/SideMenu.vue:71
 #: src/views/portals/DashboardView.vue:29
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -1729,7 +1729,7 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:285
+#: src/components/markdown-editor/MarkdownEditor.vue:286
 msgid "heading text"
 msgstr ""
 
@@ -1744,7 +1744,7 @@ msgstr ""
 
 #: src/views/document/OutingView.vue:76
 #: src/views/document/RouteView.vue:61
-#: src/views/wiki/edition/utils/CotometerWindow.vue:56
+#: src/views/wiki/edition/utils/CotometerWindow.vue:58
 msgid "height_diff"
 msgstr ""
 
@@ -2123,7 +2123,7 @@ msgctxt "avalanche_levels"
 msgid "level_na"
 msgstr ""
 
-#: src/views/SideMenu.vue:31
+#: src/views/SideMenu.vue:32
 msgid "Licenses"
 msgstr ""
 
@@ -2160,7 +2160,7 @@ msgstr ""
 msgid "Load my preferences"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue:72
+#: src/components/helper/HelperWindow.vue:73
 msgid "loading"
 msgstr ""
 
@@ -2180,12 +2180,12 @@ msgstr ""
 msgid "Location / elevation / orientation"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:44
+#: src/views/document/utils/boxes/CommentsBox.vue:46
 msgid "Log in to post a comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:71
+#: src/views/Navigation.vue:72
 #: src/views/user/LoginView.vue:134
 #: src/views/user/LoginView.vue:26
 #: src/views/user/LoginView.vue:3
@@ -2197,7 +2197,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:129
+#: src/views/Navigation.vue:131
 msgid "Logout"
 msgstr ""
 
@@ -2427,34 +2427,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:96
+#: src/views/Navigation.vue:98
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:111
+#: src/views/Navigation.vue:113
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:116
+#: src/views/Navigation.vue:118
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:121
+#: src/views/Navigation.vue:123
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:106
+#: src/views/Navigation.vue:108
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:101
+#: src/views/Navigation.vue:103
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:91
+#: src/views/Navigation.vue:93
 msgid "My profile"
 msgstr ""
 
@@ -2542,7 +2542,7 @@ msgstr ""
 msgid "New waypoint"
 msgstr ""
 
-#: src/views/wiki/DiffView.vue:66
+#: src/views/wiki/DiffView.vue:68
 msgid "next difference"
 msgstr ""
 
@@ -2584,6 +2584,10 @@ msgstr ""
 msgid "No account yet?"
 msgstr ""
 
+#: src/components/generics/inputs/InputYesNo.vue:28
+msgid "no info"
+msgstr ""
+
 #: src/components/generics/inputs/InputDocument.vue:73
 msgid "No match?"
 msgstr ""
@@ -2603,7 +2607,7 @@ msgctxt "custodianship_types"
 msgid "no_warden"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:29
+#: src/views/document/utils/boxes/LicenseBox.vue:33
 msgid "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material."
 msgstr ""
 
@@ -2617,7 +2621,7 @@ msgctxt "autonomies"
 msgid "non_autonomous"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:26
+#: src/views/document/utils/boxes/LicenseBox.vue:30
 msgid "NonCommercial — You may not use the material for commercial purposes."
 msgstr ""
 
@@ -2653,7 +2657,7 @@ msgctxt "snow_clearance_ratings"
 msgid "often"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:72
+#: src/views/wiki/edition/utils/CotometerWindow.vue:84
 msgid "Ok"
 msgstr ""
 
@@ -2722,7 +2726,7 @@ msgstr ""
 msgid "Oups! Something went wrong with forum. Here is the message :"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:65
+#: src/components/markdown-editor/MarkdownEditor.vue:66
 msgid "Oups! something went wrong..."
 msgstr ""
 
@@ -2732,7 +2736,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:16
-#: src/views/SideMenu.vue:69
+#: src/views/SideMenu.vue:70
 #: src/views/document/utils/boxes/ToolBox.vue:22
 #: src/views/portals/DashboardView.vue:16
 #: src/views/static-views/NotFoundView.vue:23
@@ -2862,7 +2866,7 @@ msgid "personal"
 msgstr ""
 
 #: src/views/document/OutingView.vue:106
-#: src/views/wiki/edition/OutingEditionView.vue:78
+#: src/views/wiki/edition/OutingEditionView.vue:82
 msgid "personal comments"
 msgstr ""
 
@@ -2934,8 +2938,8 @@ msgctxt "glacier_ratings"
 msgid "possible"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:54
-#: src/views/document/utils/boxes/CommentsBox.vue:58
+#: src/views/document/utils/boxes/CommentsBox.vue:56
+#: src/views/document/utils/boxes/CommentsBox.vue:60
 msgid "Post the first comment"
 msgstr ""
 
@@ -2968,6 +2972,7 @@ msgid "Precise location of the event."
 msgstr ""
 
 #: src/views/documents/utils/QueryItem.vue:39
+#: src/views/documents/utils/QueryItem.vue:70
 msgid "Press enter to select"
 msgstr ""
 
@@ -2978,11 +2983,11 @@ msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:43
 #: src/views/wiki/edition/utils/EditionContainer.vue:42
-#: src/views/wiki/edition/utils/SaveDocumentRow.vue:23
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue:28
 msgid "Preview"
 msgstr ""
 
-#: src/views/wiki/DiffView.vue:35
+#: src/views/wiki/DiffView.vue:36
 msgid "previous difference"
 msgstr ""
 
@@ -3118,10 +3123,10 @@ msgctxt "area_types"
 msgid "range"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:138
-#: src/components/datatable/DocumentsTable.vue:141
-#: src/components/datatable/DocumentsTable.vue:186
-#: src/components/datatable/DocumentsTable.vue:189
+#: src/components/datatable/DocumentsTable.vue:139
+#: src/components/datatable/DocumentsTable.vue:142
+#: src/components/datatable/DocumentsTable.vue:187
+#: src/components/datatable/DocumentsTable.vue:190
 #: src/views/document/OutingView.vue:51
 #: src/views/document/RouteView.vue:35
 #: src/views/documents/utils/QueryItems.vue:15
@@ -3384,6 +3389,7 @@ msgid "See the latest version"
 msgstr ""
 
 #: src/views/documents/utils/QueryItem.vue:38
+#: src/views/documents/utils/QueryItem.vue:69
 msgid "Select option"
 msgstr ""
 
@@ -3430,7 +3436,7 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:228
+#: src/components/datatable/DocumentsTable.vue:229
 #: src/translations/fixed_strings_common_js.vue:166
 msgid "severity"
 msgstr ""
@@ -3448,7 +3454,7 @@ msgstr ""
 msgid "Share with us!"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:10
+#: src/views/document/utils/boxes/LicenseBox.vue:12
 msgid "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
 msgstr ""
 
@@ -3696,11 +3702,11 @@ msgid "stories"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:21
-#: src/components/markdown-editor/MarkdownEditor.vue:277
+#: src/components/markdown-editor/MarkdownEditor.vue:278
 msgid "strong text"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:64
+#: src/views/wiki/edition/utils/CotometerWindow.vue:71
 msgid "Suggested rating"
 msgstr ""
 
@@ -3758,11 +3764,11 @@ msgstr ""
 msgid "The page you are looking for does not exist or is broken."
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:52
+#: src/views/wiki/edition/utils/CotometerWindow.vue:54
 msgid "The slope must be between 0 and 80 deg"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:60
+#: src/views/wiki/edition/utils/CotometerWindow.vue:67
 msgid "The slope must be between 50 and 3000m high"
 msgstr ""
 
@@ -3774,15 +3780,15 @@ msgstr ""
 msgid "These are positive experiences that reveal usefull risk-management skills."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:42
+#: src/views/document/utils/boxes/LicenseBox.vue:46
 msgid "This book cover is the property of its editor and/or author"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:34
+#: src/views/document/utils/boxes/LicenseBox.vue:38
 msgid "This content is licensed under Creative Commons BY-NC-ND 3.0"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:15
+#: src/views/document/utils/boxes/LicenseBox.vue:17
 msgid "This content is licensed under Creative Commons BY-SA 3.0"
 msgstr ""
 
@@ -3799,12 +3805,12 @@ msgid "This field must be a valid ISBN."
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue:24
-#: src/views/wiki/DiffView.vue:37
+#: src/views/wiki/DiffView.vue:38
 msgid "This is the first version"
 msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue:52
-#: src/views/wiki/DiffView.vue:69
+#: src/views/wiki/DiffView.vue:71
 msgid "This is the last version"
 msgstr ""
 
@@ -3812,7 +3818,7 @@ msgstr ""
 msgid "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:40
+#: src/views/document/utils/boxes/LicenseBox.vue:44
 msgid "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes."
 msgstr ""
 
@@ -3869,7 +3875,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:68
+#: src/views/SideMenu.vue:69
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5
@@ -3937,7 +3943,7 @@ msgstr ""
 msgid "Unblock account"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:353
+#: src/components/markdown-editor/MarkdownEditor.vue:354
 #: src/components/markdown-editor/MarkdownEditor.vue:36
 msgid "Unformatted text"
 msgstr ""
@@ -3981,7 +3987,7 @@ msgctxt "climbing_styles"
 msgid "vertical"
 msgstr ""
 
-#: src/views/wiki/edition/utils/CotometerWindow.vue:39
+#: src/views/wiki/edition/utils/CotometerWindow.vue:41
 msgid "Very complex (steps, narrow sections, ridges...)"
 msgstr ""
 
@@ -4127,7 +4133,7 @@ msgstr ""
 msgid "write a summary"
 msgstr ""
 
-#: src/views/wiki/edition/OutingEditionView.vue:78
+#: src/views/wiki/edition/OutingEditionView.vue:83
 msgid "write your comments"
 msgstr ""
 
