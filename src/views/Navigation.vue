@@ -14,9 +14,10 @@
       :to="{name:'home'}"
       class="navigation-item navigation-brand has-text-centered"
       :class="{'is-hidden-mobile': !hideSearchInput}">
-      <img src="@/assets/img/logo.svg"
-           url="@/assets/img/logo.svg"
-           alt="Camptocamp.org">
+      <img
+        src="@/assets/img/logo.svg"
+        url="@/assets/img/logo.svg"
+        alt="Camptocamp.org">
     </router-link>
 
     <div class="navigation-end">
@@ -78,7 +79,8 @@
         <dropdown-button class="is-right">
           <span slot="button" class="button">
             <img
-              width="24" height="24"
+              width="24"
+              height="24"
               :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'">
             <span class="has-text-weight-bold is-hidden-mobile">
               &nbsp;{{ $user.name }}

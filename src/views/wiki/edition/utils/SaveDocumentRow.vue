@@ -13,7 +13,12 @@
     </div>
     <div class="column">
       <div class="control is-expanded">
-        <input v-model="comment" type="text" class="input" :disabled="mode !== 'edit'" :placeholder="$gettext('comment')">
+        <input
+          v-model="comment"
+          type="text"
+          class="input"
+          :disabled="mode !== 'edit'"
+          :placeholder="$gettext('comment')">
       </div>
     </div>
     <div class="column is-narrow">

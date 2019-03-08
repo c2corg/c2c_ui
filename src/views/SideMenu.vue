@@ -4,9 +4,10 @@
     <router-link
       :to="{name:'home'}"
       class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg"
-           url="@/assets/img/logo.svg"
-           alt="Camptocamp.org">
+      <img
+        src="@/assets/img/logo.svg"
+        url="@/assets/img/logo.svg"
+        alt="Camptocamp.org">
     </router-link>
 
     <router-link

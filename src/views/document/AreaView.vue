@@ -20,9 +20,10 @@
 
         <div class="box">
           <div class="level is-mobile">
-            <div class="level-item has-text-centered"
-                 v-for="documentType of ['waypoint', 'route', 'outing']"
-                 :key="documentType">
+            <div
+              class="level-item has-text-centered"
+              v-for="documentType of ['waypoint', 'route', 'outing']"
+              :key="documentType">
 
               <router-link
                 :to="{ name: documentType + 's', query: {a:documentId} }"

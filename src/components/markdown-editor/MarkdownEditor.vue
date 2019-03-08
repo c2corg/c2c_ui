@@ -62,7 +62,8 @@
 
       <div
         v-if="preview && cookerPromise.error"
-        class="preview-error has-background-danger has-text-warning has-text-weight-bold" v-translate>
+        class="preview-error has-background-danger has-text-warning has-text-weight-bold"
+        v-translate>
         Oups! something went wrong...
       </div>
     </div>

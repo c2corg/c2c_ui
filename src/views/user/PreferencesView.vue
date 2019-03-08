@@ -35,8 +35,11 @@
         <h3 v-translate>langs</h3>
         <div class="field is-grouped">
           <div v-for="(language, key) of $language.available" :key="key" class="control">
-            <button :class="{'is-primary' : preferences.langs.indexOf(key) > -1}" type="button" class="button"
-                    @click="toggle(key, preferences.langs)">
+            <button
+              :class="{'is-primary' : preferences.langs.indexOf(key) > -1}"
+              type="button"
+              class="button"
+              @click="toggle(key, preferences.langs)">
               {{ language }}
             </button>
           </div>

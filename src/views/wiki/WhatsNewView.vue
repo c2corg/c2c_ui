@@ -35,11 +35,12 @@
             last
           </document-link>
 
-          <diff-link :document-type="change.document.documentType"
-                     :id="change.document.document_id"
-                     :lang="change.lang"
-                     version-from="prev"
-                     :version-to="change.version_id" />
+          <diff-link
+            :document-type="change.document.documentType"
+            :id="change.document.document_id"
+            :lang="change.lang"
+            version-from="prev"
+            :version-to="change.version_id" />
 
           <history-link :document="change.document" :lang="change.lang" />
 

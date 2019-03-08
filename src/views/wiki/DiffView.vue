@@ -25,12 +25,13 @@
           {{ oldVersion.version.comment }}
         </div>
         <div>
-          <diff-link v-if="oldVersion.previous_version_id"
-                     :document-type="documentType"
-                     :id="documentId"
-                     :lang="lang"
-                     :version-from="oldVersion.previous_version_id"
-                     :version-to="oldVersion.version.version_id">
+          <diff-link
+            v-if="oldVersion.previous_version_id"
+            :document-type="documentType"
+            :id="documentId"
+            :lang="lang"
+            :version-from="oldVersion.previous_version_id"
+            :version-to="oldVersion.version.version_id">
             ←
             <span v-translate>previous difference</span>
           </diff-link>
@@ -57,12 +58,13 @@
           {{ newVersion.version.comment }}
         </div>
         <div>
-          <diff-link v-if="newVersion.next_version_id"
-                     :document-type="documentType"
-                     :id="documentId"
-                     :lang="lang"
-                     :version-from="newVersion.version.version_id"
-                     :version-to="newVersion.next_version_id">
+          <diff-link
+            v-if="newVersion.next_version_id"
+            :document-type="documentType"
+            :id="documentId"
+            :lang="lang"
+            :version-from="newVersion.version.version_id"
+            :version-to="newVersion.next_version_id">
             <span v-translate>next difference</span>
             →
           </diff-link>

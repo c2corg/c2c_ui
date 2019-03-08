@@ -19,7 +19,8 @@
         <li v-for="page of pageLinks" :key="page">
           <span v-if="page===null" class="pagination-ellipsis">&hellip;</span>
           <router-link
-            v-else :class="{'is-current':page==currentPage}"
+            v-else
+            :class="{'is-current':page==currentPage}"
             :aria-label="'Goto page' + page"
             :to="pageQuery(page)"
             class="pagination-link">

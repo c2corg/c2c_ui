@@ -75,7 +75,12 @@
         <form-field :document="document" :field="fields.participants" :placeholder="$gettext('Without c2c account')" />
       </div>
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.description" :label="$gettext('personal comments')" :placeholder="$gettext('write your comments')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.description"
+          :label="$gettext('personal comments')"
+          :placeholder="$gettext('write your comments')" />
         <form-field :document="document" :field="fields.disable_comments" />
       </div>
     </form-section>
@@ -111,7 +116,12 @@
       </div>
 
       <div class="columns">
-        <form-field class="is-4" :document="document" :field="fields.length_total" unit="km" :divisor="1000" />
+        <form-field
+          class="is-4"
+          :document="document"
+          :field="fields.length_total"
+          unit="km"
+          :divisor="1000" />
         <form-field class="is-4" :document="document" :field="fields.elevation_min" />
         <form-field class="is-4" :document="document" :field="fields.elevation_max" />
       </div>

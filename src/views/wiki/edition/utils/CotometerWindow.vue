@@ -20,22 +20,24 @@
         <label v-translate for="c2c-skiability-0">Wide and constant</label>
       </div>
       <div class="control">
-        <input type="radio"
-               id="c2c-skiability-1"
-               name="c2c-skiability"
-               class="is-checkradio is-info"
-               v-model="skiability"
-               :value="0.1">
+        <input
+          type="radio"
+          id="c2c-skiability-1"
+          name="c2c-skiability"
+          class="is-checkradio is-info"
+          v-model="skiability"
+          :value="0.1">
         <label v-translate for="c2c-skiability-1">1 or 2 complications (steeper or narrow section...)</label>
       </div>
 
       <div class="control">
-        <input type="radio"
-               id="c2c-skiability-2"
-               name="c2c-skiability"
-               class="is-checkradio is-info"
-               v-model="skiability"
-               :value="0.2">
+        <input
+          type="radio"
+          id="c2c-skiability-2"
+          name="c2c-skiability"
+          class="is-checkradio is-info"
+          v-model="skiability"
+          :value="0.2">
         <label v-translate for="c2c-skiability-2">Very complex (steps, narrow sections, ridges...)</label>
       </div>
     </div>
@@ -55,7 +57,12 @@
     <div class="field">
       <label class="label" v-translate>height_diff</label>
       <div class="control">
-        <input v-model="elevation" class="input" type="number" min="50" max="3000">
+        <input
+          v-model="elevation"
+          class="input"
+          type="number"
+          min="50"
+          max="3000">
       </div>
       <p class="help is-danger" v-if="errorElevation" v-translate>The slope must be between 50 and 3000m high</p>
     </div>
@@ -69,7 +76,12 @@
     </h1>
 
     <footer slot="footer">
-      <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>
+      <button
+        class="button is-success"
+        type="button"
+        @click="setResult"
+        :disabled="!rating"
+        v-translate>
         Ok
       </button>
       <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>

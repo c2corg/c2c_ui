@@ -2,7 +2,8 @@
   <!-- Do NOT add tooltip -->
   <div class="control" :class="{'has-error':hasError}">
     <span
-      v-for="activity of activities" :key="activity"
+      v-for="activity of activities"
+      :key="activity"
       :class="{'selected':value_.includes(activity), 'with-labels' :showLabels }"
       class="input-item"
       :title="showLabels ? null : $gettext(activity, 'activities')"

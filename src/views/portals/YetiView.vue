@@ -22,7 +22,13 @@
               <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
                 <svg viewBox="0 0 100 100" width="120" height="120">
                   <polygon style="fill:none;stroke:#000;stroke-miterlimit:10;" points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 " />
-                  <line v-show="bra.isDifferent" style="fill:none;stroke:#000;stroke-miterlimit:10;" x1="10" y1="61.5" x2="90" y2="61.5" />
+                  <line
+                    v-show="bra.isDifferent"
+                    style="fill:none;stroke:#000;stroke-miterlimit:10;"
+                    x1="10"
+                    y1="61.5"
+                    x2="90"
+                    y2="61.5" />
                 </svg>
                 <div class="input-bra-high select is-small">
                   <select
@@ -91,11 +97,18 @@
           <div class="columns is-mobile">
             <div
               v-for="item of Object.keys(methods)"
-              :key="item" class="column">
+              :key="item"
+              class="column">
               <div
                 class="control method-input"
                 :class="{'has-background-secondary has-text-light has-text-weight-bold': method===item}">
-                <input :id="'c2c-method-' + item" type="radio" class="is-checkradio" :value="item" v-model="method" :disabled="item=='mrd' ? bra.high == 4 : false">
+                <input
+                  :id="'c2c-method-' + item"
+                  type="radio"
+                  class="is-checkradio"
+                  :value="item"
+                  v-model="method"
+                  :disabled="item=='mrd' ? bra.high == 4 : false">
                 <label :for="'c2c-method-' + item">{{ methods[item] }}</label>
               </div>
             </div>
@@ -225,7 +238,12 @@
 
             <ul>
               <li class="control" v-for = "(item, i) of groupSizes" :key="i">
-                <input :id="'c2c-group-size-' + i" type="radio" class="is-checkradio is-primary" v-model="groupSize" :value="item.value">
+                <input
+                  :id="'c2c-group-size-' + i"
+                  type="radio"
+                  class="is-checkradio is-primary"
+                  v-model="groupSize"
+                  :value="item.value">
                 <label :for="'c2c-group-size-' + i">{{ item.text }}</label>
               </li>
             </ul>

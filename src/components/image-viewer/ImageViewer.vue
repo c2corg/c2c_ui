@@ -10,7 +10,8 @@
         </document-link>
 
         <edit-link
-          :document="activeDocument" :lang="activeDocument.available_langs[0]"
+          :document="activeDocument"
+          :lang="activeDocument.available_langs[0]"
           class="has-text-grey-lighter"
           @click="visible=false">
           <fa-icon icon="edit" />
