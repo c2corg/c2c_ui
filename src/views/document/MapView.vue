@@ -19,12 +19,12 @@
 
       <markdown-section
         :document="document"
-        :field="fields.summary"/>
+        :field="fields.summary" />
 
       <markdown-section
         :document="document"
         :field="fields.description"
-        hide-title/>
+        hide-title />
 
       <comments-box :document="document" />
 

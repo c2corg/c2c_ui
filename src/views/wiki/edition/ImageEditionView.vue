@@ -9,7 +9,7 @@
       :title="$gettext('general informations')"
       :sub-title="$gettext('Title, activity and characteristics of the picture')">
       <div class="columns is-multiline">
-        <form-field :document="document" :field="fields.title"/>
+        <form-field :document="document" :field="fields.title" />
         <form-field class="is-narrow" :document="document" :field="fields.image_type" />
         <form-field class="is-12" :document="document" :field="fields.activities" />
         <form-field class="is-4" :document="document" :field="fields.author" />
@@ -18,10 +18,10 @@
 
         <!--<form-field :document="document" :field="fields.author" />-->
 
-        <form-field class="is-6" :document="document" :field="fields.filename"/>
-        <form-field class="is-6" :document="document" :field="fields.file_size"/>
-        <form-field class="is-6" :document="document" :field="fields.height"/>
-        <form-field class="is-6" :document="document" :field="fields.width"/>
+        <form-field class="is-6" :document="document" :field="fields.filename" />
+        <form-field class="is-6" :document="document" :field="fields.file_size" />
+        <form-field class="is-6" :document="document" :field="fields.height" />
+        <form-field class="is-6" :document="document" :field="fields.width" />
       </div>
 
     </form-section>
@@ -31,7 +31,7 @@
       :sub-title="$gettext('Precise localisation of the shooting')">
 
       <div class="columns is-multiline">
-        <form-field class="is-6" :document="document" :field="fields.elevation"/>
+        <form-field class="is-6" :document="document" :field="fields.elevation" />
       </div>
 
       <map-input-row :document="document" />
@@ -53,8 +53,8 @@
       :title="$gettext('Detailed information')"
       :sub-title="$gettext('Open fields to detail the picture\'s context')">
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.summary"/>
-        <form-field class="is-12" :document="document" :field="fields.description"/>
+        <form-field class="is-12" :document="document" :field="fields.summary" />
+        <form-field class="is-12" :document="document" :field="fields.description" />
       </div>
     </form-section>
 

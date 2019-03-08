@@ -1,11 +1,11 @@
 <template>
   <!-- TODO on route view, map in full screen has not a full height -->
   <div style="width: 100%; height: 100%">
-    <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false"/>
+    <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false" />
 
     <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
       <button @click="showLayerSwitcher=!showLayerSwitcher">
-        <fa-icon icon="layer-group"/>
+        <fa-icon icon="layer-group" />
       </button>
     </div>
 
@@ -46,7 +46,7 @@
       :title="$gettext('Recenter on your current position')"
       class="ol-control ol-control-center-on-geolocation">
       <button @click="activateCenterOnGeolocation">
-        <fa-icon icon="bullseye"/>
+        <fa-icon icon="bullseye" />
       </button>
     </div>
 
@@ -57,7 +57,7 @@
       <button
         @click="filterDocumentsWithMap=!filterDocumentsWithMap"
         :class="{'has-text-success':filterDocumentsWithMap}">
-        <fa-icon icon="search"/>
+        <fa-icon icon="search" />
         <span v-translate>Filter on map extent</span>
       </button>
     </div>
@@ -104,12 +104,12 @@
     <biodiv-information
       v-if="protectionAreasVisible"
       ref="BiodivInformation"
-      :data="biodivData"/>
+      :data="biodivData" />
 
     <swiss-protection-area-information
       v-if="protectionAreasVisible"
       ref="SwissProtectionAreaInformation"
-      :data="swissProtectionAreaData"/>
+      :data="swissProtectionAreaData" />
   </div>
 </template>
 

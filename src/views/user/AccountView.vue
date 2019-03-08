@@ -1,6 +1,6 @@
 <template>
   <div class="section account-view">
-    <html-header title="Account"/>
+    <html-header title="Account" />
 
     <h1 class="title is-1" v-translate>Change account parameters</h1>
     <base-form ref="form" @submit="save" :server-errors="serverErrors">
@@ -10,7 +10,7 @@
         type="text"
         disabled
         :label="$gettext('Username')"
-        icon="user"/>
+        icon="user" />
 
       <form-field
         name="currentpassword"
@@ -18,14 +18,14 @@
         type="password"
         required
         :label="$gettext('Current password')"
-        icon="key"/>
+        icon="key" />
 
       <form-field
         name="newpassword"
         v-model="newpassword"
         type="password"
         :label="$gettext('New password')"
-        icon="key"/>
+        icon="key" />
 
       <form-field
         name="email"
@@ -33,7 +33,7 @@
         type="text"
         required
         :label="$gettext('Email')"
-        icon="at"/>
+        icon="at" />
 
       <form-field
         name="name"
@@ -41,7 +41,7 @@
         type="text"
         required
         :label="$gettext('Fullname')"
-        icon="user-check"/>
+        icon="user-check" />
 
       <form-field
         name="forum_username"
@@ -49,7 +49,7 @@
         type="text"
         required
         :label="$gettext('Forum username')"
-        icon="comments"/>
+        icon="comments" />
 
       <div class="field">
         <input-checkbox v-model="is_profile_public">

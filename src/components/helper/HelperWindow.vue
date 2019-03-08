@@ -4,7 +4,7 @@
       <p :class="{'has-text-danger': !headerFound}">
         {{ title }}
       </p>
-      <p class="buttons"/>
+      <p class="buttons" />
     </div>
 
     <!-- eslint-disable-next-line vue/no-v-html -->
@@ -19,7 +19,8 @@
           v-if="$user.isLogged && showModifyButton"
           class="button is-info"
           target="_blank"
-          :href="'https://www.camptocamp.org/articles/' + helper.documentId" v-translate>
+          :href="'https://www.camptocamp.org/articles/' + helper.documentId"
+          v-translate>
           Edit
         </a>
       </div>

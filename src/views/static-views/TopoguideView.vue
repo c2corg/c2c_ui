@@ -1,17 +1,17 @@
 <template>
   <div>
-    <html-header :title="$gettext('Topoguide')"/>
+    <html-header :title="$gettext('Topoguide')" />
     <div class="topoguide">
       <h1 class="has-text-centered has-text-weight-semibold" v-translate>
         Topoguide
       </h1>
       <div class="links is-flex">
-        <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing"/>
-        <topoguide-view-link to="routes" :label="$gettext('routes')" icon="icon-route"/>
-        <topoguide-view-link to="waypoints" :label="$gettext('waypoints')" icon="icon-waypoint"/>
-        <topoguide-view-link to="images" :label="$gettext('images')" icon="icon-image"/>
-        <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book"/>
-        <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area"/>
+        <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing" />
+        <topoguide-view-link to="routes" :label="$gettext('routes')" icon="icon-route" />
+        <topoguide-view-link to="waypoints" :label="$gettext('waypoints')" icon="icon-waypoint" />
+        <topoguide-view-link to="images" :label="$gettext('images')" icon="icon-image" />
+        <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book" />
+        <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area" />
       </div>
     </div>
     <div class="section columns is-multiline is-variable is-8">

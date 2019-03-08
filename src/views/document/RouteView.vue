@@ -5,8 +5,8 @@
     <div v-if="document" class="columns is-block-print">
 
       <div class="column is-3 no-print">
-        <map-box :document="document" @has-protection-area="hasProtectionArea=true"/>
-        <tool-box :document="document"/>
+        <map-box :document="document" @has-protection-area="hasProtectionArea=true" />
+        <tool-box :document="document" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -18,31 +18,31 @@
             <div class="column is-4">
 
               <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3 has-text-secondary"/>
+                <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
               </label-value>
 
               <field-view :document="document" :field="fields.route_types" />
-              <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')"/>
+              <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')" />
               <field-view :document="document" :field="fields.rock_types" />
-              <field-view :document="document" :field="fields.quality"/>
+              <field-view :document="document" :field="fields.quality" />
               <field-view :document="document" :field="fields.climbing_outdoor_type" />
               <field-view :document="document" :field="fields.configuration" />
-              <field-view :document="document" :field="fields.slackline_type"/>
+              <field-view :document="document" :field="fields.slackline_type" />
             </div>
 
             <div class="column is-4">
 
               <label-value :label="$gettext('ratings')">
-                <route-rating v-if="$documentUtils.hasRating(document)" :document="document"/>
-                <edit-link v-else :document="document" :lang="$user.lang"/>
+                <route-rating v-if="$documentUtils.hasRating(document)" :document="document" />
+                <edit-link v-else :document="document" :lang="$user.lang" />
               </label-value>
 
-              <field-view v-if="document.glacier_gear!='no'" :document="document" :field="fields.glacier_gear"/>
+              <field-view v-if="document.glacier_gear!='no'" :document="document" :field="fields.glacier_gear" />
 
               <input-orientation
                 v-if="document.orientations && document.orientations.length"
                 v-model="document.orientations"
-                disabled/>
+                disabled />
 
             </div>
 
@@ -52,7 +52,7 @@
                 :document="document"
                 :field1="fields.elevation_min"
                 :field2="fields.elevation_max"
-                :label="$gettext('elevation')"/>
+                :label="$gettext('elevation')" />
 
               <double-numeric-field
                 :document="document"
@@ -61,32 +61,32 @@
                 :label="$gettext('height_diff')"
                 show-signs />
 
-              <field-view :document="document" :field="fields.height_diff_difficulties"/>
-              <field-view :document="document" :field="fields.difficulties_height"/>
+              <field-view :document="document" :field="fields.height_diff_difficulties" />
+              <field-view :document="document" :field="fields.difficulties_height" />
 
-              <field-view :document="document" :field="fields.height_diff_access"/>
-              <field-view :document="document" :field="fields.lift_access"/>
+              <field-view :document="document" :field="fields.height_diff_access" />
+              <field-view :document="document" :field="fields.lift_access" />
 
               <label-value v-if="document.route_length" :label="$gettext('route_length')">
                 {{ document.route_length / 1000 }}&nbsp;km
               </label-value>
 
-              <field-view :document="document" :field="fields.mtb_height_diff_portages"/>
-              <field-view :document="document" :field="fields.mtb_length_asphalt"/>
-              <field-view :document="document" :field="fields.mtb_length_trail"/>
+              <field-view :document="document" :field="fields.mtb_height_diff_portages" />
+              <field-view :document="document" :field="fields.mtb_length_asphalt" />
+              <field-view :document="document" :field="fields.mtb_length_trail" />
 
               <label-value v-if="document.cooked.slope" :label="$gettext('slope')">
                 {{ document.cooked.slope }}
               </label-value>
 
-              <field-view :document="document" :field="fields.slackline_height"/>
+              <field-view :document="document" :field="fields.slackline_height" />
 
             </div>
           </div>
         </div>
 
         <div class="box">
-          <markdown-section :document="document" :field="fields.summary"/>
+          <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.route_history" />
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
@@ -123,12 +123,12 @@
           <div style="clear:both" />
         </div>
 
-        <routes-box :document="document" hide-buttons disable-activity-split/>
-        <images-box :document="document"/>
+        <routes-box :document="document" hide-buttons disable-activity-split />
+        <images-box :document="document" />
 
         <recent-outings-box :document="document" />
 
-        <comments-box :document="document"/>
+        <comments-box :document="document" />
 
       </div>
     </div>

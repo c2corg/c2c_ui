@@ -9,14 +9,14 @@
         <input-simple
           v-if="autoComputeQuality && automaticComputationAvailable"
           :value="$gettext(computedQuality, 'quality_types')"
-          disabled/>
+          disabled />
         <input-simple
           v-else
           :options="$options.quality_types"
           i18n
           i18n-context="quality_types"
           required
-          v-model="manualQuality"/>
+          v-model="manualQuality" />
       </div>
     </div>
     <div v-if="automaticComputationAvailable" class="column is-narrow">

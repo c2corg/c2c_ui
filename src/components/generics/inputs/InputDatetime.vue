@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile is-variable is-1">
     <div class="column is-narrow">
-      <input-date v-model="date"/>
+      <input-date v-model="date" />
     </div>
     <div class="column is-narrow">
       <div class="select">

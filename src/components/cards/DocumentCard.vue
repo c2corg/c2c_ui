@@ -5,11 +5,11 @@
       :document="document"
       class="document-card"
       :not-clickable="notClickable"
-      :highlighted="highlighted"/>
+      :highlighted="highlighted" />
     <delete-button
       v-if="showDeleteButton"
       @click="$emit('delete')"
-      class="delete-button"/>
+      class="delete-button" />
   </div>
 </template>
 

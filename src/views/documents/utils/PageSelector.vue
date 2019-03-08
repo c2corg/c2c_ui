@@ -5,21 +5,22 @@
         :disabled="currentPage<=1"
         :to="pageQuery(currentPage-1)"
         class="pagination-previous">
-        <fa-icon icon="chevron-left"/>
+        <fa-icon icon="chevron-left" />
       </router-link>
 
       <router-link
         :disabled="currentPage>=pageCount"
         :to="pageQuery(currentPage+1)"
         class="pagination-next">
-        <fa-icon icon="chevron-right"/>
-      </router-link >
+        <fa-icon icon="chevron-right" />
+      </router-link>
 
       <ul class="pagination-list">
         <li v-for="page of pageLinks" :key="page">
           <span v-if="page===null" class="pagination-ellipsis">&hellip;</span>
           <router-link
-            v-else :class="{'is-current':page==currentPage}"
+            v-else
+            :class="{'is-current':page==currentPage}"
             :aria-label="'Goto page' + page"
             :to="pageQuery(page)"
             class="pagination-link">

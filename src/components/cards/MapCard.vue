@@ -1,11 +1,11 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document"/>
+      <document-title :document="document" />
     </card-title>
 
     <card-row>
-      <card-region-item :document="document"/>
+      <card-region-item :document="document" />
     </card-row>
 
     <card-row>

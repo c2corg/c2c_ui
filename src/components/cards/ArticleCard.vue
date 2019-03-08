@@ -1,11 +1,11 @@
 <template>
   <card-container :document="notClickable ? null : document" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document"/>
+      <document-title :document="document" />
     </card-title>
 
     <card-row>
-      <textual-array :array="document.categories" i18n i18n-context="article_categories"/>
+      <textual-array :array="document.categories" i18n i18n-context="article_categories" />
     </card-row>
 
     <card-row>
@@ -16,7 +16,7 @@
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities"/>
+      <card-activities-item :activities="document.activities" />
       <marker-quality :quality="document.quality" />
     </card-row>
 

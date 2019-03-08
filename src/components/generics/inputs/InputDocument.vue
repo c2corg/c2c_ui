@@ -11,7 +11,7 @@
         @blur="promise={}"
         v-model="searchText">
       <span class="icon is-left">
-        <fa-icon icon="search"/>
+        <fa-icon icon="search" />
       </span>
     </div>
     <div class="dropdown-menu" role="menu" v-if="promise.data">
@@ -32,21 +32,21 @@
             <div
               v-if="isSelected(document)"
               class="column has-text-success is-size-1 is-narrow">
-              <fa-icon icon="check-circle"/>
+              <fa-icon icon="check-circle" />
             </div>
 
             <div class="column is-size-6">
-              <document-title :document="document"/>
+              <document-title :document="document" />
               <br>
               <span v-if="document.elevation || document.elevation_max">
                 <span :title="$gettext('elevation_max')">
-                  <fa-icon icon="sort-amount-up" class="has-text-primary"/>
+                  <fa-icon icon="sort-amount-up" class="has-text-primary" />
                 </span>
                 {{ document.elevation || document.elevation_max }}&nbsp;m
               </span>
 
               <span v-if="document.height_diff_up">
-                <icon-height-diff-up class="has-text-primary"/>
+                <icon-height-diff-up class="has-text-primary" />
                 {{ document.height_diff_up }}&nbsp;m
               </span>
               <span v-if="document.forum_username" class="is-italic">

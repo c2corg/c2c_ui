@@ -13,7 +13,7 @@
         <td><input type="text" class="input" v-model="level.level_snow_height_soft"></td>
         <td><input type="text" class="input" v-model="level.level_snow_height_total"></td>
         <td><input type="text" class="input" v-model="level.level_comment"></td>
-        <td><delete-button class="is-size-2 delete-button" @click="levels.splice(i, 1)"/></td>
+        <td><delete-button class="is-size-2 delete-button" @click="levels.splice(i, 1)" /></td>
       </tr>
 
       <tr>
@@ -21,7 +21,7 @@
         <td><input type="text" class="input" v-model="newLevel.level_snow_height_soft"></td>
         <td><input type="text" class="input" v-model="newLevel.level_snow_height_total"></td>
         <td><input type="text" class="input" v-model="newLevel.level_comment"></td>
-        <td><fa-icon icon="plus-circle" class="is-size-2 add-button has-text-success" @click="addLevel"/></td>
+        <td><fa-icon icon="plus-circle" class="is-size-2 add-button has-text-success" @click="addLevel" /></td>
       </tr>
     </table>
   </div>

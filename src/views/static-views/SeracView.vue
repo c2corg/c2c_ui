@@ -1,6 +1,6 @@
 <template>
   <div class="serac-view">
-    <html-header :title="$gettext('Incidents and accidents')"/>
+    <html-header :title="$gettext('Incidents and accidents')" />
     <div class="serac-view-content">
       <div class="columns is-multiline">
         <div class="column is-12">
@@ -50,7 +50,7 @@
 
         <div class="column is-4">
           <add-link document-type="xreport" class="button is-primary has-text-weight-bold">
-            <fa-icon icon="plus"/>
+            <fa-icon icon="plus" />
             &nbsp;
             <span v-translate>Create a new report</span>
           </add-link>
@@ -58,7 +58,7 @@
 
         <div class="column is-4">
           <router-link to="xreports" class="button is-warning has-text-weight-bold">
-            <fa-icon icon="list"/>
+            <fa-icon icon="list" />
             &nbsp;
             <span v-translate>View xreports</span>
           </router-link>
@@ -66,7 +66,7 @@
 
         <div class="column is-4">
           <router-link :to="{name:'article', params:{id:697210}}" class="button is-success has-text-weight-bold">
-            <fa-icon icon="info"/>
+            <fa-icon icon="info" />
             &nbsp;
             <span v-translate>Know more about SERAC</span>
           </router-link>

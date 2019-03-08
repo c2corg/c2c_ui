@@ -2,10 +2,10 @@
   <router-link
     v-if="documentType!='profile'"
     :to="{name:documentType + '-version', params:{id:id, version:version, lang:lang}}">
-    <slot/>
+    <slot />
   </router-link>
   <span v-else>
-    <slot/>
+    <slot />
   </span>
 </template>
 

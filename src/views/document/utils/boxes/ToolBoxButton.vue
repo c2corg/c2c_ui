@@ -2,7 +2,7 @@
   <component :is="to ? 'router-link' : 'div'" :to="to" @click="$emit('click')" class="toolbox-button">
     <span class="toolbox-button-icon">
       <slot name="icon">
-        <fa-icon :icon="icon"/>
+        <fa-icon :icon="icon" />
       </slot>
     </span>
     <span>

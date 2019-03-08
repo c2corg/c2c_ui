@@ -16,7 +16,7 @@
         {{ $gettext('URL') | uppercaseFirstLetter }}
       </label>
       <div class="control">
-        <input class="input" v-model="url" >
+        <input class="input" v-model="url">
       </div>
     </div>
     <div slot="footer" class="buttons">

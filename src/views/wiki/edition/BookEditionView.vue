@@ -10,8 +10,8 @@
       :title="$gettext('general informations')"
       :sub-title="$gettext('Title of the book, author, language and date of publication.')">
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.title"/>
-        <form-field class="is-12" :document="document" :field="fields.activities"/>
+        <form-field class="is-12" :document="document" :field="fields.title" />
+        <form-field class="is-12" :document="document" :field="fields.activities" />
         <form-field class="is-12" :document="document" :field="fields.book_types" />
         <form-field class="is-12" :document="document" :field="fields.langs" />
         <form-field class="is-4" :document="document" :field="fields.author" />
@@ -28,8 +28,8 @@
       :title="$gettext('description')"
       :sub-title="$gettext('Book content')">
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.summary"/>
-        <form-field class="is-12" :document="document" :field="fields.description"/>
+        <form-field class="is-12" :document="document" :field="fields.summary" />
+        <form-field class="is-12" :document="document" :field="fields.description" />
       </div>
     </form-section>
 

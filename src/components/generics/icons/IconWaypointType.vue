@@ -1,5 +1,5 @@
 <template>
-  <fa-icon :icon="['waypoint', waypointType]"/>
+  <fa-icon :icon="['waypoint', waypointType]" />
 </template>
 
 <script lang="ts">

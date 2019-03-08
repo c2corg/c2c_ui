@@ -1,6 +1,6 @@
 <template>
   <div class="section content">
-    <html-header :title="$gettext('My preferences')"/>
+    <html-header :title="$gettext('My preferences')" />
 
     <h2 v-translate>
       lang
@@ -35,8 +35,11 @@
         <h3 v-translate>langs</h3>
         <div class="field is-grouped">
           <div v-for="(language, key) of $language.available" :key="key" class="control">
-            <button :class="{'is-primary' : preferences.langs.indexOf(key) > -1}" type="button" class="button"
-                    @click="toggle(key, preferences.langs)">
+            <button
+              :class="{'is-primary' : preferences.langs.indexOf(key) > -1}"
+              type="button"
+              class="button"
+              @click="toggle(key, preferences.langs)">
               {{ language }}
             </button>
           </div>
@@ -44,7 +47,7 @@
 
         <h3 v-translate>activities</h3>
         <div class="field is-grouped">
-          <input-activity v-model="preferences.activities" @input="save"/>
+          <input-activity v-model="preferences.activities" @input="save" />
         </div>
 
         <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
@@ -63,7 +66,7 @@
                 <document-card
                   :document="document"
                   show-delete-button
-                  @delete="removeArea(document)"/>
+                  @delete="removeArea(document)" />
               </div>
             </div>
           </div>

@@ -9,7 +9,7 @@
         v-for="(item, index) of column.items"
         :key="index"
         :item="item"
-        class="feed-card"/>
+        class="feed-card" />
     </div>
     <!-- <loading-notification :promise="promise" /> -->
   </div>

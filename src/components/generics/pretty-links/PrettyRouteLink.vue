@@ -3,9 +3,9 @@
     <activities
       v-if="!hideActivities"
       :activities="route.activities"
-      class="is-size-3 has-text-secondary icon-activities"/>
+      class="is-size-3 has-text-secondary icon-activities" />
     <span>&nbsp;</span>
-    <document-title :document="route"/>,
+    <document-title :document="route" />,
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
       :title="$gettext('height_diff_difficulties')"
@@ -18,13 +18,13 @@
       class="has-text-normal">
       {{ route.orientations.join(', ') }},
     </span>
-    <route-rating :document="route" class="has-text-normal"/>
-    <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-normal"/>
+    <route-rating :document="route" class="has-text-normal" />
+    <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-normal" />
     <span v-if="!hideArea" class="has-text-normal">
       <em v-for="area in rangeAreas" :key="area.document_id">
         &hairsp;&bull;&hairsp;
         <small>
-          <document-title :document="area"/>
+          <document-title :document="area" />
         </small>
       </em>
     </span>

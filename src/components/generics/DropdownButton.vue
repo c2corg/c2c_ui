@@ -9,7 +9,7 @@
 
     <div id="dropdown-menu" class="dropdown-menu" role="menu">
       <div class="dropdown-content">
-        <slot/>
+        <slot />
       </div>
     </div>
   </div>

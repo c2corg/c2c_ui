@@ -1,8 +1,8 @@
 <template>
   <div v-if="field!==undefined" class="field">
-    <div v-if="field.queryMode==='valuesRangeSlider'" class="control" >
+    <div v-if="field.queryMode==='valuesRangeSlider'" class="control">
 
-      <query-item-slider-label :field="field" :value="value"/>
+      <query-item-slider-label :field="field" :value="value" />
       <vue-slider
         ref="slider"
         v-model="value"
@@ -10,12 +10,12 @@
         :lazy="true"
         :piecewise="true"
         tooltip="hover"
-        :formatter="field.i18n ? gettext : undefined"/>
+        :formatter="field.i18n ? gettext : undefined" />
 
     </div>
 
     <div v-else-if="field.queryMode==='numericalRangeSlider'" class="control">
-      <query-item-slider-label :field="field" :value="value"/>
+      <query-item-slider-label :field="field" :value="value" />
       <vue-slider
         ref="slider"
         v-model="value"
@@ -23,7 +23,7 @@
         :max="field.max"
         :interval="interval"
         :lazy="true"
-        tooltip="hover"/>
+        tooltip="hover" />
     </div>
 
     <div v-else-if="field.queryMode==='multiSelect'" class="control">
@@ -37,18 +37,24 @@
         :custom-label="field.i18n ? gettext : undefined"
         :placeholder="$gettext('Select option')"
         :select-label="$gettext('Press enter to select')"
-        :multiple="true"/>
+        :multiple="true" />
     </div>
 
     <div v-else-if="field.queryMode==='orientations'" class="level">
-      <input-orientation v-model="value" class="level-item"/>
+      <input-orientation v-model="value" class="level-item" />
     </div>
 
     <div v-else-if="field.queryMode==='input'" class="control">
       <label class="label" v-if="!hideLabel">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </label>
-      <input ref="input" :type="field.type" :value="value" @input="oninput" class="input" :placeholder="$gettext(field.name)">
+      <input
+        ref="input"
+        :type="field.type"
+        :value="value"
+        @input="oninput"
+        class="input"
+        :placeholder="$gettext(field.name)">
     </div>
 
     <div v-else-if="field.queryMode==='checkbox'" class="control">
@@ -58,7 +64,7 @@
     </div>
 
     <div v-else-if="field.queryMode==='activities'" class="control">
-      <input-activity v-model="value"/>
+      <input-activity v-model="value" />
     </div>
 
     <div v-else-if="field.queryMode==='dates'">

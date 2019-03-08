@@ -5,7 +5,7 @@
     <loading-notification :promise="promise" />
 
     <div v-if="document && !document.not_authorized">
-      <html-header v-if="!isDraftView" :title="title"/>
+      <html-header v-if="!isDraftView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
 
@@ -14,7 +14,7 @@
 
           <follow-button :document="document" />
 
-          <social-network-sharing v-if="documentType!='profile' && isNormalView"/>
+          <social-network-sharing v-if="documentType!='profile' && isNormalView" />
 
           <span
             :title="$gettext('Add images')"
@@ -33,10 +33,10 @@
         </span>
         <div class="title is-1">
           <slot name="icon-document">
-            <icon-document :document-type="documentType"/>
+            <icon-document :document-type="documentType" />
           </slot>
           <span>&thinsp;</span>
-          <document-title :document="document" uppercase-first-letter/>
+          <document-title :document="document" uppercase-first-letter />
 
           <!-- outing specific  -->
           <span v-if="documentType=='outing'" class="outing-date is-size-5">
@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document"/>
+      <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
     </div>
   </div>
 </template>

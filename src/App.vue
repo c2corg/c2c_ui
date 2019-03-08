@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <side-menu class="side-menu no-print" :class="{'alternative-side-menu': alternativeSideMenu}"/>
-    <navigation class="navigation no-print" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu"/>
-    <site-notice ref="siteNotice no-print" class="no-print site-notice"/>
-    <image-viewer ref="imageViewer"/>
-    <helper-window ref="helper"/>
-    <alert-window ref="alertWindow"/>
-    <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false"/>
+    <side-menu class="side-menu no-print" :class="{'alternative-side-menu': alternativeSideMenu}" />
+    <navigation class="navigation no-print" @toggleSideMenu="alternativeSideMenu=!alternativeSideMenu" />
+    <site-notice ref="siteNotice no-print" class="no-print site-notice" />
+    <image-viewer ref="imageViewer" />
+    <helper-window ref="helper" />
+    <alert-window ref="alertWindow" />
+    <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu=false" />
 
     <!-- keep router view in last  -->
     <div class="page-content is-block-print">
-      <router-view class="router-view"/>
+      <router-view class="router-view" />
     </div>
   </div>
 </template>

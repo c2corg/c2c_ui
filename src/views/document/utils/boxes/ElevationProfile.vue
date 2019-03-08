@@ -22,7 +22,7 @@
       <label v-translate for="c2c-elevation-profile-time">Time</label>
     </form>
 
-    <div ref="graph" class="elevation-profile-chart"/>
+    <div ref="graph" class="elevation-profile-chart" />
 
   </div>
 </template>

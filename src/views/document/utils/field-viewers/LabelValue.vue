@@ -4,7 +4,7 @@
         -->{{ label | uppercaseFirstLetter }}<!--
     --></span>
     <span>
-      <slot/>
+      <slot />
     </span>
   </div>
 </template>

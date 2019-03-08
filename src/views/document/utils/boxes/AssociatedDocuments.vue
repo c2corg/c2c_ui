@@ -5,7 +5,7 @@
         {{ $gettext('waypoints') | uppercaseFirstLetter }}
       </div>
       <div v-for="waypoint of associations.waypoints" :key="waypoint.document_id" class="is-ellipsed">
-        <pretty-waypoint-link :waypoint="waypoint"/>
+        <pretty-waypoint-link :waypoint="waypoint" />
       </div>
       <hr>
     </div>
@@ -15,7 +15,7 @@
         {{ $gettext('waypoint_children') | uppercaseFirstLetter }}
       </div>
       <div v-for="waypoint of associations.waypoint_children" :key="waypoint.document_id" class="is-ellipsed">
-        <pretty-waypoint-link :waypoint="waypoint"/>
+        <pretty-waypoint-link :waypoint="waypoint" />
       </div>
       <hr>
     </div>
@@ -27,7 +27,7 @@
       </div>
       <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
-          <icon-book class="icon-link"/>&nbsp;<document-title :document="book" />
+          <icon-book class="icon-link" />&nbsp;<document-title :document="book" />
         </document-link>
       </div>
       <hr>
@@ -40,7 +40,7 @@
       </div>
       <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
-          <icon-article class="icon-link"/>&nbsp;<document-title :document="article" />
+          <icon-article class="icon-link" />&nbsp;<document-title :document="article" />
         </document-link>
       </div>
       <hr>

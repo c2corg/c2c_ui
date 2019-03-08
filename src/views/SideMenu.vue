@@ -4,9 +4,10 @@
     <router-link
       :to="{name:'home'}"
       class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg"
-           url="@/assets/img/logo.svg"
-           alt="Camptocamp.org">
+      <img
+        src="@/assets/img/logo.svg"
+        url="@/assets/img/logo.svg"
+        alt="Camptocamp.org">
     </router-link>
 
     <router-link
@@ -21,7 +22,7 @@
 
     <div class="menu-footer is-size-7">
       <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-      <advertisement class="menu-add" v-if="windowHeight>=630"/>
+      <advertisement class="menu-add" v-if="windowHeight>=630" />
 
       <div class="has-text-centered menu-links">
         <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
@@ -36,12 +37,12 @@
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
         <div class="column">
           <a href="https://twitter.com/camptocamporg" title="twitter">
-            <fa-icon :icon="['fab', 'twitter']" class="twitter-icon"/>
+            <fa-icon :icon="['fab', 'twitter']" class="twitter-icon" />
           </a>
         </div>
         <div class="column">
           <a href="https://www.facebook.com/camptocamp.org/" title="facebook">
-            <fa-icon :icon="['fab', 'facebook']" class="facebook-icon"/>
+            <fa-icon :icon="['fab', 'facebook']" class="facebook-icon" />
           </a>
         </div>
       </div>

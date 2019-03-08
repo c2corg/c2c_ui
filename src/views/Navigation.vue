@@ -6,7 +6,7 @@
       :class="{'is-hidden-mobile': !hideSearchInput}"
       @click="$emit('toggleSideMenu')">
       <span class="button">
-        <fa-icon icon="bars"/>
+        <fa-icon icon="bars" />
       </span>
     </span>
 
@@ -14,9 +14,10 @@
       :to="{name:'home'}"
       class="navigation-item navigation-brand has-text-centered"
       :class="{'is-hidden-mobile': !hideSearchInput}">
-      <img src="@/assets/img/logo.svg"
-           url="@/assets/img/logo.svg"
-           alt="Camptocamp.org">
+      <img
+        src="@/assets/img/logo.svg"
+        url="@/assets/img/logo.svg"
+        alt="Camptocamp.org">
     </router-link>
 
     <div class="navigation-end">
@@ -26,24 +27,24 @@
           :class="{'is-hidden-mobile': hideSearchInput}"
           :document-type="['waypoint', 'route', 'article', 'book']"
           propose-creation
-          @input="go"/>
+          @input="go" />
 
         <div
           class="navigation-item is-hidden-tablet"
           :class="{'is-hidden-mobile': !hideSearchInput}">
           <span class="button" @click="hideSearchInput=false">
-            <fa-icon icon="search"/>
+            <fa-icon icon="search" />
           </span>
         </div>
       </div>
 
       <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" :title="'This page may contains bugs or incomplete features'">
-        <fa-icon icon="bug" size="lg" class="has-text-danger"/>
+        <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
 
       <div v-if="!siteConfiguration.isProduction" class="navigation-item dropdown is-hoverable is-hidden-mobile">
         <div class="dropdown-trigger">
-          <fa-icon icon="database"/>
+          <fa-icon icon="database" />
         </div>
         <div class="dropdown-menu">
           <div class="dropdown-content">
@@ -60,9 +61,9 @@
       </div>
 
       <div class="navigation-item">
-        <add-link document-type="outing" class="button is-primary is-hidden-mobile"/>
+        <add-link document-type="outing" class="button is-primary is-hidden-mobile" />
         <add-link document-type="outing" class="button is-primary is-hidden-tablet">
-          <fa-icon icon="plus"/>
+          <fa-icon icon="plus" />
         </add-link>
       </div>
 
@@ -78,7 +79,8 @@
         <dropdown-button class="is-right">
           <span slot="button" class="button">
             <img
-              width="24" height="24"
+              width="24"
+              height="24"
               :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'">
             <span class="has-text-weight-bold is-hidden-mobile">
               &nbsp;{{ $user.name }}
@@ -86,17 +88,17 @@
           </span>
 
           <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="dropdown-item is-size-5">
-            <fa-icon icon="user"/>
+            <fa-icon icon="user" />
             <span>&nbsp;</span>
             <span v-translate>My profile</span>
           </router-link>
           <router-link :to="{ name: 'account' }" class="dropdown-item is-size-5">
-            <fa-icon icon="check-circle"/>
+            <fa-icon icon="check-circle" />
             <span>&nbsp;</span>
             <span v-translate>My account</span>
           </router-link>
           <router-link :to="{ name: 'preferences' }" class="dropdown-item is-size-5">
-            <fa-icon icon="cogs"/>
+            <fa-icon icon="cogs" />
             <span>&nbsp;</span>
             <span v-translate>My preferences</span>
           </router-link>
@@ -106,17 +108,17 @@
             <span v-translate>My outings</span>
           </router-link>
           <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="dropdown-item is-size-5">
-            <fa-icon icon="edit"/>
+            <fa-icon icon="edit" />
             <span>&nbsp;</span>
             <span v-translate>My changes</span>
           </router-link>
           <router-link :to="{ name: 'following' }" class="dropdown-item is-size-5">
-            <fa-icon icon="heart"/>
+            <fa-icon icon="heart" />
             <span>&nbsp;</span>
             <span v-translate>My followed users</span>
           </router-link>
           <router-link :to="{ name: 'mailinglists' }" class="dropdown-item is-size-5">
-            <fa-icon icon="at"/>
+            <fa-icon icon="at" />
             <span>&nbsp;</span>
             <span v-translate>My mailing lists</span>
           </router-link>
@@ -124,7 +126,7 @@
           <hr class="dropdown-divider">
 
           <a class="dropdown-item is-size-5" @click="$user.signout()">
-            <fa-icon icon="sign-out-alt"/>
+            <fa-icon icon="sign-out-alt" />
             <span>&nbsp;</span>
             <span v-translate>Logout</span>
           </a>

@@ -1,6 +1,6 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
-    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" >
+    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2">
       <span>
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
       </span>
@@ -8,13 +8,13 @@
         class="is-size-6 is-pulled-right has-cursor-pointer"
         icon="angle-down"
         :rotation="visible ? undefined : 180"
-        @click="visible=!visible"/>
+        @click="visible=!visible" />
     </h2>
     <div v-show="visible">
       <markdown
         v-if="document.cooked[field.name]"
         :class="{'is-italic':field.name==='summary'}"
-        :content="document.cooked[field.name]"/>
+        :content="document.cooked[field.name]" />
       <slot name="after" />
     </div>
   </div>

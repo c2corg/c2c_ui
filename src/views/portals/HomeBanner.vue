@@ -12,7 +12,7 @@
           :to="{name:'outings', query:{act:activity}}"
           :title="$gettext(activity, 'activities')"
           class="outings-link">
-          <icon-activity :activity="activity"/>
+          <icon-activity :activity="activity" />
         </router-link>
       </div>
 

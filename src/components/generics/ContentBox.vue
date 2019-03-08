@@ -1,6 +1,6 @@
 <template>
-  <div class="box" @click="click" >
-    <slot/>
+  <div class="box" @click="click">
+    <slot />
   </div>
 </template>
 

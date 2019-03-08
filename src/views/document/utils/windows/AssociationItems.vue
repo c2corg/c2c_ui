@@ -23,7 +23,7 @@
           v-else-if="childType==='route'"
           :route="child.document"
           hide-orientation
-          hide-height-diff-difficulties/>
+          hide-height-diff-difficulties />
 
         <document-link v-else :document="child.document" />
       </div>

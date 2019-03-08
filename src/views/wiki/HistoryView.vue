@@ -1,12 +1,12 @@
 <template>
   <div class="section">
-    <html-header :title="$gettext('Versions')"/>
+    <html-header :title="$gettext('Versions')" />
 
     <loading-notification :promise="promise" />
 
     <div v-if="history">
       <h1 class="title is-1">
-        <icon-document :document-type="documentType"/>
+        <icon-document :document-type="documentType" />
         <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
       </h1>
 
@@ -40,7 +40,7 @@
       <table class="table is-striped">
         <thead>
           <tr>
-            <th/>
+            <th />
             <th v-translate>Created on</th>
             <th v-translate>Author</th>
             <th v-translate>comment</th>
@@ -68,7 +68,7 @@
                   :id="documentId"
                   :lang="lang"
                   version-from="prev"
-                  :version-to="version.version_id"/>
+                  :version-to="version.version_id" />
               </div>
             </td>
             <td>
@@ -77,7 +77,7 @@
               </version-link>
             </td>
             <td>
-              <contributor-link :contributor="version"/>
+              <contributor-link :contributor="version" />
             </td>
             <td>
               {{ version.comment }}

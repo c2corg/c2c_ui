@@ -24,8 +24,10 @@
           </div>
           <div class="column">
             <div class="discourse-post-header">
-              <a :href="$options.forumUrl + '/users/' + post.username" :title="post.username"
-                 class="discourse-post-header-username">
+              <a
+                :href="$options.forumUrl + '/users/' + post.username"
+                :title="post.username"
+                class="discourse-post-header-username">
                 {{ post.username }}
               </a>
               <span class="is-pulled-right">
@@ -34,7 +36,7 @@
             </div>
 
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="discourse-content" v-html="post.cooked"/>
+            <div class="discourse-content" v-html="post.cooked" />
 
           </div>
         </div>

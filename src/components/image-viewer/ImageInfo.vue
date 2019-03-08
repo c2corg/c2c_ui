@@ -19,7 +19,7 @@
 
       <p v-if="document.image_type">
         <icon-creative-commons />
-        <label >{{ $gettext(document.image_type) }}</label>
+        <label>{{ $gettext(document.image_type) }}</label>
       </p>
 
       <h4 class="title is-4 has-text-light" v-translate>

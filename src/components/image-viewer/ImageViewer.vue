@@ -6,40 +6,41 @@
       </span>
       <span class="is-size-3 is-nowrap image-viewer-buttons">
         <document-link :document="activeDocument" class="has-text-grey-lighter">
-          <fa-icon icon="eye"/>
+          <fa-icon icon="eye" />
         </document-link>
 
         <edit-link
-          :document="activeDocument" :lang="activeDocument.available_langs[0]"
+          :document="activeDocument"
+          :lang="activeDocument.available_langs[0]"
           class="has-text-grey-lighter"
           @click="visible=false">
-          <fa-icon icon="edit"/>
+          <fa-icon icon="edit" />
         </edit-link>
 
         <fa-icon
           class="has-cursor-pointer"
           icon="info-circle"
-          @click="toggleImageInfo(activeDocument)"/>
+          @click="toggleImageInfo(activeDocument)" />
         <fa-icon
           class="has-cursor-pointer request-fullscreen-button"
           icon="expand"
-          @click="onRequestFullscreen"/>
+          @click="onRequestFullscreen" />
         <fa-icon
           class="has-cursor-pointer exit-fullscreen-button"
           icon="compress"
-          @click="onExitFullscreen"/>
+          @click="onExitFullscreen" />
         <fa-icon
           class="has-cursor-pointer"
           icon="plus"
           transform="rotate-45"
-          @click="visible=false"/>
+          @click="visible=false" />
       </span>
     </div>
 
     <div ref="swiper" class="image-viewer-swiper">
-      <div class="swiper-wrapper"/>
-      <div class="swiper-button-prev"/>
-      <div class="swiper-button-next"/>
+      <div class="swiper-wrapper" />
+      <div class="swiper-button-prev" />
+      <div class="swiper-button-next" />
     </div>
 
     <div class="image-viewer-pagination">
@@ -50,7 +51,7 @@
         :class="{'image-viewer-bullet-active': image === activeDocument}"
         :title="image.locales[0].title"
         @click="onPaginationClick(index)"
-        :style="`width: calc((100vw - 1.5rem) / ${images.length});`"/>
+        :style="`width: calc((100vw - 1.5rem) / ${images.length});`" />
     </div>
 
     <image-info ref="imageInfo" class="image-viewer-info" />

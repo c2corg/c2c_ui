@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <html-header title="Dashboard"/>
+    <html-header title="Dashboard" />
     <div class="box">
       <h3 class="title is-3">
         {{ $gettext('images') | uppercaseFirstLetter }}
@@ -18,7 +18,7 @@
           <loading-notification :promise="outingsPromise" />
           <div v-if="outings!=null">
             <div v-for="outing of outings.documents" :key="outing.document_id">
-              <dashboard-outing-link :outing="outing"/>
+              <dashboard-outing-link :outing="outing" />
             </div>
           </div>
         </div>
@@ -27,7 +27,7 @@
       <div class="column">
         <div class="box">
           <h3 class="title is-3" v-translate>Forum</h3>
-          <forum-widget :message-count="20"/>
+          <forum-widget :message-count="20" />
         </div>
 
         <div class="box">
@@ -37,7 +37,7 @@
           <loading-notification :promise="routesPromise" />
           <div v-if="routes!=null">
             <div v-for="route of routes.documents" :key="route.document_id">
-              <pretty-route-link :route="route"/>
+              <pretty-route-link :route="route" />
             </div>
           </div>
         </div>

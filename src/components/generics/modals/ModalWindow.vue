@@ -1,10 +1,10 @@
 <template>
   <div class="modal" :class="{'is-active': visible, 'is-wide': wide, 'is-small': small}">
-    <div class="modal-background" @click="hide" :class="{'is-transparent': hasTransparentShader}"/>
+    <div class="modal-background" @click="hide" :class="{'is-transparent': hasTransparentShader}" />
     <div class="modal-content" :class="{'has-background-danger has-text-white-bis': isDanger}">
       <header v-if="$slots.header" class="title is-3">
         <button class="delete is-pulled-right" aria-label="close" @click="hide" />
-        <slot name="header"/>
+        <slot name="header" />
       </header>
       <button v-else class="delete is-pulled-right" aria-label="close" @click="hide" />
       <slot>
