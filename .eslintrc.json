@@ -35,6 +35,7 @@
     "vue/max-attributes-per-line": "off",
     "vue/no-use-v-if-with-v-for": "error",
     "vue/html-closing-bracket-newline": "warn",
+    "vue/prop-name-casing": ["error", "camelCase"],
     "eqeqeq": "warn",
     "camelcase": "off",
     "no-trailing-spaces": "warn",
