@@ -34,6 +34,7 @@
     "vue/attributes-order": "off",
     "vue/max-attributes-per-line": "off",
     "vue/no-use-v-if-with-v-for": "error",
+    "vue/html-closing-bracket-newline": "warn",
     "eqeqeq": "warn",
     "camelcase": "off",
     "no-trailing-spaces": "warn",
