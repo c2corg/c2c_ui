@@ -2,17 +2,11 @@
 
 * maps
   * ask for an Bing Map dev key
-* signup (CAPTCHA)
 
 ## Wait for c2c issues
 
 * <https://github.com/c2corg/v6_api/issues/730>
   handle if token is obsolote or corrupted
-
-* no mail from c2c :
-  * validate_new_password : callback when requestPasswordChange
-  * validate_change_email
-  * validate_register_email
 
 ## Nice to have
 
@@ -32,12 +26,6 @@
 
 * flag functionnal components : <https://vuejs.org/v2/guide/render-function.html#Functional-Components>
 * flag v-once components : <https://vuejs.org/v2/api/#extends>
-
-## CSS
-
-* Preferences view is ugly
-* Following view is ugly
-* print CSS
 
 ## Bugs
 

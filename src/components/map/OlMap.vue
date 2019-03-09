@@ -473,9 +473,9 @@
 
       setDocumentGeometryFromGpx(gpx) {
         const gpxFormat = new ol.format.GPX();
-        const feature = gpxFormat.readFeature(gpx, { featureProjection: 'EPSG:3857' });
+        const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
 
-        this.setDocumentGeometryFromFeature(feature);
+        features.forEach(this.setDocumentGeometryFromFeature);
       },
 
       setDocumentGeometryFromFeature(feature, fitMap = true) {
