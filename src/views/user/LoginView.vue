@@ -309,7 +309,7 @@
 
         if (discourse_url) {
           // dirty way to SSO...
-          // if somebody want to implements a better solution, feel free
+          // if somebody wants to implement a better solution, feel free
           // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/auth/auth.js
           const iframe = document.createElement('iframe');
           const sandbox = document.createAttribute('sandbox');
