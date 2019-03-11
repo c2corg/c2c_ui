@@ -34,10 +34,7 @@
           <div class="columns">
 
             <div class="column is-4">
-              <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
-              </label-value>
-
+              <activities-field :document="document" />
               <field-view :document="document" :field="fields.frequentation" />
               <field-view :document="document" :field="fields.condition_rating" />
               <field-view v-if="document.partial_trip" :document="document" :field="fields.partial_trip" />

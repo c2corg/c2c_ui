@@ -125,19 +125,20 @@
 </script>
 
 <style scoped lang="scss">
-    .section-item {
-        .section-header{
-            .title{
-                margin-bottom: 5px;
-            }
-        }
-        .section-content{
-            overflow: hidden;
-            transition: max-height 0.3s;
-        }
-
-        .section-content-hidden{
-            max-height: 0;
-        }
+  .section-item {
+    .section-header{
+      .title{
+        margin-bottom: 5px;
+      }
     }
+
+    .section-content{
+      overflow: hidden;
+      transition: max-height 0.3s;
+    }
+
+    .section-content-hidden{
+      max-height: 0;
+    }
+  }
 </style>

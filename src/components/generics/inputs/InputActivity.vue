@@ -1,11 +1,11 @@
 <template>
-  <!-- Do NOT add tooltip -->
   <div class="control" :class="{'has-error':hasError}">
     <span
       v-for="activity of activities"
       :key="activity"
-      :class="{'selected':value_.includes(activity), 'with-labels' :showLabels }"
-      class="input-item"
+      :checked="value_.includes(activity)"
+      :class="{'with-labels' :showLabels }"
+      class="input-item has-cursor-pointer"
       :title="showLabels ? null : $gettext(activity, 'activities')"
       @click="toggle(activity)">
       <icon-activity :activity="activity" />
@@ -40,35 +40,49 @@
 
 <style scoped lang="scss">
 
-@import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-.input-item {
-    cursor:pointer;
+  .input-item {
     font-size:40px;
     margin:4px;
     color:#888;
+    transition: color 300ms;
+    user-select: none;
 
-}
+    svg {
+      background:white;
+      border-radius: 100%;
+      box-shadow: 2px 2px 4px grey;
+      transition: box-shadow 100ms;
+    }
+  }
 
-.with-labels{
+  .input-item:hover{
+    svg{
+      box-shadow: 3px 3px 5px grey;
+    }
+  }
+
+  .input-item[checked]{
+    color:$primary;
+  }
+
+  .with-labels{
     width: 100px;
     display: inline-flex;
     flex-direction: column;
 
     svg {
-        margin:auto
+      margin:auto;
     }
 
     .input-label{
-        text-align: center;
+      text-align: center;
     }
-}
+  }
 
-.selected{
-    color:$primary;
-}
-.has-error{
+  .has-error{
     box-shadow: 0px 0px 8px 0px $danger;
     // border: 1px solid $danger;
-}
+  }
 </style>

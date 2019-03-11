@@ -16,11 +16,7 @@
           <div class="columns">
 
             <div class="column is-4">
-
-              <label-value :label="$gettext('activities')">
-                <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
-              </label-value>
-
+              <activities-field :document="document" />
               <field-view :document="document" :field="fields.route_types" />
               <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')" />
               <field-view :document="document" :field="fields.rock_types" />

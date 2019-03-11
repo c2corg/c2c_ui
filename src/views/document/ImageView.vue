@@ -4,9 +4,7 @@
     <div v-if="document" class="columns">
       <div class="column is-3">
         <div class="box">
-          <label-value v-if="document.activities && document.activities.length" :label="$gettext('activities')">
-            <activities :activities="document.activities" />
-          </label-value>
+          <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
           <field-view :document="document" :field="fields.date_time" />
 
@@ -34,6 +32,8 @@
           <field-view :document="document" :field="fields.width" />
           <field-view :document="document" :field="fields.elevation" />
         </div>
+
+        <map-box :document="document" />
 
         <tool-box :document="document" />
       </div>

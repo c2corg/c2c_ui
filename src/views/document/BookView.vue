@@ -4,14 +4,9 @@
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3">
         <div class="box">
-          <label-value :label="$gettext('activities')">
-            <activities :activities="document.activities" />
-          </label-value>
-
+          <activities-field :document="document" />
           <field-view :document="document" :field="fields.author" />
-
           <field-view :document="document" :field="fields.book_types" />
-
           <field-view :document="document" :field="fields.editor" />
           <field-view :document="document" :field="fields.langs" />
           <field-view :document="document" :field="fields.isbn" />

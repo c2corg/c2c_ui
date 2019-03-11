@@ -10,7 +10,7 @@
 
       <div class="column is-3">
         <div class="box">
-          <field-view :document="document" :field="fields.activities" />
+          <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
           <label-value :label="$gettext('forum')">
             <a :href="$options.forumUrl + '/users/' + document.forum_username + '/activity'">
