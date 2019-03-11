@@ -4,8 +4,8 @@
       v-for="option of options"
       :key="option"
       @click="toggle(option)"
-      class="multi-select-item"
-      :class="{ 'multi-select-item-active': value_.includes(option) }">
+      class="multi-select-item has-cursor-pointer"
+      :checked="value_.includes(option)">
       {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
     </span>
 
@@ -49,11 +49,11 @@
         max-width: 100%;
         border: 1px solid $primary;
         color: $primary;
+        background-color: $white;
         border-radius:20px;
         padding: 0.2rem 0.75em;
         margin-bottom: 0.5rem;
         user-select: None;
-        cursor: pointer;
 
         transition: box-shadow 100ms, background-color 200ms, color 100ms;
     }
@@ -66,7 +66,7 @@
         margin-right: 0.5rem;
     }
 
-    .multi-select-item-active{
+    .multi-select-item[checked]{
         color: white;
         background-color: $primary;
     }

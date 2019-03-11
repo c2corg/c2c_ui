@@ -33,6 +33,10 @@
       type: { // valid input : personal Default Profile
         type: String,
         required: true
+      },
+      hideEmptyDocuments: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -154,6 +158,10 @@
 
       dispatchToColumns(items) {
         let destColumn = this.columns[0];
+
+        if (this.hideEmptyDocuments) {
+          items = items.filter((item) => item.document.quality !== 'empty');
+        }
 
         for (const item of items) {
           for (const column of this.columns) {

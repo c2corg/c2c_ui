@@ -5,11 +5,7 @@
       <div class="column is-3 is-12-print">
 
         <div class="box">
-
-          <label-value :label="$gettext('activities')">
-            <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
-          </label-value>
-
+          <activities-field :document="document" />
           <label-value v-if="document.author" :label="$gettext('author')">
             <author-link :author="document.author" />
           </label-value>

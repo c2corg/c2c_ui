@@ -4,7 +4,7 @@
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 is-12-print">
         <div class="box">
-          <field-view :document="document" :field="fields.activities" />
+          <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
           <field-view :document="document" :field="fields.article_type" />
           <field-view :document="document" :field="fields.quality" />
