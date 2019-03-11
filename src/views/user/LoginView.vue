@@ -223,6 +223,7 @@
         termsAgreed: false,
 
         from: null,
+        redirectionStillDone: false,
 
         promise: {}
       };
@@ -248,6 +249,14 @@
       next((vm) => {
         vm.from = from;
       });
+    },
+
+    created() {
+      if (this.$route.name === 'auth-sso') {
+        if (this.$route.query.logout !== undefined) {
+          this.$user.signout();
+        }
+      }
     },
 
     mounted() {
@@ -292,7 +301,41 @@
 
       signin() {
         this.promise = this.$user.signIn(this.username, this.password)
-          .then(() => this.$router.push(this.from.fullPath));
+          .then(this.onSucessSigin);
+      },
+
+      onSucessSigin(data) {
+        const discourse_url = data.data.redirect_internal;
+
+        if (discourse_url) {
+          // dirty way to SSO...
+          // if somebody wants to implement a better solution, feel free
+          // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/auth/auth.js
+          const iframe = document.createElement('iframe');
+          const sandbox = document.createAttribute('sandbox');
+
+          sandbox.value = 'allow-same-origin';
+          iframe.style.display = 'none';
+          iframe.setAttributeNode(sandbox);
+          iframe.src = discourse_url;
+
+          // 10s to complete discourse authentication
+          window.setTimeout(this.redirect, 10000);
+          iframe.addEventListener('load', this.redirect);
+
+          this.promise.loading = true;
+          document.body.appendChild(iframe);
+        } else {
+          this.redirect();
+        }
+      },
+
+      redirect() {
+        // redirect() may be called twice
+        if (!this.redirectionStillDone) {
+          this.redirectionStillDone = true;
+          this.$router.push(this.from.fullPath);
+        }
       },
 
       signup() {

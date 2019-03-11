@@ -57,6 +57,7 @@ const routes = [
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/auth', name: 'auth', component: LoginView },
+  { path: '/auth-sso', name: 'auth-sso', component: LoginView },
   { path: '/account', name: 'account', component: AccountView },
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },

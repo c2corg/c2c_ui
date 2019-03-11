@@ -75,6 +75,8 @@ export default function install(Vue) {
       },
 
       signout() {
+        c2c.userProfile.logout();
+
         this.token = null;
         this.roles = [];
         this.id = null;
