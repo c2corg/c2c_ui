@@ -79,8 +79,12 @@ UserProfileService.prototype.login = function(username, password) {
   return this.api.post('/users/login', {
     username,
     password,
-    discourse: false
+    discourse: true
   });
+};
+
+UserProfileService.prototype.logout = function() {
+  return this.api.post('/users/logout', { discourse: true });
 };
 
 UserProfileService.prototype.update_preferred_language = function(lang) {
