@@ -89,6 +89,8 @@
           addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
           addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
           addClasses('table[c2c\\:role=ltag]', ['table']);
+
+          addClasses('[c2c\\:role=embedded-image]', ['no-print']);
         }
       },
 
