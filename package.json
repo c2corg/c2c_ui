@@ -43,7 +43,7 @@
     "vuejs-datepicker": "1.5.4"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.4.1",
+    "@vue/cli-plugin-babel": "3.5.1",
     "@vue/cli-plugin-eslint": "3.4.1",
     "@vue/cli-plugin-typescript": "3.4.1",
     "@vue/cli-service": "3.4.1",
