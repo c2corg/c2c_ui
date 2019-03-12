@@ -103,11 +103,11 @@
           </div>
         </div>
 
-        <div class="box" v-if="locale.description || locale.access || locale.summary || locale.access_period">
+        <div class="box" v-if="locale.summary || locale.access_period || locale.description || locale.access">
           <markdown-section :document="document" :field="fields.summary" />
+          <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
           <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
           <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
-          <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
           <div style="clear:both" />
         </div>
 
