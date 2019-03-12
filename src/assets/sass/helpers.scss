@@ -77,4 +77,30 @@
         width: 100%!important;
     }
 
+    /*write the activity's title instead of the icon*/
+    .is-size-3{
+        font-size: 1rem !important;
+    }
+
+    .title-print {
+        color: black;
+    }
+
+    .title-print:not(:last-child):after {
+        content: attr(title) ", ";
+    }
+
+    .title-print:last-child:after {
+        content: attr(title);
+    }
+
+    /*reduce font-size and margin*/
+    html{
+        font-size: 12px !important;
+    }
+
+    .markdown-content>h3 {
+        margin:0 !important;
+    }
+
 }
