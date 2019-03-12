@@ -11,7 +11,7 @@
       :title="$gettext('general informations')"
       :sub-title="$gettext('Waypoint\'s main properties')">
       <div class="columns">
-        <form-field :document="document" :field="fields.waypoint_type" class="is-narrow" />
+        <form-field class="is-narrow" :document="document" :field="fields.waypoint_type" />
         <form-field :document="document" :field="fields.title" />
       </div>
 
@@ -125,21 +125,31 @@
       :sub-title="$gettext('Waypoint\'s textual description')">
 
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.summary" :placeholder="$gettext('write a summary')" />
-        <form-field class="is-12" :document="document" :field="fields.description" :placeholder="descriptionPlaceholder" />
-      </div>
-
-      <div class="columns is-multiline">
         <form-field
+          class="is-12"
           :document="document"
-          :field="fields.access"
-          :placeholder="accessPlaceholder"
-          :label="accessTitle" />
+          :field="fields.summary"
+          :placeholder="$gettext('write a summary')" />
+
         <form-field
+          class="is-12"
           :document="document"
           :field="fields.access_period"
           :placeholder="accessPeriodPlaceholder"
           :label="accessPeriodTitle" />
+
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.description"
+          :placeholder="descriptionPlaceholder" />
+
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.access"
+          :placeholder="accessPlaceholder"
+          :label="accessTitle" />
       </div>
     </form-section>
 
