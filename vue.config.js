@@ -51,12 +51,18 @@ const result = {
   }
 };
 
+/* Please not that all key present in this file are public keys
+ * They don't need to be hidden.
+ * If you need to use a private key, please do NOT add it here
+ */
+
 const config = {
   routerMode: 'history', // for pretty urls
   ignApiKey: undefined,
   bingApiKey: undefined,
   isProduction: false,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
+  googleAnalyticsKey: 'UA-2814179-1',
   urlsConfigurations: {
     demo: {
       name: 'demo',

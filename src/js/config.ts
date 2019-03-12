@@ -15,6 +15,7 @@ class Config {
     urls: any
     ignApiKey: string
     bingApiKey: string
+    googleAnalyticsKey: string
     isProduction: boolean
     urlsConfigurations: any
     publicPath: string
@@ -25,6 +26,7 @@ class Config {
         this.routerMode = config.routerMode;
         this.ignApiKey = config.ignApiKey;
         this.bingApiKey = config.bingApiKey;
+        this.googleAnalyticsKey = config.googleAnalyticsKey;
         this.isProduction = config.isProduction;
         this.urlsConfigurations = config.urlsConfigurations;
         this.publicPath = config.publicPath;
