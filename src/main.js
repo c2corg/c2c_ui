@@ -2,6 +2,10 @@
 import Vue from 'vue';
 import App from '@/App.vue';
 
+import config from '@/js/config.ts';
+
+import VueAnalytics from 'vue-analytics';
+
 import router from '@/js/vue-plugins/router';
 
 import alertWindow from '@/js/vue-plugins/alert-window';
@@ -22,6 +26,38 @@ Vue.config.productionTip = false;
 Vue.config.silent = false;
 
 Vue.use(localStorage); // First, vm.$localStorage property
+
+// Google analytics
+Vue.use(VueAnalytics, {
+  id: config.googleAnalyticsKey,
+  // debug: {
+  //   enabled: true, // default value
+  //   trace: true, // default value
+  //   sendHitTask: true // default value
+  // },
+  router,
+  autoTracking: {
+    // do not send updates if query parameter has changed
+    // note that skipSamePath does not do the job, as document's titles is part of route
+    // https://github.com/MatteoGabriele/vue-analytics/blob/master/docs/page-tracking.md#customize-router-updates
+    shouldRouterUpdate(to, from) {
+      return to.name !== from.name || String(to.params.id) !== String(from.params.id);
+    },
+    pageviewTemplate(route) {
+      return {
+        page: route.path,
+        title: 'Camptocamp.org',
+        location: window.location.href
+      };
+    }
+  },
+  set: [
+    { field: 'anonymizeIp', value: true }
+  ],
+  fields: {
+    cookieDomain: window.location.host === 'localhost:8080' ? 'none' : window.location.host
+  }
+});
 
 Vue.use(vueMoment); // moment functions
 Vue.use(documentUtils); // getDocumentType, getLocale functions
