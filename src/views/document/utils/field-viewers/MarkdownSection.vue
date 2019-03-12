@@ -5,7 +5,7 @@
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
       </span>
       <fa-icon
-        class="is-size-6 is-pulled-right has-cursor-pointer"
+        class="is-size-6 is-pulled-right has-cursor-pointer no-print"
         icon="angle-down"
         :rotation="visible ? undefined : 180"
         @click="visible=!visible" />
