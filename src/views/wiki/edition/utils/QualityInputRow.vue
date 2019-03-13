@@ -1,34 +1,33 @@
 <template>
-  <div class="columns is-mobile">
-    <div class="column is-narrow">
-      <div class="field">
-        <label class="label">
+  <div>
+    <div class="field">
+      <label class="label">
+        <input-yes-no
+          v-if="automaticComputationAvailable"
+          :prefix="$gettext('quality')"
+          :label-yes="$gettext('Automatic', 'quality computation')"
+          :label-no="$gettext('Manual', 'quality computation')"
+          v-model="autoComputeQuality" />
+        <span v-else>
           {{ $gettext('quality') | uppercaseFirstLetter }}
-        </label>
-
-        <input-simple
-          v-if="autoComputeQuality && automaticComputationAvailable"
-          :value="$gettext(computedQuality, 'quality_types')"
-          disabled />
-        <input-simple
-          v-else
-          :options="$options.quality_types"
-          i18n
-          i18n-context="quality_types"
-          required
-          v-model="manualQuality" />
-      </div>
+        </span>
+      </label>
     </div>
-    <div v-if="automaticComputationAvailable" class="column is-narrow">
-      <div class="field">
-        <label class="label" v-translate>
-          Auto-compute quality
-        </label>
-
-        <div class="control">
-          <input-yes-no v-model="autoComputeQuality" />
-        </div>
-      </div>
+    <div class="field quality-select-container">
+      <input-simple
+        v-if="autoComputeQuality && automaticComputationAvailable"
+        :options="$options.quality_types"
+        i18n
+        i18n-context="quality_types"
+        :value="computedQuality"
+        disabled />
+      <input-simple
+        v-else
+        :options="$options.quality_types"
+        i18n
+        i18n-context="quality_types"
+        required
+        v-model="manualQuality" />
     </div>
   </div>
 </template>
@@ -259,3 +258,9 @@
     quality_types: constants.quality_types
   };
 </script>
+
+<style lang="scss" scoped>
+  .quality-select-container{
+    max-width: 20rem;
+  }
+</style>
