@@ -63,7 +63,7 @@
           result.set(outing.document_id, outing);
         }
 
-        return [...result.values()];
+        return [...result.values()].filter((outing) => outing.quality !== 'empty');
       },
 
       query() {
