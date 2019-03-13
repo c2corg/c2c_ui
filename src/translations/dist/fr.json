@@ -165,7 +165,9 @@
     "Author": "Auteur",
     "author": "Auteur",
     "author_status": "Implication dans la situation",
-    "Auto-compute quality": "Complétude automatique",
+    "Automatic": {
+      "quality computation": "Automatique"
+    },
     "autonomous": {
       "autonomies": "autonome"
     },
@@ -814,6 +816,9 @@
     "Make profile page public": "Rendre publique la page de profil",
     "male": {
       "genders": "homme"
+    },
+    "Manual": {
+      "quality computation": "Manuelle"
     },
     "map": "carte",
     "Map only": "Uniquement la carte",
