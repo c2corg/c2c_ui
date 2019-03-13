@@ -1,92 +1,102 @@
 <template>
   <section class="section has-text-centered">
-    <html-header title="Page not found" />
-    <h1 class="title is-1" v-translate>Ooops</h1>
-    <h3 class="subtitle is-3" v-translate>Page not found</h3>
+    <html-header :title="$gettext('Page not found')" />
 
-    <p v-translate>The page you are looking for does not exist or is broken.</p>
-    <p>{{ $route.fullPath }}</p>
+    <div class="content">
+      <h1 v-translate>Ooops</h1>
+      <h3 v-translate>Page not found</h3>
 
-    <p>
-      <a href="javascript:history.go(-1)" v-translate>Go to the previous page</a>
-      <span v-translate> or try the following pages:</span>
-    </p>
+      <p v-translate>The page you are looking for does not exist or is broken.</p>
+      <p>
+        <a href="javascript:history.go(-1)" v-translate>Go to the previous page</a>
+        <span>&nbsp;</span>
+        <span v-translate>or try the following pages:</span>
+      </p>
+    </div>
 
-    <div class="is-flex">
-      <router-link :to="{name:'home'}">
-        <fa-icon icon="home" />
-        <div v-translate>Home</div>
-      </router-link>
-
-      <router-link to="outings">
-        <icon-outing />
-        <div v-translate>outings</div>
-      </router-link>
-
-      <router-link to="waypoints">
-        <icon-waypoint />
-        <div v-translate>waypoints</div>
-      </router-link>
-
-      <router-link to="routes">
-        <icon-route />
-        <div v-translate>routes</div>
-      </router-link>
-
-      <router-link to="articles">
-        <icon-article />
-        <div v-translate>articles</div>
-      </router-link>
-
-      <router-link to="books">
-        <icon-book />
-        <div v-translate>books</div>
-      </router-link>
-
-      <router-link to="xreports">
-        <icon-xreport />
-        <div v-translate>xreports</div>
-      </router-link>
-
-      <router-link to="images">
-        <icon-image />
-        <div v-translate>images</div>
-      </router-link>
-
-      <router-link to="areas">
-        <icon-area />
-        <div v-translate>areas</div>
+    <div class="notfound-buttons">
+      <router-link
+        v-for="(button, i) of buttons"
+        :key="i"
+        :to="button.to"
+        class="is-size-4 has-text-normal has-hover-background has-text-weight-bold">
+        <component
+          :is="button.iconComponent || 'fa-icon'"
+          :icon="button.icon"
+          class="has-text-secondary is-size-1" />
+        <div>{{ button.text | uppercaseFirstLetter }}</div>
       </router-link>
     </div>
 
-    <div>
-      <img src="@/assets/img/falling.svg">
-    </div>
+    <img class="falling-image" src="@/assets/img/falling.svg">
+
   </section>
 </template>
 
-<style scoped lang="scss">
+<script>
+  const buildDocumentTypeButton = function(documentType, text) {
+    return {
+      to: documentType + 's',
+      iconComponent: 'icon-' + documentType,
+      text
+    };
+  };
 
-.is-flex{
+  export default {
+    data() {
+      return {
+        buttons: [
+          {
+            to: { name: 'home' },
+            icon: 'home',
+            text: this.$gettext('Home')
+          },
+          buildDocumentTypeButton('outing', this.$gettext('outings')),
+          buildDocumentTypeButton('waypoint', this.$gettext('waypoints')),
+          buildDocumentTypeButton('route', this.$gettext('routes')),
+          buildDocumentTypeButton('article', this.$gettext('routes')),
+          buildDocumentTypeButton('book', this.$gettext('books')),
+          buildDocumentTypeButton('xreport', this.$gettext('xreports')),
+          buildDocumentTypeButton('image', this.$gettext('images')),
+          buildDocumentTypeButton('area', this.$gettext('areas'))
+        ]
+      };
+    }
+  };
+</script>
+
+<style scoped lang="scss">
+  @import '@/assets/sass/variables.scss';
+
+  .notfound-buttons{
     display: flex;
     flex-flow : wrap row;
     justify-content: center;
     max-width: 660px;
     margin:auto;
-}
 
-.is-flex a{
-    width:100px;
-    height:100px;
-    border:3px solid white;
-    border-radius : 50%;
-    margin-left:10px;
-    margin-right:10px;
-    padding-top:15px;
-    background: #EEE;
-    transition: 0.3s;
-}
-.is-flex a:hover{
-    background:#DDD;
-}
+    a {
+      width:33%;
+      padding: 20px 0;
+      transition: 0.3s;
+    }
+  }
+
+  .falling-image{
+    transition-property: transform;
+    transition-duration: 1s;
+  }
+
+  .falling-image:hover {
+    animation-name: rotate;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes rotate {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+  }
+
 </style>

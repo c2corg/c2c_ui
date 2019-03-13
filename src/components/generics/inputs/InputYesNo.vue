@@ -1,13 +1,15 @@
 <template>
   <div class="control">
-
+    <span v-if="prefix !== null">
+      {{ prefix | uppercaseFirstLetter }} :
+    </span>
     <input
       :id="'c2c-' + _uid + '_yes'"
       type="radio"
       :value="true"
       class="is-checkradio is-primary"
       v-model="value_">
-    <label :for="'c2c-' + _uid + '_yes'">{{ $gettext('yes') | uppercaseFirstLetter }}</label>
+    <label :for="'c2c-' + _uid + '_yes'">{{ labelYes || $gettext('yes') | uppercaseFirstLetter }}</label>
 
     <input
       :id="'c2c-' + _uid + '_no'"
@@ -15,7 +17,7 @@
       :value="false"
       class="is-checkradio is-primary"
       v-model="value_">
-    <label :for="'c2c-' + _uid + '_no'">{{ $gettext('no') | uppercaseFirstLetter }}</label>
+    <label :for="'c2c-' + _uid + '_no'">{{ labelNo || $gettext('no') | uppercaseFirstLetter }}</label>
 
     <input
       v-if="nullable"
@@ -45,6 +47,18 @@
       nullable: {
         type: Boolean,
         default: false
+      },
+      prefix: {
+        type: String,
+        default: null
+      },
+      labelYes: {
+        type: String,
+        default: null
+      },
+      labelNo: {
+        type: String,
+        default: null
       }
     }
   };

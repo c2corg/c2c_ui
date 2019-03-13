@@ -1,5 +1,5 @@
 <template>
-  <div class="columns is-mobile">
+  <div class="columns is-mobile is-multiline">
     <div class="column is-narrow">
       <div class="control">
         <button
@@ -11,7 +11,14 @@
         </button>
       </div>
     </div>
-    <div class="column">
+    <div class="column is-narrow">
+      <button class="button" @click="$emit('preview')">
+        <fa-icon icon="eye" />
+        <span>&nbsp;</span>
+        <span v-translate>Preview</span>
+      </button>
+    </div>
+    <div class="column is-12-mobile">
       <div class="control is-expanded">
         <input
           v-model="comment"
@@ -20,13 +27,6 @@
           :disabled="mode !== 'edit'"
           :placeholder="$gettext('comment')">
       </div>
-    </div>
-    <div class="column is-narrow">
-      <button class="button" @click="$emit('preview')">
-        <fa-icon icon="eye" />
-        <span>&nbsp;</span>
-        <span v-translate>Preview</span>
-      </button>
     </div>
   </div>
 </template>
