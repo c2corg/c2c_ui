@@ -43,24 +43,31 @@
       </div>
 
       <div class="has-text-centered">
-        <login-button v-if="!$user.isLogged" v-translate>
+        <login-button v-if="!$user.isLogged" key="not-logged" v-translate>
           Log in to post a comment
         </login-button>
 
         <!-- API bug with first comment creation?  -->
         <button
           v-else-if="locale.topic_id === null"
+          key="no-topic"
           class="button is-primary"
           @click="createTopic"
           :disabled="!$options.isProduction"
           v-translate>
           Post the first comment
         </button>
+
         <!-- Only the system comment exists -->
-        <a v-else-if="comments.length === 0" :href="discussionUrl" class="button is-primary" v-translate>
-          Post the first comment
+        <a
+          v-else-if="comments.length === 0"
+          key="no-comment"
+          :href="discussionUrl"
+          class="button is-primary"
+          v-translate>
+          Post the first commentss
         </a>
-        <a v-else :href="discussionUrl" class="button is-primary">
+        <a v-else key="normal" :href="discussionUrl" class="button is-primary">
           <span v-translate>Continue the discussion</span>
         </a>
       </div>
