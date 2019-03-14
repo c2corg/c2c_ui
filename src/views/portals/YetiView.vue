@@ -11,7 +11,7 @@
     </div>
 
     <div class="columns yeti-content">
-      <div class="column is-7 form-container">
+      <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
         <div class="box">
           <h2 class="title is-2">
             <a class="is-size-6 is-pulled-right" href="/    yeti_faq.pdf">FAQ ?</a>
@@ -288,7 +288,7 @@
         </div>
       </div>
 
-      <div class="column is-5 map-container">
+      <div class="column map-container">
         <div class="legend">
           <div>
             <div class="legend-button is-pulled-right ol-control">
