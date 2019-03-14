@@ -14,7 +14,7 @@
       <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
         <div class="box">
           <h2 class="title is-2">
-            <a class="is-size-6 is-pulled-right" href="/    yeti_faq.pdf">FAQ ?</a>
+            <a class="is-size-6 is-pulled-right" href="/yeti_faq.pdf">FAQ ?</a>
             <span>Info BRA</span>
           </h2>
           <div class="columns">
