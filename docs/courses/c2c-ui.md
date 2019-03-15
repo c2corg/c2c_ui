@@ -57,11 +57,6 @@ Based on vue mono-file component. A component is always a file
   * They are used by plenty components, and they are available everywhere ([Here is the trick](https://github.com/c2corg/c2c_ui/tree/master/src/js/vue-plugins/generic-components.js))
 
 
-### Script
-
-You must use typescript by adding `lang="ts"` attribute on `<script>` tag
-
-
 ### Styles
 
 The framework used is [Bulma](https://bulma.io/)

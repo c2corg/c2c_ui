@@ -152,7 +152,7 @@
 </template>
 
 <script>
-  import config from '@/js/config.ts';
+  import config from '@/js/config';
 
   export default {
 

@@ -1,6 +1,6 @@
 
 import BaseApi from '@/js/apis/BaseApi.js';
-import config from '@/js/config.ts';
+import config from '@/js/config';
 
 function Forum() {
   BaseApi.call(this, config.urls.forum);

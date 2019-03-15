@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import App from '@/App.vue';
 
-import config from '@/js/config.ts';
+import config from '@/js/config';
 
 import VueAnalytics from 'vue-analytics';
 

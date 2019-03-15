@@ -3,7 +3,7 @@
   <fa-icon :icon="['quality', quality]" />
 </template>
 
-<script lang="ts">
+<script>
   export default {
     props: {
       quality: {

@@ -48,7 +48,7 @@
 
 <script>
 
-  import config from '@/js/config.ts';
+  import config from '@/js/config';
   import documentViewMixin from './utils/document-view-mixin.js';
 
   import OutingsDownloader from './utils/OutingsDownloader';

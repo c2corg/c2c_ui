@@ -1,4 +1,4 @@
-import config from '@/js/config.ts';
+import config from '@/js/config';
 import constants from '@/js/constants';
 
 import BaseApi from '@/js/apis/BaseApi.js';

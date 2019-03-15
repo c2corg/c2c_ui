@@ -38,6 +38,3 @@
 ## Doc
 
 * Probably <https://github.com/vue-styleguidist/vue-cli-plugin-styleguidist>
-
-"@vue/typescript"
-"@vue/cli-plugin-typescript": "^3.2.0",
