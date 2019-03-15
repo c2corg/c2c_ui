@@ -5,17 +5,15 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+RUN npm run generate-health
 
 # production stage
-FROM nginx:stable-alpine as production-stage
+FROM openresty/openresty:stretch as production-stage
 COPY --from=build-stage /dist /usr/share/nginx/html
-COPY ./scripts/nginx.conf /etc/nginx/conf.d/default.conf.template
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf.template
 
-# This is a hack around the envsubst nginx config. Because we have `$uri` set up, it would replace this as well.
-# Now we just reset it to its original value.
-ENV uri \$uri
 # Default configuration
 ENV PORT 80
 ENV SERVER_NAME _
 
-CMD ["sh", "-c", "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "envsubst '${PORT},${SERVER_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && /usr/bin/openresty -g 'daemon off;'"]
