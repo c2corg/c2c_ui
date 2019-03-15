@@ -1,4 +1,4 @@
-import config from '@/js/config.ts';
+import config from '@/js/config';
 import ol from '@/js/libs/ol.js';
 
 function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {

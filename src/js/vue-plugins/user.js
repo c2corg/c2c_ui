@@ -1,5 +1,5 @@
 import c2c from '@/js/apis/c2c';
-import config from '@/js/config.ts';
+import config from '@/js/config';
 
 export default function install(Vue) {
   Vue.prototype.$user = new Vue({

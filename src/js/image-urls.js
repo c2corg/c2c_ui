@@ -1,4 +1,4 @@
-import config from '@/js/config.ts';
+import config from '@/js/config';
 
 const getUrl = function(image, size) {
   if (!image.filename) {

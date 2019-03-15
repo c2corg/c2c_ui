@@ -4,7 +4,7 @@
     :icon="[condition !== null ? 'fas' : 'far', 'circle']" />
 </template>
 
-<script lang="ts">
+<script>
   export default {
     props: {
       condition: {

@@ -2,7 +2,7 @@
   <fa-icon :icon="['waypoint', waypointType]" />
 </template>
 
-<script lang="ts">
+<script>
   export default {
     props: {
       waypointType: {

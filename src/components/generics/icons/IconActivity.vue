@@ -2,7 +2,7 @@
   <fa-icon :icon="['activity', activity]" />
 </template>
 
-<script lang="ts">
+<script>
 
   export default {
     props: {

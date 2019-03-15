@@ -8,7 +8,7 @@
 <script>
   import { icon } from '@fortawesome/fontawesome-svg-core';
 
-  import config from '@/js/config.ts';
+  import config from '@/js/config';
 
   // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
   function guardEvent(e) {
