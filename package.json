@@ -40,7 +40,7 @@
     "vue-property-decorator": "8.0.0",
     "vue-recaptcha": "^1.1.1",
     "vue-router": "3.0.2",
-    "vue-slider-component": "2.8.13",
+    "vue-slider-component": "3.0.14",
     "vuejs-datepicker": "1.5.4"
   },
   "devDependencies": {
