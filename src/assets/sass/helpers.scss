@@ -82,25 +82,9 @@
         font-size: 1rem !important;
     }
 
-    .title-print {
-        color: black;
-    }
-
-    .title-print:not(:last-child):after {
-        content: attr(title) ", ";
-    }
-
-    .title-print:last-child:after {
-        content: attr(title);
-    }
-
     /*reduce font-size and margin*/
-    html{
+   body{
         font-size: 12px !important;
-    }
-
-    .markdown-content>h3 {
-        margin:0 !important;
     }
 
 }
