@@ -9,6 +9,8 @@ export default {
         query[this.field.url] = value === this.field.defaultUrlQuery ? undefined : value;
 
         if (query[this.field.url] !== this.$route.query[this.field.url]) {
+          // we always reset offset to first page
+          query.offset = undefined;
           this.$router.push({ query });
         }
       }

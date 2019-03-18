@@ -1,16 +1,16 @@
 <template>
-  <div class="columns is-mobile is-variable is-1">
-    <div class="column is-narrow">
+  <div class="columns is-mobile is-variable is-0">
+    <div class="column date-container">
       <input-date v-model="date" />
     </div>
-    <div class="column is-narrow">
+    <div class="column is-narrow hour-container">
       <div class="select">
         <select v-model="hour">
           <option v-for="i of hours" :key="i">{{ i }}</option>
         </select>
       </div>
     </div>
-    <div class="column is-narrow">
+    <div class="column is-narrow minute-container">
       <div class="select">
         <select v-model="minute">
           <option v-for="i of minutes" :key="i">{{ i }}</option>
@@ -105,3 +105,23 @@
     }
   };
 </script>
+
+<style scoped lang="scss">
+  .date-container{
+    padding-right: 0.5rem!important;
+  }
+
+  .hour-container{
+    .select select{
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  .minute-container{
+    .select select{
+      border-left: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+</style>

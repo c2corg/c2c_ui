@@ -13,15 +13,20 @@
         <form-field class="is-narrow" :document="document" :field="fields.image_type" />
         <form-field class="is-12" :document="document" :field="fields.activities" />
         <form-field class="is-4" :document="document" :field="fields.author" />
-        <form-field class="is-8" :document="document" :field="fields.date_time" />
+        <form-field class="is-narrow" :document="document" :field="fields.date_time" />
         <form-field class="is-12" :document="document" :field="fields.categories" />
 
         <!--<form-field :document="document" :field="fields.author" />-->
 
-        <form-field class="is-6" :document="document" :field="fields.filename" />
-        <form-field class="is-6" :document="document" :field="fields.file_size" />
-        <form-field class="is-6" :document="document" :field="fields.height" />
-        <form-field class="is-6" :document="document" :field="fields.width" />
+        <div class="column is-6">
+          <form-field no-wrapper :document="document" :field="fields.filename" />
+          <form-field no-wrapper :document="document" :field="fields.file_size" />
+          <form-field no-wrapper :document="document" :field="fields.height" />
+          <form-field no-wrapper :document="document" :field="fields.width" />
+        </div>
+        <div v-if="mode==='edit' && document" class="column is-6 has-text-centered">
+          <img :src="getImageUrl(document)">
+        </div>
       </div>
 
     </form-section>
@@ -71,10 +76,14 @@
 </template>
 
 <script>
-
+  import imageUrls from '@/js/image-urls';
   import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
   export default {
-    mixins: [ documentEditionViewMixin ]
+    mixins: [ documentEditionViewMixin ],
+
+    methods: {
+      getImageUrl: imageUrls.getMedium
+    }
   };
 </script>

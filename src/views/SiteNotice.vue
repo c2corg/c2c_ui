@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="hasAnnouncement && !hidden"
-    class="has-background-info has-text-light no-print"
+    class="site-notice has-background-info has-text-white no-print"
     @click="showContent=!showContent">
     <div class="section is-info">
       <button class="delete" @click="hide" />
@@ -80,12 +80,21 @@
 
 </script>
 
+<style lang="scss">
+  .site-notice{
+    a, a:hover {
+      color: currentColor;
+      text-decoration: underline;
+    }
+  }
+</style>
+
 <style scoped lang="scss">
 
-.delete{
+  .delete{
     position:absolute;
     top:0.5rem;
     right:0.5rem;
-}
+  }
 
 </style>
