@@ -190,6 +190,10 @@
     .page-content{
       padding-top: 0;
     }
+
+    html{
+        font-size: 12px !important;
+    }
   }
 
 </style>
