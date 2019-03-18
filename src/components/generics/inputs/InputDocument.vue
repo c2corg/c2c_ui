@@ -70,7 +70,7 @@
             :to="{name: type + 's', query: {q: searchText}}"
             class="dropdown-item is-italic has-text-centered"
             v-translate>
-            More results
+            See more results
           </router-link>
         </div>
 

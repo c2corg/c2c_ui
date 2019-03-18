@@ -339,7 +339,7 @@ msgstr ""
 msgid "Articles, waypoints or routes to be linked."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:63
+#: src/views/wiki/edition/ImageEditionView.vue:68
 msgid "Articles, waypoints, routes or books to be linked."
 msgstr ""
 
@@ -370,7 +370,7 @@ msgid "association"
 msgstr ""
 
 #: src/views/wiki/edition/BookEditionView.vue:37
-#: src/views/wiki/edition/ImageEditionView.vue:62
+#: src/views/wiki/edition/ImageEditionView.vue:67
 #: src/views/wiki/edition/WaypointEditionView.vue:157
 msgid "associations"
 msgstr ""
@@ -605,7 +605,7 @@ msgctxt "rock_types"
 msgid "calcaire"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:41
+#: src/views/wiki/edition/ImageEditionView.vue:46
 msgid "camera settings"
 msgstr ""
 
@@ -850,7 +850,7 @@ msgstr ""
 msgid "contact"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:64
+#: src/views/document/utils/boxes/CommentsBox.vue:71
 msgid "Continue the discussion"
 msgstr ""
 
@@ -1096,7 +1096,7 @@ msgstr ""
 msgid "Detailed figures, like ratings, height differences, frequentation..."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:53
+#: src/views/wiki/edition/ImageEditionView.vue:58
 msgid "Detailed information"
 msgstr ""
 
@@ -1523,7 +1523,7 @@ msgstr ""
 msgid "Geolocation"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:30
+#: src/views/wiki/edition/ImageEditionView.vue:35
 msgid "geolocation"
 msgstr ""
 
@@ -2589,7 +2589,7 @@ msgstr ""
 msgid "no info"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:73
+#: src/components/generics/inputs/InputDocument.vue:79
 msgid "No match?"
 msgstr ""
 
@@ -2679,7 +2679,7 @@ msgstr ""
 msgid "Open fields to deeply explain the event circumstances."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:54
+#: src/views/wiki/edition/ImageEditionView.vue:59
 msgid "Open fields to detail the picture's context"
 msgstr ""
 
@@ -2785,7 +2785,7 @@ msgctxt "waypoint_types"
 msgid "paragliding_takeoff"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:42
+#: src/views/wiki/edition/ImageEditionView.vue:47
 msgid "Parameters of the Digital Camera"
 msgstr ""
 
@@ -2940,8 +2940,8 @@ msgctxt "glacier_ratings"
 msgid "possible"
 msgstr ""
 
-#: src/views/document/utils/boxes/CommentsBox.vue:56
-#: src/views/document/utils/boxes/CommentsBox.vue:60
+#: src/views/document/utils/boxes/CommentsBox.vue:57
+#: src/views/document/utils/boxes/CommentsBox.vue:67
 msgid "Post the first comment"
 msgstr ""
 
@@ -2965,7 +2965,7 @@ msgctxt "weather_station_types"
 msgid "precipitation_heater"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:31
+#: src/views/wiki/edition/ImageEditionView.vue:36
 msgid "Precise localisation of the shooting"
 msgstr ""
 
@@ -3373,6 +3373,10 @@ msgstr ""
 
 #: src/views/document/utils/DocumentVersionBanner.vue:26
 msgid "see actual version"
+msgstr ""
+
+#: src/components/generics/inputs/InputDocument.vue:72
+msgid "See more results"
 msgstr ""
 
 #: src/views/document/utils/boxes/ToolBox.vue:36

@@ -65,7 +65,7 @@
           :href="discussionUrl"
           class="button is-primary"
           v-translate>
-          Post the first commentss
+          Post the first comment
         </a>
         <a v-else key="normal" :href="discussionUrl" class="button is-primary">
           <span v-translate>Continue the discussion</span>
