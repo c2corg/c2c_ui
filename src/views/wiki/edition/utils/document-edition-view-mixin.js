@@ -36,7 +36,8 @@ export default {
       promise: {},
       fields: null, // keep fields here to set them reactive
       genericErrors: [],
-      saving: false
+      saving: false,
+      saved: false
     };
   },
 
@@ -82,6 +83,19 @@ export default {
         vm.$router.push({ name: 'auth' });
       }
     });
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if (!this.saved) {
+      const answer = window.confirm('Do you really want to leave? you have unsaved changes!');
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
+    } else {
+      next();
+    }
   },
 
   methods: {
@@ -210,10 +224,12 @@ export default {
 
       if (this.mode === 'edit') {
         promise = c2c[this.documentType].save(this.document, comment).then(() => {
+          this.saved = true;
           this.goToDocument(this.document.document_id);
         });
       } else {
         promise = c2c[this.documentType].create(this.document).then(response => {
+          this.saved = true;
           this.goToDocument(response.data.document_id);
         });
       }
