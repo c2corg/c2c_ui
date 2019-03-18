@@ -97,6 +97,10 @@
         }.bind(this);
 
         reader.readAsText(event.target.files[0]);
+
+        // empty the input, because if user wan't to upload same trace
+        // change event is not fired
+        this.$refs.gpxFileInput.value = '';
       },
 
       setGeometryPoint() {
