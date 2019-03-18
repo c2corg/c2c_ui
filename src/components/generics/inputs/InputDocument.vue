@@ -67,6 +67,7 @@
             </div>
           </div>
           <router-link
+            v-if="showMoreResultsLink"
             :to="{name: type + 's', query: {q: searchText}}"
             class="dropdown-item is-italic has-text-centered"
             v-translate>

@@ -27,6 +27,7 @@
           :class="{'is-hidden-mobile': hideSearchInput}"
           :document-type="['waypoint', 'route', 'article', 'book']"
           propose-creation
+          show-more-results-link
           @input="go" />
 
         <div
