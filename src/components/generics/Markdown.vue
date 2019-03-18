@@ -89,8 +89,6 @@
           addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
           addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
           addClasses('table[c2c\\:role=ltag]', ['table']);
-
-          addClasses('[c2c\\:role=embedded-image]', ['no-print']);
         }
       },
 
@@ -257,4 +255,16 @@
     overflow: hidden;
   }
 
+  @media print {
+    .markdown-content:not(:last-child){
+      margin-bottom:0.5rem!important;
+    }
+
+    .markdown-content{
+      h3{
+        font-size:1.2rem!important;
+        margin-bottom:0.25em!important;
+      }
+    }
+  }
 </style>

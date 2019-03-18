@@ -58,4 +58,13 @@
       border-bottom:1px solid #DDD;
     }
   }
+
+  @media print{
+    .markdown-section{
+      .title{
+        font-size:1.2rem!important;
+        margin-bottom:0.25em!important;
+      }
+    }
+  }
 </style>
