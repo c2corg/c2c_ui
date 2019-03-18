@@ -106,7 +106,7 @@ const openTopoMap = new ol.layer.Tile({
 });
 
 const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
-const ignOrtho = createIgnSource('IGN otho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+const ignOrtho = createIgnSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
 const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
 
 const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');

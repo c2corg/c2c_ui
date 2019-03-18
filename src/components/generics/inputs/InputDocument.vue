@@ -66,6 +66,13 @@
               <icon-waypoint-type v-else-if="document.waypoint_type" :waypoint-type="document.waypoint_type" />
             </div>
           </div>
+          <router-link
+            v-if="showMoreResultsLink"
+            :to="{name: type + 's', query: {q: searchText}}"
+            class="dropdown-item is-italic has-text-centered"
+            v-translate>
+            See more results
+          </router-link>
         </div>
 
         <div v-if="proposeCreation">
@@ -110,6 +117,10 @@
         required: true
       },
       proposeCreation: {
+        type: Boolean,
+        default: false
+      },
+      showMoreResultsLink: {
         type: Boolean,
         default: false
       }

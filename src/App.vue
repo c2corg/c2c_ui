@@ -103,7 +103,6 @@
   }
 
   .site-notice{
-    cursor:pointer;
     position:absolute;
     top:$navbar-height;
     width:100%;
