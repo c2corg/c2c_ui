@@ -204,4 +204,11 @@
   .automatic-gears{
     margin-bottom: 1.5rem;
   }
+
+  @media print{
+    .protection-area-info{
+      margin: 0rem !important;
+      padding: 0rem !important;
+    }
+  }
 </style>
