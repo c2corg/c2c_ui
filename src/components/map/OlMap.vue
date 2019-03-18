@@ -443,19 +443,21 @@
           this.map.addInteraction(this.drawInteraction);
 
           this.drawInteraction.on('drawend', (event) => {
-            this.setDocumentGeometryFromFeature(event.feature, false);
+            this.setDocumentGeometryFromFeature(event.feature);
           });
         }
       },
 
       // https://openlayers.org/en/latest/examples/drag-and-drop.html
       setDragAndDropInteraction() {
+        // handle use case when user drag&drop a gpx/kml file on map
         const dragAndDrop = new ol.interaction.DragAndDrop({
           formatConstructors: [ol.format.GPX, ol.format.KML]
         });
 
         dragAndDrop.on('addfeatures', function(event) {
-          this.setDocumentGeometryFromFeature(event.features[0]);
+          event.features.map(this.setDocumentGeometryFromFeature);
+          this.fitMapToDocuments(true);
         }.bind(this));
 
         this.map.addInteraction(dragAndDrop);
@@ -475,17 +477,13 @@
         const gpxFormat = new ol.format.GPX();
         const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
 
-        features.forEach(this.setDocumentGeometryFromFeature);
+        features.map(this.setDocumentGeometryFromFeature);
+        this.fitMapToDocuments(true);
       },
 
       setDocumentGeometryFromFeature(feature, fitMap = true) {
         this.setDocumentGeometry(this.editedDocument, feature.get('geometry'));
         this.drawDocumentMarkers();
-
-        if (fitMap) {
-          this.fitMapToDocuments(true);
-        }
-
         this.setDrawInteraction();
       },
 
