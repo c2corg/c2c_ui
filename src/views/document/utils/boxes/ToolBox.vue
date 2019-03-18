@@ -31,7 +31,7 @@
       icon="edit" />
 
     <tool-box-button
-      v-if="['outing', 'route', 'waypoint'].includes(documentType)"
+      v-if="document.geometry && document.geometry.geom"
       :to="linkToClosestDocuments"
       :label="$gettext('See other documents nearby')"
       icon="compass" />
