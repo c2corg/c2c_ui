@@ -375,12 +375,12 @@ msgstr ""
 msgid "associations"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:182
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:196
 msgctxt "API message"
 msgid "at least one route required"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:183
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:197
 msgctxt "API message"
 msgid "at least one user required"
 msgstr ""
@@ -1140,6 +1140,10 @@ msgstr ""
 
 #: src/views/document/utils/boxes/ElevationProfile.vue:76
 msgid "Distance (km)"
+msgstr ""
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:90
+msgid "Do you really want to leave? you have unsaved changes!"
 msgstr ""
 
 #: src/views/document/utils/OutingsDownloader.vue:6
@@ -2181,7 +2185,7 @@ msgid "Log in to post a comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:72
+#: src/views/Navigation.vue:73
 #: src/views/user/LoginView.vue:134
 #: src/views/user/LoginView.vue:26
 #: src/views/user/LoginView.vue:3
@@ -2193,7 +2197,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:131
+#: src/views/Navigation.vue:132
 msgid "Logout"
 msgstr ""
 
@@ -2428,34 +2432,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:98
+#: src/views/Navigation.vue:99
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:113
+#: src/views/Navigation.vue:114
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:118
+#: src/views/Navigation.vue:119
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:123
+#: src/views/Navigation.vue:124
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:108
+#: src/views/Navigation.vue:109
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:103
+#: src/views/Navigation.vue:104
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:93
+#: src/views/Navigation.vue:94
 msgid "My profile"
 msgstr ""
 
@@ -2589,7 +2593,7 @@ msgstr ""
 msgid "no info"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:79
+#: src/components/generics/inputs/InputDocument.vue:80
 msgid "No match?"
 msgstr ""
 
@@ -3375,7 +3379,7 @@ msgstr ""
 msgid "see actual version"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:72
+#: src/components/generics/inputs/InputDocument.vue:73
 msgid "See more results"
 msgstr ""
 
@@ -3471,7 +3475,7 @@ msgctxt "waypoint_types"
 msgid "shelter"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:181
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:195
 msgctxt "API message"
 msgid "Shorter than minimum length 1"
 msgstr ""
