@@ -17,13 +17,13 @@
   };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
 @media print {
   /*write the activity's title instead of the icon*/
   .replace-icon-by-names-on-print{
-    color: $text ! important;
+    color: $text !important;
   }
 
   .replace-icon-by-names-on-print:not(:last-child):after {
