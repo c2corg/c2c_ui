@@ -16,6 +16,7 @@ import globalComponents from '@/js/vue-plugins/generic-components';
 import helperWindow from '@/js/vue-plugins/helper-window';
 import imageViewer from '@/js/vue-plugins/image-viewer';
 import localStorage from '@/js/vue-plugins/local-storage';
+import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
 import vueMoment from '@/js/vue-plugins/vue-moment.js';
@@ -67,6 +68,7 @@ Vue.use(helperWindow); // vm.$helper property
 Vue.use(alertWindow); // vm.$alert property
 Vue.use(imageViewer);
 Vue.use(globalComponents); // Components available everywhere
+Vue.use(stripMarkdown); // stripMarkdown filter
 Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
 

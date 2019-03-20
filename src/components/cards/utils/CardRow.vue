@@ -15,7 +15,16 @@ div{
     color:$text;
     align-items: center;
     justify-content: space-between;
-    display:flex;
+    display: flex;
+}
+
+@media screen and (max-width: $tablet) {
+  div {
+    align-items: flex-start;
+  }
+  span.is-ellipsed, p.is-ellipsed {
+    white-space: normal;
+  }
 }
 
 div:not(:last-child){
