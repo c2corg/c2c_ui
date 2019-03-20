@@ -8,7 +8,6 @@
         :placeholder="placeholder || $gettext('Search ...')"
         @input="onInput"
         @focus="onInput"
-        @blur="promise={}"
         v-model="searchText">
       <span class="icon is-left">
         <fa-icon icon="search" />
@@ -27,7 +26,7 @@
             v-for="document of promise.data[type + 's'].documents"
             :key="document.document_id"
             @mousedown="toggle(document)"
-            class="dropdown-item dropdown-item-option columns is-gapless">
+            class="dropdown-item dropdown-item-option columns is-gapless has-cursor-pointer">
 
             <div
               v-if="isSelected(document)"
@@ -70,6 +69,7 @@
             v-if="showMoreResultsLink"
             :to="{name: type + 's', query: {q: searchText}}"
             class="dropdown-item is-italic has-text-centered"
+            @click.native="closeDropdown"
             v-translate>
             See more results
           </router-link>
@@ -160,7 +160,26 @@
       }
     },
 
+    created() {
+      window.addEventListener('click', this.onWindowClick);
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('click', this.onWindowClick);
+    },
+
     methods: {
+      closeDropdown() {
+        this.promise = {};
+      },
+
+      onWindowClick(event) {
+        // close dropdown when clicked outside
+        if (!this.$el.contains(event.target)) {
+          this.closeDropdown();
+        }
+      },
+
       onInput() {
         if (this.$options.timeoutId) {
           clearTimeout(this.$options.timeoutId);
@@ -217,6 +236,7 @@
 
           this.value_ = newValue;
         }
+        this.closeDropdown();
       }
     }
   };
@@ -224,33 +244,30 @@
 
 <style scoped>
 
-    /* overwrite bulma value */
-    .dropdown-item{
-        padding:0.2rem 1rem;  /* 0.375rem 1rem */
-    }
+  /* overwrite bulma value */
+  .dropdown-item{
+      padding:0.2rem 1rem;  /* 0.375rem 1rem */
+  }
 
-    div.dropdown-item-option{
-        cursor:pointer;
-    }
+  div.dropdown-item-option:hover{
+      background: #EEE; /* TODO variables */
+  }
 
-    div.dropdown-item-option:hover{
-        background: #EEE; /* TODO variables */
-    }
+  .input-container{
+      width:100%;
+  }
 
-    .input-container{
-        width:100%;
-    }
+  .dropdown-menu{
+    max-width:30rem;
+    min-width:30rem;
+  }
+  .dropdown-content{
+    max-height:80vh;
+    overflow-y: auto;
+  }
 
-    .dropdown-menu{
-        max-width:30rem;
-        min-width:30rem;
-    }
-    .dropdown-content{
-        max-height:80vh;
-        overflow-y: auto;
-    }
-    .columns{
-        margin-bottom:0!important;
-    }
+  .columns{
+    margin-bottom:0!important;
+  }
 
 </style>
