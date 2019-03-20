@@ -1,6 +1,6 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
-    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2">
+    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" :class="{'no-print': !visible}">
       <span>
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
       </span>
