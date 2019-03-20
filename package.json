@@ -16,7 +16,7 @@
     "generate-health": "node tools/generate-health.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.7.2",
+    "@fortawesome/fontawesome-free": "5.8.0",
     "@fortawesome/fontawesome-svg-core": "1.2.15",
     "@fortawesome/free-brands-svg-icons": "5.7.2",
     "@fortawesome/free-regular-svg-icons": "5.7.2",
