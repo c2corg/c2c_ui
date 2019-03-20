@@ -136,4 +136,10 @@
         }
     }
 
+    @media print {
+      .title {
+        font-size: 1.5rem !important;
+      }
+    }
+
 </style>
