@@ -1,5 +1,14 @@
 <template>
-  <div class="control">
+  <div
+    class="control"
+    :title="((value_.indexOf('E')>-1)?'E ':'')
+            +((value_.indexOf('W')>-1)?'W ':'')
+            +((value_.indexOf('S')>-1)?'S ':'')
+            +((value_.indexOf('N')>-1)?'N ':'')
+            +((value_.indexOf('SE')>-1)?'SE ':'')
+            +((value_.indexOf('SW')>-1)?'SW ':'')
+            +((value_.indexOf('NE')>-1)?'NE ':'')
+            +((value_.indexOf('NW')>-1)?'NW':'')">
     <svg
       :class="{'is-read-only':disabled}"
       class="input-orientation is-unselectable"
@@ -83,8 +92,18 @@
 
 @media print{
   .input-orientation{
-    width:50px;
-    height:50px;
+    display:none;
+    /*width:50px;
+    height:50px;*/
+  }
+
+  div:before{
+    content:"Orientation : ";
+    font-weight: 700;
+  }
+
+  div:after{
+    content:attr(title);
   }
 }
 
