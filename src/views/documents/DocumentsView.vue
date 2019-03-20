@@ -15,7 +15,7 @@
           :key="type"
           class="dropdown-item is-size-6"
           :class="{'is-active': type === documentType}"
-          :to="{name: type + 's', query:$route.query}">
+          :to="{name: type + 's', query:queryWithoutOffset}">
           <icon-document :document-type="type" />
           <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
         </router-link>
@@ -181,6 +181,12 @@
         return {
           act: this.$route.query.act
         };
+      },
+      queryWithoutOffset() {
+        const result = Object.assign({}, this.$route.query);
+        delete result.offset;
+
+        return result;
       }
     },
 
