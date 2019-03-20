@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :title="value_.join(', ')">
     <svg
       :class="{'is-read-only':disabled}"
       class="input-orientation is-unselectable"
@@ -83,8 +83,16 @@
 
 @media print{
   .input-orientation{
-    width:50px;
-    height:50px;
+    display:none;
+  }
+
+  div:before{
+    content:"Orientations : ";
+    font-weight: 700;
+  }
+
+  div:after{
+    content:attr(title);
   }
 }
 
