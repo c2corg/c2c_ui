@@ -5,7 +5,7 @@
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
       </span>
       <fa-icon
-        class="is-size-6 is-pulled-right has-cursor-pointer"
+        class="is-size-6 is-pulled-right has-cursor-pointer no-print"
         icon="angle-down"
         :rotation="visible ? undefined : 180"
         @click="visible=!visible" />
@@ -56,6 +56,15 @@
       font-size:1.8rem!important;
       margin-bottom:0.5em!important;
       border-bottom:1px solid #DDD;
+    }
+  }
+
+  @media print{
+    .markdown-section{
+      .title{
+        font-size:1.2rem!important;
+        margin-bottom:0.25em!important;
+      }
     }
   }
 </style>

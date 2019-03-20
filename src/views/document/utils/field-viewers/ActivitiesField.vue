@@ -15,3 +15,11 @@
   };
 
 </script>
+
+<style lang="scss" scoped>
+@media print {
+  .is-size-3{
+        font-size: 1rem !important;
+  }
+}
+</style>

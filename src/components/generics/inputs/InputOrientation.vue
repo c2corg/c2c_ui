@@ -81,4 +81,11 @@
     transition:0.1s;
 }
 
+@media print{
+  .input-orientation{
+    width:50px;
+    height:50px;
+  }
+}
+
 </style>

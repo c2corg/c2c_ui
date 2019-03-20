@@ -1,5 +1,5 @@
 <template>
-  <fa-icon :icon="['activity', activity]" />
+  <fa-icon :icon="['activity', activity]" :class="'no-print'"/>
 </template>
 
 <script>

@@ -255,4 +255,16 @@
     overflow: hidden;
   }
 
+  @media print {
+    .markdown-content:not(:last-child){
+      margin-bottom:0.5rem!important;
+    }
+
+    .markdown-content{
+      h3{
+        font-size:1.2rem!important;
+        margin-bottom:0.25em!important;
+      }
+    }
+  }
 </style>
