@@ -13,11 +13,11 @@
 
     <card-row>
       <document-title :document="item.document" class="is-ellipsed has-text-weight-bold" />
-      <span v-if="documentType=='outing'" class="is-nowrap">{{ dates }}</span>
+      <span v-if="documentType=='outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
     </card-row>
 
     <card-row v-if="locale && locale.summary">
-      <p class="is-ellipsed">{{ locale.summary }}</p>
+      <p class="is-ellipsed is-max-3-lines-height-mobile">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 
     <card-row v-if="images.length!=0">
@@ -78,10 +78,14 @@
   import Gallery from '@/components/gallery/Gallery';
   import { cardMixin } from './utils/mixins.js';
 
-  export default{
+  export default {
 
     components: {
       Gallery
+    },
+
+    filters: {
+      max300chars: value => value.length > 300 ? value.substring(0, 300) + '…' : value
     },
 
     mixins: [
@@ -167,6 +171,15 @@
     .feed-card{
       border-left:0!important;
       border-right:0!important;
+    }
+    .is-max-3-lines-height-mobile {
+      // proprietary stuff, supported on limited browsers
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+    .has-left-margin-mobile {
+      margin-left: 5px;
     }
   }
 
