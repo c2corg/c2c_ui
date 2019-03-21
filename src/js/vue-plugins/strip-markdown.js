@@ -5,6 +5,6 @@ export default function install(Vue) {
     return value
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // external links
       .replace(/\[\[[^|]+|([^\]]+)\]\]/g, '$1') // internal links
-      .replace(/\**/g, ''); // emphasis
+      .replace(/[*_-#~`]/g, ''); // emphasis, lists and other similar stuff
   });
 }
