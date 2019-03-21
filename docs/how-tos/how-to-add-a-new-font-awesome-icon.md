@@ -4,13 +4,13 @@ In order to optimize distribution files sizes, only used font-awesome icons are 
 
 ## How-to ?
 
-Is you need to use a new icon, please follow this steps :
+If you need to use a new icon, please follow this steps :
 
 1. identify your icon name, and icon category (solid or regular). Let's say it's `far fa-terrible-icon`
 2. open `/src/js/fa.config.js`
 3. in relevant import block (regular or solid), add `faTerribleIcon`
   * please keep alphabetical order
-  * and is your icon is `regular`, rename it : `faTerribleIcon as faTerribleIconRegular`
+  * and if your icon is `regular`, rename it : `faTerribleIcon as faTerribleIconRegular`
 4. in `library.add` block, add `faTerribleIconRegular`
 5. that's all, enjoy :
 
