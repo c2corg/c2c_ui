@@ -8,7 +8,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     visible: false,
     source: new ol.source.XYZ({
       attributions: [
-        '<a target="_blank" href="http://www.swisstopo.admin.ch">swisstopo</a>'
+        '<a target="_blank" rel="noopener" href="http://www.swisstopo.admin.ch">swisstopo</a>'
       ],
       urls: ['10', '11', '12', '13', '14'].map(i => {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
@@ -44,7 +44,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     tileGrid,
     style: 'normal',
     attributions: [
-      '<a href="http://www.geoportail.fr/" target="_blank">' +
+      '<a href="http://www.geoportail.fr/" target="_blank" rel="norefer">' +
         '<img src="//api.ign.fr/geoportail/api/js/latest/' +
         'theme/geoportal/img/logo_gp.gif"></a>'
     ]
@@ -70,7 +70,7 @@ const esri = new ol.layer.Tile({
       'TileMatrix={z}&TileCol={x}&TileRow={y}',
     attributions: [
       '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
-        ' target="_blank">Esri</a>'
+        ' target="_blank" rel="noreferer">Esri</a>'
     ],
     maxZoom: 19
   })
@@ -100,7 +100,7 @@ const openTopoMap = new ol.layer.Tile({
     url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attributions:
       '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
-      '© <a href="//opentopomap.org" target="_blank">OpenTopoMap</a>',
+      '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
     maxZoom: 17
   })
 });

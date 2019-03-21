@@ -5,7 +5,11 @@
     </p>
     <div class="columns">
       <div class="column has-text-centered">
-        <a href="https://play.google.com/store/apps/details?id=com.webfit.camptocamp&hl=fr" :title="$gettext('Application')" target="_blank">
+        <a
+          href="https://play.google.com/store/apps/details?id=com.webfit.camptocamp&amp;hl=fr"
+          :title="$gettext('Application')"
+          target="_blank"
+          rel="noreferer">
           <img
             src="@/assets/img/app/googleplay.svg"
             url="@/assets/img/app/googleplay.svg"
@@ -13,7 +17,11 @@
         </a>
       </div>
       <div class="column has-text-centered">
-        <a href="https://itunes.apple.com/fr/app/camptocamp/id1253411269" :title="$gettext('Application')" target="_blank">
+        <a
+          href="https://itunes.apple.com/fr/app/camptocamp/id1253411269"
+          :title="$gettext('Application')"
+          target="_blank"
+          rel="noreferer">
           <img
             src="@/assets/img/app/appstore.svg"
             url="@/assets/img/app/appstore.svg"
