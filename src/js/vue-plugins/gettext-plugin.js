@@ -108,6 +108,8 @@ export default function install(Vue) {
       setCurrent(lang) {
         // save in locale storage
         this.$localStorage.set('current', lang);
+        // set html lang attribute
+        document.documentElement.setAttribute('lang', lang);
 
         // is user is logged, we need to save in db his preference
         this.$user.saveLangPreference(lang);
