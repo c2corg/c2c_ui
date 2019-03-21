@@ -1,6 +1,7 @@
 <template>
   <div class="advertisement">
     <iframe
+      :title="$gettext('advertisement')"
       :src="$options.publicPath + 'affiz.html'"
       frameborder="0"
       scrolling="no" />
