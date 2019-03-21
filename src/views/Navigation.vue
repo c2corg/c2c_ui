@@ -39,6 +39,12 @@
         </div>
       </div>
 
+      <div class="navigation-item" title="Dashboard">
+        <router-link :to="{name:'dashboard'}">
+          <fa-icon icon="list"/>
+        </router-link>
+      </div>
+
       <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" :title="'This page may contains bugs or incomplete features'">
         <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
