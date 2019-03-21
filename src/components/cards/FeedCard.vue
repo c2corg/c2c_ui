@@ -78,19 +78,14 @@
   import Gallery from '@/components/gallery/Gallery';
   import { cardMixin } from './utils/mixins.js';
 
-  export default{
+  export default {
 
     components: {
       Gallery
     },
 
     filters: {
-      max300chars(value) {
-        if (value.length > 300) {
-          return value.substring(0, 100) + '…';
-        }
-        return value;
-      }
+      max300chars: value => value.length > 300 ? value.substring(0, 300) + '…' : value
     },
 
     mixins: [
