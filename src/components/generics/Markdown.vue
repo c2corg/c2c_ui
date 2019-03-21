@@ -81,6 +81,7 @@
         container.innerHTML = this.content;
 
         if (this.content.includes('c2c:role')) {
+          this.computeFigures(container.querySelectorAll('figure[c2c\\:role=embedded-figure]'));
           this.computeImages(container.querySelectorAll('img[c2c\\:role=embedded-image]'));
           this.computeEmojis(container.querySelectorAll('img[c2c\\:role=emoji]'));
           this.computeAnchors(container.querySelectorAll('a[c2c\\:role=internal-link]'));
@@ -97,6 +98,17 @@
           const emojiSource = emoji.attributes['c2c:emoji-db'].value;
           const svgName = emoji.attributes['c2c:svg-name'].value;
           emoji.src = getEmojiSrc(emojiSource, svgName); // `${svgCdns[emojiSource]}${svgName}.svg`
+        }
+      },
+
+      computeFigures(figures) {
+        for (const figure of figures) {
+          const image = figure.children[0];
+          const size = image.attributes['c2c:size'];
+
+          if (size) {
+            figure.setAttribute('c2c:size', size.value);
+          }
         }
       },
 
@@ -193,30 +205,35 @@
     img{
       cursor: pointer
     }
+  }
 
-    // small image
-    // SI is a 200*200 image, no need to specify anything
-    // img[c2c\:size=SI]{
+  // small image
+  // SI is a 200*200 image, no need to specify anything
+  // figure[c2c\:size=SI]{
 
-    // }
+  // }
 
-    // medium image
-    img[c2c\:size=MI]{
+  // medium image
+  figure[c2c\:size=MI]{
+    width: 25vw;
+    max-width:400px;
+
+    img{
       width: 25vw;
       max-width:400px;
     }
-
-    // big image
-    // img[c2c\:size=BI]{
-
-    // }
-
-    // original size image
-    // TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY
-    // img[c2c\:size=OI]{
-
-    // }
   }
+
+  // big image
+  // figure[c2c\:size=BI]{
+
+  // }
+
+  // original size image
+  // TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY
+  // figure[c2c\:size=OI]{
+
+  // }
 
   figure[c2c\:position=right]{
     float: right;
