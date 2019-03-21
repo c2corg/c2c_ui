@@ -13,11 +13,11 @@
 
     <card-row>
       <document-title :document="item.document" class="is-ellipsed has-text-weight-bold" />
-      <span v-if="documentType=='outing'" class="is-nowrap has-mobile-left-margin">{{ dates }}</span>
+      <span v-if="documentType=='outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
     </card-row>
 
     <card-row v-if="locale && locale.summary">
-      <p class="is-ellipsed is-mobile-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
+      <p class="is-ellipsed is-max-3-lines-height-mobile">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 
     <card-row v-if="images.length!=0">
@@ -177,13 +177,13 @@
       border-left:0!important;
       border-right:0!important;
     }
-    .is-mobile-max-3-lines-height {
+    .is-max-3-lines-height-mobile {
       // proprietary stuff, supported on limited browsers
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
     }
-    .has-mobile-left-margin {
+    .has-left-margin-mobile {
       margin-left: 5px;
     }
   }
