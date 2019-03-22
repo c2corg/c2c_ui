@@ -237,6 +237,10 @@ msgctxt "area_types"
 msgid "admin_limits"
 msgstr ""
 
+#: src/views/Advertisement.vue:4
+msgid "advertisement"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:11
 msgid "age"
 msgstr ""
@@ -274,8 +278,8 @@ msgstr ""
 msgid "anonymous"
 msgstr ""
 
-#: src/views/portals/utils/MobileAppAdvertising.vue:16
-#: src/views/portals/utils/MobileAppAdvertising.vue:8
+#: src/views/portals/utils/MobileAppAdvertising.vue:10
+#: src/views/portals/utils/MobileAppAdvertising.vue:22
 msgid "Application"
 msgstr ""
 
@@ -1192,7 +1196,7 @@ msgid "edge"
 msgstr ""
 
 #: src/components/generics/links/EditLink.vue:7
-#: src/components/helper/HelperWindow.vue:23
+#: src/components/helper/HelperWindow.vue:24
 #: src/views/document/utils/DocumentViewHeader.vue:30
 msgid "Edit"
 msgstr ""
@@ -1242,7 +1246,7 @@ msgid "elevation_down_snow"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue:2
-#: src/components/generics/inputs/InputDocument.vue:42
+#: src/components/generics/inputs/InputDocument.vue:41
 #: src/translations/fixed_strings_common_js.vue:60
 msgid "elevation_max"
 msgstr ""
@@ -1629,91 +1633,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:123
+#: src/components/cards/FeedCard.vue:127
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:121
+#: src/components/cards/FeedCard.vue:125
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:122
+#: src/components/cards/FeedCard.vue:126
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:124
+#: src/components/cards/FeedCard.vue:128
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:129
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:126
+#: src/components/cards/FeedCard.vue:130
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:127
+#: src/components/cards/FeedCard.vue:131
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:132
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:133
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:130
+#: src/components/cards/FeedCard.vue:134
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:131
+#: src/components/cards/FeedCard.vue:135
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:132
+#: src/components/cards/FeedCard.vue:136
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:133
+#: src/components/cards/FeedCard.vue:137
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:134
+#: src/components/cards/FeedCard.vue:138
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:135
+#: src/components/cards/FeedCard.vue:139
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:136
+#: src/components/cards/FeedCard.vue:140
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:137
+#: src/components/cards/FeedCard.vue:141
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:138
+#: src/components/cards/FeedCard.vue:142
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:139
+#: src/components/cards/FeedCard.vue:143
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:140
+#: src/components/cards/FeedCard.vue:144
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:141
+#: src/components/cards/FeedCard.vue:145
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:142
+#: src/components/cards/FeedCard.vue:146
 msgid "has updated the xreport"
 msgstr ""
 
@@ -2160,7 +2164,7 @@ msgstr ""
 msgid "Load my preferences"
 msgstr ""
 
-#: src/components/helper/HelperWindow.vue:73
+#: src/components/helper/HelperWindow.vue:74
 msgid "loading"
 msgstr ""
 
@@ -2185,7 +2189,7 @@ msgid "Log in to post a comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:73
+#: src/views/Navigation.vue:70
 #: src/views/user/LoginView.vue:134
 #: src/views/user/LoginView.vue:26
 #: src/views/user/LoginView.vue:3
@@ -2197,7 +2201,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:132
+#: src/views/Navigation.vue:129
 msgid "Logout"
 msgstr ""
 
@@ -2432,34 +2436,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:99
+#: src/views/Navigation.vue:96
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:114
+#: src/views/Navigation.vue:111
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:119
+#: src/views/Navigation.vue:116
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:124
+#: src/views/Navigation.vue:121
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:109
+#: src/views/Navigation.vue:106
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:104
+#: src/views/Navigation.vue:101
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:94
+#: src/views/Navigation.vue:91
 msgid "My profile"
 msgstr ""
 
