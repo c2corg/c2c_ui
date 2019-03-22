@@ -28,7 +28,7 @@
           <span v-translate="" class="is-size-4">Conditions, summits, routes</span>...
         </router-link>
 
-        <router-link :to="{ name: 'forum'}" class="button is-info">
+        <router-link :to="{ name: 'forum'}" class="button is-primary">
           <icon-forum />&nbsp;
           <span v-translate>Forum</span><br>
           <span v-translate class="is-size-4">Share with us!</span>
