@@ -44,7 +44,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     tileGrid,
     style: 'normal',
     attributions: [
-      '<a href="http://www.geoportail.fr/" target="_blank" rel="norefer">' +
+      '<a href="http://www.geoportail.fr/" target="_blank" rel="noreferer">' +
         '<img src="//api.ign.fr/geoportail/api/js/latest/' +
         'theme/geoportal/img/logo_gp.gif"></a>'
     ]
