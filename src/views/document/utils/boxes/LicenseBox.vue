@@ -3,7 +3,8 @@
     <a
       v-if="license === 'by-sa'"
       :href="'https://creativecommons.org/licenses/by-sa/3.0/deed.' + $language.current"
-      target="_blank" rel="noreferer">
+      target="_blank"
+      rel="noreferer">
       <icon-creative-commons />
       CC
       <span :title="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
@@ -21,7 +22,8 @@
     <a
       v-else-if="license=='by-nc-nd'"
       :href="'https://creativecommons.org/licenses/by-nc-nd/3.0/deed.' + $language.current"
-      target="_blank" rl="noreferer">
+      target="_blank"
+      rel="noreferer">
       <icon-creative-commons />
       CC
       <span :title="$gettext('Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.')">
