@@ -12,8 +12,7 @@
     "messages:compile": "node tools/compile-messages.js",
     "generate-docs": "node tools/generate-docs.js",
     "generate-icons": "node tools/generate-icons.js",
-    "update-c2c-common": "python3 tools/update-c2c-common.py",
-    "generate-health": "node tools/generate-health.js"
+    "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.8.0",
