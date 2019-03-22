@@ -102,6 +102,8 @@ export default function install(Vue) {
           // dirty : simulate lang update to fire the update of page on load
           this.current = null;
           this.current = lang;
+          // set html lang attribute
+          document.documentElement.setAttribute('lang', lang);
         });
       },
 
@@ -116,6 +118,8 @@ export default function install(Vue) {
         // because we may need to lazy load data
         this._getMessages(lang).then(() => {
           this.current = lang;
+          // set html lang attribute
+          document.documentElement.setAttribute('lang', lang);
         });
       },
 
