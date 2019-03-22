@@ -16,8 +16,8 @@
 
     <!-- TODO : find a light way to securely show this content -->
     <p>{{ description }}</p>
-    <a :href="data.infoUrl" target="_blank" v-translate>More info</a> |
-    <a :href="data.kmlUrl" target="_blank">KML</a>
+    <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
+    <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
   </modal-window>
 </template>
 

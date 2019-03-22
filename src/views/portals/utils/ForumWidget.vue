@@ -8,6 +8,7 @@
         :key="topic.id"
         :href="getTopicUrl(topic)"
         target="_blank"
+        rel="noopener"
         :title="topic.last_poster_username">
         <img
           :src="getAvatarUrl(topic.last_poster_user)"

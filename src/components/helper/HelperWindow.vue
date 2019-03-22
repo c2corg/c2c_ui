@@ -19,6 +19,7 @@
           v-if="$user.isLogged && showModifyButton"
           class="button is-info"
           target="_blank"
+          rel="noopener"
           :href="'https://www.camptocamp.org/articles/' + helper.documentId"
           v-translate>
           Edit
