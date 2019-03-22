@@ -76,7 +76,6 @@ new Vue({
   router,
   created() {
     this.$language.firstLoad();
-    document.documentElement.setAttribute('lang', this.$language.current);
   },
   render: h => h(App)
 }).$mount('#app');

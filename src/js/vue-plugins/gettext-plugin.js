@@ -102,14 +102,14 @@ export default function install(Vue) {
           // dirty : simulate lang update to fire the update of page on load
           this.current = null;
           this.current = lang;
+          // set html lang attribute
+          document.documentElement.setAttribute('lang', lang);
         });
       },
 
       setCurrent(lang) {
         // save in locale storage
         this.$localStorage.set('current', lang);
-        // set html lang attribute
-        document.documentElement.setAttribute('lang', lang);
 
         // is user is logged, we need to save in db his preference
         this.$user.saveLangPreference(lang);
@@ -118,6 +118,8 @@ export default function install(Vue) {
         // because we may need to lazy load data
         this._getMessages(lang).then(() => {
           this.current = lang;
+          // set html lang attribute
+          document.documentElement.setAttribute('lang', lang);
         });
       },
 
