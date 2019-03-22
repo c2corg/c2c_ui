@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN npm run generate-health
+RUN node tools/generate-health.js
 
 # production stage
 FROM openresty/openresty:stretch as production-stage
