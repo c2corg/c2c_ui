@@ -393,8 +393,8 @@ msgstr ""
 msgid "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:27
-#: src/views/document/utils/boxes/LicenseBox.vue:9
+#: src/views/document/utils/boxes/LicenseBox.vue:10
+#: src/views/document/utils/boxes/LicenseBox.vue:29
 msgid "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made."
 msgstr ""
 
@@ -1633,91 +1633,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:127
+#: src/components/cards/FeedCard.vue:130
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:128
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:126
+#: src/components/cards/FeedCard.vue:129
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:131
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:132
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:130
+#: src/components/cards/FeedCard.vue:133
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:131
+#: src/components/cards/FeedCard.vue:134
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:132
+#: src/components/cards/FeedCard.vue:135
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:133
+#: src/components/cards/FeedCard.vue:136
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:134
+#: src/components/cards/FeedCard.vue:137
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:135
+#: src/components/cards/FeedCard.vue:138
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:136
+#: src/components/cards/FeedCard.vue:139
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:137
+#: src/components/cards/FeedCard.vue:140
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:138
+#: src/components/cards/FeedCard.vue:141
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:139
+#: src/components/cards/FeedCard.vue:142
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:140
+#: src/components/cards/FeedCard.vue:143
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:141
+#: src/components/cards/FeedCard.vue:144
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:142
+#: src/components/cards/FeedCard.vue:145
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:143
+#: src/components/cards/FeedCard.vue:146
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:144
+#: src/components/cards/FeedCard.vue:147
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:145
+#: src/components/cards/FeedCard.vue:148
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:146
+#: src/components/cards/FeedCard.vue:149
 msgid "has updated the xreport"
 msgstr ""
 
@@ -1756,7 +1756,7 @@ msgstr ""
 msgid "height_diff_access"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:41
+#: src/components/cards/FeedCard.vue:44
 #: src/components/cards/RouteCard.vue:31
 #: src/components/generics/pretty-links/PrettyRouteLink.vue:11
 #: src/translations/fixed_strings_common_js.vue:87
@@ -1767,7 +1767,7 @@ msgstr ""
 msgid "height_diff_down"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:36
+#: src/components/cards/FeedCard.vue:39
 #: src/components/cards/OutingCard.vue:25
 #: src/components/cards/RouteCard.vue:23
 #: src/translations/fixed_strings_common_js.vue:89
@@ -2616,7 +2616,7 @@ msgctxt "custodianship_types"
 msgid "no_warden"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:33
+#: src/views/document/utils/boxes/LicenseBox.vue:35
 msgid "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material."
 msgstr ""
 
@@ -2630,7 +2630,7 @@ msgctxt "autonomies"
 msgid "non_autonomous"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:30
+#: src/views/document/utils/boxes/LicenseBox.vue:32
 msgid "NonCommercial — You may not use the material for commercial purposes."
 msgstr ""
 
@@ -3470,7 +3470,7 @@ msgstr ""
 msgid "Share with us!"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:12
+#: src/views/document/utils/boxes/LicenseBox.vue:13
 msgid "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
 msgstr ""
 
@@ -3796,15 +3796,15 @@ msgstr ""
 msgid "These are positive experiences that reveal usefull risk-management skills."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:46
+#: src/views/document/utils/boxes/LicenseBox.vue:48
 msgid "This book cover is the property of its editor and/or author"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:38
+#: src/views/document/utils/boxes/LicenseBox.vue:40
 msgid "This content is licensed under Creative Commons BY-NC-ND 3.0"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:17
+#: src/views/document/utils/boxes/LicenseBox.vue:18
 msgid "This content is licensed under Creative Commons BY-SA 3.0"
 msgstr ""
 
@@ -3834,7 +3834,7 @@ msgstr ""
 msgid "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:44
+#: src/views/document/utils/boxes/LicenseBox.vue:46
 msgid "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes."
 msgstr ""
 
@@ -3982,6 +3982,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:186
 msgid "url"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue:6
+msgid "User avatar"
 msgstr ""
 
 #: src/views/user/AccountView.vue:12
