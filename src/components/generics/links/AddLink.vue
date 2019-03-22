@@ -2,9 +2,13 @@
   <!-- We alawys display this link, even when user is not logged
     In this case, editions vues will redirect user to /auth -->
   <router-link :to="{name:documentType + '-add', params:{lang:$language.current}, query:query}">
-    <slot>
+    <template v-if="isShortLinkOnMobile">
+      <span class="is-hidden-mobile">{{ $documentUtils.getCreationTitle('outing') | uppercaseFirstLetter }}</span>
+      <fa-icon icon="plus" class="is-hidden-tablet" />
+    </template>
+    <template v-else>
       {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
-    </slot>
+    </template>
   </router-link>
 </template>
 
@@ -18,6 +22,10 @@
       query: {
         type: Object,
         default: null
+      },
+      isShortLinkOnMobile: {
+        type: Boolean,
+        default: false
       }
     }
   };
