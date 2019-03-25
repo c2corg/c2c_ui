@@ -6,3 +6,4 @@ Please add any point or hack when intention is not purely clear for a newbie tha
 
 * `title` attribute does not work on fort-awesome SVG icons (but why??). Add them into a span.
 * [CSS tootlip does not works when element parent got a `overflow:hidden`](https://github.com/chinchang/hint.css/issues/152#issuecomment-248810536), so, until a good solution on this point, we'll use builtin title attribute
+* Bulma CSS is included into chunk app, instead of chunk vendors. it's because this CSS is compiled with our custom variables.

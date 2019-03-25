@@ -9,7 +9,6 @@
     "lint": "vue-cli-service lint",
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
-    "messages:compile": "node tools/compile-messages.js",
     "generate-docs": "node tools/generate-docs.js",
     "generate-icons": "node tools/generate-icons.js",
     "update-c2c-common": "python3 tools/update-c2c-common.py"
@@ -51,7 +50,6 @@
     "@vue/eslint-config-standard": "4.0.0",
     "angular-gettext-tools": "2.4.1",
     "cross-env": "5.2.0",
-    "iniparser": "1.0.5",
     "node-sass": "4.11.0",
     "sass-loader": "7.1.0",
     "vue-template-compiler": "2.6.8",
