@@ -1,7 +1,18 @@
 {
-  "name": "vue-camptocamp",
-  "version": "0.1.0",
-  "private": true,
+  "name": "c2c_ui",
+  "description": "https://www.camptocamp.org user interface",
+  "version": "7.0.0beta",
+  "author": "Camptocamp community <dev@camptocamp.org>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c2corg/c2c_ui.git"
+  },
+  "license": "AGPL-3.0-or-later",
+  "homepage": "https://www.camptocamp.org",
+  "bugs": {
+    "url": "https://forum.camptocamp.org/c/site-et-association/v6-suggestions-bugs-et-problemes",
+    "email": "dev@camptocamp.org"
+  },
   "scripts": {
     "serve": "cross-env BUILD_ENV=local vue-cli-service serve",
     "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build",
