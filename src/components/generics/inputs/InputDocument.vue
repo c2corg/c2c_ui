@@ -84,9 +84,7 @@
             v-for="type of documentTypes_"
             :key="type + '_add'"
             :document-type="type"
-            class="dropdown-item dropdown-item-option is-size-6">
-            {{ $gettext('Create a new ' + type) }}
-          </add-link>
+            class="dropdown-item dropdown-item-option is-size-6" />
         </div>
       </div>
     </div>

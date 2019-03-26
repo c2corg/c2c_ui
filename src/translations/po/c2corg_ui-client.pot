@@ -192,6 +192,10 @@ msgstr ""
 msgid "add a map"
 msgstr ""
 
+#: src/js/vue-plugins/document-utils.js:15
+msgid "add a route"
+msgstr ""
+
 #: src/js/vue-plugins/document-utils.js:17
 msgid "add a waypoint"
 msgstr ""
@@ -304,7 +308,7 @@ msgstr ""
 msgid "Are you sure you want to revert to this version of the document?"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:23
+#: src/translations/fixed_strings_manual.vue:18
 msgid "area"
 msgstr ""
 
@@ -313,14 +317,14 @@ msgid "area_type"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:15
-#: src/translations/fixed_strings_manual.vue:12
+#: src/translations/fixed_strings_manual.vue:7
 #: src/views/static-views/NotFoundView.vue:61
 #: src/views/static-views/TopoguideView.vue:14
 #: src/views/user/PreferencesView.vue:53
 msgid "areas"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:22
+#: src/translations/fixed_strings_manual.vue:17
 msgid "article"
 msgstr ""
 
@@ -333,7 +337,7 @@ msgid "article_type"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
-#: src/translations/fixed_strings_manual.vue:11
+#: src/translations/fixed_strings_manual.vue:6
 #: src/views/SideMenu.vue:73
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:39
 msgid "articles"
@@ -393,8 +397,8 @@ msgstr ""
 msgid "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:27
-#: src/views/document/utils/boxes/LicenseBox.vue:9
+#: src/views/document/utils/boxes/LicenseBox.vue:10
+#: src/views/document/utils/boxes/LicenseBox.vue:29
 msgid "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made."
 msgstr ""
 
@@ -557,7 +561,7 @@ msgctxt "image_categories"
 msgid "book"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:24
+#: src/translations/fixed_strings_manual.vue:19
 msgid "book"
 msgstr ""
 
@@ -570,7 +574,7 @@ msgid "book_types"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:29
-#: src/translations/fixed_strings_manual.vue:13
+#: src/translations/fixed_strings_manual.vue:8
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:26
 #: src/views/static-views/NotFoundView.vue:58
 #: src/views/static-views/TopoguideView.vue:13
@@ -905,25 +909,8 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:8
-msgid "Create a new article"
-msgstr ""
-
-#: src/translations/fixed_strings_manual.vue:9
-msgid "Create a new book"
-msgstr ""
-
 #: src/views/static-views/SeracView.vue:55
 msgid "Create a new report"
-msgstr ""
-
-#: src/js/vue-plugins/document-utils.js:15
-#: src/translations/fixed_strings_manual.vue:6
-msgid "Create a new route"
-msgstr ""
-
-#: src/translations/fixed_strings_manual.vue:7
-msgid "Create a new waypoint"
 msgstr ""
 
 #: src/views/wiki/HistoryView.vue:44
@@ -1899,7 +1886,7 @@ msgstr ""
 msgid "ice_rating"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:25
+#: src/translations/fixed_strings_manual.vue:20
 msgid "image"
 msgstr ""
 
@@ -1913,7 +1900,7 @@ msgstr ""
 
 #: src/components/generics/markers/MarkerImageCount.vue:3
 #: src/translations/fixed_strings_common_js.vue:100
-#: src/translations/fixed_strings_manual.vue:14
+#: src/translations/fixed_strings_manual.vue:9
 #: src/views/portals/DashboardView.vue:6
 #: src/views/static-views/NotFoundView.vue:60
 #: src/views/static-views/TopoguideView.vue:12
@@ -2189,7 +2176,7 @@ msgid "Log in to post a comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:70
+#: src/views/Navigation.vue:75
 #: src/views/user/LoginView.vue:134
 #: src/views/user/LoginView.vue:26
 #: src/views/user/LoginView.vue:3
@@ -2201,7 +2188,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:129
+#: src/views/Navigation.vue:134
 msgid "Logout"
 msgstr ""
 
@@ -2250,7 +2237,7 @@ msgctxt "quality computation"
 msgid "Manual"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:26
+#: src/translations/fixed_strings_manual.vue:21
 msgid "map"
 msgstr ""
 
@@ -2258,7 +2245,7 @@ msgstr ""
 msgid "Map only"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:15
+#: src/translations/fixed_strings_manual.vue:10
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:52
 msgid "maps"
 msgstr ""
@@ -2436,34 +2423,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:96
+#: src/views/Navigation.vue:101
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:111
+#: src/views/Navigation.vue:116
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:116
+#: src/views/Navigation.vue:121
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:121
+#: src/views/Navigation.vue:126
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:106
+#: src/views/Navigation.vue:111
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:101
+#: src/views/Navigation.vue:106
 #: src/views/portals/FeedView.vue:11
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:91
+#: src/views/Navigation.vue:96
 msgid "My profile"
 msgstr ""
 
@@ -2616,7 +2603,7 @@ msgctxt "custodianship_types"
 msgid "no_warden"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:33
+#: src/views/document/utils/boxes/LicenseBox.vue:35
 msgid "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material."
 msgstr ""
 
@@ -2630,7 +2617,7 @@ msgctxt "autonomies"
 msgid "non_autonomous"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:30
+#: src/views/document/utils/boxes/LicenseBox.vue:32
 msgid "NonCommercial — You may not use the material for commercial purposes."
 msgstr ""
 
@@ -2739,12 +2726,12 @@ msgstr ""
 msgid "Oups! something went wrong..."
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:27
+#: src/translations/fixed_strings_manual.vue:22
 msgid "outing"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
-#: src/translations/fixed_strings_manual.vue:16
+#: src/translations/fixed_strings_manual.vue:11
 #: src/views/SideMenu.vue:70
 #: src/views/document/utils/boxes/ToolBox.vue:22
 #: src/views/portals/DashboardView.vue:16
@@ -3028,11 +3015,11 @@ msgstr ""
 msgid "product_types"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:31
+#: src/translations/fixed_strings_manual.vue:26
 msgid "profile"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:20
+#: src/translations/fixed_strings_manual.vue:15
 msgid "profiles"
 msgstr ""
 
@@ -3287,7 +3274,7 @@ msgctxt "event_types"
 msgid "roped_fall"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:28
+#: src/translations/fixed_strings_manual.vue:23
 msgid "route"
 msgstr ""
 
@@ -3313,7 +3300,7 @@ msgid "route_types"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:162
-#: src/translations/fixed_strings_manual.vue:17
+#: src/translations/fixed_strings_manual.vue:12
 #: src/views/portals/DashboardView.vue:35
 #: src/views/static-views/NotFoundView.vue:56
 #: src/views/static-views/NotFoundView.vue:57
@@ -3470,7 +3457,7 @@ msgstr ""
 msgid "Share with us!"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:12
+#: src/views/document/utils/boxes/LicenseBox.vue:13
 msgid "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
 msgstr ""
 
@@ -3796,15 +3783,15 @@ msgstr ""
 msgid "These are positive experiences that reveal usefull risk-management skills."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:46
+#: src/views/document/utils/boxes/LicenseBox.vue:48
 msgid "This book cover is the property of its editor and/or author"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:38
+#: src/views/document/utils/boxes/LicenseBox.vue:40
 msgid "This content is licensed under Creative Commons BY-NC-ND 3.0"
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:17
+#: src/views/document/utils/boxes/LicenseBox.vue:18
 msgid "This content is licensed under Creative Commons BY-SA 3.0"
 msgstr ""
 
@@ -3816,7 +3803,7 @@ msgstr ""
 msgid "This field is too short"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:34
+#: src/translations/fixed_strings_manual.vue:28
 msgid "This field must be a valid ISBN."
 msgstr ""
 
@@ -3834,7 +3821,7 @@ msgstr ""
 msgid "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it."
 msgstr ""
 
-#: src/views/document/utils/boxes/LicenseBox.vue:44
+#: src/views/document/utils/boxes/LicenseBox.vue:46
 msgid "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes."
 msgstr ""
 
@@ -4059,7 +4046,7 @@ msgctxt "waypoint_types"
 msgid "waterpoint"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:30
+#: src/translations/fixed_strings_manual.vue:25
 #: src/views/wiki/edition/RouteEditionView.vue:15
 msgid "waypoint"
 msgstr ""
@@ -4085,7 +4072,7 @@ msgid "waypoint_type"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:191
-#: src/translations/fixed_strings_manual.vue:19
+#: src/translations/fixed_strings_manual.vue:14
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:5
 #: src/views/static-views/NotFoundView.vue:55
 #: src/views/static-views/TopoguideView.vue:11
@@ -4153,12 +4140,12 @@ msgstr ""
 msgid "write your comments"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:29
+#: src/translations/fixed_strings_manual.vue:24
 msgid "xreport"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:195
-#: src/translations/fixed_strings_manual.vue:18
+#: src/translations/fixed_strings_manual.vue:13
 #: src/views/static-views/NotFoundView.vue:59
 #: src/views/static-views/SeracView.vue:78
 msgid "xreports"
