@@ -1,58 +1,56 @@
-const os = require('os');
-const iniparser = require('iniparser');
+// usage
+//
+//   node ./tools/compile-messages.js --user api:<token>
+
 const fs = require('fs');
-const https = require('https');
+const { exec } = require('child_process');
 const Compiler = require('angular-gettext-tools').Compiler;
 
 const compiler = new Compiler({ format: 'json' });
 
-function convert(lang, config) {
-  const user = config['username'];
-  const token = config['password'];
+// https://docs.transifex.com/api/examples#getting-a-translation-file-from-transifex
+function getTranslation(lang, callback) {
+  if (process.argv[2] !== '--user' || process.argv.length !== 4) {
+    throw new Error('Usage : node ./tools/compile-messages.js --user api:<token>');
+  }
+
+  const authCurlOption = `--user ${process.argv[3]}`;
   const project = 'c2corg_ui';
   const resource = 'main';
+  const curlCommand = 'curl -L';
 
-  const options = {
-    host: 'www.transifex.com',
-    path: '/api/2/project/' + project + '/resource/' + resource + '/translation/' + lang + '/?mode=reviewed&file',
-    // authentication headers
-    headers: {
-      'Authorization': 'Basic ' + new Buffer(user + ':' + token).toString('base64')
+  const baseUrl = `https://www.transifex.com/api/2/project/${project}/resource/${resource}`;
+  const url = `${baseUrl}/translation/${lang}/?mode=reviewed&file`;
+
+  const command = `${curlCommand} ${authCurlOption} -X GET "${url}"`;
+
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.error(`stderr: ${stderr}`);
+      return;
     }
-  };
+    callback(stdout);
+  });
+}
 
+function convert(lang) {
+  // eslint-disable-next-line no-console
   console.log('Requesting', lang, 'from transifex');
-  https.get(options, (resp) => {
-    let data = '';
 
-    // A chunk of data has been received.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
+  getTranslation(lang, (data) => {
+    // save indented json : need to parse/stringify...
+    const output = JSON.parse(compiler.convertPo([data]));
+    fs.writeFileSync('src/translations/dist/' + lang + '.json', JSON.stringify(output, null, 2));
 
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-      // save indented json : need to parse/stringify...
-      // does angular-gettext has options for json format ?
-      const output = JSON.parse(compiler.convertPo([data]));
-      fs.writeFileSync('src/translations/dist/' + lang + '.json', JSON.stringify(output, null, 2));
-
-      console.log(lang, 'finished');
-    });
+    // eslint-disable-next-line no-console
+    console.log(lang, 'finished');
+    // Todo : create a Pull Request on Github
   });
 }
 
 function main() {
-  // auth info are in .transifexrc, config file for transifex client
-  iniparser.parse(os.homedir() + '/.transifexrc', function(err, data) {
-    const config = data['https://www.transifex.com'];
-
-    const inputs = ['fr', 'en', 'es', 'eu', 'de', 'it', 'ca'];
-
-    for (const lang of inputs) {
-      convert(lang, config);
-    }
-  });
+  ['fr', 'en', 'es', 'eu', 'de', 'it', 'ca'].forEach(convert);
 }
 
 // If running this module directly then call the main function.
