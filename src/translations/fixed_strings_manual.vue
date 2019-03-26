@@ -24,7 +24,5 @@
     <span v-translate>xreport</span>
     <span v-translate>waypoint</span>
     <span v-translate>profile</span>
-
-    <span v-translate>This field must be a valid ISBN.</span>
   </span>
 </template>

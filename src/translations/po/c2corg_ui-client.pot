@@ -383,12 +383,12 @@ msgstr ""
 msgid "associations"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:196
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:220
 msgctxt "API message"
 msgid "at least one route required"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:197
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:221
 msgctxt "API message"
 msgid "at least one user required"
 msgstr ""
@@ -1133,7 +1133,7 @@ msgstr ""
 msgid "Distance (km)"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:90
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:92
 msgid "Do you really want to leave? you have unsaved changes!"
 msgstr ""
 
@@ -3466,7 +3466,7 @@ msgctxt "waypoint_types"
 msgid "shelter"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:195
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:219
 msgctxt "API message"
 msgid "Shorter than minimum length 1"
 msgstr ""
@@ -3803,7 +3803,8 @@ msgstr ""
 msgid "This field is too short"
 msgstr ""
 
-#: src/translations/fixed_strings_manual.vue:28
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:222
+msgctxt "API message"
 msgid "This field must be a valid ISBN."
 msgstr ""
 

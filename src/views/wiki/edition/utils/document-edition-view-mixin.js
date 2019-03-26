@@ -37,7 +37,7 @@ export default {
       fields: null, // keep fields here to set them reactive
       genericErrors: [],
       saving: false,
-      saved: false
+      modified: false
     };
   },
 
@@ -86,7 +86,7 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-    if (!this.saved) {
+    if (this.modified) {
       const answer = window.confirm(this.$gettext('Do you really want to leave? you have unsaved changes!'));
       if (answer) {
         next();
@@ -105,6 +105,14 @@ export default {
       this.latitude = null;
       this.longitude = null;
 
+      // as this method will be called in any case,
+      // we must check that the user is logged
+      // redirection is made be beforeRouteEnter()
+      // but we do not wan't to do anythin in this case
+      if (!this.$user.isLogged) {
+        return;
+      }
+
       if (this.mode === 'edit') {
         this.promise = c2c[this.documentType].get(this.documentId, this.lang).then((response) => {
           const locales = response.data.locales;
@@ -114,6 +122,9 @@ export default {
           }
 
           this.afterLoad(response);
+
+          // TODO : implements a algorithm to determin if document has bee modified
+          this.modified = true;
         });
       } else {
         this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) };
@@ -146,6 +157,9 @@ export default {
         }
 
         this.afterLoad();
+
+        // TODO : implements a algorithm to determin if document has bee modified
+        this.modified = true;
       }
     },
 
@@ -195,6 +209,7 @@ export default {
       // $gettext('Shorter than minimum length 1', 'API message');
       // $gettext('at least one route required', 'API message');
       // $gettext('at least one user required', 'API message');
+      // $gettext('This field must be a valid ISBN.', 'API message');
 
       if (fieldsWithError.length !== 0) {
         const messages = fieldsWithError.map((field) => {
@@ -224,12 +239,12 @@ export default {
 
       if (this.mode === 'edit') {
         promise = c2c[this.documentType].save(this.document, comment).then(() => {
-          this.saved = true;
+          this.modified = false;
           this.goToDocument(this.document.document_id);
         });
       } else {
         promise = c2c[this.documentType].create(this.document).then(response => {
-          this.saved = true;
+          this.modified = false;
           this.goToDocument(response.data.document_id);
         });
       }

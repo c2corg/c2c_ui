@@ -1412,7 +1412,9 @@
     "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
     "This field is too long": "Texte trop long",
     "This field is too short": "Texte trop court",
-    "This field must be a valid ISBN.": "Ce champ doit être un ISBN valide.",
+    "This field must be a valid ISBN.": {
+      "API message": "Ce champ doit être un ISBN valide."
+    },
     "This is the first version": "Ceci est la première version",
     "This is the last version": "Ceci est la dernière version",
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Description complète de l'itinéraire (résumé, approche, descente, etc.) N'oubliez pas l'historique si vous le connaissez.",
