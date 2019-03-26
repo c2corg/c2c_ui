@@ -3,11 +3,6 @@
   <!-- TODO : remove this file, and place in comments fixed string : it's not possible to follow
     where this string are used otherwise -->
   <span>
-    <span v-translate>Create a new route</span>
-    <span v-translate>Create a new waypoint</span>
-    <span v-translate>Create a new article</span>
-    <span v-translate>Create a new book</span>
-
     <span v-translate>articles</span>
     <span v-translate>areas</span>
     <span v-translate>books</span>
@@ -30,7 +25,6 @@
     <span v-translate>waypoint</span>
     <span v-translate>profile</span>
 
-    <!-- strings in field.js -->
     <span v-translate>This field must be a valid ISBN.</span>
   </span>
 </template>

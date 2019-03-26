@@ -94,6 +94,7 @@
     "Add": "Ajouter",
     "add a book": "ajouter un livre",
     "add a map": "ajouter une carte",
+    "add a route": "ajouter un itinéraire",
     "add a waypoint": "ajouter un point de passage",
     "add an area": "ajouter une région",
     "add an article": "ajouter un article",
@@ -107,6 +108,7 @@
     "admin_limits": {
       "area_types": "limite administrative"
     },
+    "advertisement": "publicité",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
     "already used forum_username": {
@@ -355,11 +357,7 @@
       "glacier_gear_types": "crampons en début de saison"
     },
     "Create": "Créer",
-    "Create a new article": "Créer un nouvel article",
-    "Create a new book": "Créer un nouveau livre",
     "Create a new report": "Créer un nouveau compte-rendu",
-    "Create a new route": "Ajouter un itinéraire",
-    "Create a new waypoint": "Ajouter un point de passage",
     "Created on": "Crée le",
     "creator": "auteur",
     "crevasse_fall": {

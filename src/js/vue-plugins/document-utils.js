@@ -12,7 +12,7 @@ export default function install(Vue) {
     methods: {
       getCreationTitle(documentType) {
         if (documentType === 'outing') return this.$gettext('add an outing');
-        if (documentType === 'route') return this.$gettext('Create a new route');
+        if (documentType === 'route') return this.$gettext('add a route');
         if (documentType === 'image') return this.$gettext('add an image');
         if (documentType === 'waypoint') return this.$gettext('add a waypoint');
         if (documentType === 'map') return this.$gettext('add a map');

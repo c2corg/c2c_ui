@@ -62,7 +62,12 @@
       </div>
 
       <div class="navigation-item">
-        <add-link document-type="outing" is-short-link-on-mobile class="button is-primary" />
+        <add-link document-type="outing" class="button is-primary">
+          <fa-icon class="is-hidden-tablet" icon="plus" />
+          <span class="is-hidden-mobile">
+            {{ $documentUtils.getCreationTitle('outing') | uppercaseFirstLetter }}
+          </span>
+        </add-link>
       </div>
 
       <div v-if="!$user.isLogged" class="navigation-item">
