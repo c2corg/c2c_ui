@@ -1620,91 +1620,91 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:127
+#: src/components/cards/FeedCard.vue:130
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:125
+#: src/components/cards/FeedCard.vue:128
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:126
+#: src/components/cards/FeedCard.vue:129
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:131
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:132
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:130
+#: src/components/cards/FeedCard.vue:133
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:131
+#: src/components/cards/FeedCard.vue:134
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:132
+#: src/components/cards/FeedCard.vue:135
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:133
+#: src/components/cards/FeedCard.vue:136
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:134
+#: src/components/cards/FeedCard.vue:137
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:135
+#: src/components/cards/FeedCard.vue:138
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:136
+#: src/components/cards/FeedCard.vue:139
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:137
+#: src/components/cards/FeedCard.vue:140
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:138
+#: src/components/cards/FeedCard.vue:141
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:139
+#: src/components/cards/FeedCard.vue:142
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:140
+#: src/components/cards/FeedCard.vue:143
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:141
+#: src/components/cards/FeedCard.vue:144
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:142
+#: src/components/cards/FeedCard.vue:145
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:143
+#: src/components/cards/FeedCard.vue:146
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:144
+#: src/components/cards/FeedCard.vue:147
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:145
+#: src/components/cards/FeedCard.vue:148
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:146
+#: src/components/cards/FeedCard.vue:149
 msgid "has updated the xreport"
 msgstr ""
 
@@ -1743,7 +1743,7 @@ msgstr ""
 msgid "height_diff_access"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:41
+#: src/components/cards/FeedCard.vue:44
 #: src/components/cards/RouteCard.vue:31
 #: src/components/generics/pretty-links/PrettyRouteLink.vue:11
 #: src/translations/fixed_strings_common_js.vue:87
@@ -1754,7 +1754,7 @@ msgstr ""
 msgid "height_diff_down"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:36
+#: src/components/cards/FeedCard.vue:39
 #: src/components/cards/OutingCard.vue:25
 #: src/components/cards/RouteCard.vue:23
 #: src/translations/fixed_strings_common_js.vue:89
@@ -3970,6 +3970,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:186
 msgid "url"
+msgstr ""
+
+#: src/components/cards/FeedCard.vue:6
+msgid "User avatar"
 msgstr ""
 
 #: src/views/user/AccountView.vue:12

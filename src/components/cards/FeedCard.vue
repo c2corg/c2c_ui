@@ -1,7 +1,10 @@
 <template>
   <card-container :document="document" class="feed-card">
     <card-title>
-      <img class="avatar" :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+      <img
+        class="avatar"
+        :alt="$gettext('User avatar')"
+        :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
 
       <span>
         <document-title :document="item.user" />
