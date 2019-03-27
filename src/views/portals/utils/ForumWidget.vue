@@ -3,7 +3,7 @@
     <loading-notification :promise="promise" />
     <div v-if="topics">
       <a
-        class="forum-row"
+        class="forum-row is-ellipsed"
         v-for="topic of topics"
         :key="topic.id"
         :href="getTopicUrl(topic)"
