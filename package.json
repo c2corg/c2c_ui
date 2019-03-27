@@ -19,7 +19,6 @@
     "build:github": "cross-env BUILD_ENV=github vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lint:no-fix": "vue-cli-service lint --no-fix",
-    "messages:extract": "node tools/extract-messages.js",
     "generate-docs": "node tools/generate-docs.js",
     "generate-icons": "node tools/generate-icons.js",
     "update-c2c-common": "python3 tools/update-c2c-common.py"
@@ -65,7 +64,8 @@
     "sass-loader": "7.1.0",
     "vue-template-compiler": "2.6.8",
     "webpack-bundle-analyzer": "3.1.0",
-    "xml2js": "0.4.19"
+    "xml2js": "0.4.19",
+    "yargs": "13.2.2"
   },
   "postcss": {
     "plugins": {

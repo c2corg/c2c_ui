@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*****************************************
 Extract untranslated string from .vue and .js files
 and save them into a .pot file :
@@ -23,9 +25,14 @@ Supported pattern in .vue file, inside <template /> part :
 ******************************************/
 
 const fs = require('fs');
+const axios = require('axios');
 const compiler = require('vue-template-compiler');
 
 const NODETYPE_TEXT = 3;
+
+const project = 'c2corg_ui';
+const resource = 'main';
+const baseUrl = `https://www.transifex.com/api/2/project/${project}/resource/${resource}`;
 
 const template_regex = /(<template>[\s\S]*<\/template>)/;
 const gettext_template1 = /\$gettext\('((?:[^']|\\')*?)'\)/g;
@@ -154,12 +161,11 @@ Process.prototype.parseTemplate = function(file, data) {
   });
 };
 
-Process.prototype.compute = function(file_or_dir) {
+Process.prototype.extract = function(file_or_dir) {
   if (fs.statSync(file_or_dir).isDirectory()) {
     const files = fs.readdirSync(file_or_dir);
-
     for (const file of files) {
-      this.compute(file_or_dir + '/' + file);
+      this.extract(file_or_dir + '/' + file);
     }
   } else if (file_or_dir.endsWith('.vue')) {
     const data = fs.readFileSync(file_or_dir, 'utf-8');
@@ -170,29 +176,123 @@ Process.prototype.compute = function(file_or_dir) {
   }
 };
 
-Process.prototype.save = function(potFile) {
-  const result = [];
-
-  for (const key of Object.keys(this.data).sort()) {
-    result.push(this.data[key].toString());
-  }
-
-  fs.writeFileSync(potFile, result.join('\n'));
+Process.prototype.extractMessages = function(file_or_dir) {
+  this.data = [];
+  this.extract(file_or_dir);
+  return this.data;
 };
 
-function main(sourceDir, potFile) {
+function extract() {
+  const sourceDir = argv.dir;
+
   const process = new Process();
+  const entries = Object.entries(process.extractMessages(sourceDir));
 
-  process.compute(sourceDir);
-  process.save(potFile);
+  const data = entries
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(item => item[1].toString())
+    .join('\n');
 
+  const options = {
+    auth: {
+      username: argv.user,
+      password: argv.password
+    },
+    data
+  };
+  axios.put(`${baseUrl}/content/`, options)
+    .then(() => {
+      // eslint-disable-next-line no-console
+      console.log(`Process finished. ${entries.length} messages extracted`);
+    })
+    .catch(error => {
+      if (error.response) {
+        // eslint-disable-next-line no-console
+        console.error(`Cannot submit extracted messages: ${error.response.statusText} (${error.response.status})`);
+      } else if (error.request) {
+        // eslint-disable-next-line no-console
+        console.error('Cannot submit extracted messages: ' + error.request);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('Cannot submit extracted messages:', error.message);
+      }
+  });
+}
+
+function getTranslation(lang, callback) {
+  const options = {
+    auth: {
+      username: argv.username,
+      password: argv.password
+    }
+  };
+  axios.get(`${baseUrl}/translation/${lang}/?mode=reviewed&file`, options)
+    .then(response => callback(response.data))
+    .catch(error => {
+      if (error.response) {
+        // eslint-disable-next-line no-console
+        console.error(`Error retrieving translations:  ${error.response.statusText} (${error.response.status})`);
+      } else if (error.request) {
+        // eslint-disable-next-line no-console
+        console.error('Error retrieving translations: ' + error.request);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('Error retrieving translations:', error.message);
+      }
+  });
+}
+
+function convert(lang) {
   // eslint-disable-next-line no-console
-  console.log(`Process finished. ${Object.keys(process.data).length} messages extracted`);
+  console.log('Requesting', lang, 'from transifex');
+
+  getTranslation(lang, (data) => {
+    // save indented json : need to parse/stringify...
+    const output = JSON.parse(compiler.convertPo([data]));
+    fs.writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(output, null, 2));
+
+    // eslint-disable-next-line no-console
+    console.log(lang, 'finished');
+    // Todo : create a Pull Request on Github
+  });
 }
 
-// If running this module directly then call the main function.
-if (require.main === module) {
-  main('src', 'src/translations/po/c2corg_ui-client.pot');
+function compile() {
+  ['fr', 'en', 'es', 'eu', 'de', 'it', 'ca'].forEach(convert);
 }
 
-module.exports = main;
+const argv = require('yargs')
+  .option('password', {
+    alias: 'p',
+    requiresArg: true,
+    type: 'string',
+    describe: 'Specify password to connect to Transifex API',
+    demandOption: true
+  })
+  .option('user', {
+    alias: 'u',
+    requiresArg: true,
+    type: 'string',
+    default: 'api',
+    describe: 'Specifiy user to connect to Transifex API'
+  })
+  .option('dir', {
+    alias: 'd',
+    requiresArg: true,
+    type: 'string',
+    default: 'src',
+    describe: 'Extract messages from given directory'
+  })
+  .command('extract', 'Extract messages from code and submit them to transifex')
+  .command('compile', 'Retrive messages from Transifex and generate po files')
+  .version('1.0.0')
+  .argv;
+
+switch (argv._[0]) {
+case 'extract':
+  extract();
+  break;
+case 'compile':
+  compile();
+  break;
+}
