@@ -23,7 +23,7 @@
 
     props: {
       promise: {
-        type: Object,
+        type: [Object, Promise],
         required: true
       }
     },
