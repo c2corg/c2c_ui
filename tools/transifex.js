@@ -26,7 +26,9 @@ Supported pattern in .vue file, inside <template /> part :
 
 const fs = require('fs');
 const axios = require('axios');
-const compiler = require('vue-template-compiler');
+const vueCompiler = require('vue-template-compiler');
+const GettextCompiler = require('angular-gettext-tools').Compiler;
+const gettextCompiler = new GettextCompiler({ format: 'json' });
 
 const NODETYPE_TEXT = 3;
 
@@ -153,7 +155,7 @@ Process.prototype.parseTemplate = function(file, data) {
     this.push(position, msgctxt, msgid);
   };
 
-  compiler.compile(template[1], {
+  vueCompiler.compile(template[1], {
     preserveWhitespace: false,
     directives: {
       translate: parseTranslateDirective.bind(this)
@@ -222,7 +224,7 @@ function extract() {
 function getTranslation(lang, callback) {
   const options = {
     auth: {
-      username: argv.username,
+      username: argv.user,
       password: argv.password
     }
   };
@@ -248,7 +250,7 @@ function convert(lang) {
 
   getTranslation(lang, (data) => {
     // save indented json : need to parse/stringify...
-    const output = JSON.parse(compiler.convertPo([data]));
+    const output = JSON.parse(gettextCompiler.convertPo([data]));
     fs.writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(output, null, 2));
 
     // eslint-disable-next-line no-console
@@ -295,4 +297,6 @@ case 'extract':
 case 'compile':
   compile();
   break;
+default:
+  console.error(`Unknown command: ${argv._[0]}`); // eslint-disable-line no-console
 }
