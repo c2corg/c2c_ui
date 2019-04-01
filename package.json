@@ -1,7 +1,7 @@
 {
   "name": "c2c_ui",
   "description": "https://www.camptocamp.org user interface",
-  "version": "7.0.0beta",
+  "version": "7.0.0",
   "author": "Camptocamp community <dev@camptocamp.org>",
   "repository": {
     "type": "git",
