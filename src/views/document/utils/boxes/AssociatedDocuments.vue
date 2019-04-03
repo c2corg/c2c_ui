@@ -46,6 +46,19 @@
       <hr>
     </div>
 
+    <!-- xreports -->
+    <div v-if="associations.xreports.length!=0" class="associations-list">
+      <div class="title">
+        {{ $gettext('xreports') | uppercaseFirstLetter }}
+      </div>
+      <div v-for="xreport of associations.xreports" :key="xreport.document_id" class="is-ellipsed">
+        <document-link :document="xreport">
+          <icon-xreport class="icon-link" />&nbsp;<document-title :document="xreport" />
+        </document-link>
+      </div>
+      <hr>
+    </div>
+
     <!-- maps -->
     <div v-if="(document.maps && document.maps.length !== 0) || document.maps_info" class="associations-list">
       <div class="title">
