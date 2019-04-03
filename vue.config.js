@@ -58,8 +58,8 @@ const result = {
 
 const config = {
   routerMode: 'history', // for pretty urls
-  ignApiKey: 'iq1rkryayi4z074da39pbg6s',
-  bingApiKey: 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc',
+  ignApiKey: undefined,
+  bingApiKey: undefined,
   isProduction: false,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
@@ -124,7 +124,12 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   bundleAnalyzerConfig.defaultSizes = 'gzip';
 } else if (process.env.BUILD_ENV === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
+
+  config.ignApiKey = 'iq1rkryayi4z074da39pbg6s';
+  config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
+
   config.isProduction = true; // explicit prod flag
+
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';
 } else {
