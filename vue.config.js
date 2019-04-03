@@ -58,8 +58,8 @@ const result = {
 
 const config = {
   routerMode: 'history', // for pretty urls
-  ignApiKey: undefined,
-  bingApiKey: undefined,
+  ignApiKey: 'iq1rkryayi4z074da39pbg6s',
+  bingApiKey: 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc',
   isProduction: false,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
