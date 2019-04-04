@@ -4,26 +4,25 @@
 
       <query-item-slider-label :field="field" :value="value" />
       <vue-slider
-        ref="slider"
         v-model="value"
         :data="field.values"
         :lazy="true"
-        :piecewise="true"
-        tooltip="hover"
-        :formatter="field.i18n ? gettext : undefined" />
+        :marks="field.values"
+        hide-label
+        tooltip="focus"
+        :tooltip-formatter="field.i18n ? gettext : undefined" />
 
     </div>
 
     <div v-else-if="field.queryMode==='numericalRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value" />
       <vue-slider
-        ref="slider"
         v-model="value"
         :min="field.min"
         :max="field.max"
         :interval="interval"
         :lazy="true"
-        tooltip="hover" />
+        tooltip="focus" />
     </div>
 
     <div v-else-if="field.queryMode==='multiSelect'" class="control">
@@ -101,6 +100,8 @@
   import QueryItemSliderLabel from './QueryItemSliderLabel';
   import DateQueryItem from './DateQueryItem';
 
+  import 'vue-slider-component/theme/default.css';
+
   export default {
 
     components: {
@@ -137,11 +138,6 @@
     },
 
     methods: {
-      refreshSlider() {
-        if (this.$refs.slider) {
-          this.$nextTick(() => this.$refs.slider.refresh());
-        }
-      },
 
       gettext(key) {
         return this.$gettext(key, this.field.i18nContext);
