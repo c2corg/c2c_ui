@@ -12,7 +12,7 @@
 
         <editor-button
           :icon="fullScreen ? 'compress' : 'expand'"
-          :tooltip="$gettext('Toggle fullscreen')"
+          :tooltip="fullScreen ? $gettext('Leave fullscreen') : $gettext('Toggle fullscreen')"
           @click="fullScreen=!fullScreen" />
       </div>
 
