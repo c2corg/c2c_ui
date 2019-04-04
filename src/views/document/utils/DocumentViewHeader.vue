@@ -31,7 +31,7 @@
             <icon-edit />
           </edit-link>
         </span>
-        <div class="title is-1">
+        <h1 class="title is-1">
           <slot name="icon-document">
             <icon-document :document-type="documentType" />
           </slot>
@@ -47,7 +47,7 @@
           <span v-else-if="documentType=='xreport'" class="outing-date is-size-5">
             {{ $moment.toLocalizedString(document.date, 'LL') | uppercaseFirstLetter }}
           </span>
-        </div>
+        </h1>
       </div>
 
       <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
