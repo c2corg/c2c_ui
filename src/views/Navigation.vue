@@ -79,7 +79,7 @@
       </div>
 
       <div v-else class="navigation-item">
-        <dropdown-button class="is-right">
+        <dropdown-button class="is-right" ref="userMenu">
           <span slot="button" class="button">
             <img
               width="24"
@@ -90,40 +90,16 @@
             </span>
           </span>
 
-          <router-link :to="{ name: 'profile', params:{id:$user.id} }" class="dropdown-item is-size-5">
-            <fa-icon icon="user" />
-            <span>&nbsp;</span>
-            <span v-translate>My profile</span>
-          </router-link>
-          <router-link :to="{ name: 'account' }" class="dropdown-item is-size-5">
-            <fa-icon icon="check-circle" />
-            <span>&nbsp;</span>
-            <span v-translate>My account</span>
-          </router-link>
-          <router-link :to="{ name: 'preferences' }" class="dropdown-item is-size-5">
-            <fa-icon icon="cogs" />
-            <span>&nbsp;</span>
-            <span v-translate>My preferences</span>
-          </router-link>
-          <router-link :to="{ name: 'outings', query:{u:$user.id} }" class="dropdown-item is-size-5">
-            <icon-outing />
-            <span>&nbsp;</span>
-            <span v-translate>My outings</span>
-          </router-link>
-          <router-link :to="{ name: 'whatsnew', query:{u:$user.id} }" class="dropdown-item is-size-5">
-            <fa-icon icon="edit" />
-            <span>&nbsp;</span>
-            <span v-translate>My changes</span>
-          </router-link>
-          <router-link :to="{ name: 'following' }" class="dropdown-item is-size-5">
-            <fa-icon icon="heart" />
-            <span>&nbsp;</span>
-            <span v-translate>My followed users</span>
-          </router-link>
-          <router-link :to="{ name: 'mailinglists' }" class="dropdown-item is-size-5">
-            <fa-icon icon="at" />
-            <span>&nbsp;</span>
-            <span v-translate>My mailing lists</span>
+          <router-link
+            v-for="item of userMenuLinks"
+            :key="item.text"
+            :to="item.to"
+            class="dropdown-item is-size-5"
+            @click.native="$refs.userMenu.isActive = false">
+            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" />
+            <span>
+              {{ item.text }}
+            </span>
           </router-link>
 
           <hr class="dropdown-divider">
@@ -162,7 +138,44 @@
     data() {
       return {
         searchText: '',
-        hideSearchInput: true // only on small screen,
+        hideSearchInput: true, // only on small screen,
+        userMenuLinks: [
+          {
+            to: { name: 'profile', params: { id: this.$user.id } },
+            text: this.$gettext('My profile'),
+            icon: 'user'
+          },
+          {
+            to: { name: 'account' },
+            text: this.$gettext('My account'),
+            icon: 'check-circle'
+          },
+          {
+            to: { name: 'preferences' },
+            text: this.$gettext('My preferences'),
+            icon: 'cogs'
+          },
+          {
+            to: { name: 'outings', query: { u: this.$user.id } },
+            text: this.$gettext('My outings'),
+            iconComponent: 'icon-outing'
+          },
+          {
+            to: { name: 'whatsnew', query: { u: this.$user.id } },
+            text: this.$gettext('My changes'),
+            icon: 'edit'
+          },
+          {
+            to: { name: 'following' },
+            text: this.$gettext('My followed users'),
+            icon: 'heart'
+          },
+          {
+            to: { name: 'mailinglists' },
+            text: this.$gettext('My mailing lists'),
+            icon: 'at'
+          }
+        ]
       };
     },
 
