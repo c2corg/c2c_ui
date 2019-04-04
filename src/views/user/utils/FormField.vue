@@ -26,6 +26,8 @@
         :placeholder="placeholder || label"
         :required="required"
         :disabled="disabled"
+        :autocorrect="autocorrect"
+        :autocapitalize="autocapitalize"
         v-model="value_"
         class="input"
         :class="{'is-danger':hasError || errorMessage}">
@@ -70,6 +72,14 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      autocorrect: {
+        type: String,
+        default: undefined
+      },
+      autocapitalize: {
+        type: String,
+        default: undefined
       }
     },
 
