@@ -10,12 +10,13 @@
         <label>{{ document.date_time }}</label>
       </p>
 
-      <p v-if="document.locales[0].title">
+      <p v-if="document.cooked.title">
         <fa-icon icon="tag" />
-        <label>{{ document.locales[0].title }}</label>
+        <label>{{ document.cooked.title }}</label>
       </p>
 
-      <p v-if="locale.description"> {{ locale.description }}</p>
+      <markdown v-if="document.cooked.summary" class="is-italic" :content="document.cooked.summary" />
+      <markdown v-if="document.cooked.description" :content="document.cooked.description" />
 
       <p v-if="document.image_type">
         <icon-creative-commons />
@@ -54,17 +55,13 @@
     computed: {
       document() {
         return this.promise.data ? this.promise.data : null;
-      },
-
-      locale() {
-        return this.document ? this.$documentUtils.getLocaleSmart(this.document) : null;
       }
     },
 
     methods: {
       show(documentId) {
         this.visible = true;
-        this.promise = c2c.image.get(documentId);
+        this.promise = c2c.image.getCooked(documentId, this.$language.current);
       },
 
       hide() {
