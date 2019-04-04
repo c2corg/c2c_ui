@@ -138,8 +138,16 @@
     data() {
       return {
         searchText: '',
-        hideSearchInput: true, // only on small screen,
-        userMenuLinks: [
+        hideSearchInput: true // only on small screen,
+      };
+    },
+
+    computed: {
+      siteConfiguration() {
+        return config;
+      },
+      userMenuLinks() {
+        return [
           {
             to: { name: 'profile', params: { id: this.$user.id } },
             text: this.$gettext('My profile'),
@@ -175,13 +183,7 @@
             text: this.$gettext('My mailing lists'),
             icon: 'at'
           }
-        ]
-      };
-    },
-
-    computed: {
-      siteConfiguration() {
-        return config;
+        ];
       }
     },
 
