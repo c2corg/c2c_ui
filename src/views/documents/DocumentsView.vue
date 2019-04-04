@@ -147,7 +147,7 @@
 
     data() {
       return {
-        promise: null,
+        promise: {},
 
         displayMode: 'both',
         listMode: null,
@@ -203,6 +203,13 @@
       load() {
         this.displayMode = this.$localStorage.get(this.documentType + '.displayMode', this.documentAreGeoLocalized ? 'both' : 'result');
         this.listMode = this.$localStorage.get(this.documentType + '.listMode', false);
+
+        if (this.$route.hash) { // keep compatible with v6 AngularJs hacks...
+          this.$router.replace(this.$route.fullPath.replace('#', '?'));
+          // $route watcher will call load
+          return;
+        }
+
         this.promise = c2c[this.documentType].getAll(this.$route.query);
       },
 
