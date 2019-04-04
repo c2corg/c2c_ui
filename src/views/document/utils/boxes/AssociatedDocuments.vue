@@ -47,7 +47,7 @@
     </div>
 
     <!-- xreports -->
-    <div v-if="associations.xreports.length!=0" class="associations-list">
+    <div v-if="associations.xreports && associations.xreports.length!=0" class="associations-list">
       <div class="title">
         {{ $gettext('xreports') | uppercaseFirstLetter }}
       </div>
