@@ -383,12 +383,12 @@ msgstr ""
 msgid "associations"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:220
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:210
 msgctxt "API message"
 msgid "at least one route required"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:221
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:211
 msgctxt "API message"
 msgid "at least one user required"
 msgstr ""
@@ -514,6 +514,11 @@ msgstr ""
 msgid "best_periods"
 msgstr ""
 
+#: src/components/map/map-layers.js:87
+msgctxt "Map layer"
+msgid "Bing"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:287
 msgctxt "book_types"
 msgid "biography"
@@ -634,7 +639,7 @@ msgstr ""
 #: src/components/images-uploader/ImageUploader.vue:72
 #: src/components/markdown-editor/LinkHelper.vue:26
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:56
-#: src/views/user/LoginView.vue:165
+#: src/views/user/LoginView.vue:169
 #: src/views/wiki/edition/utils/CotometerWindow.vue:87
 msgid "Cancel"
 msgstr ""
@@ -669,12 +674,12 @@ msgstr ""
 msgid "Change account parameters"
 msgstr ""
 
-#: src/views/user/LoginView.vue:150
-#: src/views/user/LoginView.vue:162
+#: src/views/user/LoginView.vue:154
+#: src/views/user/LoginView.vue:166
 msgid "Change password"
 msgstr ""
 
-#: src/views/user/LoginView.vue:175
+#: src/views/user/LoginView.vue:179
 msgid "Checking..."
 msgstr ""
 
@@ -1133,7 +1138,7 @@ msgstr ""
 msgid "Distance (km)"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:92
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:90
 msgid "Do you really want to leave? you have unsaved changes!"
 msgstr ""
 
@@ -1247,8 +1252,8 @@ msgid "elevation_up_snow"
 msgstr ""
 
 #: src/views/user/AccountView.vue:35
-#: src/views/user/LoginView.vue:127
-#: src/views/user/LoginView.vue:71
+#: src/views/user/LoginView.vue:131
+#: src/views/user/LoginView.vue:75
 msgid "Email"
 msgstr ""
 
@@ -1298,6 +1303,11 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:388
 msgctxt "langs"
 msgid "es"
+msgstr ""
+
+#: src/components/map/map-layers.js:61
+msgctxt "Map layer"
+msgid "ESRI"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:390
@@ -1448,12 +1458,12 @@ msgstr ""
 msgid "Followed users"
 msgstr ""
 
-#: src/views/user/LoginView.vue:29
+#: src/views/user/LoginView.vue:31
 msgid "Forgot password?"
 msgstr ""
 
 #: src/views/SideMenu.vue:71
-#: src/views/portals/DashboardView.vue:29
+#: src/views/portals/DashboardView.vue:58
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
 msgstr ""
@@ -1463,7 +1473,7 @@ msgid "forum"
 msgstr ""
 
 #: src/views/user/AccountView.vue:51
-#: src/views/user/LoginView.vue:59
+#: src/views/user/LoginView.vue:63
 msgid "Forum username"
 msgstr ""
 
@@ -1477,7 +1487,7 @@ msgid "frequentation"
 msgstr ""
 
 #: src/views/user/AccountView.vue:43
-#: src/views/user/LoginView.vue:47
+#: src/views/user/LoginView.vue:49
 msgid "Fullname"
 msgstr ""
 
@@ -1498,7 +1508,7 @@ msgstr ""
 msgid "gender"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:14
+#: src/views/documents/utils/QueryItems.vue:13
 msgid "General"
 msgstr ""
 
@@ -1620,95 +1630,95 @@ msgstr ""
 msgid "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:130
+#: src/components/cards/FeedCard.vue:134
 msgid "has added images to area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:128
+#: src/components/cards/FeedCard.vue:132
 msgid "has added images to article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:129
+#: src/components/cards/FeedCard.vue:133
 msgid "has added images to book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:131
+#: src/components/cards/FeedCard.vue:135
 msgid "has added images to outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:132
+#: src/components/cards/FeedCard.vue:136
 msgid "has added images to route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:133
+#: src/components/cards/FeedCard.vue:137
 msgid "has added images to waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:134
+#: src/components/cards/FeedCard.vue:138
 msgid "has added images to xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:135
+#: src/components/cards/FeedCard.vue:139
 msgid "has created a new article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:136
+#: src/components/cards/FeedCard.vue:140
 msgid "has created a new book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:137
+#: src/components/cards/FeedCard.vue:141
 msgid "has created a new image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:138
+#: src/components/cards/FeedCard.vue:142
 msgid "has created a new outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:139
+#: src/components/cards/FeedCard.vue:143
 msgid "has created a new route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:140
+#: src/components/cards/FeedCard.vue:144
 msgid "has created a new waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:141
+#: src/components/cards/FeedCard.vue:145
 msgid "has created a new xreport"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:142
+#: src/components/cards/FeedCard.vue:146
 msgid "has updated the area"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:143
+#: src/components/cards/FeedCard.vue:147
 msgid "has updated the article"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:144
+#: src/components/cards/FeedCard.vue:148
 msgid "has updated the book"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:145
+#: src/components/cards/FeedCard.vue:149
 msgid "has updated the image"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:146
+#: src/components/cards/FeedCard.vue:150
 msgid "has updated the outing"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:147
+#: src/components/cards/FeedCard.vue:151
 msgid "has updated the route"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:148
+#: src/components/cards/FeedCard.vue:152
 msgid "has updated the waypoint"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:149
+#: src/components/cards/FeedCard.vue:153
 msgid "has updated the xreport"
 msgstr ""
 
-#: src/views/user/LoginView.vue:107
+#: src/views/user/LoginView.vue:111
 msgid "Have an account?"
 msgstr ""
 
@@ -1743,10 +1753,11 @@ msgstr ""
 msgid "height_diff_access"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:44
+#: src/components/cards/FeedCard.vue:47
 #: src/components/cards/RouteCard.vue:31
 #: src/components/generics/pretty-links/PrettyRouteLink.vue:11
 #: src/translations/fixed_strings_common_js.vue:87
+#: src/views/portals/utils/DashboardRouteLink.vue:6
 msgid "height_diff_difficulties"
 msgstr ""
 
@@ -1754,10 +1765,11 @@ msgstr ""
 msgid "height_diff_down"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:39
+#: src/components/cards/FeedCard.vue:42
 #: src/components/cards/OutingCard.vue:25
 #: src/components/cards/RouteCard.vue:23
 #: src/translations/fixed_strings_common_js.vue:89
+#: src/views/portals/utils/DashboardRouteLink.vue:3
 msgid "height_diff_up"
 msgstr ""
 
@@ -1868,7 +1880,7 @@ msgctxt "user_categories"
 msgid "hut_warden"
 msgstr ""
 
-#: src/views/user/LoginView.vue:78
+#: src/views/user/LoginView.vue:82
 msgid "I have read and agree to the terms of use"
 msgstr ""
 
@@ -1886,6 +1898,21 @@ msgstr ""
 msgid "ice_rating"
 msgstr ""
 
+#: src/components/map/map-layers.js:118
+msgctxt "Map slopes layer"
+msgid "IGN"
+msgstr ""
+
+#: src/components/map/map-layers.js:111
+msgctxt "Map layer"
+msgid "IGN maps"
+msgstr ""
+
+#: src/components/map/map-layers.js:113
+msgctxt "Map layer"
+msgid "IGN ortho"
+msgstr ""
+
 #: src/translations/fixed_strings_manual.vue:20
 msgid "image"
 msgstr ""
@@ -1901,7 +1928,7 @@ msgstr ""
 #: src/components/generics/markers/MarkerImageCount.vue:3
 #: src/translations/fixed_strings_common_js.vue:100
 #: src/translations/fixed_strings_manual.vue:9
-#: src/views/portals/DashboardView.vue:6
+#: src/views/portals/DashboardView.vue:8
 #: src/views/static-views/NotFoundView.vue:60
 #: src/views/static-views/TopoguideView.vue:12
 msgid "images"
@@ -2059,7 +2086,7 @@ msgstr ""
 msgid "langs"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:27
+#: src/views/portals/FeedView.vue:30
 msgid "Last forum topics"
 msgstr ""
 
@@ -2131,7 +2158,7 @@ msgctxt "event_types"
 msgid "lightning"
 msgstr ""
 
-#: src/views/user/LoginView.vue:82
+#: src/views/user/LoginView.vue:86
 msgid "link"
 msgstr ""
 
@@ -2177,8 +2204,8 @@ msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
 #: src/views/Navigation.vue:75
-#: src/views/user/LoginView.vue:134
-#: src/views/user/LoginView.vue:26
+#: src/views/user/LoginView.vue:138
+#: src/views/user/LoginView.vue:28
 #: src/views/user/LoginView.vue:3
 msgid "Login"
 msgstr ""
@@ -2188,7 +2215,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:134
+#: src/views/Navigation.vue:110
 msgid "Logout"
 msgstr ""
 
@@ -2246,7 +2273,7 @@ msgid "Map only"
 msgstr ""
 
 #: src/translations/fixed_strings_manual.vue:10
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:52
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:65
 msgid "maps"
 msgstr ""
 
@@ -2317,7 +2344,7 @@ msgstr ""
 msgid "Misc data about the waypoint"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:17
+#: src/views/documents/utils/QueryItems.vue:16
 msgid "Miscs"
 msgstr ""
 
@@ -2331,7 +2358,7 @@ msgstr ""
 msgid "mixed_rating"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:22
+#: src/views/portals/FeedView.vue:25
 msgid "Mobile application"
 msgstr ""
 
@@ -2423,34 +2450,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:101
+#: src/views/Navigation.vue:158
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:116
+#: src/views/Navigation.vue:173
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:121
+#: src/views/Navigation.vue:178
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:126
+#: src/views/Navigation.vue:183
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:111
+#: src/views/Navigation.vue:168
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:106
-#: src/views/portals/FeedView.vue:11
+#: src/views/Navigation.vue:163
+#: src/views/portals/DashboardView.vue:21
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:96
+#: src/views/Navigation.vue:153
 msgid "My profile"
 msgstr ""
 
@@ -2526,7 +2553,7 @@ msgid "New outing"
 msgstr ""
 
 #: src/views/user/AccountView.vue:27
-#: src/views/user/LoginView.vue:158
+#: src/views/user/LoginView.vue:162
 msgid "New password"
 msgstr ""
 
@@ -2576,7 +2603,7 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: src/views/user/LoginView.vue:32
+#: src/views/user/LoginView.vue:34
 msgid "No account yet?"
 msgstr ""
 
@@ -2696,6 +2723,11 @@ msgstr ""
 msgid "opening_periods"
 msgstr ""
 
+#: src/components/map/map-layers.js:97
+msgctxt "Map layer"
+msgid "OpenTopoMap"
+msgstr ""
+
 #: src/views/static-views/NotFoundView.vue:13
 msgid "or try the following pages:"
 msgstr ""
@@ -2734,7 +2766,7 @@ msgstr ""
 #: src/translations/fixed_strings_manual.vue:11
 #: src/views/SideMenu.vue:70
 #: src/views/document/utils/boxes/ToolBox.vue:22
-#: src/views/portals/DashboardView.vue:16
+#: src/views/portals/DashboardView.vue:36
 #: src/views/static-views/NotFoundView.vue:54
 #: src/views/static-views/TopoguideView.vue:20
 #: src/views/static-views/TopoguideView.vue:9
@@ -2816,8 +2848,8 @@ msgctxt "waypoint_types"
 msgid "pass"
 msgstr ""
 
-#: src/views/user/LoginView.vue:22
-#: src/views/user/LoginView.vue:65
+#: src/views/user/LoginView.vue:24
+#: src/views/user/LoginView.vue:69
 msgid "Password"
 msgstr ""
 
@@ -2867,11 +2899,13 @@ msgstr ""
 msgid "personal comments"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:14
+#: src/views/portals/DashboardView.vue:25
+#: src/views/portals/FeedView.vue:18
 msgid "Personal feed off"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:14
+#: src/views/portals/DashboardView.vue:25
+#: src/views/portals/FeedView.vue:18
 msgid "Personal feed on"
 msgstr ""
 
@@ -2968,8 +3002,8 @@ msgstr ""
 msgid "Precise location of the event."
 msgstr ""
 
-#: src/views/documents/utils/QueryItem.vue:39
-#: src/views/documents/utils/QueryItem.vue:70
+#: src/views/documents/utils/QueryItem.vue:38
+#: src/views/documents/utils/QueryItem.vue:69
 msgid "Press enter to select"
 msgstr ""
 
@@ -3127,7 +3161,7 @@ msgstr ""
 #: src/components/datatable/DocumentsTable.vue:190
 #: src/views/document/OutingView.vue:48
 #: src/views/document/RouteView.vue:31
-#: src/views/documents/utils/QueryItems.vue:15
+#: src/views/documents/utils/QueryItems.vue:14
 #: src/views/wiki/edition/RouteEditionView.vue:80
 #: src/views/wiki/edition/WaypointEditionView.vue:107
 msgid "ratings"
@@ -3150,7 +3184,7 @@ msgstr ""
 msgid "reduce_impact"
 msgstr ""
 
-#: src/views/user/LoginView.vue:104
+#: src/views/user/LoginView.vue:108
 msgid "Register"
 msgstr ""
 
@@ -3183,7 +3217,7 @@ msgstr ""
 msgid "Reset geometry"
 msgstr ""
 
-#: src/views/user/LoginView.vue:119
+#: src/views/user/LoginView.vue:123
 msgid "Reset password"
 msgstr ""
 
@@ -3301,7 +3335,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:162
 #: src/translations/fixed_strings_manual.vue:12
-#: src/views/portals/DashboardView.vue:35
+#: src/views/portals/DashboardView.vue:68
 #: src/views/static-views/NotFoundView.vue:56
 #: src/views/static-views/NotFoundView.vue:57
 #: src/views/static-views/TopoguideView.vue:10
@@ -3391,12 +3425,12 @@ msgstr ""
 msgid "See the latest version"
 msgstr ""
 
-#: src/views/documents/utils/QueryItem.vue:38
-#: src/views/documents/utils/QueryItem.vue:69
+#: src/views/documents/utils/QueryItem.vue:37
+#: src/views/documents/utils/QueryItem.vue:68
 msgid "Select option"
 msgstr ""
 
-#: src/views/user/LoginView.vue:131
+#: src/views/user/LoginView.vue:135
 msgid "Send reset email"
 msgstr ""
 
@@ -3466,7 +3500,7 @@ msgctxt "waypoint_types"
 msgid "shelter"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:219
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:209
 msgctxt "API message"
 msgid "Shorter than minimum length 1"
 msgstr ""
@@ -3722,6 +3756,16 @@ msgctxt "waypoint_types"
 msgid "summit"
 msgstr ""
 
+#: src/components/map/map-layers.js:115
+msgctxt "Map layer"
+msgid "SwissTopo"
+msgstr ""
+
+#: src/components/map/map-layers.js:121
+msgctxt "Map slopes layer"
+msgid "SwissTopo"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:248
 msgctxt "article_categories"
 msgid "tags"
@@ -3746,7 +3790,7 @@ msgctxt "weather_station_types"
 msgid "temperature"
 msgstr ""
 
-#: src/views/documents/utils/QueryItems.vue:16
+#: src/views/documents/utils/QueryItems.vue:15
 msgid "Terrain"
 msgstr ""
 
@@ -3803,7 +3847,7 @@ msgstr ""
 msgid "This field is too short"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:222
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:212
 msgctxt "API message"
 msgid "This field must be a valid ISBN."
 msgstr ""
@@ -3972,13 +4016,13 @@ msgstr ""
 msgid "url"
 msgstr ""
 
-#: src/components/cards/FeedCard.vue:6
+#: src/components/cards/FeedCard.vue:4
 msgid "User avatar"
 msgstr ""
 
 #: src/views/user/AccountView.vue:12
-#: src/views/user/LoginView.vue:14
-#: src/views/user/LoginView.vue:53
+#: src/views/user/LoginView.vue:15
+#: src/views/user/LoginView.vue:57
 msgid "Username"
 msgstr ""
 
@@ -4085,7 +4129,7 @@ msgstr ""
 msgid "waypoints"
 msgstr ""
 
-#: src/views/user/LoginView.vue:139
+#: src/views/user/LoginView.vue:143
 msgid "We sent you an email, please click on the link to reset password."
 msgstr ""
 
@@ -4151,6 +4195,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:195
 #: src/translations/fixed_strings_manual.vue:13
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:52
 #: src/views/static-views/NotFoundView.vue:59
 #: src/views/static-views/SeracView.vue:78
 msgid "xreports"
