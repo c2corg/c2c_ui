@@ -116,7 +116,7 @@
 
         // is there any elevation data
         if (!this.coords.some((coord) => {
-          return coord.length > 2;
+          return coord.length > 2 && coord[2] !== 0;
         })) {
           return;
         }
