@@ -8,10 +8,12 @@
 
       <form-field
         name="username"
-        v-model="username"
-        required
         type="text"
+        required
+        autocapitalize="off"
+        autocorrect="off"
         :label="$gettext('Username')"
+        v-model="username"
         icon="user" />
 
       <form-field
@@ -50,6 +52,8 @@
         name="username"
         v-model="username"
         type="text"
+        autocapitalize="off"
+        autocorrect="off"
         :label="$gettext('Username')"
         icon="user" />
       <form-field
