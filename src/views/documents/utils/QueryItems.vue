@@ -5,8 +5,7 @@
     <dropdown-button
       v-for="category of categorizedFields"
       :key="category.name"
-      class="category-button"
-      @changeDisplay="refreshSliders()">
+      class="category-button">
 
       <span slot="button" class="button" :disabled="category.fields.length===0">
         <fa-icon :icon="$options.categoryIcon[category.name]" />
@@ -247,18 +246,6 @@
         }
 
         return result;
-      }
-    },
-
-    methods: {
-      refreshSliders() {
-        for (const dropdown of this.$children) {
-          if (dropdown.isActive) {
-            for (const queryItem of dropdown.$children) {
-              queryItem.refreshSlider();
-            }
-          }
-        }
       }
     }
   };
