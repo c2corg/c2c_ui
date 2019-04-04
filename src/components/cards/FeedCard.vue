@@ -1,11 +1,14 @@
 <template>
   <card-container :document="document" class="feed-card">
     <card-title>
-      <img
-        class="avatar"
-        :alt="$gettext('User avatar')"
-        :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
-
+      <span :title="$gettext('User avatar')">
+        <img
+          v-if="!useDefaultAvatarIcon"
+          class="avatar"
+          @error="useDefaultAvatarIcon=true"
+          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+        <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
+      </span>
       <span>
         <document-title :document="item.user" />
         <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
@@ -105,7 +108,8 @@
     data() {
       return {
         actionLine: null,
-        images: []
+        images: [],
+        useDefaultAvatarIcon: false
       };
     },
 
