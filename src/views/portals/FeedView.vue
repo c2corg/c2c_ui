@@ -5,17 +5,20 @@
     <div class="section feed-view">
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
-          <h3 class="title is-3 feed-title">
-            <span v-translate>Activity feed</span>
-            <span v-if="$user.isLogged" class="is-size-5 is-pulled-right feed-buttons">
-              <router-link :to="{name:'preferences'}" :title="$gettext('My preferences')">
-                <fa-icon icon="cogs" />
-              </router-link>
-              <span :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')">
-                <fa-icon :icon="isPersonal ? 'user-check' : 'user'" @click="toggleIsPersonal" />
-              </span>
+          <div class="feed-title">
+            <span class="is-size-3 has-text-weight-semibold" v-translate>Activity feed</span>
+            <span v-if="$user.isLogged" class="feed-buttons">
+              <input
+                id="c2c-personal-feed"
+                class="is-checkradio is-primary"
+                type="checkbox"
+                v-model="isPersonal"
+                @change="saveIsPersonalState">
+              <label for="c2c-personal-feed">
+                {{ isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off') }}
+              </label>
             </span>
-          </h3>
+          </div>
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
@@ -63,8 +66,7 @@
     },
 
     methods: {
-      toggleIsPersonal() {
-        this.isPersonal = !this.isPersonal;
+      saveIsPersonalState() {
         this.$localStorage.set('isPersonal', this.isPersonal);
       }
     }
@@ -88,19 +90,16 @@
     }
   }
 
-  .cards-container > div{
-    justify-content:center;
-    margin:auto;
+  .feed-title{
+    margin-bottom: 12px;
   }
 
   .feed-buttons{
-    a, svg{
-      color:$text;
-    }
+    vertical-align: text-bottom;
+  }
 
-    svg{
-      margin-right:0.3rem;
-      cursor: pointer;
-    }
+  .cards-container > div{
+    justify-content:center;
+    margin:auto;
   }
 </style>
