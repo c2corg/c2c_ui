@@ -33,7 +33,7 @@ export default function install(Vue) {
       },
 
       toTechnicalString(arg) {
-        return moment(arg).format('YYYY-MM-DD hh:mm:ss');
+        return moment(arg).format('YYYY-MM-DD HH:mm:ss');
       },
 
       month(monthNumber) {
