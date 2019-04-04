@@ -1,5 +1,3 @@
-WORK IN PROGRESS
-
 Here the steps to release a new UI version on camptocamp.org
 
 First of all, you must create a [release](https://github.com/c2corg/c2c_ui/releases) on github. Please follow [semver](https://semver.org/) logic :
@@ -27,7 +25,7 @@ grep image: docker-compose.yml
 vi docker-compose.yml
 
 # Set container in mainternance mode (will not get new requests for Haproxy)
-docker-compose exec api touch maintenance_mode.txt
+docker-compose exec ui touch maintenance_mode.txt
 
 # download the new image
 docker-compose pull
@@ -36,16 +34,16 @@ docker-compose pull
 docker-compose stop && docker-compose rm -f
 docker-compose up -d
 
-# don't forget to save your changes
-git add . && git commit
-
 # make sure everything is working properly
 docker-compose ps
 
-# Perfect ! Let's do the same for api1
+# don't forget to save your changes
+git add . && git commit
+
+# Perfect ! Let's do the same for ui1
 # notice : you do not need to update docker-compose.yml
 cd ../ui1
-docker-compose exec api touch maintenance_mode.txt
+docker-compose exec ui touch maintenance_mode.txt
 docker-compose pull
 docker-compose stop && docker-compose rm -f
 docker-compose up -d
