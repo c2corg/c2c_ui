@@ -53,6 +53,7 @@
 
         <routes-box :document="document" hide-buttons />
         <recent-outings-box :document="document" hide-see-all-results-button />
+        <images-box v-if="document" :document="document" />
         <comments-box :document="document" />
 
       </div>
