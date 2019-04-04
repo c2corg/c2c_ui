@@ -58,6 +58,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
   });
 }
 
+// $gettext('ESRI', 'Map layer')
 const esri = new ol.layer.Tile({
   title: 'Esri',
   type: 'base',
@@ -83,6 +84,7 @@ var openStreetMap = new ol.layer.Tile({
     visible: false,
 }) */
 
+// $gettext('Bing', 'Map layer')
 const bingMap = new ol.layer.Tile({
   title: 'Bing',
   source: new ol.source.BingMaps({
@@ -92,6 +94,7 @@ const bingMap = new ol.layer.Tile({
   visible: false
 });
 
+// $gettext('OpenTopoMap', 'Map layer')
 const openTopoMap = new ol.layer.Tile({
   title: 'OpenTopoMap',
   type: 'base',
@@ -105,12 +108,17 @@ const openTopoMap = new ol.layer.Tile({
   })
 });
 
+// $gettext('IGN maps', 'Map layer')
 const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+// $gettext('IGN ortho', 'Map layer')
 const ignOrtho = createIgnSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+// $gettext('SwissTopo', 'Map layer')
 const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
 
+// $gettext('IGN', 'Map slopes layer')
 const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
 ignSlopes.setOpacity(0.4);
+// $gettext('SwissTopo', 'Map slopes layer')
 const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
 swissSlopes.setOpacity(0.4);
 
