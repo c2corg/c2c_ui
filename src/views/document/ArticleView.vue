@@ -19,7 +19,7 @@
           <div style="clear:both" />
         </div>
 
-        <routes-box v-if="!isDraftView" :document="document" />
+        <routes-box v-if="!isDraftView" :document="document" hide-buttons />
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
         <comments-box v-if="!isDraftView" :document="document" />
