@@ -67,6 +67,7 @@
         Oups! something went wrong...
       </div>
     </div>
+
     <link-helper ref="linkHelper" @insert="insertLink" />
   </div>
 </template>
@@ -391,11 +392,9 @@
 
     textarea, textarea:focus{
       font-family: monospace;
-      padding:0;
       border:0;
       box-shadow: none;
       min-height:100px;
-      padding:0.5rem;
     }
 
     .preview, .preview-error{
@@ -423,11 +422,17 @@
     z-index:999;
     width:100%;
     height:100%;
+    display: flex;
+    flex-direction: column;
 
-    .markdown-editor-content, textarea{
-      height:100%;
-      resize: None;
-      max-height:None;
+    .markdown-editor-content{
+      flex-grow: 1;
+
+      textarea{
+        height:100%;
+        resize: None;
+        max-height:None;
+      }
     }
   }
 
