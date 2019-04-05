@@ -85,11 +85,18 @@
           this.computeImages(container.querySelectorAll('img[c2c\\:role=embedded-image]'));
           this.computeEmojis(container.querySelectorAll('img[c2c\\:role=emoji]'));
           this.computeAnchors(container.querySelectorAll('a[c2c\\:role=internal-link]'));
+          this.computeVideos(container.querySelectorAll('div[c2c\\:role=video] > iframe'));
 
           addClasses('div[c2c\\:role=info]', ['notification', 'is-info']);
           addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
           addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
           addClasses('table[c2c\\:role=ltag]', ['table']);
+        }
+      },
+
+      computeVideos(iframes) {
+        for (const iframe of iframes) {
+          iframe.setAttribute('allowfullscreen', true);
         }
       },
 
@@ -270,6 +277,15 @@
 
   div[c2c\:role=info], div[c2c\:role=warning], div[c2c\:role=danger]{
     overflow: hidden;
+  }
+
+  div[c2c\:role=video]{
+    text-align: center;
+
+    iframe{
+      width:420px;
+      height:315px;
+    }
   }
 
   @media print {
