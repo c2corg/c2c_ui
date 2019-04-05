@@ -240,6 +240,11 @@
           source: new ol.source.Vector()
         }),
 
+        // layer for associated images
+        imagesLayer: new ol.layer.Vector({
+          source: new ol.source.Vector()
+        }),
+
         geolocation: null,
 
         showLayerSwitcher: false,
@@ -343,6 +348,7 @@
           ...this.dataLayers,
           ...this.protectionAreasLayers,
           this.protectionAreasLayer,
+          this.imagesLayer, // images icons will be under documents
           this.documentsLayer,
           this.waypointsLayer // keep waypoint above trace and documents
         ],
@@ -511,9 +517,11 @@
       drawDocumentMarkers() {
         const documentsSource = this.documentsLayer.getSource();
         const waypointsSource = this.waypointsLayer.getSource();
+        const imagesSource = this.imagesLayer.getSource();
 
         documentsSource.clear();
         waypointsSource.clear();
+        imagesSource.clear();
 
         this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true));
         this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false));
@@ -529,6 +537,12 @@
             }
             for (const waypoint of document.associations.waypoint_children || []) {
               this.addDocumentFeature(waypoint, waypointsSource);
+            }
+            for (const image of document.associations.images || []) {
+              if (!this.$documentUtils.hasSameGeolocation(image, document)) {
+                // show image marker only if it's geolocation is different from document
+                this.addDocumentFeature(image, imagesSource);
+              }
             }
           }
         }
