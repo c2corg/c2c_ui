@@ -149,34 +149,6 @@
 
   import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
-  const geomIsValid = function(geom) {
-    return geom.type === 'Point' && Array.isArray(geom.coordinates) && geom.coordinates.length === 2;
-  };
-
-  const geomHasChanged = function(oldVal, newVal) {
-    if (oldVal === newVal) {
-      // null === null
-      // string === string
-      return false;
-    } else if (oldVal === null || newVal === null) {
-      // null !== string
-      return true;
-    } else {
-      // two different strings. But, it could be :
-      //     '{"a":1, "b":2}' !== '{"b":2, "a":1}'
-      // We must parse and test
-      const oldData = JSON.parse(oldVal);
-      const newData = JSON.parse(newVal);
-
-      if (!geomIsValid(oldData) || !geomIsValid(newData)) {
-        // if any invalid structure, considere them as different
-        return true;
-      } else {
-        return (oldData.coordinates[0] !== newData.coordinates[0] || oldData.coordinates[1] !== newData.coordinates[1]);
-      }
-    }
-  };
-
   const hasChanged = function(oldVal, newVal) {
     // does oldVal equals to newVal ?
     // handle arrays and immutables values
@@ -395,12 +367,11 @@
           return false;
         }
 
-        const oldGeometry = this.oldVersion.document.geometry;
-        const newGeometry = this.newVersion.document.geometry;
-
-        if (geomHasChanged(oldGeometry.geom, newGeometry.geom)) {
+        if (!this.$documentUtils.hasSameGeolocation(this.oldVersion.document, this.newVersion.document)) {
           return true;
         }
+        const oldGeometry = this.oldVersion.document.geometry;
+        const newGeometry = this.newVersion.document.geometry;
 
         if (oldGeometry.geom_detail !== newGeometry.geom_detail) {
           return true;

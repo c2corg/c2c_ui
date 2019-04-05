@@ -273,6 +273,43 @@ export default function install(Vue) {
         } else {
           return end.format('dddd Do MMMM YYYY');
         }
+      },
+
+      // Returns true if both documents has same geolocalization point
+      // it compares document.geometry.geom
+      hasSameGeolocation(document1, document2) {
+        const geomIsValid = function(geom) {
+          return geom.type === 'Point' && Array.isArray(geom.coordinates) && geom.coordinates.length === 2;
+        };
+
+        const geolocation1 = (document1.geometry || {}).geom;
+        const geolocation2 = (document2.geometry || {}).geom;
+
+        if (geolocation1 === geolocation2) {
+          // undefined === undefined
+          // null === null
+          // string === string
+          return true;
+        } else if (!geolocation1 || !geolocation2) {
+          // only one of them is null or undefined or empty string
+          return false;
+        } else {
+          // two different strings. But, it could be :
+          //     '{"a":1, "b":2}' !== '{"b":2, "a":1}'
+          // We must parse and test
+          const data1 = JSON.parse(geolocation1);
+          const data2 = JSON.parse(geolocation2);
+
+          if (geomIsValid(data1) && geomIsValid(data2)) {
+            return (data1.coordinates[0] === data2.coordinates[0] && data1.coordinates[1] === data2.coordinates[1]);
+          } else if (!geomIsValid(data1) && !geomIsValid(data2)) {
+            // both invalid structure, considere them as identical
+            return true;
+          } else {
+            // one of thme is invalid => different
+            return false;
+          }
+        }
       }
     }
   });
