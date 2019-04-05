@@ -1,5 +1,5 @@
 <template>
-  <dropdown-button class="is-right">
+  <dropdown-button class="is-right" ref="displayModeSwitch">
     <span slot="button" class="button is-small">
       <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
       <span>&nbsp;</span>
@@ -8,7 +8,7 @@
     <a
       class="dropdown-item is-size-6"
       :class="{'is-active': value==='result'}"
-      @click="$emit('input', 'result')">
+      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'result')">
       <span class="has-text-centered item-icons">
         <fa-icon :icon="listMode ? 'th-list' : 'th'" />
       </span>
@@ -17,7 +17,7 @@
     <a
       class="dropdown-item is-size-6"
       :class="{'is-active': value==='both'}"
-      @click="$emit('input', 'both')">
+      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'both')">
       <span class="is-nowrap item-icons">
         <fa-icon :icon="listMode ? 'th-list' : 'th'" />
         <fa-icon icon="map-marked-alt" />
@@ -27,7 +27,7 @@
     <a
       class="dropdown-item is-size-6"
       :class="{'is-active': value==='map'}"
-      @click="$emit('input', 'map')">
+      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'map')">
       <span class="has-text-centered item-icons">
         <fa-icon icon="map-marked-alt" />
       </span>
