@@ -189,64 +189,70 @@
 
 <style lang="scss">
 
-@import '@/assets/sass/variables.scss';
+  @import '@/assets/sass/variables.scss';
 
-.discourse-post{
+  .discourse-post{
     border-top:6px solid $color-base-c2c;
     margin-bottom:1.5rem;
-}
+  }
 
-.discourse-post-avatar img{
+  .discourse-post-avatar img{
     margin:15px 15px 15px 0;
     border-radius: 4px;
-}
+  }
 
-.discourse-post-header{
+  .discourse-post-header{
     background: #E4E4E4;
     padding: 4px 10px 4px;
-}
+  }
 
-.discourse-post-header-username{
+  .discourse-post-header-username{
     font-weight:bold;
-}
+  }
 
-.discourse-content{
+  .discourse-content{
     margin-top:0.5rem;
 
     .emoji{
-        width:20px;
-        height:20px;
-        vertical-align: middle;
+      width:20px;
+      height:20px;
+      vertical-align: middle;
+    }
+
+    blockquote {
+      background-color: #F0EFEB;
+      border-left: 5px solid #e9e9e9;
+      border-left-color: #D0D0D0;
     }
 
     .quote{
-        margin-top: 1em;
-        margin-bottom: 1em;
+      margin-top: 1em;
+      margin-bottom: 1em;
 
-        .title, blockquote {
-            background-color: #F0EFEB;
-            border-left: 5px solid #e9e9e9;
-            border-left-color: #D0D0D0;
-        }
+      .title, blockquote {
+        background-color: #F0EFEB;
+        border-left: 5px solid #e9e9e9;
+        border-left-color: #D0D0D0;
+      }
 
-        .title{
-            padding: 12px 12px 1px 12px;
-            margin-bottom: 0;
-        }
+      .title{
+        padding: 12px 12px 1px 12px;
+        margin-bottom: 0;
+      }
 
-        blockquote{
-            margin-top: 0;
-            margin-left: 0;
-            margin-right: 0;
-            padding: 12px;
-        }
+      blockquote{
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 12px;
+      }
     }
 
     h2{
-        margin: 30px 0 10px;
-        font-size: 1.5em;
-        font-weight: bold;
+      margin: 30px 0 10px;
+      font-size: 1.5em;
+      font-weight: bold;
     }
-}
+  }
 
 </style>
