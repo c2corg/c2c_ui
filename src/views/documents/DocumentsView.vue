@@ -13,7 +13,7 @@
         <router-link
           v-for="type of documentTypes"
           :key="type"
-          class="dropdown-item is-size-6"
+          class ="dropdown-item is-size-6"
           :class="{'is-active': type === documentType}"
           :to="{name: type + 's', query:queryWithoutOffset}">
           <icon-document :document-type="type" />
@@ -104,6 +104,8 @@
           v-if="listMode"
           :documents="documents ? documents : {}"
           :document-type="documentType"
+          :highlighted-document="highlightedDocument"
+          @highlightDocument="highlightedDocument = arguments[0]"
           class="documents-table" />
       </div>
       <div v-if="showMap" class="column map-container">

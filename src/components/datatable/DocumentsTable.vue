@@ -4,7 +4,11 @@
     class="ag-theme-balham"
     :column-defs="columnDefs"
     suppress-property-names-check
-    :row-data="documents.documents" />
+    :row-data="documents.documents"
+    :get-row-class="getRowClass"
+    :get-row-node-id="getRowNodeId"
+    @grid-ready="onGridReady"
+    @cellMouseOver="onHover" />
 </template>
 
 <script>
@@ -53,6 +57,10 @@
       documents: {
         type: Object,
         required: true
+      },
+      highlightedDocument: {
+        type: Object,
+        default: null
       }
     },
 
@@ -66,10 +74,42 @@
       documentType: {
         handler: 'computeColumnDefs',
         immediate: true
+      },
+      highlightedDocument(newValue, oldValue) {
+        const rows = [];
+        const gridApi = this.gridApi;
+
+        const pushDoc = function(doc) {
+          if (doc) {
+            rows.push(gridApi.getRowNode(String(doc.document_id)));
+          }
+        };
+
+        pushDoc(newValue);
+        pushDoc(oldValue);
+
+        this.gridApi.redrawRows({ rowNodes: rows });
       }
     },
 
     methods: {
+      onGridReady(params) {
+        this.gridApi = params.api;
+      },
+
+      onHover(event) {
+        this.highlightedDocument = event.data;
+        this.$emit('highlightDocument', event.data);
+      },
+
+      getRowNodeId(document) {
+        return String(document.document_id);
+      },
+
+      getRowClass(params) {
+        return params.data === this.highlightedDocument ? 'has-background-grey-lighter' : '';
+      },
+
       computeColumnDefs() {
         const fields = constants.objectDefinitions[this.documentType].fields;
 
