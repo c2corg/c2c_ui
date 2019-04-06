@@ -1,11 +1,15 @@
 <template>
   <dashboard-link :document="route">
-    <span v-if="filteredDocument.height_diff_up" :title="$gettext('height_diff_up')">
-      +{{ route.height_diff_up }}&nbsp;m,
-    </span>
-    <span v-if="filteredDocument.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
-      +{{ route.height_diff_difficulties }}&nbsp;m,
-    </span>
+    <span
+      v-if="filteredDocument.height_diff_up"
+      :title="$gettext('height_diff_up')"
+      class="append-comma">
+      +{{ route.height_diff_up }}&nbsp;m</span>
+    <span
+      v-if="filteredDocument.height_diff_difficulties"
+      :title="$gettext('height_diff_difficulties')"
+      class="append-comma">
+      {{ route.height_diff_difficulties }}&nbsp;m</span>
     <route-rating :document="filteredDocument" />
   </dashboard-link>
 </template>
@@ -88,3 +92,9 @@
     }
   };
 </script>
+
+<style scoped>
+  .append-comma:not(:last-child)::after {
+    content: ", ";
+  }
+</style>
