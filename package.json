@@ -63,7 +63,7 @@
     "node-sass": "4.11.0",
     "sass-loader": "7.1.0",
     "vue-template-compiler": "2.6.8",
-    "webpack-bundle-analyzer": "3.1.0",
+    "webpack-bundle-analyzer": "3.2.0",
     "xml2js": "0.4.19"
   },
   "postcss": {
