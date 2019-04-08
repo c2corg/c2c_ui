@@ -11,13 +11,13 @@
 
     </div>
 
-    <map-view
-      class="map-view"
-      :documents="new Array(document)"
-      :show-protection-areas="['r', 'w'].includes(document.type)"
-      :biodiv-sports-activities="document.activities"
-      style="height:275px"
-      @has-protection-area="$emit('has-protection-area')" />
+    <div class="map-container">
+      <map-view
+        :documents="new Array(document)"
+        :show-protection-areas="['r', 'w'].includes(document.type)"
+        :biodiv-sports-activities="document.activities"
+        @has-protection-area="$emit('has-protection-area')" />
+    </div>
 
     <elevation-profile :document="document" v-if="documentType=='outing'" />
 
@@ -80,8 +80,14 @@
 </script>
 
 <style scoped>
-    .map-view, .nearby-link{
-        margin-top:1rem;
-        margin-bottom:1rem;
-    }
+  .map-container{
+    height: 275px;
+    margin-top:1rem;
+    margin-bottom:1rem;
+  }
+
+  .nearby-link{
+    margin-top:1rem;
+    margin-bottom:1rem;
+  }
 </style>
