@@ -2,6 +2,7 @@
   <div class="dropdown control" :class="{'is-active':promise.data}">
     <div class="control has-icons-left input-container">
       <input
+        ref="input"
         class="input"
         :class="{'is-danger':hasError}"
         type="text"
@@ -167,6 +168,10 @@
     },
 
     methods: {
+      focus() {
+        this.$refs.input.focus();
+      },
+
       closeDropdown() {
         this.promise = {};
       },
