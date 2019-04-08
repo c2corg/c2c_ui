@@ -23,6 +23,7 @@
     <div class="navigation-end">
       <div ref="searchInputContainer">
         <input-document
+          ref="searchInput"
           class="navigation-item search-input"
           :class="{'is-hidden-mobile': hideSearchInput}"
           :document-type="['waypoint', 'route', 'article', 'book']"
@@ -33,7 +34,7 @@
         <div
           class="navigation-item is-hidden-tablet"
           :class="{'is-hidden-mobile': !hideSearchInput}">
-          <span class="button" @click="hideSearchInput=false">
+          <span class="button" @click="showSearchInput">
             <fa-icon icon="search" />
           </span>
         </div>
@@ -213,6 +214,15 @@
         if (!this.$refs.searchInputContainer.contains(event.target)) {
           this.hideSearchInput = true;
         }
+      },
+
+      showSearchInput() {
+        this.hideSearchInput = false;
+
+        // after DOM update, input will be visible, and focusable
+        this.$nextTick(() => {
+          this.$refs.searchInput.focus();
+        });
       }
     }
   };
