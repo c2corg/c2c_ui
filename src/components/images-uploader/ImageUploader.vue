@@ -93,6 +93,27 @@
 
   const worker = new Worker();
 
+  // Microsoft Edge does not implement toblob, and there is no polyfill in core.js
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
+  if (!HTMLCanvasElement.prototype.toBlob) {
+    Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+      value(callback, type, quality) {
+        const dataURL = this.toDataURL(type, quality).split(',')[1];
+        setTimeout(function() {
+          const binStr = atob(dataURL);
+          const len = binStr.length;
+          const arr = new Uint8Array(len);
+
+          for (let i = 0; i < len; i++) {
+            arr[i] = binStr.charCodeAt(i);
+          }
+
+          callback(new Blob([arr], { type: type || 'image/png' }));
+        });
+      }
+    });
+  }
+
   export default {
 
     props: {
