@@ -50,7 +50,9 @@
           {{ change.lang }}
         </td>
         <td>
-          <icon-document :document-type="change.document.documentType" />
+          <span class="icon icon-document-container" :style="`background: ${change.documentTypeColor}`">
+            <icon-document :document-type="change.document.documentType" class="has-text-light" />
+          </span>
           {{ change.document.title }}
           :
           <span v-if="change.comment">
@@ -130,8 +132,22 @@
       },
 
       onLoad() {
+        const documentTypeColors = {
+          'a': 'purple',
+          'b': 'plum',
+          'c': 'darkcyan',
+          'i': 'pink',
+          'm': 'yellow',
+          // 'o': 'XXX',
+          // 'u': 'XXX',
+          'r': 'dodgerblue',
+          'w': 'green',
+          'x': 'tomato'
+        };
+
         for (const change of this.promise.data.feed) {
           change.document.documentType = this.$documentUtils.getDocumentType(change.document.type);
+          change.documentTypeColor = documentTypeColors[change.document.type] || 'black';
           this.feed.push(change);
         }
 
@@ -145,17 +161,21 @@
 
 <style scoped lang="scss">
 
-    td{
-        white-space:nowrap;
-    }
+  td{
+    white-space:nowrap;
+  }
 
-    td:last-child {
-        width: 100%;
-        white-space:normal;
-    }
+  td:last-child {
+    width: 100%;
+    white-space:normal;
+  }
 
-    td:last-child > span:last-child, th:last-child > span:last-child{
-        font-style:italic;
-    }
+  td:last-child > span:last-child, th:last-child > span:last-child{
+    font-style:italic;
+  }
+
+  .icon-document-container{
+    border-radius: 100%;
+  }
 
 </style>
