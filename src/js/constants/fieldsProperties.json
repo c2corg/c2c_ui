@@ -278,7 +278,7 @@
         "values": "route_duration_types",
         "multiple": true,
         "i18n": false,
-        "default": ["1"]
+        "queryMode": "valuesRangeSlider"
     },
     "editor":
     {
