@@ -134,6 +134,17 @@
       }
     },
 
+    watch: {
+      // this component svaes it states. It allow an user to close window
+      // with unsaved images, and re-open it without loosing it's images
+      // Here is the issue :
+      // if the user starts an image load, then closes the window without saving
+      // and go to another page, the component won't be reloaded
+      // and loaded images could be accessible from the next document
+      // so, if $route changes, we must clean
+      '$route': 'clean'
+    },
+
     mounted() {
       window.addEventListener('dragover', this.preventDrag, false);
       window.addEventListener('drop', this.preventDrag, false);
@@ -166,12 +177,19 @@
             this.parentDocument.associations.images.push(image);
           }
 
-          // clean
-          this.images = {};
+          this.clean();
           this.hide();
 
           // TODO handle error
         });
+      },
+
+      clean() {
+        this.images = {};
+        this.categoriesEdition = false;
+        this.promise = {};
+        this.readyForSaving = false;
+        this.dragOver = false;
       },
 
       filesChange(event) {
