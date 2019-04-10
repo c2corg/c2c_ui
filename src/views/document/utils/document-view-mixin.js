@@ -156,6 +156,9 @@ export default {
         this.$imageViewer.clear();
         this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
+          .then(() => {
+            this.$root.$emit('triggerScroll');
+          })
           .then(this.scrollToHash)
           .then(this.updateUrl);
       }
