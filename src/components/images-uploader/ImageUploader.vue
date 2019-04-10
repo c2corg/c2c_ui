@@ -28,7 +28,7 @@
             <label class="checkbox">
               <input
                 type="checkbox"
-                :checked="document.image_categories.includes(item)"
+                :checked="document.categories.includes(item)"
                 @input="toggleCategory(item)">
               {{ $gettext(item, 'image_categories') | uppercaseFirstLetter }}
             </label>
@@ -232,7 +232,7 @@
       },
 
       toggleCategory(category) {
-        const newValue = this.document.image_categories.slice(0);
+        const newValue = this.document.categories.slice(0);
 
         if (!newValue.includes(category)) {
           newValue.push(category);
@@ -240,7 +240,7 @@
           newValue.splice(newValue.indexOf(category), 1);
         }
 
-        this.document.image_categories = newValue;
+        this.document.categories = newValue;
       }
     }
   };
