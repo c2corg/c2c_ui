@@ -116,6 +116,13 @@
       initialize() {
         this.feed = [];
         this.endOfFeed = false;
+
+        if (this.$route.hash) { // keep compatible with v6 AngularJs hacks...
+          this.$router.replace(this.$route.fullPath.replace('#', '?'));
+          // $route watcher will call load
+          return;
+        }
+
         this.load();
       },
 
