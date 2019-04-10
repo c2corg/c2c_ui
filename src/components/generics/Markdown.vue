@@ -166,6 +166,7 @@
 
 <style lang="scss">
   // Not scoped syle, because CSS selector are not explicitly present in template
+  @import '@/assets/sass/variables.scss';
 
   .markdown-content:not(:last-child){
     margin-bottom: 1.5rem;
@@ -285,6 +286,28 @@
     iframe{
       width:420px;
       height:315px;
+    }
+  }
+
+  @media screen and (max-width: $tablet) {
+
+    table[c2c\:role=ltag]{
+
+      tr {
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0.4em 0 0.5em;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid #d0d0d0;
+        }
+      }
+
+      td, th {
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
     }
   }
 
