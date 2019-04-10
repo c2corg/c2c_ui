@@ -221,7 +221,6 @@
         image.document.geometry.geom = this.parentDocument.geometry ? this.parentDocument.geometry.geom : null;
         image.document.file_size = file.size;
         image.document.image_type = this.imageType;
-        image.document.image_categories = [];
         image.document.quality = 'medium';
         image.document.associations[associationsArrayName] = [
           { document_id: this.parentDocument.document_id }
