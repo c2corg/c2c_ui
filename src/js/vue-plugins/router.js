@@ -138,24 +138,40 @@ const router = new Router({
   routes,
   mode: config.routerMode,
 
-  // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
   scrollBehavior(to, from, savedPosition) {
+    // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
+    // and
+    // https://github.com/vuejs/vue-router/blob/dev/examples/scroll-behavior/app.js
+
+    let position = {};
+
     if (to.hash) {
-      // hash scroll is deferred to documentViewMixin.scrollToHash()
+      // actually, scroll behavior is not fired at initial load
+      // so let document-view-mixin handle hash use case, as it's the
+      // only use case for a new-born tab
+      // See https://github.com/vuejs/vue-router/issues/2358
+
+      // when it will be fixed, remove scrollToHash function, and simply replace the return by this two lines :
+
+      //   position.selector = to.hash;
+      //   position.offset = { y: 50 }; // navbar height
+
       return false;
     } else if (savedPosition) {
-      // scroll to saved position
-      // not that it does not works on document
-      // because this function is call way to early ...
-      return new Promise((resolve, reject) => {
-        this.app.$nextTick(() => {
-          resolve(savedPosition);
-        });
-      });
+      position = savedPosition;
     } else {
-      // otherwise, scroll to top
+      // don't need to wait any data, scroll to top
       return { x: 0, y: 0 };
     }
+
+    // we'll wait for triggerScroll event
+    return new Promise((resolve, reject) => {
+      // we add an once handler on the event
+      // view will trigger it once data are present
+      this.app.$root.$once('triggerScroll', () => {
+        resolve(position);
+      });
+    });
   }
 });
 
