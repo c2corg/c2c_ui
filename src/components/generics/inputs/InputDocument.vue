@@ -4,7 +4,7 @@
       <input
         ref="input"
         class="input"
-        :class="{'is-danger':hasError}"
+        :class="{'is-danger':hasError, 'is-small': isSmall}"
         type="text"
         :placeholder="placeholder || $gettext('Search ...')"
         @input="onInput"
@@ -14,7 +14,7 @@
         <fa-icon icon="search" />
       </span>
     </div>
-    <div class="dropdown-menu" role="menu" v-if="promise.data">
+    <div class="dropdown-menu" role="menu" v-if="promise.data && showOptions">
       <div class="dropdown-content">
         <div v-for="type of documentTypesWithResults" :key="type">
           <div
@@ -122,6 +122,14 @@
       showMoreResultsLink: {
         type: Boolean,
         default: false
+      },
+      showOptions: {
+        type: Boolean,
+        default: true
+      },
+      isSmall: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -203,6 +211,7 @@
           limit: 7
         }).then((response) => {
           response.data.profiles = response.data.users;
+          this.$emit('load-options', response.data);
         });
       },
 

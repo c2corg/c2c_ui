@@ -9,12 +9,17 @@ function cleanMessageId(msgid) {
 
   if (!msgid.replace) {
     // eslint-disable-next-line
-        console.error("Found a non-string in translations", msgid)
+    // console.error("Found a non-string in translations", msgid)
     return String(msgid);
   }
 
+  // trim
   msgid = msgid.replace(/^[\r\n\s]*/, '');
   msgid = msgid.replace(/[\r\n\s]*$/, '');
+
+  // remove new lines and duplicated spaces
+  msgid = msgid.replace(/\n/g, ' ');
+  msgid = msgid.replace(/\s+/g, ' ');
 
   return msgid;
 }
@@ -29,7 +34,7 @@ function getTranslation(lang, messages, msgid, msgctxt) { //, n = 1, context = n
 
   if (message === undefined) {
     // eslint-disable-next-line
-        // console.warn(`Untranslated ${lang} key found: "${msgid}"`)
+    // console.warn(`Untranslated ${lang} key found: "${msgid}"`)
     return msgid;
   }
 
