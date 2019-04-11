@@ -63,12 +63,22 @@
       </div>
 
       <div class="navigation-item">
-        <add-link document-type="outing" class="button is-primary">
-          <fa-icon class="is-hidden-tablet" icon="plus" />
-          <span class="is-hidden-mobile">
-            {{ $documentUtils.getCreationTitle('outing') | uppercaseFirstLetter }}
+        <dropdown-button class="is-right" ref="addDocumentMenu">
+          <span slot="button" class="button is-success">
+            <fa-icon icon="plus" />
           </span>
-        </add-link>
+          <add-link
+            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book']"
+            :key="documentType"
+            :document-type="documentType"
+            class="dropdown-item is-size-5"
+            @click.native="$refs.addDocumentMenu.isActive = false">
+            <icon-document :document-type="documentType" />
+            <span>
+              {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+            </span>
+          </add-link>
+        </dropdown-button>
       </div>
 
       <div v-if="!$user.isLogged" class="navigation-item">

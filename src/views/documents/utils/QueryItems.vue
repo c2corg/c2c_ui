@@ -7,7 +7,7 @@
       :key="category.name"
       class="category-button">
 
-      <span slot="button" class="button" :disabled="category.fields.length===0">
+      <span slot="button" class="button is-small-mobile" :disabled="category.fields.length===0">
         <fa-icon :icon="$options.categoryIcon[category.name]" />
         <span class="is-hidden-mobile">
           <!-- $gettext('General') -->
@@ -35,6 +35,7 @@
     </dropdown-button>
 
     <association-query-item class="association-query-item is-hidden-mobile" :document-types="associations" />
+    <load-user-preferences-button class="is-hidden-tablet" />
   </div>
 </template>
 
@@ -42,6 +43,7 @@
   import constants from '@/js/constants';
   import QueryItem from './QueryItem';
   import AssociationQueryItem from './AssociationQueryItem';
+  import LoadUserPreferencesButton from './LoadUserPreferencesButton';
 
   const categorizedFieldsDefault = {
     General: [
@@ -173,7 +175,8 @@
 
     components: {
       QueryItem,
-      AssociationQueryItem
+      AssociationQueryItem,
+      LoadUserPreferencesButton
     },
 
     computed: {
@@ -274,13 +277,18 @@
   }
 
   @media screen and (max-width: $tablet) {
+    .button.is-small-mobile{
+      border-radius: 2px;
+      font-size: 0.7857rem;
+    }
+
     .query-items{
       position:relative; // important; to force dropdown to be on stick to left
       display: flex;
       justify-content: flex-start;
 
       .title-input, .category-button{
-        margin-right:1em;
+        margin-right:0.5em;
       }
 
       .dropdown {
