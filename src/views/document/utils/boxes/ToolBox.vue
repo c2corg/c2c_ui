@@ -57,8 +57,7 @@
     <hr>
 
     <!-- Moderator zone -->
-    <div v-if="$user.isModerator && isEditable">
-
+    <template v-if="isEditable && $user.isModerator">
       <tool-box-button
         v-if="documentType !== 'profile'"
         @click="lockDocumentAction"
@@ -73,26 +72,27 @@
         :label="$gettext('Merge with other document')" />
 
       <tool-box-button
-        v-if="document.available_langs.length > 1 && documentType !== 'profile'"
-        @click="$refs.DeleteLocaleWindow.show()"
-        :icon="['fas','trash']"
-        :label="$gettext('Delete this locale')" />
-
-      <tool-box-button
         v-if="documentType === 'profile'"
         @click="lockAccountAction"
         icon="user-lock"
         :class="{'lock-button-red':isAccountBlocked}"
         :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')" />
+    </template>
+
+    <template v-if="isDeletable">
+      <tool-box-button
+        v-if="document.available_langs.length > 1"
+        @click="$refs.DeleteLocaleWindow.show()"
+        :icon="['fas','trash']"
+        :label="$gettext('Delete this locale')" />
 
       <tool-box-button
-        v-if="documentType !== 'profile'"
         @click="$refs.deleteDocumentWindow.show()"
         :icon="['fas','trash']"
         :label="$gettext('Delete this document')" />
+    </template>
 
-      <hr>
-    </div>
+    <hr v-if="isDeletable || (isEditable && $user.isModerator)">
 
     <license-box :document="document" />
 

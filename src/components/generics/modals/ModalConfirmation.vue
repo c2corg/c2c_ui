@@ -13,10 +13,6 @@
 
       <slot />
 
-      <div v-if="promise && promise.error" class="notification is-danger">
-        {{ promise.error }}
-      </div>
-
     </div>
     <div slot="footer">
       <button
@@ -55,12 +51,30 @@
       }
     },
 
+    watch: {
+      'promise.error': 'onError'
+    },
+
     methods: {
       show() {
         this.$refs.modalWindow.show();
       },
       hide() {
         this.$refs.modalWindow.hide();
+      },
+      onError() {
+        if (!this.promise.error) {
+          return;
+        }
+
+        if (!this.promise.error.response || !this.promise.error.response.data) {
+          window.alert('Unexpected error');
+        } else if (!this.promise.error.response.data.errors) {
+          window.alert(!this.promise.error.response.data);
+        } else {
+          // $gettext('Only document less than 24h old can be deleted', 'API message')
+          window.alert(this.$gettext(this.promise.error.response.data.errors[0].description));
+        }
       }
     }
   };
