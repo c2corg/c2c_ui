@@ -40,7 +40,6 @@
           .then(() => {
             this.$router.push({ name: this.documentType + 's' });
         });
-        // TODO feedback error
       }
     }
   };
