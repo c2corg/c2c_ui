@@ -3,41 +3,30 @@
     <html-header :title="$gettext(documentType) + 's'" />
     <div class="header-section">
 
-      <dropdown-button class="header-item">
-        <span slot="button">
-          <span class="title is-1">
-            {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+      <span>
+        <dropdown-button class="header-item">
+          <span slot="button">
+            <span class="title is-3 is-ellipsed">
+              {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+            </span>
+            <fa-icon icon="angle-down" aria-hidden="true" />
           </span>
-          <fa-icon icon="angle-down" aria-hidden="true" />
-        </span>
-        <router-link
-          v-for="type of documentTypes"
-          :key="type"
-          class ="dropdown-item is-size-6"
-          :class="{'is-active': type === documentType}"
-          :to="{name: type + 's', query:queryWithoutOffset}">
-          <icon-document :document-type="type" />
-          <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
-        </router-link>
-      </dropdown-button>
-
-      <add-link
-        v-if="!['area', 'profile', 'image'].includes(documentType)"
-        :document-type="documentType"
-        :query="addQuery"
-        class="is-size-3 header-item"
-        :title="$gettext('Create')">
-        <fa-icon icon="plus-circle" />
-      </add-link>
-
+          <router-link
+            v-for="type of documentTypes"
+            :key="type"
+            class ="dropdown-item is-size-6"
+            :class="{'is-active': type === documentType}"
+            :to="{name: type + 's', query:queryWithoutOffset}">
+            <icon-document :document-type="type" />
+            <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+          </router-link>
+        </dropdown-button>
+        &nbsp;
+        <br class="is-hidden-tablet">
+        <page-selector :documents="documents" />
+      </span>
       <span class="is-pulled-right is-flex header-right" v-if="documentType!='profile'">
-        <button v-if="$user.isLogged" class="button is-small is-primary header-item" @click="loadPreferences">
-          <fa-icon icon="star" />
-          <span class="is-hidden-mobile">&nbsp;</span>
-          <span class="is-hidden-mobile" v-translate>
-            Load my preferences
-          </span>
-        </button>
+        <load-user-preferences-button class="is-hidden-mobile" />
 
         <span
           @click="toogleProperty('listMode')"
@@ -63,14 +52,9 @@
 
         <span class="header-item is-size-3 is-hidden-tablet">
           <fa-icon
-            icon="map-marked-alt"
-            :class="{'has-text-primary': displayMode === 'map'}"
-            @click="setProperty('displayMode', 'map')" />
-          <span>&thinsp;</span>
-          <fa-icon
-            icon="th"
-            :class="{'has-text-primary': displayMode !== 'map'}"
-            @click="setProperty('displayMode', 'both')" />
+            :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
+            class="has-text-primary"
+            @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')" />
         </span>
       </span>
 
@@ -120,7 +104,6 @@
       </div>
     </div>
 
-    <page-selector :documents="documents" />
   </div>
 </template>
 
@@ -133,6 +116,7 @@
   import PageSelector from './utils/PageSelector';
   import ImageCards from './utils/ImageCards';
   import DisplayModeSwitch from './utils/DisplayModeSwitch';
+  import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
 
   const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 
@@ -144,7 +128,8 @@
       PageSelector,
       DocumentsTable,
       ImageCards,
-      DisplayModeSwitch
+      DisplayModeSwitch,
+      LoadUserPreferencesButton
     },
 
     data() {
@@ -234,26 +219,6 @@
         if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
           this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
         }
-      },
-
-      loadPreferences() {
-        c2c.userProfile.preferences.get().then((result) => {
-          const preferences = result.data;
-          const query = Object.assign({}, this.$route.query);
-
-          if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(this.documentType)) {
-            const activities = preferences.activities.join(',');
-            query.act = activities === '' ? undefined : activities;
-          }
-
-          if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(this.documentType)) {
-            const areas = preferences.areas.map((area) => area.document_id).join(',');
-            query.a = areas === '' ? undefined : areas;
-            query.bbox = undefined;
-          }
-
-          this.$router.push({ query });
-        });
       }
     }
   };
@@ -265,15 +230,14 @@
 
   $section-padding: 1.5rem; //TODO find this variable
   $header-height : 34px;
-  $header-margin-bottom : 1.5rem; //TODO find this variable
+  $header-padding-bottom : 1.5rem; //TODO find this variable
   $filter-height : 32px;
   $filter-padding-bottom : 1.5rem;
-  $page-selector-height : 3rem;
-  $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-margin-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$page-selector-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+  $result-height : calc(100vh - #{$navbar-height} - 2*#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
   $cards-gap:0.25rem;
 
   .header-section{
-    margin-bottom: $header-margin-bottom;
+    padding-bottom: $header-padding-bottom;
   }
 
   .header-right{
@@ -291,15 +255,21 @@
   }
 
   @media screen and (max-width: $tablet) {
+    $mobile-section-padding : 0.5rem;
+    $mobile-header-height: 46px;
+    $mobile-filters-height: 25px;
 
     .documents-view{
+      padding-top: $mobile-section-padding;
       padding-left: 0;
       padding-right: 0;
+      padding-bottom: 0;
     }
 
     .filter-section, .header-section{
       padding-left:0.5rem;
       padding-right:0.5rem;
+      padding-bottom: $mobile-section-padding;
     }
 
     .map-container{
@@ -311,7 +281,9 @@
 
     .mobile-mode-map{
       margin-top:0;
-      height:$result-height;
+      .map-container {
+        height:calc(100vh - #{$navbar-height} - 3*#{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height});
+      }
 
       .documents-container{
         display:None;
