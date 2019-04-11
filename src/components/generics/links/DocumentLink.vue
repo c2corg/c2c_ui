@@ -1,6 +1,6 @@
 <template>
 
-  <router-link :to="{name:documentType, params:{id:document.document_id, lang:lang}}">
+  <router-link :to="{name:documentType, params:{id:document.document_id, lang:lang}}" :target="target">
     <slot>
       <document-title v-if="document.type!='u'" :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
       <span v-else-if="uppercaseFirstLetter">{{ document.name | uppercaseFirstLetter }}</span>
@@ -26,6 +26,11 @@
       uppercaseFirstLetter: {
         type: Boolean,
         default: false
+      },
+
+      target: {
+        type: String,
+        default: undefined
       }
     }
   };
