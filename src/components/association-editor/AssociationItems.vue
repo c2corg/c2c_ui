@@ -57,8 +57,11 @@
 
 <script>
   import c2c from '@/js/apis/c2c';
+  import AssociationOutingLink from './AssociationOutingLink';
 
   export default {
+    components: { AssociationOutingLink  },
+
     props: {
 
       parent: {
