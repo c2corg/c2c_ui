@@ -323,7 +323,7 @@
             {"id": "snow_clearance_rating", "properties": {"url":"psnow", "waypoint_types":["access"]}},
             {"id": "url", "properties": {"waypoint_types":["camp_site", "climbing_indoor", "climbing_outdoor", "gite", "hut", "local_product", "weather_station", "webcam"]}},
             {"id": "waypoint_type", "properties": {"url":"wtyp"}},
-            {"id": "weather_station_types", "properties": {"url":"whtyp"}},
+            {"id": "weather_station_types", "properties": {"waypoint_types": ["weather_station"], "url":"whtyp"}},
 
             {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 3}},
             {"id": "books", "properties": {"url":"b", "associationEditorOrder": 2}},
