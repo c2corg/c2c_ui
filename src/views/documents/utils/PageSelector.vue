@@ -1,7 +1,7 @@
 <template>
   <span class="page-selector has-text-ligth">
     {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
-    <span translate-context="1-30 of 200 results">of</span>
+    <span v-translate translate-context="1-30 of 200 results">of</span>
     {{ total }}
     <component
       :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"

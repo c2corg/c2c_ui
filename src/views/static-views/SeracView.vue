@@ -16,35 +16,50 @@
         </div>
 
         <div class="column is-4">
-          <div class="serac-block has-text-light">
+          <div class="serac-block has-text-light content">
             <h3 class="title is-3 has-text-light" v-translate>Near-accidents are valuable</h3>
-            <p>
-              <span v-translate>
+            <ul>
+              <li v-translate>
                 Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.
-              </span>
-              <br>
-              <span v-translate>
+              </li>
+              <li v-translate>
                 These are positive experiences that reveal usefull risk-management skills.
-              </span>
-            </p>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="column is-4">
-          <div class="serac-block has-text-light">
+          <div class="serac-block has-text-light content">
             <h3 class="title is-3 has-text-light" v-translate>
               How is my testimony used ? How / why is it useful ?
             </h3>
-            <p v-translate>
-              Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means.
-            </p>
+            <ul>
+              <li v-translate>
+                Improve our understanding of risks
+              </li>
+              <li v-translate>
+                Contribute to common knowledge
+              </li>
+              <li v-translate>
+                Help research activities to define new prevention means
+              </li>
+            </ul>
           </div>
         </div>
         <div class="column is-4">
-          <div class="serac-block has-text-light">
+          <div class="serac-block has-text-light content">
             <h3 class="title is-3 has-text-light" v-translate>Anonimity and confidentiality</h3>
-            <p v-translate>
-              You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators.
-            </p>
+            <ul>
+              <li v-translate>
+                You can choose to remain anonymous
+              </li>
+              <li v-translate>
+                Personal data are confidential
+              </li>
+              <li v-translate>
+                SERAC is built upon a kindness mindset. We thank you to improve it
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -133,6 +148,10 @@
     padding:20px;
     height: 100%;
     transition: background-color 300ms;
+
+    ul{
+      margin-left: 1em!important;
+    }
 }
 
 .serac-block:hover{
