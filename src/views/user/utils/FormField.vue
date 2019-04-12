@@ -22,6 +22,7 @@
     </label>
     <div class="control has-icons-left">
       <input
+        ref="input"
         :type="type"
         :placeholder="placeholder || label"
         :required="required"
@@ -105,6 +106,12 @@
         }
 
         return false;
+      }
+    },
+
+    methods: {
+      focus() {
+        this.$refs.input.focus();
       }
     }
   };
