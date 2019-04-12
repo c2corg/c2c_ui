@@ -143,7 +143,16 @@
   import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
   export default {
-    mixins: [ documentEditionViewMixin ]
+    mixins: [ documentEditionViewMixin ],
+
+    methods: {
+      afterLoad() {
+        // on creation from a waypoint, set this waypoint as main
+        if (this.mode === 'add' && this.$route.query.w) {
+          this.document.main_waypoint_id = parseInt(this.$route.query.w);
+        }
+      }
+    }
   };
 
 </script>
