@@ -21,11 +21,13 @@
 
     <elevation-profile :document="document" v-if="documentType=='outing'" />
 
-    <div v-if="document.geometry && document.geometry.geom_detail" class="buttons is-centered">
-      <button class="button is-primary" @click="downloadGpx">
+    <div
+      v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
+      class="buttons is-centered">
+      <button class="button is-primary is-small" @click="downloadGpx">
         GPX
       </button>
-      <button class="button is-primary" @click="downloadKml">
+      <button class="button is-primary is-small" @click="downloadKml">
         KML
       </button>
     </div>

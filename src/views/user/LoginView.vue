@@ -7,6 +7,7 @@
       @submit="signin">
 
       <form-field
+        ref="signinMainInput"
         name="username"
         type="text"
         required
@@ -28,10 +29,10 @@
         <button type="submit" class="button is-primary" :class="{'is-loading':promise.loading}" v-translate>
           Login
         </button>
-        <button type="button" class="button is-warning" @click="setMode('resetPassword')" v-translate>
+        <button type="button" class="button is-warning" @click="mode = 'resetPassword'" v-translate>
           Forgot password?
         </button>
-        <button type="button" class="button is-link" @click="setMode('signup')" v-translate>
+        <button type="button" class="button is-link" @click="mode = 'signup'" v-translate>
           No account yet?
         </button>
       </div>
@@ -43,6 +44,7 @@
       @submit="signup">
 
       <form-field
+        ref="signupMainInput"
         name="name"
         v-model="name"
         type="text"
@@ -108,7 +110,7 @@
           v-translate>
           Register
         </button>
-        <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
           Have an account?
         </button>
       </div>
@@ -125,6 +127,7 @@
       </h3>
 
       <form-field
+        ref="resetPasswordMainInput"
         name="email"
         v-model="email"
         type="email"
@@ -135,7 +138,7 @@
         <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>
           Send reset email
         </button>
-        <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
           Login
         </button>
       </div>
@@ -156,6 +159,7 @@
       </h3>
 
       <form-field
+        ref="changePasswordMainInput"
         name="password"
         v-model="password"
         type="password"
@@ -166,7 +170,7 @@
         <button type="submit" class="button is-link" :class="{'is-loading':promise.loading}" v-translate>
           Change password
         </button>
-        <button type="button" class="button is-link" @click="setMode('signin')" v-translate>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
           Cancel
         </button>
       </div>
@@ -214,7 +218,7 @@
 
     data() {
       return {
-        mode: 'signin',
+        mode: '',
 
         username: '',
         password: '',
@@ -237,10 +241,8 @@
     },
 
     watch: {
-      '$route': {
-        handler: 'load',
-        immediate: true
-      }
+      '$route': 'load',
+      'mode': 'onModeChange'
     },
 
     // here is the trick : all auth action are on the same component.
@@ -268,12 +270,23 @@
       recaptchaScript.async = true;
       recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit');
       document.head.appendChild(recaptchaScript);
+
+      this.load();
     },
 
     methods: {
-      setMode(mode) {
-        this.mode = mode;
+      onModeChange() {
         this.promise = {};
+
+        if (this.mode === 'signin') {
+          this.$nextTick(this.$refs.signinMainInput.focus);
+        } else if (this.mode === 'changePassword') {
+          this.$nextTick(this.$refs.changePasswordMainInput.focus);
+        } else if (this.mode === 'resetPassword') {
+          this.$nextTick(this.$refs.resetPasswordMainInput.focus);
+        } else if (this.mode === 'signup') {
+          this.$nextTick(this.$refs.signupMainInput.focus);
+        }
       },
 
       load() {
@@ -285,21 +298,21 @@
           // change password mode
           // mode when user has forgotten his password.
           // an url is sent to his mail, with an secret param
-          this.setMode('changePassword');
+          this.mode = 'changePassword';
         } else if (this.$route.query.validate_change_email) {
           // when user changes his email.
           // he receives on his new mail a secret url to validate
           // that  he is the owner
-          this.setMode('changeEmail');
+          this.mode = 'changeEmail';
           this.promise = c2c.userProfile.validateChangeEmail(this.$route.query.validate_change_email)
             .then(() => this.$router.push({ name: 'home' }));
         } else if (this.$route.query.validate_register_email) {
           // after account creation
-          this.setMode('validateAccountCreation');
+          this.mode = 'validateAccountCreation';
           this.promise = c2c.userProfile.validateRegisterEmail(this.$route.query.validate_register_email)
             .then(() => this.$router.push({ name: 'home' }));
         } else {
-          this.setMode('signin');
+          this.mode = 'signin';
         }
       },
 

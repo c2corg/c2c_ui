@@ -623,7 +623,10 @@
     {
         "values": "lift_status"
     },
-    "main_waypoint_id": {},
+    "main_waypoint_id":
+    {
+        "helper": "1063045#main-waypoint"
+    },
     "maps_info":
     {
         "type": "text"
