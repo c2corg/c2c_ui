@@ -361,6 +361,7 @@
         const formatDistance = d3.format('.2f');
         const formatDate = d3.timeFormat('%H:%M');
         const formatMinutes = d3.format('02d');
+        const formatElevation = d3.format('d');
 
         const bisect = this.mode === 'distance' ? bisectDistance : bisectDate;
         const x0 = this.mode === 'distance'
@@ -385,7 +386,7 @@
         this.bubble1.text(
           this.i18n_.elevation +
             ' ' +
-            d.ele +
+            formatElevation(d.ele) +
             this.i18n_.meters +
             ' / ' +
             this.i18n_.distance +
