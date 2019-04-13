@@ -206,6 +206,9 @@
       "waypoint_types": "camp de base"
     },
     "best_periods": "Meilleures périodes",
+    "Bing": {
+      "Map layer": "Bing"
+    },
     "biography": {
       "book_types": "biographie"
     },
@@ -333,6 +336,7 @@
     },
     "contact": "Contact",
     "Continue the discussion": "Continuer la discussion",
+    "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
     "Contributions": "Contributions",
     "copyright": {
       "image_types": "copyright",
@@ -356,7 +360,6 @@
     "crampons_spring": {
       "glacier_gear_types": "crampons en début de saison"
     },
-    "Create": "Créer",
     "Create a new report": "Créer un nouveau compte-rendu",
     "Created on": "Crée le",
     "creator": "auteur",
@@ -404,7 +407,7 @@
     "Describe pt access": "Décrire l'accès au point de passage",
     "Describe road access": "Décrire l'itinéraire",
     "describe route_conditions": "Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\nATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site.",
-    "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontré lors de votre sortie",
+    "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Décrivez les informations récoltées avant la sortie et le suivi de leur évolution sur le terrain. Cela concerne les prévisions météo, les bulletins d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la neige/glace/rocher, les compte rendu des jours précédents, etc.",
     "describe timing": "Heure de départ / horaire",
     "describe weather": "Conditions météorologiques rencontrées lors de la sortie : couverture nuageuse, précipitations, vent, température",
@@ -478,6 +481,9 @@
     "equipment_ratings": "Qualité de l'équipement en place",
     "es": {
       "langs": "espagnol"
+    },
+    "ESRI": {
+      "Map layer": "ESRI"
     },
     "eu": {
       "langs": "basque"
@@ -648,6 +654,7 @@
       "image_categories": "aide",
       "$$noContext": "aide"
     },
+    "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
     "Here you may change your subscriptions to snow forecast mailing lists.": "Vous pouvez modifier ici vos abonnements aux bulletins de prévisions des risques d'avalanches.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
@@ -685,6 +692,15 @@
       "activities": "Cascade de glace"
     },
     "ice_rating": "Cotation glace",
+    "IGN": {
+      "Map slopes layer": "Pentes IGN"
+    },
+    "IGN maps": {
+      "Map layer": "IGN"
+    },
+    "IGN ortho": {
+      "Map layer": "IGN satellite"
+    },
     "image": "image",
     "image_categories": "Catégories",
     "image_type": "Type d'image (licence)",
@@ -692,6 +708,7 @@
     "impossible": {
       "glacier_ratings": "infranchissable - passage impossible"
     },
+    "Improve our understanding of risks": "Améliorer la connaissance des risques",
     "Incidents and accidents": "Incidents et accidents",
     "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
     "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
@@ -753,6 +770,7 @@
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
     "Latitude": "Latitude",
+    "Leave fullscreen": "Quitter le mode plein écran",
     "length": "Longueur",
     "length_total": "Longueur totale",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
@@ -923,8 +941,8 @@
     },
     "nb_pages": "Nombre de pages",
     "nb_participants": "Nombre de participants",
-    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Quasi-accident/incident = situation « limite » qui n’occasionne pas de blessure physique, mais qui aurait pu dégénérer en un événement plus grave.",
-    "Near-accidents are valuable": "Des évènements bénins riches d’enseignements",
+    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Situations « limites » qui aurait pu dégénérer en évènements plus graves",
+    "Near-accidents are valuable": "Des incidents et quasi-accidents riches d’enseignements :",
     "nearby service": {
       "public_transportation_ratings": "service à proximité"
     },
@@ -976,10 +994,16 @@
     "oct": {
       "months": "octobre"
     },
+    "of": {
+      "1-30 of 200 results": "sur"
+    },
     "often": {
       "snow_clearance_ratings": "déneigement régulier"
     },
     "Ok": "Ok",
+    "Only document less than 24h old can be deleted": {
+      "API message": "Seuls les documents récents (24h) peuvent être supprimés. Contactez la modération pour supprimer ce document."
+    },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
     "Ooops": "Ooops",
     "open": {
@@ -995,6 +1019,9 @@
     },
     "opening_hours": "Heures d'ouverture",
     "opening_periods": "Période de gardiennage",
+    "OpenTopoMap": {
+      "Map layer": "OpenTopoMap"
+    },
     "or try the following pages:": "ou essayez les pages suivantes :",
     "Ordered list": "Liste triée",
     "orientations": "Orientations",
@@ -1046,7 +1073,7 @@
     "people": {
       "image_categories": "personnages"
     },
-    "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos sentiments personnels sur la sortie",
+    "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la sortie",
     "Period of protection": "Période de protection",
     "person_fall": {
       "event_types": "chute d'une personne"
@@ -1057,6 +1084,7 @@
       "$$noContext": "personnel (CC by-nc-nd)"
     },
     "personal comments": "Commentaires personnels",
+    "Personal data are confidential": "Les informations personnelles sont confidentielles",
     "Personal feed off": "Fil personnel désactivé",
     "Personal feed on": "Fil personnel activé",
     "Personal informations": "Informations personnelles",
@@ -1257,6 +1285,7 @@
     },
     "SERAC": "SERAC",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
+    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
     "service_on_demand": {
       "public_transportation_types": "service à la demande"
     },
@@ -1385,6 +1414,10 @@
     "summit": {
       "waypoint_types": "sommet"
     },
+    "SwissTopo": {
+      "Map layer": "SwissTopo",
+      "Map slopes layer": "Pentes SwissTopo"
+    },
     "tags": {
       "article_categories": "tags"
     },
@@ -1399,14 +1432,13 @@
       "weather_station_types": "température"
     },
     "Terrain": "Terrain",
-    "Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means.": "Le retour d’expérience permet d’améliorer la connaissance des risques. Les récits déposés donnent lieu à des travaux de recherche afin de mieux comprendre les scénarios accidentogènes et dégager des pistes de prévention.",
     "text to display": "texte à afficher",
     "The mountain sports community": "La communauté des sports de montagne",
     "The page you are looking for does not exist or is broken.": "La page que vous demandez n'existe pas ou est cassée.",
     "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
     "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
     "There are sensitive areas on this route. Please refer to the map.": "Cet itinéraire traverse ou se situe près de zones sensibles. Merci de consulter la carte.",
-    "These are positive experiences that reveal usefull risk-management skills.": "Ce sont des expériences positives qui révèlent des compétences de gestion des risques permettant d’éviter un accident.",
+    "These are positive experiences that reveal usefull risk-management skills.": "Expériences positives qui révèlent des compétences de gestion des risques",
     "This book cover is the property of its editor and/or author": "Cette couverture de livre est la propriété de son éditeur et/ou auteur",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
@@ -1465,6 +1497,7 @@
     "Upload a GPS track": "Ajouter une trace GPS",
     "URL": "URL",
     "url": "URL",
+    "User avatar": "Avatar",
     "Username": "Identifiant",
     "users": "utilisateurs",
     "Versions": "Versions",
@@ -1532,7 +1565,7 @@
       "parking_fee_types": "oui",
       "$$noContext": "oui"
     },
-    "You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators.": "Vous pouvez choisir de rester anonyme. Les informations personnelles sont confidentielles, visibles uniquement par les chercheurs et modérateurs.",
+    "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
     "You may add associated waypoints, books and articles": "Associez d'autres document de camptocamp à ce point de passage",
     "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
   }

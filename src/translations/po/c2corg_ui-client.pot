@@ -274,7 +274,7 @@ msgctxt "user_categories"
 msgid "amateur"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:44
+#: src/views/static-views/SeracView.vue:51
 msgid "Anonimity and confidentiality"
 msgstr ""
 
@@ -300,7 +300,7 @@ msgstr ""
 msgid "Are you sure you want to delete this locale?"
 msgstr ""
 
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:88
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:120
 msgid "Are you sure you want to merge?"
 msgstr ""
 
@@ -440,7 +440,7 @@ msgctxt "event_types"
 msgid "avalanche"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:238
+#: src/components/datatable/DocumentsTable.vue:278
 msgid "avalanche"
 msgstr ""
 
@@ -548,7 +548,7 @@ msgctxt "climbing_outdoor_types"
 msgid "bloc"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:86
+#: src/views/document/utils/boxes/ToolBox.vue:79
 msgid "Block account"
 msgstr ""
 
@@ -635,11 +635,11 @@ msgstr ""
 msgid "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities."
 msgstr ""
 
-#: src/components/generics/modals/ModalConfirmation.vue:36
+#: src/components/generics/modals/ModalConfirmation.vue:32
 #: src/components/images-uploader/ImageUploader.vue:72
 #: src/components/markdown-editor/LinkHelper.vue:26
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:56
-#: src/views/user/LoginView.vue:169
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:67
+#: src/views/user/LoginView.vue:173
 #: src/views/wiki/edition/utils/CotometerWindow.vue:87
 msgid "Cancel"
 msgstr ""
@@ -657,7 +657,7 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:55
+#: src/views/documents/DocumentsView.vue:44
 msgid "Cards mode"
 msgstr ""
 
@@ -674,12 +674,12 @@ msgstr ""
 msgid "Change account parameters"
 msgstr ""
 
-#: src/views/user/LoginView.vue:154
-#: src/views/user/LoginView.vue:166
+#: src/views/user/LoginView.vue:157
+#: src/views/user/LoginView.vue:170
 msgid "Change password"
 msgstr ""
 
-#: src/views/user/LoginView.vue:179
+#: src/views/user/LoginView.vue:183
 msgid "Checking..."
 msgstr ""
 
@@ -788,7 +788,7 @@ msgctxt "article_types"
 msgid "collab"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:121
+#: src/components/images-uploader/ImageUploader.vue:142
 msgid "collab"
 msgstr ""
 
@@ -850,7 +850,7 @@ msgstr ""
 msgid "configuration"
 msgstr ""
 
-#: src/components/generics/modals/ModalConfirmation.vue:27
+#: src/components/generics/modals/ModalConfirmation.vue:23
 msgid "Confirm"
 msgstr ""
 
@@ -867,6 +867,10 @@ msgstr ""
 msgid "Continue the discussion"
 msgstr ""
 
+#: src/views/static-views/SeracView.vue:40
+msgid "Contribute to common knowledge"
+msgstr ""
+
 #: src/views/document/utils/boxes/ToolBox.vue:30
 msgid "Contributions"
 msgstr ""
@@ -876,7 +880,7 @@ msgctxt "image_types"
 msgid "copyright"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:128
+#: src/components/images-uploader/ImageUploader.vue:149
 msgid "copyright"
 msgstr ""
 
@@ -910,11 +914,7 @@ msgctxt "glacier_gear_types"
 msgid "crampons_spring"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:29
-msgid "Create"
-msgstr ""
-
-#: src/views/static-views/SeracView.vue:55
+#: src/views/static-views/SeracView.vue:70
 msgid "Create a new report"
 msgstr ""
 
@@ -995,7 +995,7 @@ msgstr ""
 msgid "Delete this document"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:79
+#: src/views/document/utils/boxes/ToolBox.vue:87
 #: src/views/document/utils/windows/DeleteLocaleWindow.vue:8
 msgid "Delete this locale"
 msgstr ""
@@ -1217,8 +1217,8 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:130
-#: src/components/datatable/DocumentsTable.vue:177
+#: src/components/datatable/DocumentsTable.vue:170
+#: src/components/datatable/DocumentsTable.vue:217
 #: src/translations/fixed_strings_common_js.vue:57
 #: src/views/document/OutingView.vue:66
 #: src/views/document/RouteView.vue:51
@@ -1238,7 +1238,7 @@ msgid "elevation_down_snow"
 msgstr ""
 
 #: src/components/cards/utils/CardElevationItem.vue:2
-#: src/components/generics/inputs/InputDocument.vue:41
+#: src/components/generics/inputs/InputDocument.vue:42
 #: src/translations/fixed_strings_common_js.vue:60
 msgid "elevation_max"
 msgstr ""
@@ -1252,13 +1252,13 @@ msgid "elevation_up_snow"
 msgstr ""
 
 #: src/views/user/AccountView.vue:35
-#: src/views/user/LoginView.vue:131
-#: src/views/user/LoginView.vue:75
+#: src/views/user/LoginView.vue:134
+#: src/views/user/LoginView.vue:77
 msgid "Email"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:22
-#: src/components/markdown-editor/MarkdownEditor.vue:282
+#: src/components/markdown-editor/MarkdownEditor.vue:283
 msgid "emphasized text"
 msgstr ""
 
@@ -1267,7 +1267,7 @@ msgctxt "quality_types"
 msgid "empty"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:59
+#: src/views/wiki/WhatsNewView.vue:61
 msgid "empty comment"
 msgstr ""
 
@@ -1365,7 +1365,7 @@ msgstr ""
 msgid "exposition_rock_rating"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:31
+#: src/components/image-viewer/ImageInfo.vue:32
 #: src/translations/fixed_strings_common_js.vue:69
 msgid "exposure_time"
 msgstr ""
@@ -1443,12 +1443,12 @@ msgctxt "image_categories"
 msgid "flora"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:32
+#: src/components/image-viewer/ImageInfo.vue:33
 #: src/translations/fixed_strings_common_js.vue:73
 msgid "fnumber"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:33
+#: src/components/image-viewer/ImageInfo.vue:34
 #: src/translations/fixed_strings_common_js.vue:74
 msgid "focal_length"
 msgstr ""
@@ -1458,7 +1458,7 @@ msgstr ""
 msgid "Followed users"
 msgstr ""
 
-#: src/views/user/LoginView.vue:31
+#: src/views/user/LoginView.vue:32
 msgid "Forgot password?"
 msgstr ""
 
@@ -1473,7 +1473,7 @@ msgid "forum"
 msgstr ""
 
 #: src/views/user/AccountView.vue:51
-#: src/views/user/LoginView.vue:63
+#: src/views/user/LoginView.vue:65
 msgid "Forum username"
 msgstr ""
 
@@ -1487,7 +1487,7 @@ msgid "frequentation"
 msgstr ""
 
 #: src/views/user/AccountView.vue:43
-#: src/views/user/LoginView.vue:49
+#: src/views/user/LoginView.vue:51
 msgid "Fullname"
 msgstr ""
 
@@ -1718,7 +1718,7 @@ msgstr ""
 msgid "has updated the xreport"
 msgstr ""
 
-#: src/views/user/LoginView.vue:111
+#: src/views/user/LoginView.vue:113
 msgid "Have an account?"
 msgstr ""
 
@@ -1730,7 +1730,7 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:286
+#: src/components/markdown-editor/MarkdownEditor.vue:287
 msgid "heading text"
 msgstr ""
 
@@ -1757,7 +1757,7 @@ msgstr ""
 #: src/components/cards/RouteCard.vue:31
 #: src/components/generics/pretty-links/PrettyRouteLink.vue:11
 #: src/translations/fixed_strings_common_js.vue:87
-#: src/views/portals/utils/DashboardRouteLink.vue:6
+#: src/views/portals/utils/DashboardRouteLink.vue:10
 msgid "height_diff_difficulties"
 msgstr ""
 
@@ -1769,7 +1769,7 @@ msgstr ""
 #: src/components/cards/OutingCard.vue:25
 #: src/components/cards/RouteCard.vue:23
 #: src/translations/fixed_strings_common_js.vue:89
-#: src/views/portals/utils/DashboardRouteLink.vue:3
+#: src/views/portals/utils/DashboardRouteLink.vue:5
 msgid "height_diff_up"
 msgstr ""
 
@@ -1792,6 +1792,10 @@ msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:7
 msgid "help"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:43
+msgid "Help research activities to define new prevention means"
 msgstr ""
 
 #: src/views/user/FollowingView.vue:9
@@ -1848,7 +1852,7 @@ msgstr ""
 msgid "Home page feed parameters"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:34
+#: src/views/static-views/SeracView.vue:33
 msgid "How is my testimony used ? How / why is it useful ?"
 msgstr ""
 
@@ -1880,7 +1884,7 @@ msgctxt "user_categories"
 msgid "hut_warden"
 msgstr ""
 
-#: src/views/user/LoginView.vue:82
+#: src/views/user/LoginView.vue:84
 msgid "I have read and agree to the terms of use"
 msgstr ""
 
@@ -1937,6 +1941,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:352
 msgctxt "glacier_ratings"
 msgid "impossible"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:37
+msgid "Improve our understanding of risks"
 msgstr ""
 
 #: src/views/static-views/SeracView.vue:3
@@ -2018,7 +2026,7 @@ msgstr ""
 msgid "isbn"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:34
+#: src/components/image-viewer/ImageInfo.vue:35
 #: src/translations/fixed_strings_common_js.vue:103
 msgid "iso_speed"
 msgstr ""
@@ -2052,7 +2060,7 @@ msgstr ""
 msgid "kilometers"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:71
+#: src/views/static-views/SeracView.vue:86
 msgid "Know more about SERAC"
 msgstr ""
 
@@ -2096,6 +2104,10 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue:36
 msgid "Latitude"
+msgstr ""
+
+#: src/components/markdown-editor/MarkdownEditor.vue:15
+msgid "Leave fullscreen"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:108
@@ -2158,7 +2170,7 @@ msgctxt "event_types"
 msgid "lightning"
 msgstr ""
 
-#: src/views/user/LoginView.vue:86
+#: src/views/user/LoginView.vue:88
 msgid "link"
 msgstr ""
 
@@ -2166,7 +2178,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:49
+#: src/views/documents/DocumentsView.vue:38
 msgid "List mode"
 msgstr ""
 
@@ -2174,7 +2186,7 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:37
+#: src/views/documents/utils/LoadUserPreferencesButton.vue:5
 msgid "Load my preferences"
 msgstr ""
 
@@ -2203,9 +2215,9 @@ msgid "Log in to post a comment"
 msgstr ""
 
 #: src/components/generics/buttons/LoginButton.vue:7
-#: src/views/Navigation.vue:75
-#: src/views/user/LoginView.vue:138
-#: src/views/user/LoginView.vue:28
+#: src/views/Navigation.vue:86
+#: src/views/user/LoginView.vue:141
+#: src/views/user/LoginView.vue:29
 #: src/views/user/LoginView.vue:3
 msgid "Login"
 msgstr ""
@@ -2215,7 +2227,7 @@ msgctxt "API message"
 msgid "Login failed"
 msgstr ""
 
-#: src/views/Navigation.vue:110
+#: src/views/Navigation.vue:121
 msgid "Logout"
 msgstr ""
 
@@ -2309,15 +2321,15 @@ msgid "medium"
 msgstr ""
 
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:4
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:50
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:61
 msgid "Merge documents"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:73
+#: src/views/document/utils/boxes/ToolBox.vue:72
 msgid "Merge with other document"
 msgstr ""
 
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:13
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:12
 msgid "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document."
 msgstr ""
 
@@ -2450,34 +2462,34 @@ msgstr ""
 msgid "Multi-criteria search"
 msgstr ""
 
-#: src/views/Navigation.vue:158
+#: src/views/Navigation.vue:169
 msgid "My account"
 msgstr ""
 
-#: src/views/Navigation.vue:173
+#: src/views/Navigation.vue:184
 msgid "My changes"
 msgstr ""
 
-#: src/views/Navigation.vue:178
+#: src/views/Navigation.vue:189
 msgid "My followed users"
 msgstr ""
 
-#: src/views/Navigation.vue:183
+#: src/views/Navigation.vue:194
 #: src/views/user/MailingListsView.vue:6
 msgid "My mailing lists"
 msgstr ""
 
-#: src/views/Navigation.vue:168
+#: src/views/Navigation.vue:179
 msgid "My outings"
 msgstr ""
 
-#: src/views/Navigation.vue:163
+#: src/views/Navigation.vue:174
 #: src/views/portals/DashboardView.vue:21
 #: src/views/user/PreferencesView.vue:3
 msgid "My preferences"
 msgstr ""
 
-#: src/views/Navigation.vue:153
+#: src/views/Navigation.vue:164
 msgid "My profile"
 msgstr ""
 
@@ -2553,7 +2565,7 @@ msgid "New outing"
 msgstr ""
 
 #: src/views/user/AccountView.vue:27
-#: src/views/user/LoginView.vue:162
+#: src/views/user/LoginView.vue:166
 msgid "New password"
 msgstr ""
 
@@ -2603,7 +2615,7 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: src/views/user/LoginView.vue:34
+#: src/views/user/LoginView.vue:35
 msgid "No account yet?"
 msgstr ""
 
@@ -2611,7 +2623,7 @@ msgstr ""
 msgid "no info"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:80
+#: src/components/generics/inputs/InputDocument.vue:81
 msgid "No match?"
 msgstr ""
 
@@ -2648,7 +2660,7 @@ msgstr ""
 msgid "NonCommercial — You may not use the material for commercial purposes."
 msgstr ""
 
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:19
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:18
 msgid "Note that comments have to be transferred manually in Discourse before merging."
 msgstr ""
 
@@ -2675,6 +2687,11 @@ msgctxt "months"
 msgid "oct"
 msgstr ""
 
+#: src/views/documents/utils/PageSelector.vue:4
+msgctxt "1-30 of 200 results"
+msgid "of"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:489
 msgctxt "snow_clearance_ratings"
 msgid "often"
@@ -2682,6 +2699,11 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/CotometerWindow.vue:84
 msgid "Ok"
+msgstr ""
+
+#: src/components/generics/modals/ModalConfirmation.vue:75
+msgctxt "API message"
+msgid "Only document less than 24h old can be deleted"
 msgstr ""
 
 #: src/views/user/PreferencesView.vue:27
@@ -2848,8 +2870,8 @@ msgctxt "waypoint_types"
 msgid "pass"
 msgstr ""
 
-#: src/views/user/LoginView.vue:24
-#: src/views/user/LoginView.vue:69
+#: src/views/user/LoginView.vue:25
+#: src/views/user/LoginView.vue:71
 msgid "Password"
 msgstr ""
 
@@ -2890,13 +2912,17 @@ msgctxt "image_types"
 msgid "personal"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:122
+#: src/components/images-uploader/ImageUploader.vue:143
 msgid "personal"
 msgstr ""
 
 #: src/views/document/OutingView.vue:103
 #: src/views/wiki/edition/OutingEditionView.vue:82
 msgid "personal comments"
+msgstr ""
+
+#: src/views/static-views/SeracView.vue:56
+msgid "Personal data are confidential"
 msgstr ""
 
 #: src/views/portals/DashboardView.vue:25
@@ -3066,7 +3092,7 @@ msgstr ""
 msgid "prominence"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:67
+#: src/views/document/utils/boxes/ToolBox.vue:66
 msgid "Protect document"
 msgstr ""
 
@@ -3155,10 +3181,10 @@ msgctxt "area_types"
 msgid "range"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:139
-#: src/components/datatable/DocumentsTable.vue:142
-#: src/components/datatable/DocumentsTable.vue:187
-#: src/components/datatable/DocumentsTable.vue:190
+#: src/components/datatable/DocumentsTable.vue:179
+#: src/components/datatable/DocumentsTable.vue:182
+#: src/components/datatable/DocumentsTable.vue:227
+#: src/components/datatable/DocumentsTable.vue:230
 #: src/views/document/OutingView.vue:48
 #: src/views/document/RouteView.vue:31
 #: src/views/documents/utils/QueryItems.vue:14
@@ -3184,7 +3210,7 @@ msgstr ""
 msgid "reduce_impact"
 msgstr ""
 
-#: src/views/user/LoginView.vue:108
+#: src/views/user/LoginView.vue:110
 msgid "Register"
 msgstr ""
 
@@ -3217,11 +3243,11 @@ msgstr ""
 msgid "Reset geometry"
 msgstr ""
 
-#: src/views/user/LoginView.vue:123
+#: src/views/user/LoginView.vue:125
 msgid "Reset password"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:35
+#: src/components/image-viewer/ImageInfo.vue:36
 msgid "resolution"
 msgstr ""
 
@@ -3377,7 +3403,7 @@ msgctxt "ground_types"
 msgid "scree"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:8
+#: src/components/generics/inputs/InputDocument.vue:9
 msgid "Search ..."
 msgstr ""
 
@@ -3404,7 +3430,7 @@ msgstr ""
 msgid "see actual version"
 msgstr ""
 
-#: src/components/generics/inputs/InputDocument.vue:73
+#: src/components/generics/inputs/InputDocument.vue:74
 msgid "See more results"
 msgstr ""
 
@@ -3430,7 +3456,7 @@ msgstr ""
 msgid "Select option"
 msgstr ""
 
-#: src/views/user/LoginView.vue:135
+#: src/views/user/LoginView.vue:138
 msgid "Send reset email"
 msgstr ""
 
@@ -3460,12 +3486,16 @@ msgstr ""
 msgid "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports."
 msgstr ""
 
+#: src/views/static-views/SeracView.vue:59
+msgid "SERAC is built upon a kindness mindset. We thank you to improve it"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue:435
 msgctxt "public_transportation_types"
 msgid "service_on_demand"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:25
+#: src/components/image-viewer/ImageInfo.vue:26
 msgid "Settings"
 msgstr ""
 
@@ -3473,7 +3503,7 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:229
+#: src/components/datatable/DocumentsTable.vue:269
 #: src/translations/fixed_strings_common_js.vue:166
 msgid "severity"
 msgstr ""
@@ -3739,7 +3769,7 @@ msgid "stories"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue:21
-#: src/components/markdown-editor/MarkdownEditor.vue:278
+#: src/components/markdown-editor/MarkdownEditor.vue:279
 msgid "strong text"
 msgstr ""
 
@@ -3794,10 +3824,6 @@ msgstr ""
 msgid "Terrain"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:37
-msgid "Testimonies help to improve our knowledge of accident scenarios through research activities to define new prevention means."
-msgstr ""
-
 #: src/components/markdown-editor/LinkHelper.vue:45
 #: src/components/markdown-editor/LinkHelper.vue:8
 msgid "text to display"
@@ -3823,7 +3849,7 @@ msgstr ""
 msgid "There are sensitive areas on this route. Please refer to the map."
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:26
+#: src/views/static-views/SeracView.vue:25
 msgid "These are positive experiences that reveal usefull risk-management skills."
 msgstr ""
 
@@ -3987,11 +4013,11 @@ msgstr ""
 msgid "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:86
+#: src/views/document/utils/boxes/ToolBox.vue:79
 msgid "Unblock account"
 msgstr ""
 
-#: src/components/markdown-editor/MarkdownEditor.vue:354
+#: src/components/markdown-editor/MarkdownEditor.vue:355
 #: src/components/markdown-editor/MarkdownEditor.vue:36
 msgid "Unformatted text"
 msgstr ""
@@ -4000,7 +4026,7 @@ msgstr ""
 msgid "Unordered list"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:67
+#: src/views/document/utils/boxes/ToolBox.vue:66
 msgid "Unprotect document"
 msgstr ""
 
@@ -4021,8 +4047,8 @@ msgid "User avatar"
 msgstr ""
 
 #: src/views/user/AccountView.vue:12
-#: src/views/user/LoginView.vue:15
-#: src/views/user/LoginView.vue:57
+#: src/views/user/LoginView.vue:16
+#: src/views/user/LoginView.vue:59
 msgid "Username"
 msgstr ""
 
@@ -4066,7 +4092,7 @@ msgstr ""
 msgid "View in other lang"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:63
+#: src/views/static-views/SeracView.vue:78
 msgid "View xreports"
 msgstr ""
 
@@ -4076,7 +4102,7 @@ msgid "virtual"
 msgstr ""
 
 #: src/components/generics/modals/ModalConfirmation.vue:9
-#: src/views/document/utils/windows/MergeDocumentWindow.vue:9
+#: src/views/document/utils/windows/MergeDocumentWindow.vue:8
 msgid "Warning: This action cannot be undone!"
 msgstr ""
 
@@ -4129,7 +4155,7 @@ msgstr ""
 msgid "waypoints"
 msgstr ""
 
-#: src/views/user/LoginView.vue:143
+#: src/views/user/LoginView.vue:146
 msgid "We sent you an email, please click on the link to reset password."
 msgstr ""
 
@@ -4197,7 +4223,7 @@ msgstr ""
 #: src/translations/fixed_strings_manual.vue:13
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:52
 #: src/views/static-views/NotFoundView.vue:59
-#: src/views/static-views/SeracView.vue:78
+#: src/views/static-views/SeracView.vue:93
 msgid "xreports"
 msgstr ""
 
@@ -4211,8 +4237,8 @@ msgstr ""
 msgid "yes"
 msgstr ""
 
-#: src/views/static-views/SeracView.vue:45
-msgid "You can choose to remain anonymous. Personal data are confidential, accessible only to researchers and moderators."
+#: src/views/static-views/SeracView.vue:53
+msgid "You can choose to remain anonymous"
 msgstr ""
 
 #: src/views/wiki/edition/WaypointEditionView.vue:158
