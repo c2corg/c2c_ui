@@ -53,7 +53,7 @@
     "vuejs-datepicker": "1.5.4"
   },
   "devDependencies": {
-    "@vue/babel-preset-app": "3.5.5",
+    "@vue/babel-preset-app": "3.6.0",
     "@vue/cli-plugin-babel": "3.5.5",
     "@vue/cli-plugin-eslint": "3.5.1",
     "@vue/cli-service": "3.5.3",
