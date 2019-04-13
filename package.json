@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@vue/babel-preset-app": "3.5.5",
-    "@vue/cli-plugin-babel": "3.5.5",
+    "@vue/cli-plugin-babel": "3.6.0",
     "@vue/cli-plugin-eslint": "3.5.1",
     "@vue/cli-service": "3.5.3",
     "@vue/eslint-config-standard": "4.0.0",
