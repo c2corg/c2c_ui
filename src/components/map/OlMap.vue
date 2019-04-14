@@ -538,10 +538,14 @@
             for (const waypoint of document.associations.waypoint_children || []) {
               this.addDocumentFeature(waypoint, waypointsSource);
             }
-            for (const image of document.associations.images || []) {
-              if (!this.$documentUtils.hasSameGeolocation(image, document)) {
-                // show image marker only if it's geolocation is different from document
-                this.addDocumentFeature(image, imagesSource);
+
+            // show associated images only for outings
+            if (document.type === 'o') {
+              for (const image of document.associations.images || []) {
+                if (!this.$documentUtils.hasSameGeolocation(image, document)) {
+                  // show image marker only if it's geolocation is different from document
+                  this.addDocumentFeature(image, imagesSource);
+                }
               }
             }
           }
