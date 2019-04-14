@@ -201,6 +201,8 @@
           }
         }
 
+        // clean target, if user delete upload, and re-upload same image
+        event.target.value = '';
         this.computeReadyForSaving();
       },
 
