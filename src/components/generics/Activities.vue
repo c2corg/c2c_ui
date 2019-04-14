@@ -1,6 +1,6 @@
 <template>
   <span v-if="activities !== null">
-    <span v-for="activity of activities" :key="activity" :title="$gettext(activity, 'activities')" class="replace-icon-by-names-on-print">
+    <span v-for="activity of sortedActivities" :key="activity" :title="$gettext(activity, 'activities')" class="replace-icon-by-names-on-print">
       <icon-activity :activity="activity" />
     </span>
   </span>
@@ -12,6 +12,11 @@
       activities: {
         type: Array,
         default: null // many object can contains null array for this...
+      }
+    },
+    computed: {
+      sortedActivities() {
+        return this.activities.slice(0).sort();
       }
     }
   };
