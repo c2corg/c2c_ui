@@ -2,7 +2,6 @@
   <div class="card">
     <div class="card-image img-container" :style="'background-image: url(' + image.src + ')'">
       <delete-button
-        :visible="isSuccess || isFailed"
         class="delete-button"
         @click="$emit('deleteImage', image)" />
 
