@@ -77,6 +77,8 @@ $navbar-height: 3.25rem;
 // but it's not yet (14/12/2018) available on npm
 $input-placeholder-color:rbg(160,160,160);
 
+
+
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: #AAA!important;
     opacity: 1; /* Firefox */
@@ -86,6 +88,9 @@ $input-placeholder-color:rbg(160,160,160);
 @import "~bulma/sass/utilities/initial-variables.sass";
 @import "~bulma/sass/utilities/functions.sass";
 @import "~bulma/sass/utilities/derived-variables.sass";
+
+// icons in input are to light
+$input-icon-color: $grey-light;
 
 /**
  * bulma card shadow is used to set a border. Remove the border part
