@@ -1,5 +1,9 @@
 <template>
-  <button v-if="$user.isLogged" class="button is-small is-primary header-item" @click="loadPreferences">
+  <button
+    v-if="$user.isLogged"
+    class="button is-small is-primary header-item"
+    :class="{'is-loading': promise.loading}"
+    @click="loadPreferences">
     <fa-icon icon="star" />
     <span class="is-hidden-mobile">&nbsp;</span>
     <span class="is-hidden-mobile" v-translate>
@@ -12,9 +16,21 @@
   import c2c from '@/js/apis/c2c';
 
   export default {
+    data() {
+      return {
+        promise: {}
+      };
+    },
+
+    computed: {
+      documentType() {
+        return this.$route.name.slice(0, -1);
+      }
+    },
+
     methods: {
       loadPreferences() {
-        c2c.userProfile.preferences.get().then((result) => {
+        this.promise = c2c.userProfile.preferences.get().then((result) => {
           const preferences = result.data;
           const query = Object.assign({}, this.$route.query);
 
