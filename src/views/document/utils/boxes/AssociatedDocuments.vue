@@ -64,6 +64,20 @@
       <hr>
     </div>
 
+    <!-- outings -->
+    <div v-if="documentType === 'xreport' && associations.outings && associations.outings.length!=0" class="associations-list">
+      <div class="title">
+        {{ $gettext('outings') | uppercaseFirstLetter }}
+      </div>
+      <div v-for="outing of associations.outings" :key="outing.document_id" class="is-ellipsed">
+        <document-link :document="outing">
+          <icon-outing class="icon-link" />
+          <document-title :document="outing" uppercase-first-letter />
+        </document-link>
+      </div>
+      <hr>
+    </div>
+
     <!-- maps -->
     <div v-if="(document.maps && document.maps.length !== 0) || document.maps_info" class="associations-list">
       <div class="title">
