@@ -1,5 +1,5 @@
 <template>
-  <card-container :document="notClickable ? null : document" :highlighted="highlighted">
+  <card-container :document="document" :target="target" :highlighted="highlighted">
     <card-title>
       <span class="is-ellipsed-tablet">
         <icon-waypoint-type :waypoint-type="document.waypoint_type" />

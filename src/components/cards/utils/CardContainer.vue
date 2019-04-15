@@ -1,8 +1,8 @@
 <template>
   <div class="card" :class="{'is-highlighted': highlighted}">
-    <component :is="document ? 'document-link' : 'span'" :document="document">
+    <document-link :document="document" :target="target">
       <slot />
-    </component>
+    </document-link>
   </div>
 </template>
 
@@ -14,7 +14,10 @@
         type: Object,
         default: null
       },
-
+      target: {
+        type: String,
+        default: undefined
+      },
       highlighted: {
         type: Boolean,
         default: false

@@ -19,9 +19,9 @@ export const cardMixin = {
   },
 
   props: {
-    notClickable: {
-      type: Boolean,
-      default: false
+    target: {
+      type: String,
+      default: undefined
     },
 
     highlighted: {
