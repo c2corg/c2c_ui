@@ -1,22 +1,24 @@
 <template>
   <div>
-    <div v-if="associations.waypoints.length" class="associations-list">
+    <div v-for="(waypointsList, i) of waypointsLists" :key="i" class="associations-list">
       <div class="title">
-        {{ $gettext('waypoints') | uppercaseFirstLetter }}
+        {{ waypointsList.title | uppercaseFirstLetter }}
       </div>
-      <div v-for="waypoint of associations.waypoints" :key="waypoint.document_id" class="is-ellipsed">
-        <pretty-waypoint-link :waypoint="waypoint" />
-      </div>
-      <hr>
-    </div>
-
-    <div v-if="associations.waypoint_children && associations.waypoint_children.length" class="associations-list">
-      <div class="title">
-        {{ $gettext('waypoint_children') | uppercaseFirstLetter }}
-      </div>
-      <div v-for="waypoint of associations.waypoint_children" :key="waypoint.document_id" class="is-ellipsed">
-        <pretty-waypoint-link :waypoint="waypoint" />
-      </div>
+      <document-link
+        v-for="waypoint of waypointsList.waypoints"
+        :key="waypoint.document_id"
+        :document="waypoint"
+        class="columns is-mobile has-hover-background is-marginless is-vcentered">
+        <div class="column is-narrow is-paddingless">
+          <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="icon-link" />
+        </div>
+        <div class="column is-paddingless">
+          <document-title :document="waypoint" />
+        </div>
+        <div class="column is-narrow has-text-grey is-paddingless is-size-7">
+          {{ waypoint.elevation }}&nbsp;m
+        </div>
+      </document-link>
       <hr>
     </div>
 
@@ -27,7 +29,8 @@
       </div>
       <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
-          <icon-book class="icon-link" />&nbsp;<document-title :document="book" />
+          <icon-book class="icon-link" />
+          <document-title :document="book" />
         </document-link>
       </div>
       <hr>
@@ -40,7 +43,8 @@
       </div>
       <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
-          <icon-article class="icon-link" />&nbsp;<document-title :document="article" />
+          <icon-article class="icon-link" />
+          <document-title :document="article" />
         </document-link>
       </div>
       <hr>
@@ -53,7 +57,8 @@
       </div>
       <div v-for="xreport of associations.xreports" :key="xreport.document_id" class="is-ellipsed">
         <document-link :document="xreport">
-          <icon-xreport class="icon-link" />&nbsp;<document-title :document="xreport" />
+          <icon-xreport class="icon-link" />
+          <document-title :document="xreport" />
         </document-link>
       </div>
       <hr>
@@ -87,10 +92,25 @@
   export default {
     mixins: [ requireDocumentProperty ],
 
-    data() {
-      return {
-        associations: null
-      };
+    computed: {
+      associations() {
+        return this.document.associations || {};
+      },
+
+      waypointsLists() {
+        const result = [];
+
+        const push = function(title, waypoints) {
+          if (waypoints && waypoints.length !== 0) {
+            result.push({ title, waypoints });
+          }
+        };
+
+        push(this.$gettext('waypoints'), this.associations.waypoints);
+        push(this.$gettext('waypoint_children'), this.associations.waypoint_children);
+
+        return result;
+      }
     },
 
     created() {
@@ -98,10 +118,7 @@
         return left.document_id < right.document_id;
       }
 
-      this.associations = this.document.associations || {};
-
       this.associations.books = (this.associations.books || []).sort(compare);
-      this.associations.waypoints = this.associations.waypoints || [];
       this.associations.articles = this.associations.articles || [];
     }
   };
@@ -121,6 +138,7 @@
 
 .icon-link, .icon-link:hover{
     color:$dark;
+    margin-right:3px;
 }
 
 </style>
