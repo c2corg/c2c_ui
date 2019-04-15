@@ -4,7 +4,7 @@
       :is="documentType + '-card'"
       :document="document"
       class="document-card"
-      :not-clickable="notClickable"
+      :target="target"
       :highlighted="highlighted" />
     <delete-button
       v-if="showDeleteButton"
@@ -48,9 +48,9 @@
         default: false
       },
 
-      notClickable: {
-        type: Boolean,
-        default: false
+      target: {
+        type: String,
+        default: undefined
       },
 
       highlighted: {

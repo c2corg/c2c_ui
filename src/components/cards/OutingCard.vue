@@ -1,5 +1,5 @@
 <template>
-  <card-container :document="notClickable ? null : document" :highlighted="highlighted">
+  <card-container :document="document" :target="target" :highlighted="highlighted">
     <card-title>
       <document-title :document="document" class="is-ellipsed-tablet" />
       <marker-condition :condition="document.condition_rating" class="is-pulled-right" />
