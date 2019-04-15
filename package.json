@@ -48,7 +48,7 @@
     "vue-multiselect": "2.1.4",
     "vue-property-decorator": "8.0.0",
     "vue-recaptcha": "^1.1.1",
-    "vue-router": "3.0.4",
+    "vue-router": "3.0.5",
     "vue-slider-component": "3.0.25",
     "vuejs-datepicker": "1.5.4"
   },
