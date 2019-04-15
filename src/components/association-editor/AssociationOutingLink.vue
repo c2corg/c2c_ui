@@ -3,7 +3,7 @@
     <span class="has-text-normal">
       {{ outing.date_start }}&hairsp;&bull;&hairsp;{{ outing.author.name }} -
     </span>
-    <document-title :document="outing"/>
+    <document-title :document="outing" />
   </document-link>
 </template>
 

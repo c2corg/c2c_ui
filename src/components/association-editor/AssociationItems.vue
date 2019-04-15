@@ -60,7 +60,7 @@
   import AssociationOutingLink from './AssociationOutingLink';
 
   export default {
-    components: { AssociationOutingLink  },
+    components: { AssociationOutingLink },
 
     props: {
 
