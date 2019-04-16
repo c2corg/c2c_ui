@@ -24,10 +24,9 @@ before_deploy:
 
 # deploy to github pages on master
 deploy:
-  provider: pages
+  provider: script
   skip-cleanup: true
-  local-dir: dist
-  github-token: $GITHUB_TOKEN
-  keep-history: true
+  script: bash scripts/deploy-gh-pages.sh
+  verbose: true
   on:
-    branch: master
+    all_branches: true
