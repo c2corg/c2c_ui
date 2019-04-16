@@ -54,7 +54,7 @@
       "waypoint_types": "accesso stradale o TP"
     },
     "access_comment": "Commenti sull'accesso stradale o TP",
-    "access_condition": "Condizioni dell'accesso stradale o TP",
+    "access_condition": "Condizioni dell'accesso stradale",
     "access_period": "Periodi dell'accesso",
     "access_time": "Tempo di accesso",
     "accessible_when_wardened": {
@@ -449,7 +449,7 @@
     "Elevation": "Quota",
     "elevation": "Quota",
     "Elevation (m)": "Altitudine (m)",
-    "elevation_access": "Quota dell'accesso stradale o TP",
+    "elevation_access": "Quota dell'accesso stradale",
     "elevation_down_snow": "Quota della neve (discesa)",
     "elevation_max": "Quota massima",
     "elevation_min": "Quota minima",
@@ -885,7 +885,7 @@
     },
     "Multi-criteria search": "ricerca multi-criteri ",
     "My account": "Il mio account",
-    "My changes": "le mie contribuzioni",
+    "My changes": "Le mie contribuzioni",
     "My followed users": "I miei amici",
     "My mailing lists": "I miei bollettini",
     "My outings": "Le mie gite",
@@ -974,7 +974,7 @@
       "lift_status": "aperti"
     },
     "open_guarded": {
-      "hut_status": "aperto  custodito"
+      "hut_status": "custodito"
     },
     "open_non_guarded": {
       "hut_status": "aperto non custodito"
@@ -991,6 +991,7 @@
     },
     "other_comments": "Altri commenti",
     "outing": "gite",
+    "outings": "gitte",
     "overcrowded": {
       "frequentation_types": "molto affollato "
     },
@@ -1030,6 +1031,7 @@
     "people": {
       "image_categories": "personaggi"
     },
+    "People who were with you, and your feelings about this outing": "Partecipanti alla gita e commenti personali sulla gita ",
     "Period of protection": "Periodo di protezione ",
     "person_fall": {
       "event_types": "caduta di una persona "
@@ -1042,6 +1044,7 @@
     "personal comments": "Commenti personali",
     "Personal feed off": "La personalizzazione della sezione Notizie è disattivata ",
     "Personal feed on": "La personalizzazione della sezione Notizie è attivata ",
+    "Personal informations": "Informazioni personale ",
     "phone": "Telefono",
     "phone_custodian": "Telefono gestore",
     "photos-art": {
