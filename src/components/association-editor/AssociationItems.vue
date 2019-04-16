@@ -19,6 +19,8 @@
 
         <pretty-book-link v-else-if="childType==='book'" :book="child.document" />
 
+        <association-outing-link v-else-if="childType==='outing'" :outing="child.document" />
+
         <pretty-route-link
           v-else-if="childType==='route'"
           :route="child.document"
@@ -55,8 +57,11 @@
 
 <script>
   import c2c from '@/js/apis/c2c';
+  import AssociationOutingLink from './AssociationOutingLink';
 
   export default {
+    components: { AssociationOutingLink },
+
     props: {
 
       parent: {

@@ -122,7 +122,7 @@
   import LicenseBox from './LicenseBox';
   import AssociatedDocuments from './AssociatedDocuments';
 
-  import AssociationsWindow from '../windows/AssociationsWindow';
+  import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
   import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
   import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
   import MergeDocumentWindow from '../windows/MergeDocumentWindow';
