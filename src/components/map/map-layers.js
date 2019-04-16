@@ -1,7 +1,7 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol.js';
 
-function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current', restricted = false) {
   return new ol.layer.Tile({
     title,
     type: 'base',
@@ -14,7 +14,8 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
       maxZoom: 17
-    })
+    }),
+    restricted
   });
 }
 
@@ -58,84 +59,91 @@ function createIgnSource(title, layer, format = 'jpeg') {
   });
 }
 
-// $gettext('ESRI', 'Map layer')
-const esri = new ol.layer.Tile({
-  title: 'Esri',
-  type: 'base',
-  visible: true,
-  source: new ol.source.XYZ({
-    url:
-      'https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/' +
-      'WMTS?layer=World_Topo_Map&style=default&tilematrixset=GoogleMapsCompatible&' +
-      'Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&' +
-      'TileMatrix={z}&TileCol={x}&TileRow={y}',
-    attributions: [
-      '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
-        ' target="_blank" rel="noreferer">Esri</a>'
-    ],
-    maxZoom: 19
-  })
-});
+export const cartoLayers = function() {
+  // $gettext('ESRI', 'Map layer')
+  const esri = new ol.layer.Tile({
+    title: 'Esri',
+    type: 'base',
+    visible: true,
+    source: new ol.source.XYZ({
+      url:
+        'https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/' +
+        'WMTS?layer=World_Topo_Map&style=default&tilematrixset=GoogleMapsCompatible&' +
+        'Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&' +
+        'TileMatrix={z}&TileCol={x}&TileRow={y}',
+      attributions: [
+        '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
+          ' target="_blank" rel="noreferer">Esri</a>'
+      ],
+      maxZoom: 19
+    })
+  });
 
-/*
-var openStreetMap = new ol.layer.Tile({
-    title: 'OpenStreetMap',
-    source: new OSM(),
+  /*
+  var openStreetMap = new ol.layer.Tile({
+      title: 'OpenStreetMap',
+      source: new OSM(),
+      visible: false,
+  }) */
+
+  // $gettext('Bing', 'Map layer')
+  const bingMap = new ol.layer.Tile({
+    title: 'Bing',
+    source: new ol.source.BingMaps({
+      key: config.bingApiKey,
+      imagerySet: 'AerialWithLabels'
+    }),
+    visible: false
+  });
+
+  // $gettext('OpenTopoMap', 'Map layer')
+  const openTopoMap = new ol.layer.Tile({
+    title: 'OpenTopoMap',
+    type: 'base',
     visible: false,
-}) */
+    source: new ol.source.XYZ({
+      url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
+      attributions:
+        '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
+        '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
+      maxZoom: 17
+    })
+  });
 
-// $gettext('Bing', 'Map layer')
-const bingMap = new ol.layer.Tile({
-  title: 'Bing',
-  source: new ol.source.BingMaps({
-    key: config.bingApiKey,
-    imagerySet: 'AerialWithLabels'
-  }),
-  visible: false
-});
+  // $gettext('IGN maps', 'Map layer')
+  const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+  // $gettext('IGN ortho', 'Map layer')
+  const ignOrtho = createIgnSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+  // $gettext('SwissTopo', 'Map layer')
+  const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current', true);
 
-// $gettext('OpenTopoMap', 'Map layer')
-const openTopoMap = new ol.layer.Tile({
-  title: 'OpenTopoMap',
-  type: 'base',
-  visible: false,
-  source: new ol.source.XYZ({
-    url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    attributions:
-      '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
-      '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
-    maxZoom: 17
-  })
-});
+  return [esri, /* openStreetMap, */ openTopoMap, bingMap, ignMaps, ignOrtho, swissTopo];
+};
 
-// $gettext('IGN maps', 'Map layer')
-const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
-// $gettext('IGN ortho', 'Map layer')
-const ignOrtho = createIgnSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
-// $gettext('SwissTopo', 'Map layer')
-const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe');
+export const dataLayers = function() {
+  // $gettext('IGN', 'Map slopes layer')
+  const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+  ignSlopes.setOpacity(0.4);
+  // $gettext('SwissTopo', 'Map slopes layer')
+  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101', true);
+  swissSlopes.setOpacity(0.4);
 
-// $gettext('IGN', 'Map slopes layer')
-const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
-ignSlopes.setOpacity(0.4);
-// $gettext('SwissTopo', 'Map slopes layer')
-const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
-swissSlopes.setOpacity(0.4);
+  return [ignSlopes, swissSlopes];
+};
 
-const swissTranquilityZones = createSwisstopoLayer(
-  'Swiss tranquility zones',
-  'ch.bafu.wrz-wildruhezonen_portal',
-  'png'
-);
-swissTranquilityZones.setOpacity(0.7);
-const swissFaunaProtectionZones = createSwisstopoLayer(
-  'Swiss fauna protection zones',
-  'ch.bafu.wrz-jagdbanngebiete_select',
-  'png'
-);
-swissFaunaProtectionZones.setOpacity(0.7);
+export const protectionAreasLayers = function() {
+  const swissTranquilityZones = createSwisstopoLayer(
+    'Swiss tranquility zones',
+    'ch.bafu.wrz-wildruhezonen_portal',
+    'png'
+  );
+  swissTranquilityZones.setOpacity(0.7);
+  const swissFaunaProtectionZones = createSwisstopoLayer(
+    'Swiss fauna protection zones',
+    'ch.bafu.wrz-jagdbanngebiete_select',
+    'png'
+  );
+  swissFaunaProtectionZones.setOpacity(0.7);
 
-export const cartoLayers = [esri, /* openStreetMap, */ openTopoMap, bingMap, ignMaps, ignOrtho, swissTopo];
-export const dataLayers = [ignSlopes, swissSlopes];
-export const swissTopoLayers = [swissTopo, swissSlopes];
-export const protectionAreasLayers = [swissTranquilityZones, swissFaunaProtectionZones];
+  return [swissTranquilityZones, swissFaunaProtectionZones];
+};
