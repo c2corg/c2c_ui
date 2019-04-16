@@ -21,6 +21,8 @@
 
         <association-outing-link v-else-if="childType==='outing'" :outing="child.document" />
 
+        <association-image-link v-else-if="childType==='image'" :image="child.document" />
+
         <pretty-route-link
           v-else-if="childType==='route'"
           :route="child.document"
@@ -58,9 +60,13 @@
 <script>
   import c2c from '@/js/apis/c2c';
   import AssociationOutingLink from './AssociationOutingLink';
+  import AssociationImageLink from './AssociationImageLink';
 
   export default {
-    components: { AssociationOutingLink },
+    components: {
+      AssociationOutingLink,
+      AssociationImageLink
+      },
 
     props: {
 
