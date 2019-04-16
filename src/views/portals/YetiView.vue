@@ -3,7 +3,7 @@
     <html-header title="Yeti" />
     <div class="box">
       <h1 class="title is-1">
-        <span>YETI - Un outil pour la vie</span>
+        <span>YETI - Un outil de préparation de course</span>
         <span class="is-pulled-right has-text-primary">
           <fa-icon icon="map-marked-alt" />
         </span>
@@ -34,7 +34,7 @@
                   <select
                     v-model="bra.high"
                     class="form-control"
-                    aria-label="Niveau de risque BRA haut">
+                    aria-label="Niveau de danger BRA haut">
                     <option :value="null" selected />
                     <option :value="1">1</option>
                     <option :value="2">2</option>
@@ -56,7 +56,7 @@
                 </div>
 
                 <div v-show="bra.isDifferent" class="input-bra-low select is-small">
-                  <select v-model="bra.low" aria-label="Niveau de risque BRA bas">
+                  <select v-model="bra.low" aria-label="Niveau de danger BRA bas">
                     <option :value="null" selected />
                     <option :value="1">1</option>
                     <option :value="2">2</option>
@@ -116,10 +116,10 @@
 
           <div v-show="method=='mrd'">
             <p>
-              Avec la Méthode de Réduction pour Débutant (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de risque donné par le BRA.
+              Avec la Méthode de Réduction pour Débutant (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
             </p>
             <p class="is-italic">
-              Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de risque du BRA. Il n'est pas tenu compte de l'orientation.
+              Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de danger du BRA. Il n'est pas tenu compte de l'orientation.
             </p>
 
             <table class="yetiForm-danger">
@@ -160,7 +160,7 @@
             </p>
 
             <p class="is-italic">
-              On notera que toutes les orientations possèdent le niveau de risque du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.
+              On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.
             </p>
 
             <table class="yetiForm-danger">
@@ -221,7 +221,7 @@
             </ul>
 
             <p class="is-italic">
-              Le potentiel de danger est calculé à partir du niveau de risque du BRA. Il peut être affiné en agissant directement sur le slider. Par exemple: Le BRA évoque un risque 3 juste après une période en risque 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.
+              Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en agissant directement sur le slider. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.
             </p>
 
             <p>
@@ -254,7 +254,7 @@
               <li>Grand groupe = 5 personnes et plus</li>
               <li>Petit groupe = 2 à 4 personnes</li>
             </ul>
-            <h4 class="title is-4">Distances de sécurité</h4>
+            <h4 class="title is-4">Distances de délestage</h4>
             <ul class="content-ul">
               <li>10 mètres au minimum à la montée</li>
               <li>50 mètres à la descente</li>
