@@ -113,7 +113,10 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.routerMode = undefined;
 
   // github pages url is postfixed
-  result.publicPath = '/c2c_ui/';
+  // and we will deploy a build on
+  // https://c2corg.github.io/c2c_ui/<branch-name>/
+  config.branchName = process.env.TRAVIS_BRANCH;
+  result.publicPath = `/c2c_ui/${config.branchName}/`;
 
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';
