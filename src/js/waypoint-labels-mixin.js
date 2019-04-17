@@ -18,15 +18,16 @@ export default {
         return '';
       }
 
-      if (this.document.waypoint_type === 'access') {
+      switch (this.document.waypoint_type) {
+      case 'access':
         return this.$gettext('public transportation access');
-      }
-
-      if (['hut', 'climbing_indoor', 'climbing_outdoor'].includes(this.document.waypoint_type)) {
+      case 'climbing_outdoor':
         return this.$gettext('pedestrian access');
+      case 'hut':
+        return this.$gettext('pedestrian access', 'hut');
+      default:
+        return this.$gettext('road or pedestrian access');
       }
-
-      return this.$gettext('road or pedestrian access');
     },
 
     accessPeriodTitle() {
@@ -34,61 +35,61 @@ export default {
         return '';
       }
 
-      if (['hut', 'gite', 'camp_site'].includes(this.document.waypoint_type)) {
+      switch (this.document.waypoint_type) {
+      case 'hut':
+      case 'gite':
+      case 'camp_site':
         return this.$gettext('opening_periods');
-      }
-
-      if (this.document.waypoint_type === 'local_product') {
+      case 'local_product':
         return this.$gettext('opening_hours');
-      }
-
-      if (this.document.waypoint_type === 'climbing_outdoor') {
+      case 'climbing_outdoor':
         return this.$gettext('restricted_access');
+      default:
+        return this.$gettext('access_period');
       }
-
-      return this.$gettext('access_period');
     },
 
     descriptionPlaceholder() {
       const type = this.document ? this.document.waypoint_type : undefined;
 
-      if (type === 'access') {
+      switch (type) {
+      case 'access':
         return this.$gettext('Describe here the waypoint');
+      default:
+        return this.$gettext('Describe road access');
       }
-
-      return this.$gettext('Describe road access');
     },
 
     accessPlaceholder() {
       const type = this.document ? this.document.waypoint_type : undefined;
 
-      if (type === 'access') {
+      switch (type) {
+      case 'access':
         return this.$gettext('Describe pt access');
-      }
-
-      if (type === 'hut' || type === 'climbing_indoor' || type === 'climbing_outdoor') {
+      case 'hut':
+        return this.$gettext('Describe pedestrian access', 'hut');
+      case 'climbing_outdoor':
         return this.$gettext('Describe pedestrian access');
+      default:
+        return this.$gettext('Describe access');
       }
-
-      return this.$gettext('Describe access');
     },
 
     accessPeriodPlaceholder() {
       const type = this.document ? this.document.waypoint_type : undefined;
 
-      if (type === 'hut' || type === 'gite' || type === 'camp_site') {
+      switch (type) {
+      case 'hut':
+      case 'gite':
+      case 'camp_site':
         return this.$gettext('Describe opening periods');
-      }
-
-      if (type === 'local_product') {
+      case 'local_product':
         return this.$gettext('Describe opening hours');
-      }
-
-      if (type === 'climbing_outdoor') {
+      case 'climbing_outdoor':
         return this.$gettext('Describe access restrictions');
+      default:
+        return this.$gettext('Describe access period');
       }
-
-      return this.$gettext('Describe access period');
     }
   }
 };
