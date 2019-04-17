@@ -1005,11 +1005,11 @@
     },
     "snow_quality":
     {
-        "values": "condition_ratings"
+        "values": "snow_quality_ratings"
     },
     "snow_quantity":
     {
-        "values": "condition_ratings"
+        "values": "snow_quantity_ratings"
     },
     "snowshoe_rating":
     {

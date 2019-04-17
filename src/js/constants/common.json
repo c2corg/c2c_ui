@@ -233,6 +233,20 @@
             "poor",
             "awful"
         ],
+        "snow_quality_ratings": [
+            "excellent",
+            "good",
+            "average",
+            "poor",
+            "awful"
+        ],
+        "snow_quantity_ratings": [
+            "excellent",
+            "good",
+            "average",
+            "poor",
+            "awful"
+        ],
         "weather_station_types": [
             "temperature",
             "wind_speed",
