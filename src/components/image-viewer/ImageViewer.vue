@@ -1,10 +1,10 @@
 <template>
   <div v-if="visible" class="image-viewer">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
-      <span class="is-size-2 is-ellipsed image-viewer-title">
+      <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
       </span>
-      <span class="is-size-3 is-nowrap image-viewer-buttons">
+      <span class="is-size-5 is-nowrap image-viewer-buttons">
         <document-link :document="activeDocument" class="has-text-grey-lighter">
           <fa-icon icon="eye" />
         </document-link>
@@ -39,7 +39,7 @@
       <div class="swiper-button-next" />
     </div>
 
-    <div class="image-viewer-pagination">
+    <div class="image-viewer-pagination is-hidden-mobile">
       <span
         v-for="(image, index) of images"
         :key="image.document_id"
@@ -243,7 +243,7 @@
   $headerHeight: 52px;
   $paginationHeight: 30px;
 
-  .image-viewer{
+  .image-viewer {
     z-index:1000;
     position:fixed;
     top:0;
@@ -252,7 +252,7 @@
     height:100%;
     background: rgba(0,0,0,0.95);
 
-    .image-viewer-header{
+    &-header {
       justify-content: space-between;
       padding:0.5rem 1rem;
       margin-bottom: 0!important;
@@ -273,12 +273,12 @@
       }
     }
 
-    .image-viewer-swiper{
+    &-swiper{
       width:100vw;
       height:calc(100% - #{$headerHeight} - #{$paginationHeight});
     }
 
-    .image-viewer-pagination{
+    &-pagination{
       display:flex;
       align-items: center;
       justify-content: center;
@@ -306,6 +306,22 @@
       .image-viewer-bullet-active{
         background: $primary;
       }
+    }
+  }
+
+  @media screen and (max-width: $tablet) {
+    .image-viewer-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    .image-viewer-buttons {
+      position: absolute;
+      top: 0;
+      right: 1em;
     }
   }
 
