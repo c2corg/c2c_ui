@@ -119,7 +119,7 @@
   import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
   import photon from '@/js/apis/photon';
 
-  import { cartoLayers, dataLayers, swissTopoLayers, protectionAreasLayers } from './map-layers.js';
+  import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers.js';
   import {
     getDocumentPointStyle,
     getDocumentLineStyle,
@@ -204,13 +204,13 @@
     },
 
     data() {
-      let cartoLayers_ = cartoLayers;
-      let dataLayers_ = dataLayers;
+      let cartoLayers_ = cartoLayers();
+      let dataLayers_ = dataLayers();
 
       // swiss topo only for logged users
       if (!this.$user.isLogged) {
-        cartoLayers_ = cartoLayers_.filter(layer => !swissTopoLayers.includes(layer));
-        dataLayers_ = dataLayers.filter(layer => !swissTopoLayers.includes(layer));
+        cartoLayers_ = cartoLayers_.filter(layer => !layer.get('restricted'));
+        dataLayers_ = dataLayers_.filter(layer => !layer.get('restricted'));
       }
 
       return {
@@ -228,7 +228,7 @@
         }),
 
         // protection areas layers
-        protectionAreasLayers,
+        protectionAreasLayers: protectionAreasLayers(),
 
         // layer for document icons and paths
         documentsLayer: new ol.layer.Vector({
