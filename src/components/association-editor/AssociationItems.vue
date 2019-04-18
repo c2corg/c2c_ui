@@ -66,7 +66,7 @@
     components: {
       AssociationOutingLink,
       AssociationImageLink
-      },
+    },
 
     props: {
 

@@ -4,7 +4,9 @@
     <figure class="image is-96x96 association-image-link-child">
       <img :src="getUrl(image)" :title="image.locales[0].title">
     </figure>
-    <document-title :document="image" class="association-image-link-child"/>
+    <span class="association-image-link-child">
+      {{ image.locales[0].title | max50chars }}
+    </span>
   </document-link>
 
 </template>
@@ -13,6 +15,10 @@
   import imageUrls from '@/js/image-urls';
 
   export default {
+    filters: {
+      max50chars: value => value.length > 50 ? value.substring(0, 50) + '…' : value
+    },
+
     props: {
       image: {
         type: Object,
