@@ -130,6 +130,14 @@
     .page-content{
       margin-left:0;
     }
+
+    .section{
+      padding: 0.75rem !important;
+    }
+
+    .box:not(:last-child), .feed-card{
+      margin-bottom: 0.5rem !important;
+    }
   }
 
   @media screen and (min-width: $tablet) and (max-width: $desktop){
