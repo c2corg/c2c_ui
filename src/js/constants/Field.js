@@ -4,7 +4,7 @@ import utils from '@/js/utils';
 
 const attrs = common.attributes;
 
-// values  can be a string : it describes a common.attributes fields
+// values can be a string : it describes a common.attributes fields
 for (const property of Object.values(fieldsProperties)) {
   if (property.values && typeof property.values === 'string') {
     property.i18nContext = property.values;
