@@ -136,7 +136,7 @@
     }
 
     .box:not(:last-child), .feed-card{
-      margin-bottom: 0.5rem !important;
+      margin-bottom: 0.75rem !important;
     }
   }
 
