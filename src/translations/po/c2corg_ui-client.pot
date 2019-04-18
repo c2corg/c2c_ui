@@ -103,7 +103,7 @@ msgstr ""
 msgid "access_condition"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:49
+#: src/js/waypoint-labels-mixin.js:48
 #: src/translations/fixed_strings_common_js.vue:7
 msgid "access_period"
 msgstr ""
@@ -180,7 +180,7 @@ msgctxt "activity_rates"
 msgid "activity_rate_50"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:116
+#: src/components/association-editor/AssociationItems.vue:121
 msgid "Add"
 msgstr ""
 
@@ -339,7 +339,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:6
 #: src/views/SideMenu.vue:73
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:39
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:42
 msgid "articles"
 msgstr ""
 
@@ -580,7 +580,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:29
 #: src/translations/fixed_strings_manual.vue:8
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:26
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:28
 #: src/views/static-views/NotFoundView.vue:58
 #: src/views/static-views/TopoguideView.vue:13
 msgid "books"
@@ -636,7 +636,7 @@ msgid "Camptocamp.org aims to facilitate information sharing between mountain ad
 msgstr ""
 
 #: src/components/generics/modals/ModalConfirmation.vue:32
-#: src/components/images-uploader/ImageUploader.vue:72
+#: src/components/images-uploader/ImageUploader.vue:71
 #: src/components/markdown-editor/LinkHelper.vue:26
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:67
 #: src/views/user/LoginView.vue:173
@@ -743,9 +743,9 @@ msgstr ""
 msgid "climbing_styles"
 msgstr ""
 
+#: src/components/association-editor/AssociationsWindow.vue:25
 #: src/components/helper/HelperWindow.vue:15
 #: src/components/images-uploader/ImagesUploader.vue:57
-#: src/views/document/utils/windows/AssociationsWindow.vue:25
 msgid "Close"
 msgstr ""
 
@@ -788,7 +788,7 @@ msgctxt "article_types"
 msgid "collab"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:142
+#: src/components/images-uploader/ImageUploader.vue:141
 msgid "collab"
 msgstr ""
 
@@ -880,7 +880,7 @@ msgctxt "image_types"
 msgid "copyright"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:149
+#: src/components/images-uploader/ImageUploader.vue:148
 msgid "copyright"
 msgstr ""
 
@@ -1005,7 +1005,7 @@ msgctxt "image_categories"
 msgid "descent"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:73
+#: src/js/waypoint-labels-mixin.js:74
 msgid "Describe access"
 msgstr ""
 
@@ -1013,7 +1013,7 @@ msgstr ""
 msgid "Describe access period"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:88
+#: src/js/waypoint-labels-mixin.js:89
 msgid "Describe access restrictions"
 msgstr ""
 
@@ -1025,7 +1025,7 @@ msgstr ""
 msgid "Describe here the gear needed for this route"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:56
+#: src/js/waypoint-labels-mixin.js:57
 msgid "Describe here the waypoint"
 msgstr ""
 
@@ -1033,19 +1033,24 @@ msgstr ""
 msgid "Describe historical information about the route (date, names..) here"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:84
+#: src/js/waypoint-labels-mixin.js:87
 msgid "Describe opening hours"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:80
+#: src/js/waypoint-labels-mixin.js:85
 msgid "Describe opening periods"
 msgstr ""
 
 #: src/js/waypoint-labels-mixin.js:70
+msgctxt "hut"
 msgid "Describe pedestrian access"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:66
+#: src/js/waypoint-labels-mixin.js:72
+msgid "Describe pedestrian access"
+msgstr ""
+
+#: src/js/waypoint-labels-mixin.js:68
 msgid "Describe pt access"
 msgstr ""
 
@@ -2186,7 +2191,7 @@ msgstr ""
 msgid "List of versions for language:"
 msgstr ""
 
-#: src/views/documents/utils/LoadUserPreferencesButton.vue:5
+#: src/views/documents/utils/LoadUserPreferencesButton.vue:9
 msgid "Load my preferences"
 msgstr ""
 
@@ -2285,7 +2290,7 @@ msgid "Map only"
 msgstr ""
 
 #: src/translations/fixed_strings_manual.vue:10
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:65
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:84
 msgid "maps"
 msgstr ""
 
@@ -2737,11 +2742,11 @@ msgctxt "hut_status"
 msgid "open_non_guarded"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:42
+#: src/js/waypoint-labels-mixin.js:44
 msgid "opening_hours"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:38
+#: src/js/waypoint-labels-mixin.js:42
 msgid "opening_periods"
 msgstr ""
 
@@ -2787,6 +2792,7 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:11
 #: src/views/SideMenu.vue:70
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:70
 #: src/views/document/utils/boxes/ToolBox.vue:22
 #: src/views/portals/DashboardView.vue:36
 #: src/views/static-views/NotFoundView.vue:54
@@ -2880,7 +2886,12 @@ msgctxt "API message"
 msgid "Password too short"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:26
+#: src/js/waypoint-labels-mixin.js:27
+msgctxt "hut"
+msgid "pedestrian access"
+msgstr ""
+
+#: src/js/waypoint-labels-mixin.js:25
 msgid "pedestrian access"
 msgstr ""
 
@@ -2912,7 +2923,7 @@ msgctxt "image_types"
 msgid "personal"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:143
+#: src/components/images-uploader/ImageUploader.vue:142
 msgid "personal"
 msgstr ""
 
@@ -3122,7 +3133,7 @@ msgctxt "climbing_outdoor_types"
 msgid "psicobloc"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:22
+#: src/js/waypoint-labels-mixin.js:23
 msgid "public transportation access"
 msgstr ""
 
@@ -3142,7 +3153,7 @@ msgstr ""
 msgid "publication_date"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:115
+#: src/components/association-editor/AssociationItems.vue:120
 msgid "Put it back"
 msgstr ""
 
@@ -3218,7 +3229,7 @@ msgstr ""
 msgid "remarks"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:114
+#: src/components/association-editor/AssociationItems.vue:119
 msgid "Remove"
 msgstr ""
 
@@ -3269,7 +3280,7 @@ msgstr ""
 msgid "Results only"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:66
+#: src/components/images-uploader/ImageUploader.vue:65
 msgid "Retry"
 msgstr ""
 
@@ -3407,7 +3418,7 @@ msgstr ""
 msgid "Search ..."
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationsWindow.vue:8
+#: src/components/association-editor/AssociationsWindow.vue:8
 msgid "Search a document to associate..."
 msgstr ""
 
@@ -3917,7 +3928,7 @@ msgstr ""
 msgid "timing"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:43
+#: src/components/images-uploader/ImageUploader.vue:42
 #: src/translations/fixed_strings_common_js.vue:184
 #: src/views/wiki/WhatsNewView.vue:15
 msgid "title"
@@ -3935,7 +3946,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: src/views/document/utils/windows/AssociationItems.vue:49
+#: src/components/association-editor/AssociationItems.vue:51
 msgid "Too many results: please refine your search."
 msgstr ""
 
@@ -4134,7 +4145,7 @@ msgstr ""
 msgid "Waypoint's textual description"
 msgstr ""
 
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:15
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:124
 msgid "waypoint_children"
 msgstr ""
 
@@ -4148,7 +4159,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:191
 #: src/translations/fixed_strings_manual.vue:14
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:5
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:123
 #: src/views/static-views/NotFoundView.vue:55
 #: src/views/static-views/TopoguideView.vue:11
 #: src/views/static-views/TopoguideView.vue:72
@@ -4221,7 +4232,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:195
 #: src/translations/fixed_strings_manual.vue:13
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:52
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:56
 #: src/views/static-views/NotFoundView.vue:59
 #: src/views/static-views/SeracView.vue:93
 msgid "xreports"
