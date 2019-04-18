@@ -8,7 +8,7 @@
 
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" class="is-hidden-mobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -107,6 +107,10 @@
 
         <comments-box :document="document" />
 
+      </div>
+
+      <div class="column is-3 no-print is-hidden-tablet">
+        <tool-box :document="document" />
       </div>
     </div>
   </div>
