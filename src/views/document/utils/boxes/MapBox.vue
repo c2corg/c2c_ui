@@ -60,22 +60,28 @@
       },
 
       downloadFeatures(format, extension, mimetype) {
-        const features = GeoJSON.readFeatures(this.document.geometry.geom_detail);
-
-        if (features.length) {
-          // Export only the current document geometry, not the associated features
-          const feature = features[0];
-          const name = this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
-
-          feature.set('name', name);
-
-          const filename = this.document.document_id + extension;
-          const content = format.writeFeatures([feature], {
-            featureProjection: 'EPSG:3857'
-          });
-
-          utils.download(content, filename, mimetype + ';charset=utf-8');
+        let features = [];
+        if (this.document.geometry.geom_detail) {
+          features = GeoJSON.readFeatures(this.document.geometry.geom_detail);
+        } else if (this.document.geometry.geom) {
+          features = GeoJSON.readFeatures(this.document.geometry.geom);
         }
+        if (!features.length) {
+          return;
+        }
+
+        // Export only the current document geometry, not the associated features
+        const feature = features[0];
+        const name = this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
+
+        feature.set('name', name);
+
+        const filename = this.document.document_id + extension;
+        const content = format.writeFeatures([feature], {
+          featureProjection: 'EPSG:3857'
+        });
+
+        utils.download(content, filename, mimetype + ';charset=utf-8');
       }
     }
   };
