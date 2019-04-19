@@ -5,7 +5,7 @@
         <h2 class="title is-2" :class="{'has-text-danger': hasError}">
           {{ title }}
         </h2>
-        <p><em> {{ subTitle }} </em></p>
+        <p v-if="subTitle"><em> {{ subTitle }} </em></p>
       </div>
       <div class="column is-narrow">
         <button class="button is-info" @click="toggleExpandedState">
@@ -31,7 +31,7 @@
       },
       subTitle: {
         type: String,
-        default: 'Lorem ipsum'
+        default: undefined
       }
     },
 

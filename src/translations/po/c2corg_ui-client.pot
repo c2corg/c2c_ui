@@ -1,7 +1,3 @@
-#: src/views/wiki/edition/WaypointEditionView.vue:50
-msgid "..."
-msgstr ""
-
 #: src/views/wiki/edition/utils/CotometerWindow.vue:30
 msgid "1 or 2 complications (steeper or narrow section...)"
 msgstr ""
@@ -364,7 +360,7 @@ msgstr ""
 msgid "Associated routes"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:108
+#: src/views/wiki/edition/WaypointEditionView.vue:107
 msgid "Associated routes cotations"
 msgstr ""
 
@@ -379,7 +375,7 @@ msgstr ""
 
 #: src/views/wiki/edition/BookEditionView.vue:37
 #: src/views/wiki/edition/ImageEditionView.vue:67
-#: src/views/wiki/edition/WaypointEditionView.vue:157
+#: src/views/wiki/edition/WaypointEditionView.vue:156
 msgid "associations"
 msgstr ""
 
@@ -534,7 +530,7 @@ msgstr ""
 msgid "best_periods"
 msgstr ""
 
-#: src/components/map/map-layers.js:87
+#: src/components/map/map-layers.js:89
 msgctxt "Map layer"
 msgid "Bing"
 msgstr ""
@@ -1098,7 +1094,7 @@ msgstr ""
 msgid "describe weather"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:124
+#: src/views/wiki/edition/WaypointEditionView.vue:123
 msgid "Description"
 msgstr ""
 
@@ -1330,7 +1326,7 @@ msgctxt "langs"
 msgid "es"
 msgstr ""
 
-#: src/components/map/map-layers.js:61
+#: src/components/map/map-layers.js:63
 msgctxt "Map layer"
 msgid "ESRI"
 msgstr ""
@@ -1947,17 +1943,17 @@ msgstr ""
 msgid "ice_rating"
 msgstr ""
 
-#: src/components/map/map-layers.js:118
+#: src/components/map/map-layers.js:124
 msgctxt "Map slopes layer"
 msgid "IGN"
 msgstr ""
 
-#: src/components/map/map-layers.js:111
+#: src/components/map/map-layers.js:113
 msgctxt "Map layer"
 msgid "IGN maps"
 msgstr ""
 
-#: src/components/map/map-layers.js:113
+#: src/components/map/map-layers.js:115
 msgctxt "Map layer"
 msgid "IGN ortho"
 msgstr ""
@@ -2397,7 +2393,7 @@ msgctxt "waypoint_types"
 msgid "misc"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:73
+#: src/views/wiki/edition/WaypointEditionView.vue:72
 msgid "Misc data about the waypoint"
 msgstr ""
 
@@ -2719,7 +2715,7 @@ msgctxt "book_types"
 msgid "novel"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:72
+#: src/views/wiki/edition/WaypointEditionView.vue:71
 msgid "Numbers"
 msgstr ""
 
@@ -2790,7 +2786,7 @@ msgstr ""
 msgid "opening_periods"
 msgstr ""
 
-#: src/components/map/map-layers.js:97
+#: src/components/map/map-layers.js:99
 msgctxt "Map layer"
 msgid "OpenTopoMap"
 msgstr ""
@@ -3250,7 +3246,7 @@ msgstr ""
 #: src/views/document/RouteView.vue:31
 #: src/views/documents/utils/QueryItems.vue:14
 #: src/views/wiki/edition/RouteEditionView.vue:80
-#: src/views/wiki/edition/WaypointEditionView.vue:107
+#: src/views/wiki/edition/WaypointEditionView.vue:106
 msgid "ratings"
 msgstr ""
 
@@ -3847,12 +3843,12 @@ msgctxt "waypoint_types"
 msgid "summit"
 msgstr ""
 
-#: src/components/map/map-layers.js:115
+#: src/components/map/map-layers.js:117
 msgctxt "Map layer"
 msgid "SwissTopo"
 msgstr ""
 
-#: src/components/map/map-layers.js:121
+#: src/components/map/map-layers.js:127
 msgctxt "Map slopes layer"
 msgid "SwissTopo"
 msgstr ""
@@ -4191,7 +4187,7 @@ msgstr ""
 msgid "Waypoint's main properties"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:125
+#: src/views/wiki/edition/WaypointEditionView.vue:124
 msgid "Waypoint's textual description"
 msgstr ""
 
@@ -4268,7 +4264,7 @@ msgstr ""
 msgid "Without c2c account"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:132
+#: src/views/wiki/edition/WaypointEditionView.vue:131
 msgid "write a summary"
 msgstr ""
 
@@ -4302,7 +4298,7 @@ msgstr ""
 msgid "You can choose to remain anonymous"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:158
+#: src/views/wiki/edition/WaypointEditionView.vue:157
 msgid "You may add associated waypoints, books and articles"
 msgstr ""
 
