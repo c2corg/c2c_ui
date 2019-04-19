@@ -3,7 +3,7 @@
     <loading-notification :promise="promise" />
     <div v-if="topics">
       <a
-        class="forum-row is-ellipsed"
+        class="forum-row"
         v-for="topic of topics"
         :key="topic.id"
         :href="getTopicUrl(topic)"
@@ -146,13 +146,14 @@
   @import '@/assets/sass/variables.scss';
 
   .forum-row{
-    display:block;
+    display:flex;
     color:$text;
     padding-bottom:0.2rem;
 
     img {
       border-radius: 50%;
-      vertical-align: bottom;
+      vertical-align: top;
+      height: 100%;
     }
 
     span{
@@ -165,11 +166,9 @@
   }
 
   .wide{
-
     .forum-row{
       padding:1rem;
       border-bottom: 1px solid #EEE;
-      font-weight:bold;
 
       img {
         margin-right: 0.5rem;
