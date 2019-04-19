@@ -46,8 +46,7 @@
     </form-section>
 
     <form-section
-      :title="$gettext('Types and styles')"
-      :sub-title="$gettext('...')">
+      :title="$gettext('Types and styles')">
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.climbing_outdoor_types" />
         <form-field class="is-12" :document="document" :field="fields.climbing_indoor_types" />
