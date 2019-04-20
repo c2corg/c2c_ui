@@ -13,15 +13,12 @@
         <td><input type="text" class="input" v-model="level.level_snow_height_soft"></td>
         <td><input type="text" class="input" v-model="level.level_snow_height_total"></td>
         <td><input type="text" class="input" v-model="level.level_comment"></td>
-        <td><delete-button class="is-size-2 delete-button" @click="levels.splice(i, 1)" /></td>
-      </tr>
-
-      <tr>
-        <td><input type="text" class="input" v-model="newLevel.level_place"></td>
-        <td><input type="text" class="input" v-model="newLevel.level_snow_height_soft"></td>
-        <td><input type="text" class="input" v-model="newLevel.level_snow_height_total"></td>
-        <td><input type="text" class="input" v-model="newLevel.level_comment"></td>
-        <td><fa-icon icon="plus-circle" class="is-size-2 add-button has-text-success" @click="addLevel" /></td>
+        <td>
+          <delete-button
+            class="is-size-2 delete-button"
+            v-if="i < levels.length - 1 || isLevelFilled(levels[i])"
+            @click="levels.splice(i, 1)" />
+        </td>
       </tr>
     </table>
   </div>
@@ -38,9 +35,7 @@
 
     data() {
       return {
-        levels: [],
-        newLevel: {}
-
+        levels: []
       };
     },
 
@@ -55,20 +50,26 @@
       const levels = this.value ? JSON.parse(this.value) : [];
 
       for (const level of levels) {
-        if (level.level_place || level.level_place || level.level_place || level.level_place) {
+        if (this.isLevelFilled(level)) {
           this.levels.push(level);
         }
       }
+      this.levels.push({}); // always add empty level in the end
     },
 
     methods: {
       change() {
-        this.$emit('input', JSON.stringify(this.levels));
+        if (this.isLevelFilled(this.levels[this.levels.length - 1])) {
+          this.levels.push({});
+        }
+        this.$emit('input', JSON.stringify(this.levels.filter(level => this.isLevelFilled(level))));
       },
 
-      addLevel() {
-        this.levels.push(this.newLevel);
-        this.newLevel = {};
+      isLevelFilled(level) {
+        return Boolean(level.level_place) ||
+          Boolean(level.level_snow_height_soft) ||
+          Boolean(level.level_snow_height_total) ||
+          Boolean(level.level_comment);
       }
     }
   };

@@ -41,9 +41,9 @@
 
         const firstLevel = this.levels[0]; // goddamn API...
 
-        return Boolean(firstLevel.level_snow_height_total) ||
-          Boolean(firstLevel.level_snow_height_total) ||
+        return Boolean(firstLevel.level_place) ||
           Boolean(firstLevel.level_snow_height_soft) ||
+          Boolean(firstLevel.level_snow_height_total) ||
           Boolean(firstLevel.level_comment);
       }
     }
