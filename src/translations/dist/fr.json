@@ -38,7 +38,7 @@
       "access_times": "3h"
     },
     "3h+": {
-      "access_times": "3h+"
+      "access_times": "> 3h"
     },
     "45min": {
       "access_times": "45min"
@@ -50,11 +50,11 @@
       "access_times": "5min"
     },
     "access": {
-      "$$noContext": "accès routier / TC",
-      "waypoint_types": "accès routier / TC"
+      "$$noContext": "accès routier / transports en commun",
+      "waypoint_types": "accès routier / transports en commun"
     },
-    "access_comment": "Commentaires sur l'accès routier / TC",
-    "access_condition": "Conditions de l'accès routier / TC",
+    "access_comment": "Commentaires sur l'accès routier / transports en commun",
+    "access_condition": "Conditions de l'accès routier / transports en commun",
     "access_period": "Période de déneigement ou d'ouverture",
     "access_time": "Temps d'accès",
     "accessible_when_wardened": {
@@ -154,7 +154,7 @@
     },
     "associations": "Associations",
     "at least one route required": {
-      "API message": "Sélectionnez au moins un participant"
+      "API message": "Sélectionnez au moins un itinéraire"
     },
     "at least one user required": {
       "API message": "Sélectionnez au moins un itinéraire"
@@ -164,7 +164,6 @@
     "aug": {
       "months": "août"
     },
-    "Author": "Auteur",
     "author": "Auteur",
     "author_status": "Implication dans la situation",
     "Automatic": {
@@ -186,12 +185,16 @@
     "avalanche_slope": "Pente de la zone de départ",
     "avalanches": "Observations relatives aux avalanches",
     "average": {
-      "condition_ratings": "moyennes"
+      "condition_ratings": "moyennes",
+      "snow_quality_ratings": "moyenne",
+      "snow_quantity_ratings": "moyenne"
     },
     "Average slope (degrees)": "Pente moyenne (degrés)",
     "Average slope in degree": "Pente moyenne en degrés",
     "awful": {
-      "condition_ratings": "exécrables"
+      "condition_ratings": "exécrables",
+      "snow_quality_ratings": "exécrable",
+      "snow_quantity_ratings": "exécrable"
     },
     "Back to code": "Retour au code",
     "Back to edit mode": "Retour en mode édition",
@@ -338,6 +341,7 @@
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
     "Contributions": "Contributions",
+    "contributor": "contributeur",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -362,7 +366,6 @@
     },
     "Create a new report": "Créer un nouveau compte-rendu",
     "Created on": "Crée le",
-    "creator": "auteur",
     "crevasse_fall": {
       "event_types": "chute en crevasse"
     },
@@ -403,7 +406,10 @@
     "Describe historical information about the route (date, names..) here": "Précisez ici les informations historiques de l'itinéraire : ouverture du bas ou équipement (du haut), premières ascensions, premières descentes à ski/surf, rééquipements, éboulements, etc. Mentionnez la date, le nom des protagonistes, et le club ou organisme ayant financé le matériel laissé en place.",
     "Describe opening hours": "Précisez les heures d'ouverture",
     "Describe opening periods": "Précisez les périodes d'ouverture",
-    "Describe pedestrian access": "Décrire l'accès pédestre",
+    "Describe pedestrian access": {
+      "hut": "Décrire l'accès",
+      "$$noContext": "Décrire l'accès pédestre"
+    },
     "Describe pt access": "Décrire l'accès au point de passage",
     "Describe road access": "Décrire l'itinéraire",
     "describe route_conditions": "Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\nATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site.",
@@ -492,7 +498,9 @@
     "event_type": "Type d'évènement",
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalités des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
     "excellent": {
-      "condition_ratings": "excellentes"
+      "condition_ratings": "excellentes",
+      "snow_quality_ratings": "excellente",
+      "snow_quantity_ratings": "excellente"
     },
     "Expand": "Déplier",
     "expedition": {
@@ -590,7 +598,9 @@
     },
     "Go to the previous page": "Retourner à la page précédente",
     "good": {
-      "condition_ratings": "bonnes"
+      "condition_ratings": "bonnes",
+      "snow_quality_ratings": "bonne",
+      "snow_quantity_ratings": "bonne"
     },
     "good service": {
       "public_transportation_ratings": "service régulier"
@@ -827,7 +837,7 @@
     "magazine": {
       "book_types": "magazine"
     },
-    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, le géo-localisation, et l'environnement proche.",
+    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
     "Main informations about your outing": "Données principales de votre sortie",
     "main_waypoint_id": "ID du point de passage principal",
     "Make profile page public": "Rendre publique la page de profil",
@@ -1069,7 +1079,10 @@
     "Password too short": {
       "API message": "Le mot de passe est trop court"
     },
-    "pedestrian access": "Accès pédestre",
+    "pedestrian access": {
+      "hut": "Accès",
+      "$$noContext": "Accès pédestre"
+    },
     "people": {
       "image_categories": "personnages"
     },
@@ -1108,7 +1121,9 @@
       "API message": "Erreur inattendue, merci de contacter dev@camptocamp.org"
     },
     "poor": {
-      "condition_ratings": "mauvaises"
+      "condition_ratings": "mauvaises",
+      "snow_quality_ratings": "mauvaise",
+      "snow_quantity_ratings": "mauvaise"
     },
     "poor service": {
       "public_transportation_ratings": "service réduit"
@@ -1566,7 +1581,7 @@
       "$$noContext": "oui"
     },
     "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
-    "You may add associated waypoints, books and articles": "Associez d'autres document de camptocamp à ce point de passage",
+    "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
     "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
   }
 }

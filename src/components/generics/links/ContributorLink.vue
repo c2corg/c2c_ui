@@ -1,7 +1,11 @@
 <template>
   <span>
-    <author-link :author="contributor" />
-    (<router-link :to="{name: 'whatsnew', query: {u:contributor.user_id} }">c</router-link>)
+    <router-link :to="{name:'profile', params:{id:contributor.user_id}}">
+      {{ contributor.name }}
+    </router-link>
+    <span v-if="showWhatsnew">
+      (<router-link :to="{name: 'whatsnew', query: {u:contributor.user_id} }">c</router-link>)
+    </span>
   </span>
 </template>
 
@@ -11,6 +15,10 @@
       contributor: {
         type: Object,
         required: true
+      },
+      showWhatsnew: {
+        type: Boolean,
+        default: false
       }
     }
   };
