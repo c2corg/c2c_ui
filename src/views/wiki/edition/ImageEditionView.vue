@@ -16,8 +16,6 @@
         <form-field class="is-narrow" :document="document" :field="fields.date_time" />
         <form-field class="is-12" :document="document" :field="fields.categories" />
 
-        <!--<form-field :document="document" :field="fields.author" />-->
-
         <div class="column is-6">
           <form-field no-wrapper :document="document" :field="fields.filename" />
           <form-field no-wrapper :document="document" :field="fields.file_size" />

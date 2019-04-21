@@ -42,7 +42,7 @@
           <tr>
             <th />
             <th v-translate>Created on</th>
-            <th v-translate>Author</th>
+            <th v-translate>contributor</th>
             <th v-translate>comment</th>
           </tr>
         </thead>
@@ -77,7 +77,7 @@
               </version-link>
             </td>
             <td>
-              <contributor-link :contributor="version" />
+              <contributor-link :contributor="version" show-whatsnew />
             </td>
             <td>
               {{ version.comment }}

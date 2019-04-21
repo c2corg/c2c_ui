@@ -53,7 +53,7 @@
 
     <p>
       <icon-document document-type="profile" />
-      <contributor-link :contributor="version" /> : <em>{{ version.comment }}</em>
+      <contributor-link :contributor="version" show-whatsnew /> : <em>{{ version.comment }}</em>
     </p>
     <p v-if="$user.isModerator">
       <button

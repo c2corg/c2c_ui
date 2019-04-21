@@ -6,8 +6,8 @@
 
         <div class="box">
           <activities-field :document="document" />
-          <label-value v-if="document.author" :label="$gettext('author')">
-            <author-link :author="document.author" />
+          <label-value v-if="document.author" :label="$gettext('contributor')">
+            <contributor-link :contributor="document.author" />
           </label-value>
 
           <field-view :document="document" :field="fields.event_type" />

@@ -8,7 +8,7 @@
       infinite-scroll-distance="100">
       <tr>
         <th v-translate translate-context="modification date">Modified the</th>
-        <th v-translate>Author</th>
+        <th v-translate>contributor</th>
         <th v-translate>Links</th>
         <th />
         <th>
@@ -28,7 +28,7 @@
           </version-link>
         </td>
         <td>
-          <contributor-link :contributor="change.user" />
+          <contributor-link :contributor="change.user" show-whatsnew />
         </td>
         <td>
           <document-link :document="change.document" :lang="change.lang">

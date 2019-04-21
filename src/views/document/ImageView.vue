@@ -14,8 +14,8 @@
 
           <field-view :document="document" :field="fields.author" />
 
-          <label-value v-if="document.creator" :label="$gettext('creator')">
-            <author-link :author="document.creator" />
+          <label-value v-if="document.creator" :label="$gettext('contributor')">
+            <contributor-link :contributor="document.creator" />
           </label-value>
 
           <field-view :document="document" :field="fields.image_type" />

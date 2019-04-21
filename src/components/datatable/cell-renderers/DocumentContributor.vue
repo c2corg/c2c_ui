@@ -1,5 +1,5 @@
 <template>
-  <author-link :author="params.data.author" />
+  <contributor-link :contributor="params.data.author" />
 </template>
 
 <script>
