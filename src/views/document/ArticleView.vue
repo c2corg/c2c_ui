@@ -7,6 +7,9 @@
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
           <field-view :document="document" :field="fields.article_type" />
+          <label-value v-if="document.author && document.article_type==='personal'" :label="$gettext('contributor')">
+            <contributor-link :contributor="document.author" />
+          </label-value>
           <field-view :document="document" :field="fields.quality" />
         </div>
 
