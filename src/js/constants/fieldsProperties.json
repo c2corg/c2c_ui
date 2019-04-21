@@ -821,7 +821,7 @@
         "values": "quality_types",
         "queryMode": "valuesRangeSlider",
         "i18n": true,
-        "default":"empty"
+        "default":"draft"
     },
     "rain_proof":
     {
