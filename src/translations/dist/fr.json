@@ -123,7 +123,7 @@
     "amateur": {
       "user_categories": "amateur"
     },
-    "Anonimity and confidentiality": "Anonymat et confidentialité",
+    "Anonymity and confidentiality": "Anonymat et confidentialité",
     "anonymous": "Contribution anonyme",
     "Application": "Application",
     "apr": {
@@ -159,7 +159,6 @@
     "at least one user required": {
       "API message": "Sélectionnez au moins un itinéraire"
     },
-    "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.": "Décrivez votre niveau technique à la date de l'évènement, votre condition physique, la fatigue accumulée avant l'évènement, l'acclimatation pour une sortie en haute altitude, etc.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
     "aug": {
       "months": "août"
@@ -638,6 +637,7 @@
     "has created a new route": "a ajouté un nouvel itinéraire",
     "has created a new waypoint": "a ajouté un nouveau point de passage",
     "has created a new xreport": "a crée un nouveau rapport d'incident/accident",
+    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Cet évènement a-t-il modifié vos habitudes ? Quels enseignements en avez-vous tiré ?",
     "has updated the area": "a mis à jour cette région",
     "has updated the article": "a mis à jour un article",
     "has updated the book": "a mis à jour ce livre",
@@ -849,8 +849,8 @@
     },
     "map": "carte",
     "Map only": "Uniquement la carte",
+    "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
     "maps": "cartes",
-    "Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.": "Cartes, topos, compte rendus de sorties consultés. Réévaluation de l'itinéraire au cours de la sortie.",
     "maps_info": "Cartes",
     "maps_references": "Références cartographiques",
     "mar": {
@@ -1120,6 +1120,7 @@
     "please consult the server logs": {
       "API message": "Erreur inattendue, merci de contacter dev@camptocamp.org"
     },
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Décrivez votre niveau technique et expérience par rapport à l’objectif choisi, votre condition physique, la fatigue accumulée avant la sortie, l’acclimatation pour une sortie en altitude, etc.",
     "poor": {
       "condition_ratings": "mauvaises",
       "snow_quality_ratings": "mauvaise",
@@ -1497,7 +1498,7 @@
     "train": {
       "public_transportation_types": "train"
     },
-    "training": "Préparation physique et entraînement par rapport à l’objectif",
+    "training": "Préparation physique et et niveau technique",
     "Translate into an other lang": "Traduire dans une autre langue",
     "Transport & road or PT access": "Accès routier/TC",
     "traverse": {

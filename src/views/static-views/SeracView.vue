@@ -48,7 +48,7 @@
         </div>
         <div class="column is-4">
           <div class="serac-block has-text-light content">
-            <h3 class="title is-3 has-text-light" v-translate>Anonimity and confidentiality</h3>
+            <h3 class="title is-3 has-text-light" v-translate>Anonymity and confidentiality</h3>
             <ul>
               <li v-translate>
                 You can choose to remain anonymous
