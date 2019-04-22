@@ -98,7 +98,6 @@
       },
 
       onHover(event) {
-        this.highlightedDocument = event.data;
         this.$emit('highlightDocument', event.data);
       },
 
