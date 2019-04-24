@@ -10,14 +10,14 @@
       class="columns is-mobile is-gapless document-row has-hover-background">
       <div class="column">
 
-        <document-link v-if="childType==='profile'" :document="child.document">
+        <document-link v-if="childType==='profile'" :document="child.document" target="_blank">
           @{{ child.document.forum_username }}
           (<document-title :document="child.document" />)
         </document-link>
 
-        <pretty-waypoint-link v-else-if="childType==='waypoint'" :waypoint="child.document" />
+        <pretty-waypoint-link v-else-if="childType==='waypoint'" :waypoint="child.document" target="_blank" />
 
-        <pretty-book-link v-else-if="childType==='book'" :book="child.document" />
+        <pretty-book-link v-else-if="childType==='book'" :book="child.document" target="_blank" />
 
         <association-outing-link v-else-if="childType==='outing'" :outing="child.document" />
 
@@ -27,9 +27,10 @@
           v-else-if="childType==='route'"
           :route="child.document"
           hide-orientation
-          hide-height-diff-difficulties />
+          hide-height-diff-difficulties
+          target="_blank" />
 
-        <document-link v-else :document="child.document" />
+        <document-link v-else :document="child.document" target="_blank" />
       </div>
       <div class="column is-narrow">
         <button
