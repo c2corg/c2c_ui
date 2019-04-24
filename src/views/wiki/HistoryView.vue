@@ -27,14 +27,14 @@
           v-translate>
           See the latest version
         </router-link>
-        <button class="button" disabled>
+        <span>
           <span v-translate>
             List of versions for language:
           </span>
           <span>
             &nbsp;{{ $gettext(lang, 'langs') }}
           </span>
-        </button>
+        </span>
       </div>
 
       <table class="table is-striped">
