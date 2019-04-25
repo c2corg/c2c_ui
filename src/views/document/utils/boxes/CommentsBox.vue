@@ -256,3 +256,12 @@
   }
 
 </style>
+
+<style lang="scss" scoped>
+
+  .button{
+    white-space: normal;
+    height: auto;
+  }
+
+</style>
