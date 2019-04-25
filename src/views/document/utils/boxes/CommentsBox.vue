@@ -187,7 +187,7 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   @import '@/assets/sass/variables.scss';
 
@@ -254,6 +254,10 @@
       font-weight: bold;
     }
   }
+
+</style>
+
+<style lang="scss" scoped>
 
   .button{
     white-space: normal;
