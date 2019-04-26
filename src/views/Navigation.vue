@@ -63,7 +63,7 @@
       </div>
 
       <div class="navigation-item">
-        <dropdown-button class="is-right" ref="addDocumentMenu">
+        <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <span slot="button" class="button is-success">
             <fa-icon icon="plus" />
           </span>
@@ -374,4 +374,17 @@
       margin-right:0;
     }
   }
+</style>
+
+<style lang="scss">
+
+  @import '@/assets/sass/variables.scss';
+
+  @media screen and (max-width: $tablet){
+
+    .add-button .dropdown-content{
+      position: fixed;
+    }
+  }
+
 </style>
