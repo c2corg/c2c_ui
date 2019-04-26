@@ -63,15 +63,15 @@
       </div>
 
       <div class="navigation-item">
-        <dropdown-button class="is-right" ref="addDocumentMenu">
+        <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <span slot="button" class="button is-success">
             <fa-icon icon="plus" />
           </span>
           <add-link
-            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book']"
+            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
             :key="documentType"
             :document-type="documentType"
-            class="dropdown-item is-size-5"
+            class="dropdown-item is-size-5 is-ellipsed"
             @click.native="$refs.addDocumentMenu.isActive = false">
             <icon-document :document-type="documentType" />
             <span>
@@ -374,4 +374,19 @@
       margin-right:0;
     }
   }
+</style>
+
+<style lang="scss">
+
+  @import '@/assets/sass/variables.scss';
+
+  @media screen and (max-width: $tablet){
+
+    .add-button .dropdown-content{
+      position: fixed;
+      right: 0;
+      max-width: 100%;
+    }
+  }
+
 </style>
