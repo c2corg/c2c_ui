@@ -13,6 +13,7 @@ install:
 
 script:
 - npm run lint:no-fix
+- sh scripts/update-release-description.sh
 # - npm run test
 
 # always build docker image
