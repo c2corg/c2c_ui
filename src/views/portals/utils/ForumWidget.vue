@@ -154,6 +154,7 @@
       border-radius: 50%;
       vertical-align: top;
       height: 100%;
+      flex-shrink: 0;
     }
 
     span{
