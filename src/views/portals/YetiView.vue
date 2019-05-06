@@ -378,6 +378,10 @@
         },
         groupSizes: [
           {
+            value: 1,
+            text: 'Aucun facteur de réduction lié au groupe'
+          },
+          {
             value: 2.1,
             text: 'Grand groupe avec distance de délestage'
           },
@@ -388,10 +392,6 @@
           {
             value: 3,
             text: 'Petit groupe avec distance de délestage'
-          },
-          {
-            value: 1,
-            text: 'Aucun facteur de réduction lié au groupe'
           }
         ],
         method: null,
