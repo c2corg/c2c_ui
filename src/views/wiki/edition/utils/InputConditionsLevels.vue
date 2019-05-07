@@ -9,10 +9,10 @@
         <th />
       </tr>
       <tr v-for="(level, i) of levels" :key="i">
-        <td><input type="text" class="input" v-model="level.level_place"></td>
-        <td><input type="text" class="input" v-model="level.level_snow_height_soft"></td>
-        <td><input type="text" class="input" v-model="level.level_snow_height_total"></td>
-        <td><input type="text" class="input" v-model="level.level_comment"></td>
+        <td><input type="text" class="input" v-model.lazy="level.level_place"></td>
+        <td><input type="text" class="input" v-model.lazy="level.level_snow_height_soft"></td>
+        <td><input type="text" class="input" v-model.lazy="level.level_snow_height_total"></td>
+        <td><input type="text" class="input" v-model.lazy="level.level_comment"></td>
         <td>
           <delete-button
             class="is-size-2 delete-button"
