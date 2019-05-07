@@ -24,7 +24,7 @@
     "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.8.0",
+    "@fortawesome/fontawesome-free": "5.8.2",
     "@fortawesome/fontawesome-svg-core": "1.2.16",
     "@fortawesome/free-brands-svg-icons": "5.8.0",
     "@fortawesome/free-regular-svg-icons": "5.8.0",
