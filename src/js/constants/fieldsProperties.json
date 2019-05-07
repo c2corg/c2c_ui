@@ -562,7 +562,8 @@
     "image_type":
     {
         "values": "image_types",
-        "required": true
+        "required": true,
+        "url": "ityp"
     },
     "increase_impact":
     {

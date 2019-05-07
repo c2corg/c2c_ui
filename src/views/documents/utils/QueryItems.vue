@@ -147,7 +147,8 @@
       'weather_station_types',
       'nb_participants',
       'nb_impacted',
-      'severity'
+      'severity',
+      'image_type'
     ]
   };
 
