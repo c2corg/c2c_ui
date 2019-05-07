@@ -185,10 +185,10 @@
         "fields":[
             {"id": "summary"},
             {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+            {"id": "lang"},
 
-            {"id": "activities", "properties": {"url":"act", "required":false}},
-            {"id": "categories"},
+            {"id": "activities", "properties": {"url":null, "required":false}},
+            {"id": "categories", "properties": {"url":null}},
             {"id": "name"},
 
             {"id": "images"}
