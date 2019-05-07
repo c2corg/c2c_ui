@@ -2,7 +2,7 @@
    "area":{
         "letter":"a",
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},
@@ -15,7 +15,7 @@
     "article":{
         "letter":"c",
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},
@@ -39,7 +39,7 @@
     "book":{
         "letter":"b",
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},
@@ -103,7 +103,7 @@
     "map":{
         "letter":"m",
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "lang", "properties": {"url":"l"}},
@@ -118,7 +118,7 @@
         "letter":"o",
         "geoLocalized":true,
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "conditions_levels", "properties": {"activities": ["skitouring", "snowshoeing", "ice_climbing", "snow_ice_mixed"]}},
@@ -185,10 +185,10 @@
         "fields":[
             {"id": "summary"},
             {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+            {"id": "lang"},
 
-            {"id": "activities", "properties": {"url":"act", "required":false}},
-            {"id": "categories"},
+            {"id": "activities", "properties": {"url":null, "required":false}},
+            {"id": "categories", "properties": {"url":null}},
             {"id": "name"},
 
             {"id": "images"}
@@ -199,7 +199,7 @@
         "letter":"r",
         "geoLocalized":true,
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "route_history"},
             {"id": "description"},
@@ -269,7 +269,7 @@
         "letter":"w",
         "geoLocalized":true,
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "access", "properties": {"waypoint_types":["access", "climbing_indoor", "climbing_outdoor", "hut", "local_product", "slackline_spot"]}},
@@ -337,7 +337,7 @@
         "letter":"x",
         "geoLocalized":true,
         "fields":[
-            {"id": "title", "properties": {"url":"q"}},
+            {"id": "title"},
             {"id": "summary"},
             {"id": "description"},
             {"id": "place"},

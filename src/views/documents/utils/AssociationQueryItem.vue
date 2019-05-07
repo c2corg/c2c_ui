@@ -22,6 +22,8 @@
   import constants from '@/js/constants';
   import mixin from './query-item-mixin.js';
 
+  const documentsCache = {};
+
   export default {
     mixins: [mixin],
 
@@ -83,17 +85,21 @@
       },
 
       getDocument(documentType, documentId) {
-        const result = {
-          document_id: documentId,
-          loading: true
-        };
+        const key = `${documentType}#${documentId}`;
 
-        c2c[documentType].get(documentId).then(response => {
-          result.loading = false;
-          Object.assign(result, response.data);
-        });
+        if (documentsCache[key] === undefined) {
+          documentsCache[key] = {
+            document_id: documentId,
+            loading: true
+          };
 
-        return result;
+          c2c[documentType].get(documentId).then(response => {
+            documentsCache[key].loading = false;
+            Object.assign(documentsCache[key], response.data);
+          });
+        }
+
+        return documentsCache[key];
       },
 
       add(document) {

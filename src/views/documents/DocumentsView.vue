@@ -1,6 +1,6 @@
 <template>
   <div class="section documents-view">
-    <html-header :title="$gettext(documentType) + 's'" />
+    <html-header :title="getDocumentTypeTitle(documentType)" />
     <div class="search-infos">
       <div class="header-section">
 
@@ -17,7 +17,7 @@
               :key="type"
               class ="dropdown-item is-size-6"
               :class="{'is-active': type === documentType}"
-              :to="{name: type + 's', query:queryWithoutOffset}" >
+              :to="{name: type + 's', query:queryWithoutOffset}">
               <icon-document :document-type="type" />
               <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
             </router-link>

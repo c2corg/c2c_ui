@@ -1,11 +1,13 @@
 <template>
   <div v-if="documents" class="cards-container is-flex">
-    <div
+    <document-link
       v-for="document in documents.documents"
       :key="document.document_id"
+      :document="document"
+      :title="$documentUtils.getDocumentTitle(document)"
       class="card-image">
-      <img :src="getMediumImageUrl(document)" height="250" @click="go(document)">
-    </div>
+      <img :src="getMediumImageUrl(document)" height="250">
+    </document-link>
   </div>
 </template>
 
@@ -21,13 +23,6 @@
     },
 
     methods: {
-      go(document) {
-        this.$router.push({
-          name: 'image',
-          params: { id: document.document_id }
-        });
-      },
-
       getMediumImageUrl: imageUrls.getMedium
     }
   };
@@ -36,20 +31,19 @@
 
 <style scoped lang="scss">
 
-    .cards-container{
-        flex-flow:wrap row;
-        //margin:auto;
+  .cards-container{
+    flex-flow:wrap row;
+    //margin:auto;
 
-        .card-image{
-            transition:0.2s;
-            margin-bottom:5px;
-            flex-grow: 1;
+    .card-image{
+      transition:0.2s;
+      margin-bottom:5px;
+      flex-grow: 1;
 
-            img{
-                cursor:pointer;
-                height:200px;
-            }
-        }
+      img{
+        height:200px;
+      }
     }
+  }
 
 </style>

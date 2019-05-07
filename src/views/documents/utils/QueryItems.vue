@@ -1,6 +1,6 @@
 <template>
   <div class="query-items">
-    <query-item :field="fields.title" class="title-input is-hidden-mobile" hide-label />
+    <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
 
     <dropdown-button
       v-for="category of categorizedFields"
@@ -147,7 +147,8 @@
       'weather_station_types',
       'nb_participants',
       'nb_impacted',
-      'severity'
+      'severity',
+      'image_type'
     ]
   };
 
@@ -226,7 +227,7 @@
 
           for (const name of categorizedFields[this.documentType][category]) {
             const field = this.fields[name];
-            if (field !== undefined) {
+            if (field !== undefined && field.url) {
               addCategory = true;
 
               if (this.$route.query[field.url] !== undefined) {
