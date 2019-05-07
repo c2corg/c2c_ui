@@ -1039,7 +1039,8 @@
         "required": true,
         "parent": "locales",
         "minLength": 3,
-        "queryMode": "input"
+        "queryMode": "input",
+        "url": "q"
     },
     "training":
     {
