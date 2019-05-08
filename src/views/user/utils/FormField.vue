@@ -16,6 +16,8 @@
 
       <!-- $gettext('please consult the server logs', 'API message') -->
 
+      <!-- $gettext('Contain invalid character(s)', 'API message') -->
+
       <span class="has-text-danger has-text-weight-bold" v-if="errorMessage">
         {{ $gettext(errorMessage, 'API message') }}
       </span>
