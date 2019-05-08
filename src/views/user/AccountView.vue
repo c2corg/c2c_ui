@@ -3,7 +3,7 @@
     <html-header title="Account" />
 
     <h1 class="title is-1" v-translate>Change account parameters</h1>
-    <base-form ref="form" @submit="save" :server-errors="serverErrors">
+    <base-form ref="form" @submit="save" :promise="promise">
       <form-field
         name="username"
         v-model="username"
@@ -96,7 +96,6 @@
         forum_username: this.$user.forumUsername,
         is_profile_public: null,
         original_mail: null,
-        serverErrors: null,
 
         promise: {}
       };
@@ -123,10 +122,7 @@
           newOrNull(this.forum_username, this.$user.forumUsername),
           newOrNull(this.email, this.original_mail),
           this.is_profile_public,
-          this.newpassword ? this.newpassword : null)
-          .catch((error) => {
-            this.serverErrors = error.response.data;
-        });
+          this.newpassword ? this.newpassword : null);
       }
     }
   };
