@@ -117,6 +117,37 @@
     flex-flow: column;
   }
 
+  .wrapper{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item1, .item2, .item3{
+    width: 100%;
+  }
+
+
+  @supports (display: grid){
+
+    @media screen and (min-width: $tablet){
+      .wrapper{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: auto 1fr;
+        grid-gap: 0.75rem;
+      }
+
+      .item1, .item3{
+        grid-column: 1;
+      }
+
+      .item2 {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+    }
+  }
+
   @media screen and (max-width: $tablet) {
 
     .side-menu{

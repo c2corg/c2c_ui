@@ -1,8 +1,8 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
-      <div class="column is-3">
+    <div v-if="document" class="wrapper">
+      <div class="item1">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
@@ -34,11 +34,9 @@
         </div>
 
         <map-box :document="document" />
-
-        <tool-box :document="document" />
       </div>
 
-      <div class="column is-9">
+      <div class="item2">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
             <img class="main-image" :src="getBigImageUrl(document)">
@@ -56,6 +54,10 @@
         <images-box v-if="document" :document="document" />
         <comments-box :document="document" />
 
+      </div>
+
+      <div class="item3">
+        <tool-box :document="document" />
       </div>
 
     </div>

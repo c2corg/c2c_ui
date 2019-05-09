@@ -2,14 +2,13 @@
   <div class="section has-background-white-print">
 
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns is-block-print">
+    <div v-if="document" class="wrapper is-block-print">
 
-      <div class="column is-3 no-print">
+      <div class="item1 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea=true" />
-        <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="item2 is-12-print">
         <!--   CONTENT  -->
 
         <div class="box">
@@ -126,6 +125,10 @@
 
         <comments-box :document="document" />
 
+      </div>
+
+      <div class="item3">
+        <tool-box :document="document" />
       </div>
     </div>
   </div>

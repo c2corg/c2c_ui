@@ -4,14 +4,13 @@
 
     <images-box v-if="document" :document="document" />
 
-    <div v-if="document" class="columns is-multiline is-block-print">
+    <div v-if="document" class="wrapper is-block-print">
 
-      <div class="column is-3 no-print">
+      <div class="item1 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="item2 is-12-print">
 
         <div class="box">
 
@@ -107,6 +106,10 @@
 
         <comments-box :document="document" />
 
+      </div>
+
+      <div class="item3">
+        <tool-box :document="document" />
       </div>
     </div>
   </div>

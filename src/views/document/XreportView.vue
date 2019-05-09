@@ -1,8 +1,8 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns is-block-print">
-      <div class="column is-3 is-12-print">
+    <div v-if="document" class="wrapper is-block-print">
+      <div class="item1 is-12-print">
 
         <div class="box">
           <activities-field :document="document" />
@@ -27,10 +27,9 @@
         </div>
 
         <map-box :document="document" />
-        <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="item2">
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />
@@ -54,6 +53,10 @@
 
         <comments-box :document="document" />
 
+      </div>
+
+      <div class="item3">
+        <tool-box :document="document" />
       </div>
     </div>
   </div>

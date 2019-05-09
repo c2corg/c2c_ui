@@ -7,13 +7,12 @@
         :waypoint-type="document.waypoint_type" />
     </document-view-header>
 
-    <div v-if="document" class="columns">
-      <div class="column is-3 no-print">
+    <div v-if="document" class="wrapper">
+      <div class="item1 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="item2 is-12-print">
         <div class="box">
           <div class="columns is-multiline">
             <div class="column is-4">
@@ -115,6 +114,10 @@
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
         <comments-box v-if="!isDraftView" :document="document" />
+      </div>
+
+      <div class="item3">
+        <tool-box :document="document" />
       </div>
     </div>
   </div>
