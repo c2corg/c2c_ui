@@ -555,12 +555,12 @@
 
         let errorText = ERRORS['yeti'];
 
-        if (err.status === 400) {
+        if (err.response.status === 400) {
           const xml = new DOMParser().parseFromString(err.data, 'application/xml');
           errorText = [...xml.getElementsByTagName('ExceptionText')].map(_ => _.textContent).join(' ');
         }
 
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           errorText = ERRORS['yeti_unauthorized'];
         }
 
