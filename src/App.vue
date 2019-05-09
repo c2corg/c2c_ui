@@ -126,7 +126,6 @@
     width: 100%;
   }
 
-
   @supports (display: grid){
 
     @media screen and (min-width: $tablet){
