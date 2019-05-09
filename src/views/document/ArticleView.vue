@@ -2,7 +2,7 @@
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="wrapper is-block-print">
-      <div class="item1 is-12-print">
+      <div class="item1">
         <div class="box">
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
@@ -13,7 +13,7 @@
           <field-view :document="document" :field="fields.quality" />
         </div>
       </div>
-      <div class="item2 is-12-print">
+      <div class="item2">
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />

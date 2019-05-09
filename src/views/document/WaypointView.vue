@@ -12,7 +12,7 @@
         <map-box :document="document" />
       </div>
 
-      <div class="item2 is-12-print">
+      <div class="item2">
         <div class="box">
           <div class="columns is-multiline">
             <div class="column is-4">

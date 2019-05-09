@@ -2,7 +2,7 @@
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="wrapper is-block-print">
-      <div class="item1 is-12-print">
+      <div class="item1">
 
         <div class="box">
           <activities-field :document="document" />

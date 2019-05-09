@@ -131,9 +131,9 @@
     @media screen and (min-width: $tablet){
       .wrapper{
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 23% auto; //need to fix the first column for the is-ellipsed to work, 1fr 3fr doesn't work
         grid-template-rows: auto 1fr;
-        grid-gap: 0.75rem;
+        grid-gap: 1.5rem;
       }
 
       .item1, .item3{
