@@ -66,11 +66,15 @@
 
       <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview=true" :is-loading="isLoading" />
       <quality-input-row v-if="!['map', 'profile'].includes(documentType)" :document="document" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-if="htmlBanners && htmlBanners[documentType]" v-html="htmlBanners[documentType]" class="edition-banner" />
     </div>
   </div>
 </template>
 
 <script>
+
+  import c2c from '@/js/apis/c2c';
 
   import FormRow from './FormRow';
 
@@ -87,6 +91,10 @@
 
   import QualityInputRow from './QualityInputRow';
   import SaveDocumentRow from './SaveDocumentRow';
+
+  const BANNERS_ARTICLE_ID = 1110927;
+  const htmlBanners = {}; // cache for banners
+  htmlBanners.initialized = false;
 
   export default {
 
@@ -135,6 +143,10 @@
     computed: {
       documentType() {
         return this.$documentUtils.getDocumentType(this.document.type);
+      },
+
+      htmlBanners() {
+        return htmlBanners;
       }
     },
 
@@ -142,9 +154,38 @@
       '$route': 'reset'
     },
 
+    mounted() {
+      if (!htmlBanners.initialized) {
+        c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners);
+      }
+    },
+
     methods: {
       reset() {
         this.isPreview = false;
+      },
+
+      computeBanners(response) {
+        const cooked = response.data.cooked;
+
+        const content = document.createElement('div');
+        content.innerHTML = cooked.description;
+
+        let key;
+        htmlBanners.initialized = true;
+        htmlBanners[undefined] = '';
+
+        for (const node of content.children) {
+          const isHeader = node.nodeName.match(/^[hH]3$/);
+
+          if (isHeader) {
+            key = node.id;
+            htmlBanners[key] = '';
+          } else {
+            htmlBanners[key] += node.outerHTML;
+          }
+        }
+        this.$forceUpdate();
       }
     }
   };
@@ -159,5 +200,11 @@
     margin:auto;
     width: 100%;
     max-width: 1000px;
+  }
+
+  .edition-banner{
+    margin-top: 1.5rem;
+    border: 3px dashed pink;
+    padding:0.5rem;
   }
 </style>
