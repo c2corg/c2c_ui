@@ -313,6 +313,18 @@
         deep: true // must look on change inside documents object
       },
 
+      // if, for any reason, geomtry of edited document is set, center map on it
+      // * new value entered in text inputs
+      // * first click
+      // * new association to route (geomtry is copied from route to outing in this case)
+      'editedDocument.geometry.geom': {
+        handler(to, from) {
+          if (from === null && to !== null) {
+            this.fitMapToDocuments(true);
+          }
+        }
+      },
+
       filterDocumentsWithMap: 'sendBoundsToUrl',
 
       highlightedDocument(newValue, oldValue) {
