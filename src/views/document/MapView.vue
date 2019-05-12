@@ -2,18 +2,17 @@
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document">
-      <div class="columns">
-        <div class="column is-3">
-          <label>editor</label>
-          <span>{{ document.editor }}</span>
-        </div>
-        <div class="column is-3">
-          <label>code</label>
-          <span>{{ document.code }}</span>
-        </div>
-        <div class="column is-3">
-          <label>Scale</label>
-          <span>{{ document.scale }}</span>
+      <div class="box">
+        <div class="columns">
+          <div class="column is-3">
+            <field-view :document="document" :field="fields.editor" />
+          </div>
+          <div class="column is-3">
+            <field-view :document="document" :field="fields.code" />
+          </div>
+          <div class="column is-3">
+            <field-view :document="document" :field="fields.scale" />
+          </div>
         </div>
       </div>
 
