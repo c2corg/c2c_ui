@@ -21,7 +21,9 @@
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
     "generate-icons": "node tools/generate-icons.js",
-    "update-c2c-common": "python3 tools/update-c2c-common.py"
+    "update-c2c-common": "python3 tools/update-c2c-common.py",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.8.0",
@@ -50,7 +52,8 @@
     "vue-recaptcha": "^1.1.1",
     "vue-router": "3.0.5",
     "vue-slider-component": "3.0.25",
-    "vuejs-datepicker": "1.5.4"
+    "vuejs-datepicker": "1.5.4",
+    "snyk": "1.161.1"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "3.6.0",
@@ -78,5 +81,6 @@
     "not dead",
     "not ie <= 10",
     "Chrome 41"
-  ]
+  ],
+  "snyk": true
 }
