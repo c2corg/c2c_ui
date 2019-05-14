@@ -13,7 +13,7 @@
         <img
           :src="getAvatarUrl(topic.last_poster_user)"
           :style="'width:' + imgSize + 'px'">
-        <span>
+        <span class="is-ellipsed">
           {{ topic.title }}
         </span>
       </a>
@@ -158,7 +158,8 @@
     }
 
     span{
-      vertical-align: top
+      vertical-align: top;
+      padding-left: 0.5rem;
     }
   }
 
