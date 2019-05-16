@@ -13,7 +13,8 @@
         <img
           :src="getAvatarUrl(topic.last_poster_user)"
           :style="'width:' + imgSize + 'px'">
-        <span>
+        <span
+          :class="{'is-ellipsed':!wide}">
           {{ topic.title }}
         </span>
       </a>
@@ -158,7 +159,7 @@
     }
 
     span{
-      vertical-align: top
+      vertical-align: top;
     }
   }
 
@@ -174,6 +175,12 @@
       img {
         margin-right: 0.5rem;
       }
+    }
+  }
+
+  :not(.wide){
+    span{
+      padding-left: 0.5rem;
     }
   }
 </style>
