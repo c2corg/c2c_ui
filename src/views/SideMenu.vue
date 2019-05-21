@@ -22,7 +22,7 @@
 
     <div class="menu-footer is-size-7">
       <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-      <advertisement class="menu-add" v-if="windowHeight>=630" />
+      <advertisement class="menu-add" v-if="$screen.height>=630" />
 
       <div class="has-text-centered menu-links">
         <router-link :to="{name:'article', params:{id:106727}}" v-translate>contact</router-link>
@@ -56,12 +56,6 @@
   export default {
     components: { Advertisement },
 
-    data() {
-      return {
-        windowHeight: 0
-      };
-    },
-
     computed: {
       // This must be computed, because it needs $gettext() function
       menuItems() {
@@ -72,17 +66,6 @@
           { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
           { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
         ];
-      }
-    },
-
-    mounted() {
-      this.onResize();
-      window.addEventListener('resize', this.onResize);
-    },
-
-    methods: {
-      onResize() {
-        this.windowHeight = window.innerHeight;
       }
     }
   };

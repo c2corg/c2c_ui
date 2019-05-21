@@ -13,7 +13,7 @@
           <field-view :document="document" :field="fields.quality" />
         </div>
 
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
       <div class="column is-9 is-12-print">
         <div class="box">
@@ -25,6 +25,7 @@
         <routes-box v-if="!isDraftView" :document="document" hide-buttons />
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
+        <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box v-if="!isDraftView" :document="document" />
       </div>
     </div>
