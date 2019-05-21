@@ -6,8 +6,8 @@
     infinite-scroll-distance="500">
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
       <feed-card
-        v-for="(item, index) of column.items"
-        :key="index"
+        v-for="item of column.items"
+        :key="item.id"
         :item="item"
         class="feed-card" />
     </div>
