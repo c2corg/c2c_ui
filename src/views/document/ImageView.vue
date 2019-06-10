@@ -26,7 +26,6 @@
           <field-view :document="document" :field="fields.fnumber" />
           <field-view :document="document" :field="fields.focal_length" />
           <field-view :document="document" :field="fields.iso_speed" />
-          <field-view :document="document" :field="fields.filename" />
           <field-view :document="document" :field="fields.file_size" unit="ko" :divisor="1024" />
           <field-view :document="document" :field="fields.height" />
           <field-view :document="document" :field="fields.width" />

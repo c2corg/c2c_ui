@@ -23,18 +23,14 @@
         <label>{{ $gettext(document.image_type) }}</label>
       </p>
 
-      <h4 class="title is-4 has-text-light" v-translate>
-        Settings
-      </h4>
-
       <ul>
         <li v-if="document.camera_name"> {{ document.camera_name }}</li>
-        <li v-if="document.exposure_time" :title="$gettext('exposure_time')">{{ document.exposure_time }}s</li>
-        <li v-if="document.fnumber" :title="$gettext('fnumber')">f/{{ document.fnumber }}</li>
+        <li v-if="document.exposure_time" :title="$gettext('exposure_time')">1/{{ Math.floor(1/document.exposure_time) }}&nbsp;s</li>
+        <li v-if="document.fnumber" :title="$gettext('fnumber')">f/{{ Math.round(document.fnumber * 10) / 10 }}</li>
         <li v-if="document.focal_length" :title="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
-        <li v-if="document.iso_speed" :title="$gettext('iso_speed')">{{ document.iso_speed }} ISO</li>
+        <li v-if="document.iso_speed" :title="$gettext('iso_speed')">{{ document.iso_speed }}&nbsp;ISO</li>
         <li v-if="document.width && document.height" :title="$gettext('resolution')">
-          {{ document.height }} x {{ document.width }} <span translate>pixels</span>
+          {{ document.height }} x {{ document.width }}&nbsp;<span translate>pixels</span>
         </li>
       </ul>
     </div>
@@ -85,5 +81,10 @@
     .image-info{
         background: rgba(0,0,0,0.7);
         padding:1rem;
+    }
+
+    /* FIXME seems not to work */
+    icon-creative-commons, fa-icon {
+        margin-right:1rem;
     }
 </style>
