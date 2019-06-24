@@ -52,7 +52,7 @@
     "vue-recaptcha": "^1.1.1",
     "vue-router": "3.0.5",
     "vue-slider-component": "3.0.25",
-    "vuejs-datepicker": "1.5.4",
+    "vuejs-datepicker": "1.6.2",
     "snyk": "1.180.1"
   },
   "devDependencies": {
