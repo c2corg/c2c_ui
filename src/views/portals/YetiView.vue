@@ -13,10 +13,16 @@
     <div class="columns yeti-content">
       <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
         <div class="box">
-          <h2 class="title is-2">
-            <a class="is-size-6 is-pulled-right" href="/yeti_faq.pdf">FAQ ?</a>
-            <span>Info BRA</span>
-          </h2>
+          <div class="columns">
+            <div class="column">
+              <h2 class="title is-3 yeti-title">
+                <span>Info <abbr title="Bulletin du Risque d'Avalanche">BRA</abbr></span>
+              </h2>
+            </div>
+            <div class="column">
+              <a class="is-size-6 is-pulled-right" href="/yeti_faq.pdf">FAQ ?</a>
+            </div>
+          </div>
           <div class="columns">
             <div class="column">
               <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
@@ -73,7 +79,7 @@
               </div>
             </div>
 
-            <div class="column has-text-centered">
+            <div class="column has-text-right">
               <button
                 class="button is-primary"
                 :class="{'is-loading': promise}"
@@ -81,7 +87,7 @@
                 @click="compute">
                 Voir sur la carte
               </button>
-              <p v-if="currentError">
+              <p class="yetiForm-error" v-if="currentError">
                 <span>
                   <strong>Info: </strong>
                   {{ currentError }}
@@ -91,14 +97,14 @@
 
           </div>
 
-          <h2 class="title is-2">
+          <h2 class="title is-3 yeti-title">
             Méthodes
           </h2>
-          <div class="columns is-mobile">
+          <div class="columns is-mobile yeti-tabs">
             <div
               v-for="item of Object.keys(methods)"
               :key="item"
-              class="column">
+              class="column yeti-tab">
               <div
                 class="control method-input"
                 :class="{'has-background-secondary has-text-light has-text-weight-bold': method===item}">
@@ -118,9 +124,9 @@
             <p>
               Avec la Méthode de Réduction pour Débutant (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
             </p>
-            <p class="is-italic">
-              Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de danger du BRA. Il n'est pas tenu compte de l'orientation.
-            </p>
+            <div class="yetiForm-note">
+              <p>Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de danger du BRA. Il n'est pas tenu compte de l'orientation.</p>
+            </div>
 
             <table class="yetiForm-danger">
               <tr class="yetiForm-danger--low">
@@ -159,9 +165,9 @@
               <input-orientation v-model="orientation" class="has-text-centered" />
             </p>
 
-            <p class="is-italic">
-              On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.
-            </p>
+            <div class="yetiForm-note">
+              <p>On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.</p>
+            </div>
 
             <table class="yetiForm-danger">
               <tr class="yetiForm-danger--low">
@@ -220,9 +226,9 @@
               </li>
             </ul>
 
-            <p class="is-italic">
-              Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en agissant directement sur le slider. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.
-            </p>
+            <div class="yetiForm-note">
+              <p>Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en agissant directement sur le slider. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.</p>
+            </div>
 
             <p>
               <input-checkbox v-model="wetSnow">
@@ -230,9 +236,9 @@
               </input-checkbox>
             </p>
 
-            <p class="is-italic">
-              Attention, par neige mouillée, aucun facteur de réduction d'orientation ou de fréquentation ne peut être appliqué.
-            </p>
+            <div class="yetiForm-note">
+              <p>Attention, par neige mouillée, aucun facteur de réduction d'orientation ou de fréquentation ne peut être appliqué.</p>
+            </div>
 
             <h3 class="title is-3">Groupe</h3>
 
@@ -248,17 +254,18 @@
               </li>
             </ul>
 
-            <h4 class="title is-4">Taille du groupe</h4>
-
-            <ul class="content-ul">
-              <li>Grand groupe = 5 personnes et plus</li>
-              <li>Petit groupe = 2 à 4 personnes</li>
-            </ul>
-            <h4 class="title is-4">Distances de délestage</h4>
-            <ul class="content-ul">
-              <li>10 mètres au minimum à la montée</li>
-              <li>50 mètres à la descente</li>
-            </ul>
+            <div class="yetiForm-note">
+              <p>Taille du groupe</p>
+              <ul class="content-ul">
+                <li>Grand groupe = 5 personnes et plus</li>
+                <li>Petit groupe = 2 à 4 personnes</li>
+              </ul>
+              <p>Distances de délestage</p>
+              <ul class="content-ul">
+                <li>10 mètres au minimum à la montée</li>
+                <li>50 mètres à la descente</li>
+              </ul>
+            </div>
 
             <p>
               Le facteur "pente parcourue fréquemment" n'est pas pris en compte par l'outil car cet aspect ne peut être constaté que sur le terrain.
@@ -692,9 +699,21 @@
     margin-bottom: 0.25rem!important;
   }
 
+  abbr {
+    text-decoration: none;
+    border-bottom: dotted 2px #aaa;
+  }
+
   .content-ul {
     list-style: disc outside;
     margin-left: 2em;
+  }
+
+  .yeti-title {
+    display: inline-block;
+    margin-left: -1.25rem;
+    padding: .25em 1.25rem;
+    background: #e0e0e0;
   }
 
   .inputs-bra{
@@ -769,6 +788,49 @@
     .yetiForm-danger--insane {
       background: #c01a2c;
     }
+  }
+
+  .yetiForm-error {
+    font-size: 0.8em;
+    font-style: italic;
+    margin-top: 10px;
+    text-align: right;
+    opacity: 0.75;
+  }
+
+  .yetiForm-note {
+    position: relative;
+    font-size: 0.9em;
+    color: #888;
+    padding: 1em;
+    padding-left: 4em;
+    margin-bottom: 2em;
+    border: 1px solid #bbb;
+    border-radius: 2px;
+  }
+
+  .yetiForm-note::before {
+    content: 'i';
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    color: white;
+    font-size: 1.14em;
+    font-weight: bold;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: 1.4em;
+    background-color: rgba(0, 60, 136, 0.5);
+    border-radius: 2px;
+  }
+
+  .yeti-tabs {
+    margin: 0;
+  }
+
+  .yeti-tab {
+    padding: .75rem 0;
   }
 
   .potential-danger-labels {
