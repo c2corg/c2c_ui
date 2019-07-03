@@ -85,7 +85,7 @@
                 :class="{'is-loading': promise}"
                 :disabled="formError"
                 @click="compute">
-                Voir sur la carte
+                Calculer le risque
               </button>
               <p class="yetiForm-error" v-if="currentError">
                 <span>
@@ -271,6 +271,24 @@
               Le facteur "pente parcourue fréquemment" n'est pas pris en compte par l'outil car cet aspect ne peut être constaté que sur le terrain.
             </p>
 
+          </div>
+
+          <div class="columns yetiForm-validation" v-show="method">
+            <div class="column has-text-right">
+              <button
+                class="button is-primary"
+                :class="{'is-loading': promise}"
+                :disabled="formError"
+                @click="compute">
+                Calculer le risque
+              </button>
+              <p class="yetiForm-error" v-if="currentError">
+                <span>
+                  <strong>Info: </strong>
+                  {{ currentError }}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -859,6 +877,10 @@
     .potential-danger-label[selected] {
       border-color: black;
     }
+  }
+
+  .yetiForm-validation {
+    margin-top: 1rem;
   }
 
   .yeti-logos{
