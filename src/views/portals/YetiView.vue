@@ -335,7 +335,7 @@
             </div>
           </div>
         </div>
-        <map-view ref="map" @zoom="mapZoom = arguments[0]" />
+        <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on />
       </div>
     </div>
   </div>
