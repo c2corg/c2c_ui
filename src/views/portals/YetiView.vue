@@ -317,7 +317,7 @@
         <div class="legend">
           <div>
             <div class="legend-button is-pulled-right ol-control">
-              <button type="button" @click="showLegend=!showLegend"><span>?</span></button>
+              <button type="button" @click="showLegend=!showLegend"><span>Légende</span></button>
             </div>
           </div>
           <div class="legend-content" v-show="showLegend === true">
@@ -641,12 +641,16 @@
     .legend {
       position: absolute;
       z-index: 5;
-      top:0;
-      right:0;
-      padding:1rem;
+      top: 1.25rem;
+      right: 1.25rem;
 
       .legend-button {
         position: unset;
+
+        button {
+          width: auto;
+          padding: 0 .5em;
+        }
       }
 
       .legend-content{
