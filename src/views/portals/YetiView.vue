@@ -80,19 +80,10 @@
             </div>
 
             <div class="column has-text-right">
-              <button
-                class="button is-primary"
-                :class="{'is-loading': promise}"
-                :disabled="promise"
-                @click="compute">
-                Calculer le risque
-              </button>
-              <p class="yetiForm-error" v-if="currentError">
-                <span>
-                  <strong>Info: </strong>
-                  {{ currentError }}
-                </span>
-              </p>
+              <validation-button
+                :current-error="currentError"
+                :loading="promise"
+                @click="compute" />
             </div>
 
           </div>
@@ -277,19 +268,10 @@
 
           <div class="columns yetiForm-validation" v-show="method">
             <div class="column has-text-right">
-              <button
-                class="button is-primary"
-                :class="{'is-loading': promise}"
-                :disabled="formError"
-                @click="compute">
-                Calculer le risque
-              </button>
-              <p class="yetiForm-error" v-if="currentError">
-                <span>
-                  <strong>Info: </strong>
-                  {{ currentError }}
-                </span>
-              </p>
+              <validation-button
+                :current-error="currentError"
+                :loading="promise"
+                @click="compute" />
             </div>
           </div>
         </div>
@@ -347,6 +329,7 @@
   import ol from '@/js/libs/ol';
   import axios from 'axios';
   import vueSlider from 'vue-slider-component';
+  import ValidationButton from '@/components/yeti/ValidationButton';
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
 
@@ -394,7 +377,7 @@
   };
 
   export default {
-    components: { vueSlider },
+    components: { vueSlider, ValidationButton },
 
     data() {
       return {
@@ -836,14 +819,6 @@
     .yetiForm-danger--insane {
       background: #c01a2c;
     }
-  }
-
-  .yetiForm-error {
-    font-size: 0.8em;
-    font-style: italic;
-    margin-top: 10px;
-    text-align: right;
-    opacity: 0.75;
   }
 
   .yetiForm-note {
