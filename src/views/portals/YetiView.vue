@@ -10,7 +10,15 @@
       </h1>
     </div>
 
-    <div class="columns yeti-content">
+    <div class="box" v-if="$route.params.page === 'faq'">
+      <p><router-link to="/yeti">Retour YETI</router-link></p>
+      <h2 class="title is-3 yeti-title">
+        <span>FAQ</span>
+      </h2>
+      <faq />
+    </div>
+
+    <div class="columns yeti-content" v-else>
       <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
         <div class="box">
           <div class="columns">
@@ -20,7 +28,7 @@
               </h2>
             </div>
             <div class="column">
-              <a class="is-size-6 is-pulled-right" href="/yeti_faq.pdf">FAQ ?</a>
+              <router-link class="is-size-6 is-pulled-right" to="/yeti/faq">FAQ ?</router-link>
             </div>
           </div>
           <div class="columns">
@@ -373,6 +381,7 @@
   import axios from 'axios';
   import vueSlider from 'vue-slider-component';
   import ValidationButton from '@/components/yeti/ValidationButton';
+  import Faq from '@/components/yeti/Faq';
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
   const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
@@ -423,7 +432,7 @@
   };
 
   export default {
-    components: { vueSlider, ValidationButton },
+    components: { vueSlider, ValidationButton, Faq },
 
     data() {
       return {
@@ -941,6 +950,11 @@
 
   p:not(:last-child), ul:not(:last-child), table:not(:last-child){
     margin-bottom: 1rem;
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: underline;
   }
 
   h4{
