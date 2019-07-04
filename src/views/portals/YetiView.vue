@@ -45,7 +45,7 @@
                     <option :value="1">1</option>
                     <option :value="2">2</option>
                     <option :value="3">3</option>
-                    <option :value="4" :disabled="method==='mrd'">4</option>
+                    <option :value="4">4</option>
                   </select>
                 </div>
 
@@ -67,7 +67,7 @@
                     <option :value="1">1</option>
                     <option :value="2">2</option>
                     <option :value="3">3</option>
-                    <option :value="4" :disabled="method==='mrd'">4</option>
+                    <option :value="4">4</option>
                   </select>
                 </div>
               </div>
@@ -83,7 +83,7 @@
               <button
                 class="button is-primary"
                 :class="{'is-loading': promise}"
-                :disabled="formError"
+                :disabled="promise"
                 @click="compute">
                 Calculer le risque
               </button>
@@ -114,8 +114,10 @@
                   class="is-checkradio"
                   :value="item"
                   v-model="method"
-                  :disabled="item=='mrd' ? bra.high == 4 : false">
-                <label :for="'c2c-method-' + item">{{ methods[item] }}</label>
+                  :disabled="item === 'mrd' ? bra.high == 4 || bra.low == 4 : false">
+                <label
+                  :for="'c2c-method-' + item"
+                  @click="warnAboutMethodBra(item)">{{ methods[item] }}</label>
               </div>
             </div>
           </div>
@@ -371,7 +373,7 @@
     },
     'method_bra': {
       'simple': 'Méthode et BRA incompatible',
-      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum'
+      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP'
     },
     'bra': {
       'simple': 'BRA manquant',
@@ -473,7 +475,11 @@
       },
 
       mrdIsNotApplicable() {
-        return this.bra.high > VALID_FORM_DATA.braMaxMrd && this.method === 'mrd';
+        return this.isBraMax && this.method === 'mrd';
+      },
+
+      isBraMax() {
+        return (this.bra.high > VALID_FORM_DATA.braMaxMrd || this.bra.low > VALID_FORM_DATA.braMaxMrd);
       },
 
       isValidMapZoom() {
@@ -485,7 +491,7 @@
       'bra.high': 'onBraChange',
       'bra.low': 'check',
       'bra.altiThreshold': 'check',
-      'bra.isDifferent': 'check',
+      'bra.isDifferent': ['check', 'checkBraIsDifferent'],
       'method': 'check',
       'mapZoom': 'check'
     },
@@ -498,27 +504,43 @@
       check() {
         if (!this.bra.high) {
           this.formError = 'bra';
-        } else if (!this['method']) {
-          this.formError = 'method';
-        } else if (this.mrdIsNotApplicable) { // technically, can't happen
-          window.alert(ERRORS.method_bra.full);
-          this.method = null;
-          this.formError = 'method';
         } else if (this.bra.low && this.bra.high !== this.bra.low && !this.bra.altiThreshold) {
           this.formError = 'altitude';
+        } else if (!this['method']) {
+          this.formError = 'method';
+        } else if (this.mrdIsNotApplicable) {
+          this.formError = 'method_bra';
         } else if (!this.isValidMapZoom) {
           this.formError = 'zoom';
         } else {
           this.formError = null;
+        }
+        // also
+        // verif if bra = 4, method MRD forbidden
+        if (this.mrdIsNotApplicable) {
+          this.method = null;
         }
 
         // then set errors
         this.setCurrentError();
       },
 
+      checkBraIsDifferent() {
+        if (!this.bra.isDifferent) {
+          this.bra.low = null;
+          this.bra.altiThreshold = null;
+        }
+      },
+
       onBraChange() {
         this.potentialDanger = this.potentialDangerOptions.val;
         this.check();
+      },
+
+      warnAboutMethodBra(item) {
+        if (item === 'mrd' && this.isBraMax) {
+          window.alert(ERRORS.method_bra.full);
+        }
       },
 
       setCurrentError() {
@@ -533,6 +555,10 @@
       },
 
       compute() {
+        if (this.formError) {
+          window.alert(ERRORS[this.formError]['full']);
+          return;
+        }
         const bbox = this.$refs.map.getExtent('EPSG:4326');
         const yetiUrl = this.getYetiUrl(bbox);
 
