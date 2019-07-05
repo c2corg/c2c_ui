@@ -53,7 +53,7 @@
     "vue-router": "3.0.5",
     "vue-slider-component": "3.0.25",
     "vuejs-datepicker": "1.6.2",
-    "snyk": "1.192.2"
+    "snyk": "1.192.3"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "3.6.0",
