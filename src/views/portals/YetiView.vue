@@ -70,8 +70,8 @@
               </div>
 
               <div>
-                <input-checkbox v-model="bra.isDifferent">
-                  BRA haut/bas différents ?
+                <input-checkbox v-model="bra.isDifferent" class="control--braDifferent">
+                  BRA haut/bas différents ?
                 </input-checkbox>
               </div>
             </div>
