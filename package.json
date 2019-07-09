@@ -61,7 +61,7 @@
     "@vue/cli-plugin-eslint": "3.6.0",
     "@vue/cli-service": "3.6.0",
     "@vue/eslint-config-standard": "4.0.0",
-    "angular-gettext-tools": "2.4.1",
+    "angular-gettext-tools": "2.4.2",
     "cross-env": "5.2.0",
     "node-sass": "4.11.0",
     "sass-loader": "7.1.0",
