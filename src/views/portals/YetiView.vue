@@ -159,29 +159,25 @@
             </div>
 
             <table class="yetiForm-danger">
-              <tr class="yetiForm-danger--low">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                 <td>Danger faible</td>
-                <td>Pente &lt;40°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level1"></td>
+                <td>Je renonce aux pentes > 40°</td>
               </tr>
-              <tr class="yetiForm-danger--medium">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
                 <td>Danger limité</td>
-                <td>Pente &lt;35°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level2"></td>
+                <td>Je renonce aux pentes > 35°</td>
               </tr>
-              <tr class="yetiForm-danger--strong">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level3"></td>
                 <td>Danger marqué</td>
-                <td>Pente &lt;30°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level3"></td>
+                <td>Je renonce aux pentes > 30°</td>
               </tr>
-              <tr class="yetiForm-danger--high">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
-                <td>Danger fort</td>
-                <td>Renoncer à sortir</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level4"></td>
+                <td>Danger fort à très fort</td>
+                <td>Je renonce à sortir</td>
               </tr>
             </table>
           </div>
@@ -200,35 +196,30 @@
             </div>
 
             <table class="yetiForm-danger">
-              <tr class="yetiForm-danger--low">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                 <td>Danger faible</td>
-                <td>Skier avec précaution</td>
-                <td />
+                <td>Je renonce aux pentes > 45°</td>
               </tr>
-              <tr class="yetiForm-danger--medium">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
                 <td>Danger limité</td>
-                <td>Pente &lt;40°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level1"></td>
+                <td>Je renonce aux pentes > 40°</td>
               </tr>
-              <tr class="yetiForm-danger--strong">
+              <tr class="multiline">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level3"></td>
                 <td>Danger marqué</td>
-                <td>Pente &lt;35°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level2"></td>
+                <td>Je renonce aux pentes > 35° <br><small>y compris les pentes qui me dominent</small></td>
               </tr>
-              <tr class="yetiForm-danger--high">
+              <tr class="multiline">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
                 <td>Danger fort</td>
-                <td>Pente &lt;30°</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level3"></td>
+                <td>Je renonce aux pentes > 30° <br><small>y compris les pentes qui me dominent</small></td>
               </tr>
-              <tr class="yetiForm-danger--insane">
+              <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
                 <td>Danger très fort</td>
-                <td>Renoncer à sortir</td>
-                <td><img src="@/assets/img/yeti/levels-danger-slope.svg#level4"></td>
+                <td>Je renonce à sortir</td>
               </tr>
             </table>
           </div>
@@ -877,40 +868,29 @@
   .yetiForm-danger {
     width: 100%;
     table-layout: fixed;
-    color:$dark;
+    color: $dark;
+    background-color: $white-ter;
 
     td{
       vertical-align: middle;
+      height: 45px;
     }
 
-    td:first-child,
-    td:last-child {
-      width: 100px;
-      text-align: center;
+    .multiline td {
+      vertical-align: baseline;
+    }
+
+    td:first-child {
+      width: 60px;
+    }
+
+    td:first-child + td {
+      width: 40%;
     }
 
     td img {
-      height: 50px;
-    }
-
-    .yetiForm-danger--low {
-      background: #bfe12b;
-    }
-
-    .yetiForm-danger--medium {
-      background: #fff200;
-    }
-
-    .yetiForm-danger--strong {
-      background: #f68712;
-    }
-
-    .yetiForm-danger--high {
-      background: #ed1c24;
-    }
-
-    .yetiForm-danger--insane {
-      background: #c01a2c;
+      vertical-align: -12px;
+      height: 35px;
     }
   }
 
