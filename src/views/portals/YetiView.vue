@@ -37,10 +37,7 @@
                     y2="61.5" />
                 </svg>
                 <div class="input-bra-high select is-small">
-                  <select
-                    v-model="bra.high"
-                    class="form-control"
-                    aria-label="Niveau de danger BRA haut">
+                  <select v-model="bra.high" aria-label="Niveau de danger BRA haut">
                     <option :value="null" selected />
                     <option :value="1">1</option>
                     <option :value="2">2</option>
@@ -91,31 +88,34 @@
           <h2 class="title is-3 yeti-title">
             Méthodes
           </h2>
-          <div class="columns is-mobile yeti-tabs">
+          <div class="columns is-mobile yetiTabs">
             <div
               v-for="item of Object.keys(methods)"
               :key="item"
-              class="column yeti-tab">
+              class="column yetiTab">
               <div
-                class="control method-input"
-                :class="{'has-background-secondary has-text-light has-text-weight-bold': method===item}">
+                class="control method-input yetiTab-control"
+                :class="{'yetiTab-control--selected': method===item}">
                 <input
                   :id="'c2c-method-' + item"
                   type="radio"
-                  class="is-checkradio"
+                  class="is-checkradio is-primary"
                   :value="item"
                   v-model="method"
                   :disabled="item === 'mrd' ? bra.high == 4 || bra.low == 4 : false">
                 <label
                   :for="'c2c-method-' + item"
-                  @click="warnAboutMethodBra(item)">{{ methods[item] }}</label>
+                  @click="warnAboutMethodBra(item)">
+                  {{ methods[item][0] }}
+                  <span class="yetiForm-info">{{ methods[item][1] }}</span>
+                </label>
               </div>
             </div>
           </div>
 
           <div v-show="method=='mrd'">
             <p>
-              Avec la Méthode de Réduction pour Débutant (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
+              Avec la <strong>Méthode de Réduction pour Débutant</strong> (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
             </p>
             <div class="yetiForm-note">
               <p>Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de danger du BRA. Il n'est pas tenu compte de l'orientation.</p>
@@ -151,7 +151,7 @@
 
           <div v-show="method=='mre'">
             <p>
-              Avec la Méthode de Réduction élémentaire (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d'apres le BRA consitituent des orientations critiques.
+              Avec la <strong>Méthode de Réduction Élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d'apres le BRA consitituent des orientations critiques.
             </p>
 
             <p>
@@ -198,12 +198,12 @@
 
           <div v-show="method=='mrp'">
             <p>
-              Avec la Méthode de Réduction Professionnelle (MRP), vous pouvez affiner le potentiel de danger, tenir compte de la taille du groupe et des mesures de précaution envisagées.
+              Avec la <strong>Méthode de Réduction Professionnelle</strong> (MRP), vous pouvez affiner le potentiel de danger, tenir compte de la taille du groupe et des mesures de précaution envisagées.
             </p>
 
             <h3 class="title is-3">Potentiel de danger</h3>
-            <p v-if="bra.high">BRA actuel: {{ bra.high }}</p>
-            <p v-else>Pas de BRA sélectionné</p>
+            <p v-if="bra.high" class="yetiForm-info">BRA actuel: {{ bra.high }}</p>
+            <p v-else class="yetiForm-info">Pas de BRA sélectionné</p>
 
             <ul class="potential-danger-labels has-text-black">
               <li
@@ -382,9 +382,9 @@
     data() {
       return {
         methods: {
-          mrd: 'MRD (débutant)',
-          mre: 'MRE (élémentaire)',
-          mrp: 'MRP (expert)'
+          mrd: ['MRD', 'Débutant'],
+          mre: ['MRE', 'Élémentaire'],
+          mrp: ['MRP', 'Expert']
         },
         groupSizes: [
           {
@@ -744,7 +744,7 @@
     display: inline-block;
     margin-left: -1.25rem;
     padding: .25em 1.25rem;
-    background: #e0e0e0;
+    background: $grey-lighter;
   }
 
   .inputs-bra{
@@ -824,16 +824,15 @@
   .yetiForm-note {
     position: relative;
     font-size: 0.9em;
-    color: #888;
     padding: 1em;
     padding-left: 4em;
     margin-bottom: 2em;
-    border: 1px solid #bbb;
+    background-color: $white-ter;
     border-radius: 2px;
   }
 
   .yetiForm-note::before {
-    content: 'i';
+    content: '?';
     position: absolute;
     top: 1em;
     left: 1em;
@@ -848,12 +847,32 @@
     border-radius: 2px;
   }
 
-  .yeti-tabs {
+  .yetiTabs {
     margin: 0;
   }
 
-  .yeti-tab {
+  .yetiTab {
     padding: .75rem 0;
+  }
+
+  .yetiTab-control {
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    &:hover,
+    &:focus {
+      border-color: $grey-lighter;
+    }
+  }
+
+  .yetiTab-control--selected {
+    color: $primary;
+    border-color: $primary;
+
+    &:hover,
+    &:focus {
+      border-color: $primary;
+    }
   }
 
   .potential-danger-labels {
@@ -892,5 +911,13 @@
       img{
         max-width: 65%;
       }
+  }
+</style>
+
+<style>
+  /* Not scoped styles, to alter component's CSS */
+  .input-orientation {
+    width: 120px;
+    height: 120px;
   }
 </style>
