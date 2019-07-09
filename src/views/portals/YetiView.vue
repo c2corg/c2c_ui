@@ -85,6 +85,43 @@
 
           </div>
 
+          <div class="yetiMountains">
+            <div>
+              <p class="yetiMountains-title" @click="showMountainsList = !showMountainsList">
+                Liste des massifs
+                <span v-if="promiseMountains" class="yetiMountains-count">{{ countVisibleMountains }}</span>
+                <fa-icon
+                  class="yetiMountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
+                  icon="angle-down"
+                  :rotation="showMountainsList ? 180 : undefined" />
+              </p>
+            </div>
+            <div v-if="showMountainsList">
+              <div v-if="promiseMountains">
+                <p class="column yetiForm-info">Téléchargez le bulletin en PDF depuis le site de Météo France</p>
+                <dl>
+                  <div v-for="(mountains, massif) of visibleMountains" :key="massif">
+                    <dt class="yetiMountains-listTitle">
+                      {{ massif }}
+                    </dt>
+                    <div class="yetiMountains-list">
+                      <dd class="yetiMountains-listElement" v-for="mountain of mountains" :key="mountain.title">
+                        <a :href="'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' + mountain.id_mf + '.pdf'" target="_blank" v-if="mountain.id_mf">
+                          <fa-icon icon="external-link-alt" />
+                          {{ mountain.title }}
+                        </a>
+                        <span v-else>{{ mountain.title }}</span>
+                      </dd>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+              <div v-else>
+                <p class="column yetiForm-info">Les massifs n’ont pas pu être chargés</p>
+              </div>
+            </div>
+          </div>
+
           <h2 class="title is-3 yeti-title">
             Méthodes
           </h2>
@@ -332,6 +369,7 @@
   import ValidationButton from '@/components/yeti/ValidationButton';
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
+  const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 
   const VALID_FORM_DATA = {
     minZoom: 13,
@@ -424,14 +462,10 @@
         showLegend: undefined,
         mapLegend: null,
 
-        label: {
-
-        },
-        item: {
-          text: {
-
-          }
-        }
+        mountains: {},
+        visibleMountains: {},
+        promiseMountains: null,
+        showMountainsList: false
       };
     },
 
@@ -467,7 +501,12 @@
 
       isValidMapZoom() {
         return this.mapZoom >= VALID_FORM_DATA.minZoom;
+      },
+
+      countVisibleMountains() {
+        return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
       }
+
     },
 
     watch: {
@@ -481,6 +520,12 @@
 
     mounted() {
       this.check();
+
+      // mountains
+      this.$refs.map.map.on('moveend', this.onMapMoveEnd);
+      axios.get(YETI_URL_MOUNTAINS)
+        .then(this.onMountainsResult)
+        .catch(this.onMountainsError);
     },
 
     methods: {
@@ -629,6 +674,54 @@
         result += '&username=' + this.$user.forumUsername;
 
         return result;
+      },
+
+      onMapMoveEnd() {
+        this.setVisibleMountains();
+      },
+
+      setVisibleMountains() {
+        const mapExtent = this.$refs.map.getExtent('EPSG:4326');
+        // clone this.mountains first, with no reference
+        this.visibleMountains = Object.assign({}, this.mountains);
+        // then filter if polygon isn't in view
+        for (const massif in this.visibleMountains) {
+          this.visibleMountains[massif] = this.visibleMountains[massif].filter(mountain => {
+            const polygon = mountain.geometry;
+            return polygon.intersectsExtent(mapExtent);
+          });
+          // unset massif if empty
+          if (this.visibleMountains[massif].length === 0) {
+            delete this.visibleMountains[massif];
+          }
+        }
+      },
+
+      sortMountainsByMassif() {
+        const sortedMountains = {};
+        for (let i = 0; i < this.mountains.length; i++) {
+          if (!sortedMountains[this.mountains[i].mountain]) {
+            sortedMountains[this.mountains[i].mountain] = [];
+          }
+          sortedMountains[this.mountains[i].mountain].push(this.mountains[i]);
+        }
+        this.mountains = sortedMountains;
+      },
+
+      onMountainsResult(data) {
+        const features = data.data;
+        this.mountains = (new ol.format.GeoJSON()).readFeatures(features).map(mountain => {
+          return mountain.getProperties();
+        });
+        this.sortMountainsByMassif();
+        this.setVisibleMountains();
+
+        this.promiseMountains = true;
+      },
+
+      onMountainsError() {
+        // silent error
+        this.promiseMountains = null;
       }
     }
   };
@@ -905,6 +998,59 @@
 
   .yetiForm-validation {
     margin-top: 1rem;
+  }
+
+  .yetiMountains {
+    margin-bottom: 2rem;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+
+    &:hover {
+      border-color: #b5b5b5;
+    }
+  }
+
+  .yetiMountains-title {
+    cursor: pointer;
+    padding: .25rem .75rem;
+  }
+
+  .yetiMountains-count {
+    display: inline-block;
+    width: 1.1rem;
+    height: 1.1rem;
+    line-height: 1rem;
+    vertical-align: .2rem;
+    margin-left: 1rem;
+    background: #4a4a4a;
+    color: #fff;
+    border-radius: 50%;
+    font-size: .7em;
+    text-align: center;
+  }
+
+  .yetiMountains-arrow {
+    color: $color-complementary-c2c;
+    margin-top: .25rem;
+  }
+
+  .yetiMountains-list {
+    columns: 3 170px;
+    padding: .75rem 2rem;
+  }
+
+  .yetiMountains-listTitle {
+    font-weight: bold;
+    padding: 0 .75rem;
+  }
+
+  .yetiMountains-listElement + .yetiMountains-listTitle {
+    margin-top: .5rem;
+  }
+
+  .yetiForm-info {
+    font-size: 0.8em;
+    opacity: 0.75;
   }
 
   .yeti-logos{
