@@ -131,7 +131,7 @@
               :key="item"
               class="column yetiTab">
               <div
-                class="control method-input yetiTab-control"
+                class="control yetiTab-control"
                 :class="{'yetiTab-control--selected': method===item}">
                 <input
                   :id="'c2c-method-' + item"
@@ -142,6 +142,7 @@
                   :disabled="item === 'mrd' ? bra.high == 4 || bra.low == 4 : false">
                 <label
                   :for="'c2c-method-' + item"
+                  class="yetiTab-label"
                   @click="warnAboutMethodBra(item)">
                   {{ methods[item][0] }}
                   <span class="yetiForm-info">{{ methods[item][1] }}</span>
@@ -861,10 +862,6 @@
     }
   }
 
-  .method-input{
-    padding: 0.5rem;
-  }
-
   .yetiForm-danger {
     width: 100%;
     table-layout: fixed;
@@ -922,29 +919,61 @@
 
   .yetiTabs {
     margin: 0;
-  }
-
-  .yetiTab {
     padding: .75rem 0;
   }
 
-  .yetiTab-control {
-    border: 1px solid transparent;
-    border-radius: 4px;
+  .yetiTab {
+    padding: 0;
+  }
 
-    &:hover,
-    &:focus {
-      border-color: $grey-lighter;
+  .yetiTab-control {
+    .yetiTab-label {
+      display: block;
+      margin: 0;
+      padding: .25rem;
+      padding-left: 2rem;
+      border: 1px solid transparent;
+      border-radius: 4px;
+
+      &:hover,
+      &:focus {
+        border-color: $grey-lighter;
+      }
+
+      &.yetiTab-label:before {
+        top: .25rem !important;
+        left: .25rem !important;
+      }
+      &.yetiTab-label:after {
+        top: 1em !important;
+        left: 1em !important;
+      }
+    }
+
+    .is-checkradio:checked + label:after {
+      top: .25rem !important;
+      left: .25rem !important;
     }
   }
 
   .yetiTab-control--selected {
-    color: $primary;
-    border-color: $primary;
-
-    &:hover,
-    &:focus {
+    .yetiTab-label {
+      color: $primary;
       border-color: $primary;
+
+      &:hover,
+      &:focus {
+        border-color: $primary;
+      }
+    }
+  }
+
+  @media screen and (max-width: 450px), (min-width: $tablet) and (max-width: 950px), (min-width: $desktop) and (max-width: 1160px), (min-width: $fullhd) and (max-width: 1575px) {
+    .yetiTabs {
+      flex-wrap: wrap;
+    }
+    .yetiTab {
+      flex: 0 0 50%;
     }
   }
 
