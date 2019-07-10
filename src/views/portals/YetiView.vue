@@ -162,22 +162,22 @@
             <table class="yetiForm-danger">
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
-                <td>Danger faible</td>
+                <td><strong>Danger faible</strong></td>
                 <td>Je renonce aux pentes > 40°</td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
-                <td>Danger limité</td>
+                <td><strong>Danger limité</strong></td>
                 <td>Je renonce aux pentes > 35°</td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level3"></td>
-                <td>Danger marqué</td>
+                <td><strong>Danger marqué</strong></td>
                 <td>Je renonce aux pentes > 30°</td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
-                <td>Danger fort à très fort</td>
+                <td><strong>Danger fort à très fort</strong></td>
                 <td>Je renonce à sortir</td>
               </tr>
             </table>
@@ -199,27 +199,27 @@
             <table class="yetiForm-danger">
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
-                <td>Danger faible</td>
+                <td><strong>Danger faible</strong></td>
                 <td>Je renonce aux pentes > 45°</td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
-                <td>Danger limité</td>
+                <td><strong>Danger limité</strong></td>
                 <td>Je renonce aux pentes > 40°</td>
               </tr>
               <tr class="multiline">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level3"></td>
-                <td>Danger marqué</td>
+                <td><strong>Danger marqué</strong></td>
                 <td>Je renonce aux pentes > 35° <br><small>y compris les pentes qui me dominent</small></td>
               </tr>
               <tr class="multiline">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
-                <td>Danger fort</td>
+                <td><strong>Danger fort</strong></td>
                 <td>Je renonce aux pentes > 30° <br><small>y compris les pentes qui me dominent</small></td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
-                <td>Danger très fort</td>
+                <td><strong>Danger très fort</strong></td>
                 <td>Je renonce à sortir</td>
               </tr>
             </table>
@@ -895,6 +895,12 @@
     border-bottom: dotted 2px #aaa;
   }
 
+  strong,
+  dt {
+    font-weight: bold;
+    color: $grey;
+  }
+
   .content-ul {
     list-style: disc outside;
     margin-left: 2em;
@@ -942,6 +948,12 @@
     table-layout: fixed;
     color: $dark;
     background-color: $white-ter;
+
+    tr {
+      border: 1px solid $white;
+      border-left: 0;
+      border-right: 0;
+    }
 
     td{
       vertical-align: middle;
@@ -1043,12 +1055,31 @@
     }
   }
 
-  @media screen and (max-width: 450px), (min-width: $tablet) and (max-width: 950px), (min-width: $desktop) and (max-width: 1160px), (min-width: $fullhd) and (max-width: 1575px) {
+  @media screen and (max-width: 490px),
+         screen and (min-width: $tablet) and (max-width: 970px),
+         screen and (min-width: $desktop) and (max-width: 1180px),
+         screen and (min-width: $widescreen) and (max-width: 1370px),
+         screen and (min-width: $fullhd) and (max-width: 1650px) {
     .yetiTabs {
       flex-wrap: wrap;
     }
     .yetiTab {
       flex: 0 0 50%;
+    }
+    .yetiForm-danger tr,
+    .yetiForm-danger td {
+      display: block;
+    }
+    .yetiForm-danger tr {
+      padding: .5em 0;
+    }
+    .yetiForm-danger td:first-child {
+      float: left;
+    }
+    .yetiForm-danger td:first-child ~ td {
+      height: auto;
+      width: calc(100% - 60px);
+      margin-left: 60px;
     }
   }
 
@@ -1104,17 +1135,17 @@
     width: 1.1rem;
     height: 1.1rem;
     line-height: 1rem;
-    vertical-align: .2rem;
+    vertical-align: .1rem;
     margin-left: 1rem;
-    background: #4a4a4a;
-    color: #fff;
+    background: $grey;
+    color: $white;
     border-radius: 50%;
     font-size: .7em;
     text-align: center;
   }
 
   .yetiMountains-arrow {
-    color: $color-complementary-c2c;
+    color: $primary;
     margin-top: .25rem;
   }
 
@@ -1149,5 +1180,8 @@
   .input-orientation {
     width: 120px;
     height: 120px;
+  }
+  .control--braDifferent .is-checkradio[type=checkbox] + label {
+    margin: 0;
   }
 </style>
