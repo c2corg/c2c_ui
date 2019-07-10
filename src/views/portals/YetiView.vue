@@ -348,6 +348,20 @@
             </div>
           </div>
         </div>
+        <div class="ol-control opacity" v-if="yetiLayer">
+          <div class="opacity-slider">
+            <vue-slider
+              v-model="opacityYetiLayer"
+              :min="0"
+              :max="1"
+              :interval=".01"
+              tooltip="none"
+              direction="btt"
+              :rail-style="{background: 'rgba(0,0,0,.25)'}"
+              :process-style="{background: 'white'}"
+              @change="onUpdateOpacityYetiLayer" />
+          </div>
+        </div>
         <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on />
       </div>
     </div>
@@ -378,6 +392,8 @@
       { min: 13, max: 16, val: 16 }
     ]
   };
+
+  const OPACITY_LAYER = 0.75;
 
   const ERRORS = {
     'method': {
@@ -451,6 +467,7 @@
 
         promise: null,
         yetiLayer: null,
+        opacityYetiLayer: OPACITY_LAYER,
         showLegend: undefined,
         mapLegend: null,
 
@@ -585,6 +602,10 @@
         // if layer already exist, remove it
         if (this.yetiLayer) {
           this.yetiLayer.setMap(null);
+          this.yetiLayer = null;
+
+          // set default opacity
+          this.opacityYetiLayer = OPACITY_LAYER;
         }
 
         // fetch img
@@ -607,7 +628,7 @@
             },
             imageExtent
           }),
-          opacity: 0.75
+          opacity: this.opacityYetiLayer
         });
 
         this.yetiLayer.setMap(this.$refs.map.map);
@@ -636,6 +657,13 @@
         }
 
         window.alert(ERRORS['yeti_prefix'] + errorText);
+      },
+
+      onUpdateOpacityYetiLayer() {
+        if (this.yetiLayer) {
+          this.yetiLayer.setOpacity(this.opacityYetiLayer);
+          this.yetiLayer.setMap(this.$refs.map.map);
+        }
       },
 
       getYetiUrl(bbox) {
@@ -734,7 +762,7 @@
 
     .legend {
       position: absolute;
-      z-index: 5;
+      z-index: 6;
       top: 1.25rem;
       right: 1.25rem;
 
@@ -749,6 +777,7 @@
 
       .legend-content{
         margin-top: 0.5rem;
+        margin-left: 1.25rem;
         border-radius: 2px;
         border: 1px solid lightgray;
         padding:0.5rem;
@@ -763,7 +792,41 @@
         height: 21px;
         margin-right: 5px;
       }
-  }
+    }
+
+    .opacity {
+      position: absolute;
+      z-index: 5;
+      top: 3.5rem;
+      right: 1.25rem;
+
+      .opacity-slider {
+        font-size: 1.14em;
+        margin: 1px;
+        width: 1.375em;
+        padding: 1rem 0;
+        background: rgba(0,60,136,0.5);
+        border-radius: 2px;
+
+        &:hover {
+          background: rgba(0,60,136,0.7);
+        }
+      }
+
+      .vue-slider {
+        padding: 0 9px !important;
+        height: 300px !important;
+        max-height: 30vh;
+      }
+
+      .vue-slider-process {
+        background: $white;
+      }
+
+      .vue-slider-rail {
+        background: $black;
+      }
+    }
   }
   @media screen and (max-width: $tablet) {
 
@@ -772,6 +835,18 @@
       padding-left:0;
       padding-top:0;
       padding-bottom:0;
+
+      .legend {
+        top: .5rem;
+
+        .legend-content {
+          margin-left: .5rem;
+        }
+      }
+
+      .opacity {
+        top: 2.75rem;
+      }
     }
 
     .mobile-result-map{
