@@ -767,7 +767,7 @@
       right: 1.25rem;
 
       .legend-button {
-        position: unset;
+        position: static;
 
         button {
           width: auto;

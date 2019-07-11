@@ -25,7 +25,7 @@
         default: ''
       },
       loading: {
-        type: Promise,
+        type: [Promise, Object],
         default: null
       }
     }
