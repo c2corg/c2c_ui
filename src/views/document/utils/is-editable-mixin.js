@@ -72,7 +72,21 @@ export default {
         return this.document.author.user_id === this.$user.id;
       }
 
-      if (['outing', 'xreport'].includes(this.documentType)) {
+      if (this.documentType === 'xreport') {
+        if (this.document.author.user_id === this.$user.id) {
+          return true;
+        }
+
+        for (const user of this.document.associations.users) {
+          if (user.document_id === this.$user.id) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      if (this.documentType === 'outing') {
         for (const user of this.document.associations.users) {
           if (user.document_id === this.$user.id) {
             return true;
