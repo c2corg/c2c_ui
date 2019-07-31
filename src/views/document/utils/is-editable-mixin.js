@@ -56,6 +56,10 @@ export default {
         return true;
       }
 
+      if (this.document.protected) {
+        return false;
+      }
+
       if (['route', 'waypoint', 'area', 'book', 'map'].includes(this.documentType)) {
         return true;
       }
