@@ -16,7 +16,7 @@
           <div class="columns">
             <div class="column">
               <h2 class="title is-3 yeti-title">
-                <span>Info <abbr title="Bulletin du Risque d'Avalanche">BRA</abbr></span>
+                <span>Info <abbr title="Bulletin du Risque d’Avalanche">BRA</abbr></span>
               </h2>
             </div>
             <div class="column">
@@ -71,7 +71,7 @@
 
               <div>
                 <input-checkbox v-model="bra.isDifferent" class="control--braDifferent">
-                  BRA haut/bas différents ?
+                  BRA haut/bas différents?
                 </input-checkbox>
               </div>
             </div>
@@ -153,10 +153,10 @@
 
           <div v-show="method=='mrd'">
             <p>
-              Avec la <strong>Méthode de Réduction pour Débutant</strong> (MRD), vous n'avez pas d'autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
+              Avec la <strong>méthode de réduction pour débutant</strong> (MRD), vous n’avez pas d’autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
             </p>
             <div class="yetiForm-note">
-              <p>Comme son nom l'indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de securité se doit d'être très importante. On ne spécifie pas d'autre paramètre que le niveau de danger du BRA. Il n'est pas tenu compte de l'orientation.</p>
+              <p>Comme son nom l’indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de sécurité se doit d'être très importante. On ne spécifie pas d’autre paramètre que le niveau de danger du BRA. Il n’est pas tenu compte de l’orientation.</p>
             </div>
 
             <table class="yetiForm-danger">
@@ -170,10 +170,10 @@
                 <td><strong>Danger limité</strong></td>
                 <td>Je renonce aux pentes > 35°</td>
               </tr>
-              <tr>
+              <tr class="multiline">
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level3"></td>
                 <td><strong>Danger marqué</strong></td>
-                <td>Je renonce aux pentes > 30°</td>
+                <td>Je renonce aux pentes > 30° <br><small>y compris les pentes qui me dominent</small></td>
               </tr>
               <tr>
                 <td><img src="@/assets/img/yeti/levels-danger.svg#level4"></td>
@@ -185,7 +185,7 @@
 
           <div v-show="method=='mre'">
             <p>
-              Avec la <strong>Méthode de Réduction Élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d'apres le BRA consitituent des orientations critiques.
+              Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d’après le BRA constituent des orientations critiques.
             </p>
 
             <p>
@@ -227,7 +227,7 @@
 
           <div v-show="method=='mrp'">
             <p>
-              Avec la <strong>Méthode de Réduction Professionnelle</strong> (MRP), vous pouvez affiner le potentiel de danger, tenir compte de la taille du groupe et des mesures de précaution envisagées.
+              Avec la <strong>méthode de réduction professionnelle</strong> (MRP), vous pouvez affiner le potentiel de danger, tenir compte de la taille du groupe et des mesures de précaution envisagées.
             </p>
 
             <h3 class="title is-3">Potentiel de danger</h3>
@@ -249,17 +249,17 @@
             </ul>
 
             <div class="yetiForm-note">
-              <p>Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en agissant directement sur le slider. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.</p>
+              <p>Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du BRA. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.</p>
             </div>
 
             <p>
               <input-checkbox v-model="wetSnow">
-                Neige mouillée: pas de prise en compte de l'orientation
+                Neige mouillée: pas de prise en compte de l’orientation
               </input-checkbox>
             </p>
 
             <div class="yetiForm-note">
-              <p>Attention, par neige mouillée, aucun facteur de réduction d'orientation ou de fréquentation ne peut être appliqué.</p>
+              <p>Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut être appliqué.</p>
             </div>
 
             <h3 class="title is-3">Groupe</h3>
@@ -290,7 +290,7 @@
             </div>
 
             <p>
-              Le facteur "pente parcourue fréquemment" n'est pas pris en compte par l'outil car cet aspect ne peut être constaté que sur le terrain.
+              Le facteur "pente parcourue fréquemment" n’est pas pris en compte par l’outil car cet aspect ne peut être constaté que sur le terrain.
             </p>
 
           </div>
@@ -335,7 +335,7 @@
           </div>
           <div class="legend-content" v-show="showLegend === true">
             <p class="is-italic" v-if="!mapLegend">
-              La légende apparaîtra automatiquement avec l'image générée
+              La légende apparaitra automatiquement avec l’image générée
             </p>
             <div v-else>
               <ul>
@@ -416,7 +416,7 @@
       'simple': 'Zoom carte trop important',
       'full': 'Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum'
     },
-    'ok': 'Tout semble correct :)',
+    'ok': 'Le calcul peut être lancé :)',
     'yeti': 'Le service ne fonctionne pas actuellement',
     'yeti_prefix': 'YETI Service: ',
     'yeti_unauthorized': 'Vous devez être autorisé pour effectuer cette requête. Contactez les administrateurs du service si vous êtes intéressé.'
@@ -762,7 +762,7 @@
         const mapExtent = this.$refs.map.getExtent('EPSG:4326');
         // clone this.mountains first, with no reference
         this.visibleMountains = Object.assign({}, this.mountains);
-        // then filter if polygon isn't in view
+        // then filter if polygon isn’t in view
         for (const massif in this.visibleMountains) {
           this.visibleMountains[massif] = this.visibleMountains[massif].filter(mountain => {
             const polygon = mountain.geometry;
@@ -1234,7 +1234,7 @@
 </style>
 
 <style>
-  /* Not scoped styles, to alter component's CSS */
+  /* Not scoped styles, to alter component’s CSS */
   .input-orientation {
     width: 120px;
     height: 120px;
