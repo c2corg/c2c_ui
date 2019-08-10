@@ -1,25 +1,33 @@
 <template>
   <modal-card ref="modalWindow" class="images-uploader" wide>
-
     <div class="columns is-multiline images-uploader-files">
       <div
         v-for="(image, key) of images"
         :key="key"
         class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
         <image-uploader
-          :image="image"
           :categories-edition="categoriesEdition"
-          :parent-document="parentDocument"
-          @success="computeReadyForSaving"
-          @deleteImage="onDeleteImage" />
+          :status="image.status"
+          :data-url="image.dataUrl"
+          :percent-completed="image.percentCompleted"
+          :document="image.document"
+          :is-initial="image.status === 'INITIAL'"
+          :is-saving="image.status === 'SAVING'"
+          :is-success="image.status === 'SUCCESS'"
+          :is-failed="image.status === 'FAILED'"
+          @deleteImage="onDeleteImage(image)"
+          @retryUpload="startUpload(image)" />
       </div>
 
-      <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
-        <div class="images-uploader-message" :class="{'images-uploader-message-dragover': dragOver}">
+      <div
+        class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
+        <div
+          class="images-uploader-message"
+          :class="{'images-uploader-message-dragover': dragOver}">
           <input
             ref="fileInput"
             type="file"
-            @change="filesChange"
+            @change="onFilesChange"
             @dragenter="dragOver=true"
             @dragover="dragOver=true"
             @dragleave="dragOver=false"
@@ -39,52 +47,26 @@
         :disabled="documents.length === 0"
         class="button is-information"
         @click="categoriesEdition=!categoriesEdition">
-        <span v-if="categoriesEdition" v-translate>
-          Edit titles
-        </span>
-        <span v-else v-translate>
-          Edit categories
-        </span>
+        <span v-if="categoriesEdition" v-translate>Edit titles</span>
+        <span v-else v-translate>Edit categories</span>
       </button>
       <button
         :disabled="!readyForSaving"
         class="button is-primary"
         :class="{'is-loading': promise.loading}"
         @click="save"
-        v-translate>
-        Save
-      </button>
-      <button class="button is-warning" @click="hide" v-translate>
-        Close
-      </button>
+        v-translate>Save</button>
+      <button class="button is-warning" @click="hide" v-translate>Close</button>
     </div>
   </modal-card>
 </template>
 
 <script>
-  import loadImage from 'blueimp-load-image';
-
   import c2c from '@/js/apis/c2c';
-  import ol from '@/js/libs/ol.js';
-
   import ImageUploader from './ImageUploader';
-
-  // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
-  const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
-    let decimal = Number(degrees) + (Number(minutes) / 60) + (parseFloat(seconds) / 3600);
-
-    // Don't do anything for N or E
-    if (direction === 'S' || direction === 'W') {
-      decimal = decimal * -1;
-    }
-
-    return decimal;
-  };
-
-  const worldExtent = ol.proj.get('EPSG:4326').getExtent();
+  import uploadFile from '@/js/upload-file';
 
   export default {
-
     components: {
       ImageUploader
     },
@@ -112,12 +94,18 @@
 
     computed: {
       imageType() {
-        if (this.parentDocument.type === 'o' || this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
+        if (
+          this.parentDocument.type === 'o' ||
+          this.parentDocument.type === 'u' ||
+          this.parentDocument.type === 'x'
+        ) {
           return 'personal';
         }
 
         if (this.parentDocument.type === 'c') {
-          return this.parentDocument.article_type === 'collab' ? 'collaborative' : 'personal';
+          return this.parentDocument.article_type === 'collab'
+            ? 'collaborative'
+            : 'personal';
         }
 
         return 'collaborative';
@@ -131,18 +119,23 @@
         }
 
         return documents;
+      },
+
+      associationsArrayName() {
+        return this.$documentUtils.getAssociationArrayName(this.parentDocument);
       }
     },
 
     watch: {
       // this component svaes it states. It allow an user to close window
-      // with unsaved images, and re-open it without loosing it's images
+      // with unsaved images, and re-open it without loosing its images
+      //
       // Here is the issue :
       // if the user starts an image load, then closes the window without saving
       // and go to another page, the component won't be reloaded
       // and loaded images could be accessible from the next document
       // so, if $route changes, we must clean
-      '$route': 'clean'
+      $route: 'clean'
     },
 
     mounted() {
@@ -170,20 +163,6 @@
         this.$refs.modalWindow.hide();
       },
 
-      save() {
-        this.promise = c2c.createImages(this.documents).then(() => {
-          // add result to parent, it will update page
-          for (const image of this.documents) {
-            this.parentDocument.associations.images.push(image);
-          }
-
-          this.clean();
-          this.hide();
-
-          // TODO handle error
-        });
-      },
-
       clean() {
         this.images = {};
         this.categoriesEdition = false;
@@ -192,95 +171,106 @@
         this.dragOver = false;
       },
 
-      filesChange(event) {
-        for (const file of event.target.files) {
-          const key = file.name + '#' + file.lastModified;
-
-          if (this.images[key] === undefined) {
-            this.computeFile(file, key);
-          }
-        }
-
-        // clean target, if user delete upload, and re-upload same image
-        event.target.value = '';
-        this.computeReadyForSaving();
-      },
-
-      computeFile(file, key) {
-        const image = {
-          file,
-          key,
-          exif: null,
-          blob: null,
-          src: '',
-          orientation: 0,
-          document: this.$documentUtils.buildDocument('image', this.lang)
-        };
-        const associationsArrayName = this.$documentUtils.getAssociationArrayName(this.parentDocument);
-
-        image.document = this.$documentUtils.buildDocument('image', this.lang);
-        image.document.activities = this.parentDocument.activities ? this.parentDocument.activities.slice(0) : [];
-        image.document.geometry.geom = this.parentDocument.geometry ? this.parentDocument.geometry.geom : null;
-        image.document.file_size = file.size;
-        image.document.image_type = this.imageType;
-        image.document.quality = 'medium';
-        image.document.associations[associationsArrayName] = [
-          { document_id: this.parentDocument.document_id }
-        ];
-
-        loadImage.parseMetaData(file, (metaData) => {
-          this.parseMetaData(image, metaData);
-          this.$set(this.images, image.key, image);
-        });
-      },
-
-      parseMetaData(image, metaData) {
-        const exif = metaData.exif ? metaData.exif.getAll() : null;
-
-        if (exif) {
-          image.orientation = metaData.exif.get('Orientation');
-
-          const exifDate = exif.DateTimeOriginal || exif.DateTime;
-
-          if (exifDate) {
-            const date = this.$moment.parseDate(exifDate, 'YYYY:MM:DD HH:mm:ss');
-            image.document.date_time = date.isValid() ? date.format() : null;
-          }
-
-          image.document.exposure_time = exif.ExposureTime;
-          image.document.iso_speed = exif.PhotographicSensitivity;
-          image.document.focal_length = exif.FocalLengthIn35mmFilm;
-          image.document.fnumber = exif.FNumber;
-          image.document.camera_name = (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : null;
-
-          if (exif.GPSLatitude && exif.GPSLongitude) {
-            let lat = exif.GPSLatitude.split(',');
-            let lon = exif.GPSLongitude.split(',');
-
-            lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSLatitudeRef);
-            lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSLongitudeRef);
-
-            if (!isNaN(lat) && !isNaN(lon) && ol.extent.containsXY(worldExtent, lon, lat)) {
-              const location = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-              const geom = { 'coordinates': location, 'type': 'Point' };
-
-              image.document.geometry = { 'geom': JSON.stringify(geom) };
-            }
-          }
-
-          if (exif.GPSAltitude) {
-            const elevation = parseFloat(exif.GPSAltitude);
-            image.document.elevation = isNaN(elevation) ? null : elevation;
-          }
-        }
-      },
-
       onDeleteImage(image) {
         if (this.images[image.key] !== undefined) {
           this.$delete(this.images, image.key);
         }
 
         this.computeReadyForSaving();
+      },
+
+      onFilesChange(event) {
+        for (const file of event.target.files) {
+          const key = file.name + '#' + file.lastModified;
+
+          if (this.images[key] === undefined) {
+            const image = this.buildImageObject(file, key);
+
+            this.$set(this.images, image.key, image);
+            this.startUpload(image);
+          }
+        }
+
+        // clean HTML input : if user delete upload, and re-upload same image
+        event.target.value = '';
+        this.computeReadyForSaving();
+      },
+
+      // build an object that ships all data needed for one file to upload :
+      // file : OS file object to upload
+      // key : unique key that identify it
+      // document : c2c document that will be saved once the file is uploaded
+      // dataUrl : raw representation of the image (used in HTML src attribute)
+      // status : INITIAL, SAVING, SUCCESS or FAILED
+      // percentCompleted : no comment :)
+      // errorMessage : not yet used ?
+      buildImageObject(file, key) {
+        const document = this.$documentUtils.buildDocument('image', this.lang);
+        document.activities = this.parentDocument.activities
+          ? this.parentDocument.activities.slice(0)
+          : [];
+        document.geometry.geom = this.parentDocument.geometry
+          ? this.parentDocument.geometry.geom
+          : null;
+        document.file_size = file.size;
+        document.image_type = this.imageType;
+        document.quality = 'medium';
+        document.associations[this.associationsArrayName] = [
+          { document_id: this.parentDocument.document_id }
+        ];
+
+        return {
+          file,
+          key,
+          document,
+          dataUrl: null,
+          percentCompleted: 0,
+          status: 'INITIAL',
+          errorMessage: null
+        };
+      },
+
+      startUpload(image) {
+        image.status = 'INITIAL';
+        image.percentCompleted = 0;
+
+        uploadFile(
+          image.file,
+          document => {
+            Object.assign(image.document, document);
+          },
+          dataUrl => {
+            image.dataUrl = dataUrl;
+          },
+          event => {
+            this.onUploadProgress(event, image);
+          },
+          event => {
+            this.onUploadSuccess(event, image);
+          },
+          event => {
+            this.onUploadFailure(event, image);
+          }
+        );
+      },
+
+      onUploadProgress(event, image) {
+        image.status = 'SAVING';
+        if (event.total !== 0) {
+          image.percentCompleted = Math.floor((event.loaded * 100) / event.total);
+        }
+      },
+
+      onUploadSuccess(event, image) {
+        image.status = 'SUCCESS';
+        image.document.filename = event.data.filename;
+        this.computeReadyForSaving();
+      },
+
+      onUploadFailure(event, image) {
+        image.percentCompleted = 100;
+        image.status = 'FAILED';
+        image.errorMessage = event.message;
       },
 
       computeReadyForSaving() {
@@ -295,46 +285,57 @@
             }
           }
         }
+      },
+
+      save() {
+        this.promise = c2c.createImages(this.documents).then(() => {
+          // add result to parent, it will update page
+          for (const image of this.documents) {
+            this.parentDocument.associations.images.push(image);
+          }
+
+          this.clean();
+          this.hide();
+
+          // TODO handle error
+        });
       }
     }
   };
-
 </script>
 
 <style scoped lang="scss">
+  // TODO : modal background color with more alpha in Variables
 
-// TODO : modal background color with more alpha in Variables
+  .images-uploader {
+    .images-uploader-message {
+      position: relative;
+      height: 315px;
+      text-align: center;
+      border: 5px dashed #ddd;
+      background: #f8f8f8;
+      transition: 0.2s;
+      padding: 1rem;
 
-.images-uploader{
+      input {
+        opacity: 0; /* invisible but it's there! */
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+      }
+    }
 
-  .images-uploader-message{
-    position: relative;
-    height:315px;
-    text-align: center;
-    border: 5px dashed #ddd;
-    background: #f8f8f8;
-    transition:0.2s;
-    padding:1rem;
+    .images-uploader-message:hover {
+      background: #eee;
+      border: 5px dashed #bbb;
+    }
 
-    input {
-      opacity: 0; /* invisible but it's there! */
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top:0;
-      left:0;
-      cursor: pointer;
+    .images-uploader-message-dragover {
+      background: rgb(184, 238, 177);
+      border: 5px dashed green;
     }
   }
-
-  .images-uploader-message:hover {
-    background: #eee;
-    border: 5px dashed #bbb;
-  }
-
-  .images-uploader-message-dragover {
-    background: rgb(184, 238, 177);
-    border: 5px dashed green;
-  }
-}
 </style>
