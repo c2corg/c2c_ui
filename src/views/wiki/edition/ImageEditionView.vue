@@ -23,6 +23,26 @@
           <form-field no-wrapper :document="document" :field="fields.width" />
         </div>
         <div v-if="mode==='edit' && document" class="column is-6 has-text-centered">
+          <div class="field">
+            <div class="file is-centered">
+              <label class="file-label">
+                <input
+                  class="file-input"
+                  type="file"
+                  name="resume"
+                  @change="onFileChange"
+                  accept="image/*">
+                <span class="file-cta button" :class="{'is-loading': uploading}">
+                  <span class="file-icon">
+                    <fa-icon icon="upload" />
+                  </span>
+                  <span class="file-label" v-translate>
+                    Upload a new version
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
           <img :src="getImageUrl(document)">
         </div>
       </div>
@@ -74,14 +94,52 @@
 </template>
 
 <script>
+  import uploadFile from '@/js/upload-file';
   import imageUrls from '@/js/image-urls';
   import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
   export default {
-    mixins: [ documentEditionViewMixin ],
+    mixins: [documentEditionViewMixin],
+
+    data() {
+      return {
+        uploading: false
+      };
+    },
 
     methods: {
-      getImageUrl: imageUrls.getMedium
+      getImageUrl: imageUrls.getMedium,
+      onFileChange(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+          return;
+        }
+
+        this.uploading = true;
+
+        uploadFile(
+          file,
+          document => {
+            if (document.geometry) {
+              document.geometry.version = this.document.geometry.version;
+            }
+            Object.assign(this.document, document);
+          },
+          dataUrl => { },
+          event => { /* onUploadProgress */ },
+          event => {
+            this.uploading = false;
+            this.document.filename = event.data.filename;
+          },
+          event => {
+            /* onUploadFailure */
+            this.uploading = false;
+          }
+        );
+
+        event.target.value = '';
+      }
     }
   };
 </script>
