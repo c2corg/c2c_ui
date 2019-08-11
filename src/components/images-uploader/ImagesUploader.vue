@@ -236,17 +236,14 @@
 
         uploadFile(
           image.file,
-          document => {
-            Object.assign(image.document, document);
-          },
           dataUrl => {
             image.dataUrl = dataUrl;
           },
           event => {
             this.onUploadProgress(event, image);
           },
-          event => {
-            this.onUploadSuccess(event, image);
+          document => {
+            this.onUploadSuccess(document, image);
           },
           event => {
             this.onUploadFailure(event, image);
@@ -261,9 +258,9 @@
         }
       },
 
-      onUploadSuccess(event, image) {
+      onUploadSuccess(document, image) {
         image.status = 'SUCCESS';
-        image.document.filename = event.data.filename;
+        Object.assign(image.document, document);
         this.computeReadyForSaving();
       },
 

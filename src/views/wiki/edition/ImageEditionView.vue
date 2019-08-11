@@ -3,7 +3,7 @@
     :mode="mode"
     :document="document"
     :generic-errors="genericErrors"
-    :is-loading="saving"
+    :is-loading="saving || uploadingNewFile"
     @save="save">
     <form-section
       :title="$gettext('general informations')"
@@ -32,7 +32,7 @@
                   name="resume"
                   @change="onFileChange"
                   accept="image/*">
-                <span class="file-cta button" :class="{'is-loading': uploading}">
+                <span class="file-cta button" :class="{'is-loading': uploadingNewFile}">
                   <span class="file-icon">
                     <fa-icon icon="upload" />
                   </span>
@@ -43,7 +43,7 @@
               </label>
             </div>
           </div>
-          <img :src="getImageUrl(document)">
+          <img :src="newVersionSource ? newVersionSource : getImageUrl(document)">
         </div>
       </div>
 
@@ -103,7 +103,8 @@
 
     data() {
       return {
-        uploading: false
+        newVersionSource: null,
+        uploadingNewFile: false
       };
     },
 
@@ -116,25 +117,25 @@
           return;
         }
 
-        this.uploading = true;
+        this.uploadingNewFile = true;
 
         uploadFile(
           file,
+          dataUrl => {
+            this.newVersionSource = dataUrl;
+          },
+          event => { /* onUploadProgress */ },
           document => {
+            this.uploadingNewFile = false;
+
             if (document.geometry) {
               document.geometry.version = this.document.geometry.version;
             }
             Object.assign(this.document, document);
           },
-          dataUrl => { },
-          event => { /* onUploadProgress */ },
-          event => {
-            this.uploading = false;
-            this.document.filename = event.data.filename;
-          },
           event => {
             /* onUploadFailure */
-            this.uploading = false;
+            this.uploadingNewFile = false;
           }
         );
 

@@ -93,7 +93,7 @@ const setIfDefined = function(document, name, value) {
   }
 };
 
-const uploadFile = function(file, onDocumentReady, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
+const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
   const document = {};
 
   const parseMetaData = function(metaData) {
@@ -149,15 +149,18 @@ const uploadFile = function(file, onDocumentReady, onDataUrlReady, onUploadProgr
       // image is loaded; sizes are available
       document.width = img.width;
       document.height = img.height;
-
-      onDocumentReady(document);
     };
 
     img.src = dataUrl;
   };
 
+  const onUploadSuccess = function(event) {
+    document.filename = event.data.filename;
+    onSuccess(document);
+  };
+
   const upload = function(data) {
-    worker.push(c2c.uploadImage.bind(c2c), data, onUploadProgress, onSuccess, onFailure);
+    worker.push(c2c.uploadImage.bind(c2c), data, onUploadProgress, onUploadSuccess, onFailure);
   };
 
   loadImage.parseMetaData(file, parseMetaData);
