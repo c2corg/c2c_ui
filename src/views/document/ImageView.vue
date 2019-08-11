@@ -8,10 +8,6 @@
 
           <field-view :document="document" :field="fields.date_time" />
 
-          <label-value v-if="document.areas.length">
-            <areas-links :areas="document.areas" />
-          </label-value>
-
           <field-view :document="document" :field="fields.author" />
 
           <label-value v-if="document.creator" :label="$gettext('contributor')">
@@ -68,7 +64,7 @@
   import documentViewMixin from './utils/document-view-mixin.js';
 
   export default {
-    mixins: [ documentViewMixin ],
+    mixins: [documentViewMixin],
 
     methods: {
       getOriginalImageUrl: imageUrls.get,
@@ -78,8 +74,8 @@
 </script>
 
 <style scoped lang="scss">
-    .main-image{
-        // remove the ugly 4px in the bottom
-        display:block;
-    }
+  .main-image {
+    // remove the ugly 4px in the bottom
+    display: block;
+  }
 </style>

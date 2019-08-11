@@ -5,7 +5,7 @@
     addthis:ui_click="true"
     v-bind="$attrs"
     :title="$gettext('Share')">
-    <fa-icon icon="share-square" />
+    <fa-icon icon="share-alt" />
   </span>
 </template>
 

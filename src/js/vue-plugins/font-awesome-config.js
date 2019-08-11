@@ -55,7 +55,7 @@ import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMap } from '@fortawesome/free-solid-svg-icons/faMap';
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkedAlt';
-import { faMapPin } from '@fortawesome/free-solid-svg-icons/faMapPin';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faNewspaper } from '@fortawesome/free-solid-svg-icons/faNewspaper';
 import { faObjectGroup } from '@fortawesome/free-solid-svg-icons/faObjectGroup';
@@ -65,7 +65,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
-import { faShareSquare } from '@fortawesome/free-solid-svg-icons/faShareSquare';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
@@ -258,7 +258,7 @@ export default function install(Vue) {
     faLock,
     faMap,
     faMapMarkedAlt,
-    faMapPin,
+    faMapMarkerAlt,
     faMinus,
     faNewspaper,
     faObjectGroup,
@@ -268,7 +268,7 @@ export default function install(Vue) {
     faQuestionCircle,
     faRoute,
     faSearch,
-    faShareSquare,
+    faShareAlt,
     faSignInAlt,
     faSignOutAlt,
     faSortAmountUp,
