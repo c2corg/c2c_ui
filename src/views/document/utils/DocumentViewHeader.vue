@@ -20,7 +20,11 @@
             :title="$gettext('Add images')"
             v-if="isEditable && documentType !== 'image'"
             @click="$refs.imagesUploader.show()">
-            <icon-image />
+            <fa-layers>
+              <fa-icon icon="image" />
+              <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
+              <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
+            </fa-layers>
           </span>
 
           <edit-link
