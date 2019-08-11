@@ -160,7 +160,7 @@
 
         if (this.documentType === 'outing') {
           this.columnDefs = [
-            getColDef(this, fields.date_start, { width: 120, cellRendererFramework: OutingDate }),
+            getColDef(this, fields.date_end, { width: 120, cellRendererFramework: OutingDate }),
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
             getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
             getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentContributor, width: 100 }),
