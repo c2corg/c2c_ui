@@ -196,9 +196,9 @@
               Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d’après le BRA constituent des orientations critiques.
             </p>
 
-            <p>
-              <input-orientation v-model="orientation" class="has-text-centered" />
-            </p>
+            <input-orientation v-model="orientation" class="has-text-centered" />
+            <p v-if="orientation.length != 0" class="yetiForm-info">Orientations: {{ orientation.join(', ') }}</p>
+            <p v-else class="yetiForm-info">Pas d’orientations sélectionnées</p>
 
             <div class="yetiForm-note">
               <p>On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.</p>
@@ -239,8 +239,6 @@
             </p>
 
             <h3 class="title is-3">Potentiel de danger</h3>
-            <p v-if="bra.high" class="yetiForm-info">BRA actuel: {{ bra.high }}</p>
-            <p v-else class="yetiForm-info">Pas de BRA sélectionné</p>
 
             <ul class="potential-danger-labels has-text-black">
               <li
@@ -255,6 +253,9 @@
                 </span>
               </li>
             </ul>
+
+            <p v-if="potentialDanger" class="yetiForm-info">Potentiel de danger: {{ potentialDanger }} (BRA: {{ bra.high }})</p>
+            <p v-else class="yetiForm-info">Pas de potentiel de danger sélectionné. Entrez d’abord le BRA</p>
 
             <div class="yetiForm-note">
               <p>Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du BRA. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.</p>
