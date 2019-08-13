@@ -1242,6 +1242,9 @@
   }
 
   .yeti-logos{
+      box-shadow: none;
+      background: none;
+      mix-blend-mode: multiply;
       img{
         max-width: 65%;
       }
