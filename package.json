@@ -51,7 +51,7 @@
     "vue-property-decorator": "8.2.1",
     "vue-recaptcha": "^1.1.1",
     "vue-router": "3.0.7",
-    "vue-slider-component": "3.0.33",
+    "vue-slider-component": "3.0.38",
     "vuejs-datepicker": "1.6.2",
     "snyk": "1.198.0"
   },
