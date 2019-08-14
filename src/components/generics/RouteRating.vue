@@ -4,6 +4,10 @@
       {{ document.global_rating }}
     </span>
 
+    <span v-if="document.via_ferrata_rating" :title="$gettext('via_ferrata_rating')">
+      {{ document.via_ferrata_rating }}
+    </span>
+
     <span>
       <span v-if="document.rock_free_rating" :title="$gettext('rock_free_rating')">
         {{ document.rock_free_rating }}<!--
