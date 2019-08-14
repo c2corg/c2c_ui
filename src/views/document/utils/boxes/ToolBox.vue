@@ -31,7 +31,7 @@
       icon="edit" />
 
     <tool-box-button
-      v-if="document.geometry && document.geometry.geom"
+      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
       :to="linkToClosestDocuments"
       :label="$gettext('See other documents nearby')"
       icon="compass" />
