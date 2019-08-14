@@ -67,7 +67,7 @@
 
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.lift_access" />
-        <form-field class="is-12" :document="document" :field="fields.durations" />
+        <form-field class="is-12" :document="document" :field="fields.durations" :label="$gettext('durations (days)')" />
       </div>
 
       <div class="columns is-multiline">
