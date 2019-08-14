@@ -278,7 +278,8 @@
         "values": "route_duration_types",
         "multiple": true,
         "i18n": false,
-        "queryMode": "valuesRangeSlider"
+        "queryMode": "valuesRangeSlider",
+        "unit": "day"
     },
     "editor":
     {
