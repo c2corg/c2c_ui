@@ -34,7 +34,10 @@
 
     </dropdown-button>
 
-    <association-query-item class="association-query-item is-hidden-mobile" :document-types="associations" />
+    <association-query-item
+      class="association-query-item is-hidden-mobile"
+      :document-types="associations"
+      @documents-load="$emit('documents-load', arguments[0])" />
     <load-user-preferences-button class="is-hidden-tablet" />
   </div>
 </template>
