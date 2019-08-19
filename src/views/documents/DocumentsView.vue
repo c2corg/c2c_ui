@@ -61,7 +61,9 @@
 
       </div>
 
-      <query-items class="filter-section" />
+      <query-items
+        class="filter-section"
+        @documents-load="onQueryDocumentsLoad" />
     </div>
 
     <div class="columns result-section" :class="'mobile-mode-' + displayMode">
@@ -97,7 +99,7 @@
       <div v-if="showMap" class="column map-container">
         <map-view
           ref="map"
-          :documents="documents ? documents.documents : []"
+          :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
           @highlightDocument="highlightedDocument = arguments[0]"
           show-filter-control
@@ -143,7 +145,9 @@
 
         isMobile: null,
 
-        highlightedDocument: null
+        highlightedDocument: null,
+
+        filteredWaypoints: []
       };
     },
 
@@ -176,6 +180,9 @@
         delete result.offset;
 
         return result;
+      },
+      documentsShownOnMap() {
+        return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
       }
     },
 
@@ -221,6 +228,13 @@
         if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
           this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
         }
+      },
+
+      onQueryDocumentsLoad(documents) {
+        this.filteredWaypoints = documents.filter(document => document.type === 'w');
+
+        // do not display waypoints associated
+        this.filteredWaypoints.map(document => delete document.associations);
       }
     }
   };

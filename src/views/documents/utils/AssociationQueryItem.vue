@@ -82,6 +82,8 @@
             this.documents.push(this.getDocument(documentType, documentId));
           }
         }
+
+        this.emitDocumentsLoad();
       },
 
       getDocument(documentType, documentId) {
@@ -96,6 +98,7 @@
           c2c[documentType].get(documentId).then(response => {
             documentsCache[key].loading = false;
             Object.assign(documentsCache[key], response.data);
+            this.emitDocumentsLoad();
           });
         }
 
@@ -123,6 +126,10 @@
         value.splice(value.indexOf(document.document_id), 1);
 
         this.setValue(documentType, value);
+      },
+
+      emitDocumentsLoad() {
+        this.$emit('documents-load', this.documents);
       }
     }
   };
