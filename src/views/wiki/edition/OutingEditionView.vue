@@ -176,6 +176,10 @@
       };
     },
 
+    watch: {
+      showBothDates: 'handleDates'
+    },
+
     methods: {
       afterLoad() {
         this.showBothDates = this.document.date_start !== this.document.date_end;

@@ -254,12 +254,18 @@ export default function install(Vue) {
       },
 
       getOutingDatesLocalized(document) {
-        if (!document.date_start) {
+        // date_end may be empty on outing creation
+        // it will be filled on save
+        // so, for the preview, we must replace an empty date_end with date start
+        const date_start = document.date_start;
+        const date_end = document.date_end || date_start;
+
+        if (!date_start) {
           return this.$gettext('Invalid date');
         }
 
-        const start = this.$moment.parseDate(document['date_start']).locale(this.$language.current);
-        const end = this.$moment.parseDate(document['date_end']).locale(this.$language.current);
+        const start = this.$moment.parseDate(date_start).locale(this.$language.current);
+        const end = this.$moment.parseDate(date_end).locale(this.$language.current);
         const sameYear = start.year() === end.year();
         const sameMonth = start.month() === end.month();
         const sameDay = start.date() === end.date();
