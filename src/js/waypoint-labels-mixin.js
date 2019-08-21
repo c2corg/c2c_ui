@@ -54,9 +54,9 @@ export default {
 
       switch (type) {
       case 'access':
-        return this.$gettext('Describe here the waypoint');
-      default:
         return this.$gettext('Describe road access');
+      default:
+        return this.$gettext('Describe here the waypoint');
       }
     },
 
