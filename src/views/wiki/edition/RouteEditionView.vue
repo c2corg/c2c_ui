@@ -145,11 +145,29 @@
   export default {
     mixins: [ documentEditionViewMixin ],
 
+    watch: {
+      'document.associations.waypoints': 'onWaypointsAssociation'
+    },
+
     methods: {
       afterLoad() {
         // on creation from a waypoint, set this waypoint as main
         if (this.mode === 'add' && this.$route.query.w) {
           this.document.main_waypoint_id = parseInt(this.$route.query.w);
+        }
+      },
+
+      onWaypointsAssociation() {
+        const waypoints = this.document.associations.waypoints;
+
+        // clean main waypoint if it is missing from associated waypoints
+        if (waypoints.findIndex(doc => doc.document_id === this.document.main_waypoint_id) === -1) {
+          this.document.main_waypoint_id = null;
+        }
+
+        // if main waypoint is null, and some waypoints are associated, take the first
+        if (this.document.main_waypoint_id === null && waypoints.length !== 0) {
+          this.document.main_waypoint_id = waypoints[0].document_id;
         }
       }
     }
