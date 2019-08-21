@@ -8,6 +8,10 @@
       {{ value }}
     </a>
 
+    <span v-else-if="field.type==='date_time'">
+      {{ $moment.toLocalizedString(value, 'LLL') }}
+    </span>
+
     <textual-array
       v-else-if="isArray"
       :array="value"

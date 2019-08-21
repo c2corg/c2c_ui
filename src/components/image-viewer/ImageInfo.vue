@@ -7,12 +7,16 @@
     <div v-if="document">
       <p>
         <fa-icon icon="calendar" />
-        <label>{{ document.date_time }}</label>
+        <label>
+          {{ $moment.toLocalizedString(document.date_time, 'LLL') }}
+        </label>
       </p>
 
       <p v-if="document.cooked.title">
         <fa-icon icon="tag" />
-        <label>{{ document.cooked.title }}</label>
+        <label>
+          {{ document.cooked.title }}
+        </label>
       </p>
 
       <markdown v-if="document.cooked.summary" class="is-italic" :content="document.cooked.summary" />
@@ -20,7 +24,9 @@
 
       <p v-if="document.image_type">
         <icon-creative-commons />
-        <label>{{ $gettext(document.image_type) }}</label>
+        <label>
+          {{ $gettext(document.image_type) }}
+        </label>
       </p>
 
       <h4 class="title is-4 has-text-light" v-translate>
