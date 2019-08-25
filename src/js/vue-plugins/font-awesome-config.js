@@ -78,6 +78,7 @@ import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faThList } from '@fortawesome/free-solid-svg-icons/faThList';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserLock } from '@fortawesome/free-solid-svg-icons/faUserLock';
@@ -283,6 +284,7 @@ export default function install(Vue) {
     faTrash,
     // faTrashAlt,
     faUnlock,
+    faUpload,
     faUser,
     faUserCheck,
     faUserLock,

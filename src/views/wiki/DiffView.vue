@@ -76,12 +76,24 @@
     </div>
 
     <div v-if="oldVersion && newVersion">
+
+      <div v-if="filenameHasChanged">
+        <div class="columns">
+          <div class="column">
+            <img :src="getImageUrl(oldVersion.document)" class="is-pulled-right">
+          </div>
+          <div class="column">
+            <img :src="getImageUrl(newVersion.document)">
+          </div>
+        </div>
+      </div>
+
       <div v-if="geometryHasChanged">
         <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
       </div>
 
       <div v-for="key of Object.keys(diffProperties)" :key="key">
-        <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
+        <h2 class="title is-2 has-text-centered">{{ $gettext(key) | uppercase-first-letter }}</h2>
         <div class="columns">
           <div class="column is-6">
             <del v-if="diffProperties[key].old === null" class="is-pulled-right is-italic">null</del>
@@ -146,6 +158,7 @@
 <script>
   import c2c from '@/js/apis/c2c';
   import constants from '@/js/constants';
+  import imageUrls from '@/js/image-urls';
 
   import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
@@ -359,6 +372,10 @@
         return constants.objectDefinitions[this.documentType].geoLocalized;
       },
 
+      filenameHasChanged() {
+        return this.oldVersion.document.filename !== this.newVersion.document.filename;
+      },
+
       geometryHasChanged() {
         // areas are flagged as not geolocalized because you cant display
         // ol map componenent on /areas
@@ -389,6 +406,8 @@
     },
 
     methods: {
+      getImageUrl: imageUrls.getMedium,
+
       loadVersions() {
         this.loadVersion(this.$route.params.versionFrom, 'oldVersion');
         this.loadVersion(this.$route.params.versionTo, 'newVersion');
@@ -418,7 +437,7 @@
         const keys = this.getKeys(
           this.oldVersion.document,
           this.newVersion.document,
-          ['version', 'locales', 'geometry', 'cooked']
+          ['version', 'locales', 'geometry', 'cooked', 'filename']
         );
 
         for (const key of keys) {

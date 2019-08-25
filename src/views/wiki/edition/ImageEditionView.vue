@@ -3,7 +3,7 @@
     :mode="mode"
     :document="document"
     :generic-errors="genericErrors"
-    :is-loading="saving"
+    :is-loading="saving || uploadingNewFile"
     @save="save">
     <form-section
       :title="$gettext('general informations')"
@@ -23,7 +23,27 @@
           <form-field no-wrapper :document="document" :field="fields.width" />
         </div>
         <div v-if="mode==='edit' && document" class="column is-6 has-text-centered">
-          <img :src="getImageUrl(document)">
+          <div class="field">
+            <div class="file is-centered">
+              <label class="file-label">
+                <input
+                  class="file-input"
+                  type="file"
+                  name="resume"
+                  @change="onFileChange"
+                  accept="image/*">
+                <span class="file-cta button" :class="{'is-loading': uploadingNewFile}">
+                  <span class="file-icon">
+                    <fa-icon icon="upload" />
+                  </span>
+                  <span class="file-label" v-translate>
+                    Upload a new version
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <img :src="newVersionSource ? newVersionSource : getImageUrl(document)">
         </div>
       </div>
 
@@ -74,14 +94,53 @@
 </template>
 
 <script>
+  import uploadFile from '@/js/upload-file';
   import imageUrls from '@/js/image-urls';
   import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
   export default {
-    mixins: [ documentEditionViewMixin ],
+    mixins: [documentEditionViewMixin],
+
+    data() {
+      return {
+        newVersionSource: null,
+        uploadingNewFile: false
+      };
+    },
 
     methods: {
-      getImageUrl: imageUrls.getMedium
+      getImageUrl: imageUrls.getMedium,
+      onFileChange(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+          return;
+        }
+
+        this.uploadingNewFile = true;
+
+        uploadFile(
+          file,
+          dataUrl => {
+            this.newVersionSource = dataUrl;
+          },
+          event => { /* onUploadProgress */ },
+          document => {
+            this.uploadingNewFile = false;
+
+            if (document.geometry) {
+              document.geometry.version = this.document.geometry.version;
+            }
+            Object.assign(this.document, document);
+          },
+          event => {
+            /* onUploadFailure */
+            this.uploadingNewFile = false;
+          }
+        );
+
+        event.target.value = '';
+      }
     }
   };
 </script>

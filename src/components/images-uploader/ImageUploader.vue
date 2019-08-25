@@ -1,35 +1,34 @@
 <template>
   <div class="card">
-    <div class="card-image img-container" :style="'background-image: url(' + image.src + ')'">
-      <delete-button
-        class="delete-button"
-        @click="$emit('deleteImage', image)" />
+    <div
+      class="card-image img-container"
+      :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
+      <delete-button class="delete-button" @click="$emit('deleteImage')" />
 
       <progress
         v-if="isSaving || isFailed"
         class="progress is-large"
         :class="{
-          'is-success' : isSuccess,
-          'is-warning' : isSaving,
-          'is-danger' : isFailed}"
+          'is-success': isSuccess,
+          'is-warning': isSaving,
+          'is-danger': isFailed
+        }"
         :value="percentCompleted"
-        max="100">
-        {{ percentCompleted }}%
-      </progress>
-
+        max="100">{{ percentCompleted }}%</progress>
     </div>
 
     <div class="card-content">
       <div v-if="!isFailed">
-
-        <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
+        <div
+          v-if="categoriesEdition"
+          class="columns is-mobile is-multiline is-gapless category-select">
           <div v-for="item of imageCategories" :key="item" class="column is-4">
             <label class="checkbox">
               <input
                 type="checkbox"
                 :checked="document.categories.includes(item)"
                 @input="toggleCategory(item)">
-              {{ $gettext(item, 'image_categories') | uppercaseFirstLetter }}
+              {{ $gettext(item, "image_categories") | uppercaseFirstLetter }}
             </label>
           </div>
         </div>
@@ -48,10 +47,13 @@
             <div
               v-for="[licence, label] in Array.from(licences)"
               class="column has-text-centered"
-              :class="{'has-background-success': document.image_type==licence, 'is-4':licences.size===3, 'is-6':licences.size===2}"
+              :class="{
+                'has-background-success': document.image_type == licence,
+                'is-4': licences.size === 3,
+                'is-6': licences.size === 2
+              }"
               :key="licence"
-              @click="document.image_type=licence">
-
+              @click="document.image_type = licence">
               <label>{{ licences.length }} {{ label | uppercaseFirstLetter }}</label>
             </div>
           </div>
@@ -60,13 +62,13 @@
 
       <div v-else class="buttons is-centered buttons-if-failed">
         <button
-          @click="upload"
+          @click="$emit('retryUpload')"
           class="button is-primary"
           v-translate>
           Retry
         </button>
         <button
-          @click="$emit('deleteImage', image)"
+          @click="$emit('deleteImage')"
           class="button is-danger"
           v-translate>
           Cancel
@@ -74,57 +76,47 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-  import loadImage from 'blueimp-load-image';
-
   // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-  import c2c from '@/js/apis/c2c';
   import constants from '@/js/constants';
-  import Worker from '@/js/Worker';
-
-  const STATUS_INITIAL = 'Initial';
-  const STATUS_SAVING = 'Saving';
-  const STATUS_SUCCESS = 'Success';
-  const STATUS_FAILED = 'Failed';
-
-  const worker = new Worker();
-
-  // Microsoft Edge does not implement toblob, and there is no polyfill in core.js
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
-  if (!HTMLCanvasElement.prototype.toBlob) {
-    Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-      value(callback, type, quality) {
-        const dataURL = this.toDataURL(type, quality).split(',')[1];
-        setTimeout(function() {
-          const binStr = atob(dataURL);
-          const len = binStr.length;
-          const arr = new Uint8Array(len);
-
-          for (let i = 0; i < len; i++) {
-            arr[i] = binStr.charCodeAt(i);
-          }
-
-          callback(new Blob([arr], { type: type || 'image/png' }));
-        });
-      }
-    });
-  }
 
   export default {
-
     props: {
-      image: {
-        type: Object,
-        required: true
-      },
-      parentDocument: {
-        type: Object,
-        required: true
-      },
       categoriesEdition: {
+        type: Boolean,
+        required: true
+      },
+      dataUrl: {
+        type: String,
+        default: null
+      },
+      status: {
+        type: String,
+        required: true
+      },
+      percentCompleted: {
+        type: Number,
+        required: true
+      },
+      document: {
+        type: Object,
+        required: true
+      },
+      isInitial: {
+        type: Boolean,
+        required: true
+      },
+      isSaving: {
+        type: Boolean,
+        required: true
+      },
+      isSuccess: {
+        type: Boolean,
+        required: true
+      },
+      isFailed: {
         type: Boolean,
         required: true
       }
@@ -132,16 +124,10 @@
 
     data() {
       const result = {
-        visibleDropdown: null,
-        status: STATUS_INITIAL,
-        percentCompleted: 0,
-        errorMessage: null,
-
         licences: new Map([
           ['collaborative', this.$gettext('collab')],
           ['personal', this.$gettext('personal')]
         ])
-
       };
 
       if (this.$user.isModerator) {
@@ -152,84 +138,12 @@
     },
 
     computed: {
-      document() {
-        return this.image.document;
-      },
       imageCategories() {
         return constants.objectDefinitions.image.fields.categories.values;
-      },
-      isInitial() {
-        return this.status === STATUS_INITIAL;
-      },
-      isSaving() {
-        return this.status === STATUS_SAVING;
-      },
-      isSuccess() {
-        return this.status === STATUS_SUCCESS;
-      },
-      isFailed() {
-        return this.status === STATUS_FAILED;
-      }
-    },
-
-    created() {
-      const image = this.image;
-      const upload = this.upload;
-
-      // test files for orientation stuff :
-      // https://github.com/recurser/exif-orientation-examples
-      // and a very good article :
-      // https://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/
-
-      // pre processing is mandatory. Reasons :
-      // * file is rotated
-      if (image.orientation !== 0 && image.file.type === 'image/jpeg') {
-        loadImage(
-          image.file,
-          (canvas) => {
-            image.src = canvas.toDataURL(image.file.type);
-            canvas.toBlob(upload, image.file.type);
-          },
-          { canvas: true, orientation: image.orientation } // this will fix orientation from exif
-        );
-      } else {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          image.src = e.target.result;
-        };
-        reader.readAsDataURL(image.file);
-
-        upload(image.file);
       }
     },
 
     methods: {
-
-      onUploadProgress(event) {
-        if (event.total !== 0) {
-          this.percentCompleted = Math.floor((event.loaded * 100) / event.total);
-        }
-      },
-
-      onSuccess(event) {
-        this.status = STATUS_SUCCESS;
-        this.document.filename = event.data.filename;
-        this.$emit('success');
-      },
-
-      onFailure(event) {
-        this.percentCompleted = 100;
-        this.status = STATUS_FAILED;
-        this.errorMessage = event.message;
-        this.$emit('fail', event);
-      },
-
-      upload(data) {
-        this.percentCompleted = 0;
-        this.status = STATUS_SAVING;
-        worker.push(c2c.uploadImage.bind(c2c), data, this.onUploadProgress, this.onSuccess, this.onFailure);
-      },
-
       toggleCategory(category) {
         const newValue = this.document.categories.slice(0);
 
@@ -246,10 +160,9 @@
 </script>
 
 <style scoped lang="scss">
+  @import "~bulma/sass/utilities/initial-variables.sass";
 
-@import "~bulma/sass/utilities/initial-variables.sass";
-
-.img-container {
+  .img-container {
     width: 100%;
     height: 200px;
     transition: 0.2s;
@@ -260,85 +173,84 @@
     position: relative;
 
     &:hover {
-        // background-color: black;
-        transition: 0.2s;
+      // background-color: black;
+      transition: 0.2s;
 
-        .exif {
+      .exif {
         background-color: rgba(83, 83, 83, 0.58);
-        }
+      }
 
-        .remove-image-btn,
-        .exif p {
-            opacity: 1;
-            transition: 0.2s;
-        }
+      .remove-image-btn,
+      .exif p {
+        opacity: 1;
+        transition: 0.2s;
+      }
     }
 
-    progress{
-        position:absolute;
-        bottom:0;
+    progress {
+      position: absolute;
+      bottom: 0;
     }
-}
+  }
 
-.card-content{
-    height:115px;
+  .card-content {
+    height: 115px;
     overflow-y: hidden;
-    padding:0;
+    padding: 0;
 
-    .category-select{
-        padding:0.5rem;
+    .category-select {
+      padding: 0.5rem;
 
-        label{
-            display: inherit;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            user-select: none;
-        }
+      label {
+        display: inherit;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        user-select: none;
+      }
     }
 
-    .title-input{
-        margin-bottom: 0;
+    .title-input {
+      margin-bottom: 0;
 
-        input{
-            padding:19px 0.5rem;
-            border:0;
-            outline:0;
-            display:block;
-            width:100%;
-            font-size:1rem;
-        }
+      input {
+        padding: 19px 0.5rem;
+        border: 0;
+        outline: 0;
+        display: block;
+        width: 100%;
+        font-size: 1rem;
+      }
     }
 
-    .licence-select{
-        border-top: 1px solid #DDD;
-        max-width: 100%;
+    .licence-select {
+      border-top: 1px solid #ddd;
+      max-width: 100%;
 
-        .column:not(:last-child){
-            border-right: 1px solid #DDD;
-        }
+      .column:not(:last-child) {
+        border-right: 1px solid #ddd;
+      }
 
-        label{
-            padding:19px 0.5rem;
-            display: inherit;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            cursor:pointer;
-            user-select: none;
-        }
+      label {
+        padding: 19px 0.5rem;
+        display: inherit;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
+      }
     }
-}
+  }
 
-.delete-button{
-    position:absolute;
-    top:-1rem;
-    right:-1rem;
-    font-size:3rem;
-}
+  .delete-button {
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    font-size: 3rem;
+  }
 
-.buttons-if-failed{
+  .buttons-if-failed {
     margin-top: 3em;
-}
-
- </style>
+  }
+</style>
