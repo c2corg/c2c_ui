@@ -123,7 +123,6 @@
     "amateur": {
       "user_categories": "amateur"
     },
-    "Anonimity and confidentiality": "Anonimity and confidentiality",
     "anonymous": "anonymous",
     "Application": "Application",
     "apr": {
@@ -159,7 +158,6 @@
     "at least one user required": {
       "API message": "Select at least one user"
     },
-    "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.": "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.",
     "aug": {
       "months": "aug"
@@ -849,7 +847,6 @@
     "map": "map",
     "Map only": "Map only",
     "maps": "maps",
-    "Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.": "Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.",
     "maps_info": "Maps info",
     "maps_references": "Maps references",
     "mar": {
@@ -1496,7 +1493,7 @@
     "train": {
       "public_transportation_types": "train"
     },
-    "training": "Physical training related to the goal",
+    "training": "Physical training and technical level",
     "Translate into an other lang": "Translate into an other lang",
     "Transport & road or PT access": "Road or public transport access",
     "traverse": {
