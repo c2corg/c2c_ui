@@ -337,6 +337,9 @@
       "rock_types": "conglomérat"
     },
     "contact": "Contact",
+    "Contain invalid character(s)": {
+      "API message": "Contient un ou plusieurs caractères invalides"
+    },
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
     "Contributions": "Contributions",
@@ -444,6 +447,7 @@
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
     "durations": "Durée",
+    "durations (days)": "durée (jours)",
     "easy": {
       "glacier_ratings": "bouché - passage sans problème"
     },
@@ -1498,7 +1502,7 @@
     "train": {
       "public_transportation_types": "train"
     },
-    "training": "Préparation physique et et niveau technique",
+    "training": "Préparation physique et niveau technique",
     "Translate into an other lang": "Traduire dans une autre langue",
     "Transport & road or PT access": "Accès routier/TC",
     "traverse": {
@@ -1511,6 +1515,7 @@
     "Unordered list": "Liste non triée",
     "Unprotect document": "Déprotéger ce document",
     "Upload a GPS track": "Ajouter une trace GPS",
+    "Upload a new version": "Télécharger une nouvelle version",
     "URL": "URL",
     "url": "URL",
     "User avatar": "Avatar",

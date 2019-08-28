@@ -113,7 +113,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:72
+#: src/views/SideMenu.vue:66
 msgid "Accident database"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgctxt "activity_rates"
 msgid "activity_rate_50"
 msgstr ""
 
-#: src/components/association-editor/AssociationItems.vue:121
+#: src/components/association-editor/AssociationItems.vue:128
 msgid "Add"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgstr ""
 msgid "age"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:16
+#: src/components/generics/RouteRating.vue:20
 #: src/translations/fixed_strings_common_js.vue:12
 msgid "aid_rating"
 msgstr ""
@@ -335,7 +335,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:6
-#: src/views/SideMenu.vue:73
+#: src/views/SideMenu.vue:67
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:42
 msgid "articles"
 msgstr ""
@@ -344,7 +344,7 @@ msgstr ""
 msgid "Articles, waypoints or routes to be linked."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:66
+#: src/views/wiki/edition/ImageEditionView.vue:86
 msgid "Articles, waypoints, routes or books to be linked."
 msgstr ""
 
@@ -375,7 +375,7 @@ msgid "association"
 msgstr ""
 
 #: src/views/wiki/edition/BookEditionView.vue:37
-#: src/views/wiki/edition/ImageEditionView.vue:65
+#: src/views/wiki/edition/ImageEditionView.vue:85
 #: src/views/wiki/edition/WaypointEditionView.vue:156
 msgid "associations"
 msgstr ""
@@ -427,7 +427,7 @@ msgctxt "event_types"
 msgid "avalanche"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:278
+#: src/components/datatable/DocumentsTable.vue:277
 msgid "avalanche"
 msgstr ""
 
@@ -625,7 +625,7 @@ msgctxt "rock_types"
 msgid "calcaire"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:44
+#: src/views/wiki/edition/ImageEditionView.vue:64
 msgid "camera settings"
 msgstr ""
 
@@ -643,7 +643,7 @@ msgid "Camptocamp.org aims to facilitate information sharing between mountain ad
 msgstr ""
 
 #: src/components/generics/modals/ModalConfirmation.vue:32
-#: src/components/images-uploader/ImageUploader.vue:71
+#: src/components/images-uploader/ImageUploader.vue:73
 #: src/components/markdown-editor/LinkHelper.vue:26
 #: src/views/document/utils/windows/MergeDocumentWindow.vue:67
 #: src/views/user/LoginView.vue:173
@@ -664,7 +664,7 @@ msgstr ""
 msgid "capacity_staffed"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:44
+#: src/views/documents/DocumentsView.vue:45
 msgid "Cards mode"
 msgstr ""
 
@@ -752,7 +752,7 @@ msgstr ""
 
 #: src/components/association-editor/AssociationsWindow.vue:25
 #: src/components/helper/HelperWindow.vue:15
-#: src/components/images-uploader/ImagesUploader.vue:57
+#: src/components/images-uploader/ImagesUploader.vue:59
 msgid "Close"
 msgstr ""
 
@@ -795,7 +795,7 @@ msgctxt "article_types"
 msgid "collab"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:141
+#: src/components/images-uploader/ImageUploader.vue:128
 msgid "collab"
 msgstr ""
 
@@ -870,6 +870,11 @@ msgstr ""
 msgid "contact"
 msgstr ""
 
+#: src/views/user/utils/FormField.vue:19
+msgctxt "API message"
+msgid "Contain invalid character(s)"
+msgstr ""
+
 #: src/views/document/utils/boxes/CommentsBox.vue:71
 msgid "Continue the discussion"
 msgstr ""
@@ -883,7 +888,7 @@ msgid "Contributions"
 msgstr ""
 
 #: src/views/document/ArticleView.vue:10
-#: src/views/document/ImageView.vue:17
+#: src/views/document/ImageView.vue:13
 #: src/views/document/XreportView.vue:9
 #: src/views/wiki/HistoryView.vue:45
 #: src/views/wiki/WhatsNewView.vue:11
@@ -895,7 +900,7 @@ msgctxt "image_types"
 msgid "copyright"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:148
+#: src/components/images-uploader/ImageUploader.vue:134
 msgid "copyright"
 msgstr ""
 
@@ -1036,7 +1041,7 @@ msgstr ""
 msgid "Describe here the gear needed for this route"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:57
+#: src/js/waypoint-labels-mixin.js:59
 msgid "Describe here the waypoint"
 msgstr ""
 
@@ -1065,7 +1070,7 @@ msgstr ""
 msgid "Describe pt access"
 msgstr ""
 
-#: src/js/waypoint-labels-mixin.js:59
+#: src/js/waypoint-labels-mixin.js:57
 msgid "Describe road access"
 msgstr ""
 
@@ -1108,7 +1113,7 @@ msgstr ""
 msgid "Detailed figures, like ratings, height differences, frequentation..."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:56
+#: src/views/wiki/edition/ImageEditionView.vue:76
 msgid "Detailed information"
 msgstr ""
 
@@ -1167,7 +1172,7 @@ msgctxt "quality_types"
 msgid "draft"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:32
+#: src/components/images-uploader/ImagesUploader.vue:40
 msgid "Drop images here or click to upload"
 msgstr ""
 
@@ -1181,6 +1186,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:55
 msgid "durations"
+msgstr ""
+
+#: src/views/wiki/edition/RouteEditionView.vue:70
+msgid "durations (days)"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:361
@@ -1205,7 +1214,7 @@ msgstr ""
 
 #: src/components/generics/links/EditLink.vue:7
 #: src/components/helper/HelperWindow.vue:24
-#: src/views/document/utils/DocumentViewHeader.vue:30
+#: src/views/document/utils/DocumentViewHeader.vue:34
 msgid "Edit"
 msgstr ""
 
@@ -1217,11 +1226,11 @@ msgstr ""
 msgid "Edit associations"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:45
+#: src/components/images-uploader/ImagesUploader.vue:51
 msgid "Edit categories"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:42
+#: src/components/images-uploader/ImagesUploader.vue:50
 msgid "Edit titles"
 msgstr ""
 
@@ -1233,8 +1242,8 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:170
-#: src/components/datatable/DocumentsTable.vue:217
+#: src/components/datatable/DocumentsTable.vue:169
+#: src/components/datatable/DocumentsTable.vue:216
 #: src/translations/fixed_strings_common_js.vue:57
 #: src/views/document/OutingView.vue:66
 #: src/views/document/RouteView.vue:51
@@ -1292,7 +1301,7 @@ msgctxt "langs"
 msgid "en"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:20
+#: src/components/generics/RouteRating.vue:24
 #: src/translations/fixed_strings_common_js.vue:63
 msgid "engagement_rating"
 msgstr ""
@@ -1307,7 +1316,7 @@ msgctxt "image_categories"
 msgid "equipment"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:28
+#: src/components/generics/RouteRating.vue:32
 #: src/translations/fixed_strings_common_js.vue:64
 msgid "equipment_rating"
 msgstr ""
@@ -1386,12 +1395,12 @@ msgstr ""
 msgid "exposition_rating"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:31
+#: src/components/generics/RouteRating.vue:35
 #: src/translations/fixed_strings_common_js.vue:68
 msgid "exposition_rock_rating"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:32
+#: src/components/image-viewer/ImageInfo.vue:38
 #: src/translations/fixed_strings_common_js.vue:69
 msgid "exposure_time"
 msgstr ""
@@ -1469,12 +1478,12 @@ msgctxt "image_categories"
 msgid "flora"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:33
+#: src/components/image-viewer/ImageInfo.vue:39
 #: src/translations/fixed_strings_common_js.vue:73
 msgid "fnumber"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:34
+#: src/components/image-viewer/ImageInfo.vue:40
 #: src/translations/fixed_strings_common_js.vue:74
 msgid "focal_length"
 msgstr ""
@@ -1488,7 +1497,7 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:71
+#: src/views/SideMenu.vue:65
 #: src/views/portals/DashboardView.vue:58
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -1554,7 +1563,7 @@ msgstr ""
 msgid "Geolocation"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:33
+#: src/views/wiki/edition/ImageEditionView.vue:53
 msgid "geolocation"
 msgstr ""
 
@@ -1864,12 +1873,12 @@ msgstr ""
 msgid "hiking gear"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:68
+#: src/components/generics/RouteRating.vue:72
 #: src/translations/fixed_strings_common_js.vue:93
 msgid "hiking_mtb_exposition"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:59
+#: src/components/generics/RouteRating.vue:63
 #: src/translations/fixed_strings_common_js.vue:94
 msgid "hiking_rating"
 msgstr ""
@@ -1937,7 +1946,7 @@ msgctxt "activities"
 msgid "ice_climbing"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:34
+#: src/components/generics/RouteRating.vue:38
 #: src/translations/fixed_strings_common_js.vue:97
 msgid "ice_rating"
 msgstr ""
@@ -2053,7 +2062,7 @@ msgctxt "author_statuses"
 msgid "internal_witness"
 msgstr ""
 
-#: src/js/vue-plugins/document-utils.js:258
+#: src/js/vue-plugins/document-utils.js:264
 msgid "Invalid date"
 msgstr ""
 
@@ -2066,7 +2075,7 @@ msgstr ""
 msgid "isbn"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:35
+#: src/components/image-viewer/ImageInfo.vue:41
 #: src/translations/fixed_strings_common_js.vue:103
 msgid "iso_speed"
 msgstr ""
@@ -2104,12 +2113,12 @@ msgstr ""
 msgid "Know more about SERAC"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:50
+#: src/components/generics/RouteRating.vue:54
 #: src/translations/fixed_strings_common_js.vue:104
 msgid "labande_global_rating"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:55
+#: src/components/generics/RouteRating.vue:59
 #: src/translations/fixed_strings_common_js.vue:105
 msgid "labande_ski_rating"
 msgstr ""
@@ -2218,7 +2227,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: src/views/documents/DocumentsView.vue:38
+#: src/views/documents/DocumentsView.vue:39
 msgid "List mode"
 msgstr ""
 
@@ -2405,7 +2414,7 @@ msgctxt "API message"
 msgid "Missing captcha"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:37
+#: src/components/generics/RouteRating.vue:41
 #: src/translations/fixed_strings_common_js.vue:115
 msgid "mixed_rating"
 msgstr ""
@@ -2471,7 +2480,7 @@ msgctxt "user_categories"
 msgid "mountainbike_instructor"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:65
+#: src/components/generics/RouteRating.vue:69
 #: src/translations/fixed_strings_common_js.vue:118
 msgid "mtb_down_rating"
 msgstr ""
@@ -2488,7 +2497,7 @@ msgstr ""
 msgid "mtb_length_trail"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:62
+#: src/components/generics/RouteRating.vue:66
 #: src/translations/fixed_strings_common_js.vue:122
 msgid "mtb_up_rating"
 msgstr ""
@@ -2650,7 +2659,7 @@ msgctxt "previous_injuries"
 msgid "no"
 msgstr ""
 
-#: src/components/generics/DocumentField.vue:21
+#: src/components/generics/DocumentField.vue:25
 #: src/components/generics/inputs/InputYesNo.vue:20
 msgid "no"
 msgstr ""
@@ -2763,7 +2772,7 @@ msgstr ""
 msgid "Open fields to deeply explain the event circumstances."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:57
+#: src/views/wiki/edition/ImageEditionView.vue:77
 msgid "Open fields to detail the picture's context"
 msgstr ""
 
@@ -2826,7 +2835,7 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:11
-#: src/views/SideMenu.vue:70
+#: src/views/SideMenu.vue:64
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:70
 #: src/views/document/utils/boxes/ToolBox.vue:22
 #: src/views/portals/DashboardView.vue:36
@@ -2875,7 +2884,7 @@ msgctxt "waypoint_types"
 msgid "paragliding_takeoff"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:45
+#: src/views/wiki/edition/ImageEditionView.vue:65
 msgid "Parameters of the Digital Camera"
 msgstr ""
 
@@ -2958,7 +2967,7 @@ msgctxt "image_types"
 msgid "personal"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:142
+#: src/components/images-uploader/ImageUploader.vue:129
 msgid "personal"
 msgstr ""
 
@@ -3080,7 +3089,7 @@ msgctxt "weather_station_types"
 msgid "precipitation_heater"
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:34
+#: src/views/wiki/edition/ImageEditionView.vue:54
 msgid "Precise localisation of the shooting"
 msgstr ""
 
@@ -3202,7 +3211,7 @@ msgstr ""
 msgid "publication_date"
 msgstr ""
 
-#: src/components/association-editor/AssociationItems.vue:120
+#: src/components/association-editor/AssociationItems.vue:127
 msgid "Put it back"
 msgstr ""
 
@@ -3241,10 +3250,10 @@ msgctxt "area_types"
 msgid "range"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:179
-#: src/components/datatable/DocumentsTable.vue:182
-#: src/components/datatable/DocumentsTable.vue:227
-#: src/components/datatable/DocumentsTable.vue:230
+#: src/components/datatable/DocumentsTable.vue:178
+#: src/components/datatable/DocumentsTable.vue:181
+#: src/components/datatable/DocumentsTable.vue:226
+#: src/components/datatable/DocumentsTable.vue:229
 #: src/views/document/OutingView.vue:48
 #: src/views/document/RouteView.vue:31
 #: src/views/documents/utils/QueryItems.vue:14
@@ -3278,7 +3287,7 @@ msgstr ""
 msgid "remarks"
 msgstr ""
 
-#: src/components/association-editor/AssociationItems.vue:119
+#: src/components/association-editor/AssociationItems.vue:126
 msgid "Remove"
 msgstr ""
 
@@ -3307,7 +3316,7 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:36
+#: src/components/image-viewer/ImageInfo.vue:42
 msgid "resolution"
 msgstr ""
 
@@ -3329,7 +3338,7 @@ msgstr ""
 msgid "Results only"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:65
+#: src/components/images-uploader/ImageUploader.vue:67
 msgid "Retry"
 msgstr ""
 
@@ -3352,7 +3361,7 @@ msgstr ""
 msgid "risk"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:24
+#: src/components/generics/RouteRating.vue:28
 #: src/translations/fixed_strings_common_js.vue:153
 msgid "risk_rating"
 msgstr ""
@@ -3370,12 +3379,12 @@ msgctxt "activities"
 msgid "rock_climbing"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:8
+#: src/components/generics/RouteRating.vue:12
 #: src/translations/fixed_strings_common_js.vue:154
 msgid "rock_free_rating"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:11
+#: src/components/generics/RouteRating.vue:15
 #: src/translations/fixed_strings_common_js.vue:155
 msgid "rock_required_rating"
 msgstr ""
@@ -3443,7 +3452,7 @@ msgstr ""
 msgid "safety"
 msgstr ""
 
-#: src/components/images-uploader/ImagesUploader.vue:54
+#: src/components/images-uploader/ImagesUploader.vue:58
 #: src/views/user/AccountView.vue:66
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:9
 msgid "Save"
@@ -3555,7 +3564,7 @@ msgctxt "public_transportation_types"
 msgid "service_on_demand"
 msgstr ""
 
-#: src/components/image-viewer/ImageInfo.vue:26
+#: src/components/image-viewer/ImageInfo.vue:32
 msgid "Settings"
 msgstr ""
 
@@ -3563,7 +3572,7 @@ msgstr ""
 msgid "Several days?"
 msgstr ""
 
-#: src/components/datatable/DocumentsTable.vue:269
+#: src/components/datatable/DocumentsTable.vue:268
 #: src/translations/fixed_strings_common_js.vue:166
 msgid "severity"
 msgstr ""
@@ -3619,7 +3628,7 @@ msgctxt "article_categories"
 msgid "site_info"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:47
+#: src/components/generics/RouteRating.vue:51
 #: src/translations/fixed_strings_common_js.vue:167
 msgid "ski_exposition"
 msgstr ""
@@ -3634,7 +3643,7 @@ msgctxt "user_categories"
 msgid "ski_patroller"
 msgstr ""
 
-#: src/components/generics/RouteRating.vue:40
+#: src/components/generics/RouteRating.vue:44
 #: src/translations/fixed_strings_common_js.vue:168
 msgid "ski_rating"
 msgstr ""
@@ -3977,7 +3986,7 @@ msgstr ""
 msgid "timing"
 msgstr ""
 
-#: src/components/images-uploader/ImageUploader.vue:42
+#: src/components/images-uploader/ImageUploader.vue:41
 #: src/translations/fixed_strings_common_js.vue:184
 #: src/views/wiki/WhatsNewView.vue:15
 msgid "title"
@@ -3995,7 +4004,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: src/components/association-editor/AssociationItems.vue:51
+#: src/components/association-editor/AssociationItems.vue:54
 msgid "Too many results: please refine your search."
 msgstr ""
 
@@ -4009,7 +4018,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:69
+#: src/views/SideMenu.vue:63
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5
@@ -4094,6 +4103,10 @@ msgstr ""
 msgid "Upload a GPS track"
 msgstr ""
 
+#: src/views/wiki/edition/ImageEditionView.vue:39
+msgid "Upload a new version"
+msgstr ""
+
 #: src/components/markdown-editor/LinkHelper.vue:16
 msgid "URL"
 msgstr ""
@@ -4144,6 +4157,7 @@ msgctxt "activities"
 msgid "via_ferrata"
 msgstr ""
 
+#: src/components/generics/RouteRating.vue:7
 #: src/translations/fixed_strings_common_js.vue:188
 msgid "via_ferrata_rating"
 msgstr ""
@@ -4292,7 +4306,7 @@ msgctxt "parking_fee_types"
 msgid "yes"
 msgstr ""
 
-#: src/components/generics/DocumentField.vue:18
+#: src/components/generics/DocumentField.vue:22
 #: src/components/generics/inputs/InputYesNo.vue:12
 msgid "yes"
 msgstr ""
