@@ -323,17 +323,12 @@
           <div class="columns is-mobile is-vcentered">
             <div class="column has-text-centered">
               <a href="http://www.ensg.eu">
-                <img src="@/assets/img/yeti/logo-ensg.png" alt="Logo ENSG">
-              </a>
-            </div>
-            <div class="column has-text-centered">
-              <a href="http://www.geoportail.gouv.fr">
-                <img src="@/assets/img/yeti/logo-geoportail.png" alt="Logo Geoportail IGN">
+                <img src="@/assets/img/yeti/logo-ensg.png" alt="Logo ENSG" width="120">
               </a>
             </div>
             <div class="column has-text-centered">
               <a href="https://www.petzl.com/fondation/fondation-petzl?language=fr">
-                <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Logo Fondation Petzl">
+                <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Logo Fondation Petzl" width="90">
               </a>
             </div>
           </div>
