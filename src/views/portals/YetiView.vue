@@ -388,6 +388,8 @@
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
   const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 
+  const YETI_ATTRIBUTION = 'Données RGE ALTI®';
+
   const VALID_FORM_DATA = {
     minZoom: 13,
     braMaxMrd: 3
@@ -701,7 +703,8 @@
             imageLoadFunction(image, src) {
               image.getImage().src = 'data:image/png;base64,' + imageBase64;
             },
-            imageExtent
+            imageExtent,
+            attributions: YETI_ATTRIBUTION
           }),
           opacity: this.opacityYetiLayer
         });
