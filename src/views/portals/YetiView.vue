@@ -403,7 +403,7 @@
     bra: [
       { min: 1, max: 2, val: 2 },
       { min: 3, max: 6, val: 4 },
-      { min: 7, max: 12, val: 8 },
+      { min: 6, max: 12, val: 8 },
       { min: 13, max: 16, val: 16 }
     ]
   };
