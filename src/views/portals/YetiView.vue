@@ -1284,14 +1284,16 @@
   }
 </style>
 
-<style>
-  /* Not scoped styles, to alter component’s CSS */
-  .input-orientation {
-    width: 120px;
-    height: 120px;
-  }
-  .control--braDifferent .is-checkradio[type=checkbox] + label {
-    margin: 0;
+<style lang="scss">
+  /* Not scoped styles */
+  .yeti-app {
+    .input-orientation {
+      width: 120px;
+      height: 120px;
+    }
+    .control--braDifferent .is-checkradio[type=checkbox] + label {
+      margin: 0;
+    }
   }
   .yeti-text {
     max-width: 1039px;
