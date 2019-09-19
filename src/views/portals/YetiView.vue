@@ -1,4 +1,5 @@
 <template>
+<!-- eslint-disable -->
   <div class="section">
     <html-header title="Yeti" />
     <div class="box">
@@ -94,7 +95,7 @@
 
                 <div>
                   <input-checkbox v-model="bra.isDifferent" class="control--braDifferent">
-                    BRA haut/bas différents?
+                    BRA haut/bas différents ?
                   </input-checkbox>
                 </div>
               </div>
@@ -278,7 +279,7 @@
 
               <p>
                 <input-checkbox v-model="wetSnow">
-                  Neige mouillée: pas de prise en compte de l’orientation
+                  Neige mouillée : pas de prise en compte de l’orientation
                 </input-checkbox>
               </p>
 
@@ -867,7 +868,7 @@
         }
       }
 
-      .legend-content{
+      .legend-content {
         margin-top: 0.5rem;
         margin-left: 1.25rem;
         border-radius: 2px;
@@ -921,8 +922,7 @@
     }
   }
   @media screen and (max-width: $tablet) {
-
-    .map-container{
+    .map-container {
       height: $yeti-height;
       padding-left:0;
       padding-top:0;
@@ -941,17 +941,16 @@
       }
     }
 
-    .mobile-result-map{
+    .mobile-result-map {
       margin-top:0;
       height:$yeti-height;
 
-      .documents-container{
+      .documents-container {
         display:None;
       }
     }
 
-    .mobile-result-card{
-
+    .mobile-result-card {
       .map-container{
         visibility: hidden; // map does not like to be in a display none...
       }
@@ -959,21 +958,21 @@
   }
 
   @media screen and (min-width: $tablet){
-    .yeti-content{
+    .yeti-content {
       height:$yeti-height;
 
-      .form-container{
+      .form-container {
         height:100%;
         overflow: auto;
       }
 
-      .map-container{
+      .map-container {
         min-height: 100%;
       }
     }
   }
 
-  p:not(:last-child), ul:not(:last-child), table:not(:last-child){
+  p:not(:last-child), ul:not(:last-child), table:not(:last-child) {
     margin-bottom: 1rem;
   }
 
@@ -982,7 +981,7 @@
     text-decoration: underline;
   }
 
-  h4{
+  h4 {
     margin-top: 1rem;
     margin-bottom: 0.25rem!important;
   }
@@ -1010,7 +1009,7 @@
     background: $grey-lighter;
   }
 
-  .inputs-bra{
+  .inputs-bra {
     margin-left:2rem;
     position: relative;
 
@@ -1020,7 +1019,7 @@
       top: 62px;
     }
 
-    .input-bra-threshold{
+    .input-bra-threshold {
       position:absolute;
       left: 115px;
       top: 60px;
@@ -1034,7 +1033,7 @@
     }
   }
 
-  .inputs-bra-different{
+  .inputs-bra-different {
     .input-bra-high {
       top: 45px;
     }
@@ -1052,7 +1051,7 @@
       border-right: 0;
     }
 
-    td{
+    td {
       vertical-align: middle;
       height: 45px;
     }
@@ -1265,11 +1264,12 @@
     opacity: 0.75;
   }
 
-  .yeti-logos{
+  .yeti-logos {
       box-shadow: none;
       background: none;
       mix-blend-mode: multiply;
-      img{
+
+      img {
         max-width: 65%;
       }
   }
