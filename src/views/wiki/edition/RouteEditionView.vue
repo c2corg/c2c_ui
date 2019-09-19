@@ -165,8 +165,8 @@
           this.document.main_waypoint_id = null;
         }
 
-        // if main waypoint is null, and some waypoints are associated, take the first
-        if (this.document.main_waypoint_id === null && waypoints.length !== 0) {
+        // on creation mode, if main waypoint is null, and some waypoints are associated, take the first
+        if (this.mode === 'add' && this.document.main_waypoint_id === null && waypoints.length !== 0) {
           this.document.main_waypoint_id = waypoints[0].document_id;
         }
       }
