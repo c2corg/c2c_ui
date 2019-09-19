@@ -18,7 +18,7 @@
       <li>P. Descamps et O. Moret, Avalanche, comment réduire le risque, éd. Paulsen, 2016</li>
       <li>W. Munter, 3X3 avalanches, la gestion du risque dans les sports d’hiver, éd. du Club alpin suisse, 2006</li>
       <li>S.Harvey, H.Rhyner et J.Schweizer, Avalanches, mieux les comprendre, éd. du Club alpin suisse, SLF, 2013</li>
-      <li>White risk: <a href="///D://WWW/ENSG/yeti/faq/www.whiterisk.ch/fr">www.whiterisk.ch</a></li>
+      <li>White risk: <a href="http://www.whiterisk.ch/fr">www.whiterisk.ch</a></li>
     </ul>
   </div>
 
@@ -83,7 +83,7 @@
       <li>les limites de l’algorithme utilisé.</li>
     </ul>
     <p>Les limites de la carte des pentes : la réalisation de la carte des pentes s’appuie sur les données de la base RGEAlti de l’IGN. Cette base de données est issue d’un assemblage de différents modèles numérique de terrain (MNT) dont la résolution est comprise entre 1 et 25 mètres. Toutes les pentes à plus de 30 degrés dont la taille est supérieure à 25 mètres sur le terrain figurent sur la carte. Cette précision est la plupart du temps suffisante pour évaluer l’inclinaison des passages clés d’un itinéraire à skis ou à raquettes. Toutefois, dans certaines circonstances, des pentes réduites de moins de 25 mètres peuvent déjà être dangereuses. Il convient de rester vigilant sur le terrain en conservant un esprit critique par rapport aux informations données par Yéti. En outre, quelques aberrations visuelles peuvent survenir au niveau des frontières. Elles sont liées à la qualité du découpage du MNT dans les zones frontalières.</p>
-    <p class="image"><img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.jpg"></p>
+    <p class="image"><img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.png"></p>
     <p>Pour en savoir plus : <a href="https://www.petzl.com/fondation/projets/carte-pente-risque-avalanches?language=fr#.Wi5q1lSdVE4">Les pentes à plus de 30 degrés sur le Géoportail de l’IGN, Utilisation, intérêts et limites pour les amateurs de sport de neige</a></p>
     <p>Les limites du bulletin d’avalanche : le bulletin d’avalanche dresse un état des lieux du danger d’avalanche à l’échelle d’un massif en dehors des pistes balisées. Les conditions d’une vallée (et encore moins celle d’une pente) ne sont pas évaluées par le bulletin d’avalanche.
     L’indice de danger de 1 à 5 est le résumé d’une situation plus complexe décrite dans le texte qui accompagne le bulletin. La lecture de ce texte est l’un des piliers de l’analyse de risque avec la grille 3X3, laquelle doit systématiquement précéder l’usage de Yéti. La saisie de l’indice de danger dans le formulaire de Yéti suppose que le pratiquant a bien pris connaissance de l’ensemble du bulletin : texte, rose des vents, quantité récente de neige fraîche…
@@ -93,7 +93,7 @@
     Les auteurs et institutions partenaires du projet ne sauraient être tenus responsables des accidents survenant lors de la pratique après utilisation de l’application Yéti.</p>
     <p>Les limites de l’algorithme utilisé par Yéti : en l’état actuel du développement, seules les pentes considérées comme «à risque» par les méthodes de réduction (MRD, MRE ou MRP) sont affichées avec un estompage coloré. Or, à partir du danger 3, il convient de prendre en compte les pentes raides qui dominent l’itinéraire envisagé car elles sont susceptibles d’être déclenchées à distance.
     À partir du danger 3, l’absence d’estompage ne signifie pas que l’itinéraire est sûr. Vérifier les pentes dominant l’itinéraire et s’assurer qu’elles ne menacent pas directement la trace.</p>
-    <p class="image"><img alt="Prise en compte des pentes amont" src="@/assets/img/yeti/pentes_amont.jpg"></p>
+    <p class="image"><img alt="Prise en compte des pentes amont" src="@/assets/img/yeti/pentes_amont.png"></p>
     <p>Dans l’exemple ci-dessous, par risque 3, si on remonte le vallon en direction du lac, on est en permanence dominé par des pentes considérées comme à risque (bleue foncée rive droite, bleue clair rive gauche). Un départ d’avalanche à partir du danger 3 peut s’écouler en terrain moins raide sur lequel il n’y a pas d’estompage de couleur.</p>
   </div>
 
@@ -119,7 +119,7 @@
       <li>risque résiduel compris entre 1.3 et 1.5 : bleu foncé</li>
       <li>risque résiduel > 1.5 : violet</li>
     </ul>
-    <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp.png"></p>
+    <p class="image"><img alt="MRP" src="@/assets/img/yeti/mre.png"></p>
   </div>
 
   <div class="question">
@@ -129,7 +129,7 @@
     Soumettre la requête. L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
     <p>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).
     Couleur bleu clair : pentes à risque</p>
-    <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.jpg"></p>
+    <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.png"></p>
   </div>
 
   <div class="question">
@@ -143,7 +143,7 @@
       <li>Couleur bleu clair : pentes à risque</li>
       <li>Couleur bleu foncé : risque accru du fait de l’orientation</li>
     </ul>
-    <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre_carte.jpg"></p>
+    <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre_carte.png"></p>
   </div>
 
   <div class="question">
@@ -160,7 +160,7 @@
       <li>Couleur bleue foncée : risque résiduel entre 1.3 et 1.5, la marge de sécurité est réduite. Une grande expérience est requise pour faire une trace sûre. Les mesures de précaution doivent être appliquées scrupuleusement. Le renoncement doit être sérieusement envisagé.</li>
       <li>Couleur violette : risque résiduel supérieur à 1.5, il n’est plus possible de gérer le risque même avec des mesures de précaution appropriées ou une trace optimisée. Il faut compter sur sa bonne étoile… ou plus sérieusement changer d’itinéraire.</li>
     </ul>
-    <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp_carte.jpg"></p>
+    <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp_carte.png"></p>
   </div>
 
   <div class="question">
