@@ -319,6 +319,15 @@
               </p>
 
             </div>
+
+            <div class="columns yetiForm-validation" v-show="method">
+              <div class="column has-text-right">
+                <validation-button
+                  :current-error="currentError"
+                  :loading="promise"
+                  @click="compute" />
+              </div>
+            </div>
           </div>
 
           <div class="box yeti-logos">
