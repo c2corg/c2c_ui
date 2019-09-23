@@ -1,14 +1,13 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
+title: 'Bug: '
+labels: 'bug'
 assignees: ''
-
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. Français autorisé, deutsch erlaubt, autorizzato italiano :gift::heart:
 
 **To Reproduce**
 Steps to reproduce the behavior:
