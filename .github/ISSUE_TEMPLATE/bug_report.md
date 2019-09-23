@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is. Français autorisé, deutsch erlaubt, autorizzato italiano :gift::heart:
+A clear and concise description of what the bug is. Français autorisé, deutsch erlaubt, autorizzato italiano
 
 **To Reproduce**
 Steps to reproduce the behavior:
