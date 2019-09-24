@@ -46,15 +46,23 @@ const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
   return decimal;
 };
 
-const parseExifDate = function(exif) {
-  const exifDate = exif.DateTimeOriginal || exif.DateTime;
+const parseDate = function(exif, iptc) {
+  const iptcDate = iptc ? iptc.DateCreated : null;
+  const exifDate = exif ? exif.DateTimeOriginal || exif.DateTime : null;
 
-  if (exifDate) {
-    const date = moment(exifDate, 'YYYY:MM:DD HH:mm:ss');
-    return date.isValid() ? date.format() : null;
-  } else {
-    return undefined;
+  let date = null;
+
+  if (iptcDate) {
+    if (iptc.TimeCreated) {
+      date = moment(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD HHmmssZ ZZ');
+    } else {
+      date = moment(iptcDate, 'YYYYMMDD');
+    }
+  } else if (exifDate) {
+    date = moment(exifDate, 'YYYY:MM:DD HH:mm:ss');
   }
+
+  return date && date.isValid() ? date.format() : null;
 };
 
 const parseExifGeometry = function(exif) {
@@ -98,7 +106,10 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
 
   const parseMetaData = function(metaData) {
     const exif = metaData.exif ? metaData.exif.getAll() : null;
+    const iptc = metaData.exif ? metaData.iptc.getAll() : null;
     let orientation = 0;
+
+    setIfDefined(document, 'date_time', parseDate(exif, iptc));
 
     if (exif) {
       orientation = metaData.exif.get('Orientation');
@@ -108,7 +119,6 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
       setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
       setIfDefined(document, 'fnumber', exif.FNumber);
       setIfDefined(document, 'camera_name', (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : undefined);
-      setIfDefined(document, 'date_time', parseExifDate(exif));
       setIfDefined(document, 'geometry', parseExifGeometry(exif));
       setIfDefined(document, 'elevation', parseExifElevation(exif));
     }
