@@ -30,6 +30,7 @@ import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
@@ -234,6 +235,7 @@ export default function install(Vue) {
     faCompress,
     faDatabase,
     faEdit,
+    faExclamationCircle,
     faExpand,
     faEye,
     faFilter,
