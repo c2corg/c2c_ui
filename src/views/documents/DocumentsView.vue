@@ -67,7 +67,14 @@
     </div>
 
     <div class="columns result-section" :class="'mobile-mode-' + displayMode">
-      <div v-if="showResults" class="column documents-container" :class="{'is-12': !showMap, 'is-5': documentType == 'route' && showMap,'is-6': documentType != 'route' && showMap}">
+      <div
+        v-if="showResults"
+        class="column documents-container"
+        :class="{
+          'is-12': !showMap,
+          'is-8 is-5-fullhd': showMap && documentType == 'route',
+          'is-8 is-6-fullhd ': showMap && documentType != 'route'
+      }">
 
         <loading-notification :promise="promise" />
 
