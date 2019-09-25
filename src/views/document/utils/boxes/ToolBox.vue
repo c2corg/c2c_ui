@@ -54,6 +54,12 @@
       icon="edit"
       :label="$gettext('Translate into an other lang')" />
 
+    <tool-box-button
+      :href="`mailto:${$options.reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
+      :icon="['fas', 'exclamation-circle']"
+      icon-class="has-text-danger"
+      :label="$gettext('Report an issue')" />
+
     <hr>
 
     <!-- Moderator zone -->
@@ -151,7 +157,17 @@
       };
     },
 
+    reportingIssueMail: 'topo-fr@camptocamp.org',
+
     computed: {
+      reportingSubject() {
+        return this.$gettext('Issue report');
+      },
+
+      reportingBody() {
+        return encodeURIComponent(this.$gettext('Describe here your issue') + '\r\n\r\n----\r\n\r\n' + window.location.href);
+      },
+
       available_langs() {
         return this.document.available_langs.filter((lang) => this.$route.params.lang !== lang);
       },
