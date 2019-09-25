@@ -29,8 +29,15 @@ export default function install(Vue) {
       },
 
       getDocumentTitle(document, lang) {
+        // profile does not have locale, get profile's name
         if (document.type === 'u' || !document.type) {
           return document.name || '';
+        }
+
+        // document object returned by whatsnew does not have locale either
+        // but provides title property
+        if (!document.locales) {
+          return document.title || '';
         }
 
         const locale = this.$documentUtils.getLocaleSmart(document, lang);

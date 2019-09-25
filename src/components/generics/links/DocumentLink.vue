@@ -5,9 +5,7 @@
     :target="target"
     :title="$documentUtils.getDocumentTitle(document, $route.params.lang)">
     <slot>
-      <document-title v-if="document.type!='u'" :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
-      <span v-else-if="uppercaseFirstLetter">{{ document.name | uppercaseFirstLetter }}</span>
-      <span v-else>{{ document.name }}</span>
+      <document-title :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
     </slot>
   </router-link>
 
