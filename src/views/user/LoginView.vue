@@ -371,7 +371,8 @@
       },
 
       resetPassword() {
-        this.promise = c2c.userProfile.requestPasswordChange(this.email);
+        this.promise = c2c.userProfile.requestPasswordChange(this.email)
+          .then(() => this.$alert.show([this.$gettext('Mail has been sent')]));
       },
 
       validateNewPassword() {
