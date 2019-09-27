@@ -448,6 +448,9 @@
   };
 
   export default {
+
+    name: "Yeti",
+
     components: { vueSlider, ValidationButton, Faq, Disclaimer },
 
     data() {
@@ -557,7 +560,7 @@
 
     created() {
       // show disclaimer if not already validated
-      if (!localStorage.getItem('yeti-disclaimer')) {
+      if (!this.$localStorage.get('yeti-disclaimer')) {
         this.showDisclaimer = true;
       }
     },
@@ -839,7 +842,7 @@
 
       onSubmitDisclaimer() {
         this.showDisclaimer = false;
-        localStorage.setItem('yeti-disclaimer', 'validated');
+        this.$localStorage.set('yeti-disclaimer', 'validated');
       }
     }
   };
