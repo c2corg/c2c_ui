@@ -14,7 +14,7 @@
     <div class="yeti-app">
 
       <div class="box yeti-disclaimer" v-if="showDisclaimer">
-        <h2 class="title is-3 yeti-title"><span>Avertissement</span></h2>
+        <h2 class="title is-3 yeti-title">Avertissement</h2>
         <disclaimer />
         <form action="#" @submit="onSubmitDisclaimer">
           <input-checkbox v-model="checkDisclaimer">
@@ -28,9 +28,9 @@
 
       <div class="box" v-if="$route.params.page === 'faq'">
         <p><router-link to="/yeti">Retour YETI</router-link></p>
-        <h2 class="title is-3 yeti-title"><span>Avertissement</span></h2>
+        <h2 class="title is-3 yeti-title">Avertissement</h2>
         <disclaimer />
-        <h2 class="title is-3 yeti-title"><span>FAQ</span></h2>
+        <h2 class="title is-3 yeti-title">FAQ</h2>
         <faq />
       </div>
 
@@ -40,7 +40,7 @@
             <div class="columns">
               <div class="column">
                 <h2 class="title is-3 yeti-title">
-                  <span>Info <abbr title="Bulletin du Risque d’Avalanche">BRA</abbr></span>
+                  Info <abbr title="Bulletin du Risque d’Avalanche">BRA</abbr>
                 </h2>
               </div>
               <div class="column">
