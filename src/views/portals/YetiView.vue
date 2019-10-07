@@ -448,7 +448,7 @@
 
   export default {
 
-    name: "Yeti",
+    name: 'Yeti',
 
     components: { vueSlider, ValidationButton, yetiText },
 
