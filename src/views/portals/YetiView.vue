@@ -813,6 +813,7 @@
       },
 
       sortMountainsByMassif() {
+        // first, order mountains by massifs
         const sortedMountains = {};
         for (let i = 0; i < this.mountains.length; i++) {
           if (!sortedMountains[this.mountains[i].mountain]) {
@@ -821,6 +822,15 @@
           sortedMountains[this.mountains[i].mountain].push(this.mountains[i]);
         }
         this.mountains = sortedMountains;
+
+        // then sort mountains inside each massif
+        for (const i in this.mountains) {
+          this.mountains[i].sort((a, b) => {
+            if (a.title < b.title) return -1;
+            if (b.title > a.title) return 1;
+            return 0;
+          });
+        }
       },
 
       onMountainsResult(data) {
