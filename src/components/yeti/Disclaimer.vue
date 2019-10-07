@@ -1,5 +1,5 @@
 <template>
-  <div class="yeti-text">
+  <div>
     <p><strong>Yéti est une nouvelle application web destinée à améliorer la gestion du risque d’avalanche. Elle apporte une aide aux pratiquants de sport de neige dans leurs choix d’itinéraires pendant la phase de préparation de course, à la maison.</strong></p>
     <ul>
       <li>Yéti propose <strong>une évaluation du risque d’avalanche sur une interface cartographique</strong>. Comme toute évaluation, celle-ci peut être imparfaite ou erronée. Les erreurs d’évaluation de Yéti peuvent être liées au niveau de précision de la carte des pentes (25 mètres), aux informations générales du bulletin d’avalanche (à l’échelle d’un massif) et à l’utilisation de méthodes de réduction du risque reposant sur des modèles probabilistes</li>

@@ -15,7 +15,7 @@
 
       <div class="box yeti-disclaimer" v-if="showDisclaimer">
         <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <disclaimer />
+        <yeti-text component="disclaimer" />
         <form action="#" @submit="onSubmitDisclaimer">
           <input-checkbox v-model="checkDisclaimer">
             J’ai lu et j’ai compris l’intérêt et les limites de Yéti
@@ -29,9 +29,9 @@
       <div class="box" v-if="$route.params.page === 'faq'">
         <p><router-link to="/yeti">Retour YETI</router-link></p>
         <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <disclaimer />
+        <yeti-text component="disclaimer" />
         <h2 class="title is-3 yeti-title">FAQ</h2>
-        <faq />
+        <yeti-text component="faq" />
       </div>
 
       <div class="columns yeti-content" v-else>
@@ -394,8 +394,7 @@
   import axios from 'axios';
   import vueSlider from 'vue-slider-component';
   import ValidationButton from '@/components/yeti/ValidationButton';
-  import Faq from '@/components/yeti/Faq';
-  import Disclaimer from '@/components/yeti/Disclaimer';
+  import yetiText from '@/components/yeti/Text';
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
   const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
@@ -451,7 +450,7 @@
 
     name: "Yeti",
 
-    components: { vueSlider, ValidationButton, Faq, Disclaimer },
+    components: { vueSlider, ValidationButton, yetiText },
 
     data() {
       return {
@@ -1306,8 +1305,5 @@
     .control--braDifferent .is-checkradio[type=checkbox] + label {
       margin: 0;
     }
-  }
-  .yeti-text {
-    max-width: 1039px;
   }
 </style>

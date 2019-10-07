@@ -1,6 +1,6 @@
 <template>
 <!-- eslint-disable -->
-  <div class="yeti-text">
+  <div>
     <p>L’application Yéti fournit une aide à la décision au pratiquant de sports de neige lors de la préparation d’une course.</p>
     <p>Cet article répond aux questions les plus fréquentes sur l’utilisation, l’intérêt et les limites de cette application.</p>
 
