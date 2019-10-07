@@ -94,7 +94,7 @@
                 </div>
 
                 <div>
-                  <input-checkbox v-model="bra.isDifferent" class="control--braDifferent">
+                  <input-checkbox v-model="bra.isDifferent" class="control--bradifferent">
                     BRA haut/bas différents ?
                   </input-checkbox>
                 </div>
@@ -109,27 +109,27 @@
 
             </div>
 
-            <div class="yetiMountains">
+            <div class="yetimountains">
               <div>
-                <p class="yetiMountains-title" @click="showMountainsList = !showMountainsList">
+                <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
                   Liste des massifs
-                  <span v-if="promiseMountains" class="yetiMountains-count">{{ countVisibleMountains }}</span>
+                  <span v-if="promiseMountains" class="yetimountains-count">{{ countVisibleMountains }}</span>
                   <fa-icon
-                    class="yetiMountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
+                    class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
                     icon="angle-down"
                     :rotation="showMountainsList ? 180 : undefined" />
                 </p>
               </div>
               <div v-if="showMountainsList">
                 <div v-if="promiseMountains">
-                  <p class="column yetiForm-info">Téléchargez le bulletin en PDF depuis le site de Météo France</p>
+                  <p class="column yetiform-info">Téléchargez le bulletin en PDF depuis le site de Météo France</p>
                   <dl>
                     <div v-for="(mountains, massif) of visibleMountains" :key="massif">
-                      <dt class="yetiMountains-listTitle">
+                      <dt class="yetimountains-listtitle">
                         {{ massif }}
                       </dt>
-                      <div class="yetiMountains-list">
-                        <dd class="yetiMountains-listElement" v-for="mountain of mountains" :key="mountain.title">
+                      <div class="yetimountains-list">
+                        <dd class="yetimountains-listelement" v-for="mountain of mountains" :key="mountain.title">
                           <a :href="'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' + mountain.id_mf + '.pdf'" target="_blank" v-if="mountain.id_mf">
                             <fa-icon icon="external-link-alt" />
                             {{ mountain.title }}
@@ -141,7 +141,7 @@
                   </dl>
                 </div>
                 <div v-else>
-                  <p class="column yetiForm-info">Les massifs n’ont pas pu être chargés</p>
+                  <p class="column yetiform-info">Les massifs n’ont pas pu être chargés</p>
                 </div>
               </div>
             </div>
@@ -149,14 +149,14 @@
             <h2 class="title is-3 yeti-title">
               Méthodes
             </h2>
-            <div class="columns is-mobile yetiTabs">
+            <div class="columns is-mobile yetitabs">
               <div
                 v-for="item of Object.keys(methods)"
                 :key="item"
-                class="column yetiTab">
+                class="column yetitab">
                 <div
-                  class="control yetiTab-control"
-                  :class="{'yetiTab-control--selected': method===item}">
+                  class="control yetitab-control"
+                  :class="{'yetitab-control--selected': method===item}">
                   <input
                     :id="'c2c-method-' + item"
                     type="radio"
@@ -166,10 +166,10 @@
                     :disabled="item === 'mrd' ? bra.high == 4 || bra.low == 4 : false">
                   <label
                     :for="'c2c-method-' + item"
-                    class="yetiTab-label"
+                    class="yetitab-label"
                     @click="warnAboutMethodBra(item)">
                     {{ methods[item][0] }}
-                    <span class="yetiForm-info">{{ methods[item][1] }}</span>
+                    <span class="yetiform-info">{{ methods[item][1] }}</span>
                   </label>
                 </div>
               </div>
@@ -179,11 +179,11 @@
               <p>
                 Avec la <strong>méthode de réduction pour débutant</strong> (MRD), vous n’avez pas d’autres paramètres à entrer que le (ou les) niveau(x) de danger donné par le BRA.
               </p>
-              <div class="yetiForm-note">
+              <div class="yetiform-note">
                 <p>Comme son nom l’indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de sécurité se doit d'être très importante. On ne spécifie pas d’autre paramètre que le niveau de danger du BRA. Il n’est pas tenu compte de l’orientation.</p>
               </div>
 
-              <table class="yetiForm-danger">
+              <table class="yetiform-danger">
                 <tr>
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                   <td><strong>Danger faible</strong></td>
@@ -213,14 +213,14 @@
               </p>
 
               <input-orientation v-model="orientation" class="has-text-centered" />
-              <p v-if="orientation.length != 0" class="yetiForm-info">Orientations: {{ orientation.join(', ') }}</p>
-              <p v-else class="yetiForm-info">Pas d’orientations sélectionnées</p>
+              <p v-if="orientation.length != 0" class="yetiform-info">Orientations: {{ orientation.join(', ') }}</p>
+              <p v-else class="yetiform-info">Pas d’orientations sélectionnées</p>
 
-              <div class="yetiForm-note">
+              <div class="yetiform-note">
                 <p>On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.</p>
               </div>
 
-              <table class="yetiForm-danger">
+              <table class="yetiform-danger">
                 <tr>
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                   <td><strong>Danger faible</strong></td>
@@ -270,10 +270,10 @@
                 </li>
               </ul>
 
-              <p v-if="potentialDanger" class="yetiForm-info">Potentiel de danger: {{ potentialDanger }} (BRA: {{ bra.high }})</p>
-              <p v-else class="yetiForm-info">Pas de potentiel de danger sélectionné. Entrez d’abord le BRA</p>
+              <p v-if="potentialDanger" class="yetiform-info">Potentiel de danger: {{ potentialDanger }} (BRA: {{ bra.high }})</p>
+              <p v-else class="yetiform-info">Pas de potentiel de danger sélectionné. Entrez d’abord le BRA</p>
 
-              <div class="yetiForm-note">
+              <div class="yetiform-note">
                 <p>Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du BRA. Par exemple: Le BRA évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.</p>
               </div>
 
@@ -283,7 +283,7 @@
                 </input-checkbox>
               </p>
 
-              <div class="yetiForm-note">
+              <div class="yetiform-note">
                 <p>Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut être appliqué.</p>
               </div>
 
@@ -301,7 +301,7 @@
                 </li>
               </ul>
 
-              <div class="yetiForm-note">
+              <div class="yetiform-note">
                 <p>Taille du groupe</p>
                 <ul class="content-ul">
                   <li>Grand groupe = 5 personnes et plus</li>
@@ -320,7 +320,7 @@
 
             </div>
 
-            <div class="columns yetiForm-validation" v-show="method">
+            <div class="columns yetiform-validation" v-show="method">
               <div class="column has-text-right">
                 <validation-button
                   :current-error="currentError"
@@ -1050,7 +1050,7 @@
     }
   }
 
-  .yetiForm-danger {
+  .yetiform-danger {
     width: 100%;
     table-layout: fixed;
     color: $dark;
@@ -1085,7 +1085,7 @@
     }
   }
 
-  .yetiForm-note {
+  .yetiform-note {
     position: relative;
     font-size: 0.9em;
     padding: 1em;
@@ -1095,7 +1095,7 @@
     border-radius: 2px;
   }
 
-  .yetiForm-note::before {
+  .yetiform-note::before {
     content: '?';
     position: absolute;
     top: 1em;
@@ -1111,17 +1111,17 @@
     border-radius: 2px;
   }
 
-  .yetiTabs {
+  .yetitabs {
     margin: 0;
     padding: .75rem 0;
   }
 
-  .yetiTab {
+  .yetitab {
     padding: 0;
   }
 
-  .yetiTab-control {
-    .yetiTab-label {
+  .yetitab-control {
+    .yetitab-label {
       display: block;
       margin: 0;
       padding: .25rem;
@@ -1134,11 +1134,11 @@
         border-color: $grey-lighter;
       }
 
-      &.yetiTab-label:before {
+      &.yetitab-label:before {
         top: .25rem !important;
         left: .25rem !important;
       }
-      &.yetiTab-label:after {
+      &.yetitab-label:after {
         top: 1em !important;
         left: 1em !important;
       }
@@ -1150,8 +1150,8 @@
     }
   }
 
-  .yetiTab-control--selected {
-    .yetiTab-label {
+  .yetitab-control--selected {
+    .yetitab-label {
       color: $primary;
       border-color: $primary;
 
@@ -1167,23 +1167,23 @@
          screen and (min-width: $desktop) and (max-width: 1180px),
          screen and (min-width: $widescreen) and (max-width: 1370px),
          screen and (min-width: $fullhd) and (max-width: 1650px) {
-    .yetiTabs {
+    .yetitabs {
       flex-wrap: wrap;
     }
-    .yetiTab {
+    .yetitab {
       flex: 0 0 50%;
     }
-    .yetiForm-danger tr,
-    .yetiForm-danger td {
+    .yetiform-danger tr,
+    .yetiform-danger td {
       display: block;
     }
-    .yetiForm-danger tr {
+    .yetiform-danger tr {
       padding: .5em 0;
     }
-    .yetiForm-danger td:first-child {
+    .yetiform-danger td:first-child {
       float: left;
     }
-    .yetiForm-danger td:first-child ~ td {
+    .yetiform-danger td:first-child ~ td {
       height: auto;
       width: calc(100% - 60px);
       margin-left: 60px;
@@ -1218,11 +1218,11 @@
     }
   }
 
-  .yetiForm-validation {
+  .yetiform-validation {
     margin-top: 1rem;
   }
 
-  .yetiMountains {
+  .yetimountains {
     margin-bottom: 2rem;
     border: 1px solid #dbdbdb;
     border-radius: 4px;
@@ -1232,12 +1232,12 @@
     }
   }
 
-  .yetiMountains-title {
+  .yetimountains-title {
     cursor: pointer;
     padding: .25rem .75rem;
   }
 
-  .yetiMountains-count {
+  .yetimountains-count {
     display: inline-block;
     width: 1.1rem;
     height: 1.1rem;
@@ -1251,26 +1251,26 @@
     text-align: center;
   }
 
-  .yetiMountains-arrow {
+  .yetimountains-arrow {
     color: $primary;
     margin-top: .25rem;
   }
 
-  .yetiMountains-list {
+  .yetimountains-list {
     columns: 3 170px;
     padding: .75rem 2rem;
   }
 
-  .yetiMountains-listTitle {
+  .yetimountains-listtitle {
     font-weight: bold;
     padding: 0 .75rem;
   }
 
-  .yetiMountains-listElement + .yetiMountains-listTitle {
+  .yetimountains-listelement + .yetimountains-listtitle {
     margin-top: .5rem;
   }
 
-  .yetiForm-info {
+  .yetiform-info {
     font-size: 0.8em;
     opacity: 0.75;
   }
@@ -1302,7 +1302,7 @@
       width: 120px;
       height: 120px;
     }
-    .control--braDifferent .is-checkradio[type=checkbox] + label {
+    .control--bradifferent .is-checkradio[type=checkbox] + label {
       margin: 0;
     }
   }
