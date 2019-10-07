@@ -40,7 +40,7 @@
             <div class="columns">
               <div class="column">
                 <h2 class="title is-3 yeti-title">
-                  Info <abbr title="Bulletin du Risque d’Avalanche">BRA</abbr>
+                  Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr>
                 </h2>
               </div>
               <div class="column">
