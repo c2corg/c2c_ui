@@ -3,7 +3,7 @@
     <marker-quality :quality="outing.quality" class="has-text-normal" />
     <marker-condition :condition="outing.condition_rating" />
     <span class="has-text-normal">
-      {{ outing.date_start }}
+      {{ outing.date_end }}
       :
     </span>
     <document-title :document="outing" />
