@@ -1,5 +1,5 @@
 <template>
-  <outing-rating :document="params.data" />
+  <document-rating :document="params.data" />
 </template>
 
 <script>

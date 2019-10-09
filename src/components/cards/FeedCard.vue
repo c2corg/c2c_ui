@@ -33,8 +33,7 @@
     <card-row v-if="documentType!='article' && documentType!='book'">
       <span v-if="documentType=='outing' || documentType=='route'">
         <icon-ratings class="card-icon" />
-        <outing-rating v-if="documentType=='outing'" :document="item.document" />
-        <route-rating v-else-if="documentType=='route'" :document="item.document" />
+        <document-rating :document="item.document" />
       </span>
 
       <card-elevation-item :elevation="item.document.elevation_max" class="is-ellipsed" />

@@ -1,5 +1,5 @@
 <template>
-  <route-rating :document="params.data" />
+  <document-rating :document="params.data" />
 </template>
 
 <script>

@@ -46,7 +46,7 @@
 
             <div class="column is-4">
               <label-value :label="$gettext('ratings')">
-                <outing-rating :document="document" />
+                <document-rating :document="document" show-helper />
               </label-value>
 
               <!-- Access block -->

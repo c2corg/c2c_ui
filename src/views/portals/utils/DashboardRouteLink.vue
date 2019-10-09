@@ -10,7 +10,7 @@
       :title="$gettext('height_diff_difficulties')"
       class="append-comma">
       {{ route.height_diff_difficulties }}&nbsp;m</span>
-    <route-rating :document="filteredDocument" />
+    <document-rating :document="filteredDocument" />
   </dashboard-link>
 </template>
 

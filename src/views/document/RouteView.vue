@@ -29,7 +29,7 @@
             <div class="column is-4">
 
               <label-value :label="$gettext('ratings')">
-                <route-rating v-if="$documentUtils.hasRating(document)" :document="document" />
+                <document-rating v-if="$documentUtils.hasRating(document)" :document="document" show-helper />
                 <edit-link v-else :document="document" :lang="$user.lang" />
               </label-value>
 

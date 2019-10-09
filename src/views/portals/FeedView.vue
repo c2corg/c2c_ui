@@ -7,7 +7,7 @@
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
           <div class="feed-title">
             <span class="is-size-3 has-text-weight-semibold" v-translate>Activity feed</span>
-            <span v-if="$user.isLogged" class="feed-buttons">
+            <span v-if="$user.isLogged" class="feed-buttons is-pulled-right">
               <input
                 id="c2c-personal-feed"
                 class="is-checkradio is-primary"

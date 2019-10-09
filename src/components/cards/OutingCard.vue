@@ -17,7 +17,7 @@
     <card-row>
       <span>
         <icon-ratings class="card-icon" />
-        <outing-rating :document="document" />
+        <document-rating :document="document" />
       </span>
 
       <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed" />

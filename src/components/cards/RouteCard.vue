@@ -12,7 +12,7 @@
 
       <span class="is-nowrap">
         <icon-ratings class="card-icon" />
-        <route-rating :document="document" />
+        <document-rating :document="document" />
       </span>
 
       <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed" />
@@ -41,7 +41,10 @@
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
       </span>
 
-      <span v-if="document.orientations && document.orientations.length!=0" class="is-ellipsed">
+      <span
+        v-if="document.orientations && document.orientations.length!=0"
+        class="is-ellipsed"
+        :title="$gettext('orientations')">
         <fa-icon icon="compass" class="card-icon" />
         {{ document.orientations.join(", ") }}
       </span>
