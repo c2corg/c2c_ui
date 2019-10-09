@@ -18,7 +18,7 @@
       class="has-text-normal">
       {{ route.orientations.join(', ') }},
     </span>
-    <route-rating :document="route" class="has-text-normal" />
+    <document-rating :document="route" class="has-text-normal" />
     <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-normal" />
     <span v-if="!hideArea" class="has-text-normal">
       <em v-for="area in rangeAreas" :key="area.document_id">
