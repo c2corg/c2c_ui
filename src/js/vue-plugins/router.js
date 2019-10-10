@@ -12,6 +12,7 @@ import NotFoundView from '@/views/static-views/NotFoundView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import YetiView from '@/views/portals/YetiView';
+import GalleryView from '@/views/portals/GalleryView';
 
 import LoginView from '@/views/user/LoginView';
 import AccountView from '@/views/user/AccountView';
@@ -19,7 +20,7 @@ import FollowingView from '@/views/user/FollowingView';
 import PreferencesView from '@/views/user/PreferencesView';
 import MailingListsView from '@/views/user/MailingListsView';
 
-import DocumentsView from '@/views//documents/DocumentsView';
+import DocumentsView from '@/views/documents/DocumentsView';
 
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
@@ -74,6 +75,12 @@ const routes = [
     }
   }
 ];
+
+routes.push({
+  path: '/gallery/:documentType/:id(\\d+)',
+  name: 'gallery',
+  component: GalleryView }
+);
 
 const addDocumentTypeView = function(def, viewComponent, editionComponent) {
   routes.push({
