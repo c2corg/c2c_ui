@@ -106,7 +106,7 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
 
   const parseMetaData = function(metaData) {
     const exif = metaData.exif ? metaData.exif.getAll() : null;
-    const iptc = metaData.exif ? metaData.iptc.getAll() : null;
+    const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
     let orientation = 0;
 
     setIfDefined(document, 'date_time', parseDate(exif, iptc));
