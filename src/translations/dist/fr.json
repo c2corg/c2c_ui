@@ -405,6 +405,7 @@
     "describe conditions": "Conditions de terrain, équipement et qualité du rocher rencontrés (approche, voie, et à proximité)",
     "Describe here the gear needed for this route": "Précisez ici le matériel spécifique qu'il faut emporter en plus de l'équipement usuel. Seul le matériel \"exotique\" (en qualité ou quantité) doit être mentionné. Exemples de mentions inutiles : DVA, pelle, sonde, piolet, crampons, matériel de glacier (le champ \"matériel de glacier\" suffit), coinceurs et sangles sans plus de précision.",
     "Describe here the waypoint": "Organisez la description avec des sous titres : balises ## , ### , #### en début de ligne.",
+    "Describe here your issue": "Décrire le problème ici",
     "Describe historical information about the route (date, names..) here": "Précisez ici les informations historiques de l'itinéraire : ouverture du bas ou équipement (du haut), premières ascensions, premières descentes à ski/surf, rééquipements, éboulements, etc. Mentionnez la date, le nom des protagonistes, et le club ou organisme ayant financé le matériel laissé en place.",
     "Describe opening hours": "Précisez les heures d'ouverture",
     "Describe opening periods": "Précisez les périodes d'ouverture",
@@ -499,7 +500,7 @@
     },
     "EULA": "CGU",
     "event_type": "Type d'évènement",
-    "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalités des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
+    "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
     "excellent": {
       "condition_ratings": "excellentes",
       "snow_quality_ratings": "excellente",
@@ -754,6 +755,7 @@
     },
     "isbn": "ISBN",
     "iso_speed": "Sensibilité",
+    "Issue report": "Signalement d'un problème",
     "it": {
       "langs": "italien"
     },
@@ -841,6 +843,7 @@
     "magazine": {
       "book_types": "magazine"
     },
+    "Mail has been sent": "Courriel envoyé",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
     "Main informations about your outing": "Données principales de votre sortie",
     "main_waypoint_id": "ID du point de passage principal",
@@ -1217,6 +1220,7 @@
     "Register": "S'inscrire",
     "remarks": "Remarques",
     "Remove": "Retirer",
+    "Report an issue": "Signaler un problème",
     "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
     "Required": {
       "API message": "Requis"

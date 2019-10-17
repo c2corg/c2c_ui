@@ -184,12 +184,16 @@
     "avalanche_slope": "pendenza",
     "avalanches": "Osservazioni relative alle valanghe",
     "average": {
-      "condition_ratings": "medie"
+      "condition_ratings": "medie",
+      "snow_quality_ratings": "medie",
+      "snow_quantity_ratings": "medie"
     },
     "Average slope (degrees)": "Pendenza media (gradi)",
     "Average slope in degree": "Pendenza media in gradi",
     "awful": {
-      "condition_ratings": "pessime"
+      "condition_ratings": "pessime",
+      "snow_quality_ratings": "pessime",
+      "snow_quantity_ratings": "pessime"
     },
     "Back to code": "Tornare al codice",
     "Back to edit mode": "Tornare all'edizione ",
@@ -333,9 +337,13 @@
       "rock_types": "conglomerato"
     },
     "contact": "Contatto ",
+    "Contain invalid character(s)": {
+      "API message": "Ci sono caratteri invalidi "
+    },
     "Continue the discussion": "Prosegui la discussione",
     "Contribute to common knowledge": "Partecipare alla costruzione di un sapere collettivo ",
     "Contributions": "Contributi ",
+    "contributor": "contributore ",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -400,7 +408,10 @@
     "Describe historical information about the route (date, names..) here": "Specificare qui i ceni storici del itinerario: apertura, attrezzatura, prime salite, prime discese in sci / surf, riattrezzamento, frane, ecc. Indicare la data, il nome dei protagonisti e il club o l'organizzazione che ha finanziato l'attrezzatura.",
     "Describe opening hours": "Precisare gli orari di apertura",
     "Describe opening periods": "Precisare i periodi di apertura",
-    "Describe pedestrian access": "Descrivere l'accesso pedestre ",
+    "Describe pedestrian access": {
+      "hut": "Descrivere l'accesso",
+      "$$noContext": "Descrivere l'accesso pedonale"
+    },
     "Describe pt access": "Descrivere l'accesso al punto di passaggio",
     "Describe road access": "Descrivere l'itinerario",
     "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...",
@@ -432,6 +443,7 @@
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
     "durations": "Durata",
+    "durations (days)": "durata (giorni)",
     "easy": {
       "glacier_ratings": "chiuso - passaggio agevole"
     },
@@ -484,7 +496,9 @@
     "event_type": "tipo di evento ",
     "Everything about ratings : difficulties, exposition...": "Inserire i gradi relativo al itinerario (difficoltà, esposizione, attrezzatura) ",
     "excellent": {
-      "condition_ratings": "ottime"
+      "condition_ratings": "ottime",
+      "snow_quality_ratings": "ottime",
+      "snow_quantity_ratings": "ottime"
     },
     "Expand": "Aprire ",
     "expedition": {
@@ -582,7 +596,9 @@
     },
     "Go to the previous page": "Tornare alla pagina precedente",
     "good": {
-      "condition_ratings": "buone"
+      "condition_ratings": "buone",
+      "snow_quality_ratings": "buone",
+      "snow_quantity_ratings": "buone"
     },
     "good service": {
       "public_transportation_ratings": "servizio regolare"
@@ -906,7 +922,7 @@
       "snow_clearance_ratings": "naturale"
     },
     "nb_impacted": "numero di persone coinvolte",
-    "nb_outings": "numero di gite ",
+    "nb_outings": "Numero di gite ",
     "nb_outings_14": {
       "nb_outings": "10-14"
     },
@@ -1007,8 +1023,8 @@
     "other_comments": "Altri commenti",
     "Oups! Something went wrong with forum. Here is the message :": "Oops! C'è un errore sul forum: ",
     "Oups! something went wrong...": "Oops! c'è un errore: ",
-    "outing": "gite",
-    "outings": "gitte",
+    "outing": "gita",
+    "outings": "gite",
     "overcrowded": {
       "frequentation_types": "molto affollato "
     },
@@ -1044,7 +1060,10 @@
     "Password too short": {
       "API message": "La password è troppo corta "
     },
-    "pedestrian access": "Accesso pedonale",
+    "pedestrian access": {
+      "hut": "Accesso",
+      "$$noContext": "Accesso pedonale"
+    },
     "people": {
       "image_categories": "personaggi"
     },
@@ -1083,7 +1102,9 @@
       "API message": "C'è stato un errore, puoi contattare dev@camptocamp.org"
     },
     "poor": {
-      "condition_ratings": "cattive"
+      "condition_ratings": "cattive",
+      "snow_quality_ratings": "cattive",
+      "snow_quantity_ratings": "cattive"
     },
     "poor service": {
       "public_transportation_ratings": "servizio ridotto "
@@ -1170,6 +1191,7 @@
     "Register": "Registrarti ",
     "remarks": "Osservazioni",
     "Remove": "Togliere",
+    "Report an issue": "Segnalare un errore",
     "Required": {
       "API message": "Obbligatorio "
     },
@@ -1463,6 +1485,7 @@
     "Unordered list": "Lista non ordinata",
     "Unprotect document": "Sproteggere questo documento",
     "Upload a GPS track": "Aggiungere una traccia GPS",
+    "Upload a new version": "Scaricare una nuova versione ",
     "URL": "URL",
     "url": "URL",
     "Username": "Username",

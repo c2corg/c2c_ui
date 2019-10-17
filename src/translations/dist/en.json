@@ -123,6 +123,7 @@
     "amateur": {
       "user_categories": "amateur"
     },
+    "Anonymity and confidentiality": "Anonymity and confidentiality ",
     "anonymous": "anonymous",
     "Application": "Application",
     "apr": {
@@ -336,9 +337,13 @@
       "rock_types": "conglomerat"
     },
     "contact": "contact",
+    "Contain invalid character(s)": {
+      "API message": "Contains invalid character(s)"
+    },
     "Continue the discussion": "Continue the discussion",
     "Contribute to common knowledge": "Contribute to common knowledge",
     "Contributions": "Contributions",
+    "contributor": "contributor",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -400,6 +405,7 @@
     "describe conditions": "Describe conditions",
     "Describe here the gear needed for this route": "Describe here the gear needed for this route",
     "Describe here the waypoint": "Describe here the waypoint",
+    "Describe here your issue": "Describe your issue here",
     "Describe historical information about the route (date, names..) here": "Describes historical information about the route (date, names..) here.",
     "Describe opening hours": "Describe opening hours",
     "Describe opening periods": "Describe opening periods",
@@ -442,6 +448,7 @@
     "Duration": "Duration",
     "Duration (hrs)": "Duration (hrs)",
     "durations": "Durations",
+    "durations (days)": "duration (days)",
     "easy": {
       "glacier_ratings": "covered -  travel is easy"
     },
@@ -635,6 +642,7 @@
     "has created a new route": "has added a new route",
     "has created a new waypoint": "has added a new waypoint",
     "has created a new xreport": "has created a new xreport",
+    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Has this experience changed your habits? Describe the lessons you have learned from this experience",
     "has updated the area": "has updated an area",
     "has updated the article": "has updated an article",
     "has updated the book": "has updated a book",
@@ -747,6 +755,7 @@
     },
     "isbn": "ISBN",
     "iso_speed": "iso_speed",
+    "Issue report": "Issue report",
     "it": {
       "langs": "italian"
     },
@@ -834,6 +843,7 @@
     "magazine": {
       "book_types": "magazine"
     },
+    "Mail has been sent": "An e-mail has been sent",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Main information about the route, such as title, activity, GPS data, and environment.",
     "Main informations about your outing": "Main informations about your outing",
     "main_waypoint_id": "ID of the main waypoint",
@@ -846,6 +856,7 @@
     },
     "map": "map",
     "Map only": "Map only",
+    "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
     "maps": "maps",
     "maps_info": "Maps info",
     "maps_references": "Maps references",
@@ -1116,6 +1127,7 @@
     "please consult the server logs": {
       "API message": "An unexpected error occured, please provide feedback to dev@camptocamp.org"
     },
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Please describe your technical and experience level related to the chosen goal, your level of fitness, priorly accumulated tiredness, acclimatization if in altitude, etc. ",
     "poor": {
       "condition_ratings": "poor",
       "snow_quality_ratings": "poor",
@@ -1208,6 +1220,7 @@
     "Register": "Sign up",
     "remarks": "Remarks",
     "Remove": "Remove",
+    "Report an issue": "Report an issue",
     "Report title, activity, linked routes or outings.": "Report title, activity, linked routes or outings.",
     "Required": {
       "API message": "Required"
@@ -1506,6 +1519,7 @@
     "Unordered list": "Unordered list",
     "Unprotect document": "Unprotect document",
     "Upload a GPS track": "Upload a GPS track",
+    "Upload a new version": "Upload a new version",
     "URL": "URL",
     "url": "Url",
     "User avatar": "User avatar",
