@@ -83,12 +83,10 @@
       "article_categories": "associació"
     },
     "associations": "associacions",
-    "At the time of the incident, describe your technical level, your physical condition, how tired you had become just prior to the incident, and, if at altitude, how well you were acclimatized, etc.": "Descrigueu el vostre nivell tècnic a la data de l'esdeveniment, la vostra condició física, la fatiga acumulada abans de l'esdeveniment, l'aclimatació en el cas d'una sortida en altitud, etc.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconeixement — Heu de reconèixer d'una manera apropiada l'autoria de l'Obra, proporcionar un enllaç a la llicència i indicar si s'han fet canvis a l'Obra.",
     "aug": {
       "months": "agost"
     },
-    "Author": "Autor",
     "author": "autor",
     "author_status": "Autor",
     "autonomous": {
@@ -260,7 +258,6 @@
       "glacier_gear_types": "grampons a inici de temporada"
     },
     "Create a new report": "Crea un nou informe",
-    "Create a new route": "Crea un nou itinerari",
     "Created on": "Creat el",
     "crevasse_fall": {
       "event_types": "caiguda a esquerda"
@@ -637,7 +634,6 @@
       "waypoint_types": "Localitat"
     },
     "Location / elevation / orientation": "Lloc / altitud / orientació",
-    "Log in to post the first comment": "Registreu-vos per deixar-hi el primer comentari",
     "Login": "Accedeix",
     "Logout": "Surt",
     "Longitude": "Longitud",
@@ -654,7 +650,6 @@
     "male": {
       "genders": "home"
     },
-    "Maps, guidebooks and outings reports consulted. Evaluation of the route during the outing.": "Mapes i ressenyes d'itineraris i de sortides consultades.",
     "maps_info": "Mapes",
     "maps_references": "Referències cartogràfiques",
     "mar": {
@@ -1153,7 +1148,6 @@
     "This book cover is the property of its editor and/or author": "La coberta del llibre és propietat del seu editor i/o autor",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-SA 3.0",
-    "This field must be a valid ISBN.": "Aquest camp ha de ser un ISBN vàlid.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Aquesta imatge mostra la coberta d'un llibre. És propietat de l'editor i/o de l'autor i no es presenta sinó amb la finalitat d'il·lustrar.",
     "This profile is only available to authenticated users.": "Aquest perfil només és visible pels usuaris registrats.",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Aquesta eina permet estimar la dificultat tècnica d'un itinerari d'esquí (escala de dificultat en esquí)",
@@ -1194,7 +1188,6 @@
     "Unprotect document": "Desprotegeix el document",
     "Upload a GPS track": "Afegiu-hi una traça GPS",
     "url": "URL",
-    "URL/Link": "URL/enllaç",
     "Username": "Nom d'usuari",
     "vertical": {
       "climbing_styles": "vertical"

@@ -125,7 +125,6 @@
     "aug": {
       "months": "agosto"
     },
-    "Author": "Autor",
     "author": "Autor",
     "author_status": "Autor",
     "autonomous": {
@@ -266,7 +265,6 @@
     "conglomerat": {
       "rock_types": "conglomerado"
     },
-    "Contact": "Contacto",
     "contact": "Contacto",
     "copyright": {
       "image_types": "copyright",
@@ -291,7 +289,6 @@
       "glacier_gear_types": "crampones a principios de verano"
     },
     "Create a new report": "Agregar un nuevo informe",
-    "Create a new route": "Agregar un nuevo itinerario",
     "Created on": "Creado",
     "crevasse_fall": {
       "event_types": "caída en grieta"
@@ -354,13 +351,6 @@
       "route_configuration_types": "arista"
     },
     "Edit": "Editar",
-    "Edit in ca": "Editando en catalán",
-    "Edit in de": "Editando en alemán",
-    "Edit in en": "Editando en inglés",
-    "Edit in es": "Editando en español ",
-    "Edit in eu": "Editando en euskera",
-    "Edit in fr": "Editando en francés",
-    "Edit in it": "Editando en inglés",
     "editor": "Editor",
     "elevation": "Altitud",
     "elevation_access": "Altitud del acceso",
@@ -380,8 +370,7 @@
       "book_types": "entorno"
     },
     "equipment": {
-      "image_categories": "equipamiento",
-      "$$noContext": "equipamiento"
+      "image_categories": "equipamiento"
     },
     "equipment_rating": "Calidad del equipamiento",
     "equipment_ratings": "Calidad del equipamiento",
@@ -466,8 +455,7 @@
       "waypoint_types": "hospedaje"
     },
     "glacier": {
-      "route_configuration_types": "glaciar",
-      "$$noContext": "glaciar"
+      "route_configuration_types": "glaciar"
     },
     "glacier_crampons": {
       "glacier_gear_types": "glaciar_crampones"
@@ -633,7 +621,6 @@
     "locality": {
       "waypoint_types": "localidad"
     },
-    "Log in to post the first comment": "Conectase para fijar un comentario",
     "Login": "Iniciar sesión",
     "Logout": "Desconectar",
     "Longitude": "Longitud",
@@ -646,7 +633,6 @@
     "magazine": {
       "book_types": "revista"
     },
-    "main waypoint": "Waypoint principal",
     "Make profile page public": "Hacer pública la página de perfil",
     "male": {
       "genders": "varón"
@@ -657,7 +643,6 @@
       "months": "marzo"
     },
     "matress_unstaffed": "Colchones fuera de los períodos de guardia",
-    "max": "max",
     "may": {
       "months": "mayo"
     },
@@ -668,7 +653,6 @@
     "migmatite": {
       "rock_types": "migmatita"
     },
-    "min": "min",
     "misc": {
       "image_categories": "misceláneos",
       "waypoint_types": "misceláneos"
@@ -865,10 +849,7 @@
     "public_transportation_rating": "Acceso en transporte público",
     "public_transportation_types": "Tipo de transporte público",
     "publication_date": "Fecha de publicación",
-    "quality": {
-      "snow": "Calidad",
-      "$$noContext": "Calidad"
-    },
+    "quality": "Calidad",
     "quartzite": {
       "rock_types": "cuarcita"
     },
@@ -1063,7 +1044,6 @@
     "traverse": {
       "route_types": "cruce"
     },
-    "type": "Tipo",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
     "Upload a GPS track": "Añadir una traza",
