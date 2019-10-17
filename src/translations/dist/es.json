@@ -388,7 +388,7 @@
       "route_types": "expedition"
     },
     "expeditions": {
-      "article_categories": "expediciones "
+      "article_categories": "expediciones"
     },
     "expert": {
       "autonomies": "experto"
@@ -838,7 +838,7 @@
     "progressive": {
       "snow_clearance_ratings": "desnevado gradual"
     },
-    "prominence": "Prominencia ",
+    "prominence": "Prominencia",
     "protected": {
       "rain_proof_types": "protegido de la lluvia"
     },
@@ -868,10 +868,10 @@
       "avalanche_signs": "reciente_avalancha"
     },
     "Recenter on...": "Centrar en ...",
-    "Register": "Inscribirse ",
+    "Register": "Inscribirse",
     "remarks": "Observaciones",
     "rescue": "secorro",
-    "Reset password": "Reiniciar contraseña ",
+    "Reset password": "Reiniciar contraseña",
     "resolution": "resolución",
     "restaurant": {
       "product_types": "restaurante"
@@ -979,7 +979,7 @@
     "snow_quantity": "Cantidad de nieve",
     "snowshoe_rating": "Cotación raquetas",
     "snowshoeing": {
-      "activities": "Raquetas "
+      "activities": "Raquetas"
     },
     "soft snow": "Nieve blanda",
     "soft_mobility": {
@@ -1047,7 +1047,6 @@
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
     "Upload a GPS track": "Añadir una traza",
-    "url": "url",
     "Username": "Usuario",
     "vertical": {
       "climbing_styles": "vertical"
@@ -1072,12 +1071,11 @@
     "waterpoint": {
       "waypoint_types": "agua/fuente"
     },
-    "waypoint": "waypoint",
     "waypoint_type": "Tipo de waypoint",
-    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
+    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña.",
     "weather": "Meteo observada",
     "weather_station": {
-      "waypoint_types": " estación meteorológica"
+      "waypoint_types": "estación meteorológica"
     },
     "weather_station_types": "Tipo de estación meteorológica",
     "webcam": {

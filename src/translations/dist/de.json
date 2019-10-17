@@ -38,7 +38,7 @@
       "access_times": "3 h"
     },
     "3h+": {
-      "access_times": " 3 h +"
+      "access_times": "3 h +"
     },
     "45min": {
       "access_times": "45 min"
@@ -132,7 +132,7 @@
     "Are you sure you want to delete this document?": "Sind Sie sicher, dass Sie dieses Dokument löschen wollen?",
     "Are you sure you want to delete this locale?": "Sind Sie sicher, dass Sie diese Sprachversion löschen wollen?",
     "Are you sure you want to merge?": "Sind Sie sicher, dass Sie zusammenführen wollen?",
-    "Are you sure you want to revert to this version of the document?": "Sind Sie sicher, dass Sie diese Version des Dokuments wiederherstellen wollen ? ",
+    "Are you sure you want to revert to this version of the document?": "Sind Sie sicher, dass Sie diese Version des Dokuments wiederherstellen wollen ?",
     "area": "Gebiet",
     "area_type": "Gebietsart",
     "areas": "Gebiete",
@@ -159,12 +159,12 @@
     "at least one user required": {
       "API message": "wenigstens ein Benutzerkonto nötig"
     },
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Namensnennung — Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden. ",
+    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Namensnennung — Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden.",
     "aug": {
       "months": "August"
     },
     "author": "Autor",
-    "author_status": "Status des Autors ",
+    "author_status": "Status des Autors",
     "Automatic": {
       "quality computation": "Automatisch"
     },
@@ -432,7 +432,7 @@
     "Details on participants and event context": "Daten über Teilnehmer und Ereigniskontext",
     "Differences between versions": "Unterschied zwischen Versionen",
     "difficult": {
-      "glacier_ratings": "schwer  "
+      "glacier_ratings": "schwer"
     },
     "difficulties_height": "Höhenunterschied der Schwierigkeiten",
     "disable_comments": "Kommentare deaktivieren",
@@ -471,7 +471,6 @@
     "elevation_max": "Maximale Höhe",
     "elevation_min": "Minimale Höhe",
     "elevation_up_snow": "Höhe Ski Beginn",
-    "Email": "Email",
     "emphasized text": "kursiver Text",
     "empty": {
       "quality_types": "leer"
@@ -538,7 +537,7 @@
     "fauna": {
       "image_categories": "Fauna"
     },
-    "Fauna protection areas": "Naturschutzgebiet ",
+    "Fauna protection areas": "Naturschutzgebiet",
     "Fauna protection site:": "Naturschutzgebiet :",
     "feb": {
       "months": "Februar"
@@ -560,7 +559,6 @@
     "focal_length": "Brennweite",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
-    "Forum": "Forum",
     "forum": "Forum",
     "Forum username": "Forum-Benutzername",
     "fr": {
@@ -577,7 +575,6 @@
     "General": "Allgemein",
     "General information": "Allgemeine Information",
     "general informations": "Allgemeine Informationen",
-    "Geolocation": "Geolocation",
     "geolocation": "Geolocation",
     "geology": {
       "image_categories": "Geologie"
@@ -729,7 +726,6 @@
     "Information about the terrain, like elevations, lengths...": "Informationen über das Gelände, wie Höhen, Längen ...",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informationen zum Ort des Vorfalls. Markieren Sie den Ort auf der Karte oben, auch wenn Sie dies nicht sehr genau können. In diesem Fall geben Sie hier weitere Details an. Nachdem Sie den Bericht ausgefüllt haben, können Sie ihn einer Route, einem Klettergebiet oder einem Tourenbericht zuordnen.",
     "Informations about the access": "Informationen über Strassenzugang und Öffis",
-    "Infos": "Infos",
     "initiator": {
       "autonomies": "Auslöser"
     },
@@ -815,7 +811,6 @@
       "event_types": "Gewitter"
     },
     "link": "Link",
-    "Links": "Links",
     "List mode": "Listemodus",
     "List of versions for language:": "Versionenliste für diese Sprache:",
     "Load my preferences": "Meine Einstellungen aktivieren",
@@ -1022,7 +1017,6 @@
       "API message": "Es können nur aktuelle Dokumente (24h) gelöscht werden. Wenden Sie sich an die Moderation, um dieses Dokument zu löschen."
     },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Nur Aktionen in den ausgewählten Gebieten und mit den ausgewählten Aktivitäten werden im Feed auf der Startseite gezeigt. Die Aktionen der gefolgten Benutzern sind auch sichtbar.",
-    "Ooops": "Ooops",
     "open": {
       "lift_status": "geöffnet"
     },
@@ -1175,7 +1169,7 @@
     "profile": "Profil",
     "profiles": "Profilen",
     "progressive": {
-      "snow_clearance_ratings": "schrittweise Schneeräumung "
+      "snow_clearance_ratings": "schrittweise Schneeräumung"
     },
     "prominence": "Schartenhöhe/Prominenz",
     "Protect document": "Dokument schützen",
@@ -1307,7 +1301,6 @@
     "sep": {
       "months": "September"
     },
-    "SERAC": "SERAC",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Unfallberichtendatenbank, die strebt nach einer verbesserten Sicherheit in Klettern und Bergsporten.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC baut auf einer freundlichen Einstellung auf. Wir danken Ihnen, es zu verbessern.",
     "service_on_demand": {
@@ -1419,7 +1412,7 @@
       "frequentation_types": "kaum besucht"
     },
     "sometimes": {
-      "snow_clearance_ratings": "gelegentliche Schneeraümung "
+      "snow_clearance_ratings": "gelegentliche Schneeraümung"
     },
     "Source:": "Quelle:",
     "sport_shop": {
@@ -1518,9 +1511,8 @@
     "Unformatted text": "Roher Text",
     "Unordered list": "Ungeordnete Liste",
     "Unprotect document": "Dokument unschützen",
-    "Upload a GPS track": "GPS Strecke hochladen ",
+    "Upload a GPS track": "GPS Strecke hochladen",
     "Upload a new version": "Neue Version hochladen",
-    "URL": "URL",
     "url": "URL",
     "User avatar": "Avatar",
     "Username": "Benutzername",

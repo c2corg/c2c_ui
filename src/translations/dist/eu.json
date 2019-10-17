@@ -111,7 +111,7 @@
     "camp_site": {
       "waypoint_types": "Kanpina"
     },
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da.",
     "Cancel": "Ezeztatu",
     "capacity": "Gordetako sasoian kanpora duen edukiera",
     "capacity_staffed": "Gordetako sasoian duen edukiera",
@@ -911,7 +911,7 @@
       "rock_types": "trachyte"
     },
     "track": {
-      "image_categories": "hurratsa "
+      "image_categories": "hurratsa"
     },
     "train": {
       "public_transportation_types": "trena"
@@ -947,7 +947,6 @@
     "waterpoint": {
       "waypoint_types": "iturria"
     },
-    "waypoint": "waypoint",
     "waypoint_type": "waypoint mota",
     "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",

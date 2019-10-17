@@ -169,7 +169,6 @@
     "Cancel": "Cancel·la",
     "capacity": "capacitat en període no guardat",
     "capacity_staffed": "nombre de places en període guardat",
-    "categories": "categories",
     "cave": {
       "waypoint_types": "cova"
     },
@@ -1008,7 +1007,6 @@
     "sep": {
       "months": "setembre"
     },
-    "SERAC": "SERAC",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC és una base de dades mundial sobre els accidents i incidents a la muntanya. La seva vocació és de millorar la seguretat a la pràctica de l'escalada i dels esports de muntanya.",
     "service_on_demand": {
       "public_transportation_types": "servei a demanda"
