@@ -50,7 +50,6 @@
     "aug": {
       "months": "abuztua"
     },
-    "Author": "Egilea",
     "author": "egilea",
     "avalanche_forecaster": {
       "user_categories": "elurjausi_iragarpena"
@@ -112,7 +111,7 @@
     "camp_site": {
       "waypoint_types": "Kanpina"
     },
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da.",
     "Cancel": "Ezeztatu",
     "capacity": "Gordetako sasoian kanpora duen edukiera",
     "capacity_staffed": "Gordetako sasoian duen edukiera",
@@ -179,7 +178,6 @@
     "conglomerat": {
       "rock_types": "konglomeratua"
     },
-    "Contact": "Kontaktua",
     "contact": "Kontaktua",
     "copyright": {
       "image_types": "copyright",
@@ -203,7 +201,6 @@
     "crampons_spring": {
       "glacier_gear_types": "sasoi hasieran kranpoiak"
     },
-    "Create a new route": "Ibilbide berri bat sortu",
     "Created on": "Sortze data",
     "crowded": {
       "frequentation_types": "jende ugari"
@@ -262,13 +259,6 @@
       "route_configuration_types": "arista"
     },
     "Edit": "Aldatu",
-    "Edit in ca": "Katalanez editatu",
-    "Edit in de": "Alemanez editatu",
-    "Edit in en": "Ingeleseraz editatu",
-    "Edit in es": "Gazteleraz editatu",
-    "Edit in eu": "Euskaraz editatu",
-    "Edit in fr": "Frantsesaraz editatu",
-    "Edit in it": "Italieraz editatu",
     "editor": "Editorea",
     "elevation": "Altitudea",
     "elevation_access": "Abiapuntuaren altitudea",
@@ -288,8 +278,7 @@
       "book_types": "ingurumena"
     },
     "equipment": {
-      "image_categories": "ekipamendua",
-      "$$noContext": "ekipamendua"
+      "image_categories": "ekipamendua"
     },
     "equipment_rating": "Ekipamenduaren kalitatea",
     "equipment_ratings": "ekipamenduen kalitateak",
@@ -359,8 +348,7 @@
       "waypoint_types": "ostatua"
     },
     "glacier": {
-      "route_configuration_types": "glaziarra",
-      "$$noContext": "glaziarra"
+      "route_configuration_types": "glaziarra"
     },
     "glacier_crampons": {
       "glacier_gear_types": "kranpoiak eta glaziarreko segurtasun materiala"
@@ -516,7 +504,6 @@
     "locality": {
       "waypoint_types": "lekua"
     },
-    "Log in to post the first comment": "Konektatu zaitez lehen iruzkina emateko",
     "Login": "Konektatu",
     "Logout": "Deskonektatu",
     "loop": {
@@ -528,7 +515,6 @@
     "magazine": {
       "book_types": "aldizkaria"
     },
-    "main waypoint": "Waypoint nagusia",
     "Make profile page public": "Profilaren orria publikoa egin",
     "maps_info": "Mapak",
     "maps_references": "Erreferentzia kartografikoa",
@@ -536,7 +522,6 @@
       "months": "martxoa"
     },
     "matress_unstaffed": "Gordetako sasoitik kanpora koltxoiak daude",
-    "max": "max",
     "may": {
       "months": "maiatza"
     },
@@ -547,7 +532,6 @@
     "migmatite": {
       "rock_types": "migmatita"
     },
-    "min": "min",
     "misc": {
       "image_categories": "askotarikoa",
       "waypoint_types": "askotarikoa"
@@ -742,10 +726,7 @@
     "public_transportation_rating": "garraio publikoan heltzeko aukera",
     "public_transportation_types": "garraiobide publiko mota",
     "publication_date": "Argitalpen data",
-    "quality": {
-      "snow": "kalitatea",
-      "$$noContext": "kalitatea"
-    },
+    "quality": "kalitatea",
     "quartzite": {
       "rock_types": "kuartzita"
     },
@@ -930,7 +911,7 @@
       "rock_types": "trachyte"
     },
     "track": {
-      "image_categories": "hurratsa "
+      "image_categories": "hurratsa"
     },
     "train": {
       "public_transportation_types": "trena"
@@ -939,7 +920,6 @@
     "traverse": {
       "route_types": "trabesia"
     },
-    "type": "Mota",
     "Types and styles": "Mota eta estiloa",
     "Upload a GPS track": "GPS hurratsa gehitu",
     "url": "URL",
@@ -967,7 +947,6 @@
     "waterpoint": {
       "waypoint_types": "iturria"
     },
-    "waypoint": "waypoint",
     "waypoint_type": "waypoint mota",
     "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",

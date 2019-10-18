@@ -125,7 +125,6 @@
     "aug": {
       "months": "agosto"
     },
-    "Author": "Autor",
     "author": "Autor",
     "author_status": "Autor",
     "autonomous": {
@@ -266,7 +265,6 @@
     "conglomerat": {
       "rock_types": "conglomerado"
     },
-    "Contact": "Contacto",
     "contact": "Contacto",
     "copyright": {
       "image_types": "copyright",
@@ -291,7 +289,6 @@
       "glacier_gear_types": "crampones a principios de verano"
     },
     "Create a new report": "Agregar un nuevo informe",
-    "Create a new route": "Agregar un nuevo itinerario",
     "Created on": "Creado",
     "crevasse_fall": {
       "event_types": "caída en grieta"
@@ -354,13 +351,6 @@
       "route_configuration_types": "arista"
     },
     "Edit": "Editar",
-    "Edit in ca": "Editando en catalán",
-    "Edit in de": "Editando en alemán",
-    "Edit in en": "Editando en inglés",
-    "Edit in es": "Editando en español ",
-    "Edit in eu": "Editando en euskera",
-    "Edit in fr": "Editando en francés",
-    "Edit in it": "Editando en inglés",
     "editor": "Editor",
     "elevation": "Altitud",
     "elevation_access": "Altitud del acceso",
@@ -380,8 +370,7 @@
       "book_types": "entorno"
     },
     "equipment": {
-      "image_categories": "equipamiento",
-      "$$noContext": "equipamiento"
+      "image_categories": "equipamiento"
     },
     "equipment_rating": "Calidad del equipamiento",
     "equipment_ratings": "Calidad del equipamiento",
@@ -399,7 +388,7 @@
       "route_types": "expedition"
     },
     "expeditions": {
-      "article_categories": "expediciones "
+      "article_categories": "expediciones"
     },
     "expert": {
       "autonomies": "experto"
@@ -466,8 +455,7 @@
       "waypoint_types": "hospedaje"
     },
     "glacier": {
-      "route_configuration_types": "glaciar",
-      "$$noContext": "glaciar"
+      "route_configuration_types": "glaciar"
     },
     "glacier_crampons": {
       "glacier_gear_types": "glaciar_crampones"
@@ -633,7 +621,6 @@
     "locality": {
       "waypoint_types": "localidad"
     },
-    "Log in to post the first comment": "Conectase para fijar un comentario",
     "Login": "Iniciar sesión",
     "Logout": "Desconectar",
     "Longitude": "Longitud",
@@ -646,7 +633,6 @@
     "magazine": {
       "book_types": "revista"
     },
-    "main waypoint": "Waypoint principal",
     "Make profile page public": "Hacer pública la página de perfil",
     "male": {
       "genders": "varón"
@@ -657,7 +643,6 @@
       "months": "marzo"
     },
     "matress_unstaffed": "Colchones fuera de los períodos de guardia",
-    "max": "max",
     "may": {
       "months": "mayo"
     },
@@ -668,7 +653,6 @@
     "migmatite": {
       "rock_types": "migmatita"
     },
-    "min": "min",
     "misc": {
       "image_categories": "misceláneos",
       "waypoint_types": "misceláneos"
@@ -854,7 +838,7 @@
     "progressive": {
       "snow_clearance_ratings": "desnevado gradual"
     },
-    "prominence": "Prominencia ",
+    "prominence": "Prominencia",
     "protected": {
       "rain_proof_types": "protegido de la lluvia"
     },
@@ -865,10 +849,7 @@
     "public_transportation_rating": "Acceso en transporte público",
     "public_transportation_types": "Tipo de transporte público",
     "publication_date": "Fecha de publicación",
-    "quality": {
-      "snow": "Calidad",
-      "$$noContext": "Calidad"
-    },
+    "quality": "Calidad",
     "quartzite": {
       "rock_types": "cuarcita"
     },
@@ -887,10 +868,10 @@
       "avalanche_signs": "reciente_avalancha"
     },
     "Recenter on...": "Centrar en ...",
-    "Register": "Inscribirse ",
+    "Register": "Inscribirse",
     "remarks": "Observaciones",
     "rescue": "secorro",
-    "Reset password": "Reiniciar contraseña ",
+    "Reset password": "Reiniciar contraseña",
     "resolution": "resolución",
     "restaurant": {
       "product_types": "restaurante"
@@ -998,7 +979,7 @@
     "snow_quantity": "Cantidad de nieve",
     "snowshoe_rating": "Cotación raquetas",
     "snowshoeing": {
-      "activities": "Raquetas "
+      "activities": "Raquetas"
     },
     "soft snow": "Nieve blanda",
     "soft_mobility": {
@@ -1063,11 +1044,9 @@
     "traverse": {
       "route_types": "cruce"
     },
-    "type": "Tipo",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
     "Upload a GPS track": "Añadir una traza",
-    "url": "url",
     "Username": "Usuario",
     "vertical": {
       "climbing_styles": "vertical"
@@ -1092,12 +1071,11 @@
     "waterpoint": {
       "waypoint_types": "agua/fuente"
     },
-    "waypoint": "waypoint",
     "waypoint_type": "Tipo de waypoint",
-    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
+    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña.",
     "weather": "Meteo observada",
     "weather_station": {
-      "waypoint_types": " estación meteorológica"
+      "waypoint_types": "estación meteorológica"
     },
     "weather_station_types": "Tipo de estación meteorológica",
     "webcam": {

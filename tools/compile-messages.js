@@ -38,9 +38,32 @@ function convert(lang) {
   // eslint-disable-next-line no-console
   console.log('Requesting', lang, 'from transifex');
 
+  const cleanTranslation = (obj) => {
+    const result = {}
+
+    for(const key of Object.keys(obj)) {
+      const value = obj[key];
+      if (typeof value == "string") {
+        const cleanValue = value.trim();
+        if (cleanValue !== key) {
+          result[key] = cleanValue;
+        }
+      } else {
+        const cleanValue = cleanTranslation(value);
+        if (Object.keys(cleanValue).length !== 0) {
+          result[key] = cleanValue;
+        }
+      }
+    }
+
+    return result;
+  }
+
   getTranslation(lang, (data) => {
     // save indented json : need to parse/stringify...
-    const output = JSON.parse(compiler.convertPo([data]));
+    let output = JSON.parse(compiler.convertPo([data]));
+    output = cleanTranslation(output);
+
     fs.writeFileSync('src/translations/dist/' + lang + '.json', JSON.stringify(output, null, 2));
 
     // eslint-disable-next-line no-console
