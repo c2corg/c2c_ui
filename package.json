@@ -56,7 +56,7 @@
     "snyk": "1.236.1"
   },
   "devDependencies": {
-    "@vue/babel-preset-app": "3.12.0",
+    "@vue/babel-preset-app": "4.0.5",
     "@vue/cli-plugin-babel": "3.12.0",
     "@vue/cli-plugin-eslint": "3.12.0",
     "@vue/cli-service": "3.12.0",
