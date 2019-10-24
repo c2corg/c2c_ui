@@ -1312,8 +1312,5 @@
       width: 120px;
       height: 120px;
     }
-    .control--bradifferent .is-checkradio[type=checkbox] + label {
-      margin: 0;
-    }
   }
 </style>
