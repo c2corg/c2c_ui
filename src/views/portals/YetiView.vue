@@ -1,5 +1,5 @@
 <template>
-<!-- eslint-disable -->
+  <!-- eslint-disable no-irregular-whitespace -->
   <div class="section">
     <html-header title="Yeti" />
     <div class="box">

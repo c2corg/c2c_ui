@@ -1,5 +1,5 @@
 <template>
-<!-- eslint-disable -->
+  <!-- eslint-disable no-irregular-whitespace -->
   <div>
     <p>L’application Yéti fournit une aide à la décision au pratiquant de sports de neige lors de la préparation d’une course.</p>
     <p>Cet article répond aux questions les plus fréquentes sur l’utilisation, l’intérêt et les limites de cette application.</p>
@@ -134,7 +134,7 @@
     </div>
 
     <div class="question">
-      <h3 class=title>Comment utiliser Yéti avec la MRE ?</h3>
+      <h3 class="title">Comment utiliser Yéti avec la MRE ?</h3>
       <p>Sélectionner la méthode de réduction élémentaire (MRE) dans le formulaire.
       Saisir le niveau de danger annoncé par le bulletin d’avalanche, de 1 à 4. Le cas échéant, mentionner la limite d’altitude à partir de laquelle le danger évolue. Signaler les orientations critiques données dans la rose des vents du bulletin.
       Zoomer sur le massif, la vallée ou la pente concernée. Activez la carte IGN en cliquant sur l’icône bleue en bas à gauche de la carte.
@@ -155,7 +155,7 @@
       Préciser la taille du groupe et les mesures de précaution envisagée.
       Zoomer sur le massif, la vallée ou la pente concernée. Activez la carte IGN en cliquant sur l’icône bleue en bas à gauche de la carte.
       Soumettre la requête. L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
-      <p>Pas d’estompage de couleur : risque résiduel < inférieur à 1, le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent à partir du danger 3 (risque de déclenchement à distance).</p>
+      <p>Pas d’estompage de couleur : risque résiduel &lt; inférieur à 1, le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent à partir du danger 3 (risque de déclenchement à distance).</p>
       <ul>
         <li>Couleur bleue claire : risque résiduel entre 1 et 1.3, prise de risque accrue. Adopter une technique de ski défensive. Prendre des mesures de précaution (distances de sécurité et de délestage).</li>
         <li>Couleur bleue foncée : risque résiduel entre 1.3 et 1.5, la marge de sécurité est réduite. Une grande expérience est requise pour faire une trace sûre. Les mesures de précaution doivent être appliquées scrupuleusement. Le renoncement doit être sérieusement envisagé.</li>
