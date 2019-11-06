@@ -39,7 +39,7 @@
       <p>Une connaissance minimum de l’utilisation de la grille d’analyse 3X3 et des méthodes de réduction est conseillée pour apprécier l’intérêt et mesurer les limites de Yéti.</p>
       <p>Son usage nécessite un temps de préparation de course à la maison ou au refuge de 15 minutes à 1 heure.</p>
       <p>Pour en savoir plus sur l’analyse de risque avec la grille 3X3, se reporter aux ouvrages cités dans la question 1.</p>
-      <p class="image"><img alt="Méthode 3x3" src="@/assets/img/yeti/methode_3x3.png"></p>
+      <p class="image"><img alt="Méthode 3x3" src="@/assets/img/yeti/methode_3x3.jpg"></p>
     </div>
 
     <div class="question">
@@ -77,7 +77,7 @@
       <h3 class="title">Quelles sont les limites de Yéti ?</h3>
       <p>Les principales limites de cet outil tiennent à celles des piliers sur lesquels ils reposent : le bulletin d’avalanche, le modèle numérique de terrain, les méthodes de réduction et l’algorithme utilisé.</p>
       <p>Les limites de la carte des pentes : la réalisation de la carte des pentes s’appuie sur les données de la base RGEAlti de l’IGN. Cette base de données est issue d’un assemblage de différents modèles numérique de terrain (MNT) dont la résolution est comprise entre 1 et 25 mètres. Toutes les pentes à plus de 30 degrés dont la taille est supérieure à 25 mètres sur le terrain figurent sur la carte. Cette précision est la plupart du temps suffisante pour évaluer l’inclinaison des passages clés d’un itinéraire à skis ou à raquettes. Toutefois, dans certaines circonstances, des pentes réduites de moins de 25 mètres peuvent déjà être dangereuses. Il convient de rester vigilant sur le terrain en conservant un esprit critique par rapport aux informations données par Yéti. En outre, quelques aberrations visuelles peuvent survenir au niveau des frontières. Elles sont liées à la qualité du découpage du MNT dans les zones frontalières.</p>
-      <p class="image"><img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.png"></p>
+      <p class="image"><img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.jpg"></p>
       <p>Pour en savoir plus : <a href="https://www.petzl.com/fondation/projets/carte-pente-risque-avalanches?language=fr#.Wi5q1lSdVE4">Les pentes à plus de 30 degrés sur le Géoportail de l’IGN, Utilisation, intérêts et limites pour les amateurs de sport de neige</a></p>
       <p>Les limites du bulletin d’avalanche : le bulletin d’avalanche dresse un état des lieux du danger d’avalanche à l’échelle d’un massif en dehors des pistes balisées. Les conditions d’une vallée (et encore moins celle d’une pente) ne sont pas évaluées par le bulletin d’avalanche.
       L’indice de danger de 1 à 5 est le résumé d’une situation plus complexe décrite dans le texte qui accompagne le bulletin. La lecture de ce texte est l’un des piliers de l’analyse de risque avec la grille 3X3, laquelle doit systématiquement précéder l’usage de Yéti. La saisie de l’indice de danger dans le formulaire de Yéti suppose que le pratiquant a bien pris connaissance de l’ensemble du bulletin : texte, rose des vents, quantité récente de neige fraîche…
@@ -95,7 +95,7 @@
       <h3 class="title">Comment choisir une méthode de réduction adaptée à sa pratique ?</h3>
       <h4 class="title is-4">La méthode de réduction débutant (MRD)</h4>
       <p>La méthode de réduction débutant (MRD) s’adresse aux pratiquants possédant peu d’expérience de la neige en dehors des pistes balisées. Un encadrant expérimenté préparant une sortie pour des débutants aura intérêt à utiliser cette méthode afin de se ménager une marge de sécurité adaptée à un public qui progresse plus lentement avec des chutes fréquentes (sollicitation du manteau neigeux). Les zones considérées comme à risque sont figurées en bleu clair.</p>
-      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd.png"></p>
+      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd.jpg"></p>
       <h4 class="title is-4">La méthode de réduction élémentaire (MRE)</h4>
       <p>La méthode de réduction élémentaire (MRE) convient aux pratiquants expérimentés soucieux de conserver une marge de sécurité confortable. Avec la MRE, on peut combler une belle vie de skieur en profitant de la poudreuse en hiver et des meilleures neiges de printemps. Elle a été adoptée par des guides expérimentés qui l’estiment suffisante pour se faire plaisir en exerçant leur profession de manière plus détendue.</p>
       <p>Les zones considérées comme à risque sont figurées par deux tons de bleu :</p>
@@ -103,7 +103,7 @@
         <li>bleu foncé pour les pentes à risque dans les orientations cochées sur la rose des vents.</li>
         <li>bleu clair pour les autres pentes à risque</li>
       </ul>
-      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre.png"></p>
+      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre.jpg"></p>
       <h4 class="title is-4">La méthode de réduction professionnelle (MRP)</h4>
       <p>la méthode de réduction professionnelle (MRP) offre un choix de course plus important sur le terrain notamment en pente raide, mais réduit la marge de sécurité. Elle nécessite une compréhension plus fine du manteau neigeux et fait intervenir des paramètres comme l’orientation de la pente, la fréquentation de l’itinéraire et les mesures de précaution envisagée pendant la course. Elle s’adresse aux pratiquants expérimentés qui se sentent trop limités par la MRE.</p>
       <p>Les pentes à risque sont figurées par deux couleurs :</p>
@@ -112,7 +112,7 @@
         <li>risque résiduel compris entre 1 et 1.5 : mauve</li>
         <li>risque résiduel &gt; 1.5 : violet</li>
       </ul>
-      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mre.png"></p>
+      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mre.jpg"></p>
     </div>
 
     <div class="question">
@@ -122,7 +122,7 @@
       Soumettre la requête en cliquant sur "Calculer le risque". L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
       <p>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).
       Couleur bleu clair : pentes à risque, à éviter. À partir du danger 3, prendre en compte les pentes colorées en bleu qui dominent l'itinéraire.</p>
-      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.png"></p>
+      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.jpg"></p>
     </div>
 
     <div class="question">
@@ -136,7 +136,7 @@
         <li>Couleur bleu clair : pentes à risque</li>
         <li>Couleur bleu foncé : risque accru du fait de l’orientation</li>
       </ul>
-      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre_carte.png"></p>
+      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre_carte.jpg"></p>
     </div>
 
     <div class="question">
@@ -152,7 +152,7 @@
         <li>Couleur mauve : risque résiduel entre 1 et 1.5. Risque accru, prudence, formation et expérience sont nécessaires, afin d'adopter une attitude défensive en prenant des mesures de précaution pour réduire le risque. Des conditions nivologiques locales plus sûres que prévu ou une configuration du terrain favorable sont requises pour poursuivre sur cet itinéraire.</li>
         <li>Couleur violette : risque résiduel supérieur à 1.5. Risque élevé, mieux vaut renoncer à cette course.</li>
       </ul>
-      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp_carte.png"></p>
+      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp_carte.jpg"></p>
     </div>
 
     <div class="question">

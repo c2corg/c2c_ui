@@ -334,7 +334,7 @@
             <div class="columns is-mobile is-vcentered">
               <div class="column has-text-centered">
                 <a href="http://www.ensg.eu">
-                  <img src="@/assets/img/yeti/logo-ensg.png" alt="Logo ENSG" width="120">
+                  <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120">
                 </a>
               </div>
               <div class="column has-text-centered">
