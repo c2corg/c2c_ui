@@ -105,7 +105,7 @@
       </ul>
       <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre.jpg"></p>
       <h4 class="title is-4">La méthode de réduction professionnelle (MRP)</h4>
-      <p>la méthode de réduction professionnelle (MRP) offre un choix de course plus important sur le terrain notamment en pente raide, mais réduit la marge de sécurité. Elle nécessite une compréhension plus fine du manteau neigeux et fait intervenir des paramètres comme l’orientation de la pente, la fréquentation de l’itinéraire et les mesures de précaution envisagée pendant la course. Elle s’adresse aux pratiquants expérimentés qui se sentent trop limités par la MRE.</p>
+      <p>La méthode de réduction professionnelle (MRP) offre un choix de course plus important sur le terrain notamment en pente raide, mais réduit la marge de sécurité. Elle nécessite une compréhension plus fine du manteau neigeux et fait intervenir des paramètres comme l’orientation de la pente, la fréquentation de l’itinéraire et les mesures de précaution envisagée pendant la course. Elle s’adresse aux pratiquants expérimentés qui se sentent trop limités par la MRE.</p>
       <p>Les pentes à risque sont figurées par deux couleurs :</p>
       <ul>
         <li>risque résiduel inférieur à 1 : pas d’estompage de couleur</li>
@@ -120,8 +120,10 @@
       <p>Sélectionner la méthode de réduction débutant (MRD) dans le formulaire.
       Saisir le niveau de danger annoncé par le bulletin d’avalanche, de 1 à 3. Le degré 4 ne peut être saisi dans la MRD. Le cas échéant, mentionner la limite d’altitude à partir de laquelle le danger évolue. Zoomer sur le massif, la vallée ou la pente concernée. Activez la carte IGN en cliquant sur l’icône bleue en bas à gauche de la carte.
       Soumettre la requête en cliquant sur "Calculer le risque". L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
-      <p>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).
-      Couleur bleu clair : pentes à risque, à éviter. À partir du danger 3, prendre en compte les pentes colorées en bleu qui dominent l'itinéraire.</p>
+      <ul>
+        <li>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).</li>
+        <li>Couleur bleu clair : pentes à risque, à éviter. À partir du danger 3, prendre en compte les pentes colorées en bleu qui dominent l'itinéraire.</li>
+      </ul>
       <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.jpg"></p>
     </div>
 
@@ -131,8 +133,8 @@
       Saisir le niveau de danger annoncé par le bulletin d’avalanche, de 1 à 4. Le cas échéant, mentionner la limite d’altitude à partir de laquelle le danger évolue. Signaler les orientations critiques données dans la rose des vents du bulletin.
       Zoomer sur le massif, la vallée ou la pente concernée. Activez la carte IGN en cliquant sur l’icône bleue en bas à gauche de la carte.
       Soumettre la requête en cliquant sur "Calculer le risque". L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
-      <p>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).</p>
       <ul>
+        <li>Pas d’estompage de couleur : le projet est valable. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent l’itinéraire à partir du danger 3 (risque de déclenchement à distance).</li>
         <li>Couleur bleu clair : pentes à risque</li>
         <li>Couleur bleu foncé : risque accru du fait de l’orientation</li>
       </ul>
@@ -147,8 +149,8 @@
       Préciser la taille du groupe et les mesures de précaution envisagée.
       Zoomer sur le massif, la vallée ou la pente concernée. Activez la carte IGN en cliquant sur l’icône bleue en bas à gauche de la carte.
       Soumettre la requête en cliquant sur "Calculer le risque". L’application affiche les pentes à risque avec un code couleur sur une interface cartographique. La légende est accessible en cliquant sur l’icône « point d’interrogation » en haut à droite de la carte.</p>
-      <p>Pas d’estompage de couleur : risque résiduel &lt; inférieur à 1. Risque faible, relativement sûr en l'absence d'autres indicateurs de danger. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent à partir du danger 3 (risque de déclenchement à distance).</p>
       <ul>
+        <li>Pas d’estompage de couleur : risque résiduel &lt; inférieur à 1. Risque faible, relativement sûr en l'absence d'autres indicateurs de danger. Rester vigilant sur le terrain si les conditions ou la taille du groupe évoluent. Attention aux pentes qui dominent à partir du danger 3 (risque de déclenchement à distance).</li>
         <li>Couleur mauve : risque résiduel entre 1 et 1.5. Risque accru, prudence, formation et expérience sont nécessaires, afin d'adopter une attitude défensive en prenant des mesures de précaution pour réduire le risque. Des conditions nivologiques locales plus sûres que prévu ou une configuration du terrain favorable sont requises pour poursuivre sur cet itinéraire.</li>
         <li>Couleur violette : risque résiduel supérieur à 1.5. Risque élevé, mieux vaut renoncer à cette course.</li>
       </ul>
@@ -197,4 +199,3 @@ ul {
   max-height: 500px;
 }
 </style>
-
