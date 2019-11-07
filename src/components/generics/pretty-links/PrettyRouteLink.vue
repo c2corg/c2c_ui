@@ -1,11 +1,11 @@
 <template>
   <document-link :document="route" class="pretty-route-link has-hover-background">
+    <document-title :document="route" />
+    <span>&nbsp;</span>
     <activities
       v-if="!hideActivities"
       :activities="route.activities"
       class="is-size-3 has-text-secondary icon-activities" />
-    <span>&nbsp;</span>
-    <document-title :document="route" />,
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
       :title="$gettext('height_diff_difficulties')"
