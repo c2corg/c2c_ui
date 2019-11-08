@@ -21,15 +21,22 @@
 
     <elevation-profile :document="document" v-if="documentType=='outing'" />
 
-    <div
-      v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
-      class="buttons is-centered">
-      <button class="button is-primary is-small" @click="downloadGpx">
-        GPX
-      </button>
-      <button class="button is-primary is-small" @click="downloadKml">
-        KML
-      </button>
+    <div class="columns is-multiline is-mobile is-clearfix">
+      <div class="column is-full-tablet is-full-desktop is-half-widescreen ">
+        <yeti-button :document="document" class="is-small" />
+      </div>
+      <div class="column">
+        <div
+          v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
+          class="buttons is-pulled-right">
+          <button class="button is-primary is-small" @click="downloadGpx">
+            GPX
+          </button>
+          <button class="button is-primary is-small" @click="downloadKml">
+            KML
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -40,12 +47,14 @@
 
   import { requireDocumentProperty } from '@/js/properties-mixins';
   import ElevationProfile from './ElevationProfile';
+  import YetiButton from '@/components/yeti/YetiButton';
 
   const GeoJSON = new ol.format.GeoJSON();
 
   export default {
     components: {
-      ElevationProfile
+      ElevationProfile,
+      YetiButton
     },
 
     mixins: [ requireDocumentProperty ],

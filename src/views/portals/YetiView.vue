@@ -382,7 +382,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on />
+          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="documents" />
         </div>
       </div>
     </div>
@@ -390,6 +390,7 @@
 </template>
 
 <script>
+  import c2c from '@/js/apis/c2c';
   import ol from '@/js/libs/ol';
   import axios from 'axios';
   import vueSlider from 'vue-slider-component';
@@ -504,7 +505,9 @@
         mountains: {},
         visibleMountains: {},
         promiseMountains: null,
-        showMountainsList: false
+        showMountainsList: false,
+
+        documents: null
       };
     },
 
@@ -566,6 +569,21 @@
 
     mounted() {
       this.check();
+      const doc = this.$route.params.document;
+      const lang = this.$language.current;
+      if (doc) {
+        c2c['route'].getCooked(doc, lang).then(doc => {
+          // set min zoom for map
+          // (that will be used after document is displayed and map is fitted to extent)
+          this.$refs.map.minZoomLevel = VALID_FORM_DATA.minZoom;
+          // add documents
+          this.documents = [doc.data];
+          // put document layers on top
+          ['documentsLayer', 'waypointsLayer'].forEach(layer => {
+            this.$refs.map[layer].setZIndex(1);
+          });
+        });
+      }
 
       // mountains
       this.$refs.map.map.on('moveend', this.onMapMoveEnd);
@@ -724,6 +742,9 @@
         });
 
         this.yetiLayer.setMap(this.$refs.map.map);
+
+        // put yeti layer below document layers
+        this.yetiLayer.setZIndex(0);
 
         // set map legend
         this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);

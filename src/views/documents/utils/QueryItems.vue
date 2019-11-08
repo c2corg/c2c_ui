@@ -38,7 +38,10 @@
       class="association-query-item is-hidden-mobile"
       :document-types="associations"
       @documents-load="$emit('documents-load', arguments[0])" />
+
     <load-user-preferences-button class="is-hidden-tablet" />
+
+    <yeti-button />
   </div>
 </template>
 
@@ -47,6 +50,7 @@
   import QueryItem from './QueryItem';
   import AssociationQueryItem from './AssociationQueryItem';
   import LoadUserPreferencesButton from './LoadUserPreferencesButton';
+  import YetiButton from '@/components/yeti/YetiButton';
 
   const categorizedFieldsDefault = {
     General: [
@@ -180,7 +184,8 @@
     components: {
       QueryItem,
       AssociationQueryItem,
-      LoadUserPreferencesButton
+      LoadUserPreferencesButton,
+      YetiButton
     },
 
     computed: {

@@ -262,7 +262,9 @@
         // we must save initial geometry
         initialGeometry: null,
 
-        highlightedFeature: null
+        highlightedFeature: null,
+
+        minZoomLevel: DEFAULT_POINT_ZOOM
       };
     },
 
@@ -683,7 +685,7 @@
         this.view.fit(extent, { size: this.map.getSize() });
 
         // set a minimum zoom level
-        this.view.setZoom(Math.min(DEFAULT_POINT_ZOOM, this.view.getZoom()));
+        this.view.setZoom(Math.min(this.minZoomLevel, this.view.getZoom()));
       },
 
       toogleMapLayer(layer) {
