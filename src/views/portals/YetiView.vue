@@ -579,7 +579,7 @@
 
     mounted() {
       this.check();
-      const doc = this.$route.params.document;
+      const doc = this.$route.params.document_id;
       const lang = this.$language.current;
       if (doc) {
         c2c['route'].getCooked(doc, lang).then(doc => {
