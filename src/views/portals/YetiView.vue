@@ -330,13 +330,13 @@
             </div>
           </div>
 
-          <div class="box is-hidden-mobile" v-if="documents">
+          <div class="box is-hidden-mobile" v-if="document">
             <div class="title is-4 document-title">
               Route
             </div>
-            <document-link :document="documents[0]">
+            <document-link :document="document">
               <icon-route class="document-icon" />
-              <document-title :document="documents[0]" />
+              <document-title :document="document" />
             </document-link>
           </div>
 
@@ -392,7 +392,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="documents" />
+          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="document ? [document] : null" />
         </div>
       </div>
     </div>
@@ -517,7 +517,7 @@
         promiseMountains: null,
         showMountainsList: false,
 
-        documents: null
+        document: null
       };
     },
 
@@ -586,8 +586,8 @@
           // set min zoom for map
           // (that will be used after document is displayed and map is fitted to extent)
           this.$refs.map.minZoomLevel = VALID_FORM_DATA.minZoom;
-          // add documents
-          this.documents = [doc.data];
+          // add document
+          this.document = doc.data;
           // put document layers on top
           ['documentsLayer', 'waypointsLayer'].forEach(layer => {
             this.$refs.map[layer].setZIndex(1);
