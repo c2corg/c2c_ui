@@ -30,11 +30,11 @@ import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
-import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons/faFlagCheckered';
@@ -72,8 +72,8 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
-import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faSquare } from '@fortawesome/free-solid-svg-icons/faSquare';
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faSun } from '@fortawesome/free-solid-svg-icons/faSun';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faTag } from '@fortawesome/free-solid-svg-icons/faTag';
@@ -238,11 +238,11 @@ export default function install(Vue) {
     faCompress,
     faDatabase,
     faEdit,
+    faExclamation,
     faExclamationCircle,
     faExpand,
     faExternalLinkAlt,
     faEye,
-    faExclamation,
     faFilter,
     faFlag,
     faFlagCheckered,
@@ -280,8 +280,8 @@ export default function install(Vue) {
     faSignInAlt,
     faSignOutAlt,
     faSortAmountUp,
-    faStar,
     faSquare,
+    faStar,
     faSun,
     faTachometerAlt,
     faTag,
