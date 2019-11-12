@@ -19,7 +19,7 @@
         return this.$route.name;
       },
       href() {
-        return '/yeti' + (this.document ? '/' + this.document.document_id : '');
+        return { name: 'yeti', params: { 'document_id': this.document ? this.document.document_id : null } };
       },
       isRouteDocumentType() {
         return this.documentType === 'route' || this.documentType === 'routes';
