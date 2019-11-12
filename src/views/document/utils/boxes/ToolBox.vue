@@ -51,7 +51,7 @@
     <tool-box-button
       v-if="isEditable && hasMissingLangs"
       @click="$refs.translateWindow.show()"
-      icon="edit"
+      icon="globe"
       :label="$gettext('Translate into an other lang')" />
 
     <tool-box-button
