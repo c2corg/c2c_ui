@@ -22,10 +22,6 @@
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
-          <h3 class="title is-3" v-translate>
-            Mobile application
-          </h3>
-          <mobile-app-advertising class="box" />
 
           <h3 class="title is-3" v-translate>
             Last forum topics
@@ -43,7 +39,6 @@
   import FeedWidget from '@/components/feed-widget/FeedWidget';
   import HomeBanner from './HomeBanner';
   import ForumWidget from './utils/ForumWidget';
-  import MobileAppAdvertising from './utils/MobileAppAdvertising';
 
   export default {
     name: 'FeedView',
@@ -51,8 +46,7 @@
     components: {
       HomeBanner,
       FeedWidget,
-      ForumWidget,
-      MobileAppAdvertising
+      ForumWidget
     },
 
     data() {

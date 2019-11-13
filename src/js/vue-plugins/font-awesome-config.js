@@ -37,6 +37,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons/faFlagCheckered';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { faGlobeAmericas } from '@fortawesome/free-solid-svg-icons/faGlobeAmericas';
 import { faGrin } from '@fortawesome/free-solid-svg-icons/faGrin';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
@@ -243,6 +244,7 @@ export default function install(Vue) {
     faFilter,
     faFlag,
     faFlagCheckered,
+    faGlobe,
     faGlobeAmericas,
     faGrin,
     faHashtag,
