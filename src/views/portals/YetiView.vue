@@ -330,6 +330,16 @@
             </div>
           </div>
 
+          <div class="box is-hidden-mobile" v-if="document">
+            <div class="title is-4 document-title">
+              Route
+            </div>
+            <document-link :document="document">
+              <icon-route class="document-icon" />
+              <document-title :document="document" />
+            </document-link>
+          </div>
+
           <div class="box yeti-logos">
             <div class="columns is-mobile is-vcentered">
               <div class="column has-text-centered">
@@ -1329,6 +1339,16 @@
     right: 0;
     left: 0;
     min-height: 100%;
+  }
+
+  .document-title {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .document-icon,
+  .document-icon:hover {
+    color: $dark;
+    margin-right: 3px;
   }
 </style>
 
