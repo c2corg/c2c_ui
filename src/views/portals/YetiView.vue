@@ -382,7 +382,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on />
+          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="document ? [document] : null" />
         </div>
       </div>
     </div>
@@ -390,6 +390,7 @@
 </template>
 
 <script>
+  import c2c from '@/js/apis/c2c';
   import ol from '@/js/libs/ol';
   import axios from 'axios';
   import vueSlider from 'vue-slider-component';
@@ -504,7 +505,9 @@
         mountains: {},
         visibleMountains: {},
         promiseMountains: null,
-        showMountainsList: false
+        showMountainsList: false,
+
+        promiseDocument: null
       };
     },
 
@@ -544,6 +547,10 @@
 
       countVisibleMountains() {
         return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
+      },
+
+      document() {
+        return (this.promiseDocument && this.promiseDocument.data) ? this.promiseDocument.data : null;
       }
 
     },
@@ -566,6 +573,13 @@
 
     mounted() {
       this.check();
+
+      // document
+      const doc = this.$route.params.document_id;
+      const lang = this.$language.current;
+      if (doc) {
+        this.promiseDocument = c2c['route'].getCooked(doc, lang).then(this.onDocument);
+      }
 
       // mountains
       this.$refs.map.map.on('moveend', this.onMapMoveEnd);
@@ -725,6 +739,9 @@
 
         this.yetiLayer.setMap(this.$refs.map.map);
 
+        // put yeti layer below document layers
+        this.yetiLayer.setZIndex(0);
+
         // set map legend
         this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
         this.mapLegend.items.forEach(item => {
@@ -852,6 +869,16 @@
       onSubmitDisclaimer() {
         this.showDisclaimer = false;
         this.$localStorage.set('yeti-disclaimer', 'validated');
+      },
+
+      onDocument() {
+        // set min zoom for map
+        // (that will be used after document is displayed and map is fitted to extent)
+        this.$refs.map.minZoomLevel = VALID_FORM_DATA.minZoom;
+        // put document layers on top
+        ['documentsLayer', 'waypointsLayer'].forEach(layer => {
+          this.$refs.map[layer].setZIndex(1);
+        });
       }
     }
   };

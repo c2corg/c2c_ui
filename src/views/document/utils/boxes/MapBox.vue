@@ -21,15 +21,25 @@
 
     <elevation-profile :document="document" v-if="documentType=='outing'" />
 
-    <div
-      v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
-      class="buttons is-centered">
-      <button class="button is-primary is-small" @click="downloadGpx">
-        GPX
-      </button>
-      <button class="button is-primary is-small" @click="downloadKml">
-        KML
-      </button>
+    <div class="columns is-multiline is-mobile is-clearfix">
+      <div class="column is-full-tablet is-full-desktop is-half-widescreen ">
+        <router-link v-if="yetiDocumentActivities" :to="yetiUrl" class="button is-small">
+          <icon-yeti class="icon" />
+          <span>Voir dans YETI</span>
+        </router-link>
+      </div>
+      <div class="column">
+        <div
+          v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
+          class="buttons is-pulled-right">
+          <button class="button is-primary is-small" @click="downloadGpx">
+            GPX
+          </button>
+          <button class="button is-primary is-small" @click="downloadKml">
+            KML
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +59,17 @@
     },
 
     mixins: [ requireDocumentProperty ],
+
+    computed: {
+      yetiDocumentActivities() {
+        const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
+        return this.document.activities.some(activity => activities.includes(activity));
+      },
+
+      yetiUrl() {
+        return { name: 'yeti', params: { 'document_id': this.document.document_id } };
+      }
+    },
 
     methods: {
       downloadKml() {

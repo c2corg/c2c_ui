@@ -12,6 +12,7 @@
         <topoguide-view-link to="images" :label="$gettext('images')" icon="icon-image" />
         <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book" />
         <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area" />
+        <topoguide-view-link to="yeti" label="YETI" icon="icon-yeti" />
       </div>
     </div>
     <div class="section columns is-multiline is-variable is-8">
@@ -140,7 +141,7 @@
     .links{
       justify-content:center;
       flex-flow:wrap row;
-      max-width:550px;
+      max-width:700px;
       margin:auto;
     }
   }

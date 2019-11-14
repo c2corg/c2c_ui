@@ -62,7 +62,7 @@ const routes = [
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
   { path: '/mailinglists', name: 'mailinglists', component: MailingListsView },
-  { path: '/yeti/:page?', name: 'yeti', component: YetiView },
+  { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
