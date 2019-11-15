@@ -5,39 +5,48 @@
 // all modification are commented with a C2C prefix
 
 // C2C fixed import
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 // C2C fixed lang list
-require('moment/locale/ca.js');
-require('moment/locale/es.js');
-require('moment/locale/eu.js');
-require('moment/locale/de.js');
-require('moment/locale/fr.js');
-require('moment/locale/it.js');
-require('moment/locale/en-gb.js'); // keep en in last.
+require('dayjs/locale/ca.js');
+require('dayjs/locale/es.js');
+require('dayjs/locale/eu.js');
+require('dayjs/locale/de.js');
+require('dayjs/locale/fr.js');
+require('dayjs/locale/it.js');
+require('dayjs/locale/en-gb.js'); // keep en in last.
+
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
+dayjs.extend(localizedFormat);
+dayjs.extend(relativeTime);
 
 // C2C use export default io module.exports and remove options argument
 export default function install(Vue) {
   const momentVm = new Vue({
     methods: {
       parseDate(arg, format) {
-        return moment(arg, format);
+        return dayjs(arg, format);
       },
 
       timeAgo(arg) {
-        return moment.utc(arg).local().locale(this.$language.current).fromNow();
+        return dayjs.utc(arg).local().locale(this.$language.current).fromNow();
       },
 
       toLocalizedString(arg, format) {
-        return moment(arg).locale(this.$language.current).format(format);
+        return dayjs(arg).locale(this.$language.current).format(format);
       },
 
       toTechnicalString(arg) {
-        return moment(arg).format('YYYY-MM-DD HH:mm:ss');
+        return dayjs(arg).format('YYYY-MM-DD HH:mm:ss');
       },
 
       month(monthNumber) {
-        return moment.localeData(this.$language.current).months()[monthNumber];
+        return dayjs.localeData(this.$language.current).months()[monthNumber];
       }
     }
   });

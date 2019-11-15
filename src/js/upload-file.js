@@ -1,6 +1,6 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
-import moment from 'moment';
+import moment from 'dayjs';
 import loadImage from 'blueimp-load-image';
 import ol from '@/js/libs/ol.js';
 
