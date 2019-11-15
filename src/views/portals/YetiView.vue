@@ -1257,7 +1257,7 @@
     background: $grey;
     color: $white;
     border-radius: 50%;
-    font-size: .7em;
+    font-size: .72em;
     text-align: center;
   }
 
@@ -1302,6 +1302,10 @@
     right: 0;
     left: 0;
     min-height: 100%;
+
+    & + .yeti-content {
+      visibility: hidden;
+    }
   }
 </style>
 
