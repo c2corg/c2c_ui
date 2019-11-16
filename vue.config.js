@@ -1,5 +1,6 @@
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
 const result = {
   publicPath: '/',
@@ -11,7 +12,6 @@ const result = {
   },
 
   configureWebpack: {
-
     performance: {
       hints: 'error',
       // TODO sizes checks are on compiled files, instead of GZIP sizes
@@ -43,15 +43,11 @@ const result = {
       }
     },
 
-    plugins: [
-      // moment, by default load all locales
-      // this will skip all of it, and a fixed list is setted in @/tools/vue-moment.js',
-      new webpack.IgnorePlugin(/^\.\/locale$/, /dayjs$/)
-    ]
+    plugins: []
   }
 };
 
-/* Please not that all key present in this file are public keys
+/* Please note that all key present in this file are public keys
  * They don't need to be hidden.
  * If you need to use a private key, please do NOT add it here
  */
@@ -101,7 +97,8 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   };
 
   config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
-  config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj';
+  config.bingApiKey =
+    'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj';
 
   // dev bundles are huge, no check
   result.configureWebpack.performance.hints = false;
@@ -129,7 +126,8 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.urls = config.urlsConfigurations.prod;
 
   config.ignApiKey = 'iq1rkryayi4z074da39pbg6s';
-  config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
+  config.bingApiKey =
+    'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
   config.isProduction = true; // explicit prod flag
 
