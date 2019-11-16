@@ -1,6 +1,8 @@
 // from vue-moment.js https://github.com/brockpetrie/vue-moment
 // but with small modification for google bot.
 //
+// Further modified to replace moment with dayjs. API is almost identical.
+//
 // and added time ago filter
 // all modification are commented with a C2C prefix
 
@@ -12,13 +14,13 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 // C2C fixed lang list
-require('dayjs/locale/ca.js');
-require('dayjs/locale/es.js');
-require('dayjs/locale/eu.js');
-require('dayjs/locale/de.js');
-require('dayjs/locale/fr.js');
-require('dayjs/locale/it.js');
-require('dayjs/locale/en-gb.js'); // keep en in last.
+import 'dayjs/locale/ca';
+import 'dayjs/locale/es';
+import 'dayjs/locale/eu';
+import 'dayjs/locale/de';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/it';
+import 'dayjs/locale/en-gb';
 
 dayjs.extend(utc);
 dayjs.extend(advancedFormat);
@@ -34,11 +36,17 @@ export default function install(Vue) {
       },
 
       timeAgo(arg) {
-        return dayjs.utc(arg).local().locale(this.$language.current).fromNow();
+        return dayjs
+          .utc(arg)
+          .local()
+          .locale(this.$language.current)
+          .fromNow();
       },
 
       toLocalizedString(arg, format) {
-        return dayjs(arg).locale(this.$language.current).format(format);
+        return dayjs(arg)
+          .locale(this.$language.current)
+          .format(format);
       },
 
       toTechnicalString(arg) {

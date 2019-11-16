@@ -1,6 +1,6 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
-import moment from 'dayjs';
+import dayjs from 'dayjs';
 import loadImage from 'blueimp-load-image';
 import ol from '@/js/libs/ol.js';
 
@@ -36,7 +36,8 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
 const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
-  let decimal = Number(degrees) + (Number(minutes) / 60) + (parseFloat(seconds) / 3600);
+  let decimal =
+    Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
 
   // Don't do anything for N or E
   if (direction === 'S' || direction === 'W') {
@@ -54,12 +55,12 @@ const parseDate = function(exif, iptc) {
 
   if (iptcDate) {
     if (iptc.TimeCreated) {
-      date = moment(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD HHmmssZ ZZ');
+      date = dayjs(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD HHmmssZ ZZ');
     } else {
-      date = moment(iptcDate, 'YYYYMMDD');
+      date = dayjs(iptcDate, 'YYYYMMDD');
     }
   } else if (exifDate) {
-    date = moment(exifDate, 'YYYY:MM:DD HH:mm:ss');
+    date = dayjs(exifDate, 'YYYY:MM:DD HH:mm:ss');
   }
 
   return date && date.isValid() ? date.format() : null;
@@ -76,14 +77,18 @@ const parseExifGeometry = function(exif) {
   lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSLatitudeRef);
   lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSLongitudeRef);
 
-  if (isNaN(lat) || isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
+  if (
+    isNaN(lat) ||
+    isNaN(lon) ||
+    !ol.extent.containsXY(worldExtent, lon, lat)
+  ) {
     return undefined;
   }
 
   const location = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-  const geom = { 'coordinates': location, 'type': 'Point' };
+  const geom = { coordinates: location, type: 'Point' };
 
-  return { 'geom': JSON.stringify(geom) };
+  return { geom: JSON.stringify(geom) };
 };
 
 const parseExifElevation = function(exif) {
@@ -101,7 +106,13 @@ const setIfDefined = function(document, name, value) {
   }
 };
 
-const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
+const uploadFile = function(
+  file,
+  onDataUrlReady,
+  onUploadProgress,
+  onSuccess,
+  onFailure
+) {
   const document = {};
 
   const parseMetaData = function(metaData) {
@@ -118,7 +129,11 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
       setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
       setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
       setIfDefined(document, 'fnumber', exif.FNumber);
-      setIfDefined(document, 'camera_name', (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : undefined);
+      setIfDefined(
+        document,
+        'camera_name',
+        exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined
+      );
       setIfDefined(document, 'geometry', parseExifGeometry(exif));
       setIfDefined(document, 'elevation', parseExifElevation(exif));
     }
@@ -129,7 +144,7 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
     if (orientation !== 0 && file.type === 'image/jpeg') {
       loadImage(
         file,
-        (canvas) => {
+        canvas => {
           processDataUrl(canvas.toDataURL(file.type));
 
           // and this function will call upload
@@ -139,7 +154,7 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
       );
     } else {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         processDataUrl(e.target.result);
       };
       reader.readAsDataURL(file);
@@ -170,7 +185,13 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
   };
 
   const upload = function(data) {
-    worker.push(c2c.uploadImage.bind(c2c), data, onUploadProgress, onUploadSuccess, onFailure);
+    worker.push(
+      c2c.uploadImage.bind(c2c),
+      data,
+      onUploadProgress,
+      onUploadSuccess,
+      onFailure
+    );
   };
 
   loadImage.parseMetaData(file, parseMetaData);
