@@ -23,7 +23,7 @@
 
     <div class="columns is-multiline is-mobile is-clearfix">
       <div class="column is-full-tablet is-full-desktop is-half-widescreen ">
-        <router-link v-if="yetiDocumentActivities" :to="yetiUrl" class="button is-small">
+        <router-link v-if="showYetiButton" :to="yetiUrl" class="button is-small">
           <icon-yeti class="icon" />
           <span>Voir dans YETI</span>
         </router-link>
@@ -61,8 +61,15 @@
     mixins: [ requireDocumentProperty ],
 
     computed: {
-      yetiDocumentActivities() {
+      showYetiButton() {
+        // at least one of document activities is concerned by yeti
+
+        if (!this.document || !this.document.activities) {
+          return false;
+        }
+
         const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
+
         return this.document.activities.some(activity => activities.includes(activity));
       },
 
