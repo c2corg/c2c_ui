@@ -1292,7 +1292,6 @@
     display: inline-block;
     width: 1.1rem;
     height: 1.1rem;
-    line-height: 1rem;
     vertical-align: .1rem;
     margin-left: 1rem;
     background: $grey;
