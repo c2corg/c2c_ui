@@ -392,7 +392,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="document ? [document] : null" />
+          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="documents" />
         </div>
       </div>
     </div>
@@ -561,6 +561,10 @@
 
       document() {
         return (this.promiseDocument && this.promiseDocument.data) ? this.promiseDocument.data : null;
+      },
+
+      documents() {
+        return this.document ? [this.document] : null;
       }
 
     },
