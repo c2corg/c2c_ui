@@ -112,7 +112,7 @@
             <div class="yetimountains">
               <div>
                 <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
-                  Liste des massifs
+                  Bulletins BRA par massif
                   <span v-if="promiseMountains" class="yetimountains-count">{{ countVisibleMountains }}</span>
                   <fa-icon
                     class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
@@ -122,7 +122,7 @@
               </div>
               <div v-if="showMountainsList">
                 <div v-if="promiseMountains">
-                  <p class="column yetiform-info">Téléchargez le bulletin en PDF depuis le site de Météo France</p>
+                  <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
                   <dl>
                     <div v-for="(mountains, massif) of visibleMountains" :key="massif">
                       <dt class="yetimountains-listtitle">
