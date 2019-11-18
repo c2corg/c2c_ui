@@ -12,6 +12,7 @@ import utc from 'dayjs/plugin/utc';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import localeData from 'dayjs/plugin/localeData';
 
 // C2C fixed lang list
 import 'dayjs/locale/ca';
@@ -26,10 +27,11 @@ dayjs.extend(utc);
 dayjs.extend(advancedFormat);
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
+dayjs.extend(localeData);
 
 // C2C use export default io module.exports and remove options argument
 export default function install(Vue) {
-  const momentVm = new Vue({
+  const dateUtilsVm = new Vue({
     methods: {
       parseDate(arg, format) {
         return dayjs(arg, format);
@@ -54,10 +56,13 @@ export default function install(Vue) {
       },
 
       month(monthNumber) {
-        return dayjs.localeData(this.$language.current).months()[monthNumber];
+        return dayjs()
+          .locale(this.$language.current)
+          .localeData()
+          .months()[monthNumber];
       }
     }
   });
 
-  Vue.prototype.$moment = momentVm;
+  Vue.prototype.$dateUtils = dateUtilsVm;
 }

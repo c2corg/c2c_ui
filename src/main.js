@@ -20,7 +20,7 @@ import screen from '@/js/vue-plugins/screen';
 import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
-import vueMoment from '@/js/vue-plugins/vue-moment.js';
+import dateUtils from '@/js/vue-plugins/date-utils.js';
 
 require('./assets/sass/main.scss');
 
@@ -61,7 +61,7 @@ Vue.use(VueAnalytics, {
   }
 });
 
-Vue.use(vueMoment); // moment functions
+Vue.use(dateUtils);
 Vue.use(documentUtils); // getDocumentType, getLocale functions
 Vue.use(fontAwesome); // <fa-icon /> component
 Vue.use(getText); // vm.$gettext() function and v-translate directive

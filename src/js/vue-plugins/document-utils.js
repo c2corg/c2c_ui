@@ -271,8 +271,8 @@ export default function install(Vue) {
           return this.$gettext('Invalid date');
         }
 
-        const start = this.$moment.parseDate(date_start).locale(this.$language.current);
-        const end = this.$moment.parseDate(date_end).locale(this.$language.current);
+        const start = this.$dateUtils.parseDate(date_start).locale(this.$language.current);
+        const end = this.$dateUtils.parseDate(date_end).locale(this.$language.current);
         const sameYear = start.year() === end.year();
         const sameMonth = start.month() === end.month();
         const sameDay = start.date() === end.date();

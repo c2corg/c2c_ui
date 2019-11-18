@@ -38,7 +38,7 @@
       </span>
 
       <span class="is-nowrap">
-        {{ $moment.toLocalizedString(document.date_end, "LL") }}
+        {{ $dateUtils.toLocalizedString(document.date_end, "LL") }}
       </span>
 
       <marker-quality :quality="document.quality" />

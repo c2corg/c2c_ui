@@ -52,7 +52,7 @@
       },
       value_: {
         get() {
-          return this.$moment.parseDate(this.value || undefined);
+          return this.$dateUtils.parseDate(this.value || undefined);
         },
         set(value) {
           if (!this.disabled) {
@@ -67,7 +67,7 @@
         },
         set(value) {
           const d = this.value_;
-          value = this.$moment.parseDate(value);
+          value = this.$dateUtils.parseDate(value);
 
           d.year(value.year());
           d.month(value.month());

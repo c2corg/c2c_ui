@@ -9,7 +9,7 @@
     </a>
 
     <span v-else-if="field.type==='date_time'">
-      {{ $moment.toLocalizedString(value, 'LLL') }}
+      {{ $dateUtils.toLocalizedString(value, 'LLL') }}
     </span>
 
     <textual-array

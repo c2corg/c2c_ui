@@ -24,7 +24,7 @@
             :id="change.document.document_id"
             :version="change.version_id"
             :lang="change.lang">
-            {{ $moment.toTechnicalString(change.written_at) }}
+            {{ $dateUtils.toTechnicalString(change.written_at) }}
           </version-link>
         </td>
         <td>

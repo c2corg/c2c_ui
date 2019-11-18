@@ -8,7 +8,7 @@
       <p>
         <fa-icon icon="calendar" />
         <label>
-          {{ $moment.toLocalizedString(document.date_time, 'LLL') }}
+          {{ $dateUtils.toLocalizedString(document.date_time, 'LLL') }}
         </label>
       </p>
 

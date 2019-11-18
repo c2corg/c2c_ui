@@ -49,7 +49,7 @@
 
           <!-- xreport specific  -->
           <span v-else-if="documentType=='xreport'" class="outing-date is-size-5">
-            {{ $moment.toLocalizedString(document.date, 'LL') | uppercaseFirstLetter }}
+            {{ $dateUtils.toLocalizedString(document.date, 'LL') | uppercaseFirstLetter }}
           </span>
         </h1>
       </div>

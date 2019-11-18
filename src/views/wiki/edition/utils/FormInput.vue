@@ -148,8 +148,8 @@
         const max = this.max || this.field.max;
 
         return {
-          to: min ? this.$moment.parseDate(min).toDate() : undefined,
-          from: max ? (this.$moment.parseDate(max).add(1, 'd').toDate()) : undefined
+          to: min ? this.$dateUtils.parseDate(min).toDate() : undefined,
+          from: max ? (this.$dateUtils.parseDate(max).add(1, 'd').toDate()) : undefined
         };
       },
 

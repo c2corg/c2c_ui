@@ -1,4 +1,5 @@
 import french_translations from '@/translations/dist/fr.json';
+import dayjs from 'dayjs';
 
 const TEXT_NODE = 3;
 
@@ -102,6 +103,7 @@ export default function install(Vue) {
     methods: {
       firstLoad() {
         const lang = this.current;
+        dayjs.locale(lang);
 
         this._getMessages(this.current).then(() => {
           // dirty : simulate lang update to fire the update of page on load
@@ -115,6 +117,7 @@ export default function install(Vue) {
       setCurrent(lang) {
         // save in locale storage
         this.$localStorage.set('current', lang);
+        dayjs.locale(lang);
 
         // is user is logged, we need to save in db his preference
         this.$user.saveLangPreference(lang);

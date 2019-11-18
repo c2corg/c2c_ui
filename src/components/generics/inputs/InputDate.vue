@@ -45,7 +45,7 @@
 
     methods: {
       onInput(value) {
-        value = this.$moment.parseDate(value).format('YYYY-MM-DD');
+        value = this.$dateUtils.parseDate(value).format('YYYY-MM-DD');
         this.$emit('input', value);
       }
     },

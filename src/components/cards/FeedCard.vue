@@ -69,7 +69,7 @@
         <span>&nbsp;</span>
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
       </span>
-      <span> {{ $moment.timeAgo(item.time) }} </span>
+      <span> {{ $dateUtils.timeAgo(item.time) }} </span>
       <span>
         <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
