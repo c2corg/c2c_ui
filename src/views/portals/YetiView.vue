@@ -4,10 +4,11 @@
     <html-header title="Yeti" />
     <div class="box">
       <h1 class="title is-1">
+        <div class="yeti-icon is-inline-block">
+          <icon-yeti />
+        </div>
+        <span>&thinsp;</span>
         <span>YETI - Un outil de préparation de course</span>
-        <span class="is-pulled-right has-text-primary">
-          <fa-icon icon="map-marked-alt" />
-        </span>
       </h1>
     </div>
 
@@ -910,6 +911,10 @@
 
   .yeti-app {
     position: relative;
+  }
+
+  .yeti-icon {
+    transform: scale(.9);
   }
 
   .map-container {
