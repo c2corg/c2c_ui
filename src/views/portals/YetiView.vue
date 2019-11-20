@@ -666,11 +666,18 @@
         const extent = this.$refs.map.getExtent('EPSG:3857');
         const extendedExtent = this.extendExtent(extent);
 
-        this.drawExtent(extendedExtent);
-
         const yetiUrl = this.getYetiUrl(extendedExtent);
 
-        // if layer already exist, remove it
+        // remove old layers first
+        this.removeLayers()
+
+        // fetch img
+        this.promise = axios.get(yetiUrl)
+          .then(result => this.onYetiResult(result, extendedExtent))
+          .catch(this.onYetiError);
+      },
+
+      removeLayers() {
         if (this.yetiLayer) {
           this.yetiLayer.setMap(null);
           this.yetiLayer = null;
@@ -678,11 +685,10 @@
           // set default opacity
           this.opacityYetiLayer = OPACITY_LAYER;
         }
-
-        // fetch img
-        this.promise = axios.get(yetiUrl)
-          .then(this.onYetiResult)
-          .catch(this.onYetiError);
+        if (this.extentLayer) {
+          this.extentLayer.setMap(null);
+          this.extentLayer = null;
+        }
       },
 
       toLinearRing(extent) {
@@ -695,7 +701,7 @@
 
       drawExtent(extent) {
         // extend extent
-        const extentFill = ol.extent.buffer(extent, 1000);
+        const extentFill = ol.extent.buffer(extent, Math.max(extent[2] - extent[0], extent[3] - extent[1]) / 10);
         // then, create a donut polygon
         const polygon = new ol.Feature(
           new ol.geom.Polygon([
@@ -703,11 +709,6 @@
             this.toLinearRing(extent)
           ])
         );
-        // remove old layer if exists
-        if (this.extentLayer) {
-          this.extentLayer.setMap(null);
-          this.extentLayer = null;
-        }
         // create extent layer
         this.extentLayer = new ol.layer.Vector({
           source: new ol.source.Vector({
@@ -715,10 +716,10 @@
           }),
           style: [
             new ol.style.Style({
-              fill: new ol.style.Fill({ color: 'rgba(255,153,51,.45)' })
+              fill: new ol.style.Fill({ color: 'hsla(30, 100%, 60%, .45)' }),
             }),
             new ol.style.Style({
-              stroke: new ol.style.Stroke({ stroke: 'rgba(0,0,0,.85)' }),
+              stroke: new ol.style.Stroke({ color: 'hsla(30, 100%, 40%, 1)', width: 2 }),
               geometry: feature => {
                 return new ol.geom.Polygon([feature.getGeometry().getCoordinates()[1]]);
               }
@@ -734,11 +735,13 @@
         return ol.extent.buffer(extent, extendedValue);
       },
 
-      onYetiResult(result) {
+      onYetiResult(result, extendedExtent) {
         const xml = new DOMParser().parseFromString(result.data, 'application/xml');
         const imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
         const imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
         const imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
+
+        this.drawExtent(extendedExtent);
 
         this.yetiLayer = new ol.layer.Image({
           source: new ol.source.ImageStatic({
