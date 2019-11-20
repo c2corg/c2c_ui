@@ -38,7 +38,7 @@
       <div class="columns yeti-content" v-else>
         <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
           <div class="box">
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column">
                 <h2 class="title is-3 yeti-title">
                   Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr>
@@ -48,7 +48,7 @@
                 <router-link class="is-size-6 is-pulled-right" to="/yeti/faq">FAQ ?</router-link>
               </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column">
                 <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
                   <svg viewBox="0 0 100 100" width="120" height="120">
@@ -101,7 +101,7 @@
                 </div>
               </div>
 
-              <div class="column has-text-right">
+              <div class="column has-text-right is-hidden-mobile">
                 <validation-button
                   :current-error="currentError"
                   :loading="promise"
