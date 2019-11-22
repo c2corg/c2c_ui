@@ -2,6 +2,12 @@
   <div class="section content">
     <html-header title="Recents changes" />
 
+    <div clas="links">
+      <association-history-link :user-id="userId" v-translate>
+        Associations history
+      </association-history-link>
+    </div>
+
     <table
       v-infinite-scroll="load"
       infinite-scroll-disabled="disableInfiniteSCroll"
@@ -28,7 +34,7 @@
           </version-link>
         </td>
         <td>
-          <contributor-link :contributor="change.user" show-whatsnew />
+          <contributor-link :contributor="change.user" />
         </td>
         <td>
           <document-link :document="change.document" :lang="change.lang">
@@ -50,9 +56,7 @@
           {{ change.lang }}
         </td>
         <td>
-          <span class="icon icon-document-container" :style="`background: ${change.documentTypeColor}`">
-            <icon-document :document-type="change.document.documentType" class="has-text-light" />
-          </span>
+          <colored-icon-document :document-type="change.document.documentType" />
           {{ change.document.title }}
           :
           <span v-if="change.comment">
@@ -72,10 +76,12 @@
 
 <script>
   import infiniteScroll from 'vue-infinite-scroll';
+  import ColoredIconDocument from './utils/ColoredIconDocument';
 
   import c2c from '@/js/apis/c2c';
 
   export default {
+    components: { ColoredIconDocument },
 
     directives: { infiniteScroll },
 
@@ -88,6 +94,9 @@
     },
 
     computed: {
+      userId() {
+        return this.$route.query.u ? parseInt(this.$route.query.u) : null;
+      },
       loading() {
         return this.promise ? this.promise.loading : false;
       },
@@ -139,22 +148,8 @@
       },
 
       onLoad() {
-        const documentTypeColors = {
-          'a': 'purple',
-          'b': 'plum',
-          'c': 'darkcyan',
-          'i': 'pink',
-          'm': 'yellow',
-          // 'o': 'XXX',
-          // 'u': 'XXX',
-          'r': 'dodgerblue',
-          'w': 'green',
-          'x': 'tomato'
-        };
-
         for (const change of this.promise.data.feed) {
           change.document.documentType = this.$documentUtils.getDocumentType(change.document.type);
-          change.documentTypeColor = documentTypeColors[change.document.type] || 'black';
           this.feed.push(change);
         }
 
@@ -179,10 +174,6 @@
 
   td:last-child > span:last-child, th:last-child > span:last-child{
     font-style:italic;
-  }
-
-  .icon-document-container{
-    border-radius: 100%;
   }
 
 </style>

@@ -29,7 +29,7 @@
   import MarkerCondition from './cell-renderers/MarkerCondition';
   import MarkerQuality from './cell-renderers/MarkerQuality';
   import AreaList from './cell-renderers/AreaList';
-  import DocumentContributor from './cell-renderers/DocumentContributor';
+  import DocumentAuthor from './cell-renderers/DocumentAuthor';
   import DocumentActivities from './cell-renderers/DocumentActivities';
 
   function getColDef(vm, field, options) {
@@ -163,7 +163,7 @@
             getColDef(this, fields.date_end, { width: 120, cellRendererFramework: OutingDate }),
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
             getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-            getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentContributor, width: 100 }),
+            getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentAuthor, width: 100 }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
             {
               headerName: this.$gettext('elevation'),

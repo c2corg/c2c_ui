@@ -19,7 +19,7 @@
           </version-link>
         </div>
         <div>
-          by <contributor-link :contributor="oldVersion.version" show-whatsnew />
+          by <contributor-link :contributor="oldVersion.version" />
         </div>
         <div>
           {{ oldVersion.version.comment }}
@@ -52,7 +52,7 @@
           </version-link>
         </div>
         <div>
-          by <contributor-link :contributor="newVersion.version" show-whatsnew />
+          by <contributor-link :contributor="newVersion.version" />
         </div>
         <div>
           {{ newVersion.version.comment }}

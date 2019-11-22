@@ -37,4 +37,26 @@ AssociationService.prototype.remove = function(parent, child) {
   return this.api.delete('/associations', { data });
 };
 
+AssociationService.prototype.getHistory = function(params) {
+  let url = '/associations-history';
+  const query = [];
+
+  const addFilter = function(key, value) {
+    if (value) {
+      query.push(`${key}=${value}`);
+    }
+  };
+
+  addFilter('d', params.documentId);
+  addFilter('u', params.userId);
+  addFilter('limit', params.limit);
+  addFilter('offset', params.offset);
+
+  if (query.length !== 0) {
+    url += '?' + query.join('&');
+  }
+
+  return this.api.get(url);
+};
+
 export default AssociationService;

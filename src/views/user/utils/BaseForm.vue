@@ -42,6 +42,13 @@
       }
     },
 
+    // TODO test that
+    // destroyed() {
+    //   for (const child of this.$children) {
+    //     child.$off('input', this.check);
+    //   }
+    // },
+
     methods: {
       cleanErrors() {
         this.serverMetaErrors = [];

@@ -47,6 +47,7 @@ const WaypointEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@
 const XreportEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/XreportEditionView');
 const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/WhatsNewView.vue`);
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`);
+const AssociationsHistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
 
 const routes = [
@@ -56,6 +57,7 @@ const routes = [
   { path: '/feed', name: 'feed', component: FeedView },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
+  { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
   { path: '/auth', name: 'auth', component: LoginView },
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
   { path: '/account', name: 'account', component: AccountView },
