@@ -142,14 +142,14 @@
           const attributes = anchor.attributes;
 
           // eslint-disable-next-line
-                    const { location, route, href } = this.$router.resolve({
+          const { location, route, href } = this.$router.resolve({
             name: attributes['c2c:document-type'].value.slice(0, -1),
             params: {
               id: parseInt(attributes['c2c:document-id'].value, 10),
               lang: attributes['c2c:lang'] ? attributes['c2c:lang'].value : undefined,
-              title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined,
-              anchor: attributes['c2c:anchor'] ? attributes['c2c:anchor'].value : undefined
-            }
+              title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined
+            },
+            hash: attributes['c2c:anchor'] ? "#" + attributes['c2c:anchor'].value : undefined
           });
 
           anchor.href = href;
