@@ -12,6 +12,7 @@ import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
 import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
+import { faBroom } from '@fortawesome/free-solid-svg-icons/faBroom';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faBullseye } from '@fortawesome/free-solid-svg-icons/faBullseye';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
@@ -64,6 +65,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
+import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot';
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
@@ -212,10 +214,11 @@ export default function install(Vue) {
     faArrowRight,
     faAt,
     faAtlas,
-    faBold,
     faBan,
     faBars,
+    faBold,
     faBomb,
+    faBroom,
     faBug,
     faBullseye,
     faCalendar,
@@ -269,6 +272,7 @@ export default function install(Vue) {
     faPlus,
     faPlusCircle,
     faQuestionCircle,
+    faRobot,
     faRoute,
     faSearch,
     faShareAlt,

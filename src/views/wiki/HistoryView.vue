@@ -10,32 +10,12 @@
         <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
       </h1>
 
-      <div class="buttons">
-        <diff-link
-          class="button is-primary"
-          :document-type="documentType"
-          :id="documentId"
-          :lang="lang"
-          :version-from="versionFrom"
-          :version-to="versionTo"
-          v-translate>
-          Compare selected versions
-        </diff-link>
-        <router-link
-          :to="{name:documentType, params:{id:documentId, lang:lang}}"
-          class="button is-link"
-          v-translate>
-          See the latest version
-        </router-link>
-        <span>
-          <span v-translate>
-            List of versions for language:
-          </span>
-          <span>
-            &nbsp;{{ $gettext(lang, 'langs') }}
-          </span>
-        </span>
-      </div>
+      <history-view-links
+        :document-id="documentId"
+        :document-type="documentType"
+        :lang="lang"
+        :version-from="versionFrom"
+        :version-to="versionTo" />
 
       <table class="table is-striped">
         <thead>
@@ -47,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="version of history.versions" :key="version.verion_id">
+          <tr v-for="version of history.versions" :key="version.version_id">
             <td>
               <div v-if="documentType!='profile'" class="control">
                 <input
@@ -77,7 +57,7 @@
               </version-link>
             </td>
             <td>
-              <contributor-link :contributor="version" show-whatsnew />
+              <contributor-link :contributor="version" />
             </td>
             <td>
               {{ version.comment }}
@@ -86,32 +66,23 @@
         </tbody>
       </table>
 
-      <div class="buttons">
-        <diff-link
-          class="button is-primary"
-          :document-type="documentType"
-          :id="documentId"
-          :lang="lang"
-          :version-from="versionFrom"
-          :version-to="versionTo"
-          v-translate>
-          Compare selected versions
-        </diff-link>
-        <router-link
-          :to="{name:documentType, params:{id:documentId, lang:lang}}"
-          class="button is-link"
-          v-translate>
-          See the latest version
-        </router-link>
-      </div>
+      <history-view-links
+        :document-id="documentId"
+        :document-type="documentType"
+        :lang="lang"
+        :version-from="versionFrom"
+        :version-to="versionTo" />
+
     </div>
   </div>
 </template>
 
 <script>
   import c2c from '@/js/apis/c2c';
+  import HistoryViewLinks from './utils/HistoryViewLinks';
 
   export default {
+    components: { HistoryViewLinks },
 
     data() {
       return { // theese three data are computed
@@ -162,14 +133,19 @@
 
 </script>
 
-<style scoped>
-    td{
-        white-space:nowrap;
-    }
+<style scoped lang="scss">
 
-    td:nth-child(4) {
-        width: 100%;
-        white-space:normal;
-        font-style:italic;
-    }
+  td{
+    white-space:nowrap;
+  }
+
+  td:nth-child(4) {
+    width: 100%;
+    white-space:normal;
+    font-style:italic;
+  }
+  input[type=radio] {
+    margin-right: 5px;
+  }
+
 </style>
