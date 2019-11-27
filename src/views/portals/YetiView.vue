@@ -578,7 +578,6 @@
       },
 
       areasLayerStyle() {
-        const [ minZoom, maxZoom ] = [6, 10];
         const levelStrokeWidth = 2;
         const levelStrokeOpacity = 4;
         const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
@@ -587,7 +586,7 @@
 
         return new ol.style.Style({
           stroke: new ol.style.Stroke({
-            color: 'hsla(30, 100%, 40%,' + opacityStroke +')',
+            color: 'hsla(30, 100%, 40%,' + opacityStroke + ')',
             width: lineWidthStroke,
             lineDash: [lineDashStroke]
           })
@@ -702,7 +701,7 @@
         const yetiUrl = this.getYetiUrl(extendedExtent);
 
         // remove old layers first
-        this.removeLayers()
+        this.removeLayers();
 
         // fetch img
         this.promise = axios.get(yetiUrl)
@@ -749,7 +748,7 @@
           }),
           style: [
             new ol.style.Style({
-              fill: new ol.style.Fill({ color: 'hsla(30, 100%, 60%, .45)' }),
+              fill: new ol.style.Fill({ color: 'hsla(30, 100%, 60%, .45)' })
             }),
             new ol.style.Style({
               stroke: new ol.style.Stroke({ color: 'hsla(30, 100%, 40%, 1)', width: 2 }),
@@ -971,7 +970,7 @@
 
         for (const area in this.areas) {
           const polygon = this.areas[area].geometry;
-          if(polygon.intersectsExtent(mapExtent)) {
+          if (polygon.intersectsExtent(mapExtent)) {
             this.areaOK = true;
             break;
           } else {
