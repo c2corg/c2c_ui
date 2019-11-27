@@ -854,8 +854,6 @@
         result += `neige_mouillee=${wetSnow};`;
         result += `taille_groupe=${groupSize}`;
 
-        result += '&username=' + this.$user.forumUsername;
-
         return result;
       },
 
