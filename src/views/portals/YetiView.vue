@@ -393,7 +393,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="documents" />
+          <map-view ref="map" show-recenter-on :documents="documents" />
         </div>
       </div>
     </div>
@@ -859,7 +859,8 @@
         return result;
       },
 
-      onMapMoveEnd() {
+      onMapMoveEnd(event) {
+        this.mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
         this.setVisibleMountains();
         this.setVisibleAreas();
       },
