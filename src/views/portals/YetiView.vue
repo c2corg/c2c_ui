@@ -636,7 +636,9 @@
 
     methods: {
       check() {
-        if (!this.areaOK) {
+        if (!this.isValidMapZoom) {
+          this.formError = 'zoom';
+        } else if (!this.areaOK) {
           this.formError = 'area';
         } else if (!this.bra.high) {
           this.formError = 'bra';
@@ -646,8 +648,6 @@
           this.formError = 'method';
         } else if (this.mrdIsNotApplicable) {
           this.formError = 'method_bra';
-        } else if (!this.isValidMapZoom) {
-          this.formError = 'zoom';
         } else {
           this.formError = null;
         }
