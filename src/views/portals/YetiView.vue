@@ -410,6 +410,7 @@
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
   const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
+  const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
   const YETI_ATTRIBUTION = 'Données RGE ALTI®';
 
@@ -432,6 +433,10 @@
   const OPACITY_LAYER = 0.75;
 
   const ERRORS = {
+    'area': {
+      'simple': 'Zone non couverte',
+      'full': 'L’emprise actuelle de la carte n’est pas couverte par YETI. Actuellement, seuls les massifs français le sont.'
+    },
     'method': {
       'simple': 'Méthode manquante',
       'full': 'Veuillez sélectionner une méthode pour le calcul'
@@ -518,7 +523,11 @@
         promiseMountains: null,
         showMountainsList: false,
 
-        promiseDocument: null
+        promiseDocument: null,
+
+        areas: {},
+        areasLayer: null,
+        areaOK: true
       };
     },
 
@@ -566,6 +575,23 @@
 
       documents() {
         return this.document ? [this.document] : null;
+      },
+
+      areasLayerStyle() {
+        const [ minZoom, maxZoom ] = [6, 10];
+        const levelStrokeWidth = 2;
+        const levelStrokeOpacity = 4;
+        const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
+        const opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
+        const lineDashStroke = opacityStroke * 6;
+
+        return new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'hsla(30, 100%, 40%,' + opacityStroke +')',
+            width: lineWidthStroke,
+            lineDash: [lineDashStroke]
+          })
+        });
       }
 
     },
@@ -576,7 +602,8 @@
       'bra.altiThreshold': 'check',
       'bra.isDifferent': ['check', 'checkBraIsDifferent'],
       'method': 'check',
-      'mapZoom': 'check'
+      'mapZoom': 'check',
+      'areaOK': 'check'
     },
 
     created() {
@@ -601,11 +628,17 @@
       axios.get(YETI_URL_MOUNTAINS)
         .then(this.onMountainsResult)
         .catch(this.onMountainsError);
+
+      // area ok?
+      axios.get(YETI_URL_AREAS)
+        .then(this.onAreasResult);
     },
 
     methods: {
       check() {
-        if (!this.bra.high) {
+        if (!this.areaOK) {
+          this.formError = 'area';
+        } else if (!this.bra.high) {
           this.formError = 'bra';
         } else if (this.bra.low && this.bra.high !== this.bra.low && !this.bra.altiThreshold) {
           this.formError = 'altitude';
@@ -828,6 +861,7 @@
 
       onMapMoveEnd() {
         this.setVisibleMountains();
+        this.setVisibleAreas();
       },
 
       setVisibleMountains() {
@@ -897,6 +931,57 @@
         ['documentsLayer', 'waypointsLayer'].forEach(layer => {
           this.$refs.map[layer].setZIndex(1);
         });
+      },
+
+      onAreasResult(data) {
+        const areas = data.data;
+        const rawFeatures = (new ol.format.GeoJSON()).readFeatures(areas);
+        // geojson is 4326, convert to 3857
+        rawFeatures[0].getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+        this.areas = rawFeatures.map(area => {
+          return area.getProperties();
+        });
+
+        // flatten coords
+        const rawCoords = rawFeatures[0].getGeometry().getCoordinates();
+        const coords = [];
+        for (let i = 0; i < rawCoords.length; i++) {
+          coords.push(...rawCoords[i]);
+        }
+        // then, build linestrings instead of polygon (perf)
+        const features = [];
+        for (let i = 0; i < coords.length; i++) {
+          for (let j = 0; j < coords[i].length - 1; j++) {
+            features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
+          }
+        }
+
+        // create layer
+        this.areasLayer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features
+          }),
+          style: this.areasLayerStyle
+        });
+        this.areasLayer.setMap(this.$refs.map.map);
+      },
+
+      setVisibleAreas() {
+        const mapExtent = this.$refs.map.getExtent('EPSG:3857');
+
+        for (const area in this.areas) {
+          const polygon = this.areas[area].geometry;
+          if(polygon.intersectsExtent(mapExtent)) {
+            this.areaOK = true;
+            break;
+          } else {
+            this.areaOK = false;
+          }
+        }
+
+        // update style
+        this.areasLayer.setStyle(this.areasLayerStyle);
       }
     }
   };
