@@ -435,29 +435,29 @@
   const ERRORS = {
     'area': {
       'simple': 'Zone non couverte',
-      'full': 'L’emprise actuelle de la carte n’est pas couverte par YETI. Actuellement, seuls les massifs français le sont.'
+      'full': 'L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).'
     },
     'method': {
       'simple': 'Méthode manquante',
-      'full': 'Veuillez sélectionner une méthode pour le calcul'
+      'full': 'Veuillez sélectionner une méthode pour le calcul.'
     },
     'method_bra': {
       'simple': 'Méthode et BRA incompatible',
-      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP'
+      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP.'
     },
     'bra': {
       'simple': 'BRA manquant',
-      'full': 'La valeur de BRA est manquante'
+      'full': 'La valeur de BRA est manquante. Veuillez saisir la valeur spécifiée par le bulletin Météo-France.'
     },
     'altitude': {
       'simple': 'Altitude manquante',
-      'full': 'L\'altitude est requise quand le BRA haut et bas sont différents'
+      'full': 'L’altitude est requise quand le BRA haut et bas sont différents. Précisez la valeur fournie par le bulletin Météo-France.'
     },
     'zoom': {
       'simple': 'Zoom carte trop important',
-      'full': 'Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum'
+      'full': 'L’emprise actuelle est trop grande. Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum.'
     },
-    'ok': 'Le calcul peut être lancé :)',
+    'ok': 'Tout semble OK ! :)',
     'yeti': 'Le service ne fonctionne pas actuellement',
     'yeti_prefix': 'YETI Service: ',
     'yeti_unauthorized': 'Vous devez être autorisé pour effectuer cette requête. Contactez les administrateurs du service si vous êtes intéressé.'
@@ -683,7 +683,7 @@
         if (this.formError) {
           this.currentError = ERRORS[this.formError]['simple'];
           if (this.formError === 'zoom') {
-            this.currentError += ' (actuel: ' + this.mapZoom + ')';
+            this.currentError += ' (actuel: ' + this.mapZoom + ' sur ' + VALID_FORM_DATA.minZoom + ')';
           }
         } else {
           this.currentError = ERRORS['ok'];
