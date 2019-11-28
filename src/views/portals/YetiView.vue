@@ -210,7 +210,7 @@
 
             <div v-show="method=='mre'">
               <p>
-                Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d’après le BRA constituent des orientations critiques.
+                Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs de la rose des vents signalés comme critique dans le BRA.
               </p>
 
               <input-orientation v-model="orientation" class="has-text-centered" />
@@ -218,14 +218,14 @@
               <p v-else class="yetiform-info">Pas d’orientations sélectionnées</p>
 
               <div class="yetiform-note">
-                <p>On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.</p>
+                <p>Le niveau de danger du BRA concerne toutes les orientations. La rose des vents distingue les secteurs les plus critiques présentant un risque accru.</p>
               </div>
 
               <table class="yetiform-danger">
-                <tr>
+                <tr class="multiline">
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                   <td><strong>Danger faible</strong></td>
-                  <td>Je renonce aux pentes > 45°</td>
+                  <td>Skier avec prudence <br><small>risque de chute grave sur neige dure</small></td>
                 </tr>
                 <tr>
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
@@ -315,9 +315,7 @@
                 </ul>
               </div>
 
-              <p>
-                Le facteur "pente parcourue fréquemment" n’est pas pris en compte par l’outil car cet aspect ne peut être constaté que sur le terrain.
-              </p>
+              <p>Le facteur <em>« pente parcourue fréquemment »</em> n’est pas pris en compte par l’application, car il est souvent difficile de s'en assurer lors de la préparation de course.</p>
 
             </div>
 
