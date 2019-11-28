@@ -955,6 +955,7 @@
 
         // create layer
         this.areasLayer = new ol.layer.Vector({
+          renderMode: 'image',
           source: new ol.source.Vector({
             features
           }),
