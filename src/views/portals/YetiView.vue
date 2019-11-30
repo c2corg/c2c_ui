@@ -4,10 +4,11 @@
     <html-header title="Yeti" />
     <div class="box">
       <h1 class="title is-1">
+        <div class="yeti-icon is-inline-block">
+          <icon-yeti />
+        </div>
+        <span>&thinsp;</span>
         <span>YETI - Un outil de préparation de course</span>
-        <span class="is-pulled-right has-text-primary">
-          <fa-icon icon="map-marked-alt" />
-        </span>
       </h1>
     </div>
 
@@ -37,7 +38,7 @@
       <div class="columns yeti-content" v-else>
         <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
           <div class="box">
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column">
                 <h2 class="title is-3 yeti-title">
                   Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr>
@@ -47,7 +48,7 @@
                 <router-link class="is-size-6 is-pulled-right" to="/yeti/faq">FAQ ?</router-link>
               </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column">
                 <div class="inputs-bra" :class="{'inputs-bra-different' : bra.isDifferent}">
                   <svg viewBox="0 0 100 100" width="120" height="120">
@@ -100,7 +101,7 @@
                 </div>
               </div>
 
-              <div class="column has-text-right">
+              <div class="column has-text-right is-hidden-mobile">
                 <validation-button
                   :current-error="currentError"
                   :loading="promise"
@@ -112,7 +113,7 @@
             <div class="yetimountains">
               <div>
                 <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
-                  Liste des massifs
+                  Bulletins BRA par massif
                   <span v-if="promiseMountains" class="yetimountains-count">{{ countVisibleMountains }}</span>
                   <fa-icon
                     class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
@@ -122,7 +123,7 @@
               </div>
               <div v-if="showMountainsList">
                 <div v-if="promiseMountains">
-                  <p class="column yetiform-info">Téléchargez le bulletin en PDF depuis le site de Météo France</p>
+                  <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
                   <dl>
                     <div v-for="(mountains, massif) of visibleMountains" :key="massif">
                       <dt class="yetimountains-listtitle">
@@ -209,7 +210,7 @@
 
             <div v-show="method=='mre'">
               <p>
-                Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs sur la rose des vents qui d’après le BRA constituent des orientations critiques.
+                Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs de la rose des vents signalés comme critique dans le BRA.
               </p>
 
               <input-orientation v-model="orientation" class="has-text-centered" />
@@ -217,14 +218,14 @@
               <p v-else class="yetiform-info">Pas d’orientations sélectionnées</p>
 
               <div class="yetiform-note">
-                <p>On notera que toutes les orientations possèdent le niveau de danger du BRA, avec un caractère plus critique dans les pentes sélectionnées sur la rose des vents.</p>
+                <p>Le niveau de danger du BRA concerne toutes les orientations. La rose des vents distingue les secteurs les plus critiques présentant un risque accru.</p>
               </div>
 
               <table class="yetiform-danger">
-                <tr>
+                <tr class="multiline">
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level1"></td>
                   <td><strong>Danger faible</strong></td>
-                  <td>Je renonce aux pentes > 45°</td>
+                  <td>Skier avec prudence <br><small>risque de chute grave sur neige dure</small></td>
                 </tr>
                 <tr>
                   <td><img src="@/assets/img/yeti/levels-danger.svg#level2"></td>
@@ -314,9 +315,7 @@
                 </ul>
               </div>
 
-              <p>
-                Le facteur "pente parcourue fréquemment" n’est pas pris en compte par l’outil car cet aspect ne peut être constaté que sur le terrain.
-              </p>
+              <p>Le facteur <em>« pente parcourue fréquemment »</em> n’est pas pris en compte par l’application, car il est souvent difficile de s'en assurer lors de la préparation de course.</p>
 
             </div>
 
@@ -392,7 +391,7 @@
                 @change="onUpdateOpacityYetiLayer" />
             </div>
           </div>
-          <map-view ref="map" @zoom="mapZoom = arguments[0]" show-recenter-on :documents="documents" />
+          <map-view ref="map" show-recenter-on :documents="documents" />
         </div>
       </div>
     </div>
@@ -409,6 +408,7 @@
 
   const YETI_URL_BASE = 'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
   const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
+  const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
   const YETI_ATTRIBUTION = 'Données RGE ALTI®';
 
@@ -431,27 +431,31 @@
   const OPACITY_LAYER = 0.75;
 
   const ERRORS = {
+    'area': {
+      'simple': 'Zone non couverte',
+      'full': 'L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).'
+    },
     'method': {
       'simple': 'Méthode manquante',
-      'full': 'Veuillez sélectionner une méthode pour le calcul'
+      'full': 'Veuillez sélectionner une méthode pour le calcul.'
     },
     'method_bra': {
       'simple': 'Méthode et BRA incompatible',
-      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP'
+      'full': 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP.'
     },
     'bra': {
       'simple': 'BRA manquant',
-      'full': 'La valeur de BRA est manquante'
+      'full': 'La valeur de BRA est manquante. Veuillez saisir la valeur spécifiée par le bulletin Météo-France.'
     },
     'altitude': {
       'simple': 'Altitude manquante',
-      'full': 'L\'altitude est requise quand le BRA haut et bas sont différents'
+      'full': 'L’altitude est requise quand le BRA haut et bas sont différents. Précisez la valeur fournie par le bulletin Météo-France.'
     },
     'zoom': {
       'simple': 'Zoom carte trop important',
-      'full': 'Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum'
+      'full': 'L’emprise actuelle est trop grande. Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum.'
     },
-    'ok': 'Le calcul peut être lancé :)',
+    'ok': 'Tout semble OK ! :)',
     'yeti': 'Le service ne fonctionne pas actuellement',
     'yeti_prefix': 'YETI Service: ',
     'yeti_unauthorized': 'Vous devez être autorisé pour effectuer cette requête. Contactez les administrateurs du service si vous êtes intéressé.'
@@ -517,7 +521,11 @@
         promiseMountains: null,
         showMountainsList: false,
 
-        promiseDocument: null
+        promiseDocument: null,
+
+        areas: {},
+        areasLayer: null,
+        areaOK: true
       };
     },
 
@@ -565,6 +573,22 @@
 
       documents() {
         return this.document ? [this.document] : null;
+      },
+
+      areasLayerStyle() {
+        const levelStrokeWidth = 2;
+        const levelStrokeOpacity = 4;
+        const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
+        const opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
+        const lineDashStroke = opacityStroke * 6;
+
+        return new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'hsla(30, 100%, 40%,' + opacityStroke + ')',
+            width: lineWidthStroke,
+            lineDash: [lineDashStroke]
+          })
+        });
       }
 
     },
@@ -575,7 +599,8 @@
       'bra.altiThreshold': 'check',
       'bra.isDifferent': ['check', 'checkBraIsDifferent'],
       'method': 'check',
-      'mapZoom': 'check'
+      'mapZoom': 'check',
+      'areaOK': 'check'
     },
 
     created() {
@@ -600,11 +625,19 @@
       axios.get(YETI_URL_MOUNTAINS)
         .then(this.onMountainsResult)
         .catch(this.onMountainsError);
+
+      // area ok?
+      axios.get(YETI_URL_AREAS)
+        .then(this.onAreasResult);
     },
 
     methods: {
       check() {
-        if (!this.bra.high) {
+        if (!this.isValidMapZoom) {
+          this.formError = 'zoom';
+        } else if (!this.areaOK) {
+          this.formError = 'area';
+        } else if (!this.bra.high) {
           this.formError = 'bra';
         } else if (this.bra.low && this.bra.high !== this.bra.low && !this.bra.altiThreshold) {
           this.formError = 'altitude';
@@ -612,8 +645,6 @@
           this.formError = 'method';
         } else if (this.mrdIsNotApplicable) {
           this.formError = 'method_bra';
-        } else if (!this.isValidMapZoom) {
-          this.formError = 'zoom';
         } else {
           this.formError = null;
         }
@@ -649,7 +680,7 @@
         if (this.formError) {
           this.currentError = ERRORS[this.formError]['simple'];
           if (this.formError === 'zoom') {
-            this.currentError += ' (actuel: ' + this.mapZoom + ')';
+            this.currentError += ' (actuel: ' + this.mapZoom + ' sur ' + VALID_FORM_DATA.minZoom + ')';
           }
         } else {
           this.currentError = ERRORS['ok'];
@@ -665,11 +696,18 @@
         const extent = this.$refs.map.getExtent('EPSG:3857');
         const extendedExtent = this.extendExtent(extent);
 
-        this.drawExtent(extendedExtent);
-
         const yetiUrl = this.getYetiUrl(extendedExtent);
 
-        // if layer already exist, remove it
+        // remove old layers first
+        this.removeLayers();
+
+        // fetch img
+        this.promise = axios.get(yetiUrl)
+          .then(result => this.onYetiResult(result, extendedExtent))
+          .catch(this.onYetiError);
+      },
+
+      removeLayers() {
         if (this.yetiLayer) {
           this.yetiLayer.setMap(null);
           this.yetiLayer = null;
@@ -677,11 +715,10 @@
           // set default opacity
           this.opacityYetiLayer = OPACITY_LAYER;
         }
-
-        // fetch img
-        this.promise = axios.get(yetiUrl)
-          .then(this.onYetiResult)
-          .catch(this.onYetiError);
+        if (this.extentLayer) {
+          this.extentLayer.setMap(null);
+          this.extentLayer = null;
+        }
       },
 
       toLinearRing(extent) {
@@ -694,7 +731,7 @@
 
       drawExtent(extent) {
         // extend extent
-        const extentFill = ol.extent.buffer(extent, 1000);
+        const extentFill = ol.extent.buffer(extent, Math.max(extent[2] - extent[0], extent[3] - extent[1]) / 10);
         // then, create a donut polygon
         const polygon = new ol.Feature(
           new ol.geom.Polygon([
@@ -702,11 +739,6 @@
             this.toLinearRing(extent)
           ])
         );
-        // remove old layer if exists
-        if (this.extentLayer) {
-          this.extentLayer.setMap(null);
-          this.extentLayer = null;
-        }
         // create extent layer
         this.extentLayer = new ol.layer.Vector({
           source: new ol.source.Vector({
@@ -714,10 +746,10 @@
           }),
           style: [
             new ol.style.Style({
-              fill: new ol.style.Fill({ color: 'rgba(255,153,51,.45)' })
+              fill: new ol.style.Fill({ color: 'hsla(30, 100%, 60%, .45)' })
             }),
             new ol.style.Style({
-              stroke: new ol.style.Stroke({ stroke: 'rgba(0,0,0,.85)' }),
+              stroke: new ol.style.Stroke({ color: 'hsla(30, 100%, 40%, 1)', width: 2 }),
               geometry: feature => {
                 return new ol.geom.Polygon([feature.getGeometry().getCoordinates()[1]]);
               }
@@ -733,11 +765,13 @@
         return ol.extent.buffer(extent, extendedValue);
       },
 
-      onYetiResult(result) {
+      onYetiResult(result, extendedExtent) {
         const xml = new DOMParser().parseFromString(result.data, 'application/xml');
         const imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
         const imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
         const imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
+
+        this.drawExtent(extendedExtent);
 
         this.yetiLayer = new ol.layer.Image({
           source: new ol.source.ImageStatic({
@@ -817,13 +851,13 @@
         result += `neige_mouillee=${wetSnow};`;
         result += `taille_groupe=${groupSize}`;
 
-        result += '&username=' + this.$user.forumUsername;
-
         return result;
       },
 
-      onMapMoveEnd() {
+      onMapMoveEnd(event) {
+        this.mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
         this.setVisibleMountains();
+        this.setVisibleAreas();
       },
 
       setVisibleMountains() {
@@ -893,6 +927,58 @@
         ['documentsLayer', 'waypointsLayer'].forEach(layer => {
           this.$refs.map[layer].setZIndex(1);
         });
+      },
+
+      onAreasResult(data) {
+        const areas = data.data;
+        const rawFeatures = (new ol.format.GeoJSON()).readFeatures(areas);
+        // geojson is 4326, convert to 3857
+        rawFeatures[0].getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+        this.areas = rawFeatures.map(area => {
+          return area.getProperties();
+        });
+
+        // flatten coords
+        const rawCoords = rawFeatures[0].getGeometry().getCoordinates();
+        const coords = [];
+        for (let i = 0; i < rawCoords.length; i++) {
+          coords.push(...rawCoords[i]);
+        }
+        // then, build linestrings instead of polygon (perf)
+        const features = [];
+        for (let i = 0; i < coords.length; i++) {
+          for (let j = 0; j < coords[i].length - 1; j++) {
+            features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
+          }
+        }
+
+        // create layer
+        this.areasLayer = new ol.layer.Vector({
+          renderMode: 'image',
+          source: new ol.source.Vector({
+            features
+          }),
+          style: this.areasLayerStyle
+        });
+        this.areasLayer.setMap(this.$refs.map.map);
+      },
+
+      setVisibleAreas() {
+        const mapExtent = this.$refs.map.getExtent('EPSG:3857');
+
+        for (const area in this.areas) {
+          const polygon = this.areas[area].geometry;
+          if (polygon.intersectsExtent(mapExtent)) {
+            this.areaOK = true;
+            break;
+          } else {
+            this.areaOK = false;
+          }
+        }
+
+        // update style
+        this.areasLayer.setStyle(this.areasLayerStyle);
       }
     }
   };
@@ -910,6 +996,10 @@
 
   .yeti-app {
     position: relative;
+  }
+
+  .yeti-icon {
+    transform: scale(.9);
   }
 
   .map-container {
@@ -1292,7 +1382,6 @@
     display: inline-block;
     width: 1.1rem;
     height: 1.1rem;
-    line-height: 1rem;
     vertical-align: .1rem;
     margin-left: 1rem;
     background: $grey;

@@ -379,8 +379,6 @@
         // keyboardEventTarget: this.keyboardEventTarget,
       });
 
-      this.view.on('change:resolution', this.onChangeResolution);
-
       this.map.on('moveend', this.sendBoundsToUrl);
       this.map.on('moveend', this.getBiodivSportsAreas);
       if (this.protectionAreasVisible) {
@@ -700,15 +698,6 @@
         }
 
         return extent;
-      },
-
-      onChangeResolution(event) {
-        const zoom = event.target.getZoom();
-
-        // we do not fire event for intermediate zoom
-        if (zoom === parseInt(zoom, 10)) {
-          this.$emit('zoom', zoom);
-        }
       },
 
       onPointerMove(event) {

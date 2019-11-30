@@ -9,7 +9,6 @@
     </button>
     <p class="yetiForm-error" v-if="currentError">
       <span>
-        <strong>Info: </strong>
         {{ currentError }}
       </span>
     </p>
@@ -41,6 +40,19 @@
   margin-top: 10px;
   text-align: right;
   opacity: 0.75;
+}
+
+.yetiForm-error span::before {
+  content: 'i';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background: rgba(0,60,136,0.5);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.71rem;
+  font-weight: bold;
+  text-align: center;
 }
 
 </style>

@@ -64,7 +64,7 @@
       showYetiButton() {
         // at least one of document activities is concerned by yeti
 
-        if (!this.document || !this.document.activities) {
+        if (!this.document || this.documentType !== 'route' || !this.document.activities) {
           return false;
         }
 

@@ -14,7 +14,7 @@ import ImageStatic from 'ol/source/ImageStatic';
 
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
-import { Point, Polygon } from 'ol/geom';
+import { LineString, Point, Polygon } from 'ol/geom';
 
 import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style';
 
@@ -77,6 +77,7 @@ export default {
   },
 
   geom: {
+    LineString,
     Point,
     Polygon
   },
