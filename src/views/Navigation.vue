@@ -188,11 +188,6 @@
             to: { name: 'following' },
             text: this.$gettext('My followed users'),
             icon: 'heart'
-          },
-          {
-            to: { name: 'mailinglists' },
-            text: this.$gettext('My mailing lists'),
-            icon: 'at'
           }
         ];
       }

@@ -149,7 +149,7 @@
               lang: attributes['c2c:lang'] ? attributes['c2c:lang'].value : undefined,
               title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined
             },
-            hash: attributes['c2c:anchor'] ? "#" + attributes['c2c:anchor'].value : undefined
+            hash: attributes['c2c:anchor'] ? '#' + attributes['c2c:anchor'].value : undefined
           });
 
           anchor.href = href;
