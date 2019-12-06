@@ -17,7 +17,6 @@ import LoginView from '@/views/user/LoginView';
 import AccountView from '@/views/user/AccountView';
 import FollowingView from '@/views/user/FollowingView';
 import PreferencesView from '@/views/user/PreferencesView';
-import MailingListsView from '@/views/user/MailingListsView';
 
 import DocumentsView from '@/views//documents/DocumentsView';
 
@@ -63,7 +62,6 @@ const routes = [
   { path: '/account', name: 'account', component: AccountView },
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
-  { path: '/mailinglists', name: 'mailinglists', component: MailingListsView },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },

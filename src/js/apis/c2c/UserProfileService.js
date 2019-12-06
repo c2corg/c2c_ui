@@ -12,16 +12,6 @@ function UserProfileService(api) {
     }
   };
 
-  this.mailinglists = {
-    get() {
-      return api.get('/users/mailinglists');
-    },
-
-    post(mailinglists) {
-      return api.post('/users/mailinglists', mailinglists);
-    }
-  };
-
   this.following = {
     get() {
       return api.get('/users/following');
