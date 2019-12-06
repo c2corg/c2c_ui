@@ -14,8 +14,8 @@
       <span>{{ months.join(", ") }}</span>
     </p>
 
-    <!-- TODO : find a light way to securely show this content -->
-    <p>{{ description }}</p>
+    <!-- content formatting done with "he" html entities decoder -->
+    <p v-for="descPar of descriptionParagraphs">{{ descPar }}</p>
     <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
     <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
   </modal-window>
@@ -23,6 +23,7 @@
 
 <script>
 
+  import he from 'he';
   export default {
     props: {
       data: {
@@ -32,12 +33,17 @@
     },
 
     computed: {
-      description() {
+      descriptionParagraphs() {
         let result = this.data.description || '';
 
-        // very simple html > text interpreter : only html entities
-        result = result.replace(/&eacute;/g, 'é');
-        result = result.replace(/&egrave;/g, 'è');
+        // keep line breaks for better readability
+        result = result.replace(/<br ?\/?>/g, "%%MYNL%%");
+        // decode html entities, no dynamic html code
+        result = he.decode(result);
+        // discard all remaining html tags
+        result = result.replace(/<[^>]*>/g, "");
+        // restore initial line breaks
+        result = result.split("%%MYNL%%");
         return result;
       },
 
