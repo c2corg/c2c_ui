@@ -6,20 +6,20 @@
     <h3> Filter recent documents </h3>
     <span class="feed-filters">
 
-    <query-item
-      :key="type_field.name"
-      :field="type_field"
-      class="dropdown-item" />
+      <query-item
+        :key="type_field.name"
+        :field="type_field"
+        class="dropdown-item" />
 
-    <query-item
-      :key="qual_field.name"
-      :field="qual_field"
-      class="dropdown-item" />
+      <query-item
+        :key="qual_field.name"
+        :field="qual_field"
+        class="dropdown-item" />
 
-    <query-item
-      :key="license_field.name"
-      :field="license_field"
-      class="dropdown-item" />
+      <query-item
+        :key="license_field.name"
+        :field="license_field"
+        class="dropdown-item" />
     </span>
 
     <hr>
