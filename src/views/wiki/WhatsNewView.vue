@@ -2,6 +2,27 @@
   <div class="section content">
     <html-header title="Recents changes" />
 
+    <!-- TODO: translation of title -->
+    <h3> Filter recent documents </h3>
+    <span class="feed-filters">
+
+    <query-item
+      :key="type_field.name"
+      :field="type_field"
+      class="dropdown-item" />
+
+    <query-item
+      :key="qual_field.name"
+      :field="qual_field"
+      class="dropdown-item" />
+
+    <query-item
+      :key="license_field.name"
+      :field="license_field"
+      class="dropdown-item" />
+    </span>
+
+    <hr>
     <table
       v-infinite-scroll="load"
       infinite-scroll-disabled="disableInfiniteSCroll"
@@ -71,13 +92,17 @@
 </template>
 
 <script>
+  import QueryItem from '../documents/utils/QueryItem';
   import infiniteScroll from 'vue-infinite-scroll';
+
+  import Field from '@/js/constants/Field.js';
 
   import c2c from '@/js/apis/c2c';
 
   export default {
 
     directives: { infiniteScroll },
+    components: { QueryItem },
 
     data() {
       return {
@@ -88,8 +113,34 @@
     },
 
     computed: {
+
       loading() {
         return this.promise ? this.promise.loading : false;
+      },
+
+      type_field() {
+        // TODO: implement translations and/or icons
+        const ff = new Field('Document Type');
+        ff.url = 't';
+        ff.queryMode = 'multiSelect';
+        ff.values = ['a', 'c', 'i', 'm', 'o', 'r', 'u', 'w', 'b', 'x'];
+        ff.defaultUrlQuery = '';
+        return ff;
+      },
+      qual_field() {
+        const ff = new Field('quality', { url: 'qual' });
+        ff.queryMode = 'multiSelect';
+        ff.defaultUrlQuery = '';
+        return ff;
+      },
+      license_field() {
+        // TODO: implement translations and/or icons
+        const ff = new Field('Document license');
+        ff.url = 'lic';
+        ff.queryMode = 'multiSelect';
+        ff.defaultUrlQuery = '';
+        ff.values = ['ncnd', 'sa', 'c'];
+        return ff;
       },
 
       disableInfiniteSCroll() {
@@ -183,6 +234,12 @@
 
   .icon-document-container{
     border-radius: 100%;
+  }
+
+  .feed-filters{
+    position:relative; // important; to force dropdown to be on stick to left
+    display: flex;
+    justify-content: flex-start;
   }
 
 </style>
