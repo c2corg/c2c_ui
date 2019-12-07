@@ -15,7 +15,7 @@
     </p>
 
     <!-- content formatting done with "he" html entities decoder -->
-    <p v-for="descPar of descriptionParagraphs">{{ descPar }}</p>
+    <p v-for="(descPar, i) of descriptionParagraphs" :key="i">{{ descPar }}</p>
     <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
     <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
   </modal-window>
@@ -23,7 +23,7 @@
 
 <script>
 
-  import he from 'he';
+  import utils from '@/js/utils';
   export default {
     props: {
       data: {
@@ -37,13 +37,11 @@
         let result = this.data.description || '';
 
         // keep line breaks for better readability
-        result = result.replace(/<br ?\/?>/g, "%%MYNL%%");
-        // decode html entities, no dynamic html code
-        result = he.decode(result);
-        // discard all remaining html tags
-        result = result.replace(/<[^>]*>/g, "");
+        result = result.replace(/<br ?\/?>/g, '%%MYNL%%');
+        // decode html entities
+        result = utils.decodeHtmlEntities(result);
         // restore initial line breaks
-        result = result.split("%%MYNL%%");
+        result = result.split('%%MYNL%%');
         return result;
       },
 
