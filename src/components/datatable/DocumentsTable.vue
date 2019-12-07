@@ -2,12 +2,15 @@
   <ag-grid-vue
     style="width: 100%; "
     class="ag-theme-balham"
+    :grid-options="gridOptions"
     :column-defs="columnDefs"
+    :default-col-def="dColumnDefs"
     suppress-property-names-check
     :row-data="documents.documents"
     :get-row-class="getRowClass"
     :get-row-node-id="getRowNodeId"
     @grid-ready="onGridReady"
+    @sort-changed="sortChanged"
     @cellMouseOver="onHover" />
 </template>
 
@@ -66,7 +69,9 @@
 
     data() {
       return {
-        columnDefs: null
+        columnDefs: null,
+        dColumnDefs: { sortable: true },
+        gridOptions: {}
       };
     },
 
@@ -99,6 +104,27 @@
 
       onHover(event) {
         this.$emit('highlightDocument', event.data);
+      },
+
+      sortChanged(event) {
+        // console.log(event);
+        // console.log(this.gridOptions.columnApi.getColumnState());
+        // console.log(this.gridOptions.api.getSortModel());
+        const sortM = this.gridOptions.api.getSortModel();
+        const query = Object.assign({}, this.$route.query);
+        let sortStr = '';
+        if (sortM[0].sort === 'desc') {
+          sortStr = sortStr + '-';
+        }
+        sortStr = sortStr + sortM[0].colId;
+        // value['sort'] = sortStr;
+        query['sort'] = sortStr === '' ? undefined : sortStr;
+
+        if (query['sort'] !== this.$route.query['sort']) {
+          // we always reset offset to first page
+          query.offset = undefined;
+          this.$router.push({ query });
+        }
       },
 
       getRowNodeId(document) {
