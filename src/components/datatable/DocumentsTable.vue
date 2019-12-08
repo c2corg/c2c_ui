@@ -98,6 +98,19 @@
     methods: {
       onGridReady(params) {
         this.gridApi = params.api;
+        let sort_model = [];
+        const sort_URL = this.$route.query['sort'];
+        if (sort_URL) {
+          let sort_item = {};
+          for (sort_item of sort_URL.split(',')) {
+            if (sort_item[0] === '-') {
+              sort_model = sort_model.concat({ colId: sort_item.slice(1), sort: 'desc' });
+            } else {
+              sort_model = sort_model.concat({ colId: sort_item, sort: 'asc' });
+            }
+          }
+          this.gridApi.setSortModel(sort_model);
+        }
       },
 
       onHover(event) {
