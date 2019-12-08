@@ -53,7 +53,7 @@
     "vue-property-decorator": "8.3.0",
     "vue-recaptcha": "1.2.0",
     "vue-router": "3.0.7",
-    "vue-slider-component": "3.0.43",
+    "vue-slider-component": "3.0.46",
     "vuejs-datepicker": "1.6.2"
   },
   "devDependencies": {
