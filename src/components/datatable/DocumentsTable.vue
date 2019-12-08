@@ -168,7 +168,7 @@
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 300 }),
             getColDef(this, fields.categories, { width: 120 }),
             getColDef(this, fields.article_type, { width: 120 }),
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30 })
           ];
         }
 
