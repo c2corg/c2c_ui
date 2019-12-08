@@ -2,7 +2,6 @@
   <ag-grid-vue
     style="width: 100%; "
     class="ag-theme-balham"
-    :grid-options="gridOptions"
     :column-defs="columnDefs"
     :default-col-def="dColumnDefs"
     suppress-property-names-check
@@ -70,8 +69,7 @@
     data() {
       return {
         columnDefs: null,
-        dColumnDefs: { sortable: true },
-        gridOptions: {}
+        dColumnDefs: { sortable: true }
       };
     },
 
@@ -110,7 +108,7 @@
         // console.log(event);
         // console.log(this.gridOptions.columnApi.getColumnState());
         // console.log(this.gridOptions.api.getSortModel());
-        const sortM = this.gridOptions.api.getSortModel();
+        const sortM = this.gridApi.getSortModel();
         const query = Object.assign({}, this.$route.query);
         let sortStr = '';
         if (sortM[0].sort === 'desc') {
