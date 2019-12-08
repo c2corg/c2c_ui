@@ -110,13 +110,19 @@
         // console.log(this.gridOptions.api.getSortModel());
         const sortM = this.gridApi.getSortModel();
         const query = Object.assign({}, this.$route.query);
-        let sortStr = '';
-        if (sortM[0].sort === 'desc') {
-          sortStr = sortStr + '-';
+        let sort_list = [];
+        let sort_criteria = {};
+        for (sort_criteria of sortM) {
+          let sortStr = '';
+          if (sort_criteria.sort === 'desc') {
+            sortStr = sortStr + '-';
+          }
+          sortStr = sortStr + sort_criteria.colId;
+          sort_list = sort_list.concat(sortStr);
         }
-        sortStr = sortStr + sortM[0].colId;
+        const sortStr = sort_list.join(',');
         // value['sort'] = sortStr;
-        query['sort'] = sortStr === '' ? undefined : sortStr;
+        query.sort = sortStr === '' ? undefined : sortStr;
 
         if (query['sort'] !== this.$route.query['sort']) {
           // we always reset offset to first page
