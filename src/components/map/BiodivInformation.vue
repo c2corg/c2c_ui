@@ -14,7 +14,7 @@
       <span>{{ months.join(", ") }}</span>
     </p>
 
-    <!-- content formatting done with "he" html entities decoder -->
+    <!-- content formatting done with DOM parser to decode html entities -->
     <p v-for="(descPar, i) of descriptionParagraphs" :key="i">{{ descPar }}</p>
     <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
     <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
@@ -34,15 +34,14 @@
 
     computed: {
       descriptionParagraphs() {
-        let result = this.data.description || '';
-
         // keep line breaks for better readability
-        result = result.replace(/<br ?\/?>/g, '%%MYNL%%');
+        const paragraphList = (this.data.description || '').split(/<br ?\/?>/);
         // decode html entities
-        result = utils.decodeHtmlEntities(result);
-        // restore initial line breaks
-        result = result.split('%%MYNL%%');
-        return result;
+        let i = 0;
+        for (i in paragraphList) {
+          paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
+        }
+        return paragraphList;
       },
 
       months() {
