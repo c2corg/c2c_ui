@@ -7,18 +7,18 @@
     <span class="feed-filters">
 
       <query-item
-        :key="type_field.name"
-        :field="type_field"
+        :key="typeField.name"
+        :field="typeField"
         class="dropdown-item" />
 
       <query-item
-        :key="qual_field.name"
-        :field="qual_field"
+        :key="qualField.name"
+        :field="qualField"
         class="dropdown-item" />
 
       <query-item
-        :key="license_field.name"
-        :field="license_field"
+        :key="licenseField.name"
+        :field="licenseField"
         class="dropdown-item" />
     </span>
 
@@ -118,7 +118,7 @@
         return this.promise ? this.promise.loading : false;
       },
 
-      type_field() {
+      typeField() {
         // TODO: implement translations and/or icons
         const ff = new Field('Document Type');
         ff.url = 't';
@@ -127,13 +127,13 @@
         ff.defaultUrlQuery = '';
         return ff;
       },
-      qual_field() {
+      qualField() {
         const ff = new Field('quality', { url: 'qual' });
         ff.queryMode = 'multiSelect';
         ff.defaultUrlQuery = '';
         return ff;
       },
-      license_field() {
+      licenseField() {
         // TODO: implement translations and/or icons
         const ff = new Field('Document license');
         ff.url = 'lic';
