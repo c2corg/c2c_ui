@@ -98,18 +98,18 @@
     methods: {
       onGridReady(params) {
         this.gridApi = params.api;
-        let sort_model = [];
-        const sort_URL = this.$route.query['sort'];
-        if (sort_URL) {
-          let sort_item = {};
-          for (sort_item of sort_URL.split(',')) {
-            if (sort_item[0] === '-') {
-              sort_model = sort_model.concat({ colId: sort_item.slice(1), sort: 'desc' });
+        let sortModel = [];
+        const sortURL = this.$route.query['sort'];
+        if (sortURL) {
+          let sortItem = {};
+          for (sortItem of sortURL.split(',')) {
+            if (sortItem[0] === '-') {
+              sortModel = sortModel.concat({ colId: sortItem.slice(1), sort: 'desc' });
             } else {
-              sort_model = sort_model.concat({ colId: sort_item, sort: 'asc' });
+              sortModel = sortModel.concat({ colId: sortItem, sort: 'asc' });
             }
           }
-          this.gridApi.setSortModel(sort_model);
+          this.gridApi.setSortModel(sortModel);
         }
       },
 
@@ -118,24 +118,20 @@
       },
 
       sortChanged(event) {
-        // console.log(event);
-        // console.log(this.gridOptions.columnApi.getColumnState());
-        // console.log(this.gridOptions.api.getSortModel());
-        const sortM = this.gridApi.getSortModel();
+        const sortModel = this.gridApi.getSortModel();
         const query = Object.assign({}, this.$route.query);
-        let sort_list = [];
-        let sort_criteria = {};
-        for (sort_criteria of sortM) {
+        let sortList = [];
+        let sortCriteria = {};
+        for (sortCriteria of sortModel) {
           let sortStr = '';
-          if (sort_criteria.sort === 'desc') {
+          if (sortCriteria.sort === 'desc') {
             sortStr = sortStr + '-';
           }
-          sortStr = sortStr + sort_criteria.colId;
-          sort_list = sort_list.concat(sortStr);
+          sortStr = sortStr + sortCriteria.colId;
+          sortList = sortList.concat(sortStr);
         }
-        const sortStr = sort_list.join(',');
-        // value['sort'] = sortStr;
-        query.sort = sortStr === '' ? undefined : sortStr;
+        const sortQuery = sortList.join(',');
+        query.sort = sortQuery === '' ? undefined : sortQuery;
 
         if (query['sort'] !== this.$route.query['sort']) {
           // we always reset offset to first page
