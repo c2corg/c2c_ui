@@ -14,8 +14,8 @@
       <span>{{ months.join(", ") }}</span>
     </p>
 
-    <!-- TODO : find a light way to securely show this content -->
-    <p>{{ description }}</p>
+    <!-- content formatting done with DOM parser to decode html entities -->
+    <p v-for="(descPar, i) of descriptionParagraphs" :key="i">{{ descPar }}</p>
     <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
     <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
   </modal-window>
@@ -23,6 +23,7 @@
 
 <script>
 
+  import utils from '@/js/utils';
   export default {
     props: {
       data: {
@@ -32,13 +33,15 @@
     },
 
     computed: {
-      description() {
-        let result = this.data.description || '';
-
-        // very simple html > text interpreter : only html entities
-        result = result.replace(/&eacute;/g, 'é');
-        result = result.replace(/&egrave;/g, 'è');
-        return result;
+      descriptionParagraphs() {
+        // keep line breaks for better readability
+        const paragraphList = (this.data.description || '').split(/<br ?\/?>/);
+        // decode html entities
+        let i = 0;
+        for (i in paragraphList) {
+          paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
+        }
+        return paragraphList;
       },
 
       months() {
