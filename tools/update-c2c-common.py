@@ -66,6 +66,10 @@ attribute_names = {key: attribute_names[key] for key in sorted(attribute_names)}
 for attribute_name in attribute_names:
     result["attributes"][attribute_name] = attributes[attribute_name]
 
+sortable_attributes = get_fields('sortable_search_attributes')
+result["sortable_attributes"] = [sa for sa in sortable_attributes.keys()
+                                 if "sortable_" in sa]
+
 # store letter_types
 result["letter_types"] = get_fields('document_types')['ALL']
 
