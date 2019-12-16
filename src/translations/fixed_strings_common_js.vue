@@ -122,7 +122,6 @@
     <span v-translate>mtb_up_rating</span>
     <span v-translate>name</span>
     <span v-translate>nb_impacted</span>
-    <span v-translate>nb_outings</span>
     <span v-translate>nb_pages</span>
     <span v-translate>nb_participants</span>
     <span v-translate>orientations</span>
@@ -225,13 +224,9 @@
     <span v-translate translate-context="activities">via_ferrata</span>
     <span v-translate translate-context="activities">slacklining</span>
     <!-- activity_rates -->
-    <span v-translate translate-context="activity_rates">activity_rate_150</span>
-    <span v-translate translate-context="activity_rates">activity_rate_50</span>
-    <span v-translate translate-context="activity_rates">activity_rate_30</span>
-    <span v-translate translate-context="activity_rates">activity_rate_20</span>
-    <span v-translate translate-context="activity_rates">activity_rate_10</span>
-    <span v-translate translate-context="activity_rates">activity_rate_5</span>
-    <span v-translate translate-context="activity_rates">activity_rate_1</span>
+    <span v-translate translate-context="activity_rates">activity_rate_y5</span>
+    <span v-translate translate-context="activity_rates">activity_rate_m2</span>
+    <span v-translate translate-context="activity_rates">activity_rate_w1</span>
     <!-- area_types -->
     <span v-translate translate-context="area_types">range</span>
     <span v-translate translate-context="area_types">admin_limits</span>
@@ -259,7 +254,6 @@
     <!-- autonomies -->
     <span v-translate translate-context="autonomies">non_autonomous</span>
     <span v-translate translate-context="autonomies">autonomous</span>
-    <span v-translate translate-context="autonomies">initiator</span>
     <span v-translate translate-context="autonomies">expert</span>
     <!-- avalanche_levels -->
     <span v-translate translate-context="avalanche_levels">level_1</span>
@@ -404,11 +398,6 @@
     <span v-translate translate-context="months">oct</span>
     <span v-translate translate-context="months">nov</span>
     <span v-translate translate-context="months">dec</span>
-    <!-- nb_outings -->
-    <span v-translate translate-context="nb_outings">nb_outings_4</span>
-    <span v-translate translate-context="nb_outings">nb_outings_9</span>
-    <span v-translate translate-context="nb_outings">nb_outings_14</span>
-    <span v-translate translate-context="nb_outings">nb_outings_15</span>
     <!-- parking_fee_types -->
     <span v-translate translate-context="parking_fee_types">yes</span>
     <span v-translate translate-context="parking_fee_types">seasonal</span>
@@ -499,7 +488,7 @@
     <span v-translate translate-context="snow_quality_ratings">poor</span>
     <span v-translate translate-context="snow_quality_ratings">awful</span>
     <!-- snow_quantity_ratings -->
-    <span v-translate translate-context="snow_quantity_ratings">exllent</span>
+    <span v-translate translate-context="snow_quantity_ratings">excellent</span>
     <span v-translate translate-context="snow_quantity_ratings">good</span>
     <span v-translate translate-context="snow_quantity_ratings">average</span>
     <span v-translate translate-context="snow_quantity_ratings">poor</span>

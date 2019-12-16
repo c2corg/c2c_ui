@@ -702,10 +702,6 @@
         "max": 1000,
         "helper": "1063015#nb-impacted"
     },
-    "nb_outings":
-    {
-        "values": "nb_outings"
-    },
     "nb_pages":
     {
         "type": "number",

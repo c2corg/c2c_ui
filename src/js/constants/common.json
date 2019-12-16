@@ -35,13 +35,9 @@
             "slacklining"
         ],
         "activity_rates": [
-            "activity_rate_150",
-            "activity_rate_50",
-            "activity_rate_30",
-            "activity_rate_20",
-            "activity_rate_10",
-            "activity_rate_5",
-            "activity_rate_1"
+            "activity_rate_y5",
+            "activity_rate_m2",
+            "activity_rate_w1"
         ],
         "aid_ratings": [
             "A0",
@@ -88,7 +84,6 @@
         "autonomies": [
             "non_autonomous",
             "autonomous",
-            "initiator",
             "expert"
         ],
         "avalanche_levels": [
@@ -418,12 +413,6 @@
             "M4",
             "M5"
         ],
-        "nb_outings": [
-            "nb_outings_4",
-            "nb_outings_9",
-            "nb_outings_14",
-            "nb_outings_15"
-        ],
         "orientation_types": [
             "N",
             "NE",
@@ -585,7 +574,7 @@
             "awful"
         ],
         "snow_quantity_ratings": [
-            "exllent",
+            "excellent",
             "good",
             "average",
             "poor",
