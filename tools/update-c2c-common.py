@@ -9,6 +9,7 @@ This script load data from https://github.com/c2corg/v6_common and save it in a 
 import requests
 import json
 import os
+import re
 import optparse
 
 default_URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/'
@@ -16,6 +17,8 @@ default_URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_
 parser = optparse.OptionParser()
 parser.add_option("-p", "--path", dest="path",
                   help="path to common definitions")
+parser.add_option("-a", "--api", dest="api",
+                  help="path to api definitions")
 parser.add_option("-u", "--url", dest="url",
                   help="url to common definitions repo",
                   default=default_URL)
@@ -69,6 +72,29 @@ for attribute_name in attribute_names:
 sortable_attributes = get_fields('sortable_search_attributes')
 result["sortable_attributes"] = [sa for sa in sortable_attributes.keys()
                                  if "sortable_" in sa]
+
+if options.api:
+    with open('./src/js/constants/documentsProperties.json') as f:
+        doc_list = ['user' if doc == 'profile'
+                    else 'topo_map' if doc == 'map'
+                    else doc
+                    for doc in json.load(f).keys()]
+    search_attributes = set()
+    for doc_type in doc_list:
+        with open(os.path.join(options.api,
+                               '{}_mapping.py'.format(doc_type))) as f:
+            map_file = f.read()
+            FIELDS = re.findall(' +(FIELDS = \[.*?\])', map_file, re.DOTALL)
+            if FIELDS:
+                exec(FIELDS[0])
+                search_attributes = search_attributes.union(FIELDS)
+            ENUM_FIELDS = re.findall(' +(ENUM_RANGE_FIELDS = \[.*?\])',
+                                     map_file, re.DOTALL)
+            if ENUM_FIELDS:
+                exec(ENUM_FIELDS[0])
+                search_attributes = search_attributes.union(ENUM_RANGE_FIELDS)
+    result["search_attributes"] = list(search_attributes)
+
 
 # store letter_types
 result["letter_types"] = get_fields('document_types')['ALL']
