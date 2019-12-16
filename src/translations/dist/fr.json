@@ -70,26 +70,14 @@
     "activities": "Activités",
     "Activity feed": "Fil d'activité",
     "activity_rate": "Fréquence de pratique dans l'activité",
-    "activity_rate_1": {
-      "activity_rates": "1ère fois de sa vie"
+    "activity_rate_m2": {
+      "activity_rates": "2 fois par mois"
     },
-    "activity_rate_10": {
-      "activity_rates": "moins d'1 fois par mois"
+    "activity_rate_w1": {
+      "activity_rates": "1 fois par semaine"
     },
-    "activity_rate_150": {
-      "activity_rates": "au moins 3 fois par semaine"
-    },
-    "activity_rate_20": {
-      "activity_rates": "1 fois par mois"
-    },
-    "activity_rate_30": {
-      "activity_rates": "2 à 3 fois par mois"
-    },
-    "activity_rate_5": {
-      "activity_rates": "moins d'1 fois par an"
-    },
-    "activity_rate_50": {
-      "activity_rates": "1 à 2 fois par semaine"
+    "activity_rate_y5": {
+      "activity_rates": "5 fois par an"
     },
     "Add": "Ajouter",
     "add a book": "ajouter un livre",
@@ -1178,6 +1166,26 @@
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
     "Put it back": "Remettre",
+	"Supervision": "Encadrement",
+    "no_supervision": {
+      "supervision": "Non encadré"
+    },
+    "federal_supervision": {
+      "supervision": "Encadrement fédéral"
+    },
+    "professional_supervision": {
+      "supervision": "Encadrement professionnel"
+    },
+	"qualification": "Qualif",
+    "federal_supervisor": {
+      "qualification": "Initiateur fédéral"
+    },
+    "federal_trainer": {
+      "qualification": "Entraineur fédéral"
+    },
+    "professional_diploma": {
+      "qualification": "Diplome professionnel"
+    },
     "quality": "Complétude",
     "quartzite": {
       "rock_types": "quartzite"

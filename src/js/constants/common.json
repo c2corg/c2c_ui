@@ -460,6 +460,11 @@
             "service_on_demand",
             "boat"
         ],
+        "qualification": [
+            "federal_supervisor",
+            "federal_trainer",
+            "professional_diploma"
+        ],
         "quality_types": [
             "empty",
             "draft",
@@ -586,6 +591,11 @@
             "R3",
             "R4",
             "R5"
+        ],
+        "supervision": [
+            "no_supervision",
+            "federal_supervision",
+            "professional_supervision"
         ],
         "user_categories": [
             "amateur",

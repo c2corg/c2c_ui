@@ -143,6 +143,7 @@
     <span v-translate>public_transportation_rating</span>
     <span v-translate>public_transportation_types</span>
     <span v-translate>publication_date</span>
+    <span v-translate>qualification_state</span>
     <span v-translate>quality</span>
     <span v-translate>rain_proof</span>
     <span v-translate>reduce_impact</span>
@@ -178,6 +179,7 @@
     <span v-translate>snow_quantity</span>
     <span v-translate>snowshoe_rating</span>
     <span v-translate>summary</span>
+    <span v-translate>supervision</span>
     <span v-translate>time_management</span>
     <span v-translate>timing</span>
     <span v-translate>title</span>
@@ -423,6 +425,10 @@
     <span v-translate translate-context="public_transportation_types">bus</span>
     <span v-translate translate-context="public_transportation_types">service_on_demand</span>
     <span v-translate translate-context="public_transportation_types">boat</span>
+    <!-- qualification -->
+    <span v-translate translate-context="qualification">federal_supervisor</span>
+    <span v-translate translate-context="qualification">federal_trainer</span>
+    <span v-translate translate-context="qualification">professional_diploma</span>
     <!-- quality_types -->
     <span v-translate translate-context="quality_types">empty</span>
     <span v-translate translate-context="quality_types">draft</span>
@@ -493,6 +499,10 @@
     <span v-translate translate-context="snow_quantity_ratings">average</span>
     <span v-translate translate-context="snow_quantity_ratings">poor</span>
     <span v-translate translate-context="snow_quantity_ratings">awful</span>
+    <!-- supervision -->
+    <span v-translate translate-context="supervision">no_supervision</span>
+    <span v-translate translate-context="supervision">federal_supervision</span>
+    <span v-translate translate-context="supervision">professional_supervision</span>
     <!-- user_categories -->
     <span v-translate translate-context="user_categories">amateur</span>
     <span v-translate translate-context="user_categories">mountain_guide</span>

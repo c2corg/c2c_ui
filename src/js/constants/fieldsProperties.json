@@ -814,6 +814,10 @@
     {
         "type": "text"
     },
+	"qualification":
+	{
+		"values": "qualification"
+	},
     "quality":
     {
         "values": "quality_types",
@@ -1021,6 +1025,10 @@
         "type": "markdown",
         "parent": "locales"
     },
+	"supervision":
+	{
+		"values": "supervision"
+	},
     "time_management":
     {
         "type": "markdown",

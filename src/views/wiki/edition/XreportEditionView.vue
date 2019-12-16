@@ -58,7 +58,8 @@
         <form-field class="is-4" :document="document" :field="fields.author_status" />
         <form-field class="is-4" :document="document" :field="fields.autonomy" />
         <form-field class="is-4" :document="document" :field="fields.activity_rate" />
-        <form-field class="is-4" :document="document" :field="fields.nb_outings" />
+        <form-field class="is-4" :document="document" :field="fields.supervision" />
+        <form-field class="is-4" :document="document" :field="fields.qualification" />
         <form-field class="is-4" :document="document" :field="fields.previous_injuries" />
       </div>
     </form-section>
