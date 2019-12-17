@@ -103,6 +103,9 @@
         if (sortURL) {
           let sortItem = {};
           for (sortItem of sortURL.split(',')) {
+            if (sortItem.includes('title_')) {
+              sortItem = 'title';
+            }
             if (sortItem[0] === '-') {
               sortModel = sortModel.concat({ colId: sortItem.slice(1), sort: 'desc' });
             } else {
@@ -123,6 +126,9 @@
         let sortList = [];
         let sortCriteria = {};
         for (sortCriteria of sortModel) {
+          if (sortCriteria.colId === 'title') {
+            sortCriteria.colId = sortCriteria.colId + '_' + document.documentElement.lang;
+          }
           let sortStr = '';
           if (sortCriteria.sort === 'desc') {
             sortStr = sortStr + '-';
