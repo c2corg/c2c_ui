@@ -48,6 +48,25 @@
     return Object.assign(result, options);
   }
 
+  // comparator functions for custom sort of "complicated" columns
+  // these functions could be removed if the sort function of
+  // AG grid could be deactivated since documents are expected to
+  // be given in correct order by the backend
+  function condComp(cond1, cond2) {
+    const conds = { 'excellent': 0, 'good': 1, 'average': 2, 'poor': 3, 'awful': 4 };
+    return conds[cond1] - conds[cond2];
+  }
+
+  function qualComp(qual1, qual2) {
+    const quals = { 'empty': 0, 'draft': 1, 'medium': 2, 'fine': 3, 'great': 4 };
+    return quals[qual1] - quals[qual2];
+  }
+
+  function avComp(av1, av2, n1, n2, isInverted) {
+    const avs = { 'level_ns': 0, 'level_1': 1, 'level_2': 2, 'level_3': 3, 'level_4': 4, 'level_5': 5 };
+    return avs[av1] - avs[av2];
+  }
+
   export default {
 
     components: {
@@ -69,7 +88,7 @@
     data() {
       return {
         columnDefs: null,
-        dColumnDefs: { sortable: true }
+        dColumnDefs: { sortable: true, unSortIcon: true }
       };
     },
 
@@ -168,9 +187,9 @@
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink, width: 300 }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 300 }),
-            getColDef(this, fields.categories, { width: 120 }),
+            getColDef(this, fields.categories, { width: 120, sortable: false }),
             getColDef(this, fields.article_type, { width: 120 }),
-            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30 })
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
@@ -178,28 +197,28 @@
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
             getColDef(this, fields.book_types),
-            getColDef(this, fields.author),
+            getColDef(this, fields.author, { sortable: false }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
         if (this.documentType === 'image') {
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-            getColDef(this, fields.author),
-            getColDef(this, fields.filename)
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
+            getColDef(this, fields.author, { sortable: false }),
+            getColDef(this, fields.filename, { sortable: false })
           ];
         }
 
         if (this.documentType === 'map') {
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-            getColDef(this, fields.code),
-            getColDef(this, fields.editor),
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
+            getColDef(this, fields.code, { sortable: false }),
+            getColDef(this, fields.editor, { sortable: false }),
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
@@ -207,8 +226,8 @@
           this.columnDefs = [
             getColDef(this, fields.date_end, { width: 120, cellRendererFramework: OutingDate }),
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-            getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentContributor, width: 100 }),
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
+            getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentContributor, width: 100, sortable: false }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
             {
               headerName: this.$gettext('elevation'),
@@ -227,7 +246,8 @@
                   cellRendererFramework: OutingRating,
                   columnGroupShow: 'closed',
                   resizable: true,
-                  width: 120
+                  width: 120,
+                  sortable: false
                 },
                 getColDef(this, fields.global_rating, { columnGroupShow: 'open', width: 80 }),
                 getColDef(this, fields.rock_free_rating, { columnGroupShow: 'open', width: 80 }),
@@ -244,17 +264,17 @@
               ]
             },
 
-            { cellRendererFramework: MarkerGpsTrace, width: 30 },
-            { cellRendererFramework: MarkerImageCount, width: 30 },
-            { cellRendererFramework: MarkerCondition, width: 30 },
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            { cellRendererFramework: MarkerGpsTrace, width: 30, sortable: false },
+            { cellRendererFramework: MarkerImageCount, width: 30, sortable: false },
+            getColDef(this, fields.condition_rating, { cellRendererFramework: MarkerCondition, width: 30, comparator: condComp }),
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
         if (this.documentType === 'route') {
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
             getColDef(this, fields.orientations, { width: 100 }),
             {
@@ -275,6 +295,7 @@
                   cellRendererFramework: RouteRating,
                   columnGroupShow: 'closed',
                   resizable: true,
+                  sortable: false,
                   width: 120
                 },
                 getColDef(this, fields.engagement_rating, { columnGroupShow: 'open', width: 80 }),
@@ -287,18 +308,18 @@
                 getColDef(this, fields.rock_required_rating, { columnGroupShow: 'open', width: 80 })
               ]
             },
-            { cellRendererFramework: MarkerGpsTrace, width: 30 },
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            { cellRendererFramework: MarkerGpsTrace, width: 30, sortable: false },
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
         if (this.documentType === 'waypoint') {
           this.columnDefs = [
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
             getColDef(this, fields.elevation),
             getColDef(this, fields.waypoint_type),
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
 
@@ -306,7 +327,7 @@
           this.columnDefs = [
             getColDef(this, fields.date, { width: 100 }),
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+            getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, sortable: false }),
             getColDef(this, fields.event_type, { width: 100 }),
             getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
             {
@@ -321,11 +342,11 @@
             {
               headerName: this.$gettext('avalanche'),
               children: [
-                getColDef(this, fields.avalanche_level, { width: 150 }),
+                getColDef(this, fields.avalanche_level, { width: 150, comparator: avComp }),
                 getColDef(this, fields.avalanche_slope, { columnGroupShow: 'open', width: 120 })
               ]
             },
-            { cellRendererFramework: MarkerQuality, width: 30 }
+            getColDef(this, fields.quality, { cellRendererFramework: MarkerQuality, width: 30, comparator: qualComp })
           ];
         }
       }
