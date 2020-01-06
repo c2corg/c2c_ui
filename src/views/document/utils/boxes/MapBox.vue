@@ -21,26 +21,26 @@
 
     <elevation-profile :document="document" v-if="documentType=='outing'" />
 
-    <div class="columns is-multiline is-mobile is-clearfix">
-      <div class="column is-full-tablet is-full-desktop is-half-widescreen ">
-        <router-link v-if="showYetiButton" :to="yetiUrl" class="button is-small">
-          <icon-yeti class="icon" />
-          <span>Voir dans YETI</span>
-        </router-link>
-      </div>
-      <div class="column">
-        <div
-          v-if="document.geometry && (document.geometry.geom_detail || documentType == 'waypoint')"
-          class="buttons is-pulled-right">
-          <button class="button is-primary is-small" @click="downloadGpx">
-            GPX
-          </button>
-          <button class="button is-primary is-small" @click="downloadKml">
-            KML
-          </button>
-        </div>
-      </div>
+    <div class="buttons is-centered">
+      <router-link v-if="showYetiButton" :to="yetiUrl" class="button is-small">
+        <icon-yeti class="icon" />
+        <span v-translate>YETI</span>
+      </router-link>
+      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadGpx">
+        GPX
+      </button>
+      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadKml">
+        KML
+      </button>
+      <button
+        v-if="hasMapLinks"
+        class="button is-small"
+        @click="mapLinksAreVisible=!mapLinksAreVisible"
+        :class="{'is-success':mapLinksAreVisible}">
+        <icon-map />
+      </button>
     </div>
+    <map-links v-if="mapLinksAreVisible" :document="document" />
   </div>
 </template>
 
@@ -50,15 +50,23 @@
 
   import { requireDocumentProperty } from '@/js/properties-mixins';
   import ElevationProfile from './ElevationProfile';
+  import MapLinks from './MapLinks';
 
   const GeoJSON = new ol.format.GeoJSON();
 
   export default {
     components: {
-      ElevationProfile
+      ElevationProfile,
+      MapLinks
     },
 
     mixins: [ requireDocumentProperty ],
+
+    data() {
+      return {
+        mapLinksAreVisible: false
+      };
+    },
 
     computed: {
       showYetiButton() {
@@ -71,6 +79,14 @@
         const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
 
         return this.document.activities.some(activity => activities.includes(activity));
+      },
+
+      showDownloadTraceButtons() {
+        return this.document.geometry && (this.document.geometry.geom_detail || this.documentType === 'waypoint');
+      },
+
+      hasMapLinks() {
+        return (this.document.maps && this.document.maps.length !== 0) || this.document.maps_info;
       },
 
       yetiUrl() {
@@ -122,8 +138,4 @@
     margin-bottom:1rem;
   }
 
-  .nearby-link{
-    margin-top:1rem;
-    margin-bottom:1rem;
-  }
 </style>
