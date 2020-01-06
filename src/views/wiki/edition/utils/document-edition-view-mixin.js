@@ -77,6 +77,14 @@ export default {
     'document.geometry.geom': 'setLatitudeLongitude'
   },
 
+  mounted() {
+    window.addEventListener('beforeunload', this.beforeUnload);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.beforeUnload);
+  },
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (!vm.$user.isLogged) {
@@ -309,6 +317,13 @@ export default {
       this.genericErrors = [];
       for (const field of Object.values(this.fields)) {
         field.error = null;
+      }
+    },
+
+    beforeUnload(event) {
+      if (this.modified) {
+        event.preventDefault();
+        event.returnValue = '';
       }
     }
   }
