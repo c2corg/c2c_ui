@@ -60,6 +60,8 @@
         </span>
 
       </div>
+      <input-sort :doc-type="documentType" />
+      <br>
 
       <query-items
         class="filter-section"

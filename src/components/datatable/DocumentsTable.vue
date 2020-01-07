@@ -93,6 +93,9 @@
     },
 
     watch: {
+      $route(to, from) {
+        this.readSort();
+      },
       documentType: {
         handler: 'computeColumnDefs',
         immediate: true
@@ -117,13 +120,16 @@
     methods: {
       onGridReady(params) {
         this.gridApi = params.api;
+        this.readSort();
+      },
+      readSort() {
         let sortModel = [];
         const sortURL = this.$route.query['sort'];
         if (sortURL) {
           let sortItem = {};
           for (sortItem of sortURL.split(',')) {
             if (sortItem.includes('title_')) {
-              sortItem = 'title';
+              sortItem = sortItem[0] === '-' ? '-title' : 'title';
             }
             if (sortItem[0] === '-') {
               sortModel = sortModel.concat({ colId: sortItem.slice(1), sort: 'desc' });
@@ -158,7 +164,27 @@
         const sortQuery = sortList.join(',');
         query.sort = sortQuery === '' ? undefined : sortQuery;
 
-        if (query['sort'] !== this.$route.query['sort']) {
+        let oldSort = [];
+        if (('sort' in this.$route.query) && this.$route.query['sort']) {
+          oldSort = this.$route.query['sort'].split(',');
+        }
+        const tableCols = {};
+        for (const col of this.columnDefs) {
+          tableCols[col._fieldDefinition.name] = true;
+        }
+        let oldSortFiltered = [];
+        for (const item of oldSort) {
+          if (item.includes('title_')) {
+            if ('title' in tableCols) {
+              oldSortFiltered = oldSortFiltered.concat([item]);
+            }
+          } else if ((item in tableCols) ||
+          ((item[0] === '-') && (item.slice(1) in tableCols))) {
+            oldSortFiltered = oldSortFiltered.concat([item]);
+          }
+        }
+
+        if (query['sort'] !== oldSortFiltered.join(',')) {
           // we always reset offset to first page
           query.offset = undefined;
           this.$router.push({ query });
