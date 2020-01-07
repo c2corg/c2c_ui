@@ -18,6 +18,7 @@ function Constants() {
   this.waypoint_types = common.attributes.waypoint_types;
   this.langs = common.attributes.langs;
   this.quality_types = common.attributes.quality_types;
+  this.search_attribute_dict = common.search_attribute_dict;
 
   // You can find associations in
   //     https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py

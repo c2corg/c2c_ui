@@ -4,6 +4,9 @@ import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome
 
 // Keep  on line per icon : it helps on bundle analysis
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
+import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
+import { faSortUp } from '@fortawesome/free-solid-svg-icons/faSortUp';
 import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons/faArrowsAltV';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faAt } from '@fortawesome/free-solid-svg-icons/faAt';
@@ -208,6 +211,9 @@ export default function install(Vue) {
 
     // solid icons
     faAngleDown,
+    faSort,
+    faSortDown,
+    faSortUp,
     faArrowsAltV,
     faArrowRight,
     faAt,
