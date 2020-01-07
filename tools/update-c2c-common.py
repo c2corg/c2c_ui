@@ -79,8 +79,10 @@ if options.api:
                     else 'topo_map' if doc == 'map'
                     else doc
                     for doc in json.load(f).keys()]
-    search_attributes = set()
+    search_attributes_all = set()
+    search_attribute_dict = {}
     for doc_type in doc_list:
+        search_attributes = set()
         with open(os.path.join(options.api,
                                '{}_mapping.py'.format(doc_type))) as f:
             map_file = f.read()
@@ -93,6 +95,9 @@ if options.api:
             if ENUM_FIELDS:
                 exec(ENUM_FIELDS[0])
                 search_attributes = search_attributes.union(ENUM_RANGE_FIELDS)
+        search_attribute_dict[doc_type] = list(search_attributes)
+        search_attributes_all = search_attributes_all.union(search_attributes)
+    result["search_attribute_dict"] = search_attribute_dict
     result["search_attributes"] = list(search_attributes)
 
 

@@ -316,18 +316,6 @@
     <span v-translate translate-context="condition_ratings">average</span>
     <span v-translate translate-context="condition_ratings">poor</span>
     <span v-translate translate-context="condition_ratings">awful</span>
-    <!-- snow_quality_ratings -->
-    <span v-translate translate-context="snow_quality_ratings">excellent</span>
-    <span v-translate translate-context="snow_quality_ratings">good</span>
-    <span v-translate translate-context="snow_quality_ratings">average</span>
-    <span v-translate translate-context="snow_quality_ratings">poor</span>
-    <span v-translate translate-context="snow_quality_ratings">awful</span>
-    <!-- snow_quantity_ratings -->
-    <span v-translate translate-context="snow_quantity_ratings">excellent</span>
-    <span v-translate translate-context="snow_quantity_ratings">good</span>
-    <span v-translate translate-context="snow_quantity_ratings">average</span>
-    <span v-translate translate-context="snow_quantity_ratings">poor</span>
-    <span v-translate translate-context="snow_quantity_ratings">awful</span>
     <!-- custodianship_types -->
     <span v-translate translate-context="custodianship_types">accessible_when_wardened</span>
     <span v-translate translate-context="custodianship_types">always_accessible</span>
@@ -504,6 +492,18 @@
     <span v-translate translate-context="snow_clearance_ratings">naturally</span>
     <span v-translate translate-context="snow_clearance_ratings">closed_in_winter</span>
     <span v-translate translate-context="snow_clearance_ratings">non_applicable</span>
+    <!-- snow_quality_ratings -->
+    <span v-translate translate-context="snow_quality_ratings">excellent</span>
+    <span v-translate translate-context="snow_quality_ratings">good</span>
+    <span v-translate translate-context="snow_quality_ratings">average</span>
+    <span v-translate translate-context="snow_quality_ratings">poor</span>
+    <span v-translate translate-context="snow_quality_ratings">awful</span>
+    <!-- snow_quantity_ratings -->
+    <span v-translate translate-context="snow_quantity_ratings">excellent</span>
+    <span v-translate translate-context="snow_quantity_ratings">good</span>
+    <span v-translate translate-context="snow_quantity_ratings">average</span>
+    <span v-translate translate-context="snow_quantity_ratings">poor</span>
+    <span v-translate translate-context="snow_quantity_ratings">awful</span>
     <!-- user_categories -->
     <span v-translate translate-context="user_categories">amateur</span>
     <span v-translate translate-context="user_categories">mountain_guide</span>
