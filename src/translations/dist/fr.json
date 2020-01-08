@@ -1166,7 +1166,7 @@
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
     "Put it back": "Remettre",
-	"Supervision": "Encadrement",
+	"supervision": "Encadrement",
     "no_supervision": {
       "supervision": "Non encadré"
     },
@@ -1176,7 +1176,7 @@
     "professional_supervision": {
       "supervision": "Encadrement professionnel"
     },
-	"qualification": "Qualif",
+	"qualification": "Qualification",
     "federal_supervisor": {
       "qualification": "Initiateur fédéral"
     },
