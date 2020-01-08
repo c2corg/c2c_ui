@@ -20,7 +20,7 @@
           class="button is-info"
           target="_blank"
           rel="noopener"
-          :href="'https://www.camptocamp.org/articles/' + helper.documentId"
+          :href="'/articles/' + helper.documentId"
           v-translate>
           Edit
         </a>
