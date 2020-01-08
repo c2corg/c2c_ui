@@ -11,7 +11,7 @@
       :sub-title="$gettext('Report title, activity, linked routes or outings.')">
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.title" />
-        <form-field class="is-12" :document="document" :field="fields.activities" />
+        <form-field class="is-12" :document="document" :field="fields.activities" :single-select="true" />
       </div>
 
       <associations-input-row :document="document" :field="fields.articles" />
@@ -44,7 +44,7 @@
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.date" />
         <form-field class="is-4" :document="document" :field="fields.nb_participants" />
-        <form-field class="is-12" :document="document" :field="fields.event_type" />
+        <form-field class="is-12" :document="document" :field="fields.event_type" :single-select="true" />
         <form-field class="is-4" :document="document" :field="fields.nb_impacted" />
         <form-field class="is-4" :document="document" :field="fields.severity" />
         <form-field class="is-4" :document="document" :field="fields.rescue" />

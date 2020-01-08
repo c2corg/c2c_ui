@@ -5,6 +5,7 @@
       :key="option"
       @click="toggle(option)"
       class="multi-select-item has-cursor-pointer"
+      :single-select="singleSelect"
       :checked="value_.includes(option)">
       {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
     </span>
@@ -23,6 +24,10 @@
       options: {
         type: Array,
         required: true
+      },
+      singleSelect: {
+        type: Boolean,
+        default: false
       },
       i18n: {
         type: Boolean,

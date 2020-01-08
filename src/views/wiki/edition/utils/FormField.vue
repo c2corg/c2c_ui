@@ -19,6 +19,7 @@
         :placeholder="placeholder"
         :unit="unit"
         :divisor="divisor"
+        :single-select="singleSelect"
         :is-expanded="isExpanded" />
     </div>
   </div>
@@ -62,6 +63,10 @@
         default: undefined
       },
       noWrapper: {
+        type: Boolean,
+        default: false
+      },
+      singleSelect: {
         type: Boolean,
         default: false
       }

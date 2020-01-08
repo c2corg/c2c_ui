@@ -7,6 +7,7 @@
       :class="{'with-labels' :showLabels }"
       class="input-item has-cursor-pointer"
       :title="showLabels ? null : $gettext(activity, 'activities')"
+      :single-select="singleSelect"
       @click="toggle(activity)">
       <icon-activity :activity="activity" />
       <span v-if="showLabels" class="is-size-6 input-label">
@@ -25,6 +26,10 @@
 
     props: {
       showLabels: {
+        type: Boolean,
+        default: false
+      },
+      singleSelect: {
         type: Boolean,
         default: false
       }
