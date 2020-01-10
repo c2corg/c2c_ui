@@ -68,7 +68,6 @@
       :title="$gettext('Narration')"
       :sub-title="$gettext('Open fields to deeply explain the event circumstances.')">
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.summary" />
         <form-field class="is-12" :document="document" :field="fields.description" :placeholder="$gettext('Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)')" />
         <form-field class="is-12" :document="document" :field="fields.place" :placeholder="$gettext('Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.')" />
         <form-field class="is-12" :document="document" :field="fields.route_study" :placeholder="$gettext('Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?')" />
