@@ -63,6 +63,7 @@
     <span v-translate>engagement_rating</span>
     <span v-translate>equipment_rating</span>
     <span v-translate>equipment_ratings</span>
+    <span v-translate>event_activity</span>
     <span v-translate>event_type</span>
     <span v-translate>exposition_rating</span>
     <span v-translate>exposition_rock_rating</span>
@@ -143,7 +144,7 @@
     <span v-translate>public_transportation_rating</span>
     <span v-translate>public_transportation_types</span>
     <span v-translate>publication_date</span>
-    <span v-translate>qualification_state</span>
+    <span v-translate>qualification</span>
     <span v-translate>quality</span>
     <span v-translate>rain_proof</span>
     <span v-translate>reduce_impact</span>
@@ -317,15 +318,26 @@
     <span v-translate translate-context="custodianship_types">always_accessible</span>
     <span v-translate translate-context="custodianship_types">key_needed</span>
     <span v-translate translate-context="custodianship_types">no_warden</span>
+    <!-- event_activities -->
+    <span v-translate translate-context="event_activities">sport_climbing</span>
+    <span v-translate translate-context="event_activities">multipitch_climbing</span>
+    <span v-translate translate-context="event_activities">alpine_climbing</span>
+    <span v-translate translate-context="event_activities">snow_ice_mixed</span>
+    <span v-translate translate-context="event_activities">ice_climbing</span>
+    <span v-translate translate-context="event_activities">skitouring</span>
+    <span v-translate translate-context="event_activities">other</span>
     <!-- event_types -->
     <span v-translate translate-context="event_types">avalanche</span>
-    <span v-translate translate-context="event_types">stone_fall</span>
-    <span v-translate translate-context="event_types">falling_ice</span>
+    <span v-translate translate-context="event_types">stone_ice_fall</span>
+    <span v-translate translate-context="event_types">ice_cornice_collapse</span>
     <span v-translate translate-context="event_types">person_fall</span>
     <span v-translate translate-context="event_types">crevasse_fall</span>
-    <span v-translate translate-context="event_types">roped_fall</span>
     <span v-translate translate-context="event_types">physical_failure</span>
-    <span v-translate translate-context="event_types">lightning</span>
+    <span v-translate translate-context="event_types">injury_without_fall</span>
+    <span v-translate translate-context="event_types">blocked_person</span>
+    <span v-translate translate-context="event_types">weather_event</span>
+    <span v-translate translate-context="event_types">safety_operation</span>
+    <span v-translate translate-context="event_types">critical_situation</span>
     <span v-translate translate-context="event_types">other</span>
     <!-- frequentation_types -->
     <span v-translate translate-context="frequentation_types">quiet</span>

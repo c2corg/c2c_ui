@@ -213,15 +213,27 @@
             "P4",
             "P4+"
         ],
+        "event_activities": [
+            "sport_climbing",
+            "multipitch_climbing",
+            "alpine_climbing",
+            "snow_ice_mixed",
+            "ice_climbing",
+            "skitouring",
+            "other"
+        ],
         "event_types": [
             "avalanche",
-            "stone_fall",
-            "falling_ice",
+            "stone_ice_fall",
+            "ice_cornice_collapse",
             "person_fall",
             "crevasse_fall",
-            "roped_fall",
             "physical_failure",
-            "lightning",
+            "injury_without_fall",
+            "blocked_person",
+            "weather_event",
+            "safety_operation",
+            "critical_situation",
             "other"
         ],
         "exposition_ratings": [

@@ -350,10 +350,16 @@
         "i18n": false,
         "helper": "133323#equipment"
     },
+    "event_activity":
+    {
+        "values": "event_activities",
+        "single": true,
+        "helper": "1063015#activities"
+    },
     "event_type":
     {
         "values": "event_types",
-        "multiple": true,
+        "single": true,
         "helper": "1063015#event-type"
     },
     "exposition_rating":
