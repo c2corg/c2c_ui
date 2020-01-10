@@ -14,15 +14,19 @@
 
 <script>
 
-  import { baseMixin, arrayMixin } from './mixins.js';
+  import { baseMixin } from './mixins.js';
 
   export default {
-    mixins: [ baseMixin, arrayMixin ],
+    mixins: [ baseMixin ],
 
     props: {
       options: {
         type: Array,
         required: true
+      },
+      value: {
+        type: String,
+        default: ''
       },
       i18n: {
         type: Boolean,
@@ -31,6 +35,35 @@
       i18nContext: {
         type: String,
         default: undefined
+      }
+    },
+
+    computed: {
+      value_: {
+        get() {
+          return this.value ? this.value : '';
+        },
+        set(value) {
+          if (!this.disabled) {
+            this.$emit('input', value);
+          }
+        }
+      }
+    },
+
+    methods: {
+      toggle(item) {
+        if (this.disabled) {
+          return;
+        }
+
+        let newValue = this.value_.slice(0);
+
+        newValue = newValue === item ? '' : item;
+
+        if (newValue.length !== 0 || !this.required) {
+          this.value_ = newValue;
+        }
       }
     }
   };

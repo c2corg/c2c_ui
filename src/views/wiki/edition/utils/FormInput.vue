@@ -3,7 +3,6 @@
     v-if="field.name=='activities'"
     v-show="visible"
     :has-error="hasError"
-    :single-select="singleSelect"
     show-labels
     v-model="document.activities" />
 
@@ -53,7 +52,16 @@
     :i18n="field.i18n"
     :i18n-context="field.i18nContext"
     :has-error="hasError"
-    :single-select="singleSelect"
+    v-model="object[field.name]" />
+
+  <input-single-select
+    v-else-if="field.values && field.single"
+    v-show="visible"
+    :options="field.values"
+    :required="field.required"
+    :i18n="field.i18n"
+    :i18n-context="field.i18nContext"
+    :has-error="hasError"
     v-model="object[field.name]" />
 
   <input-date
@@ -141,10 +149,6 @@
       divisor: {
         type: Number,
         default: undefined
-      },
-      singleSelect: {
-        type: Boolean,
-        default: false
       }
     },
 

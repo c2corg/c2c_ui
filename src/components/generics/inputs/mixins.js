@@ -75,13 +75,7 @@ export const arrayMixin = {
 
       const newValue = this.value_.slice(0);
 
-      if (this.singleSelect) {
-        if (!newValue.includes(item)) {
-          newValue.splice(0, newValue.length, item);
-        } else {
-          newValue.splice(0, newValue.length);
-        }
-      } else if (!newValue.includes(item)) {
+      if (!newValue.includes(item)) {
         newValue.push(item);
       } else {
         newValue.splice(newValue.indexOf(item), 1);
