@@ -99,6 +99,9 @@
     "advertisement": "publicité",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
+    "alpine_climbing": {
+      "event_activities": "Rocher montagne (TA)"
+    },
     "already used forum_username": {
       "API message": "Pseudo forum déjà utilisé"
     },
@@ -211,6 +214,9 @@
       "climbing_outdoor_types": "bloc"
     },
     "Block account": "Bloquer cet utilisateur",
+    "blocked_person": {
+      "event_types": "Personne bloquée"
+    },
     "boat": {
       "public_transportation_types": "bateau"
     },
@@ -354,6 +360,9 @@
     "crevasse_fall": {
       "event_types": "chute en crevasse"
     },
+    "critical_situation": {
+      "event_types": "situation complexe sans incident"
+    },
     "crowded": {
       "frequentation_types": "assez fréquenté"
     },
@@ -478,6 +487,7 @@
       "langs": "basque"
     },
     "EULA": "CGU",
+    "event_activity": "Activité",
     "event_type": "Type d'évènement",
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
     "excellent": {
@@ -507,9 +517,6 @@
     },
     "face": {
       "route_configuration_types": "face"
-    },
-    "falling_ice": {
-      "event_types": "chute de glace"
     },
     "farm_sale": {
       "product_types": "vente directe"
@@ -681,7 +688,11 @@
     "I have read and agree to the terms of use": "J'ai lu et approuvé les conditions d'utilisation",
     "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
-      "activities": "Cascade de glace"
+      "activities": "Cascade de glace",
+      "event_activities": "Cascade de glace"
+    },
+    "ice_cornice_collapse": {
+      "event_types": "Effondrement cascade ou corniche"
     },
     "ice_rating": "Cotation glace",
     "IGN": {
@@ -707,6 +718,9 @@
     "Infos": "Informations",
     "initiator": {
       "autonomies": "débrouillé"
+    },
+    "injury_without_fall": {
+      "event_types": "lésion sans chute"
     },
     "Insert a link": "Insérer un lien",
     "Insert emoji": "Insérer un émoji",
@@ -785,9 +799,6 @@
     "Licenses": "Licences",
     "lift_access": "Remontées mécaniques",
     "lift_status": "Remontées mécaniques",
-    "lightning": {
-      "event_types": "foudre"
-    },
     "link": "lien",
     "Links": "Liens",
     "List mode": "Vue en liste",
@@ -898,6 +909,9 @@
     "mtb_up_rating": "Cotation VTT montée",
     "multi": {
       "climbing_outdoor_types": "grande voie"
+    },
+    "multipitch_climbing": {
+      "event_activities": "Escalade en grande voie"
     },
     "Multi-criteria search": "Recherche multi-critère",
     "My account": "Mon compte",
@@ -1014,7 +1028,8 @@
     "Ordered list": "Liste triée",
     "orientations": "Orientations",
     "other": {
-      "event_types": "autre"
+      "event_types": "autre",
+      "event_activities": "Autres activités C2C"
     },
     "other_comments": "Conséquences physiques et autres commentaires",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
@@ -1067,7 +1082,7 @@
     "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la sortie",
     "Period of protection": "Période de protection",
     "person_fall": {
-      "event_types": "chute d'une personne"
+      "event_types": "déséquilibre/chute"
     },
     "personal": {
       "article_types": "personnel (CC by-nc-nd)",
@@ -1250,9 +1265,6 @@
     "roof": {
       "climbing_styles": "toit"
     },
-    "roped_fall": {
-      "event_types": "chute encordé"
-    },
     "route": "itinéraire",
     "route_description": "Description de l'itinéraire",
     "route_history": "Historique de l'itinéraire",
@@ -1265,6 +1277,9 @@
       "children_proof_types": "adapté"
     },
     "safety": "Mesures et techniques de sécurité mises en oeuvre",
+    "safety_operation": {
+      "event_types": "Manœuvre de sécurité"
+    },
     "Save": "Enregistrer",
     "scale": "échelle",
     "schiste": {
@@ -1339,7 +1354,8 @@
     "ski_rating": "Cotation ski",
     "Skiability": "Skiabilité",
     "skitouring": {
-      "activities": "Ski, surf"
+      "activities": "Ski, surf",
+      "event_activities": "Ski de randonnée"
     },
     "skitouring gear": "Ski, surf, raquette",
     "slab": {
@@ -1390,7 +1406,8 @@
       "weather_station_types": "hauteur de neige"
     },
     "snow_ice_mixed": {
-      "activities": "Neige, glace et mixte"
+      "activities": "Neige, glace et mixte",
+      "event_activities": "Neige, glace et mixte"
     },
     "snow_quality": "Qualité de la neige",
     "snow_quantity": "Quantité de neige",
@@ -1412,11 +1429,14 @@
       "snow_clearance_ratings": "déneigement occasionnel"
     },
     "Source:": "Document à fusionner (source) :",
+    "sport_climbing": {
+      "event_activities": "Escalade en falaise"
+    },
     "sport_shop": {
       "product_types": "magasin de sport"
     },
-    "stone_fall": {
-      "event_types": "chute de pierres"
+    "stone_ice_fall": {
+      "event_types": "chute de pierre/glace/serac"
     },
     "Stop following this contributor": "Ne plus suivre ce contributeur",
     "stories": {
@@ -1551,6 +1571,9 @@
     "We sent you an email, please click on the link to reset password.": "Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il contient pour réinitialiser votre mot de passe.",
     "weather": "Météo",
     "Weather & conditions": "Météo & conditions",
+    "weather_event": {
+      "event_types": "évènement météo"
+    },
     "weather_station": {
       "waypoint_types": "station météo"
     },
