@@ -61,6 +61,9 @@
         /
         {{ document.labande_ski_rating }}
       </span>
+      <span v-if="document.snowshoe_rating" :title="$gettext('snowshoe_rating')">
+        {{ document.snowshoe_rating }}
+      </span>
       <span v-if="document.hiking_rating" :title="$gettext('hiking_rating')">
         {{ document.hiking_rating }}
       </span>
@@ -121,6 +124,7 @@
       'ski_exposition',
       'labande_global_rating',
       'labande_ski_rating',
+      'snowshoe_rating',
       'hiking_rating',
       'mtb_up_rating',
       'mtb_down_rating',
