@@ -132,6 +132,8 @@
         <form-field class="is-12" :document="document" :field="fields.gear" :placeholder="$gettext('Describe here the gear needed for this route')" />
         <form-field class="is-12" :document="document" :field="fields.glacier_gear" />
         <form-field class="is-12" :document="document" :field="fields.external_resources" :placeholder="$gettext('Books and websites not already associated to this route')" />
+
+        <quality-field class="is-4" :document="document" />
       </div>
     </form-section>
 

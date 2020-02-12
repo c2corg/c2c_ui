@@ -1,21 +1,19 @@
 <template>
-  <div>
+  <div class="column">
     <div class="field">
       <label class="label">
-        <input-yes-no
-          v-if="automaticComputationAvailable"
-          :prefix="$gettext('quality')"
-          :label-yes="$gettext('Automatic', 'quality computation')"
-          :label-no="$gettext('Manual', 'quality computation')"
-          v-model="autoComputeQuality" />
-        <span v-else>
+        <span>
           {{ $gettext('quality') | uppercaseFirstLetter }}
+        </span>
+        &nbsp;
+        <span v-if="!isCollaborative" @click="autoComputeQuality=!autoComputeQuality">
+          <fa-icon :icon="autoComputeQuality ? 'lock' : 'unlock'" class="has-cursor-pointer" />
         </span>
       </label>
     </div>
     <div class="field quality-select-container">
       <input-simple
-        v-if="autoComputeQuality && automaticComputationAvailable"
+        v-if="autoComputeQuality && !isCollaborative"
         :options="$options.quality_types"
         i18n
         i18n-context="quality_types"
@@ -27,7 +25,7 @@
         i18n
         i18n-context="quality_types"
         required
-        v-model="manualQuality" />
+        v-model="document.quality" />
     </div>
   </div>
 </template>
@@ -36,6 +34,20 @@
 
   import constants from '@/js/constants';
   import FormRow from './FormRow';
+
+  function getQualityFromScore(score) {
+    if (score < 1) {
+      return 'empty';
+    } else if (score < 2) {
+      return 'draft';
+    } else if (score < 3) {
+      return 'medium';
+    } else if (score < 4) {
+      return 'fine';
+    } else {
+      return 'fine'; // never compute great
+    }
+  }
 
   function hasActivities(doc, activities) {
     for (const activity of activities) {
@@ -79,7 +91,7 @@
       doc.glacier_rating);
   }
 
-  function getImageScore(doc, locale) {
+  function getImageQuality(doc, locale) {
     let score = 0;
 
     score += doc.geometry && doc.geometry.geom ? 1 : 0;
@@ -90,10 +102,10 @@
     score += locale.title ? 1 : 0;
     score += locale.description ? 1 : 0;
 
-    return score;
+    return getQualityFromScore(score);
   }
 
-  function getArticleScore(doc, locale) {
+  function getArticleQuality(doc, locale) {
     const description = locale.description || '';
 
     let score = 0;
@@ -105,10 +117,10 @@
     score += description.search(/(^|\n)##/g) !== -1 ? 1 : 0; // title
     score += description.search(/\[img=/g) !== -1 ? 1 : 0; // img
 
-    return score;
+    return getQualityFromScore(score);
   }
 
-  function getOutingScore(doc, locale) {
+  function getOutingQuality(doc, locale) {
     function getSkiScore() {
       let score = 0;
 
@@ -173,7 +185,8 @@
       climbingScore = getClimbingScore();
     }
 
-    return Math.max(skiScore, iceScore, climbingScore);
+    const score = Math.max(skiScore, iceScore, climbingScore);
+    return getQualityFromScore(score);
   }
 
   export default {
@@ -189,8 +202,7 @@
     data() {
       return {
         autoComputeQuality: true,
-        computedQuality: 'empty',
-        manualQuality: null
+        computedQuality: 'empty'
       };
     },
 
@@ -199,8 +211,21 @@
         // in edit mode, there is only one locale
         return this.document ? this.document.locales[0] : null;
       },
-      automaticComputationAvailable() {
-        return ['o', 'c', 'i'].includes(this.document.type);
+      isCollaborative() {
+        if (['a', 'b', 'w', 'r', 'm'].includes(this.document.type)) {
+          return true;
+        }
+        if (['u', 'o', 'x'].includes(this.document.type)) {
+          return false;
+        }
+        if (['i'].includes(this.document.type)) {
+          return this.document.image_type === 'collab';
+        }
+        if (['c'].includes(this.document.type)) {
+          return this.document.article_type === 'collab';
+        }
+
+        return false;
       }
     },
 
@@ -209,49 +234,37 @@
         handler: 'computeQuality',
         deep: true,
         immediate: true
-      },
-      autoComputeQuality: 'storeQuality',
-      manualQuality: 'storeQuality'
+      }
     },
 
     methods: {
-      storeQuality() {
-        this.document.quality = (this.autoComputeQuality && this.automaticComputationAvailable) ? this.computedQuality : this.manualQuality;
-      },
-
       computeQuality() {
         if (!this.document) {
           return null;
         }
 
-        // store orgininal quality
-        if (this.manualQuality === null) {
-          this.manualQuality = this.document.quality;
-        }
-
-        let score = this.document.quality;
-
         if (this.document.type === 'o') {
-          score = getOutingScore(this.document, this.editedLocale);
+          this.computedQuality = getOutingQuality(this.document, this.editedLocale);
         } else if (this.document.type === 'c') {
-          score = getArticleScore(this.document, this.editedLocale);
+          this.computedQuality = getArticleQuality(this.document, this.editedLocale);
         } else if (this.document.type === 'i') {
-          score = getImageScore(this.document, this.editedLocale);
+          this.computedQuality = getImageQuality(this.document, this.editedLocale);
+        } else {
+          this.computedQuality = this.document.quality;
         }
 
-        if (score < 1) {
-          this.computedQuality = 'empty';
-        } else if (score < 2) {
-          this.computedQuality = 'draft';
-        } else if (score < 3) {
-          this.computedQuality = 'medium';
-        } else if (score < 4) {
-          this.computedQuality = 'fine';
-        } else {
+        // "great is never proposed by the computation. When current quality is
+        // "great", it's because it has been explicitly set => do not change it
+        if (this.document.quality === 'great') {
           this.computedQuality = 'great';
         }
+      },
 
-        this.storeQuality();
+      // will be called by parent component before saving document
+      beforeSave() {
+        if (!this.isCollaborative && this.autoComputeQuality) {
+          this.document.quality = this.computedQuality;
+        }
       }
     },
 
