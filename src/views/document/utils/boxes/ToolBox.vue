@@ -17,6 +17,13 @@
     </div>
 
     <tool-box-button
+      v-if="fundraiser"
+      :label="$gettext('Contribute to maintainance')"
+      :href="fundraiser.url"
+      icon-class="has-text-danger"
+      icon="heart" />
+
+    <tool-box-button
       v-if="documentType==='profile'"
       :to="{ name: 'outings', query: {u:document.document_id} }"
       :label="$gettext('outings')"
@@ -120,6 +127,8 @@
   import c2c from '@/js/apis/c2c';
   import constants from '@/js/constants';
 
+  import getFundraiser from '@/js/get-fundraiser';
+
   import { requireDocumentProperty } from '@/js/properties-mixins';
   import isEditableMixin from '../is-editable-mixin';
   import viewModeMixin from '../view-mode-mixin';
@@ -186,6 +195,10 @@
         }
 
         return result;
+      },
+
+      fundraiser() {
+        return getFundraiser(this.document);
       },
 
       hasMissingLangs() {
