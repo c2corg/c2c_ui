@@ -13,6 +13,7 @@
     <div class="columns is-multiline">
       <form-field class="is-12" :document="document" :field="fields.summary" />
       <form-field class="is-12" :document="document" :field="fields.description" />
+      <quality-field class="is-4" :document="document" />
     </div>
 
     <hr>

@@ -151,6 +151,11 @@
         <form-field class="is-4" :document="document" :field="fields.mtb_down_rating" />
         <form-field class="is-4" :document="document" :field="fields.mtb_up_rating" />
       </div>
+
+      <div class="columns">
+        <quality-field ref="qualityField" class="is-4" :document="document" />
+      </div>
+
     </form-section>
 
     <!-- TODO where is that ??
@@ -193,6 +198,7 @@
 
       beforeSave() {
         this.handleDates();
+        this.$refs.qualityField.beforeSave();
       },
 
       showCotometer() {

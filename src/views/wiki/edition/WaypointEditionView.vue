@@ -149,6 +149,8 @@
           :field="fields.access"
           :placeholder="accessPlaceholder"
           :label="accessTitle" />
+
+        <quality-field class="is-4" :document="document" />
       </div>
     </form-section>
 

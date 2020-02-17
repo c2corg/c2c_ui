@@ -9,6 +9,7 @@ import FormInput from './FormInput';
 
 import FormSection from './FormSection';
 import FormField from './FormField';
+import QualityField from './QualityField';
 import MapInputRow from './MapInputRow';
 import EditionContainer from './EditionContainer';
 import AssociationsInputRow from './AssociationsInputRow';
@@ -25,6 +26,7 @@ export default {
 
     FormSection,
     FormField,
+    QualityField,
     FormInput,
     MapInputRow,
     EditionContainer,
