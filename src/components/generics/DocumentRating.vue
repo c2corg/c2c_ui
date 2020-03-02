@@ -76,7 +76,7 @@
       <span v-if="document.hiking_mtb_exposition" :title="$gettext('hiking_mtb_exposition')">
         {{ document.hiking_mtb_exposition }}
       </span>
-      <fa-icon v-if="showHelper" icon="info-circle" class="marker-helper has-text-info" />
+      <fa-icon v-if="showHelper" icon="info-circle" class="marker-helper has-text-info no-print" />
     </span>
 
     <router-link
