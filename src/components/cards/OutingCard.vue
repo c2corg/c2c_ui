@@ -26,6 +26,7 @@
         <icon-height-diff-up class="card-icon" />
         {{ document.height_diff_up }}&nbsp;m
       </span>
+      <span v-else />
     </card-row>
 
     <card-row>

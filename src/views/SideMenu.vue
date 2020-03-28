@@ -45,6 +45,13 @@
             <fa-icon :icon="['fab', 'facebook']" class="facebook-icon" />
           </a>
         </div>
+        <div class="column">
+          <a
+            href="https://www.helloasso.com/associations/camptocamp-assocation/adhesions/adhesion-camptocamp-association"
+            title="Donate">
+            <fa-icon icon="heart" class="donate-icon" />
+          </a>
+        </div>
       </div>
     </div>
   </aside>
@@ -133,7 +140,7 @@
       margin-right: calc((200px - 160px)/2);
     }
 
-    .twitter-icon, .facebook-icon{
+    .twitter-icon, .facebook-icon, .donate-icon{
       font-size: 30px;
     }
 
@@ -143,6 +150,12 @@
 
     .facebook-icon, .facebook-icon:hover{
       color:#6d8bc9; //facebook color
+    }
+    .donate-icon{
+      color:hsl(348, 100%, 71%);
+    }
+    .donate-icon:hover{
+      color:hsl(348, 100%, 51%);
     }
   }
 

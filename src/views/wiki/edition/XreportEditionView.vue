@@ -82,6 +82,8 @@
         <form-field class="is-6" :document="document" :field="fields.increase_impact" />
         <form-field class="is-6" :document="document" :field="fields.modifications" :placeholder="$gettext('Has this experience changed your habits? Describe the lessons you have learned from this experience')" />
         <form-field class="is-6" :document="document" :field="fields.other_comments" :placeholder="$gettext('Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.')" />
+
+        <quality-field class="is-4" :document="document" />
       </div>
     </form-section>
 

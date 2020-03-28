@@ -9,6 +9,7 @@ import FormInput from './FormInput';
 
 import FormSection from './FormSection';
 import FormField from './FormField';
+import QualityField from './QualityField';
 import MapInputRow from './MapInputRow';
 import EditionContainer from './EditionContainer';
 import AssociationsInputRow from './AssociationsInputRow';
@@ -25,6 +26,7 @@ export default {
 
     FormSection,
     FormField,
+    QualityField,
     FormInput,
     MapInputRow,
     EditionContainer,
@@ -75,6 +77,14 @@ export default {
       immediate: true
     },
     'document.geometry.geom': 'setLatitudeLongitude'
+  },
+
+  mounted() {
+    window.addEventListener('beforeunload', this.beforeUnload);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.beforeUnload);
   },
 
   beforeRouteEnter(to, from, next) {
@@ -309,6 +319,13 @@ export default {
       this.genericErrors = [];
       for (const field of Object.values(this.fields)) {
         field.error = null;
+      }
+    },
+
+    beforeUnload(event) {
+      if (this.modified) {
+        event.preventDefault();
+        event.returnValue = '';
       }
     }
   }

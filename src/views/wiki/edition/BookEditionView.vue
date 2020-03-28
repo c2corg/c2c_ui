@@ -20,6 +20,7 @@
         <form-field class="is-4" :document="document" :field="fields.nb_pages" />
         <form-field class="is-4" :document="document" :field="fields.isbn" />
         <form-field class="is-4" :document="document" :field="fields.url" />
+        <quality-field class="is-4" :document="document" />
       </div>
 
     </form-section>

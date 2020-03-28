@@ -65,7 +65,6 @@
       </slot>
 
       <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview=true" :is-loading="isLoading" />
-      <quality-input-row v-if="!['map', 'profile'].includes(documentType)" :document="document" />
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-if="htmlBanners && htmlBanners[documentType]" v-html="htmlBanners[documentType]" class="edition-banner" />
     </div>
@@ -89,7 +88,6 @@
   import XreportView from '@/views/document/XreportView';
   import ProfileView from '@/views/document/ProfileView';
 
-  import QualityInputRow from './QualityInputRow';
   import SaveDocumentRow from './SaveDocumentRow';
 
   const BANNERS_ARTICLE_ID = 1110927;
@@ -111,7 +109,6 @@
       WaypointView,
       XreportView,
 
-      QualityInputRow,
       SaveDocumentRow
     },
 
