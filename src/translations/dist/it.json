@@ -125,7 +125,6 @@
     },
     "Anonymity and confidentiality": "Anonima e confidenzialità",
     "anonymous": "Contributo anonimo",
-    "Application": "Applicazione",
     "apr": {
       "months": "aprile"
     },
@@ -165,9 +164,6 @@
     },
     "author": "autore",
     "author_status": "Autore",
-    "Automatic": {
-      "quality computation": "Automatico"
-    },
     "autonomous": {
       "autonomies": "autonomo"
     },
@@ -413,7 +409,7 @@
       "$$noContext": "Descrivere l'accesso pedonale"
     },
     "Describe pt access": "Descrivere l'accesso al punto di passaggio",
-    "Describe road access": "Descrivere l'itinerario",
+    "Describe road access": "Descrivere l'accesso",
     "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...",
     "Describe the conditions you encountered during your outing": "Descrivere le condizioni che hai incontrato durante la gita",
     "describe timing": "Ora di partenza / orari:",
@@ -542,7 +538,6 @@
     "file_size": "dimensione del file",
     "filename": "nome del file",
     "Filter on map extent": "Limitare la ricerca alla zona visibile sulla carta",
-    "Find all Camptocamp in the mountains with the new mobile application": "Scopri Camptocamp in montagna con la nuova applicazione mobile",
     "fine": {
       "quality_types": "buono"
     },
@@ -658,7 +653,6 @@
       "$$noContext": "aiuto"
     },
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Ecco la lista degli utenti che stai seguendo e di cui vedrai le attività nel tuo flusso personale.",
-    "Here you may change your subscriptions to snow forecast mailing lists.": "Puoi modificare il tuo abbonamento ai bollettini nivologici",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Puoi selezionare le attività e le regioni che saranno visibili nella sezione Notizie sulla pagina principale",
     "highline": {
       "slackline_types": "Highline"
@@ -827,9 +821,6 @@
     "male": {
       "genders": "maschio"
     },
-    "Manual": {
-      "quality computation": "Manuale"
-    },
     "map": "carta",
     "Map only": "solo carta",
     "maps": "carte",
@@ -861,7 +852,6 @@
       "API message": "Captcha sbagliato"
     },
     "mixed_rating": "Difficoltà misto",
-    "Mobile application": "Applicazione Mobile",
     "modifications": "Modifiche",
     "Modified the": {
       "modification date": "Modificato il"
@@ -904,7 +894,6 @@
     "My account": "Il mio account",
     "My changes": "I miei contributi",
     "My followed users": "I miei amici",
-    "My mailing lists": "I miei bollettini",
     "My outings": "Le mie gite",
     "My preferences": "Le mie preferenze",
     "My profile": "Il mio profilo",
@@ -1040,7 +1029,7 @@
       "waypoint_types": "decollo parapendio"
     },
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica",
-    "parking_fee": "Parcheggio a pagamento",
+    "parking_fee": "Parcheggio o strada a pagamento",
     "partial_trip": "Itinerario percorso solo parzialmente",
     "participant_count": "Numero di partecipanti",
     "participants": "Partecipanti",
