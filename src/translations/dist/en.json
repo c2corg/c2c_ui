@@ -133,9 +133,6 @@
       "months": "aug"
     },
     "author_status": "Author",
-    "Automatic": {
-      "quality computation": "Automatic"
-    },
     "autonomous": {
       "autonomies": "autonomous"
     },
@@ -278,6 +275,7 @@
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
     },
+    "Contribute to maintainance": "Contribute to maintenance",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -334,7 +332,7 @@
       "$$noContext": "Describe pedestrian access"
     },
     "Describe pt access": "Describe access to the waypoint",
-    "Describe road access": "Describe the journey",
+    "Describe road access": "Describe road access and facilities (accommodation, restaurant, etc.)",
     "describe route_conditions": "Describe route conditions",
     "Describe the conditions you encountered during your outing": "Describe the conditions encountered during your outing",
     "describe timing": "Describe timing",
@@ -670,9 +668,6 @@
     "male": {
       "genders": "male"
     },
-    "Manual": {
-      "quality computation": "Manual"
-    },
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
     "maps_info": "Maps info",
     "maps_references": "Maps references",
@@ -847,6 +842,7 @@
       "waypoint_types": "paragliding takeoff"
     },
     "Parameters of the Digital Camera": "Détails on the camera",
+    "parking_fee": "parking or road fee",
     "partial_trip": "Partial trip",
     "participant_count": "Number of participants",
     "participants": "Participants",
