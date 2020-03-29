@@ -150,6 +150,7 @@
       "article_categories": "association"
     },
     "associations": "Associations",
+    "Associations history": "Historique des associations",
     "at least one route required": {
       "API message": "Sélectionnez au moins un itinéraire"
     },
@@ -162,9 +163,6 @@
     },
     "author": "Auteur",
     "author_status": "Implication dans la situation",
-    "Automatic": {
-      "quality computation": "Automatique"
-    },
     "autonomous": {
       "autonomies": "autonome"
     },
@@ -269,6 +267,7 @@
     "Change account parameters": "Modifier les paramètres du compte",
     "Change password": "Modifier le mot de passe",
     "Checking...": "En cours de vérification ...",
+    "Child": "Enfant",
     "children_proof": "Enfants",
     "Clear": "Effacer",
     "cleared": {
@@ -338,6 +337,8 @@
     },
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
+    "Contribute to maintainance": "Contribuer à la maintenance",
+    "Contributor": "Contributeur",
     "contributor": "contributeur",
     "copyright": {
       "image_types": "copyright",
@@ -363,6 +364,7 @@
     },
     "Create a new report": "Créer un nouveau compte-rendu",
     "Created on": "Crée le",
+    "Creation?": "Création ?",
     "crevasse_fall": {
       "event_types": "chute en crevasse"
     },
@@ -409,7 +411,7 @@
       "$$noContext": "Décrire l'accès pédestre"
     },
     "Describe pt access": "Décrire l'accès au point de passage",
-    "Describe road access": "Décrire l'itinéraire",
+    "Describe road access": "Décrire l'accès routier et les commodités (logement, restauration, etc.)",
     "describe route_conditions": "Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\nATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site.",
     "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Décrivez les informations récoltées avant la sortie et le suivi de leur évolution sur le terrain. Cela concerne les prévisions météo, les bulletins d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la neige/glace/rocher, les compte rendu des jours précédents, etc.",
@@ -540,7 +542,6 @@
     "file_size": "taille du fichier",
     "filename": "nom du fichier",
     "Filter on map extent": "Limiter la recherche à la carte visible",
-    "Find all Camptocamp in the mountains with the new mobile application": "Découvrez tout Camptocamp en montagne avec la nouvelle application mobile",
     "fine": {
       "quality_types": "bon"
     },
@@ -660,7 +661,6 @@
     },
     "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
-    "Here you may change your subscriptions to snow forecast mailing lists.": "Vous pouvez modifier ici vos abonnements aux bulletins de prévisions des risques d'avalanches.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
     "highline": {
       "slackline_types": "Highline"
@@ -836,9 +836,6 @@
     "male": {
       "genders": "homme"
     },
-    "Manual": {
-      "quality computation": "Manuelle"
-    },
     "map": "carte",
     "Map only": "Uniquement la carte",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
@@ -872,7 +869,6 @@
       "API message": "Captcha manquant"
     },
     "mixed_rating": "Cotation mixte",
-    "Mobile application": "Application mobile",
     "modifications": "Conséquences sur les pratiques",
     "Modified the": {
       "modification date": "Modifié le"
@@ -915,7 +911,6 @@
     "My account": "Mon compte",
     "My changes": "Mes contributions",
     "My followed users": "Mes amis",
-    "My mailing lists": "Mes bulletins nivo",
     "My outings": "Mes sorties",
     "My preferences": "Mes préférences",
     "My profile": "Mon profil",
@@ -1054,7 +1049,7 @@
       "waypoint_types": "décollage parapente"
     },
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
-    "parking_fee": "Parking payant",
+    "parking_fee": "Parking ou route payant(e)",
     "partial_trip": "Parcours partiel",
     "participant_count": "Nombre de participants",
     "participants": "Participants",
@@ -1082,9 +1077,9 @@
       "event_types": "chute d'une personne"
     },
     "personal": {
-      "article_types": "personnel (CC by-nc-nd)",
-      "image_types": "personnel (CC by-nc-nd)",
-      "$$noContext": "personnel (CC by-nc-nd)"
+      "article_types": "individuel (CC by-nc-nd)",
+      "image_types": "individuel (CC by-nc-nd)",
+      "$$noContext": "individuel (CC by-nc-nd)"
     },
     "personal comments": "Commentaires personnels",
     "Personal data are confidential": "Les informations personnelles sont confidentielles",
