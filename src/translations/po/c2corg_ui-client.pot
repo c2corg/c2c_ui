@@ -113,7 +113,7 @@ msgctxt "custodianship_types"
 msgid "accessible_when_wardened"
 msgstr ""
 
-#: src/views/SideMenu.vue:66
+#: src/views/SideMenu.vue:73
 msgid "Accident database"
 msgstr ""
 
@@ -279,11 +279,6 @@ msgstr ""
 msgid "anonymous"
 msgstr ""
 
-#: src/views/portals/utils/MobileAppAdvertising.vue:10
-#: src/views/portals/utils/MobileAppAdvertising.vue:22
-msgid "Application"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue:410
 msgctxt "months"
 msgid "apr"
@@ -335,16 +330,16 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:18
 #: src/translations/fixed_strings_manual.vue:6
-#: src/views/SideMenu.vue:67
+#: src/views/SideMenu.vue:74
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:42
 msgid "articles"
 msgstr ""
 
-#: src/views/wiki/edition/BookEditionView.vue:38
+#: src/views/wiki/edition/BookEditionView.vue:39
 msgid "Articles, waypoints or routes to be linked."
 msgstr ""
 
-#: src/views/wiki/edition/ImageEditionView.vue:86
+#: src/views/wiki/edition/ImageEditionView.vue:87
 msgid "Articles, waypoints, routes or books to be linked."
 msgstr ""
 
@@ -374,18 +369,24 @@ msgctxt "article_categories"
 msgid "association"
 msgstr ""
 
-#: src/views/wiki/edition/BookEditionView.vue:37
-#: src/views/wiki/edition/ImageEditionView.vue:85
-#: src/views/wiki/edition/WaypointEditionView.vue:156
+#: src/views/wiki/edition/BookEditionView.vue:38
+#: src/views/wiki/edition/ImageEditionView.vue:86
+#: src/views/wiki/edition/WaypointEditionView.vue:158
 msgid "associations"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:210
+#: src/views/wiki/AssociationsHistoryView.vue:3
+#: src/views/wiki/WhatsNewView.vue:6
+#: src/views/wiki/utils/HistoryViewLinks.vue:15
+msgid "Associations history"
+msgstr ""
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:220
 msgctxt "API message"
 msgid "at least one route required"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:211
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:221
 msgctxt "API message"
 msgid "at least one user required"
 msgstr ""
@@ -406,11 +407,6 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:20
 msgid "author_status"
-msgstr ""
-
-#: src/views/wiki/edition/utils/QualityInputRow.vue:8
-msgctxt "quality computation"
-msgid "Automatic"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:261
@@ -555,7 +551,7 @@ msgctxt "climbing_outdoor_types"
 msgid "bloc"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:85
+#: src/views/document/utils/boxes/ToolBox.vue:92
 msgid "Block account"
 msgstr ""
 
@@ -577,7 +573,7 @@ msgstr ""
 msgid "book"
 msgstr ""
 
-#: src/views/wiki/edition/BookEditionView.vue:29
+#: src/views/wiki/edition/BookEditionView.vue:30
 msgid "Book content"
 msgstr ""
 
@@ -688,6 +684,10 @@ msgstr ""
 
 #: src/views/user/LoginView.vue:183
 msgid "Checking..."
+msgstr ""
+
+#: src/views/wiki/AssociationsHistoryView.vue:21
+msgid "Child"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:34
@@ -810,8 +810,8 @@ msgstr ""
 
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:17
 #: src/views/document/utils/field-viewers/ConditionLevels.vue:9
-#: src/views/wiki/HistoryView.vue:46
-#: src/views/wiki/WhatsNewView.vue:17
+#: src/views/wiki/HistoryView.vue:26
+#: src/views/wiki/WhatsNewView.vue:23
 #: src/views/wiki/edition/utils/InputConditionsLevels.vue:8
 #: src/views/wiki/edition/utils/SaveDocumentRow.vue:28
 msgid "comment"
@@ -830,8 +830,7 @@ msgstr ""
 msgid "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc."
 msgstr ""
 
-#: src/views/wiki/HistoryView.vue:21
-#: src/views/wiki/HistoryView.vue:97
+#: src/views/wiki/utils/HistoryViewLinks.vue:9
 msgid "Compare selected versions"
 msgstr ""
 
@@ -883,15 +882,23 @@ msgstr ""
 msgid "Contribute to common knowledge"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:30
+#: src/views/document/utils/boxes/ToolBox.vue:21
+msgid "Contribute to maintainance"
+msgstr ""
+
+#: src/views/document/utils/boxes/ToolBox.vue:37
 msgid "Contributions"
+msgstr ""
+
+#: src/views/wiki/AssociationsHistoryView.vue:18
+msgid "Contributor"
 msgstr ""
 
 #: src/views/document/ArticleView.vue:10
 #: src/views/document/ImageView.vue:13
 #: src/views/document/XreportView.vue:9
-#: src/views/wiki/HistoryView.vue:45
-#: src/views/wiki/WhatsNewView.vue:11
+#: src/views/wiki/HistoryView.vue:25
+#: src/views/wiki/WhatsNewView.vue:17
 msgid "contributor"
 msgstr ""
 
@@ -938,8 +945,13 @@ msgstr ""
 msgid "Create a new report"
 msgstr ""
 
-#: src/views/wiki/HistoryView.vue:44
+#: src/views/wiki/AssociationsHistoryView.vue:17
+#: src/views/wiki/HistoryView.vue:24
 msgid "Created on"
+msgstr ""
+
+#: src/views/wiki/AssociationsHistoryView.vue:19
+msgid "Creation?"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:341
@@ -1006,12 +1018,12 @@ msgctxt "months"
 msgid "dec"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:98
+#: src/views/document/utils/boxes/ToolBox.vue:105
 #: src/views/document/utils/windows/DeleteDocumentWindow.vue:8
 msgid "Delete this document"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:93
+#: src/views/document/utils/boxes/ToolBox.vue:100
 #: src/views/document/utils/windows/DeleteLocaleWindow.vue:8
 msgid "Delete this locale"
 msgstr ""
@@ -1045,7 +1057,7 @@ msgstr ""
 msgid "Describe here the waypoint"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:168
+#: src/views/document/utils/boxes/ToolBox.vue:177
 msgid "Describe here your issue"
 msgstr ""
 
@@ -1104,7 +1116,7 @@ msgstr ""
 
 #: src/js/waypoint-labels-mixin.js:13
 #: src/translations/fixed_strings_common_js.vue:52
-#: src/views/wiki/edition/BookEditionView.vue:28
+#: src/views/wiki/edition/BookEditionView.vue:29
 msgid "description"
 msgstr ""
 
@@ -1163,7 +1175,7 @@ msgstr ""
 msgid "Distance (km)"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:90
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:100
 msgid "Do you really want to leave? you have unsaved changes!"
 msgstr ""
 
@@ -1226,7 +1238,7 @@ msgstr ""
 msgid "Edit a document"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:49
+#: src/views/document/utils/boxes/ToolBox.vue:56
 msgid "Edit associations"
 msgstr ""
 
@@ -1296,7 +1308,7 @@ msgctxt "quality_types"
 msgid "empty"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:61
+#: src/views/wiki/WhatsNewView.vue:65
 msgid "empty comment"
 msgstr ""
 
@@ -1468,10 +1480,6 @@ msgstr ""
 msgid "Filter on map extent"
 msgstr ""
 
-#: src/views/portals/utils/MobileAppAdvertising.vue:3
-msgid "Find all Camptocamp in the mountains with the new mobile application"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue:453
 msgctxt "quality_types"
 msgid "fine"
@@ -1501,7 +1509,7 @@ msgstr ""
 msgid "Forgot password?"
 msgstr ""
 
-#: src/views/SideMenu.vue:65
+#: src/views/SideMenu.vue:72
 #: src/views/portals/DashboardView.vue:58
 #: src/views/portals/HomeBanner.vue:33
 msgid "Forum"
@@ -1855,10 +1863,6 @@ msgstr ""
 msgid "Here is the list of users you are following and whose activity you will see in your personal feed."
 msgstr ""
 
-#: src/views/user/MailingListsView.vue:9
-msgid "Here you may change your subscriptions to snow forecast mailing lists."
-msgstr ""
-
 #: src/views/user/PreferencesView.vue:26
 msgid "Here you may set activity and region filters that will apply to the homepage feed."
 msgstr ""
@@ -1877,12 +1881,12 @@ msgstr ""
 msgid "hiking gear"
 msgstr ""
 
-#: src/components/generics/DocumentRating.vue:73
+#: src/components/generics/DocumentRating.vue:76
 #: src/translations/fixed_strings_common_js.vue:93
 msgid "hiking_mtb_exposition"
 msgstr ""
 
-#: src/components/generics/DocumentRating.vue:64
+#: src/components/generics/DocumentRating.vue:67
 #: src/translations/fixed_strings_common_js.vue:94
 msgid "hiking_rating"
 msgstr ""
@@ -1892,7 +1896,7 @@ msgctxt "book_types"
 msgid "historical"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:42
+#: src/views/document/utils/boxes/ToolBox.vue:49
 msgid "History"
 msgstr ""
 
@@ -2084,7 +2088,7 @@ msgstr ""
 msgid "iso_speed"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:164
+#: src/views/document/utils/boxes/ToolBox.vue:173
 msgid "Issue report"
 msgstr ""
 
@@ -2151,7 +2155,7 @@ msgstr ""
 msgid "langs"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:30
+#: src/views/portals/FeedView.vue:26
 msgid "Last forum topics"
 msgstr ""
 
@@ -2231,7 +2235,7 @@ msgstr ""
 msgid "link"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:12
+#: src/views/wiki/WhatsNewView.vue:18
 msgid "Links"
 msgstr ""
 
@@ -2239,7 +2243,7 @@ msgstr ""
 msgid "List mode"
 msgstr ""
 
-#: src/views/wiki/HistoryView.vue:31
+#: src/views/wiki/utils/HistoryViewLinks.vue:19
 msgid "List of versions for language:"
 msgstr ""
 
@@ -2332,11 +2336,6 @@ msgctxt "genders"
 msgid "male"
 msgstr ""
 
-#: src/views/wiki/edition/utils/QualityInputRow.vue:9
-msgctxt "quality computation"
-msgid "Manual"
-msgstr ""
-
 #: src/translations/fixed_strings_manual.vue:21
 msgid "map"
 msgstr ""
@@ -2350,7 +2349,6 @@ msgid "Map, guidebook, known route, planning for a plan B, (re) evaluation of ro
 msgstr ""
 
 #: src/translations/fixed_strings_manual.vue:10
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:84
 msgid "maps"
 msgstr ""
 
@@ -2386,7 +2384,7 @@ msgstr ""
 msgid "Merge documents"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:78
+#: src/views/document/utils/boxes/ToolBox.vue:85
 msgid "Merge with other document"
 msgstr ""
 
@@ -2431,15 +2429,11 @@ msgstr ""
 msgid "mixed_rating"
 msgstr ""
 
-#: src/views/portals/FeedView.vue:25
-msgid "Mobile application"
-msgstr ""
-
 #: src/translations/fixed_strings_common_js.vue:116
 msgid "modifications"
 msgstr ""
 
-#: src/views/wiki/WhatsNewView.vue:10
+#: src/views/wiki/WhatsNewView.vue:16
 msgctxt "modification date"
 msgid "Modified the"
 msgstr ""
@@ -2492,7 +2486,7 @@ msgctxt "user_categories"
 msgid "mountainbike_instructor"
 msgstr ""
 
-#: src/components/generics/DocumentRating.vue:70
+#: src/components/generics/DocumentRating.vue:73
 #: src/translations/fixed_strings_common_js.vue:118
 msgid "mtb_down_rating"
 msgstr ""
@@ -2509,7 +2503,7 @@ msgstr ""
 msgid "mtb_length_trail"
 msgstr ""
 
-#: src/components/generics/DocumentRating.vue:67
+#: src/components/generics/DocumentRating.vue:70
 #: src/translations/fixed_strings_common_js.vue:122
 msgid "mtb_up_rating"
 msgstr ""
@@ -2533,11 +2527,6 @@ msgstr ""
 
 #: src/views/Navigation.vue:189
 msgid "My followed users"
-msgstr ""
-
-#: src/views/Navigation.vue:194
-#: src/views/user/MailingListsView.vue:6
-msgid "My mailing lists"
 msgstr ""
 
 #: src/views/Navigation.vue:179
@@ -2621,7 +2610,7 @@ msgctxt "public_transportation_ratings"
 msgid "nearby service"
 msgstr ""
 
-#: src/views/static-views/TopoguideView.vue:38
+#: src/views/static-views/TopoguideView.vue:39
 msgid "New outing"
 msgstr ""
 
@@ -2630,11 +2619,11 @@ msgstr ""
 msgid "New password"
 msgstr ""
 
-#: src/views/static-views/TopoguideView.vue:64
+#: src/views/static-views/TopoguideView.vue:65
 msgid "New route"
 msgstr ""
 
-#: src/views/static-views/TopoguideView.vue:90
+#: src/views/static-views/TopoguideView.vue:91
 msgid "New waypoint"
 msgstr ""
 
@@ -2848,12 +2837,12 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:130
 #: src/translations/fixed_strings_manual.vue:11
-#: src/views/SideMenu.vue:64
+#: src/views/SideMenu.vue:71
 #: src/views/document/utils/boxes/AssociatedDocuments.vue:70
-#: src/views/document/utils/boxes/ToolBox.vue:22
+#: src/views/document/utils/boxes/ToolBox.vue:29
 #: src/views/portals/DashboardView.vue:36
 #: src/views/static-views/NotFoundView.vue:54
-#: src/views/static-views/TopoguideView.vue:20
+#: src/views/static-views/TopoguideView.vue:21
 #: src/views/static-views/TopoguideView.vue:9
 msgid "outings"
 msgstr ""
@@ -2899,6 +2888,10 @@ msgstr ""
 
 #: src/views/wiki/edition/ImageEditionView.vue:65
 msgid "Parameters of the Digital Camera"
+msgstr ""
+
+#: src/views/wiki/AssociationsHistoryView.vue:20
+msgid "Parent"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:132
@@ -3174,7 +3167,7 @@ msgstr ""
 msgid "prominence"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:72
+#: src/views/document/utils/boxes/ToolBox.vue:79
 msgid "Protect document"
 msgstr ""
 
@@ -3230,8 +3223,7 @@ msgstr ""
 
 #: src/components/generics/markers/MarkerQuality.vue:2
 #: src/translations/fixed_strings_common_js.vue:147
-#: src/views/wiki/edition/utils/QualityInputRow.vue:12
-#: src/views/wiki/edition/utils/QualityInputRow.vue:7
+#: src/views/wiki/edition/utils/QualityField.vue:6
 msgid "quality"
 msgstr ""
 
@@ -3304,7 +3296,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:61
+#: src/views/document/utils/boxes/ToolBox.vue:68
 msgid "Report an issue"
 msgstr ""
 
@@ -3451,7 +3443,7 @@ msgstr ""
 #: src/views/static-views/NotFoundView.vue:56
 #: src/views/static-views/NotFoundView.vue:57
 #: src/views/static-views/TopoguideView.vue:10
-#: src/views/static-views/TopoguideView.vue:46
+#: src/views/static-views/TopoguideView.vue:47
 #: src/views/wiki/edition/OutingEditionView.vue:34
 msgid "routes"
 msgstr ""
@@ -3520,7 +3512,7 @@ msgstr ""
 msgid "See more results"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:36
+#: src/views/document/utils/boxes/ToolBox.vue:43
 msgid "See other documents nearby"
 msgstr ""
 
@@ -3532,8 +3524,7 @@ msgstr ""
 msgid "See the activity of this contributor in your feed"
 msgstr ""
 
-#: src/views/wiki/HistoryView.vue:103
-#: src/views/wiki/HistoryView.vue:27
+#: src/views/wiki/utils/HistoryViewLinks.vue:12
 msgid "See the latest version"
 msgstr ""
 
@@ -3616,7 +3607,7 @@ msgctxt "waypoint_types"
 msgid "shelter"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:209
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:219
 msgctxt "API message"
 msgid "Shorter than minimum length 1"
 msgstr ""
@@ -3796,6 +3787,7 @@ msgstr ""
 msgid "snow_quantity"
 msgstr ""
 
+#: src/components/generics/DocumentRating.vue:64
 #: src/translations/fixed_strings_common_js.vue:180
 msgid "snowshoe_rating"
 msgstr ""
@@ -3959,7 +3951,7 @@ msgstr ""
 msgid "This field is too short"
 msgstr ""
 
-#: src/views/wiki/edition/utils/document-edition-view-mixin.js:212
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js:222
 msgctxt "API message"
 msgid "This field must be a valid ISBN."
 msgstr ""
@@ -4005,7 +3997,7 @@ msgstr ""
 
 #: src/components/images-uploader/ImageUploader.vue:41
 #: src/translations/fixed_strings_common_js.vue:184
-#: src/views/wiki/WhatsNewView.vue:15
+#: src/views/wiki/WhatsNewView.vue:21
 msgid "title"
 msgstr ""
 
@@ -4035,7 +4027,7 @@ msgctxt "image_categories"
 msgid "topo"
 msgstr ""
 
-#: src/views/SideMenu.vue:63
+#: src/views/SideMenu.vue:70
 #: src/views/portals/HomeBanner.vue:27
 #: src/views/static-views/TopoguideView.vue:3
 #: src/views/static-views/TopoguideView.vue:5
@@ -4077,7 +4069,7 @@ msgstr ""
 msgid "training"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:55
+#: src/views/document/utils/boxes/ToolBox.vue:62
 #: src/views/document/utils/windows/TranslateWindow.vue:4
 msgid "Translate into an other lang"
 msgstr ""
@@ -4099,7 +4091,7 @@ msgstr ""
 msgid "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc."
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:85
+#: src/views/document/utils/boxes/ToolBox.vue:92
 msgid "Unblock account"
 msgstr ""
 
@@ -4112,7 +4104,7 @@ msgstr ""
 msgid "Unordered list"
 msgstr ""
 
-#: src/views/document/utils/boxes/ToolBox.vue:72
+#: src/views/document/utils/boxes/ToolBox.vue:79
 msgid "Unprotect document"
 msgstr ""
 
@@ -4225,7 +4217,7 @@ msgstr ""
 msgid "Waypoint's textual description"
 msgstr ""
 
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:124
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:104
 msgid "waypoint_children"
 msgstr ""
 
@@ -4239,10 +4231,10 @@ msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue:191
 #: src/translations/fixed_strings_manual.vue:14
-#: src/views/document/utils/boxes/AssociatedDocuments.vue:123
+#: src/views/document/utils/boxes/AssociatedDocuments.vue:103
 #: src/views/static-views/NotFoundView.vue:55
 #: src/views/static-views/TopoguideView.vue:11
-#: src/views/static-views/TopoguideView.vue:72
+#: src/views/static-views/TopoguideView.vue:73
 msgid "waypoints"
 msgstr ""
 
@@ -4328,11 +4320,15 @@ msgstr ""
 msgid "yes"
 msgstr ""
 
+#: src/views/document/utils/boxes/MapBox.vue:27
+msgid "YETI"
+msgstr ""
+
 #: src/views/static-views/SeracView.vue:53
 msgid "You can choose to remain anonymous"
 msgstr ""
 
-#: src/views/wiki/edition/WaypointEditionView.vue:157
+#: src/views/wiki/edition/WaypointEditionView.vue:159
 msgid "You may add associated waypoints, books and articles"
 msgstr ""
 
