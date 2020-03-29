@@ -54,12 +54,13 @@ Result.prototype.toString = function() {
   return result;
 };
 
-function Process() {
+function Process(includeLineNumberInPositions) {
   // data is a simple key-value dict, where key
   this.data = {};
+  this.includeLineNumberInPositions = false;
 }
 
-Process.prototype.push = function(file, msgctxt, msgid) {
+Process.prototype.push = function(file, line, msgctxt, msgid) {
   // trim
   msgid = msgid.replace(/^[\r\n\s]*/g, '');
   msgid = msgid.replace(/[\r\n\s]*$/g, '');
@@ -74,7 +75,9 @@ Process.prototype.push = function(file, msgctxt, msgid) {
     this.data[key] = new Result(msgctxt, msgid);
   }
 
-  this.data[key].addFile(file);
+
+  const position = this.includeLineNumberInPositions ? `${file}:${line}` : file;
+  this.data[key].addFile(position);
 };
 
 Process.prototype.addVueComponent = function(file, data) {
@@ -98,7 +101,7 @@ Process.prototype.parseScript = function(file, data, regex) {
       const msgid = msgData[1];
       const msgctxt = msgData[2];
 
-      this.push(`${file}:` + (i + 1), msgctxt, msgid.replace(/\\'/g, '\''));
+      this.push(file, i + 1, msgctxt, msgid.replace(/\\'/g, '\''));
     }
   }
 };
@@ -125,7 +128,6 @@ Process.prototype.parseTemplate = function(file, data) {
 
   const parseTranslateDirective = function(node, directiveMeta) {
     const line = directiveMeta.arg; // the trick: arg is the line number
-    const position = file + ':' + line;
     let msgctxt;
 
     if (node.children.length !== 1) {
@@ -143,7 +145,7 @@ Process.prototype.parseTemplate = function(file, data) {
     }
 
     const msgid = node.children[0].text;
-    this.push(position, msgctxt, msgid);
+    this.push(file, line, msgctxt, msgid);
   };
 
   compiler.compile(template[1], {
