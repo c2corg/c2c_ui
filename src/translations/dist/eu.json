@@ -419,7 +419,6 @@
       "image_categories": "laguntza",
       "$$noContext": "laguntza"
     },
-    "Here you may change your subscriptions to snow forecast mailing lists.": "Elur-jausi arriskuaren iragarpenen harpidetza hemen aldatu dezakezu",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
     "hiking": {
       "activities": "Ibilaldia / Trail"
@@ -567,7 +566,6 @@
       "climbing_outdoor_types": "Bide luzea"
     },
     "My account": "Nire kontua",
-    "My mailing lists": "Harpideturik zauden buletinak",
     "My preferences": "Nire lehentasunak",
     "My profile": "Nire profila",
     "name": "Izena",
@@ -653,7 +651,6 @@
     "paragliding_takeoff": {
       "waypoint_types": "parapente aireratzea"
     },
-    "parking_fee": "Ordaineko aparkalekua",
     "partial_trip": "Ibilbide partziala",
     "participant_count": "Partehartzaile kopurua",
     "participants": "Parte-hartzaileak",
