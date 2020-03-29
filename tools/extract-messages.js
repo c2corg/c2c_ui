@@ -54,7 +54,7 @@ Result.prototype.toString = function() {
   return result;
 };
 
-function Process(includeLineNumberInPositions) {
+function Process() {
   // data is a simple key-value dict, where key
   this.data = {};
   this.includeLineNumberInPositions = false;
