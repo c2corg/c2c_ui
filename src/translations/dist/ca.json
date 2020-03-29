@@ -1,14 +1,53 @@
 {
   "ca": {
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicacions (més dret o escanyall)",
+    "10min": {
+      "access_times": "10min"
+    },
+    "15min": {
+      "access_times": "15min"
+    },
     "1d_to_3d": {
       "severities": "D'1 a 3 dies"
+    },
+    "1h": {
+      "access_times": "1h"
+    },
+    "1h30": {
+      "access_times": "1h30"
     },
     "1m_to_3m": {
       "severities": "D'1 a 3 mesos"
     },
+    "1min": {
+      "access_times": "1min"
+    },
+    "20min": {
+      "access_times": "20min"
+    },
+    "2h": {
+      "access_times": "2h"
+    },
+    "2h30": {
+      "access_times": "2h30"
+    },
+    "30min": {
+      "access_times": "30min"
+    },
+    "3h": {
+      "access_times": "3h"
+    },
+    "3h+": {
+      "access_times": "3h+"
+    },
+    "45min": {
+      "access_times": "45min"
+    },
     "4d_to_1m": {
       "severities": "Menys d'un mes"
+    },
+    "5min": {
+      "access_times": "5min"
     },
     "access": {
       "$$noContext": "accés",
@@ -52,37 +91,71 @@
     "activity_rate_50": {
       "activity_rates": "1 a 2 cops per setmana"
     },
+    "Add": "Afegeix",
+    "add a book": "Afegeix un llibre",
+    "add a map": "Afegeix un mapa",
+    "add a route": "afegeix un itinerari",
+    "add a waypoint": "Afegeix un punt de pas",
+    "add an area": "Afegeix una àrea",
+    "add an article": "Afegeix un article",
+    "add an image": "Afegeix una imatge",
+    "add an incident/accident report": "Afegeix un informe d'incident/accident",
     "add an outing": "afegiu una sortida",
     "Add here maps not automatically referenced": "Afegiu aquí els mapes no adjuntats automàticament",
     "Add images": "Afegeix imatges",
+    "Add the first outing": "Afegeix la primera sortida",
+    "Additional information": "Informació addicional",
     "admin_limits": {
       "area_types": "límit administratiu"
     },
+    "advertisement": "publicitat",
     "age": "edat",
     "aid_rating": "Dificultat en escalada artificial",
+    "already used forum_username": {
+      "API message": "Pseudònim del fòrum ja utilitzat"
+    },
+    "already used username": {
+      "API message": "Nom d'usuari ja utilitzat"
+    },
     "always_accessible": {
       "custodianship_types": "sempre obert"
     },
     "amateur": {
       "user_categories": "aficionat"
     },
+    "Anonymity and confidentiality": "Anonimat i confidencialitat",
     "anonymous": "Contribució anònima",
     "apr": {
       "months": "abril"
     },
     "Are you sure you want to delete this document?": "Esteu segur/a de voler suprimir aquest document?",
     "Are you sure you want to delete this locale?": "Esteu segur de voler eliminar aquesta versió lingüística?",
+    "Are you sure you want to merge?": "Esteu segur de voler-ho fusionar?",
     "Are you sure you want to revert to this version of the document?": "Esteu segur de voler restaurar aquesta versió del document?",
+    "area": "regió",
     "area_type": "tipus de regió",
+    "areas": "regions",
+    "article_categories": "categories d'articles",
     "article_type": "tipus d'article",
+    "Articles, waypoints or routes to be linked.": "Articles, punts de pas o itineraris associats",
+    "Articles, waypoints, routes or books to be linked.": "Articles, punts de pas, itineraris o llibres associats",
     "artificial": {
       "rock_types": "artificial"
     },
+    "Associated outings": "Sortides associades",
+    "Associated routes": "Itineraris associats",
+    "Associated routes cotations": "Dificultat dels itineraris associats al punt de pas",
     "Association": "Associació",
     "association": {
       "article_categories": "associació"
     },
     "associations": "associacions",
+    "at least one route required": {
+      "API message": "Seleccioneu almenys un participant"
+    },
+    "at least one user required": {
+      "API message": "Seleccioneu almenys un itinerari"
+    },
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconeixement — Heu de reconèixer d'una manera apropiada l'autoria de l'Obra, proporcionar un enllaç a la llicència i indicar si s'han fet canvis a l'Obra.",
     "aug": {
       "months": "agost"
@@ -105,13 +178,19 @@
     "avalanche_slope": "pendent",
     "avalanches": "Observacions relatives a les allaus",
     "average": {
-      "condition_ratings": "mitjanes"
+      "condition_ratings": "mitjanes",
+      "snow_quality_ratings": "mitjanes",
+      "snow_quantity_ratings": "mitjanes"
     },
     "Average slope (degrees)": "Pendent mitjà (graus)",
     "Average slope in degree": "Pendent mitjà en graus",
     "awful": {
-      "condition_ratings": "execrables"
+      "condition_ratings": "execrables",
+      "snow_quality_ratings": "execrables",
+      "snow_quantity_ratings": "execrables"
     },
+    "Back to code": "Torna al codi",
+    "Back to edit mode": "Torna al mode d'edició",
     "bar": {
       "product_types": "bar"
     },
@@ -123,6 +202,9 @@
       "waypoint_types": "camp base"
     },
     "best_periods": "Millors períodes",
+    "Bing": {
+      "Map layer": "Bing"
+    },
     "biography": {
       "book_types": "biografia"
     },
@@ -143,10 +225,14 @@
     },
     "bolted rock climbing gear": "Escalada esportiva de diversos llargs",
     "book": {
-      "image_categories": "llibre"
+      "image_categories": "llibre",
+      "$$noContext": "llibre"
     },
+    "Book content": "Breu descripció del contingut del llibre",
     "book_types": "Tipus de llibres",
+    "books": "llibres",
     "Books and websites not already associated to this route": "No hi ha llibres ni webs associats a aquest itinerari",
+    "Both results and map": "Resultats i mapa",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrigueu breument les eventuals ferides, i allò que faríeu avui, vist en perspectiva. Els comentaris que no encaixin als altres camps es poden entrar aquí.",
     "bus": {
       "public_transportation_types": "autobús"
@@ -167,17 +253,24 @@
     },
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org té com a objectius compartir informació entre practicants d'esports de muntanya i contribuir a la seguretat a les activitats de muntanya.",
     "Cancel": "Cancel·la",
+    "canyon": {
+      "waypoint_types": "gorja"
+    },
     "capacity": "capacitat en període no guardat",
     "capacity_staffed": "nombre de places en període guardat",
+    "Cards mode": "Vista sobre el mapa",
     "cave": {
       "waypoint_types": "cova"
     },
     "Change account parameters": "Canvia els paràmetres del compte",
     "Change password": "Canvia la contrasenya",
+    "Checking...": "S'està verificant...",
     "children_proof": "Criatures",
+    "Clear": "Esborra-ho",
     "cleared": {
       "access_conditions": "net de neu"
     },
+    "climbing rating": "dificultat en escalada",
     "climbing_indoor": {
       "waypoint_types": "Rocòdrom"
     },
@@ -213,6 +306,7 @@
     "club": {
       "user_categories": "club"
     },
+    "code": "codi",
     "collab": {
       "article_types": "col·laboratiu",
       "$$noContext": "col·laboratiu"
@@ -220,20 +314,29 @@
     "collaborative": {
       "image_types": "col·laboratiu"
     },
+    "Collapse": "Plega",
     "comment": "Comentari",
     "Comments": "Comentaris",
     "Comments are disabled.": "No s'autoritzen comentaris en aquest document.",
+    "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicació dels objectius i expectatives de cadascú, dels temors i observacions al llarg de la sortida, posta en comú per establir noves estratègies, elements de conducta de grup i de responsabilitats, grup acostumat a funcionar junt o no, objectiu conjunt, etc.",
     "Compare selected versions": "Compara les versions seleccionades",
     "condition_rating": "Avaluació de les condicions",
     "conditions": "Condicions",
     "Conditions, summits, routes": "Condicions, cims, itineraris",
     "conditions_levels": "Condicions d'innivació per zones",
     "configuration": "Configuració",
+    "Confirm": "Confirma",
     "conglomerat": {
       "rock_types": "conglomerat"
     },
     "contact": "Contacte",
+    "Contain invalid character(s)": {
+      "API message": "Conté caràcters que no són vàlids"
+    },
     "Continue the discussion": "Segueix la discussió",
+    "Contribute to common knowledge": "Participeu a la construcció d'un saber col·lectiu",
+    "Contributions": "Aportacions",
+    "contributor": "contribuïdor",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -272,9 +375,11 @@
     "dangerous": {
       "children_proof_types": "perillós"
     },
+    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dades tècniques, com l'orientació, el tipus de roca o la configuració general de l'itinerari (aresta, pilar, etc.)",
     "date": "data",
     "date_end": "Data final",
     "date_start": "Data d'inici",
+    "date_time": "data/hora",
     "day(s)": "Dia/dies",
     "de": {
       "langs": "alemany"
@@ -289,27 +394,46 @@
     },
     "Describe access": "Descriviu l'accés",
     "Describe access period": "Indiqueu el període d'accés",
+    "Describe access restrictions": "Descrigueu les restriccions d'accés",
     "describe conditions": "Condicions del terreny, equipament i qualitat de la roca trobades (aproximació, via i a proximitat)",
     "Describe here the gear needed for this route": "Descriviu aquí el material específic que cal utilitzar a més de l'equipament habitual. Només cal mencionar el material &quot;exòtic&quot; (en qualitat o quantitat). Exemples de mencions innecessàries: ARVA, pala, sonda, grampons, piolets, material de glacera (n'hi ha prou de marcar el camp &quot;material de glacera&quot;), tascons i bagues sense més detalls.",
     "Describe here the waypoint": "Descriviu aquí el punt de pas",
+    "Describe here your issue": "Descrigueu aquí el problema",
+    "Describe historical information about the route (date, names..) here": "Preciseu aquí la informació sobre l'històric de l'itinerari: obertura des de baix o equipament (des de dalt), primeres ascensions, primers descensos amb esquís o surf, reequipaments, esllavissades, etc. Mencioneu la data, el nom dels protagonistes, el club o organisme que n'ha finançat l'equipament.",
     "Describe opening hours": "Indiqueu l'horari d'obertura",
     "Describe opening periods": "Indiqueu els períodes d'obertura",
+    "Describe pedestrian access": {
+      "hut": "Descrigueu l'accés a peu",
+      "$$noContext": "Descrigueu l'accés a peu"
+    },
+    "Describe pt access": "Descrigueu l'accés al punt de pas",
+    "Describe road access": "Descrigueu l'accés",
     "describe route_conditions": "Descrigueu breument l'itinerari que heu seguit en els casos següents: itinerari diferent al de la ressenya, ressenya amb variants, itinerari circular, encadenament, punt assolit en cas d'un recorregut parcial.",
+    "Describe the conditions you encountered during your outing": "Descrigueu les condicions que heu trobat durant la vostra sortida",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Descrigueu la informació consultada abans de la sortida i el seguiment de la seva evolució sobre el terreny. Això inclous les previsions meteorològiques, els butlletins d'allaus, la qualitat del regel, la qualitat de la neu o de la roca, les ressenyes dels dies anteriors, etc.",
     "describe timing": "Hora de sortida / horari",
     "describe weather": "Condicions meteorològiques trobades a la sortida: nuvolositat, precipitació, vent, temperatura",
+    "Description": "Descripció",
     "description": "Descripció",
     "detail": {
       "image_categories": "detall"
     },
+    "Detailed figures, like ratings, height differences, frequentation...": "Dades detallades (dificultats, desnivells, freqüentació, etc.)",
+    "Detailed information": "Informació detallada",
+    "Details": "Detalls",
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Descrigueu el desenvolupament de la sortida i de l'incident/accident. Si ja heu entrat una sortida, podeu descriure únicament l'esdeveniment, i després d'haver-ne registrat un informe, l'associeu a la sortida.",
+    "Details on participants and event context": "Detalls sobre els participants i el context de l'esdeveniment",
+    "Differences between versions": "Diferències entre les versions",
     "difficult": {
       "glacier_ratings": "difícil"
     },
     "difficulties_height": "Altura a l'inici de les dificultats",
     "disable_comments": "Desactiva els comentaris",
+    "Dispositions": "Disposicions",
     "Distance": "Distància",
     "Distance (km)": "Distància (km)",
+    "Do you really want to leave? you have unsaved changes!": "De debò voleu sortir? No heu desat els canvis!",
+    "Download outings": "Descarrega les sortides",
     "draft": {
       "quality_types": "esborrany"
     },
@@ -317,6 +441,7 @@
     "Duration": "Durada",
     "Duration (hrs)": "Durada (h)",
     "durations": "Durades",
+    "durations (days)": "durada (dies)",
     "easy": {
       "glacier_ratings": "fàcil"
     },
@@ -326,6 +451,10 @@
       "route_configuration_types": "aresta"
     },
     "Edit": "Edita",
+    "Edit a document": "Modifica el document",
+    "Edit associations": "Modifica les associacions",
+    "Edit categories": "Modifica les categories",
+    "Edit titles": "Modifica els títols",
     "editor": "Editor",
     "Elevation": "Altitud",
     "elevation": "Altitud",
@@ -340,6 +469,7 @@
     "empty": {
       "quality_types": "buit"
     },
+    "empty comment": "comentari buit",
     "en": {
       "langs": "anglès"
     },
@@ -355,14 +485,21 @@
     "es": {
       "langs": "castellà"
     },
+    "ESRI": {
+      "Map layer": "ESRI"
+    },
     "eu": {
       "langs": "euskera"
     },
     "EULA": "Acord de llicència d'usuari final",
     "event_type": "tipus d'esdeveniment",
+    "Everything about ratings : difficulties, exposition...": "Entreu aquí totes les dades de l'itinerari (dificultat, exposició, qualitat de l'equipament, etc.)",
     "excellent": {
-      "condition_ratings": "excel·lent"
+      "condition_ratings": "excel·lent",
+      "snow_quality_ratings": "excel·lent",
+      "snow_quantity_ratings": "excel·lent"
     },
+    "Expand": "Desplega",
     "expedition": {
       "route_types": "expedició"
     },
@@ -394,15 +531,17 @@
     "fauna": {
       "image_categories": "fauna"
     },
+    "Fauna protection areas": "Zona de protecció de la fauna",
+    "Fauna protection site:": "Indret de protecció de la fauna:",
     "feb": {
       "months": "febrer"
     },
     "female": {
       "genders": "dona"
     },
+    "file_size": "mida del fitxer",
     "filename": "nom del fitxer",
     "Filter on map extent": "Limita la cerca al mapa visible",
-    "Find all Camptocamp in the mountains with the new mobile application": "Descobriu Camptocamp a la muntanya amb la nova aplicació mòbil",
     "fine": {
       "quality_types": "bo"
     },
@@ -414,6 +553,7 @@
     "Followed users": "Usuaris seguits",
     "Forgot password?": "Contrasenya oblidada?",
     "Forum": "Fòrum",
+    "forum": "fòrum",
     "Forum username": "Nom d'usuari del fòrum",
     "fr": {
       "langs": "francès"
@@ -426,7 +566,9 @@
       "$$noContext": "Material"
     },
     "gender": "gènere",
+    "General information": "Informació general",
     "general informations": "Informació general",
+    "Geolocation": "Geolocalització",
     "geolocation": "Geolocalització",
     "geology": {
       "image_categories": "geologia"
@@ -451,7 +593,9 @@
     },
     "Go to the previous page": "Torna a la pàgina anterior",
     "good": {
-      "condition_ratings": "bones"
+      "condition_ratings": "bones",
+      "snow_quality_ratings": "bones",
+      "snow_quantity_ratings": "bones"
     },
     "good service": {
       "public_transportation_ratings": "servei regular"
@@ -489,6 +633,7 @@
     "has created a new route": "ha creat un nou itinerari",
     "has created a new waypoint": "ha creat un nou punt de pas",
     "has created a new xreport": "ha creat un nou informe d'incident/accident",
+    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Aquest esdeveniment ha modificat els vostres hàbits? Què n'heu après?",
     "has updated the area": "ha actualitzat aquesta regió",
     "has updated the article": "ha actualitzat un article",
     "has updated the book": "ha actualitzat aquest llibre",
@@ -515,9 +660,12 @@
       "image_categories": "ajuda",
       "$$noContext": "ajuda"
     },
+    "Help research activities to define new prevention means": "Ajudeu la recerca científica a definir nous mitjans de prevenció",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquesta és la llista dels usuaris que seguiu i dels quals veureu l'activitat al vostre fil personal",
-    "Here you may change your subscriptions to snow forecast mailing lists.": "Podeu modificar aquí les vostres subscripcions als butlletins d'allaus.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Definiu aquí els filtres d'activitats i de regions que seran aplicats al fil de la pàgina d'inici.",
+    "highline": {
+      "slackline_types": "Highline"
+    },
     "hiking": {
       "activities": "Excursionisme"
     },
@@ -529,6 +677,8 @@
     },
     "History": "Versions",
     "Home": "Pàgina d'inici",
+    "Home page feed parameters": "Paràmetre del fil d'activitat a la pàgina d'inici",
+    "How is my testimony used ? How / why is it useful ?": "De què serveix el meu testimoni?",
     "humidity": {
       "weather_station_types": "humitat"
     },
@@ -541,21 +691,42 @@
     "hut_warden": {
       "user_categories": "guarda de refugi"
     },
+    "I have read and agree to the terms of use": "He llegit i accepto les condicions d'ús",
     "ice and dry climbing gear": "Escalada en gel i dry-tooling",
     "ice_climbing": {
       "activities": "Cascada de gel"
     },
     "ice_rating": "Dificultat en gel",
+    "IGN": {
+      "Map slopes layer": "Mapa de pendents IGN"
+    },
+    "IGN maps": {
+      "Map layer": "Cartografia oficial"
+    },
+    "IGN ortho": {
+      "Map layer": "Ortofotografia"
+    },
+    "image": "imatge",
     "image_categories": "Categories",
     "image_type": "Tipus d'imatge (llicència)",
+    "images": "Imatges",
     "impossible": {
       "glacier_ratings": "impossible"
     },
+    "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
+    "Incidents and accidents": "Incidents i accidents",
     "increase_impact": "factor d'agreujament",
+    "Information about the terrain, like elevations, lengths...": "Dades relatives al terreny, com les alçades, la longitud, etc.",
+    "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informació sobre la localització de l'incident. Posicioneu la localització al mapa d'aquí sobre, encara que sigui de manera poc precisa (cas en què podeu donar més detalls en aquest camp). Després d'haver completat l'informe, podreu associar-hi un itinerari, un punt de pas o una sortida.",
+    "Informations about the access": "Informació relativa a l'accés per carretera o amb transport públic",
     "Infos": "Info",
     "initiator": {
       "autonomies": "desencadenant"
     },
+    "Insert a link": "Insereix un enllaç",
+    "Insert emoji": "Insereix una emoticona",
+    "Insert image": "Insereix una imatge",
+    "Insert link": "Insereix l'enllaç",
     "inside": {
       "rain_proof_types": "a l'interior"
     },
@@ -568,8 +739,13 @@
     "internal_witness": {
       "author_statuses": "testimoni directe"
     },
+    "Invalid date": "Data no vàlida",
+    "Invalid email address": {
+      "API message": "Correu electrònic incorrecte"
+    },
     "isbn": "ISBN",
     "iso_speed": "Sensibilitat",
+    "Issue report": "Alerta d'un problema",
     "it": {
       "langs": "italià"
     },
@@ -600,8 +776,10 @@
     "Last forum topics": "Darrers temes al fòrum",
     "Last outings": "Darreres sortides",
     "Latitude": "Latitud",
+    "Leave fullscreen": "Surt del mode de pantalla completa",
     "length": "Llargada",
     "length_total": "Llargada total",
+    "Let's make our feedbacks valuable": "Donem valor al nostre feedback",
     "level_1": {
       "avalanche_levels": "nivell 1"
     },
@@ -620,12 +798,18 @@
     "level_na": {
       "avalanche_levels": "nivell no ressenyat"
     },
+    "Licenses": "Llicències",
     "lift_access": "Remuntadors mecànics",
     "lift_status": "Remuntadors mecànics",
     "lightning": {
       "event_types": "llamp"
     },
+    "link": "enllaç",
+    "Links": "Enllaços",
+    "List mode": "Visualització en llista",
     "List of versions for language:": "Llista de versions per idioma:",
+    "Load my preferences": "Activa les meves preferències",
+    "loading": "s'està carregant",
     "local_product": {
       "waypoint_types": "Producte local / comerç"
     },
@@ -633,7 +817,11 @@
       "waypoint_types": "Localitat"
     },
     "Location / elevation / orientation": "Lloc / altitud / orientació",
+    "Log in to post a comment": "Connecta't per deixar-hi un comentari",
     "Login": "Accedeix",
+    "Login failed": {
+      "API message": "Nom d'usuari o contrasenya incorrectes"
+    },
     "Logout": "Surt",
     "Longitude": "Longitud",
     "loop": {
@@ -645,10 +833,18 @@
     "magazine": {
       "book_types": "revista"
     },
+    "Mail has been sent": "Correu enviat",
+    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Informació principal sobre l'itinerari, com el nom, les activitats, la geolocalització i l'entorn proper.",
+    "Main informations about your outing": "Dades principals de la vostra sortida",
+    "main_waypoint_id": "ID del punt de pas principal",
     "Make profile page public": "Fes pública la pàgina de perfil",
     "male": {
       "genders": "home"
     },
+    "map": "mapa",
+    "Map only": "Només el mapa",
+    "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Mapa, ressenyes, coneixement de l'itinerari, anticipació d'un pla B, reavaluació de l'itinerari durant la sortida?",
+    "maps": "mapes",
     "maps_info": "Mapes",
     "maps_references": "Referències cartogràfiques",
     "mar": {
@@ -663,6 +859,7 @@
     },
     "Merge documents": "Fusiona els documents",
     "Merge with other document": "Fusiona amb un altre document",
+    "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "La fusió d'un document \"font\" amb un altre document \"objectiu\" transfereix totes les associacions del document \"font\" al document \"objectiu\", i defineix una redirecció del document \"font\" cap al document \"objectiu\"",
     "meters": "metres",
     "migmatite": {
       "rock_types": "migmatita"
@@ -671,9 +868,16 @@
       "image_categories": "varis",
       "waypoint_types": "varis"
     },
+    "Misc data about the waypoint": "Dades diverses sobre el punt de pas",
+    "Miscs": "Varis",
+    "Missing captcha": {
+      "API message": "Falta el Captcha"
+    },
     "mixed_rating": "Dificultat en mixt",
-    "Mobile application": "Aplicació mòbil",
     "modifications": "Modificacions",
+    "Modified the": {
+      "modification date": "Modificat el"
+    },
     "mollasse_calcaire": {
       "rock_types": "melassa"
     },
@@ -708,13 +912,15 @@
     "multi": {
       "climbing_outdoor_types": "via llarga"
     },
+    "Multi-criteria search": "Cerca multi-criteri",
     "My account": "El meu compte",
+    "My changes": "Les meves aportacions",
     "My followed users": "Els meus amics",
-    "My mailing lists": "Butlletins als quals us heu subscrit",
     "My outings": "Les meves sortides",
     "My preferences": "Les meves preferències",
     "My profile": "El meu perfil",
     "name": "Nom",
+    "Narration": "Descripció en text",
     "natural_avalanche": {
       "avalanche_signs": "allau natural el dia de la sortida"
     },
@@ -737,11 +943,17 @@
     },
     "nb_pages": "Nombre de pàgines",
     "nb_participants": "nombre de participants",
+    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Quasi-accidents que haurien pogut degenerar en esdeveniments més greus",
+    "Near-accidents are valuable": "Els incidents i els quasi-accidents són experiències valuoses:",
     "nearby service": {
       "public_transportation_ratings": "servei a proximitat"
     },
+    "New outing": "Nova sortida",
     "New password": "Nova contrasenya",
+    "New route": "Nou itinerari",
+    "New waypoint": "Nou punt de pas",
     "next difference": "diferència següent",
+    "next version": "versió següent",
     "nivology": {
       "image_categories": "nivologia i allaus"
     },
@@ -753,9 +965,13 @@
       "$$noContext": "no"
     },
     "No account yet?": "Encara no tens un compte?",
+    "no info": "no hi ha informació",
     "No match?": "No hi ha cap resultat satisfactori?",
     "no service": {
       "public_transportation_ratings": "sense servei"
+    },
+    "No user with this email": {
+      "API message": "No hi ha cap usuari amb aquest correu electrònic"
     },
     "no_warden": {
       "custodianship_types": "no guardat"
@@ -780,14 +996,23 @@
     "oct": {
       "months": "octubre"
     },
+    "of": {
+      "1-30 of 200 results": "de"
+    },
     "often": {
       "snow_clearance_ratings": "neteja regular de la neu"
     },
     "Ok": "D'acord",
+    "Only document less than 24h old can be deleted": {
+      "API message": "Només es poden suprimir els documents recents (24h). Contacteu amb la moderació per suprimir aquest document."
+    },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Només es mostren al fil de la pàgina d'inici les actualitzacions que afecten les regions i activitats seleccionades.\nLes actualitzacions dels usuaris seguits sempre són visibles.",
+    "Ooops": "Eeep!",
     "open": {
       "lift_status": "obertes"
     },
+    "Open fields to deeply explain the event circumstances.": "Camps lliures per explicar el millor possible les circumstàncies de l'esdeveniment.",
+    "Open fields to detail the picture's context": "Camps lliures per descriure el context de la imatge",
     "open_guarded": {
       "hut_status": "obert i guardat"
     },
@@ -796,12 +1021,20 @@
     },
     "opening_hours": "Horari d'obertura",
     "opening_periods": "Període d'obertura",
+    "OpenTopoMap": {
+      "Map layer": "OpenTopoMap"
+    },
     "or try the following pages:": "o proveu les pàgines següents:",
+    "Ordered list": "Llista ordenada",
     "orientations": "Orientacions",
     "other": {
       "event_types": "altre"
     },
     "other_comments": "Altres comentaris",
+    "Oups! Something went wrong with forum. Here is the message :": "Ep! Hi ha hagut un problema amb el fòrum. Vegeu-ne el missatge:",
+    "Oups! something went wrong...": "Ep! Hi ha hagut un problema...",
+    "outing": "sortides",
+    "outings": "sortides",
     "overcrowded": {
       "frequentation_types": "molt freqüentat"
     },
@@ -822,10 +1055,12 @@
     "paragliding_takeoff": {
       "waypoint_types": "Enlairament amb parapent"
     },
-    "parking_fee": "Aparcament vigilat",
+    "Parameters of the Digital Camera": "Detalls de la càmera digital",
+    "parking_fee": "Aparcament o carretera vigilat",
     "partial_trip": "Recorregut parcial",
     "participant_count": "Nombre de participants",
     "participants": "Participants",
+    "Participants and context": "Participants i context",
     "partly_protected": {
       "rain_proof_types": "parcialment protegit"
     },
@@ -833,10 +1068,18 @@
       "waypoint_types": "coll"
     },
     "Password": "Contrasenya",
-    "pedestrian access": "Accés a peu",
+    "Password too short": {
+      "API message": "La contrasenya és massa curta"
+    },
+    "pedestrian access": {
+      "hut": "Accés a peu",
+      "$$noContext": "Accés a peu"
+    },
     "people": {
       "image_categories": "personalitat"
     },
+    "People who were with you, and your feelings about this outing": "L'altra gent que participava a la sortida, així com les vostres impressions sobre la sortida",
+    "Period of protection": "Període de protecció",
     "person_fall": {
       "event_types": "caiguda d'una persona"
     },
@@ -846,6 +1089,10 @@
       "$$noContext": "personal"
     },
     "personal comments": "Comentaris personals",
+    "Personal data are confidential": "Les dades personals són confidencials",
+    "Personal feed off": "Fil personal desactivat",
+    "Personal feed on": "Fil personal activat",
+    "Personal informations": "Informació personal",
     "phone": "Telèfon",
     "phone_custodian": "Telèfon del guarda",
     "photos-art": {
@@ -860,9 +1107,16 @@
     "pitch": {
       "climbing_indoor_types": "totxo"
     },
+    "Pitch description tag": "Balisa de descripció dels llargs",
     "place": "indret",
+    "please consult the server logs": {
+      "API message": "Error inesperat, si us plau contacteu amb dev@camptocamp.org"
+    },
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Descrigueu el vostre nivell tècnic i experiència en relació a l'objectiu escollit, la vostra condició física, la fatiga acumulada abans de la sortida, l'aclimatació en cas de sortides en altura, etc.",
     "poor": {
-      "condition_ratings": "dolentes"
+      "condition_ratings": "dolentes",
+      "snow_quality_ratings": "dolentes",
+      "snow_quantity_ratings": "dolentes"
     },
     "poor service": {
       "public_transportation_ratings": "servei reduït"
@@ -883,11 +1137,15 @@
     "precipitation_heater": {
       "weather_station_types": "precipitació (pluja o neu)"
     },
+    "Precise localisation of the shooting": "Localització precisa del punt de captura de la imatge",
+    "Precise location of the event.": "Localització precisa de l'esdeveniment",
+    "Press enter to select": "Premeu Enter per seleccionar",
     "pressure": {
       "weather_station_types": "pressió"
     },
     "Preview": "Vista prèvia",
     "previous difference": "diferència anterior",
+    "previous version": "versió precedent",
     "previous_injuries": "ferides prèvies",
     "previous_injuries_2": {
       "previous_injuries": "altres ferides"
@@ -899,14 +1157,20 @@
       "author_statuses": "factor principal"
     },
     "product_types": "tipus de productes locals",
+    "profile": "perfil",
+    "profiles": "perfils",
     "progressive": {
       "snow_clearance_ratings": "desinnivació progressiva"
     },
     "prominence": "prominència",
     "Protect document": "Protegeix el document",
     "protected": {
-      "rain_proof_types": "protegit de la pluja"
+      "rain_proof_types": "protegit de la pluja",
+      "$$noContext": "protegit de la pluja"
     },
+    "Protection area:": "Zona de protecció:",
+    "Protection areas": "Zones de protecció",
+    "Protection status": "Figura de protecció",
     "psicobloc": {
       "climbing_outdoor_types": "psicobloc"
     },
@@ -915,6 +1179,7 @@
     "public_transportation_rating": "Accessibilitat amb transport públic",
     "public_transportation_types": "Tipus de transport públic",
     "publication_date": "Data de publicació",
+    "Put it back": "Retornar",
     "quality": "Qualitat",
     "quartzite": {
       "rock_types": "quarsita"
@@ -922,6 +1187,7 @@
     "quiet": {
       "frequentation_types": "desert"
     },
+    "Quote": "Cita",
     "raid": {
       "route_types": "travessa"
     },
@@ -933,11 +1199,20 @@
     "recent_avalanche": {
       "avalanche_signs": "traça d'allau recent (després de la darrera nevada, pluja, vent o fusió)"
     },
+    "Recenter on your current position": "Centra-ho a la teva ubicació actual",
     "Recenter on...": "Centra a...",
     "reduce_impact": "Factor de reducció",
     "Register": "Inscriviu-vos",
     "remarks": "Remarques",
+    "Remove": "Eliminar",
+    "Report an issue": "Alerteu d'un problema",
+    "Report title, activity, linked routes or outings.": "Títol de l'escrit, activitat, enllaços amb itineraris o sortides",
+    "Required": {
+      "API message": "Obligatori"
+    },
+    "required field": "camp obligatori",
     "rescue": "rescat",
+    "Reset geometry": "Reinicia",
     "Reset password": "Restableix la contrasenya",
     "resolution": "resolució",
     "restaurant": {
@@ -945,6 +1220,7 @@
     },
     "Restore this version": "Restaura aquesta versió",
     "restricted_access": "Restriccions d'accés",
+    "Results only": "Només resultats",
     "Retry": "Torna-ho a provar",
     "return_same_way": {
       "route_types": "anada i tornada"
@@ -957,6 +1233,7 @@
     },
     "risk": "risc",
     "risk_rating": "Avaluació del risc",
+    "road access": "Accés per carretera",
     "road or pedestrian access": "Accés per carretera o a peu",
     "rock_climbing": {
       "activities": "Escalada"
@@ -970,17 +1247,20 @@
     "roped_fall": {
       "event_types": "caiguda encordat"
     },
+    "route": "itinerari",
     "route_description": "Itinerari seguit",
     "route_history": "Històric de l'itinerari",
     "route_length": "Llargada de l'itinerari",
     "route_study": "Estudi de l'itinerari",
     "route_types": "Tipus d'itinerari",
+    "routes": "itineraris",
     "routes_quantity": "Nombre d'itineraris",
     "safe": {
       "children_proof_types": "adaptat"
     },
     "safety": "Seguretat",
     "Save": "Desa",
+    "scale": "escala",
     "schiste": {
       "rock_types": "esquist"
     },
@@ -988,6 +1268,7 @@
       "ground_types": "tartera"
     },
     "Search ...": "Cerca ...",
+    "Search a document to associate...": "Cerca un document a associar",
     "seasonal": {
       "parking_fee_types": "servei de temporada"
     },
@@ -997,9 +1278,13 @@
     "secondary_impacted": {
       "author_statuses": "factor secundari"
     },
+    "see actual version": "mostra la versió actual",
+    "See more results": "Més resultats",
+    "See other documents nearby": "A prop de...",
     "See profile based on:": "Perfil d'altituds basat en:",
     "See the activity of this contributor in your feed": "Vegeu les activitats d'aquest participant al vostre fil",
     "See the latest version": "Mostra la darrera versió",
+    "Select option": "Escolliu una opció",
     "Send reset email": "Envia correu de restabliment",
     "Sensitive area:": "Àrea sensible:",
     "Sensitive areas": "Zones sensibles",
@@ -1008,6 +1293,7 @@
       "months": "setembre"
     },
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC és una base de dades mundial sobre els accidents i incidents a la muntanya. La seva vocació és de millorar la seguretat a la pràctica de l'escalada i dels esports de muntanya.",
+    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC està concebut amb ànim de bona voluntat i de posta en comú, gràcies per fomentar-lo",
     "service_on_demand": {
       "public_transportation_types": "servei a demanda"
     },
@@ -1017,10 +1303,17 @@
     "severity_no": {
       "severities": "cap ferida"
     },
+    "Share": "Comparteix",
     "Share with us!": "Comparteix-ho amb nosaltres!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual — Si feu una remescla, transformeu o creeu a partir del material de l'Obra original, haureu de difondre l'Obra modificada amb les mateixes condicions, és a dir, amb la mateixa llicència amb la que es difonia l'Obra original.",
     "shelter": {
       "waypoint_types": "aixopluc"
+    },
+    "Shorter than minimum length 1": {
+      "API message": "Camp obligatori"
+    },
+    "Shorter than minimum length 3": {
+      "API message": "Camp massa curt (mínim 3 caràcters)"
     },
     "show all": "Mostra tots els resultats",
     "Show only updates from followed users in the homepage feed": "Mostra al fil de la pàgina d'inici només les actualitzacions dels participants seguits.",
@@ -1051,6 +1344,7 @@
     },
     "slackline_anchor1": "Ancoratge 1",
     "slackline_anchor2": "Ancoratge 2",
+    "slackline_height": "altura de la slackline",
     "slackline_length": "Llargada de la línia",
     "slackline_length_max": "Llargada de la línia màxima",
     "slackline_length_min": "Llargada de la línia mínima",
@@ -1059,6 +1353,9 @@
     },
     "slackline_type": "Tipus de línia",
     "slackline_types": "Tipus de línia",
+    "slacklining": {
+      "activities": "Slackline"
+    },
     "slope": "Pendent",
     "slope_30_35": {
       "avalanche_slopes": "Pendent de 30 a 35º"
@@ -1125,6 +1422,10 @@
     "summit": {
       "waypoint_types": "cim"
     },
+    "SwissTopo": {
+      "Map layer": "SwissTopo",
+      "Map slopes layer": "Pendents SwissTopo"
+    },
     "tags": {
       "article_categories": "etiquetes"
     },
@@ -1138,14 +1439,25 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "Terrain": "Terreny",
+    "text to display": "text a mostrar",
     "The mountain sports community": "La comunitat dels esports de muntanya",
     "The page you are looking for does not exist or is broken.": "Aquesta pàgina no existeix o bé està malmesa.",
     "The slope must be between 0 and 80 deg": "El pendent ha d'estar entre 0 i 80 graus",
     "The slope must be between 50 and 3000m high": "L'alçada del pendent ha d'estar entre 50 i 3000m",
     "There are sensitive areas on this route. Please refer to the map.": "Aquest itinerari travessa o es troba a prop de zones sensibles. Si us plau, consulteu el mapa.",
+    "These are positive experiences that reveal usefull risk-management skills.": "Experiències positives que revelen habilitats en gestió de riscos",
     "This book cover is the property of its editor and/or author": "La coberta del llibre és propietat del seu editor i/o autor",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-SA 3.0",
+    "This field is too long": "Text massa llarg",
+    "This field is too short": "Text massa curt",
+    "This field must be a valid ISBN.": {
+      "API message": "Aquest camp ha de ser un ISBN vàlid."
+    },
+    "This is the first version": "Aquesta és la primera versió",
+    "This is the last version": "Aquesta és la darrera versió",
+    "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Descripció completa de l'itinerari (resum, aproximació, baixada, etc.). No us oblideu de l'històric, si el coneixeu.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Aquesta imatge mostra la coberta d'un llibre. És propietat de l'editor i/o de l'autor i no es presenta sinó amb la finalitat d'il·lustrar.",
     "This profile is only available to authenticated users.": "Aquest perfil només és visible pels usuaris registrats.",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Aquesta eina permet estimar la dificultat tècnica d'un itinerari d'esquí (escala de dificultat en esquí)",
@@ -1153,7 +1465,10 @@
     "time_management": "Gestió de l'horari",
     "timing": "durada",
     "title": "Títol",
+    "Title of the book, author, language and date of publication.": "Títol del llibre, autor, llengua i data de publicació.",
+    "Title, activity and characteristics of the picture": "Títol, activitats i característiques de la imatge",
     "Toggle fullscreen": "Passa a pantalla completa",
+    "Too many results: please refine your search.": "Massa resultats: si et plau, afina els paràmetres de la cerca",
     "topo": {
       "book_types": "ressenya",
       "image_categories": "ressenya"
@@ -1177,16 +1492,22 @@
     },
     "training": "Entrenament",
     "Translate into an other lang": "Tradueix a una altra llengua",
+    "Transport & road or PT access": "Accés per carretera / transport públic",
     "traverse": {
       "route_types": "travessa"
     },
     "Types and styles": "Tipus i estils",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Tipus d'assegurança i de proteccions, verificacions entre escaladors, tests d'estabilitat del mantell nivós, tests dels ARVAs, etc.",
     "Unblock account": "Desbloqueja aquest usuari",
+    "Unformatted text": "Text sense format",
+    "Unordered list": "Llista no ordenada",
     "Unprotect document": "Desprotegeix el document",
     "Upload a GPS track": "Afegiu-hi una traça GPS",
+    "Upload a new version": "Carrega una versió nova",
     "url": "URL",
+    "User avatar": "Avatar",
     "Username": "Nom d'usuari",
+    "users": "usuaris",
     "vertical": {
       "climbing_styles": "vertical"
     },
@@ -1202,6 +1523,7 @@
     },
     "via_ferrata_rating": "Dificultat de via ferrada",
     "View in other lang": "Mostra-ho en una altra llengua",
+    "View xreports": "Mostra els informes",
     "virtual": {
       "waypoint_types": "virtual"
     },
@@ -1209,13 +1531,22 @@
     "waterfall": {
       "waypoint_types": "cascada"
     },
+    "waterline": {
+      "slackline_types": "Waterline"
+    },
     "waterpoint": {
       "waypoint_types": "font / punt d'aigua"
     },
     "waypoint": "punt de pas",
+    "Waypoint's main properties": "Dades principals del punt de pas",
+    "Waypoint's textual description": "Descripció escrita del punt de pas",
+    "waypoint_children": "sub-punt de pas",
+    "waypoint_slope": "pendent del terreny",
     "waypoint_type": "Tipus de punt de pas",
+    "waypoints": "punts de pas",
     "We sent you an email, please click on the link to reset password.": "Us hem enviat un correu, si us plau, cliqueu-ne l'enllaç per restablir la contrasenya.",
     "weather": "Méteo",
+    "Weather & conditions": "Méteo i condicions",
     "weather_station": {
       "waypoint_types": "estació meteorològica"
     },
@@ -1232,12 +1563,17 @@
     "wind_speed": {
       "weather_station_types": "velocitat del vent"
     },
+    "Without c2c account": "Participants sense compte c2c",
     "write a summary": "Feu aquí un resum",
     "write your comments": "Feu-hi els vostres comentaris",
+    "xreport": "Incident / accident",
+    "xreports": "Informes d'incidents/accidents",
     "yes": {
       "parking_fee_types": "sí",
       "$$noContext": "sí"
     },
+    "You can choose to remain anonymous": "Podeu escollir restar en l'anonimat",
+    "You may add associated waypoints, books and articles": "Associeu d'altres documents de camptocamp a aquest punt de pas",
     "You may also drag, draw or edit the track on the map.": "També pots arrossegar, dibuixar o editar la traça al mapa."
   }
 }
