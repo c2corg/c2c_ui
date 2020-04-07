@@ -70,6 +70,8 @@ function getMessages(lang) {
     return import(/* webpackChunkName: "translations-de" */`@/translations/dist/de.json`);
   } else if (lang === 'es') {
     return import(/* webpackChunkName: "translations-es" */`@/translations/dist/es.json`);
+  } else if (lang === 'zh_CN') {
+    return import(/* webpackChunkName: "translations-es" */`@/translations/dist/zh_CN.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
@@ -92,7 +94,8 @@ export default function install(Vue) {
         en: 'English',
         es: 'Español',
         ca: 'Català',
-        eu: 'Euskara'
+        eu: 'Euskara',
+        zh_CN: 'Chinese'
       };
 
       this.translations = {};

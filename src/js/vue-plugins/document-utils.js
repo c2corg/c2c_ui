@@ -194,7 +194,7 @@ export default function install(Vue) {
           }
         }
 
-        result.lang = lang;
+        result.lang = lang === 'zh_CN' ? 'en' : lang;
 
         return result;
       },

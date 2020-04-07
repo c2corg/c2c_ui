@@ -20,6 +20,7 @@
     "lint": "vue-cli-service lint",
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
+    "messages:compile": "node ./tools/compile-messages.js --user api:$TRANSIFEX_TOKEN",
     "generate-icons": "node tools/generate-icons.js",
     "update-c2c-common": "python3 tools/update-c2c-common.py",
     "snyk-protect": "snyk protect",
