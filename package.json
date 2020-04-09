@@ -39,7 +39,7 @@
     "blueimp-load-image": "2.30.0",
     "bulma": "0.7.5",
     "bulma-checkradio": "2.1.1",
-    "core-js": "2.6.10",
+    "core-js": "3.6.4",
     "d3": "5.15.1",
     "file-saver": "2.0.2",
     "moment": "2.24.0",
