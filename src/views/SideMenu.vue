@@ -13,11 +13,14 @@
     <router-link
       v-for="item of menuItems"
       :key="item.name"
-      :to="{name:item.name, query: item.query}"
-      class="menu-item is-ellipsed"
-      :class="{'router-link-active':item.activeFor.includes($route.name)}">
-      <component :is="item.icon" />
-      <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
+      :to="{name:item.name, query: item.query, params: item.params}">
+      <span
+        v-if="!item.minScreenHeight || item.minScreenHeight < $screen.height"
+        class="menu-item is-ellipsed"
+        :class="{'router-link-active':item.activeFor.includes($route.name)}">
+        <component :is="item.icon" />
+        <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
+      </span>
     </router-link>
 
     <div class="menu-footer is-size-7">
@@ -71,7 +74,8 @@
           { name: 'outings', icon: 'icon-outing', text: this.$gettext('outings'), activeFor: ['outing'], query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
           { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
           { name: 'serac', icon: 'icon-xreport', text: this.$gettext('Accident database'), activeFor: ['xreports', 'xreport', 'xreport-add'] },
-          { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] }
+          { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] },
+          { name: 'article', icon: 'icon-help', text: this.$gettext('Help'), activeFor: [], minScreenHeight: 715, params: { id: 106732 } }
         ];
       }
     }
@@ -79,83 +83,89 @@
 </script>
 
 <style scoped lang="scss">
-  @import '@/assets/sass/variables.scss';
+  @import "@/assets/sass/variables.scss";
 
   $brandLogoHeight: 70px;
   $brandLogoMargin: 5px;
 
   $menuLinkHeightPadding: 6px;
 
-  aside{
+  aside {
     // border-right: 1px solid $secondary;
-    box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
     background: $white;
   }
 
-  .menu-brand{
+  .menu-brand {
     display: block;
     line-height: 0;
 
-    img{
+    img {
       height: $brandLogoHeight;
       margin: $brandLogoMargin 0;
     }
   }
 
-  .menu-item{
+  .menu-item {
     display: block;
     padding: $menuLinkHeightPadding 10px;
-    border-left:5px solid $white;
-    color:$text;
+    border-left: 5px solid $white;
+    color: $text;
   }
 
-  .menu-item:hover{
-    background:$light;
-    border-left:5px solid $color-base-c2c-lighter;
+  .menu-item:hover {
+    background: $light;
+    border-left: 5px solid $color-base-c2c-lighter;
   }
 
-  .menu-item-text{
+  .menu-item-text {
     margin-left: 0;
-    font-size:1.1rem;
+    font-size: 1.1rem;
   }
 
-  .menu-item.router-link-active{
-    border-left:5px solid $color-base-c2c;
+  .menu-item.router-link-active {
+    border-left: 5px solid $color-base-c2c;
     font-weight: bold;
   }
 
-  .menu-footer{
+  .menu-footer {
     position: absolute;
-    width:100%;
+    width: 100%;
     bottom: 0;
 
-    .menu-socials, .menu-add, .menu-links {
-      margin-bottom: 15px!important;
+    .menu-socials,
+    .menu-add,
+    .menu-links {
+      margin-bottom: 15px !important;
       line-height: 1;
     }
 
-    .menu-add{
+    .menu-add {
       height: 320px;
-      margin-left: calc((200px - 160px)/2);
-      margin-right: calc((200px - 160px)/2);
+      margin-left: calc((200px - 160px) / 2);
+      margin-right: calc((200px - 160px) / 2);
     }
 
-    .twitter-icon, .facebook-icon, .donate-icon{
+    .twitter-icon,
+    .facebook-icon,
+    .donate-icon {
       font-size: 30px;
     }
 
-    .twitter-icon, .twitter-icon:hover{
-      color:#4198fb; // twitter color
+    .twitter-icon,
+    .twitter-icon:hover {
+      color: #4198fb; // twitter color
     }
 
-    .facebook-icon, .facebook-icon:hover{
-      color:#6d8bc9; //facebook color
+    .facebook-icon,
+    .facebook-icon:hover {
+      color: #6d8bc9; //facebook color
     }
-    .donate-icon{
-      color:hsl(348, 100%, 71%);
+    .donate-icon {
+      color: hsl(348, 100%, 71%);
     }
-    .donate-icon:hover{
-      color:hsl(348, 100%, 51%);
+    .donate-icon:hover {
+      color: hsl(348, 100%, 51%);
     }
   }
 
@@ -165,10 +175,9 @@
   //     }
   // }
 
-  @media screen and (max-height: 680px){
-    .menu-socials{
-      display:none!important;
+  @media screen and (max-height: 680px) {
+    .menu-socials {
+      display: none !important;
     }
   }
-
 </style>
