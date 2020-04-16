@@ -53,6 +53,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
 import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons/faLayerGroup';
+import { faLifeRing } from '@fortawesome/free-solid-svg-icons/faLifeRing';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
@@ -264,6 +265,7 @@ export default function install(Vue) {
     faItalic,
     faKey,
     faLayerGroup,
+    faLifeRing,
     faLink,
     faList,
     faListOl,
