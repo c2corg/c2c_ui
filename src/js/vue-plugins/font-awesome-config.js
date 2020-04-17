@@ -110,6 +110,7 @@ import qualityGreat from '@/assets/font-awesome-custom/js/quality/great';
 
 import activityHiking from '@/assets/font-awesome-custom/js/activity/hiking';
 import activityIce_climbing from '@/assets/font-awesome-custom/js/activity/ice_climbing';
+import activityOther from '@/assets/font-awesome-custom/js/activity/other';
 import activityMountain_biking from '@/assets/font-awesome-custom/js/activity/mountain_biking';
 import activityMountain_climbing from '@/assets/font-awesome-custom/js/activity/mountain_climbing';
 import activityParagliding from '@/assets/font-awesome-custom/js/activity/paragliding';
@@ -196,6 +197,7 @@ export default function install(Vue) {
 
     activityHiking,
     activityIce_climbing,
+    activityOther,
     activityMountain_biking,
     activityMountain_climbing,
     activityParagliding,

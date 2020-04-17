@@ -13,11 +13,11 @@
     computed: {
       activities() {
         if (!this.activity) return [];
-        else if (this.activity === 'other') return [];
+        else if (this.activity === 'other') return ['other'];
         else if (this.activity === 'alpine_climbing') return ['mountain_climbing'];
         else if (this.activity === 'multipitch_climbing') return ['rock_climbing'];
         else if (this.activity === 'sport_climbing') return ['rock_climbing'];
-        else return [this.activity];
+        else return ['other'];
       }
     }
   };
