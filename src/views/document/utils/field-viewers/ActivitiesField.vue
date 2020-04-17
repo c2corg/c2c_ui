@@ -12,7 +12,7 @@
   export default {
     components: { LabelValue },
     props: { single : {
-      type: Object,
+      type: Boolean,
       default: false
     }},
     mixins: [requireDocumentProperty],
