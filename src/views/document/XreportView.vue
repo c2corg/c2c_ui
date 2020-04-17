@@ -5,7 +5,7 @@
       <div class="column is-3 is-12-print">
 
         <div class="box">
-          <activities-field :document="document" />
+          <activities-field :document="document" :single="true" />
           <label-value v-if="document.author" :label="$gettext('contributor')">
             <author-link :author="document.author" />
           </label-value>

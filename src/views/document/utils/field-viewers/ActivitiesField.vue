@@ -1,6 +1,6 @@
 <template>
-  <label-value :label="$gettext('activities')">
-    <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
+    <label-value :label="$gettext('activities')">
+    <activities :activities="activities" class="is-size-3 has-text-secondary" />
   </label-value>
 </template>
 
@@ -11,7 +11,23 @@
 
   export default {
     components: { LabelValue },
-    mixins: [requireDocumentProperty]
+    props: { single : {
+      type: Object,
+      default: false
+    }},
+    mixins: [requireDocumentProperty],
+    computed: {
+      activities() {
+        if (!this.single) return this.document.activities;
+        this.activity = this.document.event_activity;
+        if (!this.activity) return [];
+        else if (this.activity === 'other') return ['other'];
+        else if (this.activity === 'alpine_climbing') return ['mountain_climbing'];
+        else if (this.activity === 'multipitch_climbing') return ['rock_climbing'];
+        else if (this.activity === 'sport_climbing') return ['rock_climbing'];
+        else return ['other'];
+      }
+    }
   };
 
 </script>
