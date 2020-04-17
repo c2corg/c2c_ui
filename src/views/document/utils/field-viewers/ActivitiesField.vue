@@ -1,5 +1,5 @@
 <template>
-    <label-value :label="$gettext('activities')">
+  <label-value :label="$gettext('activities')">
     <activities :activities="activities" class="is-size-3 has-text-secondary" />
   </label-value>
 </template>
@@ -11,20 +11,22 @@
 
   export default {
     components: { LabelValue },
-    props: { single : {
-      type: Boolean,
-      default: false
-    }},
     mixins: [requireDocumentProperty],
+    props: {
+      single: {
+        type: Boolean,
+        default: false
+      }
+    },
     computed: {
       activities() {
         if (!this.single) return this.document.activities;
-        this.activity = this.document.event_activity;
-        if (!this.activity) return [];
-        else if (this.activity === 'other') return ['other'];
-        else if (this.activity === 'alpine_climbing') return ['mountain_climbing'];
-        else if (this.activity === 'multipitch_climbing') return ['rock_climbing'];
-        else if (this.activity === 'sport_climbing') return ['rock_climbing'];
+        const singleActivity = this.document.event_activity;
+        if (!singleActivity) return [];
+        else if (singleActivity === 'other') return ['other'];
+        else if (singleActivity === 'alpine_climbing') return ['mountain_climbing'];
+        else if (singleActivity === 'multipitch_climbing') return ['rock_climbing'];
+        else if (singleActivity === 'sport_climbing') return ['rock_climbing'];
         else return ['other'];
       }
     }
