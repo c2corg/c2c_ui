@@ -1836,6 +1836,10 @@ msgstr ""
 msgid "height_min"
 msgstr ""
 
+#: src/views/SideMenu.vue
+msgid "Help"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "image_categories"
 msgid "help"

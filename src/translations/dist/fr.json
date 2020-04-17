@@ -655,6 +655,7 @@
     "height_max": "Hauteur maximale",
     "height_median": "Hauteur moyenne",
     "height_min": "Hauteur minimale",
+    "Help": "Aide",
     "help": {
       "image_categories": "aide",
       "$$noContext": "aide"

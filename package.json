@@ -20,6 +20,7 @@
     "lint": "vue-cli-service lint",
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
+    "messages:push": "curl -L --user api:$TRANSIFEX_TOKEN -F file=\"@src/translations/po/c2corg_ui-client.pot\" -X PUT \"https://www.transifex.com/api/2/project/c2corg_ui/resource/main/content/\"",
     "messages:compile": "node ./tools/compile-messages.js --user api:$TRANSIFEX_TOKEN",
     "generate-icons": "node tools/generate-icons.js",
     "update-c2c-common": "python3 tools/update-c2c-common.py",
