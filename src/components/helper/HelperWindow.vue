@@ -15,15 +15,16 @@
         <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
           Close
         </button>
-        <a
-          v-if="$user.isLogged && showModifyButton"
-          class="button is-info"
-          target="_blank"
-          rel="noopener"
-          :href="'/articles/' + helper.documentId"
-          v-translate>
-          Edit
-        </a>
+        <router-link
+          :to="{name:'article', params:{id:helper.documentId}}"
+          target="_blank">
+          <span
+            v-if="$user.isLogged && showModifyButton"
+            class="button is-info"
+            v-translate>
+            Edit
+          </span>
+        </router-link>
       </div>
     </div>
   </modal-card>
