@@ -119,7 +119,7 @@ export default function install(Vue) {
         // save in locale storage
         this.$localStorage.set('current', lang);
 
-        // is user is logged, we need to save in db his preference
+        // if user is logged, we need to save in db his preference
         this.$user.saveLangPreference(lang);
 
         // then, we must defer lang setter
