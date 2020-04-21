@@ -1,6 +1,6 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
-    <h2 v-if="field.name !='summary' && !hideTitle" class="title is-2" :class="{'no-print': !visible}">
+    <h2 v-if="field.name != 'summary' && !hideTitle" class="title is-2" :class="{'no-print': !visible}">
       <span>
         {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
       </span>
@@ -10,10 +10,10 @@
         :rotation="visible ? undefined : 180"
         @click="visible=!visible" />
     </h2>
-    <div v-show="visible">
+    <div v-show="visible" :lang="lang">
       <markdown
         v-if="document.cooked[field.name]"
-        :class="{'is-italic':field.name==='summary'}"
+        :class="{'is-italic': field.name === 'summary'}"
         :content="document.cooked[field.name]" />
       <slot name="after" />
     </div>
@@ -42,6 +42,14 @@
       return {
         visible: true
       };
+    },
+
+    computed: {
+      lang() {
+        const current_lang = this.$language.current;
+        const document_lang = this.document ? this.document.cooked.lang : null;
+        return document_lang === current_lang ? undefined : this.$language.getIANALanguageSubtag(document_lang);
+      }
     }
   };
 </script>

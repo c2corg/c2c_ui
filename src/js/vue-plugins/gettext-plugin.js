@@ -119,7 +119,7 @@ export default function install(Vue) {
         // save in locale storage
         this.$localStorage.set('current', lang);
 
-        // is user is logged, we need to save in db his preference
+        // if user is logged, we need to save in db his preference
         this.$user.saveLangPreference(lang);
 
         // then, we must defer lang setter
@@ -127,7 +127,7 @@ export default function install(Vue) {
         this._getMessages(lang).then(() => {
           this.current = lang;
           // set html lang attribute
-          document.documentElement.setAttribute('lang', lang);
+          document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
         });
       },
 
@@ -158,11 +158,30 @@ export default function install(Vue) {
         return getTranslation(this.current, this.translations[this.current], msgid, msgctxt);
       },
 
+      getIANALanguageSubtag(lang) {
+        switch (lang) {
+        case 'fr':
+        case 'en':
+        case 'ca':
+        case 'eu':
+        case 'it':
+        case 'de':
+        case 'es':
+          return lang;
+        case 'zh_CN':
+          return 'zh';
+        default:
+          // eslint-disable-next-line no-console
+          console.error(`Unexpected langauage: ${lang}`);
+          return lang;
+        }
+      },
+
       updateElement(element) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
             // eslint-disable-next-line
-                        console.error("v-translate must contains only text", element.childNodes)
+            console.error("v-translate must contains only text", element.childNodes)
             return;
           }
 

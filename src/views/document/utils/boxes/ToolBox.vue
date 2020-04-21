@@ -3,7 +3,7 @@
 
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length>0">
+    <div class="has-text-centered" v-if="isNormalView && available_langs.length > 0">
       <span v-translate>View in other lang</span>
       <br>
       <span class="lang-switcher-box-list">
