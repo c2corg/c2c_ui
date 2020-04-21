@@ -48,7 +48,7 @@
       lang() {
         const current_lang = this.$language.current;
         const document_lang = this.document ? this.document.cooked.lang : null;
-        return document_lang === current_lang ? undefined : document_lang;
+        return document_lang === current_lang ? undefined : this.$language.getIANALanguageSubtag(document_lang);
       }
     }
   };
