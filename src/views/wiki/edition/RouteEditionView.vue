@@ -56,12 +56,27 @@
         <form-field class="is-6" :document="document" :field="fields.height_diff_difficulties" />
 
         <form-field class="is-6" :document="document" :field="fields.difficulties_height" />
-        <form-field class="is-6" :document="document" :field="fields.route_length" />
+        <form-field
+          class="is-6"
+          :document="document"
+          :field="fields.route_length"
+          :divisor="1000"
+          unit="km" />
 
       </div>
       <div class="columns is-multiline">
-        <form-field class="is-4" :document="document" :field="fields.mtb_length_asphalt" />
-        <form-field class="is-4" :document="document" :field="fields.mtb_length_trail" />
+        <form-field
+          class="is-4"
+          :document="document"
+          :field="fields.mtb_length_asphalt"
+          :divisor="1000"
+          unit="km" />
+        <form-field
+          class="is-4"
+          :document="document"
+          :field="fields.mtb_length_trail"
+          :divisor="1000"
+          unit="km" />
         <form-field class="is-4" :document="document" :field="fields.mtb_height_diff_portages" />
       </div>
 
