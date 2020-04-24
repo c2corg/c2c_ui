@@ -27,7 +27,7 @@
         else if (singleActivity === 'alpine_climbing') return ['mountain_climbing'];
         else if (singleActivity === 'multipitch_climbing') return ['rock_climbing'];
         else if (singleActivity === 'sport_climbing') return ['rock_climbing'];
-        else return ['other'];
+        else return [singleActivity];
       }
     }
   };
