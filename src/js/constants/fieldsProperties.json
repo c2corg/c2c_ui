@@ -999,7 +999,8 @@
         "type": "number",
         "min": 0,
         "max": 99,
-        "unit": "&deg;"
+        "unit": "°",
+        "skipSpaceBeforeUnit": true
     },
     "snow_clearance_rating":
     {
