@@ -513,6 +513,17 @@
           geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2);
           document.geometry.geom = JSON.stringify(geoJsonGeometry);
         } else if (geoJsonGeometry.type === 'LineString' || geoJsonGeometry.type === 'MultiLineString') {
+          if (document.type === 'a') {
+            // areas need a polygon, let change the path, check that first and last point are the same
+            geoJsonGeometry.type = 'Polygon';
+            const firstPoint = JSON.stringify(geoJsonGeometry.coordinates[0][0]);
+            const lastPoint = JSON.stringify(geoJsonGeometry.coordinates[0][geoJsonGeometry.coordinates[0].length - 1]);
+
+            if (firstPoint !== lastPoint) { // close the loop
+              geoJsonGeometry.coordinates[0].push(geoJsonGeometry.coordinates[0][0]);
+            }
+          }
+
           document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
 
           if (!document.geometry.geom) {
@@ -844,134 +855,129 @@
 
 <style lang="scss">
   // for styling ol elements
-  .ol-attribution{
-    background: white!important;
+  .ol-attribution {
+    background: white !important;
   }
 
   // disable mobile CSS for controls.
   .ol-touch .ol-control button {
-    font-size: 1.14em!important;
+    font-size: 1.14em !important;
   }
 </style>
 
 <style lang="scss" scoped>
+  @import "~ol/ol.css";
 
-@import '~ol/ol.css';
+  $control-margin: 0.5em;
 
-$control-margin:0.5em;
-
-.ol-control-center-on-geolocation{
+  .ol-control-center-on-geolocation {
     top: 100px;
     left: $control-margin;
-}
+  }
 
-.ol-control-layer-switcher {
+  .ol-control-layer-switcher {
     bottom: 3em;
     left: $control-margin;
+  }
 
-}
-
-.ol-control-layer-switcher-button {
+  .ol-control-layer-switcher-button {
     bottom: $control-margin;
     left: $control-margin;
-}
+  }
 
-.ol-control-use-map-as-filter{
+  .ol-control-use-map-as-filter {
     top: $control-margin;
-    left:3em;
+    left: 3em;
 
     button {
-        width:auto;
-        font-size:1rem;
-        font-weight: normal;
-        padding:3px;
+      width: auto;
+      font-size: 1rem;
+      font-weight: normal;
+      padding: 3px;
 
-        svg {
-            margin-right: 3px;
-        }
+      svg {
+        margin-right: 3px;
+      }
     }
-}
+  }
 
-.ol-control-recenter-on{
+  .ol-control-recenter-on {
     top: 35px;
-    left:3em;
-}
+    left: 3em;
+  }
 
-.ol-control-recenter-on_on-top{
-  top: $control-margin;
-}
+  .ol-control-recenter-on_on-top {
+    top: $control-margin;
+  }
 
-.ol-control-recenter-on-propositions{
+  .ol-control-recenter-on-propositions {
     top: 65px;
-    left:3em;
-    background: rgba(255,255,255,0.9);
-    padding:5px;
+    left: 3em;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
 
-    li:hover{
-        background: lightgrey;
-        cursor: pointer;
+    li:hover {
+      background: lightgrey;
+      cursor: pointer;
     }
-}
+  }
 
-.ol-control-recenter-on-propositions_on-top{
-  top: 35px;
-}
-
-.ol-control-reset-geometry{
-    top: 5px;
-    right:5px;
-
-    button{
-        padding:5px;
-        width: auto!important;
-        font-weight: normal;
-    }
-}
-
-.ol-control-clear-geometry{
+  .ol-control-recenter-on-propositions_on-top {
     top: 35px;
-    right:5px;
+  }
 
-    button{
-        padding:5px;
-        width: auto!important;
-        font-weight: normal;
+  .ol-control-reset-geometry {
+    top: 5px;
+    right: 5px;
+
+    button {
+      padding: 5px;
+      width: auto !important;
+      font-weight: normal;
     }
-}
+  }
 
-//style on layers popup
-.ol-control-layer-switcher > div {
+  .ol-control-clear-geometry {
+    top: 35px;
+    right: 5px;
+
+    button {
+      padding: 5px;
+      width: auto !important;
+      font-weight: normal;
+    }
+  }
+
+  //style on layers popup
+  .ol-control-layer-switcher > div {
     color: white;
     text-decoration: none;
-    background-color: rgba(0,60,136,0.5);
+    background-color: rgba(0, 60, 136, 0.5);
     border: none;
     border-radius: 2px;
     padding: 10px;
-}
-
+  }
 </style>
 
 <style lang="scss">
+  $control-margin: 0.5em;
 
-$control-margin:0.5em;
-
-.ol-scale-line {
-        background: rgba(255, 255, 255, 0.3);
-        bottom: 10px;
-        right: 40px;
-        left: initial;
+  .ol-scale-line {
+    background: rgba(255, 255, 255, 0.3);
+    bottom: 10px;
+    right: 40px;
+    left: initial;
 
     .ol-scale-line-inner {
-        color: black;
-        border: 1px solid black;
-        border-top: none;
+      color: black;
+      border: 1px solid black;
+      border-top: none;
     }
-}
+  }
 
-.ol-full-screen{
-    right:auto;
-    left:$control-margin;
+  .ol-full-screen {
+    right: auto;
+    left: $control-margin;
     top: 60px;
-}
-
+  }
 </style>
