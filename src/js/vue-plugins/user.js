@@ -97,8 +97,8 @@ export default function install(Vue) {
           is_profile_public,
           newpassword
         ).then(() => {
-          this.forumUsername = forum_username;
-          this.name = name;
+          this.forumUsername = forum_username === null ? this.forumUsername : forum_username;
+          this.name = name === null ? this.name : name;
           this.commitToLocaleStorage_();
         });
       },

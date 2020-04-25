@@ -92,10 +92,10 @@
         currentpassword: '',
         newpassword: '',
         email: '',
+        original_mail: null,
         name: this.$user.name,
         forum_username: this.$user.forumUsername,
         is_profile_public: null,
-        original_mail: null,
 
         promise: {}
       };
@@ -103,9 +103,12 @@
 
     created() {
       c2c.userProfile.account.get().then(response => {
+        this.$user.forumUsername = response.data.forum_username;
+
         this.email = response.data.email;
-        this.is_profile_public = response.data.is_profile_public;
         this.original_mail = response.data.email;
+        this.is_profile_public = response.data.is_profile_public;
+        this.forum_username = response.data.forum_username;
       });
     },
 
@@ -118,7 +121,7 @@
 
         this.promise = this.$user.updateAccount(
           this.currentpassword,
-          newOrNull(this.name, this.$user.userName),
+          newOrNull(this.name, this.$user.name),
           newOrNull(this.forum_username, this.$user.forumUsername),
           newOrNull(this.email, this.original_mail),
           this.is_profile_public,
