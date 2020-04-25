@@ -31,8 +31,9 @@
       {{ $gettext(value, field.i18nContext) }}
     </span>
 
-    <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span><!--
-     --><span v-if="(unit || field.unit) && value !== null && value !== undefined">&nbsp;{{ unit || field.unit }}</span>
+    <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span>
+    <span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span>
+    <span v-if="showUnit">{{ unit || field.unit }}</span>
 
   </span>
 </template>
@@ -62,6 +63,10 @@
 
       isArray() {
         return Array.isArray(this.value);
+      },
+
+      showUnit() {
+        return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
       }
     }
   };

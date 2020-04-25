@@ -33,6 +33,7 @@
               <field-view :document="document" :field="fields.capacity" v-if="document.capacity" />
               <field-view :document="document" :field="fields.capacity_staffed" />
               <field-view :document="document" :field="fields.length" />
+              <field-view :document="document" :field="fields.slope" />
               <double-numeric-field
                 :document="document"
                 :field1="fields.slackline_length_min"
