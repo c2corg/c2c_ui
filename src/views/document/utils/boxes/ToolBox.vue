@@ -44,6 +44,12 @@
       icon="compass" />
 
     <tool-box-button
+      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
+      :to="linkToParaglidingOutings"
+      :label="$gettext('Paragliding outings')"
+      :icon="['miscs','paragliding']" />
+
+    <tool-box-button
       v-if="documentType!='profile' || $user.isModerator || document.document_id === $user.id"
       :to="{name:documentType + '-history', params:{id:document.document_id, lang:document.cooked.lang}}"
       :label="$gettext('History')"
@@ -218,6 +224,25 @@
           const extent = ol.extent.buffer(point.getGeometry().getExtent(), 10000);
 
           result.query.bbox = extent.map(Math.floor).join(',');
+        }
+
+        return result;
+      },
+
+      linkToParaglidingOutings() {
+        const result = {
+          name: 'outings',
+          query: {
+            act: 'paragliding',
+            w: this.documentType === 'waypoint' ? [this.document.document_id] : []
+          }
+        };
+
+        for (const waypoint of this.document.associations.waypoints) {
+          result.query.w.push(waypoint.document_id);
+        }
+        for (const waypoint of this.document.associations.waypoint_children) {
+          result.query.w.push(waypoint.document_id);
         }
 
         return result;
