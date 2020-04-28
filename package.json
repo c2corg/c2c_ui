@@ -89,8 +89,7 @@
     "> 1%",
     "last 2 versions",
     "not dead",
-    "not ie <= 10",
-    "Chrome 41"
+    "not ie <= 10"
   ],
   "snyk": true
 }
