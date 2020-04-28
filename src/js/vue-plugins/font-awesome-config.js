@@ -156,9 +156,12 @@ import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
 
 import documentTypeOuting from '@/assets/font-awesome-custom/js/document-type/outing';
 
+import paragliding from '@/assets/font-awesome-custom/js/miscs/paragliding';
+
 // registered globally
 export default function install(Vue) {
   library.add(
+    paragliding,
 
     documentTypeOuting,
 
