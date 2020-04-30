@@ -1968,6 +1968,16 @@ msgctxt "Map layer"
 msgid "IGN ortho"
 msgstr ""
 
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN ortho (es)"
+msgstr ""
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN raster (es)"
+msgstr ""
+
 #: src/translations/fixed_strings_manual.vue
 msgid "image"
 msgstr ""
@@ -2853,6 +2863,10 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "activities"
 msgid "paragliding"
+msgstr ""
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Paragliding outings"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
