@@ -48,6 +48,7 @@ const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`);
 const AssociationsHistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
+const AssociationsNetworkView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsNetworkView.vue`);
 
 const routes = [
   { path: '/', name: 'home', component: FeedView },
@@ -63,6 +64,8 @@ const routes = [
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
+
+  { path: '/associations-network/:documentType/:id(\\d+)?', name: 'associations-network', component: AssociationsNetworkView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
