@@ -19,7 +19,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current', r
   });
 }
 
-function createIgnSource(title, layer, format = 'jpeg') {
+function createIgnFrSource(title, layer, format = 'jpeg') {
   const resolutions = [];
   const matrixIds = [];
   const proj3857 = ol.proj.get('EPSG:3857');
@@ -45,7 +45,7 @@ function createIgnSource(title, layer, format = 'jpeg') {
     tileGrid,
     style: 'normal',
     attributions: [
-      '<a href="http://www.geoportail.fr/" target="_blank" rel="noreferer">' +
+      '<a href="http://www.geoportail.fr/" target="_blank" rel="noreferer noopener">' +
         '<img src="//api.ign.fr/geoportail/api/js/latest/' +
         'theme/geoportal/img/logo_gp.gif"></a>'
     ]
@@ -59,12 +59,73 @@ function createIgnSource(title, layer, format = 'jpeg') {
   });
 }
 
+/**
+ * Creates map layer for IGN spain.
+ * Available maps useful for c2c are:
+ * - raster
+ * - base
+ * - ortho
+ *
+ * See http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign
+ */
+function createIgnEsSource(title, source) {
+  let url = 'http://www.ign.es/wmts/';
+  let layer;
+  switch (source) {
+  case 'raster':
+  default:
+    url += 'mapa-raster';
+    layer = 'MTN';
+    break;
+  case 'base':
+    url += 'ign-base';
+    layer = 'IGNBaseTodo';
+    break;
+  case 'ortho':
+    url += 'pnoa-ma';
+    layer = 'OI.OrthoimageCoverage';
+    break;
+  }
+
+  const levels = 21;
+  const proj3857 = ol.proj.get('EPSG:3857');
+  const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
+  const resolutions = [];
+  const matrixIds = [];
+  for (let i = 0; i < levels; i++) {
+    matrixIds[i] = i.toString();
+    resolutions[i] = maxResolution / Math.pow(2, i);
+  }
+
+  const tileGrid = new ol.tilegrid.WMTS({
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
+    origin: [-20037508.34, 20037508.34],
+    resolutions,
+    matrixIds
+  });
+
+  return new ol.layer.Tile({
+    title,
+    type: 'base',
+    visible: false,
+    source: new ol.source.WMTS({
+      url,
+      layer,
+      matrixSet: 'EPSG:3857',
+      format: 'image/jpeg',
+      projection: 'EPSG:3857',
+      tileGrid,
+      attributions: ['CC BY 4.0 <a href="www.scne.es" target="_blank" rel="noreferrer noopener>www.scne.es</a>']
+    })
+  });
+}
+
 export const cartoLayers = function() {
   // $gettext('ESRI', 'Map layer')
   const esri = new ol.layer.Tile({
     title: 'Esri',
     type: 'base',
-    visible: true,
+    visible: false,
     source: new ol.source.XYZ({
       url:
         'https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/' +
@@ -78,13 +139,6 @@ export const cartoLayers = function() {
       maxZoom: 19
     })
   });
-
-  /*
-  var openStreetMap = new ol.layer.Tile({
-      title: 'OpenStreetMap',
-      source: new OSM(),
-      visible: false,
-  }) */
 
   // $gettext('Bing', 'Map layer')
   const bingMap = new ol.layer.Tile({
@@ -100,9 +154,9 @@ export const cartoLayers = function() {
   const openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
     type: 'base',
-    visible: false,
+    visible: true,
     source: new ol.source.XYZ({
-      url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
+      url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       attributions:
         '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
         '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
@@ -111,18 +165,21 @@ export const cartoLayers = function() {
   });
 
   // $gettext('IGN maps', 'Map layer')
-  const ignMaps = createIgnSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+  const ignFrMaps = createIgnFrSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
-  const ignOrtho = createIgnSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
   // $gettext('SwissTopo', 'Map layer')
   const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current', true);
-
-  return [esri, /* openStreetMap, */ openTopoMap, bingMap, ignMaps, ignOrtho, swissTopo];
+  // $gettext('IGN raster (es)', 'Map layer')
+  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
+  // $gettext('IGN ortho (es)', 'Map layer')
+  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ortho');
+  return [openTopoMap, esri, bingMap, ignFrMaps, ignFrOrtho, swissTopo, ignEsMaps, ignEsOrtho];
 };
 
 export const dataLayers = function() {
   // $gettext('IGN', 'Map slopes layer')
-  const ignSlopes = createIgnSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+  const ignSlopes = createIgnFrSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo', 'Map slopes layer')
   const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101', true);
