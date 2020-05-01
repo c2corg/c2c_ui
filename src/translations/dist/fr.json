@@ -437,7 +437,7 @@
     "draft": {
       "quality_types": "ébauche"
     },
-    "Drop images here or click to upload": "Faites glisser des images ici ou cliquer pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.demov6.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
+    "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
     "durations": "Durée",
@@ -1039,6 +1039,7 @@
     "paragliding": {
       "activities": "Parapente"
     },
+    "Paragliding outings": "Sorties parapente",
     "paragliding_instructor": {
       "user_categories": "moniteur de parapente"
     },
@@ -1174,7 +1175,7 @@
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
     "Put it back": "Remettre",
-    "quality": "Complétude",
+    "quality": "Qualité du document",
     "quartzite": {
       "rock_types": "quartzite"
     },

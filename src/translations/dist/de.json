@@ -152,6 +152,7 @@
       "article_categories": "Camptocamp Verein"
     },
     "associations": "Verbindungen",
+    "Associations history": "Geschichte der Verbindungen",
     "at least one route required": {
       "API message": "wenigstens eine Route ist nötig"
     },
@@ -268,6 +269,7 @@
     "Change account parameters": "Konto-Parameter ändern",
     "Change password": "Passwort ändern",
     "Checking...": "Überprüfen ...",
+    "Child": "Kind",
     "children_proof": "Kinderfreundlich",
     "Clear": "Löschen",
     "cleared": {
@@ -338,7 +340,9 @@
     },
     "Continue the discussion": "Diskussion fortsetzen",
     "Contribute to common knowledge": "Tragen Sie zum Allgemeinwissen bei",
+    "Contribute to maintainance": "Zur Instandhaltung beitragen",
     "Contributions": "Beitragen",
+    "Contributor": "Beiträger",
     "contributor": "Beiträger",
     "copyright": {
       "image_types": "Copyright",
@@ -364,6 +368,7 @@
     },
     "Create a new report": "Neuen Unfallbericht verfassen",
     "Created on": "Erstellt am",
+    "Creation?": "Verfassung ?",
     "crevasse_fall": {
       "event_types": "Absturz in eine Spalte"
     },
@@ -657,6 +662,7 @@
     "height_max": "Maximale Höhe",
     "height_median": "Durchschnittliche Höhe",
     "height_min": "Minimale Höhe",
+    "Help": "Hilfe",
     "help": {
       "image_categories": "Hilfe",
       "$$noContext": "Hilfe"
@@ -1054,6 +1060,7 @@
       "waypoint_types": "Gleitschirmstart"
     },
     "Parameters of the Digital Camera": "Details des Kamera",
+    "Parent": "Eltern",
     "parking_fee": "Parkgebühr oder Mautstraße",
     "partial_trip": "teilweise geschafft",
     "participant_count": "Anzahl der Teilnehmer",

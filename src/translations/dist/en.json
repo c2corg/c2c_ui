@@ -567,6 +567,12 @@
     "IGN ortho": {
       "Map layer": "IGN satellite"
     },
+    "IGN ortho (es)": {
+      "Map layer": "IGN satellite Spain"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN raster Spain"
+    },
     "impossible": {
       "glacier_ratings": "travel is impossible"
     },
@@ -943,7 +949,7 @@
     "public_transportation_types": "Public transportation types",
     "publication_date": "Publication date",
     "Put it back": "Restore",
-    "quality": "Completeness",
+    "quality": "Document's quality",
     "quartzite": {
       "rock_types": "quartzite"
     },
