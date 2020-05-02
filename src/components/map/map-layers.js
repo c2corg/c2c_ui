@@ -120,9 +120,60 @@ function createIgnEsSource(title, source) {
   });
 }
 
+function createBaseMapDotAtSource(title, source) {
+  let format;
+  let layer;
+  switch (source) {
+    case 'raster':
+    default:
+      format = 'png';
+      layer = 'bmapgrau';
+      break;
+    case 'ortho':
+      format = 'jpeg';
+      layer = 'bmaporthofoto30cm';
+      break;
+  }
+
+  const levels = 20;
+  const proj3857 = ol.proj.get('EPSG:3857');
+  const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
+  const resolutions = [];
+  const matrixIds = [];
+  for (let i = 0; i < levels; i++) {
+    matrixIds[i] = i.toString();
+    resolutions[i] = maxResolution / Math.pow(2, i);
+  }
+
+  const tileGrid = new ol.tilegrid.WMTS({
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
+    origin: [-20037508.34, 20037508.34],
+    resolutions,
+    matrixIds
+  });
+
+  return new ol.layer.Tile({
+    title,
+    type: 'base',
+    visible: false,
+    source: new ol.source.WMTS({
+      name: 'basemap.at',
+      urls: ['', '1', '2', '3', '4'].map(
+        (i) =>
+          `https://maps${i}.wien.gv.at/basemap/${layer}/normal/google3857/{TileMatrix}/{TileRow}/{TileCol}.${format}`
+      ),
+      requestEncoding: 'REST',
+      layer: 'geolandbasemap',
+      matrixSet: 'google3857',
+      tileGrid,
+      attributions: '<a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>'
+    })
+  });
+}
+
 export const cartoLayers = function() {
   // $gettext('ESRI', 'Map layer')
-  const esri = new ol.layer.Tile({
+  /* const esri = new ol.layer.Tile({
     title: 'Esri',
     type: 'base',
     visible: false,
@@ -138,17 +189,17 @@ export const cartoLayers = function() {
       ],
       maxZoom: 19
     })
-  });
+  }); */
 
   // $gettext('Bing', 'Map layer')
-  const bingMap = new ol.layer.Tile({
+  /* const bingMap = new ol.layer.Tile({
     title: 'Bing',
     source: new ol.source.BingMaps({
       key: config.bingApiKey,
       imagerySet: 'AerialWithLabels'
     }),
     visible: false
-  });
+  }); */
 
   // $gettext('OpenTopoMap', 'Map layer')
   const openTopoMap = new ol.layer.Tile({
@@ -174,7 +225,22 @@ export const cartoLayers = function() {
   const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
   const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ortho');
-  return [openTopoMap, esri, bingMap, ignFrMaps, ignFrOrtho, swissTopo, ignEsMaps, ignEsOrtho];
+  // $gettext('Basemap (at)', 'Map layer')
+  const basemap = createBaseMapDotAtSource('Basemap (at)', 'raster');
+  // $gettext('Basemap ortho (at)', 'Map layer')
+  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'ortho');
+  return [
+    openTopoMap,
+    /* esri, */
+    /* bingMap, */
+    ignFrMaps,
+    ignFrOrtho,
+    swissTopo,
+    ignEsMaps,
+    ignEsOrtho,
+    basemap,
+    basemapOrtho
+  ];
 };
 
 export const dataLayers = function() {
