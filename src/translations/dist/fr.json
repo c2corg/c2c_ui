@@ -698,13 +698,19 @@
     },
     "ice_rating": "Cotation glace",
     "IGN": {
-      "Map slopes layer": "Pentes IGN"
+      "Map slopes layer": "France (IGN)"
     },
     "IGN maps": {
-      "Map layer": "IGN"
+      "Map layer": "IGN Fr"
     },
     "IGN ortho": {
-      "Map layer": "IGN satellite"
+      "Map layer": "IGN Fr Sat"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Es Sat"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Es"
     },
     "image_categories": "Catégories",
     "image_type": "Type d'image (licence)",
@@ -1419,7 +1425,7 @@
     },
     "SwissTopo": {
       "Map layer": "SwissTopo",
-      "Map slopes layer": "Pentes SwissTopo"
+      "Map slopes layer": "Suisse (SwissTopo)"
     },
     "tags": {
       "article_categories": "tags"

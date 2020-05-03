@@ -559,19 +559,19 @@
     },
     "ice_rating": "Ice climbing rating",
     "IGN": {
-      "Map slopes layer": "IGN slopes"
+      "Map slopes layer": "France (IGN)"
     },
     "IGN maps": {
-      "Map layer": "IGN maps"
+      "Map layer": "IGN Fr"
     },
     "IGN ortho": {
-      "Map layer": "IGN satellite"
+      "Map layer": "IGN Fr Sat"
     },
     "IGN ortho (es)": {
-      "Map layer": "IGN satellite Spain"
+      "Map layer": "IGN Es Sat"
     },
     "IGN raster (es)": {
-      "Map layer": "IGN raster Spain"
+      "Map layer": "IGN Es"
     },
     "impossible": {
       "glacier_ratings": "travel is impossible"
@@ -1151,7 +1151,7 @@
     },
     "SwissTopo": {
       "Map layer": "SwissTopo",
-      "Map slopes layer": "SwissTopo slopes"
+      "Map slopes layer": "Switzerland (SwissTopo)"
     },
     "tags": {
       "article_categories": "tags"

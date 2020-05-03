@@ -708,10 +708,16 @@
       "Map slopes layer": "IGN Neigung"
     },
     "IGN maps": {
-      "Map layer": "IGN"
+      "Map layer": "IGN Frankreich"
     },
     "IGN ortho": {
-      "Map layer": "IGN Satelliten"
+      "Map layer": "IGN Satelliten Frankreich"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Satelliten Spanien"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Spanien"
     },
     "image": "Bild",
     "image_categories": "Kategorien",
@@ -1049,6 +1055,7 @@
     "paragliding": {
       "activities": "Gleitschirmfliegen"
     },
+    "Paragliding outings": "Gleitschirmberichte",
     "paragliding_instructor": {
       "user_categories": "Fluglehrer"
     },
