@@ -107,15 +107,11 @@
       :sub-title="$gettext('Associated routes cotations')">
 
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.exposition_rating" />
-        <form-field :document="document" :field="fields.climbing_rating_min" />
-        <form-field :document="document" :field="fields.climbing_rating_median" />
-        <form-field :document="document" :field="fields.climbing_rating_max" />
-      </div>
-
-      <div class="columns">
-        <form-field :document="document" :field="fields.equipment_ratings" />
-        <form-field :document="document" :field="fields.paragliding_rating" />
+        <form-field class="is-4" :document="document" :field="fields.climbing_rating_min" />
+        <form-field class="is-4" :document="document" :field="fields.climbing_rating_median" />
+        <form-field class="is-4" :document="document" :field="fields.climbing_rating_max" />
+        <form-field class="is-4" :document="document" :field="fields.equipment_ratings" />
+        <form-field class="is-4" :document="document" :field="fields.paragliding_rating" />
       </div>
     </form-section>
 
