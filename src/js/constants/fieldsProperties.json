@@ -356,12 +356,6 @@
         "multiple": true,
         "helper": "1063015#event-type"
     },
-    "exposition_rating":
-    {
-        "values": "exposition_ratings",
-        "queryMode": "valuesRangeSlider",
-        "i18n": false
-    },
     "exposition_rock_rating":
     {
         "values": "exposition_rock_ratings",

@@ -68,7 +68,6 @@
               <field-view :document="document" :field="fields.climbing_rating_median" />
               <field-view :document="document" :field="fields.equipment_ratings" />
               <field-view :document="document" :field="fields.paragliding_rating" />
-              <field-view :document="document" :field="fields.exposition_rating" />
 
               <!-- heights -->
               <field-view :document="document" :field="fields.prominence" />
