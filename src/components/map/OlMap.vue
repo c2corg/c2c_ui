@@ -15,14 +15,14 @@
           <tr>
             <td>
               <header v-translate>Base layer</header>
-              <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
+              <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
                 <input :checked="layer==visibleLayer" type="radio">
                 {{ $gettext(layer.get('title'), 'Map layer') }}
               </div>
             </td>
             <td>
               <header v-translate>Slopes</header>
-              <div v-for="layer of dataLayers" :key="layer.title" @click="toogleMapLayer(layer)">
+              <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
                 <input :checked="layer.getVisible()" type="checkbox">
                 {{ $gettext(layer.get('title'), 'Map slopes layer') }}
               </div>
