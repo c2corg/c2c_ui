@@ -395,6 +395,11 @@ msgstr ""
 msgid "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made."
 msgstr ""
 
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Attributions"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "months"
 msgid "aug"
@@ -2179,6 +2184,11 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "Latitude"
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Layers"
 msgstr ""
 
 #: src/components/markdown-editor/MarkdownEditor.vue
@@ -4008,6 +4018,11 @@ msgstr ""
 msgid "Title, activity and characteristics of the picture"
 msgstr ""
 
+#: src/components/map/OlMap.vue
+msgctxt "Map Controls"
+msgid "Toggle full-screen"
+msgstr ""
+
 #: src/components/markdown-editor/MarkdownEditor.vue
 msgid "Toggle fullscreen"
 msgstr ""
@@ -4328,4 +4343,14 @@ msgstr ""
 
 #: src/views/wiki/edition/utils/MapInputRow.vue
 msgid "You may also drag, draw or edit the track on the map."
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Zoom in"
+msgstr ""
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Zoom out"
 msgstr ""
