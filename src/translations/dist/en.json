@@ -129,6 +129,9 @@
     "at least one user required": {
       "API message": "Select at least one user"
     },
+    "Attributions": {
+      "Map controls": "Attributions"
+    },
     "aug": {
       "months": "aug"
     },
@@ -166,6 +169,12 @@
     },
     "base_camp": {
       "waypoint_types": "base camp"
+    },
+    "Basemap (at)": {
+      "Map layer": "Austria"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Autria Sat"
     },
     "best_periods": "Best periods",
     "Bing": {
@@ -622,6 +631,9 @@
     },
     "lang": "Language",
     "langs": "Languages",
+    "Layers": {
+      "Map controls": "Layers"
+    },
     "length": "Length",
     "length_total": "Total length",
     "level_1": {
@@ -1174,6 +1186,9 @@
     "time_management": "Time management",
     "timing": "Timing",
     "title": "Title",
+    "Toggle full-screen": {
+      "Map Controls": "Toggle full-screen"
+    },
     "topo": {
       "book_types": "topo",
       "image_categories": "topo"
@@ -1251,6 +1266,12 @@
     "yes": {
       "parking_fee_types": "yes",
       "$$noContext": "yes"
+    },
+    "Zoom in": {
+      "Map controls": "Zoom in"
+    },
+    "Zoom out": {
+      "Map controls": "Zoom out"
     }
   }
 }

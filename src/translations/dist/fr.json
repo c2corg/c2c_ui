@@ -158,6 +158,9 @@
       "API message": "Sélectionnez au moins un itinéraire"
     },
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre.",
+    "Attributions": {
+      "Map controls": "Attributions"
+    },
     "aug": {
       "months": "août"
     },
@@ -201,6 +204,12 @@
     "Base layer": "Fond de carte",
     "base_camp": {
       "waypoint_types": "camp de base"
+    },
+    "Basemap (at)": {
+      "Map layer": "Autriche"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Autriche Sat"
     },
     "best_periods": "Meilleures périodes",
     "Bing": {
@@ -531,7 +540,7 @@
     "fauna": {
       "image_categories": "faune"
     },
-    "Fauna protection areas": "Zone de protection de la faune",
+    "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "feb": {
       "months": "février"
@@ -779,6 +788,9 @@
     "langs": "Langues",
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
+    "Layers": {
+      "Map controls": "Couches"
+    },
     "Leave fullscreen": "Quitter le mode plein écran",
     "length": "Longueur",
     "length_total": "Longueur totale",
@@ -1467,6 +1479,9 @@
     "title": "Titre",
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
+    "Toggle full-screen": {
+      "Map Controls": "Mode plein écran"
+    },
     "Toggle fullscreen": "Basculer en plein écran",
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche.",
     "topo": {
@@ -1573,6 +1588,12 @@
     },
     "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
     "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
-    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
+    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
+    "Zoom in": {
+      "Map controls": "Zoomer"
+    },
+    "Zoom out": {
+      "Map controls": "Dézoomer"
+    }
   }
 }
