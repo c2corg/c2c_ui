@@ -3,40 +3,38 @@
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false" />
 
-    <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
+    <div
+      ref="layerSwitcherButton"
+      class="ol-control ol-control-layer-switcher-button"
+      :title="$gettext('Layers', 'Map controls')"
+    >
       <button @click.stop="showLayerSwitcher=!showLayerSwitcher">
         <fa-icon icon="layer-group" />
       </button>
     </div>
 
-    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher">
+    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div>
-        <table>
-          <tr>
-            <td>
-              <header v-translate>Base layer</header>
-              <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
-                <input :checked="layer==visibleLayer" type="radio">
-                {{ $gettext(layer.get('title'), 'Map layer') }}
-              </div>
-            </td>
-            <td>
-              <header v-translate>Slopes</header>
-              <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
-                <input :checked="layer.getVisible()" type="checkbox">
-                {{ $gettext(layer.get('title'), 'Map slopes layer') }}
-              </div>
-            </td>
-            <td v-if="showProtectionAreas && !editable">
-              <header v-translate>Protection areas</header>
-              <input
-                type="checkbox"
-                :checked="protectionAreasVisible"
-                @click="toggleProtectionAreas">
-              <span v-translate>Fauna protection areas</span>
-            </td>
-          </tr>
-        </table>
+        <header v-translate>Base layer</header>
+        <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
+          <input :checked="layer==visibleLayer" type="radio">
+          {{ $gettext(layer.get('title'), 'Map layer') }}
+        </div>
+      </div>
+      <div>
+        <header v-translate>Slopes</header>
+        <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
+          <input :checked="layer.getVisible()" type="checkbox">
+          {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+        </div>
+        <template v-if="showProtectionAreas && !editable">
+          <header v-translate>Protection areas</header>
+          <input
+            type="checkbox"
+            :checked="protectionAreasVisible"
+            @click="toggleProtectionAreas">
+          <span v-translate>Fauna protection areas</span>
+        </template>
       </div>
     </div>
 
@@ -343,8 +341,11 @@
         target: this.$refs.map,
 
         controls: [
-          new ol.control.Zoom(),
-          new ol.control.FullScreen({ source: this.$el }),
+          new ol.control.Zoom({
+            zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
+            zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls')
+          }),
+          new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
           new ol.control.ScaleLine(),
           new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
           new ol.control.Control({ element: this.$refs.layerSwitcher }),
@@ -354,7 +355,7 @@
           new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
           new ol.control.Control({ element: this.$refs.resetGeometry }),
           new ol.control.Control({ element: this.$refs.clearGeometry }),
-          new ol.control.Attribution()
+          new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') })
         ],
 
         layers: [
@@ -854,11 +855,6 @@
 </script>
 
 <style lang="scss">
-  // for styling ol elements
-  .ol-attribution {
-    background: white !important;
-  }
-
   // disable mobile CSS for controls.
   .ol-touch .ol-control button {
     font-size: 1.14em !important;
@@ -949,13 +945,27 @@
   }
 
   //style on layers popup
-  .ol-control-layer-switcher > div {
+  .ol-control-layer-switcher {
     color: white;
     text-decoration: none;
-    background-color: rgba(0, 60, 136, 0.5);
+    background-color: rgba(0, 60, 136, 0.6);
     border: none;
     border-radius: 2px;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
+    display: flex;
+
+    & > div {
+      width: 50%;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+
+      header {
+        font-weight: bold;
+        padding-top: 10px;
+      }
+    }
   }
 </style>
 
