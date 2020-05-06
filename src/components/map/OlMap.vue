@@ -9,34 +9,28 @@
       </button>
     </div>
 
-    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher">
+    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div>
-        <table>
-          <tr>
-            <td>
-              <header v-translate>Base layer</header>
-              <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
-                <input :checked="layer==visibleLayer" type="radio">
-                {{ $gettext(layer.get('title'), 'Map layer') }}
-              </div>
-            </td>
-            <td>
-              <header v-translate>Slopes</header>
-              <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
-                <input :checked="layer.getVisible()" type="checkbox">
-                {{ $gettext(layer.get('title'), 'Map slopes layer') }}
-              </div>
-            </td>
-            <td v-if="showProtectionAreas && !editable">
-              <header v-translate>Protection areas</header>
-              <input
-                type="checkbox"
-                :checked="protectionAreasVisible"
-                @click="toggleProtectionAreas">
-              <span v-translate>Fauna protection areas</span>
-            </td>
-          </tr>
-        </table>
+        <header v-translate>Base layer</header>
+        <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
+          <input :checked="layer==visibleLayer" type="radio">
+          {{ $gettext(layer.get('title'), 'Map layer') }}
+        </div>
+      </div>
+      <div>
+        <header v-translate>Slopes</header>
+        <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
+          <input :checked="layer.getVisible()" type="checkbox">
+          {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+        </div>
+        <template v-if="showProtectionAreas && !editable">
+          <header v-translate>Protection areas</header>
+          <input
+            type="checkbox"
+            :checked="protectionAreasVisible"
+            @click="toggleProtectionAreas">
+          <span v-translate>Fauna protection areas</span>
+        </template>
       </div>
     </div>
 
@@ -949,13 +943,27 @@
   }
 
   //style on layers popup
-  .ol-control-layer-switcher > div {
+  .ol-control-layer-switcher {
     color: white;
     text-decoration: none;
-    background-color: rgba(0, 60, 136, 0.5);
+    background-color: rgba(0, 60, 136, 0.6);
     border: none;
     border-radius: 2px;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
+    display: flex;
+
+    & > div {
+      width: 50%;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+
+      header {
+        font-weight: bold;
+        padding-top: 10px;
+      }
+    }
   }
 </style>
 
