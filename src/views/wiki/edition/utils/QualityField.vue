@@ -33,8 +33,7 @@
 <script>
 
   import constants from '@/js/constants';
-  import FormRow from './FormRow';
-
+ 
   function getQualityFromScore(score) {
     if (score < 1) {
       return 'empty';
@@ -190,8 +189,6 @@
   }
 
   export default {
-    components: { FormRow },
-
     props: {
       document: {
         type: Object,

@@ -92,7 +92,7 @@ const bundleAnalyzerConfig = {
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   // add an url conf for local API devloppers :
-  config.urlsConfigurations['localhost'] = {
+  config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: 'http://localhost:6543',
     media: 'https://sos.exo.io/c2corg-demov6-active',

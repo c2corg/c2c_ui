@@ -92,6 +92,8 @@
             throw new Error(`Unexpected image_type : ${this.document.image_type}`);
           }
         }
+
+        throw new Error(`Unexpected document_type: ${this.documentType}`);
       }
     }
   };
