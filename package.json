@@ -72,6 +72,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
     "eslint-plugin-vue": "6.2.2",
+    "husky": "4.2.5",
     "node-sass": "4.14.1",
     "sass-loader": "8.0.2",
     "snyk": "1.319.0",
@@ -91,5 +92,10 @@
     "not dead",
     "not ie <= 10"
   ],
-  "snyk": true
+  "snyk": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run messages:extract && git add src/translations/po/c2corg_ui-client.pot"
+    }
+  }
 }
