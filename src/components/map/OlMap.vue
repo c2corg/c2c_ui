@@ -3,7 +3,11 @@
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false" />
 
-    <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
+    <div
+      ref="layerSwitcherButton"
+      class="ol-control ol-control-layer-switcher-button"
+      :title="$gettext('Layers', 'Map controls')"
+    >
       <button @click.stop="showLayerSwitcher=!showLayerSwitcher">
         <fa-icon icon="layer-group" />
       </button>
@@ -337,8 +341,11 @@
         target: this.$refs.map,
 
         controls: [
-          new ol.control.Zoom(),
-          new ol.control.FullScreen({ source: this.$el }),
+          new ol.control.Zoom({
+            zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
+            zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls')
+          }),
+          new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
           new ol.control.ScaleLine(),
           new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
           new ol.control.Control({ element: this.$refs.layerSwitcher }),
@@ -348,7 +355,7 @@
           new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
           new ol.control.Control({ element: this.$refs.resetGeometry }),
           new ol.control.Control({ element: this.$refs.clearGeometry }),
-          new ol.control.Attribution()
+          new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') })
         ],
 
         layers: [
