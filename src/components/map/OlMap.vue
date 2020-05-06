@@ -17,7 +17,7 @@
               <header v-translate>Base layer</header>
               <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
                 <input :checked="layer==visibleLayer" type="radio">
-                {{ $gettext(layer.get('title', 'Map layer')) }}
+                {{ $gettext(layer.get('title'), 'Map layer') }}
               </div>
             </td>
             <td>
