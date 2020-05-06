@@ -855,11 +855,6 @@
 </script>
 
 <style lang="scss">
-  // for styling ol elements
-  .ol-attribution {
-    background: white !important;
-  }
-
   // disable mobile CSS for controls.
   .ol-touch .ol-control button {
     font-size: 1.14em !important;
