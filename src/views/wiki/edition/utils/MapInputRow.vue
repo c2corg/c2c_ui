@@ -46,15 +46,12 @@
   import ol from '@/js/libs/ol.js';
 
   import { requireDocumentProperty } from '@/js/properties-mixins';
-  import FormRow from './FormRow';
 
   const geoJSONFormat = new ol.format.GeoJSON();
   const FORM_PROJ = 'EPSG:4326';
   const DATA_PROJ = 'EPSG:3857';
 
   export default {
-
-    components: { FormRow },
 
     mixins: [ requireDocumentProperty ],
 

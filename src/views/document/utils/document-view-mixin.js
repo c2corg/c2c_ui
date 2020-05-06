@@ -204,7 +204,9 @@ export default {
         path += this.$route.hash;
       }
 
-      this.$router.replace(path);
+      if (this.$route.path !== path) {
+        this.$router.replace(path);
+      }
     }
   }
 };

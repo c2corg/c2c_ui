@@ -38,13 +38,13 @@
           </h3>
           <loading-notification :promise="outingsPromise" />
           <div v-if="outingsByDate!=null">
-            <div v-for="(outings, date) of outingsByDate" :key="date">
+            <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
               <h4 class="outing-date-header has-text-centered is-italic has-text-weight-bold">
                 <router-link :to="{name: 'outings', query:{date: `${date},${date}`}}">
                   {{ $moment.toLocalizedString(date, "dddd Do MMMM YYYY") | uppercaseFirstLetter }}
                 </router-link>
               </h4>
-              <dashboard-outing-link v-for="outing of outings" :key="outing.document_id" :outing="outing" />
+              <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
             </div>
           </div>
         </div>

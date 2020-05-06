@@ -4,10 +4,24 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const result = {
   publicPath: '/',
 
-  // remove prefetch plugin, in order to prevent loading of translations
-  // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
   chainWebpack(config) {
+    // remove prefetch plugin, in order to prevent loading of translations
+    // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
     config.plugins.delete('prefetch');
+
+    // preserveWhitespace option was set to false by default in vue-cli v4
+    // https://cli.vuejs.org/migrating-from-v3/#vue-cli-service
+    // cutomize options
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .loader('vue-loader')
+      .tap((options) => {
+        // modify the options...
+        delete options.compilerOptions.preserveWhitespace;
+        options.compilerOptions.whitespace = 'condensed';
+        return options;
+      });
   },
 
   configureWebpack: {
@@ -92,7 +106,7 @@ const bundleAnalyzerConfig = {
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   // add an url conf for local API devloppers :
-  config.urlsConfigurations['localhost'] = {
+  config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: 'http://localhost:6543',
     media: 'https://sos.exo.io/c2corg-demov6-active',

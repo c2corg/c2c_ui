@@ -125,12 +125,12 @@
                 <div v-if="promiseMountains">
                   <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
                   <dl>
-                    <div v-for="(mountains, massif) of visibleMountains" :key="massif">
+                    <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
                       <dt class="yetimountains-listtitle">
                         {{ massif }}
                       </dt>
                       <div class="yetimountains-list">
-                        <dd class="yetimountains-listelement" v-for="mountain of mountains" :key="mountain.title">
+                        <dd class="yetimountains-listelement" v-for="mountain of mountainsForMAssif" :key="mountain.title">
                           <a :href="'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' + mountain.id_mf + '.pdf'" target="_blank" v-if="mountain.id_mf">
                             <fa-icon icon="external-link-alt" />
                             {{ mountain.title }}
