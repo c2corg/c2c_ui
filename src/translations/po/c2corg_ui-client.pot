@@ -512,6 +512,16 @@ msgctxt "waypoint_types"
 msgid "base_camp"
 msgstr ""
 
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "Basemap (at)"
+msgstr ""
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "Basemap ortho (at)"
+msgstr ""
+
 #: src/translations/fixed_strings_common_js.vue
 msgid "best_periods"
 msgstr ""
