@@ -39,7 +39,7 @@
     "axios": "0.19.2",
     "blueimp-load-image": "5.6.0",
     "bulma": "0.8.2",
-    "bulma-checkradio": "2.1.1",
+    "bulma-checkradio": "1.1.1",
     "core-js": "3.6.5",
     "d3": "5.16.0",
     "file-saver": "2.0.2",
