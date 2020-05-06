@@ -4,7 +4,7 @@
     <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false" />
 
     <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
-      <button @click="showLayerSwitcher=!showLayerSwitcher">
+      <button @click.stop="showLayerSwitcher=!showLayerSwitcher">
         <fa-icon icon="layer-group" />
       </button>
     </div>

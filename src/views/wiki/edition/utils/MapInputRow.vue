@@ -152,11 +152,8 @@
     cursor: pointer;
   }
 
-  // on mobile set heigth to 400px, otherwise it's too small
-  @media screen and (max-width: $tablet) {
-    .map-container{
-      height: 400px;
-    }
+  .map-container{
+    height: 400px;
   }
 
 </style>
