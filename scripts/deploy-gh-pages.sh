@@ -17,4 +17,4 @@ mv dist gh-pages/$CLEAN_BRANCH
 cd gh-pages
 git add .
 git commit -m "Deploy $CLEAN_BRANCH ($BRANCH) branch"
-git push > /dev/null 2>&1
+git push
