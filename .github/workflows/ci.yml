@@ -13,37 +13,37 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-        steps:
-          - uses: actions/checkout@v1
-          - name: Cache node modules
-            uses: actions/cache@v1
-            env:
-              cache-name: cache-node-modules
-            with:
-              path: ~/.npm
-              key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-              restore-keys: |
-                ${{ runner.os }}-build-${{ env.cache-name }}-
-                ${{ runner.os }}-build-
-                ${{ runner.os }}-
-          - name: Use Node.js ${{ matrix.node-version }}
-            uses: actions/setup-node@v1
-            with:
-              node-version: ${{ matrix.node-version }}
-          - name: npm install, lint and build
-            run: |
-              npm ci
-              npm run lint:no-fix
-              npm run build
-            env:
-              CI: ${{ true }}
-          - name: Build and publish Docker image
-            if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-            uses: elgohr/Publish-Docker-Github-Action@master
-            with:
-              name: c2corg/c2c_ui
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, lint and build
+        run: |
+          npm ci
+          npm run lint:no-fix
+          npm run build
+        env:
+          CI: ${{ true }}
+      - name: Build and publish Docker image
+        if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: c2corg/c2c_ui
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy-to-github-pages:
     needs: build
@@ -51,36 +51,36 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-        steps:
-          - uses: actions/checkout@v1
-          - name: Get the branch
-            id: get_branch
-            run: echo ::set-output name=BRANCH::${GITHUB_REF/refs\/heads\//}
-          - name: Cache node modules
-            uses: actions/cache@v1
-            env:
-              cache-name: cache-node-modules
-            with:
-              path: ~/.npm
-              key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-              restore-keys: |
-                ${{ runner.os }}-build-${{ env.cache-name }}-
-                ${{ runner.os }}-build-
-                ${{ runner.os }}-
-          - name: Use Node.js ${{ matrix.node-version }}
-            uses: actions/setup-node@v1
-            with:
-              node-version: ${{ matrix.node-version }}
-          - name: Build for github pages
-            run: |
-              npm ci
-              npm run build:github
-          - name: Deploy branch to github pages
-            run: bash scripts/deploy-gh-pages.sh
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              REPOSITORY: ${{ github.repository }}
-              BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get the branch
+        id: get_branch
+        run: echo ::set-output name=BRANCH::${GITHUB_REF/refs\/heads\//}
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build for github pages
+        run: |
+          npm ci
+          npm run build:github
+      - name: Deploy branch to github pages
+        run: bash scripts/deploy-gh-pages.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
 
   update-release-description:
     needs: build
