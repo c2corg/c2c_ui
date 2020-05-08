@@ -278,13 +278,25 @@ export default function install(Vue) {
         const sameDay = start.date() === end.date();
 
         if (!sameYear) {
-          return start.format('Do MMMM YYYY') + ' - ' + end.format('Do MMMM YYYY');
+          return start.format('LL') + ' - ' + end.format('LL');
         } else if (!sameMonth) {
-          return start.format('Do MMMM') + ' - ' + end.format('Do MMMM YYYY');
+          return start.format('Do MMMM') + ' - ' + end.format('LL');
         } else if (!sameDay) {
-          return start.format('Do') + ' - ' + end.format('Do MMMM YYYY');
+          return start.format('Do') + ' - ' + end.format('LL');
         } else {
-          return end.format('dddd Do MMMM YYYY');
+          // moment does not offer a short hand for date with weekday.
+          const longFormat = {
+            'ca': 'dddd D MMMM [de] YYYY [a les]',
+            'de': 'ddd, D. MMMM YYYY',
+            'en': 'dddd, D MMMM YYYY',
+            'es': 'dddd, D [de] MMMM [de]',
+            'eu': 'dddd, YYYY[ko] MMMM[ren] D[a]',
+            'fr': 'dddd D MMMM YYYY',
+            'it': 'dddd D MMMM YYYY',
+            'zh_CN': 'YYYY年M月D日dddd'
+          }[this.$language.current] || 'dddd Do MMMM YYYY';
+
+          return end.format(longFormat);
         }
       },
 
