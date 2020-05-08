@@ -23,3 +23,4 @@ yarn-error.log*
 
 # local helpers
 run-build.bat
+*.env
