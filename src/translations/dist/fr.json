@@ -1,5 +1,20 @@
 {
   "fr": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 ou 2 complications (plus pentu ou étroiture...)",
     "10min": {
       "access_times": "10min"
@@ -521,7 +536,6 @@
     "exposed": {
       "rain_proof_types": "exposé à la pluie"
     },
-    "exposition_rating": "Exposition",
     "exposition_rock_rating": "Exposition rocher",
     "exposure_time": "Temps d'exposition",
     "external_resources": "Ressources externes",

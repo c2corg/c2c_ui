@@ -737,7 +737,7 @@
     {
         "values": "paragliding_ratings",
         "queryMode": "valuesRangeSlider",
-        "i18n": false
+        "i18n": true
     },
     "parking_fee":
     {

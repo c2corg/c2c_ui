@@ -1,5 +1,20 @@
 {
   "en": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "10min": {
       "access_times": "10 min"
     },
@@ -420,7 +435,6 @@
     "exposed": {
       "rain_proof_types": "exposed"
     },
-    "exposition_rating": "Exposition rating",
     "exposition_rock_rating": "Rock exposition rating",
     "external_resources": "External resources",
     "external_witness": {
