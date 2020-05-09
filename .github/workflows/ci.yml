@@ -67,6 +67,8 @@ jobs:
           BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          ref: gh-pages
       - name: Retrieve github pages artifact
         uses: actions/download-artifact@v2
         with:
