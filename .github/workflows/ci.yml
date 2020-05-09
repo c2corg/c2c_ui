@@ -45,21 +45,42 @@ jobs:
           name: c2corg/c2c_ui
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build for github pages
+        run: npm run build:github
+      - name: Upload artifact for github pages
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-pages
+          path: dist/*
+
+  github-pages:
+    runs-on: ubuntu-latest
+    steps:
       - name: Get the branch
         id: get_branch
         run: echo ::set-output name=BRANCH::${GITHUB_REF/refs\/heads\//}
-      - name: Build for github pages
-        run: npm run build:github
-      - name: Configure git for remote pushs
+      - name: Create clean branch name
+        id: clean_branch
+        run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
+        env:
+          BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Retrieve github pages artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: github-pages
+          path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
+      - name: Commit files
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-      - name: Deploy branch to github pages
-        run: bash scripts/deploy-gh-pages.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
+          git commit -m "Deploy ${{ steps.get_branch.outputs.BRANCH }} branch"
+      - name: Push changes
+        uses: ad-m/github-push-action@0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
 
   update-release-description:
     needs: build
