@@ -91,7 +91,7 @@ jobs:
 
   create-release:
     needs: build
-    if: "contains(github.ref, 'refs/tags/v*')"
+    if: "contains(github.ref, 'refs/tags/v')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
