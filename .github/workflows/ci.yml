@@ -90,7 +90,7 @@ jobs:
 
   update-release-description:
     needs: build
-    if: "github.ref == 'refs/heads/master'"
+    if: "contains(github.ref, 'refs/tags/')"
     runs-on: ubuntu-latest
     steps:
       - name: Get the tag
