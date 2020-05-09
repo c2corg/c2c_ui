@@ -15,7 +15,7 @@ jobs:
         node-version: [12.x]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Cache node modules
         uses: actions/cache@v1
         env:
