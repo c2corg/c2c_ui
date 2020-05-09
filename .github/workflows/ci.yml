@@ -45,6 +45,7 @@ jobs:
           name: c2corg/c2c_ui
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tag_names: true
       - name: Build for github pages
         run: npm run build:github
       - name: Upload artifact for github pages
