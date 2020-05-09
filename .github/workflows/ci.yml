@@ -88,20 +88,29 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
 
-  update-release-description:
+  create-release:
     needs: build
-    if: "contains(github.ref, 'refs/tags/')"
+    if: "contains(github.ref, 'refs/tags/v*')"
     runs-on: ubuntu-latest
     steps:
-      - name: Get the tag
-        id: get_tag
-        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
-      - name: Run script to update release description
-        run: sh scripts/update-release-description.sh
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Generate changelog
+        id: changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        with:
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          TAG: ${{ steps.get_tag.outputs.TAG }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
 
   push-i18n:
     needs: build
