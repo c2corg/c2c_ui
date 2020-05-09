@@ -78,7 +78,7 @@ jobs:
           git config --global user.name "GitHub Action"
           git commit -m "Deploy ${{ steps.get_branch.outputs.BRANCH }} branch"
       - name: Push changes
-        uses: ad-m/github-push-action@0.5.0
+        uses: ad-m/github-push-action@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
