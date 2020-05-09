@@ -54,6 +54,7 @@ jobs:
           path: dist/*
 
   github-pages:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Get the branch
