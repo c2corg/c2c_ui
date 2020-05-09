@@ -96,12 +96,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Generate changelog
-        id: changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      - name: Generate changelog for release
+        id: release-changelog
+        uses: metcalfc/changelog-generator@v0.3.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issues: false
+          myToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -110,7 +109,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changelog }}
+          body: ${{ steps.release-changelog.outputs.changelog }}
           draft: false
           prerelease: false
 
