@@ -120,5 +120,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Push translations to transifex
-        run: curl -L --user api:${{ secrets.TRANSIFEX_TOKEN }} -F file="@src/translations/po/c2corg_ui-client.pot" -X PUT "https://www.transifex.com/api/2/project/c2corg_ui/resource/main/content/"
+      - name: Push translations to Transifex
+        run: |
+          echo "::add-mask::$TOKEN"
+          curl -L --user api:"$TOKEN" -F file="@src/translations/po/c2corg_ui-client.pot" -X PUT "https://www.transifex.com/api/2/project/c2corg_ui/resource/main/content/"
+        env:
+          TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
