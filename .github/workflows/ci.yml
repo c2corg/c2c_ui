@@ -69,6 +69,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: gh-pages
+      - name: Remove current branch files
+        run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
         uses: actions/download-artifact@v2
         with:
