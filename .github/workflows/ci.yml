@@ -99,7 +99,8 @@ jobs:
         id: changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.1.1
         with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issues: false
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
