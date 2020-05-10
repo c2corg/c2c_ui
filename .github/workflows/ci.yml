@@ -99,12 +99,15 @@ jobs:
       - name: Retrieve previous tag name
         id: previous_tag
         run: echo "::set-output name=tag::$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')"
+      - name: Retrieve current tag name
+        id: current_tag
+        run: echo "::set-output name=tag::$(git tag | sort -V -r | head -1)"
       - name: Generate changelog for release
         id: release_changelog
         run: echo "::set-output name=changelog::$(git log --pretty=oneline $TAG1..$TAG2 --no-merges)"
         env:
           TAG1: ${{ steps.previous_tag.outputs.tag}}
-          TAG2: ${GITHUB_REF/refs\/heads\//}
+          TAG2: ${{ steps.current_tag.outputs.tag}}
       - name: Create or update release
         uses: meeDamian/github-release@2.0
         with:
