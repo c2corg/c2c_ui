@@ -1,3 +1,8 @@
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "1"
+msgstr ""
+
 #: src/views/wiki/edition/utils/CotometerWindow.vue
 msgid "1 or 2 complications (steeper or narrow section...)"
 msgstr ""
@@ -38,6 +43,11 @@ msgid "1min"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "2"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
 msgctxt "access_times"
 msgid "20min"
 msgstr ""
@@ -50,6 +60,11 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "access_times"
 msgid "2h30"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "3"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -68,6 +83,11 @@ msgid "3h+"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "4"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
 msgctxt "access_times"
 msgid "45min"
 msgstr ""
@@ -75,6 +95,11 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "severities"
 msgid "4d_to_1m"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "5"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
@@ -1411,10 +1436,6 @@ msgstr ""
 #: src/translations/fixed_strings_common_js.vue
 msgctxt "rain_proof_types"
 msgid "exposed"
-msgstr ""
-
-#: src/translations/fixed_strings_common_js.vue
-msgid "exposition_rating"
 msgstr ""
 
 #: src/components/generics/DocumentRating.vue
