@@ -96,18 +96,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
-      - name: Retrieve previous tag name
-        id: previous_tag
-        run: echo "::set-output name=tag::$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')"
-      - name: Retrieve current tag name
-        id: current_tag
-        run: echo "::set-output name=tag::$(git tag | sort -V -r | head -1)"
       - name: Generate changelog for release
         id: release_changelog
-        run: echo "::set-output name=changelog::$(git log --pretty=oneline $TAG1..$TAG2 --no-merges)"
-        env:
-          TAG1: ${{ steps.previous_tag.outputs.tag}}
-          TAG2: ${{ steps.current_tag.outputs.tag}}
+        run: |
+          previousTag=$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')
+          currentTag=$(git tag | sort -V -r | head -1)
+          changelog=$(git log --pretty=oneline ${previousTag}..${currentTag} --no-merges)
+          changelog="${changelog//'%'/'%25'}"
+          changelog="${changelog//$'\n'/'%0A'}"
+          changelog="${changelog//$'\r'/'%0D'}" 
+          echo "::set-output name=changelog::$changelog"
       - name: Create or update release
         uses: meeDamian/github-release@2.0
         with:
