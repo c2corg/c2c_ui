@@ -63,13 +63,11 @@
               <field-view :document="document" :field="fields.height_diff_access" />
               <field-view :document="document" :field="fields.lift_access" />
 
-              <label-value v-if="document.route_length" :label="$gettext('route_length')">
-                {{ document.route_length / 1000 }}&nbsp;km
-              </label-value>
+              <field-view :document="document" :field="fields.route_length" :divisor="1000" unit="km" />
 
               <field-view :document="document" :field="fields.mtb_height_diff_portages" />
-              <field-view :document="document" :field="fields.mtb_length_asphalt" />
-              <field-view :document="document" :field="fields.mtb_length_trail" />
+              <field-view :document="document" :field="fields.mtb_length_asphalt" :divisor="1000" unit="km" />
+              <field-view :document="document" :field="fields.mtb_length_trail" :divisor="1000" unit="km" />
 
               <label-value v-if="document.cooked.slope" :label="$gettext('slope')">
                 {{ document.cooked.slope }}

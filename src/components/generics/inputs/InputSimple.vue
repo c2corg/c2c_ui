@@ -29,8 +29,8 @@
     <input
       v-else
       :type="type"
-      :min="min"
-      :max="max"
+      :min="divisor ? min / divisor : min"
+      :max="divisor ? max / divisor : max"
       :disabled="disabled"
       :placeholder="placeholder"
       v-model.lazy="value_"

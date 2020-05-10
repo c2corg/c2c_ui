@@ -668,15 +668,15 @@
     {
         "type": "number",
         "min": 0,
-        "max": 50,
-        "unit": "km"
+        "max": 500000,
+        "unit": "m"
     },
     "mtb_length_trail":
     {
         "type": "number",
         "min": 0,
-        "max": 50,
-        "unit": "km"
+        "max": 500000,
+        "unit": "m"
     },
     "mtb_up_rating":
     {
@@ -885,7 +885,7 @@
     {
         "type": "number",
         "min": 0,
-        "max": 100000,
+        "max": 500000,
         "unit": "m"
     },
     "route_study":

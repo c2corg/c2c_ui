@@ -3462,7 +3462,6 @@ msgid "route_history"
 msgstr ""
 
 #: src/translations/fixed_strings_common_js.vue
-#: src/views/document/RouteView.vue
 msgid "route_length"
 msgstr ""
 
