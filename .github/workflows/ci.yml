@@ -96,11 +96,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Retrieve previous tag name
+        id: previous_tag
+        run: echo "::set-output name=tag::$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')"
       - name: Generate changelog for release
-        id: release-changelog
-        uses: metcalfc/changelog-generator@v0.3.2
-        with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+        id: release_changelog
+        run: echo "::set-output name=changelog::$(git log --pretty=oneline $TAG1..$TAG2 --no-merges)"
+        env:
+          TAG1: ${{ steps.previous_tag.outputs.tag}}
+          TAG2: ${{ github.ref }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -109,7 +113,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: ${{ steps.release-changelog.outputs.changelog }}
+          body: ${{ steps.release_changelog.outputs.changelog }}
           draft: false
           prerelease: false
 
