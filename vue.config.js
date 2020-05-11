@@ -129,7 +129,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   // github pages url is postfixed
   // and we will deploy a build on
   // https://c2corg.github.io/c2c_ui/<branch-name>/
-  config.branchName = process.env.TRAVIS_BRANCH;
+  config.branchName = process.env.GITHUB_PAGES_BRANCH;
   result.publicPath = `/c2c_ui/${config.branchName}/`;
 
   // set a warning if bundle size is too big
