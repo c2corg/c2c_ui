@@ -66,6 +66,7 @@ jobs:
 
   github-pages:
     needs: build
+    if: "!contains(github.ref, 'refs/heads/dependabot')"
     runs-on: ubuntu-latest
     steps:
       - name: Get the branch
