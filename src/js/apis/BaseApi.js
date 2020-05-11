@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 /// ////////////////////////////////////////////////////////////////////////////////
-// Technicly, we should do this in any API call to enhance promise with response :
+// Technically, we should do this in any API call to enhance promise with response :
 // let result = axios.get(url).then(response => result.response = response)
 //
 // but, Promise prototype is not writable

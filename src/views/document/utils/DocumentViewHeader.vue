@@ -10,6 +10,7 @@
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <follow-button :document="document" />
+          <tags-button :document="document" />
 
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
@@ -56,6 +57,7 @@
 import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
+import TagsButton from './TagsButton';
 import isEditableMixin from './is-editable-mixin';
 import viewModeMixin from './view-mode-mixin';
 
@@ -65,6 +67,7 @@ export default {
   components: {
     ImagesUploader,
     FollowButton,
+    TagsButton,
     SocialNetworkSharing,
     DocumentVersionBanner,
   },

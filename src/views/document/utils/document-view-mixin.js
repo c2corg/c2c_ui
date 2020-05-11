@@ -220,7 +220,7 @@ export default {
     updateUrl() {
       let title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
 
-      // transform any unocde into it'sd ascii value
+      // transform any unicode into its ascii value
       title = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
       // and clean
