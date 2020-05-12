@@ -362,12 +362,6 @@
         "single": true,
         "helper": "1063015#event-type"
     },
-    "exposition_rating":
-    {
-        "values": "exposition_ratings",
-        "queryMode": "valuesRangeSlider",
-        "i18n": false
-    },
     "exposition_rock_rating":
     {
         "values": "exposition_rock_ratings",
@@ -680,15 +674,15 @@
     {
         "type": "number",
         "min": 0,
-        "max": 50,
-        "unit": "km"
+        "max": 500000,
+        "unit": "m"
     },
     "mtb_length_trail":
     {
         "type": "number",
         "min": 0,
-        "max": 50,
-        "unit": "km"
+        "max": 500000,
+        "unit": "m"
     },
     "mtb_up_rating":
     {
@@ -745,7 +739,7 @@
     {
         "values": "paragliding_ratings",
         "queryMode": "valuesRangeSlider",
-        "i18n": false
+        "i18n": true
     },
     "parking_fee":
     {
@@ -897,7 +891,7 @@
     {
         "type": "number",
         "min": 0,
-        "max": 100000,
+        "max": 500000,
         "unit": "m"
     },
     "route_study":
@@ -1005,7 +999,8 @@
         "type": "number",
         "min": 0,
         "max": 99,
-        "unit": "&deg;"
+        "unit": "°",
+        "skipSpaceBeforeUnit": true
     },
     "snow_clearance_rating":
     {

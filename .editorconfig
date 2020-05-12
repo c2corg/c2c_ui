@@ -7,8 +7,5 @@ charset = utf-8
 indent_style = spaces
 trim_trailing_whitespace = true
 
-[*.html,*.vue,*.scss]
-indent_size = 2
-
-[*.js,*.ts,*.json,*.xml]
+[*.html,*.vue,*.scss*.js,*.ts,*.json,*.xml,*yml]
 indent_size = 2

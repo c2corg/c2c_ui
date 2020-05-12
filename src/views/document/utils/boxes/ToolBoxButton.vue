@@ -1,7 +1,23 @@
 <template>
-  <component
-    :is="to ? 'router-link' : (href ? 'a' : 'div')"
+  <!--Can't use component for router-link, it does not set the href attribute.
+    Surprisingly, it open the link, but it prevents user to open it in a new tab -->
+  <router-link
+    v-if="to"
     :to="to"
+    @click="$emit('click')"
+    class="toolbox-button">
+    <span class="toolbox-button-icon">
+      <slot name="icon">
+        <fa-icon :icon="icon" :class="iconClass" />
+      </slot>
+    </span>
+    <span>
+      {{ label | uppercaseFirstLetter }}
+    </span>
+  </router-link>
+  <component
+    v-else
+    :is="href ? 'a' : 'div'"
     @click="$emit('click')"
     :href="href"
     class="toolbox-button">

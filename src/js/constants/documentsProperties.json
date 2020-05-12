@@ -292,7 +292,6 @@
             {"id": "elevation", "properties": {"url":"walt"}},
             {"id": "elevation_min", "properties": {"waypoint_types":["access"]}},
             {"id": "equipment_ratings", "properties": {"url":"anchq", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "exposition_rating", "properties": {"url":"pglexp", "waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
             {"id": "gas_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},
             {"id": "ground_types", "properties": {"waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
             {"id": "heating_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},

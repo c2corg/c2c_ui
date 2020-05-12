@@ -125,12 +125,12 @@
                 <div v-if="promiseMountains">
                   <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
                   <dl>
-                    <div v-for="(mountains, massif) of visibleMountains" :key="massif">
+                    <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
                       <dt class="yetimountains-listtitle">
                         {{ massif }}
                       </dt>
                       <div class="yetimountains-list">
-                        <dd class="yetimountains-listelement" v-for="mountain of mountains" :key="mountain.title">
+                        <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.title">
                           <a :href="'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' + mountain.id_mf + '.pdf'" target="_blank" v-if="mountain.id_mf">
                             <fa-icon icon="external-link-alt" />
                             {{ mountain.title }}
@@ -645,6 +645,8 @@
           this.formError = 'method';
         } else if (this.mrdIsNotApplicable) {
           this.formError = 'method_bra';
+        } else if (this.bra.isDifferent && (!this.bra.low || !this.bra.high)) {
+          this.formError = 'bra';
         } else {
           this.formError = null;
         }
@@ -805,7 +807,7 @@
         let errorText = ERRORS['yeti'];
 
         if (err.response.status === 400) {
-          const xml = new DOMParser().parseFromString(err.data, 'application/xml');
+          const xml = new DOMParser().parseFromString(err.response.data, 'text/xml');
           errorText = [...xml.getElementsByTagName('ExceptionText')].map(_ => _.textContent).join(' ');
         }
 
@@ -978,7 +980,9 @@
         }
 
         // update style
-        this.areasLayer.setStyle(this.areasLayerStyle);
+        if (this.areasLayer) { // YETI_URL_AREAS can fail
+          this.areasLayer.setStyle(this.areasLayerStyle);
+        }
       }
     }
   };

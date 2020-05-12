@@ -3,40 +3,38 @@
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width:100%; height:100%" @click="showLayerSwitcher=false" />
 
-    <div ref="layerSwitcherButton" class="ol-control ol-control-layer-switcher-button">
-      <button @click="showLayerSwitcher=!showLayerSwitcher">
+    <div
+      ref="layerSwitcherButton"
+      class="ol-control ol-control-layer-switcher-button"
+      :title="$gettext('Layers', 'Map controls')"
+    >
+      <button @click.stop="showLayerSwitcher=!showLayerSwitcher">
         <fa-icon icon="layer-group" />
       </button>
     </div>
 
-    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher">
+    <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div>
-        <table>
-          <tr>
-            <td>
-              <header v-translate>Base layer</header>
-              <div v-for="layer of mapLayers" :key="layer.title" @click="visibleLayer=layer">
-                <input :checked="layer==visibleLayer" type="radio">
-                {{ $gettext(layer.get('title', 'Map layer')) }}
-              </div>
-            </td>
-            <td>
-              <header v-translate>Slopes</header>
-              <div v-for="layer of dataLayers" :key="layer.title" @click="toogleMapLayer(layer)">
-                <input :checked="layer.getVisible()" type="checkbox">
-                {{ $gettext(layer.get('title'), 'Map slopes layer') }}
-              </div>
-            </td>
-            <td v-if="showProtectionAreas && !editable">
-              <header v-translate>Protection areas</header>
-              <input
-                type="checkbox"
-                :checked="protectionAreasVisible"
-                @click="toggleProtectionAreas">
-              <span v-translate>Fauna protection areas</span>
-            </td>
-          </tr>
-        </table>
+        <header v-translate>Base layer</header>
+        <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer=layer">
+          <input :checked="layer==visibleLayer" type="radio">
+          {{ $gettext(layer.get('title'), 'Map layer') }}
+        </div>
+      </div>
+      <div>
+        <header v-translate>Slopes</header>
+        <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
+          <input :checked="layer.getVisible()" type="checkbox">
+          {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+        </div>
+        <template v-if="showProtectionAreas && !editable">
+          <header v-translate>Protection areas</header>
+          <input
+            type="checkbox"
+            :checked="protectionAreasVisible"
+            @click="toggleProtectionAreas">
+          <span v-translate>Fauna protection areas</span>
+        </template>
       </div>
     </div>
 
@@ -343,8 +341,11 @@
         target: this.$refs.map,
 
         controls: [
-          new ol.control.Zoom(),
-          new ol.control.FullScreen({ source: this.$el }),
+          new ol.control.Zoom({
+            zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
+            zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls')
+          }),
+          new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
           new ol.control.ScaleLine(),
           new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
           new ol.control.Control({ element: this.$refs.layerSwitcher }),
@@ -354,7 +355,7 @@
           new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
           new ol.control.Control({ element: this.$refs.resetGeometry }),
           new ol.control.Control({ element: this.$refs.clearGeometry }),
-          new ol.control.Attribution()
+          new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') })
         ],
 
         layers: [
@@ -513,6 +514,17 @@
           geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2);
           document.geometry.geom = JSON.stringify(geoJsonGeometry);
         } else if (geoJsonGeometry.type === 'LineString' || geoJsonGeometry.type === 'MultiLineString') {
+          if (document.type === 'a') {
+            // areas need a polygon, let change the path, check that first and last point are the same
+            geoJsonGeometry.type = 'Polygon';
+            const firstPoint = JSON.stringify(geoJsonGeometry.coordinates[0][0]);
+            const lastPoint = JSON.stringify(geoJsonGeometry.coordinates[0][geoJsonGeometry.coordinates[0].length - 1]);
+
+            if (firstPoint !== lastPoint) { // close the loop
+              geoJsonGeometry.coordinates[0].push(geoJsonGeometry.coordinates[0][0]);
+            }
+          }
+
           document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
 
           if (!document.geometry.geom) {
@@ -843,135 +855,139 @@
 </script>
 
 <style lang="scss">
-  // for styling ol elements
-  .ol-attribution{
-    background: white!important;
-  }
-
   // disable mobile CSS for controls.
   .ol-touch .ol-control button {
-    font-size: 1.14em!important;
+    font-size: 1.14em !important;
   }
 </style>
 
 <style lang="scss" scoped>
+  @import "~ol/ol.css";
 
-@import '~ol/ol.css';
+  $control-margin: 0.5em;
 
-$control-margin:0.5em;
-
-.ol-control-center-on-geolocation{
+  .ol-control-center-on-geolocation {
     top: 100px;
     left: $control-margin;
-}
+  }
 
-.ol-control-layer-switcher {
+  .ol-control-layer-switcher {
     bottom: 3em;
     left: $control-margin;
+  }
 
-}
-
-.ol-control-layer-switcher-button {
+  .ol-control-layer-switcher-button {
     bottom: $control-margin;
     left: $control-margin;
-}
+  }
 
-.ol-control-use-map-as-filter{
+  .ol-control-use-map-as-filter {
     top: $control-margin;
-    left:3em;
+    left: 3em;
 
     button {
-        width:auto;
-        font-size:1rem;
-        font-weight: normal;
-        padding:3px;
+      width: auto;
+      font-size: 1rem;
+      font-weight: normal;
+      padding: 3px;
 
-        svg {
-            margin-right: 3px;
-        }
+      svg {
+        margin-right: 3px;
+      }
     }
-}
+  }
 
-.ol-control-recenter-on{
+  .ol-control-recenter-on {
     top: 35px;
-    left:3em;
-}
+    left: 3em;
+  }
 
-.ol-control-recenter-on_on-top{
-  top: $control-margin;
-}
+  .ol-control-recenter-on_on-top {
+    top: $control-margin;
+  }
 
-.ol-control-recenter-on-propositions{
+  .ol-control-recenter-on-propositions {
     top: 65px;
-    left:3em;
-    background: rgba(255,255,255,0.9);
-    padding:5px;
+    left: 3em;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
 
-    li:hover{
-        background: lightgrey;
-        cursor: pointer;
+    li:hover {
+      background: lightgrey;
+      cursor: pointer;
     }
-}
+  }
 
-.ol-control-recenter-on-propositions_on-top{
-  top: 35px;
-}
-
-.ol-control-reset-geometry{
-    top: 5px;
-    right:5px;
-
-    button{
-        padding:5px;
-        width: auto!important;
-        font-weight: normal;
-    }
-}
-
-.ol-control-clear-geometry{
+  .ol-control-recenter-on-propositions_on-top {
     top: 35px;
-    right:5px;
+  }
 
-    button{
-        padding:5px;
-        width: auto!important;
-        font-weight: normal;
+  .ol-control-reset-geometry {
+    top: 5px;
+    right: 5px;
+
+    button {
+      padding: 5px;
+      width: auto !important;
+      font-weight: normal;
     }
-}
+  }
 
-//style on layers popup
-.ol-control-layer-switcher > div {
+  .ol-control-clear-geometry {
+    top: 35px;
+    right: 5px;
+
+    button {
+      padding: 5px;
+      width: auto !important;
+      font-weight: normal;
+    }
+  }
+
+  //style on layers popup
+  .ol-control-layer-switcher {
     color: white;
     text-decoration: none;
-    background-color: rgba(0,60,136,0.5);
+    background-color: rgba(0, 60, 136, 0.6);
     border: none;
     border-radius: 2px;
-    padding: 10px;
-}
+    padding: 0 10px 10px 10px;
+    display: flex;
 
+    & > div {
+      width: 50%;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+
+      header {
+        font-weight: bold;
+        padding-top: 10px;
+      }
+    }
+  }
 </style>
 
 <style lang="scss">
+  $control-margin: 0.5em;
 
-$control-margin:0.5em;
-
-.ol-scale-line {
-        background: rgba(255, 255, 255, 0.3);
-        bottom: 10px;
-        right: 40px;
-        left: initial;
+  .ol-scale-line {
+    background: rgba(255, 255, 255, 0.3);
+    bottom: 10px;
+    right: 40px;
+    left: initial;
 
     .ol-scale-line-inner {
-        color: black;
-        border: 1px solid black;
-        border-top: none;
+      color: black;
+      border: 1px solid black;
+      border-top: none;
     }
-}
+  }
 
-.ol-full-screen{
-    right:auto;
-    left:$control-margin;
+  .ol-full-screen {
+    right: auto;
+    left: $control-margin;
     top: 60px;
-}
-
+  }
 </style>

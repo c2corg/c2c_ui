@@ -9,37 +9,26 @@ This script load data from https://github.com/c2corg/v6_common and save it in a 
 import requests
 import json
 import os
-import optparse
+import sys
 
-default_URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/'
 
-parser = optparse.OptionParser()
-parser.add_option("-p", "--path", dest="path",
-                  help="path to common definitions")
-parser.add_option("-u", "--url", dest="url",
-                  help="url to common definitions repo",
-                  default=default_URL)
+if sys.version_info.major == 2:
+    raise Exception("Please run this script with python3.7 or higher")
 
-(options, args) = parser.parse_args()
+if sys.version_info.major == 3 and sys.version_info.minor < 7 :
+    raise Exception("Please run this script with python3.7 or higher")
 
-if options.path:
-    def read_common_file(name):
-        with open(os.path.join(options.path, '{}.py'.format(name))) as f:
-            return f.read()
-
-else:
-    def read_common_file(name):
-        URL = (options.url + '{}.py').format
-
-        proxies = {"https" : os.environ["HTTPS_PROXY"]} if "HTTPS_PROXY" in os.environ else None
-        text = requests.get(URL(name), proxies = proxies).text
-        return text
+URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/{}.py'.format
 
 # Load python file from c2corg_common, and parse it
 def get_fields(name):
-    text = read_common_file(name)
+
+    proxies = {"https" : os.environ["HTTPS_PROXY"]} if "HTTPS_PROXY" in os.environ else None
+    text = requests.get(URL(name), proxies = proxies).text
+
     # exec : only in dev mode, lint exception
     exec(text.encode('utf8'))
+
     return dict(locals())
 
 # Load atributes file
@@ -64,14 +53,16 @@ attribute_names = {key: attribute_names[key] for key in sorted(attribute_names)}
 
 # store this attribute in result
 for attribute_name in attribute_names:
+    if attribute_name not in attributes:
+        raise Exception("Error, {} has not bee found in v6_common/attributes.py".format(attribute_name))
+
     result["attributes"][attribute_name] = attributes[attribute_name]
 
 # store letter_types
 result["letter_types"] = get_fields('document_types')['ALL']
 
 # save result
-json.dump(result, open("./src/js/constants/common.json", "w"),
-          sort_keys=True, indent=4)
+json.dump(result, open("./src/js/constants/common.json", "w"), indent=4, sort_keys=True)
 
 # and update attributes that need a translation
 with open("./src/translations/fixed_strings_common_js.vue", "w") as f:

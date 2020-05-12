@@ -20,7 +20,7 @@
                 <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
               <div
-                v-for="lang of Object.keys($language.available)"
+                v-for="lang of $options.constants.langs"
                 :key="lang"
                 class="dropdown-item has-hover-background has-cursor-pointer"
                 @click="document.locales[0].lang = lang">
@@ -74,6 +74,7 @@
 <script>
 
   import c2c from '@/js/apis/c2c';
+  import constants from '@/js/constants';
 
   import FormRow from './FormRow';
 
@@ -136,6 +137,8 @@
         isPreview: false
       };
     },
+
+    constants,
 
     computed: {
       documentType() {

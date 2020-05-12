@@ -1,5 +1,20 @@
 {
   "en": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "10min": {
       "access_times": "10 min"
     },
@@ -129,13 +144,13 @@
     "at least one user required": {
       "API message": "Select at least one user"
     },
+    "Attributions": {
+      "Map controls": "Attributions"
+    },
     "aug": {
       "months": "aug"
     },
     "author_status": "Author",
-    "Automatic": {
-      "quality computation": "Automatic"
-    },
     "autonomous": {
       "autonomies": "autonomous"
     },
@@ -169,6 +184,12 @@
     },
     "base_camp": {
       "waypoint_types": "base camp"
+    },
+    "Basemap (at)": {
+      "Map layer": "Austria"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Autria Sat"
     },
     "best_periods": "Best periods",
     "Bing": {
@@ -278,6 +299,7 @@
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
     },
+    "Contribute to maintainance": "Contribute to maintenance",
     "copyright": {
       "image_types": "copyright",
       "$$noContext": "copyright"
@@ -334,7 +356,7 @@
       "$$noContext": "Describe pedestrian access"
     },
     "Describe pt access": "Describe access to the waypoint",
-    "Describe road access": "Describe the journey",
+    "Describe road access": "Describe road access and facilities (accommodation, restaurant, etc.)",
     "describe route_conditions": "Describe route conditions",
     "Describe the conditions you encountered during your outing": "Describe the conditions encountered during your outing",
     "describe timing": "Describe timing",
@@ -413,7 +435,6 @@
     "exposed": {
       "rain_proof_types": "exposed"
     },
-    "exposition_rating": "Exposition rating",
     "exposition_rock_rating": "Rock exposition rating",
     "external_resources": "External resources",
     "external_witness": {
@@ -561,13 +582,19 @@
     },
     "ice_rating": "Ice climbing rating",
     "IGN": {
-      "Map slopes layer": "IGN slopes"
+      "Map slopes layer": "France (IGN)"
     },
     "IGN maps": {
-      "Map layer": "IGN maps"
+      "Map layer": "IGN Fr"
     },
     "IGN ortho": {
-      "Map layer": "IGN satellite"
+      "Map layer": "IGN Fr Sat"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Es Sat"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Es"
     },
     "impossible": {
       "glacier_ratings": "travel is impossible"
@@ -618,6 +645,9 @@
     },
     "lang": "Language",
     "langs": "Languages",
+    "Layers": {
+      "Map controls": "Layers"
+    },
     "length": "Length",
     "length_total": "Total length",
     "level_1": {
@@ -669,9 +699,6 @@
     "main_waypoint_id": "ID of the main waypoint",
     "male": {
       "genders": "male"
-    },
-    "Manual": {
-      "quality computation": "Manual"
     },
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
     "maps_info": "Maps info",
@@ -847,6 +874,7 @@
       "waypoint_types": "paragliding takeoff"
     },
     "Parameters of the Digital Camera": "Détails on the camera",
+    "parking_fee": "parking or road fee",
     "partial_trip": "Partial trip",
     "participant_count": "Number of participants",
     "participants": "Participants",
@@ -947,7 +975,7 @@
     "public_transportation_types": "Public transportation types",
     "publication_date": "Publication date",
     "Put it back": "Restore",
-    "quality": "Completeness",
+    "quality": "Document's quality",
     "quartzite": {
       "rock_types": "quartzite"
     },
@@ -1149,7 +1177,7 @@
     },
     "SwissTopo": {
       "Map layer": "SwissTopo",
-      "Map slopes layer": "SwissTopo slopes"
+      "Map slopes layer": "Switzerland (SwissTopo)"
     },
     "tags": {
       "article_categories": "tags"
@@ -1172,6 +1200,9 @@
     "time_management": "Time management",
     "timing": "Timing",
     "title": "Title",
+    "Toggle full-screen": {
+      "Map Controls": "Toggle full-screen"
+    },
     "topo": {
       "book_types": "topo",
       "image_categories": "topo"
@@ -1249,6 +1280,12 @@
     "yes": {
       "parking_fee_types": "yes",
       "$$noContext": "yes"
+    },
+    "Zoom in": {
+      "Map controls": "Zoom in"
+    },
+    "Zoom out": {
+      "Map controls": "Zoom out"
     }
   }
 }

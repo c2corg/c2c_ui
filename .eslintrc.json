@@ -11,46 +11,22 @@
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "warn",
-    "indent": [
-      "off",
-      2
-    ],
-    "vue/html-indent": [
-      "warn",
-      2
-    ],
-    "vue/script-indent": [
-      "warn",
-      2,
-      {
-        "baseIndent": 1
-      }
-    ],
     "vue/no-v-html": "error",
     "vue/order-in-components": "warn",
-    "vue/no-multi-spaces": "warn",
     "vue/require-prop-types": "warn",
     "vue/require-default-prop": "warn",
     "vue/attributes-order": "off",
-    "vue/max-attributes-per-line": ["warn", {
-      "singleline": 4,
-      "multiline": {
-        "max": 1,
-        "allowFirstLine": false
-      }
-    }],
     "vue/no-use-v-if-with-v-for": "error",
-    "vue/html-closing-bracket-newline": "warn",
-    "vue/html-closing-bracket-spacing": "warn",
     "vue/prop-name-casing": ["error", "camelCase"],
     "eqeqeq": "warn",
     "camelcase": "off",
-    "no-trailing-spaces": "warn",
+
+    "no-trailing-spaces": "off",
     "semi": [
       "error",
       "always"
     ],
-    "quotes": "warn",
+    "quotes": "off",
     "object-curly-spacing": "warn",
     "brace-style": [
       "warn",
@@ -70,7 +46,41 @@
     "no-var": "error",
     "prefer-const": "error",
     "no-multi-assign": "error",
-    "space-infix-ops": "warn"
+    "space-infix-ops": "warn",
+    "indent": [
+      "off",
+      2
+    ],
+    "vue/html-indent": [
+      "off",
+      2
+    ],
+    "vue/script-indent": [
+      "off",
+      2,
+      {
+        "baseIndent": 1
+      }
+    ],
+    "vue/no-multi-spaces": "warn",
+    "vue/max-attributes-per-line": ["warn", {
+      "singleline": 4,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }],
+    "vue/html-closing-bracket-newline": "off",
+    "vue/html-closing-bracket-spacing": "off",
+    "array-bracket-spacing": "off",
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "quote-props": "off",
+    "object-curly-newline": "off",
+    "dot-notation": "off",
+    "vue/no-spaces-around-equal-signs-in-attribute": "off",
+    "lines-between-class-members": "off",
+    "keyword-spacing": "off"
   },
   "parserOptions": {
     "parser": "babel-eslint"

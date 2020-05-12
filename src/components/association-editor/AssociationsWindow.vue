@@ -5,6 +5,7 @@
         <div class="field">
           <input
             class="input"
+            ref="input"
             :placeholder="$gettext('Search a document to associate...')"
             @input="search">
         </div>
@@ -78,6 +79,7 @@
     methods: {
       show() {
         this.$refs.modalCard.show();
+        this.$nextTick(() => this.$refs.input.focus());
       },
 
       // used by created() method

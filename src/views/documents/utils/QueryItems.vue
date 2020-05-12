@@ -87,7 +87,6 @@
       'hiking_mtb_exposition',
       'glacier_rating',
       'equipment_ratings',
-      'exposition_rating',
       'public_transportation_rating',
       'climbing_rating_max',
       'climbing_rating_median',

@@ -1,5 +1,20 @@
 {
   "fr": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 ou 2 complications (plus pentu ou étroiture...)",
     "10min": {
       "access_times": "10min"
@@ -141,6 +156,7 @@
       "article_categories": "association"
     },
     "associations": "Associations",
+    "Associations history": "Historique des associations",
     "at least one route required": {
       "API message": "Sélectionnez au moins un itinéraire"
     },
@@ -148,14 +164,14 @@
       "API message": "Sélectionnez au moins un itinéraire"
     },
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre.",
+    "Attributions": {
+      "Map controls": "Attributions"
+    },
     "aug": {
       "months": "août"
     },
     "author": "Auteur",
     "author_status": "Implication dans la situation",
-    "Automatic": {
-      "quality computation": "Automatique"
-    },
     "autonomous": {
       "autonomies": "autonome"
     },
@@ -194,6 +210,12 @@
     "Base layer": "Fond de carte",
     "base_camp": {
       "waypoint_types": "camp de base"
+    },
+    "Basemap (at)": {
+      "Map layer": "Autriche"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Autriche Sat"
     },
     "best_periods": "Meilleures périodes",
     "Bing": {
@@ -263,6 +285,7 @@
     "Change account parameters": "Modifier les paramètres du compte",
     "Change password": "Modifier le mot de passe",
     "Checking...": "En cours de vérification ...",
+    "Child": "Enfant",
     "children_proof": "Enfants",
     "Clear": "Effacer",
     "cleared": {
@@ -332,6 +355,8 @@
     },
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
+    "Contribute to maintainance": "Contribuer à la maintenance",
+    "Contributor": "Contributeur",
     "contributor": "contributeur",
     "copyright": {
       "image_types": "copyright",
@@ -357,6 +382,7 @@
     },
     "Create a new report": "Créer un nouveau compte-rendu",
     "Created on": "Crée le",
+    "Creation?": "Création ?",
     "crevasse_fall": {
       "event_types": "chute en crevasse"
     },
@@ -406,7 +432,7 @@
       "$$noContext": "Décrire l'accès pédestre"
     },
     "Describe pt access": "Décrire l'accès au point de passage",
-    "Describe road access": "Décrire l'itinéraire",
+    "Describe road access": "Décrire l'accès routier et les commodités (logement, restauration, etc.)",
     "describe route_conditions": "Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\nATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site.",
     "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Décrivez les informations récoltées avant la sortie et le suivi de leur évolution sur le terrain. Cela concerne les prévisions météo, les bulletins d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la neige/glace/rocher, les compte rendu des jours précédents, etc.",
@@ -432,7 +458,7 @@
     "draft": {
       "quality_types": "ébauche"
     },
-    "Drop images here or click to upload": "Faites glisser des images ici ou cliquer pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.demov6.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
+    "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
     "durations": "Durée",
@@ -508,7 +534,6 @@
     "exposed": {
       "rain_proof_types": "exposé à la pluie"
     },
-    "exposition_rating": "Exposition",
     "exposition_rock_rating": "Exposition rocher",
     "exposure_time": "Temps d'exposition",
     "external_resources": "Ressources externes",
@@ -524,7 +549,7 @@
     "fauna": {
       "image_categories": "faune"
     },
-    "Fauna protection areas": "Zone de protection de la faune",
+    "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "feb": {
       "months": "février"
@@ -535,7 +560,6 @@
     "file_size": "taille du fichier",
     "filename": "nom du fichier",
     "Filter on map extent": "Limiter la recherche à la carte visible",
-    "Find all Camptocamp in the mountains with the new mobile application": "Découvrez tout Camptocamp en montagne avec la nouvelle application mobile",
     "fine": {
       "quality_types": "bon"
     },
@@ -649,13 +673,13 @@
     "height_max": "Hauteur maximale",
     "height_median": "Hauteur moyenne",
     "height_min": "Hauteur minimale",
+    "Help": "Aide",
     "help": {
       "image_categories": "aide",
       "$$noContext": "aide"
     },
     "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
-    "Here you may change your subscriptions to snow forecast mailing lists.": "Vous pouvez modifier ici vos abonnements aux bulletins de prévisions des risques d'avalanches.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
     "highline": {
       "slackline_types": "Highline"
@@ -696,13 +720,19 @@
     },
     "ice_rating": "Cotation glace",
     "IGN": {
-      "Map slopes layer": "Pentes IGN"
+      "Map slopes layer": "France (IGN)"
     },
     "IGN maps": {
-      "Map layer": "IGN"
+      "Map layer": "IGN Fr"
     },
     "IGN ortho": {
-      "Map layer": "IGN satellite"
+      "Map layer": "IGN Fr Sat"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Es Sat"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Es"
     },
     "image_categories": "Catégories",
     "image_type": "Type d'image (licence)",
@@ -774,6 +804,9 @@
     "langs": "Langues",
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
+    "Layers": {
+      "Map controls": "Couches"
+    },
     "Leave fullscreen": "Quitter le mode plein écran",
     "length": "Longueur",
     "length_total": "Longueur totale",
@@ -835,9 +868,6 @@
     "male": {
       "genders": "homme"
     },
-    "Manual": {
-      "quality computation": "Manuelle"
-    },
     "map": "carte",
     "Map only": "Uniquement la carte",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
@@ -871,7 +901,6 @@
       "API message": "Captcha manquant"
     },
     "mixed_rating": "Cotation mixte",
-    "Mobile application": "Application mobile",
     "modifications": "Conséquences sur les pratiques",
     "Modified the": {
       "modification date": "Modifié le"
@@ -917,7 +946,6 @@
     "My account": "Mon compte",
     "My changes": "Mes contributions",
     "My followed users": "Mes amis",
-    "My mailing lists": "Mes bulletins nivo",
     "My outings": "Mes sorties",
     "My preferences": "Mes préférences",
     "My profile": "Mon profil",
@@ -1047,6 +1075,7 @@
     "paragliding": {
       "activities": "Parapente"
     },
+    "Paragliding outings": "Sorties parapente",
     "paragliding_instructor": {
       "user_categories": "moniteur de parapente"
     },
@@ -1058,7 +1087,7 @@
       "waypoint_types": "décollage parapente"
     },
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
-    "parking_fee": "Parking payant",
+    "parking_fee": "Parking ou route payant(e)",
     "partial_trip": "Parcours partiel",
     "participant_count": "Nombre de participants",
     "participants": "Participants",
@@ -1086,9 +1115,9 @@
       "event_types": "déséquilibre/chute"
     },
     "personal": {
-      "article_types": "personnel (CC by-nc-nd)",
-      "image_types": "personnel (CC by-nc-nd)",
-      "$$noContext": "personnel (CC by-nc-nd)"
+      "article_types": "individuel (CC by-nc-nd)",
+      "image_types": "individuel (CC by-nc-nd)",
+      "$$noContext": "individuel (CC by-nc-nd)"
     },
     "personal comments": "Commentaires personnels",
     "Personal data are confidential": "Les informations personnelles sont confidentielles",
@@ -1182,27 +1211,7 @@
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
     "Put it back": "Remettre",
-	"supervision": "Encadrement",
-    "no_supervision": {
-      "supervision": "Non encadré"
-    },
-    "federal_supervision": {
-      "supervision": "Encadrement fédéral"
-    },
-    "professional_supervision": {
-      "supervision": "Encadrement professionnel"
-    },
-	"qualification": "Qualification",
-    "federal_supervisor": {
-      "qualification": "Initiateur fédéral"
-    },
-    "federal_trainer": {
-      "qualification": "Entraineur fédéral"
-    },
-    "professional_diploma": {
-      "qualification": "Diplome professionnel"
-    },
-    "quality": "Complétude",
+    "quality": "Qualité du document",
     "quartzite": {
       "rock_types": "quartzite"
     },
@@ -1451,7 +1460,7 @@
     },
     "SwissTopo": {
       "Map layer": "SwissTopo",
-      "Map slopes layer": "Pentes SwissTopo"
+      "Map slopes layer": "Suisse (SwissTopo)"
     },
     "tags": {
       "article_categories": "tags"
@@ -1493,6 +1502,9 @@
     "title": "Titre",
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
+    "Toggle full-screen": {
+      "Map Controls": "Mode plein écran"
+    },
     "Toggle fullscreen": "Basculer en plein écran",
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche.",
     "topo": {
@@ -1602,6 +1614,12 @@
     },
     "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
     "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
-    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
+    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
+    "Zoom in": {
+      "Map controls": "Zoomer"
+    },
+    "Zoom out": {
+      "Map controls": "Dézoomer"
+    }
   }
 }

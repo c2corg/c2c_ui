@@ -113,17 +113,17 @@
         <div class="columns is-mobile">
           <div class="column is-6">
             <div class="splitted-diff">
-              <div v-for="(block, i) of diffLocale" :key="i">
+              <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
                 <div v-if="block.ellipsed" class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic">
                   {{ block.rows.length }} identical rows
                 </div>
                 <div v-else>
                   <div
-                    v-for="(row, i) of block.rows"
-                    :key="i"
+                    v-for="(row, rowKey) of block.rows"
+                    :key="rowKey"
                     class="row-diff"
                     :class="{'row-del': !row.isIdentical && !row.isFakeOld, 'row-fake': row.isFakeOld}">
-                    <component v-for="(item, i) of row.oldPart" :key="i" :is="item.isIdentical ? 'span' : 'del'">{{ item.text }}</component>
+                    <component v-for="(item, itemKey) of row.oldPart" :key="itemKey" :is="item.isIdentical ? 'span' : 'del'">{{ item.text }}</component>
                   </div>
                 </div>
               </div>
@@ -132,17 +132,17 @@
 
           <div class="column is-6">
             <div class="splitted-diff">
-              <div v-for="(block, i) of diffLocale" :key="i">
+              <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
                 <div v-if="block.ellipsed" class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic">
                   {{ block.rows.length }} identical rows
                 </div>
                 <div v-else>
                   <div
-                    v-for="(row, i) of block.rows"
-                    :key="i"
+                    v-for="(row, rowKey) of block.rows"
+                    :key="rowKey"
                     class="row-diff"
                     :class="{'row-ins': !row.isIdentical && !row.isFakeNew, 'row-fake': row.isFakeNew}">
-                    <component v-for="(item, i) of row.newPart" :key="i" :is="item.isIdentical ? 'span' : 'ins'">{{ item.text }}</component>
+                    <component v-for="(item, itemKey) of row.newPart" :key="itemKey" :is="item.isIdentical ? 'span' : 'ins'">{{ item.text }}</component>
                   </div>
                 </div>
               </div>

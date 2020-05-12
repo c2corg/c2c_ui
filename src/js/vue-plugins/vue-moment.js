@@ -14,6 +14,7 @@ require('moment/locale/eu.js');
 require('moment/locale/de.js');
 require('moment/locale/fr.js');
 require('moment/locale/it.js');
+require('moment/locale/zh-cn.js');
 require('moment/locale/en-gb.js'); // keep en in last.
 
 // C2C use export default io module.exports and remove options argument

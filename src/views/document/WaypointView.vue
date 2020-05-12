@@ -33,6 +33,7 @@
               <field-view :document="document" :field="fields.capacity" v-if="document.capacity" />
               <field-view :document="document" :field="fields.capacity_staffed" />
               <field-view :document="document" :field="fields.length" />
+              <field-view :document="document" :field="fields.slope" />
               <double-numeric-field
                 :document="document"
                 :field1="fields.slackline_length_min"
@@ -67,7 +68,6 @@
               <field-view :document="document" :field="fields.climbing_rating_median" />
               <field-view :document="document" :field="fields.equipment_ratings" />
               <field-view :document="document" :field="fields.paragliding_rating" />
-              <field-view :document="document" :field="fields.exposition_rating" />
 
               <!-- heights -->
               <field-view :document="document" :field="fields.prominence" />

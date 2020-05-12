@@ -73,7 +73,7 @@ function convert(lang) {
 }
 
 function main() {
-  ['fr', 'en', 'es', 'eu', 'de', 'it', 'ca'].forEach(convert);
+  ['fr', 'en', 'es', 'eu', 'de', 'it', 'ca', 'zh_CN'].forEach(convert);
 }
 
 // If running this module directly then call the main function.
