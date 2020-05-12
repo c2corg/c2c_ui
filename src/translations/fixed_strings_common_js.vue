@@ -411,11 +411,6 @@
     <span v-translate translate-context="months">oct</span>
     <span v-translate translate-context="months">nov</span>
     <span v-translate translate-context="months">dec</span>
-    <!-- nb_outings -->
-    <span v-translate translate-context="nb_outings">nb_outings_4</span>
-    <span v-translate translate-context="nb_outings">nb_outings_9</span>
-    <span v-translate translate-context="nb_outings">nb_outings_14</span>
-    <span v-translate translate-context="nb_outings">nb_outings_15</span>
     <!-- paragliding_ratings -->
     <span v-translate translate-context="paragliding_ratings">1</span>
     <span v-translate translate-context="paragliding_ratings">2</span>
