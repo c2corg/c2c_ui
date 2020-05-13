@@ -1,0 +1,25 @@
+name: Retrieve i18n from Transifex
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  retrieve-18n:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Configure git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+      - name: Retrieve i18n from Transifex and create PR if applies
+        uses: c2corg/transifex-pull-request-action@v1
+        with:
+          transifex_token: ${{ secrets.TRANSIFEX_TOKEN }}
+          transifex_project: c2corg_ui
+          transifex_resource: main
+          locales: fr, en, es, eu, de, it, ca, zh_CN
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: transifex/i18n
