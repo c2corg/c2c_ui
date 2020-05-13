@@ -136,6 +136,7 @@ jobs:
       - name: Push translations to Transifex
         run: |
           echo "::add-mask::$TOKEN"
+          npm i
           npm run messages:extract
           curl -L --user api:"$TOKEN" -F file="@src/translations/c2corg_ui-client.pot" -X PUT "https://www.transifex.com/api/2/project/c2corg_ui/resource/main/content/"
         env:
