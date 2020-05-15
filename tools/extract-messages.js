@@ -75,7 +75,6 @@ Process.prototype.push = function(file, line, msgctxt, msgid) {
     this.data[key] = new Result(msgctxt, msgid);
   }
 
-
   const position = this.includeLineNumberInPositions ? `${file}:${line}` : file;
   this.data[key].addFile(position);
 };
@@ -131,11 +130,11 @@ Process.prototype.parseTemplate = function(file, data) {
     let msgctxt;
 
     if (node.children.length !== 1) {
-      throw new Error(`In ${position}\nNodes with v-translate directive must contains only one child`);
+      throw new Error(`In ${line}\nNodes with v-translate directive must contains only one child`);
     }
 
     if (node.children[0].type !== NODETYPE_TEXT) {
-      throw new Error(`In ${position}\nInterploation is not yet supported. Please use $gettext`);
+      throw new Error(`In ${line}\nInterploation is not yet supported. Please use $gettext`);
     }
 
     for (const attribute of node.attrsList) {
@@ -194,7 +193,7 @@ function main(sourceDir, potFile) {
 
 // If running this module directly then call the main function.
 if (require.main === module) {
-  main('src', 'src/translations/po/c2corg_ui-client.pot');
+  main('src', 'src/translations/c2corg_ui-client.pot');
 }
 
 module.exports = main;
