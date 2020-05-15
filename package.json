@@ -32,7 +32,7 @@
     "@fortawesome/free-regular-svg-icons": "5.13.0",
     "@fortawesome/free-solid-svg-icons": "5.13.0",
     "@fortawesome/vue-fontawesome": "0.1.9",
-    "ag-grid-community": "23.1.0",
+    "ag-grid-community": "23.1.1",
     "ag-grid-vue": "23.1.0",
     "axios": "0.19.2",
     "blueimp-load-image": "5.11.0",
