@@ -1,5 +1,4 @@
 // Auto-generated file by generate-icons.js
-/* eslint-disable */
 
 import draft from "./draft"
 import empty from "./empty"

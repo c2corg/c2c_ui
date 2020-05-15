@@ -9,52 +9,51 @@
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  import LabelValue from './LabelValue';
-  import FieldView from './FieldView';
+import LabelValue from './LabelValue';
+import FieldView from './FieldView';
 
-  export default {
+export default {
+  components: {
+    LabelValue,
+    FieldView,
+  },
 
-    components: {
-      LabelValue,
-      FieldView
+  mixins: [requireDocumentProperty],
+
+  props: {
+    field1: {
+      type: Object,
+      required: true,
     },
-
-    mixins: [ requireDocumentProperty ],
-
-    props: {
-      field1: {
-        type: Object,
-        required: true
-      },
-      field2: {
-        type: Object,
-        required: true
-      },
-      label: {
-        type: String,
-        required: true
-      },
-      showSigns: {
-        type: Boolean,
-        default: false
-      }
+    field2: {
+      type: Object,
+      required: true,
     },
+    label: {
+      type: String,
+      required: true,
+    },
+    showSigns: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
-    computed: {
-      value1() {
-        return this.document[this.field1.name];
-      },
-      value2() {
-        return this.document[this.field2.name];
-      },
-      signPlus() {
-        return this.showSigns ? '+' : '';
-      },
-      signMinus() {
-        return this.showSigns ? '-' : '';
-      }
-    }
-  };
+  computed: {
+    value1() {
+      return this.document[this.field1.name];
+    },
+    value2() {
+      return this.document[this.field2.name];
+    },
+    signPlus() {
+      return this.showSigns ? '+' : '';
+    },
+    signMinus() {
+      return this.showSigns ? '-' : '';
+    },
+  },
+};
 </script>

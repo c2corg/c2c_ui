@@ -21,9 +21,7 @@ class Worker {
     }
     const partial = this._stack.shift();
     this._working = true;
-    partial()
-      .then(this._next.bind(this))
-      .catch(this._next.bind(this));
+    partial().then(this._next.bind(this)).catch(this._next.bind(this));
   }
 }
 

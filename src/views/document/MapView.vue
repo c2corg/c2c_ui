@@ -16,25 +16,19 @@
         </div>
       </div>
 
-      <markdown-section
-        :document="document"
-        :field="fields.summary" />
+      <markdown-section :document="document" :field="fields.summary" />
 
-      <markdown-section
-        :document="document"
-        :field="fields.description"
-        hide-title />
+      <markdown-section :document="document" :field="fields.description" hide-title />
 
       <comments-box :document="document" />
-
     </div>
   </div>
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [ documentViewMixin ]
-  };
+export default {
+  mixins: [documentViewMixin],
+};
 </script>

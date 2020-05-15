@@ -9,7 +9,6 @@ export default function install(Vue) {
       const data = this.$localStorage.get(config.urls.api, {});
 
       return {
-
         // The unique name, used to login
         userName: data['userName'] || null,
 
@@ -32,7 +31,7 @@ export default function install(Vue) {
         token: data['token'] || null,
 
         // token expiration date
-        expire: data['expire'] || null
+        expire: data['expire'] || null,
       };
     },
 
@@ -42,14 +41,14 @@ export default function install(Vue) {
       },
       isLogged() {
         return Boolean(this.token);
-      }
+      },
     },
 
     watch: {
-      'token': {
+      token: {
         handler: 'updateToken',
-        immediate: true
-      }
+        immediate: true,
+      },
     },
 
     created() {
@@ -58,19 +57,18 @@ export default function install(Vue) {
 
     methods: {
       signIn(username, password) {
-        return c2c.userProfile.login(username, password)
-          .then(response => {
-            this.lang = response.data.lang;
-            this.token = response.data.token;
-            this.roles = response.data.roles;
-            this.id = response.data.id;
-            this.userName = response.data.username;
-            this.name = response.data.name;
-            this.forumUsername = response.data.forum_username;
-            this.expire = response.data.expire;
+        return c2c.userProfile.login(username, password).then((response) => {
+          this.lang = response.data.lang;
+          this.token = response.data.token;
+          this.roles = response.data.roles;
+          this.id = response.data.id;
+          this.userName = response.data.username;
+          this.name = response.data.name;
+          this.forumUsername = response.data.forum_username;
+          this.expire = response.data.expire;
 
-            this.$language.setCurrent(this.lang);
-            this.commitToLocaleStorage_();
+          this.$language.setCurrent(this.lang);
+          this.commitToLocaleStorage_();
         });
       },
 
@@ -89,18 +87,13 @@ export default function install(Vue) {
       },
 
       updateAccount(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
-        return c2c.userProfile.account.post(
-          currentpassword,
-          name,
-          forum_username,
-          email,
-          is_profile_public,
-          newpassword
-        ).then(() => {
-          this.forumUsername = forum_username === null ? this.forumUsername : forum_username;
-          this.name = name === null ? this.name : name;
-          this.commitToLocaleStorage_();
-        });
+        return c2c.userProfile.account
+          .post(currentpassword, name, forum_username, email, is_profile_public, newpassword)
+          .then(() => {
+            this.forumUsername = forum_username === null ? this.forumUsername : forum_username;
+            this.name = name === null ? this.name : name;
+            this.commitToLocaleStorage_();
+          });
       },
 
       updateToken() {
@@ -134,7 +127,7 @@ export default function install(Vue) {
         }
 
         return false;
-      }
-    }
+      },
+    },
   });
 }

@@ -10,7 +10,7 @@
       </h3>
       <div class="images-container">
         <loading-notification :promise="imagesPromise" />
-        <gallery v-if="images!=null" :images="images.documents" />
+        <gallery v-if="images != null" :images="images.documents" />
       </div>
     </div>
 
@@ -26,8 +26,9 @@
               <fa-icon
                 icon="star"
                 class="has-cursor-pointer"
-                :class="{'has-text-primary': enableUserPreferences}"
-                @click="enableUserPreferences=!enableUserPreferences" />
+                :class="{ 'has-text-primary': enableUserPreferences }"
+                @click="enableUserPreferences = !enableUserPreferences"
+              />
             </span>
           </span>
           <h3 class="title is-2">
@@ -37,11 +38,11 @@
             </router-link>
           </h3>
           <loading-notification :promise="outingsPromise" />
-          <div v-if="outingsByDate!=null">
+          <div v-if="outingsByDate != null">
             <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
               <h4 class="outing-date-header has-text-centered is-italic has-text-weight-bold">
-                <router-link :to="{name: 'outings', query:{date: `${date},${date}`}}">
-                  {{ $moment.toLocalizedString(date, "dddd Do MMMM YYYY") | uppercaseFirstLetter }}
+                <router-link :to="{ name: 'outings', query: { date: `${date},${date}` } }">
+                  {{ $moment.toLocalizedString(date, 'dddd Do MMMM YYYY') | uppercaseFirstLetter }}
                 </router-link>
               </h4>
               <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
@@ -69,7 +70,7 @@
             </router-link>
           </h3>
           <loading-notification :promise="routesPromise" />
-          <div v-if="routes!=null">
+          <div v-if="routes != null">
             <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
           </div>
         </div>
@@ -79,127 +80,125 @@
 </template>
 
 <script>
+import c2c from '@/js/apis/c2c';
 
-  import c2c from '@/js/apis/c2c';
+import DashboardOutingLink from './utils/DashboardOutingLink';
+import DashboardRouteLink from './utils/DashboardRouteLink';
+import ForumWidget from './utils/ForumWidget';
+import Gallery from '@/components/gallery/Gallery';
 
-  import DashboardOutingLink from './utils/DashboardOutingLink';
-  import DashboardRouteLink from './utils/DashboardRouteLink';
-  import ForumWidget from './utils/ForumWidget';
-  import Gallery from '@/components/gallery/Gallery';
+export default {
+  name: 'DashboardView',
 
-  export default {
-    name: 'DashboardView',
+  components: {
+    DashboardOutingLink,
+    DashboardRouteLink,
+    ForumWidget,
+    Gallery,
+  },
 
-    components: {
-      DashboardOutingLink,
-      DashboardRouteLink,
-      ForumWidget,
-      Gallery
+  data() {
+    return {
+      enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
+      outingsPromise: null,
+      routesPromise: null,
+      imagesPromise: null,
+    };
+  },
+
+  computed: {
+    outings() {
+      return this.outingsPromise.data;
     },
 
-    data() {
-      return {
-        enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
-        outingsPromise: null,
-        routesPromise: null,
-        imagesPromise: null
-      };
+    images() {
+      return this.imagesPromise.data;
     },
 
-    computed: {
-      outings() {
-        return this.outingsPromise.data;
-      },
+    routes() {
+      return this.routesPromise.data;
+    },
 
-      images() {
-        return this.imagesPromise.data;
-      },
+    outingsByDate() {
+      if (!this.outings) {
+        return null;
+      }
 
-      routes() {
-        return this.routesPromise.data;
-      },
+      const result = {};
 
-      outingsByDate() {
-        if (!this.outings) {
-          return null;
-        }
+      for (const outing of this.outings.documents) {
+        result[outing.date_end] = result[outing.date_end] || [];
+        result[outing.date_end].push(outing);
+      }
 
-        const result = {};
+      return result;
+    },
+  },
 
-        for (const outing of this.outings.documents) {
-          result[outing.date_end] = result[outing.date_end] || [];
-          result[outing.date_end].push(outing);
-        }
+  watch: {
+    enableUserPreferences: 'loadOutings',
+  },
 
-        return result;
+  created() {
+    this.loadOutings();
+    this.routesPromise = c2c.route.getAll({ limit: 10 });
+    this.imagesPromise = c2c.image.getAll();
+  },
+
+  methods: {
+    loadOutings() {
+      this.$localStorage.set('enableUserPreferences', this.enableUserPreferences);
+
+      if (!this.enableUserPreferences || !this.$user.isLogged) {
+        this.loadOutingsWithQuery();
+      } else {
+        this.outingsPromise = this.getQueryFromUserPreferences('outing').then(this.loadOutingsWithQuery);
       }
     },
 
-    watch: {
-      enableUserPreferences: 'loadOutings'
+    loadOutingsWithQuery(query) {
+      query = query || {};
+      query.limit = 30;
+      this.outingsPromise = c2c.outing.getAll(query);
     },
 
-    created() {
-      this.loadOutings();
-      this.routesPromise = c2c.route.getAll({ limit: 10 });
-      this.imagesPromise = c2c.image.getAll();
-    },
+    getQueryFromUserPreferences(documentType) {
+      return new Promise(function (resolve) {
+        c2c.userProfile.preferences.get().then((result) => {
+          const preferences = result.data;
+          const query = {};
 
-    methods: {
-      loadOutings() {
-        this.$localStorage.set('enableUserPreferences', this.enableUserPreferences);
+          if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType)) {
+            const activities = preferences.activities.join(',');
+            query.act = activities === '' ? undefined : activities;
+          }
 
-        if (!this.enableUserPreferences || !this.$user.isLogged) {
-          this.loadOutingsWithQuery();
-        } else {
-          this.outingsPromise = this.getQueryFromUserPreferences('outing').then(this.loadOutingsWithQuery);
-        }
-      },
+          if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType)) {
+            const areas = preferences.areas.map((area) => area.document_id).join(',');
+            query.a = areas === '' ? undefined : areas;
+            query.bbox = undefined;
+          }
 
-      loadOutingsWithQuery(query) {
-        query = query || {};
-        query.limit = 30;
-        this.outingsPromise = c2c.outing.getAll(query);
-      },
-
-      getQueryFromUserPreferences(documentType) {
-        return new Promise(function(resolve, reject) {
-          c2c.userProfile.preferences.get().then((result) => {
-            const preferences = result.data;
-            const query = {};
-
-            if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType)) {
-              const activities = preferences.activities.join(',');
-              query.act = activities === '' ? undefined : activities;
-            }
-
-            if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType)) {
-              const areas = preferences.areas.map((area) => area.document_id).join(',');
-              query.a = areas === '' ? undefined : areas;
-              query.bbox = undefined;
-            }
-
-            resolve(query);
-          });
+          resolve(query);
         });
-      }
-    }
-  };
-
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .images-container{
-    min-height: 200px;
-  }
+.images-container {
+  min-height: 200px;
+}
 
-  h3{
-    padding-bottom:0.7rem !important;
-    margin-bottom:0.7rem !important;
-    border-bottom:1px solid #DDD;
-  }
+h3 {
+  padding-bottom: 0.7rem !important;
+  margin-bottom: 0.7rem !important;
+  border-bottom: 1px solid #ddd;
+}
 
-  .outing-date-header{
-    margin-top:1.5rem;
-  }
+.outing-date-header {
+  margin-top: 1.5rem;
+}
 </style>

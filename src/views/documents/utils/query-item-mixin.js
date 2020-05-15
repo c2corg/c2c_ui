@@ -13,7 +13,7 @@ export default {
           query.offset = undefined;
           this.$router.push({ query });
         }
-      }
+      },
     },
 
     value: {
@@ -22,7 +22,7 @@ export default {
       },
       set(value) {
         this.urlValue = this.field.valueToUrl(value);
-      }
-    }
-  }
+      },
+    },
+  },
 };

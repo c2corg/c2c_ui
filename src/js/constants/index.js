@@ -2,7 +2,7 @@ import common from './common.json';
 import Field from './Field.js';
 import documentsProperties from './documentsProperties.json';
 
-const getFieldsObject = function(fieldsArray) {
+const getFieldsObject = function (fieldsArray) {
   const result = {};
 
   for (const def of fieldsArray) {
@@ -37,8 +37,8 @@ function Constants() {
     this.letterToDocumentType[documentProperties.letter] = documentType;
   }
 
-  documentsProperties.outing.fields.date_start.max = (new Date()).toISOString().substring(0, 10);
-  documentsProperties.outing.fields.date_end.max = (new Date()).toISOString().substring(0, 10);
+  documentsProperties.outing.fields.date_start.max = new Date().toISOString().substring(0, 10);
+  documentsProperties.outing.fields.date_end.max = new Date().toISOString().substring(0, 10);
 }
 
 export default new Constants();

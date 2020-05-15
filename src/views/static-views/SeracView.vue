@@ -5,12 +5,14 @@
       <div class="columns is-multiline">
         <div class="column is-12">
           <div class="serac-block has-text-centered has-text-light">
-
             <h1 class="title is-1 has-text-light has-text-weight-bold" v-translate>SERAC</h1>
-            <h3 class="subtitle is-3 has-text-light has-text-weight-bold" v-translate>Let's make our feedbacks valuable</h3>
+            <h3 class="subtitle is-3 has-text-light has-text-weight-bold" v-translate>
+              Let's make our feedbacks valuable
+            </h3>
 
             <p v-translate>
-              SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.
+              SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and
+              mountain sports.
             </p>
           </div>
         </div>
@@ -20,7 +22,8 @@
             <h3 class="title is-3 has-text-light" v-translate>Near-accidents are valuable</h3>
             <ul>
               <li v-translate>
-                Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.
+                Near-accidents = delicate situation not leading to physical injury but could have lead to a much more
+                serious event.
               </li>
               <li v-translate>
                 These are positive experiences that reveal usefull risk-management skills.
@@ -80,7 +83,7 @@
         </div>
 
         <div class="column is-4">
-          <router-link :to="{name:'article', params:{id:697210}}" class="button is-success has-text-weight-bold">
+          <router-link :to="{ name: 'article', params: { id: 697210 } }" class="button is-success has-text-weight-bold">
             <fa-icon icon="info" />
             &nbsp;
             <span v-translate>Know more about SERAC</span>
@@ -97,9 +100,10 @@
                 class="column topoguide-view-small-link"
                 v-for="eventActivity of $options.event_activities"
                 :key="eventActivity"
-                :to="{name:'xreports', query:{act:eventActivity}}">
+                :to="{ name: 'xreports', query: { act: eventActivity } }"
+              >
                 <span class="is-size-1"><icon-event-activity :event-activity="eventActivity" /></span>
-                <span class="has-text-weight-semibold ">
+                <span class="has-text-weight-semibold">
                   {{ $gettext(eventActivity, 'event_activities') | uppercaseFirstLetter }}
                 </span>
               </topoguide-view-small-link>
@@ -112,58 +116,55 @@
 </template>
 
 <script>
-  import constants from '@/js/constants';
+import constants from '@/js/constants';
 
-  import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+import TopoguideViewSmallLink from './TopoguideViewSmallLink';
 
-  export default {
-    components: {
-      TopoguideViewSmallLink
-    },
+export default {
+  components: {
+    TopoguideViewSmallLink,
+  },
 
-    event_activities: constants.event_activities
-  };
-
+  event_activities: constants.event_activities,
+};
 </script>
 
 <style scoped lang="scss">
+.serac-view {
+  background-image: url('~@/assets/img/backgrounds/cermygian-crevasse.jpg');
+  background-size: cover;
+  background-position-y: 50%;
+  min-height: 100%;
 
-.serac-view{
-    background-image:url('~@/assets/img/backgrounds/cermygian-crevasse.jpg');
-    background-size: cover;
-    background-position-y: 50%;
-    min-height: 100%;
-
-    .serac-view-content{
-        padding:10px;
-        padding-top:60px;
-        margin:auto;
-        max-width: 880px;
-    }
+  .serac-view-content {
+    padding: 10px;
+    padding-top: 60px;
+    margin: auto;
+    max-width: 880px;
+  }
 }
 
-.serac-block{
-    background-color:rgba(21,50,69,0.4);
-    padding:20px;
-    height: 100%;
-    transition: background-color 300ms;
+.serac-block {
+  background-color: rgba(21, 50, 69, 0.4);
+  padding: 20px;
+  height: 100%;
+  transition: background-color 300ms;
 
-    ul{
-      margin-left: 1em!important;
-    }
+  ul {
+    margin-left: 1em !important;
+  }
 }
 
-.serac-block:hover{
-    background-color:rgba(21,50,69,0.6);
+.serac-block:hover {
+  background-color: rgba(21, 50, 69, 0.6);
 }
 
-.button{
-    display: inline-block;
-    width: 100%;
+.button {
+  display: inline-block;
+  width: 100%;
 }
 
-.topoguide-view-small-link{
+.topoguide-view-small-link {
   min-width: 10rem;
 }
-
 </style>

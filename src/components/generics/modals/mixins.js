@@ -1,8 +1,7 @@
-
 export default {
   data() {
     return {
-      visible: false
+      visible: false,
     };
   },
 
@@ -15,6 +14,6 @@ export default {
     hide() {
       this.visible = false;
       this.$emit('hide');
-    }
-  }
+    },
+  },
 };

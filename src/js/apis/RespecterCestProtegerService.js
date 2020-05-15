@@ -4,7 +4,7 @@ function RespecterCestProtegerService() {
   this.axios = axios.create();
 }
 
-RespecterCestProtegerService.prototype.identify = function(position, extent, mapWidth, mapHeight, language) {
+RespecterCestProtegerService.prototype.identify = function (position, extent, mapWidth, mapHeight, language) {
   if (language !== 'fr' && language !== 'de' && language !== 'it') {
     language = 'en';
   }

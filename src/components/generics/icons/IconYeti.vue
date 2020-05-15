@@ -3,7 +3,7 @@
 </template>
 
 <style scoped>
-  .icon-yeti {
-    transform: rotate(-45deg) scale(.95);
-  }
+.icon-yeti {
+  transform: rotate(-45deg) scale(0.95);
+}
 </style>

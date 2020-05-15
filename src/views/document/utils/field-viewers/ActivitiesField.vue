@@ -5,21 +5,20 @@
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  import LabelValue from './LabelValue';
+import LabelValue from './LabelValue';
 
-  export default {
-    components: { LabelValue },
-    mixins: [requireDocumentProperty ]
-  };
-
+export default {
+  components: { LabelValue },
+  mixins: [requireDocumentProperty],
+};
 </script>
 
 <style lang="scss" scoped>
 @media print {
-  .is-size-3{
-        font-size: 1rem !important;
+  .is-size-3 {
+    font-size: 1rem !important;
   }
 }
 </style>

@@ -10,9 +10,11 @@
       <div
         class="field"
         :class="{
-          'is-grouped is-grouped-multiline':isGrouped,
-          'is-expanded':isExpanded,
-          'is-narrow':isNarrow,}">
+          'is-grouped is-grouped-multiline': isGrouped,
+          'is-expanded': isExpanded,
+          'is-narrow': isNarrow,
+        }"
+      >
         <slot />
       </div>
     </div>
@@ -20,70 +22,70 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      label: {
-        type: String,
-        default: ''
-      },
-      alwaysVisible: {
-        type: Boolean,
-        default: false
-      },
-      isGrouped: {
-        type: Boolean,
-        default: false
-      },
-      isExpanded: {
-        type: Boolean,
-        default: false
-      },
-      isNarrow: {
-        type: Boolean,
-        default: false
-      },
-      helper: {
-        type: String,
-        default: undefined
-      }
+export default {
+  props: {
+    label: {
+      type: String,
+      default: '',
     },
-
-    data() {
-      return {
-        visible: true,
-        hasError: false
-      };
+    alwaysVisible: {
+      type: Boolean,
+      default: false,
     },
-
-    mounted() {
-      for (const child of this.$children) {
-        child.$watch('visible', this.checkVisibility);
-        child.$watch('hasError', this.checkHasError);
-      }
-
-      this.checkVisibility();
-      this.checkHasError();
+    isGrouped: {
+      type: Boolean,
+      default: false,
     },
+    isExpanded: {
+      type: Boolean,
+      default: false,
+    },
+    isNarrow: {
+      type: Boolean,
+      default: false,
+    },
+    helper: {
+      type: String,
+      default: undefined,
+    },
+  },
 
-    methods: {
-      checkVisibility() {
-        this.visible = this.alwaysVisible;
+  data() {
+    return {
+      visible: true,
+      hasError: false,
+    };
+  },
 
-        for (const child of this.$children) {
-          if (child.visible) {
-            this.visible = this.visible || true;
-          }
-        }
-      },
-      checkHasError() {
-        this.hasError = false;
-
-        for (const child of this.$children) {
-          if (child.hasError === true) {
-            this.hasError = true;
-          }
-        }
-      }
+  mounted() {
+    for (const child of this.$children) {
+      child.$watch('visible', this.checkVisibility);
+      child.$watch('hasError', this.checkHasError);
     }
-  };
+
+    this.checkVisibility();
+    this.checkHasError();
+  },
+
+  methods: {
+    checkVisibility() {
+      this.visible = this.alwaysVisible;
+
+      for (const child of this.$children) {
+        if (child.visible) {
+          this.visible = this.visible || true;
+        }
+      }
+    },
+    checkHasError() {
+      this.hasError = false;
+
+      for (const child of this.$children) {
+        if (child.hasError === true) {
+          this.hasError = true;
+        }
+      }
+    },
+  },
+};
 </script>

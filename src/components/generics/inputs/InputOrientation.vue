@@ -1,14 +1,14 @@
 <template>
   <div class="control" :title="value_.join(', ')">
     <svg
-      :class="{'is-read-only':disabled}"
+      :class="{ 'is-read-only': disabled }"
       class="input-orientation is-unselectable"
       xmlns="http://www.w3.org/2000/svg"
       width="100"
       height="100"
       version="1.1"
-      viewBox="0 0 454.00715 454.00714">
-
+      viewBox="0 0 454.00715 454.00714"
+    >
       <g :class="{ 'input-orientation-selected': value_.indexOf('E') > -1 }" @click="toggle('E')">
         <path d="m370.28 168.82-142.14 58.18 142.14 58.185h0.005l83.722-58.185z" />
         <text y="247.58344" x="350" font-size="60">E</text>
@@ -44,56 +44,52 @@
       <g :class="{ 'input-orientation-selected': value_.indexOf('NE') > -1 }" @click="toggle('NE')">
         <path d="m369.46 166.83-141.65 59.371 59.368-141.65 0.002-0.002 100.34-18.058z" />
       </g>
-
     </svg>
   </div>
 </template>
 
 <script>
-  import { baseMixin, arrayMixin } from './mixins.js';
+import { baseMixin, arrayMixin } from './mixins.js';
 
-  export default {
-    mixins: [ baseMixin, arrayMixin ]
-  };
+export default {
+  mixins: [baseMixin, arrayMixin],
+};
 </script>
 
 <style scoped lang="scss">
-
 @import '@/assets/sass/variables.scss';
 
-.input-orientation > g > path{
-    fill:#DDD;
-    transition:0.1s;
+.input-orientation > g > path {
+  fill: #ddd;
+  transition: 0.1s;
 }
 
-.input-orientation:not(.is-read-only) > g
-{
-    cursor:pointer;
+.input-orientation:not(.is-read-only) > g {
+  cursor: pointer;
 }
 
-.input-orientation > g.input-orientation-selected > path{
-    fill:$primary;
-    transition:0.1s;
+.input-orientation > g.input-orientation-selected > path {
+  fill: $primary;
+  transition: 0.1s;
 }
 
-.input-orientation > g.input-orientation-selected > text{
-    fill:$white;
-    transition:0.1s;
+.input-orientation > g.input-orientation-selected > text {
+  fill: $white;
+  transition: 0.1s;
 }
 
-@media print{
-  .input-orientation{
-    display:none;
+@media print {
+  .input-orientation {
+    display: none;
   }
 
-  div:before{
-    content:"Orientations : ";
+  div:before {
+    content: 'Orientations : ';
     font-weight: 700;
   }
 
-  div:after{
-    content:attr(title);
+  div:after {
+    content: attr(title);
   }
 }
-
 </style>

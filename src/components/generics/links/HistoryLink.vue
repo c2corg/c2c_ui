@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name:documentType + '-history', params:{id:document.document_id, lang:lang}}">
+  <router-link :to="{ name: documentType + '-history', params: { id: document.document_id, lang: lang } }">
     <slot>
       hist
     </slot>
@@ -7,16 +7,16 @@
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default{
-    mixins: [ requireDocumentProperty ],
+export default {
+  mixins: [requireDocumentProperty],
 
-    props: {
-      lang: {
-        type: String,
-        required: true
-      }
-    }
-  };
+  props: {
+    lang: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>

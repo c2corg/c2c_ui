@@ -6,22 +6,22 @@
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentProperty ],
+export default {
+  mixins: [requireDocumentProperty],
 
-    props: {
-      uppercaseFirstLetter: {
-        type: Boolean,
-        default: false
-      }
+  props: {
+    uppercaseFirstLetter: {
+      type: Boolean,
+      default: false,
     },
+  },
 
-    computed: {
-      title() {
-        return this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
-      }
-    }
-  };
+  computed: {
+    title() {
+      return this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
+    },
+  },
+};
 </script>

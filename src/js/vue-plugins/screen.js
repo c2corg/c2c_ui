@@ -1,4 +1,3 @@
-
 const BREAKPOINT_MOBILE = 768;
 const BREAKPOINT_TABLET = 1023;
 const BREAKPOINT_DESKTOP = 1215;
@@ -11,7 +10,7 @@ export default function install(Vue) {
     data() {
       return {
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       };
     },
 
@@ -31,7 +30,7 @@ export default function install(Vue) {
       },
       isFullHD() {
         return this.width > BREAKPOINT_WIDESCREEN;
-      }
+      },
     },
 
     created() {
@@ -42,7 +41,7 @@ export default function install(Vue) {
       onResize() {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-      }
-    }
+      },
+    },
   });
 }

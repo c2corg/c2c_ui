@@ -4,7 +4,8 @@
     :document="document"
     :generic-errors="genericErrors"
     :is-loading="saving"
-    @save="save">
+    @save="save"
+  >
     <div class="columns is-multiline">
       <form-field class="is-12" :document="document" :field="fields.activities" />
       <form-field class="is-12" :document="document" :field="fields.categories" />
@@ -14,18 +15,14 @@
 
     <map-input-row :document="document" />
 
-    <hr>
-
+    <hr />
   </edition-container>
 </template>
 
 <script>
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
-  import documentEditionViewMixin from './utils/document-edition-view-mixin';
-
-  export default {
-
-    mixins: [ documentEditionViewMixin ]
-  };
-
+export default {
+  mixins: [documentEditionViewMixin],
+};
 </script>

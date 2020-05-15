@@ -15,22 +15,22 @@ const NOT_MARKDOWN_PROPERTY = new Set([
   'slope',
   'conditions_levels',
   'topic_id',
-  'participants'
+  'participants',
 ]);
 
-const Cooker = function() {
+const Cooker = function () {
   this._cache = new Cache();
 };
 
-Cooker.prototype.has = function(markdown) {
+Cooker.prototype.has = function (markdown) {
   return this._cache.has(markdown);
 };
 
-Cooker.prototype.get = function(markdown) {
+Cooker.prototype.get = function (markdown) {
   return this._cache.get(markdown);
 };
 
-Cooker.prototype.feed = function(locale, cooked) {
+Cooker.prototype.feed = function (locale, cooked) {
   for (const key of Object.keys(locale)) {
     if (!NOT_MARKDOWN_PROPERTY.has(key) && locale[key]) {
       this._cache.feed(locale[key], cooked[key]);
@@ -38,7 +38,7 @@ Cooker.prototype.feed = function(locale, cooked) {
   }
 };
 
-Cooker.prototype.cook = function(locale) {
+Cooker.prototype.cook = function (locale) {
   const missing = {};
   const result = {};
   let mustCallServer = false;
@@ -55,7 +55,7 @@ Cooker.prototype.cook = function(locale) {
   }
 
   if (mustCallServer) {
-    return c2c.cooker(missing).then(response => {
+    return c2c.cooker(missing).then((response) => {
       this.feed(missing, response.data);
 
       // complete data with previously calculated data
@@ -65,14 +65,14 @@ Cooker.prototype.cook = function(locale) {
     // otherwise, return a fake promise
 
     const response = {
-      data: result
+      data: result,
     };
 
     return {
       response,
       then(callback) {
         callback(response);
-      }
+      },
     };
   }
 };

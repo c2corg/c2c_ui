@@ -13,9 +13,7 @@
     </card-row>
 
     <card-row>
-      <card-activities-item
-        v-if="document.activities"
-        :activities="document.activities" />
+      <card-activities-item v-if="document.activities" :activities="document.activities" />
       &nbsp;
 
       <textual-array
@@ -23,18 +21,16 @@
         :array="document.categories"
         i18n
         i18n-context="user_categories"
-        class="is-ellipsed" />
+        class="is-ellipsed"
+      />
     </card-row>
   </card-container>
 </template>
 
 <script>
+import { documentCardMixin } from './utils/mixins.js';
 
-  import { documentCardMixin } from './utils/mixins.js';
-
-  export default {
-    mixins: [
-      documentCardMixin
-    ]
-  };
+export default {
+  mixins: [documentCardMixin],
+};
 </script>

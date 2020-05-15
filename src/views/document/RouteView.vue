@@ -1,11 +1,9 @@
 <template>
   <div class="section has-background-white-print">
-
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="columns is-block-print">
-
       <div class="column is-3 no-print">
-        <map-box :document="document" @has-protection-area="hasProtectionArea=true" />
+        <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <tool-box :document="document" />
       </div>
 
@@ -14,7 +12,6 @@
 
         <div class="box">
           <div class="columns">
-
             <div class="column is-4">
               <activities-field :document="document" />
               <field-view :document="document" :field="fields.route_types" />
@@ -27,35 +24,35 @@
             </div>
 
             <div class="column is-4">
-
               <label-value :label="$gettext('ratings')">
                 <document-rating v-if="$documentUtils.hasRating(document)" :document="document" show-helper />
                 <edit-link v-else :document="document" :lang="$user.lang" />
               </label-value>
 
-              <field-view v-if="document.glacier_gear!='no'" :document="document" :field="fields.glacier_gear" />
+              <field-view v-if="document.glacier_gear != 'no'" :document="document" :field="fields.glacier_gear" />
 
               <input-orientation
                 v-if="document.orientations && document.orientations.length"
                 v-model="document.orientations"
-                disabled />
-
+                disabled
+              />
             </div>
 
             <div class="column is-4">
-
               <double-numeric-field
                 :document="document"
                 :field1="fields.elevation_min"
                 :field2="fields.elevation_max"
-                :label="$gettext('elevation')" />
+                :label="$gettext('elevation')"
+              />
 
               <double-numeric-field
                 :document="document"
                 :field1="fields.height_diff_up"
                 :field2="fields.height_diff_down"
                 :label="$gettext('height_diff')"
-                show-signs />
+                show-signs
+              />
 
               <field-view :document="document" :field="fields.height_diff_difficulties" />
               <field-view :document="document" :field="fields.difficulties_height" />
@@ -74,7 +71,6 @@
               </label-value>
 
               <field-view :document="document" :field="fields.slackline_height" />
-
             </div>
           </div>
         </div>
@@ -87,10 +83,7 @@
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
 
           <markdown-section :document="document" :field="fields.remarks">
-            <div
-              slot="after"
-              v-if="hasProtectionArea"
-              class="notification is-info protection-area-info">
+            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info">
               <strong v-translate>
                 Sensitive areas
               </strong>
@@ -104,7 +97,7 @@
             <div class="content automatic-gears" slot="after" v-if="Object.keys(gear_articles).length !== 0">
               <ul>
                 <li v-for="(label, articleId) of gear_articles" :key="articleId">
-                  <router-link :to="{ name: 'article', params: {id: articleId} }">
+                  <router-link :to="{ name: 'article', params: { id: articleId } }">
                     {{ label }}
                   </router-link>
                 </li>
@@ -114,7 +107,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split />
@@ -123,90 +116,91 @@
         <recent-outings-box :document="document" />
 
         <comments-box :document="document" />
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [ documentViewMixin ],
+export default {
+  mixins: [documentViewMixin],
 
-    data() {
-      return {
-        hasProtectionArea: false
-      };
-    },
+  data() {
+    return {
+      hasProtectionArea: false,
+    };
+  },
 
-    computed: {
-      // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L103
-      gear_articles() {
-        const result = {};
-        const doc = this.document;
-        const activities = doc.activities || [];
-        const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
-        const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
-        const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
+  computed: {
+    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L103
+    gear_articles() {
+      const result = {};
+      const doc = this.document;
+      const activities = doc.activities || [];
+      const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
+      const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
+      const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
 
-        if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
-          result['183333'] = this.$gettext('skitouring gear');
-        }
+      if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
+        result['183333'] = this.$gettext('skitouring gear');
+      }
 
-        if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
-          result['185750'] = this.$gettext('easy snow ice mixed gear');
-        }
+      if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
+        result['185750'] = this.$gettext('easy snow ice mixed gear');
+      }
 
-        if (activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating)) {
+      if (activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating)) {
+        result['185384'] = this.$gettext('easy mountain climbing gear');
+      }
+
+      if (activities.includes('rock_climbing')) {
+        if (['P1', 'P1+'].includes(doc.equipment_rating)) {
+          result['183332'] = this.$gettext('bolted rock climbing gear');
+        } else if (
+          !activities.includes('mountain_climbing') &&
+          easy_mountain.includes(doc.global_rating) &&
+          poor_equiped.includes(doc.equipment_rating)
+        ) {
           result['185384'] = this.$gettext('easy mountain climbing gear');
         }
-
-        if (activities.includes('rock_climbing')) {
-          if (['P1', 'P1+'].includes(doc.equipment_rating)) {
-            result['183332'] = this.$gettext('bolted rock climbing gear');
-          } else if (!activities.includes('mountain_climbing') &&
-            easy_mountain.includes(doc.global_rating) &&
-            poor_equiped.includes(doc.equipment_rating)) {
-              result['185384'] = this.$gettext('easy mountain climbing gear');
-            }
-        }
-
-        if (activities.includes('ice_climbing')) {
-          result['194479'] = this.$gettext('ice and dry climbing gear');
-        }
-
-        if (activities.includes('hiking')) {
-          result['185207'] = this.$gettext('hiking gear');
-        }
-
-        // we should use an anchor for glacier gear, but it's not possible
-        if (doc.glacier_gear && doc.glacier_gear !== 'no') {
-          if (activities.filter(act => glacier_activities.includes(act))) {
-            result['185750'] = this.$gettext('easy snow ice mixed gear');
-          }
-        }
-
-        return result;
       }
-    }
-  };
+
+      if (activities.includes('ice_climbing')) {
+        result['194479'] = this.$gettext('ice and dry climbing gear');
+      }
+
+      if (activities.includes('hiking')) {
+        result['185207'] = this.$gettext('hiking gear');
+      }
+
+      // we should use an anchor for glacier gear, but it's not possible
+      if (doc.glacier_gear && doc.glacier_gear !== 'no') {
+        if (activities.filter((act) => glacier_activities.includes(act))) {
+          result['185750'] = this.$gettext('easy snow ice mixed gear');
+        }
+      }
+
+      return result;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .protection-area-info{
-    overflow:hidden;
-    margin-bottom: 1.5rem;
-  }
-  .automatic-gears{
-    margin-bottom: 1.5rem;
-  }
+.protection-area-info {
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.automatic-gears {
+  margin-bottom: 1.5rem;
+}
 
-  @media print{
-    .protection-area-info{
-      margin: 0rem !important;
-      padding: 0rem !important;
-    }
+@media print {
+  .protection-area-info {
+    margin: 0rem !important;
+    padding: 0rem !important;
   }
+}
 </style>

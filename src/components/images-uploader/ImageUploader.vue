@@ -1,8 +1,6 @@
 <template>
   <div class="card">
-    <div
-      class="card-image img-container"
-      :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
+    <div class="card-image img-container" :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
       <delete-button class="delete-button" @click="$emit('deleteImage')" />
 
       <progress
@@ -11,24 +9,21 @@
         :class="{
           'is-success': isSuccess,
           'is-warning': isSaving,
-          'is-danger': isFailed
+          'is-danger': isFailed,
         }"
         :value="percentCompleted"
-        max="100">{{ percentCompleted }}%</progress>
+        max="100"
+        >{{ percentCompleted }}%</progress
+      >
     </div>
 
     <div class="card-content">
       <div v-if="!isFailed">
-        <div
-          v-if="categoriesEdition"
-          class="columns is-mobile is-multiline is-gapless category-select">
+        <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
           <div v-for="item of imageCategories" :key="item" class="column is-4">
             <label class="checkbox">
-              <input
-                type="checkbox"
-                :checked="document.categories.includes(item)"
-                @input="toggleCategory(item)">
-              {{ $gettext(item, "image_categories") | uppercaseFirstLetter }}
+              <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
+              {{ $gettext(item, 'image_categories') | uppercaseFirstLetter }}
             </label>
           </div>
         </div>
@@ -36,10 +31,7 @@
         <div v-else>
           <div class="field title-input">
             <div class="control">
-              <input
-                type="text"
-                :placeholder="$gettext('title')"
-                v-model="document.locales[0].title">
+              <input type="text" :placeholder="$gettext('title')" v-model="document.locales[0].title" />
             </div>
           </div>
 
@@ -50,10 +42,11 @@
               :class="{
                 'has-background-success': document.image_type == licence,
                 'is-4': licences.size === 3,
-                'is-6': licences.size === 2
+                'is-6': licences.size === 2,
               }"
               :key="licence"
-              @click="document.image_type = licence">
+              @click="document.image_type = licence"
+            >
               <label>{{ licences.length }} {{ label | uppercaseFirstLetter }}</label>
             </div>
           </div>
@@ -61,16 +54,10 @@
       </div>
 
       <div v-else class="buttons is-centered buttons-if-failed">
-        <button
-          @click="$emit('retryUpload')"
-          class="button is-primary"
-          v-translate>
+        <button @click="$emit('retryUpload')" class="button is-primary" v-translate>
           Retry
         </button>
-        <button
-          @click="$emit('deleteImage')"
-          class="button is-danger"
-          v-translate>
+        <button @click="$emit('deleteImage')" class="button is-danger" v-translate>
           Cancel
         </button>
       </div>
@@ -79,178 +66,178 @@
 </template>
 
 <script>
-  // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-  import constants from '@/js/constants';
+// https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
+import constants from '@/js/constants';
 
-  export default {
-    props: {
-      categoriesEdition: {
-        type: Boolean,
-        required: true
-      },
-      dataUrl: {
-        type: String,
-        default: null
-      },
-      status: {
-        type: String,
-        required: true
-      },
-      percentCompleted: {
-        type: Number,
-        required: true
-      },
-      document: {
-        type: Object,
-        required: true
-      },
-      isInitial: {
-        type: Boolean,
-        required: true
-      },
-      isSaving: {
-        type: Boolean,
-        required: true
-      },
-      isSuccess: {
-        type: Boolean,
-        required: true
-      },
-      isFailed: {
-        type: Boolean,
-        required: true
-      }
+export default {
+  props: {
+    categoriesEdition: {
+      type: Boolean,
+      required: true,
     },
-
-    data() {
-      const result = {
-        licences: new Map([
-          ['collaborative', this.$gettext('collab')],
-          ['personal', this.$gettext('personal')]
-        ])
-      };
-
-      if (this.$user.isModerator) {
-        result.licences.set('copyright', this.$gettext('copyright'));
-      }
-
-      return result;
+    dataUrl: {
+      type: String,
+      default: null,
     },
-
-    computed: {
-      imageCategories() {
-        return constants.objectDefinitions.image.fields.categories.values;
-      }
+    status: {
+      type: String,
+      required: true,
     },
+    percentCompleted: {
+      type: Number,
+      required: true,
+    },
+    document: {
+      type: Object,
+      required: true,
+    },
+    isInitial: {
+      type: Boolean,
+      required: true,
+    },
+    isSaving: {
+      type: Boolean,
+      required: true,
+    },
+    isSuccess: {
+      type: Boolean,
+      required: true,
+    },
+    isFailed: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
-    methods: {
-      toggleCategory(category) {
-        const newValue = this.document.categories.slice(0);
+  data() {
+    const result = {
+      licences: new Map([
+        ['collaborative', this.$gettext('collab')],
+        ['personal', this.$gettext('personal')],
+      ]),
+    };
 
-        if (!newValue.includes(category)) {
-          newValue.push(category);
-        } else {
-          newValue.splice(newValue.indexOf(category), 1);
-        }
-
-        this.document.categories = newValue;
-      }
+    if (this.$user.isModerator) {
+      result.licences.set('copyright', this.$gettext('copyright'));
     }
-  };
+
+    return result;
+  },
+
+  computed: {
+    imageCategories() {
+      return constants.objectDefinitions.image.fields.categories.values;
+    },
+  },
+
+  methods: {
+    toggleCategory(category) {
+      const newValue = this.document.categories.slice(0);
+
+      if (!newValue.includes(category)) {
+        newValue.push(category);
+      } else {
+        newValue.splice(newValue.indexOf(category), 1);
+      }
+
+      this.document.categories = newValue;
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  @import "~bulma/sass/utilities/initial-variables.sass";
+@import '~bulma/sass/utilities/initial-variables.sass';
 
-  .img-container {
-    width: 100%;
-    height: 200px;
+.img-container {
+  width: 100%;
+  height: 200px;
+  transition: 0.2s;
+  background-color: #e2e2e2;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  position: relative;
+
+  &:hover {
+    // background-color: black;
     transition: 0.2s;
-    background-color: #e2e2e2;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    position: relative;
 
-    &:hover {
-      // background-color: black;
+    .exif {
+      background-color: rgba(83, 83, 83, 0.58);
+    }
+
+    .remove-image-btn,
+    .exif p {
+      opacity: 1;
       transition: 0.2s;
-
-      .exif {
-        background-color: rgba(83, 83, 83, 0.58);
-      }
-
-      .remove-image-btn,
-      .exif p {
-        opacity: 1;
-        transition: 0.2s;
-      }
-    }
-
-    progress {
-      position: absolute;
-      bottom: 0;
     }
   }
 
-  .card-content {
-    height: 115px;
-    overflow-y: hidden;
-    padding: 0;
-
-    .category-select {
-      padding: 0.5rem;
-
-      label {
-        display: inherit;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        user-select: none;
-      }
-    }
-
-    .title-input {
-      margin-bottom: 0;
-
-      input {
-        padding: 19px 0.5rem;
-        border: 0;
-        outline: 0;
-        display: block;
-        width: 100%;
-        font-size: 1rem;
-      }
-    }
-
-    .licence-select {
-      border-top: 1px solid #ddd;
-      max-width: 100%;
-
-      .column:not(:last-child) {
-        border-right: 1px solid #ddd;
-      }
-
-      label {
-        padding: 19px 0.5rem;
-        display: inherit;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        cursor: pointer;
-        user-select: none;
-      }
-    }
-  }
-
-  .delete-button {
+  progress {
     position: absolute;
-    top: -1rem;
-    right: -1rem;
-    font-size: 3rem;
+    bottom: 0;
+  }
+}
+
+.card-content {
+  height: 115px;
+  overflow-y: hidden;
+  padding: 0;
+
+  .category-select {
+    padding: 0.5rem;
+
+    label {
+      display: inherit;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      user-select: none;
+    }
   }
 
-  .buttons-if-failed {
-    margin-top: 3em;
+  .title-input {
+    margin-bottom: 0;
+
+    input {
+      padding: 19px 0.5rem;
+      border: 0;
+      outline: 0;
+      display: block;
+      width: 100%;
+      font-size: 1rem;
+    }
   }
+
+  .licence-select {
+    border-top: 1px solid #ddd;
+    max-width: 100%;
+
+    .column:not(:last-child) {
+      border-right: 1px solid #ddd;
+    }
+
+    label {
+      padding: 19px 0.5rem;
+      display: inherit;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+}
+
+.delete-button {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  font-size: 3rem;
+}
+
+.buttons-if-failed {
+  margin-top: 3em;
+}
 </style>

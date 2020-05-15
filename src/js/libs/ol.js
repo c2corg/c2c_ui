@@ -59,7 +59,7 @@ export default {
     FullScreen,
     ScaleLine,
     Zoom,
-    Attribution
+    Attribution,
   },
 
   extent: {
@@ -67,39 +67,39 @@ export default {
     getWidth,
     containsXY,
     createEmpty,
-    extend
+    extend,
   },
 
   format: {
     GeoJSON,
     GPX,
-    KML
+    KML,
   },
 
   geom: {
     LineString,
     Point,
-    Polygon
+    Polygon,
   },
 
   interaction: {
     Draw,
     Modify,
     Snap,
-    DragAndDrop
+    DragAndDrop,
   },
 
   layer: {
     Vector: VectorLayer,
     Tile: TileLayer,
-    Image: ImageLayer
+    Image: ImageLayer,
   },
 
   proj: {
     get: getProjection,
     transform: transformProjection,
     transformExtent,
-    toLonLat
+    toLonLat,
   },
 
   source: {
@@ -107,7 +107,7 @@ export default {
     BingMaps,
     XYZ,
     WMTS,
-    ImageStatic
+    ImageStatic,
   },
 
   style: {
@@ -116,10 +116,10 @@ export default {
     Circle,
     Fill,
     Stroke,
-    Text
+    Text,
   },
 
   tilegrid: {
-    WMTS: WMTSTileGrid
-  }
+    WMTS: WMTSTileGrid,
+  },
 };

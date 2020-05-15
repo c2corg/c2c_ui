@@ -13,25 +13,24 @@
 </template>
 
 <script>
+import NotFound from '@/views/static-views/NotFoundView';
 
-  import NotFound from '@/views/static-views/NotFoundView';
+export default {
+  components: {
+    NotFound,
+  },
 
-  export default {
-    components: {
-      NotFound
+  props: {
+    promise: {
+      type: [Object, Promise],
+      required: true,
     },
+  },
 
-    props: {
-      promise: {
-        type: [Object, Promise],
-        required: true
-      }
+  computed: {
+    notFound() {
+      return Boolean(this.promise.error && this.promise.error.response && this.promise.error.response.status === 404);
     },
-
-    computed: {
-      notFound() {
-        return Boolean(this.promise.error && this.promise.error.response && this.promise.error.response.status === 404);
-      }
-    }
-  };
+  },
+};
 </script>

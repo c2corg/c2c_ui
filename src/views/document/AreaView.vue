@@ -15,7 +15,7 @@
         <div class="box" v-if="document.cooked.summary || document.cooked.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <div class="box">
@@ -23,11 +23,9 @@
             <div
               class="level-item has-text-centered"
               v-for="documentType of ['waypoint', 'route', 'outing']"
-              :key="documentType">
-
-              <router-link
-                :to="{ name: documentType + 's', query: {a:documentId} }"
-                class="">
+              :key="documentType"
+            >
+              <router-link :to="{ name: documentType + 's', query: { a: documentId } }" class="">
                 <div>
                   <icon-document class="is-size-1" :document-type="documentType.toLowerCase()" />
                 </div>
@@ -46,9 +44,9 @@
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [ documentViewMixin ]
-  };
+export default {
+  mixins: [documentViewMixin],
+};
 </script>

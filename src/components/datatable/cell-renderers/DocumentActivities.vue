@@ -3,16 +3,15 @@
 </template>
 
 <script>
-  import Vue from 'vue';
+import Vue from 'vue';
 
-  export default Vue.extend({ });
+export default Vue.extend({});
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/sass/variables.scss';
 
-  @import '@/assets/sass/variables.scss';
-
-  .cell-activities{
-    font-size:26px;
-  }
+.cell-activities {
+  font-size: 26px;
+}
 </style>

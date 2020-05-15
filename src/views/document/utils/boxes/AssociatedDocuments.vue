@@ -8,22 +8,21 @@
         v-for="waypoint of waypointsList.waypoints"
         :key="waypoint.document_id"
         :document="waypoint"
-        class="columns is-mobile has-hover-background is-marginless is-vcentered">
+        class="columns is-mobile has-hover-background is-marginless is-vcentered"
+      >
         <div class="column is-narrow is-paddingless">
           <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="icon-link" />
         </div>
         <div class="column is-paddingless">
           <document-title :document="waypoint" />
         </div>
-        <div class="column is-narrow has-text-grey is-paddingless is-size-7">
-          {{ waypoint.elevation }}&nbsp;m
-        </div>
+        <div class="column is-narrow has-text-grey is-paddingless is-size-7">{{ waypoint.elevation }}&nbsp;m</div>
       </document-link>
-      <hr>
+      <hr />
     </div>
 
     <!-- books -->
-    <div v-if="associations.books.length!=0" class="associations-list">
+    <div v-if="associations.books.length != 0" class="associations-list">
       <div class="title">
         {{ $gettext('books') | uppercaseFirstLetter }}
       </div>
@@ -33,11 +32,11 @@
           <document-title :document="book" />
         </document-link>
       </div>
-      <hr>
+      <hr />
     </div>
 
     <!-- articles -->
-    <div v-if="associations.articles.length!=0" class="associations-list">
+    <div v-if="associations.articles.length != 0" class="associations-list">
       <div class="title">
         {{ $gettext('articles') | uppercaseFirstLetter }}
       </div>
@@ -47,11 +46,11 @@
           <document-title :document="article" />
         </document-link>
       </div>
-      <hr>
+      <hr />
     </div>
 
     <!-- xreports -->
-    <div v-if="associations.xreports && associations.xreports.length!=0" class="associations-list">
+    <div v-if="associations.xreports && associations.xreports.length != 0" class="associations-list">
       <div class="title">
         {{ $gettext('xreports') | uppercaseFirstLetter }}
       </div>
@@ -61,11 +60,14 @@
           <document-title :document="xreport" />
         </document-link>
       </div>
-      <hr>
+      <hr />
     </div>
 
     <!-- outings -->
-    <div v-if="documentType === 'xreport' && associations.outings && associations.outings.length!=0" class="associations-list">
+    <div
+      v-if="documentType === 'xreport' && associations.outings && associations.outings.length != 0"
+      class="associations-list"
+    >
       <div class="title">
         {{ $gettext('outings') | uppercaseFirstLetter }}
       </div>
@@ -75,64 +77,63 @@
           <document-title :document="outing" uppercase-first-letter />
         </document-link>
       </div>
-      <hr>
+      <hr />
     </div>
   </div>
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentProperty ],
+export default {
+  mixins: [requireDocumentProperty],
 
-    computed: {
-      associations() {
-        return this.document.associations || {};
-      },
-
-      waypointsLists() {
-        const result = [];
-
-        const push = function(title, waypoints) {
-          if (waypoints && waypoints.length !== 0) {
-            result.push({ title, waypoints });
-          }
-        };
-
-        push(this.$gettext('waypoints'), this.associations.waypoints);
-        push(this.$gettext('waypoint_children'), this.associations.waypoint_children);
-
-        return result;
-      }
+  computed: {
+    associations() {
+      return this.document.associations || {};
     },
 
-    created() {
-      function compare(left, right) {
-        return left.document_id < right.document_id;
-      }
+    waypointsLists() {
+      const result = [];
 
-      this.associations.books = (this.associations.books || []).sort(compare);
-      this.associations.articles = this.associations.articles || [];
+      const push = function (title, waypoints) {
+        if (waypoints && waypoints.length !== 0) {
+          result.push({ title, waypoints });
+        }
+      };
+
+      push(this.$gettext('waypoints'), this.associations.waypoints);
+      push(this.$gettext('waypoint_children'), this.associations.waypoint_children);
+
+      return result;
+    },
+  },
+
+  created() {
+    function compare(left, right) {
+      return left.document_id < right.document_id;
     }
-  };
+
+    this.associations.books = (this.associations.books || []).sort(compare);
+    this.associations.articles = this.associations.articles || [];
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/sass/variables.scss';
 
-@import "@/assets/sass/variables.scss";
-
-.title{
-    margin-bottom:0.2rem !important;
+.title {
+  margin-bottom: 0.2rem !important;
 }
 
-.associations-list:not(:last-child){
-    margin-bottom: 1rem;
+.associations-list:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
-.icon-link, .icon-link:hover{
-    color:$dark;
-    margin-right:3px;
+.icon-link,
+.icon-link:hover {
+  color: $dark;
+  margin-right: 3px;
 }
-
 </style>

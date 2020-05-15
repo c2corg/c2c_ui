@@ -1,4 +1,3 @@
-
 function UserProfileService(api) {
   this.api = api;
 
@@ -9,7 +8,7 @@ function UserProfileService(api) {
 
     post(preferences) {
       return api.post('/users/preferences', preferences);
-    }
+    },
   };
 
   this.following = {
@@ -27,7 +26,7 @@ function UserProfileService(api) {
 
     isFollowing(user_id) {
       return api.get('/users/following-user/' + user_id);
-    }
+    },
   };
 
   this.account = {
@@ -37,7 +36,7 @@ function UserProfileService(api) {
 
     post(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
       const payload = {
-        currentpassword
+        currentpassword,
       };
 
       if (name !== null) {
@@ -61,43 +60,43 @@ function UserProfileService(api) {
       }
 
       return api.post('/users/account', payload);
-    }
+    },
   };
 }
 
-UserProfileService.prototype.login = function(username, password) {
+UserProfileService.prototype.login = function (username, password) {
   return this.api.post('/users/login', {
     username,
     password,
-    discourse: true
+    discourse: true,
   });
 };
 
-UserProfileService.prototype.logout = function() {
+UserProfileService.prototype.logout = function () {
   return this.api.post('/users/logout', { discourse: true });
 };
 
-UserProfileService.prototype.update_preferred_language = function(lang) {
+UserProfileService.prototype.update_preferred_language = function (lang) {
   return this.api.post('/users/update_preferred_language', { lang });
 };
 
-UserProfileService.prototype.requestPasswordChange = function(email) {
+UserProfileService.prototype.requestPasswordChange = function (email) {
   return this.api.post('/users/request_password_change', { email });
 };
 
-UserProfileService.prototype.validateNewPassword = function(nonce, password) {
+UserProfileService.prototype.validateNewPassword = function (nonce, password) {
   return this.api.post('/users/validate_new_password/' + nonce, { password });
 };
 
-UserProfileService.prototype.register = function(data) {
+UserProfileService.prototype.register = function (data) {
   return this.api.post('/users/register', data);
 };
 
-UserProfileService.prototype.validateChangeEmail = function(nonce) {
+UserProfileService.prototype.validateChangeEmail = function (nonce) {
   return this.api.post('/users/validate_change_email/' + nonce);
 };
 
-UserProfileService.prototype.validateRegisterEmail = function(nonce) {
+UserProfileService.prototype.validateRegisterEmail = function (nonce) {
   return this.api.post('/users/validate_register_email/' + nonce);
 };
 

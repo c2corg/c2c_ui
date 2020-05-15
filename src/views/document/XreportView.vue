@@ -3,7 +3,6 @@
     <document-view-header :document="document" :version="version" :promise="promise" />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 is-12-print">
-
         <div class="box">
           <event-activity-field :document="document" />
           <label-value v-if="document.author" :label="$gettext('contributor')">
@@ -51,7 +50,7 @@
           <markdown-section :document="document" :field="fields.reduce_impact" />
           <markdown-section :document="document" :field="fields.modifications" />
           <markdown-section :document="document" :field="fields.other_comments" />
-          <div style="clear:both" />
+          <div style="clear: both;" />
 
           <div v-for="route of document.associations.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
@@ -61,16 +60,15 @@
         <images-box v-if="document" :document="document" />
 
         <comments-box :document="document" />
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [ documentViewMixin ]
-  };
+export default {
+  mixins: [documentViewMixin],
+};
 </script>

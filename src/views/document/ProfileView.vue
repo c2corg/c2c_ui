@@ -7,7 +7,6 @@
     </div>
 
     <div v-if="document && !document.not_authorized" class="columns">
-
       <div class="column is-3">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
@@ -23,19 +22,17 @@
           <div class="buttons is-centered button-outings">
             <outings-downloader :profile-id="documentId" />
           </div>
-
         </div>
 
         <map-box :document="document" v-if="document.geometry && document.geometry.geom" />
         <tool-box :document="document" />
-
       </div>
 
       <div class="column is-9">
         <div class="box" v-if="locale.summary || locale.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <images-box :document="document" />
@@ -47,29 +44,26 @@
 </template>
 
 <script>
+import config from '@/js/config';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  import config from '@/js/config';
-  import documentViewMixin from './utils/document-view-mixin.js';
+import OutingsDownloader from './utils/OutingsDownloader';
+import FeedWidget from '@/components/feed-widget/FeedWidget';
 
-  import OutingsDownloader from './utils/OutingsDownloader';
-  import FeedWidget from '@/components/feed-widget/FeedWidget';
+export default {
+  components: {
+    FeedWidget,
+    OutingsDownloader,
+  },
 
-  export default {
+  mixins: [documentViewMixin],
 
-    components: {
-      FeedWidget,
-      OutingsDownloader
-    },
-
-    mixins: [ documentViewMixin ],
-
-    forumUrl: config.urls.forum
-  };
-
+  forumUrl: config.urls.forum,
+};
 </script>
 
 <style lang="scss" scoped>
-  .button-outings{
-    margin-top: 1rem;
-  }
+.button-outings {
+  margin-top: 1rem;
+}
 </style>

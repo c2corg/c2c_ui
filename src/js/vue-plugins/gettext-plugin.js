@@ -24,7 +24,8 @@ function cleanMessageId(msgid) {
   return msgid;
 }
 
-function getTranslation(lang, messages, msgid, msgctxt) { //, n = 1, context = null, defaultPlural = null){
+function getTranslation(lang, messages, msgid, msgctxt) {
+  //, n = 1, context = null, defaultPlural = null){
   if (messages === undefined) {
     // `messages are not yet available`
     return msgid;
@@ -61,17 +62,17 @@ function getMessages(lang) {
   } else if (lang === 'en') {
     return import(/* webpackChunkName: "translations-en" */ `@/translations/en.json`);
   } else if (lang === 'ca') {
-    return import(/* webpackChunkName: "translations-ca" */`@/translations/ca.json`);
+    return import(/* webpackChunkName: "translations-ca" */ `@/translations/ca.json`);
   } else if (lang === 'eu') {
-    return import(/* webpackChunkName: "translations-eu" */`@/translations/eu.json`);
+    return import(/* webpackChunkName: "translations-eu" */ `@/translations/eu.json`);
   } else if (lang === 'it') {
-    return import(/* webpackChunkName: "translations-it" */`@/translations/it.json`);
+    return import(/* webpackChunkName: "translations-it" */ `@/translations/it.json`);
   } else if (lang === 'de') {
-    return import(/* webpackChunkName: "translations-de" */`@/translations/de.json`);
+    return import(/* webpackChunkName: "translations-de" */ `@/translations/de.json`);
   } else if (lang === 'es') {
-    return import(/* webpackChunkName: "translations-es" */`@/translations/es.json`);
+    return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
   } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-es" */`@/translations/zh_CN.json`);
+    return import(/* webpackChunkName: "translations-es" */ `@/translations/zh_CN.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
@@ -82,7 +83,7 @@ export default function install(Vue) {
     name: 'Language',
 
     data: {
-      current: null
+      current: null,
     },
 
     created() {
@@ -95,7 +96,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
-        zh_CN: 'Chinese'
+        zh_CN: 'Chinese',
       };
 
       this.translations = {};
@@ -141,9 +142,10 @@ export default function install(Vue) {
 
         const messages = getMessages(lang);
 
-        return new Promise(resolve => {
-          if (messages.then) { // messages is a promise
-            messages.then(translations => {
+        return new Promise((resolve) => {
+          if (messages.then) {
+            // messages is a promise
+            messages.then((translations) => {
               this.translations[lang] = translations[lang];
               resolve(translations[lang]);
             });
@@ -160,20 +162,20 @@ export default function install(Vue) {
 
       getIANALanguageSubtag(lang) {
         switch (lang) {
-        case 'fr':
-        case 'en':
-        case 'ca':
-        case 'eu':
-        case 'it':
-        case 'de':
-        case 'es':
-          return lang;
-        case 'zh_CN':
-          return 'zh';
-        default:
-          // eslint-disable-next-line no-console
-          console.error(`Unexpected langauage: ${lang}`);
-          return lang;
+          case 'fr':
+          case 'en':
+          case 'ca':
+          case 'eu':
+          case 'it':
+          case 'de':
+          case 'es':
+            return lang;
+          case 'zh_CN':
+            return 'zh';
+          default:
+            // eslint-disable-next-line no-console
+            console.error(`Unexpected langauage: ${lang}`);
+            return lang;
         }
       },
 
@@ -181,7 +183,7 @@ export default function install(Vue) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
             // eslint-disable-next-line
-            console.error("v-translate must contains only text", element.childNodes)
+            console.error('v-translate must contains only text', element.childNodes);
             return;
           }
 
@@ -194,8 +196,8 @@ export default function install(Vue) {
         }
 
         element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
-      }
-    }
+      },
+    },
   });
 
   // An option to support translation with HTML content: `v-translate`.
@@ -211,7 +213,7 @@ export default function install(Vue) {
     update(el) {
       // console.log("update", el)
       languageVm.updateElement(el);
-    }
+    },
   });
 
   Vue.prototype.$language = languageVm;

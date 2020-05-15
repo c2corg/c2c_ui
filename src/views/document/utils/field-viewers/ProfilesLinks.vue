@@ -7,25 +7,24 @@
       :key="profile.document_id"
       :document="profile"
       class="user-link-label"
-      uppercase-first-letter />
+      uppercase-first-letter
+    />
   </span>
 </template>
 
 <script>
-  export default {
-    props: {
-      profiles: {
-        type: Array,
-        required: true
-      }
-    }
-  };
+export default {
+  props: {
+    profiles: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
-
-.user-link-label:not(:last-child)::after{
-    content:", ";
+.user-link-label:not(:last-child)::after {
+  content: ', ';
 }
-
 </style>

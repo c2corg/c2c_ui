@@ -4,17 +4,23 @@
     :document="document"
     :generic-errors="genericErrors"
     :is-loading="saving"
-    @save="save">
-
+    @save="save"
+  >
     <form-section
       :title="$gettext('general informations')"
-      :sub-title="$gettext('Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).')">
+      :sub-title="
+        $gettext(
+          'Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).'
+        )
+      "
+    >
       <div class="columns is-1">
         <form-field
           class="is-narrow"
           :label="$gettext('waypoint')"
           :document="document"
-          :field="fields.main_waypoint_id" />
+          :field="fields.main_waypoint_id"
+        />
         <form-field :document="document" :field="fields.title" />
       </div>
       <div class="columns is-multiline">
@@ -29,12 +35,16 @@
       <associations-input-row :document="document" :field="fields.articles" />
       <associations-input-row :document="document" :field="fields.books" />
       <associations-input-row :document="document" :field="fields.xreports" />
-
     </form-section>
 
     <form-section
       :title="$gettext('configuration')"
-      :sub-title="$gettext('Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).')">
+      :sub-title="
+        $gettext(
+          'Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).'
+        )
+      "
+    >
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.orientations" />
         <form-field class="is-12" :document="document" :field="fields.route_types" />
@@ -45,7 +55,8 @@
 
     <form-section
       :title="$gettext('numbers')"
-      :sub-title="$gettext('Information about the terrain, like elevations, lengths...')">
+      :sub-title="$gettext('Information about the terrain, like elevations, lengths...')"
+    >
       <div class="columns is-multiline">
         <form-field class="is-6" :document="document" :field="fields.elevation_min" />
         <form-field class="is-6" :document="document" :field="fields.elevation_max" />
@@ -56,33 +67,22 @@
         <form-field class="is-6" :document="document" :field="fields.height_diff_difficulties" />
 
         <form-field class="is-6" :document="document" :field="fields.difficulties_height" />
-        <form-field
-          class="is-6"
-          :document="document"
-          :field="fields.route_length"
-          :divisor="1000"
-          unit="km" />
-
+        <form-field class="is-6" :document="document" :field="fields.route_length" :divisor="1000" unit="km" />
       </div>
       <div class="columns is-multiline">
-        <form-field
-          class="is-4"
-          :document="document"
-          :field="fields.mtb_length_asphalt"
-          :divisor="1000"
-          unit="km" />
-        <form-field
-          class="is-4"
-          :document="document"
-          :field="fields.mtb_length_trail"
-          :divisor="1000"
-          unit="km" />
+        <form-field class="is-4" :document="document" :field="fields.mtb_length_asphalt" :divisor="1000" unit="km" />
+        <form-field class="is-4" :document="document" :field="fields.mtb_length_trail" :divisor="1000" unit="km" />
         <form-field class="is-4" :document="document" :field="fields.mtb_height_diff_portages" />
       </div>
 
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.lift_access" />
-        <form-field class="is-12" :document="document" :field="fields.durations" :label="$gettext('durations (days)')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.durations"
+          :label="$gettext('durations (days)')"
+        />
       </div>
 
       <div class="columns is-multiline">
@@ -93,8 +93,8 @@
 
     <form-section
       :title="$gettext('ratings')"
-      :sub-title="$gettext('Everything about ratings : difficulties, exposition...')">
-
+      :sub-title="$gettext('Everything about ratings : difficulties, exposition...')"
+    >
       <div class="columns is-multiline">
         <form-field class="is-6" :document="document" :field="fields.global_rating" />
         <form-field class="is-6" :document="document" :field="fields.rock_free_rating" />
@@ -136,58 +136,75 @@
 
     <form-section
       :title="$gettext('Comments')"
-      :sub-title="$gettext('This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.')">
+      :sub-title="
+        $gettext(
+          'This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.'
+        )
+      "
+    >
       <div class="columns is-multiline">
         <form-field class="is-12" :document="document" :field="fields.summary" />
-        <form-field class="is-12" :document="document" :field="fields.route_history" :placeholder="$gettext('Describe historical information about the route (date, names..) here')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.route_history"
+          :placeholder="$gettext('Describe historical information about the route (date, names..) here')"
+        />
         <form-field class="is-12" :document="document" :field="fields.description" />
         <form-field class="is-12" :document="document" :field="fields.slackline_anchor1" />
         <form-field class="is-12" :document="document" :field="fields.slackline_anchor2" />
         <form-field class="is-12" :document="document" :field="fields.remarks" />
-        <form-field class="is-12" :document="document" :field="fields.gear" :placeholder="$gettext('Describe here the gear needed for this route')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.gear"
+          :placeholder="$gettext('Describe here the gear needed for this route')"
+        />
         <form-field class="is-12" :document="document" :field="fields.glacier_gear" />
-        <form-field class="is-12" :document="document" :field="fields.external_resources" :placeholder="$gettext('Books and websites not already associated to this route')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.external_resources"
+          :placeholder="$gettext('Books and websites not already associated to this route')"
+        />
 
         <quality-field class="is-4" :document="document" />
       </div>
     </form-section>
-
   </edition-container>
 </template>
 
 <script>
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
-  import documentEditionViewMixin from './utils/document-edition-view-mixin';
+export default {
+  mixins: [documentEditionViewMixin],
 
-  export default {
-    mixins: [ documentEditionViewMixin ],
+  watch: {
+    'document.associations.waypoints': 'onWaypointsAssociation',
+  },
 
-    watch: {
-      'document.associations.waypoints': 'onWaypointsAssociation'
+  methods: {
+    afterLoad() {
+      // on creation from a waypoint, set this waypoint as main
+      if (this.mode === 'add' && this.$route.query.w) {
+        this.document.main_waypoint_id = parseInt(this.$route.query.w);
+      }
     },
 
-    methods: {
-      afterLoad() {
-        // on creation from a waypoint, set this waypoint as main
-        if (this.mode === 'add' && this.$route.query.w) {
-          this.document.main_waypoint_id = parseInt(this.$route.query.w);
-        }
-      },
+    onWaypointsAssociation() {
+      const waypoints = this.document.associations.waypoints;
 
-      onWaypointsAssociation() {
-        const waypoints = this.document.associations.waypoints;
-
-        // clean main waypoint if it is missing from associated waypoints
-        if (waypoints.findIndex(doc => doc.document_id === this.document.main_waypoint_id) === -1) {
-          this.document.main_waypoint_id = null;
-        }
-
-        // on creation mode, if main waypoint is null, and some waypoints are associated, take the first
-        if (this.mode === 'add' && this.document.main_waypoint_id === null && waypoints.length !== 0) {
-          this.document.main_waypoint_id = waypoints[0].document_id;
-        }
+      // clean main waypoint if it is missing from associated waypoints
+      if (waypoints.findIndex((doc) => doc.document_id === this.document.main_waypoint_id) === -1) {
+        this.document.main_waypoint_id = null;
       }
-    }
-  };
 
+      // on creation mode, if main waypoint is null, and some waypoints are associated, take the first
+      if (this.mode === 'add' && this.document.main_waypoint_id === null && waypoints.length !== 0) {
+        this.document.main_waypoint_id = waypoints[0].document_id;
+      }
+    },
+  },
+};
 </script>

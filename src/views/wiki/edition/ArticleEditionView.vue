@@ -4,7 +4,8 @@
     :document="document"
     :generic-errors="genericErrors"
     :is-loading="saving"
-    @save="save">
+    @save="save"
+  >
     <div class="columns is-multiline">
       <form-field :document="document" :field="fields.title" is-expanded />
       <form-field class="is-narrow" :document="document" :field="fields.article_type" />
@@ -21,23 +22,20 @@
     <associations-input-row :document="document" :field="fields.routes" />
     <associations-input-row :document="document" :field="fields.books" />
 
-    <hr>
+    <hr />
   </edition-container>
 </template>
 
 <script>
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
-  import documentEditionViewMixin from './utils/document-edition-view-mixin';
+export default {
+  mixins: [documentEditionViewMixin],
 
-  export default {
-
-    mixins: [ documentEditionViewMixin ],
-
-    methods: {
-      beforeSave() {
-        this.$refs.qualityField.beforeSave();
-      }
-    }
-  };
-
+  methods: {
+    beforeSave() {
+      this.$refs.qualityField.beforeSave();
+    },
+  },
+};
 </script>

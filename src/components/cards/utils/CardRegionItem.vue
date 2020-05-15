@@ -3,22 +3,18 @@
     <icon-area class="card-icon" />
     {{ text }}
   </span>
-
 </template>
 
 <script>
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+export default {
+  mixins: [requireDocumentProperty],
 
-  export default {
-
-    mixins: [requireDocumentProperty],
-
-    computed: {
-      text() {
-        return this.$documentUtils.getSortedAreaList(this.document);
-      }
-    }
-  };
-
+  computed: {
+    text() {
+      return this.$documentUtils.getSortedAreaList(this.document);
+    },
+  },
+};
 </script>

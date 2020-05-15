@@ -41,7 +41,7 @@ CamptocampApi.prototype = Object.create(BaseApi.prototype);
 // restore good contructor
 CamptocampApi.prototype.constructor = CamptocampApi;
 
-CamptocampApi.prototype.setAuthorizationToken = function(token) {
+CamptocampApi.prototype.setAuthorizationToken = function (token) {
   if (token) {
     this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"';
   } else if (this.axios.defaults.headers.common.Authorization) {
@@ -51,10 +51,10 @@ CamptocampApi.prototype.setAuthorizationToken = function(token) {
 
 /* some function that not belong to a dedicated service */
 
-CamptocampApi.prototype.search = function(params) {
+CamptocampApi.prototype.search = function (params) {
   return this.get('/search', { params });
 };
-CamptocampApi.prototype.getRecentChanges = function(params) {
+CamptocampApi.prototype.getRecentChanges = function (params) {
   return this.get('/documents/changes', { params });
 };
 
@@ -66,30 +66,31 @@ CamptocampApi.prototype.getRecentChanges = function(params) {
 /**
  * Upload images service
  */
-CamptocampApi.prototype.uploadImage = function(file, onUploadProgress, onSucess, onFailure) {
+CamptocampApi.prototype.uploadImage = function (file, onUploadProgress, onSucess, onFailure) {
   const formData = new FormData();
 
   formData.append('file', file);
 
   const requestConfig = {
     headers: {
-      'Content-Type': undefined // overwrite with undefined
+      'Content-Type': undefined, // overwrite with undefined
     },
-    onUploadProgress
+    onUploadProgress,
   };
 
   /* can't user post_ helper: it's not the API url */
   /* TODO : move this function in another service... */
-  return this.axios.post(config.urls.imageBackend + '/upload', formData, requestConfig)
+  return this.axios
+    .post(config.urls.imageBackend + '/upload', formData, requestConfig)
     .then(onSucess)
     .catch(onFailure);
 };
 
-CamptocampApi.prototype.createImages = function(images) {
+CamptocampApi.prototype.createImages = function (images) {
   return this.post('/images/list', { images });
 };
 
-CamptocampApi.prototype.cooker = function(data) {
+CamptocampApi.prototype.cooker = function (data) {
   return this.post('/cooker', data);
 };
 

@@ -16,9 +16,9 @@
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentProperty ]
-  };
+export default {
+  mixins: [requireDocumentProperty],
+};
 </script>

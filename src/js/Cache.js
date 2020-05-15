@@ -12,7 +12,7 @@
   * requested : Cache.get()
 ********************************************************************/
 
-const Cache = function() {
+const Cache = function () {
   this._size = 0;
   this._data = new Map();
   // cache of 256ko
@@ -24,7 +24,7 @@ const Cache = function() {
   this._maxSize = 250000;
 };
 
-Cache.prototype.feed = function(key, value) {
+Cache.prototype.feed = function (key, value) {
   this.delete(key);
 
   this._data.set(key, value);
@@ -38,18 +38,18 @@ Cache.prototype.feed = function(key, value) {
   }
 };
 
-Cache.prototype.has = function(key) {
+Cache.prototype.has = function (key) {
   return this._data.has(key);
 };
 
-Cache.prototype.get = function(key) {
+Cache.prototype.get = function (key) {
   const value = this._data.get(key);
   this.feed(key, value); // put it back to top
 
   return value;
 };
 
-Cache.prototype.delete = function(key) {
+Cache.prototype.delete = function (key) {
   if (this._data.has(key)) {
     this._size -= this._data.get(key).length + key.length;
     this._data.delete(key);

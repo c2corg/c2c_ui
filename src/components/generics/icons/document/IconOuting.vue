@@ -7,7 +7,7 @@
 </template>
 
 <style scoped>
-.sun{
-    animation: fa-spin 30s infinite linear;
+.sun {
+  animation: fa-spin 30s infinite linear;
 }
 </style>

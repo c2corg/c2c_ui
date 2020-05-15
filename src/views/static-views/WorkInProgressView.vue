@@ -6,11 +6,11 @@
 </template>
 
 <style scoped>
-    .work-in-progress-view div{
-        justify-content:center;
-    }
+.work-in-progress-view div {
+  justify-content: center;
+}
 
-    .work-in-progress-view i{
-        font-size:3000%;
-    }
+.work-in-progress-view i {
+  font-size: 3000%;
+}
 </style>

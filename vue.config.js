@@ -25,7 +25,6 @@ const result = {
   },
 
   configureWebpack: {
-
     performance: {
       hints: 'error',
       // TODO sizes checks are on compiled files, instead of GZIP sizes
@@ -54,15 +53,15 @@ const result = {
         }
 
         return true;
-      }
+      },
     },
 
     plugins: [
       // moment, by default load all locales
       // this will skip all of it, and a fixed list is setted in @/tools/vue-moment.js',
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ]
-  }
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    ],
+  },
 };
 
 /* Please not that all key present in this file are public keys
@@ -84,7 +83,7 @@ const config = {
       media: 'https://sos.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
-      recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc'
+      recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
     },
     prod: {
       name: 'prod',
@@ -92,16 +91,16 @@ const config = {
       media: 'https://media.camptocamp.org/c2corg_active',
       imageBackend: 'https://images.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
-      recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2'
-    }
-  }
+      recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
+    },
+  },
 };
 
 config.urls = config.urlsConfigurations.prod; // default : prod
 
 const bundleAnalyzerConfig = {
   analyzerMode: 'disabled',
-  openAnalyzer: false
+  openAnalyzer: false,
 };
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
@@ -111,7 +110,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     api: 'http://localhost:6543',
     media: 'https://sos.exo.io/c2corg-demov6-active',
     imageBackend: 'https://images.demov6.camptocamp.org',
-    forum: 'https://forum.demov6.camptocamp.org'
+    forum: 'https://forum.demov6.camptocamp.org',
   };
 
   config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
@@ -155,13 +154,11 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 
 config.publicPath = result.publicPath;
 
-result.configureWebpack.plugins.push(
-  new BundleAnalyzerPlugin(bundleAnalyzerConfig)
-);
+result.configureWebpack.plugins.push(new BundleAnalyzerPlugin(bundleAnalyzerConfig));
 
 result.configureWebpack.plugins.push(
   new webpack.DefinePlugin({
-    CAMPTOCAMP_CONFIG: JSON.stringify(config)
+    CAMPTOCAMP_CONFIG: JSON.stringify(config),
   })
 );
 

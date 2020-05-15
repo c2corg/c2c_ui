@@ -5,8 +5,9 @@
         <img
           v-if="!useDefaultAvatarIcon"
           class="avatar"
-          @error="useDefaultAvatarIcon=true"
-          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'">
+          @error="useDefaultAvatarIcon = true"
+          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+        />
         <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
       </span>
       <span>
@@ -19,19 +20,19 @@
 
     <card-row>
       <document-title :document="item.document" class="has-text-weight-bold" />
-      <span v-if="documentType=='outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
+      <span v-if="documentType == 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
     </card-row>
 
     <card-row v-if="locale && locale.summary">
       <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 
-    <card-row v-if="images.length!=0">
+    <card-row v-if="images.length != 0">
       <gallery :images="images" />
     </card-row>
 
-    <card-row v-if="documentType!='article' && documentType!='book'">
-      <span v-if="documentType=='outing' || documentType=='route'">
+    <card-row v-if="documentType != 'article' && documentType != 'book'">
+      <span v-if="documentType == 'outing' || documentType == 'route'">
         <icon-ratings class="card-icon" />
         <document-rating :document="item.document" />
       </span>
@@ -71,7 +72,7 @@
       </span>
       <span> {{ $moment.timeAgo(item.time) }} </span>
       <span>
-        <marker-condition v-if="documentType=='outing'" :condition="item.document.condition_rating" />
+        <marker-condition v-if="documentType == 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
     </card-row>
@@ -79,149 +80,144 @@
 </template>
 
 <script>
-  import forum from '@/js/apis/forum';
-  import Gallery from '@/components/gallery/Gallery';
-  import { cardMixin } from './utils/mixins.js';
+import forum from '@/js/apis/forum';
+import Gallery from '@/components/gallery/Gallery';
+import { cardMixin } from './utils/mixins.js';
 
-  export default {
+export default {
+  components: {
+    Gallery,
+  },
 
-    components: {
-      Gallery
+  filters: {
+    max300chars: (value) => (value.length > 300 ? value.substring(0, 300) + '…' : value),
+  },
+
+  mixins: [cardMixin],
+
+  props: {
+    item: {
+      type: Object,
+      required: true,
     },
+  },
 
-    filters: {
-      max300chars: value => value.length > 300 ? value.substring(0, 300) + '…' : value
+  data() {
+    return {
+      actionLine: null,
+      images: [],
+      useDefaultAvatarIcon: false,
+    };
+  },
+
+  computed: {
+    document() {
+      return this.item.document;
     },
-
-    mixins: [
-      cardMixin
-    ],
-
-    props: {
-      item: {
-        type: Object,
-        required: true
-      }
+    documentType() {
+      return this.$documentUtils.getDocumentType(this.document['type']);
     },
-
-    data() {
-      return {
-        actionLine: null,
-        images: [],
-        useDefaultAvatarIcon: false
-      };
+    locale() {
+      return this.$documentUtils.getLocaleSmart(this.item.document);
     },
+  },
 
-    computed: {
-      document() {
-        return this.item.document;
-      },
-      documentType() {
-        return this.$documentUtils.getDocumentType(this.document['type']);
-      },
-      locale() {
-        return this.$documentUtils.getLocaleSmart(this.item.document);
-      }
-    },
+  forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
 
-    forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
+  created() {
+    this.actionLine = {
+      'added_photos article': this.$gettext('has added images to article'),
+      'added_photos book': this.$gettext('has added images to book'),
+      'added_photos area': this.$gettext('has added images to area'),
+      'added_photos outing': this.$gettext('has added images to outing'),
+      'added_photos route': this.$gettext('has added images to route'),
+      'added_photos waypoint': this.$gettext('has added images to waypoint'),
+      'added_photos xreport': this.$gettext('has added images to xreport'),
+      'created article': this.$gettext('has created a new article'),
+      'created book': this.$gettext('has created a new book'),
+      'created image': this.$gettext('has created a new image'),
+      'created outing': this.$gettext('has created a new outing'),
+      'created route': this.$gettext('has created a new route'),
+      'created waypoint': this.$gettext('has created a new waypoint'),
+      'created xreport': this.$gettext('has created a new xreport'),
+      'updated area': this.$gettext('has updated the area'),
+      'updated article': this.$gettext('has updated the article'),
+      'updated book': this.$gettext('has updated the book'),
+      'updated image': this.$gettext('has updated the image'),
+      'updated outing': this.$gettext('has updated the outing'),
+      'updated route': this.$gettext('has updated the route'),
+      'updated waypoint': this.$gettext('has updated the waypoint'),
+      'updated xreport': this.$gettext('has updated the xreport'),
+    }[[this.item['change_type'], this.documentType].join(' ')];
 
-    created() {
-      this.actionLine = {
-        'added_photos article': this.$gettext('has added images to article'),
-        'added_photos book': this.$gettext('has added images to book'),
-        'added_photos area': this.$gettext('has added images to area'),
-        'added_photos outing': this.$gettext('has added images to outing'),
-        'added_photos route': this.$gettext('has added images to route'),
-        'added_photos waypoint': this.$gettext('has added images to waypoint'),
-        'added_photos xreport': this.$gettext('has added images to xreport'),
-        'created article': this.$gettext('has created a new article'),
-        'created book': this.$gettext('has created a new book'),
-        'created image': this.$gettext('has created a new image'),
-        'created outing': this.$gettext('has created a new outing'),
-        'created route': this.$gettext('has created a new route'),
-        'created waypoint': this.$gettext('has created a new waypoint'),
-        'created xreport': this.$gettext('has created a new xreport'),
-        'updated area': this.$gettext('has updated the area'),
-        'updated article': this.$gettext('has updated the article'),
-        'updated book': this.$gettext('has updated the book'),
-        'updated image': this.$gettext('has updated the image'),
-        'updated outing': this.$gettext('has updated the outing'),
-        'updated route': this.$gettext('has updated the route'),
-        'updated waypoint': this.$gettext('has updated the waypoint'),
-        'updated xreport': this.$gettext('has updated the xreport')
-      }[[this.item['change_type'], this.documentType].join(' ')];
+    this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document']);
 
-      this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document']);
-
-      if (this.item.image1) {
-        this.images.push(this.item.image1);
-      }
-
-      if (this.item.image2) {
-        this.images.push(this.item.image2);
-      }
-
-      if (this.item.image3) {
-        this.images.push(this.item.image3);
-      }
+    if (this.item.image1) {
+      this.images.push(this.item.image1);
     }
-  };
+
+    if (this.item.image2) {
+      this.images.push(this.item.image2);
+    }
+
+    if (this.item.image3) {
+      this.images.push(this.item.image3);
+    }
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/sass/variables.scss';
 
-  @import '@/assets/sass/variables.scss';
-
-  @media screen and (max-width: $tablet) {
-    .feed-card{
-      border-left:0!important;
-      border-right:0!important;
-    }
-    .has-left-margin-mobile {
-      margin-left: 5px;
-    }
+@media screen and (max-width: $tablet) {
+  .feed-card {
+    border-left: 0 !important;
+    border-right: 0 !important;
   }
-
-  .is-max-3-lines-height {
-    // proprietary stuff, supported on limited browsers
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .has-left-margin-mobile {
+    margin-left: 5px;
   }
+}
 
-  .card-image-content{
-    display:flex;
-    overflow: hidden;
-  }
+.is-max-3-lines-height {
+  // proprietary stuff, supported on limited browsers
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .avatar{
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    vertical-align: bottom;
-    margin-right: 0.5rem;
-  }
+.card-image-content {
+  display: flex;
+  overflow: hidden;
+}
 
-  .has-3-images > div{
-    width:33.33%;
-    max-height: 275px;
-    overflow: hidden;
-  }
+.avatar {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  vertical-align: bottom;
+  margin-right: 0.5rem;
+}
 
-  .has-2-images > div{
-    width:50%;
-  }
+.has-3-images > div {
+  width: 33.33%;
+  max-height: 275px;
+  overflow: hidden;
+}
 
-  .has-2-images > div{
-    width:100%;
-  }
+.has-2-images > div {
+  width: 50%;
+}
 
-  .card-image-content > div > img{
-    width:100%;
-    box-sizing: border-box;
-  }
+.has-2-images > div {
+  width: 100%;
+}
 
+.card-image-content > div > img {
+  width: 100%;
+  box-sizing: border-box;
+}
 </style>

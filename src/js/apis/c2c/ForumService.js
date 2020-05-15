@@ -4,11 +4,11 @@ function ForumService(api) {
   this.api = api;
 }
 
-ForumService.prototype.getPrivateMessagesCount = function() {
+ForumService.prototype.getPrivateMessagesCount = function () {
   return this.api.get('/forum/private-messages/unread-count');
 };
 
-ForumService.prototype.createTopic = function(document_id, lang) {
+ForumService.prototype.createTopic = function (document_id, lang) {
   return this.api.post('/forum/topics', { document_id, lang });
 };
 

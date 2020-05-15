@@ -2,7 +2,7 @@ function AssociationService(api) {
   this.api = api;
 }
 
-AssociationService.prototype.create = function(parent, child) {
+AssociationService.prototype.create = function (parent, child) {
   const pType = parent.type;
   const cType = child.type;
 
@@ -28,20 +28,20 @@ AssociationService.prototype.create = function(parent, child) {
   return this.api.post('/associations', data);
 };
 
-AssociationService.prototype.remove = function(parent, child) {
+AssociationService.prototype.remove = function (parent, child) {
   const data = {
     parent_document_id: parent.document_id,
-    child_document_id: child.document_id
+    child_document_id: child.document_id,
   };
 
   return this.api.delete('/associations', { data });
 };
 
-AssociationService.prototype.getHistory = function(params) {
+AssociationService.prototype.getHistory = function (params) {
   let url = '/associations-history';
   const query = [];
 
-  const addFilter = function(key, value) {
+  const addFilter = function (key, value) {
     if (value) {
       query.push(`${key}=${value}`);
     }

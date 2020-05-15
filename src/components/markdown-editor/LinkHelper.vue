@@ -8,7 +8,7 @@
         {{ $gettext('text to display') | uppercaseFirstLetter }}
       </label>
       <div class="control">
-        <input class="input" v-model="chunk">
+        <input class="input" v-model="chunk" />
       </div>
     </div>
     <div class="field">
@@ -16,7 +16,7 @@
         {{ $gettext('URL') | uppercaseFirstLetter }}
       </label>
       <div class="control">
-        <input class="input" v-model="url">
+        <input class="input" v-model="url" />
       </div>
     </div>
     <div slot="footer" class="buttons">
@@ -31,25 +31,24 @@
 </template>
 
 <script>
-  export default {
+export default {
+  data() {
+    return {
+      chunk: '',
+      url: '',
+    };
+  },
 
-    data() {
-      return {
-        chunk: '',
-        url: ''
-      };
+  methods: {
+    show(chunk, url) {
+      this.chunk = chunk || this.$gettext('text to display');
+      this.url = url || 'https:\\\\';
+      this.$refs.modalWindow.show();
     },
-
-    methods: {
-      show(chunk, url) {
-        this.chunk = chunk || this.$gettext('text to display');
-        this.url = url || 'https:\\\\';
-        this.$refs.modalWindow.show();
-      },
-      insert() {
-        this.$emit('insert', this.chunk, this.url);
-        this.$refs.modalWindow.hide();
-      }
-    }
-  };
+    insert() {
+      this.$emit('insert', this.chunk, this.url);
+      this.$refs.modalWindow.hide();
+    },
+  },
+};
 </script>

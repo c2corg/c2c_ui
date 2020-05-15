@@ -11,7 +11,7 @@
 
     <p v-if="data.period">
       <span v-translate>sensitive_months:</span>
-      <span>{{ months.join(", ") }}</span>
+      <span>{{ months.join(', ') }}</span>
     </p>
 
     <!-- content formatting done with DOM parser to decode html entities -->
@@ -22,46 +22,44 @@
 </template>
 
 <script>
+import utils from '@/js/utils';
+export default {
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
 
-  import utils from '@/js/utils';
-  export default {
-    props: {
-      data: {
-        type: Object,
-        required: true
+  computed: {
+    descriptionParagraphs() {
+      // keep line breaks for better readability
+      const paragraphList = (this.data.description || '').split(/<br ?\/?>/);
+      // decode html entities
+      let i = 0;
+      for (i in paragraphList) {
+        paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
       }
+      return paragraphList;
     },
 
-    computed: {
-      descriptionParagraphs() {
-        // keep line breaks for better readability
-        const paragraphList = (this.data.description || '').split(/<br ?\/?>/);
-        // decode html entities
-        let i = 0;
-        for (i in paragraphList) {
-          paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
+    months() {
+      const result = [];
+
+      for (const month in this.data.period) {
+        if (this.data.period[month]) {
+          result.push(this.$moment.month(parseInt(month, 10)));
         }
-        return paragraphList;
-      },
-
-      months() {
-        const result = [];
-
-        for (const month in this.data.period) {
-          if (this.data.period[month]) {
-            result.push(this.$moment.month(parseInt(month, 10)));
-          }
-        }
-
-        return result;
       }
+
+      return result;
     },
+  },
 
-    methods: {
-      show() {
-        this.$refs.modalWindow.show();
-      }
-    }
-  };
-
+  methods: {
+    show() {
+      this.$refs.modalWindow.show();
+    },
+  },
+};
 </script>

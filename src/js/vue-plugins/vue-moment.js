@@ -39,8 +39,8 @@ export default function install(Vue) {
 
       month(monthNumber) {
         return moment.localeData(this.$language.current).months()[monthNumber];
-      }
-    }
+      },
+    },
   });
 
   Vue.prototype.$moment = momentVm;

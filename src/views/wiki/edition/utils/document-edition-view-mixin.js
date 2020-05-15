@@ -1,4 +1,3 @@
-
 import constants from '@/js/constants';
 import c2c from '@/js/apis/c2c';
 
@@ -19,9 +18,7 @@ const FORM_PROJ = 'EPSG:4326';
 const DATA_PROJ = 'EPSG:3857';
 
 export default {
-
   components: {
-
     FormRow,
 
     FormSection,
@@ -30,7 +27,7 @@ export default {
     FormInput,
     MapInputRow,
     EditionContainer,
-    AssociationsInputRow
+    AssociationsInputRow,
   },
 
   data() {
@@ -39,12 +36,11 @@ export default {
       fields: null, // keep fields here to set them reactive
       genericErrors: [],
       saving: false,
-      modified: false
+      modified: false,
     };
   },
 
   computed: {
-
     mode() {
       return this.$route.name.split('-')[1]; // right part of route name : add or edit
     },
@@ -68,15 +64,15 @@ export default {
     editedLocale() {
       // in edit mode, there is only one locale
       return this.document ? this.document.locales[0] : null;
-    }
+    },
   },
 
   watch: {
-    '$route': {
+    $route: {
       handler: 'load',
-      immediate: true
+      immediate: true,
     },
-    'document.geometry.geom': 'setLatitudeLongitude'
+    'document.geometry.geom': 'setLatitudeLongitude',
   },
 
   mounted() {
@@ -88,7 +84,7 @@ export default {
   },
 
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next((vm) => {
       if (!vm.$user.isLogged) {
         vm.$router.push({ name: 'auth' });
       }
@@ -127,7 +123,8 @@ export default {
         this.promise = c2c[this.documentType].get(this.documentId, this.lang).then((response) => {
           const locales = response.data.locales;
 
-          if (locales.length === 0) { // it's a translation from an existing doc
+          if (locales.length === 0) {
+            // it's a translation from an existing doc
             locales.push(this.$documentUtils.buildLocale(this.documentType, this.lang));
           }
 
@@ -141,7 +138,7 @@ export default {
 
         // add current user for outings
         if (this.documentType === 'outing') {
-          c2c.profile.get(this.$user.id).then(response => {
+          c2c.profile.get(this.$user.id).then((response) => {
             this.$documentUtils.addAssociation(this.document, response.data);
           });
         }
@@ -155,7 +152,7 @@ export default {
             const documentIds = String(this.$route.query[letter]).split(',');
 
             for (const documentId of documentIds) {
-              c2c[documentType].get(documentId).then(response => {
+              c2c[documentType].get(documentId).then((response) => {
                 this.$documentUtils.addAssociation(this.document, response.data);
               });
             }
@@ -201,13 +198,9 @@ export default {
       this.latitude = Math.round(coords[1] * 1000000) / 1000000;
     },
 
-    afterLoad() {
+    afterLoad() {},
 
-    },
-
-    beforeSave() {
-
-    },
+    beforeSave() {},
 
     // display a popup with info from fields taht contains an error
     // return true if popup is displayed, false otherwise
@@ -253,13 +246,13 @@ export default {
           this.goToDocument(this.document.document_id);
         });
       } else {
-        promise = c2c[this.documentType].create(this.document).then(response => {
+        promise = c2c[this.documentType].create(this.document).then((response) => {
           this.modified = false;
           this.goToDocument(response.data.document_id);
         });
       }
 
-      promise.catch(error => {
+      promise.catch((error) => {
         this.saving = false;
         const data = error.response.data;
         this.dispatchErrors(data.errors);
@@ -273,8 +266,8 @@ export default {
         name: this.documentType,
         params: {
           id: documentId,
-          lang: this.lang
-        }
+          lang: this.lang,
+        },
       });
     },
 
@@ -327,6 +320,6 @@ export default {
         event.preventDefault();
         event.returnValue = '';
       }
-    }
-  }
+    },
+  },
 };

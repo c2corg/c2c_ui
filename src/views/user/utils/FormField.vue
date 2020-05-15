@@ -33,7 +33,8 @@
         :autocapitalize="autocapitalize"
         v-model="value_"
         class="input"
-        :class="{'is-danger':hasError || errorMessage}">
+        :class="{ 'is-danger': hasError || errorMessage }"
+      />
       <span class="icon is-small is-left">
         <fa-icon :icon="icon" />
       </span>
@@ -42,79 +43,80 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      name: {
-        type: String,
-        required: true
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    value: {
+      type: [String, Number, Boolean],
+      default: null,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+    type: {
+      // HTML type of input (text, number...)
+      type: String,
+      required: true,
+    },
+    placeholder: {
+      type: String,
+      default: null,
+    },
+    icon: {
+      type: String,
+      required: true,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    autocorrect: {
+      type: String,
+      default: undefined,
+    },
+    autocapitalize: {
+      type: String,
+      default: undefined,
+    },
+  },
+
+  data() {
+    return {
+      errorMessage: null,
+    };
+  },
+
+  computed: {
+    value_: {
+      get() {
+        return this.value;
       },
-      value: {
-        type: [String, Number, Boolean],
-        default: null
+      set(value) {
+        this.$emit('input', value);
       },
-      label: {
-        type: String,
-        required: true
-      },
-      type: { // HTML type of input (text, number...)
-        type: String,
-        required: true
-      },
-      placeholder: {
-        type: String,
-        default: null
-      },
-      icon: {
-        type: String,
-        required: true
-      },
-      required: {
-        type: Boolean,
-        default: false
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      autocorrect: {
-        type: String,
-        default: undefined
-      },
-      autocapitalize: {
-        type: String,
-        default: undefined
-      }
     },
 
-    data() {
-      return {
-        errorMessage: null
-      };
-    },
-
-    computed: {
-      value_: {
-        get() {
-          return this.value;
-        },
-        set(value) {
-          this.$emit('input', value);
-        }
-      },
-
-      hasError() {
-        if (this.required && !this.value) {
-          return true;
-        }
-
-        return false;
+    hasError() {
+      if (this.required && !this.value) {
+        return true;
       }
-    },
 
-    methods: {
-      focus() {
-        this.$refs.input.focus();
-      }
-    }
-  };
+      return false;
+    },
+  },
+
+  methods: {
+    focus() {
+      this.$refs.input.focus();
+    },
+  },
+};
 </script>
