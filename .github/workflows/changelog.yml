@@ -1,9 +1,8 @@
 name: Generate changelog
 
 on:
-  push:
-    branches:
-      - "**"
+  release:
+    types: [published]
 
 jobs:
   generate-changelog:
@@ -23,7 +22,7 @@ jobs:
           git config --global user.name "GitHub Action"
       - name: Generate changelog
         id: changelog
-        uses: c2corg/generate-changelog-action@master
+        uses: c2corg/generate-changelog-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Save changelog to file
