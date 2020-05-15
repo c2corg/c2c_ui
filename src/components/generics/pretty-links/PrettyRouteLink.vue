@@ -5,17 +5,16 @@
     <activities
       v-if="!hideActivities"
       :activities="route.activities"
-      class="is-size-3 has-text-secondary icon-activities" />
+      class="is-size-3 has-text-secondary icon-activities"
+    />
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
       :title="$gettext('height_diff_difficulties')"
-      class="has-text-normal">
+      class="has-text-normal"
+    >
       {{ route.height_diff_difficulties }}&nbsp;m,
     </span>
-    <span
-      v-if="route.orientations && !hideOrientation"
-      :title="$gettext('orientations')"
-      class="has-text-normal">
+    <span v-if="route.orientations && !hideOrientation" :title="$gettext('orientations')" class="has-text-normal">
       {{ route.orientations.join(', ') }},
     </span>
     <document-rating :document="route" class="has-text-normal" />
@@ -32,47 +31,44 @@
 </template>
 
 <script>
-
-  export default {
-    props: {
-      route: {
-        type: Object,
-        required: true
-      },
-      hideActivities: {
-        type: Boolean,
-        default: false
-      },
-      hideArea: {
-        type: Boolean,
-        default: false
-      },
-      hideOrientation: {
-        type: Boolean,
-        default: false
-      },
-      hideHeightDiffDifficulties: {
-        type: Boolean,
-        default: false
-      }
+export default {
+  props: {
+    route: {
+      type: Object,
+      required: true,
     },
+    hideActivities: {
+      type: Boolean,
+      default: false,
+    },
+    hideArea: {
+      type: Boolean,
+      default: false,
+    },
+    hideOrientation: {
+      type: Boolean,
+      default: false,
+    },
+    hideHeightDiffDifficulties: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
-    computed: {
-      rangeAreas() {
-        return this.route.areas.filter((area) => area.area_type === 'range');
-      }
-    }
-  };
+  computed: {
+    rangeAreas() {
+      return this.route.areas.filter((area) => area.area_type === 'range');
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
+.pretty-route-link {
+  display: block;
+}
 
-  .pretty-route-link{
-    display:block
-  }
-
-  .icon-activities{
-    line-height: 1;
-  }
-
+.icon-activities {
+  line-height: 1;
+}
 </style>

@@ -10,7 +10,6 @@ import constants from '@/js/constants';
 export default function install(Vue) {
   Vue.prototype.$documentUtils = new Vue({
     methods: {
-
       getCreationTitle(documentType) {
         if (documentType === 'outing') return this.$gettext('add an outing');
         if (documentType === 'route') return this.$gettext('add a route');
@@ -91,7 +90,8 @@ export default function install(Vue) {
       },
 
       hasRating(document) {
-        return document.global_rating ||
+        return (
+          document.global_rating ||
           document.rock_free_rating ||
           document.rock_required_rating ||
           document.aid_rating ||
@@ -107,7 +107,8 @@ export default function install(Vue) {
           document.mtb_down_rating ||
           document.hiking_mtb_exposition ||
           document.labande_global_rating ||
-          document.labande_ski_rating;
+          document.labande_ski_rating
+        );
       },
 
       getAssociationArrayName(child) {
@@ -116,7 +117,7 @@ export default function install(Vue) {
       },
 
       isInArray(array, document) {
-        return array.filter(item => item.document_id === document.document_id).length !== 0;
+        return array.filter((item) => item.document_id === document.document_id).length !== 0;
       },
 
       addAssociation(document, child) {
@@ -134,7 +135,7 @@ export default function install(Vue) {
         const arrayName = this.getAssociationArrayName(child);
         const array = document.associations[arrayName];
 
-        document.associations[arrayName] = array.filter(item => item.document_id !== child.document_id);
+        document.associations[arrayName] = array.filter((item) => item.document_id !== child.document_id);
       },
 
       propagateAssociationProperties(parent, child) {
@@ -172,7 +173,7 @@ export default function install(Vue) {
           'via_ferrata_rating',
 
           'mtb_down_rating',
-          'mtb_up_rating'
+          'mtb_up_rating',
         ];
 
         names.forEach((name) => {
@@ -205,10 +206,8 @@ export default function install(Vue) {
 
         const result = {
           type: def.letter,
-          locales: [
-            this.buildLocale(documentType, lang)
-          ],
-          associations: {}
+          locales: [this.buildLocale(documentType, lang)],
+          associations: {},
         };
 
         for (const field of Object.values(def.fields)) {
@@ -226,7 +225,7 @@ export default function install(Vue) {
         if (def.geoLocalized) {
           result.geometry = {
             geom: null,
-            geom_detail: null
+            geom_detail: null,
           };
         }
 
@@ -239,7 +238,7 @@ export default function install(Vue) {
 
         if (areas) {
           // the areas often come in different orders within 3 area objects.
-          const orderedAreas = { 'range': [], 'admin_limits': [], 'country': [] };
+          const orderedAreas = { range: [], admin_limits: [], country: [] };
 
           for (const area of areas) {
             orderedAreas[area.area_type].push(this.getLocaleSmart(area).title);
@@ -286,16 +285,17 @@ export default function install(Vue) {
           return start.format('Do') + ' - ' + end.format('LL');
         } else {
           // moment does not offer a short hand for date with weekday.
-          const longFormat = {
-            'ca': 'dddd D MMMM [de] YYYY [a les]',
-            'de': 'ddd, D. MMMM YYYY',
-            'en': 'dddd, D MMMM YYYY',
-            'es': 'dddd, D [de] MMMM [de]',
-            'eu': 'dddd, YYYY[ko] MMMM[ren] D[a]',
-            'fr': 'dddd D MMMM YYYY',
-            'it': 'dddd D MMMM YYYY',
-            'zh_CN': 'YYYY年M月D日dddd'
-          }[this.$language.current] || 'dddd Do MMMM YYYY';
+          const longFormat =
+            {
+              ca: 'dddd D MMMM [de] YYYY [a les]',
+              de: 'ddd, D. MMMM YYYY',
+              en: 'dddd, D MMMM YYYY',
+              es: 'dddd, D [de] MMMM [de]',
+              eu: 'dddd, YYYY[ko] MMMM[ren] D[a]',
+              fr: 'dddd D MMMM YYYY',
+              it: 'dddd D MMMM YYYY',
+              zh_CN: 'YYYY年M月D日dddd',
+            }[this.$language.current] || 'dddd Do MMMM YYYY';
 
           return end.format(longFormat);
         }
@@ -304,7 +304,7 @@ export default function install(Vue) {
       // Returns true if both documents has same geolocalization point
       // it compares document.geometry.geom
       hasSameGeolocation(document1, document2) {
-        const geomIsValid = function(geom) {
+        const geomIsValid = function (geom) {
           return geom.type === 'Point' && Array.isArray(geom.coordinates) && geom.coordinates.length === 2;
         };
 
@@ -327,7 +327,7 @@ export default function install(Vue) {
           const data2 = JSON.parse(geolocation2);
 
           if (geomIsValid(data1) && geomIsValid(data2)) {
-            return (data1.coordinates[0] === data2.coordinates[0] && data1.coordinates[1] === data2.coordinates[1]);
+            return data1.coordinates[0] === data2.coordinates[0] && data1.coordinates[1] === data2.coordinates[1];
           } else if (!geomIsValid(data1) && !geomIsValid(data2)) {
             // both invalid structure, considere them as identical
             return true;
@@ -336,7 +336,7 @@ export default function install(Vue) {
             return false;
           }
         }
-      }
-    }
+      },
+    },
   });
 }

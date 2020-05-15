@@ -42,11 +42,13 @@ const MapEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/view
 const OutingEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/OutingEditionView');
 const ProfileEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/ProfileEditionView');
 const RouteEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/RouteEditionView');
-const WaypointEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/WaypointEditionView');
+const WaypointEditionView = () =>
+  import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/WaypointEditionView');
 const XreportEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/XreportEditionView');
 const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/WhatsNewView.vue`);
 const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`);
-const AssociationsHistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
+const AssociationsHistoryView = () =>
+  import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
 
 const routes = [
@@ -71,52 +73,52 @@ const routes = [
     name: 'forum',
     beforeEnter() {
       location.href = config.urls.forum;
-    }
-  }
+    },
+  },
 ];
 
-const addDocumentTypeView = function(def, viewComponent, editionComponent) {
+const addDocumentTypeView = function (def, viewComponent, editionComponent) {
   routes.push({
     path: '/' + def.documentType + 's',
     name: def.documentType + 's',
-    component: DocumentsView }
-  );
+    component: DocumentsView,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/:id(\\d+)/:lang?/:title?',
     name: def.documentType,
-    component: viewComponent }
-  );
+    component: viewComponent,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/version/:id(\\d+)/:lang/:version',
     name: def.documentType + '-version',
-    component: viewComponent }
-  );
+    component: viewComponent,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/history/:id(\\d+)/:lang',
     name: def.documentType + '-history',
-    component: HistoryView }
-  );
+    component: HistoryView,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
     name: def.documentType + '-edit',
-    component: editionComponent }
-  );
+    component: editionComponent,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/add/:lang?',
     name: def.documentType + '-add',
-    component: editionComponent }
-  );
+    component: editionComponent,
+  });
 
   routes.push({
     path: '/' + def.documentType + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
     name: def.documentType + '-diff',
-    component: DiffView }
-  );
+    component: DiffView,
+  });
 };
 
 addDocumentTypeView(constants.objectDefinitions.area, AreaView, AreaEditionView);
@@ -165,14 +167,14 @@ const router = new Router({
     }
 
     // we'll wait for triggerScroll event
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // we add an once handler on the event
       // view will trigger it once data are present
       this.app.$root.$once('triggerScroll', () => {
         resolve(position);
       });
     });
-  }
+  },
 });
 
 export default router;

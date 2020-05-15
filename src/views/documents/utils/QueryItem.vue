@@ -1,7 +1,6 @@
 <template>
-  <div v-if="field!==undefined" class="field">
-    <div v-if="field.queryMode==='valuesRangeSlider'" class="control">
-
+  <div v-if="field !== undefined" class="field">
+    <div v-if="field.queryMode === 'valuesRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value" />
       <vue-slider
         v-model="value"
@@ -10,22 +9,16 @@
         :marks="field.values"
         hide-label
         tooltip="focus"
-        :tooltip-formatter="field.i18n ? gettext : undefined" />
-
+        :tooltip-formatter="field.i18n ? gettext : undefined"
+      />
     </div>
 
-    <div v-else-if="field.queryMode==='numericalRangeSlider'" class="control">
+    <div v-else-if="field.queryMode === 'numericalRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value" />
-      <vue-slider
-        v-model="value"
-        :min="field.min"
-        :max="field.max"
-        :interval="interval"
-        :lazy="true"
-        tooltip="focus" />
+      <vue-slider v-model="value" :min="field.min" :max="field.max" :interval="interval" :lazy="true" tooltip="focus" />
     </div>
 
-    <div v-else-if="field.queryMode==='multiSelect'" class="control">
+    <div v-else-if="field.queryMode === 'multiSelect'" class="control">
       <label class="label">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </label>
@@ -36,14 +29,15 @@
         :custom-label="field.i18n ? gettext : undefined"
         :placeholder="$gettext('Select option')"
         :select-label="$gettext('Press enter to select')"
-        :multiple="true" />
+        :multiple="true"
+      />
     </div>
 
-    <div v-else-if="field.queryMode==='orientations'" class="level">
+    <div v-else-if="field.queryMode === 'orientations'" class="level">
       <input-orientation v-model="value" class="level-item" />
     </div>
 
-    <div v-else-if="field.queryMode==='input'" class="control">
+    <div v-else-if="field.queryMode === 'input'" class="control">
       <label class="label" v-if="!hideLabel">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </label>
@@ -53,10 +47,11 @@
         :value="value"
         @input="oninput"
         class="input"
-        :placeholder="$gettext(field.name)">
+        :placeholder="$gettext(field.name)"
+      />
     </div>
 
-    <div v-else-if="field.queryMode==='tristate'" class="control">
+    <div v-else-if="field.queryMode === 'tristate'" class="control">
       <label class="label">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </label>
@@ -66,20 +61,21 @@
         :options="['yes', 'no', 'no info']"
         :custom-label="gettext"
         :placeholder="$gettext('Select option')"
-        :select-label="$gettext('Press enter to select')" />
+        :select-label="$gettext('Press enter to select')"
+      />
     </div>
 
-    <div v-else-if="field.queryMode==='checkbox'" class="control">
+    <div v-else-if="field.queryMode === 'checkbox'" class="control">
       <input-checkbox v-model="value">
         {{ $gettext(field.name) }}
       </input-checkbox>
     </div>
 
-    <div v-else-if="field.queryMode==='activities'" class="control">
+    <div v-else-if="field.queryMode === 'activities'" class="control">
       <input-activity v-model="value" />
     </div>
 
-    <div v-else-if="field.queryMode==='dates'">
+    <div v-else-if="field.queryMode === 'dates'">
       <date-query-item />
     </div>
 
@@ -91,78 +87,75 @@
 </template>
 
 <script>
-  import { requireFieldProperty } from '@/js/properties-mixins';
+import { requireFieldProperty } from '@/js/properties-mixins';
 
-  import queryItemMixin from './query-item-mixin.js';
+import queryItemMixin from './query-item-mixin.js';
 
-  import Multiselect from 'vue-multiselect';
-  import vueSlider from 'vue-slider-component';
-  import QueryItemSliderLabel from './QueryItemSliderLabel';
-  import DateQueryItem from './DateQueryItem';
+import Multiselect from 'vue-multiselect';
+import vueSlider from 'vue-slider-component';
+import QueryItemSliderLabel from './QueryItemSliderLabel';
+import DateQueryItem from './DateQueryItem';
 
-  import 'vue-slider-component/theme/default.css';
+import 'vue-slider-component/theme/default.css';
 
-  export default {
+export default {
+  components: {
+    Multiselect,
+    vueSlider,
+    QueryItemSliderLabel,
+    DateQueryItem,
+  },
 
-    components: {
-      Multiselect,
-      vueSlider,
-      QueryItemSliderLabel,
-      DateQueryItem
+  mixins: [requireFieldProperty, queryItemMixin],
+
+  props: {
+    hideLabel: {
+      type: Boolean,
+      default: false,
     },
+  },
 
-    mixins: [ requireFieldProperty, queryItemMixin ],
+  timeoutId: null,
+  computed: {
+    interval() {
+      const scope = this.field.max - this.field.min;
 
-    props: {
-      hideLabel: {
-        type: Boolean,
-        default: false
+      if (scope < 300) {
+        return 1;
+      } else if (scope < 1000) {
+        return 5;
+      } else if (scope < 3000) {
+        return 10;
+      } else {
+        return 25;
       }
     },
+  },
 
-    timeoutId: null,
-    computed: {
-      interval() {
-        const scope = this.field.max - this.field.min;
-
-        if (scope < 300) {
-          return 1;
-        } else if (scope < 1000) {
-          return 5;
-        } else if (scope < 3000) {
-          return 10;
-        } else {
-          return 25;
-        }
-      }
+  methods: {
+    gettext(key) {
+      return this.$gettext(key, this.field.i18nContext);
     },
 
-    methods: {
-
-      gettext(key) {
-        return this.$gettext(key, this.field.i18nContext);
-      },
-
-      // for simple input, add a small delay (avoir spamming API, and url history)
-      oninput() {
-        if (this.$options.timeoutId) {
-          clearTimeout(this.$options.timeoutId);
-        }
-
-        this.$options.timeoutId = setTimeout(this.updateValue, 300);
-      },
-
-      updateValue() {
-        this.value = this.$refs.input.value;
+    // for simple input, add a small delay (avoir spamming API, and url history)
+    oninput() {
+      if (this.$options.timeoutId) {
+        clearTimeout(this.$options.timeoutId);
       }
-    }
-  };
+
+      this.$options.timeoutId = setTimeout(this.updateValue, 300);
+    },
+
+    updateValue() {
+      this.value = this.$refs.input.value;
+    },
+  },
+};
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
-
 /*
 If a multi select is below a slider, multi select  popup is bellow slider elements.
 set z-index to 6 (5 is the highest slider z-index value) to fix this
@@ -170,5 +163,4 @@ set z-index to 6 (5 is the highest slider z-index value) to fix this
 .multiselect--active {
   z-index: 6;
 }
-
 </style>

@@ -1,64 +1,60 @@
 <template>
   <swiper :options="$options.swiperOption" class="swiper">
     <swiper-slide v-for="image of images" :key="image.document_id">
-      <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)">
+      <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)" />
     </swiper-slide>
   </swiper>
-
 </template>
 
 <script>
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import imageUrls from '@/js/image-urls';
 
-  import { swiper, swiperSlide } from 'vue-awesome-swiper';
-  import imageUrls from '@/js/image-urls';
+export default {
+  components: {
+    swiper,
+    swiperSlide,
+  },
 
-  export default {
-
-    components: {
-      swiper,
-      swiperSlide
+  props: {
+    images: {
+      type: Array,
+      required: true,
     },
+  },
 
-    props: {
-      images: {
-        type: Array,
-        required: true
-      }
+  created() {
+    this.images.map(this.$imageViewer.push);
+  },
+
+  methods: {
+    getUrl(image) {
+      return imageUrls.getMedium(image);
     },
+  },
 
-    created() {
-      this.images.map(this.$imageViewer.push);
-    },
-
-    methods: {
-      getUrl(image) {
-        return imageUrls.getMedium(image);
-      }
-    },
-
-    swiperOption: {
-      slidesPerView: 'auto',
-      spaceBetween: 15
-    }
-  };
+  swiperOption: {
+    slidesPerView: 'auto',
+    spaceBetween: 15,
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '~swiper/dist/css/swiper.css';
 
-    @import '~swiper/dist/css/swiper.css';
+.swiper {
+  .swiper-slide {
+    height: 200px;
+    width: auto;
 
-    .swiper{
-        .swiper-slide{
-            height:200px;
-            width:auto;
-
-            img{
-                height:200px;
-            }
-        }
-
-        .swiper-button-disabled{
-            opacity:100;
-        }
+    img {
+      height: 200px;
     }
+  }
+
+  .swiper-button-disabled {
+    opacity: 100;
+  }
+}
 </style>

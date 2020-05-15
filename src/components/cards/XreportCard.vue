@@ -14,29 +14,24 @@
       <span class="is-ellipsed" v-if="document.event_type">
         {{ $gettext(document.event_type, 'event_types') }}
       </span>
-
     </card-row>
 
     <card-row>
       <card-event-activity-item :event-activity="document.event_activity" />
 
       <span class="is-nowrap">
-        {{ $moment.parseDate(document.date).locale(this.$language.current).format("LL") }}
+        {{ $moment.parseDate(document.date).locale(this.$language.current).format('LL') }}
       </span>
 
       <marker-quality :quality="document.quality" />
     </card-row>
-
   </card-container>
 </template>
 
 <script>
+import { documentCardMixin } from './utils/mixins.js';
 
-  import { documentCardMixin } from './utils/mixins.js';
-
-  export default {
-    mixins: [
-      documentCardMixin
-    ]
-  };
+export default {
+  mixins: [documentCardMixin],
+};
 </script>

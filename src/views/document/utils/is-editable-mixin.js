@@ -23,7 +23,10 @@ export default {
         }
       } else if (this.documentType === 'image') {
         // image : it must be own user personnal image. Collaborative image can't be deleted
-        if (['personal', 'copyright'].includes(this.document.image_type) && this.document.creator.user_id === this.$user.id) {
+        if (
+          ['personal', 'copyright'].includes(this.document.image_type) &&
+          this.document.creator.user_id === this.$user.id
+        ) {
           return true;
         }
       } else if (this.documentType === 'xreport') {
@@ -111,6 +114,6 @@ export default {
       }
 
       return false;
-    }
-  }
+    },
+  },
 };

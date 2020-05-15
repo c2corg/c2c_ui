@@ -2,56 +2,57 @@ export const baseMixin = {
   props: {
     type: {
       type: String,
-      default: 'text'
+      default: 'text',
     },
     disabled: {
       type: Boolean,
-      default: null
+      default: null,
     },
     required: {
       type: Boolean,
-      default: null
+      default: null,
     },
     hasError: {
       type: Boolean,
-      default: false
+      default: false,
     },
     i18n: {
       type: Boolean,
-      default: false
+      default: false,
     },
     divisor: {
       type: Number,
-      default: undefined
+      default: undefined,
     },
     placeholder: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   computed: {
     value_: {
       get() {
-        return this.type !== 'number' || this.divisor === undefined || !this.value ? this.value : this.value / this.divisor;
+        return this.type !== 'number' || this.divisor === undefined || !this.value
+          ? this.value
+          : this.value / this.divisor;
       },
       set(value) {
         if (!this.disabled) {
           value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor;
           this.$emit('input', value);
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 export const arrayMixin = {
-
   props: {
     value: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
 
   computed: {
@@ -63,8 +64,8 @@ export const arrayMixin = {
         if (!this.disabled) {
           this.$emit('input', value);
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -84,6 +85,6 @@ export const arrayMixin = {
       if (newValue.length !== 0 || !this.required) {
         this.value_ = newValue;
       }
-    }
-  }
+    },
+  },
 };

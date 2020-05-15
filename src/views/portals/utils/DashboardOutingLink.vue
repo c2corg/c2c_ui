@@ -6,16 +6,16 @@
 </template>
 
 <script>
-  import DashboardLink from './DashboardLink';
+import DashboardLink from './DashboardLink';
 
-  export default {
-    components: { DashboardLink },
+export default {
+  components: { DashboardLink },
 
-    props: {
-      outing: {
-        type: Object,
-        required: true
-      }
-    }
-  };
+  props: {
+    outing: {
+      type: Object,
+      required: true,
+    },
+  },
+};
 </script>

@@ -39,7 +39,7 @@
       </span>
 
       <span class="is-nowrap">
-        {{ $moment.toLocalizedString(document.date_end, "LL") }}
+        {{ $moment.toLocalizedString(document.date_end, 'LL') }}
       </span>
 
       <marker-quality :quality="document.quality" />
@@ -48,12 +48,9 @@
 </template>
 
 <script>
+import { documentCardMixin } from './utils/mixins.js';
 
-  import { documentCardMixin } from './utils/mixins.js';
-
-  export default {
-    mixins: [
-      documentCardMixin
-    ]
-  };
+export default {
+  mixins: [documentCardMixin],
+};
 </script>

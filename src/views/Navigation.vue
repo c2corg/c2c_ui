@@ -1,23 +1,21 @@
 <template>
-  <nav class="is-size-5" :class="{'has-background-warning':siteConfiguration.urls.name != 'prod'}">
-
+  <nav class="is-size-5" :class="{ 'has-background-warning': siteConfiguration.urls.name != 'prod' }">
     <span
       class="navigation-item is-hidden-desktop"
-      :class="{'is-hidden-mobile': !hideSearchInput}"
-      @click="$emit('toggleSideMenu')">
+      :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      @click="$emit('toggleSideMenu')"
+    >
       <span class="button">
         <fa-icon icon="bars" />
       </span>
     </span>
 
     <router-link
-      :to="{name:'home'}"
+      :to="{ name: 'home' }"
       class="navigation-item navigation-brand has-text-centered"
-      :class="{'is-hidden-mobile': !hideSearchInput}">
-      <img
-        src="@/assets/img/logo.svg"
-        url="@/assets/img/logo.svg"
-        alt="Camptocamp.org">
+      :class="{ 'is-hidden-mobile': !hideSearchInput }"
+    >
+      <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </router-link>
 
     <div class="navigation-end">
@@ -25,22 +23,25 @@
         <input-document
           ref="searchInput"
           class="navigation-item search-input"
-          :class="{'is-hidden-mobile': hideSearchInput}"
+          :class="{ 'is-hidden-mobile': hideSearchInput }"
           :document-type="['waypoint', 'route', 'article', 'book']"
           propose-creation
           show-more-results-link
-          @input="go" />
+          @input="go"
+        />
 
-        <div
-          class="navigation-item is-hidden-tablet"
-          :class="{'is-hidden-mobile': !hideSearchInput}">
+        <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
           <span class="button" @click="showSearchInput">
             <fa-icon icon="search" />
           </span>
         </div>
       </div>
 
-      <div v-if="!siteConfiguration.isProduction" class="navigation-item is-hidden-mobile" :title="'This page may contains bugs or incomplete features'">
+      <div
+        v-if="!siteConfiguration.isProduction"
+        class="navigation-item is-hidden-mobile"
+        :title="'This page may contains bugs or incomplete features'"
+      >
         <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
 
@@ -54,8 +55,9 @@
               v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
               :key="i"
               class="dropdown-item is-size-5"
-              :class="{'is-active': urlsConfiguration.name === siteConfiguration.urls.name}"
-              @click="setUrlsConfiguration(urlsConfiguration.name)">
+              :class="{ 'is-active': urlsConfiguration.name === siteConfiguration.urls.name }"
+              @click="setUrlsConfiguration(urlsConfiguration.name)"
+            >
               <span>{{ urlsConfiguration.name }}</span>
             </a>
           </div>
@@ -72,7 +74,8 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click.native="$refs.addDocumentMenu.isActive = false">
+            @click.native="$refs.addDocumentMenu.isActive = false"
+          >
             <icon-document :document-type="documentType" />
             <span>
               {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
@@ -95,10 +98,9 @@
             <img
               width="24"
               height="24"
-              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'">
-            <span class="has-text-weight-bold is-hidden-mobile">
-              &nbsp;{{ $user.name }}
-            </span>
+              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+            />
+            <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
           </span>
 
           <router-link
@@ -106,14 +108,15 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click.native="$refs.userMenu.isActive = false">
+            @click.native="$refs.userMenu.isActive = false"
+          >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" />
             <span>
               {{ item.text }}
             </span>
           </router-link>
 
-          <hr class="dropdown-divider">
+          <hr class="dropdown-divider" />
 
           <a class="dropdown-item is-size-5" @click="$user.signout()">
             <fa-icon icon="sign-out-alt" />
@@ -131,8 +134,9 @@
             v-for="(language, key) in $language.available"
             :key="key"
             class="dropdown-item is-size-5"
-            :class="{'is-active': key==$language.current}"
-            @click="$language.setCurrent(key)">
+            :class="{ 'is-active': key == $language.current }"
+            @click="$language.setCurrent(key)"
+          >
             {{ language }}
           </a>
         </dropdown-button>
@@ -142,246 +146,238 @@
 </template>
 
 <script>
-  import config from '@/js/config';
+import config from '@/js/config';
 
-  export default {
+export default {
+  data() {
+    return {
+      searchText: '',
+      hideSearchInput: true, // only on small screen,
+    };
+  },
 
-    data() {
-      return {
-        searchText: '',
-        hideSearchInput: true // only on small screen,
-      };
+  computed: {
+    siteConfiguration() {
+      return config;
+    },
+    userMenuLinks() {
+      return [
+        {
+          to: { name: 'profile', params: { id: this.$user.id } },
+          text: this.$gettext('My profile'),
+          icon: 'user',
+        },
+        {
+          to: { name: 'account' },
+          text: this.$gettext('My account'),
+          icon: 'check-circle',
+        },
+        {
+          to: { name: 'preferences' },
+          text: this.$gettext('My preferences'),
+          icon: 'cogs',
+        },
+        {
+          to: { name: 'outings', query: { u: this.$user.id } },
+          text: this.$gettext('My outings'),
+          iconComponent: 'icon-outing',
+        },
+        {
+          to: { name: 'whatsnew', query: { u: this.$user.id } },
+          text: this.$gettext('My changes'),
+          icon: 'edit',
+        },
+        {
+          to: { name: 'following' },
+          text: this.$gettext('My followed users'),
+          icon: 'heart',
+        },
+      ];
+    },
+  },
+
+  forumUrl: config.urls.forum,
+
+  created() {
+    window.addEventListener('click', this.onClick);
+  },
+
+  // do need to destroy event listener as Navigation component will always exists
+
+  methods: {
+    go(document) {
+      this.$router.push({
+        name: this.$documentUtils.getDocumentType(document.type),
+        params: { id: document.document_id },
+      });
     },
 
-    computed: {
-      siteConfiguration() {
-        return config;
-      },
-      userMenuLinks() {
-        return [
-          {
-            to: { name: 'profile', params: { id: this.$user.id } },
-            text: this.$gettext('My profile'),
-            icon: 'user'
-          },
-          {
-            to: { name: 'account' },
-            text: this.$gettext('My account'),
-            icon: 'check-circle'
-          },
-          {
-            to: { name: 'preferences' },
-            text: this.$gettext('My preferences'),
-            icon: 'cogs'
-          },
-          {
-            to: { name: 'outings', query: { u: this.$user.id } },
-            text: this.$gettext('My outings'),
-            iconComponent: 'icon-outing'
-          },
-          {
-            to: { name: 'whatsnew', query: { u: this.$user.id } },
-            text: this.$gettext('My changes'),
-            icon: 'edit'
-          },
-          {
-            to: { name: 'following' },
-            text: this.$gettext('My followed users'),
-            icon: 'heart'
-          }
-        ];
+    setUrlsConfiguration(name) {
+      config.setUrlsName(name);
+      this.$router.go();
+    },
+
+    onClick(event) {
+      if (!this.$refs.searchInputContainer.contains(event.target)) {
+        this.hideSearchInput = true;
       }
     },
 
-    forumUrl: config.urls.forum,
+    showSearchInput() {
+      this.hideSearchInput = false;
 
-    created() {
-      window.addEventListener('click', this.onClick);
+      // after DOM update, input will be visible, and focusable
+      this.$nextTick(() => {
+        this.$refs.searchInput.focus();
+      });
     },
-
-    // do need to destroy event listener as Navigation component will always exists
-
-    methods: {
-
-      go(document) {
-        this.$router.push({
-          name: this.$documentUtils.getDocumentType(document.type),
-          params: { id: document.document_id }
-        });
-      },
-
-      setUrlsConfiguration(name) {
-        config.setUrlsName(name);
-        this.$router.go();
-      },
-
-      onClick(event) {
-        if (!this.$refs.searchInputContainer.contains(event.target)) {
-          this.hideSearchInput = true;
-        }
-      },
-
-      showSearchInput() {
-        this.hideSearchInput = false;
-
-        // after DOM update, input will be visible, and focusable
-        this.$nextTick(() => {
-          this.$refs.searchInput.focus();
-        });
-      }
-    }
-  };
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/sass/variables.scss';
 
-  @import '@/assets/sass/variables.scss';
+nav {
+  max-width: 100vw;
+  height: $navbar-height;
+  background-color: $white;
+  box-shadow: 0 2px 0 $color-base-c2c;
+  display: flex;
+}
 
-  nav{
-    max-width: 100vw;
-    height:$navbar-height;
-    background-color: $white;
-    box-shadow: 0 2px 0 $color-base-c2c;
-    display: flex;
+.navigation-brand {
+  padding: 4px 5px !important;
+  img {
+    height: calc(#{$navbar-height} - 8px);
   }
+}
 
-  .navigation-brand{
-    padding: 4px 5px!important;
-    img{
-      height:calc(#{$navbar-height} - 8px);
-    }
-  }
+.navigation-end {
+  justify-content: flex-end;
+  margin-left: auto;
+  display: flex;
+}
 
-  .navigation-end{
-    justify-content: flex-end;
-    margin-left: auto;
-    display:flex;
-  }
+.navigation-item {
+  display: flex;
+  align-items: center;
+  line-height: 1.5;
+}
 
-  .navigation-item{
-    display:flex;
-    align-items: center;
-    line-height: 1.5;
-  }
-
-  @media screen and (max-width: $tablet) {
-    .navigation-brand{
-
-      img{
-        margin-left:0px;
-        // height:31px;
-      }
-    }
-
-    .navigation-item{
-      padding: 0.5rem 5px;
-    }
-
-    .navigation-end{
-      margin-right: 5px;
-    }
-
-    .search-input{
-      width:160px;
+@media screen and (max-width: $tablet) {
+  .navigation-brand {
+    img {
+      margin-left: 0px;
+      // height:31px;
     }
   }
 
-  @media screen and (min-width: $tablet) and (max-width: $desktop){
-    .navigation-brand{
-      img{
-        margin-left:5px;
-      }
-    }
+  .navigation-item {
+    padding: 0.5rem 5px;
+  }
 
-    .navigation-item{
-      padding: 0.5rem 5px;
-    }
+  .navigation-end {
+    margin-right: 5px;
+  }
 
-    .navigation-end{
-      margin-right: 5px;
-    }
+  .search-input {
+    width: 160px;
+  }
+}
 
-    .search-input{
-      width:250px;
+@media screen and (min-width: $tablet) and (max-width: $desktop) {
+  .navigation-brand {
+    img {
+      margin-left: 5px;
     }
   }
 
-  @media screen and (min-width: $desktop) and (max-width: $widescreen){
-    .navigation-brand{
-      img{
-        margin-left:20px;
-      }
-    }
+  .navigation-item {
+    padding: 0.5rem 5px;
+  }
 
-    .navigation-item{
-      padding: 0.5rem 0.75rem;
-    }
+  .navigation-end {
+    margin-right: 5px;
+  }
 
-    .navigation-end{
-      margin-right: 1rem;
+  .search-input {
+    width: 250px;
+  }
+}
+
+@media screen and (min-width: $desktop) and (max-width: $widescreen) {
+  .navigation-brand {
+    img {
+      margin-left: 20px;
     }
   }
 
-  @media screen and (min-width: $widescreen) and (max-width: $fullhd){
-    .navigation-brand{
-      img{
-        margin-left:20px;
-      }
-    }
+  .navigation-item {
+    padding: 0.5rem 0.75rem;
+  }
 
-    .navigation-item{
-      padding: 0.5rem 0.75rem;
-    }
+  .navigation-end {
+    margin-right: 1rem;
+  }
+}
 
-    .navigation-end{
-      margin-right: 1rem;
+@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
+  .navigation-brand {
+    img {
+      margin-left: 20px;
     }
   }
 
-  @media screen and (min-width: $fullhd){
-    .navigation-brand{
-      img{
-        margin-left:20px;
-      }
-    }
+  .navigation-item {
+    padding: 0.5rem 0.75rem;
+  }
 
-    .navigation-item{
-      padding: 0.5rem 0.75rem;
-    }
+  .navigation-end {
+    margin-right: 1rem;
+  }
+}
 
-    .navigation-end{
-      margin-right: 1rem;
+@media screen and (min-width: $fullhd) {
+  .navigation-brand {
+    img {
+      margin-left: 20px;
     }
   }
 
-  // search input : increase size to right on hover
-  // only on screen wider than desktop
-  @media screen and (min-width: $desktop) {
-
-    .search-input{
-      width:250px;
-      margin-right:50px;
-      transition: width .5s ease, margin-right .5s ease;
-    }
-
-    .search-input:hover{
-      width:300px;
-      margin-right:0;
-    }
+  .navigation-item {
+    padding: 0.5rem 0.75rem;
   }
+
+  .navigation-end {
+    margin-right: 1rem;
+  }
+}
+
+// search input : increase size to right on hover
+// only on screen wider than desktop
+@media screen and (min-width: $desktop) {
+  .search-input {
+    width: 250px;
+    margin-right: 50px;
+    transition: width 0.5s ease, margin-right 0.5s ease;
+  }
+
+  .search-input:hover {
+    width: 300px;
+    margin-right: 0;
+  }
+}
 </style>
 
 <style lang="scss">
+@import '@/assets/sass/variables.scss';
 
-  @import '@/assets/sass/variables.scss';
-
-  @media screen and (max-width: $tablet){
-
-    .add-button .dropdown-content{
-      position: fixed;
-      right: 0;
-      max-width: 100%;
-    }
+@media screen and (max-width: $tablet) {
+  .add-button .dropdown-content {
+    position: fixed;
+    right: 0;
+    max-width: 100%;
   }
-
+}
 </style>

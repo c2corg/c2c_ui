@@ -1,24 +1,19 @@
 <template>
   <!-- This a generic component that display field value of a document for any kind of field  -->
   <span>
+    <activities v-if="field.name == 'activities'" :activities="document.activities" class="has-text-secondary" />
 
-    <activities v-if="field.name=='activities'" :activities="document.activities" class="has-text-secondary" />
-
-    <a v-else-if="field.type==='url'" :href="value">
+    <a v-else-if="field.type === 'url'" :href="value">
       {{ value }}
     </a>
 
-    <span v-else-if="field.type==='date_time'">
+    <span v-else-if="field.type === 'date_time'">
       {{ $moment.toLocalizedString(value, 'LLL') }}
     </span>
 
-    <textual-array
-      v-else-if="isArray"
-      :array="value"
-      :i18n="field.i18n"
-      :i18n-context="field.i18nContext" />
+    <textual-array v-else-if="isArray" :array="value" :i18n="field.i18n" :i18n-context="field.i18nContext" />
 
-    <span v-else-if="typeof(value) === 'boolean'">
+    <span v-else-if="typeof value === 'boolean'">
       <span v-if="value" v-translate>
         yes
       </span>
@@ -31,43 +26,43 @@
       {{ $gettext(value, field.i18nContext) }}
     </span>
 
-    <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span><!--
-    --><span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span><!--
+    <span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span
+    ><!--
+    --><span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span
+    ><!--
     --><span v-if="showUnit">{{ unit || field.unit }}</span>
-
   </span>
 </template>
 
 <script>
-  import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
-  export default {
+export default {
+  mixins: [requireDocumentProperty, requireFieldProperty],
 
-    mixins: [ requireDocumentProperty, requireFieldProperty ],
+  props: {
+    unit: {
+      type: String,
+      default: null,
+    },
+    divisor: {
+      type: Number,
+      default: null,
+    },
+  },
 
-    props: {
-      unit: {
-        type: String,
-        default: null
-      },
-      divisor: {
-        type: Number,
-        default: null
-      }
+  computed: {
+    value() {
+      return this.document[this.field.name];
     },
 
-    computed: {
-      value() {
-        return this.document[this.field.name];
-      },
+    isArray() {
+      return Array.isArray(this.value);
+    },
 
-      isArray() {
-        return Array.isArray(this.value);
-      },
-
-      showUnit() {
-        return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
-      }
-    }
-  };
+    showUnit() {
+      return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
+    },
+  },
+};
 </script>

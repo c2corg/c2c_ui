@@ -34,7 +34,7 @@
       </h4>
 
       <ul>
-        <li v-if="document.camera_name"> {{ document.camera_name }}</li>
+        <li v-if="document.camera_name">{{ document.camera_name }}</li>
         <li v-if="document.exposure_time" :title="$gettext('exposure_time')">{{ document.exposure_time }}s</li>
         <li v-if="document.fnumber" :title="$gettext('fnumber')">f/{{ document.fnumber }}</li>
         <li v-if="document.focal_length" :title="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
@@ -48,48 +48,46 @@
 </template>
 
 <script>
-  import c2c from '@/js/apis/c2c';
+import c2c from '@/js/apis/c2c';
 
-  export default {
-    data() {
-      return {
-        promise: {},
-        visible: false
-      };
+export default {
+  data() {
+    return {
+      promise: {},
+      visible: false,
+    };
+  },
+
+  computed: {
+    document() {
+      return this.promise.data ? this.promise.data : null;
+    },
+  },
+
+  methods: {
+    show(documentId) {
+      this.visible = true;
+      this.promise = c2c.image.getCooked(documentId, this.$language.current);
     },
 
-    computed: {
-      document() {
-        return this.promise.data ? this.promise.data : null;
-      }
+    hide() {
+      this.visible = false;
     },
 
-    methods: {
-      show(documentId) {
-        this.visible = true;
-        this.promise = c2c.image.getCooked(documentId, this.$language.current);
-      },
-
-      hide() {
-        this.visible = false;
-      },
-
-      toggle(documentId) {
-        if (this.visible) {
-          this.hide();
-        } else {
-          this.show(documentId);
-        }
+    toggle(documentId) {
+      if (this.visible) {
+        this.hide();
+      } else {
+        this.show(documentId);
       }
-    }
-  };
-
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
-    .image-info{
-        background: rgba(0,0,0,0.7);
-        padding:1rem;
-    }
+.image-info {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+}
 </style>

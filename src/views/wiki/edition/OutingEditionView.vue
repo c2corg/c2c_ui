@@ -4,24 +4,27 @@
     :document="document"
     :generic-errors="genericErrors"
     :is-loading="saving"
-    @save="save">
-
+    @save="save"
+  >
     <form-section
       :title="$gettext('general informations')"
-      :sub-title="$gettext('Main informations about your outing')">
+      :sub-title="$gettext('Main informations about your outing')"
+    >
       <div class="columns">
         <form-field
           class="is-narrow"
           :document="document"
           :field="fields.date_start"
           :max="showBothDates ? document.date_end : undefined"
-          @input="handleDates" />
+          @input="handleDates"
+        />
         <form-field
           class="is-narrow"
           v-show="showBothDates"
           :document="document"
           :field="fields.date_end"
-          :min="showBothDates ? document.date_start : undefined" />
+          :min="showBothDates ? document.date_start : undefined"
+        />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
         </div>
@@ -36,14 +39,19 @@
       <div class="columns is-multiline">
         <form-field :document="document" :field="fields.title" />
         <form-field class="is-narrow" :document="document" :field="fields.partial_trip" />
-        <form-field class="is-12" :document="document" :field="fields.route_description" :placeholder="$gettext('describe route_conditions')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.route_description"
+          :placeholder="$gettext('describe route_conditions')"
+        />
       </div>
-
     </form-section>
 
     <form-section
       :title="$gettext('Weather & conditions')"
-      :sub-title="$gettext('Describe the conditions you encountered during your outing')">
+      :sub-title="$gettext('Describe the conditions you encountered during your outing')"
+    >
       <div class="columns is-multiline">
         <form-field class="is-6" :document="document" :field="fields.condition_rating" />
         <form-field class="is-6" :document="document" :field="fields.glacier_rating" />
@@ -58,9 +66,24 @@
         <form-field :document="document" :field="fields.snow_quality" />
       </div>
       <div class="columns is-multiline">
-        <form-field class="is-12" :document="document" :field="fields.conditions" :placeholder="$gettext('describe conditions')" />
-        <form-field class="is-6" :document="document" :field="fields.weather" :placeholder="$gettext('describe weather')" />
-        <form-field class="is-6" :document="document" :field="fields.timing" :placeholder="$gettext('describe timing')" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.conditions"
+          :placeholder="$gettext('describe conditions')"
+        />
+        <form-field
+          class="is-6"
+          :document="document"
+          :field="fields.weather"
+          :placeholder="$gettext('describe weather')"
+        />
+        <form-field
+          class="is-6"
+          :document="document"
+          :field="fields.timing"
+          :placeholder="$gettext('describe timing')"
+        />
         <form-field class="is-12" :document="document" :field="fields.avalanche_signs" />
         <form-field class="is-12" :document="document" :field="fields.avalanches" />
       </div>
@@ -68,7 +91,8 @@
 
     <form-section
       :title="$gettext('Personal informations')"
-      :sub-title="$gettext('People who were with you, and your feelings about this outing')">
+      :sub-title="$gettext('People who were with you, and your feelings about this outing')"
+    >
       <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
       <div class="columns">
         <form-field :document="document" :field="fields.participant_count" class="is-narrow" />
@@ -80,21 +104,21 @@
           :document="document"
           :field="fields.description"
           :label="$gettext('personal comments')"
-          :placeholder="$gettext('write your comments')" />
+          :placeholder="$gettext('write your comments')"
+        />
         <form-field :document="document" :field="fields.disable_comments" />
       </div>
     </form-section>
 
     <form-section
       :title="$gettext('Details')"
-      :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')">
-
+      :sub-title="$gettext('Detailed figures, like ratings, height differences, frequentation...')"
+    >
       <div class="columns">
         <form-field class="is-4" :document="document" :field="fields.frequentation" />
       </div>
 
       <div class="columns is-multiline">
-
         <div class="column is-4">
           <form-field no-wrapper :document="document" :field="fields.elevation_access" />
           <form-field no-wrapper :document="document" :field="fields.access_condition" />
@@ -116,12 +140,7 @@
       </div>
 
       <div class="columns">
-        <form-field
-          class="is-4"
-          :document="document"
-          :field="fields.length_total"
-          unit="km"
-          :divisor="1000" />
+        <form-field class="is-4" :document="document" :field="fields.length_total" unit="km" :divisor="1000" />
         <form-field class="is-4" :document="document" :field="fields.elevation_min" />
         <form-field class="is-4" :document="document" :field="fields.elevation_max" />
       </div>
@@ -138,7 +157,8 @@
           :document="document"
           :field="fields.ski_rating"
           prefix="?"
-          @click:prefix="showCotometer" />
+          @click:prefix="showCotometer"
+        />
         <form-field class="is-4" :document="document" :field="fields.labande_global_rating" />
 
         <form-field class="is-4" :document="document" :field="fields.ice_rating" />
@@ -155,7 +175,6 @@
       <div class="columns">
         <quality-field ref="qualityField" class="is-4" :document="document" />
       </div>
-
     </form-section>
 
     <!-- TODO where is that ??
@@ -166,45 +185,43 @@
 </template>
 
 <script>
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import CotometerWindow from './utils/CotometerWindow';
 
-  import documentEditionViewMixin from './utils/document-edition-view-mixin';
-  import CotometerWindow from './utils/CotometerWindow';
+export default {
+  components: { CotometerWindow },
 
-  export default {
-    components: { CotometerWindow },
+  mixins: [documentEditionViewMixin],
 
-    mixins: [ documentEditionViewMixin ],
+  data() {
+    return {
+      showBothDates: false,
+    };
+  },
 
-    data() {
-      return {
-        showBothDates: false
-      };
+  watch: {
+    showBothDates: 'handleDates',
+  },
+
+  methods: {
+    afterLoad() {
+      this.showBothDates = this.document.date_start !== this.document.date_end;
     },
 
-    watch: {
-      showBothDates: 'handleDates'
-    },
-
-    methods: {
-      afterLoad() {
-        this.showBothDates = this.document.date_start !== this.document.date_end;
-      },
-
-      handleDates() {
-        if (!this.showBothDates) {
-          this.document.date_end = this.document.date_start;
-        }
-      },
-
-      beforeSave() {
-        this.handleDates();
-        this.$refs.qualityField.beforeSave();
-      },
-
-      showCotometer() {
-        this.$refs.cotometerWindow.show();
+    handleDates() {
+      if (!this.showBothDates) {
+        this.document.date_end = this.document.date_start;
       }
-    }
-  };
+    },
 
+    beforeSave() {
+      this.handleDates();
+      this.$refs.qualityField.beforeSave();
+    },
+
+    showCotometer() {
+      this.$refs.cotometerWindow.show();
+    },
+  },
+};
 </script>

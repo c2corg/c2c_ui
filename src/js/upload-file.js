@@ -19,7 +19,7 @@ if (!HTMLCanvasElement.prototype.toBlob) {
   Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
     value(callback, type, quality) {
       const dataURL = this.toDataURL(type, quality).split(',')[1];
-      setTimeout(function() {
+      setTimeout(function () {
         const binStr = atob(dataURL);
         const len = binStr.length;
         const arr = new Uint8Array(len);
@@ -30,13 +30,13 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 
         callback(new Blob([arr], { type: type || 'image/png' }));
       });
-    }
+    },
   });
 }
 
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
-const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
-  let decimal = Number(degrees) + (Number(minutes) / 60) + (parseFloat(seconds) / 3600);
+const convertDMSToDecimal = function (degrees, minutes, seconds, direction) {
+  let decimal = Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
 
   // Don't do anything for N or E
   if (direction === 'S' || direction === 'W') {
@@ -46,7 +46,7 @@ const convertDMSToDecimal = function(degrees, minutes, seconds, direction) {
   return decimal;
 };
 
-const parseDate = function(exif, iptc) {
+const parseDate = function (exif, iptc) {
   const iptcDate = iptc ? iptc.DateCreated : null;
   const exifDate = exif ? exif.DateTimeOriginal || exif.DateTime : null;
 
@@ -65,7 +65,7 @@ const parseDate = function(exif, iptc) {
   return date && date.isValid() ? date.format() : null;
 };
 
-const parseExifGeometry = function(exif) {
+const parseExifGeometry = function (exif) {
   if (!exif.GPSLatitude || !exif.GPSLongitude) {
     return undefined;
   }
@@ -81,12 +81,12 @@ const parseExifGeometry = function(exif) {
   }
 
   const location = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-  const geom = { 'coordinates': location, 'type': 'Point' };
+  const geom = { coordinates: location, type: 'Point' };
 
-  return { 'geom': JSON.stringify(geom) };
+  return { geom: JSON.stringify(geom) };
 };
 
-const parseExifElevation = function(exif) {
+const parseExifElevation = function (exif) {
   if (!exif.GPSAltitude) {
     return undefined;
   }
@@ -95,16 +95,16 @@ const parseExifElevation = function(exif) {
   return isNaN(elevation) ? undefined : elevation;
 };
 
-const setIfDefined = function(document, name, value) {
+const setIfDefined = function (document, name, value) {
   if (value !== undefined) {
     document[name] = value;
   }
 };
 
-const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
+const uploadFile = function (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
   const document = {};
 
-  const parseMetaData = function(metaData) {
+  const parseMetaData = function (metaData) {
     const exif = metaData.exif ? metaData.exif.getAll() : null;
     const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
     let orientation = 0;
@@ -118,14 +118,14 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
       setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
       setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
       setIfDefined(document, 'fnumber', exif.FNumber);
-      setIfDefined(document, 'camera_name', (exif.Make && exif.Model) ? (exif.Make + ' ' + exif.Model) : undefined);
+      setIfDefined(document, 'camera_name', exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined);
       setIfDefined(document, 'geometry', parseExifGeometry(exif));
       setIfDefined(document, 'elevation', parseExifElevation(exif));
     }
     preProcess(orientation);
   };
 
-  const preProcess = function(orientation) {
+  const preProcess = function (orientation) {
     if (orientation !== 0 && file.type === 'image/jpeg') {
       loadImage(
         file,
@@ -148,14 +148,14 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
     }
   };
 
-  const processDataUrl = function(dataUrl) {
+  const processDataUrl = function (dataUrl) {
     // send data url to caller
     onDataUrlReady(dataUrl);
 
     // and use this to get image dimensions
     const img = new Image();
 
-    img.onload = function() {
+    img.onload = function () {
       // image is loaded; sizes are available
       document.width = img.width;
       document.height = img.height;
@@ -164,12 +164,12 @@ const uploadFile = function(file, onDataUrlReady, onUploadProgress, onSuccess, o
     img.src = dataUrl;
   };
 
-  const onUploadSuccess = function(event) {
+  const onUploadSuccess = function (event) {
     document.filename = event.data.filename;
     onSuccess(document);
   };
 
-  const upload = function(data) {
+  const upload = function (data) {
     worker.push(c2c.uploadImage.bind(c2c), data, onUploadProgress, onUploadSuccess, onFailure);
   };
 

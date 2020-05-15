@@ -1,4 +1,3 @@
-
 /************************************************************************************************************
  Waypoint fields access and access_period has a different signification, depending of waypoint_type
  It implies different label/titles/placeholders. And this logic is needed in both document views and
@@ -10,7 +9,9 @@
 export default {
   computed: {
     descriptionTitle() {
-      return this.document && this.document.waypoint_type === 'access' ? this.$gettext('road access') : this.$gettext('description');
+      return this.document && this.document.waypoint_type === 'access'
+        ? this.$gettext('road access')
+        : this.$gettext('description');
     },
 
     accessTitle() {
@@ -19,14 +20,14 @@ export default {
       }
 
       switch (this.document.waypoint_type) {
-      case 'access':
-        return this.$gettext('public transportation access');
-      case 'climbing_outdoor':
-        return this.$gettext('pedestrian access');
-      case 'hut':
-        return this.$gettext('pedestrian access', 'hut');
-      default:
-        return this.$gettext('road or pedestrian access');
+        case 'access':
+          return this.$gettext('public transportation access');
+        case 'climbing_outdoor':
+          return this.$gettext('pedestrian access');
+        case 'hut':
+          return this.$gettext('pedestrian access', 'hut');
+        default:
+          return this.$gettext('road or pedestrian access');
       }
     },
 
@@ -36,16 +37,16 @@ export default {
       }
 
       switch (this.document.waypoint_type) {
-      case 'hut':
-      case 'gite':
-      case 'camp_site':
-        return this.$gettext('opening_periods');
-      case 'local_product':
-        return this.$gettext('opening_hours');
-      case 'climbing_outdoor':
-        return this.$gettext('restricted_access');
-      default:
-        return this.$gettext('access_period');
+        case 'hut':
+        case 'gite':
+        case 'camp_site':
+          return this.$gettext('opening_periods');
+        case 'local_product':
+          return this.$gettext('opening_hours');
+        case 'climbing_outdoor':
+          return this.$gettext('restricted_access');
+        default:
+          return this.$gettext('access_period');
       }
     },
 
@@ -53,10 +54,10 @@ export default {
       const type = this.document ? this.document.waypoint_type : undefined;
 
       switch (type) {
-      case 'access':
-        return this.$gettext('Describe road access');
-      default:
-        return this.$gettext('Describe here the waypoint');
+        case 'access':
+          return this.$gettext('Describe road access');
+        default:
+          return this.$gettext('Describe here the waypoint');
       }
     },
 
@@ -64,14 +65,14 @@ export default {
       const type = this.document ? this.document.waypoint_type : undefined;
 
       switch (type) {
-      case 'access':
-        return this.$gettext('Describe pt access');
-      case 'hut':
-        return this.$gettext('Describe pedestrian access', 'hut');
-      case 'climbing_outdoor':
-        return this.$gettext('Describe pedestrian access');
-      default:
-        return this.$gettext('Describe access');
+        case 'access':
+          return this.$gettext('Describe pt access');
+        case 'hut':
+          return this.$gettext('Describe pedestrian access', 'hut');
+        case 'climbing_outdoor':
+          return this.$gettext('Describe pedestrian access');
+        default:
+          return this.$gettext('Describe access');
       }
     },
 
@@ -79,17 +80,17 @@ export default {
       const type = this.document ? this.document.waypoint_type : undefined;
 
       switch (type) {
-      case 'hut':
-      case 'gite':
-      case 'camp_site':
-        return this.$gettext('Describe opening periods');
-      case 'local_product':
-        return this.$gettext('Describe opening hours');
-      case 'climbing_outdoor':
-        return this.$gettext('Describe access restrictions');
-      default:
-        return this.$gettext('Describe access period');
+        case 'hut':
+        case 'gite':
+        case 'camp_site':
+          return this.$gettext('Describe opening periods');
+        case 'local_product':
+          return this.$gettext('Describe opening hours');
+        case 'climbing_outdoor':
+          return this.$gettext('Describe access restrictions');
+        default:
+          return this.$gettext('Describe access period');
       }
-    }
-  }
+    },
+  },
 };

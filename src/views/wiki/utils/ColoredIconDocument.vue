@@ -5,30 +5,28 @@
 </template>
 
 <script>
-  import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentTypeProperty ],
+export default {
+  mixins: [requireDocumentTypeProperty],
 
-    colors: {
-      'area': 'purple',
-      'book': 'plum',
-      'article': 'darkcyan',
-      'image': 'pink',
-      'map': 'yellow',
-      'outing': 'grey',
-      'profile': 'red',
-      'route': 'dodgerblue',
-      'waypoint': 'green',
-      'xreport': 'tomato'
-    }
-  };
+  colors: {
+    area: 'purple',
+    book: 'plum',
+    article: 'darkcyan',
+    image: 'pink',
+    map: 'yellow',
+    outing: 'grey',
+    profile: 'red',
+    route: 'dodgerblue',
+    waypoint: 'green',
+    xreport: 'tomato',
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
-  .icon-document-container{
-    border-radius: 100%;
-  }
-
+.icon-document-container {
+  border-radius: 100%;
+}
 </style>

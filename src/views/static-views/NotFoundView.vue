@@ -19,84 +19,84 @@
         v-for="(button, i) of buttons"
         :key="i"
         :to="button.to"
-        class="is-size-4 has-text-normal has-hover-background has-text-weight-bold">
-        <component
-          :is="button.iconComponent || 'fa-icon'"
-          :icon="button.icon"
-          class="has-text-secondary is-size-1" />
+        class="is-size-4 has-text-normal has-hover-background has-text-weight-bold"
+      >
+        <component :is="button.iconComponent || 'fa-icon'" :icon="button.icon" class="has-text-secondary is-size-1" />
         <div>{{ button.text | uppercaseFirstLetter }}</div>
       </router-link>
     </div>
 
-    <img class="falling-image" src="@/assets/img/falling.svg">
-
+    <img class="falling-image" src="@/assets/img/falling.svg" />
   </section>
 </template>
 
 <script>
-  const buildDocumentTypeButton = function(documentType, text) {
-    return {
-      to: documentType + 's',
-      iconComponent: 'icon-' + documentType,
-      text
-    };
+const buildDocumentTypeButton = function (documentType, text) {
+  return {
+    to: documentType + 's',
+    iconComponent: 'icon-' + documentType,
+    text,
   };
+};
 
-  export default {
-    data() {
-      return {
-        buttons: [
-          {
-            to: { name: 'home' },
-            icon: 'home',
-            text: this.$gettext('Home')
-          },
-          buildDocumentTypeButton('outing', this.$gettext('outings')),
-          buildDocumentTypeButton('waypoint', this.$gettext('waypoints')),
-          buildDocumentTypeButton('route', this.$gettext('routes')),
-          buildDocumentTypeButton('article', this.$gettext('routes')),
-          buildDocumentTypeButton('book', this.$gettext('books')),
-          buildDocumentTypeButton('xreport', this.$gettext('xreports')),
-          buildDocumentTypeButton('image', this.$gettext('images')),
-          buildDocumentTypeButton('area', this.$gettext('areas'))
-        ]
-      };
-    }
-  };
+export default {
+  data() {
+    return {
+      buttons: [
+        {
+          to: { name: 'home' },
+          icon: 'home',
+          text: this.$gettext('Home'),
+        },
+        buildDocumentTypeButton('outing', this.$gettext('outings')),
+        buildDocumentTypeButton('waypoint', this.$gettext('waypoints')),
+        buildDocumentTypeButton('route', this.$gettext('routes')),
+        buildDocumentTypeButton('article', this.$gettext('routes')),
+        buildDocumentTypeButton('book', this.$gettext('books')),
+        buildDocumentTypeButton('xreport', this.$gettext('xreports')),
+        buildDocumentTypeButton('image', this.$gettext('images')),
+        buildDocumentTypeButton('area', this.$gettext('areas')),
+      ],
+    };
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  @import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables.scss';
 
-  .notfound-buttons{
-    display: flex;
-    flex-flow : wrap row;
-    justify-content: center;
-    max-width: 660px;
-    margin:auto;
+.notfound-buttons {
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: center;
+  max-width: 660px;
+  margin: auto;
 
-    a {
-      width:33%;
-      padding: 20px 0;
-      transition: 0.3s;
-    }
+  a {
+    width: 33%;
+    padding: 20px 0;
+    transition: 0.3s;
   }
+}
 
-  .falling-image{
-    transition-property: transform;
-    transition-duration: 1s;
+.falling-image {
+  transition-property: transform;
+  transition-duration: 1s;
+}
+
+.falling-image:hover {
+  animation-name: rotate;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
   }
-
-  .falling-image:hover {
-    animation-name: rotate;
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+  to {
+    transform: rotate(360deg);
   }
-
-  @keyframes rotate {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
-  }
-
+}
 </style>

@@ -13,12 +13,12 @@ Photon.prototype = Object.create(BaseApi.prototype);
 // restore good contructor
 Photon.prototype.constructor = Photon;
 
-Photon.prototype.getPropositions = function(query, lang, centerWgs84) {
+Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
   const params = {
     q: query,
     lang,
     lon: centerWgs84[0],
-    lat: centerWgs84[1]
+    lat: centerWgs84[1],
   };
 
   return this.get('/', { params });

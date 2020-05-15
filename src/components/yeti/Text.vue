@@ -5,17 +5,17 @@
 </template>
 
 <script>
-  import Faq from '@/components/yeti/Faq';
-  import Disclaimer from '@/components/yeti/Disclaimer';
-  export default {
-    components: { Faq, Disclaimer },
-    props: {
-      component: {
-        type: String,
-        required: true
-      }
-    }
-  };
+import Faq from '@/components/yeti/Faq';
+import Disclaimer from '@/components/yeti/Disclaimer';
+export default {
+  components: { Faq, Disclaimer },
+  props: {
+    component: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style>

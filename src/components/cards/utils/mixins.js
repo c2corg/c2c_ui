@@ -9,7 +9,6 @@ import CardActivitiesItem from './CardActivitiesItem';
 import CardEventActivityItem from './CardEventActivityItem';
 
 export const cardMixin = {
-
   components: {
     CardContainer,
     CardTitle,
@@ -17,23 +16,22 @@ export const cardMixin = {
     CardRegionItem,
     CardElevationItem,
     CardActivitiesItem,
-    CardEventActivityItem
+    CardEventActivityItem,
   },
 
   props: {
     target: {
       type: String,
-      default: undefined
+      default: undefined,
     },
 
     highlighted: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 export const documentCardMixin = {
-  mixins: [cardMixin, requireDocumentProperty]
-
+  mixins: [cardMixin, requireDocumentProperty],
 };

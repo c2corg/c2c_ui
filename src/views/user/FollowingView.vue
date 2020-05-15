@@ -15,14 +15,8 @@
       </div>
       <div class="column">
         <div v-if="following.data" class="columns is-multiline">
-          <div
-            v-for="document in following.data.following"
-            :key="document.document_id"
-            class="column is-3">
-            <document-card
-              :document="document"
-              show-delete-button
-              @delete="remove(document)" />
+          <div v-for="document in following.data.following" :key="document.document_id" class="column is-3">
+            <document-card :document="document" show-delete-button @delete="remove(document)" />
           </div>
         </div>
       </div>
@@ -31,37 +25,36 @@
 </template>
 
 <script>
-  import c2c from '@/js/apis/c2c';
+import c2c from '@/js/apis/c2c';
 
-  export default {
+export default {
+  data() {
+    return {
+      following: null,
+      newUser: null,
+    };
+  },
 
-    data() {
-      return {
-        following: null,
-        newUser: null
-      };
+  created() {
+    this.load();
+  },
+
+  methods: {
+    load() {
+      this.following = c2c.userProfile.following.get();
     },
 
-    created() {
-      this.load();
+    add(profile) {
+      c2c.userProfile.following.add(profile.document_id).then(() => {
+        this.load();
+      });
     },
 
-    methods: {
-      load() {
-        this.following = c2c.userProfile.following.get();
-      },
-
-      add(profile) {
-        c2c.userProfile.following.add(profile.document_id).then(() => {
-          this.load();
-        });
-      },
-
-      remove(document) {
-        c2c.userProfile.following.remove(document.document_id).then(() => {
-          this.load();
-        });
-      }
-    }
-  };
+    remove(document) {
+      c2c.userProfile.following.remove(document.document_id).then(() => {
+        this.load();
+      });
+    },
+  },
+};
 </script>

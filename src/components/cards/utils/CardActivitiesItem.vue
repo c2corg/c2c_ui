@@ -3,18 +3,18 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      activities: {
-        type: Array,
-        default: null
-      }
-    }
-  };
+export default {
+  props: {
+    activities: {
+      type: Array,
+      default: null,
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-  .icon-activities{
-    line-height: 1;
-  }
+.icon-activities {
+  line-height: 1;
+}
 </style>

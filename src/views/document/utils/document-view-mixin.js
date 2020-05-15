@@ -1,4 +1,3 @@
-
 import constants from '@/js/constants';
 import c2c from '@/js/apis/c2c';
 import cooker from '@/js/cooker';
@@ -22,7 +21,6 @@ import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
 
 export default {
-
   components: {
     DocumentViewHeader,
 
@@ -38,21 +36,21 @@ export default {
     RecentOutingsBox,
     ToolBox,
     RoutesBox,
-    ImagesBox
+    ImagesBox,
   },
 
-  mixins: [ viewModeMixin ],
+  mixins: [viewModeMixin],
 
   props: {
     draft: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
     return {
-      promise: null
+      promise: null,
     };
   },
 
@@ -100,63 +98,67 @@ export default {
 
     lang() {
       return this.document ? this.document.cooked.lang : null;
-    }
+    },
   },
 
   watch: {
-    '$route': {
+    $route: {
       handler: 'loadDocument',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
     loadDocument($route) {
       if (this.isVersionView) {
         this.$imageViewer.clear();
-        this.promise = c2c[this.documentType].getVersion(
-          this.documentId,
-          this.$route.params.lang,
-          this.$route.params.version
-        ).then(response => {
-          // version object with all data
-          response.data.version.next_version_id = response.data.next_version_id;
-          response.data.version.previous_version_id = response.data.previous_version_id;
+        this.promise = c2c[this.documentType]
+          .getVersion(this.documentId, this.$route.params.lang, this.$route.params.version)
+          .then((response) => {
+            // version object with all data
+            response.data.version.next_version_id = response.data.next_version_id;
+            response.data.version.previous_version_id = response.data.previous_version_id;
 
-          // versionned datas are poor...
-          response.data.document.areas = [];
-          response.data.document.creator = null;
-          response.data.document.associations = {
-            articles: [],
-            books: [],
-            images: [],
-            users: [],
-            waypoints: [],
-            waypoint_children: [],
-            all_routes: {
-              documents: []
-            },
-            recent_outings: {
-              documents: []
-            }
-          };
-        });
+            // versionned datas are poor...
+            response.data.document.areas = [];
+            response.data.document.creator = null;
+            response.data.document.associations = {
+              articles: [],
+              books: [],
+              images: [],
+              users: [],
+              waypoints: [],
+              waypoint_children: [],
+              all_routes: {
+                documents: [],
+              },
+              recent_outings: {
+                documents: [],
+              },
+            };
+          });
       } else if (this.isDraftView) {
         this.promise = {};
 
         this.$imageViewer.clear();
-        cooker.cook(this.draft.locales[0]).then(response => {
+        cooker.cook(this.draft.locales[0]).then((response) => {
           this.draft.cooked = response.data;
           this.$set(this.promise, 'data', this.draft);
         });
-      } else { // normal mode
+      } else {
+        // normal mode
         // because of updateUrl(), we may have nothing to do
-        if (this.document && parseInt($route.params.id, 10) === this.document.document_id && this.expected_lang === this.lang) {
+        if (
+          this.document &&
+          parseInt($route.params.id, 10) === this.document.document_id &&
+          this.expected_lang === this.lang
+        ) {
           return;
         }
 
         this.$imageViewer.clear();
-        this.promise = c2c[this.documentType].getCooked(this.documentId, this.expected_lang)
+        this.promise = c2c[this.documentType]
+          .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
           .then(() => {
             this.$root.$emit('triggerScroll');
@@ -209,6 +211,6 @@ export default {
       if (this.$route.path !== path) {
         this.$router.replace(path);
       }
-    }
-  }
+    },
+  },
 };

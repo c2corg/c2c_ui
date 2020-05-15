@@ -7,18 +7,16 @@
 </template>
 
 <style scoped lang="scss">
-
 @import '@/assets/sass/variables.scss';
 
 .card-header-title {
-    padding:0.4rem 0.8rem;
-    display:block;
-    min-width: 0;
-    color:$text;
+  padding: 0.4rem 0.8rem;
+  display: block;
+  min-width: 0;
+  color: $text;
 
-    align-items: center;
-    justify-content: space-between;
-    display:flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
 }
-
 </style>

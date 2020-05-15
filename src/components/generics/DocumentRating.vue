@@ -11,11 +11,14 @@
 
       <span>
         <span v-if="document.rock_free_rating" :title="$gettext('rock_free_rating')">
-          {{ document.rock_free_rating }}<!--
-              --></span><!--
-              --><span v-if="document.rock_required_rating" :title="$gettext('rock_required_rating')"><!--
+          {{ document.rock_free_rating
+          }}<!--
+              --></span
+        ><!--
+              --><span v-if="document.rock_required_rating" :title="$gettext('rock_required_rating')"
+          ><!--
               -->&gt;{{ document.rock_required_rating }}
-              </span>
+        </span>
       </span>
 
       <span v-if="document.aid_rating" :title="$gettext('aid_rating')">
@@ -83,8 +86,9 @@
       v-for="rating of (showHelper ? displayed_ratings : [])"
       :key="rating"
       :to="getHelperLink(fields[rating].helper)"
-      class="dropdown-item">
-      <div style="width:2em;display:inline-block" class="has-text-weight-bold">
+      class="dropdown-item"
+    >
+      <div style="width: 2em; display: inline-block;" class="has-text-weight-bold">
         {{ document[rating] }}
       </div>
       <span>
@@ -95,72 +99,72 @@
 </template>
 
 <script>
-  import constants from '@/js/constants';
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import constants from '@/js/constants';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentProperty ],
+export default {
+  mixins: [requireDocumentProperty],
 
-    props: {
-      showHelper: {
-        type: Boolean,
-        default: false
-      }
+  props: {
+    showHelper: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  ratings: [
+    'global_rating',
+    'via_ferrata_rating',
+    'rock_free_rating',
+    'rock_required_rating',
+    'aid_rating',
+    'engagement_rating',
+    'risk_rating',
+    'equipment_rating',
+    'exposition_rock_rating',
+    'ice_rating',
+    'mixed_rating',
+    'ski_rating',
+    'ski_exposition',
+    'labande_global_rating',
+    'labande_ski_rating',
+    'snowshoe_rating',
+    'hiking_rating',
+    'mtb_up_rating',
+    'mtb_down_rating',
+    'hiking_mtb_exposition',
+  ],
+
+  computed: {
+    fields() {
+      return constants.objectDefinitions[this.documentType].fields;
     },
 
-    ratings: [
-      'global_rating',
-      'via_ferrata_rating',
-      'rock_free_rating',
-      'rock_required_rating',
-      'aid_rating',
-      'engagement_rating',
-      'risk_rating',
-      'equipment_rating',
-      'exposition_rock_rating',
-      'ice_rating',
-      'mixed_rating',
-      'ski_rating',
-      'ski_exposition',
-      'labande_global_rating',
-      'labande_ski_rating',
-      'snowshoe_rating',
-      'hiking_rating',
-      'mtb_up_rating',
-      'mtb_down_rating',
-      'hiking_mtb_exposition'
-    ],
+    displayed_ratings() {
+      const result = [];
 
-    computed: {
-      fields() {
-        return constants.objectDefinitions[this.documentType].fields;
-      },
-
-      displayed_ratings() {
-        const result = [];
-
-        for (const rating of this.$options.ratings) {
-          if (this.document[rating]) {
-            result.push(rating);
-          }
+      for (const rating of this.$options.ratings) {
+        if (this.document[rating]) {
+          result.push(rating);
         }
-
-        return result;
       }
+
+      return result;
     },
+  },
 
-    methods: {
-      getHelperLink(helper) {
-        const items = helper.split('#');
+  methods: {
+    getHelperLink(helper) {
+      const items = helper.split('#');
 
-        return {
-          name: 'article',
-          hash: `#${items[1]}`,
-          params: {
-            id: parseInt(items[0])
-          }
-        };
-      }
-    }
-  };
+      return {
+        name: 'article',
+        hash: `#${items[1]}`,
+        params: {
+          id: parseInt(items[0]),
+        },
+      };
+    },
+  },
+};
 </script>

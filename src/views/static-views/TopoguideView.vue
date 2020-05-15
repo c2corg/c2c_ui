@@ -25,7 +25,8 @@
             class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             v-for="activity of activities"
             :key="activity"
-            :to="{name:'outings', query:{act:activity}}">
+            :to="{ name: 'outings', query: { act: activity } }"
+          >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
               {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
@@ -34,7 +35,8 @@
 
           <topoguide-view-small-link
             class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
-            :to="{name:'outing-add'}">
+            :to="{ name: 'outing-add' }"
+          >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New outing
@@ -51,7 +53,8 @@
             class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
             v-for="activity of activities"
             :key="activity"
-            :to="{name:'routes', query:{act:activity}}">
+            :to="{ name: 'routes', query: { act: activity } }"
+          >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
               {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
@@ -60,7 +63,8 @@
 
           <topoguide-view-small-link
             class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
-            :to="{name:'route-add'}">
+            :to="{ name: 'route-add' }"
+          >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New route
@@ -77,7 +81,8 @@
             class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
             v-for="waypoint_type of waypoint_types"
             :key="waypoint_type"
-            :to="{name:'waypoints', query:{wtyp:waypoint_type}}">
+            :to="{ name: 'waypoints', query: { wtyp: waypoint_type } }"
+          >
             <span class="is-size-1"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
             <span class="has-text-weight-semibold">
               {{ $gettext(waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}
@@ -86,7 +91,8 @@
 
           <topoguide-view-small-link
             class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
-            :to="{name:'waypoint-add'}">
+            :to="{ name: 'waypoint-add' }"
+          >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
             <span class="has-text-success has-text-weight-semibold" v-translate>
               New waypoint
@@ -99,55 +105,53 @@
 </template>
 
 <script>
-  import constants from '@/js/constants';
+import constants from '@/js/constants';
 
-  import TopoguideViewLink from './TopoguideViewLink';
-  import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+import TopoguideViewLink from './TopoguideViewLink';
+import TopoguideViewSmallLink from './TopoguideViewSmallLink';
 
-  export default {
-    components: {
-      TopoguideViewLink,
-      TopoguideViewSmallLink
+export default {
+  components: {
+    TopoguideViewLink,
+    TopoguideViewSmallLink,
+  },
+
+  computed: {
+    activities() {
+      return constants.activities;
     },
-
-    computed: {
-      activities() {
-        return constants.activities;
-      },
-      waypoint_types() {
-        return constants.waypoint_types;
-      }
-    }
-  };
-
+    waypoint_types() {
+      return constants.waypoint_types;
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  @import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables.scss';
 
-  .topoguide{
-    background-image:url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
-    background-size:cover;
-    padding-top:90px; //keep the header on a deep color zone
-    padding-bottom:25px;
-    justify-content:center;
+.topoguide {
+  background-image: url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
+  background-size: cover;
+  padding-top: 90px; //keep the header on a deep color zone
+  padding-bottom: 25px;
+  justify-content: center;
 
-    h1{
-      font-size:3rem;
-      color:$light;
-      margin-bottom: 25px;
-    }
-
-    .links{
-      justify-content:center;
-      flex-flow:wrap row;
-      max-width:700px;
-      margin:auto;
-    }
+  h1 {
+    font-size: 3rem;
+    color: $light;
+    margin-bottom: 25px;
   }
 
-  .title{
-    line-height:1.5 !important;
+  .links {
+    justify-content: center;
+    flex-flow: wrap row;
+    max-width: 700px;
+    margin: auto;
   }
+}
 
+.title {
+  line-height: 1.5 !important;
+}
 </style>

@@ -7,7 +7,9 @@
     <div v-if="history">
       <h1 class="title is-1">
         <icon-document :document-type="documentType" />
-        <router-link :to="{ name: documentType, params: {id:documentId, lang:lang} }">{{ history.title }}</router-link>
+        <router-link :to="{ name: documentType, params: { id: documentId, lang: lang } }">{{
+          history.title
+        }}</router-link>
       </h1>
 
       <history-view-links
@@ -15,7 +17,8 @@
         :document-type="documentType"
         :lang="lang"
         :version-from="versionFrom"
-        :version-to="versionTo" />
+        :version-to="versionTo"
+      />
 
       <table class="table is-striped">
         <thead>
@@ -29,26 +32,29 @@
         <tbody>
           <tr v-for="version of history.versions" :key="version.version_id">
             <td>
-              <div v-if="documentType!='profile'" class="control">
+              <div v-if="documentType != 'profile'" class="control">
                 <input
                   v-model="versionFrom"
                   :disabled="versionTo <= version.version_id"
                   :value="version.version_id"
                   type="radio"
-                  name="versionFrom">
+                  name="versionFrom"
+                />
                 <input
                   v-model="versionTo"
                   :disabled="versionFrom >= version.version_id"
                   :value="version.version_id"
                   type="radio"
-                  name="versionTo">
+                  name="versionTo"
+                />
                 <diff-link
                   v-if="version.version_id !== veryFirstVersionId"
                   :document-type="documentType"
                   :id="documentId"
                   :lang="lang"
                   version-from="prev"
-                  :version-to="version.version_id" />
+                  :version-to="version.version_id"
+                />
               </div>
             </td>
             <td>
@@ -71,81 +77,78 @@
         :document-type="documentType"
         :lang="lang"
         :version-from="versionFrom"
-        :version-to="versionTo" />
-
+        :version-to="versionTo"
+      />
     </div>
   </div>
 </template>
 
 <script>
-  import c2c from '@/js/apis/c2c';
-  import HistoryViewLinks from './utils/HistoryViewLinks';
+import c2c from '@/js/apis/c2c';
+import HistoryViewLinks from './utils/HistoryViewLinks';
 
-  export default {
-    components: { HistoryViewLinks },
+export default {
+  components: { HistoryViewLinks },
 
-    data() {
-      return { // theese three data are computed
-        promise: {},
-        versionFrom: undefined,
-        versionTo: undefined
-      };
+  data() {
+    return {
+      // theese three data are computed
+      promise: {},
+      versionFrom: undefined,
+      versionTo: undefined,
+    };
+  },
+
+  computed: {
+    documentId() {
+      return parseInt(this.$route.params.id);
     },
-
-    computed: {
-      documentId() {
-        return parseInt(this.$route.params.id);
-      },
-      documentType() {
-        return this.$route.name.replace('-history', '');
-      },
-      lang() {
-        return this.$route.params.lang;
-      },
-      veryFirstVersionId() {
-        return this.history.versions[this.history.versions.length - 1].version_id;
-      },
-      history() {
-        return this.promise.data;
-      }
+    documentType() {
+      return this.$route.name.replace('-history', '');
     },
-
-    watch: {
-      '$route': {
-        handler: 'load',
-        immediate: true
-      }
+    lang() {
+      return this.$route.params.lang;
     },
+    veryFirstVersionId() {
+      return this.history.versions[this.history.versions.length - 1].version_id;
+    },
+    history() {
+      return this.promise.data;
+    },
+  },
 
-    methods: {
+  watch: {
+    $route: {
+      handler: 'load',
+      immediate: true,
+    },
+  },
 
-      load() {
-        this.promise = c2c[this.documentType].getHistory(this.documentId, this.lang).then(response => {
-          const versions = response.data.versions.reverse();
-          response.data.versions = versions;
+  methods: {
+    load() {
+      this.promise = c2c[this.documentType].getHistory(this.documentId, this.lang).then((response) => {
+        const versions = response.data.versions.reverse();
+        response.data.versions = versions;
 
-          this.versionFrom = versions[versions.length > 1 ? 1 : 0].version_id;
-          this.versionTo = versions[0].version_id;
-        });
-      }
-    }
-  };
-
+        this.versionFrom = versions[versions.length > 1 ? 1 : 0].version_id;
+        this.versionTo = versions[0].version_id;
+      });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
+td {
+  white-space: nowrap;
+}
 
-  td{
-    white-space:nowrap;
-  }
-
-  td:nth-child(4) {
-    width: 100%;
-    white-space:normal;
-    font-style:italic;
-  }
-  input[type=radio] {
-    margin-right: 5px;
-  }
-
+td:nth-child(4) {
+  width: 100%;
+  white-space: normal;
+  font-style: italic;
+}
+input[type='radio'] {
+  margin-right: 5px;
+}
 </style>

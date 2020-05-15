@@ -1,6 +1,5 @@
-
 <template>
-  <div class="modal" :class="{'is-active': visible, 'is-wide': wide}">
+  <div class="modal" :class="{ 'is-active': visible, 'is-wide': wide }">
     <div class="modal-background" @click="hide" />
     <div class="modal-card">
       <header v-if="$slots.title" class="modal-card-head">
@@ -22,26 +21,23 @@
 </template>
 
 <script>
-  import mixins from './mixins';
+import mixins from './mixins';
 
-  export default {
-    mixins: [ mixins ],
+export default {
+  mixins: [mixins],
 
-    props: {
-      wide: {
-        type: Boolean,
-        default: false
-      }
-    }
-  };
-
+  props: {
+    wide: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
 </script>
 
 <style scoped>
-
-    .is-wide .modal-card{
-        width:95%;
-        padding:2%;
-    }
-
+.is-wide .modal-card {
+  width: 95%;
+  padding: 2%;
+}
 </style>

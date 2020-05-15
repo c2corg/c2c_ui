@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="columns is-mobile"> <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
+    <div class="columns is-mobile">
+      <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
       <div class="column query-bound-value-left">
         <span v-if="field.i18n">{{ $gettext(value[0], field.i18nContext) | uppercaseFirstLetter }}</span>
         <span v-else>{{ value[0] }}</span>
@@ -12,7 +13,7 @@
         * but of values are numeric (like elevation), then we know that there textual representation is small
           ==> give to field's name all the place it needs with is-narrow helper
       -->
-      <div class="column query-label" :class="{'is-narrow':!field.i18n, 'is-4':field.i18n}">
+      <div class="column query-label" :class="{ 'is-narrow': !field.i18n, 'is-4': field.i18n }">
         {{ $gettext(field.name) | uppercaseFirstLetter }}
       </div>
       <div class="column query-bound-value-right">
@@ -22,38 +23,35 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-  import { requireFieldProperty } from '@/js/properties-mixins';
+import { requireFieldProperty } from '@/js/properties-mixins';
 
-  export default{
+export default {
+  mixins: [requireFieldProperty],
 
-    mixins: [ requireFieldProperty ],
-
-    props: {
-      value: {
-        type: Array,
-        required: true
-      }
-    }
-  };
+  props: {
+    value: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
-
-.query-label{
-    font-style:italic;
-    text-align:center;
+.query-label {
+  font-style: italic;
+  text-align: center;
 }
 
-.query-bound-value-left, .query-bound-value-right{
-    font-weight:bold;
+.query-bound-value-left,
+.query-bound-value-right {
+  font-weight: bold;
 }
 
-.query-bound-value-right{
-    text-align:right;
+.query-bound-value-right {
+  text-align: right;
 }
-
 </style>

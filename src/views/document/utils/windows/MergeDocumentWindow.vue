@@ -10,9 +10,8 @@
       </div>
       <div class="has-padding-bottom">
         <span v-translate>
-          Merging a source document with a target document transfers all
-          associations of the source document to the target document, and sets up a
-          redirection from the source to the target document.
+          Merging a source document with a target document transfers all associations of the source document to the
+          target document, and sets up a redirection from the source to the target document.
         </span>
         <span>&nbsp;</span>
         <span class="has-text-weight-bold" v-translate>
@@ -34,7 +33,8 @@
             v-model="targetDocument"
             :show-options="false"
             @load-options="options = arguments[0]"
-            is-small />
+            is-small
+          />
         </div>
         <div v-if="targetDocument">
           <fa-icon icon="check-circle" class="has-text-success" />
@@ -50,21 +50,13 @@
           <button class="button is-success is-small" @click="select(target)">select</button>
         </div>
       </div>
-
     </section>
 
     <footer slot="footer">
-      <button
-        :disabled="targetDocument===null"
-        @click="mergeDocuments"
-        class="button is-success"
-        v-translate>
+      <button :disabled="targetDocument === null" @click="mergeDocuments" class="button is-success" v-translate>
         Merge documents
       </button>
-      <button
-        @click="hide()"
-        class="button"
-        v-translate>
+      <button @click="hide()" class="button" v-translate>
         Cancel
       </button>
     </footer>
@@ -72,80 +64,74 @@
 </template>
 
 <script>
-  import c2c from '@/js/apis/c2c';
+import c2c from '@/js/apis/c2c';
 
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  import MergeDocumentLink from './MergeDocumentLink';
+import MergeDocumentLink from './MergeDocumentLink';
 
-  export default {
+export default {
+  components: { MergeDocumentLink },
 
-    components: { MergeDocumentLink },
+  mixins: [requireDocumentProperty],
 
-    mixins: [
-      requireDocumentProperty
-    ],
+  data() {
+    return {
+      targetDocument: null,
+      options: null,
+    };
+  },
 
-    data() {
-      return {
-        targetDocument: null,
-        options: null
-      };
-    },
-
-    computed: {
-      possibleTargets() {
-        if (this.options) {
-          return this.options[this.documentType + 's'].documents;
-        } else {
-          return [];
-        }
+  computed: {
+    possibleTargets() {
+      if (this.options) {
+        return this.options[this.documentType + 's'].documents;
+      } else {
+        return [];
       }
     },
+  },
 
-    methods: {
-      hide() {
-        this.$refs.modalWindow.hide();
-      },
-      show() {
-        this.$refs.modalWindow.show();
-      },
+  methods: {
+    hide() {
+      this.$refs.modalWindow.hide();
+    },
+    show() {
+      this.$refs.modalWindow.show();
+    },
 
-      select(target) {
-        this.targetDocument = target;
-        this.options = null;
-      },
+    select(target) {
+      this.targetDocument = target;
+      this.options = null;
+    },
 
-      mergeDocuments() {
-        if (window.confirm(this.$gettext('Are you sure you want to merge?'))) {
-          c2c.moderator.mergeDocuments(
-            this.document.document_id,
-            this.targetDocument.document_id
-          ).then(() => {
-            // TODO feedback
-            this.hide();
-          });
-        }
+    mergeDocuments() {
+      if (window.confirm(this.$gettext('Are you sure you want to merge?'))) {
+        c2c.moderator.mergeDocuments(this.document.document_id, this.targetDocument.document_id).then(() => {
+          // TODO feedback
+          this.hide();
+        });
       }
-    }
-  };
-
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/sass/variables.scss';
 
-  @import "@/assets/sass/variables.scss";
+.modal-card-body,
+.modal-card,
+.modal {
+  overflow: visible !important;
+}
 
-  .modal-card-body, .modal-card, .modal {
-      overflow: visible !important;
-  }
+.column {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
 
-  .column{
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
-  }
-
-  .has-padding-bottom {
-    padding-bottom: 1rem;
-  }
+.has-padding-bottom {
+  padding-bottom: 1rem;
+}
 </style>

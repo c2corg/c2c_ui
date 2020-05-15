@@ -13,7 +13,7 @@ async function main() {
   await promisify(fs.writeFile)(path.resolve(__dirname, '../dist', 'health.json'), content);
 }
 
-main().catch(err => {
+main().catch((err) => {
   if (err) {
     throw err;
   }

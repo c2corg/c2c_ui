@@ -1,7 +1,8 @@
 <template>
   <router-link
-    v-if="documentType!='profile'"
-    :to="{name:documentType + '-version', params:{id:id, version:version, lang:lang}}">
+    v-if="documentType != 'profile'"
+    :to="{ name: documentType + '-version', params: { id: id, version: version, lang: lang } }"
+  >
     <slot />
   </router-link>
   <span v-else>
@@ -10,24 +11,24 @@
 </template>
 
 <script>
-  import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
-  export default{
-    mixins: [ requireDocumentTypeProperty ],
+export default {
+  mixins: [requireDocumentTypeProperty],
 
-    props: {
-      version: {
-        type: Number,
-        required: true
-      },
-      lang: {
-        type: String,
-        required: true
-      },
-      id: {
-        type: Number,
-        required: true
-      }
-    }
-  };
+  props: {
+    version: {
+      type: Number,
+      required: true,
+    },
+    lang: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
+};
 </script>

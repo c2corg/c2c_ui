@@ -19,17 +19,13 @@
       <card-activities-item :activities="document.activities" />
       <marker-quality :quality="document.quality" />
     </card-row>
-
   </card-container>
 </template>
 
 <script>
+import { documentCardMixin } from './utils/mixins.js';
 
-  import { documentCardMixin } from './utils/mixins.js';
-
-  export default {
-    mixins: [
-      documentCardMixin
-    ]
-  };
+export default {
+  mixins: [documentCardMixin],
+};
 </script>

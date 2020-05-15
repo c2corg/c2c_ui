@@ -7,15 +7,13 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current', r
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
-      attributions: [
-        '<a target="_blank" rel="noopener" href="http://www.swisstopo.admin.ch">swisstopo</a>'
-      ],
-      urls: ['10', '11', '12', '13', '14'].map(i => {
+      attributions: ['<a target="_blank" rel="noopener" href="http://www.swisstopo.admin.ch">swisstopo</a>'],
+      urls: ['10', '11', '12', '13', '14'].map((i) => {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
-      maxZoom: 17
+      maxZoom: 17,
     }),
-    restricted
+    restricted,
   });
 }
 
@@ -33,7 +31,7 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
   const tileGrid = new ol.tilegrid.WMTS({
     origin: [-20037508, 20037508],
     resolutions,
-    matrixIds
+    matrixIds,
   });
 
   const source = new ol.source.WMTS({
@@ -47,15 +45,15 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
     attributions: [
       '<a href="http://www.geoportail.fr/" target="_blank" rel="noreferer noopener">' +
         '<img src="//api.ign.fr/geoportail/api/js/latest/' +
-        'theme/geoportal/img/logo_gp.gif"></a>'
-    ]
+        'theme/geoportal/img/logo_gp.gif"></a>',
+    ],
   });
 
   return new ol.layer.Tile({
     title,
     type: 'base',
     visible: false,
-    source
+    source,
   });
 }
 
@@ -72,19 +70,19 @@ function createIgnEsSource(title, source) {
   let url = 'http://www.ign.es/wmts/';
   let layer;
   switch (source) {
-  case 'raster':
-  default:
-    url += 'mapa-raster';
-    layer = 'MTN';
-    break;
-  case 'base':
-    url += 'ign-base';
-    layer = 'IGNBaseTodo';
-    break;
-  case 'ortho':
-    url += 'pnoa-ma';
-    layer = 'OI.OrthoimageCoverage';
-    break;
+    case 'raster':
+    default:
+      url += 'mapa-raster';
+      layer = 'MTN';
+      break;
+    case 'base':
+      url += 'ign-base';
+      layer = 'IGNBaseTodo';
+      break;
+    case 'ortho':
+      url += 'pnoa-ma';
+      layer = 'OI.OrthoimageCoverage';
+      break;
   }
 
   const levels = 21;
@@ -101,7 +99,7 @@ function createIgnEsSource(title, source) {
     extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
     origin: [-20037508.34, 20037508.34],
     resolutions,
-    matrixIds
+    matrixIds,
   });
 
   return new ol.layer.Tile({
@@ -115,8 +113,8 @@ function createIgnEsSource(title, source) {
       format: 'image/jpeg',
       projection: 'EPSG:3857',
       tileGrid,
-      attributions: ['CC BY 4.0 <a href="www.scne.es" target="_blank" rel="noreferrer noopener>www.scne.es</a>']
-    })
+      attributions: ['CC BY 4.0 <a href="www.scne.es" target="_blank" rel="noreferrer noopener>www.scne.es</a>'],
+    }),
   });
 }
 
@@ -149,7 +147,7 @@ function createBaseMapDotAtSource(title, source) {
     extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
     origin: [-20037508.34, 20037508.34],
     resolutions,
-    matrixIds
+    matrixIds,
   });
 
   return new ol.layer.Tile({
@@ -166,12 +164,12 @@ function createBaseMapDotAtSource(title, source) {
       layer: 'geolandbasemap',
       matrixSet: 'google3857',
       tileGrid,
-      attributions: '<a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>'
-    })
+      attributions: '<a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>',
+    }),
   });
 }
 
-export const cartoLayers = function() {
+export const cartoLayers = function () {
   // $gettext('ESRI', 'Map layer')
   /* const esri = new ol.layer.Tile({
     title: 'Esri',
@@ -211,8 +209,8 @@ export const cartoLayers = function() {
       attributions:
         '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
         '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
-      maxZoom: 17
-    })
+      maxZoom: 17,
+    }),
   });
 
   // $gettext('IGN maps', 'Map layer')
@@ -239,11 +237,11 @@ export const cartoLayers = function() {
     ignEsMaps,
     ignEsOrtho,
     basemap,
-    basemapOrtho
+    basemapOrtho,
   ];
 };
 
-export const dataLayers = function() {
+export const dataLayers = function () {
   // $gettext('IGN', 'Map slopes layer')
   const ignSlopes = createIgnFrSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
@@ -254,7 +252,7 @@ export const dataLayers = function() {
   return [ignSlopes, swissSlopes];
 };
 
-export const protectionAreasLayers = function() {
+export const protectionAreasLayers = function () {
   const swissTranquilityZones = createSwisstopoLayer(
     'Swiss tranquility zones',
     'ch.bafu.wrz-wildruhezonen_portal',

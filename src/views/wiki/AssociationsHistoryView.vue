@@ -7,7 +7,8 @@
       :limit="limit"
       :offset="offset"
       :document-id="documentId"
-      :user-id="userId" />
+      :user-id="userId"
+    />
 
     <loading-notification :promise="promise" />
 
@@ -33,14 +34,12 @@
             {{ association.is_creation }}
           </td>
           <td>
-            <colored-icon-document
-              :document-type="$documentUtils.getDocumentType(association.parent_document.type)" />
+            <colored-icon-document :document-type="$documentUtils.getDocumentType(association.parent_document.type)" />
             <span>&nbsp;</span>
             <document-link :document="association.parent_document" />
           </td>
           <td>
-            <colored-icon-document
-              :document-type="$documentUtils.getDocumentType(association.child_document.type)" />
+            <colored-icon-document :document-type="$documentUtils.getDocumentType(association.child_document.type)" />
             <span>&nbsp;</span>
             <document-link :document="association.child_document" />
           </td>
@@ -52,68 +51,66 @@
       :limit="limit"
       :offset="offset"
       :document-id="documentId"
-      :user-id="userId" />
+      :user-id="userId"
+    />
   </div>
 </template>
 
 <script>
-  import c2c from '@/js/apis/c2c';
-  import ColoredIconDocument from './utils/ColoredIconDocument';
-  import AssociationHistoryPagination from './utils/AssociationHistoryPagination';
+import c2c from '@/js/apis/c2c';
+import ColoredIconDocument from './utils/ColoredIconDocument';
+import AssociationHistoryPagination from './utils/AssociationHistoryPagination';
 
-  export default {
-    components: { ColoredIconDocument, AssociationHistoryPagination },
+export default {
+  components: { ColoredIconDocument, AssociationHistoryPagination },
 
-    data() {
-      return {
-        promise: {}
-      };
+  data() {
+    return {
+      promise: {},
+    };
+  },
+
+  computed: {
+    userId() {
+      return this.$route.query.u ? parseInt(this.$route.query.u) : null;
     },
-
-    computed: {
-      userId() {
-        return this.$route.query.u ? parseInt(this.$route.query.u) : null;
-      },
-      documentId() {
-        return this.$route.query.d ? parseInt(this.$route.query.d) : null;
-      },
-      offset() {
-        return this.$route.query.offset ? parseInt(this.$route.query.offset) : null;
-      },
-      limit() {
-        return this.$route.query.limit ? parseInt(this.$route.query.limit) : null;
-      },
-      results() {
-        return this.promise.data;
-      }
+    documentId() {
+      return this.$route.query.d ? parseInt(this.$route.query.d) : null;
     },
-
-    watch: {
-      '$route': {
-        handler: 'load',
-        immediate: true
-      }
+    offset() {
+      return this.$route.query.offset ? parseInt(this.$route.query.offset) : null;
     },
+    limit() {
+      return this.$route.query.limit ? parseInt(this.$route.query.limit) : null;
+    },
+    results() {
+      return this.promise.data;
+    },
+  },
 
-    methods: {
-      load() {
-        this.promise = c2c.association.getHistory({
-          documentId: this.documentId,
-          userId: this.userId,
-          limit: this.limit,
-          offset: this.offset
-        });
-      }
-    }
-  };
+  watch: {
+    $route: {
+      handler: 'load',
+      immediate: true,
+    },
+  },
 
+  methods: {
+    load() {
+      this.promise = c2c.association.getHistory({
+        documentId: this.documentId,
+        userId: this.userId,
+        limit: this.limit,
+        offset: this.offset,
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-  td:nth-child(1), td:nth-child(2){
-    white-space:nowrap;
-  }
-  /* td:nth-child(5) {
-    width:100%;
-  } */
+td:nth-child(1),
+td:nth-child(2) {
+  white-space: nowrap;
+}
 </style>

@@ -32,51 +32,51 @@
 </template>
 
 <script>
-  import utils from '@/js/utils';
+import utils from '@/js/utils';
 
-  export default {
-    props: {
-      data: {
-        type: Object,
-        required: true
-      }
+export default {
+  props: {
+    data: {
+      type: Object,
+      required: true,
     },
-    computed: {
-      type() {
-        switch (this.data.layerBodId) {
+  },
+  computed: {
+    type() {
+      switch (this.data.layerBodId) {
         case 'ch.bafu.wrz-wildruhezonen_portal':
           return this.$gettext('Protection area:');
         case 'ch.bafu.wrz-jagdbanngebiete_select':
           return this.$gettext('Fauna protection site:');
         default:
           return this.$gettext('Sensitive area:');
-        }
-      },
-      dispositions() {
-        let lang = this.$language.current;
-        if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
-          lang = 'fr';
-        }
-        const result = this.data.properties[`best_${lang}`] || '';
-        return utils.decodeHtmlEntities(result);
-      },
-      additionalInformation() {
-        const result = this.data.properties.zusatzinformation || '';
-        return utils.decodeHtmlEntities(result);
-      },
-      protectionStatus() {
-        let lang = this.$language.current;
-        if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
-          lang = 'fr';
-        }
-
-        return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] || '');
       }
     },
-    methods: {
-      show() {
-        this.$refs.modalWindow.show();
+    dispositions() {
+      let lang = this.$language.current;
+      if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
+        lang = 'fr';
       }
-    }
-  };
+      const result = this.data.properties[`best_${lang}`] || '';
+      return utils.decodeHtmlEntities(result);
+    },
+    additionalInformation() {
+      const result = this.data.properties.zusatzinformation || '';
+      return utils.decodeHtmlEntities(result);
+    },
+    protectionStatus() {
+      let lang = this.$language.current;
+      if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
+        lang = 'fr';
+      }
+
+      return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] || '');
+    },
+  },
+  methods: {
+    show() {
+      this.$refs.modalWindow.show();
+    },
+  },
+};
 </script>

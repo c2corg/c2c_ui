@@ -49,16 +49,14 @@ Vue.use(VueAnalytics, {
       return {
         page: route.path,
         title: 'Camptocamp.org',
-        location: window.location.href
+        location: window.location.href,
       };
-    }
+    },
   },
-  set: [
-    { field: 'anonymizeIp', value: true }
-  ],
+  set: [{ field: 'anonymizeIp', value: true }],
   fields: {
-    cookieDomain: window.location.host === 'localhost:8080' ? 'none' : window.location.host
-  }
+    cookieDomain: window.location.host === 'localhost:8080' ? 'none' : window.location.host,
+  },
 });
 
 Vue.use(vueMoment); // moment functions
@@ -79,5 +77,5 @@ new Vue({
   created() {
     this.$language.firstLoad();
   },
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount('#app');

@@ -5,16 +5,13 @@
     <images-box v-if="document" :document="document" />
 
     <div v-if="document" class="columns is-multiline is-block-print">
-
       <div class="column is-3 no-print">
         <map-box :document="document" />
         <tool-box :document="document" />
       </div>
 
       <div class="column is-9 is-12-print">
-
         <div class="box">
-
           <div v-for="route of document.associations.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
           </div>
@@ -29,10 +26,9 @@
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>
 
-          <hr>
+          <hr />
 
           <div class="columns">
-
             <div class="column is-4">
               <activities-field :document="document" />
               <field-view :document="document" :field="fields.frequentation" />
@@ -41,7 +37,6 @@
               <field-view :document="document" :field="fields.quality" />
 
               <field-view :document="document" :field="fields.participant_count" />
-
             </div>
 
             <div class="column is-4">
@@ -54,7 +49,6 @@
               <field-view :document="document" :field="fields.access_condition" />
               <field-view :document="document" :field="fields.lift_status" />
               <field-view :document="document" :field="fields.hut_status" />
-
             </div>
 
             <div class="column is-4">
@@ -63,7 +57,8 @@
                 :document="document"
                 :field1="fields.elevation_min"
                 :field2="fields.elevation_max"
-                :label="$gettext('elevation')" />
+                :label="$gettext('elevation')"
+              />
 
               <field-view :document="document" :field="fields.elevation_access" />
               <double-numeric-field
@@ -71,7 +66,8 @@
                 :field1="fields.height_diff_up"
                 :field2="fields.height_diff_down"
                 :label="$gettext('height_diff')"
-                show-signs />
+                show-signs
+              />
               <label-value v-if="document.length_total" :label="$gettext('length_total')">
                 {{ document.length_total / 1000 }}&nbsp;km
               </label-value>
@@ -83,13 +79,11 @@
               <field-view :document="document" :field="fields.snow_quality" />
               <field-view :document="document" :field="fields.glacier_rating" />
               <field-view :document="document" :field="fields.avalanche_signs" />
-
             </div>
           </div>
         </div>
 
         <div class="box">
-
           <markdown-section :document="document" :field="fields.route_description" />
           <markdown-section :document="document" :field="fields.weather" />
           <markdown-section :document="document" :field="fields.conditions" />
@@ -102,26 +96,24 @@
           <markdown-section :document="document" :field="fields.hut_comment" />
           <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')" />
 
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <comments-box :document="document" />
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
-  import ConditionLevels from './utils/field-viewers/ConditionLevels';
+import documentViewMixin from './utils/document-view-mixin.js';
+import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
-  export default {
-    components: {
-      ConditionLevels
-    },
+export default {
+  components: {
+    ConditionLevels,
+  },
 
-    mixins: [ documentViewMixin ]
-
-  };
+  mixins: [documentViewMixin],
+};
 </script>

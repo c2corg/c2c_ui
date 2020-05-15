@@ -1,26 +1,25 @@
-
 export const requireDocumentProperty = {
   props: {
     document: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
     documentType() {
       return this.$documentUtils.getDocumentType(this.document.type);
-    }
-  }
+    },
+  },
 };
 
 export const requireFieldProperty = {
   props: {
     field: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 
 export const requireDocumentTypeProperty = {
@@ -28,9 +27,9 @@ export const requireDocumentTypeProperty = {
     documentType: {
       type: String,
       required: true,
-      validator: value => {
+      validator: (value) => {
         return value.length > 1;
-      }
-    }
-  }
+      },
+    },
+  },
 };

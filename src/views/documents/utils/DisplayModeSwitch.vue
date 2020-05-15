@@ -7,8 +7,12 @@
     </span>
     <a
       class="dropdown-item is-size-6"
-      :class="{'is-active': value==='result'}"
-      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'result')">
+      :class="{ 'is-active': value === 'result' }"
+      @click="
+        $refs.displayModeSwitch.isActive = false;
+        $emit('input', 'result');
+      "
+    >
       <span class="has-text-centered item-icons">
         <fa-icon :icon="listMode ? 'th-list' : 'th'" />
       </span>
@@ -16,8 +20,12 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{'is-active': value==='both'}"
-      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'both')">
+      :class="{ 'is-active': value === 'both' }"
+      @click="
+        $refs.displayModeSwitch.isActive = false;
+        $emit('input', 'both');
+      "
+    >
       <span class="is-nowrap item-icons">
         <fa-icon :icon="listMode ? 'th-list' : 'th'" />
         <fa-icon icon="map-marked-alt" />
@@ -26,8 +34,12 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{'is-active': value==='map'}"
-      @click="$refs.displayModeSwitch.isActive = false; $emit('input', 'map')">
+      :class="{ 'is-active': value === 'map' }"
+      @click="
+        $refs.displayModeSwitch.isActive = false;
+        $emit('input', 'map');
+      "
+    >
       <span class="has-text-centered item-icons">
         <fa-icon icon="map-marked-alt" />
       </span>
@@ -37,32 +49,31 @@
 </template>
 
 <script>
-
-  export default {
-    props: {
-      value: {
-        type: String,
-        required: true
-      },
-      listMode: {
-        type: String,
-        required: true
-      }
-    }
-  };
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+    listMode: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .item-icons{
-    display:inline-block;
-    width:2.2rem;
+.item-icons {
+  display: inline-block;
+  width: 2.2rem;
 
-    svg{
-      margin:0 0.1rem;
-    }
+  svg {
+    margin: 0 0.1rem;
   }
+}
 
-  span:nth-child(2) {
-    padding-left: 0.5rem;
-  }
+span:nth-child(2) {
+  padding-left: 0.5rem;
+}
 </style>

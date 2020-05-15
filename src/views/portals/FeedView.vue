@@ -13,7 +13,8 @@
                 class="is-checkradio is-primary"
                 type="checkbox"
                 v-model="isPersonal"
-                @change="saveIsPersonalState">
+                @change="saveIsPersonalState"
+              />
               <label for="c2c-personal-feed">
                 {{ isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off') }}
               </label>
@@ -22,7 +23,6 @@
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
-
           <h3 class="title is-3" v-translate>
             Last forum topics
           </h3>
@@ -35,65 +35,62 @@
 </template>
 
 <script>
+import FeedWidget from '@/components/feed-widget/FeedWidget';
+import HomeBanner from './HomeBanner';
+import ForumWidget from './utils/ForumWidget';
 
-  import FeedWidget from '@/components/feed-widget/FeedWidget';
-  import HomeBanner from './HomeBanner';
-  import ForumWidget from './utils/ForumWidget';
+export default {
+  name: 'FeedView',
 
-  export default {
-    name: 'FeedView',
+  components: {
+    HomeBanner,
+    FeedWidget,
+    ForumWidget,
+  },
 
-    components: {
-      HomeBanner,
-      FeedWidget,
-      ForumWidget
+  data() {
+    return {
+      isPersonal: false,
+    };
+  },
+
+  created() {
+    this.isPersonal = this.$localStorage.get('isPersonal', false);
+  },
+
+  methods: {
+    saveIsPersonalState() {
+      this.$localStorage.set('isPersonal', this.isPersonal);
     },
-
-    data() {
-      return {
-        isPersonal: false
-      };
-    },
-
-    created() {
-      this.isPersonal = this.$localStorage.get('isPersonal', false);
-    },
-
-    methods: {
-      saveIsPersonalState() {
-        this.$localStorage.set('isPersonal', this.isPersonal);
-      }
-    }
-  };
-
+  },
+};
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/sass/variables.scss';
 
-  @import '@/assets/sass/variables.scss';
+@media screen and (max-width: $tablet) {
+  .feed-view {
+    padding-left: 0;
+    padding-right: 0;
 
-  @media screen and (max-width: $tablet) {
-    .feed-view{
-      padding-left: 0;
-      padding-right: 0;
-
-      .feed-title{
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-      }
+    .feed-title {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
   }
+}
 
-  .feed-title{
-    margin-bottom: 12px;
-  }
+.feed-title {
+  margin-bottom: 12px;
+}
 
-  .feed-buttons{
-    vertical-align: text-bottom;
-  }
+.feed-buttons {
+  vertical-align: text-bottom;
+}
 
-  .cards-container > div{
-    justify-content:center;
-    margin:auto;
-  }
+.cards-container > div {
+  justify-content: center;
+  margin: auto;
+}
 </style>

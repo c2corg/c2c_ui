@@ -9,20 +9,18 @@
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      messages: null,
+    };
+  },
 
-  export default {
-
-    data() {
-      return {
-        messages: null
-      };
+  methods: {
+    show(messages) {
+      this.messages = messages;
+      this.$refs.modalWindow.show();
     },
-
-    methods: {
-      show(messages) {
-        this.messages = messages;
-        this.$refs.modalWindow.show();
-      }
-    }
-  };
+  },
+};
 </script>

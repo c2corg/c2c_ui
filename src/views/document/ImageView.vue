@@ -37,45 +37,43 @@
       <div class="column is-9">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
-            <img class="main-image" :src="getBigImageUrl(document)">
+            <img class="main-image" :src="getBigImageUrl(document)" />
           </a>
         </div>
 
         <div v-if="locale.summary || locale.description" class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <routes-box :document="document" hide-buttons />
         <recent-outings-box :document="document" hide-see-all-results-button />
         <images-box v-if="document" :document="document" />
         <comments-box :document="document" />
-
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-  import imageUrls from '@/js/image-urls';
+import imageUrls from '@/js/image-urls';
 
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [documentViewMixin],
+export default {
+  mixins: [documentViewMixin],
 
-    methods: {
-      getOriginalImageUrl: imageUrls.get,
-      getBigImageUrl: imageUrls.getBig
-    }
-  };
+  methods: {
+    getOriginalImageUrl: imageUrls.get,
+    getBigImageUrl: imageUrls.getBig,
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  .main-image {
-    // remove the ugly 4px in the bottom
-    display: block;
-  }
+.main-image {
+  // remove the ugly 4px in the bottom
+  display: block;
+}
 </style>

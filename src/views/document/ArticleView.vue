@@ -7,7 +7,7 @@
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
           <field-view :document="document" :field="fields.article_type" />
-          <label-value v-if="document.author && document.article_type==='personal'" :label="$gettext('contributor')">
+          <label-value v-if="document.author && document.article_type === 'personal'" :label="$gettext('contributor')">
             <author-link :author="document.author" />
           </label-value>
           <field-view :document="document" :field="fields.quality" />
@@ -19,7 +19,7 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
-          <div style="clear:both" />
+          <div style="clear: both;" />
         </div>
 
         <routes-box v-if="!isDraftView" :document="document" hide-buttons />
@@ -33,9 +33,9 @@
 </template>
 
 <script>
-  import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin.js';
 
-  export default {
-    mixins: [ documentViewMixin ]
-  };
+export default {
+  mixins: [documentViewMixin],
+};
 </script>

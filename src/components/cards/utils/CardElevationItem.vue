@@ -6,14 +6,12 @@
 </template>
 
 <script>
-
-  export default {
-    props: {
-      elevation: {
-        type: Number,
-        default: null
-      }
-    }
-  };
-
+export default {
+  props: {
+    elevation: {
+      type: Number,
+      default: null,
+    },
+  },
+};
 </script>

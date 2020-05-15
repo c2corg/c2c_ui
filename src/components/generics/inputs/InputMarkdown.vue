@@ -5,24 +5,22 @@
 </template>
 
 <script>
-  import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins.js';
 
-  import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
+import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
-  export default {
+export default {
+  components: {
+    MarkdownEditor,
+  },
 
-    components: {
-      MarkdownEditor
+  mixins: [baseMixin],
+
+  props: {
+    value: {
+      type: String,
+      default: null,
     },
-
-    mixins: [ baseMixin ],
-
-    props: {
-      value: {
-        type: String,
-        default: null
-      }
-    }
-  };
-
+  },
+};
 </script>

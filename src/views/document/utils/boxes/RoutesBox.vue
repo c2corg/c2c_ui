@@ -1,10 +1,10 @@
 <template>
-  <div class="box no-print" v-if="source.length !=0 || !hideButtons">
+  <div class="box no-print" v-if="source.length != 0 || !hideButtons">
     <h2 class="title is-2">
       <span>{{ $gettext('Associated routes') }}</span>
       <span v-if="!hideButtons" class="is-size-5">
         <span>, </span>
-        <router-link :to="{name:'routes', query:query}" v-translate>
+        <router-link :to="{ name: 'routes', query: query }" v-translate>
           show all
         </router-link>
       </span>
@@ -24,75 +24,71 @@
       </div>
     </div>
     <div v-if="!hideButtons" class="has-text-centered add-section">
-      <add-link
-        document-type="route"
-        :query="query"
-        class="button is-primary" />
+      <add-link document-type="route" :query="query" class="button is-primary" />
     </div>
-
   </div>
 </template>
 
 <script>
-  import { requireDocumentProperty } from '@/js/properties-mixins';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
-  export default {
-    mixins: [ requireDocumentProperty ],
+export default {
+  mixins: [requireDocumentProperty],
 
-    props: {
-      hideButtons: {
-        type: Boolean,
-        default: false
-      },
-
-      disableActivitySplit: {
-        type: Boolean,
-        default: false
-      }
+  props: {
+    hideButtons: {
+      type: Boolean,
+      default: false,
     },
 
-    computed: {
-      query() {
-        const query = {};
-        query[this.document.type] = this.document.document_id;
-        return query;
-      },
+    disableActivitySplit: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
-      source() {
-        return this.document.associations.routes || this.document.associations.all_routes.documents;
-      },
+  computed: {
+    query() {
+      const query = {};
+      query[this.document.type] = this.document.document_id;
+      return query;
+    },
 
-      routes() {
-        const result = {};
+    source() {
+      return this.document.associations.routes || this.document.associations.all_routes.documents;
+    },
 
-        for (const route of this.source) {
-          for (const activity of route.activities) {
-            if (!result[activity]) {
-              result[activity] = {};
-            }
+    routes() {
+      const result = {};
 
-            result[activity][route.document_id] = route;
+      for (const route of this.source) {
+        for (const activity of route.activities) {
+          if (!result[activity]) {
+            result[activity] = {};
           }
-        }
 
-        return result;
+          result[activity][route.document_id] = route;
+        }
       }
-    }
-  };
+
+      return result;
+    },
+  },
+};
 </script>
 
 <style scoped>
-  h3{
-    margin-top:1.5rem!important;
-    margin-bottom: 0.5rem!important;
-  }
+h3 {
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
 
-  .button{
-    vertical-align: bottom;
-    margin-left: 1rem;
-  }
+.button {
+  vertical-align: bottom;
+  margin-left: 1rem;
+}
 
-  .add-section {
-    margin-top: 1.5rem;
-  }
+.add-section {
+  margin-top: 1.5rem;
+}
 </style>

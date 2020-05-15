@@ -40,11 +40,11 @@ function Result(msgctxt, msgid) {
   this.files = {}; // fake hastable
 }
 
-Result.prototype.addFile = function(file) {
+Result.prototype.addFile = function (file) {
   this.files[file] = null;
 };
 
-Result.prototype.toString = function() {
+Result.prototype.toString = function () {
   let result = '#: ' + Object.keys(this.files).sort().join('\n#: ') + '\n';
 
   result += this.msgctxt ? `msgctxt "${this.msgctxt}"\n` : '';
@@ -60,7 +60,7 @@ function Process() {
   this.includeLineNumberInPositions = false;
 }
 
-Process.prototype.push = function(file, line, msgctxt, msgid) {
+Process.prototype.push = function (file, line, msgctxt, msgid) {
   // trim
   msgid = msgid.replace(/^[\r\n\s]*/g, '');
   msgid = msgid.replace(/[\r\n\s]*$/g, '');
@@ -79,18 +79,18 @@ Process.prototype.push = function(file, line, msgctxt, msgid) {
   this.data[key].addFile(position);
 };
 
-Process.prototype.addVueComponent = function(file, data) {
+Process.prototype.addVueComponent = function (file, data) {
   this.parseTemplate(file, data);
   this.parseScript(file, data, gettext_template1);
   this.parseScript(file, data, gettext_template2);
 };
 
-Process.prototype.addScript = function(file, data) {
+Process.prototype.addScript = function (file, data) {
   this.parseScript(file, data, gettext_template1);
   this.parseScript(file, data, gettext_template2);
 };
 
-Process.prototype.parseScript = function(file, data, regex) {
+Process.prototype.parseScript = function (file, data, regex) {
   let msgData;
 
   const lines = data.split('\n');
@@ -100,12 +100,12 @@ Process.prototype.parseScript = function(file, data, regex) {
       const msgid = msgData[1];
       const msgctxt = msgData[2];
 
-      this.push(file, i + 1, msgctxt, msgid.replace(/\\'/g, '\''));
+      this.push(file, i + 1, msgctxt, msgid.replace(/\\'/g, "'"));
     }
   }
 };
 
-Process.prototype.parseTemplate = function(file, data) {
+Process.prototype.parseTemplate = function (file, data) {
   // we need line number, but compiler does not provide it.
   // let use a trick : we do not use directive argument, so
   // we will modifiy our script by adding v-translate:N
@@ -125,7 +125,7 @@ Process.prototype.parseTemplate = function(file, data) {
     return;
   }
 
-  const parseTranslateDirective = function(node, directiveMeta) {
+  const parseTranslateDirective = function (node, directiveMeta) {
     const line = directiveMeta.arg; // the trick: arg is the line number
     let msgctxt;
 
@@ -150,12 +150,12 @@ Process.prototype.parseTemplate = function(file, data) {
   compiler.compile(template[1], {
     preserveWhitespace: false,
     directives: {
-      translate: parseTranslateDirective.bind(this)
-    }
+      translate: parseTranslateDirective.bind(this),
+    },
   });
 };
 
-Process.prototype.compute = function(file_or_dir) {
+Process.prototype.compute = function (file_or_dir) {
   if (fs.statSync(file_or_dir).isDirectory()) {
     const files = fs.readdirSync(file_or_dir);
 
@@ -171,7 +171,7 @@ Process.prototype.compute = function(file_or_dir) {
   }
 };
 
-Process.prototype.save = function(potFile) {
+Process.prototype.save = function (potFile) {
   const result = [];
 
   for (const key of Object.keys(this.data).sort()) {

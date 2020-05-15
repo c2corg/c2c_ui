@@ -12,7 +12,7 @@ for (const property of Object.values(fieldsProperties)) {
   }
 }
 
-const onlyRockClimbing = function(document) {
+const onlyRockClimbing = function (document) {
   const activities = document.activities;
 
   if (!activities || activities.length === 0 || activities.length > 1) {
@@ -23,8 +23,8 @@ const onlyRockClimbing = function(document) {
 };
 
 // this handler is only for routes
-const getIsOnlyRockClimbingTypesHandler = function(types) {
-  return function(document) {
+const getIsOnlyRockClimbingTypesHandler = function (types) {
+  return function (document) {
     if (document.type !== 'r') {
       return true;
     }
@@ -61,7 +61,7 @@ const extraIsVisibleForHandlers = {
 
   equipment_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
   rock_required_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
-  aid_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi'])
+  aid_rating: getIsOnlyRockClimbingTypesHandler(['single', 'multi']),
 };
 
 function Field(id, properties = {}) {
@@ -117,7 +117,7 @@ function Field(id, properties = {}) {
   }
 }
 
-Field.prototype.valueToUrl = function(value) {
+Field.prototype.valueToUrl = function (value) {
   if (this.queryMode === 'numericalRangeSlider' || this.queryMode === 'valuesRangeSlider') {
     return value.join(',');
   }
@@ -153,7 +153,7 @@ Field.prototype.valueToUrl = function(value) {
   throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode);
 };
 
-Field.prototype.urlToValue = function(url) {
+Field.prototype.urlToValue = function (url) {
   if (this.queryMode === 'numericalRangeSlider') {
     let value = url || this.defaultUrlQuery;
     value = value.split(',');
@@ -186,7 +186,7 @@ Field.prototype.urlToValue = function(url) {
   }
 
   if (this.queryMode === 'checkbox') {
-    return !((url === null || url === undefined || url === '' || url === 'false'));
+    return !(url === null || url === undefined || url === '' || url === 'false');
   }
 
   if (this.queryMode === 'input') {
@@ -204,13 +204,17 @@ Field.prototype.urlToValue = function(url) {
   }
 
   if (this.queryMode === 'input-document') {
-    return url ? String(url).split(',').map(num => parseInt(num, 10)) : [];
+    return url
+      ? String(url)
+          .split(',')
+          .map((num) => parseInt(num, 10))
+      : [];
   }
 
   throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode);
 };
 
-Field.prototype.getErrorObject = function(description) {
+Field.prototype.getErrorObject = function (description) {
   let errorName;
 
   if (this.parent === 'document') {
@@ -223,11 +227,11 @@ Field.prototype.getErrorObject = function(description) {
 
   return {
     name: errorName,
-    description
+    description,
   };
 };
 
-Field.prototype.getError = function(document, locale) {
+Field.prototype.getError = function (document, locale) {
   if (!this.isVisibleFor(document)) {
     return null;
   }
@@ -260,7 +264,7 @@ Field.prototype.getError = function(document, locale) {
   return null;
 };
 
-Field.prototype.isVisibleForActivities = function(activities) {
+Field.prototype.isVisibleForActivities = function (activities) {
   let result = true;
 
   if (this.activities && activities) {
@@ -270,7 +274,7 @@ Field.prototype.isVisibleForActivities = function(activities) {
   return result;
 };
 
-Field.prototype.isVisibleForWaypointType = function(waypointType) {
+Field.prototype.isVisibleForWaypointType = function (waypointType) {
   if (!this.waypoint_types) {
     return true;
   }
@@ -282,7 +286,7 @@ Field.prototype.isVisibleForWaypointType = function(waypointType) {
   return this.waypoint_types.includes(waypointType);
 };
 
-Field.prototype.isVisibleForWaypointTypes = function(waypointTypes) {
+Field.prototype.isVisibleForWaypointTypes = function (waypointTypes) {
   if (!this.waypoint_types) {
     return true;
   }
@@ -294,7 +298,7 @@ Field.prototype.isVisibleForWaypointTypes = function(waypointTypes) {
   return utils.intersectionIsNotNull(this.waypoint_types, waypointTypes);
 };
 
-Field.prototype.isVisibleFor = function(document) {
+Field.prototype.isVisibleFor = function (document) {
   if (!this.extraIsVisibleFor(document)) {
     return false;
   }

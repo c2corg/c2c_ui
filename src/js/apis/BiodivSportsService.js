@@ -5,15 +5,15 @@ function BiodivSportsService() {
   this.axios = axios.create();
 }
 
-BiodivSportsService.prototype.fetchData = function(extent, activities, language) {
+BiodivSportsService.prototype.fetchData = function (extent, activities, language) {
   if (language !== 'fr' && language !== 'en' && language !== 'it') {
     language = 'en';
   }
 
   const params = {
-    'in_bbox': `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`,
+    in_bbox: `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`,
     language,
-    'fields': 'id,geometry,name,description,info_url,period,kml_url'
+    fields: 'id,geometry,name,description,info_url,period,kml_url',
   };
 
   if (activities && activities.length > 0) {

@@ -3,12 +3,12 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      waypointType: {
-        type: String,
-        required: true
-      }
-    }
-  };
+export default {
+  props: {
+    waypointType: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>

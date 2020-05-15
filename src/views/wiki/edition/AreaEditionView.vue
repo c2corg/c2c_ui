@@ -4,7 +4,8 @@
     :document="document"
     :generic-errors="genericErrors"
     :is-loading="saving"
-    @save="save">
+    @save="save"
+  >
     <div class="columns">
       <form-field :document="document" :field="fields.title" />
       <form-field class="is-narrow" :document="document" :field="fields.area_type" />
@@ -16,25 +17,23 @@
       <quality-field class="is-4" :document="document" />
     </div>
 
-    <hr>
+    <hr />
   </edition-container>
 </template>
 
 <script>
+import documentEditionViewMixin from './utils/document-edition-view-mixin.js';
 
-  import documentEditionViewMixin from './utils/document-edition-view-mixin.js';
+export default {
+  mixins: [documentEditionViewMixin],
 
-  export default {
-
-    mixins: [ documentEditionViewMixin ],
-
-    methods: {
-      beforeSave() {
-        if (!this.$user.isModerator) {
-          // need to delete geomtry : API won't allow any modification otherwise
-          delete this.document.geometry;
-        }
+  methods: {
+    beforeSave() {
+      if (!this.$user.isModerator) {
+        // need to delete geomtry : API won't allow any modification otherwise
+        delete this.document.geometry;
       }
-    }
-  };
+    },
+  },
+};
 </script>
