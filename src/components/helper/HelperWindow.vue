@@ -16,10 +16,10 @@
           Close
         </button>
         <router-link
+          v-if="$user.isLogged && showModifyButton"
           :to="{name:'article', params:{id:helper.documentId}}"
           target="_blank">
           <span
-            v-if="$user.isLogged && showModifyButton"
             class="button is-info"
             v-translate>
             Edit

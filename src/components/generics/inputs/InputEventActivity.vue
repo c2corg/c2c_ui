@@ -1,16 +1,16 @@
 <template>
   <div class="control" :class="{'has-error':hasError}">
     <span
-      v-for="activity of activities"
-      :key="activity"
-      :checked="value_.includes(activity)"
+      v-for="event_activity of event_activities"
+      :key="event_activity"
+      :checked="value_ === event_activity"
       :class="{'with-labels' :showLabels }"
       class="input-item has-cursor-pointer"
-      :title="showLabels ? null : $gettext(activity, 'activities')"
-      @click="toggle(activity)">
-      <icon-activity :activity="activity" />
+      :title="showLabels ? null : $gettext(event_activity, 'event_activities')"
+      @click="value_ = event_activity">
+      <icon-event-activity :event-activity="event_activity" />
       <span v-if="showLabels" class="is-size-6 input-label">
-        {{ $gettext(activity, 'activities') }}
+        {{ $gettext(event_activity, 'event_activities') }}
       </span>
     </span>
   </div>
@@ -18,12 +18,18 @@
 
 <script>
   import constants from '@/js/constants';
-  import { baseMixin, arrayMixin } from './mixins.js';
+  import { baseMixin } from './mixins.js';
 
   export default {
-    mixins: [ baseMixin, arrayMixin ],
+    mixins: [ baseMixin ],
 
     props: {
+
+      value: {
+        type: String,
+        default: null
+      },
+
       showLabels: {
         type: Boolean,
         default: false
@@ -31,8 +37,8 @@
     },
 
     computed: {
-      activities() {
-        return constants.activities;
+      event_activities() {
+        return constants.event_activities;
       }
     }
   };

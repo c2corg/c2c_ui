@@ -44,7 +44,7 @@
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.date" />
         <form-field class="is-4" :document="document" :field="fields.nb_participants" />
-        <form-field class="is-12" :document="document" :field="fields.event_type" />
+        <form-field class="is-4" :document="document" :field="fields.event_type" />
         <form-field class="is-4" :document="document" :field="fields.nb_impacted" />
         <form-field class="is-4" :document="document" :field="fields.severity" />
         <form-field class="is-4" :document="document" :field="fields.rescue" />

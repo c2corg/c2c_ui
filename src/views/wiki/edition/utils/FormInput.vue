@@ -6,6 +6,13 @@
     show-labels
     v-model="document.activities" />
 
+  <input-event-activity
+    v-else-if="field.name=='event_activity'"
+    v-show="visible"
+    :has-error="hasError"
+    show-labels
+    v-model="document.event_activity" />
+
   <input-orientation
     v-else-if="field.name=='orientations'"
     v-show="visible"
@@ -46,16 +53,6 @@
 
   <input-multi-select
     v-else-if="field.values && field.multiple"
-    v-show="visible"
-    :options="field.values"
-    :required="field.required"
-    :i18n="field.i18n"
-    :i18n-context="field.i18nContext"
-    :has-error="hasError"
-    v-model="object[field.name]" />
-
-  <input-single-select
-    v-else-if="field.values && field.single"
     v-show="visible"
     :options="field.values"
     :required="field.required"
