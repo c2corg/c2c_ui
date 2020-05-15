@@ -5,7 +5,7 @@
       <div class="column is-3 is-12-print">
 
         <div class="box">
-          <activities-field :document="document" />
+          <event-activity-field :document="document" />
           <label-value v-if="document.author" :label="$gettext('contributor')">
             <author-link :author="document.author" />
           </label-value>
@@ -23,6 +23,10 @@
           <field-view :document="document" :field="fields.nb_impacted" />
           <field-view :document="document" :field="fields.rescue" />
           <field-view :document="document" :field="fields.severity" />
+          <field-view :document="document" :field="fields.supervision" />
+          <field-view :document="document" :field="fields.autonomy" />
+          <field-view :document="document" :field="fields.activity_rate" />
+          <field-view :document="document" :field="fields.qualification" />
           <field-view :document="document" :field="fields.quality" />
         </div>
 

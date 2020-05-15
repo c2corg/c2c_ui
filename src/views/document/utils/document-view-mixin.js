@@ -16,6 +16,7 @@ import RoutesBox from './boxes/RoutesBox';
 import FieldView from './field-viewers/FieldView';
 import LabelValue from './field-viewers/LabelValue';
 import ActivitiesField from './field-viewers/ActivitiesField';
+import EventActivityField from './field-viewers/EventActivityField';
 import DoubleNumericField from './field-viewers/DoubleNumericField';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
@@ -30,6 +31,7 @@ export default {
     FieldView,
     LabelValue,
     ActivitiesField,
+    EventActivityField,
     MapBox,
     MarkdownSection,
     ProfilesLinks,

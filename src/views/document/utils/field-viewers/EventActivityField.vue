@@ -1,6 +1,6 @@
 <template>
-  <label-value :label="$gettext('activities')">
-    <activities :activities="document.activities" class="is-size-3 has-text-secondary" />
+  <label-value :label="$gettext('activity')">
+    <icon-event-activity :event-activity="document.event_activity" class="is-size-3 has-text-secondary" />
   </label-value>
 </template>
 

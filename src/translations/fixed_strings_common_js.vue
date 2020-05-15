@@ -63,6 +63,7 @@
     <span v-translate>engagement_rating</span>
     <span v-translate>equipment_rating</span>
     <span v-translate>equipment_ratings</span>
+    <span v-translate>event_activity</span>
     <span v-translate>event_type</span>
     <span v-translate>exposition_rock_rating</span>
     <span v-translate>exposure_time</span>
@@ -121,7 +122,6 @@
     <span v-translate>mtb_up_rating</span>
     <span v-translate>name</span>
     <span v-translate>nb_impacted</span>
-    <span v-translate>nb_outings</span>
     <span v-translate>nb_pages</span>
     <span v-translate>nb_participants</span>
     <span v-translate>orientations</span>
@@ -143,6 +143,7 @@
     <span v-translate>public_transportation_rating</span>
     <span v-translate>public_transportation_types</span>
     <span v-translate>publication_date</span>
+    <span v-translate>qualification</span>
     <span v-translate>quality</span>
     <span v-translate>rain_proof</span>
     <span v-translate>reduce_impact</span>
@@ -178,6 +179,7 @@
     <span v-translate>snow_quantity</span>
     <span v-translate>snowshoe_rating</span>
     <span v-translate>summary</span>
+    <span v-translate>supervision</span>
     <span v-translate>time_management</span>
     <span v-translate>timing</span>
     <span v-translate>title</span>
@@ -224,13 +226,9 @@
     <span v-translate translate-context="activities">via_ferrata</span>
     <span v-translate translate-context="activities">slacklining</span>
     <!-- activity_rates -->
-    <span v-translate translate-context="activity_rates">activity_rate_150</span>
-    <span v-translate translate-context="activity_rates">activity_rate_50</span>
-    <span v-translate translate-context="activity_rates">activity_rate_30</span>
-    <span v-translate translate-context="activity_rates">activity_rate_20</span>
-    <span v-translate translate-context="activity_rates">activity_rate_10</span>
-    <span v-translate translate-context="activity_rates">activity_rate_5</span>
-    <span v-translate translate-context="activity_rates">activity_rate_1</span>
+    <span v-translate translate-context="activity_rates">activity_rate_y5</span>
+    <span v-translate translate-context="activity_rates">activity_rate_m2</span>
+    <span v-translate translate-context="activity_rates">activity_rate_w1</span>
     <!-- area_types -->
     <span v-translate translate-context="area_types">range</span>
     <span v-translate translate-context="area_types">admin_limits</span>
@@ -258,7 +256,6 @@
     <!-- autonomies -->
     <span v-translate translate-context="autonomies">non_autonomous</span>
     <span v-translate translate-context="autonomies">autonomous</span>
-    <span v-translate translate-context="autonomies">initiator</span>
     <span v-translate translate-context="autonomies">expert</span>
     <!-- avalanche_levels -->
     <span v-translate translate-context="avalanche_levels">level_1</span>
@@ -320,15 +317,26 @@
     <span v-translate translate-context="custodianship_types">always_accessible</span>
     <span v-translate translate-context="custodianship_types">key_needed</span>
     <span v-translate translate-context="custodianship_types">no_warden</span>
+    <!-- event_activities -->
+    <span v-translate translate-context="event_activities">sport_climbing</span>
+    <span v-translate translate-context="event_activities">multipitch_climbing</span>
+    <span v-translate translate-context="event_activities">alpine_climbing</span>
+    <span v-translate translate-context="event_activities">snow_ice_mixed</span>
+    <span v-translate translate-context="event_activities">ice_climbing</span>
+    <span v-translate translate-context="event_activities">skitouring</span>
+    <span v-translate translate-context="event_activities">other</span>
     <!-- event_types -->
     <span v-translate translate-context="event_types">avalanche</span>
-    <span v-translate translate-context="event_types">stone_fall</span>
-    <span v-translate translate-context="event_types">falling_ice</span>
+    <span v-translate translate-context="event_types">stone_ice_fall</span>
+    <span v-translate translate-context="event_types">ice_cornice_collapse</span>
     <span v-translate translate-context="event_types">person_fall</span>
     <span v-translate translate-context="event_types">crevasse_fall</span>
-    <span v-translate translate-context="event_types">roped_fall</span>
     <span v-translate translate-context="event_types">physical_failure</span>
-    <span v-translate translate-context="event_types">lightning</span>
+    <span v-translate translate-context="event_types">injury_without_fall</span>
+    <span v-translate translate-context="event_types">blocked_person</span>
+    <span v-translate translate-context="event_types">weather_event</span>
+    <span v-translate translate-context="event_types">safety_operation</span>
+    <span v-translate translate-context="event_types">critical_situation</span>
     <span v-translate translate-context="event_types">other</span>
     <!-- frequentation_types -->
     <span v-translate translate-context="frequentation_types">quiet</span>
@@ -403,11 +411,6 @@
     <span v-translate translate-context="months">oct</span>
     <span v-translate translate-context="months">nov</span>
     <span v-translate translate-context="months">dec</span>
-    <!-- nb_outings -->
-    <span v-translate translate-context="nb_outings">nb_outings_4</span>
-    <span v-translate translate-context="nb_outings">nb_outings_9</span>
-    <span v-translate translate-context="nb_outings">nb_outings_14</span>
-    <span v-translate translate-context="nb_outings">nb_outings_15</span>
     <!-- paragliding_ratings -->
     <span v-translate translate-context="paragliding_ratings">1</span>
     <span v-translate translate-context="paragliding_ratings">2</span>
@@ -439,6 +442,10 @@
     <span v-translate translate-context="public_transportation_types">bus</span>
     <span v-translate translate-context="public_transportation_types">service_on_demand</span>
     <span v-translate translate-context="public_transportation_types">boat</span>
+    <!-- qualification -->
+    <span v-translate translate-context="qualification">federal_supervisor</span>
+    <span v-translate translate-context="qualification">federal_trainer</span>
+    <span v-translate translate-context="qualification">professional_diploma</span>
     <!-- quality_types -->
     <span v-translate translate-context="quality_types">empty</span>
     <span v-translate translate-context="quality_types">draft</span>
@@ -509,6 +516,10 @@
     <span v-translate translate-context="snow_quantity_ratings">average</span>
     <span v-translate translate-context="snow_quantity_ratings">poor</span>
     <span v-translate translate-context="snow_quantity_ratings">awful</span>
+    <!-- supervision -->
+    <span v-translate translate-context="supervision">no_supervision</span>
+    <span v-translate translate-context="supervision">federal_supervision</span>
+    <span v-translate translate-context="supervision">professional_supervision</span>
     <!-- user_categories -->
     <span v-translate translate-context="user_categories">amateur</span>
     <span v-translate translate-context="user_categories">mountain_guide</span>

@@ -10,6 +10,7 @@ import constants from '@/js/constants';
 export default function install(Vue) {
   Vue.prototype.$documentUtils = new Vue({
     methods: {
+
       getCreationTitle(documentType) {
         if (documentType === 'outing') return this.$gettext('add an outing');
         if (documentType === 'route') return this.$gettext('add a route');

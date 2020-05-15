@@ -6,6 +6,13 @@
     show-labels
     v-model="document.activities" />
 
+  <input-event-activity
+    v-else-if="field.name=='event_activity'"
+    v-show="visible"
+    :has-error="hasError"
+    show-labels
+    v-model="document.event_activity" />
+
   <input-orientation
     v-else-if="field.name=='orientations'"
     v-show="visible"

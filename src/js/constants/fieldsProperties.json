@@ -350,10 +350,14 @@
         "i18n": false,
         "helper": "133323#equipment"
     },
+    "event_activity":
+    {
+        "values": "event_activities",
+        "helper": "1063015#activities"
+    },
     "event_type":
     {
         "values": "event_types",
-        "multiple": true,
         "helper": "1063015#event-type"
     },
     "exposition_rock_rating":
@@ -696,10 +700,6 @@
         "max": 1000,
         "helper": "1063015#nb-impacted"
     },
-    "nb_outings":
-    {
-        "values": "nb_outings"
-    },
     "nb_pages":
     {
         "type": "number",
@@ -812,6 +812,10 @@
     {
         "type": "text"
     },
+	"qualification":
+	{
+		"values": "qualification"
+	},
     "quality":
     {
         "values": "quality_types",
@@ -1020,6 +1024,10 @@
         "type": "markdown",
         "parent": "locales"
     },
+	"supervision":
+	{
+		"values": "supervision"
+	},
     "time_management":
     {
         "type": "markdown",

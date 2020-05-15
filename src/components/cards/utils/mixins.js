@@ -6,6 +6,7 @@ import CardRow from './CardRow';
 import CardRegionItem from './CardRegionItem';
 import CardElevationItem from './CardElevationItem';
 import CardActivitiesItem from './CardActivitiesItem';
+import CardEventActivityItem from './CardEventActivityItem';
 
 export const cardMixin = {
 
@@ -15,7 +16,8 @@ export const cardMixin = {
     CardRow,
     CardRegionItem,
     CardElevationItem,
-    CardActivitiesItem
+    CardActivitiesItem,
+    CardEventActivityItem
   },
 
   props: {

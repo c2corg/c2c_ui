@@ -263,7 +263,7 @@
             getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
             getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
             getColDef(this, fields.event_type, { width: 100 }),
-            getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
+            getColDef(this, fields.event_activity, { width: 100 }),
             {
               headerName: this.$gettext('severity'),
               children: [

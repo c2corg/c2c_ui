@@ -11,16 +11,14 @@
     </card-row>
 
     <card-row>
-      <textual-array
-        class="is-ellipsed"
-        :array="document.event_type"
-        i18n
-        i18n-context="event_types" />
+      <span class="is-ellipsed" v-if="document.event_type">
+        {{ $gettext(document.event_type, 'event_types') }}
+      </span>
 
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-event-activity-item :event-activity="document.event_activity" />
 
       <span class="is-nowrap">
         {{ $moment.parseDate(document.date).locale(this.$language.current).format("LL") }}

@@ -92,16 +92,15 @@
             <h2 class="title is-2 has-text-light has-text-centered">
               {{ $gettext('xreports') | uppercaseFirstLetter }}
             </h2>
-
             <div class="columns is-multiline is-variable is-mobile">
               <topoguide-view-small-link
                 class="column topoguide-view-small-link"
-                v-for="activity of $options.activities"
-                :key="activity"
-                :to="{name:'xreports', query:{act:activity}}">
-                <span class="is-size-1"><icon-activity :activity="activity" /></span>
+                v-for="eventActivity of $options.event_activities"
+                :key="eventActivity"
+                :to="{name:'xreports', query:{act:eventActivity}}">
+                <span class="is-size-1"><icon-event-activity :event-activity="eventActivity" /></span>
                 <span class="has-text-weight-semibold ">
-                  {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+                  {{ $gettext(eventActivity, 'event_activities') | uppercaseFirstLetter }}
                 </span>
               </topoguide-view-small-link>
             </div>
@@ -122,7 +121,7 @@
       TopoguideViewSmallLink
     },
 
-    activities: constants.activities
+    event_activities: constants.event_activities
   };
 
 </script>

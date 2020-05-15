@@ -62,7 +62,7 @@ for attribute_name in attribute_names:
 result["letter_types"] = get_fields('document_types')['ALL']
 
 # save result
-json.dump(result, open("./src/js/constants/common.json", "w"), indent=4)
+json.dump(result, open("./src/js/constants/common.json", "w"), indent=4, sort_keys=True)
 
 # and update attributes that need a translation
 with open("./src/translations/fixed_strings_common_js.vue", "w") as f:
