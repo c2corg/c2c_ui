@@ -1,54 +1,145 @@
 {
   "es": {
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicaciones (mas vertical o mas estrecho pasajes )",
-    "10min": {
-      "access_times": "10min"
-    },
-    "15min": {
-      "access_times": "15min"
-    },
     "1d_to_3d": {
       "severities": "Desde 1 día hasta 3 días"
-    },
-    "1h": {
-      "access_times": "1h"
-    },
-    "1h30": {
-      "access_times": "1h30"
     },
     "1m_to_3m": {
       "severities": "Desde 1 mes hasta 3 meses"
     },
-    "1min": {
-      "access_times": "1min"
-    },
-    "20min": {
-      "access_times": "20min"
-    },
-    "2h": {
-      "access_times": "2h"
-    },
-    "2h30": {
-      "access_times": "2h30"
-    },
-    "30min": {
-      "access_times": "30min"
-    },
-    "3h": {
-      "access_times": "3h"
-    },
-    "3h+": {
-      "access_times": "3h+"
-    },
-    "45min": {
-      "access_times": "45min"
-    },
     "4d_to_1m": {
       "severities": "Menos de 1 mes"
     },
-    "5min": {
-      "access_times": "5min"
+    "Accident database": "Base de datos de accidentes",
+    "Activity feed": "Actividades",
+    "Add": "Añadir",
+    "Add here maps not automatically referenced": "Agregar aquí mapas no hace referencia de forma automática",
+    "Add images": "Agregar imagen",
+    "Add the first outing": "Añadir la primera salida",
+    "Additional information": "Información Adicional",
+    "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
+    "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
+    "Associated outings": "Salidas asociadas",
+    "Associated routes": "Itinerarios asociados",
+    "Association": "Asociación",
+    "Average slope (degrees)": "Inclinación media (grados)",
+    "Average slope in degree": "inclinación media en grados",
+    "Block account": "Bloquear cuenta",
+    "Book content": "Contenido del libro",
+    "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
+    "Cancel": "Anular",
+    "Change account parameters": "Cambiar parámetros de cuenta",
+    "Change password": "Cambiar contraseña",
+    "Checking...": "Verificando...",
+    "Close": "Cerrar",
+    "Comments": "Comentarios",
+    "Compare selected versions": "Comparar versiones seleccionadas",
+    "Conditions, summits, routes": "Condiciones, cumbres, rutas",
+    "Confirm": "Confirmar",
+    "Create a new report": "Agregar un nuevo informe",
+    "Created on": "Creado",
+    "Current password": "Contraseña actual",
+    "Delete this document": "Suprimir este documento",
+    "Describe access": "Describir acceso",
+    "Describe access period": "Describir periodo de acceso",
+    "Describe access restrictions": "Describe las limitaciones de accesso",
+    "Describe here the gear needed for this route": "Describir el equipo necesario para este itinerario.",
+    "Describe here the waypoint": "Describir el waypoint",
+    "Describe here your issue": "Describe aqui vuestra problema",
+    "Describe historical information about the route (date, names..) here": "Describe mas informaciones historicas sobre la ruta (fecha, nombres...) aqui",
+    "Describe opening hours": "Describir las horas de apertura",
+    "Describe opening periods": "Describir periodo de apertura",
+    "Describe pedestrian access": {
+      "$$noContext": "Describe el accesso peateonal",
+      "hut": "Describe el accesso peateonal"
     },
+    "Describe road access": "Describe el accesso con un coche",
+    "Description": "Descripción",
+    "Detailed information": "Informaciónes detalladas",
+    "Details": "Detalles",
+    "Distance": "Distancia",
+    "Distance (km)": "Distancia (km)",
+    "Download outings": "Descargar las salidas",
+    "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
+    "Duration": "Duración",
+    "Duration (hrs)": "duración (horas)",
+    "EULA": "CGU",
+    "Edit": "Editar",
+    "Edit a document": "Editar un documento",
+    "Edit associations": "Editar las asociaciónes",
+    "Edit categories": "Editar las categorias",
+    "Edit titles": "Editar los títulos",
+    "Elevation": "Altitud",
+    "Elevation (m)": "Altitud (m)",
+    "Email": "Correo electronico",
+    "Expand": "Expandir",
+    "Filter on map extent": "Filtro en la extensión de mapa",
+    "Followed users": "Usuarios seguidos",
+    "Forgot password?": "¿Olvidaste la contraseña?",
+    "Forum": "Foro",
+    "Forum username": "Nombre de usuario del forum",
+    "Fullname": "Nombre completo",
+    "Go to the previous page": "Ir a la página anterior",
+    "Have an account?": "¿Tienes una cuenta?",
+    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
+    "History": "Historia",
+    "Home": "Inicio",
+    "Infos": "Informaciónes",
+    "Invalid email address": {
+      "API message": "Email inválido"
+    },
+    "Last outings": "Últimas salidas",
+    "Latitude": "Latitud",
+    "List of versions for language:": "Lista de versiones para el idioma:",
+    "Login": "Iniciar sesión",
+    "Logout": "Desconectar",
+    "Longitude": "Longitud",
+    "Make profile page public": "Hacer pública la página de perfil",
+    "My account": "Mi cuenta",
+    "My followed users": "Mis amigos",
+    "My outings": "Mis salidas",
+    "My preferences": "Mis preferencias",
+    "My profile": "Mi perfil",
+    "New password": "Nueva contraseña",
+    "No account yet?": "¿No tienes cuenta?",
+    "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
+    "Numbers": "Numeros",
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
+    "Page not found": "Página no encontrada",
+    "Password": "Contraseña",
+    "Personal feed off": "Noticias personales desactivadas",
+    "Personal feed on": "Noticias personales activadas",
+    "Post the first comment": "Deja un comentario",
+    "Preview": "Previsualizar",
+    "Recenter on your current position": "Centrar en mi posición actual",
+    "Recenter on...": "Centrar en ...",
+    "Register": "Inscribirse ",
+    "Reset password": "Reiniciar contraseña ",
+    "Save": "Guardar",
+    "Search ...": "Buscar ...",
+    "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
+    "See the latest version": "Ver la última versión",
+    "Send reset email": "Enviar email de reinicio",
+    "Settings": "Configuración",
+    "Several days?": "¿Varios días?",
+    "Share with us!": "¡ Comparte con nosotros!",
+    "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
+    "Stop following this contributor": "Dejar de seguir este usuario",
+    "The mountain sports community": "La comunidad de los deportes de montaña",
+    "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
+    "Time": "Horario",
+    "Toggle fullscreen": "Pasar a pantalla completa",
+    "Topoguide": "Topoguía",
+    "Translate into an other lang": "Traducir en otra lengua",
+    "Types and styles": "Tipos y estilos",
+    "Unblock account": "Desbloquear cuenta",
+    "Upload a GPS track": "Añadir una traza",
+    "Username": "Usuario",
+    "View in other lang": "Ver en otra lengua",
+    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
+    "Without c2c account": "Participantes sin cuenta c2c",
     "access": {
       "$$noContext": "acceso",
       "waypoint_types": "acceso"
@@ -60,7 +151,6 @@
     "accessible_when_wardened": {
       "custodianship_types": "abierto durante los períodos de guardia"
     },
-    "Accident database": "Base de datos de accidentes",
     "accidental_avalanche": {
       "avalanche_signs": "accidente_avalancha"
     },
@@ -68,30 +158,7 @@
       "image_categories": "acción"
     },
     "activities": "Actividades",
-    "Activity feed": "Actividades",
     "activity_rate": "Frecuencia de la práctica de la actividad.",
-    "activity_rate_1": {
-      "activity_rates": "por primera vez en su vida."
-    },
-    "activity_rate_10": {
-      "activity_rates": "menos de 1 vez por mes"
-    },
-    "activity_rate_150": {
-      "activity_rates": "al menos 3 veces por semana"
-    },
-    "activity_rate_20": {
-      "activity_rates": "1 vez por mes"
-    },
-    "activity_rate_30": {
-      "activity_rates": "2 a 3 veces al mes"
-    },
-    "activity_rate_5": {
-      "activity_rates": "menos de 1 por año"
-    },
-    "activity_rate_50": {
-      "activity_rates": "1 a 2 veces por semana"
-    },
-    "Add": "Añadir",
     "add a book": "añadir un libro",
     "add a map": "añadir una mapa",
     "add a route": "añadir un itinerario",
@@ -101,10 +168,6 @@
     "add an image": "añadir un imagen",
     "add an incident/accident report": "añadir un informe de incidento / accidento",
     "add an outing": "añadir una salida",
-    "Add here maps not automatically referenced": "Agregar aquí mapas no hace referencia de forma automática",
-    "Add images": "Agregar imagen",
-    "Add the first outing": "Añadir la primera salida",
-    "Additional information": "Información Adicional",
     "admin_limits": {
       "area_types": "límite administrativo"
     },
@@ -120,14 +183,9 @@
     "always_accessible": {
       "custodianship_types": "siempre abierto"
     },
-    "amateur": {
-      "user_categories": "amateur"
-    },
     "apr": {
       "months": "abril"
     },
-    "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
-    "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
     "area": "región",
     "area_type": "tipo de región",
     "areas": "regiones",
@@ -135,17 +193,10 @@
     "article_categories": "categorías de artículos",
     "article_type": "Tipo de artículo",
     "articles": "artículos",
-    "artificial": {
-      "rock_types": "artificial"
-    },
-    "Associated outings": "Salidas asociadas",
-    "Associated routes": "Itinerarios asociados",
-    "Association": "Asociación",
     "association": {
       "article_categories": "asociación"
     },
     "associations": "Asociaciones",
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconocimiento (Attribution): en cualquier explotación de la obra autorizada por la licencia hará falta reconocer la autoría.",
     "aug": {
       "months": "agosto"
     },
@@ -156,8 +207,8 @@
     },
     "autonomy": "autonomía",
     "avalanche": {
-      "event_types": "alud",
-      "$$noContext": "alud"
+      "$$noContext": "alud",
+      "event_types": "alud"
     },
     "avalanche_forecaster": {
       "user_categories": "previsión de avalancha"
@@ -171,15 +222,10 @@
       "snow_quality_ratings": "medias",
       "snow_quantity_ratings": "medias"
     },
-    "Average slope (degrees)": "Inclinación media (grados)",
-    "Average slope in degree": "inclinación media en grados",
     "awful": {
       "condition_ratings": "execrables",
       "snow_quality_ratings": "execrables",
       "snow_quantity_ratings": "execrables"
-    },
-    "bar": {
-      "product_types": "bar"
     },
     "basalte": {
       "rock_types": "basalto"
@@ -191,33 +237,20 @@
     "biography": {
       "book_types": "biografía"
     },
-    "bisse": {
-      "waypoint_types": "bisse"
-    },
     "bivouac": {
       "waypoint_types": "vivac"
     },
     "blanket_unstaffed": "Mantas fuera de los períodos de guardia",
-    "bloc": {
-      "climbing_indoor_types": "bloc",
-      "climbing_outdoor_types": "bloc"
-    },
-    "Block account": "Bloquear cuenta",
     "boat": {
       "public_transportation_types": "barco"
     },
     "bolted rock climbing gear": "Escalada deportiva de varios largos",
     "book": {
-      "image_categories": "libro",
-      "$$noContext": "libro"
+      "$$noContext": "libro",
+      "image_categories": "libro"
     },
-    "Book content": "Contenido del libro",
     "book_types": "Tipos de libros",
     "books": "libros",
-    "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
-    "bus": {
-      "public_transportation_types": "bus"
-    },
     "c2c_meetings": {
       "article_categories": "reuniones c2c"
     },
@@ -232,8 +265,6 @@
     "camp_site": {
       "waypoint_types": "camping"
     },
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
-    "Cancel": "Anular",
     "canyon": {
       "waypoint_types": "cañón"
     },
@@ -243,9 +274,6 @@
     "cave": {
       "waypoint_types": "cueva"
     },
-    "Change account parameters": "Cambiar parámetros de cuenta",
-    "Change password": "Cambiar contraseña",
-    "Checking...": "Verificando...",
     "children_proof": "Niños",
     "cleared": {
       "access_conditions": "desnevado"
@@ -267,7 +295,6 @@
     "climbing_rating_median": "Cotación media",
     "climbing_rating_min": "Cotación minima",
     "climbing_styles": "Estilos de escalada",
-    "Close": "Cerrar",
     "closed": {
       "lift_status": "cerradas"
     },
@@ -283,32 +310,17 @@
     "closed_snow": {
       "access_conditions": "cerrado nevado"
     },
-    "club": {
-      "user_categories": "club"
-    },
-    "collab": {
-      "article_types": "collab",
-      "$$noContext": "collab"
-    },
     "collaborative": {
       "image_types": "colaborativo"
     },
     "comment": "Comentario",
-    "Comments": "Comentarios",
-    "Compare selected versions": "Comparar versiones seleccionadas",
     "condition_rating": "Condiciones",
     "conditions": "Condiciones",
-    "Conditions, summits, routes": "Condiciones, cumbres, rutas",
     "configuration": "Configuración",
-    "Confirm": "Confirmar",
     "conglomerat": {
       "rock_types": "conglomerado"
     },
     "contact": "Contacto",
-    "copyright": {
-      "image_types": "copyright",
-      "$$noContext": "copyright"
-    },
     "corridor": {
       "route_configuration_types": "corredor"
     },
@@ -327,15 +339,12 @@
     "crampons_spring": {
       "glacier_gear_types": "crampones a principios de verano"
     },
-    "Create a new report": "Agregar un nuevo informe",
-    "Created on": "Creado",
     "crevasse_fall": {
       "event_types": "caída en grieta"
     },
     "crowded": {
       "frequentation_types": "frecuentado"
     },
-    "Current password": "Contraseña actual",
     "custodianship": "Apertura",
     "danger_sign": {
       "avalanche_signs": "peligro_señal"
@@ -354,48 +363,24 @@
     "dec": {
       "months": "diciembre"
     },
-    "Delete this document": "Suprimir este documento",
     "descent": {
       "image_categories": "descenso"
     },
-    "Describe access": "Describir acceso",
-    "Describe access period": "Describir periodo de acceso",
-    "Describe access restrictions": "Describe las limitaciones de accesso",
     "describe conditions": "Describir condiciones",
-    "Describe here the gear needed for this route": "Describir el equipo necesario para este itinerario.",
-    "Describe here the waypoint": "Describir el waypoint",
-    "Describe here your issue": "Describe aqui vuestra problema",
-    "Describe historical information about the route (date, names..) here": "Describe mas informaciones historicas sobre la ruta (fecha, nombres...) aqui",
-    "Describe opening hours": "Describir las horas de apertura",
-    "Describe opening periods": "Describir periodo de apertura",
-    "Describe pedestrian access": {
-      "hut": "Describe el accesso peateonal",
-      "$$noContext": "Describe el accesso peateonal"
-    },
-    "Describe road access": "Describe el accesso con un coche",
     "describe route_conditions": "Brevemente describa el itinerario que siguió en los siguientes casos: ruta diferente de la del topo, topo con variantes, encadenamiento de rutas, itinerario en cierre, punto alcanzado durante un recorrido parcial.",
     "describe timing": "Hora de salida / horario",
     "describe weather": "Describir el tiempo",
-    "Description": "Descripción",
     "description": "Descripción",
     "detail": {
       "image_categories": "detalle"
     },
-    "Detailed information": "Informaciónes detalladas",
-    "Details": "Detalles",
     "difficult": {
       "glacier_ratings": "difícil"
     },
     "difficulties_height": "Desnivel de las dificultades",
-    "Distance": "Distancia",
-    "Distance (km)": "Distancia (km)",
-    "Download outings": "Descargar las salidas",
     "draft": {
       "quality_types": "borrador"
     },
-    "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
-    "Duration": "Duración",
-    "Duration (hrs)": "duración (horas)",
     "durations": "Duración",
     "durations (days)": "duración (días)",
     "easy": {
@@ -406,21 +391,13 @@
     "edge": {
       "route_configuration_types": "arista"
     },
-    "Edit": "Editar",
-    "Edit a document": "Editar un documento",
-    "Edit associations": "Editar las asociaciónes",
-    "Edit categories": "Editar las categorias",
-    "Edit titles": "Editar los títulos",
     "editor": "Editor",
-    "Elevation": "Altitud",
     "elevation": "Altitud",
-    "Elevation (m)": "Altitud (m)",
     "elevation_access": "Altitud del acceso",
     "elevation_down_snow": "Altitud esquiable min. en la bajada",
     "elevation_max": "Altitud máxima",
     "elevation_min": "Altitud mínima",
     "elevation_up_snow": "Altitud esquiable min. en la subida",
-    "Email": "Correo electronico",
     "empty": {
       "quality_types": "vacío"
     },
@@ -439,24 +416,16 @@
     "es": {
       "langs": "español"
     },
-    "ESRI": {
-      "Map layer": "ESRI"
-    },
     "eu": {
       "langs": "vasco"
     },
-    "EULA": "CGU",
     "excellent": {
       "condition_ratings": "excelentes",
       "snow_quality_ratings": "excelentes",
       "snow_quantity_ratings": "excelentes"
     },
-    "Expand": "Expandir",
-    "expedition": {
-      "route_types": "expedition"
-    },
     "expeditions": {
-      "article_categories": "expediciones"
+      "article_categories": "expediciones "
     },
     "expert": {
       "autonomies": "experto"
@@ -464,7 +433,6 @@
     "exposed": {
       "rain_proof_types": "expuesto a la lluvia"
     },
-    "exposition_rating": "Exposición",
     "exposition_rock_rating": "Exposición",
     "exposure_time": "Tiempo de exposición",
     "external_resources": "Recursos externos",
@@ -474,14 +442,8 @@
     "face": {
       "route_configuration_types": "cara"
     },
-    "falling_ice": {
-      "event_types": "caída de hielo"
-    },
     "farm_sale": {
       "product_types": "venta directa"
-    },
-    "fauna": {
-      "image_categories": "fauna"
     },
     "feb": {
       "months": "febrero"
@@ -490,28 +452,19 @@
       "genders": "mujer"
     },
     "filename": "nombre del archivo",
-    "Filter on map extent": "Filtro en la extensión de mapa",
     "fine": {
       "quality_types": "bueno"
     },
-    "flora": {
-      "image_categories": "flora"
-    },
     "fnumber": "Propiedades de la imagen",
     "focal_length": "Distancia focal",
-    "Followed users": "Usuarios seguidos",
-    "Forgot password?": "¿Olvidaste la contraseña?",
-    "Forum": "Foro",
-    "Forum username": "Nombre de usuario del forum",
     "fr": {
       "langs": "francés"
     },
     "frequentation": "Frecuentación",
-    "Fullname": "Nombre completo",
     "gas_unstaffed": "Gas fuera de los períodos de guardia",
     "gear": {
-      "article_categories": "Equipamiento",
-      "$$noContext": "Equipamiento"
+      "$$noContext": "Equipamiento",
+      "article_categories": "Equipamiento"
     },
     "gender": "sexo",
     "general informations": "Información general",
@@ -537,7 +490,6 @@
     "gneiss": {
       "rock_types": "gneis"
     },
-    "Go to the previous page": "Ir a la página anterior",
     "good": {
       "condition_ratings": "Bueno",
       "snow_quality_ratings": "Bueno",
@@ -546,17 +498,11 @@
     "good service": {
       "public_transportation_ratings": "servicio regular"
     },
-    "goulotte": {
-      "route_configuration_types": "goulotte"
-    },
     "granit": {
       "rock_types": "granito"
     },
     "great": {
       "quality_types": "excelente"
-    },
-    "gres": {
-      "rock_types": "gres"
     },
     "grocery": {
       "product_types": "tienda"
@@ -572,7 +518,6 @@
     "has updated the outing": "ha actualizado una salida",
     "has updated the route": "ha actualizado un itinerario",
     "has updated the waypoint": "ha actualizado un waypoint",
-    "Have an account?": "¿Tienes una cuenta?",
     "heating_unstaffed": "Calefacción fuera de los períodos de guardia",
     "height": "Altitud",
     "height_diff": "Desnivel",
@@ -584,11 +529,9 @@
     "height_median": "Altura mediana",
     "height_min": "Altura mínima",
     "help": {
-      "image_categories": "ayuda",
-      "$$noContext": "ayuda"
+      "$$noContext": "ayuda",
+      "image_categories": "ayuda"
     },
-    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "hiking": {
       "activities": "Caminata pedestre"
     },
@@ -597,8 +540,6 @@
     "historical": {
       "book_types": "historial"
     },
-    "History": "Historia",
-    "Home": "Inicio",
     "humidity": {
       "weather_station_types": "humedad"
     },
@@ -622,7 +563,6 @@
     "impossible": {
       "glacier_ratings": "imposible"
     },
-    "Infos": "Informaciónes",
     "inside": {
       "rain_proof_types": "dentro"
     },
@@ -634,9 +574,6 @@
     },
     "internal_witness": {
       "author_statuses": "testigo directo"
-    },
-    "Invalid email address": {
-      "API message": "Email inválido"
     },
     "isbn": "ISBN",
     "iso_speed": "Sensibilidad",
@@ -666,8 +603,6 @@
     },
     "lang": "Idioma",
     "langs": "Idiomas",
-    "Last outings": "Últimas salidas",
-    "Latitude": "Latitud",
     "length": "Longitud",
     "length_total": "Longitud total",
     "level_1": {
@@ -684,19 +619,12 @@
     },
     "lift_access": "Medios de elevación",
     "lift_status": "Medios de elevación",
-    "lightning": {
-      "event_types": "relámpago"
-    },
-    "List of versions for language:": "Lista de versiones para el idioma:",
     "local_product": {
       "waypoint_types": "productos locales"
     },
     "locality": {
       "waypoint_types": "localidad"
     },
-    "Login": "Iniciar sesión",
-    "Logout": "Desconectar",
-    "Longitude": "Longitud",
     "loop": {
       "route_types": "vuelta"
     },
@@ -706,7 +634,6 @@
     "magazine": {
       "book_types": "revista"
     },
-    "Make profile page public": "Hacer pública la página de perfil",
     "male": {
       "genders": "varón"
     },
@@ -757,11 +684,6 @@
     "multi": {
       "climbing_outdoor_types": "ruta de varios largos"
     },
-    "My account": "Mi cuenta",
-    "My followed users": "Mis amigos",
-    "My outings": "Mis salidas",
-    "My preferences": "Mis preferencias",
-    "My profile": "Mi perfil",
     "name": "Nombre",
     "natural_avalanche": {
       "avalanche_signs": "avalancha naturale el dia de la salida"
@@ -769,47 +691,22 @@
     "naturally": {
       "snow_clearance_ratings": "natural"
     },
-    "nb_outings": "número de salidas",
-    "nb_outings_14": {
-      "nb_outings": "de 10 a 14"
-    },
-    "nb_outings_15": {
-      "nb_outings": "más de 15"
-    },
-    "nb_outings_4": {
-      "nb_outings": "de 0 a 4"
-    },
-    "nb_outings_9": {
-      "nb_outings": "de 5 a 9"
-    },
     "nb_pages": "Número de páginas",
     "nb_participants": "número de participantes",
     "nearby service": {
       "public_transportation_ratings": "servicio cercano"
     },
-    "New password": "Nueva contraseña",
     "next difference": "proxima diferencia",
     "nivology": {
       "image_categories": "nivología y aludes"
     },
-    "no": {
-      "avalanche_signs": "no",
-      "glacier_gear_types": "no",
-      "parking_fee_types": "no",
-      "previous_injuries": "no",
-      "$$noContext": "no"
-    },
-    "No account yet?": "¿No tienes cuenta?",
     "no info": "no hay información",
-    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
-    "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "nov": {
       "months": "noviembre"
     },
     "novel": {
       "book_types": "nueva"
     },
-    "Numbers": "Numeros",
     "numbers": "Características",
     "oct": {
       "months": "octubre"
@@ -817,7 +714,6 @@
     "often": {
       "snow_clearance_ratings": "desnevado periódico"
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
     "open": {
       "lift_status": "abiertas"
     },
@@ -840,7 +736,6 @@
     "overhang": {
       "climbing_styles": "extraplomado"
     },
-    "Page not found": "Página no encontrada",
     "paragliding": {
       "activities": "Paragliding"
     },
@@ -863,21 +758,13 @@
     "pass": {
       "waypoint_types": "paso"
     },
-    "Password": "Contraseña",
     "people": {
       "image_categories": "figura"
     },
     "person_fall": {
       "event_types": "caida de montañero"
     },
-    "personal": {
-      "article_types": "personal",
-      "image_types": "personal",
-      "$$noContext": "personal"
-    },
     "personal comments": "Comentarios personales",
-    "Personal feed off": "Noticias personales desactivadas",
-    "Personal feed on": "Noticias personales activadas",
     "phone": "Teléfono",
     "photos-art": {
       "book_types": "fotos-arte"
@@ -897,7 +784,6 @@
     "possible": {
       "glacier_ratings": "posible"
     },
-    "Post the first comment": "Deja un comentario",
     "prairie": {
       "ground_types": "pradera"
     },
@@ -910,20 +796,16 @@
     "pressure": {
       "weather_station_types": "presión"
     },
-    "Preview": "Previsualizar",
     "previous difference": "diferencia anterior",
     "product_types": "Tipo de productos locales",
     "profile": "perfil",
     "progressive": {
       "snow_clearance_ratings": "desnevado gradual"
     },
-    "prominence": "Prominencia",
+    "prominence": "Prominencia ",
     "protected": {
-      "rain_proof_types": "protegido de la lluvia",
-      "$$noContext": "protegido de la lluvia"
-    },
-    "psicobloc": {
-      "climbing_outdoor_types": "psicobloc"
+      "$$noContext": "protegido de la lluvia",
+      "rain_proof_types": "protegido de la lluvia"
     },
     "public_transport": "Transporte público",
     "public_transportation_rating": "Acceso en transporte público",
@@ -936,9 +818,6 @@
     "quiet": {
       "frequentation_types": "no frecuentado"
     },
-    "raid": {
-      "route_types": "raid"
-    },
     "rain_proof": "Llubia",
     "range": {
       "area_types": "macizo"
@@ -947,12 +826,8 @@
     "recent_avalanche": {
       "avalanche_signs": "reciente_avalancha"
     },
-    "Recenter on your current position": "Centrar en mi posición actual",
-    "Recenter on...": "Centrar en ...",
-    "Register": "Inscribirse",
     "remarks": "Observaciones",
     "rescue": "secorro",
-    "Reset password": "Reiniciar contraseña",
     "resolution": "resolución",
     "restaurant": {
       "product_types": "restaurante"
@@ -987,38 +862,28 @@
       "children_proof_types": "seguro"
     },
     "safety": "Seguridad",
-    "Save": "Guardar",
     "schiste": {
       "rock_types": "esquites"
     },
     "scree": {
       "ground_types": "acarreo"
     },
-    "Search ...": "Buscar ...",
     "seasonal": {
       "parking_fee_types": "servicio en temporada"
     },
-    "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
-    "See the latest version": "Ver la última versión",
-    "Send reset email": "Enviar email de reinicio",
     "sep": {
       "months": "septiembre"
     },
     "service_on_demand": {
       "public_transportation_types": "servicio por solicitud"
     },
-    "Settings": "Configuración",
-    "Several days?": "¿Varios días?",
     "severity": "gravedad",
     "severity_no": {
       "severities": "indice de gravedad"
     },
-    "Share with us!": "¡ Comparte con nosotros!",
-    "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "shelter": {
       "waypoint_types": "refugio precario"
     },
-    "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
     "single": {
       "climbing_outdoor_types": "solo"
     },
@@ -1061,7 +926,7 @@
     "snow_quantity": "Cantidad de nieve",
     "snowshoe_rating": "Cotación raquetas",
     "snowshoeing": {
-      "activities": "Raquetas"
+      "activities": "Raquetas "
     },
     "soft snow": "Nieve blanda",
     "soft_mobility": {
@@ -1076,10 +941,6 @@
     "sport_shop": {
       "product_types": "tienda de deportes"
     },
-    "stone_fall": {
-      "event_types": "caída de piedra"
-    },
-    "Stop following this contributor": "Dejar de seguir este usuario",
     "stories": {
       "article_categories": "historias"
     },
@@ -1087,28 +948,14 @@
     "summit": {
       "waypoint_types": "cumbre"
     },
-    "SwissTopo": {
-      "Map layer": "SwissTopo",
-      "Map slopes layer": "SwissTopo"
-    },
     "tags": {
       "article_categories": "etiquetas"
     },
     "temperature": {
       "weather_station_types": "temperatura"
     },
-    "The mountain sports community": "La comunidad de los deportes de montaña",
-    "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
-    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
-    "Time": "Horario",
     "timing": "Duración",
     "title": "Titulo",
-    "Toggle fullscreen": "Pasar a pantalla completa",
-    "topo": {
-      "book_types": "topo",
-      "image_categories": "topo"
-    },
-    "Topoguide": "Topoguía",
     "topoguide_supplements": {
       "article_categories": "topoguide_suplementos"
     },
@@ -1119,23 +966,9 @@
     "trachyte": {
       "rock_types": "tracita"
     },
-    "track": {
-      "image_categories": "track"
-    },
-    "train": {
-      "public_transportation_types": "train"
-    },
     "training": "entranamiento",
-    "Translate into an other lang": "Traducir en otra lengua",
     "traverse": {
       "route_types": "cruce"
-    },
-    "Types and styles": "Tipos y estilos",
-    "Unblock account": "Desbloquear cuenta",
-    "Upload a GPS track": "Añadir una traza",
-    "Username": "Usuario",
-    "vertical": {
-      "climbing_styles": "vertical"
     },
     "very_dangerous": {
       "children_proof_types": "peligroso"
@@ -1147,10 +980,6 @@
       "activities": "Vía ferrata"
     },
     "via_ferrata_rating": "Cotación vía ferrata",
-    "View in other lang": "Ver en otra lengua",
-    "virtual": {
-      "waypoint_types": "virtual"
-    },
     "waterfall": {
       "waypoint_types": "cascada"
     },
@@ -1158,10 +987,9 @@
       "waypoint_types": "agua/fuente"
     },
     "waypoint_type": "Tipo de waypoint",
-    "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña.",
     "weather": "Meteo observada",
     "weather_station": {
-      "waypoint_types": "estación meteorológica"
+      "waypoint_types": " estación meteorológica"
     },
     "weather_station_types": "Tipo de estación meteorológica",
     "webcam": {
@@ -1174,13 +1002,12 @@
     "wind_speed": {
       "weather_station_types": "velocidad del viento"
     },
-    "Without c2c account": "Participantes sin cuenta c2c",
     "write a summary": "Escribir un resumen",
     "write your comments": "Escribir sus comentarios",
     "xreport": "incidente / accidente",
     "yes": {
-      "parking_fee_types": "si",
-      "$$noContext": "si"
+      "$$noContext": "si",
+      "parking_fee_types": "si"
     }
   }
 }

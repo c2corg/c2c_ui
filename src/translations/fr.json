@@ -1,68 +1,366 @@
 {
   "fr": {
-    "1": {
-      "paragliding_ratings": "P1"
-    },
-    "2": {
-      "paragliding_ratings": "P2"
-    },
-    "3": {
-      "paragliding_ratings": "P3"
-    },
-    "4": {
-      "paragliding_ratings": "P4"
-    },
-    "5": {
-      "paragliding_ratings": "P5"
-    },
     "1 or 2 complications (steeper or narrow section...)": "1 ou 2 complications (plus pentu ou étroiture...)",
-    "10min": {
-      "access_times": "10min"
-    },
-    "15min": {
-      "access_times": "15min"
-    },
     "1d_to_3d": {
       "severities": "De 1 à 3 jours"
-    },
-    "1h": {
-      "access_times": "1h"
-    },
-    "1h30": {
-      "access_times": "1h30"
     },
     "1m_to_3m": {
       "severities": "De 1 à 3 mois"
     },
-    "1min": {
-      "access_times": "1min"
-    },
-    "20min": {
-      "access_times": "20min"
-    },
-    "2h": {
-      "access_times": "2h"
-    },
-    "2h30": {
-      "access_times": "2h30"
-    },
-    "30min": {
-      "access_times": "30min"
-    },
-    "3h": {
-      "access_times": "3h"
-    },
     "3h+": {
       "access_times": "> 3h"
-    },
-    "45min": {
-      "access_times": "45min"
     },
     "4d_to_1m": {
       "severities": "De 4 jours à un mois"
     },
-    "5min": {
-      "access_times": "5min"
+    "Accident database": "Incidents et accidents",
+    "Activity feed": "Fil d'activité",
+    "Add": "Ajouter",
+    "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
+    "Add images": "Ajouter des images",
+    "Add the first outing": "Ajouter la première sortie",
+    "Additional information": "Informations supplémentaires",
+    "Anonymity and confidentiality": "Anonymat et confidentialité",
+    "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",
+    "Are you sure you want to delete this locale?": "Êtes-vous sûr(e) de vouloir supprimer cette version linguistique ?",
+    "Are you sure you want to merge?": "Êtes-vous sur de vouloir fusionner ?",
+    "Are you sure you want to revert to this version of the document?": "Êtes-vous sûr de vouloir restaurer cette version du document ?",
+    "Articles, waypoints or routes to be linked.": "Articles, points de passage et itinéraires attachés",
+    "Articles, waypoints, routes or books to be linked.": "Articles, points de passage, itinéraires et ouvrages attachés",
+    "Associated outings": "Sorties associées",
+    "Associated routes": "Itinéraires associés",
+    "Associated routes cotations": "Cotations des itinéraires associés au point de passage",
+    "Association": "Camptocamp Association",
+    "Associations history": "Historique des associations",
+    "Average slope (degrees)": "Pente moyenne (degrés)",
+    "Average slope in degree": "Pente moyenne en degrés",
+    "Back to code": "Retour au code",
+    "Back to edit mode": "Retour en mode édition",
+    "Base layer": "Fond de carte",
+    "Basemap (at)": {
+      "Map layer": "Autriche"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Autriche Sat"
+    },
+    "Block account": "Bloquer cet utilisateur",
+    "Book content": "Rapide description du contenu de l'ouvrage",
+    "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
+    "Both results and map": "Résultats et carte",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org a pour but de faciliter le partage d'informations entre les pratiquants de sports de montagne et de contribuer à la sécurité des activités montagne.",
+    "Cancel": "Annuler",
+    "Cards mode": "Vue en cards",
+    "Change account parameters": "Modifier les paramètres du compte",
+    "Change password": "Modifier le mot de passe",
+    "Checking...": "En cours de vérification ...",
+    "Child": "Enfant",
+    "Clear": "Effacer",
+    "Close": "Fermer",
+    "Collapse": "Replier",
+    "Comments": "Commentaires",
+    "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
+    "Compare selected versions": "Comparer les versions sélectionnées",
+    "Conditions, summits, routes": "Conditions, sommets, itinéraires",
+    "Confirm": "Confirmer",
+    "Contain invalid character(s)": {
+      "API message": "Contient un ou plusieurs caractères invalides"
+    },
+    "Continue the discussion": "Continuer la discussion",
+    "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
+    "Contribute to maintainance": "Contribuer à la maintenance",
+    "Contributor": "Contributeur",
+    "Create a new report": "Créer un nouveau compte-rendu",
+    "Created on": "Crée le",
+    "Creation?": "Création ?",
+    "Current password": "Mot de passe actuel",
+    "Delete this document": "Supprimer ce document",
+    "Delete this locale": "Supprimer cette version linguistique",
+    "Describe access": "Décrivez ici l'accès",
+    "Describe access period": "Précisez la période d'accès",
+    "Describe access restrictions": "Décrire les restrictions d'accès",
+    "Describe here the gear needed for this route": "Précisez ici le matériel spécifique qu'il faut emporter en plus de l'équipement usuel. Seul le matériel \"exotique\" (en qualité ou quantité) doit être mentionné. Exemples de mentions inutiles : DVA, pelle, sonde, piolet, crampons, matériel de glacier (le champ \"matériel de glacier\" suffit), coinceurs et sangles sans plus de précision.",
+    "Describe here the waypoint": "Organisez la description avec des sous titres : balises ## , ### , #### en début de ligne.",
+    "Describe here your issue": "Décrire le problème ici",
+    "Describe historical information about the route (date, names..) here": "Précisez ici les informations historiques de l'itinéraire : ouverture du bas ou équipement (du haut), premières ascensions, premières descentes à ski/surf, rééquipements, éboulements, etc. Mentionnez la date, le nom des protagonistes, et le club ou organisme ayant financé le matériel laissé en place.",
+    "Describe opening hours": "Précisez les heures d'ouverture",
+    "Describe opening periods": "Précisez les périodes d'ouverture",
+    "Describe pedestrian access": {
+      "$$noContext": "Décrire l'accès",
+      "hut": "Décrire l'accès"
+    },
+    "Describe pt access": "Décrire l'accès au point de passage",
+    "Describe road access": "Décrire l'accès routier et les commodités (logement, restauration, etc.)",
+    "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
+    "Detailed figures, like ratings, height differences, frequentation...": "Données détaillées (cotations, dénivelés, fréquentation...)",
+    "Detailed information": "Informations détaillées",
+    "Details": "Détails",
+    "Details on participants and event context": "Détails sur les participants et le contexte de l'évènement",
+    "Differences between versions": "Différences entre les versions",
+    "Do you really want to leave? you have unsaved changes!": "Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été sauvegardés !",
+    "Download outings": "Télécharger les sorties",
+    "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
+    "Duration": "Durée",
+    "Duration (hrs)": "Durée (h)",
+    "EULA": "CGU",
+    "Edit": "Modifier",
+    "Edit a document": "Modifier le document",
+    "Edit associations": "Modifier les associations",
+    "Edit categories": "Modifier les catégories",
+    "Edit titles": "Modifier les titres",
+    "Elevation": "Altitude",
+    "Elevation (m)": "Altitude (m)",
+    "Email": "Adresse email",
+    "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
+    "Expand": "Déplier",
+    "Fauna protection areas": "Faune",
+    "Fauna protection site:": "Site de protection de la faune :",
+    "Filter on map extent": "Limiter la recherche à la carte visible",
+    "Followed users": "Contributeurs suivis",
+    "Forgot password?": "Mot de passe oublié ?",
+    "Forum username": "Pseudo forum",
+    "Fullname": "Nom",
+    "GPS Track": "Trace GPS",
+    "General": "Général",
+    "General information": "Informations générales",
+    "Geolocation": "Géolocalisation",
+    "Go to the previous page": "Retourner à la page précédente",
+    "Have an account?": "Déjà inscrit(e) ?",
+    "Heading": "Titre",
+    "Help": "Aide",
+    "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
+    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
+    "History": "Versions",
+    "Home": "Accueil",
+    "Home page feed parameters": "Paramètre du fil d'activité sur la page d'accueil",
+    "How is my testimony used ? How / why is it useful ?": "À quoi sert mon témoignage ?",
+    "I have read and agree to the terms of use": "J'ai lu et approuvé les conditions d'utilisation",
+    "IGN": {
+      "Map slopes layer": "France (IGN)"
+    },
+    "IGN maps": {
+      "Map layer": "IGN Fr"
+    },
+    "IGN ortho": {
+      "Map layer": "IGN Fr Sat"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Es Sat"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Es"
+    },
+    "Improve our understanding of risks": "Améliorer la connaissance des risques",
+    "Incidents and accidents": "Incidents et accidents",
+    "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
+    "Informations about the access": "Information à propos de l'accès routier/transport en commun",
+    "Infos": "Informations",
+    "Insert a link": "Insérer un lien",
+    "Insert emoji": "Insérer un émoji",
+    "Insert image": "Insérer une image",
+    "Insert link": "Insérer le lien",
+    "Invalid date": "Date non valide",
+    "Invalid email address": {
+      "API message": "Adresse email invalide"
+    },
+    "Issue report": "Signalement d'un problème",
+    "Know more about SERAC": "En savoir plus sur SERAC",
+    "Last forum topics": "Dernières discussions du forum",
+    "Last outings": "Dernières sorties",
+    "Layers": {
+      "Map controls": "Couches"
+    },
+    "Leave fullscreen": "Quitter le mode plein écran",
+    "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
+    "Licenses": "Licences",
+    "Links": "Liens",
+    "List mode": "Vue en liste",
+    "List of versions for language:": "Liste des versions pour la langue :",
+    "Load my preferences": "Activer mes préférences",
+    "Location / elevation / orientation": "Lieu / altitude / orientation",
+    "Log in to post a comment": "Se connecter pour poster un commentaire",
+    "Login": "Se connecter",
+    "Login failed": {
+      "API message": "Identifiant ou mot de passe incorrects"
+    },
+    "Logout": "Me déconnecter",
+    "Mail has been sent": "Courriel envoyé",
+    "Main informations about your outing": "Données principales de votre sortie",
+    "Make profile page public": "Rendre publique la page de profil",
+    "Map only": "Uniquement la carte",
+    "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
+    "Merge documents": "Fusionner des documents",
+    "Merge with other document": "Fusionner avec un autre document",
+    "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Fusionner un document source avec un document cible transfère toutes les associations du document source au document cible, et définit une redirection du document source vers le document cible.",
+    "Misc data about the waypoint": "Données diverses sur le point de passage",
+    "Miscs": "Divers",
+    "Missing captcha": {
+      "API message": "Captcha manquant"
+    },
+    "Modified the": {
+      "modification date": "Modifié le"
+    },
+    "More info": "Plus d'information",
+    "Multi-criteria search": "Recherche multi-critère",
+    "My account": "Mon compte",
+    "My changes": "Mes contributions",
+    "My followed users": "Mes amis",
+    "My outings": "Mes sorties",
+    "My preferences": "Mes préférences",
+    "My profile": "Mon profil",
+    "Narration": "Description textuelle",
+    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Situations « limites » qui aurait pu dégénérer en évènements plus graves",
+    "Near-accidents are valuable": "Des incidents et quasi-accidents riches d’enseignements :",
+    "New outing": "Nouvelle sortie",
+    "New password": "Nouveau mot de passe",
+    "New route": "Nouvel itinéraire",
+    "New waypoint": "Nouveau point de passage",
+    "No account yet?": "Pas encore de compte ?",
+    "No match?": "Aucun résultat satisfaisant ?",
+    "No user with this email": {
+      "API message": "Il n'existe pas d'utilisateur avec cet email"
+    },
+    "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
+    "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
+    "Numbers": "Données",
+    "Only document less than 24h old can be deleted": {
+      "API message": "Seuls les documents récents (24h) peuvent être supprimés. Contactez la modération pour supprimer ce document."
+    },
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
+    "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
+    "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
+    "Ordered list": "Liste triée",
+    "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
+    "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
+    "Page not found": "Page non trouvée",
+    "Paragliding outings": "Sorties parapente",
+    "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
+    "Participants and context": "Participants et contexte",
+    "Password": "Mot de passe",
+    "Password too short": {
+      "API message": "Le mot de passe est trop court"
+    },
+    "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la sortie",
+    "Period of protection": "Période de protection",
+    "Personal data are confidential": "Les informations personnelles sont confidentielles",
+    "Personal feed off": "Fil personnel désactivé",
+    "Personal feed on": "Fil personnel activé",
+    "Personal informations": "Informations personnelles",
+    "Pitch description tag": "Balise de description des longueurs",
+    "Post the first comment": "Publier le premier commentaire",
+    "Precise localisation of the shooting": "Localisation précise de la prise de vue",
+    "Precise location of the event.": "Localisation précise de l'évènement",
+    "Press enter to select": "Entrée pour selectionner",
+    "Preview": "Prévisualiser",
+    "Protect document": "Protéger ce document",
+    "Protection area:": "Zone de protection :",
+    "Protection areas": "Zones de protection",
+    "Protection status": "Status de la protection",
+    "Put it back": "Remettre",
+    "Quote": "Citation",
+    "Recenter on your current position": "Centrage sur votre position actuelle",
+    "Recenter on...": "Recentrer sur...",
+    "Register": "S'inscrire",
+    "Remove": "Retirer",
+    "Report an issue": "Signaler un problème",
+    "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
+    "Required": {
+      "API message": "Requis"
+    },
+    "Reset geometry": "Réinitialiser",
+    "Reset password": "Réinitialiser le mot de passe",
+    "Restore this version": "Restaurer cette version",
+    "Results only": "Uniquement les résultats",
+    "Retry": "Réessayer",
+    "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
+    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
+    "Save": "Enregistrer",
+    "Search ...": "Rechercher ...",
+    "Search a document to associate...": "Rechercher un document à associer",
+    "See more results": "Plus de résultats",
+    "See other documents nearby": "À proximité de...",
+    "See profile based on:": "Profil d'altitude selon :",
+    "See the activity of this contributor in your feed": "Voir les activités de ce contributeur dans votre fil",
+    "See the latest version": "Voir la dernière version",
+    "Select option": "Choisissez une option",
+    "Send reset email": "Envoyer l'email de réinitialisation",
+    "Sensitive area:": "Zone sensible :",
+    "Sensitive areas": "Zones sensibles",
+    "Settings": "Paramètres",
+    "Several days?": "Plusieurs jours ?",
+    "Share": "Partager",
+    "Share with us!": "Partagez avec nous!",
+    "Shorter than minimum length 1": {
+      "API message": "Champ obligatoire"
+    },
+    "Shorter than minimum length 3": {
+      "API message": "Champ trop court (minimum 3 caractères)"
+    },
+    "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
+    "Skiability": "Skiabilité",
+    "Slopes": "Cartes de pentes",
+    "Source:": "Document à fusionner (source) :",
+    "Stop following this contributor": "Ne plus suivre ce contributeur",
+    "Suggested rating": "Cotation suggérée",
+    "SwissTopo": {
+      "Map slopes layer": "Suisse (SwissTopo)"
+    },
+    "Target:": "Document à conserver (cible) :",
+    "The mountain sports community": "La communauté des sports de montagne",
+    "The page you are looking for does not exist or is broken.": "La page que vous demandez n'existe pas ou est cassée.",
+    "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
+    "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
+    "There are sensitive areas on this route. Please refer to the map.": "Cet itinéraire traverse ou se situe près de zones sensibles. Merci de consulter la carte.",
+    "These are positive experiences that reveal usefull risk-management skills.": "Expériences positives qui révèlent des compétences de gestion des risques",
+    "This book cover is the property of its editor and/or author": "Cette couverture de livre est la propriété de son éditeur et/ou auteur",
+    "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0",
+    "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
+    "This field is too long": "Texte trop long",
+    "This field is too short": "Texte trop court",
+    "This field must be a valid ISBN.": {
+      "API message": "Ce champ doit être un ISBN valide."
+    },
+    "This is the first version": "Ceci est la première version",
+    "This is the last version": "Ceci est la dernière version",
+    "This profile is only available to authenticated users.": "Ce profil est accessible aux seuls utilisateurs authentifiés.",
+    "This tool estimates the technical difficulty of a ski route (ski rating).": "Cet outil permet d'estimer la difficulté technique d'un itinéraire à ski (cotation ski)",
+    "Time": "Heure",
+    "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
+    "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
+    "Toggle full-screen": {
+      "Map Controls": "Mode plein écran"
+    },
+    "Toggle fullscreen": "Basculer en plein écran",
+    "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
+    "Translate into an other lang": "Traduire dans une autre langue",
+    "Transport & road or PT access": "Accès routier/TC",
+    "Types and styles": "Types et styles",
+    "Unblock account": "Débloquer cet utilisateur",
+    "Unformatted text": "Texte brut",
+    "Unordered list": "Liste non triée",
+    "Unprotect document": "Déprotéger ce document",
+    "Upload a GPS track": "Ajouter une trace GPS",
+    "Upload a new version": "Télécharger une nouvelle version",
+    "User avatar": "Avatar",
+    "Username": "Identifiant",
+    "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres,...)",
+    "View in other lang": "Voir dans une autre langue",
+    "View xreports": "Voir les compte-rendus",
+    "Warning: This action cannot be undone!": "Attention : cette action est irréversible !",
+    "Waypoint's main properties": "Principales données du point de passage",
+    "Waypoint's textual description": "Descriptions textuelles du point de passage",
+    "We sent you an email, please click on the link to reset password.": "Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il contient pour réinitialiser votre mot de passe.",
+    "Weather & conditions": "Météo & conditions",
+    "Wide and constant": "Large et régulière",
+    "Without c2c account": "Participants sans compte c2c",
+    "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
+    "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
+    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
+    "Zoom in": {
+      "Map controls": "Zoomer"
+    },
+    "Zoom out": {
+      "Map controls": "Dézoomer"
     },
     "access": {
       "$$noContext": "accès routier / transports en commun",
@@ -75,26 +373,11 @@
     "accessible_when_wardened": {
       "custodianship_types": "gardé, fermé hors gardiennage"
     },
-    "Accident database": "Incidents et accidents",
     "accidental_avalanche": {
       "avalanche_signs": "avalanche déclenchée par une personne le jour de la sortie"
     },
-    "action": {
-      "image_categories": "action"
-    },
     "activities": "Activités",
-    "Activity feed": "Fil d'activité",
     "activity_rate": "Fréquence de pratique dans l'activité",
-    "activity_rate_m2": {
-      "activity_rates": "2 fois par mois"
-    },
-    "activity_rate_w1": {
-      "activity_rates": "1 fois par semaine"
-    },
-    "activity_rate_y5": {
-      "activity_rates": "5 fois par an"
-    },
-    "Add": "Ajouter",
     "add a book": "ajouter un livre",
     "add a map": "ajouter une carte",
     "add a route": "ajouter un itinéraire",
@@ -104,19 +387,12 @@
     "add an image": "ajouter une image",
     "add an incident/accident report": "ajouter un rapport d'incident/accident",
     "add an outing": "ajouter une sortie",
-    "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
-    "Add images": "Ajouter des images",
-    "Add the first outing": "Ajouter la première sortie",
-    "Additional information": "Informations supplémentaires",
     "admin_limits": {
       "area_types": "limite administrative"
     },
     "advertisement": "publicité",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
-    "alpine_climbing": {
-      "event_activities": "Rocher montagne (TA)"
-    },
     "already used forum_username": {
       "API message": "Pseudo forum déjà utilisé"
     },
@@ -126,46 +402,24 @@
     "always_accessible": {
       "custodianship_types": "toujours ouvert"
     },
-    "amateur": {
-      "user_categories": "amateur"
-    },
-    "Anonymity and confidentiality": "Anonymat et confidentialité",
     "anonymous": "Contribution anonyme",
     "apr": {
       "months": "avril"
     },
-    "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",
-    "Are you sure you want to delete this locale?": "Êtes-vous sûr(e) de vouloir supprimer cette version linguistique ?",
-    "Are you sure you want to merge?": "Êtes-vous sur de vouloir fusionner ?",
-    "Are you sure you want to revert to this version of the document?": "Êtes-vous sûr de vouloir restaurer cette version du document ?",
     "area": "région",
     "area_type": "Type de région",
     "areas": "régions",
     "article_categories": "catégories d'articles",
     "article_type": "Type d'article",
-    "Articles, waypoints or routes to be linked.": "Articles, points de passage et itinéraires attachés",
-    "Articles, waypoints, routes or books to be linked.": "Articles, points de passage, itinéraires et ouvrages attachés",
     "artificial": {
       "rock_types": "artificiel"
     },
-    "Associated outings": "Sorties associées",
-    "Associated routes": "Itinéraires associés",
-    "Associated routes cotations": "Cotations des itinéraires associés au point de passage",
-    "Association": "Camptocamp Association",
-    "association": {
-      "article_categories": "association"
-    },
     "associations": "Associations",
-    "Associations history": "Historique des associations",
     "at least one route required": {
       "API message": "Sélectionnez au moins un itinéraire"
     },
     "at least one user required": {
       "API message": "Sélectionnez au moins un itinéraire"
-    },
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre.",
-    "Attributions": {
-      "Map controls": "Attributions"
     },
     "aug": {
       "months": "août"
@@ -176,10 +430,6 @@
       "autonomies": "autonome"
     },
     "autonomy": "Niveau de pratique",
-    "avalanche": {
-      "event_types": "avalanche",
-      "$$noContext": "avalanche"
-    },
     "avalanche_forecaster": {
       "user_categories": "prévision d'avalanche"
     },
@@ -192,102 +442,50 @@
       "snow_quality_ratings": "moyenne",
       "snow_quantity_ratings": "moyenne"
     },
-    "Average slope (degrees)": "Pente moyenne (degrés)",
-    "Average slope in degree": "Pente moyenne en degrés",
     "awful": {
       "condition_ratings": "exécrables",
       "snow_quality_ratings": "exécrable",
       "snow_quantity_ratings": "exécrable"
     },
-    "Back to code": "Retour au code",
-    "Back to edit mode": "Retour en mode édition",
-    "bar": {
-      "product_types": "bar"
-    },
-    "basalte": {
-      "rock_types": "basalte"
-    },
-    "Base layer": "Fond de carte",
     "base_camp": {
       "waypoint_types": "camp de base"
     },
-    "Basemap (at)": {
-      "Map layer": "Autriche"
-    },
-    "Basemap ortho (at)": {
-      "Map layer": "Autriche Sat"
-    },
     "best_periods": "Meilleures périodes",
-    "Bing": {
-      "Map layer": "Bing"
-    },
     "biography": {
       "book_types": "biographie"
     },
     "bisse": {
       "waypoint_types": "bisse / béal"
     },
-    "bivouac": {
-      "waypoint_types": "bivouac"
-    },
     "blanket_unstaffed": "Couvertures hors gardiennage",
-    "bloc": {
-      "climbing_indoor_types": "bloc",
-      "climbing_outdoor_types": "bloc"
-    },
-    "Block account": "Bloquer cet utilisateur",
-    "blocked_person": {
-      "event_types": "Personne bloquée"
-    },
     "boat": {
       "public_transportation_types": "bateau"
     },
     "bolted rock climbing gear": "Escalade en grande voie sportive",
     "book": {
-      "image_categories": "livre",
-      "$$noContext": "livre"
+      "$$noContext": "livre",
+      "image_categories": "livre"
     },
-    "Book content": "Rapide description du contenu de l'ouvrage",
     "book_types": "Type de livre",
     "books": "livres",
-    "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
-    "Both results and map": "Résultats et carte",
-    "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
-    "bus": {
-      "public_transportation_types": "bus"
-    },
     "c2c_meetings": {
       "article_categories": "réunions c2c"
     },
     "ca": {
       "langs": "catalan"
     },
-    "calcaire": {
-      "rock_types": "calcaire"
-    },
     "camera settings": "Paramètres de l'APN",
     "camera_name": "Nom de l'APN",
     "camp_site": {
       "waypoint_types": "camping"
     },
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org a pour but de faciliter le partage d'informations entre les pratiquants de sports de montagne et de contribuer à la sécurité des activités montagne.",
-    "Cancel": "Annuler",
-    "canyon": {
-      "waypoint_types": "canyon"
-    },
     "capacity": "Nombre de places hors gardiennage",
     "capacity_staffed": "Nombre de places en gardiennage",
-    "Cards mode": "Vue en cards",
     "categories": "Catégories",
     "cave": {
       "waypoint_types": "grotte"
     },
-    "Change account parameters": "Modifier les paramètres du compte",
-    "Change password": "Modifier le mot de passe",
-    "Checking...": "En cours de vérification ...",
-    "Child": "Enfant",
     "children_proof": "Enfants",
-    "Clear": "Effacer",
     "cleared": {
       "access_conditions": "déneigé"
     },
@@ -308,7 +506,6 @@
     "climbing_rating_median": "Cotation médiane",
     "climbing_rating_min": "Cotation minimale",
     "climbing_styles": "Styles d'escalade",
-    "Close": "Fermer",
     "closed": {
       "lift_status": "fermées"
     },
@@ -324,44 +521,23 @@
     "closed_snow": {
       "access_conditions": "fermé enneigé"
     },
-    "club": {
-      "user_categories": "club"
-    },
     "collab": {
-      "article_types": "collaboratif (CC by-sa)",
-      "$$noContext": "collaboratif (CC by-sa)"
+      "$$noContext": "collaboratif (CC by-sa)",
+      "article_types": "collaboratif (CC by-sa)"
     },
     "collaborative": {
       "image_types": "collaboratif (CC by-sa)"
     },
-    "Collapse": "Replier",
     "comment": "Commentaire",
-    "Comments": "Commentaires",
-    "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
-    "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication des objectifs et attentes de chacun, des craintes et observations en cours de sortie, briefing pour établir de nouvelles stratégies, éléments de conduite de groupe et de responsabilités, groupe habitué à fonctionner ensemble ou non, émulation, etc.",
-    "Compare selected versions": "Comparer les versions sélectionnées",
     "condition_rating": "Évaluation des conditions",
     "conditions": "Conditions",
-    "Conditions, summits, routes": "Conditions, sommets, itinéraires",
     "conditions_levels": "Conditions d'enneigement par zones",
     "configuration": "Configuration",
-    "Confirm": "Confirmer",
     "conglomerat": {
       "rock_types": "conglomérat"
     },
     "contact": "Contact",
-    "Contain invalid character(s)": {
-      "API message": "Contient un ou plusieurs caractères invalides"
-    },
-    "Continue the discussion": "Continuer la discussion",
-    "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
-    "Contribute to maintainance": "Contribuer à la maintenance",
-    "Contributor": "Contributeur",
     "contributor": "contributeur",
-    "copyright": {
-      "image_types": "copyright",
-      "$$noContext": "copyright"
-    },
     "corridor": {
       "route_configuration_types": "couloir"
     },
@@ -371,28 +547,18 @@
     "crack_dihedral": {
       "climbing_styles": "fissure-dièdre"
     },
-    "craie": {
-      "rock_types": "craie"
-    },
     "crampons_req": {
       "glacier_gear_types": "crampons indispensables"
     },
     "crampons_spring": {
       "glacier_gear_types": "crampons en début de saison"
     },
-    "Create a new report": "Créer un nouveau compte-rendu",
-    "Created on": "Crée le",
-    "Creation?": "Création ?",
     "crevasse_fall": {
       "event_types": "chute en crevasse"
-    },
-    "critical_situation": {
-      "event_types": "situation complexe sans incident"
     },
     "crowded": {
       "frequentation_types": "assez fréquenté"
     },
-    "Current password": "Mot de passe actuel",
     "custodianship": "Ouverture",
     "danger_sign": {
       "avalanche_signs": "signaux d'alerte autres que des traces d'avalanche"
@@ -400,7 +566,6 @@
     "dangerous": {
       "children_proof_types": "peu adapté"
     },
-    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Données techniques, comme l'orientation, le type de roche ou la configuration générale de l'itinéraire (arête, pilier...)",
     "date": "Date",
     "date_end": "Date de fin",
     "date_start": "Date de début",
@@ -412,55 +577,25 @@
     "dec": {
       "months": "décembre"
     },
-    "Delete this document": "Supprimer ce document",
-    "Delete this locale": "Supprimer cette version linguistique",
     "descent": {
       "image_categories": "descente"
     },
-    "Describe access": "Décrivez ici l'accès",
-    "Describe access period": "Précisez la période d'accès",
-    "Describe access restrictions": "Décrire les restrictions d'accès",
     "describe conditions": "Conditions de terrain, équipement et qualité du rocher rencontrés (approche, voie, et à proximité)",
-    "Describe here the gear needed for this route": "Précisez ici le matériel spécifique qu'il faut emporter en plus de l'équipement usuel. Seul le matériel \"exotique\" (en qualité ou quantité) doit être mentionné. Exemples de mentions inutiles : DVA, pelle, sonde, piolet, crampons, matériel de glacier (le champ \"matériel de glacier\" suffit), coinceurs et sangles sans plus de précision.",
-    "Describe here the waypoint": "Organisez la description avec des sous titres : balises ## , ### , #### en début de ligne.",
-    "Describe here your issue": "Décrire le problème ici",
-    "Describe historical information about the route (date, names..) here": "Précisez ici les informations historiques de l'itinéraire : ouverture du bas ou équipement (du haut), premières ascensions, premières descentes à ski/surf, rééquipements, éboulements, etc. Mentionnez la date, le nom des protagonistes, et le club ou organisme ayant financé le matériel laissé en place.",
-    "Describe opening hours": "Précisez les heures d'ouverture",
-    "Describe opening periods": "Précisez les périodes d'ouverture",
-    "Describe pedestrian access": {
-      "hut": "Décrire l'accès",
-      "$$noContext": "Décrire l'accès pédestre"
-    },
-    "Describe pt access": "Décrire l'accès au point de passage",
-    "Describe road access": "Décrire l'accès routier et les commodités (logement, restauration, etc.)",
     "describe route_conditions": "Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\nATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site.",
-    "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
-    "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Décrivez les informations récoltées avant la sortie et le suivi de leur évolution sur le terrain. Cela concerne les prévisions météo, les bulletins d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la neige/glace/rocher, les compte rendu des jours précédents, etc.",
     "describe timing": "Heure de départ / horaire",
     "describe weather": "Conditions météorologiques rencontrées lors de la sortie : couverture nuageuse, précipitations, vent, température",
     "description": "Description",
     "detail": {
       "image_categories": "détail"
     },
-    "Detailed figures, like ratings, height differences, frequentation...": "Données détaillées (cotations, dénivelés, fréquentation...)",
-    "Detailed information": "Informations détaillées",
-    "Details": "Détails",
-    "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Décrivez le déroulement de la sortie et de l'incident/accident. Si vous avez déjà saisi une sortie, vous pouvez décrire uniquement l'évènement, puis associez ce compte rendu à la sortie (après l'avoir enregistré).",
-    "Details on participants and event context": "Détails sur les participants et le contexte de l'évènement",
-    "Differences between versions": "Différences entre les versions",
     "difficult": {
       "glacier_ratings": "ouvert - passage difficile"
     },
     "difficulties_height": "Altitude du début des difficultés",
     "disable_comments": "Désactiver les commentaires",
-    "Do you really want to leave? you have unsaved changes!": "Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été sauvegardés !",
-    "Download outings": "Télécharger les sorties",
     "draft": {
       "quality_types": "ébauche"
     },
-    "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
-    "Duration": "Durée",
-    "Duration (hrs)": "Durée (h)",
     "durations": "Durée",
     "durations (days)": "durée (jours)",
     "easy": {
@@ -471,21 +606,13 @@
     "edge": {
       "route_configuration_types": "arête"
     },
-    "Edit": "Modifier",
-    "Edit a document": "Modifier le document",
-    "Edit associations": "Modifier les associations",
-    "Edit categories": "Modifier les catégories",
-    "Edit titles": "Modifier les titres",
     "editor": "Éditeur",
-    "Elevation": "Altitude",
     "elevation": "Altitude",
-    "Elevation (m)": "Altitude (m)",
     "elevation_access": "Altitude de l'accès routier / TC",
     "elevation_down_snow": "Altitude de déchaussage",
     "elevation_max": "Altitude maximale",
     "elevation_min": "Altitude minimale",
     "elevation_up_snow": "Altitude de chaussage",
-    "Email": "Adresse email",
     "emphasized text": "texte en italiques",
     "empty": {
       "quality_types": "vide"
@@ -506,30 +633,20 @@
     "es": {
       "langs": "espagnol"
     },
-    "ESRI": {
-      "Map layer": "ESRI"
-    },
     "eu": {
       "langs": "basque"
     },
-    "EULA": "CGU",
-    "event_activity": "Activité",
     "event_type": "Type d'évènement",
-    "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
     "excellent": {
       "condition_ratings": "excellentes",
       "snow_quality_ratings": "excellente",
       "snow_quantity_ratings": "excellente"
     },
-    "Expand": "Déplier",
     "expedition": {
       "route_types": "expédition"
     },
     "expeditions": {
       "article_categories": "expéditions"
-    },
-    "expert": {
-      "autonomies": "expert"
     },
     "exposed": {
       "rain_proof_types": "exposé à la pluie"
@@ -540,17 +657,12 @@
     "external_witness": {
       "author_statuses": "témoin extérieur"
     },
-    "face": {
-      "route_configuration_types": "face"
-    },
     "farm_sale": {
       "product_types": "vente directe"
     },
     "fauna": {
       "image_categories": "faune"
     },
-    "Fauna protection areas": "Faune",
-    "Fauna protection site:": "Site de protection de la faune :",
     "feb": {
       "months": "février"
     },
@@ -559,7 +671,6 @@
     },
     "file_size": "taille du fichier",
     "filename": "nom du fichier",
-    "Filter on map extent": "Limiter la recherche à la carte visible",
     "fine": {
       "quality_types": "bon"
     },
@@ -568,33 +679,23 @@
     },
     "fnumber": "Propriétés de l'image",
     "focal_length": "Focale",
-    "Followed users": "Contributeurs suivis",
-    "Forgot password?": "Mot de passe oublié ?",
-    "Forum username": "Pseudo forum",
     "fr": {
       "langs": "français"
     },
     "frequentation": "Fréquentation",
-    "Fullname": "Nom",
     "gas_unstaffed": "Gaz hors gardiennage",
     "gear": {
-      "article_categories": "Matériel",
-      "$$noContext": "Matériel"
+      "$$noContext": "Matériel",
+      "article_categories": "Matériel"
     },
     "gender": "Sexe",
-    "General": "Général",
-    "General information": "Informations générales",
     "general informations": "Informations générales",
-    "Geolocation": "Géolocalisation",
     "geolocation": "Géolocalisation",
     "geology": {
       "image_categories": "géologie"
     },
     "gite": {
       "waypoint_types": "gîte"
-    },
-    "glacier": {
-      "route_configuration_types": "glacier"
     },
     "glacier_crampons": {
       "glacier_gear_types": "crampons + matériel de sécurité sur glacier"
@@ -605,10 +706,6 @@
       "glacier_gear_types": "matériel de sécurité sur glacier"
     },
     "global_rating": "Cotation globale",
-    "gneiss": {
-      "rock_types": "gneiss"
-    },
-    "Go to the previous page": "Retourner à la page précédente",
     "good": {
       "condition_ratings": "bonnes",
       "snow_quality_ratings": "bonne",
@@ -616,13 +713,6 @@
     },
     "good service": {
       "public_transportation_ratings": "service régulier"
-    },
-    "goulotte": {
-      "route_configuration_types": "goulotte"
-    },
-    "GPS Track": "Trace GPS",
-    "granit": {
-      "rock_types": "granit"
     },
     "great": {
       "quality_types": "excellent"
@@ -635,7 +725,6 @@
     },
     "ground_types": "Type de sol",
     "group_management": "Gestion du groupe",
-    "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Un horaire avait-il été prévu ? A t-il été tenu ? La gestion du temps a t-elle eu une influence sur le déclenchement de l'événement ?",
     "has added images to area": "a ajouté des images pour cette région",
     "has added images to article": "a ajouté des images pour cet article",
     "has added images to book": "a ajouté des images pour ce livre",
@@ -650,7 +739,6 @@
     "has created a new route": "a ajouté un nouvel itinéraire",
     "has created a new waypoint": "a ajouté un nouveau point de passage",
     "has created a new xreport": "a crée un nouveau rapport d'incident/accident",
-    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Cet évènement a-t-il modifié vos habitudes ? Quels enseignements en avez-vous tiré ?",
     "has updated the area": "a mis à jour cette région",
     "has updated the article": "a mis à jour un article",
     "has updated the book": "a mis à jour ce livre",
@@ -659,9 +747,6 @@
     "has updated the route": "a mis à jour un itinéraire",
     "has updated the waypoint": "a mis à jour un point de passage",
     "has updated the xreport": "a mis à jour ce rapport d'incident/accident",
-    "Have an account?": "Déjà inscrit(e) ?",
-    "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Avez-vous (ré)évalué les risques à chaque changement de situation ?\nConsidérez des facteurs qui ont pu influencer votre niveau d'attention tels que la fatigue, le stress, la baisse d'attention une fois les difficultés passées ou à la descente, un secteur connu ou réputé facile, la présence de traces ou d'autres personnes, une confiance totale dans le responsable du groupe, etc.",
-    "Heading": "Titre",
     "heading text": "texte du titre",
     "heating_unstaffed": "Chauffage hors gardiennage",
     "height": "Hauteur",
@@ -673,14 +758,10 @@
     "height_max": "Hauteur maximale",
     "height_median": "Hauteur moyenne",
     "height_min": "Hauteur minimale",
-    "Help": "Aide",
     "help": {
-      "image_categories": "aide",
-      "$$noContext": "aide"
+      "$$noContext": "aide",
+      "image_categories": "aide"
     },
-    "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
-    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
     "highline": {
       "slackline_types": "Highline"
     },
@@ -693,10 +774,6 @@
     "historical": {
       "book_types": "historique"
     },
-    "History": "Versions",
-    "Home": "Accueil",
-    "Home page feed parameters": "Paramètre du fil d'activité sur la page d'accueil",
-    "How is my testimony used ? How / why is it useful ?": "À quoi sert mon témoignage ?",
     "humidity": {
       "weather_station_types": "humidité"
     },
@@ -709,72 +786,28 @@
     "hut_warden": {
       "user_categories": "gardien de refuge"
     },
-    "I have read and agree to the terms of use": "J'ai lu et approuvé les conditions d'utilisation",
     "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
-      "activities": "Cascade de glace",
-      "event_activities": "Cascade de glace"
-    },
-    "ice_cornice_collapse": {
-      "event_types": "Effondrement cascade ou corniche"
+      "activities": "Cascade de glace"
     },
     "ice_rating": "Cotation glace",
-    "IGN": {
-      "Map slopes layer": "France (IGN)"
-    },
-    "IGN maps": {
-      "Map layer": "IGN Fr"
-    },
-    "IGN ortho": {
-      "Map layer": "IGN Fr Sat"
-    },
-    "IGN ortho (es)": {
-      "Map layer": "IGN Es Sat"
-    },
-    "IGN raster (es)": {
-      "Map layer": "IGN Es"
-    },
     "image_categories": "Catégories",
     "image_type": "Type d'image (licence)",
     "impossible": {
       "glacier_ratings": "infranchissable - passage impossible"
     },
-    "Improve our understanding of risks": "Améliorer la connaissance des risques",
-    "Incidents and accidents": "Incidents et accidents",
     "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
-    "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
-    "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Information sur la localisation de l'incident. Positionner la localisation sur la carte ci-dessus, même de manière peu précise (auquel cas vous pouvez ajouter plus de détails dans ce champ). Après avoir complété le rapport, vous pouvez associer un itinéraire, un point de passage ou une sortie.",
-    "Informations about the access": "Information à propos de l'accès routier/transport en commun",
-    "Infos": "Informations",
-    "initiator": {
-      "autonomies": "débrouillé"
-    },
-    "injury_without_fall": {
-      "event_types": "lésion sans chute"
-    },
-    "Insert a link": "Insérer un lien",
-    "Insert emoji": "Insérer un émoji",
-    "Insert image": "Insérer une image",
-    "Insert link": "Insérer le lien",
     "inside": {
       "rain_proof_types": "à l'intérieur"
     },
     "insolation": {
       "weather_station_types": "ensoleillement"
     },
-    "institution": {
-      "user_categories": "institution"
-    },
     "internal_witness": {
       "author_statuses": "témoin direct"
     },
-    "Invalid date": "Date non valide",
-    "Invalid email address": {
-      "API message": "Adresse email invalide"
-    },
     "isbn": "ISBN",
     "iso_speed": "Sensibilité",
-    "Issue report": "Signalement d'un problème",
     "it": {
       "langs": "italien"
     },
@@ -791,7 +824,6 @@
       "custodianship_types": "clé nécessaire pour ouvrir"
     },
     "kilometers": "km",
-    "Know more about SERAC": "En savoir plus sur SERAC",
     "labande_global_rating": "Cotation globale ski",
     "labande_ski_rating": "Cotation ponctuelle ski",
     "lake": {
@@ -802,15 +834,8 @@
     },
     "lang": "Langue",
     "langs": "Langues",
-    "Last forum topics": "Dernières discussions du forum",
-    "Last outings": "Dernières sorties",
-    "Layers": {
-      "Map controls": "Couches"
-    },
-    "Leave fullscreen": "Quitter le mode plein écran",
     "length": "Longueur",
     "length_total": "Longueur totale",
-    "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
     "level_1": {
       "avalanche_levels": "1 - faible"
     },
@@ -827,16 +852,11 @@
       "avalanche_levels": "5 - très fort"
     },
     "level_na": {
-      "avalanche_levels": "niveau non renseigné"
+      "avalanche_levels": " niveau non renseigné"
     },
-    "Licenses": "Licences",
     "lift_access": "Remontées mécaniques",
     "lift_status": "Remontées mécaniques",
     "link": "lien",
-    "Links": "Liens",
-    "List mode": "Vue en liste",
-    "List of versions for language:": "Liste des versions pour la langue :",
-    "Load my preferences": "Activer mes préférences",
     "loading": "chargement en cours",
     "local_product": {
       "waypoint_types": "produits locaux"
@@ -844,33 +864,17 @@
     "locality": {
       "waypoint_types": "lieu-dit"
     },
-    "Location / elevation / orientation": "Lieu / altitude / orientation",
-    "Log in to post a comment": "Se connecter pour poster un commentaire",
-    "Login": "Se connecter",
-    "Login failed": {
-      "API message": "Identifiant ou mot de passe incorrects"
-    },
-    "Logout": "Me déconnecter",
     "loop": {
       "route_types": "boucle (pied de la voie)"
     },
     "loop_hut": {
       "route_types": "boucle (approche ou refuge)"
     },
-    "magazine": {
-      "book_types": "magazine"
-    },
-    "Mail has been sent": "Courriel envoyé",
-    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
-    "Main informations about your outing": "Données principales de votre sortie",
     "main_waypoint_id": "ID du point de passage principal",
-    "Make profile page public": "Rendre publique la page de profil",
     "male": {
       "genders": "homme"
     },
     "map": "carte",
-    "Map only": "Uniquement la carte",
-    "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
     "maps": "cartes",
     "maps_info": "Cartes",
     "maps_references": "Références cartographiques",
@@ -884,31 +888,16 @@
     "medium": {
       "quality_types": "moyen"
     },
-    "Merge documents": "Fusionner des documents",
-    "Merge with other document": "Fusionner avec un autre document",
-    "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Fusionner un document source avec un document cible transfère toutes les associations du document source au document cible, et définit une redirection du document source vers le document cible.",
     "meters": "m",
-    "migmatite": {
-      "rock_types": "migmatite"
-    },
     "misc": {
       "image_categories": "divers",
       "waypoint_types": "divers"
     },
-    "Misc data about the waypoint": "Données diverses sur le point de passage",
-    "Miscs": "Divers",
-    "Missing captcha": {
-      "API message": "Captcha manquant"
-    },
     "mixed_rating": "Cotation mixte",
     "modifications": "Conséquences sur les pratiques",
-    "Modified the": {
-      "modification date": "Modifié le"
-    },
     "mollasse_calcaire": {
       "rock_types": "molasse"
     },
-    "More info": "Plus d'information",
     "more_than_3m": {
       "severities": "supérieur à 3 mois"
     },
@@ -939,18 +928,7 @@
     "multi": {
       "climbing_outdoor_types": "grande voie"
     },
-    "multipitch_climbing": {
-      "event_activities": "Escalade en grande voie"
-    },
-    "Multi-criteria search": "Recherche multi-critère",
-    "My account": "Mon compte",
-    "My changes": "Mes contributions",
-    "My followed users": "Mes amis",
-    "My outings": "Mes sorties",
-    "My preferences": "Mes préférences",
-    "My profile": "Mon profil",
     "name": "Nom",
-    "Narration": "Description textuelle",
     "natural_avalanche": {
       "avalanche_signs": "avalanche naturelle le jour de la sortie"
     },
@@ -958,70 +936,42 @@
       "snow_clearance_ratings": "déneigement naturel"
     },
     "nb_impacted": "Nombre de personnes touchées",
-    "nb_outings": "Nombre de sorties",
-    "nb_outings_14": {
-      "nb_outings": "de 10 à 14"
-    },
-    "nb_outings_15": {
-      "nb_outings": "15 et plus"
-    },
-    "nb_outings_4": {
-      "nb_outings": "de 0 à 4"
-    },
-    "nb_outings_9": {
-      "nb_outings": "de 5 à 9"
-    },
     "nb_pages": "Nombre de pages",
     "nb_participants": "Nombre de participants",
-    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Situations « limites » qui aurait pu dégénérer en évènements plus graves",
-    "Near-accidents are valuable": "Des incidents et quasi-accidents riches d’enseignements :",
     "nearby service": {
       "public_transportation_ratings": "service à proximité"
     },
-    "New outing": "Nouvelle sortie",
-    "New password": "Nouveau mot de passe",
-    "New route": "Nouvel itinéraire",
-    "New waypoint": "Nouveau point de passage",
     "next difference": "différence suivante",
     "next version": "version suivante",
     "nivology": {
       "image_categories": "nivologie et avalanches"
     },
     "no": {
+      "$$noContext": "non",
       "avalanche_signs": "non",
       "glacier_gear_types": "non",
       "parking_fee_types": "non",
-      "previous_injuries": "non",
-      "$$noContext": "non"
+      "previous_injuries": "non"
     },
-    "No account yet?": "Pas encore de compte ?",
     "no info": "pas d'information",
-    "No match?": "Aucun résultat satisfaisant ?",
     "no service": {
       "public_transportation_ratings": "pas de service"
-    },
-    "No user with this email": {
-      "API message": "Il n'existe pas d'utilisateur avec cet email"
     },
     "no_warden": {
       "custodianship_types": "non gardé"
     },
-    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Pas de modifications — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre modifiée.",
     "non_applicable": {
       "snow_clearance_ratings": "non applicable"
     },
     "non_autonomous": {
       "autonomies": "non autonome"
     },
-    "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant.",
-    "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "nov": {
       "months": "novembre"
     },
     "novel": {
       "book_types": "nouvelle"
     },
-    "Numbers": "Données",
     "numbers": "Caractéristiques",
     "oct": {
       "months": "octobre"
@@ -1032,15 +982,9 @@
     "often": {
       "snow_clearance_ratings": "déneigement régulier"
     },
-    "Only document less than 24h old can be deleted": {
-      "API message": "Seuls les documents récents (24h) peuvent être supprimés. Contactez la modération pour supprimer ce document."
-    },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
     "open": {
       "lift_status": "ouvertes"
     },
-    "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
-    "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
     "open_guarded": {
       "hut_status": "ouvert gardé"
     },
@@ -1049,20 +993,12 @@
     },
     "opening_hours": "Heures d'ouverture",
     "opening_periods": "Période de gardiennage",
-    "OpenTopoMap": {
-      "Map layer": "OpenTopoMap"
-    },
     "or try the following pages:": "ou essayez les pages suivantes :",
-    "Ordered list": "Liste triée",
     "orientations": "Orientations",
     "other": {
-      "event_types": "autre",
-      "activities": "Autres activités C2C",
-      "event_activities": "Autres activités C2C"
+      "event_types": "autre"
     },
     "other_comments": "Conséquences physiques et autres commentaires",
-    "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
-    "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
     "outing": "sortie",
     "outings": "sorties",
     "overcrowded": {
@@ -1071,11 +1007,9 @@
     "overhang": {
       "climbing_styles": "dévers-surplomb"
     },
-    "Page not found": "Page non trouvée",
     "paragliding": {
       "activities": "Parapente"
     },
-    "Paragliding outings": "Sorties parapente",
     "paragliding_instructor": {
       "user_categories": "moniteur de parapente"
     },
@@ -1086,49 +1020,34 @@
     "paragliding_takeoff": {
       "waypoint_types": "décollage parapente"
     },
-    "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
     "parking_fee": "Parking ou route payant(e)",
     "partial_trip": "Parcours partiel",
     "participant_count": "Nombre de participants",
     "participants": "Participants",
-    "Participants and context": "Participants et contexte",
     "partly_protected": {
       "rain_proof_types": "partiellement protégé"
     },
     "pass": {
       "waypoint_types": "col"
     },
-    "Password": "Mot de passe",
-    "Password too short": {
-      "API message": "Le mot de passe est trop court"
-    },
     "pedestrian access": {
-      "hut": "Accès",
-      "$$noContext": "Accès pédestre"
+      "$$noContext": "Accès",
+      "hut": "Accès"
     },
     "people": {
       "image_categories": "personnages"
     },
-    "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la sortie",
-    "Period of protection": "Période de protection",
     "person_fall": {
-      "event_types": "déséquilibre/chute"
+      "event_types": "chute d'une personne"
     },
     "personal": {
+      "$$noContext": "individuel (CC by-nc-nd)",
       "article_types": "individuel (CC by-nc-nd)",
-      "image_types": "individuel (CC by-nc-nd)",
-      "$$noContext": "individuel (CC by-nc-nd)"
+      "image_types": "individuel (CC by-nc-nd)"
     },
     "personal comments": "Commentaires personnels",
-    "Personal data are confidential": "Les informations personnelles sont confidentielles",
-    "Personal feed off": "Fil personnel désactivé",
-    "Personal feed on": "Fil personnel activé",
-    "Personal informations": "Informations personnelles",
     "phone": "Téléphone",
     "phone_custodian": "Téléphone gardien/gérant",
-    "photos-art": {
-      "book_types": "photos-art"
-    },
     "physical_failure": {
       "event_types": "défaillance physique"
     },
@@ -1138,12 +1057,10 @@
     "pitch": {
       "climbing_indoor_types": "couenne"
     },
-    "Pitch description tag": "Balise de description des longueurs",
     "place": "Lieu",
     "please consult the server logs": {
       "API message": "Erreur inattendue, merci de contacter dev@camptocamp.org"
     },
-    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Décrivez votre niveau technique et expérience par rapport à l’objectif choisi, votre condition physique, la fatigue accumulée avant la sortie, l’acclimatation pour une sortie en altitude, etc.",
     "poor": {
       "condition_ratings": "mauvaises",
       "snow_quality_ratings": "mauvaise",
@@ -1155,26 +1072,15 @@
     "possible": {
       "glacier_ratings": "délicat - passage possible"
     },
-    "Post the first comment": "Publier le premier commentaire",
-    "pouding": {
-      "rock_types": "pouding"
-    },
-    "prairie": {
-      "ground_types": "prairie"
-    },
     "precipitation": {
       "weather_station_types": "précipitations (pluie uniquement)"
     },
     "precipitation_heater": {
       "weather_station_types": "précipitations (pluie ou neige)"
     },
-    "Precise localisation of the shooting": "Localisation précise de la prise de vue",
-    "Precise location of the event.": "Localisation précise de l'évènement",
-    "Press enter to select": "Entrée pour selectionner",
     "pressure": {
       "weather_station_types": "pression"
     },
-    "Preview": "Prévisualiser",
     "previous difference": "différence précédente",
     "previous version": "version précédente",
     "previous_injuries": "Blessures antérieures",
@@ -1194,33 +1100,18 @@
       "snow_clearance_ratings": "déneigement progressif"
     },
     "prominence": "Proéminence",
-    "Protect document": "Protéger ce document",
     "protected": {
-      "rain_proof_types": "protégé de la pluie",
-      "$$noContext": "protégé"
-    },
-    "Protection area:": "Zone de protection :",
-    "Protection areas": "Zones de protection",
-    "Protection status": "Status de la protection",
-    "psicobloc": {
-      "climbing_outdoor_types": "psicobloc"
+      "$$noContext": "protégé de la pluie",
+      "rain_proof_types": "protégé de la pluie"
     },
     "public transportation access": "Accès en transports en commun",
     "public_transport": "Sortie en mobilité douce",
     "public_transportation_rating": "Accessibilité en transports en commun",
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
-    "Put it back": "Remettre",
     "quality": "Qualité du document",
-    "quartzite": {
-      "rock_types": "quartzite"
-    },
     "quiet": {
       "frequentation_types": "non fréquenté"
-    },
-    "Quote": "Citation",
-    "raid": {
-      "route_types": "raid"
     },
     "rain_proof": "Pluie",
     "range": {
@@ -1230,34 +1121,14 @@
     "recent_avalanche": {
       "avalanche_signs": "trace d'avalanche récente (après la dernière chute de neige, pluie, vent ou redoux)"
     },
-    "Recenter on your current position": "Centrage sur votre position actuelle",
-    "Recenter on...": "Recentrer sur...",
     "reduce_impact": "Éléments ayant atténué les conséquences de l'évènement",
-    "Register": "S'inscrire",
     "remarks": "Remarques",
-    "Remove": "Retirer",
-    "Report an issue": "Signaler un problème",
-    "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
-    "Required": {
-      "API message": "Requis"
-    },
     "required field": "champ obligatoire",
     "rescue": "Intervention des services de secours",
-    "Reset geometry": "Réinitialiser",
-    "Reset password": "Réinitialiser le mot de passe",
     "resolution": "résolution",
-    "restaurant": {
-      "product_types": "restaurant"
-    },
-    "Restore this version": "Restaurer cette version",
     "restricted_access": "Restrictions d'accès",
-    "Results only": "Uniquement les résultats",
-    "Retry": "Réessayer",
     "return_same_way": {
       "route_types": "aller-retour"
-    },
-    "rhyolite": {
-      "rock_types": "rhyolite"
     },
     "rise": {
       "image_categories": "montée"
@@ -1287,19 +1158,10 @@
       "children_proof_types": "adapté"
     },
     "safety": "Mesures et techniques de sécurité mises en oeuvre",
-    "safety_operation": {
-      "event_types": "Manœuvre de sécurité"
-    },
-    "Save": "Enregistrer",
     "scale": "échelle",
-    "schiste": {
-      "rock_types": "schiste"
-    },
     "scree": {
       "ground_types": "éboulis"
     },
-    "Search ...": "Rechercher ...",
-    "Search a document to associate...": "Rechercher un document à associer",
     "seasonal": {
       "parking_fee_types": "saisonnier"
     },
@@ -1310,44 +1172,21 @@
       "author_statuses": "victime secondaire"
     },
     "see actual version": "voir la version actuelle",
-    "See more results": "Plus de résultats",
-    "See other documents nearby": "À proximité de...",
-    "See profile based on:": "Profil d'altitude selon :",
-    "See the activity of this contributor in your feed": "Voir les activités de ce contributeur dans votre fil",
-    "See the latest version": "Voir la dernière version",
-    "Select option": "Choisissez une option",
-    "Send reset email": "Envoyer l'email de réinitialisation",
-    "Sensitive area:": "Zone sensible :",
-    "Sensitive areas": "Zones sensibles",
     "sensitive_months:": "Période de vigilance :",
     "sep": {
       "months": "septembre"
     },
-    "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
-    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
     "service_on_demand": {
       "public_transportation_types": "service à la demande"
     },
-    "Settings": "Paramètres",
-    "Several days?": "Plusieurs jours ?",
     "severity": "Gravité",
     "severity_no": {
       "severities": "pas de blessure"
     },
-    "Share": "Partager",
-    "Share with us!": "Partagez avec nous!",
-    "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée.",
     "shelter": {
       "waypoint_types": "abri"
     },
-    "Shorter than minimum length 1": {
-      "API message": "Champ obligatoire"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Champ trop court (minimum 3 caractères)"
-    },
     "show all": "Voir tous les résultats",
-    "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "single": {
       "climbing_outdoor_types": "couenne"
     },
@@ -1362,10 +1201,8 @@
       "user_categories": "pisteur"
     },
     "ski_rating": "Cotation ski",
-    "Skiability": "Skiabilité",
     "skitouring": {
-      "activities": "Ski, surf",
-      "event_activities": "Ski de randonnée"
+      "activities": "Ski, surf"
     },
     "skitouring gear": "Ski, surf, raquette",
     "slab": {
@@ -1404,7 +1241,6 @@
     "slope_lt_30": {
       "avalanche_slopes": "pente inférieure à 30°"
     },
-    "Slopes": "Cartes de pentes",
     "small_pillar": {
       "climbing_styles": "colonnettes"
     },
@@ -1416,8 +1252,7 @@
       "weather_station_types": "hauteur de neige"
     },
     "snow_ice_mixed": {
-      "activities": "Neige, glace et mixte",
-      "event_activities": "Neige, glace et mixte"
+      "activities": "Neige, glace et mixte"
     },
     "snow_quality": "Qualité de la neige",
     "snow_quantity": "Quantité de neige",
@@ -1438,34 +1273,17 @@
     "sometimes": {
       "snow_clearance_ratings": "déneigement occasionnel"
     },
-    "Source:": "Document à fusionner (source) :",
-    "sport_climbing": {
-      "event_activities": "Escalade en falaise"
-    },
     "sport_shop": {
       "product_types": "magasin de sport"
     },
-    "stone_ice_fall": {
-      "event_types": "chute de pierre/glace/serac"
-    },
-    "Stop following this contributor": "Ne plus suivre ce contributeur",
     "stories": {
       "article_categories": "récits"
     },
     "strong text": "texte en gras",
-    "Suggested rating": "Cotation suggérée",
     "summary": "Résumé",
     "summit": {
       "waypoint_types": "sommet"
     },
-    "SwissTopo": {
-      "Map layer": "SwissTopo",
-      "Map slopes layer": "Suisse (SwissTopo)"
-    },
-    "tags": {
-      "article_categories": "tags"
-    },
-    "Target:": "Document à conserver (cible) :",
     "technical": {
       "article_categories": "technique"
     },
@@ -1476,37 +1294,9 @@
       "weather_station_types": "température"
     },
     "text to display": "texte à afficher",
-    "The mountain sports community": "La communauté des sports de montagne",
-    "The page you are looking for does not exist or is broken.": "La page que vous demandez n'existe pas ou est cassée.",
-    "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
-    "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
-    "There are sensitive areas on this route. Please refer to the map.": "Cet itinéraire traverse ou se situe près de zones sensibles. Merci de consulter la carte.",
-    "These are positive experiences that reveal usefull risk-management skills.": "Expériences positives qui révèlent des compétences de gestion des risques",
-    "This book cover is the property of its editor and/or author": "Cette couverture de livre est la propriété de son éditeur et/ou auteur",
-    "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0",
-    "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
-    "This field is too long": "Texte trop long",
-    "This field is too short": "Texte trop court",
-    "This field must be a valid ISBN.": {
-      "API message": "Ce champ doit être un ISBN valide."
-    },
-    "This is the first version": "Ceci est la première version",
-    "This is the last version": "Ceci est la dernière version",
-    "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Description complète de l'itinéraire (résumé, approche, descente, etc.) N'oubliez pas l'historique si vous le connaissez.",
-    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Cette image montre une couverture de livre. Elle est la propriété de l'éditeur et/ou de l'auteur et n'est présentée ici qu'à des fins d'illustration.",
-    "This profile is only available to authenticated users.": "Ce profil est accessible aux seuls utilisateurs authentifiés.",
-    "This tool estimates the technical difficulty of a ski route (ski rating).": "Cet outil permet d'estimer la difficulté technique d'un itinéraire à ski (cotation ski)",
-    "Time": "Heure",
     "time_management": "Gestion de l'horaire",
     "timing": "Durée",
     "title": "Titre",
-    "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
-    "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
-    "Toggle full-screen": {
-      "Map Controls": "Mode plein écran"
-    },
-    "Toggle fullscreen": "Basculer en plein écran",
-    "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche.",
     "topo": {
       "book_types": "topoguide",
       "image_categories": "schéma / tracé"
@@ -1518,37 +1308,15 @@
     "tourism": {
       "book_types": "tourisme"
     },
-    "trachyte": {
-      "rock_types": "trachyte"
-    },
     "track": {
       "image_categories": "trace"
     },
-    "train": {
-      "public_transportation_types": "train"
-    },
     "training": "Préparation physique et niveau technique",
-    "Translate into an other lang": "Traduire dans une autre langue",
-    "Transport & road or PT access": "Accès routier/TC",
     "traverse": {
       "route_types": "traversée"
     },
-    "Types and styles": "Types et styles",
-    "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Type d'assurage et de protection, vérifications entre grimpeurs, tests de stabilité du manteau neigeux, test des DVA, etc.",
-    "Unblock account": "Débloquer cet utilisateur",
-    "Unformatted text": "Texte brut",
-    "Unordered list": "Liste non triée",
-    "Unprotect document": "Déprotéger ce document",
-    "Upload a GPS track": "Ajouter une trace GPS",
-    "Upload a new version": "Télécharger une nouvelle version",
     "url": "URL",
-    "User avatar": "Avatar",
-    "Username": "Identifiant",
     "users": "utilisateurs",
-    "vertical": {
-      "climbing_styles": "vertical"
-    },
-    "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres,...)",
     "very_dangerous": {
       "children_proof_types": "dangereux"
     },
@@ -1559,12 +1327,9 @@
       "activities": "Via ferrata"
     },
     "via_ferrata_rating": "Cotation via ferrata",
-    "View in other lang": "Voir dans une autre langue",
-    "View xreports": "Voir les compte-rendus",
     "virtual": {
       "waypoint_types": "virtuel"
     },
-    "Warning: This action cannot be undone!": "Attention : cette action est irréversible !",
     "waterfall": {
       "waypoint_types": "cascade"
     },
@@ -1575,27 +1340,15 @@
       "waypoint_types": "point d'eau/source"
     },
     "waypoint": "point de passage",
-    "Waypoint's main properties": "Principales données du point de passage",
-    "Waypoint's textual description": "Descriptions textuelles du point de passage",
     "waypoint_children": "sous-points de passage",
     "waypoint_slope": "pente du terrain",
     "waypoint_type": "Type de point de passage",
     "waypoints": "points de passage",
-    "We sent you an email, please click on the link to reset password.": "Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il contient pour réinitialiser votre mot de passe.",
     "weather": "Météo",
-    "Weather & conditions": "Météo & conditions",
-    "weather_event": {
-      "event_types": "évènement météo"
-    },
     "weather_station": {
       "waypoint_types": "station météo"
     },
     "weather_station_types": "Variables mesurées par la station météo",
-    "webcam": {
-      "waypoint_types": "webcam"
-    },
-    "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Pourquoi avoir choisi cette sortie ? A quel point étiez-vous attaché à l'objectif fixé ? Considérez l'influence de possibles choix effectués en amont (jours de congés, long trajet, réservations de nuitées...), des efforts réalisés jusque-là, de la rareté de l'opportunité, etc.",
-    "Wide and constant": "Large et régulière",
     "width": "Largeur",
     "wind_direction": {
       "weather_station_types": "direction du vent"
@@ -1603,23 +1356,13 @@
     "wind_speed": {
       "weather_station_types": "vitesse du vent"
     },
-    "Without c2c account": "Participants sans compte c2c",
     "write a summary": "Indiquez ici un résumé",
     "write your comments": "Laissez vos commentaires",
     "xreport": "incident / accident",
     "xreports": "rapports incidents/accidents",
     "yes": {
-      "parking_fee_types": "oui",
-      "$$noContext": "oui"
-    },
-    "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
-    "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
-    "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
-    "Zoom in": {
-      "Map controls": "Zoomer"
-    },
-    "Zoom out": {
-      "Map controls": "Dézoomer"
+      "$$noContext": "oui",
+      "parking_fee_types": "oui"
     }
   }
 }
