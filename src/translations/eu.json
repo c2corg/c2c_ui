@@ -1,5 +1,86 @@
 {
   "eu": {
+    "Accident database": "Istripu datu-basea",
+    "Activity feed": "aktibitate jarioa",
+    "Add here maps not automatically referenced": "Automatikoki kargatu ez diren mapak hemen gehitu",
+    "Add images": "Irudia gehitu",
+    "Association": "Camptocamp Elkartea",
+    "Books and websites not already associated to this route": "Ibilbide honetan ez daude loturiko liburu edo web orririk",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
+    "Cancel": "Ezeztatu",
+    "Change account parameters": "Kontuaren xehetasunak aldatu",
+    "Change password": "Pasahitza aldatu",
+    "Close": "Itxi",
+    "Comments": "Iruzkinak",
+    "Compare selected versions": "Aukeratutako bertsioak alderatu",
+    "Conditions, summits, routes": "Egoera, gailurrak, ibilbideak",
+    "Created on": "Sortze data",
+    "Current password": "Oraingo pasahitza",
+    "Describe access": "Abiagunea deskribatu",
+    "Describe access period": "Sarbidearen denboraldia zehaztu",
+    "Describe here the gear needed for this route": "Ohizko ekipamenduaz gain hartu behar den material espezifikoa. Aipatu behar ez den ekipamenduaren adibibe batzu: ARVA, pala, sonda, pioleta etabar.",
+    "Describe here the waypoint": "Waypoint-a describatu hemen",
+    "Describe opening hours": "Irekiera orduak zehaztu",
+    "Describe opening periods": "Irekiera denboraldia zehaztu",
+    "Distance": "Distantzia",
+    "Distance (km)": "Distantzia (km)",
+    "Drop images here or click to upload": "Irudia jaregin edo klikatu aukera egiteko",
+    "Edit": "Aldatu",
+    "Email": "email helbidea",
+    "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
+    "Forgot password?": "Pasahitza ahaztu al duzu ?",
+    "Forum": "Foroa",
+    "Forum username": "Goitizena",
+    "Fullname": "Izena",
+    "Go to the previous page": "Aurreko orrira itzuli",
+    "Have an account?": "Kontua ba al duzu ?",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
+    "History": "Bertsioak",
+    "Home": "Sarrera orria",
+    "Infos": "Argibideak",
+    "Last outings": "Azken irteerak",
+    "Latitude": "Latitudea",
+    "List of versions for language:": "Hizkuntzaren araberako bertsio zerrenda",
+    "Login": "Konektatu",
+    "Logout": "Deskonektatu",
+    "Make profile page public": "Profilaren orria publikoa egin",
+    "My account": "Nire kontua",
+    "My preferences": "Nire lehentasunak",
+    "My profile": "Nire profila",
+    "New password": "Pasahitz berria",
+    "No account yet?": "Konturik ez al duzu ?",
+    "NonCommercial — You may not use the material for commercial purposes.": "Erabilera komertzialik ez — Ez duzu lan honen erabilera komertzialik egiteko eskubiderik.",
+    "Numbers": "Datuak",
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Orri nagusiko jarioan aukeratutako eskualde et aktibitateen eguneratzeak soilik erakusten dira.\nJarraitutako erabiltzaileen eguneratzeak beti erakusten dira",
+    "Page not found": "Orria ez da aurkitu",
+    "Password": "Pasahitza",
+    "Post the first comment": "Lehen iruzkina eman",
+    "Preview": "Aurreikusi",
+    "Recenter on...": "Zentratu",
+    "Register": "Izena eman",
+    "Reset password": "Pasahitza berrasieratu",
+    "Save": "Gorde",
+    "Search ...": "Bilatu ...",
+    "See the activity of this contributor in your feed": "Kolaboratzaile honen aktibitateak zure web-jarioan ikusi",
+    "See the latest version": "Azken bertsioa ikusi",
+    "Send reset email": "Berrasiera email-a bidali",
+    "Settings": "Parametroak",
+    "Several days?": "Egun bat baino gehiago ?",
+    "Share with us!": "Gurekin banatu",
+    "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
+    "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
+    "The mountain sports community": "Mendi kirolen elkartea",
+    "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
+    "This profile is only available to authenticated users.": "Profil hau izenpetutako erabiltzaileentzat soilik dago eskuragai",
+    "Time": "Ordua",
+    "Toggle fullscreen": "Pantaila osoa erabili",
+    "Topoguide": "Topogida",
+    "Translate into an other lang": "Beste hizkuntza batera itzuli",
+    "Types and styles": "Mota eta estiloa",
+    "Upload a GPS track": "GPS hurratsa gehitu",
+    "Username": "Identifikazioa",
+    "View in other lang": "Beste hizkuntza batean ikusi",
+    "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "access": {
       "$$noContext": "abiapuntua",
       "waypoint_types": "abiapuntua"
@@ -11,7 +92,6 @@
     "accessible_when_wardened": {
       "custodianship_types": "Gordetako sasoian soilik irekia"
     },
-    "Accident database": "Istripu datu-basea",
     "accidental_avalanche": {
       "avalanche_signs": "elur-jausi_istripua"
     },
@@ -19,19 +99,13 @@
       "image_categories": "Akzioa"
     },
     "activities": "Jarduerak",
-    "Activity feed": "aktibitate jarioa",
     "add an outing": "Irteera bat gehitu",
-    "Add here maps not automatically referenced": "Automatikoki kargatu ez diren mapak hemen gehitu",
-    "Add images": "Irudia gehitu",
     "admin_limits": {
       "area_types": "administratzaile limiteak"
     },
     "aid_rating": "Eskalada artifizialeko zailtasuna",
     "always_accessible": {
       "custodianship_types": "Beti irekia"
-    },
-    "amateur": {
-      "user_categories": "amateur"
     },
     "apr": {
       "months": "apirila"
@@ -41,12 +115,10 @@
     "artificial": {
       "rock_types": "artifiziala"
     },
-    "Association": "Camptocamp Elkartea",
     "association": {
       "article_categories": "elkartea"
     },
     "associations": "Elkarteak",
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Atribuzioa — Lanaren egilea zein den esan, lizentziara bideratzen duen lotura bat eman eta aldaketarik egin den esan behar da",
     "aug": {
       "months": "abuztua"
     },
@@ -93,7 +165,6 @@
       "image_categories": "liburua"
     },
     "book_types": "Liburu mota",
-    "Books and websites not already associated to this route": "Ibilbide honetan ez daude loturiko liburu edo web orririk",
     "bus": {
       "public_transportation_types": "autobusa"
     },
@@ -111,16 +182,12 @@
     "camp_site": {
       "waypoint_types": "Kanpina"
     },
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da.",
-    "Cancel": "Ezeztatu",
     "capacity": "Gordetako sasoian kanpora duen edukiera",
     "capacity_staffed": "Gordetako sasoian duen edukiera",
     "categories": "kategoriak",
     "cave": {
       "waypoint_types": "haitzuloa"
     },
-    "Change account parameters": "Kontuaren xehetasunak aldatu",
-    "Change password": "Pasahitza aldatu",
     "children_proof": "Umeentzako egokia",
     "cleared": {
       "access_conditions": "elurrik gabe"
@@ -141,7 +208,6 @@
     "climbing_rating_median": "batezbesteko zailtasuna",
     "climbing_rating_min": "zailtasun txikiena",
     "climbing_styles": "eskalada estiloa",
-    "Close": "Itxi",
     "closed": {
       "lift_status": "itxiak"
     },
@@ -161,28 +227,21 @@
       "user_categories": "kluba"
     },
     "collab": {
-      "article_types": "elkarlanean",
-      "$$noContext": "elkarlanean"
+      "$$noContext": "elkarlanean",
+      "article_types": "elkarlanean"
     },
     "collaborative": {
       "image_types": "elkarlanean"
     },
     "comment": "Iruzkina",
-    "Comments": "Iruzkinak",
-    "Compare selected versions": "Aukeratutako bertsioak alderatu",
     "condition_rating": "Egoeraren azterketa",
     "conditions": "Egoera",
-    "Conditions, summits, routes": "Egoera, gailurrak, ibilbideak",
     "conditions_levels": "Eskualdeetako elur egoera",
     "configuration": "Konfigurazioa",
     "conglomerat": {
       "rock_types": "konglomeratua"
     },
     "contact": "Kontaktua",
-    "copyright": {
-      "image_types": "copyright",
-      "$$noContext": "copyright"
-    },
     "corridor": {
       "route_configuration_types": "korridorea"
     },
@@ -201,11 +260,9 @@
     "crampons_spring": {
       "glacier_gear_types": "sasoi hasieran kranpoiak"
     },
-    "Created on": "Sortze data",
     "crowded": {
       "frequentation_types": "jende ugari"
     },
-    "Current password": "Oraingo pasahitza",
     "custodianship": "Gordeta",
     "danger_sign": {
       "avalanche_signs": "arrisku ikurra"
@@ -226,13 +283,7 @@
     "descent": {
       "image_categories": "jeitsiera"
     },
-    "Describe access": "Abiagunea deskribatu",
-    "Describe access period": "Sarbidearen denboraldia zehaztu",
     "describe conditions": "Aurkitutako kondizioak, ekipamendua eta harkaitzaren kalitatea (gerturatzean, ibilbidean eta inguruan)",
-    "Describe here the gear needed for this route": "Ohizko ekipamenduaz gain hartu behar den material espezifikoa. Aipatu behar ez den ekipamenduaren adibibe batzu: ARVA, pala, sonda, pioleta etabar.",
-    "Describe here the waypoint": "Waypoint-a describatu hemen",
-    "Describe opening hours": "Irekiera orduak zehaztu",
-    "Describe opening periods": "Irekiera denboraldia zehaztu",
     "describe route_conditions": "Laburtu ezazu jarraitutako ibilbidea hurrengo kasuetako batekin bat egiten badu: topo gidan deskribatutakoren desberdina bada, topo-gidak saihesbideak proposatzen baditu, ibilbide zirkularrak, jarraian eginiko ibilbideak edo ibilbidea ez bada amaitu.",
     "describe timing": "Irteera ordua / iraupena",
     "describe weather": "Irteeran aurkitutako eguraldiaren egoera: lainoak, euria, haizea, tenperatura.",
@@ -244,12 +295,9 @@
       "glacier_ratings": "zaila"
     },
     "difficulties_height": "Zailtasunaren altuera",
-    "Distance": "Distantzia",
-    "Distance (km)": "Distantzia (km)",
     "draft": {
       "quality_types": "zirriborroa"
     },
-    "Drop images here or click to upload": "Irudia jaregin edo klikatu aukera egiteko",
     "durations": "Iraupena",
     "easy": {
       "glacier_ratings": "erreza"
@@ -258,7 +306,6 @@
     "edge": {
       "route_configuration_types": "arista"
     },
-    "Edit": "Aldatu",
     "editor": "Editorea",
     "elevation": "Altitudea",
     "elevation_access": "Abiapuntuaren altitudea",
@@ -266,7 +313,6 @@
     "elevation_max": "Altitude maximoa",
     "elevation_min": "Altitude minimoa",
     "elevation_up_snow": "Eskiak jarritako altitudea",
-    "Email": "email helbidea",
     "empty": {
       "quality_types": "hutsa"
     },
@@ -300,7 +346,6 @@
     "exposed": {
       "rain_proof_types": "Arriskutsua"
     },
-    "exposition_rating": "Arriskua",
     "exposition_rock_rating": "eskalada arriskua",
     "exposure_time": "arriskuaren iraupena",
     "external_resources": "kanpoko baliabideak",
@@ -310,34 +355,23 @@
     "farm_sale": {
       "product_types": "produktu lokalen salme ta zuzena"
     },
-    "fauna": {
-      "image_categories": "fauna"
-    },
     "feb": {
       "months": "otsaila"
     },
     "filename": "fitxategiaren izena",
-    "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
     "fine": {
       "quality_types": "ona"
     },
-    "flora": {
-      "image_categories": "flora"
-    },
     "fnumber": "irudiaren xehetasunak",
     "focal_length": "distantzia fokala",
-    "Forgot password?": "Pasahitza ahaztu al duzu ?",
-    "Forum": "Foroa",
-    "Forum username": "Goitizena",
     "fr": {
       "langs": "frantsesa"
     },
     "frequentation": "Jendetza",
-    "Fullname": "Izena",
     "gas_unstaffed": "gasa gordetako sasoitik kanpora",
     "gear": {
-      "article_categories": "Materiala",
-      "$$noContext": "Materiala"
+      "$$noContext": "Materiala",
+      "article_categories": "Materiala"
     },
     "general informations": "Informazio orokorrak",
     "geolocation": "geolokalizazioa",
@@ -359,10 +393,6 @@
       "glacier_gear_types": "Glaziarrerako segurtasun materiala"
     },
     "global_rating": "zailtasun orokorra",
-    "gneiss": {
-      "rock_types": "gneiss"
-    },
-    "Go to the previous page": "Aurreko orrira itzuli",
     "good": {
       "condition_ratings": "ona"
     },
@@ -404,7 +434,6 @@
     "has updated the outing": "irteera bat eguneratu du",
     "has updated the route": "ibilbide bat eguneratu du",
     "has updated the waypoint": "waypoint bat eguneratu du",
-    "Have an account?": "Kontua ba al duzu ?",
     "heating_unstaffed": "gordetako sasoitik kanpora berotua",
     "height": "altitudea",
     "height_diff": "desnibela",
@@ -416,10 +445,9 @@
     "height_median": "batazbesteko altuera",
     "height_min": "altuera minimoa",
     "help": {
-      "image_categories": "laguntza",
-      "$$noContext": "laguntza"
+      "$$noContext": "laguntza",
+      "image_categories": "laguntza"
     },
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
     "hiking": {
       "activities": "Ibilaldia / Trail"
     },
@@ -428,8 +456,6 @@
     "historical": {
       "book_types": "historia"
     },
-    "History": "Bertsioak",
-    "Home": "Sarrera orria",
     "humidity": {
       "weather_station_types": "hezetasuna"
     },
@@ -452,7 +478,6 @@
     "impossible": {
       "glacier_ratings": "igarogaitz - ezin da pasatu"
     },
-    "Infos": "Argibideak",
     "inside": {
       "rain_proof_types": "barnean"
     },
@@ -490,21 +515,16 @@
     },
     "lang": "Hizkuntza",
     "langs": "Hiukuntzak",
-    "Last outings": "Azken irteerak",
-    "Latitude": "Latitudea",
     "length": "Luzera",
     "length_total": "Luzera osoa",
     "lift_access": "igogailu mekanikoak",
     "lift_status": "Igogailu mekanikoak",
-    "List of versions for language:": "Hizkuntzaren araberako bertsio zerrenda",
     "local_product": {
       "waypoint_types": "bertako produktuak"
     },
     "locality": {
       "waypoint_types": "lekua"
     },
-    "Login": "Konektatu",
-    "Logout": "Deskonektatu",
     "loop": {
       "route_types": "zirkuitoa"
     },
@@ -514,7 +534,6 @@
     "magazine": {
       "book_types": "aldizkaria"
     },
-    "Make profile page public": "Profilaren orria publikoa egin",
     "maps_info": "Mapak",
     "maps_references": "Erreferentzia kartografikoa",
     "mar": {
@@ -565,9 +584,6 @@
     "multi": {
       "climbing_outdoor_types": "Bide luzea"
     },
-    "My account": "Nire kontua",
-    "My preferences": "Nire lehentasunak",
-    "My profile": "Nire profila",
     "name": "Izena",
     "natural_avalanche": {
       "avalanche_signs": "Elur-jausi naturala irteera egindako egunean"
@@ -579,37 +595,32 @@
     "nearby service": {
       "public_transportation_ratings": "gertuko zerbitzua"
     },
-    "New password": "Pasahitz berria",
     "next difference": "hurrengo desberdintasuna",
     "nivology": {
       "image_categories": "nibologia eta elur-jausiak"
     },
     "no": {
+      "$$noContext": "ez",
       "avalanche_signs": "ez",
       "glacier_gear_types": "ez",
       "parking_fee_types": "ez",
-      "previous_injuries": "ez",
-      "$$noContext": "ez"
+      "previous_injuries": "ez"
     },
-    "No account yet?": "Konturik ez al duzu ?",
     "no service": {
       "public_transportation_ratings": "ez dago zerbitzurik"
     },
     "no_warden": {
       "custodianship_types": "zaintzailerik ez"
     },
-    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Aldaketarik ez — Aldaketa edo konposiziorik egin ezkero ez duzu banatzeko eskubiderik",
     "non_applicable": {
       "snow_clearance_ratings": "ezin da aplikatu"
     },
-    "NonCommercial — You may not use the material for commercial purposes.": "Erabilera komertzialik ez — Ez duzu lan honen erabilera komertzialik egiteko eskubiderik.",
     "nov": {
       "months": "azaroa"
     },
     "novel": {
       "book_types": "berria"
     },
-    "Numbers": "Datuak",
     "numbers": "Ezaugarriak",
     "oct": {
       "months": "urria"
@@ -617,7 +628,6 @@
     "often": {
       "snow_clearance_ratings": "Elurra sarri garbitzen da"
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Orri nagusiko jarioan aukeratutako eskualde et aktibitateen eguneratzeak soilik erakusten dira.\nJarraitutako erabiltzaileen eguneratzeak beti erakusten dira",
     "open": {
       "lift_status": "irekiak"
     },
@@ -637,7 +647,6 @@
     "overhang": {
       "climbing_styles": "desplomea"
     },
-    "Page not found": "Orria ez da aurkitu",
     "paragliding": {
       "activities": "Parapentea"
     },
@@ -660,14 +669,13 @@
     "pass": {
       "waypoint_types": "lepoa"
     },
-    "Password": "Pasahitza",
     "people": {
       "image_categories": "nortasuna"
     },
     "personal": {
+      "$$noContext": "pribatua",
       "article_types": "pribatua",
-      "image_types": "pribatua",
-      "$$noContext": "pribatua"
+      "image_types": "pribatua"
     },
     "personal comments": "iruzkin pribatuak",
     "phone": "telefonoa",
@@ -690,10 +698,6 @@
     "possible": {
       "glacier_ratings": "delikatua - pasabidea posible da"
     },
-    "Post the first comment": "Lehen iruzkina eman",
-    "pouding": {
-      "rock_types": "pouding"
-    },
     "prairie": {
       "ground_types": "zelaia"
     },
@@ -706,7 +710,6 @@
     "pressure": {
       "weather_station_types": "presioa"
     },
-    "Preview": "Aurreikusi",
     "previous difference": "aurreko desberdintasuna",
     "product_types": "bertako produktu mota",
     "progressive": {
@@ -740,10 +743,7 @@
     "recent_avalanche": {
       "avalanche_signs": "Elur-jausi berri baten aztarnak"
     },
-    "Recenter on...": "Zentratu",
-    "Register": "Izena eman",
     "remarks": "Oharrak",
-    "Reset password": "Pasahitza berrasieratu",
     "resolution": "bereizpena",
     "restaurant": {
       "product_types": "jatetxea"
@@ -775,37 +775,27 @@
     "safe": {
       "children_proof_types": "egokia"
     },
-    "Save": "Gorde",
     "schiste": {
       "rock_types": "eskistoa"
     },
     "scree": {
       "ground_types": "harritza"
     },
-    "Search ...": "Bilatu ...",
     "seasonal": {
       "parking_fee_types": "sasoikoa"
     },
     "seasonal service": {
       "public_transportation_ratings": "sasoiko zerbitzua"
     },
-    "See the activity of this contributor in your feed": "Kolaboratzaile honen aktibitateak zure web-jarioan ikusi",
-    "See the latest version": "Azken bertsioa ikusi",
-    "Send reset email": "Berrasiera email-a bidali",
     "sep": {
       "months": "iraila"
     },
     "service_on_demand": {
       "public_transportation_types": "eskatutako zerbitzua"
     },
-    "Settings": "Parametroak",
-    "Several days?": "Egun bat baino gehiago ?",
-    "Share with us!": "Gurekin banatu",
-    "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Baldintza berdinetan partekatu — Aldaketarik edo konposiziorik egin ezkero, lan originalak zituen baldintza berdinetan soilik banatzeko eskubidea duzu, hau da, lizentzia berdina erabiliz",
     "shelter": {
       "waypoint_types": "estalpea"
     },
-    "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
     "single": {
       "climbing_outdoor_types": "kirol eskalada"
     },
@@ -863,7 +853,6 @@
     "sport_shop": {
       "product_types": "kirol denda"
     },
-    "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
     "stories": {
       "article_categories": "kontakizuna"
     },
@@ -883,19 +872,12 @@
     "temperature": {
       "weather_station_types": "tenperatura"
     },
-    "The mountain sports community": "Mendi kirolen elkartea",
-    "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
-    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Irudi honek liburuaren azala erakusten du. Irudia editore edo/eta egileaeren jabetza da.",
-    "This profile is only available to authenticated users.": "Profil hau izenpetutako erabiltzaileentzat soilik dago eskuragai",
-    "Time": "Ordua",
     "timing": "Iraupena",
     "title": "Titulua",
-    "Toggle fullscreen": "Pantaila osoa erabili",
     "topo": {
       "book_types": "krokisa",
       "image_categories": "krokisa"
     },
-    "Topoguide": "Topogida",
     "topoguide_supplements": {
       "article_categories": "gidaren gehigarriak"
     },
@@ -903,23 +885,16 @@
     "tourism": {
       "book_types": "turismoa"
     },
-    "trachyte": {
-      "rock_types": "trachyte"
-    },
     "track": {
-      "image_categories": "hurratsa"
+      "image_categories": "hurratsa "
     },
     "train": {
       "public_transportation_types": "trena"
     },
-    "Translate into an other lang": "Beste hizkuntza batera itzuli",
     "traverse": {
       "route_types": "trabesia"
     },
-    "Types and styles": "Mota eta estiloa",
-    "Upload a GPS track": "GPS hurratsa gehitu",
     "url": "URL",
-    "Username": "Identifikazioa",
     "vertical": {
       "climbing_styles": "bertikala"
     },
@@ -933,7 +908,6 @@
       "activities": "Bide ferrata"
     },
     "via_ferrata_rating": "Bide ferrata kotazioa",
-    "View in other lang": "Beste hizkuntza batean ikusi",
     "virtual": {
       "waypoint_types": "birtuala"
     },
@@ -944,15 +918,11 @@
       "waypoint_types": "iturria"
     },
     "waypoint_type": "waypoint mota",
-    "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "weather": "Eguraldia",
     "weather_station": {
       "waypoint_types": "metereologia estazioa"
     },
     "weather_station_types": "Meteorologia estazioak neurtutako aldagaiak",
-    "webcam": {
-      "waypoint_types": "webcam"
-    },
     "width": "zabalera",
     "wind_direction": {
       "weather_station_types": "haizearen norabidea"
@@ -963,8 +933,8 @@
     "write a summary": "Laburpena hemen adierazi",
     "write your comments": "Zure iruzkina utzi",
     "yes": {
-      "parking_fee_types": "bai",
-      "$$noContext": "bai"
+      "$$noContext": "bai",
+      "parking_fee_types": "bai"
     }
   }
 }
