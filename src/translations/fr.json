@@ -1,5 +1,20 @@
 {
   "fr": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 ou 2 complications (plus pentu ou étroiture...)",
     "1d_to_3d": {
       "severities": "De 1 à 3 jours"
@@ -168,7 +183,7 @@
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
     "Layers": {
-      "Map controls": "Couches"
+      "Map controls": "Sélection des couches"
     },
     "Leave fullscreen": "Quitter le mode plein écran",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
@@ -377,7 +392,17 @@
       "avalanche_signs": "avalanche déclenchée par une personne le jour de la sortie"
     },
     "activities": "Activités",
+    "activity": "Activité",
     "activity_rate": "Fréquence de pratique dans l'activité",
+    "activity_rate_m2": {
+      "activity_rates": "1 à 2 fois par mois"
+    },
+    "activity_rate_w1": {
+      "activity_rates": "1 fois par semaine et plus"
+    },
+    "activity_rate_y5": {
+      "activity_rates": "Moins de 5 fois par an"
+    },
     "add a book": "ajouter un livre",
     "add a map": "ajouter une carte",
     "add a route": "ajouter un itinéraire",
@@ -393,6 +418,9 @@
     "advertisement": "publicité",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
+    "alpine_climbing": {
+      "event_activities": "Rocher montagne (TA)"
+    },
     "already used forum_username": {
       "API message": "Pseudo forum déjà utilisé"
     },
@@ -458,6 +486,9 @@
       "waypoint_types": "bisse / béal"
     },
     "blanket_unstaffed": "Couvertures hors gardiennage",
+    "blocked_person": {
+      "event_types": "personne bloquée"
+    },
     "boat": {
       "public_transportation_types": "bateau"
     },
@@ -554,7 +585,10 @@
       "glacier_gear_types": "crampons en début de saison"
     },
     "crevasse_fall": {
-      "event_types": "chute en crevasse"
+      "event_types": "chute en crevasse/bédière"
+    },
+    "critical_situation": {
+      "event_types": "Situation complexe sans accident"
     },
     "crowded": {
       "frequentation_types": "assez fréquenté"
@@ -636,6 +670,7 @@
     "eu": {
       "langs": "basque"
     },
+    "event_activity": "Activité",
     "event_type": "Type d'évènement",
     "excellent": {
       "condition_ratings": "excellentes",
@@ -665,6 +700,15 @@
     },
     "feb": {
       "months": "février"
+    },
+    "federal_supervision": {
+      "supervision": "fédéral"
+    },
+    "federal_supervisor": {
+      "qualification": "initiateur fédéral"
+    },
+    "federal_trainer": {
+      "qualification": "instructeur fédéral"
     },
     "female": {
       "genders": "femme"
@@ -788,7 +832,11 @@
     },
     "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
-      "activities": "Cascade de glace"
+      "activities": "Cascade de glace",
+      "event_activities": "cascade de glace"
+    },
+    "ice_cornice_collapse": {
+      "event_types": "Effondrement cascade ou corniche"
     },
     "ice_rating": "Cotation glace",
     "image_categories": "Catégories",
@@ -797,6 +845,9 @@
       "glacier_ratings": "infranchissable - passage impossible"
     },
     "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
+    "injury_without_fall": {
+      "event_types": "Lésion sans chute"
+    },
     "inside": {
       "rain_proof_types": "à l'intérieur"
     },
@@ -928,6 +979,9 @@
     "multi": {
       "climbing_outdoor_types": "grande voie"
     },
+    "multipitch_climbing": {
+      "event_activities": "Escalade grande voie"
+    },
     "name": "Nom",
     "natural_avalanche": {
       "avalanche_signs": "avalanche naturelle le jour de la sortie"
@@ -956,6 +1010,9 @@
     "no info": "pas d'information",
     "no service": {
       "public_transportation_ratings": "pas de service"
+    },
+    "no_supervision": {
+      "supervision": "non encadré"
     },
     "no_warden": {
       "custodianship_types": "non gardé"
@@ -996,6 +1053,7 @@
     "or try the following pages:": "ou essayez les pages suivantes :",
     "orientations": "Orientations",
     "other": {
+      "event_activities": "autre",
       "event_types": "autre"
     },
     "other_comments": "Conséquences physiques et autres commentaires",
@@ -1038,7 +1096,7 @@
       "image_categories": "personnages"
     },
     "person_fall": {
-      "event_types": "chute d'une personne"
+      "event_types": "déséquilibre"
     },
     "personal": {
       "$$noContext": "individuel (CC by-nc-nd)",
@@ -1094,6 +1152,12 @@
       "author_statuses": "victime principale"
     },
     "product_types": "Type de produits locaux",
+    "professional_diploma": {
+      "qualification": "diplôme professionel"
+    },
+    "professional_supervision": {
+      "supervision": "professionel"
+    },
     "profile": "profil",
     "profiles": "profils",
     "progressive": {
@@ -1109,6 +1173,7 @@
     "public_transportation_rating": "Accessibilité en transports en commun",
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
+    "qualification": "Diplôme d'encadrement dans l'activité concernée",
     "quality": "Qualité du document",
     "quiet": {
       "frequentation_types": "non fréquenté"
@@ -1158,6 +1223,9 @@
       "children_proof_types": "adapté"
     },
     "safety": "Mesures et techniques de sécurité mises en oeuvre",
+    "safety_operation": {
+      "event_types": "manœuvre de sécurité"
+    },
     "scale": "échelle",
     "scree": {
       "ground_types": "éboulis"
@@ -1202,7 +1270,8 @@
     },
     "ski_rating": "Cotation ski",
     "skitouring": {
-      "activities": "Ski, surf"
+      "activities": "Ski, surf",
+      "event_activities": "ski de randonnée"
     },
     "skitouring gear": "Ski, surf, raquette",
     "slab": {
@@ -1252,7 +1321,8 @@
       "weather_station_types": "hauteur de neige"
     },
     "snow_ice_mixed": {
-      "activities": "Neige, glace et mixte"
+      "activities": "Neige, glace et mixte",
+      "event_activities": "neige, glace et mixte"
     },
     "snow_quality": "Qualité de la neige",
     "snow_quantity": "Quantité de neige",
@@ -1273,8 +1343,14 @@
     "sometimes": {
       "snow_clearance_ratings": "déneigement occasionnel"
     },
+    "sport_climbing": {
+      "event_activities": "Escalade falaise"
+    },
     "sport_shop": {
       "product_types": "magasin de sport"
+    },
+    "stone_ice_fall": {
+      "event_types": "Chute de pierre/glace/serac"
     },
     "stories": {
       "article_categories": "récits"
@@ -1284,6 +1360,7 @@
     "summit": {
       "waypoint_types": "sommet"
     },
+    "supervision": "Encadrement",
     "technical": {
       "article_categories": "technique"
     },
@@ -1345,6 +1422,9 @@
     "waypoint_type": "Type de point de passage",
     "waypoints": "points de passage",
     "weather": "Météo",
+    "weather_event": {
+      "event_types": "événement météo"
+    },
     "weather_station": {
       "waypoint_types": "station météo"
     },
