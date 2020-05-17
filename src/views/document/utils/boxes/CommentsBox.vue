@@ -70,8 +70,11 @@
         >
           Post the first comment
         </a>
-        <a v-else key="normal" :href="discussionUrl" class="button is-primary">
+        <a v-else-if="allCommentDisplayed" key="all-displayed" :href="discussionUrl" class="button is-primary">
           <span v-translate>Continue the discussion</span>
+        </a>
+        <a v-else key="some-displayed" :href="discussionUrl" class="button is-primary">
+          <span v-translate>View next comments and continue the discussion</span>
         </a>
       </div>
     </div>
@@ -141,6 +144,13 @@ export default {
       }
 
       return result;
+    },
+
+    allCommentDisplayed() {
+      if (!this.topic || !this.topic.post_stream || !this.topic.posts_count) {
+        return true;
+      }
+      return this.topic.post_stream.posts.length >= this.topic.posts_count;
     },
   },
 
