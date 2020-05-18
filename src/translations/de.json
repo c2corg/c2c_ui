@@ -73,6 +73,12 @@
     "Back to code": "Zurück zur Code",
     "Back to edit mode": "Zurück zur Bearbeitung",
     "Base layer": "Kartenhintergrund",
+    "Basemap (at)": {
+      "Map layer": "Österreich"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Österreich Luftbild"
+    },
     "Block account": "Konto blockieren",
     "Book content": "Buch Inhalt",
     "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
@@ -169,19 +175,19 @@
     "How is my testimony used ? How / why is it useful ?": "Was ist der Sinn meines Zeugnisses ?",
     "I have read and agree to the terms of use": "Ich habe die Nutzungsbedingungen gelesen und akzeptiert",
     "IGN": {
-      "Map slopes layer": "IGN Neigung"
+      "Map slopes layer": "Frankreich"
     },
     "IGN maps": {
-      "Map layer": "IGN Frankreich"
+      "Map layer": "Frankreich"
     },
     "IGN ortho": {
-      "Map layer": "IGN Satelliten Frankreich"
+      "Map layer": "Frankreich Luftbild"
     },
     "IGN ortho (es)": {
-      "Map layer": "IGN Satelliten Spanien"
+      "Map layer": "Spanien Luftbild"
     },
     "IGN raster (es)": {
-      "Map layer": "IGN Spanien"
+      "Map layer": "Spanien"
     },
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "Incidents and accidents": "Unfallberichte",
@@ -200,6 +206,9 @@
     "Last forum topics": "Letztes Forumsthema",
     "Last outings": "Letzte Tourenberichte",
     "Latitude": "Breitengrad",
+    "Layers": {
+      "Map controls": "Dargestellte Karten"
+    },
     "Leave fullscreen": "Vollbild verlassen",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
     "Licenses": "Lizenzen",
@@ -330,12 +339,13 @@
     },
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
     "Skiability": "Schifahrengenuss",
-    "Slopes": "Steigung",
+    "Slopes": "Hangneigung",
     "Source:": "Quelle:",
     "Stop following this contributor": "Diesem Benutzer nicht mehr folgen",
     "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
     "SwissTopo": {
-      "Map slopes layer": "SwissTopo Neigung"
+      "Map layer": "Schweiz",
+      "Map slopes layer": "Schweiz"
     },
     "Target:": "Ziel:",
     "Terrain": "Grund",
@@ -881,7 +891,8 @@
     },
     "ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "ice_climbing": {
-      "activities": "Eisklettern"
+      "activities": "Eisklettern",
+      "event_activities": "Eisklettern"
     },
     "ice_rating": "Schwierigkeit (Eisklettern)",
     "image": "Bild",
@@ -1100,6 +1111,7 @@
     "or try the following pages:": "oder versuchen Sie die folgenden Seiten:",
     "orientations": "Ausrichtungen",
     "other": {
+      "event_activities": "anderes",
       "event_types": "anderes"
     },
     "other_comments": "Zusätzliche Kommentare",
@@ -1333,7 +1345,8 @@
     },
     "ski_rating": "Ski-Schwierigkeit",
     "skitouring": {
-      "activities": "Ski-Touring"
+      "activities": "Ski-Touring",
+      "event_activities": "Ski-Touring"
     },
     "skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
     "slab": {
@@ -1383,7 +1396,8 @@
       "weather_station_types": "Schneehöhe"
     },
     "snow_ice_mixed": {
-      "activities": "Hochtouren"
+      "activities": "Hochtouren",
+      "event_activities": "Hochtouren"
     },
     "snow_quality": "Schneequalität",
     "snow_quantity": "Schneehöhe",
