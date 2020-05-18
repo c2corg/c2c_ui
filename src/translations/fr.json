@@ -17,16 +17,16 @@
     },
     "1 or 2 complications (steeper or narrow section...)": "1 ou 2 complications (plus pentu ou étroiture...)",
     "1d_to_3d": {
-      "severities": "De 1 à 3 jours"
+      "severities": "de 1 à 3 jours"
     },
     "1m_to_3m": {
-      "severities": "De 1 à 3 mois"
+      "severities": "de 1 à 3 mois"
     },
     "3h+": {
       "access_times": "> 3h"
     },
     "4d_to_1m": {
-      "severities": "De 4 jours à un mois"
+      "severities": "de 4 jours à un mois"
     },
     "Accident database": "Incidents et accidents",
     "Activity feed": "Fil d'activité",
@@ -401,7 +401,7 @@
       "activity_rates": "1 fois par semaine et plus"
     },
     "activity_rate_y5": {
-      "activity_rates": "Moins de 5 fois par an"
+      "activity_rates": "moins de 5 fois par an"
     },
     "add a book": "ajouter un livre",
     "add a map": "ajouter une carte",
@@ -588,7 +588,7 @@
       "event_types": "chute en crevasse/bédière"
     },
     "critical_situation": {
-      "event_types": "Situation complexe sans accident"
+      "event_types": "situation complexe sans accident"
     },
     "crowded": {
       "frequentation_types": "assez fréquenté"
@@ -833,10 +833,10 @@
     "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
       "activities": "Cascade de glace",
-      "event_activities": "cascade de glace"
+      "event_activities": "Cascade de glace"
     },
     "ice_cornice_collapse": {
-      "event_types": "Effondrement cascade ou corniche"
+      "event_types": "effondrement cascade ou corniche"
     },
     "ice_rating": "Cotation glace",
     "image_categories": "Catégories",
@@ -846,7 +846,7 @@
     },
     "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
     "injury_without_fall": {
-      "event_types": "Lésion sans chute"
+      "event_types": "lésion sans chute"
     },
     "inside": {
       "rain_proof_types": "à l'intérieur"
@@ -1053,7 +1053,7 @@
     "or try the following pages:": "ou essayez les pages suivantes :",
     "orientations": "Orientations",
     "other": {
-      "event_activities": "autre",
+      "event_activities": "Autre",
       "event_types": "autre"
     },
     "other_comments": "Conséquences physiques et autres commentaires",
@@ -1271,7 +1271,7 @@
     "ski_rating": "Cotation ski",
     "skitouring": {
       "activities": "Ski, surf",
-      "event_activities": "ski de randonnée"
+      "event_activities": "Ski de randonnée"
     },
     "skitouring gear": "Ski, surf, raquette",
     "slab": {
@@ -1322,7 +1322,7 @@
     },
     "snow_ice_mixed": {
       "activities": "Neige, glace et mixte",
-      "event_activities": "neige, glace et mixte"
+      "event_activities": "Neige, glace et mixte"
     },
     "snow_quality": "Qualité de la neige",
     "snow_quantity": "Quantité de neige",
@@ -1350,7 +1350,7 @@
       "product_types": "magasin de sport"
     },
     "stone_ice_fall": {
-      "event_types": "Chute de pierre/glace/serac"
+      "event_types": "chute de pierre/glace/serac"
     },
     "stories": {
       "article_categories": "récits"

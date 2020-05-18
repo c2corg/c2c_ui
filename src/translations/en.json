@@ -1,5 +1,20 @@
 {
   "en": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "10min": {
       "access_times": "10 min"
     },
@@ -153,9 +168,22 @@
       "avalanche_signs": "accidental avalanche"
     },
     "activities": "Activities",
+    "activity": "Activity",
     "activity_rate": "Practice frequency",
+    "activity_rate_m2": {
+      "activity_rates": "once or twice a month"
+    },
+    "activity_rate_w1": {
+      "activity_rates": "once a week and more"
+    },
+    "activity_rate_y5": {
+      "activity_rates": "less than 5 times a year"
+    },
     "age": "Age",
     "aid_rating": "Aid rating",
+    "alpine_climbing": {
+      "event_activities": "Alpine climbing"
+    },
     "already used forum_username": {
       "API message": "This forum username is already in use."
     },
@@ -188,6 +216,9 @@
     },
     "best_periods": "Best periods",
     "blanket_unstaffed": "Blankets if unstaffed",
+    "blocked_person": {
+      "event_types": "blocked person"
+    },
     "bolted rock climbing gear": "Multipitch sport climbing",
     "book_types": "Book type",
     "c2c_meetings": {
@@ -235,6 +266,9 @@
     },
     "crevasse_fall": {
       "event_types": "crevasse fall"
+    },
+    "critical_situation": {
+      "event_types": "critical situation without accident"
     },
     "custodianship": "Custodianship",
     "danger_sign": {
@@ -284,6 +318,7 @@
     "eu": {
       "langs": "basque"
     },
+    "event_activity": "Activity",
     "event_type": "Event type",
     "exposition_rock_rating": "Rock exposition rating",
     "external_resources": "External resources",
@@ -292,6 +327,15 @@
     },
     "farm_sale": {
       "product_types": "farm sale"
+    },
+    "federal_supervision": {
+      "supervision": "federal supervision"
+    },
+    "federal_supervisor": {
+      "qualification": "federal supervisor"
+    },
+    "federal_trainer": {
+      "qualification": "federal trainer"
     },
     "file_size": "file size",
     "fr": {
@@ -356,13 +400,20 @@
     },
     "ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "ice_climbing": {
-      "activities": "ice climbing"
+      "activities": "ice climbing",
+      "event_activities": "Ice climbing"
+    },
+    "ice_cornice_collapse": {
+      "event_types": "ice/cornice collapse"
     },
     "ice_rating": "Ice climbing rating",
     "impossible": {
       "glacier_ratings": "travel is impossible"
     },
     "increase_impact": "Factors that increased the event consequences",
+    "injury_without_fall": {
+      "event_types": "injury without fall"
+    },
     "internal_witness": {
       "author_statuses": "direct witness"
     },
@@ -433,12 +484,18 @@
     "mtb_length_asphalt": "Asphalt length",
     "mtb_length_trail": "Trail length",
     "mtb_up_rating": "Mountain bike rating up",
+    "multipitch_climbing": {
+      "event_activities": "Multipitch climbing"
+    },
     "natural_avalanche": {
       "avalanche_signs": "natural avalanche"
     },
     "nb_impacted": "Count of impacted people",
     "nb_pages": "Number of pages",
     "nb_participants": "Count of participants",
+    "no_supervision": {
+      "supervision": "no supervision"
+    },
     "no_warden": {
       "custodianship_types": "no warden"
     },
@@ -508,6 +565,12 @@
       "author_statuses": "main victim"
     },
     "product_types": "Product types",
+    "professional_diploma": {
+      "qualification": "professional diploma"
+    },
+    "professional_supervision": {
+      "supervision": "professional supervision"
+    },
     "prominence": "Prominence",
     "psicobloc": {
       "climbing_outdoor_types": "deep-water soloing"
@@ -516,6 +579,7 @@
     "public_transportation_rating": "Public transportation",
     "public_transportation_types": "Public transportation types",
     "publication_date": "Publication date",
+    "qualification": "Qualification for the activity",
     "quality": "Document's quality",
     "rain_proof": "Rain proof",
     "ratings": "Ratings",
@@ -547,6 +611,9 @@
       "children_proof_types": "suitable"
     },
     "safety": "Safety techniques and  steps applied",
+    "safety_operation": {
+      "event_types": "safety operation"
+    },
     "schiste": {
       "rock_types": "schist"
     },
@@ -567,6 +634,9 @@
     },
     "ski_exposition": "Ski exposition",
     "ski_rating": "Ski rating",
+    "skitouring": {
+      "event_activities": "Skitouring"
+    },
     "skitouring gear": "Ski and snowboard touring, snowshoeing",
     "slackline_anchor1": "Anchor 1",
     "slackline_anchor2": "Anchor 2",
@@ -603,7 +673,8 @@
       "weather_station_types": "snow height"
     },
     "snow_ice_mixed": {
-      "activities": "snow, ice and mixed"
+      "activities": "snow, ice and mixed",
+      "event_activities": "Snow, ice and mixed"
     },
     "snow_quality": "Snow quality",
     "snow_quantity": "Snow quantity",
@@ -612,11 +683,18 @@
     "soft_mobility": {
       "article_categories": "soft mobility"
     },
+    "sport_climbing": {
+      "event_activities": "Sport climbing"
+    },
     "sport_shop": {
       "product_types": "sport shop"
     },
+    "stone_ice_fall": {
+      "event_types": "stone or ice fall"
+    },
     "strong text": "bold text",
     "summary": "Summary",
+    "supervision": "Supervision",
     "text to display": "display text",
     "time_management": "Time management",
     "timing": "Timing",
@@ -644,6 +722,9 @@
     "waypoint_slope": "ground slope",
     "waypoint_type": "Waypoint type",
     "weather": "Weather",
+    "weather_event": {
+      "event_types": "weather event"
+    },
     "weather_station": {
       "waypoint_types": "weather station"
     },
