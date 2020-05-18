@@ -16,8 +16,8 @@
   },
   "scripts": {
     "serve": "cross-env BUILD_ENV=local vue-cli-service serve",
-    "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build --modern",
-    "build:github": "cross-env BUILD_ENV=github vue-cli-service build --modern",
+    "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build --modern --skip-plugins eslint",
+    "build:github": "cross-env BUILD_ENV=github vue-cli-service build --modern --skip-plugins eslint",
     "lint": "vue-cli-service lint",
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
