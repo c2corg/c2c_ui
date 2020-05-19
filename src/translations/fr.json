@@ -360,6 +360,7 @@
     "Username": "Identifiant",
     "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres,...)",
     "View in other lang": "Voir dans une autre langue",
+    "View next comments and continue the discussion": "Voir les commentaires suivants et continuer la discussion",
     "View xreports": "Voir les compte-rendus",
     "Warning: This action cannot be undone!": "Attention : cette action est irréversible !",
     "Waypoint's main properties": "Principales données du point de passage",
@@ -1096,7 +1097,7 @@
       "image_categories": "personnages"
     },
     "person_fall": {
-      "event_types": "déséquilibre"
+      "event_types": "déséquilibre ou chute"
     },
     "personal": {
       "$$noContext": "individuel (CC by-nc-nd)",
@@ -1173,7 +1174,7 @@
     "public_transportation_rating": "Accessibilité en transports en commun",
     "public_transportation_types": "Type de transport en commun",
     "publication_date": "Date de publication",
-    "qualification": "Diplôme d'encadrement dans l'activité concernée",
+    "qualification": "Diplôme d'encadrement pour l'activité",
     "quality": "Qualité du document",
     "quiet": {
       "frequentation_types": "non fréquenté"
