@@ -90,7 +90,7 @@
     "Comments": "评论",
     "Comments are disabled.": "评论关闭",
     "Compare selected versions": "比较选中的版本",
-    "Conditions, summits, routes": "条件、顶峰、路线",
+    "Conditions, summits, routes": "条件、山峰、路线",
     "Confirm": "确认",
     "Contain invalid character(s)": {
       "API message": "包含无效字符"
@@ -1389,7 +1389,7 @@
     "strong text": "加粗字体",
     "summary": "总结",
     "summit": {
-      "waypoint_types": "顶峰"
+      "waypoint_types": "山峰"
     },
     "tags": {
       "article_categories": "标签"
