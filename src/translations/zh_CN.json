@@ -174,7 +174,7 @@
     "Improve our understanding of risks": "提高我们对风险的理解",
     "Incidents and accidents": "事故报告",
     "Information about the terrain, like elevations, lengths...": "关于地形的信息，例如海拔、长度...",
-    "Informations about the access": "关于进入攀登区域交通的信息",
+    "Informations about the access": "关于进入点的信息",
     "Infos": "信息",
     "Insert a link": "插入链接",
     "Insert emoji": "插入表情",
@@ -386,8 +386,8 @@
       "Map controls": "缩小"
     },
     "access": {
-      "$$noContext": "交通节点",
-      "waypoint_types": "交通节点"
+      "$$noContext": "进入点",
+      "waypoint_types": "进入点"
     },
     "access_comment": "公路情况评注",
     "access_condition": "公路路况",
@@ -673,7 +673,7 @@
     },
     "editor": "编辑者",
     "elevation": "海拔",
-    "elevation_access": "交通节点海拔",
+    "elevation_access": "进入点海拔",
     "elevation_down_snow": "雪线海拔(下行)",
     "elevation_max": "最高海拔",
     "elevation_min": "最低海拔",
@@ -1209,7 +1209,7 @@
       "frequentation_types": "很少人"
     },
     "raid": {
-      "route_types": "多日"
+      "route_types": "路线群"
     },
     "rain_proof": "防雨",
     "range": {
