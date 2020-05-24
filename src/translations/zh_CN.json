@@ -67,7 +67,7 @@
     "Associated routes": "关联的路线",
     "Associated routes cotations": "路点关联的路线难度定级情况",
     "Association": "协会",
-    "Associations history": "关联材料历史",
+    "Associations history": "关联历史",
     "Average slope (degrees)": "平均坡度",
     "Average slope in degree": "平均坡度",
     "Back to code": "返回代码编辑模式",
@@ -127,7 +127,7 @@
     "Detailed information": "详细信息",
     "Details": "详细内容",
     "Details on participants and event context": "详细的参与者和事件背景信息",
-    "Differences between versions": "不同版本之间的差别",
+    "Differences between versions": "不同版本之间的差异",
     "Dispositions": "规定",
     "Distance": "路程",
     "Distance (km)": "路程(km)",
@@ -587,7 +587,7 @@
       "article_types": "可协作编辑"
     },
     "collaborative": {
-      "image_types": "团体"
+      "image_types": "协作"
     },
     "comment": "评论",
     "condition_rating": "条件评价",
@@ -1021,7 +1021,7 @@
     "nearby service": {
       "public_transportation_ratings": "只在附近服务"
     },
-    "next difference": "下一个不同",
+    "next difference": "下一个版本差异",
     "next version": "下一版本",
     "nivology": {
       "image_categories": "和雪相关"
@@ -1170,7 +1170,7 @@
     "pressure": {
       "weather_station_types": "气压"
     },
-    "previous difference": "以前的差异",
+    "previous difference": "上一个版本差异",
     "previous version": "上一个版本",
     "previous_injuries": "先前是否受伤",
     "previous_injuries_2": {
