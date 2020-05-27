@@ -62,7 +62,7 @@
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
     "Articles, waypoints or routes to be linked.": "待关联的文章、路点和路线。",
-    "Articles, waypoints, routes or books to be linked.": "待关联的文章、路点、路线和路书。",
+    "Articles, waypoints, routes or books to be linked.": "待关联的文章、路点、路线和书籍。",
     "Associated outings": "关联的出行记录",
     "Associated routes": "关联的路线",
     "Associated routes cotations": "路点关联的路线难度定级情况",
@@ -74,7 +74,7 @@
     "Back to edit mode": "回到编辑模式",
     "Base layer": "底层地图",
     "Block account": "冻结账号",
-    "Book content": "路书内容",
+    "Book content": "书籍目录",
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org促进爱山者之间的信息共享，并为山地运动的安全做贡献。",
@@ -404,7 +404,7 @@
     },
     "activities": "运动",
     "activity_rate": "训练频率",
-    "add a book": "添加路书",
+    "add a book": "添加书籍",
     "add a map": "添加地图",
     "add a route": "添加路线",
     "add a waypoint": "添加路点",
@@ -514,8 +514,8 @@
     },
     "bolted rock climbing gear": "多段运动攀岩装备",
     "book": {
-      "$$noContext": "路书",
-      "image_categories": "路书"
+      "$$noContext": "书籍",
+      "image_categories": "书籍"
     },
     "book_types": "书籍类型",
     "books": "书籍",
@@ -656,7 +656,7 @@
     "difficult": {
       "glacier_ratings": "困难"
     },
-    "difficulties_height": "困难路段高差",
+    "difficulties_height": "困难路段开始海拔",
     "disable_comments": "禁用评论",
     "draft": {
       "quality_types": "粗略"
