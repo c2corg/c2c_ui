@@ -1,5 +1,20 @@
 {
   "zh_CN": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
+    "5": {
+      "paragliding_ratings": "P5"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1到2个难点(陡峭或窄的路段...)",
     "10min": {
       "access_times": "10分钟"
@@ -38,7 +53,7 @@
       "access_times": "3小时"
     },
     "3h+": {
-      "access_times": "3小时+"
+      "access_times": "3小时以上"
     },
     "45min": {
       "access_times": "45分钟"
@@ -61,20 +76,29 @@
     "Are you sure you want to delete this locale?": "你确定要删除这个地区吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
-    "Articles, waypoints or routes to be linked.": "待关联的文章、路点和路线。",
-    "Articles, waypoints, routes or books to be linked.": "待关联的文章、路点、路线和书籍。",
+    "Articles, waypoints or routes to be linked.": "关联的文章、路点和路线。",
+    "Articles, waypoints, routes or books to be linked.": "关联的文章、路点、路线和书籍。",
     "Associated outings": "关联的出行记录",
     "Associated routes": "关联的路线",
     "Associated routes cotations": "路点关联的路线难度定级情况",
     "Association": "协会",
     "Associations history": "关联历史",
+    "Attributions": {
+      "Map controls": "归属"
+    },
     "Average slope (degrees)": "平均坡度",
     "Average slope in degree": "平均坡度",
     "Back to code": "返回代码编辑模式",
     "Back to edit mode": "回到编辑模式",
     "Base layer": "底层地图",
+    "Basemap (at)": {
+      "Map layer": "Austria"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Austria Sat"
+    },
     "Block account": "冻结账号",
-    "Book content": "书籍目录",
+    "Book content": "书籍目录的简短描述",
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org促进爱山者之间的信息共享，并为山地运动的安全做贡献。",
@@ -96,7 +120,7 @@
       "API message": "包含无效字符"
     },
     "Continue the discussion": "继续讨论",
-    "Contribute to common knowledge": "贡献攀登常识",
+    "Contribute to common knowledge": "贡献山地运动知识",
     "Contribute to maintainance": "帮助维护",
     "Contributions": "贡献",
     "Contributor": "贡献者",
@@ -105,7 +129,7 @@
     "Creation?": "创作？",
     "Current password": "当前密码",
     "Delete this document": "删除文档",
-    "Delete this locale": "删除此地点",
+    "Delete this locale": "删除此语言版本",
     "Describe access": "描述接近路线",
     "Describe access period": "描述进入时间段",
     "Describe access restrictions": "描述接近路线限制",
@@ -116,12 +140,12 @@
     "Describe opening hours": "描述开放时间",
     "Describe opening periods": "描述开放周期",
     "Describe pedestrian access": {
-      "$$noContext": "描述步行接近路线",
-      "hut": "描述步行接近路线"
+      "$$noContext": "描述接近路线",
+      "hut": "描述接近路线"
     },
     "Describe pt access": "描述公共交通情况",
-    "Describe road access": "\b描述行程情况",
-    "Describe the conditions you encountered during your outing": "描述你的出行路线情况",
+    "Describe road access": "\b描述行程情况（包括住宿、饭店等）",
+    "Describe the conditions you encountered during your outing": "描述你的出行过程中路线条件情况",
     "Description": "描述",
     "Detailed figures, like ratings, height differences, frequentation...": "详细的数字，例如定级、高差、拥挤程度",
     "Detailed information": "详细信息",
@@ -136,7 +160,7 @@
     "Drop images here or click to upload": "拖拽图片到这里或者点击来上传",
     "Duration": "时长",
     "Duration (hrs)": "时长(小时)",
-    "EULA": "用户许可",
+    "EULA": "最终用户许可协议",
     "Edit": "编辑",
     "Edit a document": "编辑文档",
     "Edit associations": "编辑相关资料",
@@ -160,7 +184,7 @@
     "General information": "一般信息",
     "Geolocation": "地理坐标",
     "Go to the previous page": "回到上一页",
-    "Have an account?": "有账户吗？",
+    "Have an account?": "是否有账户？",
     "Heading": "标题",
     "Help": "帮助",
     "Help research activities to define new prevention means": "帮助研究活动确定新的预防手段",
@@ -171,10 +195,25 @@
     "Home page feed parameters": "主页订阅参数",
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I have read and agree to the terms of use": "我已经阅读和同意使用条款",
+    "IGN": {
+      "Map slopes layer": "France (IGN)"
+    },
+    "IGN maps": {
+      "Map layer": "IGN Fr"
+    },
+    "IGN ortho": {
+      "Map layer": "IGN Fr Sat"
+    },
+    "IGN ortho (es)": {
+      "Map layer": "IGN Es Sat"
+    },
+    "IGN raster (es)": {
+      "Map layer": "IGN Es"
+    },
     "Improve our understanding of risks": "提高我们对风险的理解",
     "Incidents and accidents": "事故报告",
     "Information about the terrain, like elevations, lengths...": "关于地形的信息，例如海拔、长度...",
-    "Informations about the access": "关于进入点的信息",
+    "Informations about the access": "关于交通节点的信息",
     "Infos": "信息",
     "Insert a link": "插入链接",
     "Insert emoji": "插入表情",
@@ -189,9 +228,12 @@
     "Last forum topics": "最新的论坛主题",
     "Last outings": "最新的出行记录",
     "Latitude": "纬度",
+    "Layers": {
+      "Map controls": "图层"
+    },
     "Leave fullscreen": "离开全屏",
     "Let's make our feedbacks valuable": "让我们的反馈更有价值",
-    "Licenses": "内容许可",
+    "Licenses": "许可协议",
     "Links": "链接",
     "List mode": "列表模式",
     "List of versions for language:": "不同语言版本列表",
@@ -218,12 +260,12 @@
       "API message": "缺少验证码"
     },
     "Modified the": {
-      "modification date": "修改"
+      "modification date": "修改于"
     },
     "More info": "更多信息",
     "Multi-criteria search": "多条件搜索",
     "My account": "我的账号",
-    "My changes": "我的修改",
+    "My changes": "我的贡献",
     "My followed users": "我关注的用户",
     "My outings": "我的出行记录",
     "My preferences": "我的偏好设置",
@@ -255,6 +297,7 @@
     "Oups! Something went wrong with forum. Here is the message :": "哎呀！论坛出现错误。这是信息：",
     "Oups! something went wrong...": "哎呀！出现错误...",
     "Page not found": "页面未找到",
+    "Paragliding outings": "滑翔伞出行记录",
     "Parameters of the Digital Camera": "数码相机的参数",
     "Parent": "父节点",
     "Participants and context": "参与者和背景",
@@ -320,10 +363,13 @@
     },
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
     "Skiability": "可滑雪性",
-    "Slopes": "坡",
+    "Slopes": "坡度",
     "Source:": "来源：",
-    "Stop following this contributor": "取消关注此贡献者",
+    "Stop following this contributor": "停止关注此贡献者",
     "Suggested rating": "建议定级",
+    "SwissTopo": {
+      "Map slopes layer": "Switzerland (SwissTopo)"
+    },
     "Target:": "目标：",
     "Terrain": "地形",
     "The mountain sports community": "山地运动社区",
@@ -354,7 +400,7 @@
     "Too many results: please refine your search.": "结果太多：请优化搜索。",
     "Topoguide": "路线指南",
     "Translate into an other lang": "翻译成其他语言",
-    "Transport & road or PT access": "交通情况",
+    "Transport & road or PT access": "交通节点",
     "Types and styles": "类型和风格",
     "URL": "网址",
     "Unblock account": "取消冻结账号",
@@ -368,6 +414,7 @@
     "Versions": "版本",
     "Very complex (steps, narrow sections, ridges...)": "非常复杂（台阶，狭窄路段，山脊...）",
     "View in other lang": "查看其它语言版本",
+    "View next comments and continue the discussion": "查看下一个评论并继续讨论",
     "View xreports": "查看事故报告",
     "Warning: This action cannot be undone!": "警告：此操作无法撤消！",
     "Waypoint's main properties": "路点的主要特征",
@@ -386,11 +433,11 @@
       "Map controls": "缩小"
     },
     "access": {
-      "$$noContext": "进入点",
-      "waypoint_types": "进入点"
+      "$$noContext": "交通节点",
+      "waypoint_types": "交通节点"
     },
-    "access_comment": "公路情况评注",
-    "access_condition": "公路路况",
+    "access_comment": "交通节点评注",
+    "access_condition": "交通节点路况",
     "access_period": "进入时间段",
     "access_time": "接近路线耗时",
     "accessible_when_wardened": {
@@ -403,7 +450,17 @@
       "image_categories": "动作"
     },
     "activities": "运动",
+    "activity": "活动",
     "activity_rate": "训练频率",
+    "activity_rate_m2": {
+      "activity_rates": "每月1-2次"
+    },
+    "activity_rate_w1": {
+      "activity_rates": "每周1次以上"
+    },
+    "activity_rate_y5": {
+      "activity_rates": "每年5次以下"
+    },
     "add a book": "添加书籍",
     "add a map": "添加地图",
     "add a route": "添加路线",
@@ -419,6 +476,9 @@
     "advertisement": "广告",
     "age": "年龄",
     "aid_rating": "器械攀登定级",
+    "alpine_climbing": {
+      "event_activities": "阿尔卑斯攀登"
+    },
     "already used forum_username": {
       "API message": "该论坛用户名已被使用"
     },
@@ -448,12 +508,12 @@
     "association": {
       "article_categories": "c2c协会"
     },
-    "associations": "相关资料",
+    "associations": "关联资料",
     "at least one route required": {
-      "API message": "至少需要一条路线"
+      "API message": "选择至少一条路线"
     },
     "at least one user required": {
-      "API message": "至少需要一位用户"
+      "API message": "选择至少一位用户"
     },
     "aug": {
       "months": "8月"
@@ -474,7 +534,7 @@
     "avalanche_level": "雪崩级别",
     "avalanche_signs": "雪崩信号",
     "avalanche_slope": "雪崩坡",
-    "avalanches": "雪崩",
+    "avalanches": "与雪崩有关的观测",
     "average": {
       "condition_ratings": "平均",
       "snow_quality_ratings": "平均",
@@ -494,7 +554,7 @@
     "base_camp": {
       "waypoint_types": "大本营"
     },
-    "best_periods": "最佳攀登周期",
+    "best_periods": "最佳周期",
     "biography": {
       "book_types": "传记"
     },
@@ -502,12 +562,15 @@
       "waypoint_types": "水渠Bisse"
     },
     "bivouac": {
-      "waypoint_types": "Bivy露营地"
+      "waypoint_types": "营地"
     },
-    "blanket_unstaffed": "是否提供毯子",
+    "blanket_unstaffed": "无看守时是否提供毯子",
     "bloc": {
       "climbing_indoor_types": "线路集合",
       "climbing_outdoor_types": "线路集合"
+    },
+    "blocked_person": {
+      "event_types": "被冻结的用户"
     },
     "boat": {
       "public_transportation_types": "船"
@@ -525,13 +588,16 @@
     "c2c_meetings": {
       "article_categories": "c2c会议"
     },
+    "ca": {
+      "langs": "加语"
+    },
     "calcaire": {
       "rock_types": "石灰岩"
     },
     "camera settings": "相机设置",
     "camera_name": "相机名称",
     "camp_site": {
-      "waypoint_types": "露营地"
+      "waypoint_types": "专用露营区"
     },
     "canyon": {
       "waypoint_types": "峡谷"
@@ -542,7 +608,7 @@
     "cave": {
       "waypoint_types": "洞穴"
     },
-    "children_proof": "儿童安全性",
+    "children_proof": "儿童",
     "cleared": {
       "access_conditions": "清理过"
     },
@@ -624,6 +690,9 @@
     "crevasse_fall": {
       "event_types": "冰裂缝坠落"
     },
+    "critical_situation": {
+      "event_types": "未发生事故的危急情况"
+    },
     "crowded": {
       "frequentation_types": "拥挤"
     },
@@ -632,22 +701,25 @@
       "avalanche_signs": "危险信号"
     },
     "dangerous": {
-      "children_proof_types": "危险"
+      "children_proof_types": "不合适的"
     },
     "date": "日期",
-    "date_end": "结束时间",
-    "date_start": "开始时间",
+    "date_end": "结束日期",
+    "date_start": "开始日期",
     "date_time": "日期和时间",
     "day(s)": "天",
+    "de": {
+      "langs": "德语"
+    },
     "dec": {
       "months": "12月"
     },
     "descent": {
       "image_categories": "下降"
     },
-    "describe conditions": "描述情况",
+    "describe conditions": "描述条件情况",
     "describe route_conditions": "描述路线情况",
-    "describe timing": "描述时间段",
+    "describe timing": "描述时间节点",
     "describe weather": "描述天气",
     "description": "描述",
     "detail": {
@@ -673,7 +745,7 @@
     },
     "editor": "编辑者",
     "elevation": "海拔",
-    "elevation_access": "进入点海拔",
+    "elevation_access": "交通节点海拔",
     "elevation_down_snow": "雪线海拔(下行)",
     "elevation_max": "最高海拔",
     "elevation_min": "最低海拔",
@@ -683,6 +755,9 @@
       "quality_types": "空白"
     },
     "empty comment": "空白评论",
+    "en": {
+      "langs": "英语"
+    },
     "engagement_rating": "参与度定级",
     "environment": {
       "book_types": "环境"
@@ -692,6 +767,13 @@
     },
     "equipment_rating": "保护点定级",
     "equipment_ratings": "保护点定级",
+    "es": {
+      "langs": "西班牙语"
+    },
+    "eu": {
+      "langs": "巴斯克语"
+    },
+    "event_activity": "活动",
     "event_type": "事件类型",
     "excellent": {
       "condition_ratings": "很好",
@@ -728,6 +810,15 @@
     "feb": {
       "months": "2月"
     },
+    "federal_supervision": {
+      "supervision": "联邦指导"
+    },
+    "federal_supervisor": {
+      "qualification": "联邦指导员"
+    },
+    "federal_trainer": {
+      "qualification": "联邦培训员"
+    },
     "female": {
       "genders": "女士"
     },
@@ -742,8 +833,11 @@
     "fnumber": "光圈数",
     "focal_length": "焦距",
     "forum": "论坛",
+    "fr": {
+      "langs": "法语"
+    },
     "frequentation": "拥挤程度",
-    "gas_unstaffed": "是否提供燃气",
+    "gas_unstaffed": "无看守时是否提供燃气",
     "gear": {
       "$$noContext": "装备",
       "article_categories": "装备"
@@ -761,7 +855,7 @@
       "route_configuration_types": "冰川"
     },
     "glacier_crampons": {
-      "glacier_gear_types": "行走冰爪"
+      "glacier_gear_types": "冰川行走冰爪"
     },
     "glacier_gear": "冰川装备",
     "glacier_rating": "冰川定级",
@@ -820,15 +914,15 @@
     "has updated the waypoint": "更新了该路点",
     "has updated the xreport": "更新了该事故报告",
     "heading text": "标题文字",
-    "heating_unstaffed": "是否供暖",
+    "heating_unstaffed": "无看守时是否供暖",
     "height": "高度",
     "height_diff": "高差",
     "height_diff_access": "接近路线高差",
     "height_diff_difficulties": "困难路线高差",
-    "height_diff_down": "下降高差",
-    "height_diff_up": "上升高差",
+    "height_diff_down": "累积海拔下降",
+    "height_diff_up": "累积海拔上升",
     "height_max": "最高海拔",
-    "height_median": "中等高度",
+    "height_median": "中等海拔",
     "height_min": "最低海拔",
     "help": {
       "$$noContext": "帮助",
@@ -860,7 +954,11 @@
     },
     "ice and dry climbing gear": "攀冰和干攀装备",
     "ice_climbing": {
-      "activities": "攀冰"
+      "activities": "攀冰",
+      "event_activities": "攀冰"
+    },
+    "ice_cornice_collapse": {
+      "event_types": "冰/雪檐崩塌"
     },
     "ice_rating": "攀冰定级",
     "image": "图片",
@@ -870,7 +968,10 @@
     "impossible": {
       "glacier_ratings": "不可能"
     },
-    "increase_impact": "增加影响",
+    "increase_impact": "加重事件后果的因素",
+    "injury_without_fall": {
+      "event_types": "受伤但无坠落"
+    },
     "inside": {
       "rain_proof_types": "里面"
     },
@@ -885,6 +986,9 @@
     },
     "isbn": "ISBN号",
     "iso_speed": "感光度",
+    "it": {
+      "langs": "意大利语"
+    },
     "jan": {
       "months": "1月"
     },
@@ -933,7 +1037,7 @@
     "link": "链接",
     "loading": "加载中",
     "local_product": {
-      "waypoint_types": "特产"
+      "waypoint_types": "当地特产"
     },
     "locality": {
       "waypoint_types": "地点"
@@ -947,7 +1051,7 @@
     "magazine": {
       "book_types": "杂志"
     },
-    "main_waypoint_id": "路点id",
+    "main_waypoint_id": "主要路点的id",
     "male": {
       "genders": "男士"
     },
@@ -958,7 +1062,7 @@
     "mar": {
       "months": "3月"
     },
-    "matress_unstaffed": "是否提供床垫",
+    "matress_unstaffed": "无看守时是否提供床垫",
     "may": {
       "months": "5月"
     },
@@ -1008,6 +1112,9 @@
     "multi": {
       "climbing_outdoor_types": "多段"
     },
+    "multipitch_climbing": {
+      "event_activities": "多段攀岩"
+    },
     "name": "姓名",
     "natural_avalanche": {
       "avalanche_signs": "自然雪崩"
@@ -1022,7 +1129,7 @@
       "public_transportation_ratings": "只在附近服务"
     },
     "next difference": "下一个版本差异",
-    "next version": "下一版本",
+    "next version": "下一个版本",
     "nivology": {
       "image_categories": "和雪相关"
     },
@@ -1036,6 +1143,9 @@
     "no info": "没有信息",
     "no service": {
       "public_transportation_ratings": "没有服务"
+    },
+    "no_supervision": {
+      "supervision": "没有指导"
     },
     "no_warden": {
       "custodianship_types": "没有看守"
@@ -1076,9 +1186,10 @@
     "or try the following pages:": "或者尝试以下页面",
     "orientations": "朝向",
     "other": {
+      "event_activities": "其他",
       "event_types": "其他"
     },
-    "other_comments": "其他评注",
+    "other_comments": "身体受伤和其他评注",
     "outing": "出行记录",
     "outings": "出行记录",
     "overcrowded": {
@@ -1100,7 +1211,7 @@
     "paragliding_takeoff": {
       "waypoint_types": "滑翔伞起飞点"
     },
-    "parking_fee": "停车费",
+    "parking_fee": "停车费或过路费",
     "partial_trip": "部分行程",
     "participant_count": "参与人数",
     "participants": "参与者",
@@ -1142,7 +1253,7 @@
     },
     "place": "地点",
     "please consult the server logs": {
-      "API message": "请查阅服务器日志"
+      "API message": "发生意外错误，请提供反馈至dev@camptocamp.org"
     },
     "poor": {
       "condition_ratings": "差",
@@ -1170,7 +1281,7 @@
     "pressure": {
       "weather_station_types": "气压"
     },
-    "previous difference": "上一个版本差异",
+    "previous difference": "上一个差异",
     "previous version": "上一个版本",
     "previous_injuries": "先前是否受伤",
     "previous_injuries_2": {
@@ -1183,6 +1294,12 @@
       "author_statuses": "受到主要影响"
     },
     "product_types": "特产类型",
+    "professional_diploma": {
+      "qualification": "专业文凭"
+    },
+    "professional_supervision": {
+      "supervision": "专业指导"
+    },
     "profile": "个人资料",
     "profiles": "个人资料",
     "progressive": {
@@ -1201,6 +1318,7 @@
     "public_transportation_rating": "公共交通服务",
     "public_transportation_types": "公共交通类型",
     "publication_date": "发表日期",
+    "qualification": "活动资格",
     "quality": "文档质量",
     "quartzite": {
       "rock_types": "石英岩"
@@ -1219,7 +1337,7 @@
     "recent_avalanche": {
       "avalanche_signs": "最近的雪崩"
     },
-    "reduce_impact": "减少影响",
+    "reduce_impact": "减轻事件后果的因素",
     "remarks": "评论",
     "required field": "必填项",
     "rescue": "救援",
@@ -1259,9 +1377,12 @@
     "routes": "路线",
     "routes_quantity": "路线数量",
     "safe": {
-      "children_proof_types": "安全"
+      "children_proof_types": "合适的"
     },
     "safety": "安全",
+    "safety_operation": {
+      "event_types": "安全操作"
+    },
     "scale": "比例尺",
     "schiste": {
       "rock_types": "片岩"
@@ -1309,7 +1430,8 @@
     },
     "ski_rating": "滑雪定级",
     "skitouring": {
-      "activities": "滑雪"
+      "activities": "滑雪",
+      "event_activities": "滑雪"
     },
     "skitouring gear": "滑雪装备",
     "slab": {
@@ -1359,7 +1481,8 @@
       "weather_station_types": "雪的厚度"
     },
     "snow_ice_mixed": {
-      "activities": "登山(混合路线)"
+      "activities": "登山(混合路线)",
+      "event_activities": "登山(混合路线)"
     },
     "snow_quality": "雪质",
     "snow_quantity": "雪量",
@@ -1380,8 +1503,14 @@
     "sometimes": {
       "snow_clearance_ratings": "偶尔"
     },
+    "sport_climbing": {
+      "event_activities": "运动攀岩"
+    },
     "sport_shop": {
       "product_types": "运动商店"
+    },
+    "stone_ice_fall": {
+      "event_types": "落石或落冰"
     },
     "stories": {
       "article_categories": "故事"
@@ -1391,6 +1520,7 @@
     "summit": {
       "waypoint_types": "山峰"
     },
+    "supervision": "指导",
     "tags": {
       "article_categories": "标签"
     },
@@ -1427,7 +1557,7 @@
     "train": {
       "public_transportation_types": "火车"
     },
-    "training": "训练",
+    "training": "体能训练和技术等级",
     "traverse": {
       "route_types": "横穿"
     },
@@ -1437,7 +1567,7 @@
       "climbing_styles": "竖直"
     },
     "very_dangerous": {
-      "children_proof_types": "非常危险"
+      "children_proof_types": "危险的"
     },
     "very_safe": {
       "children_proof_types": "非常安全"
@@ -1464,6 +1594,9 @@
     "waypoint_type": "路点类型",
     "waypoints": "路点",
     "weather": "天气",
+    "weather_event": {
+      "event_types": "天气事件"
+    },
     "weather_station": {
       "waypoint_types": "气象站"
     },
