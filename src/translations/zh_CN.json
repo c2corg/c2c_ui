@@ -447,7 +447,7 @@
       "avalanche_signs": "偶发雪崩"
     },
     "action": {
-      "image_categories": "动作"
+      "image_categories": "行动"
     },
     "activities": "运动",
     "activity": "活动",
@@ -1131,7 +1131,7 @@
     "next difference": "下一个版本差异",
     "next version": "下一个版本",
     "nivology": {
-      "image_categories": "和雪相关"
+      "image_categories": "雪和雪崩"
     },
     "no": {
       "$$noContext": "否",
