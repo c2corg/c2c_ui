@@ -70,10 +70,10 @@
     "Add here maps not automatically referenced": "在此处添加未自动引用的地图",
     "Add images": "添加图片",
     "Add the first outing": "添加第一个出行记录",
-    "Additional information": "额外信息",
+    "Additional information": "附加信息",
     "Anonymity and confidentiality": "匿名与保密",
     "Are you sure you want to delete this document?": "你确定要删除此文档吗？",
-    "Are you sure you want to delete this locale?": "你确定要删除这个地区吗？",
+    "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
     "Articles, waypoints or routes to be linked.": "关联的文章、路点和路线。",
@@ -81,7 +81,7 @@
     "Associated outings": "关联的出行记录",
     "Associated routes": "关联的路线",
     "Associated routes cotations": "路点关联的路线难度定级情况",
-    "Association": "协会",
+    "Association": "c2c协会",
     "Associations history": "关联历史",
     "Attributions": {
       "Map controls": "归属"
@@ -97,7 +97,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Austria Sat"
     },
-    "Block account": "冻结账号",
+    "Block account": "冻结该用户",
     "Book content": "书籍目录的简短描述",
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
@@ -438,20 +438,20 @@
     },
     "access_comment": "交通节点评注",
     "access_condition": "交通节点路况",
-    "access_period": "进入时间段",
+    "access_period": "除雪或开放期",
     "access_time": "接近路线耗时",
     "accessible_when_wardened": {
-      "custodianship_types": "看守时可进入"
+      "custodianship_types": "仅有看守时可进入"
     },
     "accidental_avalanche": {
-      "avalanche_signs": "偶发雪崩"
+      "avalanche_signs": "出行当天的人为雪崩"
     },
     "action": {
       "image_categories": "行动"
     },
-    "activities": "运动",
+    "activities": "活动",
     "activity": "活动",
-    "activity_rate": "训练频率",
+    "activity_rate": "参与活动频率",
     "activity_rate_m2": {
       "activity_rates": "每月1-2次"
     },
@@ -471,13 +471,13 @@
     "add an incident/accident report": "添加事故报告",
     "add an outing": "添加出行记录",
     "admin_limits": {
-      "area_types": "行政区划"
+      "area_types": "行政边界"
     },
-    "advertisement": "广告",
+    "advertisement": "宣传",
     "age": "年龄",
     "aid_rating": "器械攀登定级",
     "alpine_climbing": {
-      "event_activities": "阿尔卑斯攀登"
+      "event_activities": "高山岩石"
     },
     "already used forum_username": {
       "API message": "该论坛用户名已被使用"
@@ -486,10 +486,10 @@
       "API message": "该用户名已被使用"
     },
     "always_accessible": {
-      "custodianship_types": "总是可进入"
+      "custodianship_types": "总是开放"
     },
     "amateur": {
-      "user_categories": "业余"
+      "user_categories": "业余爱好者"
     },
     "anonymous": "匿名",
     "apr": {
@@ -529,12 +529,12 @@
       "event_types": "雪崩"
     },
     "avalanche_forecaster": {
-      "user_categories": "雪崩预报员"
+      "user_categories": "雪崩预报"
     },
-    "avalanche_level": "雪崩级别",
+    "avalanche_level": "雪崩风险级别",
     "avalanche_signs": "雪崩信号",
-    "avalanche_slope": "雪崩坡",
-    "avalanches": "与雪崩有关的观测",
+    "avalanche_slope": "雪崩起点坡度",
+    "avalanches": "雪崩相关观测",
     "average": {
       "condition_ratings": "平均",
       "snow_quality_ratings": "平均",
@@ -589,7 +589,7 @@
       "article_categories": "c2c会议"
     },
     "ca": {
-      "langs": "加语"
+      "langs": "Català"
     },
     "calcaire": {
       "rock_types": "石灰岩"
@@ -658,7 +658,7 @@
     "comment": "评论",
     "condition_rating": "条件评价",
     "conditions": "详细条件情况",
-    "conditions_levels": "条件",
+    "conditions_levels": "不同地区的雪况",
     "configuration": "地形结构",
     "conglomerat": {
       "rock_types": "砾岩"
@@ -709,7 +709,7 @@
     "date_time": "日期和时间",
     "day(s)": "天",
     "de": {
-      "langs": "德语"
+      "langs": "Deutsch"
     },
     "dec": {
       "months": "12月"
@@ -756,7 +756,7 @@
     },
     "empty comment": "空白评论",
     "en": {
-      "langs": "英语"
+      "langs": "English"
     },
     "engagement_rating": "参与度定级",
     "environment": {
@@ -768,10 +768,10 @@
     "equipment_rating": "保护点定级",
     "equipment_ratings": "保护点定级",
     "es": {
-      "langs": "西班牙语"
+      "langs": "Español"
     },
     "eu": {
-      "langs": "巴斯克语"
+      "langs": "Euskal"
     },
     "event_activity": "活动",
     "event_type": "事件类型",
@@ -834,7 +834,7 @@
     "focal_length": "焦距",
     "forum": "论坛",
     "fr": {
-      "langs": "法语"
+      "langs": "français"
     },
     "frequentation": "拥挤程度",
     "gas_unstaffed": "无看守时是否提供燃气",
@@ -987,7 +987,7 @@
     "isbn": "ISBN号",
     "iso_speed": "感光度",
     "it": {
-      "langs": "意大利语"
+      "langs": "italiano"
     },
     "jan": {
       "months": "1月"
@@ -1090,7 +1090,7 @@
       "activities": "山地骑行"
     },
     "mountain_climbing": {
-      "activities": "登山(岩石路线)"
+      "activities": "高山岩石路线"
     },
     "mountain_environment": {
       "article_categories": "山区环境"
@@ -1219,7 +1219,7 @@
       "rain_proof_types": "部分保护"
     },
     "pass": {
-      "waypoint_types": "垭口"
+      "waypoint_types": "山道"
     },
     "pedestrian access": {
       "$$noContext": "步行接近",
@@ -1481,8 +1481,8 @@
       "weather_station_types": "雪的厚度"
     },
     "snow_ice_mixed": {
-      "activities": "登山(混合路线)",
-      "event_activities": "登山(混合路线)"
+      "activities": "冰雪及混合路线",
+      "event_activities": "冰雪及混合路线"
     },
     "snow_quality": "雪质",
     "snow_quantity": "雪量",
