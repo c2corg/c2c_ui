@@ -1,6 +1,6 @@
 <template>
   <div class="section content">
-    <html-header title="Recents changes" />
+    <html-header :title="$gettext('Recent changes')" />
 
     <div clas="links">
       <association-history-link :user-id="userId" v-translate>
