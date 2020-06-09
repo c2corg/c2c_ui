@@ -1,42 +1,37 @@
-
-
 //https://bulma.io/documentation/customize/variables/
-
 
 /**
  * here is custom c2c variables
  */
 
- // orange defined in V5
- // please have a look on this discussion :
- // https://forum.camptocamp.org/t/projet-ui-quel-est-le-orange-c2c/238878
-$color-base-c2c: #F93;
+// orange defined in V5
+// please have a look on this discussion :
+// https://forum.camptocamp.org/t/projet-ui-quel-est-le-orange-c2c/238878
+$color-base-c2c: #f93;
 
-$color-base-c2c-darker: #B26F1E;
+$color-base-c2c-darker: #b26f1e;
 $color-base-c2c-lighter: rgb(255, 206, 158);
 
-$color-complementary-c2c: #337AB7; // must fit with c2c orange, and will be main color
-$color-complementary-c2c-lighter: #7699B8;
+$color-complementary-c2c: #337ab7; // must fit with c2c orange, and will be main color
+$color-complementary-c2c-lighter: #7699b8;
 
-$color-link: #337AB7; // We use the same blue as complementary-c2c
-
+$color-link: #337ab7; // We use the same blue as complementary-c2c
 
 /**
  * Bulma variables
  */
-$body-size : 14px !default;
+$body-size: 14px !default;
 
 // define size to get entire px size.
 // TODO : is ot smarter to directlty set px values ?....
 
-$size-1	: 2.1429rem;   // 30/14
-$size-2	: 1.8571rem;   // 26/14
-$size-3	: 1.5714rem;   // 22/14
-$size-4	: 1.2857rem;   // 18/14
-$size-5	: 1.1429rem;   // 16/14
+$size-1: 2.1429rem; // 30/14
+$size-2: 1.8571rem; // 26/14
+$size-3: 1.5714rem; // 22/14
+$size-4: 1.2857rem; // 18/14
+$size-5: 1.1429rem; // 16/14
 // $size-6 : 1 rem,    untouched
-$size-7 : 0.7857rem;   // 12/14
-
+$size-7: 0.7857rem; // 12/14
 
 /**
  * customize bulma colors
@@ -51,9 +46,9 @@ $link: $color-link;
 //$danger: $red
 //$dark: $grey-darker
 //$text: $grey-dark
-$pagination-current-background-color:$primary;
-$pagination-current-border-color:$primary;
-$body-background-color : #fbfaf6; // if you modify this, please also modify it for spashscreen on public/index.html
+$pagination-current-background-color: $primary;
+$pagination-current-border-color: $primary;
+$body-background-color: #fbfaf6; // if you modify this, please also modify it for spashscreen on public/index.html
 
 $input-focus-border-color: $color-base-c2c;
 $input-focus-box-shadow-size: 0 0 0 0; // with border orange, input focus shadow is terrible
@@ -66,7 +61,6 @@ $hr-margin: 1rem 0;
 $box-radius: 0;
 $box-shadow: rgba(10, 10, 10, 0.1) 0 2px 3px 0, rgba(10, 10, 10, 0.1) 0 0 0 1px;
 
-
 /*
  * Here is bulma variables needed for components.
  * we only includes variables from utilities, and
@@ -76,19 +70,17 @@ $navbar-height: 3.25rem;
 
 // TODO bulkma 0.7.3 will introduce $input-placeholder-color
 // but it's not yet (14/12/2018) available on npm
-$input-placeholder-color:rbg(160,160,160);
+$input-placeholder-color: rbg(160, 160, 160);
 
-
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #AAA!important;
-    opacity: 1; /* Firefox */
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #aaa !important;
+  opacity: 1; /* Firefox */
 }
 
-
-@import "~bulma/sass/utilities/initial-variables.sass";
-@import "~bulma/sass/utilities/functions.sass";
-@import "~bulma/sass/utilities/derived-variables.sass";
+@import '~bulma/sass/utilities/initial-variables.sass';
+@import '~bulma/sass/utilities/functions.sass';
+@import '~bulma/sass/utilities/derived-variables.scss';
 
 // icons in input are to light
 $input-icon-color: $grey-light;
@@ -99,7 +91,7 @@ $input-icon-color: $grey-light;
 $card-shadow: 0 2px 3px rgba($black, 0.1);
 $card-hover-shadow: 1px 3px 4px rgba($black, 0.1);
 
- // and set a variable for card border :
+// and set a variable for card border :
 $card-border: 1px solid rgba($black, 0.15);
 
 /**
