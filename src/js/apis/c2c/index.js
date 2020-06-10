@@ -1,10 +1,11 @@
 import AssociationService from './AssociationService.js';
-import BaseApi from '@/js/apis/BaseApi.js';
 import DocumentService from './DocumentService.js';
 import FeedService from './FeedService.js';
 import ForumService from './ForumService.js';
 import ModeratorService from './ModeratorService.js';
 import UserProfileService from './UserProfileService.js';
+
+import BaseApi from '@/js/apis/BaseApi.js';
 import config from '@/js/config';
 import constants from '@/js/constants';
 

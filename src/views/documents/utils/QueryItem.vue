@@ -88,12 +88,14 @@
 
 <script>
 import 'vue-slider-component/theme/default.css';
-import DateQueryItem from './DateQueryItem';
 import Multiselect from 'vue-multiselect';
+import vueSlider from 'vue-slider-component';
+
+import DateQueryItem from './DateQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
 import queryItemMixin from './query-item-mixin.js';
+
 import { requireFieldProperty } from '@/js/properties-mixins';
-import vueSlider from 'vue-slider-component';
 
 export default {
   components: {

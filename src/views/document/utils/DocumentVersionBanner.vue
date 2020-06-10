@@ -74,6 +74,7 @@
 
 <script>
 import RevertVersionWindow from './windows/RevertVersionWindow';
+
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {

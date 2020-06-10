@@ -6,6 +6,7 @@ It also prevent the computation of not markdown property
 ********************************************************************/
 
 import Cache from './Cache';
+
 import c2c from '@/js/apis/c2c';
 
 const NOT_MARKDOWN_PROPERTY = new Set([

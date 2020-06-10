@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import ConditionLevels from './utils/field-viewers/ConditionLevels';
 import documentViewMixin from './utils/document-view-mixin.js';
+import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
 export default {
   components: {

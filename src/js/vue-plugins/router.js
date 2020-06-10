@@ -1,29 +1,30 @@
-import AccountView from '@/views/user/AccountView';
+import Vue from 'vue';
+import Router from 'vue-router';
+
+import config from '@/js/config';
+import constants from '@/js/constants';
+import DocumentsView from '@/views//documents/DocumentsView';
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
 import BookView from '@/views/document/BookView';
-import DashboardView from '@/views/portals/DashboardView';
-import DocumentsView from '@/views//documents/DocumentsView';
-import FeedView from '@/views/portals/FeedView';
-import FollowingView from '@/views/user/FollowingView';
 import ImageView from '@/views/document/ImageView';
-import LoginView from '@/views/user/LoginView';
 import MapView from '@/views/document/MapView';
-import NotFoundView from '@/views/static-views/NotFoundView';
 import OutingView from '@/views/document/OutingView';
-import PreferencesView from '@/views/user/PreferencesView';
 import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
-import Router from 'vue-router';
+import WaypointView from '@/views/document/WaypointView';
+import XreportView from '@/views/document/XreportView';
+import DashboardView from '@/views/portals/DashboardView';
+import FeedView from '@/views/portals/FeedView';
+import YetiView from '@/views/portals/YetiView';
+import NotFoundView from '@/views/static-views/NotFoundView';
 import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
-import Vue from 'vue';
-import WaypointView from '@/views/document/WaypointView';
 import WorkInProgressView from '@/views/static-views/WorkInProgressView';
-import XreportView from '@/views/document/XreportView';
-import YetiView from '@/views/portals/YetiView';
-import config from '@/js/config';
-import constants from '@/js/constants';
+import AccountView from '@/views/user/AccountView';
+import FollowingView from '@/views/user/FollowingView';
+import LoginView from '@/views/user/LoginView';
+import PreferencesView from '@/views/user/PreferencesView';
 
 // lazy-load components
 // actually, only diff is quite big, because of diff computation

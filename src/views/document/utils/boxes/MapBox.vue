@@ -46,6 +46,7 @@
 <script>
 import ElevationProfile from './ElevationProfile';
 import MapLinks from './MapLinks';
+
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 import utils from '@/js/utils';

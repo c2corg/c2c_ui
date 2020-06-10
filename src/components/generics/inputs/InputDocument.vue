@@ -91,6 +91,7 @@
 
 <script>
 import { arrayMixin, baseMixin } from './mixins.js';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 

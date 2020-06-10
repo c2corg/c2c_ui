@@ -80,6 +80,7 @@
 <script>
 import EditorButton from './EditorButton';
 import LinkHelper from './LinkHelper';
+
 import cooker from '@/js/cooker.js';
 
 function Selection(textarea, onInput) {

@@ -88,6 +88,7 @@
 
 <script>
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
+
 import imageUrls from '@/js/image-urls';
 import uploadFile from '@/js/upload-file';
 

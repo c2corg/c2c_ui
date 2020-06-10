@@ -21,6 +21,7 @@ import ProfileCard from './ProfileCard';
 import RouteCard from './RouteCard';
 import WaypointCard from './WaypointCard';
 import XreportCard from './XreportCard';
+
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {

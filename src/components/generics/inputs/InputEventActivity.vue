@@ -19,6 +19,7 @@
 
 <script>
 import { baseMixin } from './mixins.js';
+
 import constants from '@/js/constants';
 
 export default {

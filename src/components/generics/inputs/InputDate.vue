@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import { ca, de, en, es, fr, it } from 'vuejs-datepicker/dist/locale';
 import Datepicker from 'vuejs-datepicker';
+import { ca, de, en, es, fr, it } from 'vuejs-datepicker/dist/locale';
 
 import { baseMixin } from './mixins.js';
 

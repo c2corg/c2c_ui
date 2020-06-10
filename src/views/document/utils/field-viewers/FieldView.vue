@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
-
 import LabelValue from './LabelValue';
+
+import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: { LabelValue },

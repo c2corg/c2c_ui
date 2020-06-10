@@ -85,6 +85,7 @@
 
 <script>
 import HistoryViewLinks from './utils/HistoryViewLinks';
+
 import c2c from '@/js/apis/c2c';
 
 export default {

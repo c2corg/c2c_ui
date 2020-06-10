@@ -14,6 +14,7 @@
 
 <script>
 import { AgGridVue } from 'ag-grid-vue';
+
 import AreaList from './cell-renderers/AreaList';
 import DocumentActivities from './cell-renderers/DocumentActivities';
 import DocumentAuthor from './cell-renderers/DocumentAuthor';
@@ -26,6 +27,7 @@ import MarkerQuality from './cell-renderers/MarkerQuality';
 import OutingDate from './cell-renderers/OutingDate';
 import OutingRating from './cell-renderers/OutingRating';
 import RouteRating from './cell-renderers/RouteRating';
+
 import constants from '@/js/constants';
 import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 

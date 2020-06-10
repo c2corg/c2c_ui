@@ -65,6 +65,7 @@
 
 <script>
 import MergeDocumentLink from './MergeDocumentLink';
+
 import c2c from '@/js/apis/c2c';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 

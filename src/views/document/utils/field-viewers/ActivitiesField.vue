@@ -6,6 +6,7 @@
 
 <script>
 import LabelValue from './LabelValue';
+
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {

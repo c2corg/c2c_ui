@@ -427,12 +427,13 @@
 </template>
 
 <script>
-import ValidationButton from '@/components/yeti/ValidationButton';
 import axios from 'axios';
+import vueSlider from 'vue-slider-component';
+
+import yetiText from '@/components/yeti/Text';
+import ValidationButton from '@/components/yeti/ValidationButton';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
-import vueSlider from 'vue-slider-component';
-import yetiText from '@/components/yeti/Text';
 
 const YETI_URL_BASE =
   'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';

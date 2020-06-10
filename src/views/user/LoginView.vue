@@ -171,9 +171,11 @@
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha';
+
 import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
-import VueRecaptcha from 'vue-recaptcha';
+
 import c2c from '@/js/apis/c2c';
 import config from '@/js/config';
 

@@ -3,7 +3,7 @@
   "env": {
     "node": true
   },
-  "extends": ["plugin:vue/recommended", "@vue/prettier"],
+  "extends": ["plugin:vue/recommended", "plugin:import/errors", "plugin:import/warnings", "@vue/prettier"],
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "warn",
@@ -16,7 +16,23 @@
     "vue/prop-name-casing": ["error", "camelCase"],
     "eqeqeq": "warn",
     "camelcase": "off",
-    "sort-imports": "error"
+    "import/order": [
+      "error",
+      { "newlines-between": "always", "alphabetize": { "order": "asc", "caseInsensitive": false } }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".vue"]
+      },
+      "custom-alias": {
+        "alias": {
+          "@": "./src"
+        },
+        "extensions": [".js", ".vue"]
+      }
+    }
   },
   "parserOptions": {
     "parser": "babel-eslint"

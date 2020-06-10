@@ -56,6 +56,7 @@
 <script>
 import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
+
 import c2c from '@/js/apis/c2c';
 
 export default {

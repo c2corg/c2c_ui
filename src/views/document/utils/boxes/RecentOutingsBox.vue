@@ -26,8 +26,9 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import viewModeMixin from '../view-mode-mixin';
+
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty, viewModeMixin],

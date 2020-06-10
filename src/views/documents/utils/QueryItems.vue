@@ -41,6 +41,7 @@
 import AssociationQueryItem from './AssociationQueryItem';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
 import QueryItem from './QueryItem';
+
 import constants from '@/js/constants';
 
 const categorizedFieldsDefault = {

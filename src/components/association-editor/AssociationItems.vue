@@ -62,6 +62,7 @@
 <script>
 import AssociationImageLink from './AssociationImageLink';
 import AssociationOutingLink from './AssociationOutingLink';
+
 import c2c from '@/js/apis/c2c';
 
 export default {

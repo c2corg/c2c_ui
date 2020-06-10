@@ -5,6 +5,7 @@ import CardEventActivityItem from './CardEventActivityItem';
 import CardRegionItem from './CardRegionItem';
 import CardRow from './CardRow';
 import CardTitle from './CardTitle';
+
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export const cardMixin = {

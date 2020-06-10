@@ -47,8 +47,10 @@
 </template>
 
 <script>
-import ImageInfo from './ImageInfo';
 import Swiper from 'swiper/dist/js/swiper.js';
+
+import ImageInfo from './ImageInfo';
+
 import imageUrls from '@/js/image-urls';
 
 const requestFullscreen = function (wrapper) {

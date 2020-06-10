@@ -12,7 +12,6 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {

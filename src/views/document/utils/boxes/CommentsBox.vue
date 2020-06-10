@@ -82,11 +82,12 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
-import config from '@/js/config';
-import forum from '@/js/apis/forum';
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import viewModeMixin from '.././view-mode-mixin';
+
+import c2c from '@/js/apis/c2c';
+import forum from '@/js/apis/forum';
+import config from '@/js/config';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 const computeCooked = function (cooked) {
   cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url);

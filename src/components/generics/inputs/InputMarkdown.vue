@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 import { baseMixin } from './mixins.js';
+
+import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
 export default {
   components: {

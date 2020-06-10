@@ -58,6 +58,7 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin.js';
+
 import imageUrls from '@/js/image-urls';
 
 export default {

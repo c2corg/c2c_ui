@@ -122,6 +122,7 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin.js';
+
 import waypointLabels from '@/js/waypoint-labels-mixin.js';
 
 export default {

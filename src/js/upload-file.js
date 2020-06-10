@@ -1,9 +1,10 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
-import Worker from '@/js/Worker';
-import c2c from '@/js/apis/c2c';
 import loadImage from 'blueimp-load-image';
 import moment from 'moment';
+
+import Worker from '@/js/Worker';
+import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol.js';
 
 // get all world extent. sometimes, geoloc in exif is outside this extent.

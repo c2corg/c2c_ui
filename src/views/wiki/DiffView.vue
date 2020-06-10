@@ -173,9 +173,10 @@
 </template>
 
 <script>
+import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 import imageUrls from '@/js/image-urls';
 
 const hasChanged = function (oldVal, newVal) {

@@ -117,6 +117,7 @@
 
 <script>
 import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+
 import constants from '@/js/constants';
 
 export default {

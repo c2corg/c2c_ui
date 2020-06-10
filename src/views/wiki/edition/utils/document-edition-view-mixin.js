@@ -6,6 +6,7 @@ import FormRow from './FormRow';
 import FormSection from './FormSection';
 import MapInputRow from './MapInputRow';
 import QualityField from './QualityField';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import ol from '@/js/libs/ol.js';
