@@ -70,23 +70,20 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
-import constants from '@/js/constants';
-
-import FormRow from './FormRow';
-
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
 import BookView from '@/views/document/BookView';
+import FormRow from './FormRow';
 import ImageView from '@/views/document/ImageView';
 import MapView from '@/views/document/MapView';
 import OutingView from '@/views/document/OutingView';
+import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
+import SaveDocumentRow from './SaveDocumentRow';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
-import ProfileView from '@/views/document/ProfileView';
-
-import SaveDocumentRow from './SaveDocumentRow';
+import c2c from '@/js/apis/c2c';
+import constants from '@/js/constants';
 
 const BANNERS_ARTICLE_ID = 1110927;
 const htmlBanners = {}; // cache for banners

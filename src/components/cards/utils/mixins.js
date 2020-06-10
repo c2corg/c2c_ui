@@ -1,12 +1,11 @@
-import { requireDocumentProperty } from '@/js/properties-mixins';
-
-import CardContainer from './CardContainer';
-import CardTitle from './CardTitle';
-import CardRow from './CardRow';
-import CardRegionItem from './CardRegionItem';
-import CardElevationItem from './CardElevationItem';
 import CardActivitiesItem from './CardActivitiesItem';
+import CardContainer from './CardContainer';
+import CardElevationItem from './CardElevationItem';
 import CardEventActivityItem from './CardEventActivityItem';
+import CardRegionItem from './CardRegionItem';
+import CardRow from './CardRow';
+import CardTitle from './CardTitle';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export const cardMixin = {
   components: {

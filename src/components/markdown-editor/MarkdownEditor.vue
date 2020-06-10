@@ -78,9 +78,9 @@
 </template>
 
 <script>
-import cooker from '@/js/cooker.js';
 import EditorButton from './EditorButton';
 import LinkHelper from './LinkHelper';
+import cooker from '@/js/cooker.js';
 
 function Selection(textarea, onInput) {
   this.textarea = textarea;

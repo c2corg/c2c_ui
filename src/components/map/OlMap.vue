@@ -102,22 +102,20 @@
 </template>
 
 <script>
-import ol from '@/js/libs/ol';
+import {
+  buildDiffStyle,
+  buildPolygonStyle,
+  geoJSONFormat,
+  getDocumentLineStyle,
+  getDocumentPointStyle,
+} from './map-utils.js';
+import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers.js';
+import BiodivInformation from './BiodivInformation';
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
 import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
-import photon from '@/js/apis/photon';
-
-import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers.js';
-import {
-  getDocumentPointStyle,
-  getDocumentLineStyle,
-  geoJSONFormat,
-  buildPolygonStyle,
-  buildDiffStyle,
-} from './map-utils.js';
-
-import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
+import ol from '@/js/libs/ol';
+import photon from '@/js/apis/photon';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 12;

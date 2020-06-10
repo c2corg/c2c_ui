@@ -87,9 +87,9 @@
 </template>
 
 <script>
-import uploadFile from '@/js/upload-file';
-import imageUrls from '@/js/image-urls';
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import imageUrls from '@/js/image-urls';
+import uploadFile from '@/js/upload-file';
 
 export default {
   mixins: [documentEditionViewMixin],

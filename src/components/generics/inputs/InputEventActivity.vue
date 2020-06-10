@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import constants from '@/js/constants';
 import { baseMixin } from './mixins.js';
+import constants from '@/js/constants';
 
 export default {
   mixins: [baseMixin],

@@ -1,13 +1,12 @@
-import config from '@/js/config';
-import constants from '@/js/constants';
-
-import BaseApi from '@/js/apis/BaseApi.js';
-import UserProfileService from './UserProfileService.js';
-import DocumentService from './DocumentService.js';
-import ModeratorService from './ModeratorService.js';
 import AssociationService from './AssociationService.js';
+import BaseApi from '@/js/apis/BaseApi.js';
+import DocumentService from './DocumentService.js';
 import FeedService from './FeedService.js';
 import ForumService from './ForumService.js';
+import ModeratorService from './ModeratorService.js';
+import UserProfileService from './UserProfileService.js';
+import config from '@/js/config';
+import constants from '@/js/constants';
 
 function CamptocampApi() {
   // inherits properties

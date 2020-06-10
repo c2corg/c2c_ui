@@ -8,7 +8,7 @@
     <alert-window ref="alertWindow" />
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
 
-    <!-- keep router view in last  -->
+    <!-- keep router view in last -->
     <div class="page-content is-block-print">
       <router-view class="router-view" />
     </div>
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import Navigation from './views/Navigation';
-import SideMenu from './views/SideMenu';
-import SiteNotice from './views/SiteNotice';
 import AlertWindow from './components/alert-window/AlertWindow';
 import HelperWindow from './components/helper/HelperWindow';
 import ImageViewer from './components/image-viewer/ImageViewer';
+import Navigation from './views/Navigation';
+import SideMenu from './views/SideMenu';
+import SiteNotice from './views/SiteNotice';
 
 export default {
   name: 'App',

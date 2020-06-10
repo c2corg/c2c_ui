@@ -44,11 +44,10 @@
 </template>
 
 <script>
+import FeedWidget from '@/components/feed-widget/FeedWidget';
+import OutingsDownloader from './utils/OutingsDownloader';
 import config from '@/js/config';
 import documentViewMixin from './utils/document-view-mixin.js';
-
-import OutingsDownloader from './utils/OutingsDownloader';
-import FeedWidget from '@/components/feed-widget/FeedWidget';
 
 export default {
   components: {

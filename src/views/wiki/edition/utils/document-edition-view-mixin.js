@@ -1,17 +1,14 @@
-import constants from '@/js/constants';
-import c2c from '@/js/apis/c2c';
-
-import ol from '@/js/libs/ol.js';
-
-import FormRow from './FormRow';
-import FormInput from './FormInput';
-
-import FormSection from './FormSection';
-import FormField from './FormField';
-import QualityField from './QualityField';
-import MapInputRow from './MapInputRow';
-import EditionContainer from './EditionContainer';
 import AssociationsInputRow from './AssociationsInputRow';
+import EditionContainer from './EditionContainer';
+import FormField from './FormField';
+import FormInput from './FormInput';
+import FormRow from './FormRow';
+import FormSection from './FormSection';
+import MapInputRow from './MapInputRow';
+import QualityField from './QualityField';
+import c2c from '@/js/apis/c2c';
+import constants from '@/js/constants';
+import ol from '@/js/libs/ol.js';
 
 const geoJSONFormat = new ol.format.GeoJSON();
 const FORM_PROJ = 'EPSG:4326';

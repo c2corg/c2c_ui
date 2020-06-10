@@ -36,8 +36,8 @@
 
 <script>
 import FeedWidget from '@/components/feed-widget/FeedWidget';
-import HomeBanner from './HomeBanner';
 import ForumWidget from './utils/ForumWidget';
+import HomeBanner from './HomeBanner';
 
 export default {
   name: 'FeedView',

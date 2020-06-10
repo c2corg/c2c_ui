@@ -427,11 +427,11 @@
 </template>
 
 <script>
+import ValidationButton from '@/components/yeti/ValidationButton';
+import axios from 'axios';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
-import axios from 'axios';
 import vueSlider from 'vue-slider-component';
-import ValidationButton from '@/components/yeti/ValidationButton';
 import yetiText from '@/components/yeti/Text';
 
 const YETI_URL_BASE =

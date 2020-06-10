@@ -57,9 +57,8 @@
 </template>
 
 <script>
-import imageUrls from '@/js/image-urls';
-
 import documentViewMixin from './utils/document-view-mixin.js';
+import imageUrls from '@/js/image-urls';
 
 export default {
   mixins: [documentViewMixin],

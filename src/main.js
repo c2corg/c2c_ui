@@ -1,14 +1,9 @@
 // Require the main Sass manifest file
-import Vue from 'vue';
 import App from '@/App.vue';
-
-import config from '@/js/config';
-
+import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
-
-import router from '@/js/vue-plugins/router';
-
 import alertWindow from '@/js/vue-plugins/alert-window';
+import config from '@/js/config';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
 import getText from '@/js/vue-plugins/gettext-plugin';
@@ -16,6 +11,7 @@ import globalComponents from '@/js/vue-plugins/generic-components';
 import helperWindow from '@/js/vue-plugins/helper-window';
 import imageViewer from '@/js/vue-plugins/image-viewer';
 import localStorage from '@/js/vue-plugins/local-storage';
+import router from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
 import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';

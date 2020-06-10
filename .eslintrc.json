@@ -15,7 +15,8 @@
     "vue/no-use-v-if-with-v-for": "error",
     "vue/prop-name-casing": ["error", "camelCase"],
     "eqeqeq": "warn",
-    "camelcase": "off"
+    "camelcase": "off",
+    "sort-imports": "error"
   },
   "parserOptions": {
     "parser": "babel-eslint"

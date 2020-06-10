@@ -1,24 +1,21 @@
-import constants from '@/js/constants';
-import c2c from '@/js/apis/c2c';
-import cooker from '@/js/cooker';
-
-import viewModeMixin from './view-mode-mixin';
-
-import DocumentViewHeader from './DocumentViewHeader';
-import CommentsBox from './boxes/CommentsBox';
-import MapBox from './boxes/MapBox';
-import ImagesBox from './boxes/ImagesBox';
-import RecentOutingsBox from './boxes/RecentOutingsBox';
-import ToolBox from './boxes/ToolBox';
-import RoutesBox from './boxes/RoutesBox';
-
-import FieldView from './field-viewers/FieldView';
-import LabelValue from './field-viewers/LabelValue';
 import ActivitiesField from './field-viewers/ActivitiesField';
-import EventActivityField from './field-viewers/EventActivityField';
+import CommentsBox from './boxes/CommentsBox';
+import DocumentViewHeader from './DocumentViewHeader';
 import DoubleNumericField from './field-viewers/DoubleNumericField';
+import EventActivityField from './field-viewers/EventActivityField';
+import FieldView from './field-viewers/FieldView';
+import ImagesBox from './boxes/ImagesBox';
+import LabelValue from './field-viewers/LabelValue';
+import MapBox from './boxes/MapBox';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
+import RecentOutingsBox from './boxes/RecentOutingsBox';
+import RoutesBox from './boxes/RoutesBox';
+import ToolBox from './boxes/ToolBox';
+import c2c from '@/js/apis/c2c';
+import constants from '@/js/constants';
+import cooker from '@/js/cooker';
+import viewModeMixin from './view-mode-mixin';
 
 export default {
   components: {

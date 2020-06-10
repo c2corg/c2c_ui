@@ -8,10 +8,9 @@
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
-
-import c2c from '@/js/apis/c2c';
 import FeedCard from '@/components/cards/FeedCard';
+import c2c from '@/js/apis/c2c';
+import infiniteScroll from 'vue-infinite-scroll';
 
 export default {
   components: {

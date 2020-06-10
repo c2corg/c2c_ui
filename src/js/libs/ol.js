@@ -1,33 +1,24 @@
-import { Map, View, Feature } from 'ol';
-
-import { Control, FullScreen, ScaleLine, Zoom, Attribution } from 'ol/control';
-
-import VectorLayer from 'ol/layer/Vector';
-import TileLayer from 'ol/layer/Tile';
-import ImageLayer from 'ol/layer/Image';
-
-import VectorSource from 'ol/source/Vector';
-import BingMaps from 'ol/source/BingMaps';
-import XYZ from 'ol/source/XYZ';
-import WMTS from 'ol/source/WMTS';
-import ImageStatic from 'ol/source/ImageStatic';
-
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
-
+import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
+import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
+import { DragAndDrop, Draw, Modify, Snap } from 'ol/interaction';
+import { Feature, Map, View } from 'ol';
 import { LineString, Point, Polygon } from 'ol/geom';
+import { buffer, containsXY, createEmpty, extend, getWidth } from 'ol/extent';
+import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
 
-import { Icon, Style, Circle, Fill, Stroke, Text } from 'ol/style';
-
-import Geolocation from 'ol/Geolocation';
-
-import GeoJSON from 'ol/format/GeoJSON';
+import BingMaps from 'ol/source/BingMaps';
 import GPX from 'ol/format/GPX';
+import GeoJSON from 'ol/format/GeoJSON';
+import Geolocation from 'ol/Geolocation';
+import ImageLayer from 'ol/layer/Image';
+import ImageStatic from 'ol/source/ImageStatic';
 import KML from 'ol/format/KML';
-import { get as getProjection, transform as transformProjection, transformExtent, toLonLat } from 'ol/proj';
-import { getWidth, containsXY, createEmpty, extend, buffer } from 'ol/extent';
-
-import { Draw, Modify, Snap, DragAndDrop } from 'ol/interaction';
-
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import WMTS from 'ol/source/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import XYZ from 'ol/source/XYZ';
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 

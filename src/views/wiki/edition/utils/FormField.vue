@@ -26,9 +26,8 @@
 </template>
 
 <script>
-import FormInput from './FormInput';
-
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import FormInput from './FormInput';
 
 export default {
   components: {

@@ -33,12 +33,10 @@
 </template>
 
 <script>
+import AssociationItems from './AssociationItems';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-
 import { requireDocumentProperty } from '@/js/properties-mixins';
-
-import AssociationItems from './AssociationItems';
 
 export default {
   components: { AssociationItems },

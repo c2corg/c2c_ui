@@ -1,5 +1,5 @@
-import common from './common.json';
 import Field from './Field.js';
+import common from './common.json';
 import documentsProperties from './documentsProperties.json';
 
 const getFieldsObject = function (fieldsArray) {
@@ -20,11 +20,10 @@ function Constants() {
   this.langs = common.attributes.langs;
   this.quality_types = common.attributes.quality_types;
 
-  // You can find associations in
-  //     https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
+  // You can find associations in https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
 
   // also, GUI avalaible associtions can be found here, on dataset attribute :
-  //     https://github.com/c2corg/v6_ui/search?l=HTML&q=app-add-association
+  // https://github.com/c2corg/v6_ui/search?l=HTML&q=app-add-association
 
   this.documentTypes = Object.keys(documentsProperties);
   this.objectDefinitions = documentsProperties;

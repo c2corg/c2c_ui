@@ -64,11 +64,9 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
-
-import { requireDocumentProperty } from '@/js/properties-mixins';
-
 import MergeDocumentLink from './MergeDocumentLink';
+import c2c from '@/js/apis/c2c';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   components: { MergeDocumentLink },

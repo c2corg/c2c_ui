@@ -72,10 +72,9 @@
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
 import ColoredIconDocument from './utils/ColoredIconDocument';
-
 import c2c from '@/js/apis/c2c';
+import infiniteScroll from 'vue-infinite-scroll';
 
 export default {
   components: { ColoredIconDocument },

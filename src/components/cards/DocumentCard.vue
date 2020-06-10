@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
-
 import AreaCard from './AreaCard';
 import ArticleCard from './ArticleCard';
 import BookCard from './BookCard';
@@ -23,6 +21,7 @@ import ProfileCard from './ProfileCard';
 import RouteCard from './RouteCard';
 import WaypointCard from './WaypointCard';
 import XreportCard from './XreportCard';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   components: {
