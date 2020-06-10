@@ -1,10 +1,15 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
-
-// Keep  on line per icon : it helps on bundle analysis
+import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons/faCreativeCommons';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
+import { faCircle as faCircleRegular } from '@fortawesome/free-regular-svg-icons/faCircle';
+import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/faClock';
+import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
+import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
-import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons/faArrowsAltV';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons/faArrowsAltV';
 import { faAt } from '@fortawesome/free-solid-svg-icons/faAt';
 import { faAtlas } from '@fortawesome/free-solid-svg-icons/faAtlas';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
@@ -91,36 +96,27 @@ import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserLock } from '@fortawesome/free-solid-svg-icons/faUserLock';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
-
-import { faCircle as faCircleRegular } from '@fortawesome/free-regular-svg-icons/faCircle';
-import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/faClock';
-import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
-import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-
-import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons/faCreativeCommons';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
-
-import qualityEmpty from '@/assets/font-awesome-custom/js/quality/empty';
-import qualityDraft from '@/assets/font-awesome-custom/js/quality/draft';
-import qualityMedium from '@/assets/font-awesome-custom/js/quality/medium';
-import qualityFine from '@/assets/font-awesome-custom/js/quality/fine';
-import qualityGreat from '@/assets/font-awesome-custom/js/quality/great';
+import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
 
 import activityHiking from '@/assets/font-awesome-custom/js/activity/hiking';
 import activityIce_climbing from '@/assets/font-awesome-custom/js/activity/ice_climbing';
-import activityOther from '@/assets/font-awesome-custom/js/activity/other';
 import activityMountain_biking from '@/assets/font-awesome-custom/js/activity/mountain_biking';
 import activityMountain_climbing from '@/assets/font-awesome-custom/js/activity/mountain_climbing';
+import activityOther from '@/assets/font-awesome-custom/js/activity/other';
 import activityParagliding from '@/assets/font-awesome-custom/js/activity/paragliding';
 import activityRock_climbing from '@/assets/font-awesome-custom/js/activity/rock_climbing';
 import activitySkitouring from '@/assets/font-awesome-custom/js/activity/skitouring';
 import activitySlacklining from '@/assets/font-awesome-custom/js/activity/slacklining';
-import activitySnowshoeing from '@/assets/font-awesome-custom/js/activity/snowshoeing';
 import activitySnow_ice_mixed from '@/assets/font-awesome-custom/js/activity/snow_ice_mixed';
+import activitySnowshoeing from '@/assets/font-awesome-custom/js/activity/snowshoeing';
 import activityVia_ferrata from '@/assets/font-awesome-custom/js/activity/via_ferrata';
-
+import documentTypeOuting from '@/assets/font-awesome-custom/js/document-type/outing';
+import paragliding from '@/assets/font-awesome-custom/js/miscs/paragliding';
+import qualityDraft from '@/assets/font-awesome-custom/js/quality/draft';
+import qualityEmpty from '@/assets/font-awesome-custom/js/quality/empty';
+import qualityFine from '@/assets/font-awesome-custom/js/quality/fine';
+import qualityGreat from '@/assets/font-awesome-custom/js/quality/great';
+import qualityMedium from '@/assets/font-awesome-custom/js/quality/medium';
 import waypointaccess from '@/assets/font-awesome-custom/js/waypoint/access';
 import waypointbase_camp from '@/assets/font-awesome-custom/js/waypoint/base_camp';
 import waypointbergschrund from '@/assets/font-awesome-custom/js/waypoint/bergschrund';
@@ -137,8 +133,8 @@ import waypointgite from '@/assets/font-awesome-custom/js/waypoint/gite';
 import waypointglacier from '@/assets/font-awesome-custom/js/waypoint/glacier';
 import waypointhut from '@/assets/font-awesome-custom/js/waypoint/hut';
 import waypointlake from '@/assets/font-awesome-custom/js/waypoint/lake';
-import waypointlocality from '@/assets/font-awesome-custom/js/waypoint/locality';
 import waypointlocal_product from '@/assets/font-awesome-custom/js/waypoint/local_product';
+import waypointlocality from '@/assets/font-awesome-custom/js/waypoint/locality';
 import waypointmisc from '@/assets/font-awesome-custom/js/waypoint/misc';
 import waypointparagliding_landing from '@/assets/font-awesome-custom/js/waypoint/paragliding_landing';
 import waypointparagliding_takeoff from '@/assets/font-awesome-custom/js/waypoint/paragliding_takeoff';
@@ -153,10 +149,6 @@ import waypointwaterpoint from '@/assets/font-awesome-custom/js/waypoint/waterpo
 import waypointwaypoints from '@/assets/font-awesome-custom/js/waypoint/waypoints';
 import waypointweather_station from '@/assets/font-awesome-custom/js/waypoint/weather_station';
 import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
-
-import documentTypeOuting from '@/assets/font-awesome-custom/js/document-type/outing';
-
-import paragliding from '@/assets/font-awesome-custom/js/miscs/paragliding';
 
 // registered globally
 export default function install(Vue) {

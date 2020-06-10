@@ -185,8 +185,8 @@
 </template>
 
 <script>
-import documentEditionViewMixin from './utils/document-edition-view-mixin';
 import CotometerWindow from './utils/CotometerWindow';
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
   components: { CotometerWindow },

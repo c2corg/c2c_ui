@@ -1,5 +1,6 @@
 import common from './common.json';
 import fieldsProperties from './fieldsProperties.json';
+
 import utils from '@/js/utils';
 
 const attrs = common.attributes;

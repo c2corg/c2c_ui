@@ -123,14 +123,14 @@
 </template>
 
 <script>
+import DisplayModeSwitch from './utils/DisplayModeSwitch';
+import ImageCards from './utils/ImageCards';
+import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
+import PageSelector from './utils/PageSelector';
+import QueryItems from './utils/QueryItems';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-
-import QueryItems from './utils/QueryItems';
-import PageSelector from './utils/PageSelector';
-import ImageCards from './utils/ImageCards';
-import DisplayModeSwitch from './utils/DisplayModeSwitch';
-import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
 
 const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 

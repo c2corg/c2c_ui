@@ -106,8 +106,9 @@
 </template>
 
 <script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 import InputConditionsLevels from './InputConditionsLevels';
+
+import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: { InputConditionsLevels },

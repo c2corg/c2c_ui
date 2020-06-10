@@ -38,10 +38,11 @@
 </template>
 
 <script>
-import constants from '@/js/constants';
-import QueryItem from './QueryItem';
 import AssociationQueryItem from './AssociationQueryItem';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
+import QueryItem from './QueryItem';
+
+import constants from '@/js/constants';
 
 const categorizedFieldsDefault = {
   General: [

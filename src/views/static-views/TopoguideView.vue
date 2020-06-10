@@ -105,10 +105,10 @@
 </template>
 
 <script>
-import constants from '@/js/constants';
-
 import TopoguideViewLink from './TopoguideViewLink';
 import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+
+import constants from '@/js/constants';
 
 export default {
   components: {

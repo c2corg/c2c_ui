@@ -73,6 +73,7 @@
 
 <script>
 import infiniteScroll from 'vue-infinite-scroll';
+
 import ColoredIconDocument from './utils/ColoredIconDocument';
 
 import c2c from '@/js/apis/c2c';

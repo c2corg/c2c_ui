@@ -73,8 +73,9 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import RevertVersionWindow from './windows/RevertVersionWindow';
+
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   components: { RevertVersionWindow },

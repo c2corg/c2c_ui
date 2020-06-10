@@ -57,9 +57,10 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
-import ColoredIconDocument from './utils/ColoredIconDocument';
 import AssociationHistoryPagination from './utils/AssociationHistoryPagination';
+import ColoredIconDocument from './utils/ColoredIconDocument';
+
+import c2c from '@/js/apis/c2c';
 
 export default {
   components: { ColoredIconDocument, AssociationHistoryPagination },

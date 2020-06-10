@@ -49,8 +49,9 @@
 <script>
 import Swiper from 'swiper/dist/js/swiper.js';
 
-import imageUrls from '@/js/image-urls';
 import ImageInfo from './ImageInfo';
+
+import imageUrls from '@/js/image-urls';
 
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {

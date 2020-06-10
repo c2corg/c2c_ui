@@ -1,7 +1,7 @@
+import { icon } from '@fortawesome/fontawesome-svg-core';
+
 import ol from '@/js/libs/ol.js';
 import utils from '@/js/utils.js';
-
-import { icon } from '@fortawesome/fontawesome-svg-core';
 
 const buildTextStyle = function (title, highlight) {
   // createTextStyle_ = function(feature, type, highlight) {

@@ -60,9 +60,10 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
-import AssociationOutingLink from './AssociationOutingLink';
 import AssociationImageLink from './AssociationImageLink';
+import AssociationOutingLink from './AssociationOutingLink';
+
+import c2c from '@/js/apis/c2c';
 
 export default {
   components: {

@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import ImagesUploader from '@/components/images-uploader/ImagesUploader';
+import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
-import DocumentVersionBanner from './DocumentVersionBanner';
-
 import isEditableMixin from './is-editable-mixin';
 import viewModeMixin from './view-mode-mixin';
+
+import ImagesUploader from '@/components/images-uploader/ImagesUploader';
 
 export default {
   components: {

@@ -18,8 +18,9 @@
 </template>
 
 <script>
+import { arrayMixin, baseMixin } from './mixins.js';
+
 import constants from '@/js/constants';
-import { baseMixin, arrayMixin } from './mixins.js';
 
 export default {
   mixins: [baseMixin, arrayMixin],

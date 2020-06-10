@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { baseMixin, arrayMixin } from './mixins.js';
+import { arrayMixin, baseMixin } from './mixins.js';
 
 export default {
   mixins: [baseMixin, arrayMixin],

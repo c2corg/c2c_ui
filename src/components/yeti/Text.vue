@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import Faq from '@/components/yeti/Faq';
 import Disclaimer from '@/components/yeti/Disclaimer';
+import Faq from '@/components/yeti/Faq';
+
 export default {
   components: { Faq, Disclaimer },
   props: {

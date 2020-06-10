@@ -173,11 +173,11 @@
 </template>
 
 <script>
+import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import imageUrls from '@/js/image-urls';
-
-import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
 const hasChanged = function (oldVal, newVal) {
   // does oldVal equals to newVal ?

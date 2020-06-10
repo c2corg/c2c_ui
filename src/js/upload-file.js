@@ -1,11 +1,11 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
-import moment from 'moment';
 import loadImage from 'blueimp-load-image';
-import ol from '@/js/libs/ol.js';
+import moment from 'moment';
 
-import c2c from '@/js/apis/c2c';
 import Worker from '@/js/Worker';
+import c2c from '@/js/apis/c2c';
+import ol from '@/js/libs/ol.js';
 
 // get all world extent. sometimes, geoloc in exif is outside this extent.
 const worldExtent = ol.proj.get('EPSG:4326').getExtent();

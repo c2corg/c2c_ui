@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
-import ol from '@/js/libs/ol.js';
 import d3 from '@/js/libs/d3.js';
+import ol from '@/js/libs/ol.js';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],

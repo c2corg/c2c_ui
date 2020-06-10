@@ -87,16 +87,15 @@
 </template>
 
 <script>
-import { requireFieldProperty } from '@/js/properties-mixins';
-
-import queryItemMixin from './query-item-mixin.js';
-
+import 'vue-slider-component/theme/default.css';
 import Multiselect from 'vue-multiselect';
 import vueSlider from 'vue-slider-component';
-import QueryItemSliderLabel from './QueryItemSliderLabel';
-import DateQueryItem from './DateQueryItem';
 
-import 'vue-slider-component/theme/default.css';
+import DateQueryItem from './DateQueryItem';
+import QueryItemSliderLabel from './QueryItemSliderLabel';
+import queryItemMixin from './query-item-mixin.js';
+
+import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: {

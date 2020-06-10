@@ -13,25 +13,23 @@
 </template>
 
 <script>
-// https://www.ag-grid.com/vue-getting-started/
 import { AgGridVue } from 'ag-grid-vue';
 
-import { requireDocumentTypeProperty } from '@/js/properties-mixins';
-
-import constants from '@/js/constants';
-
-import OutingDate from './cell-renderers/OutingDate';
-import DocumentLink from './cell-renderers/DocumentLink';
+import AreaList from './cell-renderers/AreaList';
+import DocumentActivities from './cell-renderers/DocumentActivities';
+import DocumentAuthor from './cell-renderers/DocumentAuthor';
 import DocumentField from './cell-renderers/DocumentField';
-import RouteRating from './cell-renderers/RouteRating';
-import OutingRating from './cell-renderers/OutingRating';
+import DocumentLink from './cell-renderers/DocumentLink';
+import MarkerCondition from './cell-renderers/MarkerCondition';
 import MarkerGpsTrace from './cell-renderers/MarkerGpsTrace';
 import MarkerImageCount from './cell-renderers/MarkerImageCount';
-import MarkerCondition from './cell-renderers/MarkerCondition';
 import MarkerQuality from './cell-renderers/MarkerQuality';
-import AreaList from './cell-renderers/AreaList';
-import DocumentAuthor from './cell-renderers/DocumentAuthor';
-import DocumentActivities from './cell-renderers/DocumentActivities';
+import OutingDate from './cell-renderers/OutingDate';
+import OutingRating from './cell-renderers/OutingRating';
+import RouteRating from './cell-renderers/RouteRating';
+
+import constants from '@/js/constants';
+import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
 function getColDef(vm, field, options) {
   options = options || {};

@@ -140,26 +140,23 @@
 </template>
 
 <script>
-import ol from '@/js/libs/ol';
-
-import c2c from '@/js/apis/c2c';
-import constants from '@/js/constants';
-
-import getFundraiser from '@/js/get-fundraiser';
-
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import isEditableMixin from '../is-editable-mixin';
 import viewModeMixin from '../view-mode-mixin';
-
-import ToolBoxButton from './ToolBoxButton';
-import LicenseBox from './LicenseBox';
-import AssociatedDocuments from './AssociatedDocuments';
-
-import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow';
 import TranslateWindow from '../windows/TranslateWindow';
+
+import AssociatedDocuments from './AssociatedDocuments';
+import LicenseBox from './LicenseBox';
+import ToolBoxButton from './ToolBoxButton';
+
+import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
+import c2c from '@/js/apis/c2c';
+import constants from '@/js/constants';
+import getFundraiser from '@/js/get-fundraiser';
+import ol from '@/js/libs/ol';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 const GeoJSON = new ol.format.GeoJSON();
 

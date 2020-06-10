@@ -66,8 +66,9 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
 import ImageUploader from './ImageUploader';
+
+import c2c from '@/js/apis/c2c';
 import uploadFile from '@/js/upload-file';
 
 export default {

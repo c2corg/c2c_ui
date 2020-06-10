@@ -84,8 +84,9 @@
 </template>
 
 <script>
-import c2c from '@/js/apis/c2c';
 import HistoryViewLinks from './utils/HistoryViewLinks';
+
+import c2c from '@/js/apis/c2c';
 
 export default {
   components: { HistoryViewLinks },
