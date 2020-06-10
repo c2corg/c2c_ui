@@ -253,6 +253,7 @@ export default {
 
     onUploadSuccess(document, image) {
       image.status = 'SUCCESS';
+
       Object.assign(image.document, document);
       this.computeReadyForSaving();
     },
@@ -260,7 +261,7 @@ export default {
     onUploadFailure(event, image) {
       image.percentCompleted = 100;
       image.status = 'FAILED';
-      image.errorMessage = event.message;
+      image.errorMessage = event?.message || this.$gettext('Image could not be processed');
     },
 
     computeReadyForSaving() {

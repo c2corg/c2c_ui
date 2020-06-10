@@ -35,7 +35,7 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 }
 
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
-const convertDMSToDecimal = function (degrees, minutes, seconds, direction) {
+const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
   let decimal = Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
 
   // Don't do anything for N or E
@@ -46,7 +46,7 @@ const convertDMSToDecimal = function (degrees, minutes, seconds, direction) {
   return decimal;
 };
 
-const parseDate = function (exif, iptc) {
+const parseDate = (exif, iptc) => {
   const iptcDate = iptc ? iptc.DateCreated : null;
   const exifDate = exif ? exif.DateTimeOriginal || exif.DateTime : null;
 
@@ -65,7 +65,7 @@ const parseDate = function (exif, iptc) {
   return date && date.isValid() ? date.format() : null;
 };
 
-const parseExifGeometry = function (exif) {
+const parseExifGeometry = (exif) => {
   if (!exif.GPSLatitude || !exif.GPSLongitude) {
     return undefined;
   }
@@ -86,7 +86,7 @@ const parseExifGeometry = function (exif) {
   return { geom: JSON.stringify(geom) };
 };
 
-const parseExifElevation = function (exif) {
+const parseExifElevation = (exif) => {
   if (!exif.GPSAltitude) {
     return undefined;
   }
@@ -95,84 +95,111 @@ const parseExifElevation = function (exif) {
   return isNaN(elevation) ? undefined : elevation;
 };
 
-const setIfDefined = function (document, name, value) {
+const setIfDefined = (document, name, value) => {
   if (value !== undefined) {
     document[name] = value;
   }
 };
 
-const uploadFile = function (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) {
-  const document = {};
-
-  const parseMetaData = function (metaData) {
-    const exif = metaData.exif ? metaData.exif.getAll() : null;
-    const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
-    let orientation = 0;
-
-    setIfDefined(document, 'date_time', parseDate(exif, iptc));
-
-    if (exif) {
-      orientation = metaData.exif.get('Orientation');
-
-      setIfDefined(document, 'exposure_time', exif.ExposureTime);
-      setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
-      setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
-      setIfDefined(document, 'fnumber', exif.FNumber);
-      setIfDefined(document, 'camera_name', exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined);
-      setIfDefined(document, 'geometry', parseExifGeometry(exif));
-      setIfDefined(document, 'elevation', parseExifElevation(exif));
-    }
-    preProcess(orientation);
-  };
-
-  const preProcess = function (orientation) {
-    if (orientation !== 0 && file.type === 'image/jpeg') {
-      loadImage(
-        file,
-        (canvas) => {
-          processDataUrl(canvas.toDataURL(file.type));
-
-          // and this function will call upload
-          canvas.toBlob(upload, file.type);
-        },
-        { canvas: true, orientation } // this will fix orientation from exif
-      );
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        processDataUrl(e.target.result);
-      };
-      reader.readAsDataURL(file);
-
-      upload(file);
-    }
-  };
-
-  const processDataUrl = function (dataUrl) {
-    // send data url to caller
-    onDataUrlReady(dataUrl);
-
-    // and use this to get image dimensions
-    const img = new Image();
-
-    img.onload = function () {
-      // image is loaded; sizes are available
-      document.width = img.width;
-      document.height = img.height;
+const readFile = async (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
     };
-
-    img.src = dataUrl;
-  };
-
-  const onUploadSuccess = function (event) {
-    document.filename = event.data.filename;
-    onSuccess(document);
-  };
-
-  const upload = function (data) {
-    worker.push(c2c.uploadImage.bind(c2c), data, onUploadProgress, onUploadSuccess, onFailure);
-  };
-
-  loadImage.parseMetaData(file, parseMetaData);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 };
+
+const extractDimensions = async (dataUrl) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve({ dataUrl, width: img.width, height: img.height });
+    img.src = dataUrl;
+  });
+};
+
+const parseMetaData = (document, metaData) => {
+  const exif = metaData.exif ? metaData.exif.getAll() : null;
+  const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
+  let orientation = 0;
+
+  setIfDefined(document, 'date_time', parseDate(exif, iptc));
+
+  if (exif) {
+    orientation = metaData.exif.get('Orientation');
+
+    setIfDefined(document, 'exposure_time', exif.ExposureTime);
+    setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
+    setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
+    setIfDefined(document, 'fnumber', exif.FNumber);
+    setIfDefined(document, 'camera_name', exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined);
+    setIfDefined(document, 'geometry', parseExifGeometry(exif));
+    setIfDefined(document, 'elevation', parseExifElevation(exif));
+  }
+  return orientation;
+};
+
+const preProcess = async (file, document, orientation, onDataUrlReady) => {
+  let options = {};
+  // fix orientation for JPEGs, based on EXIF
+  if (file.type === 'image/jpeg' && orientation) {
+    options = { ...options, orientation };
+  }
+
+  const result = await readFile(file);
+  // limit file size and dimensions
+  const { dataUrl, width, height } = await extractDimensions(result);
+
+  // no restriction on SVGs.
+  // images weighting over 2MB are restricted to 2048px height (thus allowing panos).
+  // this is a simple heuristic with flaws, but should match most cases
+  if (file.type !== 'image/svg+xml' && file.size > 2 * 1024 * 1024 && height > 2048) {
+    options = { ...options, maxHeight: 2048 };
+  }
+
+  if (Object.keys(options).length) {
+    options = { ...options, canvas: true };
+    const { image: canvas } = await loadImage(file, options);
+    onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
+    // and extract modified image for upload
+    return new Promise((resolve) => {
+      canvas.toBlob((file) => {
+        document.file_size = file.size;
+        document.width = canvas.width;
+        document.height = canvas.height;
+        resolve(file);
+      }, file.type);
+    });
+  } else {
+    onDataUrlReady(dataUrl); // send data url to caller
+    document.width = width;
+    document.height = height;
+    return Promise.resolve(file);
+  }
+};
+
+const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
+  try {
+    const document = {};
+    const metaData = await loadImage.parseMetaData(file);
+    const orientation = await parseMetaData(document, metaData);
+    const data = await preProcess(file, document, orientation, onDataUrlReady);
+    // do the upload
+    worker.push(
+      c2c.uploadImage.bind(c2c),
+      data,
+      onUploadProgress,
+      (event) => {
+        document.filename = event.data.filename;
+        onSuccess(document);
+      },
+      onFailure
+    );
+  } catch (error) {
+    onFailure();
+  }
+};
+
 export default uploadFile;
