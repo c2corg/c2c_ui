@@ -26,7 +26,7 @@
     "ag-grid-community": "23.2.1",
     "ag-grid-vue": "23.2.1",
     "axios": "0.19.2",
-    "blueimp-load-image": "5.12.0",
+    "blueimp-load-image": "5.13.0",
     "bulma": "0.9.0",
     "bulma-checkradio": "1.1.1",
     "core-js": "3.6.5",
