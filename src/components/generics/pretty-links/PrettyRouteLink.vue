@@ -1,7 +1,6 @@
 <template>
   <document-link :document="route" class="pretty-route-link has-hover-background">
     <document-title :document="route" />
-    <span>&nbsp;</span>
     <activities
       v-if="!hideActivities"
       :activities="route.activities"

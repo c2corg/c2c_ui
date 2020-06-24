@@ -95,7 +95,7 @@
             <h2 class="title is-2 has-text-light has-text-centered">
               {{ $gettext('xreports') | uppercaseFirstLetter }}
             </h2>
-            <div class="columns is-multiline is-variable is-mobile">
+            <div class="columns is-multiline is-mobile serac-activities">
               <topoguide-view-small-link
                 class="column topoguide-view-small-link"
                 v-for="eventActivity of $options.event_activities"
@@ -157,6 +157,12 @@ export default {
 
 .serac-block:hover {
   background-color: rgba(21, 50, 69, 0.6);
+}
+
+.serac-activities {
+  max-width: 699px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .button {
