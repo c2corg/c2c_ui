@@ -1,10 +1,9 @@
 <template>
-  <span v-if="array">
-    <span v-for="(item, i) of array" :key="i">
-      <span>{{ i18n ? $gettext(item, i18nContext) : item }}</span>
-      <span v-if="i != array.length - 1">, </span>
-    </span>
-  </span>
+  <span v-if="array"
+    ><span v-for="(item, i) of array" :key="i"
+      >{{ i18n ? $gettext(item, i18nContext) : item }}<span v-if="i != array.length - 1">, </span>
+    </span></span
+  >
 </template>
 
 <script>

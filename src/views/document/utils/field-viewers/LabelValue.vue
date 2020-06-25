@@ -23,15 +23,16 @@ export default {
 </script>
 
 <style scoped>
-/*
-.label-value span{
-    // TODO : icon activities is bigger. vertical align, and be careful to other items
-    // vertical-align: middle;
-    // display: inline-block;
+:lang(fr) .label-value-label:after {
+  content: '\00a0:';
 }
-*/
-
-.label-value-label:after {
-  content: ' :\00a0'; /* \00a0 is nbsp */
+:lang(it) .label-value-label:after,
+:lang(de) .label-value-label:after,
+:lang(en) .label-value-label:after,
+:lang(es) .label-value-label:after,
+:lang(ca) .label-value-label:after,
+:lang(eu) .label-value-label:after,
+:lang(zh) .label-value-label:after {
+  content: ':';
 }
 </style>

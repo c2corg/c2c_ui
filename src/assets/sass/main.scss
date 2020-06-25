@@ -1,31 +1,44 @@
 @import './variables.scss';
 @import './scrollbar.scss';
 
-@import "~bulma/sass/utilities/_all.sass";
+// with bulma 0.8.0, buttons are now 2.5em high. Use the following lines to restore previous behaviour.
+$control-border-width: 1px;
+$control-height: 2.25em;
+$control-padding-vertical: calc(0.375em - #{$control-border-width});
+$control-padding-horizontal: calc(0.625em - #{$control-border-width});
+$button-border-width: $control-border-width !default;
+$button-padding-vertical: calc(0.375em - #{$button-border-width});
+$button-padding-horizontal: 0.75em;
 
-@import "~bulma/sass/base/_all.sass";
-
-@import "~bulma/sass/components/card.sass";
-@import "~bulma/sass/components/dropdown.sass";
-@import "~bulma/sass/components/level.sass";
-@import "~bulma/sass/components/modal.sass";
-
-@import "~bulma/sass/elements/box.sass";
-@import "~bulma/sass/elements/button.sass";
-@import "~bulma/sass/elements/container.sass";
-@import "~bulma/sass/elements/content.sass";
-@import "~bulma/sass/form/_all.sass";
-@import "~bulma/sass/elements/icon.sass";
-@import "~bulma/sass/elements/image.sass";
-@import "~bulma/sass/elements/notification.sass";
-@import "~bulma/sass/elements/progress.sass";
-@import "~bulma/sass/elements/other.sass";
-@import "~bulma/sass/elements/table.sass";
-@import "~bulma/sass/elements/tag.sass";
-@import "~bulma/sass/elements/title.sass";
-
-@import "~bulma/sass/grid/columns.sass";
-@import "~bulma/sass/layout/section.sass";
+@import '~bulma/sass/utilities/_all.sass';
+//
+@import '~bulma/sass/base/_all.sass';
+//
+@import '~bulma/sass/elements/box.sass';
+@import '~bulma/sass/elements/button.sass';
+@import '~bulma/sass/elements/container.sass';
+@import '~bulma/sass/elements/content.sass';
+@import '~bulma/sass/elements/icon.sass';
+@import '~bulma/sass/elements/image.sass';
+@import '~bulma/sass/elements/notification.sass';
+@import '~bulma/sass/elements/progress.sass';
+@import '~bulma/sass/elements/other.sass';
+@import '~bulma/sass/elements/table.sass';
+@import '~bulma/sass/elements/tag.sass';
+@import '~bulma/sass/elements/title.sass';
+//
+@import '~bulma/sass/form/_all.sass';
+//
+@import '~bulma/sass/components/card.sass';
+@import '~bulma/sass/components/dropdown.sass';
+@import '~bulma/sass/components/level.sass';
+@import '~bulma/sass/components/modal.sass';
+//
+@import '~bulma/sass/grid/columns.sass';
+//
+@import '~bulma/sass/helpers/_all.sass';
+//
+@import '~bulma/sass/layout/section.sass';
 
 @import '~bulma-checkradio';
 // bulma checkradio isn't customizable with variables. Overrides its classes

@@ -36,7 +36,6 @@
               :class="listMode ? 'has-text-primary' : ''"
               :title="$gettext('List mode')"
             />
-            <span>&thinsp;</span>
             <fa-icon
               v-show="displayMode !== 'map'"
               icon="th"

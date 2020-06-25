@@ -68,15 +68,7 @@ $box-shadow: rgba(10, 10, 10, 0.1) 0 2px 3px 0, rgba(10, 10, 10, 0.1) 0 0 0 1px;
  */
 $navbar-height: 3.25rem;
 
-// TODO bulkma 0.7.3 will introduce $input-placeholder-color
-// but it's not yet (14/12/2018) available on npm
-$input-placeholder-color: rbg(160, 160, 160);
-
-::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #aaa !important;
-  opacity: 1; /* Firefox */
-}
+$input-placeholder-color: rgb(160, 160, 160);
 
 @import '~bulma/sass/utilities/initial-variables.sass';
 @import '~bulma/sass/utilities/functions.sass';

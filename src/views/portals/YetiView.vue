@@ -7,7 +7,6 @@
         <div class="yeti-icon is-inline-block">
           <icon-yeti />
         </div>
-        <span>&thinsp;</span>
         <span>YETI - Un outil de préparation de course</span>
       </h1>
     </div>

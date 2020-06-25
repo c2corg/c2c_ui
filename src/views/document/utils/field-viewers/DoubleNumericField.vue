@@ -1,7 +1,7 @@
 <template>
   <label-value v-if="value1 && value2" :label="label">
     <span>{{ signPlus }}{{ value1 }}&nbsp;{{ field1.unit }}</span>
-    <span>&nbsp;/&nbsp;</span>
+    <span>/</span>
     <span>{{ signMinus }}{{ value2 }}&nbsp;{{ field2.unit }}</span>
   </label-value>
   <field-view v-else-if="value1" :document="document" :field="field1" />
