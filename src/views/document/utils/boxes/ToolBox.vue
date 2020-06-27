@@ -241,22 +241,17 @@ export default {
     },
 
     linkToParaglidingOutings() {
-      const result = {
+      return {
         name: 'outings',
         query: {
           act: 'paragliding',
-          w: this.documentType === 'waypoint' ? [this.document.document_id] : [],
+          w: [
+            ...(this.documentType === 'waypoint' ? [this.document.document_id] : []),
+            ...this.document.associations.waypoints.map((w) => w.document_id),
+            ...this.document.associations.waypoint_children.map((w) => w.document_id),
+          ].join(','),
         },
       };
-
-      for (const waypoint of this.document.associations.waypoints) {
-        result.query.w.push(waypoint.document_id);
-      }
-      for (const waypoint of this.document.associations.waypoint_children) {
-        result.query.w.push(waypoint.document_id);
-      }
-
-      return result;
     },
   },
 
