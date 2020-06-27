@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div v-if="geometryHasChanged">
+      <div v-if="geometryHasChanged" class="map-container">
         <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
       </div>
 
@@ -601,5 +601,9 @@ del {
 h2 {
   margin-top: 2rem;
   margin-bottom: 0.5rem !important;
+}
+
+.map-container {
+  height: 400px;
 }
 </style>
