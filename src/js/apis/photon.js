@@ -14,12 +14,15 @@ Photon.prototype = Object.create(BaseApi.prototype);
 Photon.prototype.constructor = Photon;
 
 Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
-  const params = {
+  let params = {
     q: query,
-    lang,
     lon: centerWgs84[0],
     lat: centerWgs84[1],
   };
+  // only english, german, french and italian languages are supported
+  if (['en', 'de', 'fr', 'it'].includes(lang)) {
+    params = { ...params, lang };
+  }
 
   return this.get('/', { params });
 };
