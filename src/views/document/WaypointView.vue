@@ -18,7 +18,7 @@
         <div class="box">
           <div class="columns is-multiline">
             <div class="column is-4">
-              <!-- General  -->
+              <!-- General -->
               <field-view :document="document" :field="fields.elevation" />
               <field-view :document="document" :field="fields.waypoint_type" />
               <field-view :document="document" :field="fields.climbing_indoor_types" />
@@ -30,7 +30,13 @@
               <field-view :document="document" :field="fields.weather_station_types" />
               <field-view :document="document" :field="fields.rain_proof" />
               <field-view :document="document" :field="fields.children_proof" />
-              <field-view :document="document" :field="fields.capacity" v-if="document.capacity" />
+              <!-- $gettext('capacity', 'bivouac') -->
+              <field-view
+                :document="document"
+                :field="fields.capacity"
+                :context="capacityContext"
+                v-if="document.capacity"
+              />
               <field-view :document="document" :field="fields.capacity_staffed" />
               <field-view :document="document" :field="fields.length" />
               <field-view :document="document" :field="fields.slope" />
@@ -127,5 +133,11 @@ import waypointLabels from '@/js/waypoint-labels-mixin.js';
 
 export default {
   mixins: [documentViewMixin, waypointLabels],
+
+  computed: {
+    capacityContext() {
+      return this.document.waypoint_type === 'bivouac' ? this.document.waypoint_type : null;
+    },
+  },
 };
 </script>

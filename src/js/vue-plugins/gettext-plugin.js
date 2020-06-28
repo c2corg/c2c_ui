@@ -34,13 +34,11 @@ function getTranslation(lang, messages, msgid, msgctxt) {
   const message = messages[msgid];
 
   if (message === undefined) {
-    // eslint-disable-next-line
-    // console.warn(`Untranslated ${lang} key found: "${msgid}"`)
     return msgid;
   }
 
   // message can be a key-value object, if a context exists for this msgid
-  if (msgctxt !== undefined) {
+  if (!!msgctxt) {
     return message[msgctxt] || msgid;
   }
 
@@ -157,7 +155,7 @@ export default function install(Vue) {
       },
 
       gettext(msgid, msgctxt) {
-        return getTranslation(this.current, this.translations[this.current], msgid, msgctxt);
+        return getTranslation(this.translations[this.current], msgid, msgctxt);
       },
 
       getIANALanguageSubtag(lang) {

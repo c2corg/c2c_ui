@@ -1,5 +1,5 @@
 <template>
-  <label-value v-if="hasValue && visible" :label="$gettext(field.name)">
+  <label-value v-if="hasValue && visible" :label="label">
     <document-field :document="document" :field="field" :unit="unit || field.unit" :divisor="divisor" />
   </label-value>
 </template>
@@ -23,6 +23,10 @@ export default {
       type: Number,
       default: null,
     },
+    context: {
+      type: String,
+      default: null,
+    },
   },
 
   computed: {
@@ -42,6 +46,10 @@ export default {
 
     visible() {
       return this.field.isVisibleFor(this.document);
+    },
+
+    label() {
+      return this.$gettext(this.field.name, this.context);
     },
   },
 };
