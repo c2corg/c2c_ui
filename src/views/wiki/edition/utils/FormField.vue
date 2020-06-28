@@ -3,7 +3,7 @@
     <div class="field">
       <label class="label">
         <marker-helper :name="helper || field.helper" />
-        {{ label || $gettext(field.name) | uppercaseFirstLetter }}
+        {{ label || fieldLabel | uppercaseFirstLetter }}
         <span v-if="hasError" class="has-text-danger">
           <!-- $gettext('required field') -->
           <!-- $gettext('This field is too short') -->
@@ -50,6 +50,10 @@ export default {
       type: String,
       default: undefined,
     },
+    context: {
+      type: String,
+      default: null,
+    },
     placeholder: {
       type: String,
       default: ' ', // hack to force explicit placeholder
@@ -80,6 +84,12 @@ export default {
     },
     errorMessage() {
       return this.hasError ? this.$gettext(this.field.error.description) : null;
+    },
+    fieldLabel() {
+      if (this.context) {
+        return this.$gettext(this.field.name, this.context);
+      }
+      return this.$gettext(this.field.name);
     },
   },
 

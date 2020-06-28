@@ -73,7 +73,8 @@
       <div class="columns is-multiline">
         <form-field class="is-4" :document="document" :field="fields.custodianship" />
         <form-field class="is-4" :document="document" :field="fields.capacity_staffed" />
-        <form-field class="is-4" :document="document" :field="fields.capacity" />
+        <!-- $gettext('capacity', 'bivouac') -->
+        <form-field class="is-4" :document="document" :field="fields.capacity" :context="capacityContext" />
         <form-field class="is-4" :document="document" :field="fields.url" />
         <form-field class="is-4" :document="document" :field="fields.phone" />
         <form-field class="is-4" :document="document" :field="fields.phone_custodian" />
@@ -161,5 +162,11 @@ import waypointLabels from '@/js/waypoint-labels-mixin.js';
 
 export default {
   mixins: [documentEditionViewMixin, waypointLabels],
+
+  computed: {
+    capacityContext() {
+      return this.document && this.document.waypoint_type === 'bivouac' ? this.document.waypoint_type : null;
+    },
+  },
 };
 </script>
