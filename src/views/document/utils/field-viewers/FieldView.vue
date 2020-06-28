@@ -49,10 +49,7 @@ export default {
     },
 
     label() {
-      if (this.context) {
-        return this.$gettext(this.field.name, this.context);
-      }
-      return this.$gettext(this.field.name);
+      return this.$gettext(this.field.name, this.context);
     },
   },
 };

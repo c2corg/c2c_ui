@@ -86,10 +86,7 @@ export default {
       return this.hasError ? this.$gettext(this.field.error.description) : null;
     },
     fieldLabel() {
-      if (this.context) {
-        return this.$gettext(this.field.name, this.context);
-      }
-      return this.$gettext(this.field.name);
+      return this.$gettext(this.field.name, this.context);
     },
   },
 
