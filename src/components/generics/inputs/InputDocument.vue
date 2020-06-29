@@ -127,6 +127,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    clearInputOnToggle: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -247,6 +251,9 @@ export default {
         this.value_ = newValue;
       }
       this.closeDropdown();
+      if (this.clearInputOnToggle) {
+        this.searchText = '';
+      }
     },
   },
 };
