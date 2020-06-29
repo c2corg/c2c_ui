@@ -165,6 +165,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
     "Incidents and accidents": "Incidents et accidents",
     "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
@@ -512,7 +513,10 @@
     "camp_site": {
       "waypoint_types": "camping"
     },
-    "capacity": "Nombre de places hors gardiennage",
+    "capacity": {
+      "$$noContext": "Nombre de places",
+      "bivouac": "Nombre de places"
+    },
     "capacity_staffed": "Nombre de places en gardiennage",
     "categories": "Catégories",
     "cave": {

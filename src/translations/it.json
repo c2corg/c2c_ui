@@ -455,7 +455,10 @@
     "camp_site": {
       "waypoint_types": "campeggio"
     },
-    "capacity": "Posti letto (non gestito)",
+    "capacity": {
+      "$$noContext": "Posti letto",
+      "bivouac": "Posti letto"
+    },
     "capacity_staffed": "Posti letto (gestito)",
     "categories": "categorie",
     "cave": {

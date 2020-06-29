@@ -481,7 +481,10 @@
     "canyon": {
       "waypoint_types": "gorja"
     },
-    "capacity": "capacitat en període no guardat",
+    "capacity": {
+      "$$noContext": "capacitat ",
+      "bivouac": "capacitat "
+    },
     "capacity_staffed": "nombre de places en període guardat",
     "cave": {
       "waypoint_types": "cova"

@@ -268,7 +268,10 @@
     "canyon": {
       "waypoint_types": "cañón"
     },
-    "capacity": "Número de camas fuera de los períodos de guardia",
+    "capacity": {
+      "$$noContext": "Número de camas",
+      "bivouac": "Número de camas"
+    },
     "capacity_staffed": "Número de camas durante los períodos de guardia",
     "categories": "categorías",
     "cave": {

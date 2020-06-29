@@ -552,7 +552,10 @@
     "canyon": {
       "waypoint_types": "Kanyon"
     },
-    "capacity": "Anzahl der Betten (nicht bewartet)",
+    "capacity": {
+      "$$noContext": "Anzahl der Betten",
+      "bivouac": "Anzahl der Betten"
+    },
     "capacity_staffed": "Anzahl der Betten (bewartet)",
     "categories": "Kategorien",
     "cave": {
