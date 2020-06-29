@@ -24,7 +24,7 @@ function cleanMessageId(msgid) {
   return msgid;
 }
 
-function getTranslation(lang, messages, msgid, msgctxt) {
+function getTranslation(messages, msgid, msgctxt) {
   //, n = 1, context = null, defaultPlural = null){
   if (messages === undefined) {
     // `messages are not yet available`
