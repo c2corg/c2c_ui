@@ -28,8 +28,8 @@ const compiler = require('vue-template-compiler');
 const NODETYPE_TEXT = 3;
 
 const template_regex = /(<template>[\s\S]*<\/template>)/;
-const gettext_template1 = /\$gettext\('((?:[^']|\\')*?)'\)/g;
-const gettext_template2 = /\$gettext\('((?:[^']|\\')*?)', *'([^']*?)'\)/g;
+const gettext_template1 = /\$gettext\(\s*'((?:[^']|\\')*?)'\s*\)/gm;
+const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
 
 /**************************************************************************
   a "Result" is a .pot item (msgctxt/msgid), with every associated meta-data
@@ -92,16 +92,11 @@ Process.prototype.addScript = function (file, data) {
 
 Process.prototype.parseScript = function (file, data, regex) {
   let msgData;
+  while ((msgData = regex.exec(data)) !== null) {
+    const msgid = msgData[1];
+    const msgctxt = msgData[2];
 
-  const lines = data.split('\n');
-
-  for (let i = 0; i < lines.length; i++) {
-    while ((msgData = regex.exec(lines[i])) !== null) {
-      const msgid = msgData[1];
-      const msgctxt = msgData[2];
-
-      this.push(file, i + 1, msgctxt, msgid.replace(/\\'/g, "'"));
-    }
+    this.push(file, null, msgctxt, msgid.replace(/\\'/g, "'"));
   }
 };
 
