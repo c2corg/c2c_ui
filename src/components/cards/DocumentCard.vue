@@ -65,6 +65,7 @@ export default {
   position: relative;
 
   .document-card {
+    border-radius: $radius;
     border-left: 2px solid $color-base-c2c;
   }
 }
