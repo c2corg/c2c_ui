@@ -152,6 +152,9 @@
     "Last forum topics": "Darrers temes al fòrum",
     "Last outings": "Darreres sortides",
     "Latitude": "Latitud",
+    "Layers": {
+      "Map controls": "Capes"
+    },
     "Leave fullscreen": "Surt del mode de pantalla completa",
     "Let's make our feedbacks valuable": "Donem valor al nostre feedback",
     "Licenses": "Llicències",
@@ -794,7 +797,8 @@
     },
     "ice and dry climbing gear": "Escalada en gel i dry-tooling",
     "ice_climbing": {
-      "activities": "Cascada de gel"
+      "activities": "Cascada de gel",
+      "event_activities": "Cascada de gel"
     },
     "ice_rating": "Dificultat en gel",
     "image": "imatge",
@@ -1003,6 +1007,7 @@
     "or try the following pages:": "o proveu les pàgines següents:",
     "orientations": "Orientacions",
     "other": {
+      "event_activities": "altre",
       "event_types": "altre"
     },
     "other_comments": "Altres comentaris",
@@ -1225,7 +1230,8 @@
     },
     "ski_rating": "Dificultat en esquí",
     "skitouring": {
-      "activities": "Esquí, surf"
+      "activities": "Esquí, surf",
+      "event_activities": "Esquí, surf"
     },
     "skitouring gear": "Esquí, surf de neu i raquetes",
     "slab": {
@@ -1275,7 +1281,8 @@
       "weather_station_types": "gruix de neu"
     },
     "snow_ice_mixed": {
-      "activities": "Neu, gel i mixt"
+      "activities": "Neu, gel i mixt",
+      "event_activities": "Neu, gel i mixt"
     },
     "snow_quality": "Qualitat de la neu",
     "snow_quantity": "Quantitat de neu",
