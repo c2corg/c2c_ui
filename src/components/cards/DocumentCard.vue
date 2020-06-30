@@ -69,17 +69,20 @@ export default {
   }
 }
 
-@media screen and (max-width: $tablet) {
-  .document-card {
-    border-left: 0 !important;
-    border-right: 0 !important;
-  }
-}
-
 .delete-button {
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
   font-size: 2rem;
+}
+
+@media screen and (max-width: $tablet) {
+  .document-card-container .document-card {
+    border-left: $card-border;
+  }
+
+  .delete-button {
+    right: 0;
+  }
 }
 </style>
