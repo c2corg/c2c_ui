@@ -22,6 +22,7 @@
     "Associated outings": "Salidas asociadas",
     "Associated routes": "Itinerarios asociados",
     "Association": "Asociación",
+    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconocimiento (Attribution): en cualquier explotación de la obra autorizada por la licencia hará falta reconocer la autoría.",
     "Average slope (degrees)": "Inclinación media (grados)",
     "Average slope in degree": "inclinación media en grados",
     "Block account": "Bloquear cuenta",
@@ -104,6 +105,7 @@
     "My profile": "Mi perfil",
     "New password": "Nueva contraseña",
     "No account yet?": "¿No tienes cuenta?",
+    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
@@ -125,10 +127,12 @@
     "Settings": "Configuración",
     "Several days?": "¿Varios días?",
     "Share with us!": "¡ Comparte con nosotros!",
+    "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
+    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
     "Time": "Horario",
     "Toggle fullscreen": "Pasar a pantalla completa",
     "Topoguide": "Topoguía",
@@ -269,7 +273,7 @@
       "waypoint_types": "cañón"
     },
     "capacity": {
-      "$$noContext": "Número de camas",
+      "$$noContext": "Número de camas fuera de los períodos de guardia",
       "bivouac": "Número de camas"
     },
     "capacity_staffed": "Número de camas durante los períodos de guardia",
@@ -557,7 +561,8 @@
     },
     "ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "ice_climbing": {
-      "activities": "Escalada de hielo"
+      "activities": "Escalada de hielo",
+      "event_activities": "Escalada de hielo"
     },
     "ice_rating": "Cotación hielo",
     "image": "imagen",
@@ -730,6 +735,7 @@
     "opening_periods": "Período de apertura",
     "orientations": "Orientaciones",
     "other": {
+      "event_activities": "otro",
       "event_types": "otro"
     },
     "outing": "salidas",
@@ -902,7 +908,8 @@
     },
     "ski_rating": "Cotación esqui",
     "skitouring": {
-      "activities": "esqui, surf"
+      "activities": "esqui, surf",
+      "event_activities": "esqui, surf"
     },
     "skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "slab": {
@@ -923,7 +930,8 @@
       "weather_station_types": "Altura de neive"
     },
     "snow_ice_mixed": {
-      "activities": "Nieve, hielo y mixto"
+      "activities": "Nieve, hielo y mixto",
+      "event_activities": "Nieve, hielo y mixto"
     },
     "snow_quality": "Calidad de neive",
     "snow_quantity": "Cantidad de nieve",
