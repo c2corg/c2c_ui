@@ -43,6 +43,7 @@
     v-else-if="field.parent == 'associations'"
     :document-type="field.documentType"
     multiple
+    clear-input-on-toggle
     :has-error="hasError"
     @add="$documentUtils.propagateAssociationProperties(document, arguments[0])"
     v-model="object[field.name]"

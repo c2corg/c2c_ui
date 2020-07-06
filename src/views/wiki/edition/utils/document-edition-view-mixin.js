@@ -163,7 +163,7 @@ export default {
 
         this.afterLoad();
 
-        // TODO : implements a algorithm to determin if document has bee modified
+        // TODO : implements a algorithm to determine if document has been modified
         this.modified = true;
       }
     },
