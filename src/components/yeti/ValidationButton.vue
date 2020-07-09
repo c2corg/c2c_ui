@@ -1,13 +1,15 @@
 <template>
-  <div class="validation-button">
-    <button class="button is-primary" :class="{ 'is-loading': loading }" :disabled="loading" @click="$emit('click')">
-      Calculer le risque
-    </button>
-    <p class="yetiForm-error" v-if="currentError">
-      <span>
-        {{ currentError }}
-      </span>
-    </p>
+  <div class="columns">
+    <div class="column has-text-right">
+      <button class="button is-primary" :class="{ 'is-loading': loading }" :disabled="loading" @click="$emit('click')">
+        Calculer le risque
+      </button>
+      <p class="yetiForm-error" v-if="currentError">
+        <span>
+          {{ currentError }}
+        </span>
+      </p>
+    </div>
   </div>
 </template>
 
