@@ -33,18 +33,22 @@
 
       <div class="columns yeti-content" v-else>
         <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
+          <div class="columns mb-0 yeti-columns--reverse">
+            <ul class="column is-narrow pb-0">
+              <li>
+                <router-link class="is-block yetitabs-link" to="/yeti/faq">FAQ ?</router-link>
+              </li>
+            </ul>
+            <yetiTabs :tabs="tabs" :active-tab.sync="activeTab" :document="document" />
+          </div>
           <div class="box">
-            <div class="columns">
-              <div class="column">
-                <router-link class="is-size-6 is-pulled-right" to="/yeti/faq">FAQ ?</router-link>
-              </div>
-            </div>
-            <yetiPanel class="is-relative">
+            <yetiPanel ref="panel0" :index="0" :active-tab="activeTab" class="is-relative">
               <validation-button
                 class="is-hidden-mobile yeti-validation--top"
                 :current-error="currentError"
                 :loading="promise"
                 @click="compute"
+                tabindex="-1"
               />
               <yetiSubPanel>
                 Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr>
@@ -66,14 +70,25 @@
                 @click="compute"
               />
             </yetiPanel>
-          </div>
 
-          <div class="box is-hidden-mobile" v-if="document">
-            <div class="title is-4 document-title">Route</div>
-            <document-link :document="document">
-              <icon-route class="document-icon" />
-              <document-title :document="document" />
-            </document-link>
+            <yetiPanel ref="panel1" :index="1" :active-tab="activeTab">
+              <yetiSubPanel>
+                <template #content v-if="document">
+                  <p>
+                    Le document actuellement affiché sur la carte
+                  </p>
+                  <document-link :document="document">
+                    <icon-route class="document-icon" />
+                    <document-title :document="document" />
+                  </document-link>
+                </template>
+                <template #content v-else>
+                  <p>
+                    Affichez l’un des itinéraires de camptocamp au sein de YETI depuis la page du document.
+                  </p>
+                </template>
+              </yetiSubPanel>
+            </yetiPanel>
           </div>
 
           <div class="box yeti-logos">
@@ -152,6 +167,7 @@ import yetiText from '@/components/yeti/Text';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import yetiPanel from '@/components/yeti/YetiPanel';
 import yetiSubPanel from '@/components/yeti/YetiSubPanel';
+import yetiTabs from '@/components/yeti/YetiTabs';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
@@ -205,7 +221,7 @@ const ERRORS = {
 export default {
   name: 'Yeti',
 
-  components: { vueSlider, ValidationButton, yetiText, yetiPanel, yetiSubPanel, panelBRA, panelMethodes },
+  components: { vueSlider, ValidationButton, yetiText, yetiTabs, yetiPanel, yetiSubPanel, panelBRA, panelMethodes },
 
   data() {
     return {
@@ -213,6 +229,9 @@ export default {
       checkDisclaimer: false,
 
       yetiMap: null,
+
+      tabs: ['Calcul', 'Traces'],
+      activeTab: 0,
 
       bra: {
         high: null,
@@ -631,6 +650,23 @@ $yeti-height: calc(
 
 .yeti-icon {
   transform: scale(0.9);
+}
+
+.yeti-columns--reverse {
+  flex-direction: row-reverse;
+}
+
+/deep/ .yeti-counter {
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  vertical-align: 0.1rem;
+  margin-left: 0.25rem;
+  background: $grey;
+  color: $white;
+  border-radius: 50%;
+  font-size: 0.72em;
+  text-align: center;
 }
 
 .map-container {

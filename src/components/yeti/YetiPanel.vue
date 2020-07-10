@@ -1,11 +1,28 @@
 <template>
-  <div class="yeti-panel">
+  <div
+    class="yeti-panel"
+    role="tabpanel"
+    :id="'panel' + index"
+    :aria-labelledby="'tab' + index"
+    :hidden="activeTab !== index"
+  >
     <slot></slot>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    index: {
+      type: Number,
+      required: true,
+    },
+    activeTab: {
+      type: Number,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

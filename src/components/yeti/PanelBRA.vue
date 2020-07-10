@@ -67,7 +67,7 @@
       <div>
         <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
           Bulletins BRA par massif
-          <span v-if="promiseMountains" class="yetimountains-count">{{ countVisibleMountains }}</span>
+          <span v-if="promiseMountains" class="yeti-counter">{{ countVisibleMountains }}</span>
           <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
             icon="angle-down"
@@ -277,19 +277,6 @@ export default {
 .yetimountains-title {
   cursor: pointer;
   padding: 0.25rem 0.75rem;
-}
-
-.yetimountains-count {
-  display: inline-block;
-  width: 1.1rem;
-  height: 1.1rem;
-  vertical-align: 0.1rem;
-  margin-left: 1rem;
-  background: $grey;
-  color: $white;
-  border-radius: 50%;
-  font-size: 0.72em;
-  text-align: center;
 }
 
 .yetimountains-arrow {

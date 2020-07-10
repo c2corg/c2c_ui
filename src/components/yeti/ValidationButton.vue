@@ -1,7 +1,13 @@
 <template>
   <div class="columns">
     <div class="column has-text-right">
-      <button class="button is-primary" :class="{ 'is-loading': loading }" :disabled="loading" @click="$emit('click')">
+      <button
+        class="button is-primary"
+        :class="{ 'is-loading': loading }"
+        :disabled="loading"
+        :tabindex="tabindex"
+        @click="$emit('click')"
+      >
         Calculer le risque
       </button>
       <p class="yetiForm-error" v-if="currentError">
@@ -23,6 +29,10 @@ export default {
     loading: {
       type: [Promise, Object],
       default: null,
+    },
+    tabindex: {
+      type: String,
+      default: '0',
     },
   },
 };
