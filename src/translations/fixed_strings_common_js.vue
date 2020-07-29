@@ -416,7 +416,6 @@
     <span v-translate translate-context="paragliding_ratings">2</span>
     <span v-translate translate-context="paragliding_ratings">3</span>
     <span v-translate translate-context="paragliding_ratings">4</span>
-    <span v-translate translate-context="paragliding_ratings">5</span>
     <!-- parking_fee_types -->
     <span v-translate translate-context="parking_fee_types">yes</span>
     <span v-translate translate-context="parking_fee_types">seasonal</span>
