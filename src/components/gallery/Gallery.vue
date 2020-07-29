@@ -48,6 +48,7 @@ export default {
   .swiper-slide {
     height: 200px;
     width: auto;
+    cursor: pointer;
 
     img {
       height: 200px;
