@@ -90,6 +90,8 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
+
 import { arrayMixin, baseMixin } from './mixins.js';
 
 import c2c from '@/js/apis/c2c';
@@ -191,18 +193,14 @@ export default {
       }
     },
 
-    onInput() {
-      if (this.$options.timeoutId) {
-        clearTimeout(this.$options.timeoutId);
-      }
-
+    onInput: debounce(function () {
       if (!this.searchText || this.searchText.length < 3) {
         this.promise = {};
         return;
       }
 
-      this.$options.timeoutId = setTimeout(this.loadOptions, 300);
-    },
+      this.loadOptions();
+    }, 300),
 
     loadOptions() {
       this.promise = c2c
