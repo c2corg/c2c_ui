@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
 import 'vue-slider-component/theme/default.css';
 import Multiselect from 'vue-multiselect';
 import vueSlider from 'vue-slider-component';
@@ -114,7 +115,6 @@ export default {
     },
   },
 
-  timeoutId: null,
   computed: {
     interval() {
       const scope = this.field.max - this.field.min;
@@ -137,17 +137,9 @@ export default {
     },
 
     // for simple input, add a small delay (avoir spamming API, and url history)
-    oninput() {
-      if (this.$options.timeoutId) {
-        clearTimeout(this.$options.timeoutId);
-      }
-
-      this.$options.timeoutId = setTimeout(this.updateValue, 300);
-    },
-
-    updateValue() {
+    oninput: debounce(function () {
       this.value = this.$refs.input.value;
-    },
+    }, 300),
   },
 };
 </script>
