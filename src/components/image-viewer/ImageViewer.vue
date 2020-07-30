@@ -148,7 +148,9 @@ export default {
             slides,
             renderSlide(image) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
-                  <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  <div class="swiper-zoom-container">
+                    <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
             },
@@ -162,6 +164,8 @@ export default {
           keyboard: {
             enabled: true,
           },
+
+          zoom: true,
         };
 
         if (this.$options.swiper) {
