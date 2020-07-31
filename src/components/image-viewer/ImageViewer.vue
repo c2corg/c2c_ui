@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer">
+  <div v-if="visible" class="image-viewer" ref="container">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
@@ -48,6 +48,7 @@
 
 <script>
 import Swiper from 'swiper/dist/js/swiper.js';
+import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
@@ -85,6 +86,7 @@ const exitFullscreen = function () {
 
 export default {
   swiper: null,
+  zt: null,
 
   components: {
     ImageInfo,
@@ -176,8 +178,25 @@ export default {
         this.$options.swiper.on('slideChange', this.onSlideChange);
         this.$options.swiper.on('init', () => {
           window.history.pushState(null, null, '#swipe-gallery');
+
+          // close when the user goes back in history
           window.addEventListener('popstate', this.close);
+          // close on mouse wheel
           window.addEventListener('wheel', this.close);
+          // close on vertical swipe
+          this.zt = new ZingTouch.Region(this.$refs.container);
+          this.zt.bind(this.$refs.container, 'swipe', (event) => {
+            const {
+              detail: {
+                data: [{ currentDirection }],
+              },
+            } = event;
+            const isSwipeTop = currentDirection > 60 && currentDirection < 120;
+            const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
+            if (isSwipeTop || isSwipeBottom) {
+              this.close();
+            }
+          });
         });
         this.$options.swiper.init();
       });
@@ -194,8 +213,15 @@ export default {
 
     close() {
       this.visible = false;
+      // clean handlers
       window.removeEventListener('popstate', this.close);
       window.removeEventListener('wheel', this.close);
+      if (this.zt) {
+        this.zt.unbind(this.$refs.container);
+        this.zt = null;
+      }
+      // if we closed without hitting back, go back once in history
+      // to remove the hash
       if (window.location.hash === '#swipe-gallery') {
         window.history.back();
       }
