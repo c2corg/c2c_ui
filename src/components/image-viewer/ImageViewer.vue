@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer">
+  <div v-if="visible" class="image-viewer" ref="container">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
@@ -13,14 +13,14 @@
           :document="activeDocument"
           :lang="activeDocument.available_langs[0]"
           class="has-text-grey-lighter"
-          @click="visible = false"
+          @click="close()"
         >
           <fa-icon icon="edit" />
         </edit-link>
 
         <fa-icon class="has-cursor-pointer" icon="info-circle" @click="toggleImageInfo(activeDocument)" />
         <fa-icon class="has-cursor-pointer" :icon="isFullscreen ? 'compress' : 'expand'" @click="toggleFullscreen" />
-        <fa-icon class="has-cursor-pointer" icon="plus" transform="rotate-45" @click="visible = false" />
+        <fa-icon class="has-cursor-pointer" icon="plus" transform="rotate-45" @click="close()" />
       </span>
     </div>
 
@@ -48,6 +48,7 @@
 
 <script>
 import Swiper from 'swiper/dist/js/swiper.js';
+import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
@@ -85,6 +86,7 @@ const exitFullscreen = function () {
 
 export default {
   swiper: null,
+  zt: null,
 
   components: {
     ImageInfo,
@@ -126,6 +128,7 @@ export default {
         const slides = this.images;
 
         const swiperOptions = {
+          init: false,
           initialSlide,
           slidesPerView: 1,
 
@@ -147,7 +150,9 @@ export default {
             slides,
             renderSlide(image) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
-                  <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  <div class="swiper-zoom-container">
+                    <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                  </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
             },
@@ -161,6 +166,8 @@ export default {
           keyboard: {
             enabled: true,
           },
+
+          zoom: true,
         };
 
         if (this.$options.swiper) {
@@ -169,6 +176,29 @@ export default {
 
         this.$options.swiper = new Swiper(this.$refs.swiper, swiperOptions);
         this.$options.swiper.on('slideChange', this.onSlideChange);
+        this.$options.swiper.on('init', () => {
+          window.history.pushState(null, null, '#swipe-gallery');
+
+          // close when the user goes back in history
+          window.addEventListener('popstate', this.close);
+          // close on mouse wheel
+          window.addEventListener('wheel', this.close);
+          // close on vertical swipe
+          this.zt = new ZingTouch.Region(this.$refs.container);
+          this.zt.bind(this.$refs.container, 'swipe', (event) => {
+            const {
+              detail: {
+                data: [{ currentDirection }],
+              },
+            } = event;
+            const isSwipeTop = currentDirection > 60 && currentDirection < 120;
+            const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
+            if (isSwipeTop || isSwipeBottom) {
+              this.close();
+            }
+          });
+        });
+        this.$options.swiper.init();
       });
     },
 
@@ -178,12 +208,28 @@ export default {
 
     clear() {
       this.images = [];
+      this.close();
+    },
+
+    close() {
       this.visible = false;
+      // clean handlers
+      window.removeEventListener('popstate', this.close);
+      window.removeEventListener('wheel', this.close);
+      if (this.zt) {
+        this.zt.unbind(this.$refs.container);
+        this.zt = null;
+      }
+      // if we closed without hitting back, go back once in history
+      // to remove the hash
+      if (window.location.hash === '#swipe-gallery') {
+        window.history.back();
+      }
     },
 
     onKeydown(event) {
       if (event.key === 'Escape') {
-        this.visible = false;
+        this.close();
       }
     },
 
