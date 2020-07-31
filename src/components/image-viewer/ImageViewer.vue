@@ -235,7 +235,7 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
-$headerHeight: 52px;
+$headerHeight: 3rem;
 $paginationHeight: 30px;
 
 .image-viewer {
@@ -251,6 +251,7 @@ $paginationHeight: 30px;
     justify-content: space-between;
     padding: 0.5rem 1rem;
     margin-bottom: 0 !important;
+    height: $headerHeight;
 
     .image-viewer-title {
       margin: auto;
@@ -269,6 +270,8 @@ $paginationHeight: 30px;
 
   &-swiper {
     width: 100vw;
+    // on mobile, we don't have pagination, but this will give enough space to display
+    // the title on one line.
     height: calc(100% - #{$headerHeight} - #{$paginationHeight});
   }
 
@@ -310,11 +313,15 @@ $paginationHeight: 30px;
     left: 0;
     width: 100%;
     text-align: center;
+    // since mobile are small, we don't do text ellipsis and allow multi line text
+    // make it displayed on top of the image, and with some alpha background in case it
+    // overlaps the image
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
   }
 
   .image-viewer-buttons {
-    position: absolute;
-    top: 0;
+    position: fixed;
     right: 1em;
   }
 }
