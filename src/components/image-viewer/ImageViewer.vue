@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer" ref="container">
+  <div v-if="visible" class="image-viewer">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
@@ -26,9 +26,10 @@
 
     <div ref="swiper" class="image-viewer-swiper">
       <div class="swiper-wrapper" />
-      <div class="swiper-button-prev" />
-      <div class="swiper-button-next" />
     </div>
+
+    <div class="swiper-button-prev" />
+    <div class="swiper-button-next" />
 
     <div class="image-viewer-pagination is-hidden-mobile">
       <span
@@ -184,8 +185,8 @@ export default {
           // close on mouse wheel
           window.addEventListener('wheel', this.close);
           // close on vertical swipe
-          this.zt = new ZingTouch.Region(this.$refs.container);
-          this.zt.bind(this.$refs.container, 'swipe', (event) => {
+          this.zt = new ZingTouch.Region(this.$refs.swiper);
+          this.zt.bind(this.$refs.swiper, 'swipe', (event) => {
             const {
               detail: {
                 data: [{ currentDirection }],
