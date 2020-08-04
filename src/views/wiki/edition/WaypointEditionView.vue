@@ -158,7 +158,7 @@
 <script>
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
-import waypointLabels from '@/js/waypoint-labels-mixin.js';
+import waypointLabels from '@/js/waypoint-labels-mixin';
 
 export default {
   mixins: [documentEditionViewMixin, waypointLabels],

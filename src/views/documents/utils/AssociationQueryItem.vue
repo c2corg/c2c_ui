@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import mixin from './query-item-mixin.js';
+import mixin from './query-item-mixin';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';

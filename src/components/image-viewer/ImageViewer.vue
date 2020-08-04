@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Swiper from 'swiper/dist/js/swiper.js';
+import Swiper from 'swiper';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';

@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { cardMixin } from './utils/mixins.js';
+import { cardMixin } from './utils/mixins';
 
 import Gallery from '@/components/gallery/Gallery';
 import forum from '@/js/apis/forum';

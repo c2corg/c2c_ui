@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins';
 
 import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 

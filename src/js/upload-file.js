@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
-import ol from '@/js/libs/ol.js';
+import ol from '@/js/libs/ol';
 
 // get all world extent. sometimes, geoloc in exif is outside this extent.
 const worldExtent = ol.proj.get('EPSG:4326').getExtent();

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import forum from '@/js/apis/forum.js';
+import forum from '@/js/apis/forum';
 
 const EXCLUDED_CATEGORIES = [
   // https://forum.camptocamp.org/c/comments

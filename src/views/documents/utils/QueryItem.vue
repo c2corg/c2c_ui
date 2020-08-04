@@ -94,7 +94,7 @@ import vueSlider from 'vue-slider-component';
 
 import DateQueryItem from './DateQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
-import queryItemMixin from './query-item-mixin.js';
+import queryItemMixin from './query-item-mixin';
 
 import { requireFieldProperty } from '@/js/properties-mixins';
 

@@ -9,7 +9,7 @@ import QualityField from './QualityField';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-import ol from '@/js/libs/ol.js';
+import ol from '@/js/libs/ol';
 
 const geoJSONFormat = new ol.format.GeoJSON();
 const FORM_PROJ = 'EPSG:4326';

@@ -104,14 +104,14 @@
 <script>
 import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
-import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers.js';
+import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
   buildDiffStyle,
   buildPolygonStyle,
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
-} from './map-utils.js';
+} from './map-utils';
 
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
 import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';

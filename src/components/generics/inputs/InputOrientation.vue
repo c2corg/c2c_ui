@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { arrayMixin, baseMixin } from './mixins.js';
+import { arrayMixin, baseMixin } from './mixins';
 
 export default {
   mixins: [baseMixin, arrayMixin],

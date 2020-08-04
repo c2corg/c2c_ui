@@ -1,4 +1,4 @@
-import Field from './Field.js';
+import Field from './Field';
 import common from './common.json';
 import documentsProperties from './documentsProperties.json';
 

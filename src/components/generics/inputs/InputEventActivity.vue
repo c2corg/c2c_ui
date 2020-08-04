@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins';
 
 import constants from '@/js/constants';
 

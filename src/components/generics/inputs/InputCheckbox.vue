@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins';
 
 export default {
   mixins: [baseMixin],

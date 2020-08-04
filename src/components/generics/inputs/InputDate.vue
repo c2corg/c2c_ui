@@ -16,7 +16,7 @@
 import Datepicker from 'vuejs-datepicker';
 import { ca, de, en, es, fr, it } from 'vuejs-datepicker/dist/locale';
 
-import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins';
 
 // note that eu is missing. Sorry euskara...
 const datepickerLocales = {

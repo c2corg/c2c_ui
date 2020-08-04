@@ -17,7 +17,7 @@ import screen from '@/js/vue-plugins/screen';
 import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
-import vueMoment from '@/js/vue-plugins/vue-moment.js';
+import vueMoment from '@/js/vue-plugins/vue-moment';
 
 require('./assets/sass/main.scss');
 

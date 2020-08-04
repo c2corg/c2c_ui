@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins.js';
+import { baseMixin } from './mixins';
 
 const range = function (from, to) {
   const result = [];

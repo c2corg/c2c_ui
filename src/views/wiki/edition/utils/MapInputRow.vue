@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import ol from '@/js/libs/ol.js';
+import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 const geoJSONFormat = new ol.format.GeoJSON();

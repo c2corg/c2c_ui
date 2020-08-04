@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { documentCardMixin } from './utils/mixins.js';
+import { documentCardMixin } from './utils/mixins';
 
 export default {
   mixins: [documentCardMixin],

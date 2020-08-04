@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import d3 from '@/js/libs/d3.js';
-import ol from '@/js/libs/ol.js';
+import d3 from '@/js/libs/d3';
+import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {

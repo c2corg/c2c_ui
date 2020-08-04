@@ -81,7 +81,7 @@
 import EditorButton from './EditorButton';
 import LinkHelper from './LinkHelper';
 
-import cooker from '@/js/cooker.js';
+import cooker from '@/js/cooker';
 
 function Selection(textarea, onInput) {
   this.textarea = textarea;

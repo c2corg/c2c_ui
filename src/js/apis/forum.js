@@ -1,4 +1,4 @@
-import BaseApi from '@/js/apis/BaseApi.js';
+import BaseApi from '@/js/apis/BaseApi';
 import config from '@/js/config';
 
 function Forum() {

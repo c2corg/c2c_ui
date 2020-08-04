@@ -45,7 +45,7 @@
 
 <script>
 import OutingsDownloader from './utils/OutingsDownloader';
-import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 import config from '@/js/config';

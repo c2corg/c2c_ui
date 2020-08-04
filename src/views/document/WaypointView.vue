@@ -127,9 +127,9 @@
 </template>
 
 <script>
-import documentViewMixin from './utils/document-view-mixin.js';
+import documentViewMixin from './utils/document-view-mixin';
 
-import waypointLabels from '@/js/waypoint-labels-mixin.js';
+import waypointLabels from '@/js/waypoint-labels-mixin';
 
 export default {
   mixins: [documentViewMixin, waypointLabels],

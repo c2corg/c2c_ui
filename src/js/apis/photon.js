@@ -1,7 +1,7 @@
 // http://photon.komoot.de/
 // https://github.com/komoot/photon
 
-import BaseApi from '@/js/apis/BaseApi.js';
+import BaseApi from '@/js/apis/BaseApi';
 
 function Photon() {
   BaseApi.call(this, 'https://photon.komoot.de/api/');

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import documentEditionViewMixin from './utils/document-edition-view-mixin.js';
+import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
   mixins: [documentEditionViewMixin],
