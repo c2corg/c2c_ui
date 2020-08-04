@@ -4,7 +4,7 @@
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
       </span>
-      <span class="is-size-5 is-nowrap image-viewer-buttons">
+      <span class="is-size-3 is-nowrap image-viewer-buttons">
         <document-link :document="activeDocument" class="has-text-grey-lighter">
           <fa-icon icon="eye" />
         </document-link>
