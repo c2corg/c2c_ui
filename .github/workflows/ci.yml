@@ -3,9 +3,9 @@ name: Continuous integration
 on:
   push:
     branches:
-      - "**"
+      - '**'
     tags:
-      - "**"
+      - '**'
 
 jobs:
   build:
@@ -121,7 +121,7 @@ jobs:
           changelog=$(git log --pretty=oneline ${previousTag}..${currentTag} --no-merges)
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
-          changelog="${changelog//$'\r'/'%0D'}" 
+          changelog="${changelog//$'\r'/'%0D'}"
           echo "::set-output name=changelog::$changelog"
       - name: Create or update release
         uses: meeDamian/github-release@2.0
@@ -134,7 +134,7 @@ jobs:
 
   push-i18n:
     needs: build
-    if: "github.ref == 'refs/heads/master'"
+    if: "github.ref == 'refs/heads/master' && github.repository == 'c2corg/c2c_ui'"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
