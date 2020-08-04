@@ -1,3 +1,4 @@
+import 'elm-pep';
 import { Feature, Map, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
