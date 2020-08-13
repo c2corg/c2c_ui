@@ -1,8 +1,9 @@
 <template>
-  <div class="panelMethodes">
+  <div class="yeti-subpanel panelMethodes">
+    <subPanelTitle>Méthodes</subPanelTitle>
     <div class="columns is-mobile yetitabs">
       <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">
-        <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method === item }">
+        <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method.type === item }">
           <input
             :id="'c2c-method-' + item"
             type="radio"
@@ -196,6 +197,8 @@
 </template>
 
 <script>
+import subPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+
 const DANGER = {
   min: 1,
   max: 16,
@@ -208,6 +211,7 @@ const DANGER = {
 };
 
 export default {
+  components: { subPanelTitle },
   props: {
     method: {
       type: Object,
@@ -291,6 +295,12 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
+
+p:not(:last-child),
+ul:not(:last-child),
+table:not(:last-child) {
+  margin-bottom: 1rem;
+}
 
 .yetiform-danger {
   width: 100%;

@@ -1,5 +1,6 @@
 <template>
-  <div class="panelBRA">
+  <div class="yeti-subpanel panelBRA">
+    <subPanelTitle>Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr></subPanelTitle>
     <div class="columns is-mobile">
       <div class="column">
         <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
@@ -67,7 +68,7 @@
       <div>
         <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
           Bulletins BRA par massif
-          <span v-if="promiseMountains" class="yeti-counter">{{ countVisibleMountains }}</span>
+          <counter v-if="mountainsLength">{{ countVisibleMountains }}</counter>
           <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
             icon="angle-down"
@@ -76,10 +77,10 @@
         </p>
       </div>
       <div v-if="showMountainsList">
-        <div v-if="promiseMountains">
+        <div v-if="mountainsLength">
           <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
           <dl>
-            <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
+            <div v-for="(mountainsForMassif, massif) of mountains" :key="massif">
               <dt class="yetimountains-listtitle">
                 {{ massif }}
               </dt>
@@ -112,38 +113,35 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-import ol from '@/js/libs/ol';
-
-const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
+import counter from '@/components/yeti/Counter.vue';
+import subPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 
 export default {
+  components: { counter, subPanelTitle },
   props: {
     bra: {
       type: Object,
       default: null,
     },
-    map: {
+    mountains: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
   data() {
     return {
-      mountains: {},
-      visibleMountains: {},
-      promiseMountains: null,
       showMountainsList: false,
     };
   },
   computed: {
+    mountainsLength() {
+      return this.countVisibleMountains >= 0;
+    },
     countVisibleMountains() {
-      return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
+      return Object.values(this.mountains).reduce((a, b) => a + b.length, 0);
     },
   },
   watch: {
-    map: 'setMoutainsList',
     'bra.isDifferent': 'checkBraIsDifferent',
   },
   methods: {
@@ -162,71 +160,6 @@ export default {
         this.bra.low = null;
         this.bra.altiThreshold = null;
       }
-    },
-
-    setMoutainsList() {
-      // mountains
-      this.map.map.on('moveend', this.onMapMoveEnd);
-      axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult).catch(this.onMountainsError);
-    },
-
-    onMountainsResult(data) {
-      const features = data.data;
-      this.mountains = new ol.format.GeoJSON().readFeatures(features).map((mountain) => {
-        return mountain.getProperties();
-      });
-      this.sortMountainsByMassif();
-      this.setVisibleMountains();
-
-      this.promiseMountains = true;
-    },
-
-    onMountainsError() {
-      // silent error
-      this.promiseMountains = null;
-    },
-
-    setVisibleMountains() {
-      const mapExtent = this.map.getExtent('EPSG:4326');
-      // clone this.mountains first, with no reference
-      this.visibleMountains = Object.assign({}, this.mountains);
-      // then filter if polygon isn’t in view
-      for (const massif in this.visibleMountains) {
-        this.visibleMountains[massif] = this.visibleMountains[massif].filter((mountain) => {
-          const polygon = mountain.geometry;
-          return polygon.intersectsExtent(mapExtent);
-        });
-        // unset massif if empty
-        if (this.visibleMountains[massif].length === 0) {
-          delete this.visibleMountains[massif];
-        }
-      }
-    },
-
-    sortMountainsByMassif() {
-      // first, order mountains by massifs
-      const sortedMountains = {};
-      for (let i = 0; i < this.mountains.length; i++) {
-        if (!sortedMountains[this.mountains[i].mountain]) {
-          sortedMountains[this.mountains[i].mountain] = [];
-        }
-        sortedMountains[this.mountains[i].mountain].push(this.mountains[i]);
-      }
-      this.mountains = sortedMountains;
-
-      // then sort mountains inside each massif
-      for (const i in this.mountains) {
-        this.mountains[i].sort((a, b) => {
-          if (a.title < b.title) return -1;
-          if (b.title > a.title) return 1;
-          return 0;
-        });
-      }
-    },
-
-    onMapMoveEnd(event) {
-      this.mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
-      this.setVisibleMountains();
     },
   },
 };

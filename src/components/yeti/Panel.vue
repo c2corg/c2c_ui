@@ -29,12 +29,6 @@ export default {
 @import '@/assets/sass/variables.scss';
 
 /deep/ {
-  p:not(:last-child),
-  ul:not(:last-child),
-  table:not(:last-child) {
-    margin-bottom: 1rem;
-  }
-
   a:hover,
   a:focus {
     text-decoration: underline;
@@ -53,7 +47,11 @@ export default {
   strong,
   dt {
     font-weight: bold;
-    color: $grey;
+    color: $grey-dark;
+  }
+
+  .yeti-subpanel + .yeti-subpanel {
+    margin-top: 2rem;
   }
 
   .content-ul {
