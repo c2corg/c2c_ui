@@ -865,7 +865,7 @@
     "impossible": {
       "glacier_ratings": "infranchissable - passage impossible"
     },
-    "increase_impact": "Eléments ayant aggravé les conséquences de l’événement",
+    "increase_impact": "Éléments ayant aggravé les conséquences de l’événement",
     "injury_without_fall": {
       "event_types": "lésion sans chute"
     },
@@ -1207,7 +1207,7 @@
     "recent_avalanche": {
       "avalanche_signs": "trace d'avalanche récente (après la dernière chute de neige, pluie, vent ou redoux)"
     },
-    "reduce_impact": "Éléments ayant atténué les conséquences de l'évènement",
+    "reduce_impact": "Éléments ayant atténué les conséquences de l'événement",
     "remarks": "Remarques",
     "required field": "champ obligatoire",
     "rescue": "Intervention des services de secours",
