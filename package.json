@@ -72,7 +72,7 @@
     "prettier": "2.0.5",
     "pretty-quick": "3.0.0",
     "sass-loader": "9.0.3",
-    "snyk": "1.381.1",
+    "snyk": "1.382.0",
     "vue-template-compiler": "2.6.12",
     "webpack-bundle-analyzer": "3.8.0",
     "xml2js": "0.4.23"
