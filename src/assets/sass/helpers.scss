@@ -1,80 +1,78 @@
 @import './variables.scss';
 
-.has-hover-background:hover{
-    background: $hover-background;
+.has-hover-background:hover {
+  background: $hover-background;
 }
 
 // force nowrap
-.is-nowrap{
-    white-space: nowrap;
+.is-nowrap {
+  white-space: nowrap;
 }
 
 // Force a inline element to nowrap, and ellipse overflow
-.is-ellipsed{
+.is-ellipsed {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media screen and (min-width: $tablet) {
+  .is-ellipsed-tablet {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
 }
 
-
-@media screen and (min-width: $tablet) {
-    .is-ellipsed-tablet{
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-
-.has-cursor-pointer{
-    cursor:pointer;
+.has-cursor-pointer {
+  cursor: pointer;
 }
 
 .card-icon {
-    color: $text;
+  color: $text;
 }
 
 .has-text-secondary {
-    color: $secondary;
+  color: $secondary;
 }
 
 .has-background-secondary {
-    background-color: $secondary;
+  background-color: $secondary;
 }
 
 .has-text-normal {
-    color: $text;
+  color: $text;
 }
 
 .has-rounded-corner {
-    border-radius: $radius;
+  border-radius: $radius;
 }
 
 @media print {
-    /* print styles go here */
+  /* print styles go here */
 
-    /* Printing from Firefox with content display:flex will print only the first page.
+  /* Printing from Firefox with content display:flex will print only the first page.
     https://bugzilla.mozilla.org/show_bug.cgi?id=1241323
     */
-    .is-block-print {
-        display:block !important;
-    }
+  .is-block-print {
+    display: block !important;
+  }
 
-    .no-print {
-        display: none!important;
-    }
+  .no-print {
+    display: none !important;
+  }
 
-    .has-background-white-print {
-        background-color: white!important;
-    }
+  .has-background-white-print {
+    background-color: white !important;
+  }
 
-    .box {
-        padding: 0;
-        box-shadow: none;
-        border-bottom: 1px solid lightGrey;
-    }
+  .box {
+    padding: 0;
+    box-shadow: none;
+    border-bottom: 1px solid lightGrey;
+  }
 
-    .is-12-print{
-        width: 100%!important;
-    }
-
+  .is-12-print {
+    width: 100% !important;
+  }
 }
