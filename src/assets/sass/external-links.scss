@@ -1,7 +1,7 @@
 /* full links, like https://... http://... //... get an external link icon */
 $escaped-color-link: '%23#{str-slice(inspect($color-link), 2)}';
 
-a[href*="//"]:after
+a[href*="//"]::after
 {
   content: ' ';
   // Icon from https://fontawesome.com/icons/external-link-alt?style=solid (CC BY 4.0)
@@ -12,16 +12,16 @@ a[href*="//"]:after
 }
 
 /* except camptocamp full links */
-a[href^="https://www.camptocamp.org"]:after,
-a[href^="https://forum.camptocamp.org"]:after,
-a[href^="https://media.camptocamp.org"]:after
+a[href^="https://www.camptocamp.org"]::after,
+a[href^="https://forum.camptocamp.org"]::after,
+a[href^="https://media.camptocamp.org"]::after
 {
   content: none;
 }
 
 /* also hide the icon when printed */
 @media print {
-  a[href*="//"]:after
+  a[href*="//"]::after
   {
     content: none;
   }
