@@ -31,9 +31,9 @@
     "bulma-checkradio": "1.1.1",
     "core-js": "3.6.5",
     "d3": "5.16.0",
-    "elm-pep": "^1.0.6",
+    "elm-pep": "1.0.6",
     "file-saver": "2.0.2",
-    "lodash.debounce": "^4.0.8",
+    "lodash.debounce": "4.0.8",
     "moment": "2.27.0",
     "ol": "6.4.3",
     "proj4": "2.6.2",
@@ -47,7 +47,7 @@
     "vue-router": "3.4.3",
     "vue-slider-component": "3.2.5",
     "vuejs-datepicker": "1.6.2",
-    "zingtouch": "^1.0.6"
+    "zingtouch": "1.0.6"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "4.5.4",
