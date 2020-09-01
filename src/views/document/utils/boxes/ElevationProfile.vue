@@ -114,17 +114,11 @@ export default {
       }
 
       // is there any elevation data
-      if (
-        !this.coords.some((coord) => {
-          return coord.length > 2 && coord[2] !== 0;
-        })
-      ) {
+      if (!this.coords.some((coord) => coord.length > 2 && coord[2] !== 0)) {
         return;
       }
 
-      this.timeAvailable = this.coords.every((coord) => {
-        return coord.length > 3;
-      });
+      this.timeAvailable = this.coords.every((coord) => coord.length > 3);
       this.hasData = true;
     },
 
@@ -188,41 +182,21 @@ export default {
       // Scales and axes
       this.y = d3.scaleLinear().range([height, 0]);
       this.yAxis = d3.axisLeft().scale(this.y).tickFormat(d3.format('.0f'));
-      this.y
-        .domain(
-          d3.extent(this.data, (d) => {
-            return d.ele;
-          })
-        )
-        .nice();
+      this.y.domain(d3.extent(this.data, (d) => d.ele)).nice();
 
       this.x1 = d3.scaleLinear().range([0, width]);
       this.x1Axis = d3.axisBottom().scale(this.x1);
-      this.x1
-        .domain(
-          d3.extent(this.data, (d) => {
-            return d.d;
-          })
-        )
-        .nice();
+      this.x1.domain(d3.extent(this.data, (d) => d.d)).nice();
 
       if (this.timeAvailable) {
         this.x2 = d3.scaleTime().range([0, width]);
         this.x2Axis = d3
           .axisBottom()
           .scale(this.x2)
-          .tickFormat((t) => {
-            // force display of elapsed time as hrs:mins. It is not datetime!
-            return ~~(t / 3600000) + ':' + d3.format('02d')(~~((t % 3600000) / 60000));
-          });
+          // force display of elapsed time as hrs:mins. It is not datetime!
+          .tickFormat((t) => ~~(t / 3600000) + ':' + d3.format('02d')(~~((t % 3600000) / 60000)));
 
-        this.x2
-          .domain(
-            d3.extent(this.data, (d) => {
-              return d.elapsed;
-            })
-          )
-          .nice(d3.timeHour);
+        this.x2.domain(d3.extent(this.data, (d) => d.elapsed)).nice(d3.timeHour);
       }
 
       this.svg
@@ -251,22 +225,14 @@ export default {
       // data lines
       this.dLine = d3
         .line()
-        .x((d) => {
-          return this.x1(d.d);
-        })
-        .y((d) => {
-          return this.y(d.ele);
-        });
+        .x((d) => this.x1(d.d))
+        .y((d) => this.y(d.ele));
 
       if (this.timeAvailable) {
         this.tLine = d3
           .line()
-          .x((d) => {
-            return this.x2(d.elapsed);
-          })
-          .y((d) => {
-            return this.y(d.ele);
-          });
+          .x((d) => this.x2(d.elapsed))
+          .y((d) => this.y(d.ele));
       }
 
       // display line path
@@ -338,13 +304,9 @@ export default {
       // );
     },
 
-    mousemove() {
-      const bisectDistance = d3.bisector((d) => {
-        return d.d;
-      }).left;
-      const bisectDate = d3.bisector((d) => {
-        return d.elapsed;
-      }).left;
+    mousemove(event) {
+      const bisectDistance = d3.bisector((d) => d.d).left;
+      const bisectDate = d3.bisector((d) => d.elapsed).left;
 
       const formatDistance = d3.format('.2f');
       const formatDate = d3.timeFormat('%H:%M');
@@ -354,8 +316,8 @@ export default {
       const bisect = this.mode === 'distance' ? bisectDistance : bisectDate;
       const x0 =
         this.mode === 'distance'
-          ? this.x1.invert(d3.mouse(this.svg.node())[0])
-          : this.x2.invert(d3.mouse(this.svg.node())[0]);
+          ? this.x1.invert(d3.pointer(event, this.svg.node())[0])
+          : this.x2.invert(d3.pointer(event, this.svg.node())[0]);
 
       const i = bisect(this.data, x0, 1, this.data.length - 1);
       const d0 = this.data[i - 1];
