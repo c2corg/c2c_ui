@@ -218,7 +218,7 @@
     "orientation_types": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
     "paragliding_ratings": ["1", "2", "3", "4"],
     "parking_fee_types": ["yes", "seasonal", "no"],
-    "previous_injuries": ["no", "previous_injuries_2"],
+    "previous_injuries": ["no", "previous_injuries_2", "previous_injuries_3"],
     "product_types": ["farm_sale", "restaurant", "grocery", "bar", "sport_shop"],
     "public_transportation_ratings": [
       "good service",
