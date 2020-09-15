@@ -423,7 +423,6 @@
     <!-- previous_injuries -->
     <span v-translate translate-context="previous_injuries">no</span>
     <span v-translate translate-context="previous_injuries">previous_injuries_2</span>
-    <span v-translate translate-context="previous_injuries">previous_injuries_3</span>
     <!-- product_types -->
     <span v-translate translate-context="product_types">farm_sale</span>
     <span v-translate translate-context="product_types">restaurant</span>
