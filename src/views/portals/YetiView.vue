@@ -62,7 +62,12 @@
             </panel>
 
             <panel ref="panel1" :index="1" :active-tab="activeTab">
-              <subPanelCourse :map="yetiMap" :features="features" :features-title="featuresTitle" @gpx="onGpxLoaded" />
+              <subPanelCourse
+                :map="yetiMap"
+                :features="features"
+                :features-title.sync="featuresTitle"
+                @gpx="onGpxLoaded"
+              />
             </panel>
           </div>
 
@@ -253,8 +258,8 @@ export default {
     mapZoom: 'check',
     areaOk: 'check',
     featuresTitle(newValue) {
-      // set default featuresTitle
-      if (!newValue) {
+      // set default featuresTitle if null (from yeti map)
+      if (newValue == null) {
         this.featuresTitle = TEXTS.featuresTitle;
       }
     },

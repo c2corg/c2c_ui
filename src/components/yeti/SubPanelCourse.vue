@@ -5,12 +5,36 @@
       <div class="columns is-mobile">
         <div class="column">
           <p class="features-title">
-            <icon-route class="document-icon" />
-            <strong>{{ featuresTitle }}</strong>
+            <icon-route class="icon document-icon" />
+            <fa-icon icon="pen" class="icon edit-icon" />
+            <span
+              v-show="!hasFeaturesTitle"
+              class="features-title-text features-title-placeholder"
+              @click="onEditNewFeaturesTitle"
+            >
+              Ajoutez un titre…
+            </span>
+            <!-- eslint-disable -->
+            <!-- allow to write {{...}} on same line to prevent too much spaces in contenteditable element -->
+            <span
+              v-show="hasFeaturesTitle"
+              class="features-title-text features-title-content"
+              ref="featuresTitle"
+              tabindex="0"
+              contenteditable
+              spellcheck="false"
+              @blur="onEditFeaturesTitle"
+              @keypress.13.prevent
+              >{{ editableFeaturesTitle }}</span
+            >
+            <!-- eslint-enable -->
           </p>
         </div>
         <div class="column is-narrow">
-          <button class="button is-secondary is-small" @click="onRemoveFeatures">Supprimer la trace</button>
+          <button class="button is-secondary is-small" @click="onRemoveFeatures">
+            <fa-icon icon="trash" class="trash-icon" />
+            Supprimer la trace
+          </button>
         </div>
       </div>
       <div class="ml-5 mb-5">
@@ -97,12 +121,43 @@ export default {
   },
   data() {
     return {
+      editableFeaturesTitle: '',
+      newFeaturesTitle: false,
       loading: false,
       formats: ['GPX', 'KML'],
       format: 'GPX',
     };
   },
+  computed: {
+    hasFeaturesTitle() {
+      return !(!this.editableFeaturesTitle.length && !this.newFeaturesTitle);
+    },
+  },
+  watch: {
+    featuresTitle() {
+      // if featuresTitle was changed (load document), set to editableFeaturesTitle
+      this.editableFeaturesTitle = this.featuresTitle;
+    },
+  },
+  mounted() {
+    // when mounted, set editableFeaturesTitle to featuresTitle
+    this.editableFeaturesTitle = this.featuresTitle;
+  },
   methods: {
+    onEditFeaturesTitle(e) {
+      if (e.target.innerText.length === 0) {
+        this.newFeaturesTitle = false;
+      }
+      this.$emit('update:featuresTitle', e.target.innerText);
+    },
+
+    onEditNewFeaturesTitle() {
+      this.newFeaturesTitle = true;
+      this.$nextTick(() => {
+        this.$refs.featuresTitle.focus();
+      });
+    },
+
     onLoadGpx() {
       this.$refs.gpxFileInput.click();
     },
@@ -157,6 +212,47 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.features-title {
+  display: flex;
+  line-height: 1.4;
+}
+.features-title-text {
+  min-width: 100px;
+  border: solid 1px transparent;
+  border-radius: 2px;
+  padding: 2px 2em 2px 2px;
+  box-decoration-break: clone;
+}
+.features-title-text:hover,
+.features-title-text:focus {
+  border-color: #b5b5b5;
+}
+.features-title-placeholder {
+  font-style: italic;
+}
+.features-title-content {
+  font-weight: bold;
+}
+.icon {
+  margin-top: 2px;
+}
+.edit-icon {
+  order: 1;
+  opacity: 0;
+  margin-left: -1.5em;
+  pointer-events: none;
+  transform: scale(0.75);
+}
+.features-title:hover .edit-icon {
+  opacity: 0.75;
+}
+.document-icon {
+  margin-right: 3px;
+}
+.trash-icon {
+  margin-right: 3px;
+}
+
 .upload-button {
   position: relative;
 }
@@ -173,15 +269,6 @@ input[type='file'] {
 
 .load-gpx {
   margin-top: 2rem;
-}
-
-.document-icon {
-  margin-right: 3px;
-}
-
-.features-title {
-  padding: 0.15em 0;
-  line-height: 1.4;
 }
 
 .form-export {
