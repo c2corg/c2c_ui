@@ -276,9 +276,8 @@ export default {
       this.map.un('click', this.mapView.onClick);
       // global events
       this.map.on('moveend', this.onMapMoveEnd);
-      // features events (added/removed feature)
+      // features events (added feature)
       this.featuresLayerSource.on('addfeature', this.onFeature);
-      this.featuresLayerSource.on('removefeature', this.onFeature);
     },
 
     addInteractions() {
@@ -332,23 +331,37 @@ export default {
       // first, remove camptocamp document
       this.promiseDocument = null;
       // and clear geometry
-      this.featuresLayerSource.clear();
+      this.featuresLayerSource.clear(true);
+
+      // before reading gpx, set what we are doing
+      this.loadingExternalFeatures = true;
 
       const gpxFormat = new ol.format.GPX();
       const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
       features.map(this.addFeature);
       this.featuresTitleFromSource = this.getFeaturesTitleFromGpx(features);
 
+      // gpx is loaded, go back to normal case
+      this.loadingExternalFeatures = false;
+      // and emit new features
+      this.emitFeaturesEvent();
       // fit map to new features
       this.fitMapToFeatures();
     },
 
     addFeaturesFromDocument(doc) {
+      // before reading document, set what we are doing
+      this.loadingExternalFeatures = true;
+
       const documentGeometry = doc.data.geometry.geom_detail;
       const feature = new ol.format.GeoJSON().readFeature(documentGeometry);
       this.addFeature(feature);
       this.featuresTitleFromSource = this.getFeaturesTitleFromDocument(doc);
 
+      // document is loaded, go back to normal case
+      this.loadingExternalFeatures = false;
+      // and emit new features
+      this.emitFeaturesEvent();
       // fit map to new features
       this.fitMapToFeatures();
     },
@@ -368,10 +381,11 @@ export default {
 
     removeFeature(feature) {
       this.featuresLayerSource.removeFeature(feature);
+      this.emitFeaturesEvent();
     },
 
     removeFeatures() {
-      this.featuresLayerSource.clear();
+      this.featuresLayerSource.clear(true);
       this.emitFeaturesEvent();
     },
 
@@ -412,7 +426,11 @@ export default {
     onFeature(event) {
       // set features styles
       event.feature.set('highlightedStyle', highlightedLineStyle);
-      this.emitFeaturesEvent();
+      // emit new features, only in normal case (drawing)
+      // not in gpx/document case (prevent multiple update for each lines)
+      if (!this.loadingExternalFeatures) {
+        this.emitFeaturesEvent();
+      }
     },
 
     onModifyEnd() {
