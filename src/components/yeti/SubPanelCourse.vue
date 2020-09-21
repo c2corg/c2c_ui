@@ -163,9 +163,7 @@ export default {
     },
 
     onRemoveFeatures() {
-      if (confirm('Confirmez la suppression ?')) {
-        this.map.removeFeatures();
-      }
+      this.map.removeFeatures();
     },
 
     uploadGpx(event) {

@@ -380,13 +380,22 @@ export default {
     },
 
     removeFeature(feature) {
-      this.featuresLayerSource.removeFeature(feature);
-      this.emitFeaturesEvent();
+      // remove feature
+      // when only one left, ask for user to confirm
+      let toBeRemoved = !(
+        this.featuresLayerSource.getFeatures().length === 1 && !confirm('Confirmez la suppression ?')
+      );
+      if (toBeRemoved) {
+        this.featuresLayerSource.removeFeature(feature);
+        this.emitFeaturesEvent();
+      }
     },
 
     removeFeatures() {
-      this.featuresLayerSource.clear(true);
-      this.emitFeaturesEvent();
+      if (confirm('Confirmez la suppression ?')) {
+        this.featuresLayerSource.clear(true);
+        this.emitFeaturesEvent();
+      }
     },
 
     emitFeaturesEvent() {
