@@ -30,7 +30,7 @@
     "bulma": "0.9.0",
     "bulma-checkradio": "1.1.1",
     "core-js": "3.6.5",
-    "d3": "6.1.1",
+    "d3": "6.2.0",
     "elm-pep": "1.0.6",
     "file-saver": "2.0.2",
     "lodash.debounce": "4.0.8",
