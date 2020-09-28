@@ -59,7 +59,7 @@
     "angular-gettext-tools": "2.5.3",
     "babel-eslint": "10.1.0",
     "cross-env": "7.0.2",
-    "eslint": "7.9.0",
+    "eslint": "7.10.0",
     "eslint-import-resolver-custom-alias": "1.2.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-node": "11.1.0",
