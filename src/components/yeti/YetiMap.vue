@@ -295,6 +295,7 @@ export default {
       this.snapInteraction = new ol.interaction.Snap({ source });
       this.map.addInteraction(this.snapInteraction);
 
+      this.drawInteraction.on('drawstart', this.onDrawStart);
       this.drawInteraction.on('drawend', this.onDrawEnd);
       this.modifyInteraction.on('modifyend', this.onModifyEnd);
 
@@ -442,8 +443,26 @@ export default {
       }
     },
 
+    onDrawStart() {
+      document.addEventListener('keydown', this.onKeyWhileDrawing);
+      document.addEventListener('keypress', this.onKeyWhileDrawing);
+    },
+
+    onDrawEnd() {
+      document.removeEventListener('keydown', this.onKeyWhileDrawing);
+      document.removeEventListener('keypress', this.onKeyWhileDrawing);
+    },
+
     onModifyEnd() {
       this.emitFeaturesEvent();
+    },
+
+    onKeyWhileDrawing(event) {
+      event.preventDefault();
+      // backspace key
+      if (event.key === 'Backspace') {
+        this.drawInteraction.removeLastPoint();
+      }
     },
 
     drawYetiImage() {

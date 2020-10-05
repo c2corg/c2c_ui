@@ -63,12 +63,19 @@
         </div>
       </div>
       <div class="yetiform-note mt-5">
-        <p>Astuces</p>
+        <p>Astuces de dessin</p>
         <ul class="content-ul">
           <li><strong>Dessinez</strong> de nouvelles portions de lignes</li>
+          <li><strong>Supprimez</strong> le dernier point avec la touche <kbd>Backspace</kbd></li>
+        </ul>
+        <p>Sur une ligne dessinée</p>
+        <ul class="content-ul">
           <li><strong>Éditez</strong> les points en les déplaçant</li>
           <li><strong>Créez</strong> un nouveau point sur une ligne existante</li>
-          <li><strong>Supprimez un point</strong> avec Alt + clic</li>
+          <li><strong>Supprimez un point</strong> avec <kbd>Alt + clic</kbd></li>
+        </ul>
+        <p>Depuis l’interface</p>
+        <ul class="content-ul">
           <li><strong>Supprimez une portion de ligne</strong></li>
           <li><strong>Supprimez la trace</strong> pour en charger une nouvelle</li>
         </ul>
