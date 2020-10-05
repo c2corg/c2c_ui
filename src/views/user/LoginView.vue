@@ -30,9 +30,7 @@
         <button type="button" class="button is-warning" @click="mode = 'resetPassword'" v-translate>
           Forgot password?
         </button>
-        <button type="button" class="button is-link" @click="mode = 'signup'" v-translate>
-          No account yet?
-        </button>
+        <button type="button" class="button is-link" @click="mode = 'signup'" v-translate>No account yet?</button>
       </div>
     </base-form>
 
@@ -68,13 +66,9 @@
           <label class="checkbox">
             <input type="checkbox" v-model="termsAgreed" />
             &nbsp;
-            <span v-translate>
-              I have read and agree to the terms of use
-            </span>
+            <span v-translate> I have read and agree to the terms of use </span>
             <span> (</span>
-            <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>
-              link
-            </router-link>
+            <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate> link </router-link>
             <span>).</span>
           </label>
         </div>
@@ -99,16 +93,12 @@
         >
           Register
         </button>
-        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
-          Have an account?
-        </button>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Have an account?</button>
       </div>
     </base-form>
 
     <base-form ref="resetPasswordForm" v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
-      <h3 slot="header" class="title is-3" v-translate>
-        Reset password
-      </h3>
+      <h3 slot="header" class="title is-3" v-translate>Reset password</h3>
 
       <form-field
         ref="resetPasswordMainInput"
@@ -123,9 +113,7 @@
         <button type="submit" class="button is-link" :class="{ 'is-loading': promise.loading }" v-translate>
           Send reset email
         </button>
-        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
-          Login
-        </button>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Login</button>
       </div>
 
       <div v-if="promise.success" class="notification is-info" v-translate>
@@ -139,9 +127,7 @@
       :promise="promise"
       @submit="validateNewPassword"
     >
-      <h3 slot="header" class="title is-3" v-translate>
-        Change password
-      </h3>
+      <h3 slot="header" class="title is-3" v-translate>Change password</h3>
 
       <form-field
         ref="changePasswordMainInput"
@@ -156,16 +142,12 @@
         <button type="submit" class="button is-link" :class="{ 'is-loading': promise.loading }" v-translate>
           Change password
         </button>
-        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>
-          Cancel
-        </button>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Cancel</button>
       </div>
     </base-form>
 
     <base-form v-show="mode == 'changeEmail' || mode == 'validateAccountCreation'" :promise="promise">
-      <div v-if="promise.loading" v-translate>
-        Checking...
-      </div>
+      <div v-if="promise.loading" v-translate>Checking...</div>
     </base-form>
   </div>
 </template>

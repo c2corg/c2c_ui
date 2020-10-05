@@ -12,12 +12,8 @@
  --><textual-array v-else-if="isArray" :array="value" :i18n="field.i18n" :i18n-context="field.i18nContext" /><!--
 
  --><span v-else-if="typeof value === 'boolean'">
-      <span v-if="value" v-translate>
-        yes
-      </span>
-      <span v-else v-translate>
-        no
-      </span> </span
+      <span v-if="value" v-translate> yes </span>
+      <span v-else v-translate> no </span> </span
     ><!--
 
  --><span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }} </span

@@ -7,9 +7,7 @@
         <slot name="header" />
       </header>
       <button v-else class="delete is-pulled-right" aria-label="close" @click="hide" />
-      <slot>
-        Modal content
-      </slot>
+      <slot> Modal content </slot>
     </div>
   </div>
 </template>

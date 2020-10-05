@@ -24,12 +24,8 @@
         <icon-yeti class="icon" />
         <span v-translate>YETI</span>
       </router-link>
-      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadGpx">
-        GPX
-      </button>
-      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadKml">
-        KML
-      </button>
+      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadGpx">GPX</button>
+      <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadKml">KML</button>
       <button
         v-if="hasMapLinks"
         class="button is-small"

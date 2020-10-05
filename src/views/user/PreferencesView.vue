@@ -2,9 +2,7 @@
   <div class="section content">
     <html-header :title="$gettext('My preferences')" />
 
-    <h2 v-translate>
-      lang
-    </h2>
+    <h2 v-translate>lang</h2>
 
     <div class="field">
       <div class="buttons">

@@ -13,8 +13,9 @@
         }"
         :value="percentCompleted"
         max="100"
-        >{{ percentCompleted }}%</progress
       >
+        {{ percentCompleted }}%
+      </progress>
     </div>
 
     <div class="card-content">
@@ -54,12 +55,8 @@
       </div>
 
       <div v-else class="buttons is-centered buttons-if-failed">
-        <button @click="$emit('retryUpload')" class="button is-primary" v-translate>
-          Retry
-        </button>
-        <button @click="$emit('deleteImage')" class="button is-danger" v-translate>
-          Cancel
-        </button>
+        <button @click="$emit('retryUpload')" class="button is-primary" v-translate>Retry</button>
+        <button @click="$emit('deleteImage')" class="button is-danger" v-translate>Cancel</button>
       </div>
     </div>
   </div>

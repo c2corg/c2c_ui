@@ -25,9 +25,7 @@
     />
 
     <div slot="footer">
-      <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">
-        Close
-      </button>
+      <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">Close</button>
     </div>
   </modal-card>
 </template>

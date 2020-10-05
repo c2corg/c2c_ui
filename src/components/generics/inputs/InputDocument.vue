@@ -74,9 +74,7 @@
 
         <div v-if="proposeCreation">
           <hr class="dropdown-divider" />
-          <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>
-            No match?
-          </div>
+          <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>No match?</div>
           <add-link
             v-for="type of documentTypes_"
             :key="type + '_add'"

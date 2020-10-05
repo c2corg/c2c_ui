@@ -33,9 +33,7 @@
                   <span class="file-icon">
                     <fa-icon icon="upload" />
                   </span>
-                  <span class="file-label" v-translate>
-                    Upload a new version
-                  </span>
+                  <span class="file-label" v-translate> Upload a new version </span>
                 </span>
               </label>
             </div>

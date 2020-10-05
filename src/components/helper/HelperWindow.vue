@@ -12,17 +12,13 @@
 
     <div slot="footer">
       <div class="buttons" v-if="helper">
-        <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>
-          Close
-        </button>
+        <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>Close</button>
         <router-link
           v-if="$user.isLogged && showModifyButton"
           :to="{ name: 'article', params: { id: helper.documentId } }"
           target="_blank"
         >
-          <span class="button is-info" v-translate>
-            Edit
-          </span>
+          <span class="button is-info" v-translate> Edit </span>
         </router-link>
       </div>
     </div>

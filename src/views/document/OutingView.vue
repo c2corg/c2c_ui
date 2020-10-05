@@ -96,7 +96,7 @@
           <markdown-section :document="document" :field="fields.hut_comment" />
           <markdown-section :document="document" :field="fields.description" :title="$gettext('personal comments')" />
 
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <comments-box :document="document" />

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-if="!promise.data && !promise.error" class="notification is-primary">
-      Loading
-    </div>
+    <div v-if="!promise.data && !promise.error" class="notification is-primary">Loading</div>
 
     <not-found v-else-if="notFound" />
 

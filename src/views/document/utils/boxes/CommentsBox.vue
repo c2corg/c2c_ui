@@ -44,9 +44,7 @@
       </div>
 
       <div class="has-text-centered">
-        <login-button v-if="!$user.isLogged" key="not-logged" v-translate>
-          Log in to post a comment
-        </login-button>
+        <login-button v-if="!$user.isLogged" key="not-logged" v-translate> Log in to post a comment </login-button>
 
         <!-- API bug with first comment creation?  -->
         <button

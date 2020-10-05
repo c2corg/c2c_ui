@@ -28,9 +28,7 @@
       </span>
       3.0
       <br />
-      <span v-translate>
-        This content is licensed under Creative Commons BY-SA 3.0
-      </span>
+      <span v-translate> This content is licensed under Creative Commons BY-SA 3.0 </span>
     </a>
     <a
       v-else-if="license == 'by-nc-nd'"
@@ -49,9 +47,7 @@
       >
         BY
       </span>
-      <span :title="$gettext('NonCommercial — You may not use the material for commercial purposes.')">
-        NC
-      </span>
+      <span :title="$gettext('NonCommercial — You may not use the material for commercial purposes.')"> NC </span>
       <span
         :title="
           $gettext(
@@ -63,9 +59,7 @@
       </span>
       3.0
       <br />
-      <span v-translate>
-        This content is licensed under Creative Commons BY-NC-ND 3.0
-      </span>
+      <span v-translate> This content is licensed under Creative Commons BY-NC-ND 3.0 </span>
     </a>
     <span
       v-else-if="license == 'copyright'"
@@ -76,9 +70,7 @@
       "
     >
       <fa-icon icon="ban" />
-      <span v-translate>
-        This book cover is the property of its editor and/or author
-      </span>
+      <span v-translate> This book cover is the property of its editor and/or author </span>
     </span>
   </div>
 </template>
