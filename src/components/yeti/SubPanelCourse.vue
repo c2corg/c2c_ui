@@ -192,7 +192,7 @@ export default {
       this.$emit('gpx', null);
     },
 
-    downloadCourse(event) {
+    downloadCourse() {
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
       } else if (this.format === 'KML') {

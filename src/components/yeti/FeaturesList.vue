@@ -37,6 +37,7 @@ export default {
     hideFeature(feature) {
       feature.setStyle(feature.get('normalStyle'));
     },
+
     nbPointsOnFeature(feature) {
       return feature.getGeometry().getCoordinates().length;
     },

@@ -259,7 +259,7 @@ export default {
     areaOk: 'check',
     featuresTitle(newValue) {
       // set default featuresTitle if null (from yeti map)
-      if (newValue == null) {
+      if (newValue === null) {
         this.featuresTitle = TEXTS.featuresTitle;
       }
     },
