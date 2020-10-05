@@ -44,7 +44,7 @@
       </h1>
 
       <!-- On mobile, expand button may go too low -->
-      <div style="clear: both;" />
+      <div style="clear: both" />
 
       <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
         {{ error.name }}
@@ -58,9 +58,7 @@
     <div v-show="!isPreview" class="has-edition-width">
       <hr />
 
-      <slot>
-        ...
-      </slot>
+      <slot> ... </slot>
 
       <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview = true" :is-loading="isLoading" />
       <!-- eslint-disable-next-line vue/no-v-html -->

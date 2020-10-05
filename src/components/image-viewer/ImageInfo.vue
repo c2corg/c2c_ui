@@ -1,8 +1,6 @@
 <template>
   <div class="image-info has-text-light" v-if="visible">
-    <h3 class="title is-3 has-text-light" v-translate>
-      Infos
-    </h3>
+    <h3 class="title is-3 has-text-light" v-translate>Infos</h3>
 
     <div v-if="document">
       <p>
@@ -29,9 +27,7 @@
         </label>
       </p>
 
-      <h4 class="title is-4 has-text-light" v-translate>
-        Settings
-      </h4>
+      <h4 class="title is-4 has-text-light" v-translate>Settings</h4>
 
       <ul>
         <li v-if="document.camera_name">{{ document.camera_name }}</li>

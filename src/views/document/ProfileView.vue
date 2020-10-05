@@ -32,7 +32,7 @@
         <div class="box" v-if="locale.summary || locale.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <images-box :document="document" />

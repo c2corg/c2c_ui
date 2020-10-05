@@ -15,7 +15,7 @@
         <div class="box" v-if="document.cooked.summary || document.cooked.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <div class="box">

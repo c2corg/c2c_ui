@@ -1,7 +1,7 @@
 <template>
   <!-- TODO on route view, map in full screen has not a full height -->
-  <div style="width: 100%; height: 100%;">
-    <div ref="map" style="width: 100%; height: 100%;" @click="showLayerSwitcher = false" />
+  <div style="width: 100%; height: 100%">
+    <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
       ref="layerSwitcherButton"
@@ -80,15 +80,11 @@
     </div>
 
     <div v-show="editable" ref="resetGeometry" class="ol-control ol-control-reset-geometry">
-      <button @click="resetGeometry" v-translate>
-        Reset geometry
-      </button>
+      <button @click="resetGeometry" v-translate>Reset geometry</button>
     </div>
 
     <div v-show="editable" ref="clearGeometry" class="ol-control ol-control-clear-geometry">
-      <button @click="clearGeometry" v-translate>
-        Clear
-      </button>
+      <button @click="clearGeometry" v-translate>Clear</button>
     </div>
 
     <biodiv-information v-if="protectionAreasVisible" ref="BiodivInformation" :data="biodivData" />

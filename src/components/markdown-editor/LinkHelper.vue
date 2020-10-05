@@ -1,8 +1,6 @@
 <template>
   <modal-card ref="modalWindow">
-    <div slot="title" v-translate>
-      Insert a link
-    </div>
+    <div slot="title" v-translate>Insert a link</div>
     <div class="field">
       <label class="label">
         {{ $gettext('text to display') | uppercaseFirstLetter }}
@@ -20,12 +18,8 @@
       </div>
     </div>
     <div slot="footer" class="buttons">
-      <button class="button is-success" @click="insert" v-translate>
-        Insert link
-      </button>
-      <button class="button is-danger" @click="$refs.modalWindow.hide()" v-translate>
-        Cancel
-      </button>
+      <button class="button is-success" @click="insert" v-translate>Insert link</button>
+      <button class="button is-danger" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
     </div>
   </modal-card>
 </template>

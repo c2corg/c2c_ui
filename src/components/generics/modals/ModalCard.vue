@@ -9,9 +9,7 @@
         <button class="delete" aria-label="close" @click="hide" />
       </header>
       <section class="modal-card-body">
-        <slot>
-          Modal content
-        </slot>
+        <slot> Modal content </slot>
       </section>
       <footer class="modal-card-foot">
         <slot name="footer">footer</slot>

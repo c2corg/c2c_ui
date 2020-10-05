@@ -4,9 +4,7 @@
       <span>{{ $gettext('Associated routes') }}</span>
       <span v-if="!hideButtons" class="is-size-5">
         <span>, </span>
-        <router-link :to="{ name: 'routes', query: query }" v-translate>
-          show all
-        </router-link>
+        <router-link :to="{ name: 'routes', query: query }" v-translate> show all </router-link>
       </span>
     </h2>
     <div v-if="disableActivitySplit">

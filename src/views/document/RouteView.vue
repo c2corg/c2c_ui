@@ -84,12 +84,8 @@
 
           <markdown-section :document="document" :field="fields.remarks">
             <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info">
-              <strong v-translate>
-                Sensitive areas
-              </strong>
-              <p v-translate>
-                There are sensitive areas on this route. Please refer to the map.
-              </p>
+              <strong v-translate> Sensitive areas </strong>
+              <p v-translate>There are sensitive areas on this route. Please refer to the map.</p>
             </div>
           </markdown-section>
 
@@ -107,7 +103,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split />

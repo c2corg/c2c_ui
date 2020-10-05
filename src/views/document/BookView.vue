@@ -12,7 +12,7 @@
           <field-view :document="document" :field="fields.isbn" />
           <field-view :document="document" :field="fields.nb_pages" />
           <field-view :document="document" :field="fields.publication_date" />
-          <field-view :document="document" :field="fields.url" style="overflow: hidden;" />
+          <field-view :document="document" :field="fields.url" style="overflow: hidden" />
           <field-view :document="document" :field="fields.quality" />
         </div>
 
@@ -23,7 +23,7 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <routes-box :document="document" hide-buttons />

@@ -2,9 +2,7 @@
   <div>
     <html-header :title="$gettext('Topoguide')" />
     <div class="topoguide">
-      <h1 class="has-text-centered has-text-weight-semibold" v-translate>
-        Topoguide
-      </h1>
+      <h1 class="has-text-centered has-text-weight-semibold" v-translate>Topoguide</h1>
       <div class="links is-flex">
         <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing" />
         <topoguide-view-link to="routes" :label="$gettext('routes')" icon="icon-route" />
@@ -38,9 +36,7 @@
             :to="{ name: 'outing-add' }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate>
-              New outing
-            </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate> New outing </span>
           </topoguide-view-small-link>
         </div>
       </div>
@@ -66,9 +62,7 @@
             :to="{ name: 'route-add' }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate>
-              New route
-            </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate> New route </span>
           </topoguide-view-small-link>
         </div>
       </div>
@@ -94,9 +88,7 @@
             :to="{ name: 'waypoint-add' }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate>
-              New waypoint
-            </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate> New waypoint </span>
           </topoguide-view-small-link>
         </div>
       </div>

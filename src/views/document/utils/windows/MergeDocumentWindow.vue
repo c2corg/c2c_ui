@@ -56,9 +56,7 @@
       <button :disabled="targetDocument === null" @click="mergeDocuments" class="button is-success" v-translate>
         Merge documents
       </button>
-      <button @click="hide()" class="button" v-translate>
-        Cancel
-      </button>
+      <button @click="hide()" class="button" v-translate>Cancel</button>
     </footer>
   </modal-card>
 </template>

@@ -7,9 +7,7 @@
   >
     <fa-icon icon="star" />
     <span class="is-hidden-mobile">&nbsp;</span>
-    <span class="is-hidden-mobile" v-translate>
-      Load my preferences
-    </span>
+    <span class="is-hidden-mobile" v-translate> Load my preferences </span>
   </button>
 </template>
 

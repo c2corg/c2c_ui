@@ -19,9 +19,7 @@
           <input-checkbox v-model="checkDisclaimer">
             J’ai lu et j’ai compris l’intérêt et les limites de Yéti
           </input-checkbox>
-          <button class="button is-primary" :disabled="!checkDisclaimer">
-            Accéder à YETI
-          </button>
+          <button class="button is-primary" :disabled="!checkDisclaimer">Accéder à YETI</button>
         </form>
       </div>
 
@@ -51,12 +49,12 @@
                 <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
                   <svg viewBox="0 0 100 100" width="120" height="120">
                     <polygon
-                      style="fill: none; stroke: #000; stroke-miterlimit: 10;"
+                      style="fill: none; stroke: #000; stroke-miterlimit: 10"
                       points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 "
                     />
                     <line
                       v-show="bra.isDifferent"
-                      style="fill: none; stroke: #000; stroke-miterlimit: 10;"
+                      style="fill: none; stroke: #000; stroke-miterlimit: 10"
                       x1="10"
                       y1="61.5"
                       x2="90"
@@ -159,9 +157,7 @@
               </div>
             </div>
 
-            <h2 class="title is-3 yeti-title">
-              Méthodes
-            </h2>
+            <h2 class="title is-3 yeti-title">Méthodes</h2>
             <div class="columns is-mobile yetitabs">
               <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">
                 <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method === item }">
@@ -276,7 +272,9 @@
                 <li
                   v-for="label of potentialDangerLabels"
                   :key="label.text"
-                  :disabled="!bra.high || (label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max)"
+                  :disabled="
+                    !bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max
+                  "
                   :selected="potentialDanger == label.text"
                   class="potential-danger-label is-size-5"
                   @click="potentialDanger = label.text"
@@ -356,9 +354,7 @@
           </div>
 
           <div class="box is-hidden-mobile" v-if="document">
-            <div class="title is-4 document-title">
-              Route
-            </div>
+            <div class="title is-4 document-title">Route</div>
             <document-link :document="document">
               <icon-route class="document-icon" />
               <document-title :document="document" />
@@ -389,9 +385,7 @@
               </div>
             </div>
             <div class="legend-content" v-show="showLegend === true">
-              <p class="is-italic" v-if="!mapLegend">
-                La légende apparaitra automatiquement avec l’image générée
-              </p>
+              <p class="is-italic" v-if="!mapLegend">La légende apparaitra automatiquement avec l’image générée</p>
               <div v-else>
                 <ul>
                   <li v-for="(item, i) of mapLegend.items" :key="i">

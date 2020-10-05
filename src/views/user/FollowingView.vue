@@ -1,9 +1,7 @@
 <template>
   <div class="section">
     <html-header :title="$gettext('Followed users')" />
-    <h1 class="title is-1" v-translate>
-      Followed users
-    </h1>
+    <h1 class="title is-1" v-translate>Followed users</h1>
 
     <div class="columns is-multiline">
       <div class="column is-12" v-translate>

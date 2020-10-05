@@ -1,9 +1,7 @@
 <template>
   <section>
     <div class="intro-banner has-text-centered">
-      <div class="title is-1 with-background" v-translate>
-        The mountain sports community
-      </div>
+      <div class="title is-1 with-background" v-translate>The mountain sports community</div>
 
       <div class="outings-links">
         <router-link

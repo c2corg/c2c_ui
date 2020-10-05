@@ -1,9 +1,7 @@
 <template>
   <modal-card ref="modalWindow">
     <span slot="title">
-      <span v-translate>
-        This tool estimates the technical difficulty of a ski route (ski rating).
-      </span>
+      <span v-translate> This tool estimates the technical difficulty of a ski route (ski rating). </span>
     </span>
 
     <div class="field">
@@ -69,12 +67,8 @@
     </h1>
 
     <footer slot="footer">
-      <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>
-        Ok
-      </button>
-      <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>
-        Cancel
-      </button>
+      <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>Ok</button>
+      <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
     </footer>
   </modal-card>
 </template>

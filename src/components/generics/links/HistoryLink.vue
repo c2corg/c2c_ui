@@ -1,8 +1,6 @@
 <template>
   <router-link :to="{ name: documentType + '-history', params: { id: document.document_id, lang: lang } }">
-    <slot>
-      hist
-    </slot>
+    <slot> hist </slot>
   </router-link>
 </template>
 

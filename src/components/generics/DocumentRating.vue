@@ -48,9 +48,7 @@
       <span v-if="document.ski_rating" :title="$gettext('ski_rating')">
         {{ document.ski_rating }}
       </span>
-      <span v-if="document.ski_rating && (document.ski_exposition || document.labande_global_rating)">
-        /
-      </span>
+      <span v-if="document.ski_rating && (document.ski_exposition || document.labande_global_rating)"> / </span>
       <span v-if="document.ski_exposition || document.labande_global_rating">
         <span v-if="document.ski_exposition" :title="$gettext('ski_exposition')">
           {{ document.ski_exposition }}
@@ -83,12 +81,12 @@
     </span>
 
     <router-link
-      v-for="rating of (showHelper ? displayed_ratings : [])"
+      v-for="rating of showHelper ? displayed_ratings : []"
       :key="rating"
       :to="getHelperLink(fields[rating].helper)"
       class="dropdown-item"
     >
-      <div style="width: 2em; display: inline-block;" class="has-text-weight-bold">
+      <div style="width: 2em; display: inline-block" class="has-text-weight-bold">
         {{ document[rating] }}
       </div>
       <span>

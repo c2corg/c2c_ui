@@ -5,9 +5,7 @@
       <span v-else v-translate>Last outings</span>
       <span v-if="outings.length !== 0 && !hideSeeAllResultsButton">
         <span>, </span>
-        <router-link :to="{ name: 'outings', query: query }" class="is-size-5" v-translate>
-          show all
-        </router-link>
+        <router-link :to="{ name: 'outings', query: query }" class="is-size-5" v-translate> show all </router-link>
       </span>
     </div>
 
@@ -17,9 +15,7 @@
 
     <div v-if="documentType == 'route'" class="has-text-centered add-section">
       <add-link document-type="outing" :query="query" class="button is-primary">
-        <span v-if="outings.length === 0" v-translate>
-          Add the first outing
-        </span>
+        <span v-if="outings.length === 0" v-translate> Add the first outing </span>
       </add-link>
     </div>
   </div>
