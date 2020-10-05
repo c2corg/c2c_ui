@@ -226,6 +226,15 @@ export default {
     },
 
     save(comment) {
+      if (this.lang === 'eu' && !this.$user.isModerator) {
+        this.$alert.show([
+          this.$gettext(
+            "Sorry, euskara lang has been frozen.\nWe're looking for a moderator, if you're interested, please contact board@camptocamp.org"
+          ),
+        ]);
+        return;
+      }
+
       this.beforeSave(); // allow each view to handle some specific cases
 
       this.computeErrors();
