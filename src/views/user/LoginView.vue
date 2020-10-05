@@ -179,6 +179,18 @@ export default {
     VueRecaptcha,
   },
 
+  // here is the trick : all auth action are on the same component.
+  // vue won't reload it, even on route modification.
+  // watch on $route will perform any action needed by url state.
+  // but this function will be called only once : at the very first load of component
+  // so we'll keep the page to go back
+  // that's all !
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.from = from;
+    });
+  },
+
   data() {
     return {
       mode: '',
@@ -205,18 +217,6 @@ export default {
   watch: {
     $route: 'load',
     mode: 'onModeChange',
-  },
-
-  // here is the trick : all auth action are on the same component.
-  // vue won't reload it, even on route modification.
-  // watch on $route will perform any action needed by url state.
-  // but this function will be called only once : at the very first load of component
-  // so we'll keep the page to go back
-  // that's all !
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.from = from;
-    });
   },
 
   created() {

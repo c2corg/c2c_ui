@@ -96,7 +96,7 @@ export default {
     },
 
     onHover(event) {
-      this.$emit('highlightDocument', event.data);
+      this.$emit('highlight-document', event.data);
     },
 
     getRowNodeId(document) {

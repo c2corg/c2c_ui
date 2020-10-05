@@ -73,7 +73,7 @@
     v-else-if="simpleInputType"
     v-show="visible"
     :prefix="prefix"
-    @click:prefix="$emit('click:prefix')"
+    @click-prefix="$emit('click-prefix')"
     :is-expanded="isExpanded"
     :postfix="unit || field.unit"
     :divisor="divisor"

@@ -102,7 +102,7 @@
           :documents="documents ? documents : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
-          @highlightDocument="highlightedDocument = arguments[0]"
+          @highlight-document="highlightedDocument = arguments[0]"
           class="documents-table"
         />
       </div>
@@ -111,7 +111,7 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
-          @highlightDocument="highlightedDocument = arguments[0]"
+          @highlight-document="highlightedDocument = arguments[0]"
           show-filter-control
           show-center-on-geolocation
           show-recenter-on

@@ -315,6 +315,6 @@ export default function install(Vue) {
     faTwitter
   );
 
-  Vue.component('fa-icon', FontAwesomeIcon);
-  Vue.component('fa-layers', FontAwesomeLayers);
+  Vue.component('FaIcon', FontAwesomeIcon);
+  Vue.component('FaLayers', FontAwesomeLayers);
 }

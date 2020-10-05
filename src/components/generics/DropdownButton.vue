@@ -29,12 +29,6 @@ export default {
     };
   },
 
-  watch: {
-    isActive() {
-      this.$emit('changeDisplay');
-    },
-  },
-
   created() {
     window.addEventListener('click', this.onClick);
   },

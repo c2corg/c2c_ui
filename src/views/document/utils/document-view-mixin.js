@@ -159,7 +159,7 @@ export default {
           .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
           .then(() => {
-            this.$root.$emit('triggerScroll');
+            this.$root.$emit('trigger-scroll');
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);

@@ -16,8 +16,8 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
-          @deleteImage="onDeleteImage(image)"
-          @retryUpload="startUpload(image)"
+          @delete-image="onDeleteImage(image)"
+          @retry-upload="startUpload(image)"
         />
       </div>
 

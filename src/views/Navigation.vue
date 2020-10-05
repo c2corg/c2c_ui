@@ -3,7 +3,7 @@
     <span
       class="navigation-item is-hidden-desktop"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
-      @click="$emit('toggleSideMenu')"
+      @click="$emit('toggle-side-menu')"
     >
       <span class="button">
         <fa-icon icon="bars" />
