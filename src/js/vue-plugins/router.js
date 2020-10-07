@@ -161,11 +161,11 @@ const router = new Router({
       return { x: 0, y: 0 };
     }
 
-    // we'll wait for triggerScroll event
+    // we'll wait for trigger-scroll event
     return new Promise((resolve) => {
       // we add an once handler on the event
       // view will trigger it once data are present
-      this.app.$root.$once('triggerScroll', () => {
+      this.app.$root.$once('trigger-scroll', () => {
         resolve(position);
       });
     });

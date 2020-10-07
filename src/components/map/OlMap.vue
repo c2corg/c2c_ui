@@ -714,7 +714,7 @@ export default {
       });
 
       this.setHighlightedFeature(resultFeature);
-      this.$emit('highlightDocument', resultFeature ? resultFeature.get('document') : null);
+      this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
     },
 
     setHighlightedFeature(feature) {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
-    <navigation class="navigation no-print" @toggleSideMenu="alternativeSideMenu = !alternativeSideMenu" />
+    <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
     <site-notice ref="siteNotice no-print" class="no-print site-notice" />
     <image-viewer ref="imageViewer" />
     <helper-window ref="helper" />

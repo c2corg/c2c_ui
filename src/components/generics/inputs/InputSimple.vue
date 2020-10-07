@@ -1,6 +1,6 @@
 <template>
   <div class="control" :class="{ 'has-icons-right': postfix, 'has-prefix': prefix, 'is-expanded': isExpanded }">
-    <span v-if="prefix" class="button prefix" :class="{ 'is-danger': hasError }" @click="$emit('click:prefix')">
+    <span v-if="prefix" class="button prefix" :class="{ 'is-danger': hasError }" @click="$emit('click-prefix')">
       <span>
         {{ prefix | uppercaseFirstLetter }}
       </span>

@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-image img-container" :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
-      <delete-button class="delete-button" @click="$emit('deleteImage')" />
+      <delete-button class="delete-button" @click="$emit('delete-image')" />
 
       <progress
         v-if="isSaving || isFailed"
@@ -55,8 +55,8 @@
       </div>
 
       <div v-else class="buttons is-centered buttons-if-failed">
-        <button @click="$emit('retryUpload')" class="button is-primary" v-translate>Retry</button>
-        <button @click="$emit('deleteImage')" class="button is-danger" v-translate>Cancel</button>
+        <button @click="$emit('retry-upload')" class="button is-primary" v-translate>Retry</button>
+        <button @click="$emit('delete-image')" class="button is-danger" v-translate>Cancel</button>
       </div>
     </div>
   </div>

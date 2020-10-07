@@ -157,7 +157,7 @@
           :document="document"
           :field="fields.ski_rating"
           prefix="?"
-          @click:prefix="showCotometer"
+          @click-prefix="showCotometer"
         />
         <form-field class="is-4" :document="document" :field="fields.labande_global_rating" />
 
