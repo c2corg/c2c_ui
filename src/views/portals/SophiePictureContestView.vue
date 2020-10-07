@@ -34,20 +34,18 @@
       </div>
     </div>
 
-    <hr class="separator"/>
+    <hr class="separator" />
 
-    <h3 class="title is-2 has-text-centered" v-translate>
-      Candidates
-    </h3>
-    <div class="cards-container is-flex" v-if="document">
+    <h3 class="title is-2 has-text-centered" v-translate>Candidates</h3>
+    <div class="cards-container is-flex" v-if="contributions">
       <document-link
-        v-for="image in document.associations.images"
-        :key="image.document_id"
-        :document="image"
-        :title="$documentUtils.getDocumentTitle(image)"
+        v-for="contribution in contributions"
+        :key="contribution.image.document_id"
+        :document="contribution.image"
+        :title="$documentUtils.getDocumentTitle(contribution.image)"
         class="card-image"
       >
-        <img :src="getMediumImageUrl(image)" height="250" />
+        <img :src="getMediumImageUrl(contribution.image)" />
       </document-link>
     </div>
     <loading-notification v-else :promise="promise" />
@@ -58,10 +56,13 @@
 import c2c from '@/js/apis/c2c';
 import imageUrls from '@/js/image-urls';
 
+let associations = [];
+
 export default {
   data() {
     return {
       promise: null,
+      contributions: null,
     };
   },
 
@@ -106,29 +107,64 @@ export default {
     year() {
       return parseInt(this.$route.params.year, 10);
     },
-
-    document() {
-      if (!this.promise || !this.promise.data) {
-        return null;
-      }
-      return this.promise.data;
-    },
   },
 
   watch: {
     $route: {
-      handler: 'loadDocument',
+      handler: 'onLoad',
       immediate: true,
     },
   },
 
   methods: {
-    loadDocument() {
+    onLoad() {
       if (this.document && this.documentId === this.document.document_id) {
         return;
       }
 
-      this.promise = c2c.article.get(this.documentId);
+      associations = [];
+      this.contributions = null;
+      this.loadBatch(0);
+    },
+
+    loadBatch(offset) {
+      this.promise = c2c.association
+        .getHistory({ documentId: this.documentId, offset })
+        .then((response) => this.onLoadBatch(response, offset));
+    },
+
+    onLoadBatch(response, offset) {
+      associations = associations.concat(response.data.associations);
+
+      if (response.data.associations.length !== 0) {
+        this.loadBatch(offset + 50);
+      } else {
+        let contributions = {};
+
+        associations.reverse().forEach((association) => {
+          let image = null;
+
+          if (association.child_document.type === 'i') {
+            image = association.child_document;
+          } else if (association.parent_document.type === 'i') {
+            image = association.parent_document;
+          } else {
+            return;
+          }
+
+          contributions[image.document_id] = {
+            image,
+            is_creation: association.is_creation,
+            user: association.user,
+            written_at: association.written_at,
+          };
+        });
+
+        this.contributions = Object.values(contributions).filter((contribution) => contribution.is_creation);
+        this.contributions = this.contributions.sort((a, b) => {
+          return a.written_at === b.written_at ? 0 : a.written_at > b.written_at ? 1 : -1;
+        });
+      }
     },
 
     getMediumImageUrl: imageUrls.getMedium,
@@ -156,6 +192,10 @@ export default {
   .card-image {
     transition: 0.2s;
     margin-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 200px;
+    text-align: center !important;
 
     img {
       height: 200px;
