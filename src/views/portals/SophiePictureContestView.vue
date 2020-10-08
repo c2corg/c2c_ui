@@ -22,7 +22,7 @@
             {{ winner.category }}
           </div>
           <div class="has-text-centered">
-            <img :src="getMediumImageUrl(winner.image)" class="winner-image" />
+            <img :src="getImageUrl(winner.image)" class="winner-image" />
           </div>
           <div class="has-text-centered">
             <span class="is-italic"> {{ winner.title }}, </span>
@@ -45,7 +45,7 @@
         :title="$documentUtils.getDocumentTitle(contribution.image)"
         class="card-image"
       >
-        <img :src="getMediumImageUrl(contribution.image)" />
+        <img :src="getImageUrl(contribution.image)" />
       </document-link>
     </div>
     <loading-notification v-else :promise="promise" />
@@ -167,7 +167,7 @@ export default {
       }
     },
 
-    getMediumImageUrl: imageUrls.getMedium,
+    getImageUrl: imageUrls.getMedium,
   },
 };
 </script>
