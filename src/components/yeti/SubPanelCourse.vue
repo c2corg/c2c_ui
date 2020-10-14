@@ -204,13 +204,24 @@ export default {
       const features = this.features;
       features[0].set('name', this.featuresTitle);
 
-      const filename = 'export' + Date.now() + extension;
+      const filename = this.setFilename(extension);
 
       const content = format.writeFeatures(features, {
         featureProjection: 'EPSG:3857',
       });
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
+    },
+
+    setFilename(ext) {
+      let dateObj = new Date();
+      let month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+      let day = ('0' + dateObj.getDate()).slice(-2);
+      let year = dateObj.getFullYear();
+      let hours = ('0' + dateObj.getHours()).slice(-2);
+      let minutes = ('0' + dateObj.getMinutes()).slice(-2);
+      let seconds = ('0' + dateObj.getSeconds()).slice(-2);
+      return year + '-' + month + '-' + day + '_' + hours + '-' + minutes + '-' + seconds + ext;
     },
   },
 };
