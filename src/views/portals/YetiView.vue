@@ -169,7 +169,7 @@ const ERRORS = {
 };
 
 const TEXTS = {
-  featuresTitle: 'Nouvelle course',
+  featuresTitle: 'Nouvel itinéraire',
 };
 
 export default {

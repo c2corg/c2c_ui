@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelCourse">
-    <subPanelTitle>Trace</subPanelTitle>
+    <subPanelTitle>Itinéraire</subPanelTitle>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -33,7 +33,7 @@
         <div class="column is-narrow">
           <button class="button is-secondary is-small" @click="onRemoveFeatures">
             <fa-icon icon="trash" class="trash-icon" />
-            Supprimer la trace
+            Supprimer l’itinéraire
           </button>
         </div>
       </div>
@@ -59,7 +59,7 @@
           </ul>
         </div>
         <div class="column is-narrow">
-          <button class="button is-primary" @click="downloadCourse">Exporter la trace</button>
+          <button class="button is-primary" @click="downloadCourse">Exporter l’itinéraire</button>
         </div>
       </div>
       <div class="yetiform-note mt-5">
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div v-else>
-      <p>Pas de traces actuellement</p>
+      <p>Pas d’itinéraires actuellement</p>
       <div class="load-gpx">
         <button
           class="button is-primary"
@@ -97,7 +97,7 @@
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
         <div class="yetiform-note mt-5">
-          <p>Ou <strong>dessinez directement sur la carte</strong> pour créer une nouvelle course</p>
+          <p>Ou <strong>dessinez directement sur la carte</strong> pour créer un nouvel itinéraire</p>
         </div>
       </div>
     </div>
