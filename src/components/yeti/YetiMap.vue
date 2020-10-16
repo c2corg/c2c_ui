@@ -7,9 +7,7 @@
         </div>
       </div>
       <div class="legend-content" v-show="showLegend === true">
-        <p class="is-italic" v-if="!mapLegend">
-          La légende apparaitra automatiquement avec l’image générée
-        </p>
+        <p class="is-italic" v-if="!mapLegend">La légende apparaitra automatiquement avec l’image générée</p>
         <div v-else>
           <ul>
             <li v-for="(item, i) of mapLegend.items" :key="i">
