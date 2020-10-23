@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelMethodes">
-    <subPanelTitle>Méthodes</subPanelTitle>
+    <sub-panel-title>Méthodes</sub-panel-title>
     <div class="columns is-mobile yetitabs">
       <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">
         <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method.type === item }">
@@ -197,7 +197,7 @@
 </template>
 
 <script>
-import subPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 
 const DANGER = {
   min: 1,
@@ -211,7 +211,7 @@ const DANGER = {
 };
 
 export default {
-  components: { subPanelTitle },
+  components: { SubPanelTitle },
   props: {
     method: {
       type: Object,
@@ -284,7 +284,7 @@ export default {
       this.$emit('update:method', Object.assign(this.method, { [prop]: value }));
     },
     warnAboutMethodBra(item) {
-      this.$emit('warnAboutMethodBra', item);
+      this.$emit('warn-about-method-bra', item);
     },
     onBraChange() {
       this.onChange(this.potentialDangerOptions.val, 'potentialDanger');

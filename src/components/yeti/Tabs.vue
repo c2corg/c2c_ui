@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import counter from '@/components/yeti/Counter.vue';
+import Counter from '@/components/yeti/Counter.vue';
 export default {
-  components: { counter },
+  components: { Counter },
   props: {
     tabs: {
       type: Array,

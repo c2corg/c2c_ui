@@ -50,8 +50,8 @@
                 @click="compute"
                 tabindex="-1"
               />
-              <subPanelBra :bra.sync="bra" :mountains="mountains" />
-              <subPanelMethods :method.sync="method" :bra="bra" @warnAboutMethodBra="warnAboutMethodBra" />
+              <sub-panel-bra :bra.sync="bra" :mountains="mountains" />
+              <sub-panel-methods :method.sync="method" :bra="bra" @warn-about-method-bra="warnAboutMethodBra" />
               <validation-button
                 v-show="method.type"
                 class="yeti-validation--bottom"
@@ -62,7 +62,7 @@
             </panel>
 
             <panel ref="panel1" :index="1" :active-tab="activeTab">
-              <subPanelCourse
+              <sub-panel-course
                 :map="yetiMap"
                 :features="features"
                 :features-title.sync="featuresTitle"
@@ -95,7 +95,7 @@
           </div>
         </div>
 
-        <yetiMap
+        <yeti-map
           ref="map"
           :gpx="gpx"
           :active-tab="activeTab"
@@ -116,14 +116,14 @@
 <script>
 import axios from 'axios';
 
-import panel from '@/components/yeti/Panel';
-import subPanelBra from '@/components/yeti/SubPanelBra';
-import subPanelCourse from '@/components/yeti/SubPanelCourse';
-import subPanelMethods from '@/components/yeti/SubPanelMethods';
-import tabs from '@/components/yeti/Tabs';
-import texts from '@/components/yeti/Texts';
-import validationButton from '@/components/yeti/ValidationButton';
-import yetiMap from '@/components/yeti/YetiMap';
+import Panel from '@/components/yeti/Panel';
+import SubPanelBra from '@/components/yeti/SubPanelBra';
+import SubPanelCourse from '@/components/yeti/SubPanelCourse';
+import SubPanelMethods from '@/components/yeti/SubPanelMethods';
+import Tabs from '@/components/yeti/Tabs';
+import Texts from '@/components/yeti/Texts';
+import ValidationButton from '@/components/yeti/ValidationButton';
+import YetiMap from '@/components/yeti/YetiMap';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
@@ -176,14 +176,14 @@ export default {
   name: 'Yeti',
 
   components: {
-    yetiMap,
-    validationButton,
-    texts,
-    tabs,
-    panel,
-    subPanelBra,
-    subPanelCourse,
-    subPanelMethods,
+    Panel,
+    SubPanelBra,
+    SubPanelCourse,
+    SubPanelMethods,
+    Tabs,
+    Texts,
+    ValidationButton,
+    YetiMap,
   },
 
   data() {

@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelCourse">
-    <subPanelTitle>Itinéraire</subPanelTitle>
+    <sub-panel-title>Itinéraire</sub-panel-title>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -39,9 +39,9 @@
       </div>
       <div class="ml-5 mb-5">
         <p class="yetiform-info is-italic is-marginless">Portions de lignes</p>
-        <featuresList :features="features" :map="map" />
+        <features-list :features="features" :map="map" />
       </div>
-      <subPanelTitle>Export</subPanelTitle>
+      <sub-panel-title>Export</sub-panel-title>
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
@@ -105,13 +105,13 @@
 </template>
 
 <script>
-import featuresList from '@/components/yeti/FeaturesList.vue';
-import subPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import FeaturesList from '@/components/yeti/FeaturesList.vue';
+import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { featuresList, subPanelTitle },
+  components: { FeaturesList, SubPanelTitle },
   props: {
     map: {
       type: Object,

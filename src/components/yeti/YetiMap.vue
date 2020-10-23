@@ -40,7 +40,7 @@
 
 <script>
 import axios from 'axios';
-import vueSlider from 'vue-slider-component';
+import VueSlider from 'vue-slider-component';
 
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
@@ -75,7 +75,7 @@ const highlightedLineStyle = [
 ];
 
 export default {
-  components: { vueSlider },
+  components: { VueSlider },
   props: {
     activeTab: {
       type: Number,

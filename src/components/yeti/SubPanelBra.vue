@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelBRA">
-    <subPanelTitle>Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr></subPanelTitle>
+    <sub-panel-title>Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr></sub-panel-title>
     <div class="columns is-mobile">
       <div class="column">
         <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
@@ -113,11 +113,11 @@
 </template>
 
 <script>
-import counter from '@/components/yeti/Counter.vue';
-import subPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import Counter from '@/components/yeti/Counter.vue';
+import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 
 export default {
-  components: { counter, subPanelTitle },
+  components: { Counter, SubPanelTitle },
   props: {
     bra: {
       type: Object,
