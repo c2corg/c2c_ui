@@ -83,11 +83,9 @@
     }
   },
   "browserslist": [
-    "cover 95% in FR",
-    "> 1%",
-    "last 2 versions",
+    "cover 95% in FR and > 0.4%",
     "not dead",
-    "not ie <= 10"
+    "not ie <= 11"
   ],
   "bugs": {
     "url": "https://forum.camptocamp.org/c/site-et-association/v6-suggestions-bugs-et-problemes",

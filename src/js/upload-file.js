@@ -13,27 +13,6 @@ const worldExtent = ol.proj.get('EPSG:4326').getExtent();
 // this worker will handle network upload : only on upload at a time
 const worker = new Worker();
 
-// Microsoft Edge does not implement toblob, and there is no polyfill in core.js
-// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
-if (!HTMLCanvasElement.prototype.toBlob) {
-  Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-    value(callback, type, quality) {
-      const dataURL = this.toDataURL(type, quality).split(',')[1];
-      setTimeout(function () {
-        const binStr = atob(dataURL);
-        const len = binStr.length;
-        const arr = new Uint8Array(len);
-
-        for (let i = 0; i < len; i++) {
-          arr[i] = binStr.charCodeAt(i);
-        }
-
-        callback(new Blob([arr], { type: type || 'image/png' }));
-      });
-    },
-  });
-}
-
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
 const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
   let decimal = Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
