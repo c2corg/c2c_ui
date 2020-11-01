@@ -30,20 +30,17 @@ $cb-skin: skin4;
   //no border, small shadow
   $cb-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   $cb-margin-bottom: 1rem;
-}
-@elseif ($cb-skin == skin2) {
+} @else if ($cb-skin == skin2) {
   //primary big border top, small shadow
   $cb-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   $cb-border-top: 4px solid $primary;
   $cb-margin-bottom: 1rem;
-}
-@elseif ($cb-skin == skin3) {
+} @else if ($cb-skin == skin3) {
   // primary big border left, no shadow
   $cb-border-left: 4px solid $primary;
   $cb-border-top: 1px solid $primary;
   $cb-margin-bottom: 1rem;
-}
-@elseif ($cb-skin == skin4) {
+} @else if ($cb-skin == skin4) {
   // pure :)
   // $cb-border-bottom : 1px solid #e5e5e5;
   // $cb-margin-bottom: 1rem;

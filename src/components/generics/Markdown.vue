@@ -222,12 +222,12 @@ figure[c2c\:role='embedded-figure'] {
 
 // medium image
 figure[c2c\:size='MI'] {
-  max-width: unquote('min(400px, 25vw)'); // hack, see https://github.com/sass/libsass/issues/2701
-  max-height: unquote('min(400px, 25vw)');
+  max-width: min(400px, 25vw);
+  max-height: min(400px, 25vw);
 
   img {
-    max-width: unquote('min(400px, 25vw)');
-    max-height: unquote('min(400px, 25vw)');
+    max-width: min(400px, 25vw);
+    max-height: min(400px, 25vw);
   }
 }
 
