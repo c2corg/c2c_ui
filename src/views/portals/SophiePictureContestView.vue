@@ -22,7 +22,9 @@
             {{ winner.category }}
           </div>
           <div class="has-text-centered">
-            <img :src="getImageUrl(winner.image)" class="winner-image" />
+            <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
+              <img :src="getImageUrl(winner.image)" class="winner-image" />
+            </document-link>
           </div>
           <div class="has-text-centered">
             <span class="is-italic"> {{ winner.title }}, </span>
@@ -36,16 +38,22 @@
 
     <hr class="separator" />
 
-    <h3 class="title is-2 has-text-centered" v-translate>Candidates</h3>
-    <div class="cards-container is-flex" v-if="contributions">
+    <h3 class="title is-2 has-text-centered">
+      <span v-translate>Candidates</span>
+      <span class="is-size-4" v-if="images" @click="sortByAssociationDate = !sortByAssociationDate">
+        ({{ images.length }})
+        <fa-icon icon="sort-amount-up" v-if="sortByAssociationDate" />
+      </span>
+    </h3>
+    <div class="cards-container is-flex" v-if="images">
       <document-link
-        v-for="contribution in contributions"
-        :key="contribution.image.document_id"
-        :document="contribution.image"
-        :title="$documentUtils.getDocumentTitle(contribution.image)"
+        v-for="image in images"
+        :key="image.document_id"
+        :document="image"
+        :title="$documentUtils.getDocumentTitle(image)"
         class="card-image"
       >
-        <img :src="getImageUrl(contribution.image)" />
+        <img :src="getImageUrl(image)" />
       </document-link>
     </div>
     <loading-notification v-else :promise="promise" />
@@ -62,7 +70,8 @@ export default {
   data() {
     return {
       promise: null,
-      contributions: null,
+      images: null,
+      sortByAssociationDate: false,
     };
   },
 
@@ -75,8 +84,42 @@ export default {
     2014: { year: 2014, documentId: 555996, winners: null },
     2015: { year: 2015, documentId: 673796, winners: null },
     2016: { year: 2016, documentId: 809627, winners: null },
-    2017: { year: 2017, documentId: 937458, winners: null },
-    2018: { year: 2018, documentId: 1058594, winners: null },
+    2017: {
+      year: 2017,
+      documentId: 937458,
+      winners: [
+        {
+          title: 'Vivian Bruchez dans le dernier rappel plein gaz de la Dent du Géant au coucher de soleil',
+          author: 'Alex Buisse',
+          image: { document_id: 939216 },
+          category: 'Action',
+        },
+        {
+          title: 'Lever du jour sur la Grande Casse',
+          author: 'Jérôme Dauvergne',
+          image: { document_id: 939735 },
+          category: 'Paysage',
+        },
+      ],
+    },
+    2018: {
+      year: 2018,
+      documentId: 1058594,
+      winners: [
+        {
+          title: 'Flo dans Juvsoyla à Rjukan - Norvège',
+          author: 'Valentin Chapuis',
+          image: { document_id: 1060425 },
+          category: 'Action',
+        },
+        {
+          title: 'Au sommet du Helvetestinden, Lofoten',
+          author: 'Alex Buisse',
+          image: { document_id: 1060227 },
+          category: 'Coup de coeur',
+        },
+      ],
+    },
     2019: {
       year: 2019,
       documentId: 1154231,
@@ -114,17 +157,21 @@ export default {
       handler: 'onLoad',
       immediate: true,
     },
+    sortByAssociationDate: 'onLoad',
   },
 
   methods: {
     onLoad() {
-      if (this.document && this.documentId === this.document.document_id) {
-        return;
-      }
+      this.images = null;
 
-      associations = [];
-      this.contributions = null;
-      this.loadBatch(0);
+      if (this.sortByAssociationDate) {
+        associations = [];
+        this.loadBatch(0);
+      } else {
+        this.promise = c2c.article
+          .get(this.documentId)
+          .then((response) => (this.images = response.data.associations.images));
+      }
     },
 
     loadBatch(offset) {
@@ -160,10 +207,12 @@ export default {
           };
         });
 
-        this.contributions = Object.values(contributions).filter((contribution) => contribution.is_creation);
-        this.contributions = this.contributions.sort((a, b) => {
+        contributions = Object.values(contributions).filter((contribution) => contribution.is_creation);
+        contributions = contributions.sort((a, b) => {
           return a.written_at === b.written_at ? 0 : a.written_at > b.written_at ? 1 : -1;
         });
+
+        this.images = contributions.map((c) => c.image);
       }
     },
 
