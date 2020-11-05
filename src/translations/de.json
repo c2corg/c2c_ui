@@ -1,5 +1,17 @@
 {
   "de": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 oder 2 Schwierigkeiten (steiler oder enger Passagen ... )",
     "10min": {
       "access_times": "10 min"
@@ -201,6 +213,7 @@
     "IGN raster (es)": {
       "Map layer": "Spanien"
     },
+    "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "Incidents and accidents": "Unfallberichte",
     "Information about the terrain, like elevations, lengths...": "Informationen über das Gelände, wie Höhen, Längen ...",
@@ -315,6 +328,7 @@
     "Protection status": "Schutzstatus",
     "Put it back": "Rücksetzen",
     "Quote": "Zitat",
+    "Recent changes": "Letzte Veränderungen",
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
     "Register": "Anmelden",
@@ -410,6 +424,7 @@
     "Versions": "Versionen",
     "Very complex (steps, narrow sections, ridges...)": "Sehr komplexe (Schritte, schmale Abschnitte, Felsen, ...)",
     "View in other lang": "In anderer Sprache anzeigen",
+    "View next comments and continue the discussion": "Nächste Kommentare seen und Diskussion fortsetzen",
     "View xreports": "Unfallberichte sehen",
     "Warning: This action cannot be undone!": "Achtung: Diese Aktion ist unumkehrbar !",
     "Waypoint's main properties": "Hauptdaten des Wegpunkts",
@@ -472,6 +487,9 @@
     "advertisement": "Werbung",
     "age": "Alter",
     "aid_rating": "Technisches Klettern Schwierigkeitsgrad",
+    "alpine_climbing": {
+      "event_activities": "Alpinklettern"
+    },
     "already used forum_username": {
       "API message": "Forumname schon verwendet"
     },
@@ -809,6 +827,9 @@
     "federal_supervision": {
       "supervision": "Bundüberwachung"
     },
+    "federal_supervisor": {
+      "qualification": "Kletterinitiator"
+    },
     "federal_trainer": {
       "qualification": "Bundestrainer"
     },
@@ -1104,6 +1125,9 @@
     "mtb_up_rating": "MTB-Schwierigkeitsgrad (Uphill)",
     "multi": {
       "climbing_outdoor_types": "Mehrseilenlängen"
+    },
+    "multipitch_climbing": {
+      "event_activities": "Mehrseilenlänge Klettern"
     },
     "name": "Name",
     "natural_avalanche": {
@@ -1489,6 +1513,9 @@
     },
     "sometimes": {
       "snow_clearance_ratings": "gelegentliche Schneeraümung "
+    },
+    "sport_climbing": {
+      "event_activities": "Sportklettern"
     },
     "sport_shop": {
       "product_types": "Sportladen"
