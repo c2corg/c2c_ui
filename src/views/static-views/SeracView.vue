@@ -74,6 +74,16 @@
           </router-link>
         </div>
 
+        <div class="column is-6 is-offset-one-quarter has-text-centered">
+          <a
+            class="button is-warning has-text-weight-bold is-size-4"
+            href="https://www.camptocamp.org/articles/1254260/fr/sommaire-des-analyses-de-recits-de-la-base-serac"
+            v-translate
+          >
+            See the analysis of the submitted stories
+          </a>
+        </div>
+
         <div class="column is-12">
           <div class="serac-block">
             <h2 class="title is-2 has-text-light has-text-centered">
