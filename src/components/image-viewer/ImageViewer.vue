@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import Swiper from 'swiper';
+import { Swiper } from 'swiper/bundle';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
@@ -58,30 +58,18 @@ import imageUrls from '@/js/image-urls';
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {
     wrapper.requestFullscreen();
-  } else if (wrapper.mozRequestFullScreen) {
-    /* Firefox */
-    wrapper.mozRequestFullScreen();
   } else if (wrapper.webkitRequestFullscreen) {
-    /* Chrome, Safari and Opera */
+    /* Safari */
     wrapper.webkitRequestFullscreen();
-  } else if (wrapper.msRequestFullscreen) {
-    /* IE/Edge */
-    wrapper.msRequestFullscreen();
   }
 };
 
 const exitFullscreen = function () {
   if (document.exitFullscreen) {
     document.exitFullscreen();
-  } else if (document.mozCancelFullScreen) {
-    /* Firefox */
-    document.mozCancelFullScreen();
   } else if (document.webkitExitFullscreen) {
-    /* Chrome, Safari and Opera */
+    /* Safari */
     document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    /* IE/Edge */
-    document.msExitFullscreen();
   }
 };
 
@@ -142,7 +130,7 @@ export default {
           },
 
           // not possible with virtual
-          // https://idangero.us/swiper/api/#virtual
+          // https://swiperjs.com/api/#virtual
           // loop: true,
 
           // virtual because it may be too slow if there is too many image
@@ -257,7 +245,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~swiper/dist/css/swiper.css';
+@import '~swiper/swiper-bundle.css';
 
 // class not explicitly present in template, can't use scope
 

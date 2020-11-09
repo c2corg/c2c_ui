@@ -7,14 +7,14 @@
 </template>
 
 <script>
-import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 import imageUrls from '@/js/image-urls';
 
 export default {
   components: {
-    swiper,
-    swiperSlide,
+    Swiper,
+    SwiperSlide,
   },
 
   props: {
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~swiper/dist/css/swiper.css';
+@import '~swiper/swiper-bundle.css';
 
 .swiper {
   .swiper-slide {
