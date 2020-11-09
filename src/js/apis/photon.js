@@ -4,7 +4,7 @@
 import BaseApi from '@/js/apis/BaseApi';
 
 function Photon() {
-  BaseApi.call(this, 'https://photon.komoot.de/api/');
+  BaseApi.call(this, 'https://photon.komoot.io/api/');
 }
 
 // inherits prototype
