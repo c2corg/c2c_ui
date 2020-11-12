@@ -6,7 +6,7 @@ Utilities for edition views.
 
 ## form-input
 
-``` HTML
+```HTML
 <form-input :document="document" :field="fields.title"/>
 ```
 

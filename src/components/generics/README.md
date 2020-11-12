@@ -1,1 +1,1 @@
-Generic components. Any component present in this folder is available everywhere. 
+Generic components. Any component present in this folder is available everywhere.

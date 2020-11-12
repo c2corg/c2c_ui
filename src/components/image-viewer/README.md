@@ -11,4 +11,3 @@ And each component that display an camptocamp image must add it :
 ```js
 this.$imageViewer.push(imageDocument);
 ```
-
