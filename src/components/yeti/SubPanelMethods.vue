@@ -197,6 +197,7 @@
             name="groupSize"
             class="is-checkradio is-primary"
             :value="item.value"
+            :checked="item.value === method.groupSize"
             @change="onChange($event, 'groupSize')"
           />
           <label :for="'c2c-group-size-' + i">{{ item.text }}</label>
