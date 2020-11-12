@@ -1,387 +1,706 @@
 {
-   "area":{
-        "letter":"a",
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "area": {
+    "letter": "a",
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "area_type", "properties": {"url":"atyp"}},
-            {"id": "quality", "properties": {"url":"qa"}}
-        ]
-    },
+      { "id": "area_type", "properties": { "url": "atyp" } },
+      { "id": "quality", "properties": { "url": "qa" } }
+    ]
+  },
 
-    "article":{
-        "letter":"c",
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "article": {
+    "letter": "c",
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "activities", "properties": {"url":"act"}},
-            {"id": "article_categories", "properties": {"url":"acat"}},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "article_type", "properties": {"url":"atyp"}},
+      { "id": "activities", "properties": { "url": "act" } },
+      { "id": "article_categories", "properties": { "url": "acat" } },
+      { "id": "quality", "properties": { "url": "qa" } },
+      { "id": "article_type", "properties": { "url": "atyp" } },
 
-            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 1}},
-            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 4}},
-            {"id": "outings", "properties": {"url":"o", "associationEditorOrder": 5}},
-            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 3}},
-            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 2}},
-            {"id": "images", "properties":{"associationEditorOrder": 8}},
-            {"id": "users", "properties":{"associationEditorOrder": 7}},
-            {"id": "xreports", "properties":{"associationEditorOrder": 6}}
-        ]
-    },
+      { "id": "articles", "properties": { "url": "c", "associationEditorOrder": 1 } },
+      { "id": "books", "properties": { "url": "b", "associationEditorOrder": 4 } },
+      { "id": "outings", "properties": { "url": "o", "associationEditorOrder": 5 } },
+      { "id": "routes", "properties": { "url": "r", "associationEditorOrder": 3 } },
+      { "id": "waypoints", "properties": { "url": "w", "associationEditorOrder": 2 } },
+      { "id": "images", "properties": { "associationEditorOrder": 8 } },
+      { "id": "users", "properties": { "associationEditorOrder": 7 } },
+      { "id": "xreports", "properties": { "associationEditorOrder": 6 } }
+    ]
+  },
 
-    "book":{
-        "letter":"b",
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "book": {
+    "letter": "b",
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "author"},
-            {"id": "editor"},
-            {"id": "activities", "properties": {"url":"act"}},
-            {"id": "url"},
-            {"id": "isbn"},
-            {"id": "book_types", "properties": {"url":"btyp"}},
-            {"id": "publication_date"},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "langs"},
-            {"id": "nb_pages"},
+      { "id": "author" },
+      { "id": "editor" },
+      { "id": "activities", "properties": { "url": "act" } },
+      { "id": "url" },
+      { "id": "isbn" },
+      { "id": "book_types", "properties": { "url": "btyp" } },
+      { "id": "publication_date" },
+      { "id": "quality", "properties": { "url": "qa" } },
+      { "id": "langs" },
+      { "id": "nb_pages" },
 
-            {"id": "articles", "properties": {"url":"c"}},
-            {"id": "routes", "properties": {"url":"r"}},
-            {"id": "waypoints", "properties": {"url":"w"}},
-            {"id": "images"}
-        ]
-    },
+      { "id": "articles", "properties": { "url": "c" } },
+      { "id": "routes", "properties": { "url": "r" } },
+      { "id": "waypoints", "properties": { "url": "w" } },
+      { "id": "images" }
+    ]
+  },
 
-    "image":{
-        "letter":"i",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "title", "properties": {"required":false}},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "image": {
+    "letter": "i",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "title", "properties": { "required": false } },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "activities", "properties": {"url":"act"}},
-            {"id": "author"},
-            {"id": "camera_name"},
-            {"id": "date_time"},
-            {"id": "elevation", "properties": {"url":"ialt"}},
-            {"id": "height"},
-            {"id": "image_categories", "properties": {"url":"cat"}},
-            {"id": "image_type", "properties": {"url":"ityp"}},
-            {"id": "iso_speed"},
-            {"id": "file_size"},
-            {"id": "filename"},
-            {"id": "exposure_time"},
-            {"id": "focal_length"},
-            {"id": "fnumber"},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "width"},
+      { "id": "activities", "properties": { "url": "act" } },
+      { "id": "author" },
+      { "id": "camera_name" },
+      { "id": "date_time" },
+      { "id": "elevation", "properties": { "url": "ialt" } },
+      { "id": "height" },
+      { "id": "image_categories", "properties": { "url": "cat" } },
+      { "id": "image_type", "properties": { "url": "ityp" } },
+      { "id": "iso_speed" },
+      { "id": "file_size" },
+      { "id": "filename" },
+      { "id": "exposure_time" },
+      { "id": "focal_length" },
+      { "id": "fnumber" },
+      { "id": "quality", "properties": { "url": "qa" } },
+      { "id": "width" },
 
-            {"id": "areas", "properties":{"associationEditorOrder": 6}},
-            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 5}},
-            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 7}},
-            {"id": "outings", "properties":{"associationEditorOrder": 3}},
-            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 1}},
-            {"id": "users", "properties":{"associationEditorOrder": 8}},
-            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 2}},
-            {"id": "xreports", "properties":{"associationEditorOrder": 4}},
-            {"id": "images", "properties":{"associationEditorOrder": 9}}
-        ]
-    },
+      { "id": "areas", "properties": { "associationEditorOrder": 6 } },
+      { "id": "articles", "properties": { "url": "c", "associationEditorOrder": 5 } },
+      { "id": "books", "properties": { "url": "b", "associationEditorOrder": 7 } },
+      { "id": "outings", "properties": { "associationEditorOrder": 3 } },
+      { "id": "routes", "properties": { "url": "r", "associationEditorOrder": 1 } },
+      { "id": "users", "properties": { "associationEditorOrder": 8 } },
+      { "id": "waypoints", "properties": { "url": "w", "associationEditorOrder": 2 } },
+      { "id": "xreports", "properties": { "associationEditorOrder": 4 } },
+      { "id": "images", "properties": { "associationEditorOrder": 9 } }
+    ]
+  },
 
-    "map":{
-        "letter":"m",
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "map": {
+    "letter": "m",
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "code"},
-            {"id": "scale"},
-            {"id": "editor"}
-        ]
-    },
+      { "id": "code" },
+      { "id": "scale" },
+      { "id": "editor" }
+    ]
+  },
 
-    "outing":{
-        "letter":"o",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "conditions_levels", "properties": {"activities": ["skitouring", "snowshoeing", "ice_climbing", "snow_ice_mixed"]}},
-            {"id": "participants"},
-            {"id": "access_comment"},
-            {"id": "weather"},
-            {"id": "timing"},
-            {"id": "conditions"},
-            {"id": "hut_comment"},
-            {"id": "route_description"},
-            {"id": "avalanches", "properties": {"activities":["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"]}},
-            {"id": "lang", "properties": {"url":"l"}},
+  "outing": {
+    "letter": "o",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      {
+        "id": "conditions_levels",
+        "properties": { "activities": ["skitouring", "snowshoeing", "ice_climbing", "snow_ice_mixed"] }
+      },
+      { "id": "participants" },
+      { "id": "access_comment" },
+      { "id": "weather" },
+      { "id": "timing" },
+      { "id": "conditions" },
+      { "id": "hut_comment" },
+      { "id": "route_description" },
+      {
+        "id": "avalanches",
+        "properties": { "activities": ["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"] }
+      },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "access_condition"},
-            {"id": "activities", "properties": {"url":"act", "required":true}},
-            {"id": "avalanche_signs", "properties": {"url":"avdate", "activities":["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"]}},
-            {"id": "condition_rating", "properties": {"url":"ocond"}},
-            {"id": "date_end"},
-            {"id": "date_start"},
-            {"id": "disable_comments"},
-            {"id": "elevation_access", "properties": {"url":"oparka"}},
-            {"id": "elevation_down_snow", "properties": {"url":"swld", "activities":["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},
-            {"id": "elevation_max", "properties": {"url":"oalt"}},
-            {"id": "elevation_min"},
-            {"id": "elevation_up_snow", "properties": {"url":"swlu", "activities":["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},
-            {"id": "engagement_rating", "properties": {"url":"erat", "activities":["mountain_climbing", "snow_ice_mixed"]}},
-            {"id": "equipment_rating", "properties": {"url":"prat", "activities":["rock_climbing"]}},
-            {"id": "frequentation", "properties": {"url":"ofreq"}},
-            {"id": "glacier_rating", "properties": {"url":"oglac", "activities":["mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},
-            {"id": "global_rating", "properties": {"url":"grat", "activities":["mountain_climbing", "rock_climbing", "snow_ice_mixed"]}},
-            {"id": "height_diff_difficulties", "properties": {"url":"dhei", "activities":["mountain_climbing", "snow_ice_mixed"]}},
-            {"id": "height_diff_down"},
-            {"id": "height_diff_up", "properties": {"url":"odif"}},
-            {"id": "hiking_rating", "properties": {"url":"hrat", "activities":["hiking"]}},
-            {"id": "hut_status"},
-            {"id": "ice_rating", "properties": {"url":"irat", "activities":["ice_climbing"]}},
-            {"id": "labande_global_rating", "properties": {"url":"lrat", "activities":["skitouring"]}},
-            {"id": "length_total", "properties": {"url":"olen"}},
-            {"id": "lift_status"},
-            {"id": "mtb_down_rating", "properties": {"url":"mbdr", "activities":["mountain_biking"]}},
-            {"id": "mtb_up_rating", "properties": {"url":"mbur", "activities":["mountain_biking"]}},
-            {"id": "partial_trip"},
-            {"id": "participant_count"},
-            {"id": "public_transport", "properties": {"url":"owpt"}},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "rock_free_rating", "properties": {"url":"frat", "activities":["rock_climbing"]}},
-            {"id": "ski_rating", "properties": {"url":"trat", "activities":["skitouring"]}},
-            {"id": "snow_quality", "properties": {"url":"swqual", "activities":["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},
-            {"id": "snow_quantity", "properties": {"url":"swquan", "activities":["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},
-            {"id": "snowshoe_rating", "properties": {"url":"wrat", "activities":["snowshoeing"]}},
-            {"id": "via_ferrata_rating", "properties": {"url":"krat", "activities":["via_ferrata"]}},
+      { "id": "access_condition" },
+      { "id": "activities", "properties": { "url": "act", "required": true } },
+      {
+        "id": "avalanche_signs",
+        "properties": { "url": "avdate", "activities": ["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"] }
+      },
+      { "id": "condition_rating", "properties": { "url": "ocond" } },
+      { "id": "date_end" },
+      { "id": "date_start", "properties": { "url": "date", "required": false } },
+      { "id": "disable_comments" },
+      { "id": "elevation_access", "properties": { "url": "oparka" } },
+      {
+        "id": "elevation_down_snow",
+        "properties": {
+          "url": "swld",
+          "activities": ["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]
+        }
+      },
+      { "id": "elevation_max", "properties": { "url": "oalt" } },
+      { "id": "elevation_min" },
+      {
+        "id": "elevation_up_snow",
+        "properties": {
+          "url": "swlu",
+          "activities": ["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]
+        }
+      },
+      {
+        "id": "engagement_rating",
+        "properties": { "url": "erat", "activities": ["mountain_climbing", "snow_ice_mixed"] }
+      },
+      { "id": "equipment_rating", "properties": { "url": "prat", "activities": ["rock_climbing"] } },
+      { "id": "frequentation", "properties": { "url": "ofreq" } },
+      {
+        "id": "glacier_rating",
+        "properties": {
+          "url": "oglac",
+          "activities": ["mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]
+        }
+      },
+      {
+        "id": "global_rating",
+        "properties": { "url": "grat", "activities": ["mountain_climbing", "rock_climbing", "snow_ice_mixed"] }
+      },
+      {
+        "id": "height_diff_difficulties",
+        "properties": { "url": "dhei", "activities": ["mountain_climbing", "snow_ice_mixed"] }
+      },
+      { "id": "height_diff_down" },
+      { "id": "height_diff_up", "properties": { "url": "odif" } },
+      { "id": "hiking_rating", "properties": { "url": "hrat", "activities": ["hiking"] } },
+      { "id": "hut_status" },
+      { "id": "ice_rating", "properties": { "url": "irat", "activities": ["ice_climbing"] } },
+      { "id": "labande_global_rating", "properties": { "url": "lrat", "activities": ["skitouring"] } },
+      { "id": "length_total", "properties": { "url": "olen" } },
+      { "id": "lift_status" },
+      { "id": "mtb_down_rating", "properties": { "url": "mbdr", "activities": ["mountain_biking"] } },
+      { "id": "mtb_up_rating", "properties": { "url": "mbur", "activities": ["mountain_biking"] } },
+      { "id": "partial_trip" },
+      { "id": "participant_count" },
+      { "id": "public_transport", "properties": { "url": "owpt" } },
+      { "id": "quality", "properties": { "url": "qa" } },
+      { "id": "rock_free_rating", "properties": { "url": "frat", "activities": ["rock_climbing"] } },
+      { "id": "ski_rating", "properties": { "url": "trat", "activities": ["skitouring"] } },
+      {
+        "id": "snow_quality",
+        "properties": {
+          "url": "swqual",
+          "activities": ["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]
+        }
+      },
+      {
+        "id": "snow_quantity",
+        "properties": {
+          "url": "swquan",
+          "activities": ["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]
+        }
+      },
+      { "id": "snowshoe_rating", "properties": { "url": "wrat", "activities": ["snowshoeing"] } },
+      { "id": "via_ferrata_rating", "properties": { "url": "krat", "activities": ["via_ferrata"] } },
 
-            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 5}},
-            {"id": "images", "properties": {"associationEditorOrder": 3}},
-            {"id": "routes", "properties": {"url":"r", "required":true, "associationEditorOrder": 1}},
-            {"id": "users", "properties": {"url":"u", "required":true, "associationEditorOrder": 2}},
-            {"id": "xreports", "properties": {"url":"x", "associationEditorOrder": 4}}
-        ]
-    },
+      { "id": "articles", "properties": { "url": "c", "associationEditorOrder": 5 } },
+      { "id": "images", "properties": { "associationEditorOrder": 3 } },
+      { "id": "routes", "properties": { "url": "r", "required": true, "associationEditorOrder": 1 } },
+      { "id": "users", "properties": { "url": "u", "required": true, "associationEditorOrder": 2 } },
+      { "id": "xreports", "properties": { "url": "x", "associationEditorOrder": 4 } }
+    ]
+  },
 
-    "profile":{
-        "letter":"u",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "lang"},
+  "profile": {
+    "letter": "u",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "lang" },
 
-            {"id": "activities", "properties": {"url":null, "required":false}},
-            {"id": "categories", "properties": {"url":null}},
-            {"id": "name"},
+      { "id": "activities", "properties": { "url": null, "required": false } },
+      { "id": "categories", "properties": { "url": null } },
+      { "id": "name" },
 
-            {"id": "images"}
-        ]
-    },
+      { "id": "images" }
+    ]
+  },
 
-    "route":{
-        "letter":"r",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "route_history"},
-            {"id": "description"},
-            {"id": "slackline_anchor1", "properties": {"activities":["slacklining"]}},
-            {"id": "slackline_anchor2", "properties": {"activities":["slacklining"]}},
-            {"id": "slope", "properties": {"activities":["snow_ice_mixed", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "remarks"},
-            {"id": "gear"},
-            {"id": "external_resources"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "route": {
+    "letter": "r",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "route_history" },
+      { "id": "description" },
+      { "id": "slackline_anchor1", "properties": { "activities": ["slacklining"] } },
+      { "id": "slackline_anchor2", "properties": { "activities": ["slacklining"] } },
+      {
+        "id": "slope",
+        "properties": { "activities": ["snow_ice_mixed", "ice_climbing", "snowshoeing", "skitouring"] }
+      },
+      { "id": "remarks" },
+      { "id": "gear" },
+      { "id": "external_resources" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "activities", "properties": {"url":"act"}},
-            {"id": "aid_rating", "properties": {"url":"arat", "activities":["rock_climbing", "mountain_climbing"]}},
-            {"id": "climbing_outdoor_type", "properties": {"url":"crtyp", "activities":["rock_climbing"]}},
-            {"id": "configuration", "properties": {"url":"conf", "activities":["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "difficulties_height", "properties": {"url":"ralt", "activities":["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}},
-            {"id": "durations", "properties": {"url":"time", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "elevation_max", "properties": {"url":"rmaxa", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "elevation_min", "properties": {"url":"rmina", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "engagement_rating", "properties": {"url":"erat", "activities":["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}},
-            {"id": "equipment_rating", "properties": {"url":"prat", "activities":["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}},
-            {"id": "exposition_rock_rating", "properties": {"url":"rexpo", "activities":["rock_climbing", "mountain_climbing"]}},
-            {"id": "glacier_gear", "properties": {"url":"glac", "activities":["hiking", "rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "global_rating", "properties": {"url":"grat", "activities":["rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}},
-            {"id": "height_diff_access", "properties": {"url":"rappr", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "height_diff_difficulties", "properties": {"url":"dhei", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "height_diff_down", "properties": {"url":"ddif", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "height_diff_up", "properties": {"url":"hdif", "activities":["hiking", "rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_biking", "mountain_climbing", "ice_climbing", "snowshoeing", "skitouring"]}},
-            {"id": "hiking_mtb_exposition", "properties": {"url":"hexpo", "activities":["hiking", "mountain_biking"]}},
-            {"id": "hiking_rating", "properties": {"url":"hrat", "activities":["hiking"]}},
-            {"id": "ice_rating", "properties": {"url":"irat", "activities":["snow_ice_mixed", "ice_climbing"]}},
-            {"id": "labande_global_rating", "properties": {"url":"lrat", "activities":["skitouring"]}},
-            {"id": "labande_ski_rating", "properties": {"url":"srat", "activities":["skitouring"]}},
-            {"id": "lift_access"},
-            {"id": "main_waypoint_id"},
-            {"id": "mixed_rating", "properties": {"url":"mrat", "activities":["snow_ice_mixed", "ice_climbing"]}},
-            {"id": "mtb_down_rating", "properties": {"url":"mbdr", "activities":["mountain_biking"]}},
-            {"id": "mtb_height_diff_portages", "properties": {"url":"mbpush", "activities":["mountain_biking"]}},
-            {"id": "mtb_length_asphalt", "properties": {"url":"mbroad", "activities":["mountain_biking"]}},
-            {"id": "mtb_length_trail", "properties": {"url":"mbtrack", "activities":["mountain_biking"]}},
-            {"id": "mtb_up_rating", "properties": {"url":"mbur", "activities":["mountain_biking"]}},
-            {"id": "orientations", "properties": {"url":"fac"}},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "risk_rating", "properties": {"url":"orrat", "activities":["rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]}},
-            {"id": "rock_free_rating", "properties": {"url":"frat", "activities":["rock_climbing", "mountain_climbing"]}},
-            {"id": "rock_required_rating", "properties": {"url":"rrat", "activities":["rock_climbing", "mountain_climbing"]}},
-            {"id": "rock_types", "properties": {"url":"rock", "activities":["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing"]}},
-            {"id": "route_length", "properties": {"url":"rlen", "activities":["hiking", "slacklining", "via_ferrata", "snow_ice_mixed", "mountain_biking", "snowshoeing", "skitouring"]}},
-            {"id": "route_types", "properties": {"url":"rtyp"}},
-            {"id": "ski_exposition", "properties": {"url":"sexpo", "activities":["skitouring"]}},
-            {"id": "ski_rating", "properties": {"url":"trat", "activities":["skitouring"]}},
-            {"id": "slackline_height", "properties": {"activities":["slacklining"]}},
-            {"id": "slackline_type", "properties": {"url":"sltyp", "activities":["slacklining"]}},
-            {"id": "snowshoe_rating", "properties": {"url":"wrat", "activities":["snowshoeing"]}},
-            {"id": "via_ferrata_rating", "properties": {"url":"krat", "activities":["via_ferrata"]}},
+      { "id": "activities", "properties": { "url": "act" } },
+      { "id": "aid_rating", "properties": { "url": "arat", "activities": ["rock_climbing", "mountain_climbing"] } },
+      { "id": "climbing_outdoor_type", "properties": { "url": "crtyp", "activities": ["rock_climbing"] } },
+      {
+        "id": "configuration",
+        "properties": {
+          "url": "conf",
+          "activities": [
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "difficulties_height",
+        "properties": {
+          "url": "ralt",
+          "activities": ["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]
+        }
+      },
+      {
+        "id": "durations",
+        "properties": {
+          "url": "time",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "elevation_max",
+        "properties": {
+          "url": "rmaxa",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "elevation_min",
+        "properties": {
+          "url": "rmina",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "engagement_rating",
+        "properties": {
+          "url": "erat",
+          "activities": ["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]
+        }
+      },
+      {
+        "id": "equipment_rating",
+        "properties": {
+          "url": "prat",
+          "activities": ["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]
+        }
+      },
+      {
+        "id": "exposition_rock_rating",
+        "properties": { "url": "rexpo", "activities": ["rock_climbing", "mountain_climbing"] }
+      },
+      {
+        "id": "glacier_gear",
+        "properties": {
+          "url": "glac",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "snow_ice_mixed",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "global_rating",
+        "properties": {
+          "url": "grat",
+          "activities": ["rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]
+        }
+      },
+      {
+        "id": "height_diff_access",
+        "properties": {
+          "url": "rappr",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "height_diff_difficulties",
+        "properties": {
+          "url": "dhei",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "height_diff_down",
+        "properties": {
+          "url": "ddif",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      {
+        "id": "height_diff_up",
+        "properties": {
+          "url": "hdif",
+          "activities": [
+            "hiking",
+            "rock_climbing",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "mountain_climbing",
+            "ice_climbing",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      { "id": "hiking_mtb_exposition", "properties": { "url": "hexpo", "activities": ["hiking", "mountain_biking"] } },
+      { "id": "hiking_rating", "properties": { "url": "hrat", "activities": ["hiking"] } },
+      { "id": "ice_rating", "properties": { "url": "irat", "activities": ["snow_ice_mixed", "ice_climbing"] } },
+      { "id": "labande_global_rating", "properties": { "url": "lrat", "activities": ["skitouring"] } },
+      { "id": "labande_ski_rating", "properties": { "url": "srat", "activities": ["skitouring"] } },
+      { "id": "lift_access" },
+      { "id": "main_waypoint_id" },
+      { "id": "mixed_rating", "properties": { "url": "mrat", "activities": ["snow_ice_mixed", "ice_climbing"] } },
+      { "id": "mtb_down_rating", "properties": { "url": "mbdr", "activities": ["mountain_biking"] } },
+      { "id": "mtb_height_diff_portages", "properties": { "url": "mbpush", "activities": ["mountain_biking"] } },
+      { "id": "mtb_length_asphalt", "properties": { "url": "mbroad", "activities": ["mountain_biking"] } },
+      { "id": "mtb_length_trail", "properties": { "url": "mbtrack", "activities": ["mountain_biking"] } },
+      { "id": "mtb_up_rating", "properties": { "url": "mbur", "activities": ["mountain_biking"] } },
+      { "id": "orientations", "properties": { "url": "fac" } },
+      { "id": "quality", "properties": { "url": "qa" } },
+      {
+        "id": "risk_rating",
+        "properties": {
+          "url": "orrat",
+          "activities": ["rock_climbing", "snow_ice_mixed", "mountain_climbing", "ice_climbing"]
+        }
+      },
+      {
+        "id": "rock_free_rating",
+        "properties": { "url": "frat", "activities": ["rock_climbing", "mountain_climbing"] }
+      },
+      {
+        "id": "rock_required_rating",
+        "properties": { "url": "rrat", "activities": ["rock_climbing", "mountain_climbing"] }
+      },
+      {
+        "id": "rock_types",
+        "properties": {
+          "url": "rock",
+          "activities": ["rock_climbing", "via_ferrata", "snow_ice_mixed", "mountain_climbing"]
+        }
+      },
+      {
+        "id": "route_length",
+        "properties": {
+          "url": "rlen",
+          "activities": [
+            "hiking",
+            "slacklining",
+            "via_ferrata",
+            "snow_ice_mixed",
+            "mountain_biking",
+            "snowshoeing",
+            "skitouring"
+          ]
+        }
+      },
+      { "id": "route_types", "properties": { "url": "rtyp" } },
+      { "id": "ski_exposition", "properties": { "url": "sexpo", "activities": ["skitouring"] } },
+      { "id": "ski_rating", "properties": { "url": "trat", "activities": ["skitouring"] } },
+      { "id": "slackline_height", "properties": { "activities": ["slacklining"] } },
+      { "id": "slackline_type", "properties": { "url": "sltyp", "activities": ["slacklining"] } },
+      { "id": "snowshoe_rating", "properties": { "url": "wrat", "activities": ["snowshoeing"] } },
+      { "id": "via_ferrata_rating", "properties": { "url": "krat", "activities": ["via_ferrata"] } },
 
-            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 4}},
-            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 2}},
-            {"id": "images", "properties": {"associationEditorOrder": 5}},
-            {"id": "routes", "properties": {"url":"r", "associationEditorOrder": 3}},
-            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 1}},
-            {"id": "xreports", "properties": {"url":"x", "associationEditorOrder": 6}}
-        ]
-    },
+      { "id": "articles", "properties": { "url": "c", "associationEditorOrder": 4 } },
+      { "id": "books", "properties": { "url": "b", "associationEditorOrder": 2 } },
+      { "id": "images", "properties": { "associationEditorOrder": 5 } },
+      { "id": "routes", "properties": { "url": "r", "associationEditorOrder": 3 } },
+      { "id": "waypoints", "properties": { "url": "w", "associationEditorOrder": 1 } },
+      { "id": "xreports", "properties": { "url": "x", "associationEditorOrder": 6 } }
+    ]
+  },
 
-    "waypoint":{
-        "letter":"w",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "access", "properties": {"waypoint_types":["access", "climbing_indoor", "climbing_outdoor", "hut", "local_product", "slackline_spot"]}},
-            {"id": "access_period", "properties": {"waypoint_types":["access", "camp_site", "climbing_outdoor", "gite", "hut", "local_product"]}},
-            {"id": "lang", "properties": {"url":"l"}},
+  "waypoint": {
+    "letter": "w",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      {
+        "id": "access",
+        "properties": {
+          "waypoint_types": ["access", "climbing_indoor", "climbing_outdoor", "hut", "local_product", "slackline_spot"]
+        }
+      },
+      {
+        "id": "access_period",
+        "properties": { "waypoint_types": ["access", "camp_site", "climbing_outdoor", "gite", "hut", "local_product"] }
+      },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "access_time", "properties": {"url":"tappt", "waypoint_types":["climbing_outdoor", "slackline_spot"]}},
-            {"id": "best_periods", "properties": {"url":"period", "waypoint_types":["climbing_outdoor", "slackline_spot"]}},
-            {"id": "blanket_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},
-            {"id": "capacity", "properties": {"url":"hucap", "waypoint_types":["bivouac", "camp_site", "gite", "hut", "shelter"]}},
-            {"id": "capacity_staffed", "properties": {"url":"hscap", "waypoint_types":["camp_site", "gite", "hut"]}},
-            {"id": "children_proof", "properties": {"url":"chil", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "climbing_indoor_types", "properties": {"url":"ctin", "waypoint_types":["climbing_indoor"]}},
-            {"id": "climbing_outdoor_types", "properties": {"url":"ctout", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "climbing_rating_max", "properties": {"url":"tmaxr", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "climbing_rating_median", "properties": {"url":"tmedr", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "climbing_rating_min", "properties": {"url":"tminr", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "climbing_styles", "properties": {"url":"tcsty", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "custodianship", "properties": {"url":"hsta", "waypoint_types":["camp_site", "gite", "hut"]}},
-            {"id": "elevation", "properties": {"url":"walt"}},
-            {"id": "elevation_min", "properties": {"waypoint_types":["access"]}},
-            {"id": "equipment_ratings", "properties": {"url":"anchq", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "gas_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},
-            {"id": "ground_types", "properties": {"waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
-            {"id": "heating_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},
-            {"id": "height_max", "properties": {"url":"tmaxh", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "height_median", "properties": {"url":"tmedh", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "height_min", "properties": {"url":"tminh", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "length", "properties": {"url":"len", "waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
-            {"id": "lift_access", "properties": {"url":"plift", "waypoint_types":["access"]}},
-            {"id": "maps_info"},
-            {"id": "matress_unstaffed", "properties": {"waypoint_types":["hut", "shelter"]}},
-            {"id": "orientations", "properties": {"url":"wfac", "waypoint_types":["climbing_outdoor", "paragliding_landing", "paragliding_takeoff", "slackline_spot"]}},
-            {"id": "paragliding_rating", "properties": {"url":"pgrat", "waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
-            {"id": "parking_fee", "properties": {"waypoint_types":["access"]}},
-            {"id": "phone", "properties": {"waypoint_types":["camp_site", "climbing_indoor", "gite", "hut", "local_product"]}},
-            {"id": "phone_custodian", "properties": {"waypoint_types":["camp_site", "gite", "hut"]}},
-            {"id": "product_types", "properties": {"url":"ftyp", "waypoint_types":["local_product"]}},
-            {"id": "prominence", "properties": {"url":"prom", "waypoint_types":["summit"]}},
-            {"id": "public_transportation_rating", "properties": {"url":"tp", "waypoint_types":["access"]}},
-            {"id": "public_transportation_types", "properties": {"url":"tpty", "waypoint_types":["access"]}},
-            {"id": "quality", "properties": {"url":"qa"}},
-            {"id": "rain_proof", "properties": {"url":"rain", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "rock_types", "properties": {"url":"wrock", "waypoint_types":["climbing_outdoor"]}},
-            {"id": "routes_quantity", "properties": {"url":"rqua", "waypoint_types":["climbing_indoor", "climbing_outdoor"]}},
-            {"id": "slackline_length_max", "properties": {"waypoint_types":["slackline_spot"]}},
-            {"id": "slackline_length_min", "properties": {"waypoint_types":["slackline_spot"]}},
-            {"id": "slackline_types", "properties": {"waypoint_types":["slackline_spot"]}},
-            {"id": "waypoint_slope", "properties": {"waypoint_types":["paragliding_landing", "paragliding_takeoff"]}},
-            {"id": "snow_clearance_rating", "properties": {"url":"psnow", "waypoint_types":["access"]}},
-            {"id": "url", "properties": {"waypoint_types":["camp_site", "climbing_indoor", "climbing_outdoor", "gite", "hut", "local_product", "weather_station", "webcam"]}},
-            {"id": "waypoint_type", "properties": {"url":"wtyp"}},
-            {"id": "weather_station_types", "properties": {"waypoint_types": ["weather_station"], "url":"whtyp"}},
+      {
+        "id": "access_time",
+        "properties": { "url": "tappt", "waypoint_types": ["climbing_outdoor", "slackline_spot"] }
+      },
+      {
+        "id": "best_periods",
+        "properties": { "url": "period", "waypoint_types": ["climbing_outdoor", "slackline_spot"] }
+      },
+      { "id": "blanket_unstaffed", "properties": { "waypoint_types": ["hut", "shelter"] } },
+      {
+        "id": "capacity",
+        "properties": { "url": "hucap", "waypoint_types": ["bivouac", "camp_site", "gite", "hut", "shelter"] }
+      },
+      { "id": "capacity_staffed", "properties": { "url": "hscap", "waypoint_types": ["camp_site", "gite", "hut"] } },
+      { "id": "children_proof", "properties": { "url": "chil", "waypoint_types": ["climbing_outdoor"] } },
+      { "id": "climbing_indoor_types", "properties": { "url": "ctin", "waypoint_types": ["climbing_indoor"] } },
+      { "id": "climbing_outdoor_types", "properties": { "url": "ctout", "waypoint_types": ["climbing_outdoor"] } },
+      {
+        "id": "climbing_rating_max",
+        "properties": { "url": "tmaxr", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "climbing_rating_median",
+        "properties": { "url": "tmedr", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "climbing_rating_min",
+        "properties": { "url": "tminr", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "climbing_styles",
+        "properties": { "url": "tcsty", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      { "id": "custodianship", "properties": { "url": "hsta", "waypoint_types": ["camp_site", "gite", "hut"] } },
+      { "id": "elevation", "properties": { "url": "walt" } },
+      { "id": "elevation_min", "properties": { "waypoint_types": ["access"] } },
+      { "id": "equipment_ratings", "properties": { "url": "anchq", "waypoint_types": ["climbing_outdoor"] } },
+      { "id": "gas_unstaffed", "properties": { "waypoint_types": ["hut", "shelter"] } },
+      { "id": "ground_types", "properties": { "waypoint_types": ["paragliding_landing", "paragliding_takeoff"] } },
+      { "id": "heating_unstaffed", "properties": { "waypoint_types": ["hut", "shelter"] } },
+      {
+        "id": "height_max",
+        "properties": { "url": "tmaxh", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "height_median",
+        "properties": { "url": "tmedh", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "height_min",
+        "properties": { "url": "tminh", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      {
+        "id": "length",
+        "properties": { "url": "len", "waypoint_types": ["paragliding_landing", "paragliding_takeoff"] }
+      },
+      { "id": "lift_access", "properties": { "url": "plift", "waypoint_types": ["access"] } },
+      { "id": "maps_info" },
+      { "id": "matress_unstaffed", "properties": { "waypoint_types": ["hut", "shelter"] } },
+      {
+        "id": "orientations",
+        "properties": {
+          "url": "wfac",
+          "waypoint_types": ["climbing_outdoor", "paragliding_landing", "paragliding_takeoff", "slackline_spot"]
+        }
+      },
+      {
+        "id": "paragliding_rating",
+        "properties": { "url": "pgrat", "waypoint_types": ["paragliding_landing", "paragliding_takeoff"] }
+      },
+      { "id": "parking_fee", "properties": { "waypoint_types": ["access"] } },
+      {
+        "id": "phone",
+        "properties": { "waypoint_types": ["camp_site", "climbing_indoor", "gite", "hut", "local_product"] }
+      },
+      { "id": "phone_custodian", "properties": { "waypoint_types": ["camp_site", "gite", "hut"] } },
+      { "id": "product_types", "properties": { "url": "ftyp", "waypoint_types": ["local_product"] } },
+      { "id": "prominence", "properties": { "url": "prom", "waypoint_types": ["summit"] } },
+      { "id": "public_transportation_rating", "properties": { "url": "tp", "waypoint_types": ["access"] } },
+      { "id": "public_transportation_types", "properties": { "url": "tpty", "waypoint_types": ["access"] } },
+      { "id": "quality", "properties": { "url": "qa" } },
+      { "id": "rain_proof", "properties": { "url": "rain", "waypoint_types": ["climbing_outdoor"] } },
+      { "id": "rock_types", "properties": { "url": "wrock", "waypoint_types": ["climbing_outdoor"] } },
+      {
+        "id": "routes_quantity",
+        "properties": { "url": "rqua", "waypoint_types": ["climbing_indoor", "climbing_outdoor"] }
+      },
+      { "id": "slackline_length_max", "properties": { "waypoint_types": ["slackline_spot"] } },
+      { "id": "slackline_length_min", "properties": { "waypoint_types": ["slackline_spot"] } },
+      { "id": "slackline_types", "properties": { "waypoint_types": ["slackline_spot"] } },
+      { "id": "waypoint_slope", "properties": { "waypoint_types": ["paragliding_landing", "paragliding_takeoff"] } },
+      { "id": "snow_clearance_rating", "properties": { "url": "psnow", "waypoint_types": ["access"] } },
+      {
+        "id": "url",
+        "properties": {
+          "waypoint_types": [
+            "camp_site",
+            "climbing_indoor",
+            "climbing_outdoor",
+            "gite",
+            "hut",
+            "local_product",
+            "weather_station",
+            "webcam"
+          ]
+        }
+      },
+      { "id": "waypoint_type", "properties": { "url": "wtyp" } },
+      { "id": "weather_station_types", "properties": { "waypoint_types": ["weather_station"], "url": "whtyp" } },
 
-            {"id": "articles", "properties": {"url":"c", "associationEditorOrder": 3}},
-            {"id": "books", "properties": {"url":"b", "associationEditorOrder": 2}},
-            {"id": "images", "properties": {"associationEditorOrder": 4}},
-            {"id": "waypoints", "properties": {"url":"w", "associationEditorOrder": 1}},
-            {"id": "waypoints", "properties": {"name": "waypoint_children", "url":"w", "associationEditorOrder": 1}}
-        ]
-    },
+      { "id": "articles", "properties": { "url": "c", "associationEditorOrder": 3 } },
+      { "id": "books", "properties": { "url": "b", "associationEditorOrder": 2 } },
+      { "id": "images", "properties": { "associationEditorOrder": 4 } },
+      { "id": "waypoints", "properties": { "url": "w", "associationEditorOrder": 1 } },
+      { "id": "waypoints", "properties": { "name": "waypoint_children", "url": "w", "associationEditorOrder": 1 } }
+    ]
+  },
 
-    "xreport":{
-        "letter":"x",
-        "geoLocalized":true,
-        "fields":[
-            {"id": "title"},
-            {"id": "summary"},
-            {"id": "description"},
-            {"id": "place"},
-            {"id": "route_study"},
-            {"id": "conditions"},
-            {"id": "training"},
-            {"id": "motivations"},
-            {"id": "group_management"},
-            {"id": "risk"},
-            {"id": "time_management"},
-            {"id": "safety"},
-            {"id": "reduce_impact"},
-            {"id": "increase_impact"},
-            {"id": "modifications"},
-            {"id": "other_comments"},
-            {"id": "lang", "properties": {"url":"l"}},
+  "xreport": {
+    "letter": "x",
+    "geoLocalized": true,
+    "fields": [
+      { "id": "title" },
+      { "id": "summary" },
+      { "id": "description" },
+      { "id": "place" },
+      { "id": "route_study" },
+      { "id": "conditions" },
+      { "id": "training" },
+      { "id": "motivations" },
+      { "id": "group_management" },
+      { "id": "risk" },
+      { "id": "time_management" },
+      { "id": "safety" },
+      { "id": "reduce_impact" },
+      { "id": "increase_impact" },
+      { "id": "modifications" },
+      { "id": "other_comments" },
+      { "id": "lang", "properties": { "url": "l" } },
 
-            {"id": "elevation", "properties": {"url":"xalt"}},
-            {"id": "date"},
-            {"id": "event_type", "properties": {"url":"xtyp"}},
-            {"id": "event_activity", "properties": {"url":"act"}},
-            {"id": "nb_participants", "properties": {"url":"xpar"}},
-            {"id": "nb_impacted", "properties": {"url":"ximp"}},
-            {"id": "rescue"},
-            {"id": "avalanche_level"},
-            {"id": "avalanche_slope"},
-            {"id": "severity", "properties": {"url":"xsev"}},
-            {"id": "author_status"},
-            {"id": "activity_rate"},
-            {"id": "age"},
-            {"id": "gender"},
-            {"id": "previous_injuries"},
-            {"id": "autonomy"},
-            {"id": "qualification"},
-            {"id": "supervision"},
-            {"id": "disable_comments"},
-            {"id": "anonymous"},
-            {"id": "quality", "properties": {"url":"qa"}},
+      { "id": "elevation", "properties": { "url": "xalt" } },
+      { "id": "date" },
+      { "id": "event_type", "properties": { "url": "xtyp" } },
+      { "id": "event_activity", "properties": { "url": "act" } },
+      { "id": "nb_participants", "properties": { "url": "xpar" } },
+      { "id": "nb_impacted", "properties": { "url": "ximp" } },
+      { "id": "rescue" },
+      { "id": "avalanche_level" },
+      { "id": "avalanche_slope" },
+      { "id": "severity", "properties": { "url": "xsev" } },
+      { "id": "author_status" },
+      { "id": "activity_rate" },
+      { "id": "age" },
+      { "id": "gender" },
+      { "id": "previous_injuries" },
+      { "id": "autonomy" },
+      { "id": "qualification" },
+      { "id": "supervision" },
+      { "id": "disable_comments" },
+      { "id": "anonymous" },
+      { "id": "quality", "properties": { "url": "qa" } },
 
-            {"id": "articles", "properties": {"url":"c", "helper": null,  "associationEditorOrder": 6}},
-            {"id": "images", "properties": {"associationEditorOrder":5}},
-            {"id": "outings", "properties": {"url":"o", "helper": null,  "associationEditorOrder": 1}},
-            {"id": "routes", "properties": {"url":"r", "helper": null,  "associationEditorOrder": 3}},
-            {"id": "users", "properties": {"associationEditorOrder":2}},
-            {"id": "waypoints", "properties": {"associationEditorOrder":4}}
-        ]
-    }
+      { "id": "articles", "properties": { "url": "c", "helper": null, "associationEditorOrder": 6 } },
+      { "id": "images", "properties": { "associationEditorOrder": 5 } },
+      { "id": "outings", "properties": { "url": "o", "helper": null, "associationEditorOrder": 1 } },
+      { "id": "routes", "properties": { "url": "r", "helper": null, "associationEditorOrder": 3 } },
+      { "id": "users", "properties": { "associationEditorOrder": 2 } },
+      { "id": "waypoints", "properties": { "associationEditorOrder": 4 } }
+    ]
+  }
 }
