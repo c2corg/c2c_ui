@@ -3,11 +3,13 @@
     <div class="legend">
       <div>
         <div class="legend-button is-pulled-right ol-control">
-          <button type="button" @click="showLegend = !showLegend"><span>Légende</span></button>
+          <button type="button" @click="showLegend = !showLegend">
+            <span v-translate>Legend</span>
+          </button>
         </div>
       </div>
       <div class="legend-content" v-show="showLegend === true">
-        <p class="is-italic" v-if="!mapLegend">La légende apparaitra automatiquement avec l’image générée</p>
+        <p class="is-italic" v-if="!mapLegend" v-translate>Legend will appear automatically with the generated image</p>
         <div v-else>
           <ul>
             <li v-for="(item, i) of mapLegend.items" :key="i">
@@ -45,7 +47,7 @@ import VueSlider from 'vue-slider-component';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
-const YETI_ATTRIBUTION = 'Données RGE ALTI®';
+const YETI_ATTRIBUTION = 'RGE ALTI®';
 const YETI_LAYER_OPACITY = 0.75;
 const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
@@ -382,7 +384,7 @@ export default {
       // remove feature
       // when only one left, ask for user to confirm
       let toBeRemoved = !(
-        this.featuresLayerSource.getFeatures().length === 1 && !confirm('Confirmez la suppression ?')
+        this.featuresLayerSource.getFeatures().length === 1 && !confirm(this.$gettext('Confirm delete'))
       );
       if (toBeRemoved) {
         this.featuresLayerSource.removeFeature(feature);
@@ -391,7 +393,7 @@ export default {
     },
 
     removeFeatures() {
-      if (confirm('Confirmez la suppression ?')) {
+      if (confirm(this.$gettext('Confirm delete'))) {
         this.featuresLayerSource.clear(true);
         this.emitFeaturesEvent();
       }
@@ -422,7 +424,7 @@ export default {
         if (properties.name) {
           return properties.name;
         } else {
-          return 'Fichier GPX';
+          return this.$gettext('GPX file');
         }
       }
     },

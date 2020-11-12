@@ -7,28 +7,25 @@
         <div class="yeti-icon is-inline-block">
           <icon-yeti />
         </div>
-        <span>YETI - Un outil de préparation de course</span>
+        <span v-translate>YETI - A preparation tool for your outing</span>
       </h1>
     </div>
 
     <div class="yeti-app">
       <div class="box yeti-overlay" v-if="showDisclaimer">
-        <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <texts component="disclaimer" />
+        <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
         <form action="#" @submit="onSubmitDisclaimer">
-          <input-checkbox v-model="checkDisclaimer">
-            J’ai lu et j’ai compris l’intérêt et les limites de Yéti
+          <input-checkbox v-model="checkDisclaimer" v-translate>
+            I read and understood the interest and limitations of YETI
           </input-checkbox>
-          <button class="button is-primary" :disabled="!checkDisclaimer">Accéder à YETI</button>
+          <button class="button is-primary" :disabled="!checkDisclaimer" v-translate>Launch YETI</button>
         </form>
       </div>
 
       <div class="box yeti-overlay" v-if="$route.params.page === 'faq'">
-        <p><router-link to=".">Retour YETI</router-link></p>
-        <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <texts component="disclaimer" />
-        <h2 class="title is-3 yeti-title">FAQ</h2>
-        <texts component="faq" />
+        <p><router-link to="." v-translate>Go back to YETI</router-link></p>
+        <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
+        <yeti-article :article="articles.faq"></yeti-article>
       </div>
 
       <div class="columns yeti-content">
@@ -36,7 +33,9 @@
           <div class="columns mb-0 yeti-columns--reverse is-mobile">
             <ul class="column is-narrow pb-0">
               <li>
-                <router-link class="is-block yetitabs-link" :to="$route.fullPath + '/faq'">FAQ ?</router-link>
+                <router-link class="is-block yetitabs-link" :to="$route.fullPath + '/faq'" v-translate>
+                  FAQ?
+                </router-link>
               </li>
             </ul>
             <tabs :tabs="tabs" :active-tab.sync="activeTab" :has-features="hasFeatures" />
@@ -116,12 +115,12 @@
 <script>
 import axios from 'axios';
 
+import YetiArticle from '@/components/yeti/Article';
 import Panel from '@/components/yeti/Panel';
 import SubPanelBra from '@/components/yeti/SubPanelBra';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse';
 import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
-import Texts from '@/components/yeti/Texts';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
 import ol from '@/js/libs/ol';
@@ -134,54 +133,16 @@ const VALID_FORM_DATA = {
   braMaxMrd: 3,
 };
 
-const ERRORS = {
-  area: {
-    simple: 'Zone non couverte',
-    full:
-      'L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).',
-  },
-  method: {
-    simple: 'Méthode manquante',
-    full: 'Veuillez sélectionner une méthode pour le calcul.',
-  },
-  method_bra: {
-    simple: 'Méthode et BRA incompatible',
-    full: 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP.',
-  },
-  bra: {
-    simple: 'BRA manquant',
-    full: 'La valeur de BRA est manquante. Veuillez saisir la valeur spécifiée par le bulletin Météo-France.',
-  },
-  altitude: {
-    simple: 'Altitude manquante',
-    full:
-      'L’altitude est requise quand le BRA haut et bas sont différents. Précisez la valeur fournie par le bulletin Météo-France.',
-  },
-  zoom: {
-    simple: 'Zoom carte trop important',
-    full: 'L’emprise actuelle est trop grande. Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum.',
-  },
-  ok: 'Tout semble OK ! :)',
-  yeti: 'Le service ne fonctionne pas actuellement',
-  yeti_prefix: 'YETI Service: ',
-  yeti_unauthorized:
-    'Vous devez être autorisé pour effectuer cette requête. Contactez les administrateurs du service si vous êtes intéressé.',
-};
-
-const TEXTS = {
-  featuresTitle: 'Nouvel itinéraire',
-};
-
 export default {
   name: 'Yeti',
 
   components: {
+    YetiArticle,
     Panel,
     SubPanelBra,
     SubPanelCourse,
     SubPanelMethods,
     Tabs,
-    Texts,
     ValidationButton,
     YetiMap,
   },
@@ -191,10 +152,60 @@ export default {
       showDisclaimer: false,
       checkDisclaimer: false,
 
+      articles: {
+        faq: {
+          id: 1257569,
+          title: 'FAQ',
+        },
+        disclaimer: {
+          id: 1257571,
+          title: this.$gettext('Disclaimer'),
+        },
+      },
+
       yetiMap: null,
 
-      tabs: ['Calcul', 'Course'],
+      tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
       activeTab: 0,
+
+      errors: {
+        area: {
+          simple: this.$gettext('Area not covered'),
+          full: this.$gettext(
+            'Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).'
+          ),
+        },
+        method: {
+          simple: this.$gettext('Missing method'),
+          full: this.$gettext('Please select a method before computing.'),
+        },
+        method_bra: {
+          simple: this.$gettext('Conflicting method and danger'),
+          full: this.$gettext(
+            'The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.'
+          ),
+        },
+        bra: {
+          simple: this.$gettext('Missing danger level'),
+          full: this.$gettext('Please set danger level as specified on avalanche bulletin for the specific area.'),
+        },
+        altitude: {
+          simple: this.$gettext('Missing altitude'),
+          full: this.$gettext(
+            'Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.'
+          ),
+        },
+        zoom: {
+          simple: this.$gettext('Area too large'),
+          full: this.$gettext('Current map view is too large. Please zoom to level ' + VALID_FORM_DATA.minZoom),
+        },
+        ok: this.$gettext('Seems fine! :)'),
+        yeti: this.$gettext('Service is inactive right now'),
+        yeti_prefix: 'YETI Service: ',
+        yeti_unauthorized: this.$gettext(
+          'You have to be authorized. Please contact administrators of the service if interested.'
+        ),
+      },
 
       validFormData: VALID_FORM_DATA,
 
@@ -223,7 +234,7 @@ export default {
 
       features: [],
       gpx: null,
-      featuresTitle: TEXTS.featuresTitle,
+      featuresTitle: this.$gettext('New route'),
 
       mountains: {},
 
@@ -260,7 +271,7 @@ export default {
     featuresTitle(newValue) {
       // set default featuresTitle if null (from yeti map)
       if (newValue === null) {
-        this.featuresTitle = TEXTS.featuresTitle;
+        this.featuresTitle = this.$gettext('New route');
       }
     },
   },
@@ -310,24 +321,33 @@ export default {
 
     warnAboutMethodBra(item) {
       if (item === 'mrd' && this.isBraMax) {
-        window.alert(ERRORS.method_bra.full);
+        window.alert(this.errors.method_bra.full);
       }
     },
 
     setCurrentError() {
       if (this.formError) {
-        this.currentError = ERRORS[this.formError]['simple'];
+        this.currentError = this.errors[this.formError]['simple'];
         if (this.formError === 'zoom') {
-          this.currentError += ' (actuel: ' + this.mapZoom + ' sur ' + this.validFormData.minZoom + ')';
+          this.currentError +=
+            ' (' +
+            this.$gettext('current zoom:') +
+            ' ' +
+            this.mapZoom +
+            ' ' +
+            this.$gettext('on') +
+            ' ' +
+            this.validFormData.minZoom +
+            ')';
         }
       } else {
-        this.currentError = ERRORS['ok'];
+        this.currentError = this.errors['ok'];
       }
     },
 
     compute() {
       if (this.formError) {
-        window.alert(ERRORS[this.formError]['full']);
+        window.alert(this.errors[this.formError]['full']);
         return;
       }
 
@@ -362,7 +382,7 @@ export default {
     onYetiError(err) {
       this.promise = null;
 
-      let errorText = ERRORS['yeti'];
+      let errorText = this.errors['yeti'];
 
       if (err.response.status === 400) {
         const xml = new DOMParser().parseFromString(err.response.data, 'text/xml');
@@ -370,10 +390,10 @@ export default {
       }
 
       if (err.response.status === 403) {
-        errorText = ERRORS['yeti_unauthorized'];
+        errorText = this.errors['yeti_unauthorized'];
       }
 
-      window.alert(ERRORS['yeti_prefix'] + errorText);
+      window.alert(this.errors['yeti_prefix'] + errorText);
     },
 
     getYetiUrl(extent) {

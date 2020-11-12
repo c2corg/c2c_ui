@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelMethodes">
-    <sub-panel-title>Méthodes</sub-panel-title>
+    <sub-panel-title>Methods</sub-panel-title>
     <div class="columns is-mobile yetitabs">
       <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">
         <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method.type === item }">
@@ -24,45 +24,54 @@
 
     <div v-show="method.type == 'mrd'">
       <p>
-        Avec la <strong>méthode de réduction pour débutant</strong> (MRD), vous n’avez pas d’autres paramètres à entrer
-        que le (ou les) niveau(x) de danger donné par le BRA.
+        <span v-translate>With the</span>
+        <strong v-translate>Beginner Reduction Method</strong>
+        <span v-translate>
+          (MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.
+        </span>
       </p>
       <div class="yetiform-note">
-        <p>
-          Comme son nom l’indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de
-          sécurité se doit d'être très importante. On ne spécifie pas d’autre paramètre que le niveau de danger du BRA.
-          Il n’est pas tenu compte de l’orientation.
+        <p v-translate>
+          As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly
+          important. No parameter other than the danger level is specified. Orientation is ignored.
         </p>
       </div>
 
       <table class="yetiform-danger">
         <tr>
           <td><img src="@/assets/img/yeti/levels-danger.svg#level1" /></td>
-          <td><strong>Danger faible</strong></td>
-          <td>Je renonce aux pentes > 40°</td>
+          <td><strong v-translate>Danger rating - low</strong></td>
+          <td v-translate>I must not use slopes > 40°</td>
         </tr>
         <tr>
           <td><img src="@/assets/img/yeti/levels-danger.svg#level2" /></td>
-          <td><strong>Danger limité</strong></td>
-          <td>Je renonce aux pentes > 35°</td>
+          <td><strong v-translate>Danger rating - moderate</strong></td>
+          <td v-translate>I must not use slopes > 35°</td>
         </tr>
         <tr class="multiline">
           <td><img src="@/assets/img/yeti/levels-danger.svg#level3" /></td>
-          <td><strong>Danger marqué</strong></td>
-          <td>Je renonce aux pentes > 30° <br /><small>y compris les pentes qui me dominent</small></td>
+          <td><strong v-translate>Danger rating - considerable</strong></td>
+          <td>
+            <span v-translate>I must not use slopes > 30°</span>
+            <br />
+            <small v-translate>including dominant slopes</small>
+          </td>
         </tr>
         <tr>
           <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-          <td><strong>Danger fort à très fort</strong></td>
-          <td>Je renonce à sortir</td>
+          <td><strong v-translate>Danger rating - high to very high</strong></td>
+          <td v-translate>I choose to cancel the outing</td>
         </tr>
       </table>
     </div>
 
     <div v-show="method.type == 'mre'">
       <p>
-        Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs de la rose des
-        vents signalés comme critique dans le BRA.
+        <span v-translate>With the</span>
+        <strong v-translate>Elementary Reduction Method</strong>
+        <span v-translate>
+          (MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.
+        </span>
       </p>
 
       <input-orientation
@@ -70,54 +79,72 @@
         @input="onChange($event, 'orientation')"
         class="has-text-centered"
       />
+
       <p v-if="method.orientation.length != 0" class="yetiform-info">
-        Orientations: {{ method.orientation.join(', ') }}
+        <span v-translate key="tr1">Orientations</span>: {{ method.orientation.join(', ') }}
       </p>
-      <p v-else class="yetiform-info">Pas d’orientations sélectionnées</p>
+      <p v-else class="yetiform-info">
+        <span v-translate key="tr2">No orientation selected</span>
+      </p>
 
       <div class="yetiform-note">
-        <p>
-          Le niveau de danger du BRA concerne toutes les orientations. La rose des vents distingue les secteurs les plus
-          critiques présentant un risque accru.
+        <p v-translate>
+          Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most
+          critical sectors presenting an increased risk.
         </p>
       </div>
 
       <table class="yetiform-danger">
         <tr class="multiline">
           <td><img src="@/assets/img/yeti/levels-danger.svg#level1" /></td>
-          <td><strong>Danger faible</strong></td>
-          <td>Skier avec prudence <br /><small>risque de chute grave sur neige dure</small></td>
+          <td><strong v-translate>Danger rating - low</strong></td>
+          <td>
+            <span v-translate>Stay careful while skiing</span>
+            <br />
+            <small v-translate>risk of a rough fall on hard snow</small>
+          </td>
         </tr>
         <tr>
           <td><img src="@/assets/img/yeti/levels-danger.svg#level2" /></td>
-          <td><strong>Danger limité</strong></td>
-          <td>Je renonce aux pentes > 40°</td>
+          <td><strong v-translate>Danger rating - moderate</strong></td>
+          <td v-translate>I must not use slopes > 40°</td>
         </tr>
         <tr class="multiline">
           <td><img src="@/assets/img/yeti/levels-danger.svg#level3" /></td>
-          <td><strong>Danger marqué</strong></td>
-          <td>Je renonce aux pentes > 35° <br /><small>y compris les pentes qui me dominent</small></td>
+          <td><strong v-translate>Danger rating - considerable</strong></td>
+          <td>
+            <span v-translate>I must not use slopes > 35°</span>
+            <br />
+            <small v-translate>including dominant slopes</small>
+          </td>
         </tr>
         <tr class="multiline">
           <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-          <td><strong>Danger fort</strong></td>
-          <td>Je renonce aux pentes > 30° <br /><small>y compris les pentes qui me dominent</small></td>
+          <td><strong v-translate>Danger rating - high</strong></td>
+          <td>
+            <span v-translate>I must not use slopes > 30°</span>
+            <br />
+            <small v-translate>including dominant slopes</small>
+          </td>
         </tr>
         <tr>
           <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-          <td><strong>Danger très fort</strong></td>
-          <td>Je renonce à sortir</td>
+          <td><strong v-translate>Danger rating - very high</strong></td>
+          <td v-translate>I choose to cancel the outing</td>
         </tr>
       </table>
     </div>
 
     <div v-show="method.type == 'mrp'">
       <p>
-        Avec la <strong>méthode de réduction professionnelle</strong> (MRP), vous pouvez affiner le potentiel de danger,
-        tenir compte de la taille du groupe et des mesures de précaution envisagées.
+        <span v-translate>With the</span>
+        <strong v-translate>Professional Reduction Method</strong>
+        <span v-translate>
+          (MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.
+        </span>
       </p>
 
-      <h3 class="title is-3">Potentiel de danger</h3>
+      <h3 class="title is-3" v-translate>Hazard potential</h3>
       <ul class="potential-danger-labels has-text-black">
         <li
           v-for="label of potentialDangerLabels"
@@ -134,32 +161,33 @@
       </ul>
 
       <p v-if="method.potentialDanger" class="yetiform-info">
-        Potentiel de danger: {{ method.potentialDanger }} (BRA: {{ bra.high }})
+        <span v-translate key="tr1">Hazard potential:</span>
+        {{ method.potentialDanger }}
+        (<span v-translate>Danger level:</span> {{ bra.high }})
       </p>
-      <p v-else class="yetiform-info">Pas de potentiel de danger sélectionné. Entrez d’abord le BRA</p>
+      <p v-else class="yetiform-info">
+        <span v-translate key="tr2">No selected hazard potential. Set danger level first.</span>
+      </p>
 
       <div class="yetiform-note">
-        <p>
-          Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en sélectionnant
-          un potentiel dans la plage correspondant au niveau du BRA. Par exemple: Le BRA évoque un danger 3 juste après
-          une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8.
+        <p v-translate>
+          The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by
+          selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin
+          evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.
         </p>
       </div>
 
       <p>
         <input-checkbox :value="method.wetSnow" @input="onChange($event, 'wetSnow')">
-          Neige mouillée : pas de prise en compte de l’orientation
+          <span v-translate>Wet snow: orientation not taken into account</span>
         </input-checkbox>
       </p>
 
       <div class="yetiform-note">
-        <p>
-          Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut être
-          appliqué.
-        </p>
+        <p v-translate>Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.</p>
       </div>
 
-      <h3 class="title is-3">Groupe</h3>
+      <h3 class="title is-3" v-translate>Group</h3>
 
       <ul>
         <li class="control" v-for="(item, i) of groupSizes" :key="i">
@@ -176,21 +204,21 @@
       </ul>
 
       <div class="yetiform-note">
-        <p>Taille du groupe</p>
+        <p v-translate>Group size</p>
         <ul class="content-ul">
-          <li>Grand groupe = 5 personnes et plus</li>
-          <li>Petit groupe = 2 à 4 personnes</li>
+          <li v-translate>Large group = 5 people and more</li>
+          <li v-translate>Small group = 2 to 4 people</li>
         </ul>
-        <p>Distances de délestage</p>
+        <p v-translate>Load shedding distance</p>
         <ul class="content-ul">
-          <li>10 mètres au minimum à la montée</li>
-          <li>50 mètres à la descente</li>
+          <li v-translate>10 meters minimum while ascending</li>
+          <li v-translate>50 meters while descending</li>
         </ul>
       </div>
 
-      <p>
-        Le facteur <em>« pente parcourue fréquemment »</em> n’est pas pris en compte par l’application, car il est
-        souvent difficile de s'en assurer lors de la préparation de course.
+      <p v-translate>
+        The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to
+        ascertain when preparing for an outing.
       </p>
     </div>
   </div>
@@ -225,26 +253,26 @@ export default {
   data() {
     return {
       methods: {
-        mrd: ['MRD', 'Débutant'],
-        mre: ['MRE', 'Élémentaire'],
-        mrp: ['MRP', 'Expert'],
+        mrd: ['MRD', this.$gettext('Beginner')],
+        mre: ['MRE', this.$gettext('Elementary')],
+        mrp: ['MRP', this.$gettext('Expert')],
       },
       groupSizes: [
         {
           value: 1,
-          text: 'Aucun facteur de réduction lié au groupe',
+          text: this.$gettext('No reduction factor'),
         },
         {
           value: 2.1,
-          text: 'Grand groupe avec distance de délestage',
+          text: this.$gettext('Large group with load shedding distance'),
         },
         {
           value: 2.2,
-          text: 'Petit groupe sans distance',
+          text: this.$gettext('Small group without distance'),
         },
         {
           value: 3,
-          text: 'Petit groupe avec distance de délestage',
+          text: this.$gettext('Small group with load shedding distance'),
         },
       ],
     };

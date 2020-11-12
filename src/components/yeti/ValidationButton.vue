@@ -7,8 +7,9 @@
         :disabled="loading"
         :tabindex="tabindex"
         @click="$emit('click')"
+        v-translate
       >
-        Calculer le risque
+        Compute risk
       </button>
       <p class="yetiForm-error" v-if="currentError">
         <span>

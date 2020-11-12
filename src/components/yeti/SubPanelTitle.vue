@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile">
     <div class="column">
-      <h2 class="title is-3">
+      <h2 class="title is-3" v-translate>
         <slot></slot>
       </h2>
     </div>

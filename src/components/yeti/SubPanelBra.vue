@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelBRA">
-    <sub-panel-title>Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr></sub-panel-title>
+    <sub-panel-title>Danger level</sub-panel-title>
     <div class="columns is-mobile">
       <div class="column">
         <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
@@ -19,7 +19,12 @@
             />
           </svg>
           <div class="input-bra-high select is-small">
-            <select @change="onChange($event, 'high')" :value="bra.high" aria-label="Niveau de danger BRA haut">
+            <select
+              id="selectBra"
+              @change="onChange($event, 'high')"
+              :value="bra.high"
+              :aria-label="$gettext('High danger level from the avalanche bulletin')"
+            >
               <option :value="null" selected />
               <option :value="1">1</option>
               <option :value="2">2</option>
@@ -28,21 +33,26 @@
             </select>
           </div>
           <div v-show="bra.isDifferent" class="input-bra-threshold control">
+            <label for="inputThreshold" v-translate>Altitude</label>
             <input
+              id="inputThreshold"
               class="input is-small"
               type="number"
               min="0"
               max="4800"
               step="100"
               maxlength="4"
-              aria-label="Altitude seuil"
               @change="onChange($event, 'altiThreshold')"
               :value="bra.altiThreshold"
             />
           </div>
 
           <div v-show="bra.isDifferent" class="input-bra-low select is-small">
-            <select @change="onChange($event, 'low')" :value="bra.low" aria-label="Niveau de danger BRA bas">
+            <select
+              @change="onChange($event, 'low')"
+              :value="bra.low"
+              aria-label="$gettext('Low danger level from the avalanche bulletin')"
+            >
               <option :value="null" selected />
               <option :value="1">1</option>
               <option :value="2">2</option>
@@ -58,7 +68,7 @@
             :value="bra.isDifferent"
             class="control--bradifferent"
           >
-            BRA haut/bas différents ?
+            <span v-translate>Different high/low danger?</span>
           </input-checkbox>
         </div>
       </div>
@@ -67,7 +77,7 @@
     <div class="yetimountains">
       <div>
         <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
-          Bulletins BRA par massif
+          <span v-translate>Avalanche bulletins</span>
           <counter v-if="mountainsLength">{{ countVisibleMountains }}</counter>
           <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
@@ -78,7 +88,7 @@
       </div>
       <div v-if="showMountainsList">
         <div v-if="mountainsLength">
-          <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
+          <p class="column yetiform-info" v-translate>Get avalanche bulletins from Météo-France website</p>
           <dl>
             <div v-for="(mountainsForMassif, massif) of mountains" :key="massif">
               <dt class="yetimountains-listtitle">
@@ -105,7 +115,7 @@
           </dl>
         </div>
         <div v-else>
-          <p class="column yetiform-info">Les massifs n’ont pas pu être chargés</p>
+          <p class="column yetiform-info" v-translate>Massifs could not have been loaded</p>
         </div>
       </div>
     </div>
@@ -181,7 +191,7 @@ export default {
   .input-bra-threshold {
     position: absolute;
     left: 115px;
-    top: 60px;
+    top: 40px;
     width: 85px;
   }
 

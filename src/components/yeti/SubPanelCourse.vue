@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel panelCourse">
-    <sub-panel-title>Itinéraire</sub-panel-title>
+    <sub-panel-title>Route</sub-panel-title>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -11,8 +11,9 @@
               v-show="!hasFeaturesTitle"
               class="features-title-text features-title-placeholder"
               @click="onEditNewFeaturesTitle"
+              v-translate
             >
-              Ajoutez un titre…
+              Add title…
             </span>
             <!-- eslint-disable -->
             <!-- allow to write {{...}} on same line to prevent too much spaces in contenteditable element -->
@@ -33,12 +34,12 @@
         <div class="column is-narrow">
           <button class="button is-secondary is-small" @click="onRemoveFeatures">
             <fa-icon icon="trash" class="trash-icon" />
-            Supprimer l’itinéraire
+            <span v-translate>Delete route</span>
           </button>
         </div>
       </div>
       <div class="ml-5 mb-5">
-        <p class="yetiform-info is-italic is-marginless">Portions de lignes</p>
+        <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
         <features-list :features="features" :map="map" />
       </div>
       <sub-panel-title>Export</sub-panel-title>
@@ -59,30 +60,30 @@
           </ul>
         </div>
         <div class="column is-narrow">
-          <button class="button is-primary" @click="downloadCourse">Exporter l’itinéraire</button>
+          <button class="button is-primary" @click="downloadCourse" v-translate>Export route</button>
         </div>
       </div>
       <div class="yetiform-note mt-5">
-        <p>Astuces de dessin</p>
+        <p v-translate>Drawing tips</p>
         <ul class="content-ul">
-          <li><strong>Dessinez</strong> de nouvelles portions de lignes</li>
-          <li><strong>Supprimez</strong> le dernier point avec la touche <kbd>Backspace</kbd></li>
+          <li><strong v-translate>Draw</strong> <span v-translate>new lines chunks</span></li>
+          <li><strong v-translate>Delete</strong> <span v-translate>last point with the Backspace key</span></li>
         </ul>
-        <p>Sur une ligne dessinée</p>
+        <p v-translate>On a drawn line</p>
         <ul class="content-ul">
-          <li><strong>Éditez</strong> les points en les déplaçant</li>
-          <li><strong>Créez</strong> un nouveau point sur une ligne existante</li>
-          <li><strong>Supprimez un point</strong> avec <kbd>Alt + clic</kbd></li>
+          <li><strong v-translate>Edit</strong> <span v-translate>points by moving them</span></li>
+          <li><strong v-translate>Create</strong> <span v-translate>a new point on an existing line</span></li>
+          <li><strong v-translate>Delete a point</strong> <span v-translate>with Alt + clic</span></li>
         </ul>
-        <p>Depuis l’interface</p>
+        <p v-translate>From the interface</p>
         <ul class="content-ul">
-          <li><strong>Supprimez une portion de ligne</strong></li>
-          <li><strong>Supprimez la trace</strong> pour en charger une nouvelle</li>
+          <li><strong v-translate>Delete a line chunk</strong></li>
+          <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
         </ul>
       </div>
     </div>
     <div v-else>
-      <p>Pas d’itinéraires actuellement</p>
+      <p v-translate>No route right now</p>
       <div class="load-gpx">
         <button
           class="button is-primary"
@@ -91,13 +92,13 @@
           @click="onLoadGpx"
           v-translate
         >
-          Charger un fichier GPX
+          Upload a GPS track
         </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
         <div class="yetiform-note mt-5">
-          <p>Ou <strong>dessinez directement sur la carte</strong> pour créer un nouvel itinéraire</p>
+          <p><strong v-translate>Draw right on the map</strong> <span v-translate>to start a new route</span></p>
         </div>
       </div>
     </div>
