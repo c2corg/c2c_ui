@@ -112,6 +112,8 @@ function Field(id, properties = {}) {
       this.defaultUrlQuery = '';
     } else if (this.queryMode === 'input-document') {
       this.defaultUrlQuery = '';
+    } else if (this.queryMode === 'date' || this.queryMode === 'dates') {
+      this.defaultUrlQuery = '';
     } else if (this.url !== undefined) {
       throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode);
     }

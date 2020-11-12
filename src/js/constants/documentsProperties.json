@@ -137,7 +137,7 @@
             {"id": "avalanche_signs", "properties": {"url":"avdate", "activities":["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"]}},
             {"id": "condition_rating", "properties": {"url":"ocond"}},
             {"id": "date_end"},
-            {"id": "date_start"},
+            {"id": "date_start", "properties": {"url":"date", "required":false}},
             {"id": "disable_comments"},
             {"id": "elevation_access", "properties": {"url":"oparka"}},
             {"id": "elevation_down_snow", "properties": {"url":"swld", "activities":["ice_climbing", "mountain_climbing", "skitouring", "snow_ice_mixed", "snowshoeing"]}},

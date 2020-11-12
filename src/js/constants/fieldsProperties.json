@@ -249,7 +249,7 @@
     {
         "type": "date",
         "required": true,
-        "queryMode": "dates"
+        "queryMode": "date"
     },
     "date_time":
     {

@@ -75,8 +75,12 @@
       <input-activity v-model="value" />
     </div>
 
-    <div v-else-if="field.queryMode === 'dates'">
+    <div v-else-if="field.queryMode === 'date'">
       <date-query-item />
+    </div>
+
+    <div v-else-if="field.queryMode === 'dates'">
+      <dates-query-item />
     </div>
 
     <div v-else class="notification is-danger">
@@ -93,6 +97,7 @@ import Multiselect from 'vue-multiselect';
 import vueSlider from 'vue-slider-component';
 
 import DateQueryItem from './DateQueryItem';
+import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
 import queryItemMixin from './query-item-mixin';
 
@@ -104,6 +109,7 @@ export default {
     vueSlider,
     QueryItemSliderLabel,
     DateQueryItem,
+    DatesQueryItem,
   },
 
   mixins: [requireFieldProperty, queryItemMixin],
