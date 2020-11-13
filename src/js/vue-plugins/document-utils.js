@@ -31,13 +31,13 @@ export default function install(Vue) {
       getDocumentTitle(document, lang) {
         // profile does not have locale, get profile's name
         if (document.type === 'u' || !document.type) {
-          return document.name || '';
+          return document.name ?? '';
         }
 
         // document object returned by whatsnew does not have locale either
         // but provides title property
         if (!document.locales) {
-          return document.title || '';
+          return document.title ?? '';
         }
 
         const locale = this.$documentUtils.getLocaleSmart(document, lang);
@@ -46,7 +46,7 @@ export default function install(Vue) {
           return locale.title_prefix + ' : ' + locale.title;
         }
 
-        return locale.title || '';
+        return locale.title ?? '';
       },
 
       getLocaleStupid(document, lang) {
@@ -295,7 +295,7 @@ export default function install(Vue) {
               fr: 'dddd D MMMM YYYY',
               it: 'dddd D MMMM YYYY',
               zh_CN: 'YYYY年M月D日dddd',
-            }[this.$language.current] || 'dddd Do MMMM YYYY';
+            }[this.$language.current] ?? 'dddd Do MMMM YYYY';
 
           return end.format(longFormat);
         }
@@ -308,8 +308,8 @@ export default function install(Vue) {
           return geom.type === 'Point' && Array.isArray(geom.coordinates) && geom.coordinates.length === 2;
         };
 
-        const geolocation1 = (document1.geometry || {}).geom;
-        const geolocation2 = (document2.geometry || {}).geom;
+        const geolocation1 = (document1.geometry ?? {}).geom;
+        const geolocation2 = (document2.geometry ?? {}).geom;
 
         if (geolocation1 === geolocation2) {
           // undefined === undefined

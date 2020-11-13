@@ -73,7 +73,7 @@ export default {
 
       for (const child of this.$children) {
         if (child.visible) {
-          this.visible = this.visible || true;
+          this.visible = this.visible ?? true;
         }
       }
     },

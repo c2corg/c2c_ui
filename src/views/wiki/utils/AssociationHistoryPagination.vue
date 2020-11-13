@@ -71,10 +71,10 @@ export default {
 
   computed: {
     limitAsNumber() {
-      return this.limit || 50;
+      return this.limit ?? 50;
     },
     offsetAsNumber() {
-      return this.offset || 0;
+      return this.offset ?? 0;
     },
   },
 };

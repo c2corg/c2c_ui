@@ -145,7 +145,7 @@ export default {
 
         return {
           date,
-          ele: coord[2] || 0,
+          ele: coord[2] ?? 0,
           d: totalDist,
           elapsed: timeAvailable ? date - startDate : undefined,
         };

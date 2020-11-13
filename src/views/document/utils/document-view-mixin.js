@@ -66,7 +66,7 @@ export default {
       return constants.objectDefinitions[this.documentType].fields;
     },
     expected_lang() {
-      return this.$route.params.lang || this.$language.current;
+      return this.$route.params.lang ?? this.$language.current;
     },
 
     /*

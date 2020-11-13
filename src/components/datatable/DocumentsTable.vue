@@ -31,14 +31,12 @@ import RouteRating from './cell-renderers/RouteRating';
 import constants from '@/js/constants';
 import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
-function getColDef(vm, field, options) {
-  options = options || {};
-
+function getColDef(vm, field, options = {}) {
   const result = {
     headerName: vm.$gettext(field.name),
     field: field.name,
     _fieldDefinition: field,
-    cellRendererFramework: options.cellRendererFramework || DocumentField,
+    cellRendererFramework: options.cellRendererFramework ?? DocumentField,
     resizable: true,
   };
 

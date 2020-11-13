@@ -39,7 +39,7 @@ function getTranslation(messages, msgid, msgctxt) {
 
   // message can be a key-value object, if a context exists for this msgid
   if (!!msgctxt) {
-    return message[msgctxt] || msgid;
+    return message[msgctxt] ?? msgid;
   }
 
   // if context isn't provided, message may be a string if this msgid hasn't other version with context
@@ -49,7 +49,7 @@ function getTranslation(messages, msgid, msgctxt) {
 
   // otherwise, it's store in '$$noContext' key
   // note that '$$noContext' is a reserved context :)
-  return message['$$noContext'] || msgid;
+  return message['$$noContext'] ?? msgid;
 }
 
 function getMessages(lang) {

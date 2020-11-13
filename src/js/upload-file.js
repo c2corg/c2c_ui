@@ -27,7 +27,7 @@ const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
 
 const parseDate = (exif, iptc) => {
   const iptcDate = iptc ? iptc.DateCreated : null;
-  const exifDate = exif ? exif.DateTimeOriginal || exif.DateTime : null;
+  const exifDate = exif ? exif.DateTimeOriginal ?? exif.DateTime : null;
 
   let date = null;
 

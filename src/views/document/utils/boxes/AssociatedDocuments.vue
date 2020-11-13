@@ -90,7 +90,7 @@ export default {
 
   computed: {
     associations() {
-      return this.document.associations || {};
+      return this.document.associations ?? {};
     },
 
     waypointsLists() {
@@ -114,8 +114,8 @@ export default {
       return left.document_id < right.document_id;
     }
 
-    this.associations.books = (this.associations.books || []).sort(compare);
-    this.associations.articles = this.associations.articles || [];
+    this.associations.books = (this.associations.books ?? []).sort(compare);
+    this.associations.articles = this.associations.articles ?? [];
   },
 };
 </script>

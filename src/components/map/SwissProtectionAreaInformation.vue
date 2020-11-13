@@ -57,11 +57,11 @@ export default {
       if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
         lang = 'fr';
       }
-      const result = this.data.properties[`best_${lang}`] || '';
+      const result = this.data.properties[`best_${lang}`] ?? '';
       return utils.decodeHtmlEntities(result);
     },
     additionalInformation() {
-      const result = this.data.properties.zusatzinformation || '';
+      const result = this.data.properties.zusatzinformation ?? '';
       return utils.decodeHtmlEntities(result);
     },
     protectionStatus() {
@@ -70,7 +70,7 @@ export default {
         lang = 'fr';
       }
 
-      return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] || '');
+      return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] ?? '');
     },
   },
   methods: {

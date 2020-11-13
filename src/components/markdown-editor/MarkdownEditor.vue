@@ -126,14 +126,11 @@ Object.defineProperty(Selection.prototype, 'isEmpty', {
 
 Selection.prototype.set = function (start, end) {
   this.start = start;
-  this.end = end || start;
+  this.end = end ?? start;
 };
 
 // TODO : remove before and after, and rewite calls with f-strings
-Selection.prototype.setText = function (text, before, after) {
-  before = before || '';
-  after = after || '';
-
+Selection.prototype.setText = function (text, before = '', after = '') {
   const chunk = before + text + after;
 
   const start = this.start;

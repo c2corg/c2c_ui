@@ -425,10 +425,8 @@ export default {
       this.loadVersion(this.$route.params.versionTo, 'newVersion');
     },
 
-    getKeys(obj1, obj2, excludedKeys) {
+    getKeys(obj1, obj2, excludedKeys = []) {
       let keys = Object.keys(obj1).concat(Object.keys(obj2));
-
-      excludedKeys = excludedKeys || [];
 
       keys = keys.filter(function (item, pos, self) {
         return self.indexOf(item) === pos && !excludedKeys.includes(item);
@@ -467,8 +465,7 @@ export default {
       const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
       const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
 
-      const prepareText = function (text) {
-        text = text || '';
+      const prepareText = function (text = '') {
         text = text.replace(/\r\n?/g, '\n');
         text += text.endsWith('\n') ? '' : '\n';
 

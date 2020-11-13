@@ -72,8 +72,8 @@ function Field(id, properties = {}) {
   // copy baseProperties to this, and overwrite it with specific properties
   Object.assign(this, fieldsProperties[id], properties);
 
-  this.parent = this.parent || 'document';
-  this.type = this.type || 'text';
+  this.parent = this.parent ?? 'document';
+  this.type = this.type ?? 'text';
 
   this.extraIsVisibleFor = extraIsVisibleForHandlers[this.name] || Boolean; // trick for true default
 
@@ -158,13 +158,13 @@ Field.prototype.valueToUrl = function (value) {
 
 Field.prototype.urlToValue = function (url) {
   if (this.queryMode === 'numericalRangeSlider') {
-    let value = url || this.defaultUrlQuery;
+    let value = url ?? this.defaultUrlQuery;
     value = value.split(',');
     return [parseInt(value[0]), parseInt(value[1])];
   }
 
   if (this.queryMode === 'valuesRangeSlider') {
-    const value = url || this.defaultUrlQuery;
+    const value = url ?? this.defaultUrlQuery;
     return value.split(',');
   }
 
