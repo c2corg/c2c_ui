@@ -1,1 +1,1 @@
-A table that display a list of document. 
+A table that display a list of document.
