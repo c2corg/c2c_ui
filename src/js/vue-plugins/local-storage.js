@@ -5,7 +5,7 @@
 
 function LocalStorageItem(key) {
   this.key = key;
-  this.data_ = JSON.parse(window.localStorage.getItem(key) || '{}');
+  this.data_ = JSON.parse(window.localStorage.getItem(key) ?? '{}');
 }
 
 LocalStorageItem.prototype.commit_ = function () {

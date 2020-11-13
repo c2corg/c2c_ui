@@ -60,13 +60,12 @@ export default {
       this.load();
     },
 
-    load(lang) {
+    load(lang = this.lang) {
       if (!this.helper) {
         return;
       }
 
       this.showModifyButton = false;
-      this.lang = lang || this.lang;
       this.html = this.$gettext('loading');
       c2c.article.getCooked(this.helper.documentId, this.lang).then(this.computeHtml);
       this.$refs.modalCard.show();

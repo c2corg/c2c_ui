@@ -18,7 +18,7 @@ export default {
   computed: {
     urlValue: {
       get() {
-        return this.$route.query.date || '';
+        return this.$route.query.date ?? '';
       },
       set(value) {
         const query = Object.assign({}, this.$route.query);

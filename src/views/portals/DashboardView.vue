@@ -127,7 +127,7 @@ export default {
       const result = {};
 
       for (const outing of this.outings.documents) {
-        result[outing.date_end] = result[outing.date_end] || [];
+        result[outing.date_end] = result[outing.date_end] ?? [];
         result[outing.date_end].push(outing);
       }
 
@@ -156,8 +156,7 @@ export default {
       }
     },
 
-    loadOutingsWithQuery(query) {
-      query = query || {};
+    loadOutingsWithQuery(query = {}) {
       query.limit = 30;
       this.outingsPromise = c2c.outing.getAll(query);
     },

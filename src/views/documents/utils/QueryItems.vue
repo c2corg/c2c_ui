@@ -179,11 +179,11 @@ export default {
 
   computed: {
     urlActivities() {
-      return (this.$route.query.act || '').split(',');
+      return (this.$route.query.act ?? '').split(',');
     },
 
     urlWaypointTypes() {
-      return (this.$route.query.wtyp || '').split(',');
+      return (this.$route.query.wtyp ?? '').split(',');
     },
 
     fields() {

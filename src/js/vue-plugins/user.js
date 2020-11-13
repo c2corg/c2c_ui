@@ -10,28 +10,28 @@ export default function install(Vue) {
 
       return {
         // The unique name, used to login
-        userName: data['userName'] || null,
+        userName: data['userName'] ?? null,
 
         // unique numerical ID
-        id: data['id'] || null,
+        id: data['id'] ?? null,
 
         // user lang, read write property everywhere : this.$user.lang
         lang: data['lang'],
 
         // list of roles
-        roles: data['roles'] || [],
+        roles: data['roles'] ?? [],
 
         // public name, a simple label
-        name: data['name'] || null,
+        name: data['name'] ?? null,
 
         // forum name
-        forumUsername: data['forumUsername'] || null,
+        forumUsername: data['forumUsername'] ?? null,
 
         // private token used for API auth
-        token: data['token'] || null,
+        token: data['token'] ?? null,
 
         // token expiration date
-        expire: data['expire'] || null,
+        expire: data['expire'] ?? null,
       };
     },
 

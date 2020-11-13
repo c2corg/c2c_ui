@@ -261,7 +261,7 @@ export default {
     onUploadFailure(event, image) {
       image.percentCompleted = 100;
       image.status = 'FAILED';
-      image.errorMessage = event?.message || this.$gettext('Image could not be processed');
+      image.errorMessage = event?.message ?? this.$gettext('Image could not be processed');
     },
 
     computeReadyForSaving() {

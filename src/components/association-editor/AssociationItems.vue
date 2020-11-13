@@ -110,7 +110,7 @@ export default {
       const uniqueDocuments = new Map();
 
       const append = function (array, status, buttonLabel) {
-        for (const document of array || []) {
+        for (const document of array ?? []) {
           if (!uniqueDocuments.has(document.document_id)) {
             uniqueDocuments.set(document.document_id, {
               sortKey: this.$documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,

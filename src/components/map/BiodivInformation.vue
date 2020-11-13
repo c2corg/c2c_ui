@@ -32,7 +32,7 @@ export default {
   computed: {
     descriptionParagraphs() {
       // keep line breaks for better readability
-      const paragraphList = (this.data.description || '').split(/<br ?\/?>/);
+      const paragraphList = (this.data.description ?? '').split(/<br ?\/?>/);
       // decode html entities
       let i = 0;
       for (i in paragraphList) {

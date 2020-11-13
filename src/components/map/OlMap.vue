@@ -433,7 +433,7 @@ export default {
       this.drawInteraction = null;
 
       // sometimes, geom may not be set on edited documents
-      this.editedDocument.geometry = this.editedDocument.geometry || {};
+      this.editedDocument.geometry = this.editedDocument.geometry ?? {};
 
       if (!this.editedDocument.geometry.geom) {
         this.drawInteraction = new ol.interaction.Draw({
@@ -545,20 +545,20 @@ export default {
 
       this.addDocumentFeature(this.editedDocument, documentsSource);
 
-      for (const document of this.documents || []) {
+      for (const document of this.documents ?? []) {
         this.addDocumentFeature(document, documentsSource);
 
         if (document.associations) {
-          for (const waypoint of document.associations.waypoints || []) {
+          for (const waypoint of document.associations.waypoints ?? []) {
             this.addDocumentFeature(waypoint, waypointsSource);
           }
-          for (const waypoint of document.associations.waypoint_children || []) {
+          for (const waypoint of document.associations.waypoint_children ?? []) {
             this.addDocumentFeature(waypoint, waypointsSource);
           }
 
           // show associated images only for outings
           if (document.type === 'o') {
-            for (const image of document.associations.images || []) {
+            for (const image of document.associations.images ?? []) {
               if (!this.$documentUtils.hasSameGeolocation(image, document)) {
                 // show image marker only if it's geolocation is different from document
                 this.addDocumentFeature(image, imagesSource);
@@ -580,7 +580,7 @@ export default {
         const feature = this.addFeature(
           source,
           JSON.parse(document.geometry.geom),
-          style || getDocumentPointStyle(document, title, false),
+          style ?? getDocumentPointStyle(document, title, false),
           style ? null : getDocumentPointStyle(document, title, true)
         );
 
@@ -592,7 +592,7 @@ export default {
         this.addFeature(
           source,
           JSON.parse(document.geometry.geom_detail),
-          style || getDocumentLineStyle(title, false),
+          style ?? getDocumentLineStyle(title, false),
           style ? null : getDocumentLineStyle(title, true)
         ).set('document', document);
       }

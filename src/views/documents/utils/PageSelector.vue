@@ -39,10 +39,10 @@ export default {
 
   computed: {
     offset() {
-      return parseInt(this.$route.query.offset || 0);
+      return parseInt(this.$route.query.offset ?? 0);
     },
     queryLimit() {
-      return parseInt(this.$route.query.limit || 30);
+      return parseInt(this.$route.query.limit ?? 30);
     },
     firstDocumentPosition() {
       return this.offset + 1;
