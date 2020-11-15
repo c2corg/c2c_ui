@@ -60,14 +60,19 @@ export default {
       this.load();
     },
 
-    load(lang = this.lang) {
+    load(lang) {
       if (!this.helper) {
         return;
       }
 
       this.showModifyButton = false;
+
+      // if the lang is specified, use it and save it.
+      // otherwise, use the previously used lang
+      this.lang = lang ?? this.lang;
+
       this.html = this.$gettext('loading');
-      c2c.article.getCooked(this.helper.documentId, this.lang).then(this.computeHtml);
+      c2c.article.getCooked(this.helper.documentId, lang).then(this.computeHtml);
       this.$refs.modalCard.show();
     },
 

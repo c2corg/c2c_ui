@@ -465,7 +465,8 @@ export default {
       const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
       const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
 
-      const prepareText = function (text = '') {
+      const prepareText = function (text) {
+        text = text ?? ''; // text can be null
         text = text.replace(/\r\n?/g, '\n');
         text += text.endsWith('\n') ? '' : '\n';
 
