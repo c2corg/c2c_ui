@@ -34,7 +34,9 @@ export default {
   },
 
   methods: {
-    show(chunk = this.$gettext('text to display'), url = 'https:\\\\') {
+    show(chunk, url) {
+      this.chunk = chunk ?? this.$gettext('text to display');
+      this.url = url ?? 'https:\\\\';
       this.$refs.modalWindow.show();
     },
     insert() {
