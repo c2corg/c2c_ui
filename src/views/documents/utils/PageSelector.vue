@@ -12,14 +12,14 @@
       <span slot="button" class="button is-small">
         {{ currentPage }}
         &nbsp;
-        <span v-translate translate-context="2 of 200 result pages">of</span>
+        <span v-translate translate-context="1-30 of 200 results">of</span>
         &nbsp;
         {{ pagesCount }}
         &nbsp;
         <fa-icon icon="angle-down" aria-hidden="true" />
       </span>
       <component
-        v-for="n in pagesCount"
+        v-for="n in parseInt(pagesCount)"
         v-bind:key="n"
         :is="'router-link'"
         class="dropdown-item is-small"
@@ -29,7 +29,7 @@
       >
         {{ n }}
         &nbsp;
-        <span v-translate translate-context="2 of 200 result pages">of</span>
+        <span v-translate translate-context="1-30 of 200 results">of</span>
         &nbsp;
         {{ pagesCount }}
       </component>
@@ -99,7 +99,9 @@ export default {
       return Math.floor(this.offset / this.queryLimit) + 1;
     },
     pagesCount() {
-      return Math.ceil(this.total / this.queryLimit);
+      var count = Math.max(1, Math.ceil(this.total / this.queryLimit));
+
+      return count > 20 ? '20+' : count;
     },
   },
 
