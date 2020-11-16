@@ -42,7 +42,7 @@
     >
       <fa-icon icon="chevron-right" />
     </component>
-    <dropdown-button class="ml-2" ref="limitSelector">
+    <dropdown-button class="ml-1" ref="limitSelector">
       <span slot="button" class="button is-small">
         <span>{{ queryLimit }}</span>
         &nbsp;
@@ -60,7 +60,7 @@
         <span>{{ l }}</span>
       </component>
     </dropdown-button>
-    <span v-translate>results</span>
+    <span class="ml-1">{{ total }} {{ documentsTitle }}</span>
   </span>
 </template>
 
@@ -70,6 +70,9 @@ export default {
     documents: {
       type: Object,
       default: null,
+    },
+    documentsTitle: {
+      default: '',
     },
   },
 
