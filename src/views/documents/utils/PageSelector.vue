@@ -12,14 +12,10 @@
       <span slot="button" class="button is-small">
         {{ currentPage }}
         &nbsp;
-        <span v-translate translate-context="1-30 of 200 results">of</span>
-        &nbsp;
-        {{ pagesCount }}
-        &nbsp;
         <fa-icon icon="angle-down" aria-hidden="true" />
       </span>
       <component
-        v-for="n in parseInt(pagesCount)"
+        v-for="n in pagesCount"
         v-bind:key="n"
         :is="'router-link'"
         class="dropdown-item is-small"
@@ -28,12 +24,10 @@
         @click.native="(e) => hideOnclick('pageSelector')"
       >
         {{ n }}
-        &nbsp;
-        <span v-translate translate-context="1-30 of 200 results">of</span>
-        &nbsp;
-        {{ pagesCount }}
       </component>
     </dropdown-button>
+    <span v-translate translate-context="1-30 of 200 results">of</span>
+    {{ pagesCount }}
     <component
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
       class="pagination-link has-text-normal"
@@ -42,6 +36,7 @@
     >
       <fa-icon icon="chevron-right" />
     </component>
+    <span v-translate class="is-hidden-mobile" translate-context="Show 30 of 200 results">Show</span>
     <dropdown-button class="ml-1" ref="limitSelector">
       <span slot="button" class="button is-small">
         <span>{{ queryLimit }}</span>
@@ -52,7 +47,7 @@
         v-for="l in [30, 60, 90]"
         v-bind:key="l"
         :is="'router-link'"
-        class="dropdown-item is-small"
+        class="dropdown-item is-hidden-mobile is-small"
         :class="{ 'is-active': queryLimit === l }"
         :to="pageQuery(offset, l)"
         @click.native="(e) => hideOnclick('limitSelector')"
@@ -60,7 +55,8 @@
         <span>{{ l }}</span>
       </component>
     </dropdown-button>
-    <span class="ml-1">{{ total }} {{ documentsTitle }}</span>
+    <span class="ml-1 is-hidden-mobile" v-translate translate-context="1-30 of 200 results">of</span>
+    <span>{{ total }} {{ documentsTitle }}</span>
   </span>
 </template>
 
@@ -99,9 +95,7 @@ export default {
       return Math.floor(this.offset / this.queryLimit) + 1;
     },
     pagesCount() {
-      var count = Math.max(1, Math.ceil(this.total / this.queryLimit));
-
-      return count > 20 ? '20+' : count;
+      return Math.min(20, Math.max(1, Math.ceil(this.total / this.queryLimit)));
     },
   },
 
