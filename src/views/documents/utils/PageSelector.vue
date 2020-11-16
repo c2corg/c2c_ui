@@ -7,7 +7,7 @@
       :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
       class="pagination-link has-text-normal"
       :disabled="offset === 0"
-      :to="pageQuery(offset - queryLimit)"
+      :to="pageQuery(offset - queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-left" />
     </component>
@@ -15,10 +15,42 @@
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
       class="pagination-link has-text-normal"
       :disabled="lastDocumentPosition >= total"
-      :to="pageQuery(offset + queryLimit)"
+      :to="pageQuery(offset + queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-right" />
     </component>
+    <dropdown-button class="is-right2">
+      <span slot="button" class="button is-small">
+        <span>{{ queryLimit }}</span>
+        &nbsp;
+        <fa-icon icon="angle-down" aria-hidden="true" />
+      </span>
+      <component
+        :is="'router-link'"
+        class="dropdown-item is-small"
+        :class="{ 'is-active': queryLimit === 30 }"
+        :to="pageQuery(offset, 30)"
+      >
+        <span>30</span>
+      </component>
+      <component
+        :is="'router-link'"
+        class="dropdown-item is-small"
+        :class="{ 'is-active': queryLimit === 60 }"
+        :to="pageQuery(offset, 60)"
+      >
+        <span>60</span>
+      </component>
+      <component
+        :is="'router-link'"
+        class="dropdown-item is-small"
+        :class="{ 'is-active': queryLimit === 90 }"
+        :to="pageQuery(offset, 90)"
+      >
+        <span>90</span>
+      </component>
+    </dropdown-button>
+    <span v-translate>results</span>
   </span>
 </template>
 
@@ -63,9 +95,10 @@ export default {
       }
     },
 
-    pageQuery(offset) {
+    pageQuery(offset, limit) {
       const query = Object.assign({}, this.$route.query);
       query.offset = Math.max(offset, 0);
+      query.limit = Math.max(Math.min(limit, 90), 30);
       return { name: this.$route.name, params: this.$route.params, query };
     },
   },
