@@ -1,16 +1,38 @@
 <template>
-  <span class="page-selector has-text-ligth">
-    {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
-    <span v-translate translate-context="1-30 of 200 results">of</span>
-    {{ total }}
+  <span class="page-selector ml-1">
     <component
       :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
       class="pagination-link has-text-normal"
-      :disabled="offset === 0"
+      :disabled="firstDocumentPosition === 1"
       :to="pageQuery(offset - queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-left" />
     </component>
+    <dropdown-button ref="pageSelector">
+      <span slot="button" class="button is-small">
+        {{ Math.floor(offset / queryLimit) + 1 }}
+        &nbsp;
+        <span v-translate translate-context="2 of 200 result pages">of</span>
+        &nbsp;
+        {{ pagesCount }}
+        &nbsp;
+        <fa-icon icon="angle-down" aria-hidden="true" />
+      </span>
+      <component
+        v-for="n in pagesCount"
+        v-bind:key="n"
+        :is="'router-link'"
+        class="dropdown-item is-small"
+        :to="pageQuery((n - 1) * queryLimit, queryLimit)"
+        @click.native="(e) => hideOnclick('pageSelector')"
+      >
+        {{ n }}
+        &nbsp;
+        <span v-translate translate-context="2 of 200 result pages">of</span>
+        &nbsp;
+        {{ pagesCount }}
+      </component>
+    </dropdown-button>
     <component
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
       class="pagination-link has-text-normal"
@@ -19,35 +41,22 @@
     >
       <fa-icon icon="chevron-right" />
     </component>
-    <dropdown-button class="is-right2">
+    <dropdown-button class="ml-2" ref="limitSelector">
       <span slot="button" class="button is-small">
         <span>{{ queryLimit }}</span>
         &nbsp;
         <fa-icon icon="angle-down" aria-hidden="true" />
       </span>
       <component
+        v-for="l in [30, 60, 90]"
+        v-bind:key="l"
         :is="'router-link'"
         class="dropdown-item is-small"
-        :class="{ 'is-active': queryLimit === 30 }"
-        :to="pageQuery(offset, 30)"
+        :class="{ 'is-active': queryLimit === l }"
+        :to="pageQuery(offset, l)"
+        @click.native="(e) => hideOnclick('limitSelector')"
       >
-        <span>30</span>
-      </component>
-      <component
-        :is="'router-link'"
-        class="dropdown-item is-small"
-        :class="{ 'is-active': queryLimit === 60 }"
-        :to="pageQuery(offset, 60)"
-      >
-        <span>60</span>
-      </component>
-      <component
-        :is="'router-link'"
-        class="dropdown-item is-small"
-        :class="{ 'is-active': queryLimit === 90 }"
-        :to="pageQuery(offset, 90)"
-      >
-        <span>90</span>
+        <span>{{ l }}</span>
       </component>
     </dropdown-button>
     <span v-translate>results</span>
@@ -82,6 +91,9 @@ export default {
     lastDocumentPosition() {
       return Math.min(this.offset + this.queryLimit, this.total);
     },
+    pagesCount() {
+      return Math.ceil(this.total / this.queryLimit);
+    },
   },
 
   watch: {
@@ -100,6 +112,10 @@ export default {
       query.offset = Math.max(offset, 0);
       query.limit = Math.max(Math.min(limit, 90), 30);
       return { name: this.$route.name, params: this.$route.params, query };
+    },
+
+    hideOnclick(menu) {
+      this.$refs[menu].isActive = false;
     },
   },
 };
