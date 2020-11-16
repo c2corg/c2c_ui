@@ -10,7 +10,7 @@
     </component>
     <dropdown-button ref="pageSelector">
       <span slot="button" class="button is-small">
-        {{ Math.floor(offset / queryLimit) + 1 }}
+        {{ currentPage }}
         &nbsp;
         <span v-translate translate-context="2 of 200 result pages">of</span>
         &nbsp;
@@ -23,6 +23,7 @@
         v-bind:key="n"
         :is="'router-link'"
         class="dropdown-item is-small"
+        :class="{ 'is-active': currentPage === n }"
         :to="pageQuery((n - 1) * queryLimit, queryLimit)"
         @click.native="(e) => hideOnclick('pageSelector')"
       >
@@ -90,6 +91,9 @@ export default {
     },
     lastDocumentPosition() {
       return Math.min(this.offset + this.queryLimit, this.total);
+    },
+    currentPage() {
+      return Math.floor(this.offset / this.queryLimit) + 1;
     },
     pagesCount() {
       return Math.ceil(this.total / this.queryLimit);
