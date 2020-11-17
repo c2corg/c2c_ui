@@ -54,7 +54,7 @@
     "@vue/babel-preset-app": "4.5.8",
     "@vue/cli-plugin-babel": "4.5.8",
     "@vue/cli-plugin-eslint": "4.5.8",
-    "@vue/cli-service": "4.5.8",
+    "@vue/cli-service": "4.5.9",
     "@vue/eslint-config-prettier": "6.0.0",
     "@vue/eslint-config-standard": "5.1.2",
     "angular-gettext-tools": "2.5.3",
