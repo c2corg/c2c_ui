@@ -216,6 +216,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Image could not be processed": "无法处理图片",
     "Improve our understanding of risks": "提高我们对风险的理解",
     "Incidents and accidents": "事故报告",
     "Information about the terrain, like elevations, lengths...": "关于地形的信息，例如海拔、长度...",
@@ -333,6 +334,7 @@
     "Protection status": "保护状态",
     "Put it back": "放回原处",
     "Quote": "引用",
+    "Recent changes": "近期修改",
     "Recenter on your current position": "调整地图中心到你现在的位置",
     "Recenter on...": "调整地图中心到...",
     "Register": "注册",
@@ -356,6 +358,7 @@
     "See other documents nearby": "查看附近其他文档",
     "See profile based on:": "查看数据图表：",
     "See the activity of this contributor in your feed": "在我的订阅里查看此贡献者的动态",
+    "See the analysis of the submitted stories": "查看提交的故事的分析",
     "See the latest version": "查看最新版本",
     "Select option": "选择选项",
     "Send reset email": "发送重置邮件",
@@ -744,7 +747,7 @@
       "image_categories": "详细内容"
     },
     "difficult": {
-      "glacier_ratings": "困难"
+      "glacier_ratings": "很难通过"
     },
     "difficulties_height": "困难路段开始海拔",
     "disable_comments": "禁用评论",
@@ -754,7 +757,7 @@
     "durations": "时长",
     "durations (days)": "时长(天)",
     "easy": {
-      "glacier_ratings": "容易"
+      "glacier_ratings": "容易通过"
     },
     "easy mountain climbing gear": "简单登山装备",
     "easy snow ice mixed gear": "简单冰雪混合攀登装备",
@@ -984,7 +987,7 @@
     "image_type": "图片类型",
     "images": "图片",
     "impossible": {
-      "glacier_ratings": "不可能"
+      "glacier_ratings": "不可能通过"
     },
     "increase_impact": "加重事件后果的因素",
     "injury_without_fall": {
@@ -1282,7 +1285,7 @@
       "public_transportation_ratings": "服务差"
     },
     "possible": {
-      "glacier_ratings": "可能的"
+      "glacier_ratings": "稍难通过"
     },
     "pouding": {
       "rock_types": "沉积岩"
