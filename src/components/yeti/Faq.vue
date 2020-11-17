@@ -66,7 +66,13 @@
         Pour en savoir plus sur l’analyse de risque avec la grille 3X3, se reporter aux ouvrages cités dans la question
         1.
       </p>
-      <p class="image"><img alt="Méthode 3x3" src="@/assets/img/yeti/methode_3x3.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/methode_3x3.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/methode_3x3.avif" type="image/avif" />
+          <img alt="Méthode 3x3" src="@/assets/img/yeti/methode_3x3.jpg" />
+        </picture>
+      </p>
     </div>
 
     <div class="question">
@@ -149,7 +155,12 @@
         En outre, quelques aberrations visuelles peuvent survenir au niveau des frontières. Elles sont liées à la
         qualité du découpage du MNT dans les zones frontalières.
       </p>
-      <p class="image"><img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/artefact_vallorcine.avif" type="image/avif" />
+          <img alt="Aberration frontalière" src="@/assets/img/yeti/artefact_vallorcine.jpg"
+        /></picture>
+      </p>
       <p>
         Pour en savoir plus :
         <a href="https://www.petzl.com/fondation/projets/carte-pente-risque-avalanches?language=fr#.Wi5q1lSdVE4"
@@ -188,7 +199,13 @@
         pas que l’itinéraire est sûr. Vérifier les pentes dominant l’itinéraire et s’assurer qu’elles ne menacent pas
         directement la trace.
       </p>
-      <p class="image"><img alt="Prise en compte des pentes amont" src="@/assets/img/yeti/pentes_amont.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/pentes_amont.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/pentes_amont.avif" type="image/avif" />
+          <img alt="Prise en compte des pentes amont" src="@/assets/img/yeti/pentes_amont.jpg"
+        /></picture>
+      </p>
       <p>
         Dans l’exemple ci-dessous, par risque 3, si on remonte le vallon en direction du lac, on est en permanence
         dominé par des pentes considérées comme à risque (bleue foncée rive droite, bleue clair rive gauche). Un départ
@@ -207,7 +224,13 @@
         avec des chutes fréquentes (sollicitation du manteau neigeux). Les zones considérées comme à risque sont
         figurées en bleu clair.
       </p>
-      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mrd.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mrd.avif" type="image/avif" />
+          <img alt="MRD" src="@/assets/img/yeti/mrd.jpg"
+        /></picture>
+      </p>
       <h4 class="title is-4">La méthode de réduction élémentaire (MRE)</h4>
       <p>
         La méthode de réduction élémentaire (MRE) convient aux pratiquants expérimentés soucieux de conserver une marge
@@ -220,7 +243,13 @@
         <li>bleu foncé pour les pentes à risque dans les orientations cochées sur la rose des vents.</li>
         <li>bleu clair pour les autres pentes à risque</li>
       </ul>
-      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mre.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mre.avif" type="image/avif" />
+          <img alt="MRE" src="@/assets/img/yeti/mre.jpg"
+        /></picture>
+      </p>
       <h4 class="title is-4">La méthode de réduction professionnelle (MRP)</h4>
       <p>
         La méthode de réduction professionnelle (MRP) offre un choix de course plus important sur le terrain notamment
@@ -235,7 +264,13 @@
         <li>risque résiduel compris entre 1 et 1.5 : mauve</li>
         <li>risque résiduel &gt; 1.5 : violet</li>
       </ul>
-      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mre.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mre.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mre.avif" type="image/avif" />
+          <img alt="MRP" src="@/assets/img/yeti/mre.jpg"
+        /></picture>
+      </p>
     </div>
 
     <div class="question">
@@ -260,7 +295,13 @@
           bleu qui dominent l'itinéraire.
         </li>
       </ul>
-      <p class="image"><img alt="MRD" src="@/assets/img/yeti/mrd_carte.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mrd_carte.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mrd_carte.avif" type="image/avif" />
+          <img alt="MRD" src="@/assets/img/yeti/mrd_carte.jpg"
+        /></picture>
+      </p>
     </div>
 
     <div class="question">
@@ -283,7 +324,13 @@
         <li>Couleur bleu clair : pentes à risque</li>
         <li>Couleur bleu foncé : risque accru du fait de l’orientation</li>
       </ul>
-      <p class="image"><img alt="MRE" src="@/assets/img/yeti/mre_carte.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mre_carte.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mre_carte.avif" type="image/avif" />
+          <img alt="MRE" src="@/assets/img/yeti/mre_carte.jpg"
+        /></picture>
+      </p>
     </div>
 
     <div class="question">
@@ -311,7 +358,13 @@
         </li>
         <li>Couleur violette : risque résiduel supérieur à 1.5. Risque élevé, mieux vaut renoncer à cette course.</li>
       </ul>
-      <p class="image"><img alt="MRP" src="@/assets/img/yeti/mrp_carte.jpg" /></p>
+      <p class="image">
+        <picture>
+          <source srcset="@/assets/img/yeti/mrp_carte.webp" type="image/webp" />
+          <source srcset="@/assets/img/yeti/mrp_carte.avif" type="image/avif" />
+          <img alt="MRP" src="@/assets/img/yeti/mrp_carte.jpg"
+        /></picture>
+      </p>
     </div>
 
     <div class="question">
