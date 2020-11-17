@@ -22,6 +22,9 @@ const result = {
         options.compilerOptions.whitespace = 'condensed';
         return options;
       });
+
+    // also handle avif format
+    config.module.rule('images').test(/\.(png|jpe?g|gif|webp|avif)(\?.*)?$/);
   },
 
   configureWebpack: {
