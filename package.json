@@ -32,7 +32,7 @@
     "core-js": "3.7.0",
     "d3": "6.2.0",
     "elm-pep": "1.0.6",
-    "file-saver": "2.0.2",
+    "file-saver": "2.0.5",
     "lodash.debounce": "4.0.8",
     "moment": "2.29.1",
     "ol": "6.4.3",
