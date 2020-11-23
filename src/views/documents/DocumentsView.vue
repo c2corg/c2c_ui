@@ -24,7 +24,7 @@
           </dropdown-button>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documentsTitle="getDocumentTypeTitle(documentType)" :documents="documents" />
+          <page-selector :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
