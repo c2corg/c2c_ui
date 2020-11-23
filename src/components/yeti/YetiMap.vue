@@ -14,10 +14,16 @@
           <ul>
             <li v-for="(item, i) of mapLegend.items" :key="i">
               <span class="legend-color" :style="'background:' + item.color" />
-              <span>{{ item.text['fr'] }}</span>
+              <!-- $gettext('Risky slopes') -->
+              <!-- $gettext('Risky slopes, increased risk due to orientation') -->
+              <!-- $gettext('Residual risk >1') -->
+              <!-- $gettext('Residual risk >1.3') -->
+              <!-- $gettext('Residual risk >1.5') -->
+              <span>{{ $gettext(item.text['en']) }}</span>
             </li>
           </ul>
-          <p class="is-size-6 is-italic">{{ mapLegend.comment['fr'] }}</p>
+          <!-- $gettext('From danger 3, consider the slopes which dominate the route') -->
+          <p class="is-size-6 is-italic">{{ $gettext(mapLegend.comment['en']) }}</p>
         </div>
       </div>
     </div>
