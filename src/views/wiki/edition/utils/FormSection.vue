@@ -130,12 +130,9 @@ export default {
     }
   }
 
-  .section-content {
+  .section-content-hidden {
     overflow: hidden;
     transition: max-height 0.3s;
-  }
-
-  .section-content-hidden {
     max-height: 0;
   }
 }
