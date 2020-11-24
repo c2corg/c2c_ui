@@ -264,12 +264,7 @@ export default {
         const image = this.document.associations.images[0];
         inner = {
           ...inner,
-          image: [
-            {
-              contentUrl: imageUrls.getBig(image),
-              url: `https://www.camptocamp.org/images/${image.document_id}`,
-            },
-          ],
+          image: [imageUrls.getBig(image)],
         };
       }
       return inner;
