@@ -17,6 +17,7 @@ import viewModeMixin from './view-mode-mixin';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
+import imageUrls from '@/js/image-urls';
 
 export default {
   components: {
@@ -50,6 +51,22 @@ export default {
     return {
       promise: null,
     };
+  },
+
+  head: {
+    script: function () {
+      if (!this.document) {
+        return null;
+      }
+      const jsonLd = this.documentType === 'image' ? this.imageJsonLd() : this.documentJsonLd();
+      return [
+        {
+          type: 'application/ld+json',
+          id: 'json-ld',
+          inner: JSON.stringify(jsonLd),
+        },
+      ];
+    },
   },
 
   computed: {
@@ -117,7 +134,7 @@ export default {
             response.data.version.next_version_id = response.data.next_version_id;
             response.data.version.previous_version_id = response.data.previous_version_id;
 
-            // versionned datas are poor...
+            // versioned data are poor...
             response.data.document.areas = [];
             response.data.document.creator = null;
             response.data.document.associations = {
@@ -160,6 +177,8 @@ export default {
           .then(this.handleRedirection)
           .then(() => {
             this.$root.$emit('trigger-scroll');
+            // notify vue-head plugin to update
+            this.$emit('updateHead'); // eslint-disable-line
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);
@@ -209,6 +228,46 @@ export default {
       if (this.$route.path !== path) {
         this.$router.replace(path);
       }
+    },
+
+    imageJsonLd() {
+      let license;
+      switch (this.document.image_type) {
+        case 'collaborative':
+          license = 'http://creativecommons.org/licenses/by-sa/3.0/fr/';
+          break;
+        case 'personal':
+          license = 'http://creativecommons.org/licenses/by-nc-nd/3.0/fr/';
+          break;
+        case 'copyright':
+        default:
+          license = 'https://www.camptocamp.org/articles/106728';
+          break;
+      }
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'ImageObject',
+        contentUrl: imageUrls.get(this.document),
+        license,
+        acquireLicensePage: 'https://www.camptocamp.org/articles/106728',
+      };
+    },
+
+    documentJsonLd() {
+      const headline = this.$documentUtils.getDocumentTitle(this.document, this.lang);
+      let inner = {
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline,
+      };
+      if (this.document.associations?.images.length) {
+        const image = this.document.associations.images[0];
+        inner = {
+          ...inner,
+          image: [imageUrls.getBig(image)],
+        };
+      }
+      return inner;
     },
   },
 };

@@ -1,6 +1,7 @@
 // Require the main Sass manifest file
 import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
+import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
@@ -55,6 +56,7 @@ Vue.use(VueAnalytics, {
     cookieDomain: window.location.host === 'localhost:8080' ? 'none' : window.location.host,
   },
 });
+Vue.use(VueHead);
 
 Vue.use(vueMoment); // moment functions
 Vue.use(documentUtils); // getDocumentType, getLocale functions
