@@ -61,7 +61,7 @@ export default {
       const jsonLd = this.documentType === 'image' ? this.imageJsonLd() : this.documentJsonLd();
       return [
         {
-          type: 'application/json+ld',
+          type: 'application/ld+json',
           id: 'json-ld',
           inner: JSON.stringify(jsonLd),
         },
@@ -244,15 +244,13 @@ export default {
           license = 'https://www.camptocamp.org/articles/106728';
           break;
       }
-      return [
-        {
-          '@context': 'https://schema.org',
-          '@type': 'ImageObject',
-          contentUrl: imageUrls.get(this.document),
-          license,
-          acquireLicensePage: 'https://www.camptocamp.org/articles/106728',
-        },
-      ];
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'ImageObject',
+        contentUrl: imageUrls.get(this.document),
+        license,
+        acquireLicensePage: 'https://www.camptocamp.org/articles/106728',
+      };
     },
 
     documentJsonLd() {
@@ -260,10 +258,6 @@ export default {
       let inner = {
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': 'https://google.com/article',
-        },
         headline,
       };
       if (this.document.associations?.images.length) {
@@ -273,7 +267,7 @@ export default {
         }));
         inner = { ...inner, images };
       }
-      return [inner];
+      return inner;
     },
   },
 };
