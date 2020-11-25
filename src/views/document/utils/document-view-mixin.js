@@ -18,6 +18,7 @@ import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
 import imageUrls from '@/js/image-urls';
+import utils from '@/js/utils';
 
 export default {
   components: {
@@ -66,6 +67,12 @@ export default {
           inner: JSON.stringify(jsonLd),
         },
       ];
+    },
+    meta: function () {
+      if (!this.document) {
+        return null;
+      }
+      return this.documentOpenGraph();
     },
   },
 
@@ -268,6 +275,28 @@ export default {
         };
       }
       return inner;
+    },
+
+    documentOpenGraph() {
+      const title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
+      let meta = [
+        { n: 'og:title', c: title },
+        { n: 'og:type', c: this.documentType === 'article' ? 'article' : 'website' },
+        { n: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
+        { n: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
+      ];
+      if (this.document.associations?.images.length) {
+        const image = this.document.associations.images[0];
+        meta = [...meta, { n: 'og:image', c: imageUrls.getBig(image) }];
+      }
+      const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
+      if (locale?.summary || locale?.description) {
+        meta = [
+          ...meta,
+          { n: 'og:description', c: utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200) },
+        ];
+      }
+      return meta;
     },
   },
 };

@@ -177,6 +177,31 @@ export default function install(Vue) {
         }
       },
 
+      getIsoLanguageTerritory(lang) {
+        switch (lang) {
+          case 'fr':
+            return 'fr_FR';
+          case 'en':
+            return 'en_UK';
+          case 'ca':
+            return 'ca_ES';
+          case 'eu':
+            return 'eu_E';
+          case 'it':
+            return 'it_IT';
+          case 'de':
+            return 'de_DE';
+          case 'es':
+            return 'es_ES';
+          case 'zh_CN':
+            return 'zh_CN';
+          default:
+            // eslint-disable-next-line no-console
+            console.error(`Unexpected langauage: ${lang}`);
+            return lang;
+        }
+      },
+
       updateElement(element) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
