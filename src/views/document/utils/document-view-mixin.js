@@ -280,21 +280,19 @@ export default {
     documentOpenGraph() {
       const title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
       let meta = [
-        { n: 'og:title', c: title },
-        { n: 'og:type', c: this.documentType === 'article' ? 'article' : 'website' },
-        { n: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
-        { n: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
+        { p: 'og:title', c: title },
+        { p: 'og:type', c: this.documentType === 'article' ? 'article' : 'website' },
+        { p: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
+        { p: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
       ];
       const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
       if (locale?.summary || locale?.description) {
-        meta = [
-          ...meta,
-          { n: 'og:description', c: utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200) },
-        ];
+        const description = utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200);
+        meta = [...meta, { p: 'og:description', c: description }, { n: 'description', c: description }];
       }
       if (this.document.associations?.images.length) {
         const image = this.document.associations.images[0];
-        meta = [...meta, { n: 'og:image', c: imageUrls.getBig(image) }];
+        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image) }];
       }
       return meta;
     },
