@@ -285,16 +285,16 @@ export default {
         { n: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
         { n: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
       ];
-      if (this.document.associations?.images.length) {
-        const image = this.document.associations.images[0];
-        meta = [...meta, { n: 'og:image', c: imageUrls.getBig(image) }];
-      }
       const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
       if (locale?.summary || locale?.description) {
         meta = [
           ...meta,
           { n: 'og:description', c: utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200) },
         ];
+      }
+      if (this.document.associations?.images.length) {
+        const image = this.document.associations.images[0];
+        meta = [...meta, { n: 'og:image', c: imageUrls.getBig(image) }];
       }
       return meta;
     },
