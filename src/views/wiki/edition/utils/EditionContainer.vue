@@ -85,8 +85,7 @@ import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
 const BANNERS_ARTICLE_ID = 1110927;
-const htmlBanners = {}; // cache for banners
-htmlBanners.initialized = false;
+const htmlBanners = { initialized: false }; // cache for banners
 
 export default {
   components: {
@@ -164,8 +163,7 @@ export default {
       content.innerHTML = cooked.description;
 
       let key;
-      htmlBanners.initialized = true;
-      htmlBanners[undefined] = '';
+      htmlBanners = { initialized: true, undefined: '' };
 
       for (const node of content.children) {
         const isHeader = node.nodeName.match(/^[hH]3$/);
