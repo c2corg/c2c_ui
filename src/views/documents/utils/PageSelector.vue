@@ -1,24 +1,43 @@
 <template>
-  <span class="page-selector has-text-ligth">
+  <span class="page-selector ml-1">
+    <component
+      :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
+      class="pagination-link button has-text-normal"
+      :disabled="firstDocumentPosition === 1"
+      :to="pageQuery(offset - queryLimit, queryLimit)"
+    >
+      <fa-icon icon="chevron-left" />
+    </component>
     {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
     <span v-translate translate-context="1-30 of 200 results">of</span>
     {{ total }}
     <component
-      :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
-      class="pagination-link has-text-normal"
-      :disabled="offset === 0"
-      :to="pageQuery(offset - queryLimit)"
-    >
-      <fa-icon icon="chevron-left" />
-    </component>
-    <component
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
-      class="pagination-link has-text-normal"
+      class="pagination-link button has-text-normal"
       :disabled="lastDocumentPosition >= total"
-      :to="pageQuery(offset + queryLimit)"
+      :to="pageQuery(offset + queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-right" />
     </component>
+    <dropdown-button class="ml-1 mr-1" ref="limitSelector">
+      <span slot="button" class="button is-small">
+        <span>{{ queryLimit }}</span>
+        &nbsp;
+        <fa-icon icon="angle-down" aria-hidden="true" />
+      </span>
+      <component
+        v-for="l in [30, 50, 100]"
+        v-bind:key="l"
+        :is="'router-link'"
+        class="dropdown-item is-hidden-mobile is-small"
+        :class="{ 'is-active': queryLimit === l }"
+        :to="pageQuery(offset, l)"
+        @click.native="hideOnclick"
+      >
+        <span>{{ l }}</span>
+      </component>
+    </dropdown-button>
+    <span v-translate translate-context="30 per page">per page</span>
   </span>
 </template>
 
@@ -63,10 +82,15 @@ export default {
       }
     },
 
-    pageQuery(offset) {
+    pageQuery(offset, limit) {
       const query = Object.assign({}, this.$route.query);
       query.offset = Math.max(offset, 0);
+      query.limit = Math.max(Math.min(limit, 100), 30);
       return { name: this.$route.name, params: this.$route.params, query };
+    },
+
+    hideOnclick() {
+      this.$refs.limitSelector.isActive = false;
     },
   },
 };
@@ -76,13 +100,6 @@ export default {
 @import '@/assets/sass/variables.scss';
 
 .pagination-link {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  text-align: center;
-}
-
-.pagination-link[disabled] {
-  color: $grey-light;
+  height: 1.75em;
 }
 </style>
