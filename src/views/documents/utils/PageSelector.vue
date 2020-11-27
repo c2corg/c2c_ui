@@ -19,7 +19,7 @@
     >
       <fa-icon icon="chevron-right" />
     </component>
-    <dropdown-button class="ml-1 mr-1 is-hidden-mobile" ref="limitSelector">
+    <dropdown-button class="ml-1 mr-1" ref="limitSelector">
       <span slot="button" class="button is-small">
         <span>{{ queryLimit }}</span>
         &nbsp;
@@ -37,7 +37,7 @@
         <span>{{ l }}</span>
       </component>
     </dropdown-button>
-    <span v-translate class="is-hidden-mobile" translate-context="30 per page">per page</span>
+    <span v-translate translate-context="30 per page">per page</span>
   </span>
 </template>
 
