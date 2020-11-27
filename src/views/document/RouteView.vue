@@ -78,12 +78,13 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
-            <div v-else-if="activities.includes('snow_ice_mixed') || activities.includes('mountain_climbing') || activities.includes('rock_climbing') || activities.includes('ice_climbing') || activities.includes('via_ferrata') || activities.includes('slacklining') || activities.includes('skitouring') && ['5.1', '5.2', '5.3', '5.4', '5.5','5.6'].includes(doc.ski_rating))" class="missing-history-banner no-print"
-              <edit-link v-if="isEditable" :document="document" :lang="lang">
-               <v-translate/> Missing history/>
-              </edit-link>
-            </div>
-            <div v-else disable </div>
+             <div v-else-if="PromoteHistory" class="missing-history-banner no-print" />
+               <edit-link v-if="isEditable" :document="document" :lang="lang" v-translate/> 
+                  "missing_history"
+                </edit-link>
+             <div v-else>
+               disable
+             </div>
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
@@ -125,6 +126,7 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin';
+import isEditableMixin from './is-editable-mixin';
 
 export default {
   mixins: [documentViewMixin],
@@ -186,6 +188,25 @@ export default {
 
       return result;
     },
+    documentType() { // is-editable mixin needs this property
+        return this.$documentUtils.getDocumentType(this.document.type);
+      },
+    PromoteHistory() {
+        const result = {};
+        const doc = this.document;
+        const activities = doc.activities ?? [];
+        const history_worth_activities = ['snow_ice_mixed', 'mountain_climbing', 'rock_climbing', 'ice_climbing', 'via_ferrata', 'slacklining'];
+        
+        for act in history_worth_activities{
+        if (activities.includes(act)){
+          result = true
+          }
+        }
+        if (activities.includes(skitouring) && ['5.1','5.2','5.3','5.4','5.5'].includes(doc.ski_rating)){
+          result = true
+          }
+        return result;
+    }
   },
 };
 </script>
