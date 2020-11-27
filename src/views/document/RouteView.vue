@@ -77,7 +77,13 @@
 
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section :document="document" :field="fields.route_history" />
+          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
+            <div v-else-if="activities.includes('snow_ice_mixed') || activities.includes('mountain_climbing') || activities.includes('rock_climbing') || activities.includes('ice_climbing') || activities.includes('via_ferrata') || activities.includes('slacklining') || activities.includes('skitouring') && ['5.1', '5.2', '5.3', '5.4', '5.5','5.6'].includes(doc.ski_rating))" class="missing-history-banner no-print"
+              <edit-link v-if="isEditable" :document="document" :lang="lang">
+               <v-translate/> Missing history/>
+              </edit-link>
+            </div>
+            <div v-else disable </div>
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
