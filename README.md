@@ -10,7 +10,7 @@ git clone https://github.com/c2corg/c2c_ui
 cd c2c_ui
 
 # Install dependencies. It's quite long, but you have to do it once.
-npm install
+npm ci
 ```
 
 And now, let's launch
