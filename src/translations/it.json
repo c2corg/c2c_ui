@@ -1040,6 +1040,9 @@
     "people": {
       "image_categories": "personaggi"
     },
+    "per page": {
+      "30 per page": "per pagina"
+    },
     "person_fall": {
       "event_types": "caduta di una persona "
     },

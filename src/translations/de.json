@@ -1243,6 +1243,9 @@
     "people": {
       "image_categories": "Personen"
     },
+    "per page": {
+      "30 per page": "pro Seite"
+    },
     "person_fall": {
       "event_types": "Person abgestürzt"
     },
