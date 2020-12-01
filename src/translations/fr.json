@@ -1117,6 +1117,9 @@
     "people": {
       "image_categories": "personnages"
     },
+    "per page": {
+      "30 per page": "par page"
+    },
     "person_fall": {
       "event_types": "déséquilibre ou chute"
     },
