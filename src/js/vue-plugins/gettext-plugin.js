@@ -197,7 +197,7 @@ export default function install(Vue) {
             return 'zh_CN';
           default:
             // eslint-disable-next-line no-console
-            console.error(`Unexpected langauage: ${lang}`);
+            console.error(`Unexpected language: ${lang}`);
             return lang;
         }
       },
