@@ -189,14 +189,6 @@ export default {
     showMissingHistoryBanner() {
       const doc = this.document;
       const activities = doc.activities ?? [];
-      const historyWorthActivities = [
-        'snow_ice_mixed',
-        'mountain_climbing',
-        'rock_climbing',
-        'ice_climbing',
-        'via_ferrata',
-        'slacklining',
-      ];
       for (let act of historyWorthActivities) {
         if (activities.includes(act)) {
           return true;
@@ -209,9 +201,7 @@ export default {
     },
   },
 };
-</script>
-
-var historyWorthActivities = [
+const historyWorthActivities = [
         'snow_ice_mixed',
         'mountain_climbing',
         'rock_climbing',
@@ -219,7 +209,7 @@ var historyWorthActivities = [
         'via_ferrata',
         'slacklining',
       ];
-
+</script>
 <style lang="scss" scoped>
 .protection-area-info {
   overflow: hidden;
