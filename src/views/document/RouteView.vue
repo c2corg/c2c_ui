@@ -124,7 +124,14 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin';
-
+const historyWorthActivities = [
+        'snow_ice_mixed',
+        'mountain_climbing',
+        'rock_climbing',
+        'ice_climbing',
+        'via_ferrata',
+        'slacklining',
+      ];   
 export default {
   mixins: [documentViewMixin],
 
@@ -201,14 +208,6 @@ export default {
     },
   },
 };
-const historyWorthActivities = [
-        'snow_ice_mixed',
-        'mountain_climbing',
-        'rock_climbing',
-        'ice_climbing',
-        'via_ferrata',
-        'slacklining',
-      ];
 </script>
 <style lang="scss" scoped>
 .protection-area-info {
