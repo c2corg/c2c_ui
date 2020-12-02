@@ -1,6 +1,6 @@
 <template>
   <router-link
-    v-if="$user.isLogged || showEvenIfNotLogged"
+    v-if="$user.isLogged || showAlways"
     :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
     @click.native="$emit('click')"
   >
@@ -21,7 +21,7 @@ export default {
       type: String,
       required: true,
     },
-    showEvenIfNotLogged: {
+    showAlways: {
       type: Boolean,
       default: false,
     },
