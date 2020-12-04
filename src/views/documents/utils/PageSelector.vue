@@ -27,7 +27,7 @@
       </span>
       <component
         v-for="l in [30, 50, 100]"
-        v-bind:key="l"
+        :key="l"
         :is="'router-link'"
         class="dropdown-item is-hidden-mobile is-small"
         :class="{ 'is-active': queryLimit === l }"
