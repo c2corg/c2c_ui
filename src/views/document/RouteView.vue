@@ -77,14 +77,7 @@
 
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
-             <div v-else-if="PromoteHistory" class="missing-history-banner no-print" />
-               <edit-link v-if="isEditable" :document="document" :lang="lang" v-translate/> 
-                  missing_history
-                </edit-link>
-             <div v-else>
-               disable
-             </div>
+          <markdown-section :document="document" :field="fields.route_history" />
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
@@ -110,7 +103,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
-          <div style="clear: both" />
+          <div style="clear: both;" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split />
@@ -125,7 +118,6 @@
 </template>
 
 <script>
-<<<<<<< Updated upstream
 import documentViewMixin from './utils/document-view-mixin';
 
 export default {
@@ -150,19 +142,6 @@ export default {
       if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
         result['183333'] = this.$gettext('skitouring gear');
       }
-=======
-  import documentViewMixin from './utils/document-view-mixin.js';
-  import isEditableMixin from '../is-editable-mixin';
-
-  export default {
-    mixins: [ documentViewMixin ],
-
-    data() {
-      return {
-        hasProtectionArea: false
-      };
-    },
->>>>>>> Stashed changes
 
       if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
         result['185750'] = this.$gettext('easy snow ice mixed gear');
@@ -197,30 +176,6 @@ export default {
         if (activities.filter((act) => glacier_activities.includes(act))) {
           result['185750'] = this.$gettext('easy snow ice mixed gear');
         }
-<<<<<<< Updated upstream
-=======
-
-        return result;
-      },
-      PromoteHistory(){
-        const result = false;
-        const doc = this.document;
-        const activities = doc.activities || [];
-        const history_worth_activities = ['snow_ice_mixed', 'mountain_climbing', 'rock_climbing', 'ice_climbing', 'via_ferrata', 'slacklining'];
-        
-        for act in history_worth_activities:
-          if (activities.includes(act)) {
-            result = true 
-          }
-        if (activities.includes('skitouring') && ['5.1', '5.2', '5.3', '5.4', '5.5','5.6'].includes(doc.ski_rating)){
-          result = true
-        }
-        return result;     
-        }
-      }
-      documentType() { // is-editable mixin needs this property
-        return this.$documentUtils.getDocumentType(this.document.type);
->>>>>>> Stashed changes
       }
 
       return result;
