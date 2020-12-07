@@ -79,7 +79,7 @@
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print">
-            <edit-link :document="document" :lang="lang" show-always>
+            <edit-link :document="document" :lang="lang" show-always v-translate>
               History is missing, please provide it if you have information.
             </edit-link>
           </div>
