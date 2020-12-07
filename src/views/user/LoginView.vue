@@ -22,6 +22,9 @@
         :label="$gettext('Password')"
         icon="key"
       />
+      <div class="login-view-warning" v-translate>
+        <b> Beware of case-sensitive login and password</b>
+      </div>
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-primary" :class="{ 'is-loading': promise.loading }" v-translate>
@@ -377,5 +380,11 @@ export default {
     width: 100%;
     padding: 1.5rem;
   }
+}
+.login-view-warning{
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1em;
+  //color:red ;
 }
 </style>
