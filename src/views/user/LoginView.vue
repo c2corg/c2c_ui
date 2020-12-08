@@ -23,7 +23,7 @@
         icon="key"
       />
 
-      <div class="login-view has-text-weight-bold is-centered mb-1" v-translate>
+      <div class="login-view has-text-weight-bold is-centered has-text-centered mb-1" v-translate>
         Beware of case-sensitive login and password
       </div>
 
