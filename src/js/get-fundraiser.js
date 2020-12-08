@@ -29,6 +29,9 @@ const mapping = {
   // url: 'https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=XQ4S2XU3WH5F6'
   // },
   
+  107049: { //VTNO
+    url: 'https://www.vtno.fr/adh%C3%A9sion/',
+  },
 
   14474: {
     // Scotland
