@@ -77,12 +77,7 @@
 
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
-          <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print">
-            <edit-link :document="document" :lang="lang" show-even-if-not-logged>
-              History is missing, please provide it if you have information.
-            </edit-link>
-          </div>
+          <markdown-section :document="document" :field="fields.route_history" />
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
