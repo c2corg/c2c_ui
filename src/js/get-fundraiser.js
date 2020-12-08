@@ -4,40 +4,40 @@ const mapping = {
   //   url: ' https://www.helloasso.com/associations/rockclimber/formulaires/1/widget'
   // },
   
-  //Greenspit
-  947587: { //Mollans
+  // Greenspit
+  947587: { // Mollans
     url: 'https://greenspits.com/topo/mollans-sur-ouveze/'
   },
-  1150854: { //Ramirole
+  1150854: { // Ramirole
     url: 'https://greenspits.com/topo/la-ramirole-2/'
   },
-  820728: { //Maupas
+  820728: { // Maupas
     url: 'https://greenspits.com/topo/la-carriere-du-maupas/'
   },
   
   // VTNO : Site et secteurs de Presles
-  107049: { //Presles
+  107049: { // Presles
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  318456: { //Presles - Dalarhum
+  318456: { // Presles - Dalarhum
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  276273 : { //Presles - École d'artif
+  276273 : { // Presles - École d'artif
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  177942: { //Presles - Triangle de Choranche
+  177942: { // Presles - Triangle de Choranche
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  176860: { //Presles - Daladom
+  176860: { // Presles - Daladom
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  103555: { //Presles - Rocher de Nugues, Tina dalle
+  103555: { // Presles - Rocher de Nugues, Tina dalle
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  103083: { //Presles - Balme étrange
+  103083: { // Presles - Balme étrange
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  103082: { //Presles - Pierrot beach
+  103082: { // Presles - Pierrot beach
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
   43267: { // Presles - Rocher des Nugues
@@ -46,44 +46,47 @@ const mapping = {
   42469: { // Presles - Dalles de Télébus
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  42426: { //Presles - Pas du Ranc
+  42426: { // Presles - Pas du Ranc
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  42425: { //Presles - Grottes de Choranche
+  42425: { // Presles - Grottes de Choranche
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  42253: { //Presles - Paroi Rouge
+  42253: { // Presles - Paroi Rouge
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  41298: { //Presles - Fond du cirque
+  41298: { // Presles - Fond du cirque
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  40768: { //Presles - Chrysanthèmes
+  40768: { // Presles - Chrysanthèmes
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  40767: { //Presles - Fhara Kiri
+  40767: { // Presles - Fhara Kiri
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  40766: { //Presles - Eliane
+  40766: { // Presles - Eliane
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-  40756: { //Presles - Buis
+  40756: { // Presles - Buis
     url: 'https://www.vtno.fr/adh%C3%A9sion/',
   },
-
+  549732: { // Presles - Festival
+    url: 'https://www.vtno.fr/adh%C3%A9sion/',
+  },
+  
   // America
   14080: { // Access Fund USA
     url: 'https://www.accessfund.org/join-or-give'
   },
 
   // UK Boltfund
-  1203403: { //Peak District
+  1203403: { // Peak District
     url : 'http://thepeakboltfund.blogspot.com/'
   },
-  1203390: { //Lake District
+  1203390: { // Lake District
     url : 'https://www.cumbriaboltfund.co.uk/bolting'
   },
-  1264698: { //Cheshire
+  1264698: { // Cheshire
     url: 'https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=XQ4S2XU3WH5F6'
   },
   
@@ -91,7 +94,7 @@ const mapping = {
     url: 'https://www.7amax.co.uk/',
   },
 
-  //Others
+  // Others
   14151: { // Malta
     url: 'https://maltaclimbingclub.org/bolt-fund/',
   },
@@ -144,6 +147,7 @@ export default function (document) {
   // 1. route itself for routes
   // 2. waypoint itself for waypoints
   // 2. or main waypoint for routes
+  // to do : check for parents of main waypoint
   // 3. then areas of type range
   // 4. then areas of type admin_limits
   // 5. then areas of type country
