@@ -1,7 +1,34 @@
 const mapping = {
-  // 14274: { // France
+  // 14274: { // France FFME
   //   url: ' https://www.helloasso.com/associations/rockclimber/formulaires/1/widget'
   // },
+  
+  //Greenspit
+  // 947587: { //Mollans
+  // url: 'https://greenspits.com/topo/mollans-sur-ouveze/'
+  // },
+  // 1150854: { //Ramirole
+  // url: 'https://greenspits.com/topo/la-ramirole-2/'
+  // },
+  // 820728: { //Maupas
+  // url: 'https://greenspits.com/topo/la-carriere-du-maupas/'
+  // },
+  
+  // 14080: { // Access Fund USA
+  // url: 'https://www.accessfund.org/join-or-give'
+  // },
+
+  // UK Boltfund
+  // 1203403: { //Peak District
+  // url : 'http://thepeakboltfund.blogspot.com/'
+  // },
+  // 1203390: { //Lake District
+  // url : 'https://www.cumbriaboltfund.co.uk/bolting'
+  // },
+  // 1264698: { //Cheshire
+  // url: 'https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=XQ4S2XU3WH5F6'
+  // },
+  
 
   14474: {
     // Scotland
