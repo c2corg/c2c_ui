@@ -23,6 +23,10 @@
         icon="key"
       />
 
+      <div class="login-view has-text-weight-bold is-centered mb-1" v-translate>
+        Beware of case-sensitive login and password
+      </div>
+
       <div class="buttons is-centered">
         <button type="submit" class="button is-primary" :class="{ 'is-loading': promise.loading }" v-translate>
           Login
