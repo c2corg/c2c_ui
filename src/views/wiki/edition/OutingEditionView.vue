@@ -32,9 +32,10 @@
       <div class="columns">
         <form-field :document="document" :field="fields.activities" />
       </div>
-      <map-input-row :document="document" geom-detail-editable />
 
       <associations-input-row :label="$gettext('routes')" :document="document" :field="fields.routes" />
+
+      <map-input-row :document="document" geom-detail-editable />
 
       <div class="columns is-multiline">
         <form-field :document="document" :field="fields.title" />

@@ -168,19 +168,6 @@ export default {
       }
     },
 
-    setGeometryPoint() {
-      if (this.latitude === null || this.longitude === null) {
-        return;
-      }
-
-      const longitude = parseFloat(String(this.longitude).replace(',', '.'));
-      const latitude = parseFloat(String(this.latitude).replace(',', '.'));
-
-      const point = new ol.geom.Point([longitude, latitude]);
-      point.transform(FORM_PROJ, DATA_PROJ);
-      this.document.geometry.geom = geoJSONFormat.writeGeometry(point);
-    },
-
     setLatitudeLongitude() {
       if (!this.document || !this.document.geometry || !this.document.geometry.geom) {
         return {};

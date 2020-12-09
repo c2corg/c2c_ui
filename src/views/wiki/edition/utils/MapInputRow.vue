@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="columns is-multiline">
+    <div class="columns is-multiline" @mouseover="mapHover = true" @mouseleave="mapHover = false">
       <div class="column is-12 map-container">
         <map-view
           ref="map"
@@ -24,16 +24,22 @@
           show-recenter-on
         />
       </div>
-      <div class="column is-6">
+      <div class="column is-5">
         <div class="field">
           <label class="label">{{ $gettext('Longitude') }}</label>
           <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint" />
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-5">
         <div class="field">
           <label class="label">{{ $gettext('Latitude') }}</label>
           <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint" />
+        </div>
+      </div>
+      <div class="column is-2">
+        <div class="control">
+          <label class="label">{{ $gettext('Import from the map') }}</label>
+          <button class="button is-primary" @click="readMapCoordinates" v-translate>Pick</button>
         </div>
       </div>
     </div>
@@ -62,6 +68,7 @@ export default {
     return {
       latitude: null,
       longitude: null,
+      mapHover: false,
     };
   },
 
@@ -109,7 +116,7 @@ export default {
       this.document.geometry.geom = geoJSONFormat.writeGeometry(point);
     },
 
-    setLatitudeLongitude() {
+    readMapCoordinates() {
       if (!this.document || !this.document.geometry || !this.document.geometry.geom) {
         return {};
       }
@@ -122,6 +129,12 @@ export default {
 
       this.longitude = Math.round(coords[0] * 1000000) / 1000000;
       this.latitude = Math.round(coords[1] * 1000000) / 1000000;
+    },
+
+    setLatitudeLongitude() {
+      if (!this.geomDetailEditable || !this.mapHover) {
+        this.readMapCoordinates();
+      }
     },
   },
 };
