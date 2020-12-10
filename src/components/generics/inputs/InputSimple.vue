@@ -20,6 +20,7 @@
       :type="type"
       :min="divisor ? min / divisor : min"
       :max="divisor ? max / divisor : max"
+      :step="step"
       :disabled="disabled"
       :placeholder="placeholder"
       v-model.lazy="value_"
@@ -46,6 +47,10 @@ export default {
     },
     max: {
       type: [Number, String], // string is for date
+      default: null,
+    },
+    step: {
+      type: [String, Number],
       default: null,
     },
     value: {

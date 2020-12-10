@@ -27,13 +27,13 @@
       <div class="column is-5">
         <div class="field">
           <label class="label">{{ $gettext('Longitude') }}</label>
-          <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint" />
+          <input-simple type="number" step="any" postfix="°E" v-model="longitude" @input="setGeometryPoint" />
         </div>
       </div>
       <div class="column is-5">
         <div class="field">
           <label class="label">{{ $gettext('Latitude') }}</label>
-          <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint" />
+          <input-simple type="number" step="any" postfix="°N" v-model="latitude" @input="setGeometryPoint" />
         </div>
       </div>
       <div class="column is-2">
