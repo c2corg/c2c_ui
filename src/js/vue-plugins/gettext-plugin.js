@@ -172,7 +172,32 @@ export default function install(Vue) {
             return 'zh';
           default:
             // eslint-disable-next-line no-console
-            console.error(`Unexpected langauage: ${lang}`);
+            console.error(`Unexpected language: ${lang}`);
+            return lang;
+        }
+      },
+
+      getIsoLanguageTerritory(lang) {
+        switch (lang) {
+          case 'fr':
+            return 'fr_FR';
+          case 'en':
+            return 'en_UK';
+          case 'ca':
+            return 'ca_ES';
+          case 'eu':
+            return 'eu_ES';
+          case 'it':
+            return 'it_IT';
+          case 'de':
+            return 'de_DE';
+          case 'es':
+            return 'es_ES';
+          case 'zh_CN':
+            return 'zh_CN';
+          default:
+            // eslint-disable-next-line no-console
+            console.error(`Unexpected language: ${lang}`);
             return lang;
         }
       },

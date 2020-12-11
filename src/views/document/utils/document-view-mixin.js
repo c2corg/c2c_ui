@@ -18,6 +18,7 @@ import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
 import imageUrls from '@/js/image-urls';
+import utils from '@/js/utils';
 
 export default {
   components: {
@@ -66,6 +67,12 @@ export default {
           inner: JSON.stringify(jsonLd),
         },
       ];
+    },
+    meta: function () {
+      if (!this.document) {
+        return null;
+      }
+      return this.documentOpenGraph();
     },
   },
 
@@ -268,6 +275,26 @@ export default {
         };
       }
       return inner;
+    },
+
+    documentOpenGraph() {
+      const title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
+      let meta = [
+        { p: 'og:title', c: title },
+        { p: 'og:type', c: this.documentType === 'article' ? 'article' : 'website' },
+        { p: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
+        { p: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
+      ];
+      const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
+      if (locale?.summary || locale?.description) {
+        const description = utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200);
+        meta = [...meta, { p: 'og:description', c: description }, { n: 'description', c: description }];
+      }
+      if (this.document.associations?.images.length) {
+        const image = this.document.associations.images[0];
+        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image) }];
+      }
+      return meta;
     },
   },
 };
