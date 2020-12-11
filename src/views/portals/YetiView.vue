@@ -365,12 +365,20 @@
             <div class="columns is-mobile is-vcentered">
               <div class="column has-text-centered">
                 <a href="http://www.ensg.eu">
-                  <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" />
+                  <picture>
+                    <source srcset="@/assets/img/yeti/logo-ensg.webp" type="image/webp" />
+                    <source srcset="@/assets/img/yeti/logo-ensg.avif" type="image/avif" />
+                    <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" />
+                  </picture>
                 </a>
               </div>
               <div class="column has-text-centered">
                 <a href="https://www.petzl.com/fondation/fondation-petzl?language=fr">
-                  <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Logo Fondation Petzl" width="90" />
+                  <picture>
+                    <source srcset="@/assets/img/yeti/logo-fondation-petzl.webp" type="image/webp" />
+                    <source srcset="@/assets/img/yeti/logo-fondation-petzl.avif" type="image/avif" />
+                    <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Logo Fondation Petzl" width="90" />
+                  </picture>
                 </a>
               </div>
             </div>
