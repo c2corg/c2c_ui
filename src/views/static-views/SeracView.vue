@@ -127,8 +127,7 @@ export default {
 .serac-view {
   background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
   background-size: cover;
-  background-position-y: 50%;
-  background-position-x: center;
+  background-position: center;
   min-height: 100%;
   // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
   @media (min-width: 800px) and (max-width: 1224px) {
