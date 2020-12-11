@@ -186,7 +186,7 @@ export default function install(Vue) {
           case 'ca':
             return 'ca_ES';
           case 'eu':
-            return 'eu_E';
+            return 'eu_ES';
           case 'it':
             return 'it_IT';
           case 'de':
