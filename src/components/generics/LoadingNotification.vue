@@ -27,7 +27,7 @@ export default {
 
   computed: {
     notFound() {
-      return Boolean(this.promise.error && this.promise.error.response && this.promise.error.response.status === 404);
+      return Boolean(this.promise?.error?.response?.status === 404);
     },
   },
 };

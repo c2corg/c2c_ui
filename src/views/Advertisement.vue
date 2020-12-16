@@ -8,7 +8,11 @@
     />
 
     <router-link v-if="enableFallback" :to="{ name: 'serac' }" class="advertisement-fallback">
-      <img src="@/assets/img/serac.png" />
+      <picture>
+        <source srcset="@/assets/img/serac.webp" type="image/webp" />
+        <source srcset="@/assets/img/serac.avif" type="image/avif" />
+        <img src="@/assets/img/serac.png" />
+      </picture>
     </router-link>
   </div>
 </template>

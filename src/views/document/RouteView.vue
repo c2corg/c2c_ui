@@ -137,6 +137,7 @@ const historyWorthActivities = [
   'via_ferrata',
   'slacklining',
 ];
+
 const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
 const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
 const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
