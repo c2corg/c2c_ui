@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+
 import c2c from '@/js/apis/c2c';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -40,8 +42,15 @@ export default {
 
   methods: {
     async onClick() {
-      await (this.todo ? c2c.tags.remove(this.document) : c2c.tags.add(this.document));
-      this.todo = !this.todo;
+      try {
+        await (this.todo ? c2c.tags.remove(this.document) : c2c.tags.add(this.document));
+        this.todo = !this.todo;
+      } catch (error) {
+        toast({
+          message: this.$gettext(`An error occurred, couldn't (un)mark route as to do`),
+          type: 'is-danger',
+        });
+      }
     },
   },
 };
