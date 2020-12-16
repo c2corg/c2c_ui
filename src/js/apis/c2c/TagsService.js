@@ -2,29 +2,20 @@ function TagsService(api) {
   this.api = api;
 }
 
-TagsService.prototype.add = function (document) {
-  if (document.type !== 'r') {
+TagsService.prototype.add = async function ({ type, document_id }) {
+  if (type !== 'r') {
     // As for now, only routes may be tagged.
-    return Promise.reject(new Error('Tags are not supported for this type of documents'));
+    throw new Error('Tags are not supported for this kind of document');
   }
-
-  const data = {
-    document_id: document.document_id,
-  };
-
-  return this.api.post('/tags/add', data);
+  return this.api.post('/tags/add', { document_id });
 };
 
-TagsService.prototype.remove = function (document) {
-  const data = {
-    document_id: document.document_id,
-  };
-
-  return this.api.post('/tags/remove', data);
+TagsService.prototype.remove = function ({ document_id }) {
+  return this.api.post('/tags/remove', { document_id });
 };
 
-TagsService.prototype.get = function (document) {
-  return this.api.get('/tags/has/' + document.document_id);
+TagsService.prototype.get = function ({ document_id }) {
+  return this.api.get('/tags/has/' + document_id);
 };
 
 export default TagsService;

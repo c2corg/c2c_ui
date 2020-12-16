@@ -1,5 +1,5 @@
 <template>
-  <a v-if="canTag" @click="onClick" :title="tooltip" :class="{ 'todo-button-yellow': todo }">
+  <a class="todo-button" v-if="canTag" @click="onClick" :title="tooltip" :class="{ active: todo }">
     <fa-icon icon="star" />
   </a>
 </template>
@@ -13,7 +13,7 @@ export default {
 
   data() {
     return {
-      todo: null,
+      todo: false,
     };
   },
 
@@ -31,25 +31,17 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     if (this.canTag) {
-      c2c.tags.get(this.document).then((response) => {
-        this.todo = response.data.todo;
-      });
+      // on error, let todo be falsy
+      this.todo = (await c2c.tags.get(this.document)).data.todo;
     }
   },
 
   methods: {
-    onClick() {
-      if (this.todo) {
-        c2c.tags.remove(this.document).then(() => {
-          this.todo = false;
-        });
-      } else {
-        c2c.tags.add(this.document).then(() => {
-          this.todo = true;
-        });
-      }
+    async onClick() {
+      await (this.todo ? c2c.tags.remove(this.document) : c2c.tags.add(this.document));
+      this.todo = !this.todo;
     },
   },
 };
@@ -58,7 +50,7 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
-.todo-button-yellow {
+.todo-button.active {
   color: $yellow !important;
 }
 </style>
