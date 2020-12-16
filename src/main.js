@@ -1,4 +1,4 @@
-// Require the main Sass manifest file
+import { setDefaults as toastDefaults } from 'bulma-toast';
 import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
 import VueHead from 'vue-head';
@@ -20,6 +20,7 @@ import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
 import vueMoment from '@/js/vue-plugins/vue-moment';
 
+// Require the main Sass manifest file
 require('./assets/sass/main.scss');
 
 Vue.config.productionTip = false;
@@ -78,3 +79,9 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount('#app');
+
+// configure toast defaults
+toastDefaults({
+  duration: 3000,
+  pauseOnHover: true,
+});

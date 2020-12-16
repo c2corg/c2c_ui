@@ -3,6 +3,7 @@ import DocumentService from './DocumentService';
 import FeedService from './FeedService';
 import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
+import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -18,6 +19,7 @@ function CamptocampApi() {
   this.association = new AssociationService(this);
   this.feed = new FeedService(this);
   this.forum = new ForumService(this);
+  this.tags = new TagsService(this);
 
   for (const type of constants.documentTypes) {
     this[type] = new DocumentService(this, type);

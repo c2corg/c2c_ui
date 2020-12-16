@@ -108,7 +108,7 @@
 
           <markdown-section :document="document" :field="fields.external_resources" />
 
-          <div style="clear: both;" />
+          <div style="clear: both" />
         </div>
 
         <routes-box :document="document" hide-buttons disable-activity-split />
@@ -125,13 +125,13 @@
 <script>
 import documentViewMixin from './utils/document-view-mixin';
 const historyWorthActivities = [
-        'snow_ice_mixed',
-        'mountain_climbing',
-        'rock_climbing',
-        'ice_climbing',
-        'via_ferrata',
-        'slacklining',
-      ];   
+  'snow_ice_mixed',
+  'mountain_climbing',
+  'rock_climbing',
+  'ice_climbing',
+  'via_ferrata',
+  'slacklining',
+];
 export default {
   mixins: [documentViewMixin],
 
