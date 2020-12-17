@@ -29,12 +29,8 @@
                 <edit-link v-else :document="document" :lang="$user.lang" />
               </label-value>
 
-              <field-view
-                v-if="document.glacier_gear != 'no' || isMountainActivity"
-                :document="document"
-                :field="fields.glacier_gear"
-              />
-              
+              <field-view v-if="document.glacier_gear != 'no'" :document="document" :field="fields.glacier_gear" />
+
               <input-orientation
                 v-if="document.orientations && document.orientations.length"
                 v-model="document.orientations"
@@ -62,7 +58,7 @@
               <field-view :document="document" :field="fields.difficulties_height" />
 
               <field-view :document="document" :field="fields.height_diff_access" />
-              <field-view v-if="document.lift_access != 'no'" :document="document" :field="fields.lift_access" />
+              <field-view :document="document" :field="fields.lift_access" />
 
               <field-view :document="document" :field="fields.route_length" :divisor="1000" unit="km" />
 
@@ -197,17 +193,6 @@ export default {
       }
 
       return result;
-    },
-
-    isMountainActivity() {
-      const doc = this.document;
-      const activities = doc.activities ?? [];
-      for (let act of glacier_activities) {
-        if (activities.includes(act)) {
-          return true;
-        }
-      }
-      return false;
     },
 
     showMissingHistoryBanner() {

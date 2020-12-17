@@ -78,7 +78,7 @@ export default {
           icon: 'icon-outing',
           text: this.$gettext('outings'),
           activeFor: ['outing'],
-          query: { },
+          query: {},
         },
         { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
         {
