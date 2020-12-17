@@ -69,7 +69,7 @@ export default {
 
       // if the lang is specified, use it and save it.
       // otherwise, use the previously used lang
-      this.lang = lang ?? this.lang;
+      lang = lang ?? this.lang;
 
       this.html = this.$gettext('loading');
       c2c.article.getCooked(this.helper.documentId, lang).then(this.computeHtml);
