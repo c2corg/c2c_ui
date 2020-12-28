@@ -78,8 +78,7 @@ export default {
           icon: 'icon-outing',
           text: this.$gettext('outings'),
           activeFor: ['outing'],
-          // NOTE: temporary fix because of indexation problems
-          // query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' },
+          query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' },
         },
         { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
         {
