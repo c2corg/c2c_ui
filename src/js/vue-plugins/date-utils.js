@@ -19,7 +19,7 @@ require('moment/locale/en-gb.js'); // keep en in last.
 
 // C2C use export default io module.exports and remove options argument
 export default function install(Vue) {
-  const momentVm = new Vue({
+  const dateUtilsVm = new Vue({
     methods: {
       parseDate(arg, format) {
         return moment(arg, format);
@@ -43,5 +43,5 @@ export default function install(Vue) {
     },
   });
 
-  Vue.prototype.$moment = momentVm;
+  Vue.prototype.$dateUtils = dateUtilsVm;
 }

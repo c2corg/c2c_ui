@@ -6,6 +6,7 @@ import VueHead from 'vue-head';
 import App from '@/App.vue';
 import config from '@/js/config';
 import alertWindow from '@/js/vue-plugins/alert-window';
+import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
 import globalComponents from '@/js/vue-plugins/generic-components';
@@ -18,7 +19,6 @@ import screen from '@/js/vue-plugins/screen';
 import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
-import vueMoment from '@/js/vue-plugins/vue-moment';
 
 // Require the main Sass manifest file
 require('./assets/sass/main.scss');
@@ -59,7 +59,7 @@ Vue.use(VueAnalytics, {
 });
 Vue.use(VueHead);
 
-Vue.use(vueMoment); // moment functions
+Vue.use(dateUtils); // date functions
 Vue.use(documentUtils); // getDocumentType, getLocale functions
 Vue.use(fontAwesome); // <fa-icon /> component
 Vue.use(getText); // vm.$gettext() function and v-translate directive
