@@ -108,6 +108,8 @@
 </template>
 
 <script>
+import { toDate, addDays } from 'date-fns';
+
 import InputConditionsLevels from './InputConditionsLevels';
 
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
@@ -154,8 +156,8 @@ export default {
       const max = this.max || this.field.max;
 
       return {
-        to: min ? this.$dateUtils.parseDate(min).toDate() : undefined,
-        from: max ? this.$dateUtils.parseDate(max).add(1, 'd').toDate() : undefined,
+        to: min ? toDate(this.$dateUtils.parseDate(min)) : undefined,
+        from: max ? toDate(addDays(this.$dateUtils.parseDate(max), 1)) : undefined,
       };
     },
 
