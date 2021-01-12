@@ -101,6 +101,10 @@ const mapping = {
     // Access Fund USA
     url: 'https://www.accessfund.org/join-or-give',
   },
+  252272: {
+    // British Columbia
+    url: 'https://access-society.ca/Donate',
+  },
 
   // UK Boltfund
   1203403: {
@@ -121,6 +125,12 @@ const mapping = {
     url: 'https://www.7amax.co.uk/',
   },
 
+  // Australie
+  1274261: {
+    //Tasmanie
+    url: 'http://www.thesarvo.com/confluence/display/cctpublic/Home',
+  },
+  
   // Others
   14151: {
     // Malta
@@ -131,6 +141,17 @@ const mapping = {
     // Philippines
     url: 'http://www.climbphilippines.com/boltfund.html',
   },
+    
+  14154: {
+    // Malaisie
+    url: 'https://www.malaysianboltingfund.com/',
+  },
+  
+  14137:{
+    //Nouvelle-Zélande
+    url: 'https://alpineclub.org.nz/product/bolting-fund/',
+  },
+  
 };
 
 const intersection = function (array1, array2) {
