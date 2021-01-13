@@ -56,7 +56,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Autriche Sat"
     },
-    "Beware of case-sensitive login and password": "Attention, identifiant et mot de passe sont sensibles à la casse (majuscule).",
+    "Beware of case-sensitive login and password": "Attention, identifiant et mot de passe sont sensibles à la casse (majuscule et minuscule).",
     "Block account": "Bloquer cet utilisateur",
     "Book content": "Rapide description du contenu de l'ouvrage",
     "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
