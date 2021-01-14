@@ -4,6 +4,7 @@
     v-show="visible"
     :has-error="hasError"
     show-labels
+    :document-type="document.type"
     v-model="document.activities"
   />
 

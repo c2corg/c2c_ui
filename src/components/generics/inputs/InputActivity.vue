@@ -30,11 +30,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    documentType: {
+      type: String,
+      default: undefined,
+    },
   },
 
   computed: {
     activities() {
-      return constants.activities;
+      let activities = constants.activities;
+      if (this.documentType === 'r') {
+        // remove paragliding for routes
+        activities.splice(activities.indexOf('paragliding'), 1);
+      }
+      return activities;
     },
   },
 };
