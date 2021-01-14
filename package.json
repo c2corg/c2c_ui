@@ -17,11 +17,11 @@
     "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.15.1",
+    "@fortawesome/fontawesome-free": "5.15.2",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
-    "@fortawesome/free-brands-svg-icons": "5.15.1",
+    "@fortawesome/free-brands-svg-icons": "5.15.2",
     "@fortawesome/free-regular-svg-icons": "5.15.2",
-    "@fortawesome/free-solid-svg-icons": "5.15.1",
+    "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@fortawesome/vue-fontawesome": "2.0.2",
     "ag-grid-community": "24.1.0",
     "ag-grid-vue": "24.1.1",
@@ -74,7 +74,7 @@
     "pretty-quick": "3.1.0",
     "sass": "1.32.2",
     "sass-loader": "10.1.1",
-    "snyk": "1.437.3",
+    "snyk": "1.437.4",
     "vue-template-compiler": "2.6.12",
     "webpack-bundle-analyzer": "4.3.0",
     "xml2js": "0.4.23"
