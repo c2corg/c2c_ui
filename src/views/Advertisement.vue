@@ -38,6 +38,8 @@ export default {
   width: 160px;
   height: 320px;
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
 
   iframe {
     height: 320px;
