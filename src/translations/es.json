@@ -1,5 +1,17 @@
 {
   "es": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicaciones (mas vertical o mas estrecho pasajes )",
     "1d_to_3d": {
       "severities": "Desde 1 día hasta 3 días"
@@ -17,12 +29,21 @@
     "Add images": "Agregar imagen",
     "Add the first outing": "Añadir la primera salida",
     "Additional information": "Información Adicional",
+    "Anonymity and confidentiality": "Anonimato y confidencialidad",
     "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
     "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
+    "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
+    "Articles, waypoints or routes to be linked.": "Artículos, waypoints o rutas a enlazar.",
+    "Articles, waypoints, routes or books to be linked.": "Artículos, waypoints, rutas o libros a enlazar.",
     "Associated outings": "Salidas asociadas",
     "Associated routes": "Itinerarios asociados",
+    "Associated routes cotations": " Grados de rutas asociadas",
     "Association": "Asociación",
+    "Associations history": "Historia de las asociaciones",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconocimiento (Attribution): en cualquier explotación de la obra autorizada por la licencia hará falta reconocer la autoría.",
+    "Attributions": {
+      "Map controls": "Atribuciones"
+    },
     "Average slope (degrees)": "Inclinación media (grados)",
     "Average slope in degree": "inclinación media en grados",
     "Block account": "Bloquear cuenta",
@@ -83,10 +104,14 @@
     "Fullname": "Nombre completo",
     "Go to the previous page": "Ir a la página anterior",
     "Have an account?": "¿Tienes una cuenta?",
+    "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "History": "Historia",
     "Home": "Inicio",
+    "IGN maps": {
+      "Map layer": "mapas IGN"
+    },
     "Infos": "Informaciónes",
     "Invalid email address": {
       "API message": "Email inválido"
@@ -162,6 +187,7 @@
       "image_categories": "acción"
     },
     "activities": "Actividades",
+    "activity": "actividad",
     "activity_rate": "Frecuencia de la práctica de la actividad.",
     "add a book": "añadir un libro",
     "add a map": "añadir una mapa",
@@ -178,6 +204,9 @@
     "advertisement": "anuncio",
     "age": "edad",
     "aid_rating": "Cotación escalada artificial",
+    "alpine_climbing": {
+      "event_activities": "alpinismo"
+    },
     "already used forum_username": {
       "API message": "Usuario ya utilizado en el forum"
     },
@@ -187,6 +216,7 @@
     "always_accessible": {
       "custodianship_types": "siempre abierto"
     },
+    "anonymous": "anónimo",
     "apr": {
       "months": "abril"
     },
@@ -201,6 +231,12 @@
       "article_categories": "asociación"
     },
     "associations": "Asociaciones",
+    "at least one route required": {
+      "API message": "al menos una ruta requerida"
+    },
+    "at least one user required": {
+      "API message": "al menos un usario requerido"
+    },
     "aug": {
       "months": "agosto"
     },
@@ -317,6 +353,7 @@
     "closed_snow": {
       "access_conditions": "cerrado nevado"
     },
+    "code": "codigo",
     "collaborative": {
       "image_types": "colaborativo"
     },
