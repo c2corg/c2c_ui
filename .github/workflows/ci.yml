@@ -15,7 +15,7 @@ jobs:
         node-version: [14.x]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Cache node modules
         uses: actions/cache@v2.1.3
         env:
@@ -78,7 +78,7 @@ jobs:
         env:
           BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           ref: gh-pages
       # Because gh pages checkout requires quite a long time, do this to somehow ensure there is not a concurrent push
@@ -112,7 +112,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
       - name: Generate changelog for release
         id: release_changelog
         run: |
@@ -138,7 +140,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Push translations to Transifex
         run: |
           echo "::add-mask::$TOKEN"
