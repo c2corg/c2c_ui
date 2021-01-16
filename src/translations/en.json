@@ -279,6 +279,7 @@
     "dangerous": {
       "children_proof_types": "unsuitable"
     },
+    "date_end": "end date",
     "date_start": "Start date",
     "date_time": "date / time",
     "de": {
