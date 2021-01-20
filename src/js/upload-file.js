@@ -1,7 +1,7 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
 import loadImage from 'blueimp-load-image';
-import moment from 'moment';
+import { parse } from 'date-fns';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
@@ -33,12 +33,12 @@ const parseDate = (exif, iptc) => {
 
   if (iptcDate) {
     if (iptc.TimeCreated) {
-      date = moment(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD HHmmssZ ZZ');
+      date = parse(`${iptcDate} ${iptc.TimeCreated}`, 'yyyyMMdd HHmmssZ ZZ');
     } else {
-      date = moment(iptcDate, 'YYYYMMDD');
+      date = parse(iptcDate, 'yyyyMMdd');
     }
   } else if (exifDate) {
-    date = moment(exifDate, 'YYYY:MM:DD HH:mm:ss');
+    date = parse(exifDate, 'yyyy:MM:dd HH:mm:ss');
   }
 
   return date && date.isValid() ? date.format() : null;

@@ -3,7 +3,12 @@
  * it does not provide any API service
  */
 
+import { isSameDay, isSameMonth, isSameYear, format } from 'date-fns';
+import { ca, es, eu, de, fr, it, zhCN, enGB } from 'date-fns/locale';
+
 import constants from '@/js/constants';
+
+const locales = { ca, es, eu, de, fr, it, zh_CN: zhCN, en: enGB };
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
@@ -271,34 +276,22 @@ export default function install(Vue) {
           return this.$gettext('Invalid date');
         }
 
-        const start = this.$moment.parseDate(date_start).locale(this.$language.current);
-        const end = this.$moment.parseDate(date_end).locale(this.$language.current);
-        const sameYear = start.year() === end.year();
-        const sameMonth = start.month() === end.month();
-        const sameDay = start.date() === end.date();
+        const start = this.$dateUtils.parseDate(date_start);
+        const end = this.$dateUtils.parseDate(date_end);
 
-        if (!sameYear) {
-          return start.format('LL') + ' - ' + end.format('LL');
-        } else if (!sameMonth) {
-          return start.format('Do MMMM') + ' - ' + end.format('LL');
-        } else if (!sameDay) {
-          return start.format('Do') + ' - ' + end.format('LL');
+        if (!isSameYear(start, end)) {
+          return this.formatDate(start, 'PP') + ' - ' + this.formatDate(end, 'PP');
+        } else if (!isSameMonth(start, end)) {
+          return this.formatDate(start, 'd MMMM') + ' - ' + this.formatDate(end, 'PP');
+        } else if (!isSameDay(start, end)) {
+          return this.formatDate(start, 'd') + ' - ' + this.formatDate(end, 'PP');
         } else {
-          // moment does not offer a short hand for date with weekday.
-          const longFormat =
-            {
-              ca: 'dddd D MMMM [de] YYYY [a les]',
-              de: 'ddd, D. MMMM YYYY',
-              en: 'dddd, D MMMM YYYY',
-              es: 'dddd, D [de] MMMM [de]',
-              eu: 'dddd, YYYY[ko] MMMM[ren] D[a]',
-              fr: 'dddd D MMMM YYYY',
-              it: 'dddd D MMMM YYYY',
-              zh_CN: 'YYYY年M月D日dddd',
-            }[this.$language.current] ?? 'dddd Do MMMM YYYY';
-
-          return end.format(longFormat);
+          return this.formatDate(end, 'PPPP');
         }
+      },
+
+      formatDate(arg, formatString) {
+        return format(arg, formatString, { locale: locales[this.$language.current] });
       },
 
       // Returns true if both documents has same geolocalization point

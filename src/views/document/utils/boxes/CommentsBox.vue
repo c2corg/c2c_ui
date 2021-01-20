@@ -33,7 +33,7 @@
                 {{ post.username }}
               </a>
               <span class="is-pulled-right">
-                {{ $moment.timeAgo(post['created_at']) }}
+                {{ $dateUtils.timeAgo(post['created_at']) }}
               </span>
             </div>
 

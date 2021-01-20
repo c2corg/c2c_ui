@@ -46,7 +46,7 @@ export default {
 
       for (const month in this.data.period) {
         if (this.data.period[month]) {
-          result.push(this.$moment.month(parseInt(month, 10)));
+          result.push(this.$dateUtils.month(parseInt(month, 10)));
         }
       }
 

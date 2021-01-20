@@ -59,7 +59,7 @@
             </td>
             <td>
               <version-link :document-type="documentType" :id="documentId" :version="version.version_id" :lang="lang">
-                {{ $moment.toTechnicalString(version.written_at) }}
+                {{ $dateUtils.toTechnicalString(version.written_at) }}
               </version-link>
             </td>
             <td>
