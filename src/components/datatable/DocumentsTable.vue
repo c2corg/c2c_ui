@@ -7,6 +7,8 @@
     :row-data="documents.documents"
     :get-row-class="getRowClass"
     :get-row-node-id="getRowNodeId"
+    :ensure-dom-order="true"
+    :enable-cell-text-selection="true"
     @grid-ready="onGridReady"
     @cellMouseOver="onHover"
   />
