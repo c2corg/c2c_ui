@@ -14,7 +14,7 @@ import imageUrls from '@/js/image-urls';
 
 export default {
   filters: {
-    max50chars: (value) => (value.length > 50 ? value.substring(0, 50) + '…' : value),
+    max50chars: (value) => (value && value.length > 50 ? value.substring(0, 50) + '…' : value),
   },
 
   props: {
