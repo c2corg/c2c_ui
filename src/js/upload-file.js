@@ -1,7 +1,7 @@
 // This file exposes a simple function that upload a file to c2c image backend
 
 import loadImage from 'blueimp-load-image';
-import { parse } from 'date-fns';
+import { isValid, formatISO, parse } from 'date-fns';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
@@ -33,27 +33,27 @@ const parseDate = (exif, iptc) => {
 
   if (iptcDate) {
     if (iptc.TimeCreated) {
-      date = parse(`${iptcDate} ${iptc.TimeCreated}`, 'yyyyMMdd HHmmssZ ZZ');
+      date = parse(`${iptcDate} ${iptc.TimeCreated}`, 'yyyyMMdd HHmmssZ ZZ', new Date());
     } else {
-      date = parse(iptcDate, 'yyyyMMdd');
+      date = parse(iptcDate, 'yyyyMMdd', new Date());
     }
   } else if (exifDate) {
-    date = parse(exifDate, 'yyyy:MM:dd HH:mm:ss');
+    date = parse(exifDate, 'yyyy:MM:dd HH:mm:ss', new Date());
   }
 
-  return date && date.isValid() ? date.format() : null;
+  return date && isValid(date) ? formatISO(date) : null;
 };
 
 const parseExifGeometry = (exif) => {
-  if (!exif.GPSLatitude || !exif.GPSLongitude) {
+  if (!exif?.GPSInfo?.GPSLatitude || !exif?.GPSInfo?.GPSLongitude) {
     return undefined;
   }
 
-  let lat = exif.GPSLatitude.split(',');
-  let lon = exif.GPSLongitude.split(',');
+  let lat = exif.GPSInfo.GPSLatitude.split(',');
+  let lon = exif.GPSInfo.GPSLongitude.split(',');
 
-  lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSLatitudeRef);
-  lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSLongitudeRef);
+  lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSInfo?.GPSLatitudeRef);
+  lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSInfo?.GPSLongitudeRef);
 
   if (isNaN(lat) || isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
     return undefined;
@@ -66,11 +66,11 @@ const parseExifGeometry = (exif) => {
 };
 
 const parseExifElevation = (exif) => {
-  if (!exif.GPSAltitude) {
+  if (!exif?.GPSInfo?.GPSAltitude) {
     return undefined;
   }
 
-  const elevation = parseFloat(exif.GPSAltitude);
+  const elevation = parseFloat(exif.GPSInfo.GPSAltitude);
   return isNaN(elevation) ? undefined : elevation;
 };
 
