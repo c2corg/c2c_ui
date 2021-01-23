@@ -11,15 +11,20 @@ export default function install(Vue) {
       },
 
       timeAgo(arg) {
-        return formatDistanceToNowStrict(parseISO(arg), { addSuffix: true, locale: locales[this.$language.current] });
+        return formatDistanceToNowStrict(arg instanceof Date ? arg : parseISO(arg), {
+          addSuffix: true,
+          locale: locales[this.$language.current],
+        });
       },
 
       toLocalizedString(arg, formatString) {
-        return format(parseISO(arg), formatString, { locale: locales[this.$language.current] });
+        return format(arg instanceof Date ? arg : parseISO(arg), formatString, {
+          locale: locales[this.$language.current],
+        });
       },
 
       toTechnicalString(arg) {
-        return format(parseISO(arg), 'yyyy-MM-dd HH:mm:ss');
+        return format(arg instanceof Date ? arg : parseISO(arg), 'yyyy-MM-dd HH:mm:ss');
       },
 
       month(monthNumber) {
