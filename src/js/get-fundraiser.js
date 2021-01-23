@@ -125,12 +125,12 @@ const mapping = {
     url: 'https://www.7amax.co.uk/',
   },
 
-  // Australie
+  // Australia
   1274261: {
-    //Tasmanie
+    // Tasmania
     url: 'http://www.thesarvo.com/confluence/display/cctpublic/Home',
   },
-  
+
   // Others
   14151: {
     // Malta
@@ -141,17 +141,16 @@ const mapping = {
     // Philippines
     url: 'http://www.climbphilippines.com/boltfund.html',
   },
-    
+
   14154: {
-    // Malaisie
+    // Malaisia
     url: 'https://www.malaysianboltingfund.com/',
   },
-  
-  14137:{
-    //Nouvelle-Zélande
+
+  14137: {
+    // New-Zealand
     url: 'https://alpineclub.org.nz/product/bolting-fund/',
   },
-  
 };
 
 const intersection = function (array1, array2) {
