@@ -92,7 +92,7 @@ export default {
 
   methods: {
     onInput(valueAsObject) {
-      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ss'Z'`));
+      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ssxxx`));
     },
   },
 };
