@@ -6,8 +6,8 @@ const locales = { ca, es, eu, de, fr, it, zh_CN: zhCN, en: enGB };
 export default function install(Vue) {
   const dateUtilsVm = new Vue({
     methods: {
-      parseDate(arg, format) {
-        return format ? parse(arg, format, new Date()) : parseISO(arg);
+      parseDate(arg, formatString) {
+        return formatString ? parse(arg, formatString, new Date()) : parseISO(arg);
       },
 
       timeAgo(arg) {
