@@ -23,15 +23,7 @@
 <script>
 import { baseMixin } from './mixins';
 
-const range = function (from, to) {
-  const result = [];
-
-  for (let i = from; i <= to; i++) {
-    result.push(i);
-  }
-
-  return result;
-};
+const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
   mixins: [baseMixin],
@@ -100,7 +92,7 @@ export default {
 
   methods: {
     onInput(valueAsObject) {
-      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ss'Z'`));
+      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ssxxx`));
     },
   },
 };
