@@ -33,12 +33,14 @@
       :document-types="associations"
       @documents-load="$emit('documents-load', arguments[0])"
     />
-    <load-user-preferences-button class="is-hidden-tablet" />
+    <load-user-preferences-button class="is-hidden-tablet category-button" />
+    <export-csv-button v-if="listMode" class="is-small-mobile"></export-csv-button>
   </div>
 </template>
 
 <script>
 import AssociationQueryItem from './AssociationQueryItem';
+import ExportCsvButton from './ExportCsvButton.vue';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
 import QueryItem from './QueryItem';
 
@@ -172,9 +174,17 @@ export default {
   },
 
   components: {
-    QueryItem,
     AssociationQueryItem,
+    QueryItem,
+    ExportCsvButton,
     LoadUserPreferencesButton,
+  },
+
+  props: {
+    listMode: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {

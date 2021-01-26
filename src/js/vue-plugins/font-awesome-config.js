@@ -40,6 +40,7 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclama
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faFileDownload } from '@fortawesome/free-solid-svg-icons/faFileDownload';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons/faFlagCheckered';
@@ -244,6 +245,7 @@ export default function install(Vue) {
     faExpand,
     faExternalLinkAlt,
     faEye,
+    faFileDownload,
     faFilter,
     faFlag,
     faFlagCheckered,

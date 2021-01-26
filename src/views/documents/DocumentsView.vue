@@ -61,7 +61,7 @@
         </span>
       </div>
 
-      <query-items class="filter-section" @documents-load="onQueryDocumentsLoad" />
+      <query-items class="filter-section" :list-mode="listMode" @documents-load="onQueryDocumentsLoad" />
     </div>
 
     <div class="columns result-section" :class="'mobile-mode-' + displayMode">

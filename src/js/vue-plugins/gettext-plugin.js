@@ -47,7 +47,7 @@ function getTranslation(messages, msgid, msgctxt) {
     return message;
   }
 
-  // otherwise, it's store in '$$noContext' key
+  // otherwise, it's stored in '$$noContext' key
   // note that '$$noContext' is a reserved context :)
   return message['$$noContext'] ?? msgid;
 }
