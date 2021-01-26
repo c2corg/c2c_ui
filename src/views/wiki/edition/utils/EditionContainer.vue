@@ -85,7 +85,7 @@ import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
 const BANNERS_ARTICLE_ID = 1110927;
-const htmlBanners = { initialized: false }; // cache for banners
+let htmlBanners = { initialized: false }; // cache for banners
 
 export default {
   components: {
