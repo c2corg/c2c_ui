@@ -23,15 +23,7 @@
 <script>
 import { baseMixin } from './mixins';
 
-const range = function (from, to) {
-  const result = [];
-
-  for (let i = from; i <= to; i++) {
-    result.push(i);
-  }
-
-  return result;
-};
+const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
   mixins: [baseMixin],
