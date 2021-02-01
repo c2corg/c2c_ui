@@ -29,7 +29,7 @@
         v-for="l in [30, 50, 100]"
         :key="l"
         :is="'router-link'"
-        class="dropdown-item is-hidden-mobile is-small"
+        class="dropdown-item is-small"
         :class="{ 'is-active': queryLimit === l }"
         :to="pageQuery(offset, l)"
         @click.native="hideOnclick"
