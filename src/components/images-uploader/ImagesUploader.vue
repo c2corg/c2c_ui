@@ -279,11 +279,16 @@ export default {
     },
 
     save() {
-      this.promise = c2c.createImages(this.documents).then(() => {
+      this.promise = c2c.createImages(this.documents).then((response) => {
         // add result to parent, it will update page
-        for (const image of this.documents) {
-          this.parentDocument.associations.images.push(image);
-        }
+        // we fake a valid img document with enough info to work
+        this.parentDocument.associations.images.push(
+          ...this.documents.map((img, idx) => ({
+            ...img,
+            document_id: response.data.images[idx].document_id,
+            available_langs: [this.$language.current],
+          }))
+        );
 
         this.clean();
         this.hide();
