@@ -1,7 +1,12 @@
 <template>
   <swiper :options="$options.swiperOption" class="swiper">
     <swiper-slide v-for="image of images" :key="image.document_id">
-      <img :src="getUrl(image)" :title="image.locales[0].title" @click="$imageViewer.show(image)" />
+      <img
+        :src="getUrl(image)"
+        :alt="image.locales[0].title"
+        :title="image.locales[0].title"
+        @click="$imageViewer.show(image)"
+      />
     </swiper-slide>
   </swiper>
 </template>
