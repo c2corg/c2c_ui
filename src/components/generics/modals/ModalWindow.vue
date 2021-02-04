@@ -8,6 +8,9 @@
       </header>
       <button v-else class="delete is-pulled-right" aria-label="close" @click="hide" />
       <slot> Modal content </slot>
+      <footer v-if="$slots.footer" class="is-3">
+        <slot name="footer"></slot>
+      </footer>
     </div>
   </div>
 </template>

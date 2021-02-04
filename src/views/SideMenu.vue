@@ -29,6 +29,8 @@
         <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>EULA</router-link>
         <span> &bull; </span>
         <router-link :to="{ name: 'article', params: { id: 106728 } }" v-translate>Licenses</router-link>
+        <span> &bull; </span>
+        <a @click="showGDPR">Cookies</a>
         <br />
         <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
       </div>
@@ -97,6 +99,12 @@ export default {
           params: { id: 106732 },
         },
       ];
+    },
+  },
+
+  methods: {
+    showGDPR() {
+      this.$root.$emit('showGDPR');
     },
   },
 };

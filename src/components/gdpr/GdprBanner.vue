@@ -1,19 +1,34 @@
 <template>
-  <div class="gdpr-content" :class="{ active: active }">
-    <h4 class="title" v-translate>GDPR.TOAST.TITLE</h4>
-    <div class="message">
-      <span v-translate>GDPR.TOAST.MESSAGE</span>
-      <a @click="displayConfigGDPR()" v-translate>GDPR.TOAST.LINK</a>
+  <div>
+    <div class="gdpr-content" :class="{ active: active }">
+      <h4 class="title" v-translate>Contrôlez l"utilisation de vos données personnelles</h4>
+      <div class="message">
+        <span v-translate class="has-text-justified">
+          Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au
+          fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier
+          ceux qui nous permettent de comprendre les performances de notre site Web, vous fournir des fonctionnalités de
+          médias sociaux et offrir une meilleure expérience avec du contenu et de la publicité pertinents. Vous pouvez
+          les accepter ou les refuser tous ou bien
+        </span>
+        <a @click="displayConfigGDPR()" v-translate>paramétrer vos choix</a>
+      </div>
+      <div class="buttons is-flex is-justify-content-flex-end">
+        <button @click="acceptGDPR(false)" class="button is-danger" v-translate>Tout refuser</button>
+        <button @click="acceptGDPR(true)" class="button is-primary" v-translate>Tout accepter</button>
+      </div>
     </div>
-    <button @click="acceptGDPR(false)" class="accept" v-translate>REJECT</button>
-    <button @click="acceptGDPR(true)" class="accept" v-translate>ACCEPT</button>
+    <gdpr-modal ref="GdprModal" @gdpr="gdprValue = $event"></gdpr-modal>
   </div>
 </template>
 
 <script>
+import GdprModal from './GdprModal.vue';
+
 const GDPR_LOCAL_SAVE = 'gdpr';
 
 export default {
+  components: { GdprModal },
+
   data() {
     return {
       active: false,
@@ -29,7 +44,7 @@ export default {
         this._gdprValue = newValue;
         this.active = !newValue;
         !!newValue && localStorage.setItem(GDPR_LOCAL_SAVE, JSON.stringify(newValue));
-        if (newValue?.statictics) {
+        if (newValue?.statistics) {
           this.$ga.enable();
         } else {
           this.$ga.disable();
@@ -46,14 +61,17 @@ export default {
     }
   },
 
+  mounted() {
+    this.$root.$on('showGDPR', () => this.displayConfigGDPR());
+  },
+
   methods: {
     displayConfigGDPR() {
-      console.alert('modal');
+      this.$refs.GdprModal.show(this.gdprValue);
     },
 
     acceptGDPR(accept) {
-      // this.gdprService.enableAll();
-      this.gdprValue = accept ? { statictics: true } : { statictics: false };
+      this.gdprValue = accept ? { statistics: true } : { statistics: false };
     },
   },
 };
@@ -63,7 +81,7 @@ export default {
 @import '@/assets/sass/variables.scss';
 
 .gdpr-content {
-  z-index: 99;
+  z-index: 30;
   position: fixed;
   top: 0;
   width: 50%;
@@ -81,23 +99,6 @@ export default {
   &.active {
     box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 6px 0;
     transform: translateY(0);
-  }
-
-  .title {
-    color: black;
-    padding-bottom: 10px;
-    font-weight: bold;
-  }
-
-  .message {
-    a {
-      color: black;
-      cursor: pointer;
-    }
-  }
-
-  .accept {
-    align-self: flex-end;
   }
 }
 </style>
