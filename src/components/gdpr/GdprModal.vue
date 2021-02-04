@@ -44,6 +44,7 @@
     </div>
   </modal-window>
 </template>
+
 <script>
 export default {
   data() {
@@ -53,9 +54,10 @@ export default {
       },
     };
   },
+
   methods: {
     show(gdprValue) {
-      this.gdpr = gdprValue;
+      this.gdpr = gdprValue || { statistics: false };
       this.$refs.modalWindow.show();
     },
 
