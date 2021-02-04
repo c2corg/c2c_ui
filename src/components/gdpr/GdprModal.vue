@@ -16,9 +16,19 @@
         </p>
       </div>
       <div class="column">
-        <h2 class="is-size-3">
-          <span>Cookies statistiques</span><input type="checkbox" class="is-pulled-right" v-model="gdpr.statistics" />
-        </h2>
+        <div class="is-flex is-justify-content-space-between is-align-items-baseline">
+          <h2 class="is-size-3">Cookies statistiques</h2>
+          <div class="field">
+            <input
+              type="checkbox"
+              id="statistics"
+              name="statistics"
+              class="switch is-rounded"
+              v-model="gdpr.statistics"
+            />
+            <label for="statistics"></label>
+          </div>
+        </div>
         <p>
           Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les
           visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à

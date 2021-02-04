@@ -45,4 +45,6 @@ $button-padding-horizontal: 0.75em;
 // bulma checkradio isn't customizable with variables. Overrides its classes
 @import './checkradio-customization.scss';
 
+@import '~bulma-switch';
+
 @import './helpers.scss';
