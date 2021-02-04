@@ -12,11 +12,13 @@
     <div class="page-content is-block-print">
       <router-view class="router-view" />
     </div>
+    <gdpr-banner></gdpr-banner>
   </div>
 </template>
 
 <script>
 import AlertWindow from './components/alert-window/AlertWindow';
+import GdprBanner from './components/gdpr/GdprBanner.vue';
 import HelperWindow from './components/helper/HelperWindow';
 import ImageViewer from './components/image-viewer/ImageViewer';
 import Navigation from './views/Navigation';
@@ -33,6 +35,7 @@ export default {
     HelperWindow,
     ImageViewer,
     AlertWindow,
+    GdprBanner,
   },
 
   data() {
