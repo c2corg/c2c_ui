@@ -1,0 +1,4691 @@
+# 
+# Translators:
+# Alex Saunier (C2C SA), 2018
+# Xabier Larrea <xlarrea@gmail.com>, 2018
+# Lionel Besson <lionel.besson@gmail.com>, 2018
+# Romain Mouton <mouton.rom@gmail.com>, 2019
+# SERGERAERT <herve.sergeraert@gmail.com>, 2019
+# Alexis Demongeot <alexis.demongeot@camptocamp.org>, 2019
+# Martin Gerbaux <martin.gerbaux@camptocamp.org>, 2019
+# jose picheral <jose.picheral@camptocamp.org>, 2019
+# 567103ab7791f2a233ce839be19102e5, 2019
+# Dev Team Camptocamp.org <dev@camptocamp.org>, 2020
+# Sylvain HORTOLAND <sylvain.hortoland@directmountain.com>, 2020
+# fbunoz <frederic.bunoz@camptocamp.org>, 2020
+# mathieu des noes, 2020
+# CVL CVL <vial.carine@gmail.com>, 2020
+# Bruno Besson <bruno.besson@gmail.com>, 2020
+# loicperrin <loic.perrin@gmail.com>, 2020
+# Alexandre Saunier <alexandre.saunier@camptocamp.org>, 2020
+# antoine MARNAT <antoine.marnat@gmail.com>, 2021
+# Charles de Beauchesne, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Charles de Beauchesne, 2021\n"
+"Language-Team: French (https://www.transifex.com/camptocamp-association/teams/60828/fr/)\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "1"
+msgstr "P1"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "1 or 2 complications (steeper or narrow section...)"
+msgstr "1 ou 2 complications (plus pentu ou étroiture...)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "10min"
+msgstr "10min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "15min"
+msgstr "15min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "severities"
+msgid "1d_to_3d"
+msgstr "de 1 à 3 jours"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "1h"
+msgstr "1h"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "1h30"
+msgstr "1h30"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "severities"
+msgid "1m_to_3m"
+msgstr "de 1 à 3 mois"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "1min"
+msgstr "1min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "2"
+msgstr "P2"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "20min"
+msgstr "20min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "2h"
+msgstr "2h"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "2h30"
+msgstr "2h30"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "3"
+msgstr "P3"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "30min"
+msgstr "30min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "3h"
+msgstr "3h"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "3h+"
+msgstr "> 3h"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "paragliding_ratings"
+msgid "4"
+msgstr "P4"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "45min"
+msgstr "45min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "severities"
+msgid "4d_to_1m"
+msgstr "de 4 jours à un mois"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_times"
+msgid "5min"
+msgstr "5min"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "access"
+msgstr "accès routier / transports en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "access"
+msgstr "accès routier / transports en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "access_comment"
+msgstr "Commentaires sur l'accès routier / transports en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "access_condition"
+msgstr "Conditions de l'accès routier / transports en commun"
+
+#: src/js/waypoint-labels-mixin.js
+#: src/translations/fixed_strings_common_js.vue
+msgid "access_period"
+msgstr "Période de déneigement ou d'ouverture"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "access_time"
+msgstr "Temps d'accès"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "custodianship_types"
+msgid "accessible_when_wardened"
+msgstr "gardé, fermé hors gardiennage"
+
+#: src/views/SideMenu.vue
+msgid "Accident database"
+msgstr "Incidents et accidents"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_signs"
+msgid "accidental_avalanche"
+msgstr "avalanche déclenchée par une personne le jour de la sortie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "action"
+msgstr "action"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/utils/field-viewers/ActivitiesField.vue
+#: src/views/user/PreferencesView.vue
+msgid "activities"
+msgstr "Activités"
+
+#: src/views/document/utils/field-viewers/EventActivityField.vue
+msgid "activity"
+msgstr "Activité"
+
+#: src/views/portals/FeedView.vue
+msgid "Activity feed"
+msgstr "Fil d'activité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "activity_rate"
+msgstr "Fréquence de pratique dans l'activité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activity_rates"
+msgid "activity_rate_m2"
+msgstr "1 à 2 fois par mois"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activity_rates"
+msgid "activity_rate_w1"
+msgstr "1 fois par semaine et plus"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activity_rates"
+msgid "activity_rate_y5"
+msgstr "moins de 5 fois par an"
+
+#: src/components/association-editor/AssociationItems.vue
+msgid "Add"
+msgstr "Ajouter"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add a book"
+msgstr "ajouter un livre"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add a map"
+msgstr "ajouter une carte"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add a route"
+msgstr "ajouter un itinéraire"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add a waypoint"
+msgstr "ajouter un point de passage"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add an area"
+msgstr "ajouter une région"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add an article"
+msgstr "ajouter un article"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add an image"
+msgstr "ajouter une image"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add an incident/accident report"
+msgstr "ajouter un rapport d'incident/accident"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "add an outing"
+msgstr "ajouter une sortie"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Add here maps not automatically referenced"
+msgstr "Ajouter ici les cartes non ajoutées automatiquement"
+
+#: src/views/document/utils/DocumentViewHeader.vue
+msgid "Add images"
+msgstr "Ajouter des images"
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+msgid "Add the first outing"
+msgstr "Ajouter la première sortie"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Additional information"
+msgstr "Informations supplémentaires"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "area_types"
+msgid "admin_limits"
+msgstr "limite administrative"
+
+#: src/views/Advertisement.vue
+msgid "advertisement"
+msgstr "publicité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "age"
+msgstr "Âge"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "aid_rating"
+msgstr "Cotation artificielle"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "alpine_climbing"
+msgstr "Rocher montagne (TA)"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "already used forum_username"
+msgstr "Pseudo forum déjà utilisé"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "already used username"
+msgstr "Cet identifiant est déjà utilisé."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "custodianship_types"
+msgid "always_accessible"
+msgstr "toujours ouvert"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "amateur"
+msgstr "amateur"
+
+#: src/views/static-views/SeracView.vue
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Anonymity and confidentiality"
+msgstr "Anonymat et confidentialité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "anonymous"
+msgstr "Contribution anonyme"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "apr"
+msgstr "avril"
+
+#: src/views/document/utils/windows/DeleteDocumentWindow.vue
+msgid "Are you sure you want to delete this document?"
+msgstr ""
+"Êtes-vous sûr(e) de vouloir supprimer ce document ? \n"
+"Attention, les photos associées ne seront pas supprimées et deviendront orphelines. \n"
+"Si vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\n"
+"Si ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé."
+
+#: src/views/document/utils/windows/DeleteLocaleWindow.vue
+msgid "Are you sure you want to delete this locale?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer cette version linguistique ?"
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid "Are you sure you want to merge?"
+msgstr "Êtes-vous sur de vouloir fusionner ?"
+
+#: src/views/document/utils/windows/RevertVersionWindow.vue
+msgid "Are you sure you want to revert to this version of the document?"
+msgstr "Êtes-vous sûr de vouloir restaurer cette version du document ?"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "area"
+msgstr "région"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "area_type"
+msgstr "Type de région"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue src/views/user/PreferencesView.vue
+msgid "areas"
+msgstr "régions"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "article"
+msgstr "article"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "article_categories"
+msgstr "catégories d'articles"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "article_type"
+msgstr "Type d'article"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue src/views/SideMenu.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+msgid "articles"
+msgstr "articles"
+
+#: src/views/wiki/edition/BookEditionView.vue
+msgid "Articles, waypoints or routes to be linked."
+msgstr "Articles, points de passage et itinéraires attachés"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Articles, waypoints, routes or books to be linked."
+msgstr "Articles, points de passage, itinéraires et ouvrages attachés"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "artificial"
+msgstr "artificiel"
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+msgid "Associated outings"
+msgstr "Sorties associées"
+
+#: src/views/document/utils/boxes/RoutesBox.vue
+msgid "Associated routes"
+msgstr "Itinéraires associés"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Associated routes cotations"
+msgstr "Cotations des itinéraires associés au point de passage"
+
+#: src/views/SideMenu.vue
+msgid "Association"
+msgstr "Camptocamp Association"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "association"
+msgstr "association"
+
+#: src/views/wiki/edition/BookEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "associations"
+msgstr "Associations"
+
+#: src/views/wiki/AssociationsHistoryView.vue src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/utils/HistoryViewLinks.vue
+msgid "Associations history"
+msgstr "Historique des associations"
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js
+msgctxt "API message"
+msgid "at least one route required"
+msgstr "Sélectionnez au moins un itinéraire"
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js
+msgctxt "API message"
+msgid "at least one user required"
+msgstr "Sélectionnez au moins un itinéraire"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid ""
+"Attribution — You must give appropriate credit, provide a link to the "
+"license, and indicate if changes were made."
+msgstr ""
+"Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence "
+"et indiquer si des modifications ont été effectuées à l'Oeuvre. "
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Attributions"
+msgstr "Attributions"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "aug"
+msgstr "août"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "author"
+msgstr "Auteur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "author_status"
+msgstr "Implication dans la situation"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "autonomies"
+msgid "autonomous"
+msgstr "autonome"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "autonomy"
+msgstr "Niveau de pratique"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "avalanche"
+msgstr "avalanche"
+
+#: src/components/datatable/DocumentsTable.vue
+msgid "avalanche"
+msgstr "avalanche"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "avalanche_forecaster"
+msgstr "prévision d'avalanche"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanche_level"
+msgstr "Niveau de risque d'avalanche"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanche_signs"
+msgstr "Signes d'avalanche"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanche_slope"
+msgstr "Pente de la zone de départ"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "avalanches"
+msgstr "Observations relatives aux avalanches"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "condition_ratings"
+msgid "average"
+msgstr "moyennes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quality_ratings"
+msgid "average"
+msgstr "moyenne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quantity_ratings"
+msgid "average"
+msgstr "moyenne"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Average slope (degrees)"
+msgstr "Pente moyenne (degrés)"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Average slope in degree"
+msgstr "Pente moyenne en degrés"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "condition_ratings"
+msgid "awful"
+msgstr "exécrables"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quality_ratings"
+msgid "awful"
+msgstr "exécrable"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quantity_ratings"
+msgid "awful"
+msgstr "exécrable"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Back to code"
+msgstr "Retour au code"
+
+#: src/views/wiki/edition/utils/EditionContainer.vue
+msgid "Back to edit mode"
+msgstr "Retour en mode édition"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "product_types"
+msgid "bar"
+msgstr "bar"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "basalte"
+msgstr "basalte"
+
+#: src/components/map/OlMap.vue
+msgid "Base layer"
+msgstr "Fond de carte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "base_camp"
+msgstr "camp de base"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "Basemap (at)"
+msgstr "Autriche"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "Basemap ortho (at)"
+msgstr "Autriche Sat"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "best_periods"
+msgstr "Meilleures périodes"
+
+#: src/views/user/LoginView.vue
+msgid "Beware of case-sensitive login and password"
+msgstr ""
+"Attention, identifiant et mot de passe sont sensibles à la casse (majuscule "
+"et minuscule)."
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "Bing"
+msgstr "Bing"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "biography"
+msgstr "biographie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "bisse"
+msgstr "bisse / béal"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "bivouac"
+msgstr "bivouac"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "blanket_unstaffed"
+msgstr "Couvertures hors gardiennage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_indoor_types"
+msgid "bloc"
+msgstr "bloc"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_outdoor_types"
+msgid "bloc"
+msgstr "bloc"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Block account"
+msgstr "Bloquer cet utilisateur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "blocked_person"
+msgstr "personne bloquée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_types"
+msgid "boat"
+msgstr "bateau"
+
+#: src/views/document/RouteView.vue
+msgid "bolted rock climbing gear"
+msgstr "Escalade en grande voie sportive"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "book"
+msgstr "livre"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "book"
+msgstr "livre"
+
+#: src/views/wiki/edition/BookEditionView.vue
+msgid "Book content"
+msgstr "Rapide description du contenu de l'ouvrage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "book_types"
+msgstr "Type de livre"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
+msgid "books"
+msgstr "livres"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Books and websites not already associated to this route"
+msgstr ""
+"Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre "
+"ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans "
+"ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des "
+"blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des "
+"infos complémentaires concernant les topo-livres (schéma faux, etc)."
+
+#: src/views/documents/utils/DisplayModeSwitch.vue
+msgid "Both results and map"
+msgstr "Résultats et carte"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Briefly describe any injuries. Comments that do not fit into any other "
+"fields can be entered here."
+msgstr ""
+"Décrivez brièvement les blessures éventuelles, et ce que vous feriez "
+"aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre "
+"champ peuvent être saisis ici."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_types"
+msgid "bus"
+msgstr "bus"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "c2c_meetings"
+msgstr "réunions c2c"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "ca"
+msgstr "catalan"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "calcaire"
+msgstr "calcaire"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "camera settings"
+msgstr "Paramètres de l'APN"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "camera_name"
+msgstr "Nom de l'APN"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "camp_site"
+msgstr "camping"
+
+#: src/views/portals/HomeBanner.vue
+msgid ""
+"Camptocamp.org aims to facilitate information sharing between mountain "
+"addicts and contribute to the safety of mountain activities."
+msgstr ""
+"Camptocamp.org a pour but de faciliter le partage d'informations entre les "
+"pratiquants de sports de montagne et de contribuer à la sécurité des "
+"activités montagne."
+
+#: src/components/generics/modals/ModalConfirmation.vue
+#: src/components/images-uploader/ImageUploader.vue
+#: src/components/markdown-editor/LinkHelper.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+#: src/views/user/LoginView.vue
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Cancel"
+msgstr "Annuler"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "canyon"
+msgstr "canyon"
+
+#: src/views/document/WaypointView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgctxt "bivouac"
+msgid "capacity"
+msgstr "Nombre de places"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "capacity"
+msgstr "Nombre de places hors gardiennage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "capacity_staffed"
+msgstr "Nombre de places en gardiennage"
+
+#: src/views/documents/DocumentsView.vue
+msgid "Cards mode"
+msgstr "Vue en cards"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "categories"
+msgstr "Catégories"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "cave"
+msgstr "grotte"
+
+#: src/views/user/AccountView.vue
+msgid "Change account parameters"
+msgstr "Modifier les paramètres du compte"
+
+#: src/views/user/LoginView.vue
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
+#: src/views/user/LoginView.vue
+msgid "Checking..."
+msgstr "En cours de vérification ..."
+
+#: src/views/wiki/AssociationsHistoryView.vue
+msgid "Child"
+msgstr "Enfant"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "children_proof"
+msgstr "Enfants"
+
+#: src/components/map/OlMap.vue
+msgid "Clear"
+msgstr "Effacer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_conditions"
+msgid "cleared"
+msgstr "déneigé"
+
+#: src/views/document/WaypointView.vue
+msgid "climbing rating"
+msgstr "cotation escalade"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "climbing_indoor"
+msgstr "SAE"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_indoor_types"
+msgstr "Type de SAE"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "climbing_instructor"
+msgstr "moniteur d'escalade"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "climbing_outdoor"
+msgstr "site d'escalade"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_outdoor_type"
+msgstr "Type de voie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_outdoor_types"
+msgstr "Type de site d'escalade"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_rating_max"
+msgstr "Cotation maximale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_rating_median"
+msgstr "Cotation médiane"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_rating_min"
+msgstr "Cotation minimale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "climbing_styles"
+msgstr "Styles d'escalade"
+
+#: src/components/association-editor/AssociationsWindow.vue
+#: src/components/helper/HelperWindow.vue
+#: src/components/images-uploader/ImagesUploader.vue
+msgid "Close"
+msgstr "Fermer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "lift_status"
+msgid "closed"
+msgstr "fermées"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_conditions"
+msgid "closed_cleared"
+msgstr "fermé déneigé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "hut_status"
+msgid "closed_hut"
+msgstr "refuge fermé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "closed_in_winter"
+msgstr "fermé en hiver"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_conditions"
+msgid "closed_snow"
+msgstr "fermé enneigé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "club"
+msgstr "club"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "code"
+msgstr "code"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_types"
+msgid "collab"
+msgstr "collaboratif (CC by-sa)"
+
+#: src/components/images-uploader/ImageUploader.vue
+msgid "collab"
+msgstr "collaboratif (CC by-sa)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_types"
+msgid "collaborative"
+msgstr "collaboratif (CC by-sa)"
+
+#: src/views/wiki/edition/utils/FormSection.vue
+msgid "Collapse"
+msgstr "Replier"
+
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
+#: src/views/wiki/HistoryView.vue src/views/wiki/WhatsNewView.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue
+msgid "comment"
+msgstr "Commentaire"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Comments"
+msgstr "Commentaires"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "Comments are disabled."
+msgstr "Les commentaires ne sont pas autorisés sur ce document."
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Communication of the individual objectives and expectations, the thoughts "
+"and observations during the outing, discussions on new strategies, the way "
+"the group conducted itself and divided responsibilities, was the group used "
+"to working together, core aspirations, etc."
+msgstr ""
+"Communication des objectifs et attentes de chacun, des craintes et "
+"observations en cours de sortie, briefing pour établir de nouvelles "
+"stratégies, éléments de conduite de groupe et de responsabilités, groupe "
+"habitué à fonctionner ensemble ou non, émulation, etc."
+
+#: src/views/wiki/utils/HistoryViewLinks.vue
+msgid "Compare selected versions"
+msgstr "Comparer les versions sélectionnées"
+
+#: src/components/generics/markers/MarkerCondition.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "condition_rating"
+msgstr "Évaluation des conditions"
+
+#: src/components/datatable/DocumentsTable.vue
+msgid "Conditions"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "conditions"
+msgstr "Conditions"
+
+#: src/views/portals/HomeBanner.vue
+msgid "Conditions, summits, routes"
+msgstr "Conditions, sommets, itinéraires"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "conditions_levels"
+msgstr "Conditions d'enneigement par zones"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "configuration"
+msgstr "Configuration"
+
+#: src/components/generics/modals/ModalConfirmation.vue
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "conglomerat"
+msgstr "conglomérat"
+
+#: src/views/SideMenu.vue
+msgid "contact"
+msgstr "Contact"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Contain invalid character(s)"
+msgstr "Contient un ou plusieurs caractères invalides"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "Continue the discussion"
+msgstr "Continuer la discussion"
+
+#: src/views/static-views/SeracView.vue
+msgid "Contribute to common knowledge"
+msgstr "Participer à la construction d'un savoir collectif"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Contribute to maintainance"
+msgstr "Contribuer à la maintenance"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Contributions"
+msgstr "Contributions"
+
+#: src/views/wiki/AssociationsHistoryView.vue
+msgid "Contributor"
+msgstr "Contributeur"
+
+#: src/views/document/ArticleView.vue src/views/document/ImageView.vue
+#: src/views/document/XreportView.vue src/views/wiki/HistoryView.vue
+#: src/views/wiki/WhatsNewView.vue
+msgid "contributor"
+msgstr "contributeur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_types"
+msgid "copyright"
+msgstr "copyright"
+
+#: src/components/images-uploader/ImageUploader.vue
+msgid "copyright"
+msgstr "copyright"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "corridor"
+msgstr "couloir"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "area_types"
+msgid "country"
+msgstr "pays"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "crack_dihedral"
+msgstr "fissure-dièdre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "craie"
+msgstr "craie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_gear_types"
+msgid "crampons_req"
+msgstr "crampons indispensables"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_gear_types"
+msgid "crampons_spring"
+msgstr "crampons en début de saison"
+
+#: src/views/static-views/SeracView.vue
+msgid "Create a new report"
+msgstr "Créer un nouveau compte-rendu"
+
+#: src/views/wiki/AssociationsHistoryView.vue src/views/wiki/HistoryView.vue
+msgid "Created on"
+msgstr "Crée le"
+
+#: src/views/wiki/AssociationsHistoryView.vue
+msgid "Creation?"
+msgstr "Création ?"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "crevasse_fall"
+msgstr "chute en crevasse/bédière"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "critical_situation"
+msgstr "situation complexe sans accident"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "frequentation_types"
+msgid "crowded"
+msgstr "assez fréquenté"
+
+#: src/views/user/AccountView.vue
+msgid "Current password"
+msgstr "Mot de passe actuel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "custodianship"
+msgstr "Ouverture"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_signs"
+msgid "danger_sign"
+msgstr "signaux d'alerte autres que des traces d'avalanche"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "children_proof_types"
+msgid "dangerous"
+msgstr "peu adapté"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid ""
+"Data like orientation, rock type, route type (such as return trip or loop) "
+"and route configuration type (such as ridge or gully)."
+msgstr ""
+"Données techniques, comme l'orientation, le type de roche ou la "
+"configuration générale de l'itinéraire (arête, pilier...)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "date"
+msgstr "Date"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/documents/utils/DatesQueryItem.vue
+msgid "date_end"
+msgstr "Date de fin"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/documents/utils/DateQueryItem.vue
+#: src/views/documents/utils/DatesQueryItem.vue
+msgid "date_start"
+msgstr "Date de début"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "date_time"
+msgstr "date/heure"
+
+#: src/views/document/RouteView.vue
+msgid "day(s)"
+msgstr "jour(s)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "de"
+msgstr "allemand"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "dec"
+msgstr "décembre"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/DeleteDocumentWindow.vue
+msgid "Delete this document"
+msgstr "Supprimer ce document"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/DeleteLocaleWindow.vue
+msgid "Delete this locale"
+msgstr "Supprimer cette version linguistique"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "descent"
+msgstr "descente"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe access"
+msgstr "Décrivez ici l'accès"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe access period"
+msgstr "Précisez la période d'accès"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe access restrictions"
+msgstr "Décrire les restrictions d'accès"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "describe conditions"
+msgstr ""
+"Conditions de terrain, équipement et qualité du rocher rencontrés (approche, voie, et à proximité).\n"
+"Si vous rencontrez un équipement défectueux, informez les acteurs locaux (équipeurs, bureau des guides, office du tourisme ... ) et/ou renseignez-le sur https://sentinelles.sportsdenature.fr/"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Describe here the gear needed for this route"
+msgstr ""
+"Précisez ici le matériel spécifique qu'il faut emporter en plus de "
+"l'équipement usuel. Seul le matériel \"exotique\" (en qualité ou quantité) "
+"doit être mentionné. Exemples de mentions inutiles : DVA, pelle, sonde, "
+"piolet, crampons, matériel de glacier (le champ \"matériel de glacier\" "
+"suffit), coinceurs et sangles sans plus de précision."
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe here the waypoint"
+msgstr ""
+"Organisez la description avec des sous titres : balises ## , ### , #### en "
+"début de ligne."
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Describe here your issue"
+msgstr "Décrire le problème ici"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Describe historical information about the route (date, names..) here"
+msgstr ""
+"Précisez ici les informations historiques de l'itinéraire : ouverture du bas"
+" ou équipement (du haut), premières ascensions, premières descentes à "
+"ski/surf, rééquipements, éboulements, etc. Mentionnez la date, le nom des "
+"protagonistes, et le club ou organisme ayant financé le matériel laissé en "
+"place."
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe opening hours"
+msgstr "Précisez les heures d'ouverture"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe opening periods"
+msgstr "Précisez les périodes d'ouverture"
+
+#: src/js/waypoint-labels-mixin.js
+msgctxt "hut"
+msgid "Describe pedestrian access"
+msgstr "Décrire l'accès"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe pedestrian access"
+msgstr "Décrire l'accès pédestre"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe pt access"
+msgstr "Décrire l'accès au point de passage"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "Describe road access"
+msgstr ""
+"Décrire l'accès routier et les commodités (logement, restauration, etc.)"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "describe route_conditions"
+msgstr ""
+"Décrivez brièvement l'itinéraire que vous avez suivi dans les cas suivants : itinéraire différent de celui du topo, topo comportant des variantes, itinéraire en boucle, enchainement, point atteint lors d'un parcours partiel.\n"
+"ATTENTION: ne téléchargez pas de photos copiées d'un topo ou d'un livre. Les modérateurs les suppriment illico, car c'est une pratique illégale et elle ne respecte pas les licences utilisées par le site."
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Describe the conditions you encountered during your outing"
+msgstr ""
+"Décrivez les conditions que vous avez rencontrées lors de votre sortie"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Describe the information gathered before the outing and how these evolved "
+"once on route: weather forecast, avalanche risk reports, amount of "
+"refreezing, condition of the snow/ice/rock, reports from the previous days, "
+"etc."
+msgstr ""
+"Décrivez les informations récoltées avant la sortie et le suivi de leur "
+"évolution sur le terrain. Cela concerne les prévisions météo, les bulletins "
+"d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la "
+"neige/glace/rocher, les compte rendu des jours précédents, etc."
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "describe timing"
+msgstr "Heure de départ / horaire"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "describe weather"
+msgstr ""
+"Conditions météorologiques rencontrées lors de la sortie : couverture "
+"nuageuse, précipitations, vent, température"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Description"
+msgstr "Description"
+
+#: src/js/waypoint-labels-mixin.js
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/BookEditionView.vue
+msgid "description"
+msgstr "Description"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "detail"
+msgstr "détail"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Detailed figures, like ratings, height differences, frequentation..."
+msgstr "Données détaillées (cotations, dénivelés, fréquentation...)"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Detailed information"
+msgstr "Informations détaillées"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Details"
+msgstr "Détails"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Details of the actual outing and the incident. If you have already written "
+"up your outing, you only need to describe the incident, then link it to your"
+" outing report (after first uploading it)"
+msgstr ""
+"Décrivez le déroulement de la sortie et de l'incident/accident. Si vous avez"
+" déjà saisi une sortie, vous pouvez décrire uniquement l'évènement, puis "
+"associez ce compte rendu à la sortie (après l'avoir enregistré)."
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Details on participants and event context"
+msgstr "Détails sur les participants et le contexte de l'évènement"
+
+#: src/views/wiki/DiffView.vue
+msgid "Differences between versions"
+msgstr "Différences entre les versions"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_ratings"
+msgid "difficult"
+msgstr "ouvert - passage difficile"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "difficulties_height"
+msgstr "Altitude du début des difficultés"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "disable_comments"
+msgstr "Désactiver les commentaires"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Dispositions"
+msgstr "Dispositions"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Distance"
+msgstr "Distance"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Distance (km)"
+msgstr "Distance (km)"
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js
+msgid "Do you really want to leave? you have unsaved changes!"
+msgstr ""
+"Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été "
+"sauvegardés !"
+
+#: src/components/datatable/DocumentsTable.vue
+msgid "Document quality"
+msgstr ""
+
+#: src/views/document/utils/OutingsDownloader.vue
+msgid "Download outings"
+msgstr "Télécharger les sorties"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "quality_types"
+msgid "draft"
+msgstr "ébauche"
+
+#: src/components/images-uploader/ImagesUploader.vue
+msgid "Drop images here or click to upload"
+msgstr ""
+"Faites glisser des images ici ou cliquez pour les sélectionner\n"
+"Ces images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\n"
+"Si vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\n"
+"Les images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées."
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Duration"
+msgstr "Durée"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Duration (hrs)"
+msgstr "Durée (h)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "durations"
+msgstr "Durée"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "durations (days)"
+msgstr "durée (jours)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_ratings"
+msgid "easy"
+msgstr "bouché - passage sans problème"
+
+#: src/views/document/RouteView.vue
+msgid "easy mountain climbing gear"
+msgstr "Alpinisme rocheux de F à AD"
+
+#: src/views/document/RouteView.vue
+msgid "easy snow ice mixed gear"
+msgstr "Alpinisme neige/glace/mixte de F à PD+"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "edge"
+msgstr "arête"
+
+#: src/components/generics/links/EditLink.vue
+#: src/components/helper/HelperWindow.vue
+#: src/views/document/utils/DocumentViewHeader.vue
+msgid "Edit"
+msgstr "Modifier"
+
+#: src/views/wiki/edition/utils/EditionContainer.vue
+msgid "Edit a document"
+msgstr "Modifier le document"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Edit associations"
+msgstr "Modifier les associations"
+
+#: src/components/images-uploader/ImagesUploader.vue
+msgid "Edit categories"
+msgstr "Modifier les catégories"
+
+#: src/components/images-uploader/ImagesUploader.vue
+msgid "Edit titles"
+msgstr "Modifier les titres"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "editor"
+msgstr "Éditeur"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Elevation"
+msgstr "Altitude"
+
+#: src/components/datatable/DocumentsTable.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/OutingView.vue src/views/document/RouteView.vue
+msgid "elevation"
+msgstr "Altitude"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Elevation (m)"
+msgstr "Altitude (m)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "elevation_access"
+msgstr "Altitude de l'accès routier / TC"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "elevation_down_snow"
+msgstr "Altitude de déchaussage"
+
+#: src/components/cards/utils/CardElevationItem.vue
+#: src/components/generics/inputs/InputDocument.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "elevation_max"
+msgstr "Altitude maximale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "elevation_min"
+msgstr "Altitude minimale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "elevation_up_snow"
+msgstr "Altitude de chaussage"
+
+#: src/views/user/AccountView.vue src/views/user/LoginView.vue
+msgid "Email"
+msgstr "Adresse email"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "emphasized text"
+msgstr "texte en italiques"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "quality_types"
+msgid "empty"
+msgstr "vide"
+
+#: src/views/wiki/WhatsNewView.vue
+msgid "empty comment"
+msgstr "commentaire vide"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "en"
+msgstr "anglais"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "engagement_rating"
+msgstr "Engagement"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "environment"
+msgstr "environnement"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "equipment"
+msgstr "équipement"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "equipment_rating"
+msgstr "Qualité de l'équipement"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "equipment_ratings"
+msgstr "Qualité de l'équipement en place"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "es"
+msgstr "espagnol"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "ESRI"
+msgstr "ESRI"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "eu"
+msgstr "basque"
+
+#: src/views/SideMenu.vue
+msgid "EULA"
+msgstr "CGU"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "event_activity"
+msgstr "Activité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "event_type"
+msgstr "Type d'évènement"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Everything about ratings : difficulties, exposition..."
+msgstr ""
+"Rentrez ici la totalité des cotations de l'itinéraire (difficulté, "
+"exposition, qualité de l'équipement...)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "condition_ratings"
+msgid "excellent"
+msgstr "excellentes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quality_ratings"
+msgid "excellent"
+msgstr "excellente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quantity_ratings"
+msgid "excellent"
+msgstr "excellente"
+
+#: src/views/wiki/edition/utils/FormSection.vue
+msgid "Expand"
+msgstr "Déplier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "expedition"
+msgstr "expédition"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "expeditions"
+msgstr "expéditions"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "autonomies"
+msgid "expert"
+msgstr "expert"
+
+#: src/views/documents/utils/ExportCsvButton.vue
+msgid "Export to CSV"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rain_proof_types"
+msgid "exposed"
+msgstr "exposé à la pluie"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "exposition_rock_rating"
+msgstr "Exposition rocher"
+
+#: src/components/image-viewer/ImageInfo.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "exposure_time"
+msgstr "Temps d'exposition"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "external_resources"
+msgstr "Ressources externes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "author_statuses"
+msgid "external_witness"
+msgstr "témoin extérieur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "face"
+msgstr "face"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "product_types"
+msgid "farm_sale"
+msgstr "vente directe"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "fauna"
+msgstr "faune"
+
+#: src/components/map/OlMap.vue
+msgid "Fauna protection areas"
+msgstr "Faune"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Fauna protection site:"
+msgstr "Site de protection de la faune :"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "feb"
+msgstr "février"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "supervision"
+msgid "federal_supervision"
+msgstr "fédéral"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "qualification"
+msgid "federal_supervisor"
+msgstr "initiateur fédéral"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "qualification"
+msgid "federal_trainer"
+msgstr "instructeur fédéral"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "genders"
+msgid "female"
+msgstr "femme"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "file_size"
+msgstr "taille du fichier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "filename"
+msgstr "nom du fichier"
+
+#: src/components/map/OlMap.vue
+msgid "Filter on map extent"
+msgstr "Limiter la recherche à la carte visible"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "quality_types"
+msgid "fine"
+msgstr "bon"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "flora"
+msgstr "flore"
+
+#: src/components/image-viewer/ImageInfo.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "fnumber"
+msgstr "Propriétés de l'image"
+
+#: src/components/image-viewer/ImageInfo.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "focal_length"
+msgstr "Focale"
+
+#: src/views/user/FollowingView.vue
+msgid "Followed users"
+msgstr "Contributeurs suivis"
+
+#: src/views/user/LoginView.vue
+msgid "Forgot password?"
+msgstr "Mot de passe oublié ?"
+
+#: src/views/SideMenu.vue src/views/portals/DashboardView.vue
+#: src/views/portals/HomeBanner.vue
+msgid "Forum"
+msgstr "Forum"
+
+#: src/views/document/ProfileView.vue
+msgid "forum"
+msgstr "forum"
+
+#: src/views/user/AccountView.vue src/views/user/LoginView.vue
+msgid "Forum username"
+msgstr "Pseudo forum"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "fr"
+msgstr "français"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "frequentation"
+msgstr "Fréquentation"
+
+#: src/views/user/AccountView.vue src/views/user/LoginView.vue
+msgid "Fullname"
+msgstr "Nom"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gas_unstaffed"
+msgstr "Gaz hors gardiennage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "gear"
+msgstr "Matériel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gear"
+msgstr "Matériel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "gender"
+msgstr "Sexe"
+
+#: src/views/documents/utils/QueryItems.vue
+msgid "General"
+msgstr "Général"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "General information"
+msgstr "Informations générales"
+
+#: src/views/wiki/edition/BookEditionView.vue
+#: src/views/wiki/edition/ImageEditionView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "general informations"
+msgstr "Informations générales"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Geolocation"
+msgstr "Géolocalisation"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "geolocation"
+msgstr "Géolocalisation"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "geology"
+msgstr "géologie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "gite"
+msgstr "gîte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "glacier"
+msgstr "glacier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_gear_types"
+msgid "glacier_crampons"
+msgstr "crampons + matériel de sécurité sur glacier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "glacier_gear"
+msgstr "Matériel glacier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "glacier_rating"
+msgstr "Etat du glacier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_gear_types"
+msgid "glacier_safety_gear"
+msgstr "matériel de sécurité sur glacier"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "global_rating"
+msgstr "Cotation globale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "gneiss"
+msgstr "gneiss"
+
+#: src/views/static-views/NotFoundView.vue
+msgid "Go to the previous page"
+msgstr "Retourner à la page précédente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "condition_ratings"
+msgid "good"
+msgstr "bonnes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quality_ratings"
+msgid "good"
+msgstr "bonne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quantity_ratings"
+msgid "good"
+msgstr "bonne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_ratings"
+msgid "good service"
+msgstr "service régulier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "goulotte"
+msgstr "goulotte"
+
+#: src/components/generics/markers/MarkerGpsTrace.vue
+msgid "GPS Track"
+msgstr "Trace GPS"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "granit"
+msgstr "granit"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "quality_types"
+msgid "great"
+msgstr "excellent"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "gres"
+msgstr "grès"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "product_types"
+msgid "grocery"
+msgstr "épicerie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "ground_types"
+msgstr "Type de sol"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "group_management"
+msgstr "Gestion du groupe"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Had a timetable for the route been foreseen? Did you maintain the schedule? "
+"Was time a factor in causing the incident?"
+msgstr ""
+"Un horaire avait-il été prévu ? A t-il été tenu ? La gestion du temps a "
+"t-elle eu une influence sur le déclenchement de l'événement ?"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to area"
+msgstr "a ajouté des images pour cette région"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to article"
+msgstr "a ajouté des images pour cet article"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to book"
+msgstr "a ajouté des images pour ce livre"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to outing"
+msgstr "a ajouté des images pour cette sortie"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to route"
+msgstr "a ajouté des images pour cet itinéraire"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to waypoint"
+msgstr "a ajouté des images pour ce point de passage"
+
+#: src/components/cards/FeedCard.vue
+msgid "has added images to xreport"
+msgstr "a ajouté des images pour ce rapport d'incident/accident"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new article"
+msgstr "a rédigé un nouvel article"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new book"
+msgstr "a ajouté un nouveau livre"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new image"
+msgstr "a ajouté une nouvelle image"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new outing"
+msgstr "a ajouté une nouvelle sortie"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new route"
+msgstr "a ajouté un nouvel itinéraire"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new waypoint"
+msgstr "a ajouté un nouveau point de passage"
+
+#: src/components/cards/FeedCard.vue
+msgid "has created a new xreport"
+msgstr "a crée un nouveau rapport d'incident/accident"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Has this experience changed your habits? Describe the lessons you have "
+"learned from this experience"
+msgstr ""
+"Cet évènement a-t-il modifié vos habitudes ? Quels enseignements en avez-"
+"vous tiré ?"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the area"
+msgstr "a mis à jour cette région"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the article"
+msgstr "a mis à jour un article"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the book"
+msgstr "a mis à jour ce livre"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the image"
+msgstr "a mis à jour une image"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the outing"
+msgstr "a mis à jour une sortie"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the route"
+msgstr "a mis à jour un itinéraire"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the waypoint"
+msgstr "a mis à jour un point de passage"
+
+#: src/components/cards/FeedCard.vue
+msgid "has updated the xreport"
+msgstr "a mis à jour ce rapport d'incident/accident"
+
+#: src/views/user/LoginView.vue
+msgid "Have an account?"
+msgstr "Déjà inscrit(e) ?"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Have you (re)evaluated the risks at each change in the situation? What "
+"factors might have affected your awareness, such as tiredness, stress, "
+"relaxing having passed the main difficulties or on the descent, on a section"
+" reputed to be easy, presence of footprints or other people, complete "
+"confidence in the leader of the group, etc."
+msgstr ""
+"Avez-vous (ré)évalué les risques à chaque changement de situation ?\n"
+"Considérez des facteurs qui ont pu influencer votre niveau d'attention tels que la fatigue, le stress, la baisse d'attention une fois les difficultés passées ou à la descente, un secteur connu ou réputé facile, la présence de traces ou d'autres personnes, une confiance totale dans le responsable du groupe, etc."
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Heading"
+msgstr "Titre"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "heading text"
+msgstr "texte du titre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "heating_unstaffed"
+msgstr "Chauffage hors gardiennage"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/WaypointView.vue
+msgid "height"
+msgstr "Hauteur"
+
+#: src/views/document/OutingView.vue src/views/document/RouteView.vue
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "height_diff"
+msgstr "Dénivelé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "height_diff_access"
+msgstr "Dénivelé de l'approche"
+
+#: src/components/cards/FeedCard.vue src/components/cards/RouteCard.vue
+#: src/components/generics/pretty-links/PrettyRouteLink.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/portals/utils/DashboardRouteLink.vue
+msgid "height_diff_difficulties"
+msgstr "Dénivelé des difficultés"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "height_diff_down"
+msgstr "Dénivelé négatif"
+
+#: src/components/cards/FeedCard.vue src/components/cards/OutingCard.vue
+#: src/components/cards/RouteCard.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/portals/utils/DashboardRouteLink.vue
+msgid "height_diff_up"
+msgstr "Dénivelé positif"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "height_max"
+msgstr "Hauteur maximale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "height_median"
+msgstr "Hauteur moyenne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "height_min"
+msgstr "Hauteur minimale"
+
+#: src/views/SideMenu.vue
+msgid "Help"
+msgstr "Aide"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "help"
+msgstr "aide"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "help"
+msgstr "aide"
+
+#: src/views/static-views/SeracView.vue
+msgid "Help research activities to define new prevention means"
+msgstr "Aider la recherche scientifique à dégager des pistes de prévention"
+
+#: src/views/user/FollowingView.vue
+msgid ""
+"Here is the list of users you are following and whose activity you will see "
+"in your personal feed."
+msgstr ""
+"Voici la liste des contributeurs que vous suivez et dont vous verrez les "
+"activités dans votre fil personnel."
+
+#: src/views/user/PreferencesView.vue
+msgid ""
+"Here you may set activity and region filters that will apply to the homepage"
+" feed."
+msgstr ""
+"Définissez ici les filtres d'activités et de régions qui seront appliqués "
+"dans le fil de la page d'accueil."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "slackline_types"
+msgid "highline"
+msgstr "Highline"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "hiking"
+msgstr "Randonnée / Trail"
+
+#: src/views/document/RouteView.vue
+msgid "hiking gear"
+msgstr "Randonnée pédestre estivale"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "hiking_mtb_exposition"
+msgstr "Exposition randonnée, trail et VTT"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "hiking_rating"
+msgstr "Cotation randonnée / trail"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "historical"
+msgstr "historique"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "History"
+msgstr "Versions"
+
+#: src/views/document/RouteView.vue
+msgid "History is missing, please provide it if you have information."
+msgstr ""
+"L'historique est manquant, n'hésitez pas à partager toute information en "
+"votre possession."
+
+#: src/views/portals/FeedView.vue src/views/static-views/NotFoundView.vue
+msgid "Home"
+msgstr "Accueil"
+
+#: src/views/user/PreferencesView.vue
+msgid "Home page feed parameters"
+msgstr "Paramètre du fil d'activité sur la page d'accueil"
+
+#: src/views/static-views/SeracView.vue
+msgid "How is my testimony used ? How / why is it useful ?"
+msgstr "À quoi sert mon témoignage ?"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "humidity"
+msgstr "humidité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "hut"
+msgstr "refuge/cabane"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "hut"
+msgstr "refuge/cabane"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "hut_comment"
+msgstr "Commentaires sur le refuge"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "hut_status"
+msgstr "Refuge"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "hut_warden"
+msgstr "gardien de refuge"
+
+#: src/views/user/LoginView.vue
+msgid "I have read and agree to the terms of use"
+msgstr "J'ai lu et approuvé les conditions d'utilisation"
+
+#: src/views/document/RouteView.vue
+msgid "ice and dry climbing gear"
+msgstr "Cascade de glace et dry-tooling"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "ice_climbing"
+msgstr "Cascade de glace"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "ice_climbing"
+msgstr "Cascade de glace"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "ice_cornice_collapse"
+msgstr "effondrement cascade ou corniche"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "ice_rating"
+msgstr "Cotation glace"
+
+#: src/components/map/map-layers.js
+msgctxt "Map slopes layer"
+msgid "IGN"
+msgstr "France (IGN)"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN maps"
+msgstr "IGN Fr"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN ortho"
+msgstr "IGN Fr Sat"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN ortho (es)"
+msgstr "IGN Es Sat"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "IGN raster (es)"
+msgstr "IGN Es"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "image"
+msgstr "image"
+
+#: src/components/images-uploader/ImagesUploader.vue
+msgid "Image could not be processed"
+msgstr "L'image n'a pas pu être traitée pour le téléversement"
+
+#: src/components/datatable/DocumentsTable.vue
+msgid "Image count"
+msgstr ""
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "image_categories"
+msgstr "Catégories"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "image_type"
+msgstr "Type d'image (licence)"
+
+#: src/components/generics/markers/MarkerImageCount.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/portals/DashboardView.vue src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
+msgid "images"
+msgstr "images"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_ratings"
+msgid "impossible"
+msgstr "infranchissable - passage impossible"
+
+#: src/views/static-views/SeracView.vue
+msgid "Improve our understanding of risks"
+msgstr "Améliorer la connaissance des risques"
+
+#: src/views/static-views/SeracView.vue
+msgid "Incidents and accidents"
+msgstr "Incidents et accidents"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "increase_impact"
+msgstr "Éléments ayant aggravé les conséquences de l’événement"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "Information about the terrain, like elevations, lengths..."
+msgstr "Données relatives au terrain, comme les altitudes, la longueur, etc."
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Information on the location of the incident. Mark the location on the map "
+"above, even if you cannot do very accurately, (in which case give more "
+"details here). After completing the report, you can associate it to a route,"
+" a climbing site or an outing."
+msgstr ""
+"Information sur la localisation de l'incident. Positionner la localisation "
+"sur la carte ci-dessus, même de manière peu précise (auquel cas vous pouvez "
+"ajouter plus de détails dans ce champ). Après avoir complété le rapport, "
+"vous pouvez associer un itinéraire, un point de passage ou une sortie."
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Informations about the access"
+msgstr "Information à propos de l'accès routier/transport en commun"
+
+#: src/components/image-viewer/ImageInfo.vue
+msgid "Infos"
+msgstr "Informations"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "injury_without_fall"
+msgstr "lésion sans chute"
+
+#: src/components/markdown-editor/LinkHelper.vue
+msgid "Insert a link"
+msgstr "Insérer un lien"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Insert emoji"
+msgstr "Insérer un émoji"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Insert image"
+msgstr "Insérer une image"
+
+#: src/components/markdown-editor/LinkHelper.vue
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Insert link"
+msgstr "Insérer le lien"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rain_proof_types"
+msgid "inside"
+msgstr "à l'intérieur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "insolation"
+msgstr "ensoleillement"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "institution"
+msgstr "institution"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "author_statuses"
+msgid "internal_witness"
+msgstr "témoin direct"
+
+#: src/js/vue-plugins/document-utils.js
+msgid "Invalid date"
+msgstr "Date non valide"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Invalid email address"
+msgstr "Adresse email invalide"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "isbn"
+msgstr "ISBN"
+
+#: src/components/image-viewer/ImageInfo.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "iso_speed"
+msgstr "Sensibilité"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Issue report"
+msgstr "Signalement d'un problème"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "langs"
+msgid "it"
+msgstr "italien"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "jan"
+msgstr "janvier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "jul"
+msgstr "juillet"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "jun"
+msgstr "juin"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "custodianship_types"
+msgid "key_needed"
+msgstr "clé nécessaire pour ouvrir"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "kilometers"
+msgstr "km"
+
+#: src/views/static-views/SeracView.vue
+msgid "Know more about SERAC"
+msgstr "En savoir plus sur SERAC"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "labande_global_rating"
+msgstr "Cotation globale ski"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "labande_ski_rating"
+msgstr "Cotation ponctuelle ski"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "lake"
+msgstr "lac"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "landscapes"
+msgstr "paysages"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/user/PreferencesView.vue
+msgid "lang"
+msgstr "Langue"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/user/PreferencesView.vue
+msgid "langs"
+msgstr "Langues"
+
+#: src/views/portals/FeedView.vue
+msgid "Last forum topics"
+msgstr "Dernières discussions du forum"
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+msgid "Last outings"
+msgstr "Dernières sorties"
+
+#: src/views/wiki/edition/utils/MapInputRow.vue
+msgid "Latitude"
+msgstr "Latitude"
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Layers"
+msgstr "Sélection des couches"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Leave fullscreen"
+msgstr "Quitter le mode plein écran"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "length"
+msgstr "Longueur"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/OutingView.vue
+msgid "length_total"
+msgstr "Longueur totale"
+
+#: src/views/static-views/SeracView.vue
+msgid "Let's make our feedbacks valuable"
+msgstr "Valorisons nos retours d’expérience"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_1"
+msgstr "1 - faible"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_2"
+msgstr "2 - limité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_3"
+msgstr "3 - marqué"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_4"
+msgstr "4 - fort"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_5"
+msgstr "5 - très fort"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_levels"
+msgid "level_na"
+msgstr " niveau non renseigné"
+
+#: src/views/SideMenu.vue
+msgid "Licenses"
+msgstr "Licences"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "lift_access"
+msgstr "Remontées mécaniques"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "lift_status"
+msgstr "Remontées mécaniques"
+
+#: src/views/user/LoginView.vue
+msgid "link"
+msgstr "lien"
+
+#: src/views/wiki/WhatsNewView.vue
+msgid "Links"
+msgstr "Liens"
+
+#: src/views/documents/DocumentsView.vue
+msgid "List mode"
+msgstr "Vue en liste"
+
+#: src/views/wiki/utils/HistoryViewLinks.vue
+msgid "List of versions for language:"
+msgstr "Liste des versions pour la langue :"
+
+#: src/views/documents/utils/LoadUserPreferencesButton.vue
+msgid "Load my preferences"
+msgstr "Activer mes préférences"
+
+#: src/components/helper/HelperWindow.vue
+msgid "loading"
+msgstr "chargement en cours"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "local_product"
+msgstr "produits locaux"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "locality"
+msgstr "lieu-dit"
+
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+msgid "Location / elevation / orientation"
+msgstr "Lieu / altitude / orientation"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "Log in to post a comment"
+msgstr "Se connecter pour poster un commentaire"
+
+#: src/components/generics/buttons/LoginButton.vue src/views/Navigation.vue
+#: src/views/user/LoginView.vue
+msgid "Login"
+msgstr "Se connecter"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Login failed"
+msgstr "Identifiant ou mot de passe incorrects"
+
+#: src/views/Navigation.vue
+msgid "Logout"
+msgstr "Me déconnecter"
+
+#: src/views/wiki/edition/utils/MapInputRow.vue
+msgid "Longitude"
+msgstr "Longitude"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "loop"
+msgstr "boucle (pied de la voie)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "loop_hut"
+msgstr "boucle (approche ou refuge)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "magazine"
+msgstr "magazine"
+
+#: src/views/user/LoginView.vue
+msgid "Mail has been sent"
+msgstr "Courriel envoyé"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid ""
+"Main information about the route, such as title, activity, GPS, and waypoint"
+" (which mountain, place)."
+msgstr ""
+"Principales informations sur l'itinéraire, comme le nom, les activités, la "
+"géo-localisation, et l'environnement proche."
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Main informations about your outing"
+msgstr "Données principales de votre sortie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "main_waypoint_id"
+msgstr "ID du point de passage principal"
+
+#: src/views/user/AccountView.vue
+msgid "Make profile page public"
+msgstr "Rendre publique la page de profil"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "genders"
+msgid "male"
+msgstr "homme"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "map"
+msgstr "carte"
+
+#: src/views/documents/utils/DisplayModeSwitch.vue
+msgid "Map only"
+msgstr "Uniquement la carte"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Map, guidebook, known route, planning for a plan B, (re) evaluation of route"
+" during trip?"
+msgstr ""
+"Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, "
+"réévaluation de l’itinéraire en cours de sortie ?"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "maps"
+msgstr "cartes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "maps_info"
+msgstr "Cartes"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "maps_references"
+msgstr "Références cartographiques"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "mar"
+msgstr "mars"
+
+#: src/views/document/utils/TagsButton.vue
+msgid "Mark this route as to do"
+msgstr "Mettre cet itinéraire dans ses favoris"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "matress_unstaffed"
+msgstr "Matelas hors gardiennage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "may"
+msgstr "mai"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "quality_types"
+msgid "medium"
+msgstr "moyen"
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid "Merge documents"
+msgstr "Fusionner des documents"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Merge with other document"
+msgstr "Fusionner avec un autre document"
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid ""
+"Merging a source document with a target document transfers all associations "
+"of the source document to the target document, and sets up a redirection "
+"from the source to the target document."
+msgstr ""
+"Fusionner un document source avec un document cible transfère toutes les "
+"associations du document source au document cible, et définit une "
+"redirection du document source vers le document cible."
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "meters"
+msgstr "m"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "migmatite"
+msgstr "migmatite"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "misc"
+msgstr "divers"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "misc"
+msgstr "divers"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Misc data about the waypoint"
+msgstr "Données diverses sur le point de passage"
+
+#: src/views/documents/utils/QueryItems.vue
+msgid "Miscs"
+msgstr "Divers"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Missing captcha"
+msgstr "Captcha manquant"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "mixed_rating"
+msgstr "Cotation mixte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "modifications"
+msgstr "Conséquences sur les pratiques"
+
+#: src/views/wiki/WhatsNewView.vue
+msgctxt "modification date"
+msgid "Modified the"
+msgstr "Modifié le"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "mollasse_calcaire"
+msgstr "molasse"
+
+#: src/components/map/BiodivInformation.vue
+msgid "More info"
+msgstr "Plus d'information"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "severities"
+msgid "more_than_3m"
+msgstr "supérieur à 3 mois"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "motivations"
+msgstr "Motivations"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "mountain_biking"
+msgstr "VTT"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "mountain_climbing"
+msgstr "Rocher haute montagne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "mountain_environment"
+msgstr "environnement montagne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "mountain_guide"
+msgstr "guide de haute montagne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "mountain_leader"
+msgstr "ouvreur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "mountainbike_instructor"
+msgstr "moniteur de VTT"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "mtb_down_rating"
+msgstr "Cotation VTT descente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mtb_height_diff_portages"
+msgstr "Portage VTT"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mtb_length_asphalt"
+msgstr "Distance goudronnée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "mtb_length_trail"
+msgstr "Distance sur sentier"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "mtb_up_rating"
+msgstr "Cotation VTT montée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_outdoor_types"
+msgid "multi"
+msgstr "grande voie"
+
+#: src/views/documents/utils/AssociationQueryItem.vue
+msgid "Multi-criteria search"
+msgstr "Recherche multi-critère"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "multipitch_climbing"
+msgstr "Escalade grande voie"
+
+#: src/views/Navigation.vue
+msgid "My account"
+msgstr "Mon compte"
+
+#: src/views/Navigation.vue
+msgid "My bookmarks"
+msgstr "Mes favoris"
+
+#: src/views/Navigation.vue
+msgid "My changes"
+msgstr "Mes contributions"
+
+#: src/views/Navigation.vue
+msgid "My followed users"
+msgstr "Mes amis"
+
+#: src/views/Navigation.vue
+msgid "My outings"
+msgstr "Mes sorties"
+
+#: src/views/Navigation.vue src/views/portals/DashboardView.vue
+#: src/views/user/PreferencesView.vue
+msgid "My preferences"
+msgstr "Mes préférences"
+
+#: src/views/Navigation.vue
+msgid "My profile"
+msgstr "Mon profil"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "name"
+msgstr "Nom"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Narration"
+msgstr "Description textuelle"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_signs"
+msgid "natural_avalanche"
+msgstr "avalanche naturelle le jour de la sortie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "naturally"
+msgstr "déneigement naturel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_impacted"
+msgstr "Nombre de personnes touchées"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_pages"
+msgstr "Nombre de pages"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "nb_participants"
+msgstr "Nombre de participants"
+
+#: src/views/static-views/SeracView.vue
+msgid ""
+"Near-accidents = delicate situation not leading to physical injury but could"
+" have lead to a much more serious event."
+msgstr ""
+"Situations « limites » qui aurait pu dégénérer en évènements plus graves"
+
+#: src/views/static-views/SeracView.vue
+msgid "Near-accidents are valuable"
+msgstr "Des incidents et quasi-accidents riches d’enseignements :"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_ratings"
+msgid "nearby service"
+msgstr "service à proximité"
+
+#: src/views/static-views/TopoguideView.vue
+msgid "New outing"
+msgstr "Nouvelle sortie"
+
+#: src/views/user/AccountView.vue src/views/user/LoginView.vue
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: src/views/static-views/TopoguideView.vue
+msgid "New route"
+msgstr "Nouvel itinéraire"
+
+#: src/views/static-views/TopoguideView.vue
+msgid "New waypoint"
+msgstr "Nouveau point de passage"
+
+#: src/views/wiki/DiffView.vue
+msgid "next difference"
+msgstr "différence suivante"
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+msgid "next version"
+msgstr "version suivante"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "nivology"
+msgstr "nivologie et avalanches"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_signs"
+msgid "no"
+msgstr "non"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_gear_types"
+msgid "no"
+msgstr "non"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "parking_fee_types"
+msgid "no"
+msgstr "non"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "previous_injuries"
+msgid "no"
+msgstr "non"
+
+#: src/components/datatable/DocumentsTable.vue
+#: src/components/generics/DocumentField.vue
+#: src/components/generics/inputs/InputYesNo.vue
+msgid "no"
+msgstr "non"
+
+#: src/views/user/LoginView.vue
+msgid "No account yet?"
+msgstr "Pas encore de compte ?"
+
+#: src/components/generics/inputs/InputYesNo.vue
+msgid "no info"
+msgstr "pas d'information"
+
+#: src/components/generics/inputs/InputDocument.vue
+msgid "No match?"
+msgstr "Aucun résultat satisfaisant ?"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_ratings"
+msgid "no service"
+msgstr "pas de service"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "No user with this email"
+msgstr "Il n'existe pas d'utilisateur avec cet email"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "supervision"
+msgid "no_supervision"
+msgstr "non encadré"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "custodianship_types"
+msgid "no_warden"
+msgstr "non gardé"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid ""
+"NoDerivatives — If you remix, transform, or build upon the material, you may"
+" not distribute the modified material."
+msgstr ""
+"Pas de modifications — Dans le cas où vous effectuez un remix, que vous "
+"transformez, ou créez à partir du matériel composant l'Oeuvre originale, "
+"vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre "
+"modifiée. "
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "non_applicable"
+msgstr "non applicable"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "autonomies"
+msgid "non_autonomous"
+msgstr "non autonome"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "NonCommercial — You may not use the material for commercial purposes."
+msgstr ""
+"Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage "
+"commercial de cette Oeuvre, tout ou partie du matériel la composant. "
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid ""
+"Note that comments have to be transferred manually in Discourse before "
+"merging."
+msgstr ""
+"Les commentaires doivent être transférés manuellement dans Discourse avant "
+"de fusionner les documents."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "nov"
+msgstr "novembre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "novel"
+msgstr "nouvelle"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Numbers"
+msgstr "Données"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "numbers"
+msgstr "Caractéristiques"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "oct"
+msgstr "octobre"
+
+#: src/views/documents/utils/PageSelector.vue
+msgctxt "1-30 of 200 results"
+msgid "of"
+msgstr "sur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "often"
+msgstr "déneigement régulier"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Ok"
+msgstr "Ok"
+
+#: src/components/generics/modals/ModalConfirmation.vue
+msgctxt "API message"
+msgid "Only document less than 24h old can be deleted"
+msgstr ""
+"Seuls les documents récents (24h) peuvent être supprimés. Contactez la "
+"modération pour supprimer ce document."
+
+#: src/views/user/PreferencesView.vue
+msgid ""
+"Only status updates with the selected activities and in the selected areas "
+"are shown in your homepage feed. Status updates from followed users will "
+"always be shown."
+msgstr ""
+"Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\n"
+"Les documents des utilisateurs suivis sont toujours visibles."
+
+#: src/views/static-views/NotFoundView.vue
+msgid "Ooops"
+msgstr "Ooops"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "lift_status"
+msgid "open"
+msgstr "ouvertes"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Open fields to deeply explain the event circumstances."
+msgstr ""
+"Champs libres pour raconter au mieux les circonstances de l'évènement."
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Open fields to detail the picture's context"
+msgstr "Champs libre pour décrire le contexte de l'image"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "hut_status"
+msgid "open_guarded"
+msgstr "ouvert gardé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "hut_status"
+msgid "open_non_guarded"
+msgstr "ouvert non gardé"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "opening_hours"
+msgstr "Heures d'ouverture"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "opening_periods"
+msgstr "Période de gardiennage"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "OpenTopoMap"
+msgstr "OpenTopoMap"
+
+#: src/views/static-views/NotFoundView.vue
+msgid "or try the following pages:"
+msgstr "ou essayez les pages suivantes :"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Ordered list"
+msgstr "Liste triée"
+
+#: src/components/cards/RouteCard.vue
+#: src/components/generics/pretty-links/PrettyRouteLink.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "orientations"
+msgstr "Orientations"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "other"
+msgstr "Autre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "other"
+msgstr "autre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "other_comments"
+msgstr "Conséquences physiques et autres commentaires"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "Oups! Something went wrong with forum. Here is the message :"
+msgstr "Oups ! Il y a eu un souci avec le forum. Voici le message :"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Oups! something went wrong..."
+msgstr "Oups ! Il y a eu un problème..."
+
+#: src/translations/fixed_strings_manual.vue
+msgid "outing"
+msgstr "sortie"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue src/views/SideMenu.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/portals/DashboardView.vue src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
+msgid "outings"
+msgstr "sorties"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "frequentation_types"
+msgid "overcrowded"
+msgstr "très fréquenté"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "overhang"
+msgstr "dévers-surplomb"
+
+#: src/views/static-views/NotFoundView.vue
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "paragliding"
+msgstr "Parapente"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Paragliding outings"
+msgstr "Sorties parapente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "paragliding_instructor"
+msgstr "moniteur de parapente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "paragliding_landing"
+msgstr "atterrissage parapente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "paragliding_rating"
+msgstr "Cotation parapente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "paragliding_takeoff"
+msgstr "décollage parapente"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Parameters of the Digital Camera"
+msgstr "Détails sur l'appareil photo numérique"
+
+#: src/views/wiki/AssociationsHistoryView.vue
+msgid "Parent"
+msgstr "Parent"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "parking_fee"
+msgstr "Parking ou route payant(e)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "partial_trip"
+msgstr "Parcours partiel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "participant_count"
+msgstr "Nombre de participants"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/XreportView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "participants"
+msgstr "Participants"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Participants and context"
+msgstr "Participants et contexte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rain_proof_types"
+msgid "partly_protected"
+msgstr "partiellement protégé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "pass"
+msgstr "col"
+
+#: src/views/user/LoginView.vue
+msgid "Password"
+msgstr "Mot de passe"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Password too short"
+msgstr "Le mot de passe est trop court"
+
+#: src/js/waypoint-labels-mixin.js
+msgctxt "hut"
+msgid "pedestrian access"
+msgstr "Accès"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "pedestrian access"
+msgstr "Accès pédestre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "people"
+msgstr "personnages"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "People who were with you, and your feelings about this outing"
+msgstr ""
+"Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la"
+" sortie"
+
+#: src/views/documents/utils/PageSelector.vue
+msgctxt "30 per page"
+msgid "per page"
+msgstr "par page"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Period of protection"
+msgstr "Période de protection"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "person_fall"
+msgstr "déséquilibre ou chute"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_types"
+msgid "personal"
+msgstr "individuel (CC by-nc-nd)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_types"
+msgid "personal"
+msgstr "individuel (CC by-nc-nd)"
+
+#: src/components/images-uploader/ImageUploader.vue
+msgid "personal"
+msgstr "individuel (CC by-nc-nd)"
+
+#: src/views/document/OutingView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "personal comments"
+msgstr "Commentaires personnels"
+
+#: src/views/static-views/SeracView.vue
+msgid "Personal data are confidential"
+msgstr "Les informations personnelles sont confidentielles"
+
+#: src/views/portals/DashboardView.vue src/views/portals/FeedView.vue
+msgid "Personal feed off"
+msgstr "Fil personnel désactivé"
+
+#: src/views/portals/DashboardView.vue src/views/portals/FeedView.vue
+msgid "Personal feed on"
+msgstr "Fil personnel activé"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Personal informations"
+msgstr "Informations personnelles"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "phone"
+msgstr "Téléphone"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "phone_custodian"
+msgstr "Téléphone gardien/gérant"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "photos-art"
+msgstr "photos-art"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "physical_failure"
+msgstr "défaillance physique"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_configuration_types"
+msgid "pillar"
+msgstr "pilier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_indoor_types"
+msgid "pitch"
+msgstr "couenne"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Pitch description tag"
+msgstr "Balise de description des longueurs"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "place"
+msgstr "Lieu"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "please consult the server logs"
+msgstr "Erreur inattendue, merci de contacter dev@camptocamp.org"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Please describe your technical and experience level related to the chosen "
+"goal, your level of fitness, prior tiredness accumulated, acclimatization if"
+" in altitude, etc."
+msgstr ""
+"Décrivez votre niveau technique et expérience par rapport à l’objectif "
+"choisi, votre condition physique, la fatigue accumulée avant la sortie, "
+"l’acclimatation pour une sortie en altitude, etc."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "condition_ratings"
+msgid "poor"
+msgstr "mauvaises"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quality_ratings"
+msgid "poor"
+msgstr "mauvaise"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_quantity_ratings"
+msgid "poor"
+msgstr "mauvaise"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_ratings"
+msgid "poor service"
+msgstr "service réduit"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "glacier_ratings"
+msgid "possible"
+msgstr "délicat - passage possible"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "Post the first comment"
+msgstr "Publier le premier commentaire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "pouding"
+msgstr "pouding"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "ground_types"
+msgid "prairie"
+msgstr "prairie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "precipitation"
+msgstr "précipitations (pluie uniquement)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "precipitation_heater"
+msgstr "précipitations (pluie ou neige)"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Precise localisation of the shooting"
+msgstr "Localisation précise de la prise de vue"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Precise location of the event."
+msgstr "Localisation précise de l'évènement"
+
+#: src/views/documents/utils/QueryItem.vue
+msgid "Press enter to select"
+msgstr "Entrée pour selectionner"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "pressure"
+msgstr "pression"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+#: src/views/wiki/edition/utils/EditionContainer.vue
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue
+msgid "Preview"
+msgstr "Prévisualiser"
+
+#: src/views/wiki/DiffView.vue
+msgid "previous difference"
+msgstr "différence précédente"
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+msgid "previous version"
+msgstr "version précédente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "previous_injuries"
+msgstr "Blessures antérieures"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "previous_injuries"
+msgid "previous_injuries_2"
+msgstr "autres blessures"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "author_statuses"
+msgid "primary_impacted"
+msgstr "victime principale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "product_types"
+msgstr "Type de produits locaux"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "qualification"
+msgid "professional_diploma"
+msgstr "diplôme professionel"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "supervision"
+msgid "professional_supervision"
+msgstr "professionel"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "profile"
+msgstr "profil"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "profiles"
+msgstr "profils"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "progressive"
+msgstr "déneigement progressif"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "prominence"
+msgstr "Proéminence"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Protect document"
+msgstr "Protéger ce document"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rain_proof_types"
+msgid "protected"
+msgstr "protégé de la pluie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "protected"
+msgstr "protégé"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Protection area:"
+msgstr "Zone de protection :"
+
+#: src/components/map/OlMap.vue
+msgid "Protection areas"
+msgstr "Zones de protection"
+
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Protection status"
+msgstr "Status de la protection"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_outdoor_types"
+msgid "psicobloc"
+msgstr "psicobloc"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "public transportation access"
+msgstr "Accès en transports en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "public_transport"
+msgstr "Sortie en mobilité douce"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "public_transportation_rating"
+msgstr "Accessibilité en transports en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "public_transportation_types"
+msgstr "Type de transport en commun"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "publication_date"
+msgstr "Date de publication"
+
+#: src/components/association-editor/AssociationItems.vue
+msgid "Put it back"
+msgstr "Remettre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "qualification"
+msgstr "Diplôme d'encadrement pour l'activité"
+
+#: src/components/generics/markers/MarkerQuality.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/edition/utils/QualityField.vue
+msgid "quality"
+msgstr "Qualité du document"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "quartzite"
+msgstr "quartzite"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "frequentation_types"
+msgid "quiet"
+msgstr "non fréquenté"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Quote"
+msgstr "Citation"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "raid"
+msgstr "raid"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rain_proof"
+msgstr "Pluie"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "area_types"
+msgid "range"
+msgstr "massif"
+
+#: src/components/datatable/DocumentsTable.vue
+#: src/views/document/OutingView.vue src/views/document/RouteView.vue
+#: src/views/documents/utils/QueryItems.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "ratings"
+msgstr "Cotations"
+
+#: src/views/wiki/WhatsNewView.vue
+msgid "Recent changes"
+msgstr "Changements récents"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_signs"
+msgid "recent_avalanche"
+msgstr ""
+"trace d'avalanche récente (après la dernière chute de neige, pluie, vent ou "
+"redoux)"
+
+#: src/components/map/OlMap.vue
+msgid "Recenter on your current position"
+msgstr "Centrage sur votre position actuelle"
+
+#: src/components/map/OlMap.vue
+msgid "Recenter on..."
+msgstr "Recentrer sur..."
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "reduce_impact"
+msgstr "Éléments ayant atténué les conséquences de l'événement"
+
+#: src/views/user/LoginView.vue
+msgid "Register"
+msgstr "S'inscrire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "remarks"
+msgstr "Remarques"
+
+#: src/components/association-editor/AssociationItems.vue
+msgid "Remove"
+msgstr "Retirer"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Report an issue"
+msgstr "Signaler un problème"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid "Report title, activity, linked routes or outings."
+msgstr "Titre du rapport, activité, liens avec des itinéraires ou sorties."
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Required"
+msgstr "Requis"
+
+#: src/views/wiki/edition/utils/FormField.vue
+msgid "required field"
+msgstr "champ obligatoire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rescue"
+msgstr "Intervention des services de secours"
+
+#: src/components/map/OlMap.vue
+msgid "Reset geometry"
+msgstr "Réinitialiser"
+
+#: src/views/user/LoginView.vue
+msgid "Reset password"
+msgstr "Réinitialiser le mot de passe"
+
+#: src/components/image-viewer/ImageInfo.vue
+msgid "resolution"
+msgstr "résolution"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "product_types"
+msgid "restaurant"
+msgstr "restaurant"
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+#: src/views/document/utils/windows/RevertVersionWindow.vue
+msgid "Restore this version"
+msgstr "Restaurer cette version"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "restricted_access"
+msgstr "Restrictions d'accès"
+
+#: src/views/documents/utils/DisplayModeSwitch.vue
+msgid "Results only"
+msgstr "Uniquement les résultats"
+
+#: src/components/images-uploader/ImageUploader.vue
+msgid "Retry"
+msgstr "Réessayer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "return_same_way"
+msgstr "aller-retour"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "rhyolite"
+msgstr "rhyolite"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "rise"
+msgstr "montée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "risk"
+msgstr "Niveau de l'attention et évaluation des risques"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "risk_rating"
+msgstr "Risques objectifs"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "road access"
+msgstr "Accès routier"
+
+#: src/js/waypoint-labels-mixin.js
+msgid "road or pedestrian access"
+msgstr "Accès routier ou pédestre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "rock_climbing"
+msgstr "Escalade"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "rock_free_rating"
+msgstr "Cotation libre"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "rock_required_rating"
+msgstr "Cotation obligatoire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "rock_types"
+msgstr "Type de rocher"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "roof"
+msgstr "toit"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "route"
+msgstr "itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "route_description"
+msgstr "Description de l'itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "route_history"
+msgstr "Historique de l'itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "route_length"
+msgstr "Longueur de l'itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "route_study"
+msgstr "Étude de l'itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "route_types"
+msgstr "Type d'itinéraire"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/portals/DashboardView.vue src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "routes"
+msgstr "itinéraires"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "routes_quantity"
+msgstr "Nombre de voies"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "children_proof_types"
+msgid "safe"
+msgstr "adapté"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "safety"
+msgstr "Mesures et techniques de sécurité mises en oeuvre"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "safety_operation"
+msgstr "manœuvre de sécurité"
+
+#: src/components/images-uploader/ImagesUploader.vue
+#: src/views/user/AccountView.vue
+#: src/views/wiki/edition/utils/SaveDocumentRow.vue
+msgid "Save"
+msgstr "Enregistrer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "scale"
+msgstr "échelle"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "schiste"
+msgstr "schiste"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "ground_types"
+msgid "scree"
+msgstr "éboulis"
+
+#: src/components/generics/inputs/InputDocument.vue
+msgid "Search ..."
+msgstr "Rechercher ..."
+
+#: src/components/association-editor/AssociationsWindow.vue
+msgid "Search a document to associate..."
+msgstr "Rechercher un document à associer"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "parking_fee_types"
+msgid "seasonal"
+msgstr "saisonnier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_ratings"
+msgid "seasonal service"
+msgstr "service saisonnier"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "author_statuses"
+msgid "secondary_impacted"
+msgstr "victime secondaire"
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+msgid "see actual version"
+msgstr "voir la version actuelle"
+
+#: src/components/generics/inputs/InputDocument.vue
+msgid "See more results"
+msgstr "Plus de résultats"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "See other documents nearby"
+msgstr "À proximité de..."
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "See profile based on:"
+msgstr "Profil d'altitude selon :"
+
+#: src/views/document/utils/FollowButton.vue
+msgid "See the activity of this contributor in your feed"
+msgstr "Voir les activités de ce contributeur dans votre fil"
+
+#: src/views/static-views/SeracView.vue
+msgid "See the analysis of the submitted stories"
+msgstr "Lire les analyses des récits déjà déposés"
+
+#: src/views/wiki/utils/HistoryViewLinks.vue
+msgid "See the latest version"
+msgstr "Voir la dernière version"
+
+#: src/views/documents/utils/QueryItem.vue
+msgid "Select option"
+msgstr "Choisissez une option"
+
+#: src/views/user/LoginView.vue
+msgid "Send reset email"
+msgstr "Envoyer l'email de réinitialisation"
+
+#: src/components/map/BiodivInformation.vue
+#: src/components/map/SwissProtectionAreaInformation.vue
+msgid "Sensitive area:"
+msgstr "Zone sensible :"
+
+#: src/views/document/RouteView.vue
+msgid "Sensitive areas"
+msgstr "Zones sensibles"
+
+#: src/components/map/BiodivInformation.vue
+msgid "sensitive_months:"
+msgstr "Période de vigilance :"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "months"
+msgid "sep"
+msgstr "septembre"
+
+#: src/views/static-views/SeracView.vue
+msgid "SERAC"
+msgstr "SERAC"
+
+#: src/views/static-views/SeracView.vue
+msgid ""
+"SERAC is a worldwide incidents and accidents database aiming at increasing "
+"safety in rock climbing and mountain sports."
+msgstr ""
+"SERAC est une base de données mondiale sur les accidents et incidents en "
+"montagne. Sa vocation est d'améliorer la sécurité dans la pratique de "
+"l'escalade et des sports de montagne."
+
+#: src/views/static-views/SeracView.vue
+msgid "SERAC is built upon a kindness mindset. We thank you to improve it"
+msgstr ""
+"SERAC est conçu dans un esprit de bienveillance et de partage, merci de "
+"l’encourager"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_types"
+msgid "service_on_demand"
+msgstr "service à la demande"
+
+#: src/components/image-viewer/ImageInfo.vue
+msgid "Settings"
+msgstr "Paramètres"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Several days?"
+msgstr "Plusieurs jours ?"
+
+#: src/components/datatable/DocumentsTable.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "severity"
+msgstr "Gravité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "severities"
+msgid "severity_no"
+msgstr "pas de blessure"
+
+#: src/views/document/utils/SocialNetworkSharing.vue
+msgid "Share"
+msgstr "Partager"
+
+#: src/views/portals/HomeBanner.vue
+msgid "Share with us!"
+msgstr "Partagez avec nous!"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid ""
+"ShareAlike — If you remix, transform, or build upon the material, you must "
+"distribute your contributions under the same license as the original."
+msgstr ""
+"Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, "
+"que vous transformez, ou créez à partir du matériel composant l'Oeuvre "
+"originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, "
+"c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été "
+"diffusée. "
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "shelter"
+msgstr "abri"
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js
+msgctxt "API message"
+msgid "Shorter than minimum length 1"
+msgstr "Champ obligatoire"
+
+#: src/views/user/utils/FormField.vue
+msgctxt "API message"
+msgid "Shorter than minimum length 3"
+msgstr "Champ trop court (minimum 3 caractères)"
+
+#: src/views/document/utils/boxes/RecentOutingsBox.vue
+#: src/views/document/utils/boxes/RoutesBox.vue
+msgid "show all"
+msgstr "Voir tous les résultats"
+
+#: src/views/user/PreferencesView.vue
+msgid "Show only updates from followed users in the homepage feed"
+msgstr ""
+"N'afficher dans le fil de la page d'accueil que les documents qui concernent"
+" les utilisateurs suivis."
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_outdoor_types"
+msgid "single"
+msgstr "couenne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "site_info"
+msgstr "info site"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "ski_exposition"
+msgstr "Exposition ski"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "ski_instructor"
+msgstr "moniteur de ski"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "user_categories"
+msgid "ski_patroller"
+msgstr "pisteur"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "ski_rating"
+msgstr "Cotation ski"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Skiability"
+msgstr "Skiabilité"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "skitouring"
+msgstr "Ski, surf"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "skitouring"
+msgstr "Ski de randonnée"
+
+#: src/views/document/RouteView.vue
+msgid "skitouring gear"
+msgstr "Ski, surf, raquette"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "slab"
+msgstr "dalle"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "slackline_types"
+msgid "slackline"
+msgstr "Slackline"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_anchor1"
+msgstr "Ancrage 1"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_anchor2"
+msgstr "Ancrage 2"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_height"
+msgstr "hauteur de la slackline"
+
+#: src/views/document/WaypointView.vue
+msgid "slackline_length"
+msgstr "Longueur de la ligne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_length_max"
+msgstr "Longueur de ligne maximale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_length_min"
+msgstr "Longueur de ligne minimale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "slackline_spot"
+msgstr "spot de slackline"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_type"
+msgstr "Type de ligne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "slackline_types"
+msgstr "Types de ligne"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "slacklining"
+msgstr "Slackline / Highline"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/document/RouteView.vue
+msgid "slope"
+msgstr "Pente"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_slopes"
+msgid "slope_30_35"
+msgstr "pente de 30 à 35°"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_slopes"
+msgid "slope_35_40"
+msgstr "pente de 35 à 40°"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_slopes"
+msgid "slope_40_45"
+msgstr "pente de 40 à 45°"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_slopes"
+msgid "slope_gt_45"
+msgstr "pente supérieure à 45°"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "avalanche_slopes"
+msgid "slope_lt_30"
+msgstr "pente inférieure à 30°"
+
+#: src/components/map/OlMap.vue
+msgid "Slopes"
+msgstr "Cartes de pentes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "small_pillar"
+msgstr "colonnettes"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "ground_types"
+msgid "snow"
+msgstr "Neige"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow_clearance_rating"
+msgstr "Déneigement"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "snow_height"
+msgstr "hauteur de neige"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "snow_ice_mixed"
+msgstr "Neige, glace et mixte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "snow_ice_mixed"
+msgstr "Neige, glace et mixte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow_quality"
+msgstr "Qualité de la neige"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "snow_quantity"
+msgstr "Quantité de neige"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "snowshoe_rating"
+msgstr "Cotation raquette"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "snowshoeing"
+msgstr "Raquette"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "access_conditions"
+msgid "snowy"
+msgstr "enneigé"
+
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+msgid "soft snow"
+msgstr "Neige meuble"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "soft_mobility"
+msgstr "mobilité douce"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "frequentation_types"
+msgid "some"
+msgstr "peu fréquenté"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "snow_clearance_ratings"
+msgid "sometimes"
+msgstr "déneigement occasionnel"
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid "Source:"
+msgstr "Document à fusionner (source) :"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_activities"
+msgid "sport_climbing"
+msgstr "Escalade falaise"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "product_types"
+msgid "sport_shop"
+msgstr "magasin de sport"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "stone_ice_fall"
+msgstr "chute de pierre/glace/serac"
+
+#: src/views/document/utils/FollowButton.vue
+msgid "Stop following this contributor"
+msgstr "Ne plus suivre ce contributeur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "stories"
+msgstr "récits"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "strong text"
+msgstr "texte en gras"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Suggested rating"
+msgstr "Cotation suggérée"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "summary"
+msgstr "Résumé"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "summit"
+msgstr "sommet"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "supervision"
+msgstr "Encadrement"
+
+#: src/components/map/map-layers.js
+msgctxt "Map layer"
+msgid "SwissTopo"
+msgstr "SwissTopo"
+
+#: src/components/map/map-layers.js
+msgctxt "Map slopes layer"
+msgid "SwissTopo"
+msgstr "Suisse (SwissTopo)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "tags"
+msgstr "tags"
+
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid "Target:"
+msgstr "Document à conserver (cible) :"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "technical"
+msgstr "technique"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "technics"
+msgstr "techniques"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "temperature"
+msgstr "température"
+
+#: src/views/documents/utils/QueryItems.vue
+msgid "Terrain"
+msgstr "Terrain"
+
+#: src/components/markdown-editor/LinkHelper.vue
+msgid "text to display"
+msgstr "texte à afficher"
+
+#: src/views/portals/HomeBanner.vue
+msgid "The mountain sports community"
+msgstr "La communauté des sports de montagne"
+
+#: src/views/static-views/NotFoundView.vue
+msgid "The page you are looking for does not exist or is broken."
+msgstr "La page que vous demandez n'existe pas ou est cassée."
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "The slope must be between 0 and 80 deg"
+msgstr "La pente doit être comprise entre 0 et 80 deg"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "The slope must be between 50 and 3000m high"
+msgstr "La hauteur de la pente doit être comprise entre 50 et 3000m"
+
+#: src/views/document/RouteView.vue
+msgid "There are sensitive areas on this route. Please refer to the map."
+msgstr ""
+"Cet itinéraire traverse ou se situe près de zones sensibles. Merci de "
+"consulter la carte."
+
+#: src/views/static-views/SeracView.vue
+msgid ""
+"These are positive experiences that reveal usefull risk-management skills."
+msgstr ""
+"Expériences positives qui révèlent des compétences de gestion des risques"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This book cover is the property of its editor and/or author"
+msgstr ""
+"Cette couverture de livre est la propriété de son éditeur et/ou auteur"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This content is licensed under Creative Commons BY-NC-ND 3.0"
+msgstr "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0"
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid "This content is licensed under Creative Commons BY-SA 3.0"
+msgstr "Ce contenu est sous licence Creative Commons BY-SA 3.0"
+
+#: src/views/wiki/edition/utils/FormField.vue
+msgid "This field is too long"
+msgstr "Texte trop long"
+
+#: src/views/wiki/edition/utils/FormField.vue
+msgid "This field is too short"
+msgstr "Texte trop court"
+
+#: src/views/wiki/edition/utils/document-edition-view-mixin.js
+msgctxt "API message"
+msgid "This field must be a valid ISBN."
+msgstr "Ce champ doit être un ISBN valide."
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+#: src/views/wiki/DiffView.vue
+msgid "This is the first version"
+msgstr "Ceci est la première version"
+
+#: src/views/document/utils/DocumentVersionBanner.vue
+#: src/views/wiki/DiffView.vue
+msgid "This is the last version"
+msgstr "Ceci est la dernière version"
+
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid ""
+"This is where you may describe the route extensively, maybe starting with a "
+"brief summary and then developing the description (including approach, "
+"descent, etc.). Don't forget to mention the route history if you know it."
+msgstr ""
+"Description complète de l'itinéraire (résumé, approche, descente, etc.) "
+"N'oubliez pas l'historique si vous le connaissez."
+
+#: src/views/document/utils/boxes/LicenseBox.vue
+msgid ""
+"This picture depicts a book cover. It is the property of its editor and/or "
+"author. It is presented here only for illustration purposes."
+msgstr ""
+"Cette image montre une couverture de livre. Elle est la propriété de "
+"l'éditeur et/ou de l'auteur et n'est présentée ici qu'à des fins "
+"d'illustration."
+
+#: src/views/document/ProfileView.vue
+msgid "This profile is only available to authenticated users."
+msgstr "Ce profil est accessible aux seuls utilisateurs authentifiés."
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid ""
+"This tool estimates the technical difficulty of a ski route (ski rating)."
+msgstr ""
+"Cet outil permet d'estimer la difficulté technique d'un itinéraire à ski "
+"(cotation ski)"
+
+#: src/views/document/utils/boxes/ElevationProfile.vue
+msgid "Time"
+msgstr "Heure"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "time_management"
+msgstr "Gestion de l'horaire"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "timing"
+msgstr "Durée"
+
+#: src/components/images-uploader/ImageUploader.vue
+#: src/translations/fixed_strings_common_js.vue
+#: src/views/wiki/WhatsNewView.vue
+msgid "title"
+msgstr "Titre"
+
+#: src/views/wiki/edition/BookEditionView.vue
+msgid "Title of the book, author, language and date of publication."
+msgstr "Titre de l'ouvrage, auteur, langue et date."
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Title, activity and characteristics of the picture"
+msgstr "Titre, activités et caractéristiques de l\"image"
+
+#: src/components/map/OlMap.vue
+msgctxt "Map Controls"
+msgid "Toggle full-screen"
+msgstr "Mode plein écran"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Toggle fullscreen"
+msgstr "Basculer en plein écran"
+
+#: src/components/association-editor/AssociationItems.vue
+msgid "Too many results: please refine your search."
+msgstr "Trop de résultats : merci de préciser votre recherche. "
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "topo"
+msgstr "topoguide"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "topo"
+msgstr "schéma / tracé"
+
+#: src/views/SideMenu.vue src/views/portals/HomeBanner.vue
+#: src/views/static-views/TopoguideView.vue
+msgid "Topoguide"
+msgstr "Topoguide"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "article_categories"
+msgid "topoguide_supplements"
+msgstr "suppléments du topoguide"
+
+#: src/views/document/utils/field-viewers/ConditionLevels.vue
+#: src/views/wiki/edition/utils/InputConditionsLevels.vue
+msgid "total snow"
+msgstr "Epaisseur totale"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "book_types"
+msgid "tourism"
+msgstr "tourisme"
+
+#: src/components/datatable/DocumentsTable.vue
+msgid "Trace"
+msgstr "Trace GPS"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "rock_types"
+msgid "trachyte"
+msgstr "trachyte"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "image_categories"
+msgid "track"
+msgstr "trace"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "public_transportation_types"
+msgid "train"
+msgstr "train"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "training"
+msgstr "Préparation physique et niveau technique"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+#: src/views/document/utils/windows/TranslateWindow.vue
+msgid "Translate into an other lang"
+msgstr "Traduire dans une autre langue"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Transport & road or PT access"
+msgstr "Accès routier/TC"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "route_types"
+msgid "traverse"
+msgstr "traversée"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Types and styles"
+msgstr "Types et styles"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Types of belay and protection used, verifications between climbers, snowpack"
+" stability tests, testing of avalanche transceivers, etc."
+msgstr ""
+"Type d'assurage et de protection, vérifications entre grimpeurs, tests de "
+"stabilité du manteau neigeux, test des DVA, etc."
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Unblock account"
+msgstr "Débloquer cet utilisateur"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Unformatted text"
+msgstr "Texte brut"
+
+#: src/views/document/utils/TagsButton.vue
+msgid "Unmark this route as to do"
+msgstr "Enlever cet itinéraire de ses favoris"
+
+#: src/components/markdown-editor/MarkdownEditor.vue
+msgid "Unordered list"
+msgstr "Liste non triée"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "Unprotect document"
+msgstr "Déprotéger ce document"
+
+#: src/views/wiki/edition/utils/MapInputRow.vue
+msgid "Upload a GPS track"
+msgstr "Ajouter une trace GPS"
+
+#: src/views/wiki/edition/ImageEditionView.vue
+msgid "Upload a new version"
+msgstr "Télécharger une nouvelle version"
+
+#: src/components/markdown-editor/LinkHelper.vue
+msgid "URL"
+msgstr "URL"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "url"
+msgstr "URL"
+
+#: src/components/cards/FeedCard.vue
+msgid "User avatar"
+msgstr "Avatar"
+
+#: src/views/user/AccountView.vue src/views/user/LoginView.vue
+msgid "Username"
+msgstr "Identifiant"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "users"
+msgstr "utilisateurs"
+
+#: src/views/wiki/HistoryView.vue
+msgid "Versions"
+msgstr "Versions"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "climbing_styles"
+msgid "vertical"
+msgstr "vertical"
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Very complex (steps, narrow sections, ridges...)"
+msgstr "Très complexe (marches, étroitures, barres,...)"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "children_proof_types"
+msgid "very_dangerous"
+msgstr "dangereux"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "children_proof_types"
+msgid "very_safe"
+msgstr "bien adapté"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "activities"
+msgid "via_ferrata"
+msgstr "Via ferrata"
+
+#: src/components/generics/DocumentRating.vue
+#: src/translations/fixed_strings_common_js.vue
+msgid "via_ferrata_rating"
+msgstr "Cotation via ferrata"
+
+#: src/views/document/utils/boxes/ToolBox.vue
+msgid "View in other lang"
+msgstr "Voir dans une autre langue"
+
+#: src/views/document/utils/boxes/CommentsBox.vue
+msgid "View next comments and continue the discussion"
+msgstr "Voir les commentaires suivants et continuer la discussion"
+
+#: src/views/static-views/SeracView.vue
+msgid "View xreports"
+msgstr "Voir les compte-rendus"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "virtual"
+msgstr "virtuel"
+
+#: src/components/generics/modals/ModalConfirmation.vue
+#: src/views/document/utils/windows/MergeDocumentWindow.vue
+msgid "Warning: This action cannot be undone!"
+msgstr "Attention : cette action est irréversible !"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "waterfall"
+msgstr "cascade"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "slackline_types"
+msgid "waterline"
+msgstr "Waterline"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "waterpoint"
+msgstr "point d'eau/source"
+
+#: src/translations/fixed_strings_manual.vue
+#: src/views/wiki/edition/RouteEditionView.vue
+msgid "waypoint"
+msgstr "point de passage"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Waypoint's main properties"
+msgstr "Principales données du point de passage"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "Waypoint's textual description"
+msgstr "Descriptions textuelles du point de passage"
+
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+msgid "waypoint_children"
+msgstr "sous-points de passage"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "waypoint_slope"
+msgstr "pente du terrain"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "waypoint_type"
+msgstr "Type de point de passage"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/TopoguideView.vue
+msgid "waypoints"
+msgstr "points de passage"
+
+#: src/views/user/LoginView.vue
+msgid "We sent you an email, please click on the link to reset password."
+msgstr ""
+"Vous allez bientôt recevoir un email. Veuillez cliquer sur le lien qu'il "
+"contient pour réinitialiser votre mot de passe."
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "weather"
+msgstr "Météo"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Weather & conditions"
+msgstr "Météo & conditions"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "event_types"
+msgid "weather_event"
+msgstr "événement météo"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "weather_station"
+msgstr "station météo"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "weather_station_types"
+msgstr "Variables mesurées par la station météo"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "waypoint_types"
+msgid "webcam"
+msgstr "webcam"
+
+#: src/views/wiki/edition/XreportEditionView.vue
+msgid ""
+"Why did you choose this outing? When did you decide to engage. What "
+"influenced your decision (holiday time, long journey, hotel/hut bookings, "
+"time spent already in preparation, limited possibilities, etc.)?"
+msgstr ""
+"Pourquoi avoir choisi cette sortie ? A quel point étiez-vous attaché à "
+"l'objectif fixé ? Considérez l'influence de possibles choix effectués en "
+"amont (jours de congés, long trajet, réservations de nuitées...), des "
+"efforts réalisés jusque-là, de la rareté de l'opportunité, etc."
+
+#: src/views/wiki/edition/utils/CotometerWindow.vue
+msgid "Wide and constant"
+msgstr "Large et régulière"
+
+#: src/translations/fixed_strings_common_js.vue
+msgid "width"
+msgstr "Largeur"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "wind_direction"
+msgstr "direction du vent"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "weather_station_types"
+msgid "wind_speed"
+msgstr "vitesse du vent"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "Without c2c account"
+msgstr "Participants sans compte c2c"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "write a summary"
+msgstr "Indiquez ici un résumé"
+
+#: src/views/wiki/edition/OutingEditionView.vue
+msgid "write your comments"
+msgstr "Laissez vos commentaires"
+
+#: src/translations/fixed_strings_manual.vue
+msgid "xreport"
+msgstr "incident / accident"
+
+#: src/translations/fixed_strings_common_js.vue
+#: src/translations/fixed_strings_manual.vue
+#: src/views/document/utils/boxes/AssociatedDocuments.vue
+#: src/views/static-views/NotFoundView.vue
+#: src/views/static-views/SeracView.vue
+msgid "xreports"
+msgstr "rapports incidents/accidents"
+
+#: src/translations/fixed_strings_common_js.vue
+msgctxt "parking_fee_types"
+msgid "yes"
+msgstr "oui"
+
+#: src/components/datatable/DocumentsTable.vue
+#: src/components/generics/DocumentField.vue
+#: src/components/generics/inputs/InputYesNo.vue
+msgid "yes"
+msgstr "oui"
+
+#: src/views/document/utils/boxes/MapBox.vue
+msgid "YETI"
+msgstr "YETI"
+
+#: src/views/static-views/SeracView.vue
+msgid "You can choose to remain anonymous"
+msgstr "Vous pouvez choisir de rester anonyme"
+
+#: src/views/wiki/edition/WaypointEditionView.vue
+msgid "You may add associated waypoints, books and articles"
+msgstr "Associez d'autres documents de camptocamp à ce point de passage"
+
+#: src/views/wiki/edition/utils/MapInputRow.vue
+msgid "You may also drag, draw or edit the track on the map."
+msgstr ""
+"Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte."
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Zoom in"
+msgstr "Zoomer"
+
+#: src/components/map/OlMap.vue
+msgctxt "Map controls"
+msgid "Zoom out"
+msgstr "Dézoomer"

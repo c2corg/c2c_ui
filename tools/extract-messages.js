@@ -9,6 +9,7 @@ Supported patterns in .vue and .js files :
     $gettext('msgid')
     $gettext('msgid', 'msgctx')
 
+    // FIXME FIXME FIXME
 Supported pattern in .vue file, inside <template /> part :
 
     Any node that contains a v-translate directive.

@@ -1,7 +1,7 @@
 {
   "fr": {
     "1": {
-      "paragliding_ratings": "P1"
+      "paragliding_ratings": "{GENDER, select, male {He} female {She} other {They}} found {RES, plural, =0 {no results} one {1 result} other {# results}}."
     },
     "2": {
       "paragliding_ratings": "P2"

@@ -8,8 +8,8 @@
     >
       <fa-icon icon="chevron-left" />
     </component>
-    {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
-    <span v-translate translate-context="1-30 of 200 results">of</span>
+    <!-- FIXME -->
+    {{ firstDocumentPosition }}-{{ lastDocumentPosition }} <span v-translate="{ ctxt: '1-30 of 200 results' }">of</span>
     {{ total }}
     <component
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
@@ -37,7 +37,7 @@
         <span>{{ l }}</span>
       </component>
     </dropdown-button>
-    <span v-translate translate-context="30 per page">per page</span>
+    <span v-translate="{ ctxt: '30 per page' }">per page</span>
   </span>
 </template>
 

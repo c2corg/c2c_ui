@@ -1,4 +1,6 @@
-import french_translations from '@/translations/fr.json';
+import Messages from 'messageformat/messages';
+
+import french_translations from '@/translations/fr.js';
 
 const TEXT_NODE = 3;
 
@@ -24,32 +26,12 @@ function cleanMessageId(msgid) {
   return msgid;
 }
 
-function getTranslation(messages, msgid, msgctxt) {
-  //, n = 1, context = null, defaultPlural = null){
+function getTranslation(messages, msgid, msgctxt, params) {
   if (messages === undefined) {
     // `messages are not yet available`
     return msgid;
   }
-
-  const message = messages[msgid];
-
-  if (message === undefined) {
-    return msgid;
-  }
-
-  // message can be a key-value object, if a context exists for this msgid
-  if (!!msgctxt) {
-    return message[msgctxt] ?? msgid;
-  }
-
-  // if context isn't provided, message may be a string if this msgid hasn't other version with context
-  if (typeof message === 'string') {
-    return message;
-  }
-
-  // otherwise, it's stored in '$$noContext' key
-  // note that '$$noContext' is a reserved context :)
-  return message['$$noContext'] ?? msgid;
+  return msgctxt ? messages.get([msgctxt, msgid], params) : messages.get(msgid, params);
 }
 
 function getMessages(lang) {
@@ -58,19 +40,7 @@ function getMessages(lang) {
     // and lazy load the others
     return french_translations;
   } else if (lang === 'en') {
-    return import(/* webpackChunkName: "translations-en" */ `@/translations/en.json`);
-  } else if (lang === 'ca') {
-    return import(/* webpackChunkName: "translations-ca" */ `@/translations/ca.json`);
-  } else if (lang === 'eu') {
-    return import(/* webpackChunkName: "translations-eu" */ `@/translations/eu.json`);
-  } else if (lang === 'it') {
-    return import(/* webpackChunkName: "translations-it" */ `@/translations/it.json`);
-  } else if (lang === 'de') {
-    return import(/* webpackChunkName: "translations-de" */ `@/translations/de.json`);
-  } else if (lang === 'es') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
-  } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/zh_CN.json`);
+    return import(/* webpackChunkName: "translations-en" */ `@/translations/en.js`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
@@ -96,8 +66,6 @@ export default function install(Vue) {
         eu: 'Euskara',
         zh_CN: 'Chinese',
       };
-
-      this.translations = {};
       this.current = this.$localStorage.get('current', 'fr');
     },
 
@@ -110,7 +78,7 @@ export default function install(Vue) {
           this.current = null;
           this.current = lang;
           // set html lang attribute
-          document.documentElement.setAttribute('lang', lang);
+          document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
         });
       },
 
@@ -124,6 +92,7 @@ export default function install(Vue) {
         // then, we must defer lang setter
         // because we may need to lazy load data
         this._getMessages(lang).then(() => {
+          // this.current = null; // !FIXME what's the problem with reactivity here?
           this.current = lang;
           // set html lang attribute
           document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
@@ -132,30 +101,39 @@ export default function install(Vue) {
 
       _getMessages(lang) {
         // TODO : normally, webpack should handle this
-        if (this.translations[lang] !== undefined) {
+        if (this.translations && this.translations.availableLocales.includes(lang)) {
           return new Promise((resolve) => {
-            resolve(this.translations[lang]);
+            resolve(this.translations);
           });
         }
 
         const messages = getMessages(lang);
 
         return new Promise((resolve) => {
-          if (messages.then) {
+          if (messages instanceof Promise) {
             // messages is a promise
-            messages.then((translations) => {
-              this.translations[lang] = translations[lang];
-              resolve(translations[lang]);
+            messages.then(({ default: translations }) => {
+              if (!this.translations) {
+                this.translations = new Messages(translations, lang);
+              } else {
+                this.translations.addMessages(translations[lang], lang);
+              }
+              this.translations.locale = lang;
+              resolve();
             });
           } else {
-            this.translations[lang] = messages[lang];
-            resolve(messages[lang]);
+            if (!this.translations) {
+              this.translations = new Messages(messages, lang);
+            } else {
+              this.translations.addMessages(messages[lang], lang);
+            }
+            resolve();
           }
         });
       },
 
-      gettext(msgid, msgctxt) {
-        return getTranslation(this.translations[this.current], msgid, msgctxt);
+      gettext(msgid, msgctxt, params) {
+        return getTranslation(this.translations, msgid, msgctxt, params);
       },
 
       getIANALanguageSubtag(lang) {
@@ -202,40 +180,36 @@ export default function install(Vue) {
         }
       },
 
-      updateElement(element) {
+      updateElement(element, binding) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
             // eslint-disable-next-line
-            console.error('v-translate must contains only text', element.childNodes);
+            console.error('v-translate must contain only text', element.childNodes);
             return;
           }
 
           element.dataset.msgid = cleanMessageId(element.innerText);
-
-          const context = element.attributes.getNamedItem('translate-context');
-          if (context) {
-            element.dataset.msgctxt = context.value;
-          }
         }
 
-        element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
+        element.innerText = this.gettext(
+          element.dataset.msgid,
+          binding.value?.ctxt || binding.value?.context,
+          binding.value?.params
+        );
       },
     },
   });
 
   // An option to support translation with HTML content: `v-translate`.
   Vue.directive('translate', {
-    bind(el) {
-      // console.log("bind", el)
-      languageVm.updateElement(el);
+    bind(el, binding) {
+      languageVm.updateElement(el, binding);
     },
-    inserted(el) {
-      // console.log("inserted", el)
-      languageVm.updateElement(el);
+    inserted(el, binding) {
+      languageVm.updateElement(el, binding);
     },
-    update(el) {
-      // console.log("update", el)
-      languageVm.updateElement(el);
+    update(el, binding) {
+      languageVm.updateElement(el, binding);
     },
   });
 
