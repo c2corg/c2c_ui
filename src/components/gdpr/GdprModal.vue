@@ -53,8 +53,8 @@
     </div>
 
     <div slot="footer" class="buttons is-flex is-justify-content-flex-end">
-      <button class="button" @click="hide">cancel</button>
-      <button class="button is-primary" @click="submit">submit</button>
+      <button class="button" @click="hide" v-translate>Cancel</button>
+      <button class="button is-primary" @click="submit" v-translate>Submit</button>
     </div>
   </modal-window>
 </template>
