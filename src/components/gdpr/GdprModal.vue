@@ -7,8 +7,8 @@
 
     <div class="columns">
       <div class="column">
-        <h2 class="is-size-3">Cookies nécessaires</h2>
-        <p>
+        <h2 class="is-size-3" v-translate>Cookies nécessaires</h2>
+        <p v-translate>
           Les cookies nécessaires sont indispensables au bon fonctionnement de notre site Web et ne peuvent pas être
           désactivés. Ils sont envoyés à votre ordinateur ou à votre appareil lorsque vous demandez une action ou un
           service spécifiques, par exemple lorsque vous vous connectez, remplissez un formulaire ou définissez vos
@@ -18,7 +18,7 @@
       </div>
       <div class="column">
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-          <h2 class="is-size-3">Cookies statistiques</h2>
+          <h2 class="is-size-3" v-translate>Cookies statistiques</h2>
           <div class="field">
             <input
               type="checkbox"
@@ -30,20 +30,20 @@
             <label for="statistics"></label>
           </div>
         </div>
-        <p>
+        <p v-translate>
           Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les
           visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à
           comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons
           pas améliorer votre expérience.
         </p>
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-          <h2 class="is-size-3">Cookies sociaux</h2>
+          <h2 class="is-size-3" v-translate>Cookies sociaux</h2>
           <div class="field">
             <input type="checkbox" id="social" name="social" class="switch is-rounded" v-model="gdpr.social" />
             <label for="social"></label>
           </div>
         </div>
-        <p>
+        <p v-translate>
           Ces cookies permettent d’interagir depuis le site camptocamp.org avec les modules sociaux et de partager les
           contenus du site avec d’autres personnes ou de les informer de votre consultation ou opinion sur celui-ci,
           lorsque vous cliquez sur le module "Partager" par exemple. En désactivant ces cookies, vous ne pourrez plus
