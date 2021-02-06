@@ -45,7 +45,7 @@ export default {
 <style scoped>
 .modal-content {
   background: white;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 1.5rem;
 }
 
