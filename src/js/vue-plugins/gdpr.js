@@ -8,9 +8,18 @@ export default function install(Vue) {
 
     created() {
       try {
-        this.set(this.$localStorage.get('choice'));
+        let storedValue = this.$localStorage.get('choice');
+        // if choice is over a year, consent must be asked again
+        if (Date.now() - (storedValue?.date ?? 0) > 1000 * 60 * 60 * 24 * 365) {
+          storedValue = null;
+        }
+        this.gdprValue = storedValue;
       } catch (err) {
         this.gdprValue = undefined;
+      }
+
+      if (this.gdprValue?.statistics) {
+        this.$ga.enable();
       }
     },
 
@@ -20,8 +29,12 @@ export default function install(Vue) {
       },
 
       set(newValue) {
-        this.gdprValue = newValue;
-        !!newValue && this.$localStorage.set('choice', newValue);
+        if (newValue) {
+          this.gdprValue = { ...newValue, date: Date.now() };
+          this.$localStorage.set('choice', this.gdprValue);
+        } else {
+          this.gdprValue = undefined;
+        }
 
         if (newValue?.statistics) {
           this.$ga.enable();
