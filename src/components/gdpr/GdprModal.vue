@@ -57,7 +57,7 @@ export default {
 
   methods: {
     show() {
-      this.gdpr = this.$gdpr.get() || { statistics: false };
+      this.gdpr = JSON.parse(JSON.stringify(this.$gdpr.get())) || { statistics: false, social: false };
       this.$refs.modalWindow.show();
     },
 
