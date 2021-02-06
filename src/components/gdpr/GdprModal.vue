@@ -1,6 +1,7 @@
 <template>
   <modal-window ref="modalWindow">
     <div slot="header" class="has-text-centered">
+      <fa-icon icon="user-shield"></fa-icon>
       <span v-translate>Paramétrage des cookies</span>
     </div>
 

@@ -95,6 +95,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserLock } from '@fortawesome/free-solid-svg-icons/faUserLock';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons/faUserShield';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
@@ -302,6 +303,7 @@ export default function install(Vue) {
     faUserCheck,
     faUserLock,
     faUsers,
+    faUserShield,
     faWrench,
 
     // regular icons
