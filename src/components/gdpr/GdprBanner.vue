@@ -27,16 +27,30 @@ import GdprModal from './GdprModal.vue';
 export default {
   components: { GdprModal },
 
+  data() {
+    return {
+      userHasInteracted: false,
+    };
+  },
+
   computed: {
     active: {
       get: function () {
-        return !this.$gdpr.get();
+        return !this.$gdpr.get() && this.userHasInteracted;
       },
       set: function () {
         // only trigger change
         return;
       },
     },
+  },
+
+  beforeMount() {
+    //     window.addEventListener('mousemove', this.firstUserInteraction);
+    window.addEventListener('scroll', this.firstUserInteraction);
+    window.addEventListener('keydown', this.firstUserInteraction);
+    window.addEventListener('resize', this.firstUserInteraction);
+    window.addEventListener('click', this.firstUserInteraction);
   },
 
   mounted() {
@@ -51,6 +65,16 @@ export default {
     acceptGdpr(accept) {
       this.$gdpr.set(accept ? { statistics: true } : { statistics: false });
       this.active = false;
+    },
+
+    firstUserInteraction() {
+      // window.removeEventListener('mousemove', this.userActivityThrottler);
+      window.removeEventListener('scroll', this.userActivityThrottler);
+      window.removeEventListener('keydown', this.userActivityThrottler);
+      window.removeEventListener('resize', this.userActivityThrottler);
+      window.removeEventListener('click', this.userActivityThrottler);
+
+      this.userHasInteracted = true;
     },
   },
 };
