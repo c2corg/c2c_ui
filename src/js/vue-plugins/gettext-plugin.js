@@ -9,9 +9,7 @@ function cleanMessageId(msgid) {
     return msgid;
   }
 
-  if (!msgid.replace) {
-    // eslint-disable-next-line
-    // console.error("Found a non-string in translations", msgid)
+  if (!(typeof msgid === 'string' || msgid instanceof string)) {
     return String(msgid);
   }
 
@@ -28,7 +26,6 @@ function cleanMessageId(msgid) {
 
 function getTranslation(messages, msgid, msgctxt, params) {
   if (messages === undefined) {
-    // `messages are not yet available`
     return msgid;
   }
   return msgctxt ? messages.get([msgctxt, msgid], params) : messages.get(msgid, params);
@@ -92,7 +89,6 @@ export default function install(Vue) {
         // then, we must defer lang setter
         // because we may need to lazy load data
         this._getMessages(lang).then(() => {
-          // this.current = null; // !FIXME what's the problem with reactivity here?
           this.current = lang;
           // set html lang attribute
           document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
@@ -111,7 +107,6 @@ export default function install(Vue) {
 
         return new Promise((resolve) => {
           if (messages instanceof Promise) {
-            // messages is a promise
             messages.then(({ default: translations }) => {
               if (!this.translations) {
                 this.translations = new Messages(translations, lang);
@@ -133,6 +128,9 @@ export default function install(Vue) {
       },
 
       gettext(msgid, msgctxt, params) {
+        // call to this.current msut be made so that vue reactivity system registers target component on language
+        // change, although this.translations already knows which lang to play with
+        const lang = this.current; // eslint-disable-line no-unused-vars
         return getTranslation(this.translations, msgid, msgctxt, params);
       },
 
