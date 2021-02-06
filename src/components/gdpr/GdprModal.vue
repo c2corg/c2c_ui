@@ -44,10 +44,10 @@
           </div>
         </div>
         <p>
-          Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les
-          visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à
-          comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons
-          pas améliorer votre expérience.
+          Ces cookies permettent d’interagir depuis le site camptocamp.org avec les modules sociaux et de partager les
+          contenus du site avec d’autres personnes ou de les informer de votre consultation ou opinion sur celui-ci,
+          lorsque vous cliquez sur le module "Partager" par exemple. En désactivant ces cookies, vous ne pourrez plus
+          partager les contenus de camptocamp.org depuis le site camptocamp.org sur les réseaux sociaux.
         </p>
       </div>
     </div>

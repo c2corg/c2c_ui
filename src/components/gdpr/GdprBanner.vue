@@ -6,9 +6,8 @@
         <span v-translate class="has-text-justified">
           Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au
           fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier
-          ceux qui nous permettent de comprendre les performances de notre site Web, vous fournir des fonctionnalités de
-          médias sociaux et offrir une meilleure expérience avec du contenu et de la publicité pertinents. Vous pouvez
-          les accepter ou les refuser tous ou bien
+          ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des
+          fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien
         </span>
         <a @click="displayGdprModal()" v-translate>paramétrer vos choix</a>
       </div>
