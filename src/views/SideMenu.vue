@@ -29,10 +29,10 @@
         <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>EULA</router-link>
         <span> &bull; </span>
         <router-link :to="{ name: 'article', params: { id: 106728 } }" v-translate>Licenses</router-link>
-        <span> &bull; </span>
-        <a @click="showGDPR">Cookies</a>
         <br />
         <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
+        <span> &bull; </span>
+        <a @click="showGDPR" v-translate>Cookies</a>
       </div>
 
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
