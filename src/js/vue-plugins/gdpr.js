@@ -42,6 +42,10 @@ export default function install(Vue) {
           this.$ga.disable();
         }
       },
+
+      setAll(accept) {
+        this.set(accept ? { statistics: true, social: true } : { statistics: false, social: false });
+      },
     },
   });
 

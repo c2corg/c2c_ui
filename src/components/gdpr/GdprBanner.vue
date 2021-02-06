@@ -63,7 +63,7 @@ export default {
     },
 
     acceptGdpr(accept) {
-      this.$gdpr.set(accept ? { statistics: true } : { statistics: false });
+      this.$gdpr.setAll(accept);
       this.active = false;
     },
 
