@@ -56,8 +56,8 @@ export default {
   },
 
   methods: {
-    show(gdprValue) {
-      this.gdpr = gdprValue || { statistics: false };
+    show() {
+      this.gdpr = this.$gdpr.get() || { statistics: false };
       this.$refs.modalWindow.show();
     },
 
@@ -66,7 +66,7 @@ export default {
     },
 
     submit() {
-      this.$emit('gdpr', this.gdpr);
+      this.$gdpr.set(this.gdpr);
       this.hide();
     },
   },

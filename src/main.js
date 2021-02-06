@@ -9,6 +9,7 @@ import alertWindow from '@/js/vue-plugins/alert-window';
 import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
+import gdpr from '@/js/vue-plugins/gdpr';
 import globalComponents from '@/js/vue-plugins/generic-components';
 import getText from '@/js/vue-plugins/gettext-plugin';
 import helperWindow from '@/js/vue-plugins/helper-window';
@@ -72,6 +73,7 @@ Vue.use(screen); // screen reactives properties
 Vue.use(stripMarkdown); // stripMarkdown filter
 Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
+Vue.use(gdpr);
 
 new Vue({
   router,
