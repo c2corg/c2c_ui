@@ -33,11 +33,11 @@ Vue.use(localStorage); // First, vm.$localStorage property
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
   disabled: true,
-  debug: {
-    enabled: true, // default value
-    trace: true, // default value
-    sendHitTask: true, // default value
-  },
+  // debug: {
+  //   enabled: true, // default value
+  //   trace: true, // default value
+  //   sendHitTask: true, // default value
+  // },
   router,
   autoTracking: {
     // do not send updates if query parameter has changed

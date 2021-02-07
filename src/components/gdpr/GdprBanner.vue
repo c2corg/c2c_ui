@@ -33,14 +33,8 @@ export default {
   },
 
   computed: {
-    active: {
-      get: function () {
-        return !this.$gdpr.get() && this.userHasInteracted;
-      },
-      set: function () {
-        // only trigger change
-        return;
-      },
+    active: function () {
+      return !this.$gdpr.get() && this.userHasInteracted;
     },
   },
 
@@ -63,7 +57,6 @@ export default {
 
     acceptGdpr(accept) {
       this.$gdpr.setAll(accept);
-      this.active = false;
     },
 
     firstUserInteraction() {
