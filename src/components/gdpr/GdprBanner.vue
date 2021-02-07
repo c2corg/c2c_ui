@@ -1,19 +1,18 @@
 <template>
   <div>
     <div class="gdpr-content" :class="{ active: active }">
-      <h4 class="title" v-translate>Contrôlez l'utilisation de vos données personnelles</h4>
+      <h4 class="title" v-translate>Control the use of your personal data</h4>
       <div class="message">
         <span v-translate class="has-text-justified">
-          Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au
-          fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier
-          ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des
-          fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien
+          Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website,
+          while you can adjust others at any time, in particular those that allow us to understand the performance of
+          our website and to offer you social media features. You can accept or reject all, or
         </span>
-        <a @click="displayGdprModal()" v-translate>paramétrer vos choix</a>
+        <a @click="showGdprModal()" v-translate>configure your choices</a>.
       </div>
       <div class="buttons mt-2 is-flex is-justify-content-flex-end">
-        <button @click="acceptGdpr(false)" class="button is-danger" v-translate>Tout refuser</button>
-        <button @click="acceptGdpr(true)" class="button is-primary" v-translate>Tout accepter</button>
+        <button @click="acceptGdpr(false)" class="button is-danger" v-translate>Deny all</button>
+        <button @click="acceptGdpr(true)" class="button is-primary" v-translate>Allow all</button>
       </div>
     </div>
     <gdpr-modal ref="GdprModal"></gdpr-modal>
@@ -39,7 +38,6 @@ export default {
   },
 
   beforeMount() {
-    //     window.addEventListener('mousemove', this.firstUserInteraction);
     window.addEventListener('scroll', this.firstUserInteraction);
     window.addEventListener('keydown', this.firstUserInteraction);
     window.addEventListener('resize', this.firstUserInteraction);
@@ -47,11 +45,11 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('showGDPR', () => this.displayGdprModal());
+    this.$root.$on('showGdpr', () => this.showGdprModal());
   },
 
   methods: {
-    displayGdprModal() {
+    showGdprModal() {
       this.$refs.GdprModal.show(this.gdprValue);
     },
 
@@ -60,11 +58,10 @@ export default {
     },
 
     firstUserInteraction() {
-      // window.removeEventListener('mousemove', this.userActivityThrottler);
-      window.removeEventListener('scroll', this.userActivityThrottler);
-      window.removeEventListener('keydown', this.userActivityThrottler);
-      window.removeEventListener('resize', this.userActivityThrottler);
-      window.removeEventListener('click', this.userActivityThrottler);
+      window.removeEventListener('scroll', this.firstUserInteraction);
+      window.removeEventListener('keydown', this.firstUserInteraction);
+      window.removeEventListener('resize', this.firstUserInteraction);
+      window.removeEventListener('click', this.firstUserInteraction);
 
       this.userHasInteracted = true;
     },

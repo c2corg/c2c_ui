@@ -32,7 +32,7 @@
         <br />
         <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
         <span> &bull; </span>
-        <a @click="showGDPR" v-translate>Cookies</a>
+        <a @click="showGdpr" v-translate>Cookies</a>
       </div>
 
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
@@ -103,8 +103,8 @@ export default {
   },
 
   methods: {
-    showGDPR() {
-      this.$root.$emit('showGDPR');
+    showGdpr() {
+      this.$root.$emit('showGdpr');
     },
   },
 };

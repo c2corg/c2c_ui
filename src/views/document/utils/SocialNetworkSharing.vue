@@ -18,7 +18,6 @@ import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
 
-// TODO
 export default {
   data() {
     return { visible: false };
@@ -29,7 +28,7 @@ export default {
       if (!process.browser) {
         return;
       }
-      const enabled = this.$gdpr.get()?.social || false;
+      const enabled = this.$gdpr.get()?.social ?? false;
       enabled ? this.install() : this.uninstall();
       return enabled;
     },

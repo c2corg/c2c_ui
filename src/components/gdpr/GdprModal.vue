@@ -2,23 +2,22 @@
   <modal-window ref="modalWindow">
     <div slot="header" class="has-text-centered">
       <fa-icon icon="user-shield"></fa-icon>
-      <span v-translate>Paramétrage des cookies</span>
+      <span v-translate>Configure cookies</span>
     </div>
 
     <div class="columns">
       <div class="column">
-        <h2 class="is-size-3" v-translate>Cookies nécessaires</h2>
+        <h2 class="is-size-3" v-translate>Necessary cookies</h2>
         <p v-translate>
-          Les cookies nécessaires sont indispensables au bon fonctionnement de notre site Web et ne peuvent pas être
-          désactivés. Ils sont envoyés à votre ordinateur ou à votre appareil lorsque vous demandez une action ou un
-          service spécifiques, par exemple lorsque vous vous connectez, remplissez un formulaire ou définissez vos
-          préférences en matière de cookies. Si vous configurez votre navigateur de façon à bloquer ces cookies ou à
-          vous avertir de l'existence de ces derniers, notre site Web ne fonctionnera pas intégralement.
+          Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are
+          sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out
+          a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you
+          of their existence, our website will not function fully.
         </p>
       </div>
       <div class="column">
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-          <h2 class="is-size-3" v-translate>Cookies statistiques</h2>
+          <h2 class="is-size-3" v-translate>Statistical cookies</h2>
           <div class="field">
             <input
               type="checkbox"
@@ -31,23 +30,22 @@
           </div>
         </div>
         <p v-translate>
-          Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les
-          visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à
-          comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons
-          pas améliorer votre expérience.
+          Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our
+          website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our
+          website. If you reject them, we cannot improve your experience.
         </p>
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-          <h2 class="is-size-3" v-translate>Cookies sociaux</h2>
+          <h2 class="is-size-3" v-translate>Social cookies</h2>
           <div class="field">
             <input type="checkbox" id="social" name="social" class="switch is-rounded" v-model="gdpr.social" />
             <label for="social"></label>
           </div>
         </div>
         <p v-translate>
-          Ces cookies permettent d’interagir depuis le site camptocamp.org avec les modules sociaux et de partager les
-          contenus du site avec d’autres personnes ou de les informer de votre consultation ou opinion sur celui-ci,
-          lorsque vous cliquez sur le module "Partager" par exemple. En désactivant ces cookies, vous ne pourrez plus
-          partager les contenus de camptocamp.org depuis le site camptocamp.org sur les réseaux sociaux.
+          These cookies allow you to interact from camptocamp.org website with social media modules and share content of
+          the website with other people or let them know of your consultation or opinion on it, e.g. when you click on
+          the "Share" module. By disabling these cookies, you won't be able to share content from camptocamp.org on
+          social networks.
         </p>
       </div>
     </div>
