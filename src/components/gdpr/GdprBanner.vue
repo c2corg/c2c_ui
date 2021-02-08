@@ -84,7 +84,7 @@ export default {
   background-color: white;
   box-shadow: none;
   transform: translateY(-100%);
-  transition: all 0.25s ease-in-out;
+  transition: transform 0.25s ease-in-out;
 
   &.active {
     box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 6px 0;
