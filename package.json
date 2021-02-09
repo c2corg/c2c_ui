@@ -14,7 +14,8 @@
     "messages:extract": "node tools/extract-messages.js",
     "prepare": "npm run snyk-protect",
     "snyk-protect": "snyk protect",
-    "update-c2c-common": "python3 tools/update-c2c-common.py"
+    "update-c2c-common": "python3 tools/update-c2c-common.py",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.2",
@@ -95,11 +96,6 @@
     "email": "dev@camptocamp.org"
   },
   "homepage": "https://www.camptocamp.org",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
