@@ -26,7 +26,7 @@
       "severities": "de 4 jours à un mois"
     },
     "Accident database": "Incidents et accidents",
-    "Activity feed": "Fil d'activité",
+    "Activity feed": "Fil d'activité %{TOTO}",
     "Add": "Ajouter",
     "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
     "Add images": "Ajouter des images",
@@ -197,7 +197,10 @@
     },
     "Issue report": "Signalement d'un problème",
     "Know more about SERAC": "En savoir plus sur SERAC",
-    "Last forum topics": "Dernières discussions du forum",
+    "Last %{COUNT} forum topics": [
+      "Dernière discussion du forum",
+      "%{ COUNT } dernières discussions du forum"
+    ],
     "Last outings": "Dernières sorties",
     "Layers": {
       "Map controls": "Sélection des couches"

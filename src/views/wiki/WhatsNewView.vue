@@ -8,7 +8,7 @@
 
     <table v-infinite-scroll="load" infinite-scroll-disabled="disableInfiniteSCroll" infinite-scroll-distance="100">
       <tr>
-        <th v-translate translate-context="modification date">Modified the</th>
+        <th v-translate="{ ctxt: 'modification date' }">Modified the</th>
         <th v-translate>contributor</th>
         <th v-translate>Links</th>
         <th />

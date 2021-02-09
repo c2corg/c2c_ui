@@ -6,7 +6,7 @@
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
           <div class="feed-title">
-            <span class="is-size-3 has-text-weight-semibold" v-translate>Activity feed</span>
+            <span class="is-size-3 has-text-weight-semibold" v-translate="{ TOTO: 'Bruno' }">Activity feed</span>
             <span v-if="$user.isLogged" class="feed-buttons is-pulled-right">
               <input
                 id="c2c-personal-feed"
@@ -23,7 +23,9 @@
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
-          <h3 class="title is-3" v-translate>Last forum topics</h3>
+          <h3 class="title is-3" v-translate="{ plural: 'Last forum topic', n: 3, COUNT: 3 }">
+            Last %{COUNT} forum topics
+          </h3>
 
           <forum-widget wide class="box is-paddingless" />
         </div>

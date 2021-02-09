@@ -7,7 +7,7 @@ function cleanMessageId(msgid) {
     return msgid;
   }
 
-  if (!msgid.replace) {
+  if (!(typeof msgid === 'string' || msgid instanceof string)) {
     // eslint-disable-next-line
     // console.error("Found a non-string in translations", msgid)
     return String(msgid);
@@ -42,6 +42,7 @@ function getTranslation(messages, msgid, msgctxt) {
     return message[msgctxt] ?? msgid;
   }
 
+  // ! FIXME use top level context instead
   // if context isn't provided, message may be a string if this msgid hasn't other version with context
   if (typeof message === 'string') {
     return message;
@@ -49,7 +50,7 @@ function getTranslation(messages, msgid, msgctxt) {
 
   // otherwise, it's stored in '$$noContext' key
   // note that '$$noContext' is a reserved context :)
-  return message['$$noContext'] ?? msgid;
+  return message['$$noContext'] ?? message; // FIXME handle plurals properly
 }
 
 function getMessages(lang) {
@@ -110,7 +111,7 @@ export default function install(Vue) {
           this.current = null;
           this.current = lang;
           // set html lang attribute
-          document.documentElement.setAttribute('lang', lang);
+          document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
         });
       },
 
@@ -141,7 +142,7 @@ export default function install(Vue) {
         const messages = getMessages(lang);
 
         return new Promise((resolve) => {
-          if (messages.then) {
+          if (messages instanceof Promise) {
             // messages is a promise
             messages.then((translations) => {
               this.translations[lang] = translations[lang];
@@ -154,8 +155,20 @@ export default function install(Vue) {
         });
       },
 
-      gettext(msgid, msgctxt) {
-        return getTranslation(this.translations[this.current], msgid, msgctxt);
+      gettext(msgid, msgctxt, params) {
+        // /!\ call to this.current must be made so that vue reactivity system registers target component on language
+        // change
+        let msgString = getTranslation(this.translations[this.current], msgid, msgctxt);
+        if (Array.isArray(msgString)) {
+          // plural form
+          msgString = msgString[params.n <= 1 ? 0 : 1]; // !FIXME plural form depends on lang
+        }
+        if (!!params) {
+          for (const param in params) {
+            msgString = msgString.replace(new RegExp(`%{\\s*${param}\\s*}`), params[param]);
+          }
+        }
+        return msgString;
       },
 
       getIANALanguageSubtag(lang) {
@@ -202,40 +215,33 @@ export default function install(Vue) {
         }
       },
 
-      updateElement(element) {
+      updateElement(element, binding) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
             // eslint-disable-next-line
-            console.error('v-translate must contains only text', element.childNodes);
+            console.error('v-translate must contain only text', element.childNodes);
             return;
           }
 
           element.dataset.msgid = cleanMessageId(element.innerText);
-
-          const context = element.attributes.getNamedItem('translate-context');
-          if (context) {
-            element.dataset.msgctxt = context.value;
-          }
         }
 
-        element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
+        const { context, ctxt, ...params } = binding.value ?? {};
+        element.innerText = this.gettext(element.dataset.msgid, ctxt ?? context, params);
       },
     },
   });
 
   // An option to support translation with HTML content: `v-translate`.
   Vue.directive('translate', {
-    bind(el) {
-      // console.log("bind", el)
-      languageVm.updateElement(el);
+    bind(el, binding) {
+      languageVm.updateElement(el, binding);
     },
-    inserted(el) {
-      // console.log("inserted", el)
-      languageVm.updateElement(el);
+    inserted(el, binding) {
+      languageVm.updateElement(el, binding);
     },
-    update(el) {
-      // console.log("update", el)
-      languageVm.updateElement(el);
+    update(el, binding) {
+      languageVm.updateElement(el, binding);
     },
   });
 
