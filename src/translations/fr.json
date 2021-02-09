@@ -32,6 +32,7 @@
     "Add images": "Ajouter des images",
     "Add the first outing": "Ajouter la première sortie",
     "Additional information": "Informations supplémentaires",
+    "Allow all": "Tout accepter",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
     "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",
     "Are you sure you want to delete this locale?": "Êtes-vous sûr(e) de vouloir supprimer cette version linguistique ?",
@@ -77,6 +78,7 @@
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication des objectifs et attentes de chacun, des craintes et observations en cours de sortie, briefing pour établir de nouvelles stratégies, éléments de conduite de groupe et de responsabilités, groupe habitué à fonctionner ensemble ou non, émulation, etc.",
     "Compare selected versions": "Comparer les versions sélectionnées",
     "Conditions, summits, routes": "Conditions, sommets, itinéraires",
+    "Configure cookies": "Paramétrage des cookies",
     "Confirm": "Confirmer",
     "Contain invalid character(s)": {
       "API message": "Contient un ou plusieurs caractères invalides"
@@ -85,6 +87,7 @@
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
     "Contribute to maintainance": "Contribuer à la maintenance",
     "Contributor": "Contributeur",
+    "Control the use of your personal data": "Contrôlez l'utilisation de vos données personnelles",
     "Create a new report": "Créer un nouveau compte-rendu",
     "Created on": "Crée le",
     "Creation?": "Création ?",
@@ -92,6 +95,7 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Données techniques, comme l'orientation, le type de roche ou la configuration générale de l'itinéraire (arête, pilier...)",
     "Delete this document": "Supprimer ce document",
     "Delete this locale": "Supprimer cette version linguistique",
+    "Deny all": "Tout refuser",
     "Describe access": "Décrivez ici l'accès",
     "Describe access period": "Précisez la période d'accès",
     "Describe access restrictions": "Décrire les restrictions d'accès",
@@ -116,6 +120,7 @@
     "Details on participants and event context": "Détails sur les participants et le contexte de l'évènement",
     "Differences between versions": "Différences entre les versions",
     "Do you really want to leave? you have unsaved changes!": "Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été sauvegardés !",
+    "Document quality": "Qualité du document",
     "Download outings": "Télécharger les sorties",
     "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
@@ -131,6 +136,7 @@
     "Email": "Adresse email",
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement...)",
     "Expand": "Déplier",
+    "Export to CSV": "Exporter en CSV",
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "Filter on map extent": "Limiter la recherche à la carte visible",
@@ -174,6 +180,7 @@
       "Map layer": "IGN Es"
     },
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
+    "Image count": "Nombre d'images",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
     "Incidents and accidents": "Incidents et accidents",
     "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
@@ -239,6 +246,8 @@
     "Narration": "Description textuelle",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Situations « limites » qui aurait pu dégénérer en évènements plus graves",
     "Near-accidents are valuable": "Des incidents et quasi-accidents riches d’enseignements :",
+    "Necessary cookies": "Cookies nécessaires",
+    "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Les cookies nécessaires sont indispensables au bon fonctionnement de notre site Web et ne peuvent pas être désactivés. Ils sont envoyés à votre ordinateur ou à votre appareil lorsque vous demandez une action ou un service spécifiques, par exemple lorsque vous vous connectez, remplissez un formulaire ou définissez vos préférences en matière de cookies. Si vous configurez votre navigateur de façon à bloquer ces cookies ou à vous avertir de l'existence de ces derniers, notre site Web ne fonctionnera pas intégralement.",
     "New outing": "Nouvelle sortie",
     "New password": "Nouveau mot de passe",
     "New route": "Nouvel itinéraire",
@@ -261,6 +270,7 @@
     "Ordered list": "Liste triée",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
     "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien",
     "Page not found": "Page non trouvée",
     "Paragliding outings": "Sorties parapente",
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
@@ -332,19 +342,24 @@
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "Skiability": "Skiabilité",
     "Slopes": "Cartes de pentes",
+    "Social cookies": "Cookies sociaux",
     "Source:": "Document à fusionner (source) :",
+    "Statistical cookies": "Cookies statistiques",
     "Stop following this contributor": "Ne plus suivre ce contributeur",
+    "Submit": "Enregistrer et continuer",
     "Suggested rating": "Cotation suggérée",
     "SwissTopo": {
       "Map slopes layer": "Suisse (SwissTopo)"
     },
     "Target:": "Document à conserver (cible) :",
+    "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
     "The mountain sports community": "La communauté des sports de montagne",
     "The page you are looking for does not exist or is broken.": "La page que vous demandez n'existe pas ou est cassée.",
     "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
     "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
     "There are sensitive areas on this route. Please refer to the map.": "Cet itinéraire traverse ou se situe près de zones sensibles. Merci de consulter la carte.",
     "These are positive experiences that reveal usefull risk-management skills.": "Expériences positives qui révèlent des compétences de gestion des risques",
+    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the \"Share\" module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Ces cookies permettent d’interagir depuis le site camptocamp.org avec les modules sociaux et de partager les contenus du site avec d’autres personnes ou de les informer de votre consultation ou opinion sur celui-ci, lorsque vous cliquez sur le module \"Partager\" par exemple. En désactivant ces cookies, vous ne pourrez plus partager les contenus de camptocamp.org depuis le site camptocamp.org sur les réseaux sociaux.",
     "This book cover is the property of its editor and/or author": "Cette couverture de livre est la propriété de son éditeur et/ou auteur",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ce contenu est sous licence Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Ce contenu est sous licence Creative Commons BY-SA 3.0",
@@ -367,6 +382,7 @@
     },
     "Toggle fullscreen": "Basculer en plein écran",
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
+    "Trace": "Trace GPS",
     "Translate into an other lang": "Traduire dans une autre langue",
     "Transport & road or PT access": "Accès routier/TC",
     "Types and styles": "Types et styles",
@@ -591,6 +607,7 @@
     "conditions": "Conditions",
     "conditions_levels": "Conditions d'enneigement par zones",
     "configuration": "Configuration",
+    "configure your choices": "paramétrer vos choix",
     "conglomerat": {
       "rock_types": "conglomérat"
     },
@@ -1401,6 +1418,9 @@
     "time_management": "Gestion de l'horaire",
     "timing": "Durée",
     "title": "Titre",
+    "to": {
+      "biodiv period": "à"
+    },
     "topo": {
       "book_types": "topoguide",
       "image_categories": "schéma / tracé"
@@ -1456,6 +1476,9 @@
       "waypoint_types": "station météo"
     },
     "weather_station_types": "Variables mesurées par la station météo",
+    "whole year": {
+      "biodiv period": "toute l'année"
+    },
     "width": "Largeur",
     "wind_direction": {
       "weather_station_types": "direction du vent"
