@@ -68,7 +68,7 @@
     "Add images": "Bilder hinzufügen",
     "Add the first outing": "Ersten Tourenbericht hinzufügen",
     "Additional information": "Weitere Informationen",
-    "Allow all": "alles akzeptieren",
+    "Allow all": "Alles akzeptieren",
     "Anonymity and confidentiality": "Anonymität und Vertraulichkeit",
     "Are you sure you want to delete this document?": "Sind Sie sicher, dass Sie dieses Dokument löschen wollen?",
     "Are you sure you want to delete this locale?": "Sind Sie sicher, dass Sie diese Sprachversion löschen wollen?",
@@ -136,7 +136,7 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
     "Delete this document": "Dokument löschen",
     "Delete this locale": "Sprachversion löschen",
-    "Deny all": "alles ablehnen",
+    "Deny all": "Alles ablehnen",
     "Describe access": "Zustieg beschreiben",
     "Describe access period": "Öffnungszeit beschreiben",
     "Describe access restrictions": "Zugangsbeschränkungen beschreiben",
@@ -391,7 +391,7 @@
     "Source:": "Quelle:",
     "Statistical cookies": "Statistik-Cookies",
     "Stop following this contributor": "Diesem Benutzer nicht mehr folgen",
-    "Submit": "aufnehmen und fortsetzen",
+    "Submit": "Aufnehmen und fortsetzen",
     "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
     "SwissTopo": {
       "Map layer": "Schweiz",
@@ -1646,7 +1646,7 @@
       "waypoint_types": "Webcam"
     },
     "whole year": {
-      "biodiv period": "jahreslang"
+      "biodiv period": "Jahreslang"
     },
     "width": "Breite",
     "wind_direction": {
