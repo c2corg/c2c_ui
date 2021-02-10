@@ -68,6 +68,7 @@
     "Add images": "添加图片",
     "Add the first outing": "添加第一个出行记录",
     "Additional information": "附加信息",
+    "Allow all": "允许所有",
     "Anonymity and confidentiality": "匿名与保密",
     "Are you sure you want to delete this document?": "你确定要删除此文档吗？",
     "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
@@ -95,6 +96,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Austria Sat"
     },
+    "Beware of case-sensitive login and password": "请注意用户名和密码的大小写",
     "Block account": "冻结该用户",
     "Book content": "书籍目录的简短描述",
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
@@ -115,6 +117,7 @@
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "交流个人目标和期望，出行期间的所想和所看，关于新策略的讨论，小组自我执行和分工的方式，小组共同工作，核心愿望等。",
     "Compare selected versions": "比较选中的版本",
     "Conditions, summits, routes": "条件、山峰、路线",
+    "Configure cookies": "设置 cookies",
     "Confirm": "确认",
     "Contain invalid character(s)": {
       "API message": "包含无效字符"
@@ -124,6 +127,7 @@
     "Contribute to maintainance": "帮助维护",
     "Contributions": "贡献",
     "Contributor": "贡献者",
+    "Control the use of your personal data": "控制如何使用你的个人数据",
     "Create a new report": "创建新报告",
     "Created on": "创建于",
     "Creation?": "创作？",
@@ -131,6 +135,7 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "朝向、岩石类型、路线类型(如原路返回或环线)以及线路地形类型(如山脊或冲沟)",
     "Delete this document": "删除文档",
     "Delete this locale": "删除此语言版本",
+    "Deny all": "拒绝所有",
     "Describe access": "描述接近路线",
     "Describe access period": "描述进入时间段",
     "Describe access restrictions": "描述接近路线限制",
@@ -159,6 +164,7 @@
     "Distance": "路程",
     "Distance (km)": "路程(km)",
     "Do you really want to leave? you have unsaved changes!": "你确定要离开吗？你有未保存的修改！",
+    "Document quality": "文档质量",
     "Download outings": "下载出行记录",
     "Drop images here or click to upload": "拖拽图片到这里或者点击来上传",
     "Duration": "时长",
@@ -174,6 +180,7 @@
     "Email": "邮箱",
     "Everything about ratings : difficulties, exposition...": "所有定级有关的：难度、暴露感...",
     "Expand": "展开",
+    "Export to CSV": "导出为 CSV 文件",
     "Fauna protection areas": "动物保护区",
     "Fauna protection site:": "动物保护区",
     "Filter on map extent": "过滤目前地图范围",
@@ -197,6 +204,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "这是你关注的用户列表，你将在你的个人订阅里看到他们的动态。",
     "Here you may set activity and region filters that will apply to the homepage feed.": "你可以在这里设置运动和地区过滤，它们将会应用到首页订阅。",
     "History": "历史",
+    "History is missing, please provide it if you have information.": "缺少历史信息，如果你有相关信息，请补充。",
     "Home": "主页",
     "Home page feed parameters": "主页订阅参数",
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
@@ -217,6 +225,7 @@
       "Map layer": "IGN Es"
     },
     "Image could not be processed": "无法处理图片",
+    "Image count": "图片计数",
     "Improve our understanding of risks": "提高我们对风险的理解",
     "Incidents and accidents": "事故报告",
     "Information about the terrain, like elevations, lengths...": "关于地形的信息，例如海拔、长度...",
@@ -260,6 +269,7 @@
     "Make profile page public": "公开个人资料页面",
     "Map only": "仅地图",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "地图、路书、已知路线、备用计划、出行中的再评估",
+    "Mark this route as to do": "将这条路线标记为 To Do",
     "Merge documents": "合并文档",
     "Merge with other document": "和其他文档合并",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "合并源文档与目标文档，将会把源文档所有相关资料转移到目标文档，并建立一个从源文档到目标文档的重定向。",
@@ -274,6 +284,7 @@
     "More info": "更多信息",
     "Multi-criteria search": "多条件搜索",
     "My account": "我的账号",
+    "My bookmarks": "我的收藏",
     "My changes": "我的贡献",
     "My followed users": "我关注的用户",
     "My outings": "我的出行记录",
@@ -282,6 +293,7 @@
     "Narration": "文字描述",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "未遂事故——没有导致人身伤害但是可能会导致更严重事件的微妙情形。",
     "Near-accidents are valuable": "未遂事故是很宝贵的",
+    "Necessary cookies": "必须的 Cookies",
     "New outing": "新的出行记录",
     "New password": "新的密码",
     "New route": "新的路线",
@@ -378,8 +390,11 @@
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
     "Skiability": "可滑雪性",
     "Slopes": "坡度",
+    "Social cookies": "社交 Cookies",
     "Source:": "来源：",
+    "Statistical cookies": "统计 Cookies",
     "Stop following this contributor": "停止关注此贡献者",
+    "Submit": "提交",
     "Suggested rating": "建议定级",
     "SwissTopo": {
       "Map slopes layer": "Switzerland (SwissTopo)"
@@ -422,6 +437,7 @@
     "URL": "网址",
     "Unblock account": "取消冻结账号",
     "Unformatted text": "未格式化的文字",
+    "Unmark this route as to do": "取消这条路线的 To Do 标记",
     "Unordered list": "无序列表",
     "Unprotect document": "取消保护文件",
     "Upload a GPS track": "上传GPS航迹",
@@ -681,6 +697,7 @@
     "conditions": "详细条件情况",
     "conditions_levels": "不同地区的雪况",
     "configuration": "地形结构",
+    "configure your choices": "设置你的选择",
     "conglomerat": {
       "rock_types": "砾岩"
     },
@@ -1249,6 +1266,9 @@
     "people": {
       "image_categories": "人物"
     },
+    "per page": {
+      "30 per page": "每页"
+    },
     "person_fall": {
       "event_types": "滑坠"
     },
@@ -1621,6 +1641,9 @@
     "weather_station_types": "气象站类型",
     "webcam": {
       "waypoint_types": "网络摄像头"
+    },
+    "whole year": {
+      "biodiv period": "整年"
     },
     "width": "宽度",
     "wind_direction": {
