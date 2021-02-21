@@ -29,6 +29,7 @@
     "Add images": "Afegeix imatges",
     "Add the first outing": "Afegeix la primera sortida",
     "Additional information": "Informació addicional",
+    "Allow all": "Permet-ho tot",
     "Anonymity and confidentiality": "Anonimat i confidencialitat",
     "Are you sure you want to delete this document?": "Esteu segur/a de voler suprimir aquest document?",
     "Are you sure you want to delete this locale?": "Esteu segur de voler eliminar aquesta versió lingüística?",
@@ -56,6 +57,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Àustria Sat"
     },
+    "Beware of case-sensitive login and password": "Pareu compte amb les majúscules i minúscules al nom d'usuari i a la contrasenya",
     "Block account": "Bloqueja aquest usuari",
     "Book content": "Breu descripció del contingut del llibre",
     "Books and websites not already associated to this route": "No hi ha llibres ni webs associats a aquest itinerari",
@@ -75,7 +77,9 @@
     "Comments are disabled.": "No s'autoritzen comentaris en aquest document.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicació dels objectius i expectatives de cadascú, dels temors i observacions al llarg de la sortida, posta en comú per establir noves estratègies, elements de conducta de grup i de responsabilitats, grup acostumat a funcionar junt o no, objectiu conjunt, etc.",
     "Compare selected versions": "Compara les versions seleccionades",
+    "Conditions": "Condicions",
     "Conditions, summits, routes": "Condicions, cims, itineraris",
+    "Configure cookies": "Configura les galetes",
     "Confirm": "Confirma",
     "Contain invalid character(s)": {
       "API message": "Conté caràcters que no són vàlids"
@@ -85,6 +89,8 @@
     "Contribute to maintainance": "Contribueix al manteniment",
     "Contributions": "Aportacions",
     "Contributor": "Contribuïdor",
+    "Control the use of your personal data": "Controleu l'ús de les vostres dades personals",
+    "Cookies": "Galetes",
     "Create a new report": "Crea un nou informe",
     "Created on": "Creat el",
     "Creation?": "Creació?",
@@ -92,6 +98,7 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dades tècniques, com l'orientació, el tipus de roca o la configuració general de l'itinerari (aresta, pilar, etc.)",
     "Delete this document": "Suprimeix aquest document",
     "Delete this locale": "Suprimeix aquesta versió lingüística",
+    "Deny all": "Rebutja-ho tot",
     "Describe access": "Descriviu l'accés",
     "Describe access period": "Indiqueu el període d'accés",
     "Describe access restrictions": "Descrigueu les restriccions d'accés",
@@ -120,6 +127,7 @@
     "Distance": "Distància",
     "Distance (km)": "Distància (km)",
     "Do you really want to leave? you have unsaved changes!": "De debò voleu sortir? No heu desat els canvis!",
+    "Document quality": "Qualitat del document",
     "Download outings": "Descarrega les sortides",
     "Drop images here or click to upload": "Arrossegueu imatges aquí o cliqueu per carregar-ne",
     "Duration": "Durada",
@@ -135,6 +143,7 @@
     "Email": "Correu electrònic",
     "Everything about ratings : difficulties, exposition...": "Entreu aquí totes les dades de l'itinerari (dificultat, exposició, qualitat de l'equipament, etc.)",
     "Expand": "Desplega",
+    "Export to CSV": "Exporta a csv",
     "Fauna protection areas": "Zona de protecció de la fauna",
     "Fauna protection site:": "Indret de protecció de la fauna:",
     "Filter on map extent": "Limita la cerca al mapa visible",
@@ -157,6 +166,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquesta és la llista dels usuaris que seguiu i dels quals veureu l'activitat al vostre fil personal",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Definiu aquí els filtres d'activitats i de regions que seran aplicats al fil de la pàgina d'inici.",
     "History": "Versions",
+    "History is missing, please provide it if you have information.": "L'històric no hi consta, no dubteu a aportar la informació que en tingueu",
     "Home": "Pàgina d'inici",
     "Home page feed parameters": "Paràmetre del fil d'activitat a la pàgina d'inici",
     "How is my testimony used ? How / why is it useful ?": "De què serveix el meu testimoni?",
@@ -177,6 +187,7 @@
       "Map layer": "IGN Es"
     },
     "Image could not be processed": "La imatge no ha pogut ser processada",
+    "Image count": "Nombre d'imatges",
     "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
     "Incidents and accidents": "Incidents i accidents",
     "Information about the terrain, like elevations, lengths...": "Dades relatives al terreny, com les alçades, la longitud, etc.",
@@ -220,6 +231,7 @@
     "Make profile page public": "Fes pública la pàgina de perfil",
     "Map only": "Només el mapa",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Mapa, ressenyes, coneixement de l'itinerari, anticipació d'un pla B, reavaluació de l'itinerari durant la sortida?",
+    "Mark this route as to do": "Marca aquesta ruta com a pendent",
     "Merge documents": "Fusiona els documents",
     "Merge with other document": "Fusiona amb un altre document",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "La fusió d'un document \"font\" amb un altre document \"objectiu\" transfereix totes les associacions del document \"font\" al document \"objectiu\", i defineix una redirecció del document \"font\" cap al document \"objectiu\"",
@@ -234,6 +246,7 @@
     "More info": "Més informació",
     "Multi-criteria search": "Cerca multi-criteri",
     "My account": "El meu compte",
+    "My bookmarks": "Els meus preferits",
     "My changes": "Les meves aportacions",
     "My followed users": "Els meus amics",
     "My outings": "Les meves sortides",
@@ -242,6 +255,8 @@
     "Narration": "Descripció en text",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Quasi-accidents que haurien pogut degenerar en esdeveniments més greus",
     "Near-accidents are valuable": "Els incidents i els quasi-accidents són experiències valuoses:",
+    "Necessary cookies": "Galetes necessàries",
+    "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Les galetes necessàries són indispensables per al bon funcionament del nostre lloc web i no es poden desactivar. S'envien al vostre ordinador o al vostre aparell quan demaneu una acció o servei específic, com ara quan us connecteu, ompliu un formulari o definiu les vostres preferències quant a galetes. Si configureu el vostre navegador de manera que bloquegeu aquestes galetes o de manera que us avisi de la seva existència, el nostre lloc web no funcionarà del tot bé.",
     "New outing": "Nova sortida",
     "New password": "Nova contrasenya",
     "New route": "Nou itinerari",
@@ -266,6 +281,7 @@
     "Ordered list": "Llista ordenada",
     "Oups! Something went wrong with forum. Here is the message :": "Ep! Hi ha hagut un problema amb el fòrum. Vegeu-ne el missatge:",
     "Oups! something went wrong...": "Ep! Hi ha hagut un problema...",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "El nostre lloc web utilitza galetes nostres o de tercers. Algunes galetes són necessàries per al funcionament del lloc web, per bé que d'altres es poden configurar en tot moment, en particular les que ens permeten d'entendre el comportament del nostre lloc web i d'oferir-vos funcionalitats de xarxes socials. Les podeu acceptar o rebutjar totes o bé",
     "Page not found": "No s'ha trobat la pàgina",
     "Paragliding outings": "Sortides de parapent",
     "Parameters of the Digital Camera": "Detalls de la càmera digital",
@@ -318,6 +334,7 @@
     "See other documents nearby": "A prop de...",
     "See profile based on:": "Perfil d'altituds basat en:",
     "See the activity of this contributor in your feed": "Vegeu les activitats d'aquest participant al vostre fil",
+    "See the analysis of the submitted stories": "Llegiu les anàlisis de les narracions ja lliurades",
     "See the latest version": "Mostra la darrera versió",
     "Select option": "Escolliu una opció",
     "Send reset email": "Envia correu de restabliment",
@@ -337,20 +354,25 @@
     "Show only updates from followed users in the homepage feed": "Mostra al fil de la pàgina d'inici només les actualitzacions dels participants seguits.",
     "Skiability": "Esquiabilitat",
     "Slopes": "Mapes de pendents",
+    "Social cookies": "Galetes socials",
     "Source:": "Document a fusionar (font):",
+    "Statistical cookies": "Galetes estadístiques",
     "Stop following this contributor": "Deixa de seguir aquest participant",
+    "Submit": "Desa els canvis i continua",
     "Suggested rating": "Dificultat suggerida",
     "SwissTopo": {
       "Map slopes layer": "Pendents SwissTopo"
     },
     "Target:": "Document a conservar (diana):",
     "Terrain": "Terreny",
+    "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Gràcies a les galetes estadístiques o analítiques, nostres o d'altres societats, podem comptar les visites al nostre lloc web i conèixer les fonts del trànsit. Les dades que n'obtenim ens ajuden a entendre allò que els usuaris voldrien millorar del lloc web. Si no les accepteu pas, no podrem millorar la vostra experiència.",
     "The mountain sports community": "La comunitat dels esports de muntanya",
     "The page you are looking for does not exist or is broken.": "Aquesta pàgina no existeix o bé està malmesa.",
     "The slope must be between 0 and 80 deg": "El pendent ha d'estar entre 0 i 80 graus",
     "The slope must be between 50 and 3000m high": "L'alçada del pendent ha d'estar entre 50 i 3000m",
     "There are sensitive areas on this route. Please refer to the map.": "Aquest itinerari travessa o es troba a prop de zones sensibles. Si us plau, consulteu el mapa.",
     "These are positive experiences that reveal usefull risk-management skills.": "Experiències positives que revelen habilitats en gestió de riscos",
+    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the \"Share\" module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Aquestes galetes permeten d'interactuar des del lloc camptocamp.org amb els mòduls socials i de compartir els continguts del lloc amb d'altres persones o d'informar-les de la vostra consulta o opinió al respecte, quan cliqueu el mòdul \"Compartir\", per exemple. Desactivant aquestes galetes, no podreu compartir més els continguts de camptocamp.org des del lloc web cap a les xarxes socials.",
     "This book cover is the property of its editor and/or author": "La coberta del llibre és propietat del seu editor i/o autor",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-SA 3.0",
@@ -374,12 +396,14 @@
     "Toggle fullscreen": "Passa a pantalla completa",
     "Too many results: please refine your search.": "Massa resultats: si et plau, afina els paràmetres de la cerca",
     "Topoguide": "Guia de ressenyes",
+    "Trace": "Traça GPS",
     "Translate into an other lang": "Tradueix a una altra llengua",
     "Transport & road or PT access": "Accés per carretera / transport públic",
     "Types and styles": "Tipus i estils",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Tipus d'assegurança i de proteccions, verificacions entre escaladors, tests d'estabilitat del mantell nivós, tests dels ARVAs, etc.",
     "Unblock account": "Desbloqueja aquest usuari",
     "Unformatted text": "Text sense format",
+    "Unmark this route as to do": "Elimina aquest itinerari d'entre els meus preferits",
     "Unordered list": "Llista no ordenada",
     "Unprotect document": "Desprotegeix el document",
     "Upload a GPS track": "Afegiu-hi una traça GPS",
@@ -622,6 +646,7 @@
     "conditions": "Condicions",
     "conditions_levels": "Condicions d'innivació per zones",
     "configuration": "Configuració",
+    "configure your choices": "Configureu les vostres opcions",
     "contact": "Contacte",
     "contributor": "contribuïdor",
     "corridor": {
@@ -1155,6 +1180,9 @@
     "people": {
       "image_categories": "personalitat"
     },
+    "per page": {
+      "30 per page": "per pàgina"
+    },
     "person_fall": {
       "event_types": "caiguda d'una persona"
     },
@@ -1450,6 +1478,9 @@
     "time_management": "Gestió de l'horari",
     "timing": "durada",
     "title": "Títol",
+    "to": {
+      "biodiv period": "a"
+    },
     "topo": {
       "book_types": "ressenya",
       "image_categories": "ressenya"
@@ -1508,6 +1539,9 @@
       "waypoint_types": "estació meteorològica"
     },
     "weather_station_types": "Variables mesurades per l'estació meteorològica",
+    "whole year": {
+      "biodiv period": "tot l'any"
+    },
     "width": "Amplada",
     "wind_direction": {
       "weather_station_types": "direcció del vent"
