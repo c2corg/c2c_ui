@@ -18,11 +18,11 @@
           <td v-translate>Period of protection</td>
           <td>{{ data.properties.schutzzeit }}</td>
         </tr>
-        <tr v-if="dispositions.length > 0">
+        <tr v-if="dispositions.length">
           <td v-translate>Dispositions</td>
           <td>{{ dispositions }}</td>
         </tr>
-        <tr v-if="additionalInformation.length > 0">
+        <tr v-if="additionalInformation.length">
           <td v-translate>Additional information</td>
           <td>{{ additionalInformation }}</td>
         </tr>
@@ -54,7 +54,7 @@ export default {
     },
     dispositions() {
       let lang = this.$language.current;
-      if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
+      if (!['fr', 'de', 'it'].includes(lang)) {
         lang = 'fr';
       }
       const result = this.data.properties[`best_${lang}`] ?? '';
@@ -66,7 +66,7 @@ export default {
     },
     protectionStatus() {
       let lang = this.$language.current;
-      if (lang !== 'fr' && lang !== 'de' && lang !== 'it') {
+      if (!['fr', 'de', 'it'].includes(lang)) {
         lang = 'fr';
       }
 

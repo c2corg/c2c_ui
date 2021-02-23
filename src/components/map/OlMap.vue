@@ -618,35 +618,38 @@ export default {
     },
 
     addBiodivSportsData(response) {
-      const results = response['data']['results'];
+      const results = response?.data?.results;
+      if (!results.length) {
+        return;
+      }
+
       const source = this.protectionAreasLayer.getSource();
 
       for (const result of results) {
-        const geometry = geoJSONFormat.readGeometry(result['geometry'], {
+        const geometry = geoJSONFormat.readGeometry(result.geometry, {
           dataProjection: 'EPSG:4326',
           featureProjection: 'EPSG:3857',
         });
 
         const feature = new ol.Feature({
           geometry,
-          id: result['id'],
+          id: result.id,
           biodivData: {
             source: 'biodivsports',
-            title: result['name'],
-            description: result['description'],
-            infoUrl: result['info_url'],
-            kmlUrl: result['kml_url'],
-            period: result['period'],
+            title: result.name,
+            description: result.description,
+            infoUrl: result.info_url,
+            kmlUrl: result.kml_url,
+            period: result.period,
           },
         });
 
-        feature.setId('biodiv_' + result['id']);
+        feature.setId('biodiv_' + result.id);
 
         feature.set('normalStyle', buildPolygonStyle());
         feature.setStyle(feature.get('normalStyle'));
 
         source.addFeature(feature);
-        this.$emit('has-protection-area');
       }
     },
 
@@ -734,7 +737,7 @@ export default {
     },
 
     onClick(event) {
-      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => feature);
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
       if (feature) {
         const document = feature.get('document');
