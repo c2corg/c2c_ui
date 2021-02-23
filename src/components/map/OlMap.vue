@@ -239,6 +239,7 @@ export default {
       biodivData: {},
       swissProtectionAreaData: { properties: {} },
       protectionAreasVisible: this.showProtectionAreas && !this.editable,
+      hasProtectionAreas: null,
 
       // on editable mode, there a button reset
       // we must save initial geometry
@@ -371,7 +372,7 @@ export default {
     });
 
     this.map.on('moveend', this.sendBoundsToUrl);
-    this.map.on('moveend', this.getBiodivSportsAreas);
+    this.map.on('moveend', this.getProtectionAreas);
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
@@ -759,8 +760,10 @@ export default {
           respecterCestProtegerService
             .identify(position, rcpExtent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
             .then(({ data }) => {
-              if (data.results && data.results.length > 0) {
-                this.swissProtectionAreaData = data.results[0];
+              if (data.results && data.results.length) {
+                // if there are several results, then there must be an area and an allowed path. select area
+                this.swissProtectionAreaData =
+                  data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
                 this.$refs.SwissProtectionAreaInformation.show();
               }
             });
@@ -809,18 +812,38 @@ export default {
       this.showRecenterOnPropositions = false;
     },
 
-    getBiodivSportsAreas() {
+    getProtectionAreas() {
       if (!this.protectionAreasVisible) {
         return;
       }
 
       const extent = this.view.calculateExtent(this.map.getSize() || null);
-
-      // get extent in WGS format
+      // get extent in expected format
       const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-      biodivSportsService
-        .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
-        .then(this.addBiodivSportsData);
+
+      if (this.hasProtectionAreas !== null) {
+        // check already made, only update biodivsport areas features
+        biodivSportsService
+          .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
+          .then(this.addBiodivSportsData);
+      } else {
+        // first call, check protection areas are contained within map extent and download biodivsports features
+        const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
+        Promise.allSettled([
+          biodivSportsService
+            .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
+            .then((response) => {
+              this.addBiodivSportsData(response);
+              return (response?.data?.results?.length ?? 0) > 0;
+            }),
+          respecterCestProtegerService.hasArea(rcpExtent),
+        ]).then((hasArea) => {
+          this.hasProtectionAreas = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
+          if (this.hasProtectionAreas) {
+            this.$emit('has-protection-area');
+          }
+        });
+      }
     },
 
     clearGeometry() {
