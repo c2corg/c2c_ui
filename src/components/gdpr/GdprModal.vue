@@ -7,7 +7,20 @@
 
     <div class="columns">
       <div class="column">
-        <h2 class="is-size-3" v-translate>Necessary cookies</h2>
+        <div class="is-flex is-justify-content-space-between is-align-items-baseline">
+          <h2 class="is-size-3" v-translate>Necessary cookies</h2>
+          <div class="field">
+            <input
+              type="checkbox"
+              id="necessary"
+              name="necessary"
+              class="switch is-rounded"
+              checked="checked"
+              disabled
+            />
+            <label for="necessary"></label>
+          </div>
+        </div>
         <p v-translate>
           Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are
           sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out
