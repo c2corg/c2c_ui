@@ -2,7 +2,7 @@
   <div class="box no-print">
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length > 0">
+    <div class="has-text-centered" v-if="isNormalView && available_langs.length">
       <span v-translate>View in other lang</span>
       <br />
       <span class="lang-switcher-box-list">
@@ -44,6 +44,13 @@
       :to="linkToClosestDocuments"
       :label="$gettext('See other documents nearby')"
       icon="compass"
+    />
+
+    <tool-box-button
+      v-if="(document.type === 'w' || document.type === 'r') && document.geometry && document.geometry.geom"
+      :href="linkToMeteoBlue"
+      :label="$gettext('Weather forecast (meteoblue)')"
+      icon="cloud-sun"
     />
 
     <tool-box-button
@@ -252,6 +259,34 @@ export default {
           ].join(','),
         },
       };
+    },
+
+    linkToMeteoBlue() {
+      let lang;
+      switch (this.$language.current) {
+        case 'fr':
+          lang = 'fr/meteo/semaine';
+          break;
+        case 'it':
+          lang = 'it/tempo/settimana';
+          break;
+        case 'de':
+          lang = 'de/wetter/woche';
+          break;
+        case 'es':
+        case 'eu':
+        case 'ca':
+          lang = 'es/tiempo/semana';
+          break;
+        case 'en':
+        default:
+          lang = 'en/weather/week';
+      }
+      const lonLat = ol.proj.toLonLat(
+        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
+      );
+      const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
+      return `https://meteoblue.com/${lang}/${coords}`;
     },
   },
 
