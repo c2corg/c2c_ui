@@ -140,7 +140,6 @@ export default {
       for (const anchor of anchors) {
         const attributes = anchor.attributes;
 
-        // eslint-disable-next-line
         const { location, href } = this.$router.resolve({
           name: attributes['c2c:document-type'].value.slice(0, -1),
           params: {
