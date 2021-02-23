@@ -1,6 +1,7 @@
 import french_translations from '@/translations/fr.json';
 
 const TEXT_NODE = 3;
+const INTERPOLATION_RE = /%\{((?:.|\n)+?)\}/g;
 
 function cleanMessageId(msgid) {
   if (!msgid) {
@@ -13,10 +14,7 @@ function cleanMessageId(msgid) {
     return String(msgid);
   }
 
-  // trim
-  msgid = msgid.replace(/^[\r\n\s]*/, '');
-  msgid = msgid.replace(/[\r\n\s]*$/, '');
-
+  msgid = msgid.trim();
   // remove new lines and duplicated spaces
   msgid = msgid.replace(/\n/g, ' ');
   msgid = msgid.replace(/\s+/g, ' ');
@@ -24,33 +22,15 @@ function cleanMessageId(msgid) {
   return msgid;
 }
 
-function getTranslation(messages, msgid, msgctxt) {
-  //, n = 1, context = null, defaultPlural = null){
-  if (messages === undefined) {
-    // `messages are not yet available`
-    return msgid;
+function getTranslationIndex(lang, n) {
+  if (lang === 'fr') {
+    return n > 1 ? 1 : 0;
   }
+  return n !== 1 ? 1 : 0;
+}
 
-  const message = messages[msgid];
-
-  if (message === undefined) {
-    return msgid;
-  }
-
-  // message can be a key-value object, if a context exists for this msgid
-  if (!!msgctxt) {
-    return message[msgctxt] ?? msgid;
-  }
-
-  // ! FIXME use top level context instead
-  // if context isn't provided, message may be a string if this msgid hasn't other version with context
-  if (typeof message === 'string') {
-    return message;
-  }
-
-  // otherwise, it's stored in '$$noContext' key
-  // note that '$$noContext' is a reserved context :)
-  return message['$$noContext'] ?? message; // FIXME handle plurals properly
+function interpolate(msgstr, context = {}) {
+  msgstr.replace(INTERPOLATION_RE, (match, token) => context[token.trim()] ?? match);
 }
 
 function getMessages(lang) {
@@ -155,20 +135,34 @@ export default function install(Vue) {
         });
       },
 
-      gettext(msgid, msgctxt, params) {
-        // /!\ call to this.current must be made so that vue reactivity system registers target component on language
-        // change
-        let msgString = getTranslation(this.translations[this.current], msgid, msgctxt);
-        if (Array.isArray(msgString)) {
-          // plural form
-          msgString = msgString[params.n <= 1 ? 0 : 1]; // !FIXME plural form depends on lang
+      gettext(msgid, msgctxt = null, n = 1, defaultPlural = null) {
+        const messages = this.translations[this.current];
+        if (messages === undefined) {
+          // `messages are not yet available`
+          return msgid;
         }
-        if (!!params) {
-          for (const param in params) {
-            msgString = msgString.replace(new RegExp(`%{\\s*${param}\\s*}`), params[param]);
-          }
+
+        // Default untranslated string, singular or plural.
+        const untranslated = defaultPlural && getTranslationIndex(this.current, n) > 0 ? defaultPlural : msgid;
+
+        let translated = messages[msgid];
+
+        if (!translated) {
+          return untranslated;
         }
-        return msgString;
+
+        // message can be a key-value object, if a context exists for this msgid
+        if (!!msgctxt) {
+          translated = translated[msgctxt];
+        }
+
+        if (!translated) {
+          return untranslated;
+        }
+
+        // message is a plural form
+        let translationIndex = getTranslationIndex(this.current, n);
+        return translated[translationIndex];
       },
 
       getIANALanguageSubtag(lang) {
@@ -215,36 +209,63 @@ export default function install(Vue) {
         }
       },
 
-      updateElement(element, binding) {
-        if (element.dataset.msgid === undefined) {
-          if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
-            // eslint-disable-next-line
-            console.error('v-translate must contain only text', element.childNodes);
-            return;
-          }
+      updateElement(element, binding, vnode) {
+        const attrs = vnode.data.attrs ?? {};
+        const msgid = el.dataset.msgid;
+        const translateContext = attrs['translate-context'];
+        const translateN = attrs['translate-n'];
+        const translatePlural = attrs['translate-plural'];
+        const isPlural = translateN !== undefined && translatePlural !== undefined;
+        let context = vnode.context;
 
-          element.dataset.msgid = cleanMessageId(element.innerText);
+        if (!isPlural && (translateN || translatePlural)) {
+          // eslint-disable-next-line
+          console.error('`translate-n` and `translate-plural` attributes must be used together:' + msgid + '.');
         }
 
-        const { context, ctxt, ...params } = binding.value ?? {};
-        element.innerText = this.gettext(element.dataset.msgid, ctxt ?? context, params);
+        if (binding.value && typeof binding.value === 'object') {
+          context = Object.assign({}, vnode.context, binding.value);
+        }
+
+        const translation = this.gettext(msgid, translateContext, translateN, isPlural ? translatePlural : null);
+        const msg = interpolate(translation, context);
+        element.innerText = msg;
       },
     },
   });
 
-  // An option to support translation with HTML content: `v-translate`.
   Vue.directive('translate', {
-    bind(el, binding) {
-      languageVm.updateElement(el, binding);
+    bind(el, binding, vnode) {
+      // Check we can extract msgid
+      if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
+        // eslint-disable-next-line no-console
+        console.error('v-translate must contain only text', element.childNodes);
+        return;
+      }
+
+      const msgid = cleanMessageId(el.innerText);
+      el.dataset.msgid = msgid;
+
+      // Output an info in the console if an interpolation is required but no expression is provided.
+      const hasInterpolation = msgid.indexOf('%{') !== -1;
+      if (hasInterpolation && !binding.expression) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `No expression is provided for change detection. The translation for this key will be static:\n${msgid}`
+        );
+      }
+
+      languageVm.updateElement(el, binding, vnode);
     },
-    inserted(el, binding) {
-      languageVm.updateElement(el, binding);
+    inserted(el, binding, vnode) {
+      languageVm.updateElement(el, binding, vnode);
     },
-    update(el, binding) {
-      languageVm.updateElement(el, binding);
+    update(el, binding, vnode) {
+      languageVm.updateElement(el, binding, vnode);
     },
   });
 
   Vue.prototype.$language = languageVm;
   Vue.prototype.$gettext = languageVm.gettext.bind(languageVm);
+  Vue.prototype.$interpolate = interpolate;
 }

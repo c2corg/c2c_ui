@@ -7,7 +7,7 @@ https://www.gnu.org/software/gettext/manual/gettext.html
 Supported patterns in .vue and .js files :
 
     $gettext('msgid')
-    $gettext('msgid', 'msgctx')
+    $gettext('msgid', 'msgctxt')
 
 Supported pattern in .vue file, inside <template /> part :
 
