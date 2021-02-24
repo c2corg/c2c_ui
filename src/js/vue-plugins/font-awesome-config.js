@@ -34,6 +34,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
+import { faDirections } from '@fortawesome/free-solid-svg-icons/faDirections';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
@@ -240,6 +241,7 @@ export default function install(Vue) {
     faCompass,
     faCompress,
     faDatabase,
+    faDirections,
     faEdit,
     faExclamation,
     faExclamationCircle,
