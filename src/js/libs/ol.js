@@ -2,6 +2,7 @@ import 'elm-pep';
 import { Feature, Map, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
+import { format } from 'ol/coordinate';
 import { buffer, containsXY, createEmpty, extend, getWidth } from 'ol/extent';
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -51,6 +52,10 @@ export default {
     ScaleLine,
     Zoom,
     Attribution,
+  },
+
+  coordinate: {
+    format,
   },
 
   extent: {

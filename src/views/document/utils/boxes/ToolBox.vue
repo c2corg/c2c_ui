@@ -2,7 +2,7 @@
   <div class="box no-print">
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length > 0">
+    <div class="has-text-centered" v-if="isNormalView && available_langs.length">
       <span v-translate>View in other lang</span>
       <br />
       <span class="lang-switcher-box-list">
@@ -14,6 +14,27 @@
       </span>
       <hr />
     </div>
+
+    <tool-box-button
+      v-if="(document.type === 'w' || document.type === 'r') && document.geometry && document.geometry.geom"
+      :href="linkToMeteoBlue"
+      :label="$gettext('Weather forecast (meteoblue)')"
+      icon="sun"
+    />
+
+    <tool-box-button
+      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
+      :to="linkToClosestDocuments"
+      :label="$gettext('See other documents nearby')"
+      icon="compass"
+    />
+
+    <tool-box-button
+      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
+      :to="linkToParaglidingOutings"
+      :label="$gettext('Paragliding outings')"
+      :icon="['miscs', 'paragliding']"
+    />
 
     <tool-box-button
       v-if="fundraiser"
@@ -32,25 +53,13 @@
       <icon-outing slot="icon" />
     </tool-box-button>
 
+    <hr />
+
     <tool-box-button
       v-if="documentType === 'profile'"
       :to="{ name: 'whatsnew', query: { u: document.document_id } }"
       :label="$gettext('Contributions')"
       icon="edit"
-    />
-
-    <tool-box-button
-      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
-      :to="linkToClosestDocuments"
-      :label="$gettext('See other documents nearby')"
-      icon="compass"
-    />
-
-    <tool-box-button
-      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
-      :to="linkToParaglidingOutings"
-      :label="$gettext('Paragliding outings')"
-      :icon="['miscs', 'paragliding']"
     />
 
     <tool-box-button
@@ -252,6 +261,37 @@ export default {
           ].join(','),
         },
       };
+    },
+
+    linkToMeteoBlue() {
+      let lang;
+      switch (this.$language.current) {
+        case 'fr':
+          lang = 'fr/meteo/semaine';
+          break;
+        case 'it':
+          lang = 'it/tempo/settimana';
+          break;
+        case 'de':
+          lang = 'de/wetter/woche';
+          break;
+        case 'es':
+        case 'eu':
+        case 'ca':
+          lang = 'es/tiempo/semana';
+          break;
+        case 'en':
+        default:
+          lang = 'en/weather/week';
+      }
+      const lonLat = ol.proj.toLonLat(
+        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
+      );
+      const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
+      // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
+      const elevation =
+        this.document.elevation ?? this.document.difficulties_height ?? this.document.elevation_max ?? '';
+      return `https://meteoblue.com/${lang}/${coords}${elevation}`;
     },
   },
 
