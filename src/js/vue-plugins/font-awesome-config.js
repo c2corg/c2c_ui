@@ -26,7 +26,6 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faCloud } from '@fortawesome/free-solid-svg-icons/faCloud';
-import { faCloudSun } from '@fortawesome/free-solid-svg-icons/faCloudSun';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
 import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns';
@@ -233,7 +232,6 @@ export default function install(Vue) {
     faChevronRight,
     faCircle,
     faCloud,
-    faCloudSun,
     faCode,
     faCogs,
     faColumns,

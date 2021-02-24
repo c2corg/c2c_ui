@@ -16,6 +16,27 @@
     </div>
 
     <tool-box-button
+      v-if="(document.type === 'w' || document.type === 'r') && document.geometry && document.geometry.geom"
+      :href="linkToMeteoBlue"
+      :label="$gettext('Weather forecast (meteoblue)')"
+      icon="sun"
+    />
+
+    <tool-box-button
+      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
+      :to="linkToClosestDocuments"
+      :label="$gettext('See other documents nearby')"
+      icon="compass"
+    />
+
+    <tool-box-button
+      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
+      :to="linkToParaglidingOutings"
+      :label="$gettext('Paragliding outings')"
+      :icon="['miscs', 'paragliding']"
+    />
+
+    <tool-box-button
       v-if="fundraiser"
       :label="$gettext('Contribute to maintainance')"
       :href="fundraiser.url"
@@ -32,32 +53,13 @@
       <icon-outing slot="icon" />
     </tool-box-button>
 
+    <hr />
+
     <tool-box-button
       v-if="documentType === 'profile'"
       :to="{ name: 'whatsnew', query: { u: document.document_id } }"
       :label="$gettext('Contributions')"
       icon="edit"
-    />
-
-    <tool-box-button
-      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
-      :to="linkToClosestDocuments"
-      :label="$gettext('See other documents nearby')"
-      icon="compass"
-    />
-
-    <tool-box-button
-      v-if="(document.type === 'w' || document.type === 'r') && document.geometry && document.geometry.geom"
-      :href="linkToMeteoBlue"
-      :label="$gettext('Weather forecast (meteoblue)')"
-      icon="cloud-sun"
-    />
-
-    <tool-box-button
-      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
-      :to="linkToParaglidingOutings"
-      :label="$gettext('Paragliding outings')"
-      :icon="['miscs', 'paragliding']"
     />
 
     <tool-box-button
