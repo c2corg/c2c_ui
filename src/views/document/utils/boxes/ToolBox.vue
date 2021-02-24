@@ -286,7 +286,10 @@ export default {
         GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
       );
       const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
-      return `https://meteoblue.com/${lang}/${coords}`;
+      // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
+      const elevation =
+        this.document.elevation ?? this.document.difficulties_height ?? this.document.elevation_max ?? '';
+      return `https://meteoblue.com/${lang}/${coords}${elevation}`;
     },
   },
 
