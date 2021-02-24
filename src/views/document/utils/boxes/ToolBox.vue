@@ -16,10 +16,17 @@
     </div>
 
     <tool-box-button
-      v-if="(document.type === 'w' || document.type === 'r') && document.geometry && document.geometry.geom"
+      v-if="shouldAddWheatherLink"
       :href="linkToMeteoBlue"
       :label="$gettext('Weather forecast (meteoblue)')"
       icon="sun"
+    />
+
+    <tool-box-button
+      v-if="shouldAddDirections"
+      :href="linkToGoogleMapsDirections"
+      :label="$gettext('Directions (Google Maps)')"
+      icon="directions"
     />
 
     <tool-box-button
@@ -263,6 +270,10 @@ export default {
       };
     },
 
+    shouldAddWheatherLink() {
+      return (this.document.type === 'w' || this.document.type === 'r') && this.document?.geometry?.geom;
+    },
+
     linkToMeteoBlue() {
       let lang;
       switch (this.$language.current) {
@@ -292,6 +303,22 @@ export default {
       const elevation =
         this.document.elevation ?? this.document.difficulties_height ?? this.document.elevation_max ?? '';
       return `https://meteoblue.com/${lang}/${coords}${elevation}`;
+    },
+
+    shouldAddDirections() {
+      return (
+        this.document.type === 'w' &&
+        ['access', 'gite', 'camp_site'].includes(this.document.waypoint_type) &&
+        this.document?.geometry?.geom
+      );
+    },
+
+    linkToGoogleMapsDirections() {
+      const lonLat = ol.proj.toLonLat(
+        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
+      );
+      const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
+      return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
     },
   },
 
