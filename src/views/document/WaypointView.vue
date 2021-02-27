@@ -112,8 +112,15 @@
         <div class="box" v-if="locale.summary || locale.access_period || locale.description || locale.access">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
-          <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
-          <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+          <template v-if="document.waypoint_type == 'access'">
+            <!-- order is different for access -->
+            <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+            <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
+          </template>
+          <template v-else>
+            <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
+            <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+          </template>
           <div style="clear: both" />
         </div>
 
