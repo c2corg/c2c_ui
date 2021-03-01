@@ -68,7 +68,9 @@ export default {
         }
         return (
           this.$dateUtils.month(parseInt(start, 10)) +
+          ' ' +
           this.$gettext('to', 'biodiv period') +
+          ' ' +
           this.$dateUtils.month(parseInt(end, 10))
         );
       }
