@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="no-print">
     <div class="gdpr-content" :class="{ active: active }">
       <h4 class="title" v-translate>Control the use of your personal data</h4>
       <div class="message">
