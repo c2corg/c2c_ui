@@ -8,7 +8,7 @@
       </div>
 
       <div class="column is-9 is-12-print">
-        <!--   CONTENT  -->
+        <!-- CONTENT -->
 
         <div class="box">
           <div class="columns">
@@ -17,7 +17,6 @@
               <field-view :document="document" :field="fields.route_types" />
               <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')" />
               <field-view :document="document" :field="fields.rock_types" />
-              <field-view :document="document" :field="fields.quality" />
               <field-view :document="document" :field="fields.climbing_outdoor_type" />
               <field-view :document="document" :field="fields.configuration" />
               <field-view :document="document" :field="fields.slackline_type" />
@@ -209,6 +208,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .protection-area-info {
   overflow: hidden;

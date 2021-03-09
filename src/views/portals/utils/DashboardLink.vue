@@ -39,8 +39,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .dashboard-link {
   .activity-icons {
     line-height: 1;

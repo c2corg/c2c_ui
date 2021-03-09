@@ -70,8 +70,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/variables.scss';
-
 .gdpr-content {
   z-index: 30;
   position: fixed;

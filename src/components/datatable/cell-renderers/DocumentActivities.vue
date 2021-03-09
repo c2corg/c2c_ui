@@ -9,8 +9,6 @@ export default Vue.extend({});
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/variables.scss';
-
 .cell-activities {
   font-size: 26px;
 }

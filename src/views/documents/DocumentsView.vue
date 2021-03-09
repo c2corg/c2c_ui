@@ -253,8 +253,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $section-padding: 1.5rem; //TODO find this variable
 $header-height: 34px;
 $header-padding-bottom: 1.5rem; //TODO find this variable

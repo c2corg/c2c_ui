@@ -36,8 +36,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .has-error {
   box-shadow: 0px 0px 8px 0px $danger;
   // border: 1px solid $danger;

@@ -120,8 +120,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .topoguide {
   background-image: url('~@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
   background-position-x: center;

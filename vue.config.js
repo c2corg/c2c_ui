@@ -4,6 +4,17 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const result = {
   publicPath: '/',
 
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `
+          @import '@/assets/sass/variables.scss';
+          @import '@/assets/sass/mixins.scss';
+        `,
+      },
+    },
+  },
+
   chainWebpack(config) {
     // remove prefetch plugin, in order to prevent loading of translations
     // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338

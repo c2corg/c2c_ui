@@ -48,7 +48,6 @@
               />
               <field-view :document="document" :field="fields.routes_quantity" />
               <field-view :document="document" :field="fields.best_periods" />
-              <field-view :document="document" :field="fields.quality" />
             </div>
 
             <div class="column is-4">

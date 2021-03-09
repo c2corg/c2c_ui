@@ -22,17 +22,8 @@ export default {
 };
 </script>
 
-<style scoped>
-:lang(fr) .label-value-label:after {
-  content: '\00a0:';
-}
-:lang(it) .label-value-label:after,
-:lang(de) .label-value-label:after,
-:lang(en) .label-value-label:after,
-:lang(es) .label-value-label:after,
-:lang(ca) .label-value-label:after,
-:lang(eu) .label-value-label:after,
-:lang(zh) .label-value-label:after {
-  content: ':';
+<style scoped lang="scss">
+.label-value-label {
+  @include colon;
 }
 </style>

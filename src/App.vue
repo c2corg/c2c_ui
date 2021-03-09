@@ -61,8 +61,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $sidemenu-width: 200px;
 $body-height: calc(100vh - #{$navbar-height});
 

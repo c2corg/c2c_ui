@@ -28,8 +28,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 @media print {
   /*write the activity's title instead of the icon*/
   .replace-icon-by-names-on-print {

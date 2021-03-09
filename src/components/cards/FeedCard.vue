@@ -169,8 +169,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 @media screen and (max-width: $tablet) {
   .feed-card {
     border-left: 0 !important;

@@ -368,8 +368,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/variables.scss';
-
 .login-view {
   height: 100%;
   align-items: center;

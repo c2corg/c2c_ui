@@ -27,8 +27,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .topoguide-link-view {
   width: 150px;
   height: 150px;

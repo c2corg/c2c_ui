@@ -268,8 +268,6 @@ export default {
 </style>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $headerHeight: 3rem;
 $paginationHeight: 30px;
 

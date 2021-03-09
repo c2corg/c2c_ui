@@ -54,8 +54,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 section {
   background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-800w.jpg');
   background-size: cover;

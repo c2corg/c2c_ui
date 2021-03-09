@@ -34,7 +34,6 @@
               <field-view :document="document" :field="fields.frequentation" />
               <field-view :document="document" :field="fields.condition_rating" />
               <field-view v-if="document.partial_trip" :document="document" :field="fields.partial_trip" />
-              <field-view :document="document" :field="fields.quality" />
 
               <field-view :document="document" :field="fields.participant_count" />
             </div>

@@ -14,7 +14,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .icon-condition-excellent {
   color: green;
 }

@@ -26,7 +26,6 @@
           <field-view :document="document" :field="fields.autonomy" />
           <field-view :document="document" :field="fields.activity_rate" />
           <field-view :document="document" :field="fields.qualification" />
-          <field-view :document="document" :field="fields.quality" />
         </div>
 
         <map-box :document="document" />

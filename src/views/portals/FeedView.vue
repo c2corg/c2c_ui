@@ -66,8 +66,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 @media screen and (max-width: $tablet) {
   .feed-view {
     padding-left: 0;

@@ -7,8 +7,6 @@
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .card-header-title {
   padding: 0.4rem 0.8rem;
   display: block;

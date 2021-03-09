@@ -241,8 +241,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 nav {
   max-width: 100vw;
   height: $navbar-height;
@@ -376,8 +374,6 @@ nav {
 </style>
 
 <style lang="scss">
-@import '@/assets/sass/variables.scss';
-
 @media screen and (max-width: $tablet) {
   .add-button .dropdown-content {
     position: fixed;

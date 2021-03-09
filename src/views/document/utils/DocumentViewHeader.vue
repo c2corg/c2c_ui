@@ -107,8 +107,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .button-bar {
   font-size: 1.5rem;
 }

@@ -198,8 +198,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .discourse-post {
   border-top: 6px solid $color-base-c2c;
   margin-bottom: 1.5rem;
