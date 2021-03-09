@@ -26,7 +26,7 @@
             </fa-layers>
           </span>
 
-          <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
+          <edit-link :show-always="showAlways" :document="document" :lang="lang" :title="$gettext('Edit')">
             <icon-edit />
           </edit-link>
         </span>
@@ -101,6 +101,10 @@ export default {
     documentType() {
       // is-editable mixin needs this property
       return this.$documentUtils.getDocumentType(this.document.type);
+    },
+
+    showAlways() {
+      return !['outing', 'xreport', 'profile', 'image'].includes(this.documentType);
     },
   },
 };
