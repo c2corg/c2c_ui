@@ -5,7 +5,6 @@
       <div class="column is-3">
         <div class="box">
           <field-view :document="document" :field="fields.area_type" />
-          <field-view :document="document" :field="fields.quality" />
         </div>
         <map-box :document="document" />
         <tool-box :document="document" />

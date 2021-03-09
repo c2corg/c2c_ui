@@ -69,6 +69,12 @@
       icon="edit"
     />
 
+    <div class="quality" v-if="quality">
+      <icon-quality :quality="quality.value"></icon-quality>
+      <span v-translate>{{ quality.name }}</span>
+      <span v-translate :translate-context="quality.i18nContext">{{ quality.value }}</span>
+    </div>
+
     <tool-box-button
       v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
       :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
@@ -156,6 +162,7 @@
 </template>
 
 <script>
+import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
 import isEditableMixin from '../is-editable-mixin';
 import viewModeMixin from '../view-mode-mixin';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
@@ -181,7 +188,7 @@ export default {
     ToolBoxButton,
     LicenseBox,
     AssociatedDocuments,
-
+    IconQuality,
     AssociationsWindow,
     DeleteLocaleWindow,
     DeleteDocumentWindow,
@@ -228,6 +235,14 @@ export default {
       }
 
       return result;
+    },
+
+    quality() {
+      const fields = constants.objectDefinitions[this.documentType].fields;
+      if (!fields.quality) {
+        return;
+      }
+      return { ...fields.quality, value: this.document[fields.quality.name] };
     },
 
     fundraiser() {
@@ -377,5 +392,11 @@ export default {
 
 .lang-switcher-box-list span:not(:last-child)::after {
   content: ' \2022 '; /* \2022 is bull */
+}
+
+.quality {
+  span:nth-of-type(1) {
+    @include colon;
+  }
 }
 </style>

@@ -10,7 +10,6 @@
           <label-value v-if="document.author && document.article_type === 'personal'" :label="$gettext('contributor')">
             <author-link :author="document.author" />
           </label-value>
-          <field-view :document="document" :field="fields.quality" />
         </div>
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
