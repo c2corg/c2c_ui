@@ -1,5 +1,4 @@
 <template>
-  <!-- <span :class="'icon-quality-' + quality"/> -->
   <fa-icon :icon="['quality', quality]" />
 </template>
 
