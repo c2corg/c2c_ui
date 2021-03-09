@@ -71,7 +71,7 @@
 
     <div class="quality" v-if="quality">
       <icon-quality :quality="quality.value"></icon-quality>
-      <span v-translate>{{ quality.name }}</span> {{ quality.i18nValue }}
+      <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
     </div>
 
     <tool-box-button
@@ -244,6 +244,7 @@ export default {
       return {
         ...fields.quality,
         value: this.document[fields.quality.name],
+        i18nName: this.$gettext(fields.quality.name),
         i18nValue: this.$gettext(this.document[fields.quality.name], fields.quality.i18nContext),
       };
     },
