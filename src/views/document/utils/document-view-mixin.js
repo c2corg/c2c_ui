@@ -193,7 +193,7 @@ export default {
     },
 
     handleRedirection() {
-      if (this.document && this.document.redirects_to) {
+      if (this.document?.redirects_to) {
         this.$router.push({ params: { id: this.document.redirects_to } });
       }
     },
