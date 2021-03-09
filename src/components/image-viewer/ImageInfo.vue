@@ -3,7 +3,7 @@
     <h3 class="title is-3 has-text-light" v-translate>Infos</h3>
 
     <div v-if="document">
-      <p>
+      <p v-if="document.date_time">
         <fa-icon icon="calendar" />
         <label>
           {{ $dateUtils.toLocalizedString(document.date_time, 'PPpp') }}
