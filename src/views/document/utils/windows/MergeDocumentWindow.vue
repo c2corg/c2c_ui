@@ -115,8 +115,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .modal-card-body,
 .modal-card,
 .modal {

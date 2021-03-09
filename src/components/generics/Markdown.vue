@@ -164,8 +164,6 @@ export default {
 
 <style lang="scss">
 // Not scoped syle, because CSS selector are not explicitly present in template
-@import '@/assets/sass/variables.scss';
-
 .markdown-content:not(:last-child) {
   margin-bottom: 1.5rem;
 }

@@ -268,8 +268,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .association-items {
   margin-bottom: 1rem;
 

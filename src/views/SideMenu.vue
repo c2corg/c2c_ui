@@ -111,8 +111,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $brandLogoHeight: 70px;
 $brandLogoMargin: 5px;
 

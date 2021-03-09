@@ -57,8 +57,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .todo-button.active {
   color: $yellow !important;
 }

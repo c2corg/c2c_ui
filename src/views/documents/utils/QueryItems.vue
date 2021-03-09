@@ -263,8 +263,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .title-input {
   display: inline-flex;
   margin-bottom: 0 !important;

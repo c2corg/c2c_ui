@@ -50,8 +50,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .input-item {
   font-size: 40px;
   margin: 4px;
