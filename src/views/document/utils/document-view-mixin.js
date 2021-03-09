@@ -267,7 +267,7 @@ export default {
         '@type': 'NewsArticle',
         headline,
       };
-      if (this.document.associations?.images.length) {
+      if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
         inner = {
           ...inner,
@@ -290,7 +290,7 @@ export default {
         const description = utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200);
         meta = [...meta, { p: 'og:description', c: description }, { n: 'description', c: description }];
       }
-      if (this.document.associations?.images.length) {
+      if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
         meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image) }];
       }
