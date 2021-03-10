@@ -38,7 +38,7 @@ export default {
       return this.promise ? this.promise.data : null;
     },
     fields() {
-      return constants.objectDefinitions['article'].fields;
+      return constants.objectDefinitions.article.fields;
     },
     lang() {
       return this.$language.current;
@@ -55,7 +55,7 @@ export default {
   methods: {
     cookDocument() {
       // get document, and set promise only in then (no FOIT)
-      c2c['article'].getCooked(this.id, this.$language.current).then((result) => {
+      c2c.article.getCooked(this.id, this.$language.current).then((result) => {
         this.promise = result;
       });
     },

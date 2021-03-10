@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     onEditFeaturesTitle(e) {
-      if (e.target.innerText.length === 0) {
+      if (!e.target.innerText.length) {
         this.newFeaturesTitle = false;
       }
       this.$emit('update:featuresTitle', e.target.innerText);

@@ -156,12 +156,7 @@ export default {
   },
   methods: {
     onChange(event, prop) {
-      let value = null;
-      if (prop === 'isDifferent') {
-        value = event;
-      } else {
-        value = event.target.value;
-      }
+      const value = prop === 'isDifferent' ? event : event.target.value;
       this.$emit('update:bra', Object.assign(this.bra, { [prop]: value }));
     },
 
