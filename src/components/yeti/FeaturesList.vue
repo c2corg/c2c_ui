@@ -1,9 +1,9 @@
 <template>
-  <ul class="FeaturesList">
+  <ul class="featureslist">
     <li
       v-for="(feature, i) of features"
       :key="i"
-      class="FeaturesList-Item tag"
+      class="featureslist-item tag"
       @mouseenter="showFeature(feature)"
       @mouseleave="hideFeature(feature)"
     >
@@ -48,15 +48,15 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
-.FeaturesList {
+.featureslist {
   margin: 0 -0.5rem;
 }
-.FeaturesList-Item {
+.featureslist-item {
   margin: 0.25rem;
   font-size: 0.7em;
 }
-.FeaturesList-Item:hover,
-.FeaturesList-Item:focus {
+.featureslist-item:hover,
+.featureslist-item:focus {
   background: $grey-lighter;
   cursor: default;
 }

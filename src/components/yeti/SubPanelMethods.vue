@@ -1,5 +1,5 @@
 <template>
-  <div class="yeti-subpanel panelMethodes">
+  <div class="yeti-subpanel">
     <sub-panel-title>Methods</sub-panel-title>
     <div class="columns is-mobile yetitabs">
       <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">

@@ -1,5 +1,5 @@
 <template>
-  <div class="yeti-subpanel panelCourse">
+  <div class="yeti-subpanel">
     <sub-panel-title>Route</sub-panel-title>
     <div v-if="features.length">
       <div class="columns is-mobile">

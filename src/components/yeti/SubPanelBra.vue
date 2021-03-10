@@ -1,5 +1,5 @@
 <template>
-  <div class="yeti-subpanel panelBRA">
+  <div class="yeti-subpanel">
     <sub-panel-title>Danger level</sub-panel-title>
     <div class="columns is-mobile">
       <div class="column">

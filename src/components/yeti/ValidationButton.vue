@@ -11,7 +11,7 @@
       >
         Compute risk
       </button>
-      <p class="yetiForm-error" v-if="currentError">
+      <p class="yetiform-error" v-if="currentError">
         <span>
           {{ currentError }}
         </span>
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped>
-.yetiForm-error {
+.yetiform-error {
   font-size: 0.8em;
   font-style: italic;
   margin-top: 10px;
@@ -48,7 +48,7 @@ export default {
   opacity: 0.75;
 }
 
-.yetiForm-error span::before {
+.yetiform-error span::before {
   content: 'i';
   display: inline-block;
   width: 1rem;
