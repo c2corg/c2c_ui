@@ -48,7 +48,17 @@ export default {
 
     setActiveTabKeyboard(event, index) {
       // Set arrow keys: left/right = switch active tabs / down = focus panel
-      let dir = event.which === 37 ? index - 1 : event.which === 39 ? index + 1 : event.which === 40 ? 'down' : null;
+      const ARROW_LEFT = 37;
+      const ARROW_RIGHT = 39;
+      const ARROW_DOWN = 40;
+      let dir =
+        event.which === ARROW_LEFT
+          ? index - 1
+          : event.which === ARROW_RIGHT
+          ? index + 1
+          : event.which === ARROW_DOWN
+          ? 'down'
+          : null;
 
       if (dir !== null) {
         event.preventDefault();
