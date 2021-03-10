@@ -3,10 +3,14 @@
     <div class="title is-2">
       <span v-if="documentType === 'image'" v-translate>Associated outings</span>
       <span v-else v-translate>Last outings</span>
-      <span v-if="outings.length !== 0 && !hideSeeAllResultsButton">
-        <span>, </span>
-        <router-link :to="{ name: 'outings', query: query }" class="is-size-5" v-translate> show all </router-link>
-      </span>
+      <router-link
+        :to="{ name: 'outings', query: query }"
+        class="is-size-5"
+        v-if="outings.length !== 0 && !hideSeeAllResultsButton"
+        v-translate
+      >
+        show all
+      </router-link>
     </div>
 
     <div v-for="(outing, i) of outings" :key="i">
