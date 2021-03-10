@@ -559,6 +559,10 @@ export default {
     },
 
     setVisibleMountains() {
+      // return, if mountains not loaded
+      if (!this.allMountains) {
+        return;
+      }
       const mapExtent = this.getExtent('EPSG:4326');
       // clone this.mountains first, with no reference
       const visibleMountains = Object.assign({}, this.allMountains);
@@ -573,7 +577,9 @@ export default {
           delete visibleMountains[massif];
         }
       }
-      this.$emit('update:mountains', visibleMountains);
+      // set mountains in visibleMountains key
+      const mountains = { visibleMountains };
+      this.$emit('update:mountains', mountains);
     },
 
     onAreasResult(data) {

@@ -78,7 +78,7 @@
       <div>
         <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
           <span v-translate>Avalanche bulletins</span>
-          <counter v-if="mountainsLength">{{ countVisibleMountains }}</counter>
+          <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
           <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
             icon="angle-down"
@@ -87,10 +87,10 @@
         </p>
       </div>
       <div v-if="showMountainsList">
-        <div v-if="mountainsLength">
+        <div v-if="showVisibleMountains">
           <p class="column yetiform-info" v-translate>Get avalanche bulletins from Météo-France website</p>
           <dl>
-            <div v-for="(mountainsForMassif, massif) of mountains" :key="massif">
+            <div v-for="(mountainsForMassif, massif) of mountains.visibleMountains" :key="massif">
               <dt class="yetimountains-listtitle">
                 {{ massif }}
               </dt>
@@ -144,11 +144,16 @@ export default {
     };
   },
   computed: {
-    mountainsLength() {
+    showVisibleMountains() {
       return this.countVisibleMountains >= 0;
     },
     countVisibleMountains() {
-      return Object.values(this.mountains).reduce((a, b) => a + b.length, 0);
+      // if visibleMountains are set
+      if (this.mountains.visibleMountains) {
+        return Object.values(this.mountains.visibleMountains).reduce((a, b) => a + b.length, 0);
+      }
+      // else, return -1 (because 0 is not an error)
+      return -1;
     },
   },
   watch: {
