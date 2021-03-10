@@ -115,7 +115,7 @@
           </dl>
         </div>
         <div v-else>
-          <p class="column yetiform-info" v-translate>Massifs could not have been loaded</p>
+          <p class="column yetiform-info" v-translate>Massifs could not be loaded</p>
         </div>
       </div>
     </div>
