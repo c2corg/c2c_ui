@@ -223,14 +223,8 @@ export default {
     },
 
     setFilename(ext) {
-      let dateObj = new Date();
-      let month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
-      let day = ('0' + dateObj.getDate()).slice(-2);
-      let year = dateObj.getFullYear();
-      let hours = ('0' + dateObj.getHours()).slice(-2);
-      let minutes = ('0' + dateObj.getMinutes()).slice(-2);
-      let seconds = ('0' + dateObj.getSeconds()).slice(-2);
-      return year + '-' + month + '-' + day + '_' + hours + '-' + minutes + '-' + seconds + ext;
+      let date = this.$moment.parseDate(new Date());
+      return date.format('YYYY-MM-DD_HH-mm-ss') + ext;
     },
   },
 };
