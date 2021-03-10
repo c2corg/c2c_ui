@@ -70,19 +70,19 @@ export default {
 .yetitabs {
   margin: 0 0 0 -1px !important;
   overflow: visible;
-}
 
-.yetitabs-link {
-  font-size: 0.9em;
-  padding: 0.25em 1em;
-}
+  &-link {
+    font-size: 0.9em;
+    padding: 0.25em 1em;
+  }
 
-.yetitabs li,
-.yetitabs a {
-  height: 100%;
-}
+  li,
+  a {
+    height: 100%;
+  }
 
-.yetitabs li {
-  margin-right: 1px;
+  li {
+    margin-right: 1px;
+  }
 }
 </style>

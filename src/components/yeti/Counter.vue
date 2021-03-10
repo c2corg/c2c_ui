@@ -17,6 +17,7 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
+
 .yeti-counter {
   display: inline-block;
   width: 1.1rem;
@@ -28,8 +29,9 @@ export default {
   border-radius: 50%;
   font-size: 0.72em;
   text-align: center;
-}
-.yeti-counter.has-background-primary {
-  color: $white;
+
+  &.has-background-primary {
+    color: $white;
+  }
 }
 </style>

@@ -215,26 +215,26 @@ export default {
   &:hover {
     border-color: #b5b5b5;
   }
-}
 
-.yetimountains-title {
-  cursor: pointer;
-  padding: 0.25rem 0.75rem;
-}
+  &-title {
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+  }
 
-.yetimountains-arrow {
-  color: $primary;
-  margin-top: 0.25rem;
-}
+  &-arrow {
+    color: $primary;
+    margin-top: 0.25rem;
+  }
 
-.yetimountains-list {
-  columns: 3 170px;
-  padding: 0.75rem 2rem;
-}
+  &-list {
+    columns: 3 170px;
+    padding: 0.75rem 2rem;
+  }
 
-.yetimountains-listtitle {
-  font-weight: bold;
-  padding: 0 0.75rem;
+  &-listtitle {
+    font-weight: bold;
+    padding: 0 0.75rem;
+  }
 }
 
 .yetimountains-listelement + .yetimountains-listtitle {

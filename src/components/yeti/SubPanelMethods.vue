@@ -428,20 +428,22 @@ table:not(:last-child) {
   .yetitab {
     flex: 0 0 50%;
   }
-  .yetiform-danger tr,
-  .yetiform-danger td {
-    display: block;
-  }
-  .yetiform-danger tr {
-    padding: 0.5em 0;
-  }
-  .yetiform-danger td:first-child {
-    float: left;
-  }
-  .yetiform-danger td:first-child ~ td {
-    height: auto;
-    width: calc(100% - 60px);
-    margin-left: 60px;
+  .yetiform-danger {
+    tr,
+    td {
+      display: block;
+    }
+    tr {
+      padding: 0.5em 0;
+    }
+    td:first-child {
+      float: left;
+    }
+    td:first-child ~ td {
+      height: auto;
+      width: calc(100% - 60px);
+      margin-left: 60px;
+    }
   }
 }
 
@@ -470,17 +472,17 @@ table:not(:last-child) {
     flex: 1 1 20px;
     text-align: center;
     border: 3px solid transparent;
-  }
 
-  .potential-danger-label[disabled] {
-    cursor: not-allowed;
-    pointer-events: none;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: grey;
-  }
+    &[disabled] {
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: grey;
+    }
 
-  .potential-danger-label[selected] {
-    border-color: black;
+    &[selected] {
+      border-color: black;
+    }
   }
 }
 </style>

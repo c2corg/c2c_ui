@@ -232,27 +232,33 @@ export default {
 .features-title {
   display: flex;
   line-height: 1.4;
+
+  &-text {
+    min-width: 100px;
+    border: solid 1px transparent;
+    border-radius: 2px;
+    padding: 2px 2em 2px 2px;
+    box-decoration-break: clone;
+
+    &:hover,
+    &:focus {
+      border-color: #b5b5b5;
+    }
+  }
+
+  &-placeholder {
+    font-style: italic;
+  }
+
+  &-content {
+    font-weight: bold;
+  }
 }
-.features-title-text {
-  min-width: 100px;
-  border: solid 1px transparent;
-  border-radius: 2px;
-  padding: 2px 2em 2px 2px;
-  box-decoration-break: clone;
-}
-.features-title-text:hover,
-.features-title-text:focus {
-  border-color: #b5b5b5;
-}
-.features-title-placeholder {
-  font-style: italic;
-}
-.features-title-content {
-  font-weight: bold;
-}
+
 .icon {
   margin-top: 2px;
 }
+
 .edit-icon {
   order: 1;
   opacity: 0;
@@ -260,12 +266,15 @@ export default {
   pointer-events: none;
   transform: scale(0.75);
 }
+
 .features-title:hover .edit-icon {
   opacity: 0.75;
 }
+
 .document-icon {
   margin-right: 3px;
 }
+
 .trash-icon {
   margin-right: 3px;
 }

@@ -50,14 +50,16 @@ export default {
 
 .featureslist {
   margin: 0 -0.5rem;
-}
-.featureslist-item {
-  margin: 0.25rem;
-  font-size: 0.7em;
-}
-.featureslist-item:hover,
-.featureslist-item:focus {
-  background: $grey-lighter;
-  cursor: default;
+
+  &-item {
+    margin: 0.25rem;
+    font-size: 0.7em;
+
+    &:hover,
+    &:focus {
+      background: $grey-lighter;
+      cursor: default;
+    }
+  }
 }
 </style>

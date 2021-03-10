@@ -39,25 +39,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .yetiform-error {
   font-size: 0.8em;
   font-style: italic;
   margin-top: 10px;
   text-align: right;
   opacity: 0.75;
-}
 
-.yetiform-error span::before {
-  content: 'i';
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  background: rgba(0, 60, 136, 0.5);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 0.71rem;
-  font-weight: bold;
-  text-align: center;
+  span::before {
+    content: 'i';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background: rgba(0, 60, 136, 0.5);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.71rem;
+    font-weight: bold;
+    text-align: center;
+  }
 }
 </style>
