@@ -66,13 +66,21 @@
       <div class="yetiform-note mt-5">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
-          <li><strong v-translate>Draw</strong> <span v-translate>new lines chunks</span></li>
-          <li><strong v-translate>Delete</strong> <span v-translate>last point with the Backspace key</span></li>
+          <li><strong v-translate translate-context="yeti">Draw</strong> <span v-translate>new lines chunks</span></li>
+          <li>
+            <strong v-translate translate-context="yeti">Delete</strong>
+            <span v-translate>last point with the Backspace key</span>
+          </li>
         </ul>
         <p v-translate>On a drawn line</p>
         <ul class="content-ul">
-          <li><strong v-translate>Edit</strong> <span v-translate>points by moving them</span></li>
-          <li><strong v-translate>Create</strong> <span v-translate>a new point on an existing line</span></li>
+          <li>
+            <strong v-translate translate-context="yeti">Edit</strong> <span v-translate>points by moving them</span>
+          </li>
+          <li>
+            <strong v-translate translate-context="yeti">Create</strong>
+            <span v-translate>a new point on an existing line</span>
+          </li>
           <li><strong v-translate>Delete a point</strong> <span v-translate>with Alt + clic</span></li>
         </ul>
         <p v-translate>From the interface</p>
