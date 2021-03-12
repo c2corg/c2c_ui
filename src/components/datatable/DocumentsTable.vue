@@ -497,3 +497,9 @@ export default {
 
 <style src="ag-grid-community/dist/styles/ag-grid.css" />
 <style src="ag-grid-community/dist/styles/ag-theme-balham.css" />
+<style lang="scss">
+.ag-theme-balham .ag-cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+</style>

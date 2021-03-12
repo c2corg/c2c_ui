@@ -64,7 +64,7 @@
       <query-items class="filter-section" :list-mode="listMode" @documents-load="onQueryDocumentsLoad" />
     </div>
 
-    <div class="columns result-section" :class="'mobile-mode-' + displayMode">
+    <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
         v-if="showResults"
         class="column documents-container"
@@ -157,6 +157,8 @@ export default {
       highlightedDocument: null,
 
       filteredWaypoints: [],
+
+      queryHasTags: false,
     };
   },
 
@@ -243,6 +245,7 @@ export default {
     },
 
     onQueryDocumentsLoad(documents) {
+      this.queryHasTags = documents.length > 0;
       this.filteredWaypoints = documents.filter((document) => document.type === 'w');
 
       // do not display waypoints associated
@@ -257,11 +260,16 @@ $section-padding: 1.5rem; //TODO find this variable
 $header-height: 34px;
 $header-padding-bottom: 1.5rem; //TODO find this variable
 $filter-height: 32px;
-$filter-padding-bottom: 1.5rem;
+$tags-height: 28px;
+$filter-padding-bottom: 0.5rem;
 $result-height: calc(
   100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
     #{$filter-height}
-); //  - #{$bulma-section-padding}*2 - #{$header-height} - #{$filter-height} - #{$filter-padding}*2);
+);
+$result-height-with-tags: calc(
+  100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
+    #{$filter-height} - #{$tags-height}
+);
 $cards-gap: 0.25rem;
 
 .header-section {
@@ -349,6 +357,10 @@ $cards-gap: 0.25rem;
     margin-top: 0;
     height: $result-height;
 
+    &.query-has-tags {
+      height: $result-height-with-tags;
+    }
+
     .documents-container {
       height: 100%;
       overflow: auto;
@@ -363,8 +375,6 @@ $cards-gap: 0.25rem;
       .documents-table {
         height: 100%;
       }
-
-      //    transition:0.3s;
     }
 
     .map-container {
@@ -372,7 +382,6 @@ $cards-gap: 0.25rem;
       padding-left: 0;
       padding-top: 0;
       padding-bottom: 0;
-      //    transition:0.3s;
     }
   }
 }
