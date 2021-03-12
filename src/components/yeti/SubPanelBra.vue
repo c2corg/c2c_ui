@@ -96,19 +96,10 @@
               </dt>
               <div class="yetimountains-list">
                 <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.title">
-                  <a
-                    :href="
-                      'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' +
-                      mountain.id_mf +
-                      '.pdf'
-                    "
-                    target="_blank"
-                    v-if="mountain.id_mf"
-                  >
+                  <a :href="mountain.urls[0].url" target="_blank">
                     <fa-icon icon="external-link-alt" />
                     {{ mountain.title }}
                   </a>
-                  <span v-else>{{ mountain.title }}</span>
                 </dd>
               </div>
             </div>
