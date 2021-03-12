@@ -35,7 +35,7 @@ export default {
       return this.article.title;
     },
     document() {
-      return this.promise ? this.promise.data : null;
+      return this.promise?.data ?? null;
     },
     fields() {
       return constants.objectDefinitions.article.fields;
