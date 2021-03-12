@@ -331,7 +331,7 @@ $cards-gap: 0.25rem;
     }
 
     .documents-container {
-      display: None;
+      display: none;
     }
   }
 
@@ -352,6 +352,8 @@ $cards-gap: 0.25rem;
     .documents-container {
       height: 100%;
       overflow: auto;
+      padding-top: 0;
+      padding-bottom: 0;
 
       .cards-list {
         padding-top: 2px;
