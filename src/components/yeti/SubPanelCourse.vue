@@ -15,8 +15,6 @@
             >
               Add title…
             </span>
-            <!-- eslint-disable -->
-            <!-- allow to write {{...}} on same line to prevent too much spaces in contenteditable element -->
             <span
               v-show="hasFeaturesTitle"
               class="features-title-text features-title-content"
@@ -28,7 +26,6 @@
               @keypress.13.prevent
               >{{ editableFeaturesTitle }}</span
             >
-            <!-- eslint-enable -->
           </p>
         </div>
         <div class="column is-narrow">
