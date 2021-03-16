@@ -28,7 +28,7 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
-/deep/ {
+::v-deep {
   a:hover,
   a:focus {
     text-decoration: underline;

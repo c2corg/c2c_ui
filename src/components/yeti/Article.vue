@@ -68,7 +68,7 @@ export default {
   max-width: 1039px;
   margin-top: 1.75em;
 }
-/deep/ {
+::v-deep {
   h3 {
     margin-top: 2em;
   }
@@ -83,7 +83,7 @@ export default {
     max-height: 500px;
   }
 }
-.yeti-article--disclaimer /deep/ li {
+.yeti-article--disclaimer ::v-deep li {
   margin: 2em 0;
 }
 </style>
