@@ -40,11 +40,13 @@ jobs:
           CI: ${{ true }}
       - name: Docker meta
         id: docker_meta
+        if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
       - name: Login to DockerHub
+        if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
