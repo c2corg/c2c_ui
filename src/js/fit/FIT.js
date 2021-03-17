@@ -387,7 +387,7 @@ export class FIT extends FeatureFormat {
           message.longitude,
           message.latitude,
           message.altitude || this.lastAltitude || 0,
-          message.timestamp?.getTime() || 0,
+          message.timestamp?.getTime() / 1000 || 0,
         ]);
       }
     }
