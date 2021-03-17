@@ -112,6 +112,7 @@ import {
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
 import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
 import photon from '@/js/apis/photon';
+import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
@@ -459,9 +460,9 @@ export default {
 
     // https://openlayers.org/en/latest/examples/drag-and-drop.html
     setDragAndDropInteraction() {
-      // handle use case when user drag&drop a gpx/kml file on map
+      // handle use case when user drag&drop a gpx/kml/fit file on map
       const dragAndDrop = new ol.interaction.DragAndDrop({
-        formatConstructors: [ol.format.GPX, ol.format.KML],
+        formatConstructors: [ol.format.GPX, ol.format.KML, FIT],
       });
 
       dragAndDrop.on(
@@ -485,12 +486,23 @@ export default {
       this.setDocumentGeometry(document, feature.get('geometry'));
     },
 
-    setDocumentGeometryFromGpx(gpx) {
-      const gpxFormat = new ol.format.GPX();
-      const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
+    tryReadFeaturesFromGeoFile(file, format, options) {
+      try {
+        return format.readFeatures(file, options);
+      } catch (e) {
+        return null;
+      }
+    },
 
-      features.map(this.setDocumentGeometryFromFeature);
-      this.fitMapToDocuments(true);
+    setDocumentGeometryFromGeoFile(file) {
+      for (const format of [new ol.format.GPX(), new FIT(), new ol.format.KML()]) {
+        const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
+        if (features?.length) {
+          features.map(this.setDocumentGeometryFromFeature);
+          this.fitMapToDocuments(true);
+          break;
+        }
+      }
     },
 
     setDocumentGeometryFromFeature(feature) {
