@@ -392,6 +392,13 @@ export class FIT extends FeatureFormat {
       }
     }
 
+    // Often, the first point has no altitude, but the next one has
+    const [first, second, ...other] = geometry.getCoordinates();
+    if (first?.[2] === 0 && second?.[2] !== 0) {
+      first[2] = second[2];
+      geometry.setCoordinates([first, second, ...other]);
+    }
+
     return [new Feature(transformGeometryWithOptions(geometry, false, this.getReadOptions(source, readOptions)))];
   }
 }
