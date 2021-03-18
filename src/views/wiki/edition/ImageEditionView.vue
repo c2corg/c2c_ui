@@ -1,11 +1,5 @@
 <template>
-  <edition-container
-    :mode="mode"
-    :document="document"
-    :generic-errors="genericErrors"
-    :is-loading="saving || uploadingNewFile"
-    @save="save"
-  >
+  <edition-container :mode="mode" :document="document" :is-loading="saving || uploadingNewFile" @save="save">
     <form-section
       :title="$gettext('general informations')"
       :sub-title="$gettext('Title, activity and characteristics of the picture')"

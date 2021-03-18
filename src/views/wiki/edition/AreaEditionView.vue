@@ -1,11 +1,5 @@
 <template>
-  <edition-container
-    :mode="mode"
-    :document="document"
-    :generic-errors="genericErrors"
-    :is-loading="saving"
-    @save="save"
-  >
+  <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
     <div class="columns">
       <form-field :document="document" :field="fields.title" />
       <form-field class="is-narrow" :document="document" :field="fields.area_type" />

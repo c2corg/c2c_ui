@@ -1,11 +1,5 @@
 <template>
-  <edition-container
-    :mode="mode"
-    :document="document"
-    :generic-errors="genericErrors"
-    :is-loading="saving"
-    @save="save"
-  >
+  <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
     <div class="columns is-multiline">
       <form-field :document="document" :field="fields.title" is-expanded />
       <form-field class="is-narrow" :document="document" :field="fields.article_type" />

@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
 import VueRecaptcha from 'vue-recaptcha';
 
 import BaseForm from './utils/BaseForm';
@@ -344,7 +345,7 @@ export default {
     resetPassword() {
       this.promise = c2c.userProfile
         .requestPasswordChange(this.email)
-        .then(() => this.$alert.show([this.$gettext('Mail has been sent')]));
+        .then(() => toast({ message: this.$gettext('Mail has been sent'), type: 'is-danger' }));
     },
 
     validateNewPassword() {
