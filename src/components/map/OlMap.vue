@@ -519,7 +519,7 @@ export default {
     },
 
     setOutingStartDate(document, geometry) {
-      if (document.type !== 'o' || document.date_start !== null) {
+      if (document.type !== 'o' || document.date_start) {
         return;
       }
 
