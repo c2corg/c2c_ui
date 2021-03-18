@@ -1,7 +1,7 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current', restricted = false) {
+function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
   return new ol.layer.Tile({
     title,
     type: 'base',
@@ -13,7 +13,6 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current', r
       }),
       maxZoom: 17,
     }),
-    restricted,
   });
 }
 
@@ -70,11 +69,6 @@ function createIgnEsSource(title, source) {
   let url = 'http://www.ign.es/wmts/';
   let layer;
   switch (source) {
-    case 'raster':
-    default:
-      url += 'mapa-raster';
-      layer = 'MTN';
-      break;
     case 'base':
       url += 'ign-base';
       layer = 'IGNBaseTodo';
@@ -82,6 +76,11 @@ function createIgnEsSource(title, source) {
     case 'ortho':
       url += 'pnoa-ma';
       layer = 'OI.OrthoimageCoverage';
+      break;
+    case 'raster':
+    default:
+      url += 'mapa-raster';
+      layer = 'MTN';
       break;
   }
 
@@ -122,14 +121,14 @@ function createBaseMapDotAtSource(title, source) {
   let format;
   let layer;
   switch (source) {
+    case 'ortho':
+      format = 'jpeg';
+      layer = 'bmaporthofoto30cm';
+      break;
     case 'raster':
     default:
       format = 'png';
       layer = 'bmapgrau';
-      break;
-    case 'ortho':
-      format = 'jpeg';
-      layer = 'bmaporthofoto30cm';
       break;
   }
 
@@ -218,7 +217,7 @@ export const cartoLayers = function () {
   // $gettext('IGN ortho', 'Map layer')
   const ignFrOrtho = createIgnFrSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
   // $gettext('SwissTopo', 'Map layer')
-  const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current', true);
+  const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current');
   // $gettext('IGN raster (es)', 'Map layer')
   const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
@@ -246,7 +245,7 @@ export const dataLayers = function () {
   const ignSlopes = createIgnFrSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101', true);
+  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
   swissSlopes.setOpacity(0.4);
 
   return [ignSlopes, swissSlopes];
