@@ -7,358 +7,67 @@
         <div class="yeti-icon is-inline-block">
           <icon-yeti />
         </div>
-        <span>YETI - Un outil de préparation de course</span>
+        <span v-translate>YETI - A preparation tool for your outing</span>
       </h1>
     </div>
 
     <div class="yeti-app">
-      <div class="box yeti-disclaimer" v-if="showDisclaimer">
-        <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <yeti-text component="disclaimer" />
+      <div class="box yeti-overlay" v-if="showDisclaimer">
+        <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
         <form action="#" @submit="onSubmitDisclaimer">
-          <input-checkbox v-model="checkDisclaimer">
-            J’ai lu et j’ai compris l’intérêt et les limites de Yéti
+          <input-checkbox v-model="checkDisclaimer" v-translate>
+            I read and understood the interest and limitations of YETI
           </input-checkbox>
-          <button class="button is-primary" :disabled="!checkDisclaimer">Accéder à YETI</button>
+          <button class="button is-primary" :disabled="!checkDisclaimer" v-translate>Launch YETI</button>
         </form>
       </div>
 
-      <div class="box" v-if="$route.params.page === 'faq'">
-        <p><router-link to="/yeti">Retour YETI</router-link></p>
-        <h2 class="title is-3 yeti-title">Avertissement</h2>
-        <yeti-text component="disclaimer" />
-        <h2 class="title is-3 yeti-title">FAQ</h2>
-        <yeti-text component="faq" />
+      <div class="box yeti-overlay" v-if="$route.params.page === 'faq'">
+        <p><router-link to="." v-translate>Go back to YETI</router-link></p>
+        <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
+        <yeti-article :article="articles.faq"></yeti-article>
       </div>
 
-      <div class="columns yeti-content" v-else>
+      <div class="columns yeti-content">
         <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
-          <div class="box">
-            <div class="columns is-mobile">
-              <div class="column">
-                <h2 class="title is-3 yeti-title">
-                  Info <abbr title="Bulletin d’estimation du risque d’avalanche">BRA</abbr>
-                </h2>
-              </div>
-              <div class="column">
-                <router-link class="is-size-6 is-pulled-right" to="/yeti/faq">FAQ ?</router-link>
-              </div>
-            </div>
-            <div class="columns is-mobile">
-              <div class="column">
-                <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
-                  <svg viewBox="0 0 100 100" width="120" height="120">
-                    <polygon
-                      style="fill: none; stroke: #000; stroke-miterlimit: 10"
-                      points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 "
-                    />
-                    <line
-                      v-show="bra.isDifferent"
-                      style="fill: none; stroke: #000; stroke-miterlimit: 10"
-                      x1="10"
-                      y1="61.5"
-                      x2="90"
-                      y2="61.5"
-                    />
-                  </svg>
-                  <div class="input-bra-high select is-small">
-                    <select v-model="bra.high" aria-label="Niveau de danger BRA haut">
-                      <option :value="null" selected />
-                      <option :value="1">1</option>
-                      <option :value="2">2</option>
-                      <option :value="3">3</option>
-                      <option :value="4">4</option>
-                    </select>
-                  </div>
-
-                  <div v-show="bra.isDifferent" class="input-bra-threshold control">
-                    <input
-                      class="input is-small"
-                      type="number"
-                      min="0"
-                      max="4800"
-                      step="100"
-                      v-model="bra.altiThreshold"
-                      maxlength="4"
-                      aria-label="Altitude seuil"
-                    />
-                  </div>
-
-                  <div v-show="bra.isDifferent" class="input-bra-low select is-small">
-                    <select v-model="bra.low" aria-label="Niveau de danger BRA bas">
-                      <option :value="null" selected />
-                      <option :value="1">1</option>
-                      <option :value="2">2</option>
-                      <option :value="3">3</option>
-                      <option :value="4">4</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <input-checkbox v-model="bra.isDifferent" class="control--bradifferent">
-                    BRA haut/bas différents ?
-                  </input-checkbox>
-                </div>
-              </div>
-
-              <div class="column has-text-right is-hidden-mobile">
-                <validation-button :current-error="currentError" :loading="promise" @click="compute" />
-              </div>
-            </div>
-
-            <div class="yetimountains">
-              <div>
-                <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
-                  Bulletins BRA par massif
-                  <span v-if="promiseMountains" class="yetimountains-count">{{ countVisibleMountains }}</span>
-                  <fa-icon
-                    class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
-                    icon="angle-down"
-                    :rotation="showMountainsList ? 180 : undefined"
-                  />
-                </p>
-              </div>
-              <div v-if="showMountainsList">
-                <div v-if="promiseMountains">
-                  <p class="column yetiform-info">Affichez les bulletins en PDF sur le site de Météo France</p>
-                  <dl>
-                    <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
-                      <dt class="yetimountains-listtitle">
-                        {{ massif }}
-                      </dt>
-                      <div class="yetimountains-list">
-                        <dd
-                          class="yetimountains-listelement"
-                          v-for="mountain of mountainsForMassif"
-                          :key="mountain.title"
-                        >
-                          <a
-                            :href="
-                              'http://www.meteofrance.com/integration/sim-portail/generated/integration/img/produits/pdf/bulletins_bra/' +
-                              mountain.id_mf +
-                              '.pdf'
-                            "
-                            target="_blank"
-                            v-if="mountain.id_mf"
-                          >
-                            <fa-icon icon="external-link-alt" />
-                            {{ mountain.title }}
-                          </a>
-                          <span v-else>{{ mountain.title }}</span>
-                        </dd>
-                      </div>
-                    </div>
-                  </dl>
-                </div>
-                <div v-else>
-                  <p class="column yetiform-info">Les massifs n’ont pas pu être chargés</p>
-                </div>
-              </div>
-            </div>
-
-            <h2 class="title is-3 yeti-title">Méthodes</h2>
-            <div class="columns is-mobile yetitabs">
-              <div v-for="item of Object.keys(methods)" :key="item" class="column yetitab">
-                <div class="control yetitab-control" :class="{ 'yetitab-control--selected': method === item }">
-                  <input
-                    :id="'c2c-method-' + item"
-                    type="radio"
-                    class="is-checkradio is-primary"
-                    :value="item"
-                    v-model="method"
-                    :disabled="item === 'mrd' ? bra.high == 4 || bra.low == 4 : false"
-                  />
-                  <label :for="'c2c-method-' + item" class="yetitab-label" @click="warnAboutMethodBra(item)">
-                    {{ methods[item][0] }}
-                    <span class="yetiform-info">{{ methods[item][1] }}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div v-show="method == 'mrd'">
-              <p>
-                Avec la <strong>méthode de réduction pour débutant</strong> (MRD), vous n’avez pas d’autres paramètres à
-                entrer que le (ou les) niveau(x) de danger donné par le BRA.
-              </p>
-              <div class="yetiform-note">
-                <p>
-                  Comme son nom l’indique, cette méthode est destinée aux pratiquants débutants. De ce fait, la marge de
-                  sécurité se doit d'être très importante. On ne spécifie pas d’autre paramètre que le niveau de danger
-                  du BRA. Il n’est pas tenu compte de l’orientation.
-                </p>
-              </div>
-
-              <table class="yetiform-danger">
-                <tr>
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level1" /></td>
-                  <td><strong>Danger faible</strong></td>
-                  <td>Je renonce aux pentes > 40°</td>
-                </tr>
-                <tr>
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level2" /></td>
-                  <td><strong>Danger limité</strong></td>
-                  <td>Je renonce aux pentes > 35°</td>
-                </tr>
-                <tr class="multiline">
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level3" /></td>
-                  <td><strong>Danger marqué</strong></td>
-                  <td>Je renonce aux pentes > 30° <br /><small>y compris les pentes qui me dominent</small></td>
-                </tr>
-                <tr>
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-                  <td><strong>Danger fort à très fort</strong></td>
-                  <td>Je renonce à sortir</td>
-                </tr>
-              </table>
-            </div>
-
-            <div v-show="method == 'mre'">
-              <p>
-                Avec la <strong>méthode de réduction élémentaire</strong> (MRE), vous pouvez saisir les secteurs de la
-                rose des vents signalés comme critique dans le BRA.
-              </p>
-
-              <input-orientation v-model="orientation" class="has-text-centered" />
-              <p v-if="orientation.length != 0" class="yetiform-info">Orientations: {{ orientation.join(', ') }}</p>
-              <p v-else class="yetiform-info">Pas d’orientations sélectionnées</p>
-
-              <div class="yetiform-note">
-                <p>
-                  Le niveau de danger du BRA concerne toutes les orientations. La rose des vents distingue les secteurs
-                  les plus critiques présentant un risque accru.
-                </p>
-              </div>
-
-              <table class="yetiform-danger">
-                <tr class="multiline">
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level1" /></td>
-                  <td><strong>Danger faible</strong></td>
-                  <td>Skier avec prudence <br /><small>risque de chute grave sur neige dure</small></td>
-                </tr>
-                <tr>
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level2" /></td>
-                  <td><strong>Danger limité</strong></td>
-                  <td>Je renonce aux pentes > 40°</td>
-                </tr>
-                <tr class="multiline">
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level3" /></td>
-                  <td><strong>Danger marqué</strong></td>
-                  <td>Je renonce aux pentes > 35° <br /><small>y compris les pentes qui me dominent</small></td>
-                </tr>
-                <tr class="multiline">
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-                  <td><strong>Danger fort</strong></td>
-                  <td>Je renonce aux pentes > 30° <br /><small>y compris les pentes qui me dominent</small></td>
-                </tr>
-                <tr>
-                  <td><img src="@/assets/img/yeti/levels-danger.svg#level4" /></td>
-                  <td><strong>Danger très fort</strong></td>
-                  <td>Je renonce à sortir</td>
-                </tr>
-              </table>
-            </div>
-
-            <div v-show="method == 'mrp'">
-              <p>
-                Avec la <strong>méthode de réduction professionnelle</strong> (MRP), vous pouvez affiner le potentiel de
-                danger, tenir compte de la taille du groupe et des mesures de précaution envisagées.
-              </p>
-
-              <h3 class="title is-3">Potentiel de danger</h3>
-
-              <ul class="potential-danger-labels has-text-black">
-                <li
-                  v-for="label of potentialDangerLabels"
-                  :key="label.text"
-                  :disabled="
-                    !bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max
-                  "
-                  :selected="potentialDanger == label.text"
-                  class="potential-danger-label is-size-5"
-                  @click="potentialDanger = label.text"
-                >
-                  <span :class="{ 'is-size-3 has-text-weight-bold': label.val }">
-                    {{ label.text }}
-                  </span>
-                </li>
-              </ul>
-
-              <p v-if="potentialDanger" class="yetiform-info">
-                Potentiel de danger: {{ potentialDanger }} (BRA: {{ bra.high }})
-              </p>
-              <p v-else class="yetiform-info">Pas de potentiel de danger sélectionné. Entrez d’abord le BRA</p>
-
-              <div class="yetiform-note">
-                <p>
-                  Le potentiel de danger est calculé à partir du niveau de danger du BRA. Il peut être affiné en
-                  sélectionnant un potentiel dans la plage correspondant au niveau du BRA. Par exemple: Le BRA évoque un
-                  danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au
-                  lieu de 8.
-                </p>
-              </div>
-
-              <p>
-                <input-checkbox v-model="wetSnow">
-                  Neige mouillée : pas de prise en compte de l’orientation
-                </input-checkbox>
-              </p>
-
-              <div class="yetiform-note">
-                <p>
-                  Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut
-                  être appliqué.
-                </p>
-              </div>
-
-              <h3 class="title is-3">Groupe</h3>
-
-              <ul>
-                <li class="control" v-for="(item, i) of groupSizes" :key="i">
-                  <input
-                    :id="'c2c-group-size-' + i"
-                    type="radio"
-                    class="is-checkradio is-primary"
-                    v-model="groupSize"
-                    :value="item.value"
-                  />
-                  <label :for="'c2c-group-size-' + i">{{ item.text }}</label>
-                </li>
-              </ul>
-
-              <div class="yetiform-note">
-                <p>Taille du groupe</p>
-                <ul class="content-ul">
-                  <li>Grand groupe = 5 personnes et plus</li>
-                  <li>Petit groupe = 2 à 4 personnes</li>
-                </ul>
-                <p>Distances de délestage</p>
-                <ul class="content-ul">
-                  <li>10 mètres au minimum à la montée</li>
-                  <li>50 mètres à la descente</li>
-                </ul>
-              </div>
-
-              <p>
-                Le facteur <em>« pente parcourue fréquemment »</em> n’est pas pris en compte par l’application, car il
-                est souvent difficile de s'en assurer lors de la préparation de course.
-              </p>
-            </div>
-
-            <div class="columns yetiform-validation" v-show="method">
-              <div class="column has-text-right">
-                <validation-button :current-error="currentError" :loading="promise" @click="compute" />
-              </div>
-            </div>
+          <div class="columns mb-0 yeti-columns--reverse is-mobile">
+            <ul class="column is-narrow pb-0">
+              <li>
+                <router-link class="is-block yetitabs-link" :to="$route.fullPath + '/faq'" v-translate>
+                  FAQ?
+                </router-link>
+              </li>
+            </ul>
+            <tabs :tabs="tabs" :active-tab.sync="activeTab" :has-features="hasFeatures" />
           </div>
+          <div class="box">
+            <panel ref="panel0" :index="0" :active-tab="activeTab" class="is-relative">
+              <validation-button
+                class="is-hidden-mobile yeti-validation--top"
+                :current-error="currentError"
+                :loading="promise"
+                @click="compute"
+                tabindex="-1"
+              />
+              <sub-panel-bra :bra.sync="bra" :mountains="mountains" />
+              <sub-panel-methods :method.sync="method" :bra="bra" @warn-about-method-bra="warnAboutMethodBra" />
+              <validation-button
+                v-show="method.type"
+                class="yeti-validation--bottom"
+                :current-error="currentError"
+                :loading="promise"
+                @click="compute"
+              />
+            </panel>
 
-          <div class="box is-hidden-mobile" v-if="document">
-            <div class="title is-4 document-title">Route</div>
-            <document-link :document="document">
-              <icon-route class="document-icon" />
-              <document-title :document="document" />
-            </document-link>
+            <panel ref="panel1" :index="1" :active-tab="activeTab">
+              <sub-panel-course
+                :map="yetiMap"
+                :features="features"
+                :features-title.sync="featuresTitle"
+                @gpx="onGpxLoaded"
+              />
+            </panel>
           </div>
 
           <div class="box yeti-logos">
@@ -385,43 +94,19 @@
           </div>
         </div>
 
-        <div class="column map-container">
-          <div class="legend">
-            <div>
-              <div class="legend-button is-pulled-right ol-control">
-                <button type="button" @click="showLegend = !showLegend"><span>Légende</span></button>
-              </div>
-            </div>
-            <div class="legend-content" v-show="showLegend === true">
-              <p class="is-italic" v-if="!mapLegend">La légende apparaitra automatiquement avec l’image générée</p>
-              <div v-else>
-                <ul>
-                  <li v-for="(item, i) of mapLegend.items" :key="i">
-                    <span class="legend-color" :style="'background:' + item.color" />
-                    <span>{{ item.text['fr'] }}</span>
-                  </li>
-                </ul>
-                <p class="is-size-6 is-italic">{{ mapLegend.comment['fr'] }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="ol-control opacity" v-if="yetiLayer">
-            <div class="opacity-slider">
-              <vue-slider
-                v-model="opacityYetiLayer"
-                :min="0"
-                :max="1"
-                :interval="0.01"
-                tooltip="none"
-                direction="btt"
-                :rail-style="{ background: 'rgba(0,0,0,.25)' }"
-                :process-style="{ background: 'white' }"
-                @change="onUpdateOpacityYetiLayer"
-              />
-            </div>
-          </div>
-          <map-view ref="map" show-recenter-on :documents="documents" />
-        </div>
+        <yeti-map
+          ref="map"
+          :gpx="gpx"
+          :active-tab="activeTab"
+          :valid-min-zoom="validFormData.minZoom"
+          :map-zoom.sync="mapZoom"
+          :computed-extent="yetiExtent"
+          :computed-data="yetiImage"
+          :mountains.sync="mountains"
+          :area-ok.sync="areaOk"
+          :features.sync="features"
+          :features-title.sync="featuresTitle"
+        />
       </div>
     </div>
   </div>
@@ -429,210 +114,166 @@
 
 <script>
 import axios from 'axios';
-import vueSlider from 'vue-slider-component';
 
-import yetiText from '@/components/yeti/Text';
+import YetiArticle from '@/components/yeti/Article';
+import Panel from '@/components/yeti/Panel';
+import SubPanelBra from '@/components/yeti/SubPanelBra';
+import SubPanelCourse from '@/components/yeti/SubPanelCourse';
+import SubPanelMethods from '@/components/yeti/SubPanelMethods';
+import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
-import c2c from '@/js/apis/c2c';
+import YetiMap from '@/components/yeti/YetiMap';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
   'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
-const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
-const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
-
-const YETI_ATTRIBUTION = 'Données RGE ALTI®';
 
 const VALID_FORM_DATA = {
   minZoom: 13,
   braMaxMrd: 3,
 };
 
-const DANGER = {
-  min: 1,
-  max: 16,
-  bra: [
-    { min: 1, max: 2, val: 2 },
-    { min: 3, max: 6, val: 4 },
-    { min: 6, max: 12, val: 8 },
-    { min: 13, max: 16, val: 16 },
-  ],
-};
-
-const OPACITY_LAYER = 0.75;
-
-const ERRORS = {
-  area: {
-    simple: 'Zone non couverte',
-    full:
-      'L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).',
-  },
-  method: {
-    simple: 'Méthode manquante',
-    full: 'Veuillez sélectionner une méthode pour le calcul.',
-  },
-  method_bra: {
-    simple: 'Méthode et BRA incompatible',
-    full: 'La méthode MRD (débutant) est autorisée avec un BRA de 3 maximum. Choisissez la méthode MRE ou MRP.',
-  },
-  bra: {
-    simple: 'BRA manquant',
-    full: 'La valeur de BRA est manquante. Veuillez saisir la valeur spécifiée par le bulletin Météo-France.',
-  },
-  altitude: {
-    simple: 'Altitude manquante',
-    full:
-      'L’altitude est requise quand le BRA haut et bas sont différents. Précisez la valeur fournie par le bulletin Météo-France.',
-  },
-  zoom: {
-    simple: 'Zoom carte trop important',
-    full: 'L’emprise actuelle est trop grande. Veuillez zoomer au niveau ' + VALID_FORM_DATA.minZoom + ' minimum.',
-  },
-  ok: 'Tout semble OK ! :)',
-  yeti: 'Le service ne fonctionne pas actuellement',
-  yeti_prefix: 'YETI Service: ',
-  yeti_unauthorized:
-    'Vous devez être autorisé pour effectuer cette requête. Contactez les administrateurs du service si vous êtes intéressé.',
-};
-
 export default {
   name: 'Yeti',
 
-  components: { vueSlider, ValidationButton, yetiText },
+  components: {
+    YetiArticle,
+    Panel,
+    SubPanelBra,
+    SubPanelCourse,
+    SubPanelMethods,
+    Tabs,
+    ValidationButton,
+    YetiMap,
+  },
 
   data() {
     return {
       showDisclaimer: false,
       checkDisclaimer: false,
-      methods: {
-        mrd: ['MRD', 'Débutant'],
-        mre: ['MRE', 'Élémentaire'],
-        mrp: ['MRP', 'Expert'],
+
+      articles: {
+        faq: {
+          id: 1257569,
+          title: 'FAQ',
+        },
+        disclaimer: {
+          id: 1257571,
+          title: this.$gettext('Disclaimer'),
+        },
       },
-      groupSizes: [
-        {
-          value: 1,
-          text: 'Aucun facteur de réduction lié au groupe',
+
+      yetiMap: null,
+
+      tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
+      activeTab: 0,
+
+      errors: {
+        area: {
+          simple: this.$gettext('Area not covered'),
+          full: this.$gettext(
+            'Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).'
+          ),
         },
-        {
-          value: 2.1,
-          text: 'Grand groupe avec distance de délestage',
+        method: {
+          simple: this.$gettext('Missing method'),
+          full: this.$gettext('Please select a method before computing.'),
         },
-        {
-          value: 2.2,
-          text: 'Petit groupe sans distance',
+        method_bra: {
+          simple: this.$gettext('Conflicting method and danger'),
+          full: this.$gettext(
+            'The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.'
+          ),
         },
-        {
-          value: 3,
-          text: 'Petit groupe avec distance de délestage',
+        bra: {
+          simple: this.$gettext('Missing danger level'),
+          full: this.$gettext('Please set danger level as specified on avalanche bulletin for the specific area.'),
         },
-      ],
-      method: null,
-      wetSnow: false,
-      groupSize: 1,
-      potentialDanger: undefined,
+        altitude: {
+          simple: this.$gettext('Missing altitude'),
+          full: this.$gettext(
+            'Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.'
+          ),
+        },
+        zoom: {
+          simple: this.$gettext('Area too large'),
+          full: this.$gettext('Current map view is too large. Please zoom to level ' + VALID_FORM_DATA.minZoom),
+        },
+        ok: this.$gettext('Seems fine! :)'),
+        yeti: this.$gettext('Service is inactive right now'),
+        yeti_prefix: 'YETI Service: ',
+        yeti_unauthorized: this.$gettext(
+          'You have to be authorized. Please contact administrators of the service if interested.'
+        ),
+      },
+
+      validFormData: VALID_FORM_DATA,
+
       bra: {
         high: null,
         low: null,
         altiThreshold: null,
         isDifferent: false,
       },
-      orientation: [],
-      mapZoom: false,
+      method: {
+        type: null,
+        orientation: [],
+        potentialDanger: undefined,
+        wetSnow: false,
+        groupSize: 1,
+      },
+
+      mapZoom: 0,
       formError: undefined,
       currentError: undefined,
 
       promise: null,
+      yetiImage: null,
       yetiLayer: null,
-      opacityYetiLayer: OPACITY_LAYER,
-      showLegend: undefined,
-      mapLegend: null,
-      extentLayer: null,
+      yetiExtent: [],
+
+      features: [],
+      gpx: null,
+      featuresTitle: this.$gettext('New route'),
 
       mountains: {},
-      visibleMountains: {},
-      promiseMountains: null,
-      showMountainsList: false,
 
-      promiseDocument: null,
-
-      areas: {},
-      areasLayer: null,
-      areaOK: true,
+      areaOk: true,
     };
   },
 
   computed: {
-    potentialDangerLabels() {
-      const result = [];
-      for (let i = DANGER.min; i <= DANGER.max; i++) {
-        const data = { text: i };
-        if (i === 2 || i === 4 || i === 8 || i === 16) {
-          data.val = i;
-        }
-        result.push(data);
-      }
-
-      return result;
-    },
-
-    potentialDangerOptions() {
-      if (!this.bra.high) {
-        return { val: undefined, min: 1, max: 16 };
-      }
-
-      return DANGER.bra[this.bra.high - 1];
-    },
-
     mrdIsNotApplicable() {
-      return this.isBraMax && this.method === 'mrd';
+      return this.isBraMax && this.method.type === 'mrd';
     },
 
     isBraMax() {
-      return this.bra.high > VALID_FORM_DATA.braMaxMrd || this.bra.low > VALID_FORM_DATA.braMaxMrd;
+      return this.bra.high > this.validFormData.braMaxMrd || this.bra.low > this.validFormData.braMaxMrd;
     },
 
     isValidMapZoom() {
-      return this.mapZoom >= VALID_FORM_DATA.minZoom;
+      return this.mapZoom >= this.validFormData.minZoom;
     },
 
-    countVisibleMountains() {
-      return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
-    },
-
-    document() {
-      return this.promiseDocument && this.promiseDocument.data ? this.promiseDocument.data : null;
-    },
-
-    documents() {
-      return this.document ? [this.document] : null;
-    },
-
-    areasLayerStyle() {
-      const levelStrokeWidth = 2;
-      const levelStrokeOpacity = 4;
-      const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
-      const opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
-      const lineDashStroke = opacityStroke * 6;
-
-      return new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'hsla(30, 100%, 40%,' + opacityStroke + ')',
-          width: lineWidthStroke,
-          lineDash: [lineDashStroke],
-        }),
-      });
+    hasFeatures() {
+      return !!this.features.length;
     },
   },
 
   watch: {
-    'bra.high': 'onBraChange',
     'bra.low': 'check',
     'bra.altiThreshold': 'check',
-    'bra.isDifferent': ['check', 'checkBraIsDifferent'],
-    method: 'check',
+    'bra.isDifferent': 'check',
+    'method.type': 'check',
+    'method.potentialDanger': 'check',
     mapZoom: 'check',
-    areaOK: 'check',
+    areaOk: 'check',
+    featuresTitle(newValue) {
+      // set default featuresTitle if null (from yeti map)
+      if (newValue === null) {
+        this.featuresTitle = this.$gettext('New route');
+      }
+    },
   },
 
   created() {
@@ -643,34 +284,23 @@ export default {
   },
 
   mounted() {
+    // yeti app is loaded: store yetiMap
+    this.yetiMap = this.$refs.map;
+
     this.check();
-
-    // document
-    const doc = this.$route.params.document_id;
-    const lang = this.$language.current;
-    if (doc) {
-      this.promiseDocument = c2c['route'].getCooked(doc, lang).then(this.onDocument);
-    }
-
-    // mountains
-    this.$refs.map.map.on('moveend', this.onMapMoveEnd);
-    axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult).catch(this.onMountainsError);
-
-    // area ok?
-    axios.get(YETI_URL_AREAS).then(this.onAreasResult);
   },
 
   methods: {
     check() {
-      if (!this.isValidMapZoom) {
-        this.formError = 'zoom';
-      } else if (!this.areaOK) {
+      if (!this.areaOk) {
         this.formError = 'area';
+      } else if (!this.isValidMapZoom) {
+        this.formError = 'zoom';
       } else if (!this.bra.high) {
         this.formError = 'bra';
       } else if (this.bra.low && this.bra.high !== this.bra.low && !this.bra.altiThreshold) {
         this.formError = 'altitude';
-      } else if (!this['method']) {
+      } else if (!this.method.type) {
         this.formError = 'method';
       } else if (this.mrdIsNotApplicable) {
         this.formError = 'method_bra';
@@ -682,45 +312,42 @@ export default {
       // also
       // verif if bra = 4, method MRD forbidden
       if (this.mrdIsNotApplicable) {
-        this.method = null;
+        this.method.type = null;
       }
 
       // then set errors
       this.setCurrentError();
     },
 
-    checkBraIsDifferent() {
-      if (!this.bra.isDifferent) {
-        this.bra.low = null;
-        this.bra.altiThreshold = null;
-      }
-    },
-
-    onBraChange() {
-      this.potentialDanger = this.potentialDangerOptions.val;
-      this.check();
-    },
-
     warnAboutMethodBra(item) {
       if (item === 'mrd' && this.isBraMax) {
-        window.alert(ERRORS.method_bra.full);
+        window.alert(this.errors.method_bra.full);
       }
     },
 
     setCurrentError() {
       if (this.formError) {
-        this.currentError = ERRORS[this.formError]['simple'];
+        this.currentError = this.errors[this.formError]['simple'];
         if (this.formError === 'zoom') {
-          this.currentError += ' (actuel: ' + this.mapZoom + ' sur ' + VALID_FORM_DATA.minZoom + ')';
+          this.currentError +=
+            ' (' +
+            this.$gettext('current zoom:') +
+            ' ' +
+            this.mapZoom +
+            ' ' +
+            this.$gettext('on') +
+            ' ' +
+            this.validFormData.minZoom +
+            ')';
         }
       } else {
-        this.currentError = ERRORS['ok'];
+        this.currentError = this.errors['ok'];
       }
     },
 
     compute() {
       if (this.formError) {
-        window.alert(ERRORS[this.formError]['full']);
+        window.alert(this.errors[this.formError]['full']);
         return;
       }
 
@@ -730,7 +357,7 @@ export default {
       const yetiUrl = this.getYetiUrl(extendedExtent);
 
       // remove old layers first
-      this.removeLayers();
+      this.yetiMap.clearLayers();
 
       // fetch img
       this.promise = axios
@@ -739,95 +366,15 @@ export default {
         .catch(this.onYetiError);
     },
 
-    removeLayers() {
-      if (this.yetiLayer) {
-        this.yetiLayer.setMap(null);
-        this.yetiLayer = null;
-
-        // set default opacity
-        this.opacityYetiLayer = OPACITY_LAYER;
-      }
-      if (this.extentLayer) {
-        this.extentLayer.setMap(null);
-        this.extentLayer = null;
-      }
-    },
-
-    toLinearRing(extent) {
-      const minX = extent[0];
-      const minY = extent[1];
-      const maxX = extent[2];
-      const maxY = extent[3];
-      return [
-        [minX, minY],
-        [minX, maxY],
-        [maxX, maxY],
-        [maxX, minY],
-        [minX, minY],
-      ];
-    },
-
-    drawExtent(extent) {
-      // extend extent
-      const extentFill = ol.extent.buffer(extent, Math.max(extent[2] - extent[0], extent[3] - extent[1]) / 10);
-      // then, create a donut polygon
-      const polygon = new ol.Feature(new ol.geom.Polygon([this.toLinearRing(extentFill), this.toLinearRing(extent)]));
-      // create extent layer
-      this.extentLayer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-          features: [polygon],
-        }),
-        style: [
-          new ol.style.Style({
-            fill: new ol.style.Fill({ color: 'hsla(30, 100%, 60%, .45)' }),
-          }),
-          new ol.style.Style({
-            stroke: new ol.style.Stroke({ color: 'hsla(30, 100%, 40%, 1)', width: 2 }),
-            geometry: (feature) => {
-              return new ol.geom.Polygon([feature.getGeometry().getCoordinates()[1]]);
-            },
-          }),
-        ],
-      });
-      this.extentLayer.setMap(this.$refs.map.map);
-    },
-
     extendExtent(extent) {
-      const extendedFactor = Math.min(0.5, (this.mapZoom - VALID_FORM_DATA.minZoom) / 6);
+      const extendedFactor = Math.min(0.5, (this.mapZoom - this.validFormData.minZoom) / 6);
       const extendedValue = Math.max(extent[2] - extent[0], extent[3] - extent[1]) * extendedFactor;
       return ol.extent.buffer(extent, extendedValue);
     },
 
     onYetiResult(result, extendedExtent) {
-      const xml = new DOMParser().parseFromString(result.data, 'application/xml');
-      const imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
-      const imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
-      const imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
-
-      this.drawExtent(extendedExtent);
-
-      this.yetiLayer = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-          url: '',
-          imageLoadFunction(image) {
-            image.getImage().src = 'data:image/png;base64,' + imageBase64;
-          },
-          imageExtent,
-          attributions: YETI_ATTRIBUTION,
-        }),
-        opacity: this.opacityYetiLayer,
-      });
-
-      this.yetiLayer.setMap(this.$refs.map.map);
-
-      // put yeti layer below document layers
-      this.yetiLayer.setZIndex(0);
-
-      // set map legend
-      this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
-      this.mapLegend.items.forEach((item) => {
-        item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
-      });
+      this.yetiImage = result.data;
+      this.yetiExtent = extendedExtent;
 
       this.promise = null;
     },
@@ -835,7 +382,7 @@ export default {
     onYetiError(err) {
       this.promise = null;
 
-      let errorText = ERRORS['yeti'];
+      let errorText = this.errors['yeti'];
 
       if (err.response.status === 400) {
         const xml = new DOMParser().parseFromString(err.response.data, 'text/xml');
@@ -843,17 +390,10 @@ export default {
       }
 
       if (err.response.status === 403) {
-        errorText = ERRORS['yeti_unauthorized'];
+        errorText = this.errors['yeti_unauthorized'];
       }
 
-      window.alert(ERRORS['yeti_prefix'] + errorText);
-    },
-
-    onUpdateOpacityYetiLayer() {
-      if (this.yetiLayer) {
-        this.yetiLayer.setOpacity(this.opacityYetiLayer);
-        this.yetiLayer.setMap(this.$refs.map.map);
-      }
+      window.alert(this.errors['yeti_prefix'] + errorText);
     },
 
     getYetiUrl(extent) {
@@ -866,18 +406,18 @@ export default {
 
       // mre
       const compass =
-        this.method === 'mre' && this.orientation.length !== 0
-          ? 'none,' + this.orientation.join(',').toLowerCase()
+        this.method.type === 'mre' && this.method.orientation.length !== 0
+          ? 'none,' + this.method.orientation.join(',').toLowerCase()
           : 'none';
 
       // mrp
-      const potentialDanger = this.method === 'mrp' ? this.potentialDanger : 0;
-      const wetSnow = this.method === 'mrp' ? this.wetSnow : false;
-      const groupSize = this.method === 'mrp' ? Math.floor(this.groupSize) : 0;
+      const potentialDanger = this.method.type === 'mrp' ? this.method.potentialDanger : 0;
+      const wetSnow = this.method.type === 'mrp' ? this.method.wetSnow : false;
+      const groupSize = this.method.type === 'mrp' ? Math.floor(this.method.groupSize) : 0;
 
       // create url
       let result = YETI_URL_BASE;
-      result += `methode=${this.method};`;
+      result += `methode=${this.method.type};`;
       result += `bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]};`;
       result += `risque_haut=${this.bra.high};`;
       result += `risque_bas=${braLow};`;
@@ -890,134 +430,13 @@ export default {
       return result;
     },
 
-    onMapMoveEnd(event) {
-      this.mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
-      this.setVisibleMountains();
-      this.setVisibleAreas();
-    },
-
-    setVisibleMountains() {
-      const mapExtent = this.$refs.map.getExtent('EPSG:4326');
-      // clone this.mountains first, with no reference
-      this.visibleMountains = Object.assign({}, this.mountains);
-      // then filter if polygon isn’t in view
-      for (const massif in this.visibleMountains) {
-        this.visibleMountains[massif] = this.visibleMountains[massif].filter((mountain) => {
-          const polygon = mountain.geometry;
-          return polygon.intersectsExtent(mapExtent);
-        });
-        // unset massif if empty
-        if (this.visibleMountains[massif].length === 0) {
-          delete this.visibleMountains[massif];
-        }
-      }
-    },
-
-    sortMountainsByMassif() {
-      // first, order mountains by massifs
-      const sortedMountains = {};
-      for (let i = 0; i < this.mountains.length; i++) {
-        if (!sortedMountains[this.mountains[i].mountain]) {
-          sortedMountains[this.mountains[i].mountain] = [];
-        }
-        sortedMountains[this.mountains[i].mountain].push(this.mountains[i]);
-      }
-      this.mountains = sortedMountains;
-
-      // then sort mountains inside each massif
-      for (const i in this.mountains) {
-        this.mountains[i].sort((a, b) => {
-          if (a.title < b.title) return -1;
-          if (b.title > a.title) return 1;
-          return 0;
-        });
-      }
-    },
-
-    onMountainsResult(data) {
-      const features = data.data;
-      this.mountains = new ol.format.GeoJSON().readFeatures(features).map((mountain) => {
-        return mountain.getProperties();
-      });
-      this.sortMountainsByMassif();
-      this.setVisibleMountains();
-
-      this.promiseMountains = true;
-    },
-
-    onMountainsError() {
-      // silent error
-      this.promiseMountains = null;
-    },
-
     onSubmitDisclaimer() {
       this.showDisclaimer = false;
       this.$localStorage.set('yeti-disclaimer', 'validated');
     },
 
-    onDocument() {
-      // set min zoom for map
-      // (that will be used after document is displayed and map is fitted to extent)
-      this.$refs.map.minZoomLevel = VALID_FORM_DATA.minZoom;
-      // put document layers on top
-      ['documentsLayer', 'waypointsLayer'].forEach((layer) => {
-        this.$refs.map[layer].setZIndex(1);
-      });
-    },
-
-    onAreasResult(data) {
-      const areas = data.data;
-      const rawFeatures = new ol.format.GeoJSON().readFeatures(areas);
-      // geojson is 4326, convert to 3857
-      rawFeatures[0].getGeometry().transform('EPSG:4326', 'EPSG:3857');
-
-      this.areas = rawFeatures.map((area) => {
-        return area.getProperties();
-      });
-
-      // flatten coords
-      const rawCoords = rawFeatures[0].getGeometry().getCoordinates();
-      const coords = [];
-      for (let i = 0; i < rawCoords.length; i++) {
-        coords.push(...rawCoords[i]);
-      }
-      // then, build linestrings instead of polygon (perf)
-      const features = [];
-      for (let i = 0; i < coords.length; i++) {
-        for (let j = 0; j < coords[i].length - 1; j++) {
-          features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
-        }
-      }
-
-      // create layer
-      this.areasLayer = new ol.layer.Vector({
-        renderMode: 'image',
-        source: new ol.source.Vector({
-          features,
-        }),
-        style: this.areasLayerStyle,
-      });
-      this.areasLayer.setMap(this.$refs.map.map);
-    },
-
-    setVisibleAreas() {
-      const mapExtent = this.$refs.map.getExtent('EPSG:3857');
-
-      for (const area in this.areas) {
-        const polygon = this.areas[area].geometry;
-        if (polygon.intersectsExtent(mapExtent)) {
-          this.areaOK = true;
-          break;
-        } else {
-          this.areaOK = false;
-        }
-      }
-
-      // update style
-      if (this.areasLayer) {
-        // YETI_URL_AREAS can fail
-        this.areasLayer.setStyle(this.areasLayerStyle);
-      }
+    onGpxLoaded(data) {
+      this.gpx = data;
     },
   },
 };
@@ -1040,97 +459,11 @@ $yeti-height: calc(
   transform: scale(0.9);
 }
 
-.map-container {
-  position: relative;
-
-  .legend {
-    position: absolute;
-    z-index: 6;
-    top: 1.25rem;
-    right: 1.25rem;
-
-    .legend-button {
-      position: static;
-
-      button {
-        width: auto;
-        padding: 0 0.5em;
-      }
-    }
-
-    .legend-content {
-      margin-top: 0.5rem;
-      margin-left: 1.25rem;
-      border-radius: 2px;
-      border: 1px solid lightgray;
-      padding: 0.5rem;
-      background: white;
-      clear: both;
-    }
-
-    .legend-color {
-      vertical-align: bottom;
-      display: inline-block;
-      width: 21px;
-      height: 21px;
-      margin-right: 5px;
-    }
-  }
-
-  .opacity {
-    position: absolute;
-    z-index: 5;
-    top: 3.5rem;
-    right: 1.25rem;
-
-    .opacity-slider {
-      font-size: 1.14em;
-      margin: 1px;
-      width: 1.375em;
-      padding: 1rem 0;
-      background: rgba(0, 60, 136, 0.5);
-      border-radius: 2px;
-
-      &:hover {
-        background: rgba(0, 60, 136, 0.7);
-      }
-    }
-
-    .vue-slider {
-      padding: 0 9px !important;
-      height: 300px !important;
-      max-height: 30vh;
-    }
-
-    .vue-slider-process {
-      background: $white;
-    }
-
-    .vue-slider-rail {
-      background: $black;
-    }
-  }
+.yeti-columns--reverse {
+  flex-direction: row-reverse;
 }
+
 @media screen and (max-width: $tablet) {
-  .map-container {
-    height: $yeti-height;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-
-    .legend {
-      top: 0.5rem;
-
-      .legend-content {
-        margin-left: 0.5rem;
-      }
-    }
-
-    .opacity {
-      top: 2.75rem;
-    }
-  }
-
   .mobile-result-map {
     margin-top: 0;
     height: $yeti-height;
@@ -1155,315 +488,19 @@ $yeti-height: calc(
       height: 100%;
       overflow: auto;
     }
-
-    .map-container {
-      min-height: 100%;
-    }
   }
 }
 
-p:not(:last-child),
-ul:not(:last-child),
-table:not(:last-child) {
-  margin-bottom: 1rem;
-}
-
-a:hover,
-a:focus {
-  text-decoration: underline;
-}
-
-h4 {
-  margin-top: 1rem;
-  margin-bottom: 0.25rem !important;
-}
-
-abbr {
-  text-decoration: none;
-  border-bottom: dotted 2px #aaa;
-}
-
-strong,
-dt {
-  font-weight: bold;
-  color: $grey;
-}
-
-.content-ul {
-  list-style: disc outside;
-  margin-left: 2em;
-}
-
-.yeti-title {
-  display: inline-block;
-  margin-left: -1.25rem;
-  padding: 0.25em 1.25rem;
-  background: $grey-lighter;
-}
-
-.inputs-bra {
-  margin-left: 2rem;
-  position: relative;
-
-  .input-bra-high {
-    position: absolute;
-    left: 39px;
-    top: 62px;
-  }
-
-  .input-bra-threshold {
-    position: absolute;
-    left: 115px;
-    top: 60px;
-    width: 85px;
-  }
-
-  .input-bra-low {
-    position: absolute;
-    left: 39px;
-    top: 78px;
-  }
-}
-
-.inputs-bra-different {
-  .input-bra-high {
-    top: 45px;
-  }
-}
-
-.yetiform-danger {
-  width: 100%;
-  table-layout: fixed;
-  color: $dark;
-  background-color: $white-ter;
-
-  tr {
-    border: 1px solid $white;
-    border-left: 0;
-    border-right: 0;
-  }
-
-  td {
-    vertical-align: middle;
-    height: 45px;
-  }
-
-  .multiline td {
-    vertical-align: baseline;
-  }
-
-  td:first-child {
-    width: 60px;
-  }
-
-  td:first-child + td {
-    width: 40%;
-  }
-
-  td img {
-    vertical-align: -12px;
-    height: 35px;
-  }
-}
-
-.yetiform-note {
-  position: relative;
-  font-size: 0.9em;
-  padding: 1em;
-  padding-left: 4em;
-  margin-bottom: 2em;
-  background-color: $white-ter;
-  border-radius: 2px;
-}
-
-.yetiform-note::before {
-  content: '?';
+.yeti-validation--top {
   position: absolute;
-  top: 1em;
-  left: 1em;
-  color: white;
-  font-size: 1.14em;
-  font-weight: bold;
-  text-align: center;
-  height: 1.375em;
-  width: 1.375em;
-  line-height: 1.4em;
-  background-color: rgba(0, 60, 136, 0.5);
-  border-radius: 2px;
+  right: 0;
+  top: 0.75rem;
+  width: 50%;
+  z-index: 1;
 }
 
-.yetitabs {
-  margin: 0;
-  padding: 0.75rem 0;
-}
-
-.yetitab {
-  padding: 0;
-}
-
-.yetitab-control {
-  .yetitab-label {
-    display: block;
-    margin: 0;
-    padding: 0.25rem;
-    padding-left: 2rem;
-    border: 1px solid transparent;
-    border-radius: 4px;
-
-    &:hover,
-    &:focus {
-      border-color: $grey-lighter;
-    }
-
-    &.yetitab-label:before {
-      top: 0.25rem !important;
-      left: 0.25rem !important;
-    }
-    &.yetitab-label:after {
-      top: 1em !important;
-      left: 1em !important;
-    }
-  }
-
-  .is-checkradio:checked + label:after {
-    top: 0.25rem !important;
-    left: 0.25rem !important;
-  }
-}
-
-.yetitab-control--selected {
-  .yetitab-label {
-    color: $primary;
-    border-color: $primary;
-
-    &:hover,
-    &:focus {
-      border-color: $primary;
-    }
-  }
-}
-
-@media screen and (max-width: 490px),
-  screen and (min-width: $tablet) and (max-width: 970px),
-  screen and (min-width: $desktop) and (max-width: 1180px),
-  screen and (min-width: $widescreen) and (max-width: 1370px),
-  screen and (min-width: $fullhd) and (max-width: 1650px) {
-  .yetitabs {
-    flex-wrap: wrap;
-  }
-  .yetitab {
-    flex: 0 0 50%;
-  }
-  .yetiform-danger tr,
-  .yetiform-danger td {
-    display: block;
-  }
-  .yetiform-danger tr {
-    padding: 0.5em 0;
-  }
-  .yetiform-danger td:first-child {
-    float: left;
-  }
-  .yetiform-danger td:first-child ~ td {
-    height: auto;
-    width: calc(100% - 60px);
-    margin-left: 60px;
-  }
-}
-
-.potential-danger-labels {
-  display: flex;
-  align-items: stretch;
-  user-select: none;
-  background: linear-gradient(
-    to right,
-    #bfe12b,
-    #bfe12b 12%,
-    #fff200 20%,
-    #fff200 32%,
-    #f68712 40%,
-    #f68712 72%,
-    #ed1c24 80%,
-    #ed1c24 95%,
-    #c01a2c
-  );
-
-  .potential-danger-label {
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1 1 20px;
-    text-align: center;
-    border: 3px solid transparent;
-  }
-
-  .potential-danger-label[disabled] {
-    cursor: not-allowed;
-    pointer-events: none;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: grey;
-  }
-
-  .potential-danger-label[selected] {
-    border-color: black;
-  }
-}
-
-.yetiform-validation {
+.yeti-validation--bottom {
   margin-top: 1rem;
-}
-
-.yetimountains {
-  margin-bottom: 2rem;
-  border: 1px solid #dbdbdb;
-  border-radius: 4px;
-
-  &:hover {
-    border-color: #b5b5b5;
-  }
-}
-
-.yetimountains-title {
-  cursor: pointer;
-  padding: 0.25rem 0.75rem;
-}
-
-.yetimountains-count {
-  display: inline-block;
-  width: 1.1rem;
-  height: 1.1rem;
-  vertical-align: 0.1rem;
-  margin-left: 1rem;
-  background: $grey;
-  color: $white;
-  border-radius: 50%;
-  font-size: 0.72em;
-  text-align: center;
-}
-
-.yetimountains-arrow {
-  color: $primary;
-  margin-top: 0.25rem;
-}
-
-.yetimountains-list {
-  columns: 3 170px;
-  padding: 0.75rem 2rem;
-}
-
-.yetimountains-listtitle {
-  font-weight: bold;
-  padding: 0 0.75rem;
-}
-
-.yetimountains-listelement + .yetimountains-listtitle {
-  margin-top: 0.5rem;
-}
-
-.yetiform-info {
-  font-size: 0.8em;
-  opacity: 0.75;
 }
 
 .yeti-logos {
@@ -1476,7 +513,7 @@ dt {
   }
 }
 
-.yeti-disclaimer {
+.yeti-overlay {
   position: absolute;
   z-index: 10;
   top: 0.75rem;
@@ -1484,19 +521,9 @@ dt {
   left: 0;
   min-height: 100%;
 
-  & + .yeti-content {
+  & ~ .yeti-content {
     visibility: hidden;
   }
-}
-
-.document-title {
-  margin-bottom: 0.5rem !important;
-}
-
-.document-icon,
-.document-icon:hover {
-  color: $dark;
-  margin-right: 3px;
 }
 </style>
 

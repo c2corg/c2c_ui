@@ -199,8 +199,6 @@ export default {
     }
 
     return {
-      map: null,
-
       // map layers, only one of them is visible
       mapLayers: cartoLayers_,
 
