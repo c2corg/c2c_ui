@@ -98,6 +98,8 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
@@ -306,7 +308,7 @@ export default {
     // if, for any reason, geomtry of edited document is set, center map on it
     // * new value entered in text inputs
     // * first click
-    // * new association to route (geomtry is copied from route to outing in this case)
+    // * new association to route (geometry is copied from route to outing in this case)
     'editedDocument.geometry.geom': {
       handler(to, from) {
         if (from === null && to !== null) {
@@ -506,9 +508,36 @@ export default {
     },
 
     setDocumentGeometryFromFeature(feature) {
-      this.setDocumentGeometry(this.editedDocument, feature.get('geometry'));
+      const geometry = feature.get('geometry');
+      this.setDocumentGeometry(this.editedDocument, geometry);
       this.drawDocumentMarkers();
       this.setDrawInteraction();
+      this.setOutingStartDate(this.editedDocument, geometry);
+    },
+
+    setOutingStartDate(document, geometry) {
+      if (document.type !== 'o' || document.date_start !== null) {
+        return;
+      }
+
+      const firstCoordinate = geometry.getFirstCoordinate();
+      let timestamp;
+      switch (geometry.getLayout()) {
+        case 'XYZM':
+          timestamp = firstCoordinate[3];
+          break;
+        case 'XYM':
+          timestamp = firstCoordinate[2];
+          break;
+        default:
+          return;
+      }
+
+      if (!timestamp) {
+        return;
+      }
+
+      document.date_start = format(new Date(timestamp * 1000), 'yyyy-MM-dd');
     },
 
     setDocumentGeometry(document, geometry) {
