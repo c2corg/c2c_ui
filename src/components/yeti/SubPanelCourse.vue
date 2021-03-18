@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel">
-    <sub-panel-title>Route</sub-panel-title>
+    <sub-panel-title v-translate>Route</sub-panel-title>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -39,7 +39,7 @@
         <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
         <features-list :features="features" :map="map" />
       </div>
-      <sub-panel-title>Export</sub-panel-title>
+      <sub-panel-title v-translate>Export</sub-panel-title>
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
