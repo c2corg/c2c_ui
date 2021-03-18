@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
 import { format } from 'date-fns';
 
 import BiodivInformation from './BiodivInformation';
@@ -500,9 +501,13 @@ export default {
         if (features?.length) {
           features.map(this.setDocumentGeometryFromFeature);
           this.fitMapToDocuments(true);
-          break;
+          return;
         }
       }
+      toast({
+        message: this.$gettext(`No data could be extracted from GPS file`),
+        type: 'is-danger',
+      });
     },
 
     setDocumentGeometryFromFeature(feature) {
