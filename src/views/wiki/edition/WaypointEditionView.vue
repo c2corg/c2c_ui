@@ -1,12 +1,5 @@
 <template>
-  <edition-container
-    class="edition-container"
-    :mode="mode"
-    :document="document"
-    :generic-errors="genericErrors"
-    :is-loading="saving"
-    @save="save"
-  >
+  <edition-container class="edition-container" :mode="mode" :document="document" :is-loading="saving" @save="save">
     <form-section :title="$gettext('general informations')" :sub-title="$gettext('Waypoint\'s main properties')">
       <div class="columns">
         <form-field class="is-narrow" :document="document" :field="fields.waypoint_type" />

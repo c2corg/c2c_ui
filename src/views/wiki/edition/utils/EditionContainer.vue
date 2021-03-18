@@ -45,12 +45,6 @@
 
       <!-- On mobile, expand button may go too low -->
       <div style="clear: both" />
-
-      <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
-        {{ error.name }}
-        :
-        {{ error.description }}
-      </div>
     </div>
 
     <component :is="documentType + '-view'" v-if="isPreview" :draft="document" />
@@ -108,10 +102,6 @@ export default {
     document: {
       type: Object,
       default: null,
-    },
-    genericErrors: {
-      type: Array,
-      required: true,
     },
     mode: {
       type: String,

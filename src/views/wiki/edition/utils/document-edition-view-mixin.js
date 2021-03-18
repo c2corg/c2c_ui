@@ -1,3 +1,5 @@
+import { toast } from 'bulma-toast';
+
 import AssociationsInputRow from './AssociationsInputRow';
 import EditionContainer from './EditionContainer';
 import FormField from './FormField';
@@ -32,7 +34,6 @@ export default {
     return {
       promise: {},
       fields: null, // keep fields here to set them reactive
-      genericErrors: [],
       saving: false,
       modified: false,
     };
@@ -213,11 +214,11 @@ export default {
       // $gettext('This field must be a valid ISBN.', 'API message');
 
       if (fieldsWithError.length !== 0) {
-        const messages = fieldsWithError.map((field) => {
-          return `${this.$gettext(field.name)} : ${this.$gettext(field.error.description, i18nContext)}`;
-        });
+        const messages = fieldsWithError.map(
+          (field) => `${this.$gettext(field.name)} : ${this.$gettext(field.error.description, i18nContext)}`
+        );
 
-        this.$alert.show(messages);
+        toast({ message: `<ul><li>${messages.join('</li><li>')}</li></ul>`, type: 'is-danger', position: 'center' });
 
         return true;
       }
@@ -227,11 +228,13 @@ export default {
 
     save(comment) {
       if (this.lang === 'eu' && !this.$user.isModerator) {
-        this.$alert.show([
-          this.$gettext(
+        toast({
+          message: this.$gettext(
             "Sorry, euskara lang has been frozen.\nWe're looking for a moderator, if you're interested, please contact board@camptocamp.org"
           ),
-        ]);
+          type: 'is-danger',
+          position: 'center',
+        });
         return;
       }
 
@@ -309,14 +312,21 @@ export default {
 
     dispatchError(fieldName, error) {
       if (this.fields[fieldName] === undefined) {
-        this.genericErrors.push(error);
+        // $gettext('Conflict: version of locale 'en' has changed')
+        // $gettext('Conflict: version of locale 'es' has changed')
+        // $gettext('Conflict: version of locale 'eu' has changed')
+        // $gettext('Conflict: version of locale 'de' has changed')
+        // $gettext('Conflict: version of locale 'it' has changed')
+        // $gettext('Conflict: version of locale 'ca' has changed')
+        // $gettext('Conflict: version of locale 'fr' has changed')
+        // $gettext('Conflict: version of document has changed')
+        toast({ message: this.$gettext(`${error.name}: ${error.description}`), type: 'is-danger', position: 'center' });
       } else {
         this.fields[fieldName].error = error;
       }
     },
 
     cleanErrors() {
-      this.genericErrors = [];
       for (const field of Object.values(this.fields)) {
         field.error = null;
       }
