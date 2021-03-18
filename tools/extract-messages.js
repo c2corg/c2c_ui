@@ -126,11 +126,11 @@ Process.prototype.parseTemplate = function (file, data) {
     let msgctxt;
 
     if (node.children.length !== 1) {
-      throw new Error(`On line ${line}\nNodes with v-translate directive must contains only one child`);
+      throw new Error(`${file}: on line ${line}\nNodes with v-translate directive must contains only one child`);
     }
 
     if (node.children[0].type !== NODETYPE_TEXT) {
-      throw new Error(`On line ${line}\nInterpolation is not yet supported. Please use $gettext`);
+      throw new Error(`${file}: on line ${line}\nInterpolation is not yet supported. Please use $gettext`);
     }
 
     for (const attribute of node.attrsList) {
