@@ -3,7 +3,7 @@ const mapping = {
   // 14274: { // FFME - Rockclimber
   //   url: ' https://www.helloasso.com/associations/rockclimber/formulaires/1/widget'
   // },
-  
+
   // Roche de Narse
   926211: {
     url: 'https://www.escalade-montagne.fr/falaise/bugey/roche-de-narse/',
