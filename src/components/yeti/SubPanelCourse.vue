@@ -111,6 +111,8 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import ol from '@/js/libs/ol';
@@ -220,8 +222,8 @@ export default {
     },
 
     setFilename(ext) {
-      let date = this.$moment.parseDate(new Date());
-      return date.format('YYYY-MM-DD_HH-mm-ss') + ext;
+      let date = format(new Date(), 'yyyy-MM-dd_HH-mm-ss');
+      return date + ext;
     },
   },
 };
