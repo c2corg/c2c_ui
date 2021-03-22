@@ -22,17 +22,6 @@
 <script>
 import utils from '@/js/utils';
 
-const hasSinglePeriod = (months) =>
-  months.reduce((acc, curr) => {
-    if (!acc.length) {
-      return [curr];
-    }
-    if (acc[acc.length - 1] === curr) {
-      return acc;
-    }
-    return [...acc, curr];
-  }, []).length <= 3;
-
 export default {
   props: {
     data: {
@@ -55,9 +44,9 @@ export default {
 
     period() {
       if (this.data.period.every((month) => !!month)) {
-        return this.$gettext('whole year', 'biodiv period');
+        return this.$gettext('whole year', 'period');
       }
-      if (hasSinglePeriod(this.data.period)) {
+      if (this.$dateUtils.hasSinglePeriod(this.data.period)) {
         let start, end;
         if (this.data.period[0] && this.data.period[11]) {
           start = this.data.period.lastIndexOf(false) + 1;
@@ -69,7 +58,7 @@ export default {
         return (
           this.$dateUtils.month(parseInt(start, 10)) +
           ' ' +
-          this.$gettext('to', 'biodiv period') +
+          this.$gettext('to', 'period') +
           ' ' +
           this.$dateUtils.month(parseInt(end, 10))
         );

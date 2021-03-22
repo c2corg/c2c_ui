@@ -398,19 +398,6 @@
     <!-- lift_status -->
     <span v-translate translate-context="lift_status">open</span>
     <span v-translate translate-context="lift_status">closed</span>
-    <!-- months -->
-    <span v-translate translate-context="months">jan</span>
-    <span v-translate translate-context="months">feb</span>
-    <span v-translate translate-context="months">mar</span>
-    <span v-translate translate-context="months">apr</span>
-    <span v-translate translate-context="months">may</span>
-    <span v-translate translate-context="months">jun</span>
-    <span v-translate translate-context="months">jul</span>
-    <span v-translate translate-context="months">aug</span>
-    <span v-translate translate-context="months">sep</span>
-    <span v-translate translate-context="months">oct</span>
-    <span v-translate translate-context="months">nov</span>
-    <span v-translate translate-context="months">dec</span>
     <!-- paragliding_ratings -->
     <span v-translate translate-context="paragliding_ratings">1</span>
     <span v-translate translate-context="paragliding_ratings">2</span>

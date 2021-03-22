@@ -9,6 +9,8 @@
  --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'PPpp') }}</span
     ><!--
 
+ --><best-periods v-if="field.name === 'best_periods'" :months="value" /><!--
+
  --><textual-array v-else-if="isArray" :array="value" :i18n="field.i18n" :i18n-context="field.i18nContext" /><!--
 
  --><span v-else-if="typeof value === 'boolean'">
