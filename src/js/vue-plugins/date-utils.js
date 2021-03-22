@@ -30,6 +30,24 @@ export default function install(Vue) {
       month(monthNumber) {
         return locales[this.$language.current].localize.month(monthNumber, 'wide');
       },
+
+      hasSinglePeriod(period) {
+        if (period.filter((month) => !!month).length < 2) {
+          // a period corresponds to at least 2 successive months
+          return false;
+        }
+        return (
+          period.reduce((acc, curr) => {
+            if (!acc.length) {
+              return [curr];
+            }
+            if (acc[acc.length - 1] === curr) {
+              return acc;
+            }
+            return [...acc, curr];
+          }, []).length <= 3
+        );
+      },
     },
   });
 
