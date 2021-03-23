@@ -1,5 +1,7 @@
 <template>
   <input-document
+    v-if="documentTypes.length != 0"
+    clear-input-on-toggle
     class="input-document"
     :document-type="documentTypes"
     @add="$emit('add', arguments[0])"

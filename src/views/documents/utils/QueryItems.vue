@@ -30,7 +30,6 @@
       </dropdown-button>
 
       <association-query-item
-        v-if="tags.length > 0"
         class="association-query-item is-hidden-mobile"
         :document-types="associations"
         @add="addTag"
