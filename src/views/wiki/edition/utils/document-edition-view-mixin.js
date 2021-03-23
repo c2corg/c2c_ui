@@ -312,13 +312,13 @@ export default {
 
     dispatchError(fieldName, error) {
       if (this.fields[fieldName] === undefined) {
-        // $gettext('Conflict: version of locale 'en' has changed')
-        // $gettext('Conflict: version of locale 'es' has changed')
-        // $gettext('Conflict: version of locale 'eu' has changed')
-        // $gettext('Conflict: version of locale 'de' has changed')
-        // $gettext('Conflict: version of locale 'it' has changed')
-        // $gettext('Conflict: version of locale 'ca' has changed')
-        // $gettext('Conflict: version of locale 'fr' has changed')
+        // $gettext('Conflict: version of locale \'en\' has changed')
+        // $gettext('Conflict: version of locale \'es\' has changed')
+        // $gettext('Conflict: version of locale \'eu\' has changed')
+        // $gettext('Conflict: version of locale \'de\' has changed')
+        // $gettext('Conflict: version of locale \'it\' has changed')
+        // $gettext('Conflict: version of locale \'ca\' has changed')
+        // $gettext('Conflict: version of locale \'fr\' has changed')
         // $gettext('Conflict: version of document has changed')
         toast({ message: this.$gettext(`${error.name}: ${error.description}`), type: 'is-danger', position: 'center' });
       } else {
