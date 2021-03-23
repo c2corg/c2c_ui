@@ -392,12 +392,12 @@ export default {
     display: flex;
     flex-direction: column;
 
-    div {
+    & + div {
       display: flex;
+    }
 
-      &:last-child {
-        margin-top: 0.3rem;
-      }
+    div:last-child {
+      margin-top: 0.3rem;
     }
   }
   .title-input,
@@ -412,7 +412,7 @@ export default {
     font-size: 0.7857rem;
   }
 
-  .query-items div:first-child {
+  .query-items + div:first-child {
     position: relative; // important; to force dropdown to be on stick to left
     display: flex;
     justify-content: flex-start;
