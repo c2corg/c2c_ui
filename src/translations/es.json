@@ -32,6 +32,7 @@
     "Allow all": "Permitir todo",
     "Anonymity and confidentiality": "Anonimato y confidencialidad",
     "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
+    "Are you sure you want to delete this locale?": "¿Está seguro de que quiere eliminar esta local?",
     "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
     "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
     "Articles, waypoints or routes to be linked.": "Artículos, waypoints o rutas a enlazar.",
@@ -50,13 +51,21 @@
     "Back to code": "Volver al código",
     "Back to edit mode": "Volver al modo de edición",
     "Base layer": "Primera capa",
+    "Basemap (at)": {
+      "Map layer": "Mapa inicial (at)"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Mapa inicial ortho (at)"
+    },
     "Beware of case-sensitive login and password": "Cuidado con el usuario y la contraseña que distinguen entre mayúsculas y minúsculas ",
     "Block account": "Bloquear cuenta",
     "Book content": "Contenido del libro",
     "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
     "Both results and map": "Resultados y mapa",
+    "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Describe brevemente cualquier lesión. Aquí se pueden introducir comentarios que no encajen en ningún otro campo.",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
     "Cancel": "Anular",
+    "Cards mode": "Modo tarjetas",
     "Change account parameters": "Cambiar parámetros de cuenta",
     "Change password": "Cambiar contraseña",
     "Checking...": "Verificando...",
@@ -75,8 +84,15 @@
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
     },
+    "Continue the discussion": "Continuar la discusión",
+    "Contribute to common knowledge": "Contribuir al conocimiento común",
+    "Contribute to maintainance": "Contruibuir a la manutencion",
+    "Contributions": "Contribuciones",
+    "Contributor": "Contribuyente",
+    "Control the use of your personal data": "Controlar el uso de sus datos personales",
     "Create a new report": "Agregar un nuevo informe",
     "Created on": "Creado",
+    "Creation?": "Creación?",
     "Current password": "Contraseña actual",
     "Delete this document": "Suprimir este documento",
     "Describe access": "Describir acceso",
@@ -104,7 +120,10 @@
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
     "EULA": "CGU",
-    "Edit": "Editar",
+    "Edit": {
+      "$$noContext": "Editar",
+      "yeti": "Editar"
+    },
     "Edit a document": "Editar un documento",
     "Edit associations": "Editar las asociaciónes",
     "Edit categories": "Editar las categorias",
@@ -209,6 +228,15 @@
     "activities": "Actividades",
     "activity": "actividad",
     "activity_rate": "Frecuencia de la práctica de la actividad.",
+    "activity_rate_m2": {
+      "activity_rates": "actividad_cotacion_m2"
+    },
+    "activity_rate_w1": {
+      "activity_rates": "actividad_dificuldad_w1"
+    },
+    "activity_rate_y5": {
+      "activity_rates": "actividad_dificuldad_y5"
+    },
     "add a book": "añadir un libro",
     "add a map": "añadir una mapa",
     "add a route": "añadir un itinerario",
@@ -237,9 +265,6 @@
       "custodianship_types": "siempre abierto"
     },
     "anonymous": "anónimo",
-    "apr": {
-      "months": "abril"
-    },
     "area": "región",
     "area_type": "tipo de región",
     "areas": "regiones",
@@ -256,9 +281,6 @@
     },
     "at least one user required": {
       "API message": "al menos un usario requerido"
-    },
-    "aug": {
-      "months": "agosto"
     },
     "author": "Autor",
     "author_status": "Autor",
@@ -301,6 +323,9 @@
       "waypoint_types": "vivac"
     },
     "blanket_unstaffed": "Mantas fuera de los períodos de guardia",
+    "blocked_person": {
+      "event_types": "persona_obstruida"
+    },
     "boat": {
       "public_transportation_types": "barco"
     },
@@ -380,12 +405,14 @@
     "comment": "Comentario",
     "condition_rating": "Condiciones",
     "conditions": "Condiciones",
+    "conditions_levels": "condicion_grados",
     "configuration": "Configuración",
     "configure your choices": "Configurar sus opciones",
     "conglomerat": {
       "rock_types": "conglomerado"
     },
     "contact": "Contacto",
+    "contributor": "contribuyente",
     "corridor": {
       "route_configuration_types": "corredor"
     },
@@ -407,6 +434,9 @@
     "crevasse_fall": {
       "event_types": "caída en grieta"
     },
+    "critical_situation": {
+      "event_types": "situacion_critica"
+    },
     "crowded": {
       "frequentation_types": "frecuentado"
     },
@@ -424,9 +454,6 @@
     "day(s)": "Dia(s)",
     "de": {
       "langs": "alemán"
-    },
-    "dec": {
-      "months": "diciembre"
     },
     "descent": {
       "image_categories": "descenso"
@@ -509,9 +536,6 @@
     },
     "farm_sale": {
       "product_types": "venta directa"
-    },
-    "feb": {
-      "months": "febrero"
     },
     "female": {
       "genders": "mujer"
@@ -647,15 +671,6 @@
     "it": {
       "langs": "italiano"
     },
-    "jan": {
-      "months": "enero"
-    },
-    "jul": {
-      "months": "julio"
-    },
-    "jun": {
-      "months": "junio"
-    },
     "key_needed": {
       "custodianship_types": "llave necesaria para abrir"
     },
@@ -707,13 +722,7 @@
     "map": "mapa",
     "maps_info": "Mapas",
     "maps_references": "Referencias cartográficas",
-    "mar": {
-      "months": "marzo"
-    },
     "matress_unstaffed": "Colchones fuera de los períodos de guardia",
-    "may": {
-      "months": "mayo"
-    },
     "medium": {
       "quality_types": "medio"
     },
@@ -769,16 +778,10 @@
       "image_categories": "nivología y aludes"
     },
     "no info": "no hay información",
-    "nov": {
-      "months": "noviembre"
-    },
     "novel": {
       "book_types": "nueva"
     },
     "numbers": "Características",
-    "oct": {
-      "months": "octubre"
-    },
     "often": {
       "snow_clearance_ratings": "desnevado periódico"
     },
@@ -940,9 +943,6 @@
     "seasonal": {
       "parking_fee_types": "servicio en temporada"
     },
-    "sep": {
-      "months": "septiembre"
-    },
     "service_on_demand": {
       "public_transportation_types": "servicio por solicitud"
     },
@@ -1067,7 +1067,7 @@
       "waypoint_types": "cámara web"
     },
     "whole year": {
-      "biodiv period": "año completo"
+      "period": "año completo"
     },
     "width": "anchura",
     "wind_direction": {

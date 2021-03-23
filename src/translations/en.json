@@ -77,6 +77,7 @@
     "Books and websites not already associated to this route": "Books and websites not yet associated to this route",
     "Both results and map": "Results and map",
     "Cards mode": "Cards view",
+    "Conflict: version of document has changed": "Document has been modified in the meantime and a new version is available.",
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
     },

@@ -91,6 +91,9 @@
     "Contributor": "Contribuïdor",
     "Control the use of your personal data": "Controleu l'ús de les vostres dades personals",
     "Cookies": "Galetes",
+    "Create": {
+      "yeti": "Crea"
+    },
     "Create a new report": "Crea un nou informe",
     "Created on": "Creat el",
     "Creation?": "Creació?",
@@ -123,6 +126,7 @@
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Descrigueu el desenvolupament de la sortida i de l'incident/accident. Si ja heu entrat una sortida, podeu descriure únicament l'esdeveniment, i després d'haver-ne registrat un informe, l'associeu a la sortida.",
     "Details on participants and event context": "Detalls sobre els participants i el context de l'esdeveniment",
     "Differences between versions": "Diferències entre les versions",
+    "Directions (Google Maps)": "Indicacions (Google Maps)",
     "Dispositions": "Disposicions",
     "Distance": "Distància",
     "Distance (km)": "Distància (km)",
@@ -133,7 +137,10 @@
     "Duration": "Durada",
     "Duration (hrs)": "Durada (h)",
     "EULA": "Acord de llicència d'usuari final",
-    "Edit": "Edita",
+    "Edit": {
+      "$$noContext": "Edita",
+      "yeti": "Edita"
+    },
     "Edit a document": "Modifica el document",
     "Edit associations": "Modifica les associacions",
     "Edit categories": "Modifica les categories",
@@ -419,6 +426,7 @@
     "Waypoint's textual description": "Descripció escrita del punt de pas",
     "We sent you an email, please click on the link to reset password.": "Us hem enviat un correu, si us plau, cliqueu-ne l'enllaç per restablir la contrasenya.",
     "Weather & conditions": "Méteo i condicions",
+    "Weather forecast (meteoblue)": "Previsió meteorològica (Meteoblue)",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Why did you choose this outing? When did you decide to commit to it. What influenced your decision, (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)",
     "Wide and constant": "Ample i regular",
     "Without c2c account": "Participants sense compte c2c",
@@ -491,9 +499,6 @@
       "user_categories": "aficionat"
     },
     "anonymous": "Contribució anònima",
-    "apr": {
-      "months": "abril"
-    },
     "area": "regió",
     "area_type": "tipus de regió",
     "areas": "regions",
@@ -508,9 +513,6 @@
     },
     "at least one user required": {
       "API message": "Seleccioneu almenys un itinerari"
-    },
-    "aug": {
-      "months": "agost"
     },
     "author": "autor",
     "author_status": "Autor",
@@ -691,9 +693,6 @@
     "de": {
       "langs": "alemany"
     },
-    "dec": {
-      "months": "desembre"
-    },
     "descent": {
       "image_categories": "baixada"
     },
@@ -780,9 +779,6 @@
     },
     "farm_sale": {
       "product_types": "venda directa"
-    },
-    "feb": {
-      "months": "febrer"
     },
     "federal_supervision": {
       "supervision": "federal"
@@ -948,15 +944,6 @@
     "it": {
       "langs": "italià"
     },
-    "jan": {
-      "months": "gener"
-    },
-    "jul": {
-      "months": "juliol"
-    },
-    "jun": {
-      "months": "juny"
-    },
     "key_needed": {
       "custodianship_types": "clau necessària per obrir"
     },
@@ -1018,13 +1005,7 @@
     "maps": "mapes",
     "maps_info": "Mapes",
     "maps_references": "Referències cartogràfiques",
-    "mar": {
-      "months": "març"
-    },
     "matress_unstaffed": "matalassos en període no guardat",
-    "may": {
-      "months": "maig"
-    },
     "medium": {
       "quality_types": "mitjà"
     },
@@ -1108,16 +1089,10 @@
     "non_autonomous": {
       "autonomies": "no autònom"
     },
-    "nov": {
-      "months": "novembre"
-    },
     "novel": {
       "book_types": "novel·la"
     },
     "numbers": "Característiques",
-    "oct": {
-      "months": "octubre"
-    },
     "of": {
       "1-30 of 200 results": "de"
     },
@@ -1342,9 +1317,6 @@
     },
     "see actual version": "mostra la versió actual",
     "sensitive_months:": "Període de vigilància:",
-    "sep": {
-      "months": "setembre"
-    },
     "service_on_demand": {
       "public_transportation_types": "servei a demanda"
     },
@@ -1479,7 +1451,7 @@
     "timing": "durada",
     "title": "Títol",
     "to": {
-      "biodiv period": "a"
+      "period": "a"
     },
     "topo": {
       "book_types": "ressenya",
@@ -1540,7 +1512,7 @@
     },
     "weather_station_types": "Variables mesurades per l'estació meteorològica",
     "whole year": {
-      "biodiv period": "tot l'any"
+      "period": "tot l'any"
     },
     "width": "Amplada",
     "wind_direction": {

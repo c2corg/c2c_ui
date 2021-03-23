@@ -129,6 +129,9 @@
     "Contributions": "Beitragen",
     "Contributor": "Beiträger",
     "Control the use of your personal data": "Verwendung Ihrer persönlichen Daten kontrollieren",
+    "Create": {
+      "yeti": "Erstellen"
+    },
     "Create a new report": "Neuen Unfallbericht verfassen",
     "Created on": "Erstellt am",
     "Creation?": "Verfassung ?",
@@ -172,7 +175,10 @@
     "Duration": "Zeit",
     "Duration (hrs)": "Zeit (Stunden)",
     "EULA": "Nutzungsbedingungen",
-    "Edit": "Bearbeiten",
+    "Edit": {
+      "$$noContext": "Bearbeiten",
+      "yeti": "Bearbeiten"
+    },
     "Edit a document": "Dokument bearbeiten",
     "Edit associations": "Verbindungen bearbeiten",
     "Edit categories": "Kategorien bearbeiten",
@@ -528,9 +534,6 @@
       "user_categories": "Amateur"
     },
     "anonymous": "anonymer Beitrag",
-    "apr": {
-      "months": "April"
-    },
     "area": "Gebiet",
     "area_type": "Gebietsart",
     "areas": "Gebiete",
@@ -550,9 +553,6 @@
     },
     "at least one user required": {
       "API message": "wenigstens ein Benutzerkonto nötig"
-    },
-    "aug": {
-      "months": "August"
     },
     "author": "Autor",
     "author_status": "Status des Autors ",
@@ -751,9 +751,6 @@
     "de": {
       "langs": "deutsch"
     },
-    "dec": {
-      "months": "Dezember"
-    },
     "descent": {
       "image_categories": "Abstieg"
     },
@@ -846,9 +843,6 @@
     },
     "fauna": {
       "image_categories": "Fauna"
-    },
-    "feb": {
-      "months": "Februar"
     },
     "federal_supervision": {
       "supervision": "Bundüberwachung"
@@ -1029,15 +1023,6 @@
     "it": {
       "langs": "italienisch"
     },
-    "jan": {
-      "months": "Januar"
-    },
-    "jul": {
-      "months": "Juli"
-    },
-    "jun": {
-      "months": "Juni"
-    },
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
     },
@@ -1099,13 +1084,7 @@
     "maps": "Karten",
     "maps_info": "Karten",
     "maps_references": "Karten Referenzen",
-    "mar": {
-      "months": "März"
-    },
     "matress_unstaffed": "Matratzen (nicht bewartet)",
-    "may": {
-      "months": "Mai"
-    },
     "medium": {
       "quality_types": "durchschnittlich"
     },
@@ -1196,16 +1175,10 @@
     "non_autonomous": {
       "autonomies": "nicht selbstständig"
     },
-    "nov": {
-      "months": "November"
-    },
     "novel": {
       "book_types": "Roman"
     },
     "numbers": "Zahlen",
-    "oct": {
-      "months": "Oktober"
-    },
     "of": {
       "1-30 of 200 results": "aus"
     },
@@ -1441,9 +1414,6 @@
     },
     "see actual version": "Letzte Version anschauen",
     "sensitive_months:": "Aufpassenzeit",
-    "sep": {
-      "months": "September"
-    },
     "service_on_demand": {
       "public_transportation_types": "On-Demand Dienste"
     },
@@ -1578,7 +1548,7 @@
     "timing": "Timing",
     "title": "Titel",
     "to": {
-      "biodiv period": "zu"
+      "period": "zu"
     },
     "topo": {
       "book_types": "Topo",
@@ -1648,7 +1618,7 @@
       "waypoint_types": "Webcam"
     },
     "whole year": {
-      "biodiv period": "Jahreslang"
+      "period": "Jahreslang"
     },
     "width": "Breite",
     "wind_direction": {
