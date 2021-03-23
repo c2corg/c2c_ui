@@ -15,8 +15,8 @@
       </router-link>
     </div>
     <div v-if="winners">
-      <div class="columns">
-        <div v-for="winner of winners" :key="winner.documentId" class="column">
+      <div class="columns is-centered is-multiline">
+        <div v-for="winner of winners" :key="winner.documentId" class="column is-4">
           <div class="has-text-centered has-text-weight-bold title is-2">
             <fa-icon icon="star" class="star-icon" />
             {{ winner.category }}
@@ -36,27 +36,29 @@
       </div>
     </div>
 
-    <hr class="separator" />
+    <div v-if="year">
+      <hr class="separator" />
 
-    <h3 class="title is-2 has-text-centered">
-      <span v-translate>Candidates</span>
-      <span class="is-size-4" v-if="images" @click="sortByAssociationDate = !sortByAssociationDate">
-        ({{ images.length }})
-        <fa-icon icon="sort-amount-up" v-if="sortByAssociationDate" />
-      </span>
-    </h3>
-    <div class="cards-container is-flex" v-if="images">
-      <document-link
-        v-for="image in images"
-        :key="image.document_id"
-        :document="image"
-        :title="$documentUtils.getDocumentTitle(image)"
-        class="card-image"
-      >
-        <img :src="getImageUrl(image)" />
-      </document-link>
+      <h3 class="title is-2 has-text-centered">
+        <span v-translate>Candidates</span>
+        <span class="is-size-4" v-if="images" @click="sortByAssociationDate = !sortByAssociationDate">
+          ({{ images.length }})
+          <fa-icon icon="sort-amount-up" v-if="sortByAssociationDate" />
+        </span>
+      </h3>
+      <div class="cards-container is-flex" v-if="images">
+        <document-link
+          v-for="image in images"
+          :key="image.document_id"
+          :document="image"
+          :title="$documentUtils.getDocumentTitle(image)"
+          class="card-image"
+        >
+          <img :src="getImageUrl(image)" />
+        </document-link>
+      </div>
+      <loading-notification v-else :promise="promise" />
     </div>
-    <loading-notification v-else :promise="promise" />
   </div>
 </template>
 
@@ -134,7 +136,42 @@ export default {
         { title: 'Lavaredo', author: 'sambuco', image: { document_id: 1159569 }, category: 'Topoguide' },
       ],
     },
-    2020: { year: 2020, documentId: 1251594, winners: null },
+    2020: {
+      year: 2020,
+      documentId: 1251594,
+      winners: [
+        {
+          title: 'Pic de Bure, vallon Froid',
+          author: 'ThierryC',
+          image: { document_id: 1253196 },
+          category: 'Action - prix du jury',
+        },
+        {
+          title: 'Arpelistock',
+          author: 'jvallet',
+          image: { document_id: 1253534 },
+          category: 'Paysage - prix du jury et du public',
+        },
+        {
+          title: 'Arête de la table de Roc',
+          author: 'gula',
+          image: { document_id: 1258595 },
+          category: 'Topoguide - prix du jury',
+        },
+        {
+          title: 'Tempête sous Roche Château',
+          author: 'DominicL',
+          image: { document_id: 1257660 },
+          category: 'Action - prix du public',
+        },
+        {
+          title: 'Secours au crépuscule au Grépon',
+          author: 'Rob.Bonnet',
+          image: { document_id: 1257385 },
+          category: 'Topoguide - prix du public',
+        },
+      ],
+    },
   },
 
   computed: {
@@ -142,13 +179,13 @@ export default {
      * properties that are deducted from URL
      */
     documentId() {
-      return this.$options.years[this.year].documentId;
+      return this.year ? this.$options.years[this.year].documentId : null;
     },
     winners() {
-      return this.$options.years[this.year].winners;
+      return this.year ? this.$options.years[this.year].winners : null;
     },
     year() {
-      return parseInt(this.$route.params.year, 10);
+      return this.$route.params.year ? parseInt(this.$route.params.year, 10) : null;
     },
   },
 

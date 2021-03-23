@@ -61,7 +61,7 @@ const routes = [
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
-  { path: '/sophie-picture-contest/:year(\\d+)', name: 'sophie-picture-contest', component: SophiePictureContestView },
+  { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
