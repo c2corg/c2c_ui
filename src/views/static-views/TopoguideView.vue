@@ -11,6 +11,7 @@
         <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book" />
         <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area" />
         <topoguide-view-link to="yeti" label="YETI" icon="icon-yeti" />
+        <topoguide-view-link to="sophie-picture-contest" label="CPS" icon="icon-star" />
       </div>
     </div>
     <div class="section columns is-multiline is-variable is-8">

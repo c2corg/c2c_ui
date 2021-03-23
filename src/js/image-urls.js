@@ -2,7 +2,7 @@ import config from '@/js/config';
 
 const getUrl = function (image, size) {
   if (!image.filename) {
-    const sizeArg = size ? `?$size=${size}` : '';
+    const sizeArg = size ? `?size=${size}` : '';
     return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}`;
   }
 
