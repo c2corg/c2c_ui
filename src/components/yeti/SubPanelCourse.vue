@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel">
-    <sub-panel-title v-translate>Route</sub-panel-title>
+    <sub-panel-title><span v-translate>Route</span></sub-panel-title>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -39,7 +39,7 @@
         <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
         <features-list :features="features" :map="map" />
       </div>
-      <sub-panel-title v-translate>Export</sub-panel-title>
+      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
@@ -111,6 +111,8 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import ol from '@/js/libs/ol';
@@ -206,13 +208,13 @@ export default {
       }
     },
 
-    downloadFeatures(format, extension, mimetype) {
+    downloadFeatures(olFormat, extension, mimetype) {
       const features = this.features;
       features[0].set('name', this.featuresTitle);
 
       const filename = this.setFilename(extension);
 
-      const content = format.writeFeatures(features, {
+      const content = olFormat.writeFeatures(features, {
         featureProjection: 'EPSG:3857',
       });
 
@@ -220,8 +222,7 @@ export default {
     },
 
     setFilename(ext) {
-      let date = this.$moment.parseDate(new Date());
-      return date.format('YYYY-MM-DD_HH-mm-ss') + ext;
+      return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
     },
   },
 };

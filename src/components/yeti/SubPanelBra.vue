@@ -1,6 +1,6 @@
 <template>
   <div class="yeti-subpanel">
-    <sub-panel-title v-translate>Danger level</sub-panel-title>
+    <sub-panel-title><span v-translate>Danger level</span></sub-panel-title>
     <div class="columns is-mobile">
       <div class="column">
         <div class="inputs-bra" :class="{ 'inputs-bra-different': bra.isDifferent }">
