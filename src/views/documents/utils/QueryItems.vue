@@ -3,7 +3,12 @@
     <div>
       <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
 
-      <dropdown-button v-for="category of categorizedFields" :key="category.name" class="category-button">
+      <dropdown-button
+        v-for="category of categorizedFields"
+        :key="category.name"
+        class="category-button"
+        :disabled="category.fields.length === 0"
+      >
         <span slot="button" class="button is-small-mobile" :disabled="category.fields.length === 0">
           <fa-icon :icon="$options.categoryIcon[category.name]" />
           <span class="is-hidden-mobile">
