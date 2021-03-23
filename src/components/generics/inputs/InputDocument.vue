@@ -83,7 +83,9 @@
           />
         </div>
 
-        <div v-else-if="documentTypesWithResults.length == 0" class="dropdown-item is-size-6">No result found</div>
+        <div v-else-if="documentTypesWithResults.length == 0" class="dropdown-item is-size-6" v-translate>
+          No result found
+        </div>
       </div>
     </div>
   </div>
