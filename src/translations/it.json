@@ -94,7 +94,10 @@
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
-    "Edit": "Modificare",
+    "Edit": {
+      "$$noContext": "Modificare",
+      "yeti": "Modificare"
+    },
     "Edit a document": "Modificare il documento",
     "Edit associations": "Modificare le associazioni ",
     "Edit categories": "Modificare le categorie ",
@@ -370,9 +373,6 @@
       "user_categories": "amatore"
     },
     "anonymous": "Contributo anonimo ",
-    "apr": {
-      "months": "aprile"
-    },
     "area": "regione",
     "area_type": "tipo di regione",
     "areas": "regioni",
@@ -392,9 +392,6 @@
     },
     "at least one user required": {
       "API message": "Selezionare al meno un itinerario"
-    },
-    "aug": {
-      "months": "agosto "
     },
     "author": "autore",
     "author_status": "Autore",
@@ -570,9 +567,6 @@
     "de": {
       "langs": "tedesco"
     },
-    "dec": {
-      "months": "dicembre"
-    },
     "descent": {
       "image_categories": "discesa"
     },
@@ -661,9 +655,6 @@
     },
     "farm_sale": {
       "product_types": "vendita del produttore"
-    },
-    "feb": {
-      "months": "febbraio "
     },
     "female": {
       "genders": "femmina "
@@ -819,15 +810,6 @@
     "it": {
       "langs": "italiano"
     },
-    "jan": {
-      "months": "gennaio "
-    },
-    "jul": {
-      "months": "luglio"
-    },
-    "jun": {
-      "months": "giugno"
-    },
     "key_needed": {
       "custodianship_types": "chiavi necessarie "
     },
@@ -888,13 +870,7 @@
     "maps": "carte",
     "maps_info": "Carte/Mappe",
     "maps_references": "Riferimenti cartografici",
-    "mar": {
-      "months": "marzo"
-    },
     "matress_unstaffed": "Materassi (non gestito) ",
-    "may": {
-      "months": "maggio "
-    },
     "medium": {
       "quality_types": "medio"
     },
@@ -969,16 +945,10 @@
     "non_autonomous": {
       "autonomies": "non autonomo "
     },
-    "nov": {
-      "months": "novembre"
-    },
     "novel": {
       "book_types": "racconto"
     },
     "numbers": "Caratteristiche ",
-    "oct": {
-      "months": "ottobre"
-    },
     "of": {
       "1-30 of 200 results": "su"
     },
@@ -1201,9 +1171,6 @@
     },
     "see actual version": "vedere la versione attuale",
     "sensitive_months:": "Periodo di vigilanza: ",
-    "sep": {
-      "months": "settembre"
-    },
     "service_on_demand": {
       "public_transportation_types": "servizio a richiesta"
     },

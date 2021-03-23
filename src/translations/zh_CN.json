@@ -170,7 +170,10 @@
     "Duration": "时长",
     "Duration (hrs)": "时长(小时)",
     "EULA": "最终用户许可协议",
-    "Edit": "编辑",
+    "Edit": {
+      "$$noContext": "编辑",
+      "yeti": "编辑"
+    },
     "Edit a document": "编辑文档",
     "Edit associations": "编辑相关资料",
     "Edit categories": "编辑分类",
@@ -526,9 +529,6 @@
       "user_categories": "业余爱好者"
     },
     "anonymous": "匿名",
-    "apr": {
-      "months": "4月"
-    },
     "area": "地区",
     "area_type": "地区类型",
     "areas": "地区",
@@ -548,9 +548,6 @@
     },
     "at least one user required": {
       "API message": "选择至少一位用户"
-    },
-    "aug": {
-      "months": "8月"
     },
     "author": "作者",
     "author_status": "作者状态",
@@ -749,9 +746,6 @@
     "de": {
       "langs": "Deutsch"
     },
-    "dec": {
-      "months": "12月"
-    },
     "descent": {
       "image_categories": "下降"
     },
@@ -844,9 +838,6 @@
     },
     "fauna": {
       "image_categories": "动物群"
-    },
-    "feb": {
-      "months": "2月"
     },
     "federal_supervision": {
       "supervision": "联邦指导"
@@ -1027,15 +1018,6 @@
     "it": {
       "langs": "italiano"
     },
-    "jan": {
-      "months": "1月"
-    },
-    "jul": {
-      "months": "7月"
-    },
-    "jun": {
-      "months": "6月"
-    },
     "key_needed": {
       "custodianship_types": "需要钥匙"
     },
@@ -1097,13 +1079,7 @@
     "maps": "地图",
     "maps_info": "地图信息",
     "maps_references": "地图引用",
-    "mar": {
-      "months": "3月"
-    },
     "matress_unstaffed": "无看守时是否提供床垫",
-    "may": {
-      "months": "5月"
-    },
     "medium": {
       "quality_types": "中等"
     },
@@ -1194,16 +1170,10 @@
     "non_autonomous": {
       "autonomies": "不能自主"
     },
-    "nov": {
-      "months": "11月"
-    },
     "novel": {
       "book_types": "小说"
     },
     "numbers": "特征",
-    "oct": {
-      "months": "10月"
-    },
     "of": {
       "1-30 of 200 results": "于"
     },
@@ -1439,9 +1409,6 @@
     },
     "see actual version": "查看实际版本",
     "sensitive_months:": "敏感的月份",
-    "sep": {
-      "months": "9月"
-    },
     "service_on_demand": {
       "public_transportation_types": "按需服务"
     },
@@ -1643,7 +1610,7 @@
       "waypoint_types": "网络摄像头"
     },
     "whole year": {
-      "biodiv period": "整年"
+      "period": "整年"
     },
     "width": "宽度",
     "wind_direction": {
