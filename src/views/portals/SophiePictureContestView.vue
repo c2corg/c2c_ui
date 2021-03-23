@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <h1 class="title is-1 has-text-centered">
-      <router-link :to="{ name: 'article', params: { id: 1204369 } }"> Sophie Picture Contest </router-link>
+      <router-link :to="{ name: 'article', params: { id: 1204369 } }" v-translate>Sophie Picture Contest</router-link>
     </h1>
     <div class="buttons is-centered">
       <router-link
@@ -19,7 +19,7 @@
         <div v-for="winner of winners" :key="winner.documentId" class="column is-4">
           <div class="has-text-centered has-text-weight-bold title is-2">
             <fa-icon icon="star" class="star-icon" />
-            {{ winner.category }}
+            {{ $gettext(winner.category) }}
           </div>
           <div class="has-text-centered">
             <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
@@ -77,6 +77,15 @@ export default {
     };
   },
 
+  // $gettext('Action', 'Sophie picture context')
+  // $gettext('Action - prix du jury', 'Sophie picture context')
+  // $gettext('Action - prix du public', 'Sophie picture context')
+  // $gettext('Paysage', 'Sophie picture context')
+  // $gettext('Paysage - prix du jury et du public', 'Sophie picture context')
+  // $gettext('Coup de coeur', 'Sophie picture context')
+  // $gettext('Topoguide', 'Sophie picture context')
+  // $gettext('Topoguide - prix du jury', 'Sophie picture context')
+  // $gettext('Topoguide - prix du public', 'Sophie picture context')
   years: {
     2009: { year: 2009, documentId: 187913, winners: null },
     2010: { year: 2010, documentId: 237549, winners: null },
