@@ -23,7 +23,12 @@
           </div>
           <div class="has-text-centered">
             <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
-              <img :src="getImageUrl(winner.image)" class="winner-image" />
+              <img
+                :src="getImageUrl(winner.image)"
+                :alt="$documentUtils.getDocumentTitle(winner.image)"
+                class="winner-image"
+                loading="lazy"
+              />
             </document-link>
           </div>
           <div class="has-text-centered">
@@ -54,7 +59,7 @@
           :title="$documentUtils.getDocumentTitle(image)"
           class="card-image"
         >
-          <img :src="getImageUrl(image)" />
+          <img :src="getImageUrl(image)" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
         </document-link>
       </div>
       <loading-notification v-else :promise="promise" />

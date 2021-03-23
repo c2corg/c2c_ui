@@ -77,7 +77,7 @@
                   <picture>
                     <source srcset="@/assets/img/yeti/logo-ensg.webp" type="image/webp" />
                     <source srcset="@/assets/img/yeti/logo-ensg.avif" type="image/avif" />
-                    <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" />
+                    <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" loading="lazy" />
                   </picture>
                 </a>
               </div>
@@ -86,7 +86,12 @@
                   <picture>
                     <source srcset="@/assets/img/yeti/logo-fondation-petzl.webp" type="image/webp" />
                     <source srcset="@/assets/img/yeti/logo-fondation-petzl.avif" type="image/avif" />
-                    <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Logo Fondation Petzl" width="90" />
+                    <img
+                      src="@/assets/img/yeti/logo-fondation-petzl.jpg"
+                      alt="Logo Fondation Petzl"
+                      width="90"
+                      loading="lazy"
+                    />
                   </picture>
                 </a>
               </div>

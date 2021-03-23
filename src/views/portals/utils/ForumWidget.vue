@@ -11,7 +11,7 @@
         rel="noopener"
         :title="topic.last_poster_username"
       >
-        <img :src="getAvatarUrl(topic.last_poster_user)" :style="'width:' + imgSize + 'px'" />
+        <img :src="getAvatarUrl(topic.last_poster_user)" :style="'width:' + imgSize + 'px'" loading="lazy" />
         <span :class="{ 'is-ellipsed': !wide }">
           {{ topic.title }}
         </span>

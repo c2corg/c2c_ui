@@ -21,6 +21,7 @@
             <img
               :src="getAvatarUrl(post)"
               :style="'width:' + $options.forumAvatarSize + 'px;height:' + $options.forumAvatarSize + 'px'"
+              loading="lazy"
             />
           </div>
           <div class="column">
