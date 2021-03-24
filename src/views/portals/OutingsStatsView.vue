@@ -1,16 +1,20 @@
 <template>
   <div class="section">
-    <h1>
-      <span>Outing statistics</span>
+    <html-header :title="$gettext('Outings statistics')" />
+    <h1 class="title is-3 header-section">
+      <span v-translate>Outing statistics</span>
       <span v-if="!outings">{{ Math.round(loadingPercentage * 100) }}%</span>
     </h1>
-    <div v-if="outings" class="columns">
+
+    <query-items class="filter-section" />
+
+    <div v-if="outings" class="columns result-section">
       <div class="column">
-        <h2>By year</h2>
+        <h2 class="title is-4" v-translate>By year</h2>
         <div ref="year_repartition"></div>
       </div>
       <div class="column">
-        <h2>By month</h2>
+        <h2 class="title is-4" v-translate>By month</h2>
         <div ref="month_repartition"></div>
       </div>
     </div>
@@ -22,6 +26,7 @@ import { createHistogram } from './utils/outings-stats';
 
 import c2c from '@/js/apis/c2c';
 import d3 from '@/js/libs/d3';
+import QueryItems from '@/views/documents/utils/QueryItems';
 
 const getOutingYear = function (outing) {
   return parseInt(outing.date_start.substring(0, 4), 10);
@@ -31,6 +36,10 @@ const getOutingMonth = function (outing) {
 };
 
 export default {
+  components: {
+    QueryItems,
+  },
+
   data() {
     return {
       outings: null,
@@ -66,3 +75,17 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.filter-section {
+  padding-bottom: 0.5rem;
+  clear: both;
+}
+
+.result-section {
+  margin-top: 0.5rem;
+  border-top: 1px solid lightgrey;
+  padding-top: 0.5rem;
+  clear: both;
+}
+</style>

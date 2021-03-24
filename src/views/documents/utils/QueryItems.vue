@@ -218,7 +218,7 @@ export default {
     },
 
     documentType() {
-      return this.$route.name.slice(0, -1);
+      return this.$route.name.split('-')[0].slice(0, -1);
     },
 
     associations() {
