@@ -61,6 +61,12 @@
       "access_times": "5 min"
     },
     "Accident database": "Incidents and Accidents",
+    "Action - prix du jury": {
+      "Sophie picture context": "Action - Jury prize"
+    },
+    "Action - prix du public": {
+      "Sophie picture context": "Action - Public prize"
+    },
     "Are you sure you want to delete this locale?": "Are you sure you want to delete this linguistic version?",
     "Articles, waypoints or routes to be linked.": "Linked articles, waypoints and routes",
     "Articles, waypoints, routes or books to be linked.": "Linked articles, waypoints, routes and books",
@@ -76,6 +82,7 @@
     "Book content": "Short description of the book's contents",
     "Books and websites not already associated to this route": "Books and websites not yet associated to this route",
     "Both results and map": "Results and map",
+    "Candidates": "All proposed pictures",
     "Cards mode": "Cards view",
     "Conflict: version of document has changed": "Document has been modified in the meantime and a new version is available.",
     "Contain invalid character(s)": {
@@ -136,6 +143,12 @@
     "Password too short": {
       "API message": "Password is too short"
     },
+    "Paysage": {
+      "Sophie picture context": "Landscape"
+    },
+    "Paysage - prix du jury et du public": {
+      "Sophie picture context": "Landscape - Jury and public prize"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Please describe your technical and experience level related to the chosen goal, your level of fitness, priorly accumulated tiredness, acclimatization if in altitude, etc. ",
     "Precise location of the event.": "Precise location of the event",
     "Put it back": "Restore",
@@ -153,6 +166,12 @@
     },
     "This field is too long": "Text is too long",
     "This field is too short": "Text is too short",
+    "Topoguide - prix du jury": {
+      "Sophie picture context": "Topoguide - Jury prize"
+    },
+    "Topoguide - prix du public": {
+      "Sophie picture context": "Topoguide - Public prize"
+    },
     "Trace": "GPS Track",
     "Transport & road or PT access": "Road or public transport access",
     "View in other lang": "View in other language",
