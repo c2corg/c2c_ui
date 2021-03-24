@@ -15,6 +15,7 @@ D3.prototype.resolve_ = function () {
   this.resolving_ = true;
 
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale/src/linear'), 'scaleLinear');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale/src/band'), 'scaleBand');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-geo/src/distance'), 'geoDistance');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time/src/hour'), 'timeHour');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-shape/src/line'), 'line');
