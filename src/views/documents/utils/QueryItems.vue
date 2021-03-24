@@ -3,7 +3,12 @@
     <div>
       <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
 
-      <dropdown-button v-for="category of categorizedFields" :key="category.name" class="category-button">
+      <dropdown-button
+        v-for="category of categorizedFields"
+        :key="category.name"
+        class="category-button"
+        :disabled="category.fields.length === 0"
+      >
         <span slot="button" class="button is-small-mobile" :disabled="category.fields.length === 0">
           <fa-icon :icon="$options.categoryIcon[category.name]" />
           <span class="is-hidden-mobile">
@@ -30,7 +35,6 @@
       </dropdown-button>
 
       <association-query-item
-        v-if="tags.length > 0"
         class="association-query-item is-hidden-mobile"
         :document-types="associations"
         @add="addTag"
@@ -392,12 +396,12 @@ export default {
     display: flex;
     flex-direction: column;
 
-    div {
+    & + div {
       display: flex;
+    }
 
-      &:last-child {
-        margin-top: 0.3rem;
-      }
+    div:last-child {
+      margin-top: 0.3rem;
     }
   }
   .title-input,
@@ -412,7 +416,7 @@ export default {
     font-size: 0.7857rem;
   }
 
-  .query-items div:first-child {
+  .query-items + div:first-child {
     position: relative; // important; to force dropdown to be on stick to left
     display: flex;
     justify-content: flex-start;

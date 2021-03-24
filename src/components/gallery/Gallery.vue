@@ -6,6 +6,7 @@
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
+        loading="lazy"
       />
     </swiper-slide>
   </swiper>

@@ -73,7 +73,7 @@
         </div>
 
         <div v-if="proposeCreation">
-          <hr class="dropdown-divider" />
+          <hr v-if="documentTypesWithResults.length > 0" class="dropdown-divider" />
           <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>No match?</div>
           <add-link
             v-for="type of documentTypes_"
@@ -81,6 +81,10 @@
             :document-type="type"
             class="dropdown-item dropdown-item-option is-size-6"
           />
+        </div>
+
+        <div v-else-if="documentTypesWithResults.length == 0" class="dropdown-item is-size-6" v-translate>
+          No result found
         </div>
       </div>
     </div>

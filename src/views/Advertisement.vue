@@ -11,7 +11,7 @@
       <picture>
         <source srcset="@/assets/img/serac.webp" type="image/webp" />
         <source srcset="@/assets/img/serac.avif" type="image/avif" />
-        <img src="@/assets/img/serac.png" />
+        <img src="@/assets/img/serac.png" loading="lazy" />
       </picture>
     </router-link>
   </div>

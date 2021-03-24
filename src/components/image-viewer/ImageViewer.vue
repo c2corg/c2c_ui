@@ -140,7 +140,9 @@ export default {
             renderSlide(img) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" title="${img.locales[0].title}">
+                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" title="${
+                img.locales[0].title
+              }" loading="lazy">
                   </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
