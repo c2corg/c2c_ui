@@ -32,6 +32,8 @@ import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import QueryItems from '@/views/documents/utils/QueryItems';
 
+const LIST_MAX_LENGTH = 2000;
+
 export default {
   components: {
     OutingsStatsPart,
@@ -55,11 +57,11 @@ export default {
 
   methods: {
     load() {
-      c2c.outing.fullDownload(this.$route.query, 2000, this.progress).then(this.compute);
+      c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
     },
 
     progress(current, total) {
-      this.loadingPercentage = current / Math.min(total, 2000);
+      this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
     },
 
     compute(outings) {
@@ -86,13 +88,6 @@ export default {
 <style scoped lang="scss">
 .filter-section {
   padding-bottom: 0.5rem;
-  clear: both;
-}
-
-.result-section {
-  margin-top: 0.5rem;
-  border-top: 1px solid lightgrey;
-  padding-top: 0.5rem;
   clear: both;
 }
 </style>

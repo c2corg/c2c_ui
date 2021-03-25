@@ -222,6 +222,10 @@ export default {
     },
 
     documentType() {
+      // route name are like outings, routes ...
+      // always the document type with a tail "s".
+      // the `.slice(0, -1)` removes this "s"
+      // it also can be outings-stats => the `.split('-')[0]` remove "-stats"
       return this.$route.name.split('-')[0].slice(0, -1);
     },
 

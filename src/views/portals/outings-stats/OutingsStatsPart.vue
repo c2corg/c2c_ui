@@ -32,10 +32,10 @@ const getOutingMonth = function (outing) {
 
 const formatLengthInMeter = function (length) {
   if (length < 9999) {
-    return `${length}m`;
+    return `${length} m`;
   } else {
     length = Math.round(length / 1000);
-    return `${length}km`;
+    return `${length} km`;
   }
 };
 

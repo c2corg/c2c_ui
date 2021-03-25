@@ -7,37 +7,28 @@ DocumentService.prototype.getAll = function (params) {
   return this.api.get('/' + this.documentType + 's', { params });
 };
 
-DocumentService.prototype.fullDownload = function (params, limit, progress) {
+DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
   // will load the ENTIRE list of document. Limited to 2000 docs
-  const this_ = this;
 
-  limit = limit || 2000;
-  params = { ...params }; // clone
+  const MAX_SIZE = 2000;
+  const API_MAX_LIMIT = 100;
+
+  limit = limit || MAX_SIZE;
+  limit = limit > MAX_SIZE ? MAX_SIZE : limit;
 
   return new Promise((resolve, reject) => {
     const result = [];
 
-    params.limit = 100;
-
-    const download = function (offset) {
-      params.offset = offset;
-
-      this_
-        .getAll(params)
-        .then((response) => {
-          for (const document of response.data.documents) {
+    const download = (offset = 0) => {
+      this.getAll({ ...params, offset: offset, limit: API_MAX_LIMIT })
+        .then(({ data }) => {
+          for (const document of data.documents) {
             result.push(document);
           }
 
-          if (progress) {
-            progress(result.length, response.data.total);
-          }
+          onProgress?.(result.length, data.total);
 
-          if (response.data.documents.length === 0) {
-            resolve(result);
-          } else if (result.length === response.data.total) {
-            resolve(result);
-          } else if (result.length >= limit) {
+          if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
             resolve(result);
           } else {
             download(offset + 100);
@@ -48,7 +39,7 @@ DocumentService.prototype.fullDownload = function (params, limit, progress) {
         });
     };
 
-    download(0);
+    download();
   });
 };
 

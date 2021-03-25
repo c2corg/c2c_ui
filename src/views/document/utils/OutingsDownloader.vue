@@ -45,7 +45,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          window.alert(error.response.data.errors[0].description);
+          window.alert(error.response?.data?.errors?.[0]?.description);
         });
     },
   },
