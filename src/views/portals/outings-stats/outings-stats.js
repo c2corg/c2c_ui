@@ -96,6 +96,6 @@ export class Histogram {
       .attr('width', x.bandwidth())
       .attr('y', (d) => y(d.y))
       .attr('height', (d) => height - y(d.y))
-      .style('fill', '#69b3a2');
+      .style('fill', '#F93');
   }
 }
