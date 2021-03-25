@@ -87,8 +87,8 @@
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
 
           <markdown-section :document="document" :field="fields.remarks">
-            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info">
-              <strong v-translate> Sensitive areas </strong>
+            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info no-print">
+              <strong v-translate>Sensitive areas</strong>
               <p v-translate>There are sensitive areas on this route. Please refer to the map.</p>
             </div>
           </markdown-section>
