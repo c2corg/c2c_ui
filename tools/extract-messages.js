@@ -62,13 +62,14 @@ function Process() {
 
 Process.prototype.push = function (file, line, msgctxt, msgid) {
   // trim
-  msgid = msgid.replace(/^[\r\n\s]*/g, '');
-  msgid = msgid.replace(/[\r\n\s]*$/g, '');
-  msgid = msgid.replace(/\\/g, '\\');
-  msgid = msgid.replace(/\n/g, ' ');
-  msgid = msgid.replace(/\t/g, ' ');
-  msgid = msgid.replace(/\s+/g, ' ');
-  msgid = msgid.replace(/"/g, '\\"');
+  msgid = msgid
+    .replace(/^[\r\n\s]*/g, '')
+    .replace(/[\r\n\s]*$/g, '')
+    .replace(/\\/g, '\\')
+    .replace(/\n/g, ' ')
+    .replace(/\t/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/"/g, '\\"');
 
   // keep lower case msgid in first, at's it will be used for sorting
   const key = `${msgid.toLowerCase()}\u0002${msgid}\u0002${msgctxt}`;
