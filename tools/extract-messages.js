@@ -64,6 +64,7 @@ Process.prototype.push = function (file, line, msgctxt, msgid) {
   // trim
   msgid = msgid.replace(/^[\r\n\s]*/g, '');
   msgid = msgid.replace(/[\r\n\s]*$/g, '');
+  msgid = msgid.replace(/\\/g, '\\');
   msgid = msgid.replace(/\n/g, ' ');
   msgid = msgid.replace(/\t/g, ' ');
   msgid = msgid.replace(/\s+/g, ' ');
