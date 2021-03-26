@@ -20,7 +20,7 @@ DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
     const result = [];
 
     const download = (offset = 0) => {
-      this.getAll({ ...params, offset: offset, limit: API_MAX_LIMIT })
+      this.getAll({ ...params, offset, limit: API_MAX_LIMIT })
         .then(({ data }) => {
           for (const document of data.documents) {
             result.push(document);
