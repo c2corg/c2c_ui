@@ -1,0 +1,53 @@
+@import './variables.scss';
+
+// a kind-of-hacky layout so that for documents, toolbox is displayed last on mobile
+// cannot be done using bulma's columns and column classes...
+.two-columns-doc {
+  display: flex;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  margin-top: -0.75rem;
+
+  & > div {
+    margin: 0.75rem;
+
+    &:first-child {
+      max-width: 25%;
+      flex-basis: 25%;
+    }
+
+    &:last-child {
+      flex-basis: 75%;
+    }
+  }
+
+  .two-columns-last {
+    order: 99;
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  .two-columns-doc {
+    flex-direction: column;
+    margin: 0;
+
+    & > div {
+      display: contents;
+    }
+
+    .two-columns-last {
+      margin-top: 0.75rem;
+    }
+  }
+}
+
+@media print {
+  .two-columns-doc {
+    flex-direction: column;
+    margin: 0;
+
+    & > div {
+      display: contents;
+    }
+  }
+}

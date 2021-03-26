@@ -1,8 +1,8 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns">
-      <div class="column is-3">
+    <div v-if="document" class="two-columns-doc">
+      <div>
         <div class="box">
           <field-view :document="document" :field="fields.area_type" />
         </div>
@@ -10,7 +10,7 @@
         <tool-box :document="document" />
       </div>
 
-      <div class="column is-9">
+      <div>
         <div class="box" v-if="document.cooked.summary || document.cooked.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />

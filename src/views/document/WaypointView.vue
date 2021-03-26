@@ -8,13 +8,13 @@
       />
     </document-view-header>
 
-    <div v-if="document" class="columns">
-      <div class="column is-3 no-print">
+    <div v-if="document" class="two-columns-doc">
+      <div class="no-print">
         <map-box :document="document" />
         <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div>
         <div class="box">
           <div class="columns is-multiline">
             <div class="column is-4">

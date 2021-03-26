@@ -4,13 +4,13 @@
 
     <images-box v-if="document" :document="document" />
 
-    <div v-if="document" class="columns is-multiline is-block-print">
-      <div class="column is-3 no-print">
+    <div v-if="document" class="two-columns-doc">
+      <div class="no-print">
         <map-box :document="document" />
         <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div>
         <div class="box">
           <div v-for="route of document.associations.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />

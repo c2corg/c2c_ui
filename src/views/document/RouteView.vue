@@ -1,13 +1,13 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns is-block-print">
-      <div class="column is-3 no-print">
+    <div v-if="document" class="two-columns-doc">
+      <div class="no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <tool-box :document="document" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div>
         <!-- CONTENT -->
 
         <div class="box">

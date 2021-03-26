@@ -1,5 +1,5 @@
 <template>
-  <div class="box no-print">
+  <div class="box no-print two-columns-last">
     <associated-documents :document="document" />
 
     <div class="has-text-centered" v-if="isNormalView && available_langs.length">

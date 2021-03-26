@@ -1,8 +1,8 @@
 <template>
   <div class="section has-background-white-print">
     <document-view-header :document="document" :version="version" :promise="promise" />
-    <div v-if="document" class="columns is-block-print">
-      <div class="column is-3 is-12-print">
+    <div v-if="document" class="two-columns-doc">
+      <div>
         <div class="box">
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
@@ -12,9 +12,9 @@
           </label-value>
         </div>
 
-        <tool-box :document="document" v-if="!$screen.isMobile" />
+        <tool-box :document="document" />
       </div>
-      <div class="column is-9 is-12-print">
+      <div>
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
