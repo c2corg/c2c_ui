@@ -158,7 +158,7 @@ export class FIT extends FeatureFormat {
     const size = blob[fieldDefinitionIndex + 1];
 
     return {
-      size: size,
+      size,
       isDeveloperField: true,
     };
   }
