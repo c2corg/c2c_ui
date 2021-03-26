@@ -15,7 +15,7 @@
       <div v-for="child in document.associations[field.name]" :key="child.document_id" class="column is-4">
         <document-card
           :document="child"
-          show-delete-button
+          :show-delete-button="showDeleteButton(child)"
           @delete="$documentUtils.removeAssociation(document, child)"
           target="_blank"
         />
@@ -27,6 +27,7 @@
 <script>
 import FormInput from './FormInput';
 
+import associationRights from '@/js/associations-rights-mixin';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
@@ -34,7 +35,7 @@ export default {
     FormInput,
   },
 
-  mixins: [requireFieldProperty, requireDocumentProperty],
+  mixins: [requireFieldProperty, requireDocumentProperty, associationRights],
 
   props: {
     label: {
@@ -54,6 +55,12 @@ export default {
     },
     hasError() {
       return this.field.error !== null;
+    },
+  },
+
+  methods: {
+    showDeleteButton(document) {
+      return this.canRemove(this.document, document); // ! FIXME import mixin
     },
   },
 };
