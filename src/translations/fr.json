@@ -99,6 +99,12 @@
     "Confirm": "Confirmer",
     "Confirm delete": "Confirmer la suppression",
     "Conflict: version of document has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'ca' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'de' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'en' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'es' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'eu' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
+    "Conflict: version of locale 'fr' has changed": "Le document a été modifié entretemps et une version plus récente existe.",
     "Conflicting method and danger": "Méthode et niveau de danger incompatible",
     "Contain invalid character(s)": {
       "API message": "Contient un ou plusieurs caractères invalides"

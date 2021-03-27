@@ -91,7 +91,10 @@
     "This profile is only available to authenticated users.": "Profil hau izenpetutako erabiltzaileentzat soilik dago eskuragai",
     "Time": "Ordua",
     "Toggle fullscreen": "Pantaila osoa erabili",
-    "Topoguide": "Topogida",
+    "Topoguide": {
+      "$$noContext": "Topogida",
+      "Sophie picture context": "Topogida"
+    },
     "Translate into an other lang": "Beste hizkuntza batera itzuli",
     "Types and styles": "Mota eta estiloa",
     "Upload a GPS track": "GPS hurratsa gehitu",

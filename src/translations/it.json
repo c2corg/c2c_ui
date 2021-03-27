@@ -303,7 +303,10 @@
     "Title, activity and characteristics of the picture": "Titolo, attività, caratteristiche dell'immagine",
     "Toggle fullscreen": "Schermo intero",
     "Too many results: please refine your search.": "Troppi risultati: restringere la ricerca",
-    "Topoguide": "Guida",
+    "Topoguide": {
+      "$$noContext": "Guida",
+      "Sophie picture context": "Guida"
+    },
     "Translate into an other lang": "Tradurre in un altra lingua ",
     "Transport & road or PT access": "Accesso stradale / mezzi publici",
     "Types and styles": "Tipi e stili",
