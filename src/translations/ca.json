@@ -402,7 +402,10 @@
     },
     "Toggle fullscreen": "Passa a pantalla completa",
     "Too many results: please refine your search.": "Massa resultats: si et plau, afina els paràmetres de la cerca",
-    "Topoguide": "Guia de ressenyes",
+    "Topoguide": {
+      "$$noContext": "Guia de ressenyes",
+      "Sophie picture context": "Guia de ressenyes"
+    },
     "Trace": "Traça GPS",
     "Translate into an other lang": "Tradueix a una altra llengua",
     "Transport & road or PT access": "Accés per carretera / transport públic",

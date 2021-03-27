@@ -199,7 +199,10 @@
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
     "Time": "Horario",
     "Toggle fullscreen": "Pasar a pantalla completa",
-    "Topoguide": "Topoguía",
+    "Topoguide": {
+      "$$noContext": "Topoguía",
+      "Sophie picture context": "Topoguía"
+    },
     "Translate into an other lang": "Traducir en otra lengua",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",

@@ -85,6 +85,13 @@
     "Candidates": "All proposed pictures",
     "Cards mode": "Cards view",
     "Conflict: version of document has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'ca' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'de' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'en' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'es' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'eu' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'fr' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'it' has changed": "Document has been modified in the meantime and a new version is available.",
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
     },
