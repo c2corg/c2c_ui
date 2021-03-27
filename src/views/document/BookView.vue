@@ -15,7 +15,7 @@
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
 
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9">
@@ -28,6 +28,8 @@
         <routes-box :document="document" hide-buttons />
 
         <images-box :document="document" />
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>
