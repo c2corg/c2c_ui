@@ -4,6 +4,11 @@ const mapping = {
   //   url: ' https://www.helloasso.com/associations/rockclimber/formulaires/1/widget'
   // },
 
+  // Buoux
+  102357: {
+     url: 'https://www.aptitudes-escalade.com/i-love-buoux/',
+  },
+  
   // Roche de Narse
   926211: {
     url: 'https://www.escalade-montagne.fr/falaise/bugey/roche-de-narse/',
