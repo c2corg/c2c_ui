@@ -3,6 +3,8 @@
 import loadImage from 'blueimp-load-image';
 import { isValid, formatISO, parse, parseISO } from 'date-fns';
 
+import { parseHeifMetadata } from './heif/heif-exif';
+
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
@@ -162,7 +164,10 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
-    const metaData = await loadImage.parseMetaData(file);
+    let metaData = await loadImage.parseMetaData(file);
+    if (!Object.keys(metaData).length) {
+      metaData = parseHeifMetadata(file);
+    }
     const orientation = await parseMetaData(document, metaData);
     const data = await preProcess(file, document, orientation, onDataUrlReady);
     // do the upload
