@@ -7,7 +7,7 @@
           <field-view :document="document" :field="fields.area_type" />
         </div>
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9">
@@ -35,6 +35,8 @@
         </div>
 
         <images-box :document="document" />
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>

@@ -11,7 +11,7 @@
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -126,6 +126,7 @@
         <routes-box v-if="!isDraftView" :document="document" />
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
+        <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box v-if="!isDraftView" :document="document" />
       </div>
     </div>

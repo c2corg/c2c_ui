@@ -4,7 +4,7 @@
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -114,6 +114,8 @@
         <images-box :document="document" />
 
         <recent-outings-box :document="document" />
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>
