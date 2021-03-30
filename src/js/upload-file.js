@@ -3,7 +3,7 @@
 import loadImage from 'blueimp-load-image';
 import { isValid, formatISO, parse, parseISO } from 'date-fns';
 
-import { parseHeifMetadata } from './heif/heif-exif';
+import { findEXIFinHEIC } from './heif/heif-exif';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
@@ -47,15 +47,15 @@ const parseDate = (exif, iptc) => {
 };
 
 const parseExifGeometry = (exif) => {
-  if (!exif?.GPSInfo?.GPSLatitude || !exif?.GPSInfo?.GPSLongitude) {
+  if (!exif.GPSInfo?.GPSLatitude || !exif.GPSInfo?.GPSLongitude) {
     return undefined;
   }
 
   let lat = exif.GPSInfo.GPSLatitude.split(',');
   let lon = exif.GPSInfo.GPSLongitude.split(',');
 
-  lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSInfo?.GPSLatitudeRef);
-  lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSInfo?.GPSLongitudeRef);
+  lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSInfo.GPSLatitudeRef);
+  lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSInfo.GPSLongitudeRef);
 
   if (isNaN(lat) || isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
     return undefined;
@@ -68,7 +68,7 @@ const parseExifGeometry = (exif) => {
 };
 
 const parseExifElevation = (exif) => {
-  if (!exif?.GPSInfo?.GPSAltitude) {
+  if (!exif.GPSInfo?.GPSAltitude) {
     return undefined;
   }
 
@@ -82,22 +82,22 @@ const setIfDefined = (document, name, value) => {
   }
 };
 
-const readFile = async (file) => {
-  // TODO
+const readFile = async (file, method = 'readAsDataURL') => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
       resolve(reader.result);
     };
     reader.onerror = reject;
-    reader.readAsDataURL(file);
+    reader[method](file);
   });
 };
 
 const extractDimensions = async (dataUrl) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve({ dataUrl, width: img.width, height: img.height });
+    img.onerror = reject;
     img.src = dataUrl;
   });
 };
@@ -108,12 +108,12 @@ const parseMetaData = (document, exif, iptc) => {
   setIfDefined(document, 'date_time', parseDate(exif, iptc));
 
   if (exif) {
-    orientation = metaData.exif.get('Orientation');
+    orientation = exif.Orientation;
 
-    setIfDefined(document, 'exposure_time', exif.ExposureTime);
-    setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
-    setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
-    setIfDefined(document, 'fnumber', exif.FNumber);
+    setIfDefined(document, 'exposure_time', exif.Exif?.ExposureTime);
+    setIfDefined(document, 'iso_speed', exif.Exif?.PhotographicSensitivity);
+    setIfDefined(document, 'focal_length', exif.Exif?.FocalLengthIn35mmFilm);
+    setIfDefined(document, 'fnumber', exif.Exif?.FNumber);
     setIfDefined(document, 'camera_name', exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined);
     setIfDefined(document, 'geometry', parseExifGeometry(exif));
     setIfDefined(document, 'elevation', parseExifElevation(exif));
@@ -168,7 +168,7 @@ const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onF
     const iptc = metaData.iptc?.getAll();
     if (!exif && !iptc) {
       // try to parse heif file
-      exif = await parseHeifMetadata(file);
+      exif = findEXIFinHEIC(await readFile(file, 'readAsArrayBuffer'));
     }
     const orientation = await parseMetaData(document, exif, iptc);
     const data = await preProcess(file, document, orientation, onDataUrlReady);

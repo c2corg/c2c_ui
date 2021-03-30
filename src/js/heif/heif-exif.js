@@ -284,158 +284,152 @@ const StringValues = {
 };
 
 function readTags(file, tiffStart, dirStart, strings, bigEnd) {
-  var entries = file.getUint16(dirStart, !bigEnd),
-    tags = {},
-    entryOffset,
-    tag,
-    i;
+  const entries = file.getUint16(dirStart, !bigEnd);
+  const tags = {};
 
-  for (i = 0; i < entries; i++) {
-    entryOffset = dirStart + i * 12 + 2;
-    tag = strings[file.getUint16(entryOffset, !bigEnd)];
-    if (!tag /*&& debug*/) {
-      console.log('Unknown tag: ' + file.getUint16(entryOffset, !bigEnd));
-    }
+  for (let i = 0; i < entries; i++) {
+    const entryOffset = dirStart + i * 12 + 2;
+    const tag = strings[file.getUint16(entryOffset, !bigEnd)];
     tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
   }
   return tags;
 }
 
 function readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd) {
-  var type = file.getUint16(entryOffset + 2, !bigEnd),
-    numValues = file.getUint32(entryOffset + 4, !bigEnd),
-    valueOffset = file.getUint32(entryOffset + 8, !bigEnd) + tiffStart,
-    offset,
-    vals,
-    val,
-    n,
-    numerator,
-    denominator;
+  const type = file.getUint16(entryOffset + 2, !bigEnd);
+  const numValues = file.getUint32(entryOffset + 4, !bigEnd);
+  const valueOffset = file.getUint32(entryOffset + 8, !bigEnd) + tiffStart;
 
   switch (type) {
     case 1: // byte, 8-bit unsigned int
-    case 7: // undefined, 8-bit byte, value depending on field
-      if (numValues == 1) {
+    case 7: {
+      // undefined, 8-bit byte, value depending on field
+      if (numValues === 1) {
         return file.getUint8(entryOffset + 8, !bigEnd);
       } else {
-        offset = numValues > 4 ? valueOffset : entryOffset + 8;
-        vals = [];
-        for (n = 0; n < numValues; n++) {
+        const offset = numValues > 4 ? valueOffset : entryOffset + 8;
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
           vals[n] = file.getUint8(offset + n);
         }
         return vals;
       }
-
-    case 2: // ascii, 8-bit byte
-      offset = numValues > 4 ? valueOffset : entryOffset + 8;
+    }
+    case 2: {
+      // ascii, 8-bit byte
+      const offset = numValues > 4 ? valueOffset : entryOffset + 8;
       return getStringFromDB(file, offset, numValues - 1);
-
-    case 3: // short, 16 bit int
-      if (numValues == 1) {
+    }
+    case 3: {
+      // short, 16 bit int
+      if (numValues === 1) {
         return file.getUint16(entryOffset + 8, !bigEnd);
       } else {
-        offset = numValues > 2 ? valueOffset : entryOffset + 8;
-        vals = [];
-        for (n = 0; n < numValues; n++) {
+        const offset = numValues > 2 ? valueOffset : entryOffset + 8;
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
           vals[n] = file.getUint16(offset + 2 * n, !bigEnd);
         }
         return vals;
       }
-
-    case 4: // long, 32 bit int
-      if (numValues == 1) {
+    }
+    case 4: {
+      // long, 32 bit int
+      if (numValues === 1) {
         return file.getUint32(entryOffset + 8, !bigEnd);
       } else {
-        vals = [];
-        for (n = 0; n < numValues; n++) {
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
           vals[n] = file.getUint32(valueOffset + 4 * n, !bigEnd);
         }
         return vals;
       }
-
-    case 5: // rational = two long values, first is numerator, second is denominator
-      if (numValues == 1) {
-        numerator = file.getUint32(valueOffset, !bigEnd);
-        denominator = file.getUint32(valueOffset + 4, !bigEnd);
-        val = new Number(numerator / denominator);
-        val.numerator = numerator;
-        val.denominator = denominator;
+    }
+    case 5: {
+      // rational = two long values, first is numerator, second is denominator
+      if (numValues === 1) {
+        const numerator = file.getUint32(valueOffset, !bigEnd);
+        const denominator = file.getUint32(valueOffset + 4, !bigEnd);
+        const val = Number(numerator / denominator);
         return val;
       } else {
-        vals = [];
-        for (n = 0; n < numValues; n++) {
-          numerator = file.getUint32(valueOffset + 8 * n, !bigEnd);
-          denominator = file.getUint32(valueOffset + 4 + 8 * n, !bigEnd);
-          vals[n] = new Number(numerator / denominator);
-          vals[n].numerator = numerator;
-          vals[n].denominator = denominator;
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
+          const numerator = file.getUint32(valueOffset + 8 * n, !bigEnd);
+          const denominator = file.getUint32(valueOffset + 4 + 8 * n, !bigEnd);
+          vals[n] = Number(numerator / denominator);
         }
         return vals;
       }
-
-    case 9: // slong, 32 bit signed int
-      if (numValues == 1) {
+    }
+    case 9: {
+      // slong, 32 bit signed int
+      if (numValues === 1) {
         return file.getInt32(entryOffset + 8, !bigEnd);
       } else {
-        vals = [];
-        for (n = 0; n < numValues; n++) {
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
           vals[n] = file.getInt32(valueOffset + 4 * n, !bigEnd);
         }
         return vals;
       }
-
-    case 10: // signed rational, two slongs, first is numerator, second is denominator
-      if (numValues == 1) {
+    }
+    case 10: {
+      // signed rational, two slongs, first is numerator, second is denominator
+      if (numValues === 1) {
         return file.getInt32(valueOffset, !bigEnd) / file.getInt32(valueOffset + 4, !bigEnd);
       } else {
-        vals = [];
-        for (n = 0; n < numValues; n++) {
+        const vals = [];
+        for (let n = 0; n < numValues; n++) {
           vals[n] = file.getInt32(valueOffset + 8 * n, !bigEnd) / file.getInt32(valueOffset + 4 + 8 * n, !bigEnd);
         }
         return vals;
       }
+    }
   }
 }
 
 function getStringFromDB(buffer, start, length) {
-  var outstr = '';
-  for (var n = start; n < start + length; n++) {
+  let outstr = '';
+  for (let n = start; n < start + length; n++) {
     outstr += String.fromCharCode(buffer.getUint8(n));
   }
   return outstr;
 }
 
 function readEXIFData(file, start) {
-  var bigEnd, tags, tag, exifData, gpsData;
+  let bigEnd;
 
   // test for TIFF validity and endianness
-  if (file.getUint16(start) == 0x4949) {
+  if (file.getUint16(start) === 0x4949) {
     bigEnd = false;
-  } else if (file.getUint16(start) == 0x4d4d) {
+  } else if (file.getUint16(start) === 0x4d4d) {
     bigEnd = true;
   } else {
-    if (true /*debug*/) console.log('Not valid TIFF data! (no 0x4949 or 0x4D4D)');
+    // Not valid TIFF data! (no 0x4949 or 0x4D4D)
     return false;
   }
 
-  if (file.getUint16(start + 2, !bigEnd) != 0x002a) {
-    if (true /*debug*/) console.log('Not valid TIFF data! (no 0x002A)');
+  if (file.getUint16(start + 2, !bigEnd) !== 0x002a) {
+    // Not valid TIFF data! (no 0x002A)
     return false;
   }
 
-  var firstIFDOffset = file.getUint32(start + 4, !bigEnd);
+  const firstIFDOffset = file.getUint32(start + 4, !bigEnd);
 
   if (firstIFDOffset < 0x00000008) {
-    if (true /*debug*/)
-      console.log('Not valid TIFF data! (First offset less than 8)', file.getUint32(tiffOffset + 4, !bigEnd));
+    // Not valid TIFF data! (First offset less than 8)
     return false;
   }
 
-  tags = readTags(file, start, start + firstIFDOffset, TiffTags, bigEnd);
+  const tags = readTags(file, start, start + firstIFDOffset, TiffTags, bigEnd);
 
   if (tags.ExifIFDPointer) {
-    exifData = readTags(file, start, start + tags.ExifIFDPointer, ExifTags, bigEnd);
-    for (tag in exifData) {
+    const exifData = readTags(file, start, start + tags.ExifIFDPointer, ExifTags, bigEnd);
+    if (Object.keys(exifData).length) {
+      tags.Exif = {};
+    }
+    for (const tag in exifData) {
       switch (tag) {
         case 'LightSource':
         case 'Flash':
@@ -468,19 +462,26 @@ function readEXIFData(file, start) {
             StringValues.Components[exifData[tag][3]];
           break;
       }
-      tags[tag] = exifData[tag];
+      tags.Exif[tag] = exifData[tag];
     }
   }
 
   if (tags.GPSInfoIFDPointer) {
-    gpsData = readTags(file, start, start + tags.GPSInfoIFDPointer, GPSTags, bigEnd);
-    for (tag in gpsData) {
+    const gpsData = readTags(file, start, start + tags.GPSInfoIFDPointer, GPSTags, bigEnd);
+    if (Object.keys(gpsData).length) {
+      tags.GPSInfo = {};
+    }
+    for (const tag in gpsData) {
       switch (tag) {
         case 'GPSVersionID':
           gpsData[tag] = gpsData[tag][0] + '.' + gpsData[tag][1] + '.' + gpsData[tag][2] + '.' + gpsData[tag][3];
           break;
+        case 'GPSLatitude':
+        case 'GPSLongitude':
+          gpsData[tag] = gpsData[tag][0] + ',' + gpsData[tag][1] + ',' + gpsData[tag][2];
+          break;
       }
-      tags[tag] = gpsData[tag];
+      tags.GPSInfo[tag] = gpsData[tag];
     }
   }
 
@@ -488,63 +489,40 @@ function readEXIFData(file, start) {
 }
 
 //Based on HEIC format decoded via https://github.com/exiftool/exiftool
-function findEXIFinHEIC(data) {
-  var dataView = new DataView(data);
-  var ftypeSize = dataView.getUint32(0); // size of ftype box
-  var metadataSize = dataView.getUint32(ftypeSize); //size of metadata box
+export function findEXIFinHEIC(data) {
+  const dataView = new DataView(data);
+  const ftypeSize = dataView.getUint32(0); // size of ftype box
+  const metadataSize = dataView.getUint32(ftypeSize); //size of metadata box
 
   //Scan through metadata until we find (a) Exif, (b) iloc
-  var exifOffset = -1;
-  var ilocOffset = -1;
-  for (var i = ftypeSize; i < metadataSize + ftypeSize; i++) {
-    if (getStringFromDB(dataView, i, 4) == 'Exif') {
+  let exifOffset = -1;
+  let ilocOffset = -1;
+  for (let i = ftypeSize; i < metadataSize + ftypeSize; i++) {
+    if (getStringFromDB(dataView, i, 4) === 'Exif') {
       exifOffset = i;
-    } else if (getStringFromDB(dataView, i, 4) == 'iloc') {
+    } else if (getStringFromDB(dataView, i, 4) === 'iloc') {
       ilocOffset = i;
     }
   }
 
-  if (exifOffset == -1 || ilocOffset == -1) {
+  if (exifOffset === -1 || ilocOffset === -1) {
     return null;
   }
 
-  var exifItemIndex = dataView.getUint16(exifOffset - 4);
+  const exifItemIndex = dataView.getUint16(exifOffset - 4);
 
   //Scan through ilocs to find exif item location
-  for (var i = ilocOffset + 12; i < metadataSize + ftypeSize; i += 16) {
-    var itemIndex = dataView.getUint16(i);
-    if (itemIndex == exifItemIndex) {
-      var exifLocation = dataView.getUint32(i + 8);
-      var exifSize = dataView.getUint32(i + 12);
+  for (let i = ilocOffset + 12; i < metadataSize + ftypeSize; i += 16) {
+    const itemIndex = dataView.getUint16(i);
+    if (itemIndex === exifItemIndex) {
+      const exifLocation = dataView.getUint32(i + 8);
       //Check prefix at exif exifOffset
-      var prefixSize = 4 + dataView.getUint32(exifLocation);
-      var exifOffset = exifLocation + prefixSize;
+      const prefixSize = 4 + dataView.getUint32(exifLocation);
+      exifOffset = exifLocation + prefixSize;
 
       return readEXIFData(dataView, exifOffset);
     }
   }
 
   return null;
-}
-
-function readFile(file, onload, onerror) {
-  var reader = new FileReader();
-  reader.onload = function (e) {
-    onload.call(reader, e.target.result);
-  };
-  if (onerror) {
-    reader.onabort = reader.onerror = function (e) {
-      onerror.call(reader, e.target.error);
-    };
-  }
-  reader.readAsArrayBuffer(file);
-  return reader;
-}
-
-export function parseHeifMetadata(file) {
-  return new Promise((resolve, reject) => {
-    if (!readFile(file, (buffer) => resolve(findEXIFinHEIC(buffer)), reject)) {
-      resolve({});
-    }
-  });
 }
