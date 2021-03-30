@@ -3,23 +3,25 @@
     <div class="title is-2">
       <span v-if="documentType === 'image'" v-translate>Associated outings</span>
       <span v-else v-translate>Last outings</span>
-      <router-link
-        :to="{ name: 'outings', query: query }"
-        class="is-size-5"
-        v-if="outings.length !== 0 && !hideSeeAllResultsButton"
-        v-translate
-      >
-        show all
-      </router-link>
     </div>
 
     <div v-for="(outing, i) of outings" :key="i">
       <pretty-outing-link :outing="outing" />
     </div>
 
-    <div v-if="documentType == 'route'" class="has-text-centered add-section">
-      <add-link document-type="outing" :query="query" class="button is-primary">
-        <span v-if="outings.length === 0" v-translate> Add the first outing </span>
+    <div
+      v-if="(!hideSeeAllResultsButton && outings.length) || documentType == 'route'"
+      class="has-text-centered add-section"
+    >
+      <router-link
+        :to="{ name: 'outings', query: query }"
+        class="button is-primary"
+        v-if="outings.length && !hideSeeAllResultsButton"
+      >
+        <span v-translate>show all</span>&nbsp;<span class="badge">{{ totalOutings }}</span>
+      </router-link>
+      <add-link v-if="documentType == 'route'" document-type="outing" :query="query" class="button is-primary">
+        <span v-translate v-if="outings.length === 0">Add the first outing</span>
       </add-link>
     </div>
   </div>
@@ -41,23 +43,13 @@ export default {
   },
 
   computed: {
-    // API bug, an outing can be present several times
     outings() {
-      const result = new Map();
-      const associations = this.document.associations;
-      let outings = [];
+      const outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
+      return outings.filter((outing) => outing.quality !== 'empty');
+    },
 
-      if (associations.recent_outings !== undefined) {
-        outings = associations.recent_outings.documents;
-      } else {
-        outings = associations.outings;
-      }
-
-      for (const outing of outings) {
-        result.set(outing.document_id, outing);
-      }
-
-      return [...result.values()].filter((outing) => outing.quality !== 'empty');
+    totalOutings() {
+      return this.document.associations.recent_outings?.total || outings.length;
     },
 
     query() {
@@ -69,7 +61,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .button {
   vertical-align: bottom;
   margin-left: 1rem;
@@ -77,5 +69,9 @@ export default {
 
 .add-section {
   margin-top: 1.5rem;
+}
+
+.badge {
+  @include button-badge-primary;
 }
 </style>

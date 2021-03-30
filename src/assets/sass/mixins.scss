@@ -12,3 +12,10 @@
     content: ':';
   }
 }
+
+@mixin button-badge-primary {
+  color: $primary;
+  background-color: $primary-invert;
+  border-radius: 1em;
+  padding: 0 0.35em;
+}
