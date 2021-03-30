@@ -6,9 +6,9 @@ const mapping = {
 
   // Buoux
   102357: {
-     url: 'https://www.aptitudes-escalade.com/i-love-buoux/',
+    url: 'https://www.aptitudes-escalade.com/i-love-buoux/',
   },
-  
+
   // Roche de Narse
   926211: {
     url: 'https://www.escalade-montagne.fr/falaise/bugey/roche-de-narse/',
