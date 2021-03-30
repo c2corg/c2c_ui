@@ -13,15 +13,15 @@ function cleanMessageId(msgid) {
     return String(msgid);
   }
 
-  // trim
-  msgid = msgid.replace(/^[\r\n\s]*/, '');
-  msgid = msgid.replace(/[\r\n\s]*$/, '');
-
-  // remove new lines and duplicated spaces
-  msgid = msgid.replace(/\n/g, ' ');
-  msgid = msgid.replace(/\s+/g, ' ');
-
-  return msgid;
+  return (
+    msgid
+      .trim()
+      .replace(/"/g, '&quot;')
+      .replace(/\\/g, '&#x5C;')
+      // remove new lines and duplicated spaces
+      .replace(/\n/g, ' ')
+      .replace(/\s+/g, ' ')
+  );
 }
 
 function getTranslation(messages, msgid, msgctxt) {
