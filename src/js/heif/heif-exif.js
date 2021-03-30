@@ -293,7 +293,7 @@ function readTags(file, tiffStart, dirStart, strings, bigEnd) {
   for (i = 0; i < entries; i++) {
     entryOffset = dirStart + i * 12 + 2;
     tag = strings[file.getUint16(entryOffset, !bigEnd)];
-    if (!tag && debug) {
+    if (!tag /*&& debug*/) {
       console.log('Unknown tag: ' + file.getUint16(entryOffset, !bigEnd));
     }
     tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
@@ -414,19 +414,20 @@ function readEXIFData(file, start) {
   } else if (file.getUint16(start) == 0x4d4d) {
     bigEnd = true;
   } else {
-    if (debug) console.log('Not valid TIFF data! (no 0x4949 or 0x4D4D)');
+    if (true /*debug*/) console.log('Not valid TIFF data! (no 0x4949 or 0x4D4D)');
     return false;
   }
 
   if (file.getUint16(start + 2, !bigEnd) != 0x002a) {
-    if (debug) console.log('Not valid TIFF data! (no 0x002A)');
+    if (true /*debug*/) console.log('Not valid TIFF data! (no 0x002A)');
     return false;
   }
 
   var firstIFDOffset = file.getUint32(start + 4, !bigEnd);
 
   if (firstIFDOffset < 0x00000008) {
-    if (debug) console.log('Not valid TIFF data! (First offset less than 8)', file.getUint32(tiffOffset + 4, !bigEnd));
+    if (true /*debug*/)
+      console.log('Not valid TIFF data! (First offset less than 8)', file.getUint32(tiffOffset + 4, !bigEnd));
     return false;
   }
 
@@ -528,12 +529,12 @@ function findEXIFinHEIC(data) {
 
 function readFile(file, onload, onerror) {
   var reader = new FileReader();
-  reader.onload = function () {
-    onload.call(reader, this.result);
+  reader.onload = function (e) {
+    onload.call(reader, e.target.result);
   };
   if (onerror) {
-    reader.onabort = reader.onerror = function () {
-      onerror.call(reader, this.error);
+    reader.onabort = reader.onerror = function (e) {
+      onerror.call(reader, e.target.error);
     };
   }
   reader.readAsArrayBuffer(file);

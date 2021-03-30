@@ -83,6 +83,7 @@ const setIfDefined = (document, name, value) => {
 };
 
 const readFile = async (file) => {
+  // TODO
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -101,9 +102,7 @@ const extractDimensions = async (dataUrl) => {
   });
 };
 
-const parseMetaData = (document, metaData) => {
-  const exif = metaData.exif ? metaData.exif.getAll() : null;
-  const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
+const parseMetaData = (document, exif, iptc) => {
   let orientation = 0;
 
   setIfDefined(document, 'date_time', parseDate(exif, iptc));
@@ -164,11 +163,14 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
-    let metaData = await loadImage.parseMetaData(file);
-    if (!Object.keys(metaData).length) {
-      metaData = parseHeifMetadata(file);
+    const metaData = await loadImage.parseMetaData(file);
+    let exif = metaData.exif?.getAll();
+    const iptc = metaData.iptc?.getAll();
+    if (!exif && !iptc) {
+      // try to parse heif file
+      exif = await parseHeifMetadata(file);
     }
-    const orientation = await parseMetaData(document, metaData);
+    const orientation = await parseMetaData(document, exif, iptc);
     const data = await preProcess(file, document, orientation, onDataUrlReady);
     // do the upload
     worker.push(
