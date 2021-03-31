@@ -1,46 +1,57 @@
 <template>
-  <span
-    v-if="enabled"
-    v-show="visible"
-    class="social-network-sharing"
-    addthis:ui_click="true"
-    addthis:data_track_clickback="false"
-    addthis:data_track_addressbar="false"
-    v-bind="$attrs"
-    :title="$gettext('Share')"
-  >
-    <fa-icon icon="share-alt" />
+  <span>
+    <span
+      v-if="addThisEnabled"
+      v-show="addThisVisible"
+      class="social-network-sharing"
+      addthis:ui_click="true"
+      addthis:data_track_clickback="false"
+      addthis:data_track_addressbar="false"
+      v-bind="$attrs"
+      :title="$gettext('Share')"
+    >
+      <fa-icon icon="share-alt" />
+    </span>
+    <span v-else-if="supportsWebShare" :title="$gettext('Share')" @click="webShare()">
+      <fa-icon icon="share-alt" />
+    </span>
   </span>
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+
 import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
 
 export default {
   data() {
-    return { visible: false };
+    return { addThisVisible: false };
   },
 
   computed: {
-    enabled: function () {
+    addThisEnabled: function () {
       if (!process.browser) {
         return;
       }
       const enabled = this.$gdpr.get()?.social ?? false;
-      enabled ? this.install() : this.uninstall();
+      enabled ? this.installAddThis() : this.uninstallAddThis();
       return enabled;
+    },
+
+    supportsWebShare() {
+      return !!navigator.share;
     },
   },
 
   methods: {
     onAddthisLoad() {
-      this.visible = true;
+      this.addThisVisible = true;
       window.addthis.button('.social-network-sharing');
     },
 
-    install() {
+    installAddThis() {
       if (document.getElementById('addthis-script') !== null) {
         this.onAddthisLoad();
         return;
@@ -54,14 +65,28 @@ export default {
       document.body.appendChild(el);
     },
 
-    uninstall() {
-      this.visible = false;
+    uninstallAddThis() {
+      this.addThisVisible = false;
       const el = document.getElementById('addthis-script');
       if (el === null) {
         return;
       }
       document.body.removeChild(el);
       delete window.addthis;
+    },
+
+    webShare() {
+      navigator
+        .share({
+          title: this.$documentUtils.getDocumentTitle(this.$parent.document),
+          url: window.location.href,
+        })
+        .catch(() =>
+          toast({
+            message: this.$gettext('Error sharing'),
+            type: 'is-danger',
+          })
+        );
     },
   },
 };
