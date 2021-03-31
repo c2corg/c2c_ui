@@ -1,5 +1,17 @@
 {
   "it": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 difficoltà puntuale (tratto ripido, strettoia... )",
     "1d_to_3d": {
       "severities": "Da 1 a 3 giorni"
