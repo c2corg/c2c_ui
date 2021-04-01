@@ -4,7 +4,7 @@
   <router-link v-if="to" :to="to" @click="$emit('click')" class="toolbox-button">
     <span class="toolbox-button-icon">
       <slot name="icon">
-        <fa-icon :icon="icon" :class="iconClass" />
+        <fa-icon v-if="icon" :icon="icon" :class="iconClass" />
       </slot>
     </span>
     <span>
@@ -14,7 +14,7 @@
   <component v-else :is="href ? 'a' : 'div'" @click="$emit('click')" :href="href" class="toolbox-button">
     <span class="toolbox-button-icon">
       <slot name="icon">
-        <fa-icon :icon="icon" :class="iconClass" />
+        <fa-icon v-if="icon" :icon="icon" :class="iconClass" />
       </slot>
     </span>
     <span>
@@ -28,7 +28,7 @@ export default {
   props: {
     icon: {
       type: [String, Array],
-      required: true,
+      default: null,
     },
     iconClass: {
       type: String,

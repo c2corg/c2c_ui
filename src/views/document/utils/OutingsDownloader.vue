@@ -25,7 +25,6 @@ export default {
   methods: {
     downloadOutings() {
       this.isLoading = true;
-      const outings = [];
 
       const extraKeys = new Map([
         ['title', this.$documentUtils.getDocumentTitle],
@@ -38,27 +37,16 @@ export default {
         ],
       ]);
 
-      const download = function (offset) {
-        c2c.outing
-          .getAll({ u: this.profileId, limit: 50, offset })
-          .then((response) => {
-            for (const document of response.data.documents) {
-              outings.push(document);
-            }
-            if (response.data.documents.length === 0 || outings.length === response.data.total) {
-              utils.downloadCsv(outings, 'outings.csv', extraKeys);
-              this.isLoading = false;
-            } else {
-              download(offset + 50);
-            }
-          })
-          .catch((error) => {
-            this.isLoading = false;
-            window.alert(error.response.data.errors[0].description);
-          });
-      }.bind(this);
-
-      download(0);
+      c2c.outing
+        .fullDownload({ u: this.profileId }, 1000)
+        .then((outings) => {
+          utils.downloadCsv(outings, 'outings.csv', extraKeys);
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          window.alert(error.response?.data?.errors?.[0]?.description);
+        });
     },
   },
 };

@@ -18,6 +18,7 @@ import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
 import YetiView from '@/views/portals/YetiView';
+import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
 import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
@@ -61,6 +62,7 @@ const routes = [
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
+  { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },

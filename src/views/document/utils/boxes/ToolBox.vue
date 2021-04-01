@@ -55,10 +55,16 @@
       v-if="documentType === 'profile'"
       :to="{ name: 'outings', query: { u: document.document_id } }"
       :label="$gettext('outings')"
-      icon="edit"
     >
       <icon-outing slot="icon" />
     </tool-box-button>
+
+    <tool-box-button
+      v-if="documentType === 'profile'"
+      :to="{ name: 'outings-stats', query: { u: document.document_id } }"
+      :label="$gettext('Statistics')"
+      icon="chart-bar"
+    />
 
     <hr />
 
