@@ -72,7 +72,7 @@
                 :label="$gettext('climbing rating')"
               />
               <field-view :document="document" :field="fields.climbing_rating_median" />
-              <field-view :document="document" :field="fields.equipment_ratings" />
+              <field-view :document="document" :field="fields.equipment_ratings" sort-values />
               <field-view :document="document" :field="fields.paragliding_rating" />
 
               <!-- heights -->
