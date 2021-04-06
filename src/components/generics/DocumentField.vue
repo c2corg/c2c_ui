@@ -11,7 +11,13 @@
 
  --><best-periods v-else-if="field.name === 'best_periods'" :months="value" /><!--
 
- --><textual-array v-else-if="isArray" :array="value" :i18n="field.i18n" :i18n-context="field.i18nContext" /><!--
+ --><textual-array
+      v-else-if="isArray"
+      :array="value"
+      :i18n="field.i18n"
+      :i18n-context="field.i18nContext"
+      :sort-values="sortValues"
+    /><!--
 
  --><span v-else-if="typeof value === 'boolean'">
       <span v-if="value" v-translate> yes </span>
@@ -43,6 +49,10 @@ export default {
     divisor: {
       type: Number,
       default: null,
+    },
+    sortValues: {
+      type: Boolean,
+      default: false,
     },
   },
 
