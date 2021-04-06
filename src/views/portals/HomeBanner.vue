@@ -54,12 +54,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 section {
-  background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland.jpg');
+  background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-800w.jpg');
   background-size: cover;
   background-position-y: 50%;
+  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
+  @media (min-width: 800px) and (max-width: 1224px) {
+    background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1024w.jpg');
+  }
+  @media (min-width: 1224px) {
+    background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1200w.jpg');
+  }
 }
 
 .intro-banner {

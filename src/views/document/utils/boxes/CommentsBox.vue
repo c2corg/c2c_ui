@@ -21,6 +21,7 @@
             <img
               :src="getAvatarUrl(post)"
               :style="'width:' + $options.forumAvatarSize + 'px;height:' + $options.forumAvatarSize + 'px'"
+              loading="lazy"
             />
           </div>
           <div class="column">
@@ -33,7 +34,7 @@
                 {{ post.username }}
               </a>
               <span class="is-pulled-right">
-                {{ $moment.timeAgo(post['created_at']) }}
+                {{ $dateUtils.timeAgo(post['created_at']) }}
               </span>
             </div>
 
@@ -198,8 +199,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .discourse-post {
   border-top: 6px solid $color-base-c2c;
   margin-bottom: 1.5rem;

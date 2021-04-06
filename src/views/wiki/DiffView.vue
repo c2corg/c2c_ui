@@ -17,7 +17,7 @@
             :lang="lang"
           >
             Revision #{{ oldVersion.document.version }} as of
-            {{ $moment.toTechnicalString(oldVersion.version.written_at) }}
+            {{ $dateUtils.toTechnicalString(oldVersion.version.written_at) }}
           </version-link>
         </div>
         <div>by <contributor-link :contributor="oldVersion.version" /></div>
@@ -49,7 +49,7 @@
             :lang="lang"
           >
             Revision #{{ newVersion.document.version }} as of
-            {{ $moment.toTechnicalString(newVersion.version.written_at) }}
+            {{ $dateUtils.toTechnicalString(newVersion.version.written_at) }}
           </version-link>
         </div>
         <div>by <contributor-link :contributor="newVersion.version" /></div>

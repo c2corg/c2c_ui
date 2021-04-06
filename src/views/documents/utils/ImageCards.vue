@@ -7,7 +7,7 @@
       :title="$documentUtils.getDocumentTitle(document)"
       class="card-image"
     >
-      <img :src="getMediumImageUrl(document)" height="250" />
+      <img :src="getMediumImageUrl(document)" height="250" loading="lazy" />
     </document-link>
   </div>
 </template>

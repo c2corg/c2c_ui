@@ -4,6 +4,7 @@
     v-show="visible"
     :has-error="hasError"
     show-labels
+    :document-type="document.type"
     v-model="document.activities"
   />
 
@@ -107,6 +108,8 @@
 </template>
 
 <script>
+import { toDate, addDays } from 'date-fns';
+
 import InputConditionsLevels from './InputConditionsLevels';
 
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
@@ -153,8 +156,8 @@ export default {
       const max = this.max || this.field.max;
 
       return {
-        to: min ? this.$moment.parseDate(min).toDate() : undefined,
-        from: max ? this.$moment.parseDate(max).add(1, 'd').toDate() : undefined,
+        to: min ? toDate(this.$dateUtils.parseDate(min)) : undefined,
+        from: max ? toDate(addDays(this.$dateUtils.parseDate(max), 1)) : undefined,
       };
     },
 

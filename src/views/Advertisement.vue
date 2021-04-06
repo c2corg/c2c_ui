@@ -8,7 +8,11 @@
     />
 
     <router-link v-if="enableFallback" :to="{ name: 'serac' }" class="advertisement-fallback">
-      <img src="@/assets/img/serac.png" />
+      <picture>
+        <source srcset="@/assets/img/serac.webp" type="image/webp" />
+        <source srcset="@/assets/img/serac.avif" type="image/avif" />
+        <img src="@/assets/img/serac.png" loading="lazy" />
+      </picture>
     </router-link>
   </div>
 </template>
@@ -34,6 +38,8 @@ export default {
   width: 160px;
   height: 320px;
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
 
   iframe {
     height: 320px;

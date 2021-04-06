@@ -21,6 +21,7 @@ import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faBullseye } from '@fortawesome/free-solid-svg-icons/faBullseye';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
 import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
+import { faChartBar } from '@fortawesome/free-solid-svg-icons/faChartBar';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
@@ -34,12 +35,14 @@ import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
+import { faDirections } from '@fortawesome/free-solid-svg-icons/faDirections';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faFileDownload } from '@fortawesome/free-solid-svg-icons/faFileDownload';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons/faFlagCheckered';
@@ -94,6 +97,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserLock } from '@fortawesome/free-solid-svg-icons/faUserLock';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons/faUserShield';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
@@ -224,6 +228,7 @@ export default function install(Vue) {
     faBullseye,
     faCalendar,
     faCamera,
+    faChartBar,
     faCheckCircle,
     //    faCheckSquare,
     faChevronLeft,
@@ -238,12 +243,14 @@ export default function install(Vue) {
     faCompass,
     faCompress,
     faDatabase,
+    faDirections,
     faEdit,
     faExclamation,
     faExclamationCircle,
     faExpand,
     faExternalLinkAlt,
     faEye,
+    faFileDownload,
     faFilter,
     faFlag,
     faFlagCheckered,
@@ -300,6 +307,7 @@ export default function install(Vue) {
     faUserCheck,
     faUserLock,
     faUsers,
+    faUserShield,
     faWrench,
 
     // regular icons

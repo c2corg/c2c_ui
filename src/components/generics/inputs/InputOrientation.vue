@@ -57,8 +57,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .input-orientation > g > path {
   fill: #ddd;
   transition: 0.1s;

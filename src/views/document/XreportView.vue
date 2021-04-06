@@ -26,11 +26,10 @@
           <field-view :document="document" :field="fields.autonomy" />
           <field-view :document="document" :field="fields.activity_rate" />
           <field-view :document="document" :field="fields.qualification" />
-          <field-view :document="document" :field="fields.quality" />
         </div>
 
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -58,6 +57,8 @@
         </div>
 
         <images-box v-if="document" :document="document" />
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>

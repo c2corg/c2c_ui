@@ -45,12 +45,6 @@
 
       <!-- On mobile, expand button may go too low -->
       <div style="clear: both" />
-
-      <div v-for="(error, i) of genericErrors" :key="i" class="has-text-danger has-text-weight-bold">
-        {{ error.name }}
-        :
-        {{ error.description }}
-      </div>
     </div>
 
     <component :is="documentType + '-view'" v-if="isPreview" :draft="document" />
@@ -85,7 +79,7 @@ import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
 const BANNERS_ARTICLE_ID = 1110927;
-const htmlBanners = { initialized: false }; // cache for banners
+let htmlBanners = { initialized: false }; // cache for banners
 
 export default {
   components: {
@@ -108,10 +102,6 @@ export default {
     document: {
       type: Object,
       default: null,
-    },
-    genericErrors: {
-      type: Array,
-      required: true,
     },
     mode: {
       type: String,

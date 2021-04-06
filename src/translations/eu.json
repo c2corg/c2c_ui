@@ -29,7 +29,10 @@
     "Distance": "Distantzia",
     "Distance (km)": "Distantzia (km)",
     "Drop images here or click to upload": "Irudia jaregin edo klikatu aukera egiteko",
-    "Edit": "Aldatu",
+    "Edit": {
+      "$$noContext": "Aldatu",
+      "yeti": "Aldatu"
+    },
     "Email": "email helbidea",
     "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
     "Forgot password?": "Pasahitza ahaztu al duzu ?",
@@ -88,7 +91,10 @@
     "This profile is only available to authenticated users.": "Profil hau izenpetutako erabiltzaileentzat soilik dago eskuragai",
     "Time": "Ordua",
     "Toggle fullscreen": "Pantaila osoa erabili",
-    "Topoguide": "Topogida",
+    "Topoguide": {
+      "$$noContext": "Topogida",
+      "Sophie picture context": "Topogida"
+    },
     "Translate into an other lang": "Beste hizkuntza batera itzuli",
     "Types and styles": "Mota eta estiloa",
     "Upload a GPS track": "GPS hurratsa gehitu",
@@ -124,9 +130,6 @@
     "always_accessible": {
       "custodianship_types": "Beti irekia"
     },
-    "apr": {
-      "months": "apirila"
-    },
     "area": "ESKUALDEA",
     "area_type": "eskualde mota",
     "article": "Artikulua",
@@ -138,9 +141,6 @@
       "article_categories": "elkartea"
     },
     "associations": "Elkarteak",
-    "aug": {
-      "months": "abuztua"
-    },
     "author": "egilea",
     "avalanche_forecaster": {
       "user_categories": "elurjausi_iragarpena"
@@ -304,9 +304,6 @@
     "de": {
       "langs": "alemana"
     },
-    "dec": {
-      "months": "abendua"
-    },
     "descent": {
       "image_categories": "jeitsiera"
     },
@@ -383,9 +380,6 @@
     },
     "farm_sale": {
       "product_types": "produktu lokalen salme ta zuzena"
-    },
-    "feb": {
-      "months": "otsaila"
     },
     "filename": "fitxategiaren izena",
     "fine": {
@@ -525,15 +519,6 @@
     "it": {
       "langs": "italiera"
     },
-    "jan": {
-      "months": "urtarrila"
-    },
-    "jul": {
-      "months": "uztaila"
-    },
-    "jun": {
-      "months": "ekaina"
-    },
     "key_needed": {
       "custodianship_types": "sartzeko giltza behar da"
     },
@@ -569,13 +554,7 @@
     },
     "maps_info": "Mapak",
     "maps_references": "Erreferentzia kartografikoa",
-    "mar": {
-      "months": "martxoa"
-    },
     "matress_unstaffed": "Gordetako sasoitik kanpora koltxoiak daude",
-    "may": {
-      "months": "maiatza"
-    },
     "medium": {
       "quality_types": "batazbeste"
     },
@@ -649,16 +628,10 @@
     "non_applicable": {
       "snow_clearance_ratings": "ezin da aplikatu"
     },
-    "nov": {
-      "months": "azaroa"
-    },
     "novel": {
       "book_types": "berria"
     },
     "numbers": "Ezaugarriak",
-    "oct": {
-      "months": "urria"
-    },
     "often": {
       "snow_clearance_ratings": "Elurra sarri garbitzen da"
     },
@@ -828,9 +801,6 @@
     },
     "seasonal service": {
       "public_transportation_ratings": "sasoiko zerbitzua"
-    },
-    "sep": {
-      "months": "iraila"
     },
     "service_on_demand": {
       "public_transportation_types": "eskatutako zerbitzua"

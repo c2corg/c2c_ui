@@ -16,10 +16,10 @@ BiodivSportsService.prototype.fetchData = function (extent, activities, language
     fields: 'id,geometry,name,description,info_url,period,kml_url',
   };
 
-  if (activities && activities.length > 0) {
+  if (activities?.length) {
     // select practices depending on activities
     const practices = [1, 2, 4]; // for anyone: Land, Vertical, Equipment
-    if (activities.indexOf('paragliding') > 0) {
+    if (activities.includes('paragliding')) {
       practices.push(3); // Aérien
     }
     params['practices'] = practices.join(',');

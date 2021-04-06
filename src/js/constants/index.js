@@ -22,14 +22,14 @@ function Constants() {
 
   // You can find associations in https://github.com/c2corg/v6_common/blob/master/c2corg_common/associations.py
 
-  // also, GUI avalaible associtions can be found here, on dataset attribute :
+  // also, GUI avalaible associations can be found here, on dataset attribute :
   // https://github.com/c2corg/v6_ui/search?l=HTML&q=app-add-association
 
   this.documentTypes = Object.keys(documentsProperties);
   this.objectDefinitions = documentsProperties;
   this.letterToDocumentType = {};
 
-  for (const documentType of Object.keys(documentsProperties)) {
+  for (const documentType of this.documentTypes) {
     const documentProperties = documentsProperties[documentType];
     documentProperties.fields = getFieldsObject(documentProperties.fields);
     documentProperties.documentType = documentType;

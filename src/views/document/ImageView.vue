@@ -15,7 +15,6 @@
           </label-value>
 
           <field-view :document="document" :field="fields.image_type" />
-          <field-view :document="document" :field="fields.quality" />
           <field-view :document="document" :field="fields.categories" />
           <field-view :document="document" :field="fields.camera_name" />
           <field-view :document="document" :field="fields.exposure_time" />
@@ -31,7 +30,7 @@
 
         <map-box :document="document" />
 
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9">
@@ -50,6 +49,7 @@
         <routes-box :document="document" hide-buttons />
         <recent-outings-box :document="document" hide-see-all-results-button />
         <images-box v-if="document" :document="document" />
+        <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box :document="document" />
       </div>
     </div>

@@ -7,6 +7,42 @@ DocumentService.prototype.getAll = function (params) {
   return this.api.get('/' + this.documentType + 's', { params });
 };
 
+DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
+  // will load the ENTIRE list of document. Limited to 2000 docs
+
+  const MAX_SIZE = 2000;
+  const API_MAX_LIMIT = 100;
+
+  limit = limit || MAX_SIZE;
+  limit = limit > MAX_SIZE ? MAX_SIZE : limit;
+
+  return new Promise((resolve, reject) => {
+    const result = [];
+
+    const download = (offset = 0) => {
+      this.getAll({ ...params, offset, limit: API_MAX_LIMIT })
+        .then(({ data }) => {
+          for (const document of data.documents) {
+            result.push(document);
+          }
+
+          onProgress?.(result.length, data.total);
+
+          if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
+            resolve(result);
+          } else {
+            download(offset + 100);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    };
+
+    download();
+  });
+};
+
 DocumentService.prototype.get = function (id, lang) {
   return this.api.get('/' + this.documentType + 's/' + id, { params: { l: lang } });
 };

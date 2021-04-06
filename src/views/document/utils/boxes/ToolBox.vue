@@ -2,7 +2,7 @@
   <div class="box no-print">
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length > 0">
+    <div class="has-text-centered" v-if="isNormalView && available_langs.length">
       <span v-translate>View in other lang</span>
       <br />
       <span class="lang-switcher-box-list">
@@ -16,27 +16,17 @@
     </div>
 
     <tool-box-button
-      v-if="fundraiser"
-      :label="$gettext('Contribute to maintainance')"
-      :href="fundraiser.url"
-      icon-class="has-text-danger"
-      icon="heart"
+      v-if="shouldAddWheatherLink"
+      :href="linkToMeteoBlue"
+      :label="$gettext('Weather forecast (meteoblue)')"
+      icon="sun"
     />
 
     <tool-box-button
-      v-if="documentType === 'profile'"
-      :to="{ name: 'outings', query: { u: document.document_id } }"
-      :label="$gettext('outings')"
-      icon="edit"
-    >
-      <icon-outing slot="icon" />
-    </tool-box-button>
-
-    <tool-box-button
-      v-if="documentType === 'profile'"
-      :to="{ name: 'whatsnew', query: { u: document.document_id } }"
-      :label="$gettext('Contributions')"
-      icon="edit"
+      v-if="shouldAddDirections"
+      :href="linkToGoogleMapsDirections"
+      :label="$gettext('Directions (Google Maps)')"
+      icon="directions"
     />
 
     <tool-box-button
@@ -52,6 +42,43 @@
       :label="$gettext('Paragliding outings')"
       :icon="['miscs', 'paragliding']"
     />
+
+    <tool-box-button
+      v-if="fundraiser"
+      :label="$gettext('Contribute to maintainance')"
+      :href="fundraiser.url"
+      icon-class="has-text-danger"
+      icon="heart"
+    />
+
+    <tool-box-button
+      v-if="documentType === 'profile'"
+      :to="{ name: 'outings', query: { u: document.document_id } }"
+      :label="$gettext('outings')"
+    >
+      <icon-outing slot="icon" />
+    </tool-box-button>
+
+    <tool-box-button
+      v-if="documentType === 'profile'"
+      :to="{ name: 'outings-stats', query: { u: document.document_id } }"
+      :label="$gettext('Statistics')"
+      icon="chart-bar"
+    />
+
+    <hr />
+
+    <tool-box-button
+      v-if="documentType === 'profile'"
+      :to="{ name: 'whatsnew', query: { u: document.document_id } }"
+      :label="$gettext('Contributions')"
+      icon="edit"
+    />
+
+    <div class="quality" v-if="quality">
+      <icon-quality :quality="quality.value"></icon-quality>
+      <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
+    </div>
 
     <tool-box-button
       v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
@@ -140,6 +167,7 @@
 </template>
 
 <script>
+import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
 import isEditableMixin from '../is-editable-mixin';
 import viewModeMixin from '../view-mode-mixin';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
@@ -165,7 +193,7 @@ export default {
     ToolBoxButton,
     LicenseBox,
     AssociatedDocuments,
-
+    IconQuality,
     AssociationsWindow,
     DeleteLocaleWindow,
     DeleteDocumentWindow,
@@ -214,6 +242,19 @@ export default {
       return result;
     },
 
+    quality() {
+      const fields = constants.objectDefinitions[this.documentType].fields;
+      if (!fields.quality) {
+        return;
+      }
+      return {
+        ...fields.quality,
+        value: this.document[fields.quality.name],
+        i18nName: this.$gettext(fields.quality.name),
+        i18nValue: this.$gettext(this.document[fields.quality.name], fields.quality.i18nContext),
+      };
+    },
+
     fundraiser() {
       return getFundraiser(this.document);
     },
@@ -252,6 +293,57 @@ export default {
           ].join(','),
         },
       };
+    },
+
+    shouldAddWheatherLink() {
+      return (this.document.type === 'w' || this.document.type === 'r') && this.document?.geometry?.geom;
+    },
+
+    linkToMeteoBlue() {
+      let lang;
+      switch (this.$language.current) {
+        case 'fr':
+          lang = 'fr/meteo/semaine';
+          break;
+        case 'it':
+          lang = 'it/tempo/settimana';
+          break;
+        case 'de':
+          lang = 'de/wetter/woche';
+          break;
+        case 'es':
+        case 'eu':
+        case 'ca':
+          lang = 'es/tiempo/semana';
+          break;
+        case 'en':
+        default:
+          lang = 'en/weather/week';
+      }
+      const lonLat = ol.proj.toLonLat(
+        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
+      );
+      const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
+      // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
+      const elevation =
+        this.document.elevation ?? this.document.difficulties_height ?? this.document.elevation_max ?? '';
+      return `https://meteoblue.com/${lang}/${coords}${elevation}`;
+    },
+
+    shouldAddDirections() {
+      return (
+        this.document.type === 'w' &&
+        ['access', 'gite', 'camp_site'].includes(this.document.waypoint_type) &&
+        this.document?.geometry?.geom
+      );
+    },
+
+    linkToGoogleMapsDirections() {
+      const lonLat = ol.proj.toLonLat(
+        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
+      );
+      const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
+      return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
     },
   },
 
@@ -292,8 +384,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .toolbox-button {
   cursor: pointer;
 
@@ -312,5 +402,11 @@ export default {
 
 .lang-switcher-box-list span:not(:last-child)::after {
   content: ' \2022 '; /* \2022 is bull */
+}
+
+.quality {
+  span:nth-of-type(1) {
+    @include colon;
+  }
 }
 </style>

@@ -64,12 +64,15 @@ import AssociationImageLink from './AssociationImageLink';
 import AssociationOutingLink from './AssociationOutingLink';
 
 import c2c from '@/js/apis/c2c';
+import associationRights from '@/js/associations-rights-mixin';
 
 export default {
   components: {
     AssociationOutingLink,
     AssociationImageLink,
   },
+
+  mixins: [associationRights],
 
   props: {
     parent: {
@@ -117,7 +120,10 @@ export default {
               document,
               status,
               buttonLabel,
-              disabled: status === 'current' ? !this.canRemove(document) : !this.canAdd(document),
+              disabled:
+                status === 'current'
+                  ? !this.canRemove(this.parent, document)
+                  : !this.canAdd(this.parent, document, this.forbiddenChildren),
             });
           }
         }
@@ -135,93 +141,6 @@ export default {
   },
 
   methods: {
-    canAdd(child) {
-      // technical limitation : for waypoint/waypoint associations
-      if (
-        this.forbiddenChildren &&
-        this.forbiddenChildren.find((e) => e.document_id === child.document_id) !== undefined
-      ) {
-        return false;
-      }
-
-      // can't associate a document to itself
-      if (this.parent.document_id === child.document_id) {
-        return false;
-      }
-
-      // moderator can always add
-      if (this.$user.isModerator) {
-        return true;
-      }
-
-      /**********************************
-        /* rules for standard users. Do not forget that if he can open this window, he can edit parent
-        **********************************/
-
-      // only moderator can add waypoint/waypoint association
-      if (this.parent.type === 'w' && this.childType === 'waypoint') {
-        return false;
-      }
-
-      if (this.childType === 'article' && child.article_type === 'personal') {
-        return false; // TODO API : if user is article owner, he can => add author in response
-      }
-
-      if (this.childType === 'xreport') {
-        return false; // TODO API : if user is xreport owner, he can => add author in response
-      }
-
-      if (this.childType === 'image') {
-        return true; // TODO API : add image_type (collab), and author
-      }
-
-      return true;
-    },
-
-    canRemove(child) {
-      // technical limitation : an outing must have at least one route
-      if (this.parent.type === 'o' && this.childType === 'route' && this.current.length === 1) {
-        return false;
-      }
-
-      // otherwise, moderator can always remove
-      if (this.$user.isModerator) {
-        return true;
-      }
-
-      /**********************************
-                / rules for standard user. Do not forget that if he can open this window, he can edit parent
-                **********************************/
-
-      // if it's an outing, user can do whatever he want's, except remove itself
-      if (this.parent.type === 'o') {
-        return child.document_id !== this.$user.id;
-      }
-
-      // if parent document is user own profile : can always remove
-      if (this.parent.document_id === this.$user.id) {
-        return true;
-      }
-
-      if (this.childType === 'article' && child.article_type === 'personal') {
-        return false; // TODO API : if user is article owner, he can => add author in response
-      }
-
-      if (this.childType === 'xreport') {
-        return false; // TODO API : if user is xreport owner, he can => add author in response
-      }
-
-      if (this.childType === 'image') {
-        return false; // TODO API : add image_type (collab), and author
-      }
-
-      if (this.childType === 'outing') {
-        return child.author.user_id === this.$user.id;
-      }
-
-      return false;
-    },
-
     onclick(child) {
       if (child.status === 'current') {
         this.remove(child.document);
@@ -268,8 +187,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .association-items {
   margin-bottom: 1rem;
 

@@ -1,11 +1,5 @@
 <template>
-  <edition-container
-    :mode="mode"
-    :document="document"
-    :generic-errors="genericErrors"
-    :is-loading="saving"
-    @save="save"
-  >
+  <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
     <form-section
       :title="$gettext('General information')"
       :sub-title="$gettext('Report title, activity, linked routes or outings.')"

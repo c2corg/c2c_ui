@@ -1,13 +1,14 @@
-// Require the main Sass manifest file
+import { setDefaults as toastDefaults } from 'bulma-toast';
 import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
 import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
-import alertWindow from '@/js/vue-plugins/alert-window';
+import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
+import gdpr from '@/js/vue-plugins/gdpr';
 import globalComponents from '@/js/vue-plugins/generic-components';
 import getText from '@/js/vue-plugins/gettext-plugin';
 import helperWindow from '@/js/vue-plugins/helper-window';
@@ -18,8 +19,8 @@ import screen from '@/js/vue-plugins/screen';
 import stripMarkdown from '@/js/vue-plugins/strip-markdown';
 import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
-import vueMoment from '@/js/vue-plugins/vue-moment';
 
+// Require the main Sass manifest file
 require('./assets/sass/main.scss');
 
 Vue.config.productionTip = false;
@@ -30,10 +31,11 @@ Vue.use(localStorage); // First, vm.$localStorage property
 // Google analytics
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
+  disabled: true,
   // debug: {
   //   enabled: true, // default value
   //   trace: true, // default value
-  //   sendHitTask: true // default value
+  //   sendHitTask: true, // default value
   // },
   router,
   autoTracking: {
@@ -58,18 +60,18 @@ Vue.use(VueAnalytics, {
 });
 Vue.use(VueHead);
 
-Vue.use(vueMoment); // moment functions
+Vue.use(dateUtils); // date functions
 Vue.use(documentUtils); // getDocumentType, getLocale functions
 Vue.use(fontAwesome); // <fa-icon /> component
 Vue.use(getText); // vm.$gettext() function and v-translate directive
 Vue.use(helperWindow); // vm.$helper property
-Vue.use(alertWindow); // vm.$alert property
 Vue.use(imageViewer);
 Vue.use(globalComponents); // Components available everywhere
 Vue.use(screen); // screen reactives properties
 Vue.use(stripMarkdown); // stripMarkdown filter
 Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
+Vue.use(gdpr);
 
 new Vue({
   router,
@@ -78,3 +80,9 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount('#app');
+
+// configure toast defaults
+toastDefaults({
+  duration: 3000,
+  pauseOnHover: true,
+});

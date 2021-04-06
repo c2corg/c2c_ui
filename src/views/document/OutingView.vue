@@ -7,7 +7,7 @@
     <div v-if="document" class="columns is-multiline is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -34,7 +34,6 @@
               <field-view :document="document" :field="fields.frequentation" />
               <field-view :document="document" :field="fields.condition_rating" />
               <field-view v-if="document.partial_trip" :document="document" :field="fields.partial_trip" />
-              <field-view :document="document" :field="fields.quality" />
 
               <field-view :document="document" :field="fields.participant_count" />
             </div>
@@ -98,6 +97,8 @@
 
           <div style="clear: both" />
         </div>
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>

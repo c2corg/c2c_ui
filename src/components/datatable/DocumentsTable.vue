@@ -7,6 +7,8 @@
     :row-data="documents.documents"
     :get-row-class="getRowClass"
     :get-row-node-id="getRowNodeId"
+    :ensure-dom-order="true"
+    :enable-cell-text-selection="true"
     @grid-ready="onGridReady"
     @cellMouseOver="onHover"
   />
@@ -33,14 +35,19 @@ import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
 function getColDef(vm, field, options = {}) {
   const result = {
-    headerName: vm.$gettext(field.name),
+    headerName: capitalize(vm.$gettext(field.name)),
     field: field.name,
     _fieldDefinition: field,
     cellRendererFramework: options.cellRendererFramework ?? DocumentField,
+    _exportRenderer: options._exportRendered,
     resizable: true,
   };
 
   return Object.assign(result, options);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export default {
@@ -88,6 +95,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.$root.$on('table-csv-export', () => this.exportCsv());
+  },
+
   methods: {
     onGridReady(params) {
       this.gridApi = params.api;
@@ -110,35 +121,57 @@ export default {
 
       if (this.documentType === 'area') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
           getColDef(this, fields.area_type),
         ];
       }
 
       if (this.documentType === 'article') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, width: 300 }),
-          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 300 }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: DocumentLink,
+            _exportFormatter: this.formatTitle,
+            width: 300,
+          }),
+          getColDef(this, fields.activities, {
+            cellRendererFramework: DocumentActivities,
+            _exportFormatter: this.formatActivities,
+            width: 300,
+          }),
           getColDef(this, fields.categories, { width: 120 }),
           getColDef(this, fields.article_type, { width: 120 }),
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'book') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
           getColDef(this, fields.book_types),
           getColDef(this, fields.author),
-          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          getColDef(this, fields.activities, {
+            cellRendererFramework: DocumentActivities,
+            _exportFormatter: this.formatActivities,
+            width: 100,
+          }),
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'image') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.author),
           getColDef(this, fields.filename),
         ];
@@ -146,23 +179,47 @@ export default {
 
       if (this.documentType === 'map') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.code),
           getColDef(this, fields.editor),
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'outing') {
         this.columnDefs = [
-          getColDef(this, fields.date_end, { width: 120, cellRendererFramework: OutingDate }),
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-          getColDef(this, { name: 'contributor' }, { cellRendererFramework: DocumentAuthor, width: 100 }),
-          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
+          getColDef(this, fields.date_end, {
+            width: 120,
+            cellRendererFramework: OutingDate,
+            _exportFormatter: this.formatOutingDate,
+          }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(
+            this,
+            { name: 'areas' },
+            {
+              cellRendererFramework: AreaList,
+              _exportFormatter: this.formatAreas,
+            }
+          ),
+          getColDef(
+            this,
+            { name: 'contributor' },
+            { cellRendererFramework: DocumentAuthor, _exportFormatter: this.formatAuthor, width: 100 }
+          ),
+          getColDef(this, fields.activities, {
+            cellRendererFramework: DocumentActivities,
+            _exportFormatter: this.formatActivities,
+            width: 100,
+          }),
           {
-            headerName: this.$gettext('elevation'),
+            headerName: capitalize(this.$gettext('elevation')),
             children: [
               getColDef(this, fields.elevation_max, { columnGroupShow: 'closed', width: 100 }),
               getColDef(this, fields.elevation_max, { columnGroupShow: 'open', width: 100 }),
@@ -171,11 +228,12 @@ export default {
             ],
           },
           {
-            headerName: this.$gettext('ratings'),
+            headerName: capitalize(this.$gettext('ratings')),
             children: [
               {
-                headerName: this.$gettext('ratings'),
+                headerName: capitalize(this.$gettext('ratings')),
                 cellRendererFramework: OutingRating,
+                _exportFormatter: this.formatRating,
                 columnGroupShow: 'closed',
                 resizable: true,
                 width: 120,
@@ -195,18 +253,42 @@ export default {
             ],
           },
 
-          { cellRendererFramework: MarkerGpsTrace, width: 30 },
-          { cellRendererFramework: MarkerImageCount, width: 30 },
-          { cellRendererFramework: MarkerCondition, width: 30 },
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerGpsTrace,
+            _exportFormatter: this.formatGpsTrace,
+            _headerName: capitalize(this.$gettext('Trace')),
+            width: 30,
+          },
+          {
+            cellRendererFramework: MarkerImageCount,
+            _exportFormatter: this.formatImagesCount,
+            _headerName: capitalize(this.$gettext('Image count')),
+            width: 30,
+          },
+          {
+            cellRendererFramework: MarkerCondition,
+            _exportFormatter: this.formatConditions,
+            _headerName: capitalize(this.$gettext('Conditions')),
+            width: 30,
+          },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'route') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
-          getColDef(this, fields.activities, { cellRendererFramework: DocumentActivities, width: 100 }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, fields.activities, {
+            cellRendererFramework: DocumentActivities,
+            _exportFormatter: this.formatActivities,
+            width: 100,
+          }),
           getColDef(this, fields.orientations, { width: 100 }),
           {
             headerName: this.$gettext('elevation'),
@@ -224,6 +306,7 @@ export default {
               {
                 headerName: this.$gettext('ratings'),
                 cellRendererFramework: RouteRating,
+                _exportFormatter: this.formatRating,
                 columnGroupShow: 'closed',
                 resizable: true,
                 width: 120,
@@ -238,26 +321,41 @@ export default {
               getColDef(this, fields.rock_required_rating, { columnGroupShow: 'open', width: 80 }),
             ],
           },
-          { cellRendererFramework: MarkerGpsTrace, width: 30 },
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerGpsTrace,
+            _exportFormatter: this.formatGpsTrace,
+            _headerName: capitalize(this.$gettext('Trace')),
+            width: 30,
+          },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'waypoint') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.elevation),
           getColDef(this, fields.waypoint_type),
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
 
       if (this.documentType === 'xreport') {
         this.columnDefs = [
           getColDef(this, fields.date, { width: 100 }),
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList }),
+          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.event_type, { width: 100 }),
           getColDef(this, fields.event_activity, { width: 100 }),
           {
@@ -276,9 +374,122 @@ export default {
               getColDef(this, fields.avalanche_slope, { columnGroupShow: 'open', width: 120 }),
             ],
           },
-          { cellRendererFramework: MarkerQuality, width: 30 },
+          {
+            cellRendererFramework: MarkerQuality,
+            _exportFormatter: this.formatQuality,
+            _headerName: capitalize(this.$gettext('Document quality')),
+            width: 30,
+          },
         ];
       }
+    },
+
+    exportCsv() {
+      this.gridApi.exportDataAsCsv({
+        processCellCallback: this.formatExportCell,
+        processHeaderCallback: this.formatExportHeader,
+      });
+    },
+
+    formatExportHeader(params) {
+      return params.column.colDef?.headerName ?? params.column.colDef?._headerName ?? undefined;
+    },
+
+    formatExportCell(params) {
+      return (
+        params.column.colDef?._exportFormatter?.(params.node.data, params.column.colDef.field) ??
+        (params.column.colDef?._fieldDefinition?.i18n
+          ? this.$gettext(params.value, params.column.colDef._fieldDefinition.i18nContext)
+          : params.value)
+      );
+    },
+
+    formatOutingDate(document, field) {
+      return this.$dateUtils.toLocalizedString(document[field], 'PP');
+    },
+
+    formatAreas(document) {
+      return this.$documentUtils.getSortedAreaList(document);
+    },
+
+    formatTitle(document) {
+      return this.$documentUtils.getDocumentTitle(document, this.$route.params.lang);
+    },
+
+    formatAuthor(document) {
+      return document.author.name;
+    },
+
+    formatActivities(document) {
+      return document.activities.map((activity) => this.$gettext(activity, 'activities')).join(', ');
+    },
+
+    formatRating(document) {
+      let rating = this.ratings(document, 'global_rating', 'via_ferrata_rating');
+      if (document.rock_free_rating) {
+        rating = [
+          ...rating,
+          document.rock_required_rating
+            ? document.rock_free_rating + '>' + document.rock_required_rating
+            : document.rock_free_rating,
+        ];
+      }
+      rating = [
+        ...rating,
+        ...this.ratings(
+          document,
+          'aid_rating',
+          'engagement_rating',
+          'risk_rating',
+          'equipment_rating',
+          'exposition_rock_rating',
+          'ice_rating',
+          'mixed_rating'
+        ),
+      ];
+
+      if (document.ski_rating) {
+        rating = [...rating, document.ski_rating];
+        if (document.ski_exposition || document.labande_global_rating) {
+          rating = [...rating, '/'];
+        }
+      }
+      rating = [...rating, ...this.ratings(document, 'ski_exposition', 'labande_global_rating')];
+      if (document.labande_ski_rating) {
+        rating = [...rating, '/', document.labande_ski_rating];
+      }
+      rating = [
+        ...rating,
+        ...this.ratings(
+          document,
+          'snowshoe_rating',
+          'hiking_rating',
+          'mtb_up_rating',
+          'mtb_down_rating',
+          'hiking_mtb_exposition'
+        ),
+      ];
+      return rating.join(' ');
+    },
+
+    ratings(document, ...ratings) {
+      return ratings.map((rating) => document[rating]).filter((rating) => !!rating);
+    },
+
+    formatGpsTrace(document) {
+      return document.geometry.has_geom_detail ? this.$gettext('yes') : this.$gettext('no');
+    },
+
+    formatImagesCount(document) {
+      return document.img_count;
+    },
+
+    formatConditions(document) {
+      return this.$gettext(document.condition_rating, 'condition_ratings');
+    },
+
+    formatQuality(document) {
+      return this.$gettext(document.quality, 'quality_types');
     },
   },
 };
@@ -286,3 +497,9 @@ export default {
 
 <style src="ag-grid-community/dist/styles/ag-grid.css" />
 <style src="ag-grid-community/dist/styles/ag-theme-balham.css" />
+<style lang="scss">
+.ag-theme-balham .ag-cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+</style>

@@ -68,6 +68,7 @@
     "Add images": "Bilder hinzufügen",
     "Add the first outing": "Ersten Tourenbericht hinzufügen",
     "Additional information": "Weitere Informationen",
+    "Allow all": "Alles akzeptieren",
     "Anonymity and confidentiality": "Anonymität und Vertraulichkeit",
     "Are you sure you want to delete this document?": "Sind Sie sicher, dass Sie dieses Dokument löschen wollen?",
     "Are you sure you want to delete this locale?": "Sind Sie sicher, dass Sie diese Sprachversion löschen wollen?",
@@ -95,6 +96,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Österreich Luftbild"
     },
+    "Beware of case-sensitive login and password": "Vorsicht vor Groß- und Kleinschreibung bei Login und Passwort.",
     "Block account": "Konto blockieren",
     "Book content": "Buch Inhalt",
     "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
@@ -114,7 +116,9 @@
     "Comments are disabled.": "Kommentare sind deaktiviert.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
+    "Conditions": "Voraussetzungen",
     "Conditions, summits, routes": "Verhältnisse, Gipfel, Routen",
+    "Configure cookies": "Cookies einstellen",
     "Confirm": "Bestätigen",
     "Contain invalid character(s)": {
       "API message": "enthält ein oder mehrere ungültige Zeichen"
@@ -124,6 +128,10 @@
     "Contribute to maintainance": "Zur Instandhaltung beitragen",
     "Contributions": "Beitragen",
     "Contributor": "Beiträger",
+    "Control the use of your personal data": "Verwendung Ihrer persönlichen Daten kontrollieren",
+    "Create": {
+      "yeti": "Erstellen"
+    },
     "Create a new report": "Neuen Unfallbericht verfassen",
     "Created on": "Erstellt am",
     "Creation?": "Verfassung ?",
@@ -131,6 +139,7 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
     "Delete this document": "Dokument löschen",
     "Delete this locale": "Sprachversion löschen",
+    "Deny all": "Alles ablehnen",
     "Describe access": "Zustieg beschreiben",
     "Describe access period": "Öffnungszeit beschreiben",
     "Describe access restrictions": "Zugangsbeschränkungen beschreiben",
@@ -155,16 +164,21 @@
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Beschreiben Sie den Ablauf der Tour und des Ereignisses/Unfalls. Falls Sie schon eine Tour eingetragen haben können Sie das Ereignis separat beschreiben und es später - nach dessen Speichern - mit dem Toureneintrag verbinden.",
     "Details on participants and event context": "Daten über Teilnehmer und Ereigniskontext",
     "Differences between versions": "Unterschied zwischen Versionen",
+    "Directions (Google Maps)": "Anfahrtsbeschreibung (Google Maps)",
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
     "Distance (km)": "Länge (km)",
     "Do you really want to leave? you have unsaved changes!": "Wollen Sie wirklich diese Seite schließen ? Änderungen werden nicht gespeichert !",
+    "Document quality": "Dokumentqualität",
     "Download outings": "Tourenberichte herunterladen",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
     "Duration": "Zeit",
     "Duration (hrs)": "Zeit (Stunden)",
     "EULA": "Nutzungsbedingungen",
-    "Edit": "Bearbeiten",
+    "Edit": {
+      "$$noContext": "Bearbeiten",
+      "yeti": "Bearbeiten"
+    },
     "Edit a document": "Dokument bearbeiten",
     "Edit associations": "Verbindungen bearbeiten",
     "Edit categories": "Kategorien bearbeiten",
@@ -173,6 +187,7 @@
     "Elevation (m)": "Höhe (m)",
     "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
     "Expand": "Entfalten",
+    "Export to CSV": "Exportieren als CSV",
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
     "Filter on map extent": "Mit Karte filtern",
@@ -194,6 +209,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Hier ist die Liste der Benutzern, denen Sie folgen. Aktivitäten dieser Benutzern werden in Ihrem persönlichen Feed angezeigt.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Wählen Sie hier die Aktivitäten und Regionen aus, für die Sie Einträge im Feed auf der Startseite sehen möchten.",
     "History": "Historie",
+    "History is missing, please provide it if you have information.": "Routengeschichte fehlt. Bitte tragen Sie bei, fals Sie etwas wissen.",
     "Home": "Startseite",
     "Home page feed parameters": "Parameter des Feed der Hauptseite",
     "How is my testimony used ? How / why is it useful ?": "Was ist der Sinn meines Zeugnisses ?",
@@ -214,6 +230,7 @@
       "Map layer": "Spanien"
     },
     "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
+    "Image count": "Bildanzahl",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "Incidents and accidents": "Unfallberichte",
     "Information about the terrain, like elevations, lengths...": "Informationen über das Gelände, wie Höhen, Längen ...",
@@ -255,6 +272,7 @@
     "Make profile page public": "Profil öffentlich verfügbar machen",
     "Map only": "Nur Karte",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Karte, Topos, Kenntnis der Route, Antizipation eines Plans B, Neubewertung der ausgeführten Route?",
+    "Mark this route as to do": "Markieren Sie diese Route als zu tun",
     "Merge documents": "Dokumente vereinigen",
     "Merge with other document": "Mit anderen Dokumenten vereinigen",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Durch das Zusammenführen eines Quelldokuments mit einem Zieldokument werden alle Zuordnungen des Quelldokuments zum Zieldokument übertragen und eine Umleitung vom Quelldokument zum Zieldokument eingerichtet.",
@@ -269,6 +287,7 @@
     "More info": "Mehr Info",
     "Multi-criteria search": "Multikriterium Suche",
     "My account": "Mein Konto",
+    "My bookmarks": "Meine Favoriten",
     "My changes": "Meine Beiträge",
     "My followed users": "Meine Freunden",
     "My outings": "Meine Tourenberichte",
@@ -277,6 +296,8 @@
     "Narration": "Textbeschreibung",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Heikle Situation, die nicht zu körperlichen Verletzungen führet, aber zu einem viel ernsteren Ereignis hätte führen können.",
     "Near-accidents are valuable": "Beinaheunfälle sind wertvoll",
+    "Necessary cookies": "Benötigte Cookies",
+    "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Die benötigten Cookies sind für das ordnungsgemäße Funktionieren unserer Website unerlässlich und können nicht deaktiviert werden. Sie werden an Ihren Computer oder Ihr Gerät gesendet, wenn Sie eine bestimmte Aktion oder einen bestimmten Dienst anfordern, z. B. wenn Sie sich anmelden, ein Formular ausfüllen oder Ihre Cookie-Einstellungen festlegen. Wenn Sie Ihren Browser so einstellen, dass er diese Cookies blockiert oder Sie vor ihnen warnt, wird unsere Website nicht vollständig funktionieren.",
     "New outing": "Neue Tourenberichte",
     "New password": "Neues Passwort",
     "New route": "Neue Route",
@@ -300,6 +321,7 @@
     "Ordered list": "geordnete Liste",
     "Oups! Something went wrong with forum. Here is the message :": "Upsi ! Etwas is mit den Forum schief gegangen. Hier ist die Nachricht :",
     "Oups! something went wrong...": "Upsi ! Etwas ist schief gegangen ...",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Unsere Website verwendet Cookies, die von uns und von Drittparteien bereitgestellt werden. Einige Cookies sind für den Betrieb der Website erforderlich, während andere von Ihnen zu jeder Zeit eingestellt werden können, insbesondere solche, die es uns ermöglichen, die Leistung unserer Website zu verstehen und Ihnen Social-Media-Funktionen zur Verfügung zu stellen. Sie können alle annehmen oder ablehnen oder",
     "Page not found": "Seite nicht gefunden",
     "Paragliding outings": "Gleitschirmberichte",
     "Parameters of the Digital Camera": "Details des Kamera",
@@ -372,8 +394,11 @@
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
     "Skiability": "Schifahrengenuss",
     "Slopes": "Hangneigung",
+    "Social cookies": "Sozial-Cookies",
     "Source:": "Quelle:",
+    "Statistical cookies": "Statistik-Cookies",
     "Stop following this contributor": "Diesem Benutzer nicht mehr folgen",
+    "Submit": "Aufnehmen und fortsetzen",
     "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
     "SwissTopo": {
       "Map layer": "Schweiz",
@@ -381,12 +406,14 @@
     },
     "Target:": "Ziel:",
     "Terrain": "Grund",
+    "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Dank der statistischen oder analytischen Cookies, die von uns und anderen Unternehmen zur Verfügung gestellt werden, können wir die Besuche auf unserer Website zählen und die Quellen des Verkehrs kennen. Die Daten, die wir erhalten, helfen uns zu verstehen, was den Besuchern gefällt und die Website zu verbessern. Wenn Sie diese Daten nicht akzeptieren, sind wir nicht in der Lage, Ihr Erlebnis zu verbessern.",
     "The mountain sports community": "Die Bergsport-Community",
     "The page you are looking for does not exist or is broken.": "Die von Ihnen angeforderte Seite existiert nicht oder ist fehlerhaft.",
     "The slope must be between 0 and 80 deg": "Die Steigung muss zwischen 0 und 80 Grad liegen",
     "The slope must be between 50 and 3000m high": "Die Höhe des Hanges muss zwischen 50 und 3000 m betragen",
     "There are sensitive areas on this route. Please refer to the map.": "Auf dieser Route gibt es sensible Gebiete. Bitte beachten Sie die Karte.",
     "These are positive experiences that reveal usefull risk-management skills.": "Dies sind positive Erfahrungen, die nützliche Risikomanagementfähigkeiten aufzeigen.",
+    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Diese Cookies ermöglichen es Ihnen, von der Seite camptocamp.org aus mit den sozialen Modulen zu interagieren und die Inhalte der Seite mit anderen Personen zu teilen oder sie über Ihre Konsultation oder Meinung dazu zu informieren, wenn Sie zum Beispiel auf das Modul \"Teilen\" klicken. Wenn Sie diese Cookies deaktivieren, können Sie die Inhalte der Seite camptocamp.org nicht mehr in sozialen Netzwerken teilen.",
     "This book cover is the property of its editor and/or author": "Dieses Buchcover ist Eigentum des Herausgebers und / oder des Autors",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Dieser Inhalt unterliegt der Lizenz Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Dieser Inhalt unterliegt der Lizenz Creative Commons BY-SA 3.0",
@@ -409,13 +436,18 @@
     },
     "Toggle fullscreen": "Vollbild ein/aus",
     "Too many results: please refine your search.": "Zu viele Ergebnisse: bitte Suche spezifieren.",
-    "Topoguide": "Topoführer",
+    "Topoguide": {
+      "$$noContext": "Topoführer",
+      "Sophie picture context": "Topoführer"
+    },
+    "Trace": "GPS-Track",
     "Translate into an other lang": "In eine andere Sprache übersetzen",
     "Transport & road or PT access": "Strassenzugang/Öffis",
     "Types and styles": "Art & Stile",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-geräte, usw…",
     "Unblock account": "Konto entsperren",
     "Unformatted text": "Roher Text",
+    "Unmark this route as to do": "Entmarkieren Sie diese Route als zu tun",
     "Unordered list": "Ungeordnete Liste",
     "Unprotect document": "Dokument unschützen",
     "Upload a GPS track": "GPS Strecke hochladen ",
@@ -432,6 +464,7 @@
     "Waypoint's textual description": "Textbeschreibung des Wegpunkts",
     "We sent you an email, please click on the link to reset password.": "Wir haben Ihnen eine Email zu gesendet. Bitten klicken Sie auf den gesendeten Link um das Passwort zurückzusetzen.",
     "Weather & conditions": "Wetter und Verhältnisse",
+    "Weather forecast (meteoblue)": "Wetterprognose (Meteoblue)",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Erklären Sie bitte, warum Sie gerade diese Tour ausgewählt haben und wie wichtig das Erreichen des Zieles für Sie war. Berücksichtigen Sie dabei den Einfluss der verschiedenen Optionen vorher (Urlaubstage, lange Anreise, Unterkunftsbuchungen...), der bisher dazu nötigen Bemühungen, der Seltenheit der Opportunität, usw...",
     "Wide and constant": "Breit und konstant",
     "Without c2c account": "Ohne c2c Konto",
@@ -504,9 +537,6 @@
       "user_categories": "Amateur"
     },
     "anonymous": "anonymer Beitrag",
-    "apr": {
-      "months": "April"
-    },
     "area": "Gebiet",
     "area_type": "Gebietsart",
     "areas": "Gebiete",
@@ -526,9 +556,6 @@
     },
     "at least one user required": {
       "API message": "wenigstens ein Benutzerkonto nötig"
-    },
-    "aug": {
-      "months": "August"
     },
     "author": "Autor",
     "author_status": "Status des Autors ",
@@ -675,6 +702,7 @@
     "conditions": "Verhältnisse",
     "conditions_levels": "Schneeverhältnisse per Zonen",
     "configuration": "Routengestaltung",
+    "configure your choices": "Ihre Auswahl einrichten",
     "conglomerat": {
       "rock_types": "Konglomerat"
     },
@@ -725,9 +753,6 @@
     "day(s)": "Tag(e)",
     "de": {
       "langs": "deutsch"
-    },
-    "dec": {
-      "months": "Dezember"
     },
     "descent": {
       "image_categories": "Abstieg"
@@ -821,9 +846,6 @@
     },
     "fauna": {
       "image_categories": "Fauna"
-    },
-    "feb": {
-      "months": "Februar"
     },
     "federal_supervision": {
       "supervision": "Bundüberwachung"
@@ -1004,15 +1026,6 @@
     "it": {
       "langs": "italienisch"
     },
-    "jan": {
-      "months": "Januar"
-    },
-    "jul": {
-      "months": "Juli"
-    },
-    "jun": {
-      "months": "Juni"
-    },
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
     },
@@ -1074,13 +1087,7 @@
     "maps": "Karten",
     "maps_info": "Karten",
     "maps_references": "Karten Referenzen",
-    "mar": {
-      "months": "März"
-    },
     "matress_unstaffed": "Matratzen (nicht bewartet)",
-    "may": {
-      "months": "Mai"
-    },
     "medium": {
       "quality_types": "durchschnittlich"
     },
@@ -1171,16 +1178,10 @@
     "non_autonomous": {
       "autonomies": "nicht selbstständig"
     },
-    "nov": {
-      "months": "November"
-    },
     "novel": {
       "book_types": "Roman"
     },
     "numbers": "Zahlen",
-    "oct": {
-      "months": "Oktober"
-    },
     "of": {
       "1-30 of 200 results": "aus"
     },
@@ -1416,9 +1417,6 @@
     },
     "see actual version": "Letzte Version anschauen",
     "sensitive_months:": "Aufpassenzeit",
-    "sep": {
-      "months": "September"
-    },
     "service_on_demand": {
       "public_transportation_types": "On-Demand Dienste"
     },
@@ -1552,6 +1550,9 @@
     "time_management": "Zeitmanagement",
     "timing": "Timing",
     "title": "Titel",
+    "to": {
+      "period": "zu"
+    },
     "topo": {
       "book_types": "Topo",
       "image_categories": "Topo"
@@ -1618,6 +1619,9 @@
     "weather_station_types": "Wetterstation",
     "webcam": {
       "waypoint_types": "Webcam"
+    },
+    "whole year": {
+      "period": "Jahreslang"
     },
     "width": "Breite",
     "wind_direction": {

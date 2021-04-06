@@ -98,6 +98,9 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+import { format } from 'date-fns';
+
 import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
@@ -112,6 +115,7 @@ import {
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
 import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
 import photon from '@/js/apis/photon';
+import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
@@ -196,8 +200,6 @@ export default {
     }
 
     return {
-      map: null,
-
       // map layers, only one of them is visible
       mapLayers: cartoLayers_,
 
@@ -239,6 +241,7 @@ export default {
       biodivData: {},
       swissProtectionAreaData: { properties: {} },
       protectionAreasVisible: this.showProtectionAreas && !this.editable,
+      hasProtectionAreas: null,
 
       // on editable mode, there a button reset
       // we must save initial geometry
@@ -304,7 +307,7 @@ export default {
     // if, for any reason, geomtry of edited document is set, center map on it
     // * new value entered in text inputs
     // * first click
-    // * new association to route (geomtry is copied from route to outing in this case)
+    // * new association to route (geometry is copied from route to outing in this case)
     'editedDocument.geometry.geom': {
       handler(to, from) {
         if (from === null && to !== null) {
@@ -371,7 +374,7 @@ export default {
     });
 
     this.map.on('moveend', this.sendBoundsToUrl);
-    this.map.on('moveend', this.getBiodivSportsAreas);
+    this.map.on('moveend', this.getProtectionAreas);
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
@@ -458,9 +461,9 @@ export default {
 
     // https://openlayers.org/en/latest/examples/drag-and-drop.html
     setDragAndDropInteraction() {
-      // handle use case when user drag&drop a gpx/kml file on map
+      // handle use case when user drag&drop a gpx/kml/fit file on map
       const dragAndDrop = new ol.interaction.DragAndDrop({
-        formatConstructors: [ol.format.GPX, ol.format.KML],
+        formatConstructors: [ol.format.GPX, ol.format.KML, FIT],
       });
 
       dragAndDrop.on(
@@ -484,18 +487,60 @@ export default {
       this.setDocumentGeometry(document, feature.get('geometry'));
     },
 
-    setDocumentGeometryFromGpx(gpx) {
-      const gpxFormat = new ol.format.GPX();
-      const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
+    tryReadFeaturesFromGeoFile(file, format, options) {
+      try {
+        return format.readFeatures(file, options);
+      } catch (e) {
+        return null;
+      }
+    },
 
-      features.map(this.setDocumentGeometryFromFeature);
-      this.fitMapToDocuments(true);
+    setDocumentGeometryFromGeoFile(file) {
+      for (const format of [new ol.format.GPX(), new FIT(), new ol.format.KML()]) {
+        const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
+        if (features?.length) {
+          features.map(this.setDocumentGeometryFromFeature);
+          this.fitMapToDocuments(true);
+          return;
+        }
+      }
+      toast({
+        message: this.$gettext(`No data could be extracted from GPS file`),
+        type: 'is-danger',
+      });
     },
 
     setDocumentGeometryFromFeature(feature) {
-      this.setDocumentGeometry(this.editedDocument, feature.get('geometry'));
+      const geometry = feature.get('geometry');
+      this.setDocumentGeometry(this.editedDocument, geometry);
       this.drawDocumentMarkers();
       this.setDrawInteraction();
+      this.setOutingStartDate(this.editedDocument, geometry);
+    },
+
+    setOutingStartDate(document, geometry) {
+      if (document.type !== 'o' || document.date_start) {
+        return;
+      }
+
+      const firstCoordinate = geometry.getFirstCoordinate();
+      let timestamp;
+      switch (geometry.getLayout()) {
+        case 'XYZM':
+          timestamp = firstCoordinate[3];
+          break;
+        case 'XYM':
+          timestamp = firstCoordinate[2];
+          break;
+        default:
+          return;
+      }
+
+      if (!timestamp) {
+        return;
+      }
+
+      document.date_start = format(new Date(timestamp * 1000), 'yyyy-MM-dd');
     },
 
     setDocumentGeometry(document, geometry) {
@@ -618,35 +663,38 @@ export default {
     },
 
     addBiodivSportsData(response) {
-      const results = response['data']['results'];
+      const results = response?.data?.results;
+      if (!results.length) {
+        return;
+      }
+
       const source = this.protectionAreasLayer.getSource();
 
       for (const result of results) {
-        const geometry = geoJSONFormat.readGeometry(result['geometry'], {
+        const geometry = geoJSONFormat.readGeometry(result.geometry, {
           dataProjection: 'EPSG:4326',
           featureProjection: 'EPSG:3857',
         });
 
         const feature = new ol.Feature({
           geometry,
-          id: result['id'],
+          id: result.id,
           biodivData: {
             source: 'biodivsports',
-            title: result['name'],
-            description: result['description'],
-            infoUrl: result['info_url'],
-            kmlUrl: result['kml_url'],
-            period: result['period'],
+            title: result.name,
+            description: result.description,
+            infoUrl: result.info_url,
+            kmlUrl: result.kml_url,
+            period: result.period,
           },
         });
 
-        feature.setId('biodiv_' + result['id']);
+        feature.setId('biodiv_' + result.id);
 
         feature.set('normalStyle', buildPolygonStyle());
         feature.setStyle(feature.get('normalStyle'));
 
         source.addFeature(feature);
-        this.$emit('has-protection-area');
       }
     },
 
@@ -734,7 +782,7 @@ export default {
     },
 
     onClick(event) {
-      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => feature);
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
       if (feature) {
         const document = feature.get('document');
@@ -756,8 +804,10 @@ export default {
           respecterCestProtegerService
             .identify(position, rcpExtent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
             .then(({ data }) => {
-              if (data.results && data.results.length > 0) {
-                this.swissProtectionAreaData = data.results[0];
+              if (data.results && data.results.length) {
+                // if there are several results, then there must be an area and an allowed path. select area
+                this.swissProtectionAreaData =
+                  data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
                 this.$refs.SwissProtectionAreaInformation.show();
               }
             });
@@ -806,18 +856,38 @@ export default {
       this.showRecenterOnPropositions = false;
     },
 
-    getBiodivSportsAreas() {
+    getProtectionAreas() {
       if (!this.protectionAreasVisible) {
         return;
       }
 
       const extent = this.view.calculateExtent(this.map.getSize() || null);
-
-      // get extent in WGS format
+      // get extent in expected format
       const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-      biodivSportsService
-        .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
-        .then(this.addBiodivSportsData);
+
+      if (this.hasProtectionAreas !== null) {
+        // check already made, only update biodivsport areas features
+        biodivSportsService
+          .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
+          .then(this.addBiodivSportsData);
+      } else {
+        // first call, check protection areas are contained within map extent and download biodivsports features
+        const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
+        Promise.allSettled([
+          biodivSportsService
+            .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
+            .then((response) => {
+              this.addBiodivSportsData(response);
+              return (response?.data?.results?.length ?? 0) > 0;
+            }),
+          respecterCestProtegerService.hasArea(rcpExtent),
+        ]).then((hasArea) => {
+          this.hasProtectionAreas = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
+          if (this.hasProtectionAreas) {
+            this.$emit('has-protection-area');
+          }
+        });
+      }
     },
 
     clearGeometry() {

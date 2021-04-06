@@ -1,0 +1,14 @@
+@mixin colon {
+  :lang(fr) &::after {
+    content: '\00a0:';
+  }
+  :lang(it) &::after,
+  :lang(de) &::after,
+  :lang(en) &::after,
+  :lang(es) &::after,
+  :lang(ca) &::after,
+  :lang(eu) &::after,
+  :lang(zh) &::after {
+    content: ':';
+  }
+}

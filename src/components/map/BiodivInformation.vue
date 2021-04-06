@@ -9,7 +9,7 @@
 
     <p v-if="data.period">
       <span v-translate>sensitive_months:</span>
-      <span>{{ months.join(', ') }}</span>
+      <span>{{ period }}</span>
     </p>
 
     <!-- content formatting done with DOM parser to decode html entities -->
@@ -21,6 +21,7 @@
 
 <script>
 import utils from '@/js/utils';
+
 export default {
   props: {
     data: {
@@ -41,16 +42,33 @@ export default {
       return paragraphList;
     },
 
-    months() {
-      const result = [];
-
-      for (const month in this.data.period) {
-        if (this.data.period[month]) {
-          result.push(this.$moment.month(parseInt(month, 10)));
+    period() {
+      if (this.data.period.every((month) => !!month)) {
+        return this.$gettext('whole year', 'period');
+      }
+      if (this.$dateUtils.hasSinglePeriod(this.data.period)) {
+        let start, end;
+        if (this.data.period[0] && this.data.period[11]) {
+          start = this.data.period.lastIndexOf(false) + 1;
+          end = this.data.period.indexOf(false) - 1;
+        } else {
+          start = this.data.period.indexOf(true);
+          end = this.data.period.lastIndexOf(true);
         }
+        return (
+          this.$dateUtils.month(parseInt(start, 10)) +
+          ' ' +
+          this.$gettext('to', 'period') +
+          ' ' +
+          this.$dateUtils.month(parseInt(end, 10))
+        );
       }
 
-      return result;
+      // default case, enumerate months
+      return this.data.period
+        .map((included, index) => (included ? this.$dateUtils.month(parseInt(index, 10)) : undefined))
+        .filter((month) => !!month)
+        .join(', ');
     },
   },
 

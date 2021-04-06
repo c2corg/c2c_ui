@@ -4,11 +4,11 @@
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
-        <!--   CONTENT  -->
+        <!-- CONTENT -->
 
         <div class="box">
           <div class="columns">
@@ -17,7 +17,6 @@
               <field-view :document="document" :field="fields.route_types" />
               <field-view :document="document" :field="fields.durations" :unit="$gettext('day(s)')" />
               <field-view :document="document" :field="fields.rock_types" />
-              <field-view :document="document" :field="fields.quality" />
               <field-view :document="document" :field="fields.climbing_outdoor_type" />
               <field-view :document="document" :field="fields.configuration" />
               <field-view :document="document" :field="fields.slackline_type" />
@@ -77,14 +76,19 @@
 
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section :document="document" :field="fields.route_history" />
+          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
+          <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print">
+            <edit-link :document="document" :lang="lang" show-always v-translate>
+              History is missing, please provide it if you have information.
+            </edit-link>
+          </div>
           <markdown-section :document="document" :field="fields.description" />
           <markdown-section :document="document" :field="fields.slackline_anchor1" />
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
 
           <markdown-section :document="document" :field="fields.remarks">
-            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info">
-              <strong v-translate> Sensitive areas </strong>
+            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info no-print">
+              <strong v-translate>Sensitive areas</strong>
               <p v-translate>There are sensitive areas on this route. Please refer to the map.</p>
             </div>
           </markdown-section>
@@ -111,6 +115,8 @@
 
         <recent-outings-box :document="document" />
 
+        <tool-box :document="document" v-if="$screen.isMobile" />
+
         <comments-box :document="document" />
       </div>
     </div>
@@ -119,7 +125,14 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin';
-
+const historyWorthActivities = [
+  'snow_ice_mixed',
+  'mountain_climbing',
+  'rock_climbing',
+  'ice_climbing',
+  'via_ferrata',
+  'slacklining',
+];
 export default {
   mixins: [documentViewMixin],
 
@@ -180,6 +193,20 @@ export default {
 
       return result;
     },
+
+    showMissingHistoryBanner() {
+      const doc = this.document;
+      const activities = doc.activities ?? [];
+      for (let act of historyWorthActivities) {
+        if (activities.includes(act)) {
+          return true;
+        }
+      }
+      if (activities.includes('skitouring') && ['5.1', '5.2', '5.3', '5.4', '5.5'].includes(doc.ski_rating)) {
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
@@ -192,7 +219,6 @@ export default {
 .automatic-gears {
   margin-bottom: 1.5rem;
 }
-
 @media print {
   .protection-area-info {
     margin: 0rem !important;

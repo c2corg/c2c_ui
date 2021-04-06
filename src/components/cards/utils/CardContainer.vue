@@ -26,8 +26,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .card {
   transition: 0.1s;
   border: $card-border;

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- Waypoint fields access and access_period has a different signification, depending of waypoint_type
+ Waypoint fields access and access_period have a different signification, depending of waypoint_type
  It implies different label/titles/placeholders. And this logic is needed in both document views and
  edition views. So we have to do a mixin for this logic
 
@@ -9,9 +9,7 @@
 export default {
   computed: {
     descriptionTitle() {
-      return this.document && this.document.waypoint_type === 'access'
-        ? this.$gettext('road access')
-        : this.$gettext('description');
+      return this.document?.waypoint_type === 'access' ? this.$gettext('road access') : this.$gettext('description');
     },
 
     accessTitle() {
@@ -51,8 +49,7 @@ export default {
     },
 
     descriptionPlaceholder() {
-      const type = this.document ? this.document.waypoint_type : undefined;
-
+      const type = this.document?.waypoint_type;
       switch (type) {
         case 'access':
           return this.$gettext('Describe road access');
@@ -62,8 +59,7 @@ export default {
     },
 
     accessPlaceholder() {
-      const type = this.document ? this.document.waypoint_type : undefined;
-
+      const type = this.document?.waypoint_type;
       switch (type) {
         case 'access':
           return this.$gettext('Describe pt access');
@@ -77,8 +73,7 @@ export default {
     },
 
     accessPeriodPlaceholder() {
-      const type = this.document ? this.document.waypoint_type : undefined;
-
+      const type = this.document?.waypoint_type;
       switch (type) {
         case 'hut':
         case 'gite':

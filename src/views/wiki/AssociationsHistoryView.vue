@@ -25,7 +25,7 @@
       <tbody>
         <tr v-for="(association, i) of results.associations" :key="i">
           <td>
-            {{ $moment.toTechnicalString(association.written_at) }}
+            {{ $dateUtils.toTechnicalString(association.written_at) }}
           </td>
           <td>
             <contributor-link :contributor="association.user" />

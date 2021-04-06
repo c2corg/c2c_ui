@@ -13,15 +13,15 @@ function cleanMessageId(msgid) {
     return String(msgid);
   }
 
-  // trim
-  msgid = msgid.replace(/^[\r\n\s]*/, '');
-  msgid = msgid.replace(/[\r\n\s]*$/, '');
-
-  // remove new lines and duplicated spaces
-  msgid = msgid.replace(/\n/g, ' ');
-  msgid = msgid.replace(/\s+/g, ' ');
-
-  return msgid;
+  return (
+    msgid
+      .trim()
+      .replace(/"/g, '&quot;')
+      .replace(/\\/g, '&#x5C;')
+      // remove new lines and duplicated spaces
+      .replace(/\n/g, ' ')
+      .replace(/\s+/g, ' ')
+  );
 }
 
 function getTranslation(messages, msgid, msgctxt) {
@@ -47,7 +47,7 @@ function getTranslation(messages, msgid, msgctxt) {
     return message;
   }
 
-  // otherwise, it's store in '$$noContext' key
+  // otherwise, it's stored in '$$noContext' key
   // note that '$$noContext' is a reserved context :)
   return message['$$noContext'] ?? msgid;
 }
@@ -155,7 +155,9 @@ export default function install(Vue) {
       },
 
       gettext(msgid, msgctxt) {
-        return getTranslation(this.translations[this.current], msgid, msgctxt);
+        return getTranslation(this.translations[this.current], msgid, msgctxt)
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#x5C;', '\\');
       },
 
       getIANALanguageSubtag(lang) {
@@ -172,7 +174,32 @@ export default function install(Vue) {
             return 'zh';
           default:
             // eslint-disable-next-line no-console
-            console.error(`Unexpected langauage: ${lang}`);
+            console.error(`Unexpected language: ${lang}`);
+            return lang;
+        }
+      },
+
+      getIsoLanguageTerritory(lang) {
+        switch (lang) {
+          case 'fr':
+            return 'fr_FR';
+          case 'en':
+            return 'en_UK';
+          case 'ca':
+            return 'ca_ES';
+          case 'eu':
+            return 'eu_ES';
+          case 'it':
+            return 'it_IT';
+          case 'de':
+            return 'de_DE';
+          case 'es':
+            return 'es_ES';
+          case 'zh_CN':
+            return 'zh_CN';
+          default:
+            // eslint-disable-next-line no-console
+            console.error(`Unexpected language: ${lang}`);
             return lang;
         }
       },

@@ -23,15 +23,7 @@
 <script>
 import { baseMixin } from './mixins';
 
-const range = function (from, to) {
-  const result = [];
-
-  for (let i = from; i <= to; i++) {
-    result.push(i);
-  }
-
-  return result;
-};
+const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
   mixins: [baseMixin],
@@ -52,7 +44,7 @@ export default {
     },
     value_: {
       get() {
-        return this.$moment.parseDate(this.value || undefined);
+        return this.$dateUtils.parseDate(this.value || undefined);
       },
       set(value) {
         if (!this.disabled) {
@@ -63,36 +55,36 @@ export default {
     },
     date: {
       get() {
-        return this.value ? this.value_.format('YYYY-MM-DD') : null;
+        return this.value ? this.$dateUtils.toLocalizedString(this.value_, 'yyyy-MM-dd') : null;
       },
       set(value) {
         const d = this.value_;
-        value = this.$moment.parseDate(value);
+        value = this.$dateUtils.parseDate(value);
 
-        d.year(value.year());
-        d.month(value.month());
-        d.date(value.date());
+        d.setYear(value.getFullYear());
+        d.setMonth(value.getMonth());
+        d.setDate(value.getDate());
 
         this.onInput(d);
       },
     },
     hour: {
       get() {
-        return this.value ? this.value_.hour() : null;
+        return this.value ? this.value_.getHours() : null;
       },
       set(value) {
         const d = this.value_;
-        d.hour(value);
+        d.setHours(value);
         this.onInput(d);
       },
     },
     minute: {
       get() {
-        return this.value ? this.value_.minute() : null;
+        return this.value ? this.value_.getMinutes() : null;
       },
       set(value) {
         const d = this.value_;
-        d.minute(value);
+        d.setMinutes(value);
         this.onInput(d);
       },
     },
@@ -100,7 +92,7 @@ export default {
 
   methods: {
     onInput(valueAsObject) {
-      this.$emit('input', valueAsObject.format('YYYY-MM-DDTHH:mm:ssZ'));
+      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ssxxx`));
     },
   },
 };

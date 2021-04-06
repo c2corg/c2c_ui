@@ -4,6 +4,17 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const result = {
   publicPath: '/',
 
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `
+          @import '@/assets/sass/variables.scss';
+          @import '@/assets/sass/mixins.scss';
+        `,
+      },
+    },
+  },
+
   chainWebpack(config) {
     // remove prefetch plugin, in order to prevent loading of translations
     // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
@@ -22,6 +33,9 @@ const result = {
         options.compilerOptions.whitespace = 'condensed';
         return options;
       });
+
+    // also handle avif format
+    config.module.rule('images').test(/\.(png|jpe?g|gif|webp|avif)(\?.*)?$/);
   },
 
   configureWebpack: {
@@ -56,11 +70,7 @@ const result = {
       },
     },
 
-    plugins: [
-      // moment, by default load all locales
-      // this will skip all of it, and a fixed list is setted in @/tools/vue-moment',
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    ],
+    plugins: [],
   },
 };
 

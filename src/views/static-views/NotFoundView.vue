@@ -63,8 +63,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .notfound-buttons {
   display: flex;
   flex-flow: wrap row;

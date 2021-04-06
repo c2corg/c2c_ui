@@ -1,17 +1,17 @@
 import axios from 'axios';
 
+const baseUrl = 'https://api3.geo.admin.ch/rest/services/api/MapServer/identify';
+const layers = 'all:' + ['ch.bafu.wrz-jagdbanngebiete_select', 'ch.bafu.wrz-wildruhezonen_portal'].join(',');
+
 function RespecterCestProtegerService() {
   this.axios = axios.create();
 }
 
 RespecterCestProtegerService.prototype.identify = function (position, extent, mapWidth, mapHeight, language) {
-  if (language !== 'fr' && language !== 'de' && language !== 'it') {
+  if (!['fr', 'de', 'it'].includes(language)) {
     language = 'en';
   }
 
-  const baseUrl = 'https://api3.geo.admin.ch/rest/services/api/MapServer/identify';
-
-  const layers = 'all:' + ['ch.bafu.wrz-jagdbanngebiete_select', 'ch.bafu.wrz-wildruhezonen_portal'].join(',');
   const geometry = `${position[0]},${position[1]}`;
   const geometryType = 'esriGeometryPoint';
   const geometryFormat = 'geojson';
@@ -31,6 +31,21 @@ RespecterCestProtegerService.prototype.identify = function (position, extent, ma
       `&tolerance=${tolerance}` +
       `&lang=${language}`
   );
+};
+
+RespecterCestProtegerService.prototype.hasArea = function (extent) {
+  const geometry = `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`;
+
+  return axios
+    .get(
+      `${baseUrl}` +
+        `?geometry=${geometry}` +
+        `&geometryType=esriGeometryEnvelope` +
+        `&returnGeometry=false` +
+        `&layers=${layers}` +
+        `&tolerance=0`
+    )
+    .then((response) => (response?.data?.results?.length ?? 0) > 0);
 };
 
 export default RespecterCestProtegerService;

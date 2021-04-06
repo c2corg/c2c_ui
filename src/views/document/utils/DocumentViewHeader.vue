@@ -10,6 +10,7 @@
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <follow-button :document="document" />
+          <tags-button :document="document" />
 
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
@@ -25,7 +26,7 @@
             </fa-layers>
           </span>
 
-          <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
+          <edit-link :show-always="showAlways" :document="document" :lang="lang" :title="$gettext('Edit')">
             <icon-edit />
           </edit-link>
         </span>
@@ -42,7 +43,7 @@
 
           <!-- xreport specific  -->
           <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-            {{ $moment.toLocalizedString(document.date, 'LL') | uppercaseFirstLetter }}
+            {{ $dateUtils.toLocalizedString(document.date, 'PP') | uppercaseFirstLetter }}
           </span>
         </h1>
       </div>
@@ -56,6 +57,7 @@
 import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
+import TagsButton from './TagsButton';
 import isEditableMixin from './is-editable-mixin';
 import viewModeMixin from './view-mode-mixin';
 
@@ -65,6 +67,7 @@ export default {
   components: {
     ImagesUploader,
     FollowButton,
+    TagsButton,
     SocialNetworkSharing,
     DocumentVersionBanner,
   },
@@ -99,13 +102,15 @@ export default {
       // is-editable mixin needs this property
       return this.$documentUtils.getDocumentType(this.document.type);
     },
+
+    showAlways() {
+      return !['outing', 'xreport', 'profile', 'image'].includes(this.documentType);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .button-bar {
   font-size: 1.5rem;
 }

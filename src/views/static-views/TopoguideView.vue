@@ -11,6 +11,7 @@
         <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book" />
         <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area" />
         <topoguide-view-link to="yeti" label="YETI" icon="icon-yeti" />
+        <topoguide-view-link to="sophie-picture-contest" label="CPS" icon="icon-star" />
       </div>
     </div>
     <div class="section columns is-multiline is-variable is-8">
@@ -120,14 +121,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .topoguide {
-  background-image: url('~@/assets/img/backgrounds/laurentf-sajama.jpg');
+  background-image: url('~@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
+  background-position-x: center;
   background-size: cover;
   padding-top: 90px; //keep the header on a deep color zone
   padding-bottom: 25px;
   justify-content: center;
+  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
+  @media (min-width: 800px) and (max-width: 1224px) {
+    background-image: url('~@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
+  }
+  @media (min-width: 1224px) {
+    background-image: url('~@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
+  }
 
   h1 {
     font-size: 3rem;

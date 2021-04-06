@@ -3,8 +3,13 @@
     <div class="columns is-mobile" v-if="geomDetailEditable">
       <div class="column is-narrow">
         <div class="control upload-button">
-          <input ref="gpxFileInput" type="file" @change="uploadGpxTrack" accept=".gpx" />
-          <button class="button is-primary is-small" @click="$refs.gpxFileInput.click()" v-translate>
+          <input
+            ref="geoFileInput"
+            type="file"
+            @change="uploadGeoFile"
+            accept=".gpx,.kml,.fit,application/gpx+xml,application/vnd.ant.fit,application/vnd.google-earth.kml+xml"
+          />
+          <button class="button is-primary is-small" @click="$refs.geoFileInput.click()" v-translate>
             Upload a GPS track
           </button>
         </div>
@@ -89,18 +94,23 @@ export default {
   },
 
   methods: {
-    uploadGpxTrack(event) {
+    uploadGeoFile(event) {
       const reader = new FileReader();
 
       reader.onload = function () {
-        this.$refs.map.setDocumentGeometryFromGpx(reader.result);
+        this.$refs.map.setDocumentGeometryFromGeoFile(reader.result);
       }.bind(this);
 
-      reader.readAsText(event.target.files[0]);
+      const file = event.target.files[0];
+      if (file.type === 'application/vnd.ant.fit' || file.name.toLowerCase().endsWith('.fit')) {
+        reader.readAsArrayBuffer(file);
+      } else {
+        reader.readAsText(file);
+      }
 
       // empty the input, because if user wan't to upload same trace
       // change event is not fired
-      this.$refs.gpxFileInput.value = '';
+      this.$refs.geoFileInput.value = '';
     },
 
     setGeometryPoint() {
@@ -141,8 +151,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .upload-button {
   position: relative;
 }

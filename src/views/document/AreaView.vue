@@ -5,10 +5,9 @@
       <div class="column is-3">
         <div class="box">
           <field-view :document="document" :field="fields.area_type" />
-          <field-view :document="document" :field="fields.quality" />
         </div>
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9">
@@ -36,6 +35,8 @@
         </div>
 
         <images-box :document="document" />
+
+        <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
       </div>

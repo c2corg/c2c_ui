@@ -11,7 +11,7 @@
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <tool-box :document="document" />
+        <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
       <div class="column is-9 is-12-print">
@@ -48,7 +48,6 @@
               />
               <field-view :document="document" :field="fields.routes_quantity" />
               <field-view :document="document" :field="fields.best_periods" />
-              <field-view :document="document" :field="fields.quality" />
             </div>
 
             <div class="column is-4">
@@ -112,14 +111,22 @@
         <div class="box" v-if="locale.summary || locale.access_period || locale.description || locale.access">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
-          <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
-          <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+          <template v-if="document.waypoint_type == 'access'">
+            <!-- order is different for access -->
+            <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+            <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
+          </template>
+          <template v-else>
+            <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
+            <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
+          </template>
           <div style="clear: both" />
         </div>
 
         <routes-box v-if="!isDraftView" :document="document" />
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
+        <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box v-if="!isDraftView" :document="document" />
       </div>
     </div>

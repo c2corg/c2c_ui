@@ -1,5 +1,5 @@
 <template>
-  <span :title="$gettext('condition_rating') + ' : ' + $gettext(condition, 'condition_ratings')">
+  <span v-if="!!condition" :title="$gettext('condition_rating') + ' : ' + $gettext(condition, 'condition_ratings')">
     <icon-condition :condition="condition" />
   </span>
 </template>

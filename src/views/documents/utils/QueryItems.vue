@@ -1,48 +1,64 @@
 <template>
   <div class="query-items">
-    <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
+    <div>
+      <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
 
-    <dropdown-button v-for="category of categorizedFields" :key="category.name" class="category-button">
-      <span slot="button" class="button is-small-mobile" :disabled="category.fields.length === 0">
-        <fa-icon :icon="$options.categoryIcon[category.name]" />
-        <span class="is-hidden-mobile">
-          <!-- $gettext('General') -->
-          <!-- $gettext('ratings') -->
-          <!-- $gettext('Terrain') -->
-          <!-- $gettext('Miscs') -->
-          &nbsp;{{ $gettext(category.name) }}
+      <dropdown-button
+        v-for="category of categorizedFields"
+        :key="category.name"
+        class="category-button"
+        :disabled="category.fields.length === 0"
+      >
+        <span slot="button" class="button is-small-mobile" :disabled="category.fields.length === 0">
+          <fa-icon :icon="$options.categoryIcon[category.name]" />
+          <span class="is-hidden-mobile">
+            <!-- $gettext('General') -->
+            <!-- $gettext('ratings') -->
+            <!-- $gettext('Terrain') -->
+            <!-- $gettext('Miscs') -->
+            &nbsp;{{ $gettext(category.name) }}
+          </span>
+          <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
+          <span>&nbsp;</span>
+          <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
-        <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
-        <span>&nbsp;</span>
-        <fa-icon icon="angle-down" aria-hidden="true" />
-      </span>
 
-      <div class="sub-query-items">
-        <query-item
-          v-for="field of category.fields"
-          :key="field.name"
-          :field="field"
-          class="dropdown-item"
-          :class="field.name === 'title' ? 'is-hidden-tablet' : ''"
-        />
-      </div>
-    </dropdown-button>
+        <div class="sub-query-items">
+          <query-item
+            v-for="field of category.fields"
+            :key="field.name"
+            :field="field"
+            class="dropdown-item"
+            :class="field.name === 'title' ? 'is-hidden-tablet' : ''"
+          />
+        </div>
+      </dropdown-button>
 
-    <association-query-item
-      class="association-query-item is-hidden-mobile"
-      :document-types="associations"
-      @documents-load="$emit('documents-load', arguments[0])"
-    />
-    <load-user-preferences-button class="is-hidden-tablet" />
+      <association-query-item
+        class="association-query-item is-hidden-mobile"
+        :document-types="associations"
+        @add="addTag"
+      />
+      <load-user-preferences-button class="is-hidden-tablet category-button" />
+      <export-csv-button v-if="listMode" class="is-small-mobile"></export-csv-button>
+    </div>
+    <div class="is-hidden-mobile">
+      <query-tags :documents="tags" @remove="removeTag"></query-tags>
+    </div>
   </div>
 </template>
 
 <script>
 import AssociationQueryItem from './AssociationQueryItem';
+import ExportCsvButton from './ExportCsvButton.vue';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
 import QueryItem from './QueryItem';
+import QueryTags from './QueryTags';
 
+import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+
+const documentsCache = {};
 
 const categorizedFieldsDefault = {
   General: [
@@ -172,9 +188,24 @@ export default {
   },
 
   components: {
-    QueryItem,
     AssociationQueryItem,
+    QueryItem,
+    QueryTags,
+    ExportCsvButton,
     LoadUserPreferencesButton,
+  },
+
+  props: {
+    listMode: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  data() {
+    return {
+      tags: [],
+    };
   },
 
   computed: {
@@ -191,7 +222,11 @@ export default {
     },
 
     documentType() {
-      return this.$route.name.slice(0, -1);
+      // route name are like outings, routes ...
+      // always the document type with a tail "s".
+      // the `.slice(0, -1)` removes this "s"
+      // it also can be outings-stats => the `.split('-')[0]` remove "-stats"
+      return this.$route.name.split('-')[0].slice(0, -1);
     },
 
     associations() {
@@ -249,12 +284,108 @@ export default {
       return result;
     },
   },
+
+  watch: {
+    $route: {
+      handler: 'load',
+      immediate: true,
+    },
+  },
+
+  methods: {
+    getUrlValue(documentType) {
+      const key = constants.objectDefinitions[documentType].letter;
+
+      return this.$route.query[key];
+    },
+
+    setUrlValue(documentType, value) {
+      const key = constants.objectDefinitions[documentType].letter;
+
+      const query = Object.assign({}, this.$route.query);
+      query[key] = value === '' ? undefined : value;
+
+      if (query[key] !== this.$route.query[key]) {
+        this.$router.push({ query });
+      }
+    },
+
+    getValue(documentType) {
+      const urlValue = this.getUrlValue(documentType);
+
+      return urlValue
+        ? String(urlValue)
+            .split(',')
+            .map((num) => parseInt(num, 10))
+        : [];
+    },
+
+    setValue(documentType, value) {
+      this.setUrlValue(documentType, value.join(','));
+    },
+
+    load() {
+      this.tags = [];
+
+      for (const documentType of this.associations) {
+        for (const documentId of this.getValue(documentType)) {
+          this.tags.push(this.getDocument(documentType, documentId));
+        }
+      }
+
+      this.emitDocumentsLoad();
+    },
+
+    getDocument(documentType, documentId) {
+      const key = `${documentType}#${documentId}`;
+
+      if (documentsCache[key] === undefined) {
+        documentsCache[key] = {
+          document_id: documentId,
+          loading: true,
+        };
+
+        c2c[documentType].get(documentId).then((response) => {
+          documentsCache[key].loading = false;
+          Object.assign(documentsCache[key], response.data);
+          this.emitDocumentsLoad();
+        });
+      }
+
+      return documentsCache[key];
+    },
+
+    addTag(document) {
+      const documentType = this.$documentUtils.getDocumentType(document.type);
+
+      const value = this.getValue(documentType);
+
+      if (value.includes(document.document_id)) {
+        return;
+      }
+
+      value.push(document.document_id);
+
+      this.setValue(documentType, value);
+    },
+
+    removeTag(document) {
+      const documentType = this.$documentUtils.getDocumentType(document.type);
+      const value = this.getValue(documentType);
+      // remove
+      value.splice(value.indexOf(document.document_id), 1);
+
+      this.setValue(documentType, value);
+    },
+
+    emitDocumentsLoad() {
+      this.$emit('documents-load', this.tags);
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .title-input {
   display: inline-flex;
   margin-bottom: 0 !important;
@@ -267,6 +398,15 @@ export default {
 @media screen and (min-width: $tablet) {
   .query-items {
     display: flex;
+    flex-direction: column;
+
+    & + div {
+      display: flex;
+    }
+
+    div:last-child {
+      margin-top: 0.3rem;
+    }
   }
   .title-input,
   .category-button {
@@ -280,7 +420,7 @@ export default {
     font-size: 0.7857rem;
   }
 
-  .query-items {
+  .query-items + div:first-child {
     position: relative; // important; to force dropdown to be on stick to left
     display: flex;
     justify-content: flex-start;
@@ -297,25 +437,6 @@ export default {
         width: 100%;
       }
     }
-
-    // .category-button{
-    //   flex-grow: 1;
-    //   flex-shrink: 1;
-    // }
-
-    // .title-input{
-    //   flex-basis: 3rem;
-    //   flex-grow: 3;
-    //   flex-shrink: 0.01;
-    // }
-
-    // .title-input:focus-within{
-    //   flex-basis: 3rem;
-    // }
   }
-}
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
-}
-@media screen and (min-width: $desktop) {
 }
 </style>

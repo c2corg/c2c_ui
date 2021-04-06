@@ -137,10 +137,12 @@ export default {
           // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
           virtual: {
             slides,
-            renderSlide(image) {
+            renderSlide(img) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(image)}" class="swiper-lazy" title="${image.locales[0].title}">
+                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" title="${
+                img.locales[0].title
+              }" loading="lazy">
                   </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
@@ -268,8 +270,6 @@ export default {
 </style>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $headerHeight: 3rem;
 $paginationHeight: 30px;
 

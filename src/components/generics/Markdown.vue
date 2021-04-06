@@ -140,7 +140,6 @@ export default {
       for (const anchor of anchors) {
         const attributes = anchor.attributes;
 
-        // eslint-disable-next-line
         const { location, href } = this.$router.resolve({
           name: attributes['c2c:document-type'].value.slice(0, -1),
           params: {
@@ -165,8 +164,6 @@ export default {
 
 <style lang="scss">
 // Not scoped syle, because CSS selector are not explicitly present in template
-@import '@/assets/sass/variables.scss';
-
 .markdown-content:not(:last-child) {
   margin-bottom: 1.5rem;
 }

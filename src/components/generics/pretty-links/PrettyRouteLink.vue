@@ -4,7 +4,7 @@
     <activities
       v-if="!hideActivities"
       :activities="route.activities"
-      class="is-size-3 has-text-secondary icon-activities"
+      class="is-size-4 has-text-secondary icon-activities"
     />
     <span
       v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"

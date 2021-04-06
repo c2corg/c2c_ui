@@ -126,12 +126,12 @@
   "capacity": {
     "type": "number",
     "min": 0,
-    "max": 9000
+    "max": 150
   },
   "capacity_staffed": {
     "type": "number",
     "min": 0,
-    "max": 9000
+    "max": 1000
   },
   "categories": {
     "values": "user_categories",

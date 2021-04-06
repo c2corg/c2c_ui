@@ -30,19 +30,26 @@ export default {
       type: Boolean,
       default: false,
     },
+    documentType: {
+      type: String,
+      default: undefined,
+    },
   },
 
   computed: {
     activities() {
-      return constants.activities;
+      let activities = constants.activities;
+      if (this.documentType === 'r') {
+        // remove paragliding for routes
+        activities.splice(activities.indexOf('paragliding'), 1);
+      }
+      return activities;
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 .input-item {
   font-size: 40px;
   margin: 4px;

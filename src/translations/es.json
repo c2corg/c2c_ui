@@ -1,5 +1,17 @@
 {
   "es": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicaciones (mas vertical o mas estrecho pasajes )",
     "1d_to_3d": {
       "severities": "Desde 1 día hasta 3 días"
@@ -17,29 +29,70 @@
     "Add images": "Agregar imagen",
     "Add the first outing": "Añadir la primera salida",
     "Additional information": "Información Adicional",
+    "Allow all": "Permitir todo",
+    "Anonymity and confidentiality": "Anonimato y confidencialidad",
     "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
+    "Are you sure you want to delete this locale?": "¿Está seguro de que quiere eliminar esta local?",
     "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
+    "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
+    "Articles, waypoints or routes to be linked.": "Artículos, waypoints o rutas a enlazar.",
+    "Articles, waypoints, routes or books to be linked.": "Artículos, waypoints, rutas o libros a enlazar.",
     "Associated outings": "Salidas asociadas",
     "Associated routes": "Itinerarios asociados",
+    "Associated routes cotations": " Grados de rutas asociadas",
     "Association": "Asociación",
+    "Associations history": "Historia de las asociaciones",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Reconocimiento (Attribution): en cualquier explotación de la obra autorizada por la licencia hará falta reconocer la autoría.",
+    "Attributions": {
+      "Map controls": "Atribuciones"
+    },
     "Average slope (degrees)": "Inclinación media (grados)",
     "Average slope in degree": "inclinación media en grados",
+    "Back to code": "Volver al código",
+    "Back to edit mode": "Volver al modo de edición",
+    "Base layer": "Primera capa",
+    "Basemap (at)": {
+      "Map layer": "Mapa inicial (at)"
+    },
+    "Basemap ortho (at)": {
+      "Map layer": "Mapa inicial ortho (at)"
+    },
+    "Beware of case-sensitive login and password": "Cuidado con el usuario y la contraseña que distinguen entre mayúsculas y minúsculas ",
     "Block account": "Bloquear cuenta",
     "Book content": "Contenido del libro",
     "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
+    "Both results and map": "Resultados y mapa",
+    "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Describe brevemente cualquier lesión. Aquí se pueden introducir comentarios que no encajen en ningún otro campo.",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
     "Cancel": "Anular",
+    "Cards mode": "Modo tarjetas",
     "Change account parameters": "Cambiar parámetros de cuenta",
     "Change password": "Cambiar contraseña",
     "Checking...": "Verificando...",
+    "Child": "Dependiente",
+    "Clear": "Limpiar",
     "Close": "Cerrar",
+    "Collapse": "Colapsar",
     "Comments": "Comentarios",
+    "Comments are disabled.": "Comentarios están desactivados.",
+    "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicación de los objetivos y expectativas, pensamientos y observaciones durante la salida, discusiones sobre nuevas estrategias, la forma en que el grupo se condujo y dividió las responsabilidades, estaba el grupo acostumbrado a trabajar en conjunto, aspiraciones centrales, etc.",
     "Compare selected versions": "Comparar versiones seleccionadas",
+    "Conditions": "Condiciones",
     "Conditions, summits, routes": "Condiciones, cumbres, rutas",
+    "Configure cookies": "Configurar cookies",
     "Confirm": "Confirmar",
+    "Contain invalid character(s)": {
+      "API message": "Contiene caracteres no válidos"
+    },
+    "Continue the discussion": "Continuar la discusión",
+    "Contribute to common knowledge": "Contribuir al conocimiento común",
+    "Contribute to maintainance": "Contruibuir a la manutencion",
+    "Contributions": "Contribuciones",
+    "Contributor": "Contribuyente",
+    "Control the use of your personal data": "Controlar el uso de sus datos personales",
     "Create a new report": "Agregar un nuevo informe",
     "Created on": "Creado",
+    "Creation?": "Creación?",
     "Current password": "Contraseña actual",
     "Delete this document": "Suprimir este documento",
     "Describe access": "Describir acceso",
@@ -61,12 +114,16 @@
     "Details": "Detalles",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
+    "Document quality": "Calidad del documento",
     "Download outings": "Descargar las salidas",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
     "EULA": "CGU",
-    "Edit": "Editar",
+    "Edit": {
+      "$$noContext": "Editar",
+      "yeti": "Editar"
+    },
     "Edit a document": "Editar un documento",
     "Edit associations": "Editar las asociaciónes",
     "Edit categories": "Editar las categorias",
@@ -83,10 +140,17 @@
     "Fullname": "Nombre completo",
     "Go to the previous page": "Ir a la página anterior",
     "Have an account?": "¿Tienes una cuenta?",
+    "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "History": "Historia",
     "Home": "Inicio",
+    "IGN maps": {
+      "Map layer": "mapas IGN"
+    },
+    "IGN ortho": {
+      "Map layer": "IGN ortho (fr)"
+    },
     "Infos": "Informaciónes",
     "Invalid email address": {
       "API message": "Email inválido"
@@ -135,7 +199,10 @@
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
     "Time": "Horario",
     "Toggle fullscreen": "Pasar a pantalla completa",
-    "Topoguide": "Topoguía",
+    "Topoguide": {
+      "$$noContext": "Topoguía",
+      "Sophie picture context": "Topoguía"
+    },
     "Translate into an other lang": "Traducir en otra lengua",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
@@ -162,7 +229,17 @@
       "image_categories": "acción"
     },
     "activities": "Actividades",
+    "activity": "actividad",
     "activity_rate": "Frecuencia de la práctica de la actividad.",
+    "activity_rate_m2": {
+      "activity_rates": "actividad_cotacion_m2"
+    },
+    "activity_rate_w1": {
+      "activity_rates": "actividad_dificuldad_w1"
+    },
+    "activity_rate_y5": {
+      "activity_rates": "actividad_dificuldad_y5"
+    },
     "add a book": "añadir un libro",
     "add a map": "añadir una mapa",
     "add a route": "añadir un itinerario",
@@ -178,6 +255,9 @@
     "advertisement": "anuncio",
     "age": "edad",
     "aid_rating": "Cotación escalada artificial",
+    "alpine_climbing": {
+      "event_activities": "alpinismo"
+    },
     "already used forum_username": {
       "API message": "Usuario ya utilizado en el forum"
     },
@@ -187,9 +267,7 @@
     "always_accessible": {
       "custodianship_types": "siempre abierto"
     },
-    "apr": {
-      "months": "abril"
-    },
+    "anonymous": "anónimo",
     "area": "región",
     "area_type": "tipo de región",
     "areas": "regiones",
@@ -201,8 +279,11 @@
       "article_categories": "asociación"
     },
     "associations": "Asociaciones",
-    "aug": {
-      "months": "agosto"
+    "at least one route required": {
+      "API message": "al menos una ruta requerida"
+    },
+    "at least one user required": {
+      "API message": "al menos un usario requerido"
     },
     "author": "Autor",
     "author_status": "Autor",
@@ -245,6 +326,9 @@
       "waypoint_types": "vivac"
     },
     "blanket_unstaffed": "Mantas fuera de los períodos de guardia",
+    "blocked_person": {
+      "event_types": "persona_obstruida"
+    },
     "boat": {
       "public_transportation_types": "barco"
     },
@@ -317,17 +401,21 @@
     "closed_snow": {
       "access_conditions": "cerrado nevado"
     },
+    "code": "codigo",
     "collaborative": {
       "image_types": "colaborativo"
     },
     "comment": "Comentario",
     "condition_rating": "Condiciones",
     "conditions": "Condiciones",
+    "conditions_levels": "condicion_grados",
     "configuration": "Configuración",
+    "configure your choices": "Configurar sus opciones",
     "conglomerat": {
       "rock_types": "conglomerado"
     },
     "contact": "Contacto",
+    "contributor": "contribuyente",
     "corridor": {
       "route_configuration_types": "corredor"
     },
@@ -349,6 +437,9 @@
     "crevasse_fall": {
       "event_types": "caída en grieta"
     },
+    "critical_situation": {
+      "event_types": "situacion_critica"
+    },
     "crowded": {
       "frequentation_types": "frecuentado"
     },
@@ -366,9 +457,6 @@
     "day(s)": "Dia(s)",
     "de": {
       "langs": "alemán"
-    },
-    "dec": {
-      "months": "diciembre"
     },
     "descent": {
       "image_categories": "descenso"
@@ -452,9 +540,6 @@
     "farm_sale": {
       "product_types": "venta directa"
     },
-    "feb": {
-      "months": "febrero"
-    },
     "female": {
       "genders": "mujer"
     },
@@ -464,6 +549,7 @@
     },
     "fnumber": "Propiedades de la imagen",
     "focal_length": "Distancia focal",
+    "forum": "foro",
     "fr": {
       "langs": "francés"
     },
@@ -588,15 +674,6 @@
     "it": {
       "langs": "italiano"
     },
-    "jan": {
-      "months": "enero"
-    },
-    "jul": {
-      "months": "julio"
-    },
-    "jun": {
-      "months": "junio"
-    },
     "key_needed": {
       "custodianship_types": "llave necesaria para abrir"
     },
@@ -645,15 +722,10 @@
     "male": {
       "genders": "varón"
     },
+    "map": "mapa",
     "maps_info": "Mapas",
     "maps_references": "Referencias cartográficas",
-    "mar": {
-      "months": "marzo"
-    },
     "matress_unstaffed": "Colchones fuera de los períodos de guardia",
-    "may": {
-      "months": "mayo"
-    },
     "medium": {
       "quality_types": "medio"
     },
@@ -709,16 +781,10 @@
       "image_categories": "nivología y aludes"
     },
     "no info": "no hay información",
-    "nov": {
-      "months": "noviembre"
-    },
     "novel": {
       "book_types": "nueva"
     },
     "numbers": "Características",
-    "oct": {
-      "months": "octubre"
-    },
     "often": {
       "snow_clearance_ratings": "desnevado periódico"
     },
@@ -880,9 +946,6 @@
     "seasonal": {
       "parking_fee_types": "servicio en temporada"
     },
-    "sep": {
-      "months": "septiembre"
-    },
     "service_on_demand": {
       "public_transportation_types": "servicio por solicitud"
     },
@@ -1005,6 +1068,9 @@
     "weather_station_types": "Tipo de estación meteorológica",
     "webcam": {
       "waypoint_types": "cámara web"
+    },
+    "whole year": {
+      "period": "año completo"
     },
     "width": "anchura",
     "wind_direction": {

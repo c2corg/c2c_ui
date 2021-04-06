@@ -31,6 +31,8 @@
         <router-link :to="{ name: 'article', params: { id: 106728 } }" v-translate>Licenses</router-link>
         <br />
         <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
+        <span> &bull; </span>
+        <a @click="showGdpr" v-translate>Cookies</a>
       </div>
 
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
@@ -99,12 +101,16 @@ export default {
       ];
     },
   },
+
+  methods: {
+    showGdpr() {
+      this.$root.$emit('showGdpr');
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 $brandLogoHeight: 70px;
 $brandLogoMargin: 5px;
 
@@ -154,13 +160,13 @@ aside {
   bottom: 0;
 
   .menu-socials,
-  .menu-add,
+  .menu-ad,
   .menu-links {
     margin-bottom: 15px !important;
     line-height: 1;
   }
 
-  .menu-add {
+  .menu-ad {
     height: 320px;
     margin-left: calc((200px - 160px) / 2);
     margin-right: calc((200px - 160px) / 2);
@@ -173,24 +179,25 @@ aside {
   }
 
   .twitter-icon,
-  .twitter-icon:hover {
+  &:hover {
     color: #4198fb; // twitter color
   }
 
   .facebook-icon,
-  .facebook-icon:hover {
+  &:hover {
     color: #6d8bc9; //facebook color
   }
+
   .donate-icon {
     color: hsl(348, 100%, 71%);
-  }
-  .donate-icon:hover {
-    color: hsl(348, 100%, 51%);
+    &:hover {
+      color: hsl(348, 100%, 51%);
+    }
   }
 }
 
 // @media screen and (max-height: 645px){
-//     .menu-add{
+//     .menu-ad {
 //         display:none!important;
 //     }
 // }

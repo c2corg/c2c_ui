@@ -1,5 +1,17 @@
 {
   "it": {
+    "1": {
+      "paragliding_ratings": "P1"
+    },
+    "2": {
+      "paragliding_ratings": "P2"
+    },
+    "3": {
+      "paragliding_ratings": "P3"
+    },
+    "4": {
+      "paragliding_ratings": "P4"
+    },
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 difficoltà puntuale (tratto ripido, strettoia... )",
     "1d_to_3d": {
       "severities": "Da 1 a 3 giorni"
@@ -34,6 +46,7 @@
     "Back to code": "Tornare al codice",
     "Back to edit mode": "Tornare all'edizione ",
     "Base layer": "Carta",
+    "Beware of case-sensitive login and password": "Attenzione a login e password sensibili alle maiuscole e minuscole",
     "Block account": "Blocca account",
     "Book content": "Breve descrizione del libro",
     "Books and websites not already associated to this route": "Non ci sono libri o siti web associati a questo itinerario ",
@@ -93,7 +106,10 @@
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
-    "Edit": "Modificare",
+    "Edit": {
+      "$$noContext": "Modificare",
+      "yeti": "Modificare"
+    },
     "Edit a document": "Modificare il documento",
     "Edit associations": "Modificare le associazioni ",
     "Edit categories": "Modificare le categorie ",
@@ -299,7 +315,10 @@
     "Title, activity and characteristics of the picture": "Titolo, attività, caratteristiche dell'immagine",
     "Toggle fullscreen": "Schermo intero",
     "Too many results: please refine your search.": "Troppi risultati: restringere la ricerca",
-    "Topoguide": "Guida",
+    "Topoguide": {
+      "$$noContext": "Guida",
+      "Sophie picture context": "Guida"
+    },
     "Translate into an other lang": "Tradurre in un altra lingua ",
     "Transport & road or PT access": "Accesso stradale / mezzi publici",
     "Types and styles": "Tipi e stili",
@@ -369,9 +388,6 @@
       "user_categories": "amatore"
     },
     "anonymous": "Contributo anonimo ",
-    "apr": {
-      "months": "aprile"
-    },
     "area": "regione",
     "area_type": "tipo di regione",
     "areas": "regioni",
@@ -391,9 +407,6 @@
     },
     "at least one user required": {
       "API message": "Selezionare al meno un itinerario"
-    },
-    "aug": {
-      "months": "agosto "
     },
     "author": "autore",
     "author_status": "Autore",
@@ -569,9 +582,6 @@
     "de": {
       "langs": "tedesco"
     },
-    "dec": {
-      "months": "dicembre"
-    },
     "descent": {
       "image_categories": "discesa"
     },
@@ -660,9 +670,6 @@
     },
     "farm_sale": {
       "product_types": "vendita del produttore"
-    },
-    "feb": {
-      "months": "febbraio "
     },
     "female": {
       "genders": "femmina "
@@ -818,15 +825,6 @@
     "it": {
       "langs": "italiano"
     },
-    "jan": {
-      "months": "gennaio "
-    },
-    "jul": {
-      "months": "luglio"
-    },
-    "jun": {
-      "months": "giugno"
-    },
     "key_needed": {
       "custodianship_types": "chiavi necessarie "
     },
@@ -887,13 +885,7 @@
     "maps": "carte",
     "maps_info": "Carte/Mappe",
     "maps_references": "Riferimenti cartografici",
-    "mar": {
-      "months": "marzo"
-    },
     "matress_unstaffed": "Materassi (non gestito) ",
-    "may": {
-      "months": "maggio "
-    },
     "medium": {
       "quality_types": "medio"
     },
@@ -968,16 +960,10 @@
     "non_autonomous": {
       "autonomies": "non autonomo "
     },
-    "nov": {
-      "months": "novembre"
-    },
     "novel": {
       "book_types": "racconto"
     },
     "numbers": "Caratteristiche ",
-    "oct": {
-      "months": "ottobre"
-    },
     "of": {
       "1-30 of 200 results": "su"
     },
@@ -1200,9 +1186,6 @@
     },
     "see actual version": "vedere la versione attuale",
     "sensitive_months:": "Periodo di vigilanza: ",
-    "sep": {
-      "months": "settembre"
-    },
     "service_on_demand": {
       "public_transportation_types": "servizio a richiesta"
     },

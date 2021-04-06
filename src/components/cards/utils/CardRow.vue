@@ -5,8 +5,6 @@
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 div {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;

@@ -23,6 +23,10 @@
         icon="key"
       />
 
+      <div class="has-text-weight-bold is-centered has-text-centered mb-1" v-translate>
+        Beware of case-sensitive login and password
+      </div>
+
       <div class="buttons is-centered">
         <button type="submit" class="button is-primary" :class="{ 'is-loading': promise.loading }" v-translate>
           Login
@@ -153,6 +157,7 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
 import VueRecaptcha from 'vue-recaptcha';
 
 import BaseForm from './utils/BaseForm';
@@ -340,7 +345,7 @@ export default {
     resetPassword() {
       this.promise = c2c.userProfile
         .requestPasswordChange(this.email)
-        .then(() => this.$alert.show([this.$gettext('Mail has been sent')]));
+        .then(() => toast({ message: this.$gettext('Mail has been sent'), type: 'is-danger' }));
     },
 
     validateNewPassword() {
@@ -364,8 +369,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/variables.scss';
-
 .login-view {
   height: 100%;
   align-items: center;

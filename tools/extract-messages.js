@@ -62,11 +62,13 @@ function Process() {
 
 Process.prototype.push = function (file, line, msgctxt, msgid) {
   // trim
-  msgid = msgid.replace(/^[\r\n\s]*/g, '');
-  msgid = msgid.replace(/[\r\n\s]*$/g, '');
-  msgid = msgid.replace(/\n/g, ' ');
-  msgid = msgid.replace(/\t/g, ' ');
-  msgid = msgid.replace(/\s+/g, ' ');
+  msgid = msgid
+    .trim()
+    .replace(/"/g, '&quot;')
+    .replace(/\\/g, '&#x5C;')
+    // remove new lines and duplicated spaces
+    .replace(/\n/g, ' ')
+    .replace(/\s+/g, ' ');
 
   // keep lower case msgid in first, at's it will be used for sorting
   const key = `${msgid.toLowerCase()}\u0002${msgid}\u0002${msgctxt}`;
@@ -125,11 +127,11 @@ Process.prototype.parseTemplate = function (file, data) {
     let msgctxt;
 
     if (node.children.length !== 1) {
-      throw new Error(`In ${line}\nNodes with v-translate directive must contains only one child`);
+      throw new Error(`${file}: on line ${line}\nNodes with v-translate directive must contains only one child`);
     }
 
     if (node.children[0].type !== NODETYPE_TEXT) {
-      throw new Error(`In ${line}\nInterploation is not yet supported. Please use $gettext`);
+      throw new Error(`${file}: on line ${line}\nInterpolation is not yet supported. Please use $gettext`);
     }
 
     for (const attribute of node.attrsList) {

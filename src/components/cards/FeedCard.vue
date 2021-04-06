@@ -7,6 +7,7 @@
           class="avatar"
           @error="useDefaultAvatarIcon = true"
           :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+          loading="lazy"
         />
         <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
       </span>
@@ -70,7 +71,7 @@
         <span>&nbsp;</span>
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
       </span>
-      <span> {{ $moment.timeAgo(item.time) }} </span>
+      <span> {{ $dateUtils.timeAgo(item.time) }} </span>
       <span>
         <marker-condition v-if="documentType == 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
@@ -169,8 +170,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
-
 @media screen and (max-width: $tablet) {
   .feed-card {
     border-left: 0 !important;
