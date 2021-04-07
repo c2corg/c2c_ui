@@ -42,6 +42,7 @@ export default {
 
   data() {
     return {
+      promise: null,
       outings: {},
       loadingPercentage: 0,
       activeTab: 'all',
@@ -57,7 +58,10 @@ export default {
 
   methods: {
     load() {
-      c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
+      if (this.promise) {
+        this.promise.cancel();
+      }
+      this.promise = c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
     },
 
     progress(current, total) {
@@ -65,6 +69,7 @@ export default {
     },
 
     compute(outings) {
+      this.promise = null;
       this.outings = { all: outings };
 
       for (let activity of constants.activities) {
