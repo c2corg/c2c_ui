@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer">
+  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
@@ -73,6 +73,8 @@ const exitFullscreen = function () {
   }
 };
 
+const idleDuration = 3000;
+
 export default {
   swiper: null,
   zt: null,
@@ -87,6 +89,7 @@ export default {
       images: [],
       activeDocument: null,
       isFullscreen: false,
+      hideButtons: false,
     };
   },
 
@@ -140,7 +143,7 @@ export default {
             renderSlide(img) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" title="${
+                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
                 img.locales[0].title
               }" loading="lazy">
                   </div>
@@ -188,7 +191,18 @@ export default {
               this.close();
             }
           });
+          if (!this.$screen.isMobile) {
+            // detect idle
+            window.addEventListener('mousemove', this.resetTimer);
+            window.addEventListener('keypress', this.resetTimer);
+            this.timer = setTimeout(() => {
+              this.hideButtons = true;
+            }, idleDuration);
+          }
         });
+        if (this.$screen.isMobile) {
+          this.$options.swiper.on('click', this.toggleButtons);
+        }
         this.$options.swiper.init();
       });
     },
@@ -211,6 +225,12 @@ export default {
         this.zt.unbind(this.$refs.container);
         this.zt = null;
       }
+
+      window.removeEventListener('mousemove', this.resetTimer);
+      window.removeEventListener('keypress', this.resetTimer);
+      clearTimeout(this.timer);
+      this.hideButtons = false;
+
       // if we closed without hitting back, go back once in history
       // to remove the hash
       if (window.location.hash === '#swipe-gallery') {
@@ -218,10 +238,22 @@ export default {
       }
     },
 
+    resetTimer() {
+      this.hideButtons = false;
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.hideButtons = true;
+      }, idleDuration);
+    },
+
     onKeydown(event) {
       if (event.key === 'Escape') {
         this.close();
       }
+    },
+
+    toggleButtons() {
+      this.hideButtons = !this.hideButtons;
     },
 
     toggleImageInfo(image) {
@@ -337,6 +369,25 @@ $paginationHeight: 30px;
 
     .image-viewer-bullet-active {
       background: $primary;
+    }
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next,
+  .image-viewer-pagination,
+  .image-viewer-buttons {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 1s, opacity 1s;
+  }
+
+  &.hide-buttons {
+    .swiper-button-prev,
+    .swiper-button-next,
+    .image-viewer-pagination,
+    .image-viewer-buttons {
+      visibility: hidden;
+      opacity: 0;
     }
   }
 }
