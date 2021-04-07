@@ -13,15 +13,31 @@ DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
   const MAX_SIZE = 2000;
   const API_MAX_LIMIT = 100;
 
+  let cancelled = false;
+
   limit = limit || MAX_SIZE;
   limit = limit > MAX_SIZE ? MAX_SIZE : limit;
 
-  return new Promise((resolve, reject) => {
+  class CancelablePromise extends Promise {
+    cancel() {
+      cancelled = true;
+    }
+  }
+
+  return new CancelablePromise((resolve, reject) => {
     const result = [];
 
     const download = (offset = 0) => {
+      if (cancelled) {
+        return;
+      }
+
       this.getAll({ ...params, offset, limit: API_MAX_LIMIT })
         .then(({ data }) => {
+          if (cancelled) {
+            return;
+          }
+
           for (const document of data.documents) {
             result.push(document);
           }
@@ -35,6 +51,10 @@ DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
           }
         })
         .catch((error) => {
+          if (cancelled) {
+            return;
+          }
+
           reject(error);
         });
     };
