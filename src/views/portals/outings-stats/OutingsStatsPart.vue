@@ -66,6 +66,7 @@ import common from '@/js/constants/common.json';
 const getOutingYear = function (outing) {
   return parseInt(outing.date_start.substring(0, 4), 10);
 };
+
 const getOutingMonth = function (outing) {
   return parseInt(outing.date_start.substring(5, 7), 10) - 1;
 };
@@ -86,6 +87,7 @@ const getRedToGreenColor = function (value, reference, minValue, maxValue) {
 
   return `hsl(${hue}, 75%, 50%)`;
 };
+
 const getRockRatingColor = function (rating, minRating, maxRating) {
   return getRedToGreenColor(rating, common.attributes.climbing_ratings, minRating, maxRating);
 };
@@ -142,8 +144,10 @@ export default {
   methods: {
     createGraphs() {
       new Histogram(this.outings, this.$refs.year_repartition, getOutingYear).draw();
+
       new Histogram(this.outings, this.$refs.month_repartition, getOutingMonth)
         .xTickLabel(this.$dateUtils.month)
+        .xDomain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) // always display all months
         .draw();
 
       new Histogram(this.outings, this.$refs.height_diff_up, getOutingYear)

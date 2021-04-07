@@ -19,6 +19,13 @@ export class Histogram {
     this._yScale = null;
 
     this._values = null; //computed version of data
+
+    this._xDomain = null;
+  }
+
+  xDomain(domain) {
+    this._xDomain = domain;
+    return this;
   }
 
   getY(foo) {
@@ -65,16 +72,14 @@ export class Histogram {
 
     this._computeValues();
 
-    this._xScale = d3
-      .scaleBand()
-      .range([0, this._width])
-      .padding(0.1)
-      .domain(
-        d3.range(
+    const xDomain = this._xDomain
+      ? this._xDomain
+      : d3.range(
           d3.min(this._values, (v) => v.x),
           d3.max(this._values, (v) => v.x) + 1
-        )
-      );
+        );
+
+    this._xScale = d3.scaleBand().range([0, this._width]).padding(0.1).domain(xDomain);
 
     this._yScale = d3.scaleLinear().range([this._height, 0]).domain([0, this._getMaxY()]);
 
