@@ -159,11 +159,17 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
   }
 };
 
-const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
+const orientations = [1, 6, 3, 8];
+
+// angle should be one of 0, 90, 180, 270 (in degrees)
+const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
     const metaData = await loadImage.parseMetaData(file);
-    const orientation = await parseMetaData(document, metaData);
+    let orientation = await parseMetaData(document, metaData);
+    if (angle) {
+      orientation = orientations[(orientations.indexOf(orientation) + angle / 90) % 4];
+    }
     const data = await preProcess(file, document, orientation, onDataUrlReady);
     // do the upload
     worker.push(

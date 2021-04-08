@@ -1,8 +1,22 @@
 <template>
   <div class="card">
     <div class="card-image img-container" :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
-      <delete-button class="delete-button" @click="$emit('delete-image')" />
-
+      <div class="action-buttons">
+        <delete-button @click="$emit('delete-image')" :title="$gettext('Delete image')" />
+        <rotate-button
+          @click="applyRotation(90)"
+          :disabled="rotateClicked || disabled"
+          :title="$gettext('Rotate image right')"
+          v-if="canRotate"
+        />
+        <rotate-button
+          direction="left"
+          @click="applyRotation(-90)"
+          :disabled="rotateClicked || disabled"
+          :title="$gettext('Rotate image left')"
+          v-if="canRotate"
+        />
+      </div>
       <progress
         v-if="isSaving || isFailed"
         class="progress is-large"
@@ -64,9 +78,14 @@
 
 <script>
 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
+import RotateButton from './RotateButton';
+
 import constants from '@/js/constants';
 
 export default {
+  components: {
+    RotateButton,
+  },
   props: {
     categoriesEdition: {
       type: Boolean,
@@ -104,6 +123,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    canRotate: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -112,6 +135,8 @@ export default {
         ['collaborative', this.$gettext('collab')],
         ['personal', this.$gettext('personal')],
       ]),
+      rotate: 0,
+      rotateClicked: false,
     };
 
     if (this.$user.isModerator) {
@@ -124,6 +149,19 @@ export default {
   computed: {
     imageCategories() {
       return constants.objectDefinitions.image.fields.categories.values;
+    },
+
+    disabled() {
+      return this.isSaving || this.isFailed;
+    },
+  },
+
+  watch: {
+    isSaving: function () {
+      this.rotateClicked = false;
+    },
+    isFailed: function () {
+      this.rotateClicked = false;
     },
   },
 
@@ -138,6 +176,18 @@ export default {
       }
 
       this.document.categories = newValue;
+    },
+
+    applyRotation(angle) {
+      if (this.rotateClicked || this.disabled) {
+        return;
+      }
+      this.rotateClicked = true;
+      this.rotate = (this.rotate + angle) % 360;
+      if (this.rotate < 0) {
+        this.rotate += 360;
+      }
+      this.$emit('rotate-image', this.rotate);
     },
   },
 };
@@ -227,11 +277,17 @@ export default {
   }
 }
 
-.delete-button {
+.action-buttons {
   position: absolute;
   top: -1rem;
   right: -1rem;
-  font-size: 3rem;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    margin-bottom: 5px;
+  }
 }
 
 .buttons-if-failed {

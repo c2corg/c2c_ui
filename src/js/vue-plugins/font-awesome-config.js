@@ -76,6 +76,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
+import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot';
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
@@ -92,6 +93,7 @@ import { faTh } from '@fortawesome/free-solid-svg-icons/faTh';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faThList } from '@fortawesome/free-solid-svg-icons/faThList';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faUndoAlt } from '@fortawesome/free-solid-svg-icons/faUndoAlt';
 import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
@@ -284,6 +286,7 @@ export default function install(Vue) {
     faPlus,
     faPlusCircle,
     faQuestionCircle,
+    faRedoAlt,
     faRobot,
     faRoute,
     faSearch,
@@ -301,6 +304,7 @@ export default function install(Vue) {
     faThList,
     faTrash,
     // faTrashAlt,
+    faUndoAlt,
     faUnlock,
     faUpload,
     faUser,
