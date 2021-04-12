@@ -2,7 +2,7 @@
   <div class="section">
     <html-header :title="$gettext('Outings statistics')" />
     <h1 class="title is-3 header-section">
-      <span v-translate>Outing statistics</span>
+      <span v-translate>Outings statistics</span>
       <span v-if="loadingPercentage !== 1">{{ Math.round(loadingPercentage * 100) }}%</span>
     </h1>
 
