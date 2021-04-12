@@ -76,17 +76,10 @@ export default {
     },
 
     webShare() {
-      navigator
-        .share({
-          title: this.$documentUtils.getDocumentTitle(this.$parent.document),
-          url: window.location.href,
-        })
-        .catch(() =>
-          toast({
-            message: this.$gettext('Error sharing'),
-            type: 'is-danger',
-          })
-        );
+      navigator.share({
+        title: this.$documentUtils.getDocumentTitle(this.$parent.document),
+        url: window.location.href,
+      });
     },
   },
 };
