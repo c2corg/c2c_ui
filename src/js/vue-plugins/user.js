@@ -16,7 +16,7 @@ export default function install(Vue) {
         id: data['id'] ?? null,
 
         // user lang, read write property everywhere : this.$user.lang
-        lang: data['lang'],
+        lang: data['lang'] ?? this.$language.current,
 
         // list of roles
         roles: data['roles'] ?? [],
