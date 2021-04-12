@@ -5,6 +5,7 @@
         <img
           v-if="!useDefaultAvatarIcon"
           class="avatar"
+          alt="Avatar"
           @error="useDefaultAvatarIcon = true"
           :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
           loading="lazy"
