@@ -9,38 +9,60 @@ export default function install(Vue) {
 
     data() {
       return {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        matchingQueryIndex: -1,
       };
     },
 
     // https://bulma.io/documentation/modifiers/responsive-helpers/
     computed: {
       isMobile() {
-        return this.width <= BREAKPOINT_MOBILE;
+        return this.matchingQueryIndex === 0;
       },
       isTablet() {
-        return this.width > BREAKPOINT_MOBILE && this.width <= BREAKPOINT_TABLET;
+        return this.matchingQueryIndex === 1;
       },
       isDesktop() {
-        return this.width > BREAKPOINT_TABLET && this.width <= BREAKPOINT_DESKTOP;
+        return this.matchingQueryIndex === 2;
       },
       isWidescreen() {
-        return this.width > BREAKPOINT_DESKTOP && this.width <= BREAKPOINT_WIDESCREEN;
+        return this.matchingQueryIndex === 3;
       },
       isFullHD() {
-        return this.width > BREAKPOINT_WIDESCREEN;
+        return this.matchingQueryIndex === -1;
       },
     },
 
     created() {
-      window.addEventListener('resize', this.onResize);
+      this.mediaQueryLists = [
+        BREAKPOINT_MOBILE,
+        BREAKPOINT_TABLET,
+        BREAKPOINT_DESKTOP,
+        BREAKPOINT_WIDESCREEN,
+      ].map((breakpoint) => window.matchMedia(`only screen and (max-width: ${breakpoint}px)`));
+      this.mediaQueryLists.forEach((mediaQueryList) => {
+        if (mediaQueryList.addEventListener) {
+          mediaQueryList.addEventListener('change', this.onMediaQueryChange);
+        } else {
+          // support Safari < 14
+          mediaQueryList.addListener(this.onMediaQueryChange);
+        }
+      });
+      this.onMediaQueryChange(); // init
+    },
+
+    beforeDestroy() {
+      this.mediaQueryLists.forEach((mediaQueryList) => {
+        if (mediaQueryList.removeEventListener) {
+          mediaQueryList.removeEventListener('change', this.onMediaQueryChange);
+        } else {
+          mediaQueryList.removeListener(this.onMediaQueryChange);
+        }
+      });
     },
 
     methods: {
-      onResize() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+      onMediaQueryChange() {
+        this.matchingQueryIndex = this.mediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
       },
     },
   });
