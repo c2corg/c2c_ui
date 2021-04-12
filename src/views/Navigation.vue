@@ -98,6 +98,7 @@
             <img
               width="24"
               height="24"
+              alt="Avatar"
               :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
             />
             <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
