@@ -165,7 +165,7 @@ export default function install(Vue) {
           msgid,
           msgctxt
         );
-        return (translation || msgid || '').replaceAll('&quot;', '"').replaceAll('&#x5C;', '\\');
+        return translation.replace(/&quot;/g, '"').replace(/&#x5C;/gi, '\\');
       },
 
       getIANALanguageSubtag(lang) {
