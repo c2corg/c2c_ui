@@ -155,9 +155,17 @@ export default function install(Vue) {
       },
 
       gettext(msgid, msgctxt) {
-        return getTranslation(this.translations[this.current], msgid, msgctxt)
-          .replaceAll('&quot;', '"')
-          .replaceAll('&#x5C;', '\\');
+        const translation = getTranslation(this.translations[this.current], msgid, msgctxt);
+        // eslint-disable-next-line
+        console.assert(
+          translation !== undefined,
+          this.current,
+          Object.keys(this.translations).length,
+          this.translations[this.current],
+          msgid,
+          msgctxt
+        );
+        return (translation || msgid || '').replaceAll('&quot;', '"').replaceAll('&#x5C;', '\\');
       },
 
       getIANALanguageSubtag(lang) {
