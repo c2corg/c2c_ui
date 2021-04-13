@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { toast } from 'bulma-toast';
-
 import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
