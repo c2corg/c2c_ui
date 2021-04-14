@@ -3,7 +3,7 @@ import { Feature, Map, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
-import { buffer, containsXY, createEmpty, extend, getWidth } from 'ol/extent';
+import { buffer, containsXY, createEmpty, extend, getWidth, intersects } from 'ol/extent';
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
@@ -64,6 +64,7 @@ export default {
     containsXY,
     createEmpty,
     extend,
+    intersects,
   },
 
   format: {

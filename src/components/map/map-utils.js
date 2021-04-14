@@ -135,3 +135,7 @@ export const getDocumentLineStyle = function (title, highlight) {
 };
 
 export const geoJSONFormat = new ol.format.GeoJSON();
+
+// extent of Switzerland in EPSG:3857 projection
+// (based on https://epsg.io/21781, [5.96, 45.82, 10.49, 47.81] in EPSG:4326)
+export const swissExtent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];

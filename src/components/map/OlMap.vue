@@ -110,6 +110,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  swissExtent,
 } from './map-utils';
 
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
@@ -799,6 +800,9 @@ export default {
         // handle clicks on enabled layers
         if (this.protectionAreasVisible) {
           const extent = this.view.calculateExtent(this.map.getSize() || null);
+          if (!ol.extent.intersects(extent, swissExtent)) {
+            return;
+          }
           const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
           const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
           respecterCestProtegerService
@@ -872,7 +876,6 @@ export default {
           .then(this.addBiodivSportsData);
       } else {
         // first call, check protection areas are contained within map extent and download biodivsports features
-        const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
         Promise.allSettled([
           biodivSportsService
             .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
@@ -880,7 +883,11 @@ export default {
               this.addBiodivSportsData(response);
               return (response?.data?.results?.length ?? 0) > 0;
             }),
-          respecterCestProtegerService.hasArea(rcpExtent),
+          ol.extent.intersects(extent, swissExtent)
+            ? respecterCestProtegerService.hasArea(
+                ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
+              )
+            : Promise.resolve(false),
         ]).then((hasArea) => {
           this.hasProtectionAreas = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
           if (this.hasProtectionAreas) {
