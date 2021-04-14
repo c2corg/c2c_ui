@@ -110,6 +110,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  loadEPSG21781,
   swissExtent,
 } from './map-utils';
 
@@ -782,6 +783,13 @@ export default {
       }
     },
 
+    isInSwitzerland(extent) {
+      if (!ol.extent.intersects(extent, swissExtent)) {
+        return Promise.resolve(false);
+      }
+      return loadEPSG21781().then(() => true);
+    },
+
     onClick(event) {
       const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
@@ -800,21 +808,23 @@ export default {
         // handle clicks on enabled layers
         if (this.protectionAreasVisible) {
           const extent = this.view.calculateExtent(this.map.getSize() || null);
-          if (!ol.extent.intersects(extent, swissExtent)) {
-            return;
-          }
-          const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
-          const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
-          respecterCestProtegerService
-            .identify(position, rcpExtent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
-            .then(({ data }) => {
-              if (data.results && data.results.length) {
-                // if there are several results, then there must be an area and an allowed path. select area
-                this.swissProtectionAreaData =
-                  data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
-                this.$refs.SwissProtectionAreaInformation.show();
-              }
-            });
+          this.isInSwitzerland(extent).then((intersects) => {
+            if (!intersects) {
+              return;
+            }
+            const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
+            const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
+            respecterCestProtegerService
+              .identify(position, rcpExtent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
+              .then(({ data }) => {
+                if (data.results && data.results.length) {
+                  // if there are several results, then there must be an area and an allowed path. select area
+                  this.swissProtectionAreaData =
+                    data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
+                  this.$refs.SwissProtectionAreaInformation.show();
+                }
+              });
+          });
         }
       }
     },
@@ -883,11 +893,14 @@ export default {
               this.addBiodivSportsData(response);
               return (response?.data?.results?.length ?? 0) > 0;
             }),
-          ol.extent.intersects(extent, swissExtent)
-            ? respecterCestProtegerService.hasArea(
-                ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
-              )
-            : Promise.resolve(false),
+          this.isInSwitzerland(extent).then((intersects) => {
+            if (!intersects) {
+              return Promise.resolve(false);
+            }
+            return respecterCestProtegerService.hasArea(
+              ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'))
+            );
+          }),
         ]).then((hasArea) => {
           this.hasProtectionAreas = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
           if (this.hasProtectionAreas) {

@@ -139,3 +139,25 @@ export const geoJSONFormat = new ol.format.GeoJSON();
 // extent of Switzerland in EPSG:3857 projection
 // (based on https://epsg.io/21781, [5.96, 45.82, 10.49, 47.81] in EPSG:4326)
 export const swissExtent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];
+
+export function loadEPSG21781() {
+  // To use other projections, one has to register the projection in OpenLayers.
+  // This can easily be done with [https://proj4js.org](proj4)
+  //
+  // By default OpenLayers does not know about the EPSG:21781 (Swiss) projection.
+  // So we create a projection instance for EPSG:21781 and pass it to
+  // register to make it available to the library for lookup by its
+  // code.
+  // See http://spatialreference.org/ref/epsg/21781/
+  return import(/* webpackChunkName: "proj4" */ 'proj4')
+    .then((module) => module.default)
+    .then((proj4) => {
+      proj4.defs(
+        'EPSG:21781',
+        '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 ' +
+          '+x_0=600000 +y_0=200000 +ellps=bessel ' +
+          '+towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
+      );
+      ol.proj.proj4.register(proj4);
+    });
+}

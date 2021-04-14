@@ -21,23 +21,6 @@ import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import proj4 from 'proj4';
-
-// To use other projections, one has to register the projection in OpenLayers.
-// This can easily be done with [https://proj4js.org](proj4)
-//
-// By default OpenLayers does not know about the EPSG:21781 (Swiss) projection.
-// So we create a projection instance for EPSG:21781 and pass it to
-// register to make it available to the library for lookup by its
-// code.
-// See http://spatialreference.org/ref/epsg/21781/
-proj4.defs(
-  'EPSG:21781',
-  '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 ' +
-    '+x_0=600000 +y_0=200000 +ellps=bessel ' +
-    '+towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
-);
-register(proj4);
 
 // build our own ol module
 export default {
@@ -97,6 +80,9 @@ export default {
     transform: transformProjection,
     transformExtent,
     toLonLat,
+    proj4: {
+      register,
+    },
   },
 
   source: {
