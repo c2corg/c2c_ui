@@ -122,8 +122,8 @@ const parseMetaData = (document, metaData) => {
 
 const preProcess = async (file, document, orientation, onDataUrlReady) => {
   let options = {};
-  // fix orientation for JPEGs, based on EXIF
-  if (file.type === 'image/jpeg' && orientation) {
+  // fix orientation
+  if (orientation) {
     options = { ...options, orientation };
   }
 
@@ -168,7 +168,8 @@ const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSucce
     const metaData = await loadImage.parseMetaData(file);
     let orientation = await parseMetaData(document, metaData);
     if (angle) {
-      orientation = orientations[(orientations.indexOf(orientation) + angle / 90) % 4];
+      // if no orientation has been retrieved, consider value 1 (no rotation)
+      orientation = orientations[(orientations.indexOf(orientation || 1) + angle / 90) % 4];
     }
     const data = await preProcess(file, document, orientation, onDataUrlReady);
     // do the upload
