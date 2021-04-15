@@ -1,6 +1,4 @@
 // This file exposes a simple function that upload a file to c2c image backend
-
-import loadImage from 'blueimp-load-image';
 import { isValid, formatISO, parse, parseISO } from 'date-fns';
 
 import Worker from '@/js/Worker';
@@ -140,6 +138,7 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 
   if (Object.keys(options).length) {
     options = { ...options, canvas: true };
+    const loadImage = await import(/* webpackChunkName: "load-image" */ 'blueimp-load-image');
     const { image: canvas } = await loadImage(file, options);
     onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
     // and extract modified image for upload
@@ -165,6 +164,7 @@ const orientations = [1, 6, 3, 8];
 const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
+    const loadImage = await import(/* webpackChunkName: "load-image" */ 'blueimp-load-image');
     const metaData = await loadImage.parseMetaData(file);
     let orientation = await parseMetaData(document, metaData);
     if (angle) {
