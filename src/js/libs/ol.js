@@ -13,7 +13,6 @@ import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
-import { register } from 'ol/proj/proj4';
 import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
 import VectorSource from 'ol/source/Vector';
@@ -80,9 +79,6 @@ export default {
     transform: transformProjection,
     transformExtent,
     toLonLat,
-    proj4: {
-      register,
-    },
   },
 
   source: {
