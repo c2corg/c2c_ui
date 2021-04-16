@@ -4,7 +4,6 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 const buildTextStyle = function (title, highlight) {
-  // createTextStyle_ = function(feature, type, highlight) {
   let text;
 
   if (highlight) {
@@ -127,7 +126,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
 export const getDocumentLineStyle = function (title, highlight) {
   return new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: highlight ? 'red' : 'yellow',
+      color: highlight ? 'red' : '#f93',
       width: 3,
     }),
     text: buildTextStyle(title, highlight),
