@@ -28,18 +28,18 @@ export class Histogram {
     return this;
   }
 
-  getY(foo) {
-    this._getY = foo;
+  y(yGetter) {
+    this._getY = yGetter;
     return this;
   }
 
-  xTickLabel(foo) {
-    this._xTickLabel = foo;
+  xTickLabel(xTickLabelGetter) {
+    this._xTickLabel = xTickLabelGetter;
     return this;
   }
 
-  yTickLabel(foo) {
-    this._yTickLabel = foo;
+  yTickLabel(yTickLabelGetter) {
+    this._yTickLabel = yTickLabelGetter;
     return this;
   }
 
@@ -126,35 +126,40 @@ export class Histogram {
 }
 
 export class StackedHistogram extends Histogram {
-  constructor(data, htmlElement, getX, getCategory) {
+  constructor(data, htmlElement, getX, getCategories) {
     super(data, htmlElement, getX);
-    this._getCategory = getCategory;
+    this._getCategories = getCategories;
+    this._getCategoryLabel = (category) => category;
     this._color = () => '#F93';
-    this._categoryComparator = (a, b) => (a < b ? -1 : a > b ? +1 : 0);
+    this._categoryComparator = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
     this._categories = null;
   }
 
   _computeValues() {
     let values = {};
-    let categories = new Set();
+    let all_categories = new Set();
     let xs = new Set();
 
     for (const d of this._data) {
       const x = this._getX(d);
       const y = this._getY(d);
-      const category = this._getCategory(d);
-      if (category !== undefined && category !== null) {
-        const key = `${x}_${category}`;
+      let categories = this._getCategories(d);
 
-        values[key] = values[key] || { x, category, y: 0, yDown: 0, yUp: 0, color: null };
-        values[key].y += y;
+      for (let category of categories) {
+        if (!!category) {
+          const key = `${x}_${category}`;
 
-        categories.add(category);
-        xs.add(x);
+          values[key] = values[key] || { x, category, y: 0, yDown: 0, yUp: 0, color: null };
+          values[key].y += y / categories.length;
+
+          all_categories.add(category);
+          xs.add(x);
+        }
       }
     }
 
-    this._categories = [...categories].sort(this._categoryComparator);
+    this._categories = [...all_categories].sort(this._categoryComparator);
+
     const firstCategory = this._categories[0],
       lastCategory = this._categories[this._categories.length - 1];
 
@@ -178,17 +183,22 @@ export class StackedHistogram extends Histogram {
     this._values = Object.values(values);
   }
 
+  categoryLabel(categoryLabelGetter) {
+    this._getCategoryLabel = categoryLabelGetter;
+    return this;
+  }
+
   _getMaxY() {
     return d3.max(this._values, (v) => v.yUp);
   }
 
-  categoryComparator(foo) {
-    this._categoryComparator = foo;
+  categoryComparator(categoryComparator) {
+    this._categoryComparator = categoryComparator;
     return this;
   }
 
-  color(foo) {
-    this._color = foo;
+  color(colorGetter) {
+    this._color = colorGetter;
     return this;
   }
 
@@ -196,6 +206,7 @@ export class StackedHistogram extends Histogram {
     // Add one dot in the legend for each name.
     var size = 8;
     const colors = {};
+    const categories = [...this._categories].reverse();
 
     for (let category of this._categories) {
       colors[category] = this._color(category, this._categories[0], this._categories[this._categories.length - 1]);
@@ -218,7 +229,7 @@ export class StackedHistogram extends Histogram {
 
     legend
       .selectAll('mydots')
-      .data(this._categories)
+      .data(categories)
       .enter()
       .append('rect')
       .attr('y', (d, i) => i * (size + 5))
@@ -228,12 +239,12 @@ export class StackedHistogram extends Histogram {
 
     legend
       .selectAll('mylabels')
-      .data(this._categories)
+      .data(categories)
       .enter()
       .append('text')
       .attr('x', size * 1.2)
       .attr('y', (d, i) => i * (size + 5) + size / 2)
-      .text((d) => d)
+      .text(this._getCategoryLabel)
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle');
 

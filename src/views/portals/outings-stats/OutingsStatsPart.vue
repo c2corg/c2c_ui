@@ -85,7 +85,7 @@ const getRedToGreenColor = function (value, reference, minValue, maxValue) {
   // going from [0, 1] to [120, 0] (0 means red, 120 means green)
   const hue = 120 - 120 * hueOffset;
 
-  return `hsl(${hue}, 75%, 50%)`;
+  return `hsl(${hue}, 66%, 50%)`;
 };
 
 const getRockRatingColor = function (rating, minRating, maxRating) {
@@ -106,6 +106,28 @@ const getIceRatingColor = function (rating, minRating, maxRating) {
 
 const getHikingRatingColor = function (rating, minRating, maxRating) {
   return getRedToGreenColor(rating, common.attributes.hiking_ratings, minRating, maxRating);
+};
+
+const ACTIVITY_COLORS = {
+  ice_climbing: 'Aqua',
+  snow_ice_mixed: 'LightSteelBlue',
+
+  paragliding: 'MediumBlue',
+
+  hiking: 'ForestGreen',
+  snowshoeing: 'LightGreen',
+
+  rock_climbing: 'SaddleBrown',
+  mountain_climbing: 'RosyBrown',
+
+  skitouring: 'Red',
+  mountain_biking: 'DeepPink',
+  via_ferrata: 'Black',
+  slacklining: 'Orange',
+};
+
+const getActivityColor = function (activity) {
+  return ACTIVITY_COLORS[activity];
 };
 
 // global rating can't be ordered alphabetically
@@ -143,51 +165,53 @@ export default {
 
   methods: {
     createGraphs() {
-      new Histogram(this.outings, this.$refs.year_repartition, getOutingYear).draw();
+      new StackedHistogram(this.outings, this.$refs.year_repartition, getOutingYear, (d) => d.activities)
+        .color(getActivityColor)
+        .categoryLabel((activity) => this.$gettext(activity, 'activities'))
+        .draw();
 
-      new Histogram(this.outings, this.$refs.month_repartition, getOutingMonth)
+      new StackedHistogram(this.outings, this.$refs.month_repartition, getOutingMonth, (d) => d.activities)
+        .color(getActivityColor)
         .xTickLabel(this.$dateUtils.month)
+        .categoryLabel((activity) => this.$gettext(activity, 'activities'))
         .xDomain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) // always display all months
         .draw();
 
       new Histogram(this.outings, this.$refs.height_diff_up, getOutingYear)
-        .getY((outing) => outing.height_diff_up)
+        .y((outing) => outing.height_diff_up)
         .yTickLabel(formatLengthInMeter)
         .draw();
 
       new Histogram(this.outings, this.$refs.height_diff_difficulties, getOutingYear)
-        .getY((outing) => outing.height_diff_difficulties)
+        .y((outing) => outing.height_diff_difficulties)
         .yTickLabel(formatLengthInMeter)
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.rock_free_rating, getOutingYear, (d) => d.rock_free_rating)
+      new StackedHistogram(this.outings, this.$refs.rock_free_rating, getOutingYear, (d) => [d.rock_free_rating])
         .color(getRockRatingColor)
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.global_rating, getOutingYear, (d) => d.global_rating)
+      new StackedHistogram(this.outings, this.$refs.global_rating, getOutingYear, (d) => [d.global_rating])
         .color(getGlobalRatingColor)
         .categoryComparator(compareGlobalRatings)
         .draw();
 
-      new StackedHistogram(
-        this.outings,
-        this.$refs.labande_global_rating,
-        getOutingYear,
-        (d) => d.labande_global_rating
-      )
+      new StackedHistogram(this.outings, this.$refs.labande_global_rating, getOutingYear, (d) => [
+        d.labande_global_rating,
+      ])
         .color(getGlobalRatingColor)
         .categoryComparator(compareGlobalRatings)
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.ski_rating, getOutingYear, (d) => d.ski_rating)
+      new StackedHistogram(this.outings, this.$refs.ski_rating, getOutingYear, (d) => [d.ski_rating])
         .color(getSkiRatingColor)
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.ice_rating, getOutingYear, (d) => d.ice_rating)
+      new StackedHistogram(this.outings, this.$refs.ice_rating, getOutingYear, (d) => [d.ice_rating])
         .color(getIceRatingColor)
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.hiking_rating, getOutingYear, (d) => d.hiking_rating)
+      new StackedHistogram(this.outings, this.$refs.hiking_rating, getOutingYear, (d) => [d.hiking_rating])
         .color(getHikingRatingColor)
         .draw();
     },
