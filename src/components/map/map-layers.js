@@ -218,6 +218,8 @@ export const cartoLayers = function () {
   const ignFrOrtho = createIgnFrSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
   // $gettext('SwissTopo', 'Map layer')
   const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current');
+  // $gettext('SwissTopo ortho', 'Map layer')
+  const swissTopoOrtho = createSwisstopoLayer('SwissTopo ortho', 'ch.swisstopo.swissimage', 'jpeg', 'current');
   // $gettext('IGN raster (es)', 'Map layer')
   const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
@@ -233,6 +235,7 @@ export const cartoLayers = function () {
     ignFrMaps,
     ignFrOrtho,
     swissTopo,
+    swissTopoOrtho,
     ignEsMaps,
     ignEsOrtho,
     basemap,
