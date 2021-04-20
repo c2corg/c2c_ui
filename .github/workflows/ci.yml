@@ -80,6 +80,7 @@ jobs:
     needs: build
     if: "!contains(github.ref, 'refs/heads/dependabot')"
     runs-on: ubuntu-latest
+    concurrency: github-pages
     steps:
       - name: Get the branch
         id: get_branch
