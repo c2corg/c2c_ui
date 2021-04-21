@@ -16,12 +16,16 @@
           :class="{ 'is-active': activeTab === activity }"
           @click="activeTab = activity"
         >
-          <a> {{ $gettext(activity, 'activities') }} ({{ outings[activity].length }}) </a>
+          <a>
+            <span v-if="activity">{{ $gettext(activity, 'activities') }}</span>
+            <span v-else v-translate>All</span>
+            <span>({{ outings[activity].length }})</span>
+          </a>
         </li>
       </ul>
     </div>
 
-    <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" />
+    <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" :activity="activeTab" />
   </div>
 </template>
 
@@ -45,7 +49,7 @@ export default {
       promise: null,
       outings: {},
       loadingPercentage: 0,
-      activeTab: 'all',
+      activeTab: '', // empty string means all
     };
   },
 
@@ -70,7 +74,7 @@ export default {
 
     compute(outings) {
       this.promise = null;
-      this.outings = { all: outings };
+      this.outings = { '': outings };
 
       for (let activity of constants.activities) {
         const result = [];

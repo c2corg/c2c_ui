@@ -8,6 +8,7 @@ export class Histogram {
     this._xTickLabel = (value) => value;
     this._yTickLabel = (value) => value;
     this._getY = () => 1;
+    this._xUrl = null;
 
     // set the dimensions and margins of the graph
     this._margin = { top: 10, right: 30, bottom: 50, left: 40 };
@@ -35,6 +36,11 @@ export class Histogram {
 
   xTickLabel(xTickLabelGetter) {
     this._xTickLabel = xTickLabelGetter;
+    return this;
+  }
+
+  xUrl(xUrlGetter) {
+    this._xUrl = xUrlGetter;
     return this;
   }
 
@@ -92,15 +98,26 @@ export class Histogram {
       .append('g')
       .attr('transform', 'translate(' + this._margin.left + ',' + this._margin.top + ')');
 
-    this._svg
+    const axisBottom = this._svg
       .append('g')
       .attr('transform', 'translate(0,' + this._height + ')')
-      .call(d3.axisBottom(this._xScale).tickSize(0).tickFormat(this._xTickLabel))
+      .call(d3.axisBottom(this._xScale).tickSize(0).tickFormat(this._xTickLabel));
+
+    axisBottom
       .selectAll('text')
       .style('text-anchor', 'end')
       .attr('dx', '0.5em')
       .attr('dy', '1.5em')
       .attr('transform', 'rotate(-35)');
+
+    if (this._xUrl) {
+      const xUrl = this._xUrl;
+
+      axisBottom.selectAll('text').each(function (d) {
+        const anchor = d3.select(this.parentNode).append('a').attr('xlink:href', xUrl(d));
+        anchor.node().appendChild(this);
+      });
+    }
 
     this._svg.append('g').call(d3.axisLeft(this._yScale).tickFormat(this._yTickLabel));
 
@@ -133,6 +150,8 @@ export class StackedHistogram extends Histogram {
     this._color = () => '#F93';
     this._categoryComparator = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
     this._categories = null;
+    this._categoryUrl = null;
+    this._dataUrl = null;
   }
 
   _computeValues() {
@@ -183,6 +202,11 @@ export class StackedHistogram extends Histogram {
     this._values = Object.values(values);
   }
 
+  categoryUrl(_categoryUrlGetter) {
+    this._categoryUrl = _categoryUrlGetter;
+    return this;
+  }
+
   categoryLabel(categoryLabelGetter) {
     this._getCategoryLabel = categoryLabelGetter;
     return this;
@@ -199,6 +223,11 @@ export class StackedHistogram extends Histogram {
 
   color(colorGetter) {
     this._color = colorGetter;
+    return this;
+  }
+
+  dataUrl(dataUrlGetter) {
+    this._dataUrl = dataUrlGetter;
     return this;
   }
 
@@ -237,10 +266,13 @@ export class StackedHistogram extends Histogram {
       .attr('height', size)
       .style('fill', (d) => colors[d]);
 
-    legend
-      .selectAll('mylabels')
-      .data(categories)
-      .enter()
+    let labels = legend.selectAll('mylabels').data(categories).enter();
+
+    if (this._categoryUrl) {
+      labels = labels.append('a').attr('xlink:href', this._categoryUrl);
+    }
+
+    labels
       .append('text')
       .attr('x', size * 1.2)
       .attr('y', (d, i) => i * (size + 5) + size / 2)
@@ -259,12 +291,14 @@ export class StackedHistogram extends Histogram {
   }
 
   drawRectangles() {
-    this._svg
-      .selectAll('.bar')
-      .data(this._values)
-      .enter()
+    let rectangles = this._svg.selectAll('.bar').data(this._values).enter();
+
+    if (this._dataUrl) {
+      rectangles = rectangles.append('a').attr('xlink:href', (value) => this._dataUrl(value.x, value.category));
+    }
+
+    rectangles
       .append('rect')
-      .attr('class', 'bar')
       .attr('x', (d) => this._xScale(d.x))
       .attr('width', this._xScale.bandwidth())
       .attr('y', (d) => this._yScale(d.yUp))
