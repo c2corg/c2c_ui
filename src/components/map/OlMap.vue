@@ -570,7 +570,8 @@ export default {
           const mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry;
           this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)));
         }
-      } else if (geoJsonGeometry.type === 'Polygon') {
+      } else if (geoJsonGeometry.type === 'Polygon' || geoJsonGeometry.type === 'MultiPolygon') {
+        // areas
         document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
       } else {
         throw new Error(`Unexpected geometry type : ${geometry.type}`);
