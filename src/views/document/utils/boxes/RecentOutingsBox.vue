@@ -16,7 +16,7 @@
       <router-link
         :to="{ name: 'outings', query: query }"
         class="button is-primary"
-        v-if="outings.length && !hideSeeAllResultsButton"
+        v-if="!hideSeeAllResultsButton && outings.length"
       >
         <span v-translate>show all</span>&nbsp;<span class="badge">{{ totalOutings }}</span>
       </router-link>
@@ -44,8 +44,9 @@ export default {
 
   computed: {
     outings() {
-      const outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
-      return outings.filter((outing) => outing.quality !== 'empty');
+      return (this.document.associations.recent_outings?.documents || this.document.associations.outings).filter(
+        (outing) => outing.quality !== 'empty'
+      );
     },
 
     totalOutings() {
