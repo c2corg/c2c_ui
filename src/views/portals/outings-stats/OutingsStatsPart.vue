@@ -61,7 +61,10 @@
 <script>
 import { Histogram, StackedHistogram } from './outings-stats';
 
+import constants from '@/js/constants';
 import common from '@/js/constants/common.json';
+
+const NOT_NULL_VALUES = '__NOT_NULL_VALUES__';
 
 const getOutingYear = function (outing) {
   return parseInt(outing.date_start.substring(0, 4), 10);
@@ -151,7 +154,10 @@ export default {
     outings: {
       type: Array,
       required: true,
-      tye: Array,
+    },
+    activity: {
+      type: String,
+      default: null,
     },
   },
 
@@ -164,15 +170,101 @@ export default {
   },
 
   methods: {
+    urlBuilder(fields) {
+      /*
+       * ## The "magic" function that build URLs.
+       *
+       * it hides all the field query complexity, and expose a simple prototype
+       * It also handles overwriting the actuel $route possible filter
+       *
+       * ### Basic behavior
+       *
+       * Take an object with field ids (like `ski_rating`) and values, it will returns and URL:
+       *
+       *     { activities: "skitouring" } => /outings?act=skitouring
+       *
+       * ### `year` id
+       *
+       * Even if `year` is not a field id, it's accepted, and the value is transformed. Example:
+       *
+       *     { year: 2013} => /outings?date=2013-01-01,2013-12-31
+       *
+       * ### `null` value
+       *
+       * If the value is NOT_NULL_VALUES, then the lower and upper bound of possible values is used. It's usefull to
+       * filter on outings where the field is defined, whetever the value (e.g. NOT NULL ). Example:
+       *
+       *     { ski_rating: NOT_NULL_VALUES } => /outings?trat=1.1,5.6
+       *     { height_diff_up: NOT_NULL_VALUES } => /outings?odif=0,9000
+       *
+       * ### When field is requested threw a range
+       *
+       * It seems that the API is not able to filter on a single value on some field. When the query mode of the field
+       * is a slided (meaning setting an lower and an upper bound, then we use a range). Example :
+       *
+       *     { rock_free_rating: "5a" } => /outings?frat=5a,5a
+       *
+       */
+
+      const queryArgs = {};
+      const outingFields = constants.objectDefinitions.outing.fields;
+
+      // specific treatment for year
+      if (fields.year) {
+        queryArgs.date = `${fields.year}-01-01,${fields.year}-12-31`;
+        delete fields.year;
+      }
+
+      for (const fieldId in fields) {
+        const field = outingFields[fieldId];
+        const value = fields[fieldId];
+
+        if (value === NOT_NULL_VALUES) {
+          // when value is null, get bounds of possible values
+          if (field.values) {
+            queryArgs[field.url] = `${field.values[0]},${field.values[field.values.length - 1]}`;
+          } else {
+            queryArgs[field.url] = `${field.min},${field.max}`;
+          }
+        } else if (field.queryMode === 'valuesRangeSlider') {
+          // is field's query mode is a range slider (means, we query it threw a range) tthen use a range
+          queryArgs[field.url] = `${fields[fieldId]},${fields[fieldId]}`;
+        } else {
+          // otherwise, simply take the value
+          queryArgs[field.url] = fields[fieldId];
+        }
+      }
+
+      // get current route query, and overwrite it with filters in arguments
+      const query = { ...this.$route.query, ...queryArgs };
+
+      // if the current tab is filterd with activities
+      if (this.activity) {
+        query.act = this.activity;
+      }
+
+      // build target route object, and return the full path
+      const route = this.$router.resolve({ name: 'outings', query }).route;
+      return route.fullPath;
+    },
+
     createGraphs() {
+      // we can't filter outings containing two activities
+      // so we display a filter on legend only for the first part (all activities)
+      const categoryUrlGetter = this.activity ? null : (category) => this.urlBuilder({ activities: category });
+
       new StackedHistogram(this.outings, this.$refs.year_repartition, getOutingYear, (d) => d.activities)
         .color(getActivityColor)
+        .categoryUrl(categoryUrlGetter)
         .categoryLabel((activity) => this.$gettext(activity, 'activities'))
+        .xUrl((year) => this.urlBuilder({ year }))
+        .dataUrl(this.activity ? null : (year, category) => this.urlBuilder({ year, activities: category }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.month_repartition, getOutingMonth, (d) => d.activities)
         .color(getActivityColor)
         .xTickLabel(this.$dateUtils.month)
+        .categoryUrl(categoryUrlGetter)
         .categoryLabel((activity) => this.$gettext(activity, 'activities'))
         .xDomain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) // always display all months
         .draw();
@@ -180,39 +272,65 @@ export default {
       new Histogram(this.outings, this.$refs.height_diff_up, getOutingYear)
         .y((outing) => outing.height_diff_up)
         .yTickLabel(formatLengthInMeter)
+        .xUrl((year) => this.urlBuilder({ year, height_diff_up: NOT_NULL_VALUES }))
         .draw();
 
       new Histogram(this.outings, this.$refs.height_diff_difficulties, getOutingYear)
         .y((outing) => outing.height_diff_difficulties)
         .yTickLabel(formatLengthInMeter)
+        .xUrl((year) =>
+          this.urlBuilder({
+            year,
+            height_diff_difficulties: NOT_NULL_VALUES,
+            activities: 'mountain_climbing,snow_ice_mixed',
+          })
+        )
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.rock_free_rating, getOutingYear, (d) => [d.rock_free_rating])
         .color(getRockRatingColor)
+        .categoryUrl((rock_free_rating) => this.urlBuilder({ rock_free_rating }))
+        .xUrl((year) => this.urlBuilder({ year, rock_free_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, rock_free_rating) => this.urlBuilder({ year, rock_free_rating }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.global_rating, getOutingYear, (d) => [d.global_rating])
         .color(getGlobalRatingColor)
+        .categoryUrl((global_rating) => this.urlBuilder({ global_rating }))
         .categoryComparator(compareGlobalRatings)
+        .xUrl((year) => this.urlBuilder({ year, global_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, global_rating) => this.urlBuilder({ year, global_rating }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.labande_global_rating, getOutingYear, (d) => [
         d.labande_global_rating,
       ])
         .color(getGlobalRatingColor)
+        .categoryUrl((labande_global_rating) => this.urlBuilder({ labande_global_rating }))
         .categoryComparator(compareGlobalRatings)
+        .xUrl((year) => this.urlBuilder({ year, labande_global_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, labande_global_rating) => this.urlBuilder({ year, labande_global_rating }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.ski_rating, getOutingYear, (d) => [d.ski_rating])
         .color(getSkiRatingColor)
+        .categoryUrl((ski_rating) => this.urlBuilder({ ski_rating }))
+        .xUrl((year) => this.urlBuilder({ year, ski_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, ski_rating) => this.urlBuilder({ year, ski_rating }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.ice_rating, getOutingYear, (d) => [d.ice_rating])
         .color(getIceRatingColor)
+        .categoryUrl((ice_rating) => this.urlBuilder({ ice_rating }))
+        .xUrl((year) => this.urlBuilder({ year, ice_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, ice_rating) => this.urlBuilder({ year, ice_rating }))
         .draw();
 
       new StackedHistogram(this.outings, this.$refs.hiking_rating, getOutingYear, (d) => [d.hiking_rating])
         .color(getHikingRatingColor)
+        .categoryUrl((hiking_rating) => this.urlBuilder({ hiking_rating }))
+        .xUrl((year) => this.urlBuilder({ year, hiking_rating: NOT_NULL_VALUES }))
+        .dataUrl((year, hiking_rating) => this.urlBuilder({ year, hiking_rating }))
         .draw();
     },
   },
