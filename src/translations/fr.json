@@ -38,6 +38,7 @@
     "Add the first outing": "Ajouter la première sortie",
     "Add title…": "Ajouter un titre...",
     "Additional information": "Informations supplémentaires",
+    "All": "Tout",
     "Allow all": "Tout accepter",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L’altitude est requise quand les niveaux de danger haut et bas sont différents. Précisez la valeur fournie par le bulletin d'avalanche.",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
@@ -469,6 +470,9 @@
     "Suggested rating": "Cotation suggérée",
     "SwissTopo": {
       "Map slopes layer": "Suisse (SwissTopo)"
+    },
+    "SwissTopo ortho": {
+      "Map layer": "SwissTopo Sat"
     },
     "Target:": "Document à conserver (cible) :",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
