@@ -143,9 +143,8 @@ export class Histogram {
 }
 
 export class StackedHistogram extends Histogram {
-  constructor(data, htmlElement, getX, getCategories) {
+  constructor(data, htmlElement, getX) {
     super(data, htmlElement, getX);
-    this._getCategories = getCategories;
     this._getCategoryLabel = (category) => category;
     this._color = () => '#F93';
     this._categoryComparator = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
@@ -162,17 +161,32 @@ export class StackedHistogram extends Histogram {
     for (const d of this._data) {
       const x = this._getX(d);
       const y = this._getY(d);
-      let categories = this._getCategories(d);
 
-      for (let category of categories) {
-        if (!!category) {
-          const key = `${x}_${category}`;
+      if (!!y) {
+        let y_as_object = {};
 
-          values[key] = values[key] || { x, category, y: 0, yDown: 0, yUp: 0, color: null };
-          values[key].y += y / categories.length;
+        if (typeof y === 'string') {
+          // simply use y as a category, and set value to 1
+          y_as_object[y] = 1;
+        } else if (Array.isArray(y)) {
+          // Use item of array as category, and value as 1/length for each category
+          for (const category of y) {
+            y_as_object[category] = 1 / y.length;
+          }
+        } else {
+          y_as_object = y;
+        }
 
-          all_categories.add(category);
-          xs.add(x);
+        for (const category in y_as_object) {
+          if (!!category && y_as_object[category] !== 0) {
+            const key = `${x}_${category}`;
+
+            values[key] = values[key] || { x, category, y: 0, yDown: 0, yUp: 0, color: null };
+            values[key].y += y_as_object[category];
+
+            all_categories.add(category);
+            xs.add(x);
+          }
         }
       }
     }
