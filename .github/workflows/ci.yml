@@ -159,6 +159,6 @@ jobs:
           echo "::add-mask::$TOKEN"
           npm i
           npm run messages:extract
-          curl -L --fail --user api:"$TOKEN" -F file="@src/translations/c2corg_ui-client.pot" -X PUT "https://www.transifex.com/api/2/project/c2corg_ui/resource/main/content/"
+          curl --location --fail --request POST 'https://rest.api.transifex.com/resource_strings_async_uploads' --header 'Content-Type: multipart/form-data' --header 'Authorization: Bearer $TOKEN' --form 'content=@src/translations/c2corg_ui-client.pot' --form 'resource="o:camptocamp-association:p:c2corg_ui:r:main"'
         env:
           TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
