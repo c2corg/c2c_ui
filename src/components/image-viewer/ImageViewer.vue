@@ -79,8 +79,6 @@ const exitFullscreen = function () {
   }
 };
 
-const idleDuration = 3000;
-
 export default {
   swiper: null,
   zt: null,
@@ -197,14 +195,6 @@ export default {
               this.close();
             }
           });
-          if (!this.$screen.isMobile) {
-            // detect idle
-            window.addEventListener('mousemove', this.resetTimer);
-            window.addEventListener('keypress', this.resetTimer);
-            this.timer = setTimeout(() => {
-              this.hideButtons = true;
-            }, idleDuration);
-          }
         });
         if (this.$screen.isMobile) {
           this.$options.swiper.on('click', this.toggleButtons);
@@ -231,10 +221,6 @@ export default {
         this.zt.unbind(this.$refs.container);
         this.zt = null;
       }
-
-      window.removeEventListener('mousemove', this.resetTimer);
-      window.removeEventListener('keypress', this.resetTimer);
-      clearTimeout(this.timer);
       this.hideButtons = false;
 
       // if we closed without hitting back, go back once in history
@@ -242,14 +228,6 @@ export default {
       if (window.location.hash === '#swipe-gallery') {
         window.history.back();
       }
-    },
-
-    resetTimer() {
-      this.hideButtons = false;
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        this.hideButtons = true;
-      }, idleDuration);
     },
 
     onKeydown(event) {
