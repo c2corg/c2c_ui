@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { Histogram, StackedHistogram } from './outings-stats';
+import { StackedHistogram } from './outings-stats';
 
 import constants from '@/js/constants';
 import common from '@/js/constants/common.json';
@@ -147,6 +147,24 @@ const formatLengthInMeter = function (length) {
     length = Math.round(length / 1000);
     return `${length}\u00a0km`;
   }
+};
+
+const activitySplittedValue = function (outing, value) {
+  /* returns an object where:
+
+  * key are outing's activity
+  * value is the the value in argument divided by the number of outing's activity
+
+  */
+
+  const result = {};
+
+  if (value) {
+    for (const activity of outing.activities) {
+      result[activity] = value / outing.activities.length;
+    }
+  }
+  return result;
 };
 
 export default {
@@ -253,7 +271,8 @@ export default {
       // so we display a filter on legend only for the first part (all activities)
       const categoryUrlGetter = this.activity ? null : (category) => this.urlBuilder({ activities: category });
 
-      new StackedHistogram(this.outings, this.$refs.year_repartition, getOutingYear, (d) => d.activities)
+      new StackedHistogram(this.outings, this.$refs.year_repartition, getOutingYear)
+        .y((d) => d.activities)
         .color(getActivityColor)
         .categoryUrl(categoryUrlGetter)
         .categoryLabel((activity) => this.$gettext(activity, 'activities'))
@@ -261,7 +280,8 @@ export default {
         .dataUrl(this.activity ? null : (year, category) => this.urlBuilder({ year, activities: category }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.month_repartition, getOutingMonth, (d) => d.activities)
+      new StackedHistogram(this.outings, this.$refs.month_repartition, getOutingMonth)
+        .y((d) => d.activities)
         .color(getActivityColor)
         .xTickLabel(this.$dateUtils.month)
         .categoryUrl(categoryUrlGetter)
@@ -269,15 +289,22 @@ export default {
         .xDomain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) // always display all months
         .draw();
 
-      new Histogram(this.outings, this.$refs.height_diff_up, getOutingYear)
-        .y((outing) => outing.height_diff_up)
+      new StackedHistogram(this.outings, this.$refs.height_diff_up, getOutingYear)
+        .y((outing) => activitySplittedValue(outing, outing.height_diff_up))
+        .color(getActivityColor)
         .yTickLabel(formatLengthInMeter)
+        .categoryUrl((category) => this.urlBuilder({ activities: category, height_diff_up: NOT_NULL_VALUES }))
+        .categoryLabel((activity) => this.$gettext(activity, 'activities'))
         .xUrl((year) => this.urlBuilder({ year, height_diff_up: NOT_NULL_VALUES }))
+        .dataUrl((year, category) => this.urlBuilder({ year, activities: category, height_diff_up: NOT_NULL_VALUES }))
         .draw();
 
-      new Histogram(this.outings, this.$refs.height_diff_difficulties, getOutingYear)
-        .y((outing) => outing.height_diff_difficulties)
+      new StackedHistogram(this.outings, this.$refs.height_diff_difficulties, getOutingYear)
+        .y((outing) => activitySplittedValue(outing, outing.height_diff_difficulties))
+        .color(getActivityColor)
         .yTickLabel(formatLengthInMeter)
+        .categoryUrl((category) => this.urlBuilder({ activities: category, height_diff_difficulties: NOT_NULL_VALUES }))
+        .categoryLabel((activity) => this.$gettext(activity, 'activities'))
         .xUrl((year) =>
           this.urlBuilder({
             year,
@@ -285,16 +312,21 @@ export default {
             activities: 'mountain_climbing,snow_ice_mixed',
           })
         )
+        .dataUrl((year, category) =>
+          this.urlBuilder({ year, activities: category, height_diff_difficulties: NOT_NULL_VALUES })
+        )
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.rock_free_rating, getOutingYear, (d) => [d.rock_free_rating])
+      new StackedHistogram(this.outings, this.$refs.rock_free_rating, getOutingYear)
+        .y((d) => d.rock_free_rating)
         .color(getRockRatingColor)
         .categoryUrl((rock_free_rating) => this.urlBuilder({ rock_free_rating }))
         .xUrl((year) => this.urlBuilder({ year, rock_free_rating: NOT_NULL_VALUES }))
         .dataUrl((year, rock_free_rating) => this.urlBuilder({ year, rock_free_rating }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.global_rating, getOutingYear, (d) => [d.global_rating])
+      new StackedHistogram(this.outings, this.$refs.global_rating, getOutingYear)
+        .y((d) => d.global_rating)
         .color(getGlobalRatingColor)
         .categoryUrl((global_rating) => this.urlBuilder({ global_rating }))
         .categoryComparator(compareGlobalRatings)
@@ -302,9 +334,8 @@ export default {
         .dataUrl((year, global_rating) => this.urlBuilder({ year, global_rating }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.labande_global_rating, getOutingYear, (d) => [
-        d.labande_global_rating,
-      ])
+      new StackedHistogram(this.outings, this.$refs.labande_global_rating, getOutingYear)
+        .y((d) => d.labande_global_rating)
         .color(getGlobalRatingColor)
         .categoryUrl((labande_global_rating) => this.urlBuilder({ labande_global_rating }))
         .categoryComparator(compareGlobalRatings)
@@ -312,21 +343,24 @@ export default {
         .dataUrl((year, labande_global_rating) => this.urlBuilder({ year, labande_global_rating }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.ski_rating, getOutingYear, (d) => [d.ski_rating])
+      new StackedHistogram(this.outings, this.$refs.ski_rating, getOutingYear)
+        .y((d) => d.ski_rating)
         .color(getSkiRatingColor)
         .categoryUrl((ski_rating) => this.urlBuilder({ ski_rating }))
         .xUrl((year) => this.urlBuilder({ year, ski_rating: NOT_NULL_VALUES }))
         .dataUrl((year, ski_rating) => this.urlBuilder({ year, ski_rating }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.ice_rating, getOutingYear, (d) => [d.ice_rating])
+      new StackedHistogram(this.outings, this.$refs.ice_rating, getOutingYear)
+        .y((d) => d.ice_rating)
         .color(getIceRatingColor)
         .categoryUrl((ice_rating) => this.urlBuilder({ ice_rating }))
         .xUrl((year) => this.urlBuilder({ year, ice_rating: NOT_NULL_VALUES }))
         .dataUrl((year, ice_rating) => this.urlBuilder({ year, ice_rating }))
         .draw();
 
-      new StackedHistogram(this.outings, this.$refs.hiking_rating, getOutingYear, (d) => [d.hiking_rating])
+      new StackedHistogram(this.outings, this.$refs.hiking_rating, getOutingYear)
+        .y((d) => d.hiking_rating)
         .color(getHikingRatingColor)
         .categoryUrl((hiking_rating) => this.urlBuilder({ hiking_rating }))
         .xUrl((year) => this.urlBuilder({ year, hiking_rating: NOT_NULL_VALUES }))
