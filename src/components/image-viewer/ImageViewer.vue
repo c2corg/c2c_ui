@@ -28,8 +28,12 @@
       <div class="swiper-wrapper" />
     </div>
 
-    <div class="swiper-button-prev" />
-    <div class="swiper-button-next" />
+    <div class="swiper-button-prev">
+      <fa-icon icon="arrow-left"></fa-icon>
+    </div>
+    <div class="swiper-button-next">
+      <fa-icon icon="arrow-right"></fa-icon>
+    </div>
 
     <div class="image-viewer-pagination is-hidden-mobile">
       <span
@@ -48,12 +52,14 @@
 </template>
 
 <script>
-import { Swiper } from 'swiper/bundle';
+import SwiperCore, { Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom } from 'swiper/core';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
 import imageUrls from '@/js/image-urls';
+
+SwiperCore.use([Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom]);
 
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {
@@ -72,8 +78,6 @@ const exitFullscreen = function () {
     document.webkitExitFullscreen();
   }
 };
-
-const idleDuration = 3000;
 
 export default {
   swiper: null,
@@ -168,7 +172,7 @@ export default {
           this.$options.swiper.destroy();
         }
 
-        this.$options.swiper = new Swiper(this.$refs.swiper, swiperOptions);
+        this.$options.swiper = new SwiperCore(this.$refs.swiper, swiperOptions);
         this.$options.swiper.on('slideChange', this.onSlideChange);
         this.$options.swiper.on('init', () => {
           window.history.pushState(null, null, '#swipe-gallery');
@@ -191,14 +195,6 @@ export default {
               this.close();
             }
           });
-          if (!this.$screen.isMobile) {
-            // detect idle
-            window.addEventListener('mousemove', this.resetTimer);
-            window.addEventListener('keypress', this.resetTimer);
-            this.timer = setTimeout(() => {
-              this.hideButtons = true;
-            }, idleDuration);
-          }
         });
         if (this.$screen.isMobile) {
           this.$options.swiper.on('click', this.toggleButtons);
@@ -225,10 +221,6 @@ export default {
         this.zt.unbind(this.$refs.container);
         this.zt = null;
       }
-
-      window.removeEventListener('mousemove', this.resetTimer);
-      window.removeEventListener('keypress', this.resetTimer);
-      clearTimeout(this.timer);
       this.hideButtons = false;
 
       // if we closed without hitting back, go back once in history
@@ -236,14 +228,6 @@ export default {
       if (window.location.hash === '#swipe-gallery') {
         window.history.back();
       }
-    },
-
-    resetTimer() {
-      this.hideButtons = false;
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        this.hideButtons = true;
-      }, idleDuration);
     },
 
     onKeydown(event) {
@@ -279,7 +263,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~swiper/swiper-bundle.css';
+@import '~swiper/swiper.scss';
+@import '~swiper/components/lazy/lazy.scss';
+@import '~swiper/components/zoom/zoom.scss';
 
 // class not explicitly present in template, can't use scope
 
@@ -421,10 +407,36 @@ $paginationHeight: 30px;
   right: 0;
 }
 
+$swiper-navigation-size: 4rem;
+
 .swiper-button-prev {
-  margin-left: 1rem;
+  left: 0;
+  right: auto;
 }
 .swiper-button-next {
-  margin-right: 1rem;
+  left: auto;
+  right: 0;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  font-size: $swiper-navigation-size/2;
+  width: $swiper-navigation-size;
+  height: $swiper-navigation-size;
+  margin-top: -$swiper-navigation-size/2;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: $white;
+
+  &.swiper-button-disabled {
+    cursor: auto;
+    pointer-events: none;
+    color: $grey;
+  }
 }
 </style>

@@ -13,9 +13,12 @@
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import { Swiper as SwiperClass } from 'swiper/core';
+import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter';
 
 import imageUrls from '@/js/image-urls';
+
+const { Swiper, SwiperSlide } = getAwesomeSwiper(SwiperClass);
 
 export default {
   components: {
@@ -54,7 +57,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~swiper/swiper-bundle.css';
+@import '~swiper/swiper.scss';
+@import '~swiper/components/lazy/lazy.scss';
+@import '~swiper/components/navigation/navigation.scss';
+@import '~swiper/components/zoom/zoom.scss';
 
 .swiper {
   .swiper-slide {
