@@ -1,5 +1,5 @@
 """
-This script load data from https://github.com/c2corg/v6_common and save it in a relevant format :
+This script load data from https://github.com/c2corg/v6_api/tree/master/c2corg_api/models/common and save it in a relevant format :
 
 * common.json for attributes arrays
 * fixed_strings_common_js.vue, a fake vue component, for attributes values that needs a translation
@@ -18,7 +18,7 @@ if sys.version_info.major == 2:
 if sys.version_info.major == 3 and sys.version_info.minor < 7 :
     raise Exception("Please run this script with python3.7 or higher")
 
-URL = 'https://raw.githubusercontent.com/c2corg/v6_common/master/c2corg_common/{}.py'.format
+URL = 'https://raw.githubusercontent.com/c2corg/v6_api/master/c2corg_api/models/common/{}.py'.format
 
 # Load python file from c2corg_common, and parse it
 def get_fields(name):
@@ -62,7 +62,7 @@ for attribute_name in attribute_names:
 result["letter_types"] = get_fields('document_types')['ALL']
 
 # save result
-json.dump(result, open("./src/js/constants/common.json", "w"), indent=4, sort_keys=True)
+json.dump(result, open("./src/js/constants/common.json", "w"), indent=2, sort_keys=True)
 
 # and update attributes that need a translation
 with open("./src/translations/fixed_strings_common_js.vue", "w") as f:
