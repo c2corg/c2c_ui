@@ -1,5 +1,5 @@
 <template>
-  <div class="box no-print" v-if="source.length != 0 || !hideButtons">
+  <div class="box no-print" v-if="source.length || !hideButtons">
     <h2 class="title is-2">
       <span>{{ $gettext('Associated routes') }}</span>
     </h2>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="!hideButtons" class="has-text-centered add-section">
-      <router-link :to="{ name: 'routes', query: query }" class="button is-primary">
+      <router-link :to="{ name: 'routes', query: query }" class="button is-primary" v-if="routes.length">
         <span v-translate>Filter results</span>&nbsp;<span class="badge">{{ totalRoutes }}</span>
       </router-link>
       <add-link document-type="route" :query="query" class="button is-primary" />
@@ -74,7 +74,7 @@ export default {
     },
 
     totalRoutes() {
-      return this.document.associations.all_routes?.total || routes.length;
+      return this.document.associations.all_routes?.total || this.document.associations.routes?.length;
     },
   },
 };
