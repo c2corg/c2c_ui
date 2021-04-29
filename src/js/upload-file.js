@@ -138,7 +138,7 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 
   if (Object.keys(options).length) {
     options = { ...options, canvas: true };
-    const loadImage = await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image');
+    const loadImage = (await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image')).default;
     const { image: canvas } = await loadImage(file, options);
     onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
     // and extract modified image for upload
