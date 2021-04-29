@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="!hideButtons" class="has-text-centered add-section">
-      <router-link :to="{ name: 'routes', query: query }" class="button is-primary" v-if="routes.length">
+      <router-link :to="{ name: 'routes', query: query }" class="button is-primary" v-if="source.length">
         <span v-translate>Filter results</span>&nbsp;<span class="badge">{{ totalRoutes }}</span>
       </router-link>
       <add-link document-type="route" :query="query" class="button is-primary" />
