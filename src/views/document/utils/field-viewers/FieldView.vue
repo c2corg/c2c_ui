@@ -47,7 +47,7 @@ export default {
         return false;
       }
 
-      if (Array.isArray(value) && value.length === 0) {
+      if (Array.isArray(value) && !value.length) {
         return false;
       }
 
