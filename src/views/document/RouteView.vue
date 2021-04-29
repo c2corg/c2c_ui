@@ -165,7 +165,9 @@ export default {
       }
 
       if (activities.includes('rock_climbing')) {
-        if (['P1', 'P1+'].includes(doc.equipment_rating)) {
+        if (['single', 'bloc', 'psicobloc'].includes(doc.climbing_outdoor_type)) {
+          result['1307778'] = this.$gettext('crag climbing gear');
+        } else if (['P1', 'P1+'].includes(doc.equipment_rating)) {
           result['183332'] = this.$gettext('bolted rock climbing gear');
         } else if (
           !activities.includes('mountain_climbing') &&
