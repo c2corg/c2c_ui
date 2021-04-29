@@ -22,19 +22,19 @@
 
     <card-row>
       <document-title :document="item.document" class="has-text-weight-bold" />
-      <span v-if="documentType == 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
+      <span v-if="documentType === 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
     </card-row>
 
     <card-row v-if="locale && locale.summary">
       <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 
-    <card-row v-if="images.length != 0">
+    <card-row v-if="images.length">
       <gallery :images="images" />
     </card-row>
 
     <card-row v-if="documentType != 'article' && documentType != 'book'">
-      <span v-if="documentType == 'outing' || documentType == 'route'">
+      <span v-if="documentType === 'outing' || documentType === 'route'">
         <icon-ratings class="card-icon" />
         <document-rating :document="item.document" />
       </span>
@@ -68,13 +68,15 @@
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
       </span>
       <span>
+        <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" />
+        &nbsp;
         <marker-image-count :image-count="item.document.img_count" />
-        <span>&nbsp;</span>
+        &nbsp;
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
       </span>
       <span> {{ $dateUtils.timeAgo(item.time) }} </span>
       <span>
-        <marker-condition v-if="documentType == 'outing'" :condition="item.document.condition_rating" />
+        <marker-condition v-if="documentType === 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
     </card-row>

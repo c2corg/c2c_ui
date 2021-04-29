@@ -33,8 +33,10 @@
       <card-activities-item :activities="document.activities" />
 
       <span class="card-icon is-nowrap">
+        <marker-soft-mobility v-if="document.public_transport" />
+        &nbsp;
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
-        <span>&nbsp;</span>
+        &nbsp;
         <marker-image-count :image-count="document.img_count" />
       </span>
 

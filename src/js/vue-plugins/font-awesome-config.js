@@ -20,6 +20,7 @@ import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faBroom } from '@fortawesome/free-solid-svg-icons/faBroom';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faBullseye } from '@fortawesome/free-solid-svg-icons/faBullseye';
+import { faBus } from '@fortawesome/free-solid-svg-icons/faBus';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
 import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
 import { faChartBar } from '@fortawesome/free-solid-svg-icons/faChartBar';
@@ -229,12 +230,12 @@ export default function install(Vue) {
     faBomb,
     faBroom,
     faBug,
+    faBus,
     faBullseye,
     faCalendar,
     faCamera,
     faChartBar,
     faCheckCircle,
-    //    faCheckSquare,
     faChevronLeft,
     faChevronRight,
     faCircle,
@@ -305,7 +306,6 @@ export default function install(Vue) {
     faThLarge,
     faThList,
     faTrash,
-    // faTrashAlt,
     faUndoAlt,
     faUnlock,
     faUpload,
