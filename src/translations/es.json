@@ -28,22 +28,33 @@
     "Action": {
       "Sophie picture context": "Accion"
     },
+    "Action - prix du jury": {
+      "Sophie picture context": "Acción - premio del jurado"
+    },
+    "Action - prix du public": {
+      "Sophie picture context": "Acción - premio público"
+    },
     "Activity feed": "Actividades",
     "Add": "Añadir",
     "Add here maps not automatically referenced": "Agregar aquí mapas no hace referencia de forma automática",
     "Add images": "Agregar imagen",
     "Add the first outing": "Añadir la primera salida",
+    "Add title…": "Añadir título…",
     "Additional information": "Información Adicional",
     "All": "Todos",
     "Allow all": "Permitir todo",
     "Altitude": "Altitud",
+    "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La altitud es obligatoria cuando los peligros alto y bajo son diferentes. Establezca la altitud como se especificada en el boletín de avalanchas para el área específica.",
     "Anonymity and confidentiality": "Anonimato y confidencialidad",
     "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
     "Are you sure you want to delete this locale?": "¿Está seguro de que quiere eliminar esta local?",
     "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
     "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
+    "Area not covered": "Área no cubiertado",
+    "Area too large": "Área demasiado grande",
     "Articles, waypoints or routes to be linked.": "Artículos, waypoints o rutas a enlazar.",
     "Articles, waypoints, routes or books to be linked.": "Artículos, waypoints, rutas o libros a enlazar.",
+    "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Como su nombre indica, este método está destinado a principiantes. Por tanto, el margen de seguridad debe ser especialmente importante. No se especifica ningún otro parámetro otro que el nivel de peligro. Se ignora la orientación.",
     "Associated outings": "Salidas asociadas",
     "Associated routes": "Itinerarios asociados",
     "Associated routes cotations": " Grados de rutas asociadas",
@@ -53,6 +64,7 @@
     "Attributions": {
       "Map controls": "Atribuciones"
     },
+    "Avalanche bulletins": "Pronósticos de avalancha",
     "Average slope (degrees)": "Inclinación media (grados)",
     "Average slope in degree": "inclinación media en grados",
     "Back to code": "Volver al código",
@@ -64,6 +76,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Mapa inicial ortho (at)"
     },
+    "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Tenga cuidado, en la nieve mojada, no se puede aplicar ningún factor que reduzca la orientación o la asistencia.",
     "Beware of case-sensitive login and password": "Cuidado con el usuario y la contraseña que distinguen entre mayúsculas y minúsculas ",
     "Block account": "Bloquear cuenta",
     "Book content": "Contenido del libro",
@@ -225,6 +238,7 @@
     "View in other lang": "Ver en otra lengua",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
     "Without c2c account": "Participantes sin cuenta c2c",
+    "a new point on an existing line": "un nuevo punto en una línea existente",
     "access": {
       "$$noContext": "acceso",
       "waypoint_types": "acceso"
