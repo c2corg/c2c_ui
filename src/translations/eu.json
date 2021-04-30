@@ -29,6 +29,7 @@
     "Distance": "Distantzia",
     "Distance (km)": "Distantzia (km)",
     "Drop images here or click to upload": "Irudia jaregin edo klikatu aukera egiteko",
+    "Easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
     "Edit": {
       "$$noContext": "Aldatu",
       "yeti": "Aldatu"
@@ -45,6 +46,7 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
     "History": "Bertsioak",
     "Home": "Sarrera orria",
+    "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "Infos": "Argibideak",
     "Invalid email address": {
       "API message": "Email helbidea ez da egokia"
@@ -84,6 +86,7 @@
     "Share with us!": "Gurekin banatu",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Baldintza berdinetan partekatu — Aldaketarik edo konposiziorik egin ezkero, lan originalak zituen baldintza berdinetan soilik banatzeko eskubidea duzu, hau da, lizentzia berdina erabiliz",
     "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
+    "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
     "The mountain sports community": "Mendi kirolen elkartea",
     "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
@@ -326,7 +329,6 @@
     "easy": {
       "glacier_ratings": "erreza"
     },
-    "easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
     "edge": {
       "route_configuration_types": "arista"
     },
@@ -493,7 +495,6 @@
     "hut_warden": {
       "user_categories": "aterpe zaintzailea"
     },
-    "ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "ice_climbing": {
       "activities": "izotz jauzia",
       "event_activities": "izotz jauzia"
@@ -826,7 +827,6 @@
       "activities": "Eskia, surfa",
       "event_activities": "Eskia, surfa"
     },
-    "skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "slab": {
       "climbing_styles": "plaka"
     },

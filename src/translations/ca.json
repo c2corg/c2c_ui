@@ -83,6 +83,7 @@
     "Beginner Reduction Method": "mètode de reducció per a debutant",
     "Beware of case-sensitive login and password": "Pareu compte amb les majúscules i minúscules al nom d'usuari i a la contrasenya",
     "Block account": "Bloqueja aquest usuari",
+    "Bolted rock climbing gear": "Escalada esportiva de diversos llargs",
     "Book content": "Breu descripció del contingut del llibre",
     "Books and websites not already associated to this route": "No hi ha llibres ni webs associats a aquest itinerari",
     "Both results and map": "Resultats i mapa",
@@ -202,6 +203,8 @@
     "Duration": "Durada",
     "Duration (hrs)": "Durada (h)",
     "EULA": "Acord de llicència d'usuari final",
+    "Easy mountain climbing gear": "Alpinisme en roca de F a AD",
+    "Easy snow ice mixed gear": "Alpinisme en neu/glaç/mixt de F a PD+",
     "Edit": {
       "$$noContext": "Edita",
       "yeti": "Edita"
@@ -251,6 +254,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquesta és la llista dels usuaris que seguiu i dels quals veureu l'activitat al vostre fil personal",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Definiu aquí els filtres d'activitats i de regions que seran aplicats al fil de la pàgina d'inici.",
     "High danger level from the avalanche bulletin": "Nivell de perill alt del butlletí d'allaus",
+    "Hiking gear": "Excursionisme estival",
     "History": "Versions",
     "History is missing, please provide it if you have information.": "L'històric no hi consta, no dubteu a aportar la informació que en tingueu",
     "Home": "Pàgina d'inici",
@@ -277,6 +281,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Ice and dry climbing gear": "Escalada en gel i dry-tooling",
     "Image could not be processed": "La imatge no ha pogut ser processada",
     "Image count": "Nombre d'imatges",
     "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
@@ -481,6 +486,7 @@
     },
     "Show only updates from followed users in the homepage feed": "Mostra al fil de la pàgina d'inici només les actualitzacions dels participants seguits.",
     "Skiability": "Esquiabilitat",
+    "Skitouring gear": "Esquí, surf de neu i raquetes",
     "Slopes": "Mapes de pendents",
     "Small group = 2 to 4 people": "Grup petit = 2 a 4 persones",
     "Small group without distance": "Grup petit sense distància",
@@ -705,7 +711,6 @@
     "boat": {
       "public_transportation_types": "vaixell"
     },
-    "bolted rock climbing gear": "Escalada esportiva de diversos llargs",
     "book": {
       "$$noContext": "llibre",
       "image_categories": "llibre"
@@ -859,8 +864,6 @@
     "easy": {
       "glacier_ratings": "fàcil"
     },
-    "easy mountain climbing gear": "Alpinisme en roca de F a AD",
-    "easy snow ice mixed gear": "Alpinisme en neu/glaç/mixt de F a PD+",
     "edge": {
       "route_configuration_types": "aresta"
     },
@@ -1034,7 +1037,6 @@
     "hiking": {
       "activities": "Excursionisme"
     },
-    "hiking gear": "Excursionisme estival",
     "hiking_mtb_exposition": "Exposició en excursionisme i BTT",
     "hiking_rating": "Dificultat en excursionisme",
     "historical": {
@@ -1052,7 +1054,6 @@
     "hut_warden": {
       "user_categories": "guarda de refugi"
     },
-    "ice and dry climbing gear": "Escalada en gel i dry-tooling",
     "ice_climbing": {
       "activities": "Cascada de gel",
       "event_activities": "Cascada de gel"
@@ -1493,7 +1494,6 @@
       "activities": "Esquí, surf",
       "event_activities": "Esquí, surf"
     },
-    "skitouring gear": "Esquí, surf de neu i raquetes",
     "slab": {
       "climbing_styles": "placa"
     },

@@ -120,6 +120,7 @@
     "Beginner Reduction Method": "Einsteiger-Reduktionsmethode",
     "Beware of case-sensitive login and password": "Vorsicht vor Groß- und Kleinschreibung bei Login und Passwort.",
     "Block account": "Konto blockieren",
+    "Bolted rock climbing gear": "Mehrseillängensportkletterei",
     "Book content": "Buch Inhalt",
     "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
     "Both results and map": "Beide Ergebnisse und Karte",
@@ -238,6 +239,8 @@
     "Duration": "Zeit",
     "Duration (hrs)": "Zeit (Stunden)",
     "EULA": "Nutzungsbedingungen",
+    "Easy mountain climbing gear": "Alpines Felsklettern von F bis AD",
+    "Easy snow ice mixed gear": "Gletscher-, Eistouren und kombiniertes Bergsteigen von L bis WS+",
     "Edit": {
       "$$noContext": "Bearbeiten",
       "yeti": "Bearbeiten"
@@ -287,6 +290,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Hier ist die Liste der Benutzern, denen Sie folgen. Aktivitäten dieser Benutzern werden in Ihrem persönlichen Feed angezeigt.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Wählen Sie hier die Aktivitäten und Regionen aus, für die Sie Einträge im Feed auf der Startseite sehen möchten.",
     "High danger level from the avalanche bulletin": "Hohe Gefahrenstufe aus dem Lawinenbulletin",
+    "Hiking gear": "Sommerliches Wandern",
     "History": "Historie",
     "History is missing, please provide it if you have information.": "Routengeschichte fehlt. Bitte tragen Sie bei, fals Sie etwas wissen.",
     "Home": "Startseite",
@@ -310,6 +314,7 @@
     "IGN raster (es)": {
       "Map layer": "Spanien"
     },
+    "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
     "Image count": "Bildanzahl",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
@@ -510,6 +515,7 @@
     },
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
     "Skiability": "Schifahrengenuss",
+    "Skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
     "Slopes": "Hangneigung",
     "Small group = 2 to 4 people": "Kleine Gruppe = 2 bis 4 Leute",
     "Small group with load shedding distance": "Kleine Gruppe mit Lastabwurfweite",
@@ -745,7 +751,6 @@
     "boat": {
       "public_transportation_types": "Schiff"
     },
-    "bolted rock climbing gear": "Mehrseillängensportkletterei",
     "book": {
       "$$noContext": "Buch",
       "image_categories": "Buch"
@@ -910,8 +915,6 @@
     "easy": {
       "glacier_ratings": "einfach"
     },
-    "easy mountain climbing gear": "Alpines Felsklettern von F bis AD",
-    "easy snow ice mixed gear": "Gletscher-, Eistouren und kombiniertes Bergsteigen von L bis WS+",
     "edge": {
       "route_configuration_types": "Grat"
     },
@@ -1103,7 +1106,6 @@
     "hiking": {
       "activities": "Wandern"
     },
-    "hiking gear": "Sommerliches Wandern",
     "hiking_mtb_exposition": "Ausgesetztheit Wandern und MTB",
     "hiking_rating": "Schwierigkeit (Wandern)",
     "historical": {
@@ -1121,7 +1123,6 @@
     "hut_warden": {
       "user_categories": "Hüttenwirt"
     },
-    "ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "ice_climbing": {
       "activities": "Eisklettern",
       "event_activities": "Eisklettern"
@@ -1583,7 +1584,6 @@
       "activities": "Ski-Touring",
       "event_activities": "Ski-Touring"
     },
-    "skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
     "slab": {
       "climbing_styles": "Platte"
     },
