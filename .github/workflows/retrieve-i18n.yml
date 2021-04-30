@@ -2,7 +2,7 @@ name: Retrieve i18n from Transifex
 
 on:
   schedule:
-    - cron: '0 4 * * *'
+    - cron: '0 */2 * * *'
 
 jobs:
   retrieve-18n:
