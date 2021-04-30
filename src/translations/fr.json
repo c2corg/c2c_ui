@@ -74,6 +74,7 @@
     "Beginner Reduction Method": "méthode de réduction pour débutant",
     "Beware of case-sensitive login and password": "Attention, identifiant et mot de passe sont sensibles à la casse (majuscule et minuscule).",
     "Block account": "Bloquer cet utilisateur",
+    "Bolted rock climbing gear": "Escalade en grande voie sportive",
     "Book content": "Rapide description du contenu de l'ouvrage",
     "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
     "Both results and map": "Résultats et carte",
@@ -118,6 +119,7 @@
     "Contribute to maintainance": "Contribuer à la maintenance",
     "Contributor": "Contributeur",
     "Control the use of your personal data": "Contrôlez l'utilisation de vos données personnelles",
+    "Crag climbing gear": "Escalade en couenne",
     "Create": {
       "yeti": "Créer"
     },
@@ -184,6 +186,8 @@
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
     "EULA": "CGU",
+    "Easy mountain climbing gear": "Alpinisme rocheux de F à AD",
+    "Easy snow ice mixed gear": "Alpinisme neige/glace/mixte de F à PD+",
     "Edit": {
       "$$noContext": "Modifier",
       "yeti": "Modifier"
@@ -234,6 +238,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
     "High danger level from the avalanche bulletin": "Niveau de danger haut du bulletin d'avalanche",
+    "Hiking gear": "Randonnée pédestre estivale",
     "History": "Versions",
     "History is missing, please provide it if you have information.": "L'historique est manquant, n'hésitez pas à partager toute information en votre possession.",
     "Home": "Accueil",
@@ -260,6 +265,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
     "Image count": "Nombre d'images",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
@@ -456,6 +462,7 @@
     },
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "Skiability": "Skiabilité",
+    "Skitouring gear": "Ski, surf, raquette",
     "Slopes": "Cartes de pentes",
     "Small group = 2 to 4 people": "Petit groupe = 2 à 4 personnes",
     "Small group with load shedding distance": "Petit groupe avec distance de délestage",
@@ -660,7 +667,6 @@
     "boat": {
       "public_transportation_types": "bateau"
     },
-    "bolted rock climbing gear": "Escalade en grande voie sportive",
     "book": {
       "$$noContext": "livre",
       "image_categories": "livre"
@@ -805,8 +811,6 @@
     "easy": {
       "glacier_ratings": "bouché - passage sans problème"
     },
-    "easy mountain climbing gear": "Alpinisme rocheux de F à AD",
-    "easy snow ice mixed gear": "Alpinisme neige/glace/mixte de F à PD+",
     "edge": {
       "route_configuration_types": "arête"
     },
@@ -979,7 +983,6 @@
     "hiking": {
       "activities": "Randonnée / Trail"
     },
-    "hiking gear": "Randonnée pédestre estivale",
     "hiking_mtb_exposition": "Exposition randonnée, trail et VTT",
     "hiking_rating": "Cotation randonnée / trail",
     "historical": {
@@ -997,7 +1000,6 @@
     "hut_warden": {
       "user_categories": "gardien de refuge"
     },
-    "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
       "activities": "Cascade de glace",
       "event_activities": "Cascade de glace"
@@ -1422,7 +1424,6 @@
       "activities": "Ski, surf",
       "event_activities": "Ski de randonnée"
     },
-    "skitouring gear": "Ski, surf, raquette",
     "slab": {
       "climbing_styles": "dalle"
     },

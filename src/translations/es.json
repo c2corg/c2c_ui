@@ -79,6 +79,7 @@
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Tenga cuidado, en la nieve mojada, no se puede aplicar ningún factor que reduzca la orientación o la asistencia.",
     "Beware of case-sensitive login and password": "Cuidado con el usuario y la contraseña que distinguen entre mayúsculas y minúsculas ",
     "Block account": "Bloquear cuenta",
+    "Bolted rock climbing gear": "Escalada deportiva de varios largos",
     "Book content": "Contenido del libro",
     "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
     "Both results and map": "Resultados y mapa",
@@ -142,6 +143,8 @@
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
     "EULA": "CGU",
+    "Easy mountain climbing gear": "Alpinismo en roca de F a AD",
+    "Easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
     "Edit": {
       "$$noContext": "Editar",
       "yeti": "Editar"
@@ -169,6 +172,7 @@
     "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
+    "Hiking gear": "Excursionismo de verano",
     "History": "Historia",
     "Home": "Inicio",
     "IGN maps": {
@@ -177,6 +181,7 @@
     "IGN ortho": {
       "Map layer": "IGN ortho (fr)"
     },
+    "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "Infos": "Informaciónes",
     "Invalid email address": {
       "API message": "Email inválido"
@@ -220,6 +225,7 @@
     "Share with us!": "¡ Comparte con nosotros!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
+    "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
@@ -360,7 +366,6 @@
     "boat": {
       "public_transportation_types": "barco"
     },
-    "bolted rock climbing gear": "Escalada deportiva de varios largos",
     "book": {
       "$$noContext": "libro",
       "image_categories": "libro"
@@ -509,8 +514,6 @@
     "easy": {
       "glacier_ratings": "facil"
     },
-    "easy mountain climbing gear": "Alpinismo en roca de F a AD",
-    "easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
     "edge": {
       "route_configuration_types": "arista"
     },
@@ -658,7 +661,6 @@
     "hiking": {
       "activities": "Caminata pedestre"
     },
-    "hiking gear": "Excursionismo de verano",
     "hiking_rating": "Cotación caminata pedestre",
     "historical": {
       "book_types": "historial"
@@ -675,7 +677,6 @@
     "hut_warden": {
       "user_categories": "guardián de refugio"
     },
-    "ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "ice_climbing": {
       "activities": "Escalada de hielo",
       "event_activities": "Escalada de hielo"
@@ -1004,7 +1005,6 @@
       "activities": "esqui, surf",
       "event_activities": "esqui, surf"
     },
-    "skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "slab": {
       "climbing_styles": "placa"
     },

@@ -98,6 +98,7 @@
     },
     "Beware of case-sensitive login and password": "请注意用户名和密码的大小写",
     "Block account": "冻结该用户",
+    "Bolted rock climbing gear": "多段运动攀岩装备",
     "Book content": "书籍目录的简短描述",
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
@@ -170,6 +171,8 @@
     "Duration": "时长",
     "Duration (hrs)": "时长(小时)",
     "EULA": "最终用户许可协议",
+    "Easy mountain climbing gear": "简单登山装备",
+    "Easy snow ice mixed gear": "简单冰雪混合攀登装备",
     "Edit": {
       "$$noContext": "编辑",
       "yeti": "编辑"
@@ -206,6 +209,7 @@
     "Help research activities to define new prevention means": "帮助研究活动确定新的预防手段",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "这是你关注的用户列表，你将在你的个人订阅里看到他们的动态。",
     "Here you may set activity and region filters that will apply to the homepage feed.": "你可以在这里设置运动和地区过滤，它们将会应用到首页订阅。",
+    "Hiking gear": "徒步装备",
     "History": "历史",
     "History is missing, please provide it if you have information.": "缺少历史信息，如果你有相关信息，请补充。",
     "Home": "主页",
@@ -227,6 +231,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Ice and dry climbing gear": "攀冰和干攀装备",
     "Image could not be processed": "无法处理图片",
     "Image count": "图片计数",
     "Improve our understanding of risks": "提高我们对风险的理解",
@@ -392,6 +397,7 @@
     },
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
     "Skiability": "可滑雪性",
+    "Skitouring gear": "滑雪装备",
     "Slopes": "坡度",
     "Social cookies": "社交 Cookies",
     "Source:": "来源：",
@@ -609,7 +615,6 @@
     "boat": {
       "public_transportation_types": "船"
     },
-    "bolted rock climbing gear": "多段运动攀岩装备",
     "book": {
       "$$noContext": "书籍",
       "image_categories": "书籍"
@@ -773,8 +778,6 @@
     "easy": {
       "glacier_ratings": "容易通过"
     },
-    "easy mountain climbing gear": "简单登山装备",
-    "easy snow ice mixed gear": "简单冰雪混合攀登装备",
     "edge": {
       "route_configuration_types": "棱边"
     },
@@ -966,7 +969,6 @@
     "hiking": {
       "activities": "徒步"
     },
-    "hiking gear": "徒步装备",
     "hiking_mtb_exposition": "徒步/山地骑行暴露感定级",
     "hiking_rating": "徒步定级",
     "historical": {
@@ -984,7 +986,6 @@
     "hut_warden": {
       "user_categories": "登山小屋看守员"
     },
-    "ice and dry climbing gear": "攀冰和干攀装备",
     "ice_climbing": {
       "activities": "攀冰",
       "event_activities": "攀冰"
@@ -1441,7 +1442,6 @@
       "activities": "滑雪",
       "event_activities": "滑雪"
     },
-    "skitouring gear": "滑雪装备",
     "slab": {
       "climbing_styles": "光板"
     },
