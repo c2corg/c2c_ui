@@ -77,6 +77,8 @@
       "Map layer": "Mapa inicial ortho (at)"
     },
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Tenga cuidado, en la nieve mojada, no se puede aplicar ningún factor que reduzca la orientación o la asistencia.",
+    "Beginner": "Principiante",
+    "Beginner Reduction Method": "Método de reducción para principiantes ",
     "Beware of case-sensitive login and password": "Cuidado con el usuario y la contraseña que distinguen entre mayúsculas y minúsculas ",
     "Block account": "Bloquear cuenta",
     "Bolted rock climbing gear": "Escalada deportiva de varios largos",
@@ -84,8 +86,11 @@
     "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
     "Both results and map": "Resultados y mapa",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Describe brevemente cualquier lesión. Aquí se pueden introducir comentarios que no encajen en ningún otro campo.",
+    "By month": "Por mes",
+    "By year": "Por año",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
     "Cancel": "Anular",
+    "Candidates": "Candidatos",
     "Cards mode": "Modo tarjetas",
     "Change account parameters": "Cambiar parámetros de cuenta",
     "Change password": "Cambiar contraseña",
@@ -98,10 +103,13 @@
     "Comments are disabled.": "Comentarios están desactivados.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicación de los objetivos y expectativas, pensamientos y observaciones durante la salida, discusiones sobre nuevas estrategias, la forma en que el grupo se condujo y dividió las responsabilidades, estaba el grupo acostumbrado a trabajar en conjunto, aspiraciones centrales, etc.",
     "Compare selected versions": "Comparar versiones seleccionadas",
+    "Compute": "Calcular",
+    "Compute risk": "Calcular el riesgo ",
     "Conditions": "Condiciones",
     "Conditions, summits, routes": "Condiciones, cumbres, rutas",
     "Configure cookies": "Configurar cookies",
     "Confirm": "Confirmar",
+    "Confirm delete": "Confirmar eliminación",
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
     },
@@ -111,12 +119,18 @@
     "Contributions": "Contribuciones",
     "Contributor": "Contribuyente",
     "Control the use of your personal data": "Controlar el uso de sus datos personales",
+    "Create": {
+      "yeti": "Crear"
+    },
     "Create a new report": "Agregar un nuevo informe",
     "Created on": "Creado",
     "Creation?": "Creación?",
     "Current password": "Contraseña actual",
     "Danger level": "Nivel de peligro",
     "Danger level:": "Nivel de peligro:",
+    "Delete": {
+      "yeti": "Eliminar"
+    },
     "Delete this document": "Suprimir este documento",
     "Describe access": "Describir acceso",
     "Describe access period": "Describir periodo de acceso",
