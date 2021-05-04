@@ -10,6 +10,7 @@ export default function install(Vue) {
     data() {
       return {
         matchingQueryIndex: -1,
+        height: window.innerHeight,
       };
     },
 
