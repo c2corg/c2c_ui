@@ -10,6 +10,7 @@ export default function install(Vue) {
     data() {
       return {
         matchingQueryIndex: -1,
+        hasHeightForAd: false,
       };
     },
 
@@ -33,36 +34,54 @@ export default function install(Vue) {
     },
 
     created() {
-      this.mediaQueryLists = [
+      this.breakpointsMediaQueryLists = [
         BREAKPOINT_MOBILE,
         BREAKPOINT_TABLET,
         BREAKPOINT_DESKTOP,
         BREAKPOINT_WIDESCREEN,
       ].map((breakpoint) => window.matchMedia(`only screen and (max-width: ${breakpoint}px)`));
-      this.mediaQueryLists.forEach((mediaQueryList) => {
+      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
         if (mediaQueryList.addEventListener) {
-          mediaQueryList.addEventListener('change', this.onMediaQueryChange);
+          mediaQueryList.addEventListener('change', this.onBreakpointMediaQueryChange);
         } else {
           // support Safari < 14
-          mediaQueryList.addListener(this.onMediaQueryChange);
+          mediaQueryList.addListener(this.onBreakpointMediaQueryChange);
         }
       });
-      this.onMediaQueryChange(); // init
+      this.onBreakpointMediaQueryChange(); // init
+
+      this.heightMediaQueryList = window.matchMedia('only screen and (min-height: 630px');
+      if (this.heightMediaQueryList.addEventListener) {
+        this.heightMediaQueryList.addEventListener('change', this.onHeightMediaQueryChange);
+      } else {
+        // support Safari < 14
+        this.heightMediaQueryList.addListener(this.onHeightMediaQueryChange);
+      }
+      this.onHeightMediaQueryChange(); // init
     },
 
     beforeDestroy() {
-      this.mediaQueryLists.forEach((mediaQueryList) => {
+      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
         if (mediaQueryList.removeEventListener) {
-          mediaQueryList.removeEventListener('change', this.onMediaQueryChange);
+          mediaQueryList.removeEventListener('change', this.onBreakpointMediaQueryChange);
         } else {
-          mediaQueryList.removeListener(this.onMediaQueryChange);
+          mediaQueryList.removeListener(this.onBreakpointMediaQueryChange);
         }
       });
+      if (heightMediaQueryList.removeEventListener) {
+        heightMediaQueryList.removeEventListener('change', this.onHeightMediaQueryChange);
+      } else {
+        heightMediaQueryList.removeListener(this.onHeightMediaQueryChange);
+      }
     },
 
     methods: {
-      onMediaQueryChange() {
-        this.matchingQueryIndex = this.mediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
+      onBreakpointMediaQueryChange() {
+        this.matchingQueryIndex = this.breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
+      },
+
+      onHeightMediaQueryChange() {
+        this.hasHeightForAd = this.heightMediaQueryList.matches;
       },
     },
   });
