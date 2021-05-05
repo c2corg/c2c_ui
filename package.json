@@ -75,7 +75,7 @@
     "pretty-quick": "3.1.0",
     "sass": "1.32.12",
     "sass-loader": "10.1.1",
-    "snyk": "1.576.0",
+    "snyk": "1.582.0",
     "vue-template-compiler": "2.6.12",
     "webpack-bundle-analyzer": "4.4.1",
     "xml2js": "0.4.23"
