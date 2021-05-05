@@ -12,6 +12,9 @@
     "4": {
       "paragliding_ratings": "P4"
     },
+    "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD), no es necesario que introduzca ningún parámetro que no sea el nivel de peligro indicado por el boletín de avalanchas. ",
+    "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE), puede ingresar los sectores de la rosa de los vientos que se reportan como críticos en el boletín de avalanchas. ",
+    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), puede refinar el potencial de peligro, establecer el tamaño del grupo y las medidas de precaución que se estén considerando. ",
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicaciones (mas vertical o mas estrecho pasajes )",
     "10 meters minimum while ascending": "10 metros minimo durante la subida",
     "1d_to_3d": {
@@ -110,6 +113,14 @@
     "Configure cookies": "Configurar cookies",
     "Confirm": "Confirmar",
     "Confirm delete": "Confirmar eliminación",
+    "Conflict: version of document has changed": "Conflicto: la versión del documento ha cambiado ",
+    "Conflict: version of locale 'ca' has changed": "Conflicto: la versión de la configuración local 'ca' ha cambiado",
+    "Conflict: version of locale 'de' has changed": "Conflicto: la versión de la configuración local 'de' ha cambiado",
+    "Conflict: version of locale 'en' has changed": "Conflicto: la versión de la configuración local 'en' ha cambiado",
+    "Conflict: version of locale 'es' has changed": "Conflicto: la versión de la configuración local 'es' ha cambiado",
+    "Conflict: version of locale 'eu' has changed": "Conflicto: la versión de la configuración local 'eu' ha cambiado",
+    "Conflict: version of locale 'fr' has changed": "Conflicto: la versión de la configuración local 'fr' ha cambiado",
+    "Conflict: version of locale 'it' has changed": "Conflicto: la versión de la configuración local 'it' ha cambiado",
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
     },
