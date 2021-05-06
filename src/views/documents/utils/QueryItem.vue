@@ -93,8 +93,6 @@
 <script>
 import debounce from 'lodash.debounce';
 import 'vue-slider-component/theme/default.css';
-import Multiselect from 'vue-multiselect';
-import vueSlider from 'vue-slider-component';
 
 import DateQueryItem from './DateQueryItem';
 import DatesQueryItem from './DatesQueryItem';
@@ -105,8 +103,8 @@ import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: {
-    Multiselect,
-    vueSlider,
+    Multiselect: () => import(/* webpackChunkName: "multiselect" */ 'vue-multiselect'),
+    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,

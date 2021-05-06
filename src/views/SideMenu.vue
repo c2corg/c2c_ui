@@ -4,24 +4,66 @@
       <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </router-link>
 
-    <router-link
-      v-for="item of menuItems"
-      :key="item.name"
-      :to="{ name: item.name, query: item.query, params: item.params }"
-    >
+    <router-link :to="{ name: 'topoguide' }">
       <span
-        v-if="!item.minScreenHeight || item.minScreenHeight < $screen.height"
         class="menu-item is-ellipsed"
-        :class="{ 'router-link-active': item.activeFor.includes($route.name) }"
+        :class="{
+          'router-link-active': ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(
+            $route.name
+          ),
+        }"
       >
-        <component :is="item.icon" />
-        <span class="menu-item-text"> {{ item.text | uppercaseFirstLetter }} </span>
+        <icon-topoguide />
+        <span class="menu-item-text"> {{ $gettext('Topoguide') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+    <router-link :to="{ name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } }">
+      <span
+        class="menu-item is-ellipsed"
+        :class="{
+          'router-link-active': ['outings', 'outing'].includes($route.name),
+        }"
+      >
+        <icon-outing />
+        <span class="menu-item-text"> {{ $gettext('outings') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+    <router-link :to="{ name: 'forum' }">
+      <span class="menu-item is-ellipsed">
+        <icon-forum />
+        <span class="menu-item-text"> {{ $gettext('Forum') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+    <router-link :to="{ name: 'serac' }">
+      <span
+        class="menu-item is-ellipsed"
+        :class="{
+          'router-link-active': ['serac', 'xreports', 'xreport'].includes($route.name),
+        }"
+      >
+        <icon-xreport />
+        <span class="menu-item-text"> {{ $gettext('Accident database') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+    <router-link :to="{ name: 'articles' }">
+      <span
+        class="menu-item is-ellipsed"
+        :class="{ 'router-link-active': ['articles', 'article'].includes($route.name) }"
+      >
+        <icon-article />
+        <span class="menu-item-text"> {{ $gettext('articles') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+    <router-link :to="{ name: 'article', params: { id: 106732 } }" v-if="isTall">
+      <span class="menu-item is-ellipsed">
+        <icon-help />
+        <span class="menu-item-text"> {{ $gettext('Help') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
 
     <div class="menu-footer is-size-7">
       <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-      <advertisement class="menu-add" v-if="$screen.height >= 630" />
+      <advertisement class="menu-add" v-if="$screen.hasHeightForAd" />
 
       <div class="has-text-centered menu-links">
         <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
@@ -65,46 +107,39 @@ import Advertisement from './Advertisement';
 export default {
   components: { Advertisement },
 
-  computed: {
-    // This must be computed, because it needs $gettext() function
-    menuItems() {
-      return [
-        {
-          name: 'topoguide',
-          icon: 'icon-topoguide',
-          text: this.$gettext('Topoguide'),
-          activeFor: ['routes', 'waypoints', 'route', 'waypoint', 'area', 'areas'],
-        },
-        {
-          name: 'outings',
-          icon: 'icon-outing',
-          text: this.$gettext('outings'),
-          activeFor: ['outing'],
-          query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' },
-        },
-        { name: 'forum', icon: 'icon-forum', text: this.$gettext('Forum'), activeFor: [] },
-        {
-          name: 'serac',
-          icon: 'icon-xreport',
-          text: this.$gettext('Accident database'),
-          activeFor: ['xreports', 'xreport', 'xreport-add'],
-        },
-        { name: 'articles', icon: 'icon-article', text: this.$gettext('articles'), activeFor: ['article'] },
-        {
-          name: 'article',
-          icon: 'icon-help',
-          text: this.$gettext('Help'),
-          activeFor: [],
-          minScreenHeight: 715,
-          params: { id: 106732 },
-        },
-      ];
-    },
+  data() {
+    return {
+      isTall: false,
+    };
+  },
+
+  created() {
+    this.mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
+    if (this.mediaQueryList.addEventListener) {
+      this.mediaQueryList.addEventListener('change', this.onHeightBreakpointChange);
+    } else {
+      // Safari < 14 support
+      this.mediaQueryList.addListener(this.onHeightBreakpointChange);
+    }
+    this.onHeightBreakpointChange();
+  },
+
+  beforeDestroy() {
+    if (this.mediaQueryList.removeEventListener) {
+      this.mediaQueryList.removeEventListener('change', this.onHeightBreakpointChange);
+    } else {
+      // Safari < 14 support
+      this.mediaQueryList.removeListener(this.onHeightBreakpointChange);
+    }
   },
 
   methods: {
     showGdpr() {
       this.$root.$emit('showGdpr');
+    },
+
+    onHeightBreakpointChange() {
+      this.isTall = this.mediaQueryList.matches;
     },
   },
 };

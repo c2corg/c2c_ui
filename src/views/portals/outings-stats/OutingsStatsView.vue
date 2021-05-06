@@ -2,7 +2,7 @@
   <div class="section">
     <html-header :title="$gettext('Outings statistics')" />
     <h1 class="title is-3 header-section">
-      <span v-translate>Outing statistics</span>
+      <span v-translate>Outings statistics</span>
       <span v-if="loadingPercentage !== 1">{{ Math.round(loadingPercentage * 100) }}%</span>
     </h1>
 
@@ -16,12 +16,16 @@
           :class="{ 'is-active': activeTab === activity }"
           @click="activeTab = activity"
         >
-          <a> {{ $gettext(activity, 'activities') }} ({{ outings[activity].length }}) </a>
+          <a>
+            <span v-if="activity">{{ $gettext(activity, 'activities') }}</span>
+            <span v-else v-translate>All</span>
+            <span>({{ outings[activity].length }})</span>
+          </a>
         </li>
       </ul>
     </div>
 
-    <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" />
+    <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" :activity="activeTab" />
   </div>
 </template>
 
@@ -42,9 +46,10 @@ export default {
 
   data() {
     return {
+      promise: null,
       outings: {},
       loadingPercentage: 0,
-      activeTab: 'all',
+      activeTab: '', // empty string means all
     };
   },
 
@@ -57,7 +62,10 @@ export default {
 
   methods: {
     load() {
-      c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
+      if (this.promise) {
+        this.promise.cancel();
+      }
+      this.promise = c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
     },
 
     progress(current, total) {
@@ -65,7 +73,8 @@ export default {
     },
 
     compute(outings) {
-      this.outings = { all: outings };
+      this.promise = null;
+      this.outings = { '': outings };
 
       for (let activity of constants.activities) {
         const result = [];

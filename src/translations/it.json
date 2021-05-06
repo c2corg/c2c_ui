@@ -48,6 +48,7 @@
     "Base layer": "Carta",
     "Beware of case-sensitive login and password": "Attenzione a login e password sensibili alle maiuscole e minuscole",
     "Block account": "Blocca account",
+    "Bolted rock climbing gear": "Arrampicata su vie sportive",
     "Book content": "Breve descrizione del libro",
     "Books and websites not already associated to this route": "Non ci sono libri o siti web associati a questo itinerario ",
     "Both results and map": "Risultati e carta",
@@ -106,6 +107,8 @@
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
+    "Easy mountain climbing gear": "Alpinismo su roccia (F a AD)",
+    "Easy snow ice mixed gear": "Alpinismo su neve, ghiaccio, misto (F a PD+)",
     "Edit": {
       "$$noContext": "Modificare",
       "yeti": "Modificare"
@@ -134,6 +137,7 @@
     "Heading": "Titolo",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Ecco la lista degli utenti che stai seguendo e di cui vedrai le attività nel tuo flusso personale.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Puoi selezionare le attività e le regioni che saranno visibili nella sezione Notizie sulla pagina principale",
+    "Hiking gear": "Escursionismo estivale",
     "History": "Versioni",
     "Home page feed parameters": "Parametro per le attualità sulla home",
     "I have read and agree to the terms of use": "Ho letto ed approvo i termini e condizioni d'uso ",
@@ -146,6 +150,7 @@
     "IGN ortho": {
       "Map layer": "IGN satellite "
     },
+    "Ice and dry climbing gear": "Cascata di ghiaccio e dry-tooling",
     "Incidents and accidents": "accidenti",
     "Information about the terrain, like elevations, lengths...": "Dati relativi al terreno (altitudine, lunghezza...)  ",
     "Informations about the access": "Informazioni sul accesso stradale o i mezzi pubblici ",
@@ -283,6 +288,7 @@
     },
     "Show only updates from followed users in the homepage feed": "Vedere solo le modifiche degli utenti che stai seguendo",
     "Skiability": "Sciabilità",
+    "Skitouring gear": "Sci, snowboard, ciaspole",
     "Slopes": "Mappa delle pendenze ",
     "Source:": "Documento da unire (sorgente):",
     "Stop following this contributor": "Non seguire più questo utente",
@@ -459,7 +465,6 @@
     "boat": {
       "public_transportation_types": "nave"
     },
-    "bolted rock climbing gear": "Arrampicata su vie sportive",
     "book": {
       "$$noContext": "libro",
       "image_categories": "libro"
@@ -606,8 +611,6 @@
     "easy": {
       "glacier_ratings": "chiuso - passaggio agevole"
     },
-    "easy mountain climbing gear": "Alpinismo su roccia (F a AD)",
-    "easy snow ice mixed gear": "Alpinismo su neve, ghiaccio, misto (F a PD+)",
     "edge": {
       "route_configuration_types": "cresta"
     },
@@ -776,7 +779,6 @@
     "hiking": {
       "activities": "Escursionismo / Trail"
     },
-    "hiking gear": "Escursionismo estivale",
     "hiking_mtb_exposition": "Esposizione (escursionismo, trail, bici)",
     "hiking_rating": "Difficoltà escursionismo/trail",
     "historical": {
@@ -794,7 +796,6 @@
     "hut_warden": {
       "user_categories": "gestore del rifugio "
     },
-    "ice and dry climbing gear": "Cascata di ghiaccio e dry-tooling",
     "ice_climbing": {
       "activities": "Cascata di ghiaccio ",
       "event_activities": "Cascata di ghiaccio "
@@ -1215,7 +1216,6 @@
       "activities": "Sci, snowboard",
       "event_activities": "Sci, snowboard"
     },
-    "skitouring gear": "Sci, snowboard, ciaspole",
     "slab": {
       "climbing_styles": "placca"
     },

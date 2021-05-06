@@ -1,6 +1,6 @@
 <template>
   <span v-if="array"
-    ><span v-for="(item, i) of array" :key="i"
+    ><span v-for="(item, i) of displayedArray" :key="i"
       >{{ i18n ? $gettext(item, i18nContext) : item }}<span v-if="i != array.length - 1">, </span>
     </span></span
   >
@@ -20,6 +20,16 @@ export default {
     i18nContext: {
       type: String,
       default: undefined,
+    },
+    sortValues: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  computed: {
+    displayedArray() {
+      return this.sortValues ? [...this.array].sort() : this.array;
     },
   },
 };

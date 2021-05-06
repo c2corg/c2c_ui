@@ -1,6 +1,4 @@
 // This file exposes a simple function that upload a file to c2c image backend
-
-import loadImage from 'blueimp-load-image';
 import { isValid, formatISO, parse, parseISO } from 'date-fns';
 
 import Worker from '@/js/Worker';
@@ -122,8 +120,8 @@ const parseMetaData = (document, metaData) => {
 
 const preProcess = async (file, document, orientation, onDataUrlReady) => {
   let options = {};
-  // fix orientation for JPEGs, based on EXIF
-  if (file.type === 'image/jpeg' && orientation) {
+  // fix orientation
+  if (orientation) {
     options = { ...options, orientation };
   }
 
@@ -140,6 +138,7 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 
   if (Object.keys(options).length) {
     options = { ...options, canvas: true };
+    const loadImage = (await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image')).default;
     const { image: canvas } = await loadImage(file, options);
     onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
     // and extract modified image for upload
@@ -159,11 +158,19 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
   }
 };
 
-const uploadFile = async (file, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
+const orientations = [1, 6, 3, 8];
+
+// angle should be one of 0, 90, 180, 270 (in degrees)
+const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
+    const loadImage = await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image');
     const metaData = await loadImage.parseMetaData(file);
-    const orientation = await parseMetaData(document, metaData);
+    let orientation = await parseMetaData(document, metaData);
+    if (angle) {
+      // if no orientation has been retrieved, consider value 1 (no rotation)
+      orientation = orientations[(orientations.indexOf(orientation || 1) + angle / 90) % 4];
+    }
     const data = await preProcess(file, document, orientation, onDataUrlReady);
     // do the upload
     worker.push(

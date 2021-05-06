@@ -22,7 +22,10 @@
           </div>
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
-        <div class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
+        <div
+          v-if="!$screen.isMobile"
+          class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd"
+        >
           <h3 class="title is-3" v-translate>Last forum topics</h3>
 
           <forum-widget wide class="box is-paddingless" />

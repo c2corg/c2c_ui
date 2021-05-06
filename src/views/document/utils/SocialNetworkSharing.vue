@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { toast } from 'bulma-toast';
-
 import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
@@ -76,17 +74,10 @@ export default {
     },
 
     webShare() {
-      navigator
-        .share({
-          title: this.$documentUtils.getDocumentTitle(this.$parent.document),
-          url: window.location.href,
-        })
-        .catch(() =>
-          toast({
-            message: this.$gettext('Error sharing'),
-            type: 'is-danger',
-          })
-        );
+      navigator.share({
+        title: this.$documentUtils.getDocumentTitle(this.$parent.document),
+        url: window.location.href,
+      });
     },
   },
 };

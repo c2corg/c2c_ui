@@ -16,7 +16,9 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
+          :can-rotate="image.file && image.file.name && !image.file.name.endsWith('.svg')"
           @delete-image="onDeleteImage(image)"
+          @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
         />
       </div>
@@ -126,12 +128,12 @@ export default {
   },
 
   watch: {
-    // this component svaes it states. It allow an user to close window
+    // this component saves its state. It allows an user to close window
     // with unsaved images, and re-open it without loosing its images
     //
-    // Here is the issue :
+    // Here is the issue:
     // if the user starts an image load, then closes the window without saving
-    // and go to another page, the component won't be reloaded
+    // and goes to another page, the component won't be reloaded
     // and loaded images could be accessible from the next document
     // so, if $route changes, we must clean
     $route: 'clean',
@@ -171,7 +173,7 @@ export default {
     },
 
     onDeleteImage(image) {
-      if (this.images[image.key] !== undefined) {
+      if (this.images[image.key]) {
         this.$delete(this.images, image.key);
       }
 
@@ -223,12 +225,13 @@ export default {
       };
     },
 
-    startUpload(image) {
+    startUpload(image, angle = 0) {
       image.status = 'INITIAL';
       image.percentCompleted = 0;
 
       uploadFile(
         image.file,
+        angle,
         (dataUrl) => {
           image.dataUrl = dataUrl;
         },
@@ -264,18 +267,14 @@ export default {
       image.errorMessage = event?.message ?? this.$gettext('Image could not be processed');
     },
 
-    computeReadyForSaving() {
-      if (this.documents.length === 0) {
-        this.readyForSaving = false;
-      } else {
-        this.readyForSaving = true;
+    onRotateImage(image, angle) {
+      this.startUpload(image, angle);
+      this.computeReadyForSaving();
+    },
 
-        for (const document of this.documents) {
-          if (!document.filename) {
-            this.readyForSaving = false;
-          }
-        }
-      }
+    computeReadyForSaving() {
+      const images = Object.values(this.images);
+      this.readyForSaving = images.length && images.every((image) => image.status === 'SUCCESS');
     },
 
     save() {

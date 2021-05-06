@@ -38,6 +38,7 @@
     "Add the first outing": "Ajouter la première sortie",
     "Add title…": "Ajouter un titre...",
     "Additional information": "Informations supplémentaires",
+    "All": "Tout",
     "Allow all": "Tout accepter",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L’altitude est requise quand les niveaux de danger haut et bas sont différents. Précisez la valeur fournie par le bulletin d'avalanche.",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
@@ -73,10 +74,13 @@
     "Beginner Reduction Method": "méthode de réduction pour débutant",
     "Beware of case-sensitive login and password": "Attention, identifiant et mot de passe sont sensibles à la casse (majuscule et minuscule).",
     "Block account": "Bloquer cet utilisateur",
+    "Bolted rock climbing gear": "Escalade en grande voie sportive",
     "Book content": "Rapide description du contenu de l'ouvrage",
     "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
     "Both results and map": "Résultats et carte",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
+    "By month": "Par mois",
+    "By year": "Par année",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org a pour but de faciliter le partage d'informations entre les pratiquants de sports de montagne et de contribuer à la sécurité des activités montagne.",
     "Cancel": "Annuler",
     "Candidates": "Toutes les photos",
@@ -115,6 +119,7 @@
     "Contribute to maintainance": "Contribuer à la maintenance",
     "Contributor": "Contributeur",
     "Control the use of your personal data": "Contrôlez l'utilisation de vos données personnelles",
+    "Crag climbing gear": "Escalade en couenne",
     "Create": {
       "yeti": "Créer"
     },
@@ -138,6 +143,7 @@
     },
     "Delete a line chunk": "Supprimer une portion de ligne",
     "Delete a point": "Supprimer un point",
+    "Delete image": "Supprimer l'image",
     "Delete route": "Supprimer l'itinéraire",
     "Delete this document": "Supprimer ce document",
     "Delete this locale": "Supprimer cette version linguistique",
@@ -180,6 +186,8 @@
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
     "EULA": "CGU",
+    "Easy mountain climbing gear": "Alpinisme rocheux de F à AD",
+    "Easy snow ice mixed gear": "Alpinisme neige/glace/mixte de F à PD+",
     "Edit": {
       "$$noContext": "Modifier",
       "yeti": "Modifier"
@@ -201,6 +209,7 @@
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "Filter on map extent": "Limiter la recherche à la carte visible",
+    "Filter results": "Filtrer",
     "Followed users": "Contributeurs suivis",
     "Forgot password?": "Mot de passe oublié ?",
     "Forum username": "Pseudo forum",
@@ -229,6 +238,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Voici la liste des contributeurs que vous suivez et dont vous verrez les activités dans votre fil personnel.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Définissez ici les filtres d'activités et de régions qui seront appliqués dans le fil de la page d'accueil.",
     "High danger level from the avalanche bulletin": "Niveau de danger haut du bulletin d'avalanche",
+    "Hiking gear": "Randonnée pédestre estivale",
     "History": "Versions",
     "History is missing, please provide it if you have information.": "L'historique est manquant, n'hésitez pas à partager toute information en votre possession.",
     "Home": "Accueil",
@@ -255,6 +265,7 @@
     "IGN raster (es)": {
       "Map layer": "IGN Es"
     },
+    "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
     "Image count": "Nombre d'images",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
@@ -367,6 +378,7 @@
     "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien",
     "Outing": "Itinéraire",
+    "Outings statistics": "Statistiques des sorties",
     "Page not found": "Page non trouvée",
     "Paragliding outings": "Sorties parapente",
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
@@ -417,6 +429,8 @@
     "Retry": "Réessayer",
     "Risky slopes": "Pentes à risque",
     "Risky slopes, increased risk due to orientation": "Pentes à risque, orientation critique",
+    "Rotate image left": "Tourner vers la gauche",
+    "Rotate image right": "Tourner vers la droite",
     "Route": "Itinéraire",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
@@ -448,20 +462,26 @@
     },
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
     "Skiability": "Skiabilité",
+    "Skitouring gear": "Ski, surf, raquette",
     "Slopes": "Cartes de pentes",
     "Small group = 2 to 4 people": "Petit groupe = 2 à 4 personnes",
     "Small group with load shedding distance": "Petit groupe avec distance de délestage",
     "Small group without distance": "Petit groupe sans distance",
     "Social cookies": "Cookies sociaux",
+    "Soft mobility outing": "Sortie en mobilité douce",
     "Sophie Picture Contest": "Concours Photo Sophie",
     "Source:": "Document à fusionner (source) :",
     "Statistical cookies": "Cookies statistiques",
+    "Statistics": "Statistiques",
     "Stay careful while skiing": "Skier avec prudence",
     "Stop following this contributor": "Ne plus suivre ce contributeur",
     "Submit": "Enregistrer et continuer",
     "Suggested rating": "Cotation suggérée",
     "SwissTopo": {
       "Map slopes layer": "Suisse (SwissTopo)"
+    },
+    "SwissTopo ortho": {
+      "Map layer": "SwissTopo Sat"
     },
     "Target:": "Document à conserver (cible) :",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
@@ -647,7 +667,6 @@
     "boat": {
       "public_transportation_types": "bateau"
     },
-    "bolted rock climbing gear": "Escalade en grande voie sportive",
     "book": {
       "$$noContext": "livre",
       "image_categories": "livre"
@@ -792,8 +811,6 @@
     "easy": {
       "glacier_ratings": "bouché - passage sans problème"
     },
-    "easy mountain climbing gear": "Alpinisme rocheux de F à AD",
-    "easy snow ice mixed gear": "Alpinisme neige/glace/mixte de F à PD+",
     "edge": {
       "route_configuration_types": "arête"
     },
@@ -966,7 +983,6 @@
     "hiking": {
       "activities": "Randonnée / Trail"
     },
-    "hiking gear": "Randonnée pédestre estivale",
     "hiking_mtb_exposition": "Exposition randonnée, trail et VTT",
     "hiking_rating": "Cotation randonnée / trail",
     "historical": {
@@ -984,7 +1000,6 @@
     "hut_warden": {
       "user_categories": "gardien de refuge"
     },
-    "ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "ice_climbing": {
       "activities": "Cascade de glace",
       "event_activities": "Cascade de glace"
@@ -1409,7 +1424,6 @@
       "activities": "Ski, surf",
       "event_activities": "Ski de randonnée"
     },
-    "skitouring gear": "Ski, surf, raquette",
     "slab": {
       "climbing_styles": "dalle"
     },

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer">
+  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
@@ -28,8 +28,12 @@
       <div class="swiper-wrapper" />
     </div>
 
-    <div class="swiper-button-prev" />
-    <div class="swiper-button-next" />
+    <div class="swiper-button-prev">
+      <fa-icon icon="arrow-left"></fa-icon>
+    </div>
+    <div class="swiper-button-next">
+      <fa-icon icon="arrow-right"></fa-icon>
+    </div>
 
     <div class="image-viewer-pagination is-hidden-mobile">
       <span
@@ -48,12 +52,14 @@
 </template>
 
 <script>
-import { Swiper } from 'swiper/bundle';
+import SwiperCore, { Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom } from 'swiper/core';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
 import imageUrls from '@/js/image-urls';
+
+SwiperCore.use([Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom]);
 
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {
@@ -87,6 +93,7 @@ export default {
       images: [],
       activeDocument: null,
       isFullscreen: false,
+      hideButtons: false,
     };
   },
 
@@ -140,7 +147,7 @@ export default {
             renderSlide(img) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" title="${
+                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
                 img.locales[0].title
               }" loading="lazy">
                   </div>
@@ -165,7 +172,7 @@ export default {
           this.$options.swiper.destroy();
         }
 
-        this.$options.swiper = new Swiper(this.$refs.swiper, swiperOptions);
+        this.$options.swiper = new SwiperCore(this.$refs.swiper, swiperOptions);
         this.$options.swiper.on('slideChange', this.onSlideChange);
         this.$options.swiper.on('init', () => {
           window.history.pushState(null, null, '#swipe-gallery');
@@ -189,6 +196,9 @@ export default {
             }
           });
         });
+        if (this.$screen.isMobile) {
+          this.$options.swiper.on('click', this.toggleButtons);
+        }
         this.$options.swiper.init();
       });
     },
@@ -211,6 +221,8 @@ export default {
         this.zt.unbind(this.$refs.container);
         this.zt = null;
       }
+      this.hideButtons = false;
+
       // if we closed without hitting back, go back once in history
       // to remove the hash
       if (window.location.hash === '#swipe-gallery') {
@@ -222,6 +234,10 @@ export default {
       if (event.key === 'Escape') {
         this.close();
       }
+    },
+
+    toggleButtons() {
+      this.hideButtons = !this.hideButtons;
     },
 
     toggleImageInfo(image) {
@@ -247,7 +263,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~swiper/swiper-bundle.css';
+@import '~swiper/swiper.scss';
+@import '~swiper/components/lazy/lazy.scss';
+@import '~swiper/components/zoom/zoom.scss';
 
 // class not explicitly present in template, can't use scope
 
@@ -339,6 +357,25 @@ $paginationHeight: 30px;
       background: $primary;
     }
   }
+
+  .swiper-button-prev,
+  .swiper-button-next,
+  .image-viewer-pagination,
+  .image-viewer-buttons {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 1s, opacity 1s;
+  }
+
+  &.hide-buttons {
+    .swiper-button-prev,
+    .swiper-button-next,
+    .image-viewer-pagination,
+    .image-viewer-buttons {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
 }
 
 @media screen and (max-width: $tablet) {
@@ -370,10 +407,36 @@ $paginationHeight: 30px;
   right: 0;
 }
 
+$swiper-navigation-size: 4rem;
+
 .swiper-button-prev {
-  margin-left: 1rem;
+  left: 0;
+  right: auto;
 }
 .swiper-button-next {
-  margin-right: 1rem;
+  left: auto;
+  right: 0;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  font-size: $swiper-navigation-size/2;
+  width: $swiper-navigation-size;
+  height: $swiper-navigation-size;
+  margin-top: -$swiper-navigation-size/2;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: $white;
+
+  &.swiper-button-disabled {
+    cursor: auto;
+    pointer-events: none;
+    color: $grey;
+  }
 }
 </style>

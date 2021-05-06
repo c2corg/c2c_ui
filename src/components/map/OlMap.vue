@@ -99,7 +99,7 @@
 
 <script>
 import { toast } from 'bulma-toast';
-import { format } from 'date-fns';
+import { format as formatDate } from 'date-fns';
 
 import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
@@ -110,6 +110,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  swissExtent,
 } from './map-utils';
 
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
@@ -540,7 +541,7 @@ export default {
         return;
       }
 
-      document.date_start = format(new Date(timestamp * 1000), 'yyyy-MM-dd');
+      document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
     },
 
     setDocumentGeometry(document, geometry) {
@@ -569,7 +570,8 @@ export default {
           const mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry;
           this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)));
         }
-      } else if (geoJsonGeometry.type === 'Polygon') {
+      } else if (geoJsonGeometry.type === 'Polygon' || geoJsonGeometry.type === 'MultiPolygon') {
+        // areas
         document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
       } else {
         throw new Error(`Unexpected geometry type : ${geometry.type}`);
@@ -745,11 +747,9 @@ export default {
 
     getExtent(projection) {
       let extent = this.view.calculateExtent(this.map.getSize() || null);
-
       if (projection) {
         extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get(projection));
       }
-
       return extent;
     },
 
@@ -781,6 +781,10 @@ export default {
       }
     },
 
+    intersectsWithSwitzerland(extent) {
+      return ol.extent.intersects(extent, swissExtent);
+    },
+
     onClick(event) {
       const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
@@ -799,10 +803,11 @@ export default {
         // handle clicks on enabled layers
         if (this.protectionAreasVisible) {
           const extent = this.view.calculateExtent(this.map.getSize() || null);
-          const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
-          const position = ol.proj.transform(event.coordinate, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
+          if (!this.intersectsWithSwitzerland(extent)) {
+            return;
+          }
           respecterCestProtegerService
-            .identify(position, rcpExtent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
+            .identify(event.coordinate, extent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
             .then(({ data }) => {
               if (data.results && data.results.length) {
                 // if there are several results, then there must be an area and an allowed path. select area
@@ -872,7 +877,6 @@ export default {
           .then(this.addBiodivSportsData);
       } else {
         // first call, check protection areas are contained within map extent and download biodivsports features
-        const rcpExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:21781'));
         Promise.allSettled([
           biodivSportsService
             .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
@@ -880,7 +884,9 @@ export default {
               this.addBiodivSportsData(response);
               return (response?.data?.results?.length ?? 0) > 0;
             }),
-          respecterCestProtegerService.hasArea(rcpExtent),
+          this.intersectsWithSwitzerland(extent)
+            ? respecterCestProtegerService.hasArea(extent)
+            : Promise.resolve(false),
         ]).then((hasArea) => {
           this.hasProtectionAreas = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
           if (this.hasProtectionAreas) {

@@ -8,6 +8,7 @@ import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/f
 import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
 import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons/faArrowsAltV';
 import { faAt } from '@fortawesome/free-solid-svg-icons/faAt';
@@ -19,6 +20,7 @@ import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faBroom } from '@fortawesome/free-solid-svg-icons/faBroom';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faBullseye } from '@fortawesome/free-solid-svg-icons/faBullseye';
+import { faBus } from '@fortawesome/free-solid-svg-icons/faBus';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
 import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
 import { faChartBar } from '@fortawesome/free-solid-svg-icons/faChartBar';
@@ -76,6 +78,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
+import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot';
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
@@ -92,6 +95,7 @@ import { faTh } from '@fortawesome/free-solid-svg-icons/faTh';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faThList } from '@fortawesome/free-solid-svg-icons/faThList';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faUndoAlt } from '@fortawesome/free-solid-svg-icons/faUndoAlt';
 import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
@@ -216,6 +220,7 @@ export default function install(Vue) {
     // solid icons
     faAngleDown,
     faArrowsAltV,
+    faArrowLeft,
     faArrowRight,
     faAt,
     faAtlas,
@@ -225,12 +230,12 @@ export default function install(Vue) {
     faBomb,
     faBroom,
     faBug,
+    faBus,
     faBullseye,
     faCalendar,
     faCamera,
     faChartBar,
     faCheckCircle,
-    //    faCheckSquare,
     faChevronLeft,
     faChevronRight,
     faCircle,
@@ -284,6 +289,7 @@ export default function install(Vue) {
     faPlus,
     faPlusCircle,
     faQuestionCircle,
+    faRedoAlt,
     faRobot,
     faRoute,
     faSearch,
@@ -300,7 +306,7 @@ export default function install(Vue) {
     faThLarge,
     faThList,
     faTrash,
-    // faTrashAlt,
+    faUndoAlt,
     faUnlock,
     faUpload,
     faUser,

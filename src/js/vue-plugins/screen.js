@@ -9,38 +9,79 @@ export default function install(Vue) {
 
     data() {
       return {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        matchingQueryIndex: -1,
+        hasHeightForAd: false,
       };
     },
 
     // https://bulma.io/documentation/modifiers/responsive-helpers/
     computed: {
       isMobile() {
-        return this.width <= BREAKPOINT_MOBILE;
+        return this.matchingQueryIndex === 0;
       },
       isTablet() {
-        return this.width > BREAKPOINT_MOBILE && this.width <= BREAKPOINT_TABLET;
+        return this.matchingQueryIndex === 1;
       },
       isDesktop() {
-        return this.width > BREAKPOINT_TABLET && this.width <= BREAKPOINT_DESKTOP;
+        return this.matchingQueryIndex === 2;
       },
       isWidescreen() {
-        return this.width > BREAKPOINT_DESKTOP && this.width <= BREAKPOINT_WIDESCREEN;
+        return this.matchingQueryIndex === 3;
       },
       isFullHD() {
-        return this.width > BREAKPOINT_WIDESCREEN;
+        return this.matchingQueryIndex === -1;
       },
     },
 
     created() {
-      window.addEventListener('resize', this.onResize);
+      this.breakpointsMediaQueryLists = [
+        BREAKPOINT_MOBILE,
+        BREAKPOINT_TABLET,
+        BREAKPOINT_DESKTOP,
+        BREAKPOINT_WIDESCREEN,
+      ].map((breakpoint) => window.matchMedia(`only screen and (max-width: ${breakpoint}px)`));
+      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
+        if (mediaQueryList.addEventListener) {
+          mediaQueryList.addEventListener('change', this.onBreakpointMediaQueryChange);
+        } else {
+          // support Safari < 14
+          mediaQueryList.addListener(this.onBreakpointMediaQueryChange);
+        }
+      });
+      this.onBreakpointMediaQueryChange(); // init
+
+      this.heightMediaQueryList = window.matchMedia('only screen and (min-height: 630px');
+      if (this.heightMediaQueryList.addEventListener) {
+        this.heightMediaQueryList.addEventListener('change', this.onHeightMediaQueryChange);
+      } else {
+        // support Safari < 14
+        this.heightMediaQueryList.addListener(this.onHeightMediaQueryChange);
+      }
+      this.onHeightMediaQueryChange(); // init
+    },
+
+    beforeDestroy() {
+      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
+        if (mediaQueryList.removeEventListener) {
+          mediaQueryList.removeEventListener('change', this.onBreakpointMediaQueryChange);
+        } else {
+          mediaQueryList.removeListener(this.onBreakpointMediaQueryChange);
+        }
+      });
+      if (heightMediaQueryList.removeEventListener) {
+        heightMediaQueryList.removeEventListener('change', this.onHeightMediaQueryChange);
+      } else {
+        heightMediaQueryList.removeListener(this.onHeightMediaQueryChange);
+      }
     },
 
     methods: {
-      onResize() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+      onBreakpointMediaQueryChange() {
+        this.matchingQueryIndex = this.breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
+      },
+
+      onHeightMediaQueryChange() {
+        this.hasHeightForAd = this.heightMediaQueryList.matches;
       },
     },
   });

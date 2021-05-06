@@ -77,7 +77,7 @@
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
-          <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print">
+          <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">
             <edit-link :document="document" :lang="lang" show-always v-translate>
               History is missing, please provide it if you have information.
             </edit-link>
@@ -153,41 +153,43 @@ export default {
       const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
 
       if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
-        result['183333'] = this.$gettext('skitouring gear');
+        result['183333'] = this.$gettext('Skitouring gear');
       }
 
       if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
-        result['185750'] = this.$gettext('easy snow ice mixed gear');
+        result['185750'] = this.$gettext('Easy snow ice mixed gear');
       }
 
       if (activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating)) {
-        result['185384'] = this.$gettext('easy mountain climbing gear');
+        result['185384'] = this.$gettext('Easy mountain climbing gear');
       }
 
       if (activities.includes('rock_climbing')) {
-        if (['P1', 'P1+'].includes(doc.equipment_rating)) {
-          result['183332'] = this.$gettext('bolted rock climbing gear');
+        if (['single', 'bloc', 'psicobloc'].includes(doc.climbing_outdoor_type)) {
+          result['1307778'] = this.$gettext('Crag climbing gear');
+        } else if (['P1', 'P1+'].includes(doc.equipment_rating)) {
+          result['183332'] = this.$gettext('Bolted rock climbing gear');
         } else if (
           !activities.includes('mountain_climbing') &&
           easy_mountain.includes(doc.global_rating) &&
           poor_equiped.includes(doc.equipment_rating)
         ) {
-          result['185384'] = this.$gettext('easy mountain climbing gear');
+          result['185384'] = this.$gettext('Easy mountain climbing gear');
         }
       }
 
       if (activities.includes('ice_climbing')) {
-        result['194479'] = this.$gettext('ice and dry climbing gear');
+        result['194479'] = this.$gettext('Ice and dry climbing gear');
       }
 
       if (activities.includes('hiking')) {
-        result['185207'] = this.$gettext('hiking gear');
+        result['185207'] = this.$gettext('Hiking gear');
       }
 
       // we should use an anchor for glacier gear, but it's not possible
       if (doc.glacier_gear && doc.glacier_gear !== 'no') {
         if (activities.filter((act) => glacier_activities.includes(act))) {
-          result['185750'] = this.$gettext('easy snow ice mixed gear');
+          result['185750'] = this.$gettext('Easy snow ice mixed gear');
         }
       }
 
@@ -212,6 +214,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.missing-history-banner {
+  overflow: hidden;
+}
+
 .protection-area-info {
   overflow: hidden;
   margin-bottom: 1.5rem;

@@ -20,6 +20,7 @@
           <div class="column is-narrow discourse-post-avatar">
             <img
               :src="getAvatarUrl(post)"
+              alt="Avatar"
               :style="'width:' + $options.forumAvatarSize + 'px;height:' + $options.forumAvatarSize + 'px'"
               loading="lazy"
             />

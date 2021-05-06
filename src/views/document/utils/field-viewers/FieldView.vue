@@ -1,6 +1,12 @@
 <template>
   <label-value v-if="hasValue && visible" :label="label">
-    <document-field :document="document" :field="field" :unit="unit || field.unit" :divisor="divisor" />
+    <document-field
+      :document="document"
+      :field="field"
+      :unit="unit || field.unit"
+      :divisor="divisor"
+      :sort-values="sortValues"
+    />
   </label-value>
 </template>
 
@@ -27,6 +33,10 @@ export default {
       type: String,
       default: null,
     },
+    sortValues: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -37,7 +47,7 @@ export default {
         return false;
       }
 
-      if (Array.isArray(value) && value.length === 0) {
+      if (Array.isArray(value) && !value.length) {
         return false;
       }
 

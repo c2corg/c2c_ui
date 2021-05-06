@@ -158,7 +158,6 @@
 
 <script>
 import { toast } from 'bulma-toast';
-import VueRecaptcha from 'vue-recaptcha';
 
 import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
@@ -181,7 +180,7 @@ export default {
   components: {
     FormField,
     BaseForm,
-    VueRecaptcha,
+    VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
   },
 
   // here is the trick : all auth action are on the same component.

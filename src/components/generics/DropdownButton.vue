@@ -1,12 +1,12 @@
 <template>
   <div :class="{ 'is-active': isActive }" class="dropdown">
     <div class="dropdown-trigger" @click="isActive = !isActive && !disabled">
-      <span aria-haspopup="true" aria-controls="dropdown-menu">
+      <span aria-haspopup="true" :aria-controls="'dropdown-menu-' + id">
         <slot name="button" />
       </span>
     </div>
 
-    <div id="dropdown-menu" class="dropdown-menu" role="menu">
+    <div :id="'dropdown-menu-' + id" class="dropdown-menu" role="menu">
       <div class="dropdown-content">
         <slot />
       </div>
@@ -26,10 +26,12 @@ export default {
   data() {
     return {
       isActive: false,
+      id: 0,
     };
   },
 
   created() {
+    this.id = Math.random().toString().substring(2, 6);
     window.addEventListener('click', this.onClick);
   },
 

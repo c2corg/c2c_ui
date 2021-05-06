@@ -4,31 +4,27 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 const buildTextStyle = function (title, highlight) {
-  // createTextStyle_ = function(feature, type, highlight) {
-  let text;
-
-  if (highlight) {
-    // on hover in list view
-    const def = {
-      text: utils.stringDivider(title, 30, '\n'),
-      textAlign: 'left',
-      overflow: true,
-      offsetX: 20,
-      font: '12px verdana,sans-serif',
-      stroke: new ol.style.Stroke({
-        color: 'white',
-        width: 3,
-      }),
-      fill: new ol.style.Fill({
-        color: 'black',
-      }),
-      textBaseline: 'middle',
-    };
-
-    text = new ol.style.Text(def);
+  if (!highlight) {
+    return undefined;
   }
+  // on hover in list view
+  const def = {
+    text: utils.stringDivider(title, 30, '\n'),
+    textAlign: 'left',
+    overflow: true,
+    offsetX: 20,
+    font: '12px verdana,sans-serif',
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 3,
+    }),
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    textBaseline: 'middle',
+  };
 
-  return text;
+  return new ol.style.Text(def);
 };
 
 export const buildPolygonStyle = function () {
@@ -125,13 +121,36 @@ export const getDocumentPointStyle = function (document, title, highlight) {
 };
 
 export const getDocumentLineStyle = function (title, highlight) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: highlight ? 'red' : 'yellow',
-      width: 3,
-    }),
-    text: buildTextStyle(title, highlight),
-  });
+  if (highlight) {
+    return new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'red',
+        width: 3,
+      }),
+      text: buildTextStyle(title, highlight),
+    });
+  } else {
+    return [
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'grey',
+          width: 3,
+          zIndex: 0,
+        }),
+      }),
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'yellow',
+          width: 2,
+          zIndex: 1,
+        }),
+      }),
+    ];
+  }
 };
 
 export const geoJSONFormat = new ol.format.GeoJSON();
+
+// extent of Switzerland in EPSG:3857 projection
+// (based on https://epsg.io/21781, [5.96, 45.82, 10.49, 47.81] in EPSG:4326)
+export const swissExtent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];

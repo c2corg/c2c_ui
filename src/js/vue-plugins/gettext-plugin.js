@@ -156,8 +156,8 @@ export default function install(Vue) {
 
       gettext(msgid, msgctxt) {
         return getTranslation(this.translations[this.current], msgid, msgctxt)
-          .replaceAll('&quot;', '"')
-          .replaceAll('&#x5C;', '\\');
+          .replace(/&quot;/g, '"')
+          .replace(/&#x5C;/gi, '\\');
       },
 
       getIANALanguageSubtag(lang) {
