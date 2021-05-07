@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import debounce from 'lodash.debounce';
 import 'vue-slider-component/theme/default.css';
 
 import DateQueryItem from './DateQueryItem';
@@ -99,6 +98,7 @@ import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
 import queryItemMixin from './query-item-mixin';
 
+import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {

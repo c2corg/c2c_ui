@@ -92,12 +92,11 @@
 </template>
 
 <script>
-import debounce from 'lodash.debounce';
-
 import { arrayMixin, baseMixin } from './mixins';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import debounce from '@/js/debounce';
 
 export default {
   mixins: [baseMixin, arrayMixin],
