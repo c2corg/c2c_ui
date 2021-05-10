@@ -665,6 +665,11 @@ export default {
     },
 
     addBiodivSportsData(response) {
+      // tmp fix to exclude regulatory zones from results
+      if (response?.data.results) {
+        response.data.results = response.data.results.filter((zone) => !!zone.species_id);
+      }
+
       const results = response?.data?.results;
       if (!results.length) {
         return;
