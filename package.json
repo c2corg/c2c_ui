@@ -12,10 +12,9 @@
     "generate-icons": "node tools/generate-icons.js",
     "lint:no-fix": "vue-cli-service lint --no-fix",
     "messages:extract": "node tools/extract-messages.js",
-    "prepare": "npm run snyk-protect",
+    "prepare": "husky install && npm run snyk-protect",
     "snyk-protect": "snyk protect",
-    "update-c2c-common": "python3 tools/update-c2c-common.py",
-    "postinstall": "husky install"
+    "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
