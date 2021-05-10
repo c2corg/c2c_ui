@@ -278,22 +278,29 @@ export default {
     },
 
     save() {
-      this.promise = c2c.createImages(this.documents).then((response) => {
-        // add result to parent, it will update page
-        // we fake a valid img document with enough info to work
-        this.parentDocument.associations.images.push(
-          ...this.documents.map((img, idx) => ({
-            ...img,
-            document_id: response.data.images[idx].document_id,
-            available_langs: [this.$language.current],
-          }))
-        );
-
-        this.clean();
-        this.hide();
-
-        // TODO handle error
-      });
+      this.promise = c2c
+        .createImages(this.documents)
+        .then((response) => {
+          // add result to parent, it will update page
+          // we fake a valid img document with enough info to work
+          this.parentDocument.associations.images.push(
+            ...this.documents.map((img, idx) => ({
+              ...img,
+              document_id: response.data.images[idx].document_id,
+              available_langs: [this.$language.current],
+            }))
+          );
+        })
+        .catch(() =>
+          toast({
+            message: this.$gettext(`An error occurred, couldn't save images`),
+            type: 'is-danger',
+          })
+        )
+        .finally(() => {
+          this.clean();
+          this.hide();
+        });
     },
   },
 };
