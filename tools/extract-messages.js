@@ -29,9 +29,9 @@ const NODETYPE_TEXT = 3;
 
 const template_regex = /(<template>[\s\S]*<\/template>)/;
 const gettext_template1 = /\$gettext\(\s*'((?:[^']|\\')*?)'\s*\)/gm;
-const gettext_template1b = /\$gettext\(\s*`((?:[^`])*?)`\s*\)/gm;
+const gettext_template1b = /\$gettext\(\s*`((?:[^`$])*?)`\s*\)/gm;
 const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
-const gettext_template2b = /\$gettext\(\s*`((?:[^`])*?)`,\s*`([^`]*?)`\s*\)/gm;
+const gettext_template2b = /\$gettext\(\s*`((?:[^`$])*?)`,\s*`([^']*?)`\s*\)/gm;
 
 /**************************************************************************
   a "Result" is a .pot item (msgctxt/msgid), with every associated meta-data
