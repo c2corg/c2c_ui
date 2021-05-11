@@ -29,7 +29,9 @@ const NODETYPE_TEXT = 3;
 
 const template_regex = /(<template>[\s\S]*<\/template>)/;
 const gettext_template1 = /\$gettext\(\s*'((?:[^']|\\')*?)'\s*\)/gm;
+const gettext_template1b = /\$gettext\(\s*`((?:[^`])*?)`\s*\)/gm;
 const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
+const gettext_template2b = /\$gettext\(\s*`((?:[^`])*?)`,\s*`([^`]*?)`\s*\)/gm;
 
 /**************************************************************************
   a "Result" is a .pot item (msgctxt/msgid), with every associated meta-data
@@ -84,12 +86,16 @@ Process.prototype.push = function (file, line, msgctxt, msgid) {
 Process.prototype.addVueComponent = function (file, data) {
   this.parseTemplate(file, data);
   this.parseScript(file, data, gettext_template1);
+  this.parseScript(file, data, gettext_template1b);
   this.parseScript(file, data, gettext_template2);
+  this.parseScript(file, data, gettext_template2b);
 };
 
 Process.prototype.addScript = function (file, data) {
   this.parseScript(file, data, gettext_template1);
+  this.parseScript(file, data, gettext_template1b);
   this.parseScript(file, data, gettext_template2);
+  this.parseScript(file, data, gettext_template2b);
 };
 
 Process.prototype.parseScript = function (file, data, regex) {

@@ -506,7 +506,7 @@ export default {
         }
       }
       toast({
-        message: this.$gettext(`No data could be extracted from GPS file`),
+        message: this.$gettext('No data could be extracted from GPS file'),
         type: 'is-danger',
       });
     },
