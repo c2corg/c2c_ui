@@ -46,7 +46,7 @@
         <div v-else>
           <div class="field title-input">
             <div class="control">
-              <input type="text" :placeholder="$gettext('title')" v-model="document.locales[0].title" />
+              <input type="text" :placeholder="$gettext('title')" v-model="document.locales[0].title" maxlength="150" />
             </div>
           </div>
 
