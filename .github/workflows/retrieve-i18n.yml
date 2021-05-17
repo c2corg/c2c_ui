@@ -3,7 +3,7 @@ name: Retrieve i18n from Transifex
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */6 * * *'
 
 jobs:
   retrieve-18n:
