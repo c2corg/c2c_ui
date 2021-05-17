@@ -48,6 +48,8 @@
     "Allow all": "Permitir todo",
     "Altitude": "Altitud",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La altitud es obligatoria cuando los peligros alto y bajo son diferentes. Establezca la altitud como se especificada en el boletín de avalanchas para el área específica.",
+    "An error occurred, couldn't (un)mark route as to do": "Ocurrió un error, no se pudo (des) marcar la ruta como para hacer",
+    "An error occurred, couldn't save images": "Ocurrió un error, no se pudieron guardar las imágenes ",
     "Anonymity and confidentiality": "Anonimato y confidencialidad",
     "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
     "Are you sure you want to delete this locale?": "¿Está seguro de que quiere eliminar esta local?",
@@ -121,6 +123,7 @@
     "Conflict: version of locale 'eu' has changed": "Conflicto: la versión de la configuración local 'eu' ha cambiado",
     "Conflict: version of locale 'fr' has changed": "Conflicto: la versión de la configuración local 'fr' ha cambiado",
     "Conflict: version of locale 'it' has changed": "Conflicto: la versión de la configuración local 'it' ha cambiado",
+    "Conflicting method and danger": "Método conflictivo y peligro ",
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
     },
@@ -130,15 +133,27 @@
     "Contributions": "Contribuciones",
     "Contributor": "Contribuyente",
     "Control the use of your personal data": "Controlar el uso de sus datos personales",
+    "Coup de coeur": {
+      "Sophie picture context": "Nos enamoramos"
+    },
+    "Crag climbing gear": "Equipo de escala",
     "Create": {
       "yeti": "Crear"
     },
     "Create a new report": "Agregar un nuevo informe",
     "Created on": "Creado",
     "Creation?": "Creación?",
+    "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI no cubre la vista actual del mapa. Solo las montañas francesas lo son a partir de ahora (determinadas por un trazo discontinuo). ",
     "Current password": "Contraseña actual",
     "Danger level": "Nivel de peligro",
+    "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivel de peligro del boletín de avalanchas se aplica a todas las orientaciones. La rosa de los vientos distingue los sectores más críticos que presentan un mayor riesgo.",
     "Danger level:": "Nivel de peligro:",
+    "Danger rating - considerable": "Clasificación de peligro: considerable",
+    "Danger rating - high": "Clasificación de peligro: alto",
+    "Danger rating - high to very high": "Clasificación de peligro: alto hasta muy alto",
+    "Danger rating - low": "Clasificación de peligro: bajo",
+    "Danger rating - moderate": "Clasificación de peligro: moderado",
+    "Danger rating - very high": "Clasificación de peligro: muy alto",
     "Delete": {
       "yeti": "Eliminar"
     },
@@ -501,6 +516,7 @@
     "crowded": {
       "frequentation_types": "frecuentado"
     },
+    "current zoom:": "zoom actual:",
     "custodianship": "Apertura",
     "danger_sign": {
       "avalanche_signs": "peligro_señal"
