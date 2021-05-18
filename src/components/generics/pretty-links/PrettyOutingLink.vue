@@ -14,6 +14,7 @@
       <marker-quality :quality="outing.quality" />
       <marker-image-count v-if="outing.img_count != 0" :image-count="outing.img_count" />
       <marker-gps-trace v-if="outing.geometry.has_geom_detail" />
+      <marker-soft-mobility v-if="outing.public_transport" />
     </span>
   </document-link>
 </template>

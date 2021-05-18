@@ -26,6 +26,7 @@ import MarkerCondition from './cell-renderers/MarkerCondition';
 import MarkerGpsTrace from './cell-renderers/MarkerGpsTrace';
 import MarkerImageCount from './cell-renderers/MarkerImageCount';
 import MarkerQuality from './cell-renderers/MarkerQuality';
+import MarkerSoftMobility from './cell-renderers/MarkerSoftMobility.vue';
 import OutingDate from './cell-renderers/OutingDate';
 import OutingRating from './cell-renderers/OutingRating';
 import RouteRating from './cell-renderers/RouteRating';
@@ -195,7 +196,7 @@ export default {
       if (this.documentType === 'outing') {
         this.columnDefs = [
           getColDef(this, fields.date_end, {
-            width: 120,
+            width: 90,
             cellRendererFramework: OutingDate,
             _exportFormatter: this.formatOutingDate,
           }),
@@ -257,25 +258,31 @@ export default {
             cellRendererFramework: MarkerGpsTrace,
             _exportFormatter: this.formatGpsTrace,
             _headerName: capitalize(this.$gettext('Trace')),
-            width: 30,
+            width: 20,
           },
           {
             cellRendererFramework: MarkerImageCount,
             _exportFormatter: this.formatImagesCount,
             _headerName: capitalize(this.$gettext('Image count')),
-            width: 30,
+            width: 20,
+          },
+          {
+            cellRendererFramework: MarkerSoftMobility,
+            _exportFormatter: this.formatSoftMobility,
+            _headerName: capitalize(this.$gettext('Soft mobility outing')),
+            width: 20,
           },
           {
             cellRendererFramework: MarkerCondition,
             _exportFormatter: this.formatConditions,
             _headerName: capitalize(this.$gettext('Conditions')),
-            width: 30,
+            width: 20,
           },
           {
             cellRendererFramework: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
-            width: 30,
+            width: 20,
           },
         ];
       }
@@ -482,6 +489,10 @@ export default {
 
     formatImagesCount(document) {
       return document.img_count;
+    },
+
+    formatSoftMobility(document) {
+      return document.public_transport ? this.$gettext('yes') : this.$gettext('no');
     },
 
     formatConditions(document) {
