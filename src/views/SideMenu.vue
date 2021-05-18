@@ -89,10 +89,7 @@
           </a>
         </div>
         <div class="column">
-          <a
-            href="https://www.helloasso.com/associations/camptocamp-assocation/adhesions/adhesion-camptocamp-association"
-            title="Donate"
-          >
+          <a href="https://www.helloasso.com/associations/camptocamp-association/formulaires/2" title="Donate">
             <fa-icon icon="heart" class="donate-icon" />
           </a>
         </div>
