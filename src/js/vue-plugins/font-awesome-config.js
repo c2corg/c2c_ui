@@ -39,6 +39,7 @@ import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faDirections } from '@fortawesome/free-solid-svg-icons/faDirections';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
@@ -102,6 +103,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserLock } from '@fortawesome/free-solid-svg-icons/faUserLock';
 import { faUserShield } from '@fortawesome/free-solid-svg-icons/faUserShield';
+import { faUserSlash } from '@fortawesome/free-solid-svg-icons/faUserSlash';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
@@ -250,6 +252,7 @@ export default function install(Vue) {
     faDatabase,
     faDirections,
     faEdit,
+    faEllipsisV,
     faExclamation,
     faExclamationCircle,
     faExpand,
@@ -314,6 +317,7 @@ export default function install(Vue) {
     faUserLock,
     faUsers,
     faUserShield,
+    faUserSlash,
     faWrench,
 
     // regular icons
