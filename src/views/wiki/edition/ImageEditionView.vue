@@ -112,6 +112,7 @@ export default {
 
       uploadFile(
         file,
+        undefined,
         (dataUrl) => {
           this.newVersionSource = dataUrl;
         },
