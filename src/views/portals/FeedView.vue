@@ -20,7 +20,7 @@
                 v-translate
                 :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
               >
-                Personalize
+                Personal feed
               </label>
             </div>
           </div>
