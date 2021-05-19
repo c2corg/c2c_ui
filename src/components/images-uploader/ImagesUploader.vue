@@ -290,16 +290,16 @@ export default {
               available_langs: [this.$language.current],
             }))
           );
+          this.clean();
+          this.hide();
         })
-        .catch(() =>
+        .catch(() => {
+          this.clean();
+          this.hide();
           toast({
             message: this.$gettext(`An error occurred, couldn't save images`),
             type: 'is-danger',
-          })
-        )
-        .finally(() => {
-          this.clean();
-          this.hide();
+          });
         });
     },
   },
