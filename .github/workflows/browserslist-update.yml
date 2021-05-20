@@ -1,0 +1,24 @@
+name: Update canisuse database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 1,15 * *'
+
+jobs:
+  retrieve-18n:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - name: Configure git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+      - name: Update canisuse database and create PR if applies
+        uses: c2corg/browserslist-update-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: browserslist-update
