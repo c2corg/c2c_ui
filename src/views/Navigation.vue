@@ -184,6 +184,11 @@ export default {
           iconComponent: 'icon-outing',
         },
         {
+          to: { name: 'outings-stats', query: { u: this.$user.id } },
+          text: this.$gettext('My statistics'),
+          icon: 'chart-bar',
+        },
+        {
           to: { name: 'whatsnew', query: { u: this.$user.id } },
           text: this.$gettext('My changes'),
           icon: 'edit',
