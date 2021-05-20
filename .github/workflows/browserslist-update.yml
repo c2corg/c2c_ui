@@ -1,4 +1,4 @@
-name: Update canisuse database
+name: Update caniuse database
 
 on:
   workflow_dispatch:
