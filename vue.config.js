@@ -74,7 +74,7 @@ const result = {
   },
 };
 
-/* Please not that all key present in this file are public keys
+/* Please note that all key present in this file are public keys
  * They don't need to be hidden.
  * If you need to use a private key, please do NOT add it here
  */
