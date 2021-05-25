@@ -153,6 +153,13 @@
     <base-form v-show="mode == 'changeEmail' || mode == 'validateAccountCreation'" :promise="promise">
       <div v-if="promise.loading" v-translate>Checking...</div>
     </base-form>
+
+    <div class="verify-email has-text-centered" v-show="mode == 'verifyEmail'">
+      <h1 class="is-size-3">✔️ <span v-translate>Your account was successfully created</span></h1>
+      <p class="my-2" v-translate>You need to activate your by clicking the link sent to your email address.</p>
+      <p class="my-2" v-translate>If you can't see this email, please check your spam folder.</p>
+      <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Login</button>
+    </div>
   </div>
 </template>
 
@@ -255,6 +262,8 @@ export default {
         this.$nextTick(this.$refs.resetPasswordMainInput.focus);
       } else if (this.mode === 'signup') {
         this.$nextTick(this.$refs.signupMainInput.focus);
+      } else if (this.mode === 'verifyEmail') {
+        this.$nextTick(this.$refs.signupMainInput.focus);
       }
     },
 
@@ -327,18 +336,26 @@ export default {
     },
 
     signup() {
-      this.promise = c2c.userProfile.register({
-        name: this.name,
-        username: this.username,
-        forum_username: this.forum_username,
-        password: this.password,
-        email: this.email,
-        lang: this.$language.current,
-        captcha: this.captcha,
-      });
+      this.promise = c2c.userProfile
+        .register({
+          name: this.name,
+          username: this.username,
+          forum_username: this.forum_username,
+          password: this.password,
+          email: this.email,
+          lang: this.$language.current,
+          captcha: this.captcha,
+        })
+        .then(() => {
+          this.captcha = null;
+          this.$refs.recaptcha.reset();
 
-      this.captcha = null;
-      this.$refs.recaptcha.reset();
+          this.mode = 'verifyEmail';
+        })
+        .catch(() => {
+          this.captcha = null;
+          this.$refs.recaptcha.reset();
+        });
     },
 
     resetPassword() {
