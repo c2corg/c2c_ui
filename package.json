@@ -63,7 +63,7 @@
     "cross-env": "7.0.3",
     "eslint": "7.26.0",
     "eslint-import-resolver-custom-alias": "1.2.0",
-    "eslint-plugin-import": "2.23.2",
+    "eslint-plugin-import": "2.23.3",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-promise": "4.3.1",
