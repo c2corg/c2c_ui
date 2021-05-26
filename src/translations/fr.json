@@ -269,6 +269,7 @@
       "Map layer": "IGN Es"
     },
     "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
+    "If you can't see this email, please check your spam folder.": "Pensez à vérifier dans les spams si vous ne voyez pas ce mail.",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
     "Image count": "Nombre d'images",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
@@ -557,6 +558,8 @@
     "You have to be authorized. Please contact administrators of the service if interested.": "Vous devez être autorisé. Merci de contacter les administrateurs du service si intéréssé.",
     "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
     "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
+    "You need to activate your by clicking the link sent to your email address.": "Vous devez l'activer en cliquant sur le lien qui a été envoyé à votre adresse email.",
+    "Your account was successfully created": "Votre compte a été créé",
     "Zoom in": {
       "Map controls": "Zoomer"
     },
