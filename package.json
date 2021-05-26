@@ -52,7 +52,6 @@
     "zingtouch": "1.0.6"
   },
   "devDependencies": {
-    "@vue/babel-preset-app": "4.5.13",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-service": "4.5.13",
@@ -83,11 +82,6 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "cover 95% in FR and > 0.4%",
-    "not dead",
-    "not ie <= 11"
-  ],
   "bugs": {
     "url": "https://forum.camptocamp.org/c/site-et-association/v6-suggestions-bugs-et-problemes",
     "email": "dev@camptocamp.org"
