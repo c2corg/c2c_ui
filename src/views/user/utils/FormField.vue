@@ -8,6 +8,7 @@
       <!-- $gettext('Password too short', 'API message') -->
       <!-- $gettext('Missing captcha', 'API message') -->
       <!-- $gettext('already used username', 'API message') -->
+      <!-- $gettext('already used email', 'API message') -->
       <!-- $gettext('Invalid email address', 'API message') -->
       <!-- $gettext('Shorter than minimum length 3', 'API message') -->
       <!-- $gettext('already used forum_username', 'API message') -->
