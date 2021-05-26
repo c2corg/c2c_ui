@@ -611,6 +611,9 @@
     "alpine_climbing": {
       "event_activities": "Rocher montagne (TA)"
     },
+    "already used email": {
+      "API message": "Cet email est déjà utilisé"
+    },
     "already used forum_username": {
       "API message": "Pseudo forum déjà utilisé"
     },

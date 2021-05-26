@@ -224,6 +224,9 @@
     "alpine_climbing": {
       "event_activities": "Alpine climbing"
     },
+    "already used email": {
+      "API message": "This email is already in use"
+    },
     "already used forum_username": {
       "API message": "This forum username is already in use."
     },
