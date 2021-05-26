@@ -2,7 +2,7 @@
   <form @submit="submit">
     <slot name="header" />
     <div v-for="(error, i) of serverMetaErrors" :key="i" class="notification is-danger has-text-centered">
-      {{ error.description }}
+      {{ $gettext(error.description, 'API message') }}
     </div>
 
     <slot />
