@@ -229,6 +229,7 @@
     "Distance (km)": "Länge (km)",
     "Do you really want to leave? you have unsaved changes!": "Wollen Sie wirklich diese Seite schließen ? Änderungen werden nicht gespeichert !",
     "Document quality": "Dokumentqualität",
+    "Donate": "Spenden Sie an den Verein Camptocamp",
     "Download outings": "Tourenberichte herunterladen",
     "Draw": {
       "yeti": "Zeichnen"
@@ -263,6 +264,7 @@
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
     "Filter on map extent": "Mit Karte filtern",
+    "Filter results": "Ergebnisse filtern",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forum-Benutzername",
@@ -315,6 +317,7 @@
       "Map layer": "Spanien"
     },
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
+    "If you can't see this email, please check your spam folder.": "Wenn Sie diese E-Mail nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
     "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
     "Image count": "Bildanzahl",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
@@ -343,6 +346,7 @@
     },
     "Leave fullscreen": "Vollbild verlassen",
     "Legend": "Legende",
+    "Legend will appear automatically with the generated image": "Die Legende erscheint automatisch mit dem erzeugten Bild",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
     "Licenses": "Lizenzen",
     "Lines chunks": "Linien-Stücke",
@@ -391,6 +395,7 @@
     "My outings": "Meine Tourenberichte",
     "My preferences": "Meine Einstellungen",
     "My profile": "Mein Profil",
+    "My statistics": "Meine Statistiken",
     "Narration": "Textbeschreibung",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Heikle Situation, die nicht zu körperlichen Verletzungen führet, aber zu einem viel ernsteren Ereignis hätte führen können.",
     "Near-accidents are valuable": "Beinaheunfälle sind wertvoll",
@@ -401,6 +406,7 @@
     "New route": "Neue Route",
     "New waypoint": "Neues Wegpunkt",
     "No account yet?": "Noch kein Konto?",
+    "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden.",
     "No match?": "Keine Ergebnisse?",
     "No orientation selected": "Keine Ausrichtungen gewählt",
     "No reduction factor": "Kein Reduktionsfaktor",
@@ -608,6 +614,8 @@
     "You have to be authorized. Please contact administrators of the service if interested.": "Sie müssen autorisiert sein. Bitte kontaktieren Sie bei Interesse die Administratoren des Dienstes.",
     "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher oder Artikeln verbinden",
     "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf die Karte ziehen, zeichnen oder bearbeiten.",
+    "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre E-Mail-Adresse gesendet wurde.",
+    "Your account was successfully created": "Ihr Konto wurde erfolgreich erstellt",
     "Zoom in": {
       "Map controls": "Vergrössern"
     },
