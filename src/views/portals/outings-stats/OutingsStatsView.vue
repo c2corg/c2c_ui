@@ -19,6 +19,7 @@
           <a>
             <span v-if="activity">{{ $gettext(activity, 'activities') }}</span>
             <span v-else v-translate>All</span>
+            &nbsp;
             <span>({{ outings[activity].length }})</span>
           </a>
         </li>
