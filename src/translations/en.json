@@ -220,6 +220,9 @@
     "activity_rate_y5": {
       "activity_rates": "less than 5 times a year"
     },
+    "admin_limits": {
+      "area_types": "adminitrative limits"
+    },
     "age": "Age",
     "aid_rating": "Aid rating",
     "alpine_climbing": {
