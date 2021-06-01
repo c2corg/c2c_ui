@@ -80,7 +80,7 @@
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
         <div class="column">
           <a href="https://www.instagram.com/camptocamp_org/" title="Instagram">
-            <fa-icon :icon="['fab', 'twitter']" class="instagram-icon" />
+            <fa-icon :icon="['fab', 'instagram']" class="instagram-icon" />
           </a>
         </div>
         <div class="column">
