@@ -80,7 +80,7 @@
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
         <div class="column">
           <a href="https://www.instagram.com/camptocamp_org/" title="Instagram">
-            <fa-icon :icon="['fab', 'instagram']" class="instagram-icon" />
+            <icon-instagram class="instagram-icon" />
           </a>
         </div>
         <div class="column">
@@ -213,13 +213,7 @@ aside {
     font-size: 30px;
   }
 
-  .instagram-icon,
-  &:hover {
-    color: #e1306c; // instagram color
-  }
-
-  .facebook-icon,
-  &:hover {
+  .facebook-icon {
     color: #6d8bc9; //facebook color
   }
 
