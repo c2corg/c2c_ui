@@ -127,6 +127,8 @@ const TRACKING_INITIAL_ZOOM = 13;
 const biodivSportsService = new BiodivSportsService();
 const respecterCestProtegerService = new RespecterCestProtegerService();
 
+const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
+
 export default {
   components: {
     BiodivInformation,
@@ -596,10 +598,10 @@ export default {
         this.addDocumentFeature(document, documentsSource);
 
         if (document.associations) {
-          for (const waypoint of document.associations.waypoints ?? []) {
+          for (const waypoint of document.associations.waypoints?.filter(isNotVirtual) ?? []) {
             this.addDocumentFeature(waypoint, waypointsSource);
           }
-          for (const waypoint of document.associations.waypoint_children ?? []) {
+          for (const waypoint of document.associations.waypoint_children?.filter(isNotVirtual) ?? []) {
             this.addDocumentFeature(waypoint, waypointsSource);
           }
 
@@ -735,7 +737,7 @@ export default {
       }
 
       if (extent.filter(isFinite).length !== 4) {
-        // if there is infnity, default extent
+        // if there is infinity, default extent
         // TODO need to be current extent if it exists ...
         extent = DEFAULT_EXTENT;
       }
