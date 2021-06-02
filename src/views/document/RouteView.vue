@@ -28,8 +28,12 @@
                 <edit-link v-else :document="document" :lang="$user.lang" />
               </label-value>
 
-              <field-view v-if="document.glacier_gear != 'no'" :document="document" :field="fields.glacier_gear" />
-
+              <field-view
+                v-if="document.glacier_gear != 'no' || isMountainActivity"
+                :document="document"
+                :field="fields.glacier_gear"
+              />
+              
               <input-orientation
                 v-if="document.orientations && document.orientations.length"
                 v-model="document.orientations"
@@ -57,7 +61,7 @@
               <field-view :document="document" :field="fields.difficulties_height" />
 
               <field-view :document="document" :field="fields.height_diff_access" />
-              <field-view :document="document" :field="fields.lift_access" />
+              <field-view v-if="document.lift_access != 'no'" :document="document" :field="fields.lift_access" />
 
               <field-view :document="document" :field="fields.route_length" :divisor="1000" unit="km" />
 
@@ -125,6 +129,7 @@
 
 <script>
 import documentViewMixin from './utils/document-view-mixin';
+
 const historyWorthActivities = [
   'snow_ice_mixed',
   'mountain_climbing',
@@ -133,6 +138,11 @@ const historyWorthActivities = [
   'via_ferrata',
   'slacklining',
 ];
+
+const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
+const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
+const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
+
 export default {
   mixins: [documentViewMixin],
 
@@ -148,9 +158,6 @@ export default {
       const result = {};
       const doc = this.document;
       const activities = doc.activities ?? [];
-      const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
-      const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
-      const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
 
       if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
         result['183333'] = this.$gettext('Skitouring gear');
@@ -194,6 +201,17 @@ export default {
       }
 
       return result;
+    },
+
+    isMountainActivity() {
+      const doc = this.document;
+      const activities = doc.activities ?? [];
+      for (let act of glacier_activities) {
+        if (activities.includes(act)) {
+          return true;
+        }
+      }
+      return false;
     },
 
     showMissingHistoryBanner() {
