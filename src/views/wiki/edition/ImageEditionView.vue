@@ -42,7 +42,7 @@
         <form-field class="is-6" :document="document" :field="fields.elevation" />
       </div>
 
-      <map-input-row :document="document" />
+      <map-input-row :document="document" ref="map" />
     </form-section>
 
     <form-section :title="$gettext('camera settings')" :sub-title="$gettext('Parameters of the Digital Camera')">
@@ -92,6 +92,16 @@ export default {
       newVersionSource: null,
       uploadingNewFile: false,
     };
+  },
+
+  watch: {
+    'document.geometry.geom': function (to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
+      }
+    },
   },
 
   methods: {

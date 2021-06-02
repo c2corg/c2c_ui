@@ -33,6 +33,10 @@ export default {
       type: String,
       default: undefined,
     },
+    expandedOnLoad: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -58,6 +62,10 @@ export default {
     this.checkHasError();
 
     window.addEventListener('keyup', this.onKeyup);
+
+    if (this.expandedOnLoad) {
+      this.toggleExpandedState();
+    }
   },
 
   beforeDestroy() {

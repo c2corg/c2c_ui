@@ -7,7 +7,7 @@
       <form-field class="is-12" :document="document" :field="fields.description" />
     </div>
 
-    <map-input-row :document="document" />
+    <map-input-row :document="document" ref="map" />
 
     <hr />
   </edition-container>
@@ -18,5 +18,15 @@ import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
   mixins: [documentEditionViewMixin],
+
+  watch: {
+    'document.geometry.geom': function (to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
+      }
+    },
+  },
 };
 </script>

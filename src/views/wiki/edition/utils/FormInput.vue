@@ -46,7 +46,7 @@
     multiple
     clear-input-on-toggle
     :has-error="hasError"
-    @add="$documentUtils.propagateAssociationProperties(document, arguments[0])"
+    @add="$documentUtils.propagateProperties(document, arguments[0])"
     v-model="object[field.name]"
   />
 

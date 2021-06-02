@@ -120,7 +120,7 @@ import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
-const DEFAULT_POINT_ZOOM = 12;
+const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
 
@@ -188,6 +188,11 @@ export default {
       type: Object,
       default: null,
     },
+
+    initialExtent: {
+      type: Array,
+      default: null,
+    },
   },
 
   data() {
@@ -217,6 +222,11 @@ export default {
 
       // layer for document icons and paths
       documentsLayer: new ol.layer.Vector({
+        source: new ol.source.Vector(),
+      }),
+
+      // layer edited document
+      editionLayer: new ol.layer.Vector({
         source: new ol.source.Vector(),
       }),
 
@@ -290,29 +300,20 @@ export default {
     documents: {
       handler() {
         this.drawDocumentMarkers();
-        this.fitMapToDocuments();
       },
     },
 
-    editedDocument: {
-      handler() {
-        this.drawDocumentMarkers();
-        this.fitMapToDocuments();
+    'editedDocument.condition_rating': 'drawDocumentMarkers',
+    'editedDocument.waypoint_type': 'drawDocumentMarkers',
 
-        // when route is set on outing edition, geom may be updated
-        this.setDrawInteraction();
-      },
-      deep: true, // must look on change inside documents object
-    },
-
-    // if, for any reason, geomtry of edited document is set, center map on it
+    // if, for any reason, geometry of edited document is set, center map on it
     // * new value entered in text inputs
     // * first click
     // * new association to route (geometry is copied from route to outing in this case)
     'editedDocument.geometry.geom': {
       handler(to, from) {
         if (from === null && to !== null) {
-          this.fitMapToDocuments(true);
+          this.setDrawInteraction(); // reset interaction mode
         }
       },
     },
@@ -360,6 +361,7 @@ export default {
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
+        this.editionLayer,
       ],
 
       view: new ol.View({
@@ -376,6 +378,8 @@ export default {
 
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
+    this.map.on('moveend', this.emitMoveEvent);
+
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
@@ -394,6 +398,8 @@ export default {
 
     if (this.urlValue) {
       this.view.fit(this.urlValue, { size: this.map.getSize() });
+    } else if (this.initialExtent) {
+      this.fit(this.initialExtent);
     } else {
       this.fitMapToDocuments(true);
     }
@@ -414,7 +420,7 @@ export default {
 
   methods: {
     setModifyInteractions() {
-      const source = this.documentsLayer.getSource();
+      const source = this.editionLayer.getSource();
       const modify = new ol.interaction.Modify({ source });
 
       this.map.addInteraction(modify);
@@ -422,13 +428,13 @@ export default {
 
       modify.on('modifyend', (event) => {
         for (const feature of event.features.getArray()) {
-          this.updateDocumentGeometryFromFeature(feature);
+          this.setDocumentGeometry(feature.get('geometry'));
         }
       });
     },
 
     setDrawInteraction() {
-      const source = this.documentsLayer.getSource();
+      const source = this.editionLayer.getSource();
 
       if (this.drawInteraction) {
         this.map.removeInteraction(this.drawInteraction);
@@ -440,10 +446,14 @@ export default {
       this.editedDocument.geometry = this.editedDocument.geometry ?? {};
 
       if (!this.editedDocument.geometry.geom) {
-        this.drawInteraction = new ol.interaction.Draw({
-          source,
-          type: 'Point',
-        });
+        // the point is not set
+        if (this.editedDocument.type !== 'o') {
+          // do not let user set the point for outings
+          this.drawInteraction = new ol.interaction.Draw({
+            source,
+            type: 'Point',
+          });
+        }
       } else if (this.geomDetailEditable && !this.editedDocument.geometry.geom_detail) {
         this.drawInteraction = new ol.interaction.Draw({
           source,
@@ -471,21 +481,10 @@ export default {
         'addfeatures',
         function (event) {
           event.features.map(this.setDocumentGeometryFromFeature);
-          this.fitMapToDocuments(true);
         }.bind(this)
       );
 
       this.map.addInteraction(dragAndDrop);
-    },
-
-    updateDocumentGeometryFromFeature(feature) {
-      const document = feature.get('document');
-
-      if (!document) {
-        return;
-      }
-
-      this.setDocumentGeometry(document, feature.get('geometry'));
     },
 
     tryReadFeaturesFromGeoFile(file, format, options) {
@@ -501,7 +500,6 @@ export default {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
           features.map(this.setDocumentGeometryFromFeature);
-          this.fitMapToDocuments(true);
           return;
         }
       }
@@ -513,7 +511,7 @@ export default {
 
     setDocumentGeometryFromFeature(feature) {
       const geometry = feature.get('geometry');
-      this.setDocumentGeometry(this.editedDocument, geometry);
+      this.setDocumentGeometry(geometry);
       this.drawDocumentMarkers();
       this.setDrawInteraction();
       this.setOutingStartDate(this.editedDocument, geometry);
@@ -544,13 +542,24 @@ export default {
       document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
     },
 
-    setDocumentGeometry(document, geometry) {
+    setDocumentGeometry(geometry) {
+      const document = this.editedDocument;
       const geoJsonGeometry = geoJSONFormat.writeGeometryObject(geometry);
+
+      const change = (newGeometry) => {
+        if (newGeometry.geom) {
+          document.geometry.geom = newGeometry.geom;
+        }
+
+        if (newGeometry.geom_detail) {
+          document.geometry.geom_detail = newGeometry.geom_detail;
+        }
+      };
 
       if (geoJsonGeometry.type === 'Point') {
         // remove elevation and timestamp
         geoJsonGeometry.coordinates = geoJsonGeometry.coordinates.slice(0, 2);
-        document.geometry.geom = JSON.stringify(geoJsonGeometry);
+        change({ geom: JSON.stringify(geoJsonGeometry) });
       } else if (geoJsonGeometry.type === 'LineString' || geoJsonGeometry.type === 'MultiLineString') {
         if (document.type === 'a') {
           // areas need a polygon, let change the path, check that first and last point are the same
@@ -564,25 +573,27 @@ export default {
           }
         }
 
-        document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
+        change({ geom_detail: JSON.stringify(geoJsonGeometry) });
 
         if (!document.geometry.geom) {
           const mainLine = geometry.getType() === 'MultiLineString' ? geometry.getLineString(0) : geometry;
-          this.setDocumentGeometry(document, new ol.geom.Point(mainLine.getCoordinateAt(0.5)));
+          this.setDocumentGeometry(new ol.geom.Point(mainLine.getCoordinateAt(0.5)));
         }
       } else if (geoJsonGeometry.type === 'Polygon' || geoJsonGeometry.type === 'MultiPolygon') {
         // areas
-        document.geometry.geom_detail = JSON.stringify(geoJsonGeometry);
+        change({ geom_detail: JSON.stringify(geoJsonGeometry) });
       } else {
         throw new Error(`Unexpected geometry type : ${geometry.type}`);
       }
     },
 
     drawDocumentMarkers() {
+      const editionSource = this.editionLayer.getSource();
       const documentsSource = this.documentsLayer.getSource();
       const waypointsSource = this.waypointsLayer.getSource();
       const imagesSource = this.imagesLayer.getSource();
 
+      editionSource.clear();
       documentsSource.clear();
       waypointsSource.clear();
       imagesSource.clear();
@@ -590,7 +601,7 @@ export default {
       this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true));
       this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false));
 
-      this.addDocumentFeature(this.editedDocument, documentsSource);
+      this.addDocumentFeature(this.editedDocument, editionSource);
 
       for (const document of this.documents ?? []) {
         this.addDocumentFeature(document, documentsSource);
@@ -711,6 +722,11 @@ export default {
       this.protectionAreasLayer.setVisible(!this.protectionAreasLayer.getVisible());
     },
 
+    emitMoveEvent() {
+      const bounds = this.view.calculateExtent();
+      this.$emit('move', bounds.map(Math.round));
+    },
+
     // If user want's to filter with map, it will send extent to url
     // otherwise, it set bbox url to undefined
     sendBoundsToUrl() {
@@ -723,14 +739,30 @@ export default {
       }
     },
 
+    fit(extent) {
+      this.view.fit(extent, { size: this.map.getSize() });
+
+      // slightly increase the extent, for more comfort
+      let zoom = this.view.getZoom() * 0.95;
+
+      // and set a minimum zoom level
+      zoom = Math.min(this.minZoomLevel, zoom);
+
+      this.view.setZoom(zoom);
+
+      return this.view.calculateExtent().map(Math.round);
+    },
+
     fitMapToDocuments(force) {
       if ((this.filterDocumentsWithMap || this.editable) && !force) {
-        return;
+        return this.view.calculateExtent().map(Math.round);
       }
+
+      this.drawDocumentMarkers();
 
       let extent = ol.extent.createEmpty();
 
-      for (const layer of [this.documentsLayer, this.waypointsLayer]) {
+      for (const layer of [this.editionLayer, this.documentsLayer, this.waypointsLayer]) {
         ol.extent.extend(extent, layer.getSource().getExtent());
       }
 
@@ -740,10 +772,7 @@ export default {
         extent = DEFAULT_EXTENT;
       }
 
-      this.view.fit(extent, { size: this.map.getSize() });
-
-      // set a minimum zoom level
-      this.view.setZoom(Math.min(this.minZoomLevel, this.view.getZoom()));
+      return this.fit(extent);
     },
 
     toogleMapLayer(layer) {

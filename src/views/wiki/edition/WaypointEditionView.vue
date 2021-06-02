@@ -1,6 +1,10 @@
 <template>
   <edition-container class="edition-container" :mode="mode" :document="document" :is-loading="saving" @save="save">
-    <form-section :title="$gettext('general informations')" :sub-title="$gettext('Waypoint\'s main properties')">
+    <form-section
+      :title="$gettext('general informations')"
+      :sub-title="$gettext('Waypoint\'s main properties')"
+      expanded-on-load
+    >
       <div class="columns">
         <form-field class="is-narrow" :document="document" :field="fields.waypoint_type" />
         <form-field :document="document" :field="fields.title" />
@@ -12,7 +16,7 @@
         <form-field class="is-6" :document="document" :field="fields.prominence" />
       </div>
 
-      <map-input-row :document="document" />
+      <map-input-row :document="document" ref="map" />
 
       <div class="columns">
         <form-field
@@ -159,6 +163,16 @@ export default {
   computed: {
     capacityContext() {
       return this.document && this.document.waypoint_type === 'bivouac' ? this.document.waypoint_type : null;
+    },
+  },
+
+  watch: {
+    'document.geometry.geom': function (to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
+      }
     },
   },
 };
