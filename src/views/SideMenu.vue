@@ -79,12 +79,12 @@
 
       <div class="columns is-gapless has-text-centered is-mobile menu-socials">
         <div class="column">
-          <a href="https://twitter.com/camptocamporg" title="twitter">
-            <fa-icon :icon="['fab', 'twitter']" class="twitter-icon" />
+          <a href="https://www.instagram.com/camptocamp_org/" title="Instagram">
+            <icon-instagram class="instagram-icon" />
           </a>
         </div>
         <div class="column">
-          <a href="https://www.facebook.com/camptocamp.org/" title="facebook">
+          <a href="https://www.facebook.com/camptocamp.org/" title="Facebook">
             <fa-icon :icon="['fab', 'facebook']" class="facebook-icon" />
           </a>
         </div>
@@ -207,19 +207,13 @@ aside {
     margin-right: calc((200px - 160px) / 2);
   }
 
-  .twitter-icon,
+  .instagram-icon,
   .facebook-icon,
   .donate-icon {
     font-size: 30px;
   }
 
-  .twitter-icon,
-  &:hover {
-    color: #4198fb; // twitter color
-  }
-
-  .facebook-icon,
-  &:hover {
+  .facebook-icon {
     color: #6d8bc9; //facebook color
   }
 
