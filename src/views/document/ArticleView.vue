@@ -16,6 +16,7 @@
       </div>
       <div class="column is-9 is-12-print">
         <div class="box">
+          <low-document-quality-banner v-if="!version && document.article_type !== 'personal'" :document="document" />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
@@ -32,9 +33,14 @@
 </template>
 
 <script>
+import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import documentViewMixin from './utils/document-view-mixin';
 
 export default {
+  components: {
+    LowDocumentQualityBanner,
+  },
+
   mixins: [documentViewMixin],
 };
 </script>
