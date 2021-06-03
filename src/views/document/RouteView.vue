@@ -75,7 +75,10 @@
         </div>
 
         <div class="box">
-          <low-document-quality-banner v-if="!version" :document="document" />
+          <low-document-quality-banner
+            :document="document"
+            :low-quality="!version && ['empty', 'draft'].includes(document.quality)"
+          />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">

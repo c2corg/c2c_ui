@@ -16,7 +16,12 @@
       </div>
       <div class="column is-9 is-12-print">
         <div class="box">
-          <low-document-quality-banner v-if="!version && document.article_type !== 'personal'" :document="document" />
+          <low-document-quality-banner
+            :document="document"
+            :low-quality="
+              !version && document.article_type !== 'personal' && ['empty', 'draft'].includes(document.quality)
+            "
+          />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
