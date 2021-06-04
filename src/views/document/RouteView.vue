@@ -75,6 +75,10 @@
         </div>
 
         <div class="box">
+          <low-document-quality-banner
+            :document="document"
+            :low-quality="!version && ['empty', 'draft'].includes(document.quality)"
+          />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">
@@ -124,6 +128,7 @@
 </template>
 
 <script>
+import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import documentViewMixin from './utils/document-view-mixin';
 const historyWorthActivities = [
   'snow_ice_mixed',
@@ -133,7 +138,11 @@ const historyWorthActivities = [
   'via_ferrata',
   'slacklining',
 ];
+
 export default {
+  components: {
+    LowDocumentQualityBanner,
+  },
   mixins: [documentViewMixin],
 
   data() {
@@ -198,13 +207,17 @@ export default {
 
     showMissingHistoryBanner() {
       const doc = this.document;
+      if (this.version || ['empty', 'draft'].includes(doc.quality)) {
+        // hide notice if we are consulting an old version, or if low quality doc banner is already shown
+        return false;
+      }
       const activities = doc.activities ?? [];
       for (let act of historyWorthActivities) {
         if (activities.includes(act)) {
           return true;
         }
       }
-      if (activities.includes('skitouring') && ['5.1', '5.2', '5.3', '5.4', '5.5'].includes(doc.ski_rating)) {
+      if (activities.includes('skitouring') && doc.ski_rating?.startsWith('5.')) {
         return true;
       }
       return false;
