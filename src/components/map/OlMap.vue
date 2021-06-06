@@ -137,7 +137,7 @@ export default {
 
   props: {
     documents: {
-      type: Array,
+      type: [Object, Array],
       default: null,
     },
 
@@ -589,43 +589,56 @@ export default {
       waypointsSource.clear();
       imagesSource.clear();
 
-      this.addDocumentFeature(this.oldDocument, documentsSource, buildDiffStyle(true));
-      this.addDocumentFeature(this.newDocument, documentsSource, buildDiffStyle(false));
+      this.addDocumentFeature(this.oldDocument, documentsSource, { style: buildDiffStyle(true) });
+      this.addDocumentFeature(this.newDocument, documentsSource, { style: buildDiffStyle(false) });
 
       this.addDocumentFeature(this.editedDocument, documentsSource);
 
-      for (const document of this.documents ?? []) {
-        this.addDocumentFeature(document, documentsSource);
+      // map could build to display a single document or a list of documents. we have to distinguish both cases
+      let documents = [];
+      let isDocumentListMap = true;
+      if (Array.isArray(this.documents)) {
+        documents = [...documents, ...this.documents];
+      } else if (this.documents) {
+        // then it's a single document
+        isDocumentListMap = false;
+        documents.push(this.documents);
+      } // otherwise the prop is not defined, nothing to do
 
-        if (document.associations) {
-          for (const waypoint of document.associations.waypoints?.filter(isNotVirtual) ?? []) {
-            this.addDocumentFeature(waypoint, waypointsSource);
-          }
-          for (const waypoint of document.associations.waypoint_children?.filter(isNotVirtual) ?? []) {
-            this.addDocumentFeature(waypoint, waypointsSource);
-          }
+      for (const document of documents) {
+        this.addDocumentFeature(document, documentsSource, {
+          showPointGeometry: isDocumentListMap || document.type !== 'r', // hide point geometry for route view
+        });
 
-          // show associated images only for outings
-          if (document.type === 'o') {
-            for (const image of document.associations.images ?? []) {
-              if (!this.$documentUtils.hasSameGeolocation(image, document)) {
-                // show image marker only if it's geolocation is different from document
-                this.addDocumentFeature(image, imagesSource);
-              }
-            }
-          }
+        [...(document.associations?.waypoints ?? []), ...(document.associations?.waypoint_children ?? [])]
+          ?.filter(isNotVirtual)
+          .forEach((waypoint) => this.addDocumentFeature(waypoint, waypointsSource));
+
+        // show associated images only for outings
+        if (document.type === 'o') {
+          document.associations?.images
+            // show image marker only if it's geolocation is different from document
+            ?.filter((image) => !this.$documentUtils.hasSameGeolocation(image, document))
+            .forEach((image) => this.addDocumentFeature(image, imagesSource));
         }
       }
     },
 
-    addDocumentFeature(document, source, style) {
-      if (!document || !document.geometry) {
+    addDocumentFeature(document, source, options = {}) {
+      if (!document?.geometry) {
         return;
       }
 
+      const { style, showPointGeometry, showDetailedGeometry } = {
+        showPointGeometry: true,
+        showDetailedGeometry: true,
+        style: undefined,
+        ...options,
+      };
+
       const title = this.$documentUtils.getDocumentTitle(document);
 
-      if (document.geometry.geom) {
+      if (showPointGeometry && document.geometry.geom) {
         const feature = this.addFeature(
           source,
           JSON.parse(document.geometry.geom),
@@ -637,7 +650,7 @@ export default {
         feature.setId(document.document_id);
       }
 
-      if (document.geometry.geom_detail) {
+      if (showDetailedGeometry && document.geometry.geom_detail) {
         this.addFeature(
           source,
           JSON.parse(document.geometry.geom_detail),

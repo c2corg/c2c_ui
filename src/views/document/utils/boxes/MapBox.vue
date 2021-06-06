@@ -10,7 +10,7 @@
 
     <div class="map-container">
       <map-view
-        :documents="new Array(document)"
+        :documents="document"
         :show-protection-areas="['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         @has-protection-area="$emit('has-protection-area')"
