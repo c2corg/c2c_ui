@@ -1415,6 +1415,7 @@
     "pitch": {
       "climbing_indoor_types": "Sportklettern"
     },
+    "pixels": "Pixel",
     "place": "Ort",
     "please consult the server logs": {
       "API message": "Unerwarteter Fehler, bitte kontaktieren Sie dev@camptocamp.org"

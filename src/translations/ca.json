@@ -1323,6 +1323,7 @@
     "pitch": {
       "climbing_indoor_types": "totxo"
     },
+    "pixels": "píxels",
     "place": "indret",
     "please consult the server logs": {
       "API message": "Error inesperat, si us plau contacteu amb dev@camptocamp.org"
