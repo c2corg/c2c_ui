@@ -26,7 +26,7 @@
         <form-field class="is-3" :document="document" :field="fields.elevation" />
       </div>
 
-      <map-input-row :document="document" />
+      <map-input-row :document="document" ref="map" />
     </form-section>
 
     <form-section
@@ -193,5 +193,15 @@ import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
   mixins: [documentEditionViewMixin],
+
+  watch: {
+    'document.geometry.geom': function (to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
+      }
+    },
+  },
 };
 </script>

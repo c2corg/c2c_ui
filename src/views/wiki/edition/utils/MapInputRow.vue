@@ -23,19 +23,22 @@
       <div class="column is-12 map-container">
         <map-view
           ref="map"
+          :initial-extent="initialExtent"
+          :documents="documents"
           :edited-document="document"
           :geom-detail-editable="geomDetailEditable"
           show-center-on-geolocation
           show-recenter-on
+          @move="$emit('move', arguments[0])"
         />
       </div>
-      <div class="column is-6">
+      <div class="column is-6 is-hidden">
         <div class="field">
           <label class="label">{{ $gettext('Longitude') }}</label>
           <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint" />
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-6 is-hidden">
         <div class="field">
           <label class="label">{{ $gettext('Latitude') }}</label>
           <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint" />
@@ -60,6 +63,14 @@ export default {
     geomDetailEditable: {
       type: Boolean,
       default: false,
+    },
+    documents: {
+      type: Array,
+      default: null,
+    },
+    initialExtent: {
+      type: Array,
+      default: null,
     },
   },
 
@@ -132,6 +143,10 @@ export default {
 
       this.longitude = Math.round(coords[0] * 1000000) / 1000000;
       this.latitude = Math.round(coords[1] * 1000000) / 1000000;
+    },
+
+    fitMapToDocuments() {
+      return this.$refs.map.fitMapToDocuments(true);
     },
   },
 };

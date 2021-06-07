@@ -133,7 +133,7 @@ export default function install(Vue) {
         }
 
         array.push(child);
-        this.propagateAssociationProperties(document, child);
+        this.propagateProperties(document, child);
       },
 
       removeAssociation(document, child) {
@@ -143,16 +143,27 @@ export default function install(Vue) {
         document.associations[arrayName] = array.filter((item) => item.document_id !== child.document_id);
       },
 
-      propagateAssociationProperties(parent, child) {
-        // propagate route property to outing
-        if (parent.type !== 'o' || child.type !== 'r') {
-          return;
+      propagateProperties(parent, child) {
+        // Parent is being created/modified. When a child is associated to parent,
+        // it can be helpful to set parent's properties from child's properties.
+
+        if (parent.type === 'o' && child.type === 'r') {
+          this.propagateRoutePropertiesToOutingProperties(child, parent);
+        } else if (
+          (parent.type === 'r' && child.type === 'w') ||
+          (parent.type === 'x' && child.type === 'r') ||
+          (parent.type === 'x' && child.type === 'o')
+        ) {
+          this.propagateGeomPoint(child, parent);
         }
+      },
 
-        const route = child;
-        const outing = parent;
+      propagateGeomPoint(from, to) {
+        to.geometry.geom = to.geometry.geom === null ? from.geometry.geom : to.geometry.geom;
+      },
 
-        outing.geometry.geom = outing.geometry.geom === null ? route.geometry.geom : outing.geometry.geom;
+      propagateRoutePropertiesToOutingProperties(route, outing) {
+        this.propagateGeomPoint(route, outing);
 
         const names = [
           'elevation_min',
@@ -329,6 +340,26 @@ export default function install(Vue) {
             return false;
           }
         }
+      },
+
+      getDocumentsBbox(documents) {
+        documents = documents.filter((document) => document.geometry?.geom);
+
+        if (documents.length === 0) {
+          return null;
+        }
+
+        let minX, maxX, minY, maxY;
+
+        for (const document of documents) {
+          const coordinates = JSON.parse(document.geometry.geom).coordinates;
+          maxX = maxX ? Math.max(maxX, coordinates[0]) : coordinates[0];
+          maxY = maxY ? Math.max(maxY, coordinates[1]) : coordinates[1];
+          minX = minX ? Math.min(minX, coordinates[0]) : coordinates[0];
+          minY = minY ? Math.min(minY, coordinates[1]) : coordinates[1];
+        }
+
+        return [minX, minY, maxX, maxY].map(Math.round);
       },
     },
   });

@@ -29,6 +29,7 @@ export default {
     };
   },
 
+  isProduction: config.isProduction,
   publicPath: config.publicPath,
 };
 </script>

@@ -37,9 +37,11 @@
       />
 
       <div class="field">
-        <input-checkbox v-model="is_profile_public">
-          <span v-translate>Make profile page public</span>
-        </input-checkbox>
+        <div class="control">
+          <input-checkbox v-model="is_profile_public">
+            <span v-translate>Make profile page public</span>
+          </input-checkbox>
+        </div>
       </div>
 
       <div class="field is-grouped">

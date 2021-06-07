@@ -1,8 +1,9 @@
 <template>
-  <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
+  <edition-container v-if="document" :mode="mode" :document="document" :is-loading="saving" @save="save">
     <form-section
       :title="$gettext('general informations')"
       :sub-title="$gettext('Main informations about your outing')"
+      expanded-on-load
     >
       <div class="columns">
         <form-field
@@ -23,12 +24,55 @@
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
         </div>
       </div>
-      <div class="columns">
-        <form-field :document="document" :field="fields.activities" />
-      </div>
-      <map-input-row :document="document" geom-detail-editable />
 
-      <associations-input-row :label="$gettext('routes')" :document="document" :field="fields.routes" />
+      <div class="columns is-multiline">
+        <form-field class="is-two-fifths" :document="document" :field="fields.activities" />
+        <div class="column">
+          <map-input-row
+            class="field"
+            :document="document"
+            :documents="possibleRoutes"
+            geom-detail-editable
+            ref="mapInput"
+            @move="updateBbox"
+            :initial-extent="initialExtent"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">
+          {{ $gettext('routes') | uppercaseFirstLetter }}:
+          <marker-helper name="1063027#routes" />
+        </label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Name" v-model="routeTitle" />
+        </div>
+      </div>
+
+      <div v-if="possibleRoutes && possibleRoutes.length !== 0" class="field">
+        <div v-for="route of possibleRoutes" :key="route.document_id">
+          <input-checkbox :value="routeIsAssociated(route.document_id)" @input="changeRouteAssociation($event, route)">
+            <activities :activities="route.activities" class="is-size-4 has-text-secondary" />
+            <document-title :document="route" />,
+            <document-rating :document="route" />
+          </input-checkbox>
+          <document-link :document="route" target="_blank" :title="$gettext('Open in a new tab')">
+            <fa-icon icon="link" />
+          </document-link>
+        </div>
+      </div>
+
+      <div class="notification is-info" v-else>
+        <span v-translate>Please move the map, or change the route's name.</span>
+        <span v-translate>If the route does not exists in our base, you can create it.</span>
+      </div>
+
+      <div class="notification is-info" v-if="showMoreResultsBanner">
+        <span v-translate>
+          More routes are available. You can move the map, specify the name or set an activity to filter them out.
+        </span>
+      </div>
 
       <div class="columns is-multiline">
         <form-field :document="document" :field="fields.title" />
@@ -182,6 +226,8 @@
 import CotometerWindow from './utils/CotometerWindow';
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
+import c2c from '@/js/apis/c2c';
+
 export default {
   components: { CotometerWindow },
 
@@ -190,16 +236,159 @@ export default {
   data() {
     return {
       showBothDates: false,
+      possibleRoutes: null,
+      routeTitle: '',
+      bbox: null,
+      showMoreResultsBanner: false,
     };
+  },
+
+  computed: {
+    initialExtent() {
+      if (this.$route.query.initial_bbox) {
+        return this.$route.query.initial_bbox.split(',').map(parseFloat);
+      } else if (this.document.associations.routes.length) {
+        return this.$documentUtils.getDocumentsBbox(this.document.associations.routes);
+      }
+
+      return null;
+    },
   },
 
   watch: {
     showBothDates: 'handleDates',
+    'document.activities': function (to, from) {
+      if (from === undefined) {
+        return; // initial load
+      }
+      this.updateRoutes('activities', false);
+    },
+
+    'document.geometry.geom_detail': function (to, from) {
+      if (from === null && to !== null) {
+        this.possibleRoutes = null;
+        this.$nextTick(() => {
+          this.fitMapToDocuments();
+          this.updateRoutes();
+        });
+      }
+    },
+
+    routeTitle() {
+      this.updateRoutes('routeTitle', false);
+    },
   },
 
   methods: {
     afterLoad() {
       this.showBothDates = this.document.date_start !== this.document.date_end;
+    },
+
+    updateBbox(bbox) {
+      if (this.bbox === null && this.initialExtent === null && this.mode === 'add') {
+        // IF it's the very first load
+        // AND if there is no specific bbox expected in th URL
+        // AND you are creating an outing
+        // THEN the bbox will be the default one => do not load possible routes
+        this.bbox = bbox;
+        return;
+      }
+
+      if (bbox.join(',') !== this.bbox?.join(',')) {
+        this.bbox = bbox;
+        this.updateRoutes('bbox', false);
+      }
+    },
+
+    fitMapToDocuments() {
+      this.bbox = this.$refs.mapInput.fitMapToDocuments();
+    },
+
+    updateRoutes(reason, fitMap) {
+      if (!this.bbox) {
+        return reason;
+      }
+
+      const query = { limit: 50, bbox: this.bbox.join(',') };
+
+      if (this.routeTitle) {
+        query.q = this.routeTitle;
+      }
+
+      if (this.document.activities.length) {
+        query.act = this.document.activities.join(',');
+      }
+
+      const promise = c2c.route.getAll(query);
+
+      promise.then((response) => this.computePossibleRoutes(response.data.documents, response.data.total, fitMap));
+
+      return promise;
+    },
+
+    clearPossibleRoutes() {
+      this.computePossibleRoutes([], 0, false);
+    },
+
+    computePossibleRoutes(routes, total, fitMap) {
+      this.showMoreResultsBanner = total !== routes.length;
+
+      // always add actual associations to possible routes
+      const routeIds = routes.map((r) => r.document_id);
+      routes = [...routes, ...this.document.associations.routes.filter((r) => !routeIds.includes(r.document_id))];
+
+      // sort by title
+      routes.sort((a, b) =>
+        this.$documentUtils.getDocumentTitle(a).localeCompare(this.$documentUtils.getDocumentTitle(b))
+      );
+
+      // assign
+      this.possibleRoutes = routes;
+
+      // recenter the map to possible routes
+      if (fitMap) {
+        this.$nextTick(this.fitMapToDocuments);
+      }
+    },
+
+    changeRouteAssociation(addRoute, route) {
+      // Adding a route still present, or removing a route not present?
+      if (
+        (!addRoute && !this.routeIsAssociated(route.document_id)) ||
+        (addRoute && this.routeIsAssociated(route.document_id))
+      ) {
+        return;
+      }
+
+      const routes = this.document.associations.routes;
+
+      if (addRoute) {
+        routes.push(route);
+
+        if (routes.length === 1) {
+          this.possibleRoutes = [];
+
+          this.$nextTick(() => {
+            // for first association, force the localization to be the route localization
+            this.$documentUtils.propagateProperties(this.document, route);
+            this.fitMapToDocuments();
+            this.updateRoutes('First route', false);
+          });
+        } else {
+          this.$documentUtils.propagateProperties(this.document, route);
+        }
+      } else {
+        this.document.associations.routes = routes.filter((r) => r.document_id !== route.document_id);
+
+        if (!this.document.associations.routes.length) {
+          // if there is no more route associated, the localization is obsolete
+          this.document.geometry.geom = null;
+        }
+      }
+    },
+
+    routeIsAssociated(route_id) {
+      return this.document.associations.routes.filter((route) => route.document_id === route_id).length !== 0;
     },
 
     handleDates() {

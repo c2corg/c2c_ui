@@ -133,12 +133,26 @@ export default {
           this.modified = true;
         });
       } else {
-        this.promise = { data: this.$documentUtils.buildDocument(this.documentType, this.lang) };
+        const document = this.$documentUtils.buildDocument(this.documentType, this.lang);
+        this.promise = { data: null, loading: 1 };
+
+        // as some doc may be loaded, give the document once it's totally ready
+        const onload = () => {
+          this.promise.loading -= 1;
+          if (this.promise.loading === 0) {
+            // TODO : implements a algorithm to determine if document has been modified
+            this.modified = true;
+            this.promise.data = document;
+            this.afterLoad();
+          }
+        };
 
         // add current user for outings
         if (this.documentType === 'outing') {
+          this.promise.loading += 1;
           c2c.profile.get(this.$user.id).then((response) => {
-            this.$documentUtils.addAssociation(this.document, response.data);
+            this.$documentUtils.addAssociation(document, response.data);
+            onload();
           });
         }
 
@@ -151,21 +165,20 @@ export default {
             const documentIds = String(this.$route.query[letter]).split(',');
 
             for (const documentId of documentIds) {
+              this.promise.loading += 1;
               c2c[documentType].get(documentId).then((response) => {
-                this.$documentUtils.addAssociation(this.document, response.data);
+                this.$documentUtils.addAssociation(document, response.data);
+                onload();
               });
             }
           }
         }
 
         if (this.$route.query.act) {
-          this.document.activities = this.$route.query.act.split(',');
+          document.activities = this.$route.query.act.split(',');
         }
 
-        this.afterLoad();
-
-        // TODO : implements a algorithm to determine if document has been modified
-        this.modified = true;
+        onload();
       }
     },
 

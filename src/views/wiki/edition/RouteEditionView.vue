@@ -7,6 +7,7 @@
           'Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).'
         )
       "
+      expanded-on-load
     >
       <div class="columns is-1">
         <form-field
@@ -22,7 +23,7 @@
         <form-field class="is-12" :document="document" :field="fields.activities" />
       </div>
 
-      <map-input-row :document="document" geom-detail-editable />
+      <map-input-row :document="document" geom-detail-editable ref="map" />
 
       <associations-input-row :document="document" :field="fields.waypoints" />
       <associations-input-row :document="document" :field="fields.routes" />
@@ -176,6 +177,8 @@ export default {
 
   watch: {
     'document.associations.waypoints': 'onWaypointsAssociation',
+    'document.geometry.geom': 'onGeometryUpdate',
+    'document.geometry.geom_detail': 'onGeometryUpdate',
   },
 
   methods: {
@@ -183,6 +186,14 @@ export default {
       // on creation from a waypoint, set this waypoint as main
       if (this.mode === 'add' && this.$route.query.w) {
         this.document.main_waypoint_id = parseInt(this.$route.query.w);
+      }
+    },
+
+    onGeometryUpdate(to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
       }
     },
 

@@ -87,8 +87,7 @@
             :key="index"
             :class="{
               'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
-              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
-                !showMap,
+              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd': !showMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"

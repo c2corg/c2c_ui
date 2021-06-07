@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <span class="input-checkbox">
     <input
       :id="'c2c-checkbox' + _uid"
       class="is-checkradio is-primary"
@@ -10,7 +10,7 @@
     <label :for="'c2c-checkbox' + _uid">
       <slot />
     </label>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -29,9 +29,9 @@ export default {
 </script>
 
 <style scoped>
-.control {
+.input-checkbox {
   /* extension radio has removed padding around inputs */
-  padding-top: calc(0.375em - 1px);
+  display: inline-block;
   padding-bottom: calc(0.375em - 1px);
 }
 </style>
