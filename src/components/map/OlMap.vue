@@ -131,7 +131,7 @@ const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
 const showSingleDocumentPointGeometry = (document) => {
   if (document.type === 'o') {
-    // hide point geometry for outing view if GPS data
+    // hide point geometry for outing view if GPS data is available
     return !document.geometry?.geom_detail;
   }
   return document.type !== 'r'; // hide point geometry for route view
@@ -602,7 +602,7 @@ export default {
 
       this.addDocumentFeature(this.editedDocument, documentsSource);
 
-      // map could build to display a single document or a list of documents. we have to distinguish both cases
+      // map can be built to display a single document or a list of documents. we have to distinguish both cases
       let documents = [];
       let isDocumentListMap = true;
       if (Array.isArray(this.documents)) {
@@ -611,7 +611,7 @@ export default {
         // then it's a single document
         isDocumentListMap = false;
         documents.push(this.documents);
-      } // otherwise the prop is not defined, nothing to do
+      } // otherwise prop is not defined, nothing to do
 
       for (const document of documents) {
         this.addDocumentFeature(document, documentsSource, {
@@ -625,7 +625,7 @@ export default {
         // show associated images only for outings
         if (document.type === 'o') {
           document.associations?.images
-            // show image marker only if it's geolocation is different from document
+            // show image marker only if its geolocation is different from document
             ?.filter((image) => !this.$documentUtils.hasSameGeolocation(image, document))
             .forEach((image) => this.addDocumentFeature(image, imagesSource));
         }
