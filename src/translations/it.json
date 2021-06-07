@@ -1055,6 +1055,7 @@
     "pitch": {
       "climbing_indoor_types": "monotiri"
     },
+    "pixels": "pixel",
     "place": "luogo ",
     "please consult the server logs": {
       "API message": "C'è stato un errore, puoi contattare dev@camptocamp.org"
