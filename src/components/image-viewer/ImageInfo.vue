@@ -36,7 +36,7 @@
         <li v-if="document.focal_length" :title="$gettext('focal_length')">{{ document.focal_length }}&nbsp;mm</li>
         <li v-if="document.iso_speed" :title="$gettext('iso_speed')">{{ document.iso_speed }} ISO</li>
         <li v-if="document.width && document.height" :title="$gettext('resolution')">
-          {{ document.height }} x {{ document.width }} <span translate>pixels</span>
+          {{ document.height }} x {{ document.width }} <span v-translate>pixels</span>
         </li>
       </ul>
     </div>
