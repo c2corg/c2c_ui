@@ -129,6 +129,14 @@ const respecterCestProtegerService = new RespecterCestProtegerService();
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
+const showSingleDocumentPointGeometry = (document) => {
+  if (document.type === 'o') {
+    // hide point geometry for outing view if GPS data
+    return !document.geometry?.geom_detail;
+  }
+  return document.type !== 'r'; // hide point geometry for route view
+};
+
 export default {
   components: {
     BiodivInformation,
@@ -607,7 +615,7 @@ export default {
 
       for (const document of documents) {
         this.addDocumentFeature(document, documentsSource, {
-          showPointGeometry: isDocumentListMap || document.type !== 'r', // hide point geometry for route view
+          showPointGeometry: isDocumentListMap || showSingleDocumentPointGeometry(document),
         });
 
         [...(document.associations?.waypoints ?? []), ...(document.associations?.waypoint_children ?? [])]
