@@ -57,8 +57,8 @@ export default {
       const query = {};
 
       if (this.documentType === 'waypoint') {
-        let bbox = this.$documentUtils.getDocumentsBbox(this.document.associations.all_routes.documents);
-        query.initial_bbox = bbox.join(',');
+        const bbox = this.$documentUtils.getDocumentsBbox(this.document.associations.all_routes.documents);
+        query.initial_bbox = bbox?.join(',');
       } else if (this.documentType === 'route') {
         query[this.document.type] = this.document.document_id;
       }
@@ -67,10 +67,13 @@ export default {
     },
 
     showAddOutingButton() {
+      // if the document is a route, we can add an outing directly linked to the route
       if (this.documentType === 'route') {
         return true;
       }
 
+      // if the document is a waypoint, and if it has associated route, then the outing form
+      // will propose routes in the extent of the waypoint (see initial_bbox query above)
       if (this.documentType === 'waypoint' && this.document.associations.all_routes.total !== 0) {
         return true;
       }

@@ -1,7 +1,6 @@
 <template>
   <div class="advertisement">
     <iframe
-      v-if="$options.isProduction"
       :title="$gettext('advertisement')"
       :src="$options.publicPath + 'affiz.html'"
       frameborder="0"

@@ -177,13 +177,8 @@ export default {
 
   watch: {
     'document.associations.waypoints': 'onWaypointsAssociation',
-    'document.geometry.geom': function (to, from) {
-      if (from === null && to !== null) {
-        this.$nextTick(() => {
-          this.$refs.map.fitMapToDocuments();
-        });
-      }
-    },
+    'document.geometry.geom': 'onGeometryUpdate',
+    'document.geometry.geom_detail': 'onGeometryUpdate',
   },
 
   methods: {
@@ -191,6 +186,14 @@ export default {
       // on creation from a waypoint, set this waypoint as main
       if (this.mode === 'add' && this.$route.query.w) {
         this.document.main_waypoint_id = parseInt(this.$route.query.w);
+      }
+    },
+
+    onGeometryUpdate(to, from) {
+      if (from === null && to !== null) {
+        this.$nextTick(() => {
+          this.$refs.map.fitMapToDocuments();
+        });
       }
     },
 

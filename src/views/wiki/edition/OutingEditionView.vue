@@ -57,7 +57,7 @@
             <document-title :document="route" />,
             <document-rating :document="route" />
           </input-checkbox>
-          <document-link :document="route" target="_blank">
+          <document-link :document="route" target="_blank" :title="$gettext('Open in a new tab')">
             <fa-icon icon="link" />
           </document-link>
         </div>
@@ -69,10 +69,9 @@
       </div>
 
       <div class="notification is-info" v-if="showMoreResultsBanner">
-        <span v-translate
-          >More routes are available. You can move the map, specify the name or set an activity to filter them
-          out.</span
-        >
+        <span v-translate>
+          More routes are available. You can move the map, specify the name or set an activity to filter them out.
+        </span>
       </div>
 
       <div class="columns is-multiline">
@@ -248,7 +247,7 @@ export default {
     initialExtent() {
       if (this.$route.query.initial_bbox) {
         return this.$route.query.initial_bbox.split(',').map(parseFloat);
-      } else if (this.document.associations.routes.length !== 0) {
+      } else if (this.document.associations.routes.length) {
         return this.$documentUtils.getDocumentsBbox(this.document.associations.routes);
       }
 
@@ -286,14 +285,13 @@ export default {
     },
 
     updateBbox(bbox) {
-      if (this.bbox === null) {
-        // if it's the very first load
-        if (this.initialExtent === null) {
-          // and if there is no specific bbox expected
-          this.bbox = bbox;
-          // then do not load possible routes
-          return;
-        }
+      if (this.bbox === null && this.initialExtent === null && this.mode === 'add') {
+        // IF it's the very first load
+        // AND if there is no specific bbox expected in th URL
+        // AND you are creating an outing
+        // THEN the bbox will be the default one => do not load possible routes
+        this.bbox = bbox;
+        return;
       }
 
       if (bbox.join(',') !== this.bbox?.join(',')) {
@@ -301,11 +299,6 @@ export default {
         this.updateRoutes('bbox', false);
       }
     },
-
-    // printBbox(reason, bbox) {
-    //   bbox = bbox ? bbox : this.bbox;
-    //   console.log([reason, (bbox[2] - bbox[0])/1000, (bbox[3] - bbox[1])/1000]);
-    // },
 
     fitMapToDocuments() {
       this.bbox = this.$refs.mapInput.fitMapToDocuments();
@@ -322,7 +315,7 @@ export default {
         query.q = this.routeTitle;
       }
 
-      if (this.document.activities.length !== 0) {
+      if (this.document.activities.length) {
         query.act = this.document.activities.join(',');
       }
 
@@ -341,11 +334,8 @@ export default {
       this.showMoreResultsBanner = total !== routes.length;
 
       // always add actual associations to possible routes
-      for (const route of this.document.associations.routes) {
-        if (routes.filter((r) => r.document_id === route.document_id).length === 0) {
-          routes.push(route);
-        }
-      }
+      const routeIds = routes.map((r) => r.document_id);
+      routes = [...routes, ...this.document.associations.routes.filter((r) => !routeIds.includes(r.document_id))];
 
       // sort by title
       routes.sort((a, b) =>
@@ -362,9 +352,11 @@ export default {
     },
 
     changeRouteAssociation(addRoute, route) {
-      if (!addRoute && !this.routeIsAssociated(route.document_id)) {
-        return;
-      } else if (addRoute && this.routeIsAssociated(route.document_id)) {
+      // Adding a route still present, or removing a route not present?
+      if (
+        (!addRoute && !this.routeIsAssociated(route.document_id)) ||
+        (addRoute && this.routeIsAssociated(route.document_id))
+      ) {
         return;
       }
 
@@ -388,7 +380,7 @@ export default {
       } else {
         this.document.associations.routes = routes.filter((r) => r.document_id !== route.document_id);
 
-        if (this.document.associations.routes.length === 0) {
+        if (!this.document.associations.routes.length) {
           // if there is no more route associated, the localization is obsolete
           this.document.geometry.geom = null;
         }

@@ -562,7 +562,7 @@ export default {
         change({ geom: JSON.stringify(geoJsonGeometry) });
       } else if (geoJsonGeometry.type === 'LineString' || geoJsonGeometry.type === 'MultiLineString') {
         if (document.type === 'a') {
-          // areas need a polygon, let change the path, check that first and last point are the same
+          // areas need a polygon, let's change the path, check that first and last points are the same
           geoJsonGeometry.type = 'Polygon';
           const firstPoint = JSON.stringify(geoJsonGeometry.coordinates[0][0]);
           const lastPoint = JSON.stringify(geoJsonGeometry.coordinates[0][geoJsonGeometry.coordinates[0].length - 1]);
@@ -931,14 +931,27 @@ export default {
     },
 
     clearGeometry() {
-      this.editedDocument.geometry.geom = null;
+      if (this.editedDocument.type !== 'o') {
+        // user can't set the outing point directly (he must select the route)
+        // So do not clear geometry.geom
+        this.editedDocument.geometry.geom = null;
+      }
+
       this.editedDocument.geometry.geom_detail = null;
       this.drawDocumentMarkers(); // redraw markers
       this.setDrawInteraction(); // reset interaction mode
     },
 
     resetGeometry() {
-      this.editedDocument.geometry = JSON.parse(JSON.stringify(this.initialGeometry));
+      if (this.editedDocument.type === 'o') {
+        // user can't set the outing point directly (he must select the route)
+        // So do not reinit geometry.geom to nothing
+        this.editedDocument.geometry.geom = this.initialGeometry.geom || this.editedDocument.geometry.geom;
+        this.editedDocument.geometry.geom_detail = this.initialGeometry.geom_detail;
+      } else {
+        this.editedDocument.geometry = JSON.parse(JSON.stringify(this.initialGeometry));
+      }
+
       this.drawDocumentMarkers(); // redraw markers
       this.setDrawInteraction(); // reset interaction mode
     },

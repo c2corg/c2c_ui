@@ -149,11 +149,11 @@ export default function install(Vue) {
 
         if (parent.type === 'o' && child.type === 'r') {
           this.propagateRoutePropertiesToOutingProperties(child, parent);
-        } else if (parent.type === 'r' && child.type === 'w') {
-          this.propagateGeomPoint(child, parent);
-        } else if (parent.type === 'x' && child.type === 'r') {
-          this.propagateGeomPoint(child, parent);
-        } else if (parent.type === 'x' && child.type === 'o') {
+        } else if (
+          (parent.type === 'r' && child.type === 'w') ||
+          (parent.type === 'x' && child.type === 'r') ||
+          (parent.type === 'x' && child.type === 'o')
+        ) {
           this.propagateGeomPoint(child, parent);
         }
       },
@@ -343,7 +343,11 @@ export default function install(Vue) {
       },
 
       getDocumentsBbox(documents) {
-        // given an array of documents, return the extent containing all these documents
+        documents = documents.filter((document) => document.geometry?.geom);
+
+        if (documents.length === 0) {
+          return null;
+        }
 
         let minX, maxX, minY, maxY;
 
