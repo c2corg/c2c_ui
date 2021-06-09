@@ -48,7 +48,7 @@
       :label="$gettext('Contribute to maintainance')"
       :href="fundraiser.url"
       icon-class="has-text-danger"
-      icon="['miscs', 'drill']"
+      :icon="['miscs', 'drill']"
     />
 
     <tool-box-button
