@@ -9,8 +9,8 @@ import paragliding from "./paragliding"
 import rock_climbing from "./rock_climbing"
 import skitouring from "./skitouring"
 import slacklining from "./slacklining"
-import snowshoeing from "./snowshoeing"
 import snow_ice_mixed from "./snow_ice_mixed"
+import snowshoeing from "./snowshoeing"
 import via_ferrata from "./via_ferrata"
 
 export {
@@ -23,7 +23,7 @@ export {
     rock_climbing,
     skitouring,
     slacklining,
-    snowshoeing,
     snow_ice_mixed,
+    snowshoeing,
     via_ferrata
 }
