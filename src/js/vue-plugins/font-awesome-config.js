@@ -119,6 +119,7 @@ import activitySnow_ice_mixed from '@/assets/font-awesome-custom/js/activity/sno
 import activitySnowshoeing from '@/assets/font-awesome-custom/js/activity/snowshoeing';
 import activityVia_ferrata from '@/assets/font-awesome-custom/js/activity/via_ferrata';
 import documentTypeOuting from '@/assets/font-awesome-custom/js/document-type/outing';
+import drill from '@/assets/font-awesome-custom/js/miscs/drill';
 import paragliding from '@/assets/font-awesome-custom/js/miscs/paragliding';
 import qualityDraft from '@/assets/font-awesome-custom/js/quality/draft';
 import qualityEmpty from '@/assets/font-awesome-custom/js/quality/empty';
@@ -162,6 +163,7 @@ import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
 export default function install(Vue) {
   library.add(
     paragliding,
+    drill,
 
     documentTypeOuting,
 

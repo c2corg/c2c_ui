@@ -16,8 +16,8 @@ import gite from "./gite"
 import glacier from "./glacier"
 import hut from "./hut"
 import lake from "./lake"
-import locality from "./locality"
 import local_product from "./local_product"
+import locality from "./locality"
 import misc from "./misc"
 import paragliding_landing from "./paragliding_landing"
 import paragliding_takeoff from "./paragliding_takeoff"
@@ -50,8 +50,8 @@ export {
     glacier,
     hut,
     lake,
-    locality,
     local_product,
+    locality,
     misc,
     paragliding_landing,
     paragliding_takeoff,
