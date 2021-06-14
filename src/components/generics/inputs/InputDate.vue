@@ -19,6 +19,7 @@ import en from 'vuejs-datepicker/dist/locale/translations/en';
 import es from 'vuejs-datepicker/dist/locale/translations/es';
 import fr from 'vuejs-datepicker/dist/locale/translations/fr';
 import it from 'vuejs-datepicker/dist/locale/translations/it';
+import ru from 'vuejs-datepicker/dist/locale/translations/ru';
 
 import { baseMixin } from './mixins';
 
@@ -60,6 +61,7 @@ const datepickerLocales = {
     ymd: false,
     yearSuffix: '',
   },
+  ru,
 };
 
 export default {
