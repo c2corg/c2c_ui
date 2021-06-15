@@ -116,6 +116,9 @@
     "Basemap (at)": {
       "Map layer": "Австрия"
     },
+    "Basemap ortho (at)": {
+      "Map layer": "Австрийские спутниковые"
+    },
     "Beginner": "Начинающий",
     "Beware of case-sensitive login and password": "Внимание,  логин и пароль чувствительны к регистру.",
     "Block account": "Блокировать счёт",
@@ -267,6 +270,7 @@
     "Forum": "Форум",
     "Forum username": "Имя ползователя на форуме",
     "From danger 3, consider the slopes which dominate the route": "С 3-го уровня лавиноопасности, обращайте внимание на склоны которые находятся выше вашего маршрута",
+    "From the interface": "Из интерфейса",
     "Fullname": "ФИО ",
     "GPS Track": "GPS трек",
     "GPX file": "GPX файл",
@@ -274,6 +278,7 @@
     "General information": "общая информация",
     "Geolocation": "Геолокация",
     "Get avalanche bulletins from Météo-France website": "Видеть прогноз лавиноопасности от Météo-France",
+    "Go back to YETI": "Вернуться к YETI",
     "Go to the previous page": "вернуться к предыдущей странице",
     "Group": "Группа",
     "Group size": "размер группы",
@@ -287,6 +292,7 @@
     "Help": "Помощь",
     "Help research activities to define new prevention means": "Помогите научным исследованиям определить пути предотвращения",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Вот список участников, на которых вы подписаны, и чьи действия вы увидите в своей личной ленте.",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Определите фильтры для видов активности и регионов, которые будут применяться к вашей ленте",
     "High danger level from the avalanche bulletin": "Высокий уровень опасности от прогноза лавиноопасности",
     "Hiking gear": "снаряжение для похода",
     "History": "Версии",
@@ -299,28 +305,50 @@
     "I must not use slopes > 30°": "Не показывать склоны круче 30°",
     "I must not use slopes > 35°": "Не показывать склоны круче 35°",
     "I must not use slopes > 40°": "Не показывать склоны круче 40°",
+    "I read and understood the interest and limitations of YETI": "Я прочел и осознал ограничения YETI",
     "IGN maps": {
       "Map layer": "карты IGN"
     },
     "IGN ortho": {
       "Map layer": "IGN орто"
     },
+    "IGN ortho (es)": {
+      "Map layer": "спутниковые карты IGN (es)"
+    },
+    "IGN raster (es)": {
+      "Map layer": "карты IGN (es)"
+    },
+    "Ice and dry climbing gear": "Ледолазание и драй-тулинг",
+    "If the route does not exists in our base, you can create it.": "Если маршрута нет в нашей базе, вы можете создать его",
+    "If you can't see this email, please check your spam folder.": "Если вы не получили e-mail, проверьте папку со спамом.",
+    "Image could not be processed": "Изображение не может быт обработано",
+    "Image count": "Количество изображений",
+    "Improve our understanding of risks": "Улучшить наше понимание рисков",
     "Incidents and accidents": "инциденты и неудачные случаи",
+    "Information about the terrain, like elevations, lengths...": "Данные о местности, такие как высоты, протяженность",
     "Informations about the access": "Информация о подходе",
     "Infos": "информация",
     "Insert a link": "вставить ссылку",
     "Insert emoji": "вставить смайлик",
     "Insert image": "вставить изображение",
     "Insert link": "вставить ссылку",
+    "Invalid date": "Ошибочная дата",
     "Invalid email address": {
       "API message": "неправильный электронный адрес"
     },
+    "Issue report": "Сигнализировать о проблеме",
     "Know more about SERAC": "Узнать побольше про SERAC",
     "Large group = 5 people and more": "Большая группа = 5 чел или больше",
+    "Last forum topics": "Последние дискуссии",
     "Last outings": "Последные отчеты",
+    "Latitude": "Широта",
+    "Launch YETI": "Использовать YETI",
     "Layers": {
       "Map controls": "Слои"
     },
+    "Leave fullscreen": "Выйти из полноэкранного режима",
+    "Legend": "Легенда",
+    "Legend will appear automatically with the generated image": "Легенда появится автоматически вместе с созданным изображением",
     "Links": "ссылки",
     "Login": "Войти",
     "Logout": "Выйти",
@@ -513,6 +541,7 @@
       "API message": "требуется по крайней мере одного пользователя"
     },
     "author": "автор",
+    "author_status": "Вовлеченность в ситуацию",
     "autonomous": {
       "autonomies": "автономный"
     },
@@ -822,6 +851,7 @@
       "langs": "французкий"
     },
     "frequentation": "народ",
+    "gas_unstaffed": "Газ, необслуживаемое",
     "gear": {
       "$$noContext": "снаряжение ",
       "article_categories": "снаряжение "
@@ -938,10 +968,21 @@
       "activities": "ледолазание",
       "event_activities": "ледолазание"
     },
+    "ice_cornice_collapse": {
+      "event_types": "обрушение каскада или карниза"
+    },
+    "ice_rating": "Уровень сложности льда",
     "image": "изображение",
+    "image_categories": "Категории",
+    "image_type": "Тип изображения (лицензия)",
     "images": "изображения",
     "impossible": {
       "glacier_ratings": "Невозможно"
+    },
+    "including dominant slopes": "Учитывать вышестоящие склоны",
+    "increase_impact": "Причины, усугубившие последствия события",
+    "injury_without_fall": {
+      "event_types": "травма без падения"
     },
     "inside": {
       "rain_proof_types": "внутри"
@@ -949,7 +990,17 @@
     "insolation": {
       "weather_station_types": "перегрев на солнце"
     },
+    "internal_witness": {
+      "author_statuses": "непосредственный свидетель"
+    },
     "isbn": "ISBN",
+    "iso_speed": "Выдержка",
+    "it": {
+      "langs": "итальянский"
+    },
+    "key_needed": {
+      "custodianship_types": "чтобы от крыть необходим ключ"
+    },
     "kilometers": "километры",
     "lake": {
       "waypoint_types": "озеро"
@@ -960,6 +1011,7 @@
     "lang": "язык",
     "langs": "языки",
     "length": "длина",
+    "length_total": "Общая протяженность",
     "level_1": {
       "avalanche_levels": "уровень_1"
     },
