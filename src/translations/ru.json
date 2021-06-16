@@ -324,7 +324,7 @@
     "Image could not be processed": "Изображение не может быт обработано",
     "Image count": "Количество изображений",
     "Improve our understanding of risks": "Улучшить наше понимание рисков",
-    "Incidents and accidents": "инциденты и неудачные случаи",
+    "Incidents and accidents": "Происшествия и несчастные случаи",
     "Information about the terrain, like elevations, lengths...": "Данные о местности, такие как высоты, протяженность",
     "Informations about the access": "Информация о подходе",
     "Infos": "информация",
@@ -413,7 +413,7 @@
     "Stay careful while skiing": "Будьте осторожны во время катания",
     "Target:": "Сохраняемый документ",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Степень потенциальной опасности вычисляется исходя из прогноза лавинного бюллетеня. Она может быть уточнена  ??? ",
-    "The mountain sports community": "Общество горных спортов",
+    "The mountain sports community": "Сообщество любителей гор",
     "The page you are looking for does not exist or is broken.": "Запрашиваемая вами страница отсутствует или не работает",
     "The slope must be between 0 and 80 deg": "склон должен быть между 0 и 80 градусов",
     "The slope must be between 50 and 3000m high": "склон должен быть между 50 и 3000м высотой",
@@ -581,7 +581,7 @@
       "book_types": "биография"
     },
     "bisse": {
-      "waypoint_types": "бисс"
+      "waypoint_types": "каналы"
     },
     "bivouac": {
       "waypoint_types": "бивак"
@@ -1059,7 +1059,7 @@
       "activities": "горный велосипед"
     },
     "mountain_climbing": {
-      "activities": "горное лазание"
+      "activities": "Альпинизм"
     },
     "mountain_environment": {
       "article_categories": "горная среда"
@@ -1119,7 +1119,16 @@
     "paragliding": {
       "activities": "парапланеризм"
     },
+    "paragliding_landing": {
+      "waypoint_types": "Зона приземления"
+    },
+    "paragliding_takeoff": {
+      "waypoint_types": "Зона взлета"
+    },
     "participants": "участники",
+    "pass": {
+      "waypoint_types": "перевал"
+    },
     "people": {
       "image_categories": "люди"
     },
@@ -1205,8 +1214,8 @@
     },
     "ski_rating": "оценка катания",
     "skitouring": {
-      "activities": "скитуринг",
-      "event_activities": "скитуринг"
+      "activities": "скитур и сноуборд",
+      "event_activities": "Скитур"
     },
     "slackline": {
       "slackline_types": "Слэклайн"
@@ -1243,6 +1252,10 @@
     },
     "snow_height": {
       "weather_station_types": "количество свежего снега"
+    },
+    "snow_ice_mixed": {
+      "activities": "Комбинированные маршруты",
+      "event_activities": "Комбинированные маршруты"
     },
     "snow_quality": "качество снега",
     "snow_quantity": "количество снега",
