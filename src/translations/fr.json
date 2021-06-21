@@ -270,6 +270,7 @@
       "Map layer": "IGN Es"
     },
     "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
+    "If the route does not exists in our base, you can create it.": "Si l'itinéraire n'existe pas, vous pouvez le créer.",
     "If you can't see this email, please check your spam folder.": "Pensez à vérifier dans les spams si vous ne voyez pas ce mail.",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
     "Image count": "Nombre d'images",
@@ -340,6 +341,7 @@
       "modification date": "Modifié le"
     },
     "More info": "Plus d'information",
+    "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Plus d'itinéraires sont disponibles. Vous pouvez déplacer la carte, rentrer un nom ou choisir une activité pour les afficher.",
     "Multi-criteria search": "Recherche multi-critère",
     "My account": "Mon compte",
     "My bookmarks": "Mes favoris",
@@ -380,6 +382,7 @@
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
     "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
     "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
+    "Open in a new tab": "Ouvrir dans un nouvel onglet",
     "Ordered list": "Liste triée",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
     "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
@@ -403,6 +406,7 @@
     "Personal informations": "Informations personnelles",
     "Pitch description tag": "Balise de description des longueurs",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Décrivez votre niveau technique et expérience par rapport à l’objectif choisi, votre condition physique, la fatigue accumulée avant la sortie, l’acclimatation pour une sortie en altitude, etc.",
+    "Please move the map, or change the route's name.": "Déplacez la carte, ou modifier le nom de l'itinéraire.",
     "Please select a method before computing.": "Veuillez sélectionner une méthode pour le calcul.",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Le niveau de danger est manquant. Veuillez saisir la valeur spécifiée par le bulletin d'avalanche.",
     "Post the first comment": "Publier le premier commentaire",
