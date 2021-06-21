@@ -70,7 +70,9 @@ function getMessages(lang) {
   } else if (lang === 'es') {
     return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
   } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/zh_CN.json`);
+    return import(/* webpackChunkName: "translations-zhcn" */ `@/translations/zh_CN.json`);
+  } else if (lang === 'ru') {
+    return import(/* webpackChunkName: "translations-ru" */ `@/translations/ru.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
@@ -94,6 +96,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
+        ru: 'Russian',
         zh_CN: 'Chinese',
       };
 
@@ -169,6 +172,7 @@ export default function install(Vue) {
           case 'it':
           case 'de':
           case 'es':
+          case 'ru':
             return lang;
           case 'zh_CN':
             return 'zh';
@@ -197,6 +201,8 @@ export default function install(Vue) {
             return 'es_ES';
           case 'zh_CN':
             return 'zh_CN';
+          case 'ru':
+            return 'ru_RU';
           default:
             // eslint-disable-next-line no-console
             console.error(`Unexpected language: ${lang}`);
