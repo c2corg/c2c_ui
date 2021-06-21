@@ -221,10 +221,10 @@
     "Detailed figures, like ratings, height differences, frequentation...": "подробные цифры, как оценки, перепад высоты, толпа, итд...",
     "Detailed information": "подробная информация",
     "Details": "подробности",
-    "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Опишите ваш выход и происшествие/несчастный случай. Если вы уже создали описание выхода, то можете описать лишь происшествие, а затем связать этот отчет с выходом (после его загрузки).<br>",
+    "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Опишите ваш выход и происшествие/несчастный случай. Если вы уже создали описание выхода, то можете описать лишь происшествие, а затем связать этот отчет с выходом (после его загрузки).",
     "Details on participants and event context": "Подробная информация об участниках и контексте вашего мероприятия.",
     "Differences between versions": "разницы между версиями",
-    "Different high/low danger?": "Уровень опасности наверху/внизу разнится?<br>",
+    "Different high/low danger?": "Уровень опасности наверху/внизу разнится?",
     "Directions (Google Maps)": "Направления (Google Maps)",
     "Disclaimer": "отказ",
     "Distance": "дистанция",
@@ -682,7 +682,7 @@
     "comment": "комментарий",
     "condition_rating": "оценка условий",
     "conditions": "Условия",
-    "conditions_levels": "Состояние снега по зонам<br>",
+    "conditions_levels": "Состояние снега по зонам",
     "configuration": "форма",
     "configure your choices": "Настроите свои выборы",
     "conglomerat": {
@@ -814,7 +814,7 @@
       "rain_proof_types": "Нет защиты от дождя"
     },
     "exposition_rock_rating": "Последствия падения",
-    "external_resources": "Внешние ресурсы<br>",
+    "external_resources": "Внешние ресурсы",
     "external_witness": {
       "author_statuses": "сторонние свидетели"
     },
