@@ -214,11 +214,11 @@ export default {
 
     beforeSave() {},
 
-    // display a popup with info from fields taht contains an error
+    // display a popup with info from fields that contains an error
     // return true if popup is displayed, false otherwise
-    displayErrors(isApiMassage) {
+    displayErrors(isApiMessage) {
       const fieldsWithError = this.getFieldsWithError();
-      const i18nContext = isApiMassage ? 'API message' : undefined;
+      const i18nContext = isApiMessage ? 'API message' : undefined;
 
       // list of possible API message (keep js syntax, for messages extraction)
       // $gettext('Shorter than minimum length 1', 'API message');
