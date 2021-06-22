@@ -379,6 +379,11 @@ export default {
 <style scoped lang="scss">
 .query-items-filters {
   margin-bottom: 0.5rem;
+  font-size: 0;
+
+  > div {
+    font-size: 1rem;
+  }
 }
 
 .title-input {
