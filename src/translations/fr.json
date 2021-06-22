@@ -408,6 +408,8 @@
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Décrivez votre niveau technique et expérience par rapport à l’objectif choisi, votre condition physique, la fatigue accumulée avant la sortie, l’acclimatation pour une sortie en altitude, etc.",
     "Please move the map, or change the route's name.": "Déplacez la carte, ou modifier le nom de l'itinéraire.",
     "Please select a method before computing.": "Veuillez sélectionner une méthode pour le calcul.",
+    "Please select a waypoint type to enable sort feature": "Sélectionnez un type de point de passage pour activer le tri",
+    "Please select an activity to enable sort feature": "Sélectionnez une activité pour activer le tri",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Le niveau de danger est manquant. Veuillez saisir la valeur spécifiée par le bulletin d'avalanche.",
     "Post the first comment": "Publier le premier commentaire",
     "Precise localisation of the shooting": "Localisation précise de la prise de vue",
@@ -432,6 +434,7 @@
     "Required": {
       "API message": "Requis"
     },
+    "Reset": "Réinitialiser",
     "Reset geometry": "Réinitialiser",
     "Reset password": "Réinitialiser le mot de passe",
     "Residual risk >1": "Risque résiduel >1",
@@ -483,6 +486,7 @@
     "Social cookies": "Cookies sociaux",
     "Soft mobility outing": "Sortie en mobilité douce",
     "Sophie Picture Contest": "Concours Photo Sophie",
+    "Sort by": "Trier par",
     "Source:": "Document à fusionner (source) :",
     "Statistical cookies": "Cookies statistiques",
     "Statistics": "Statistiques",
@@ -561,6 +565,7 @@
     "With the": "Avec la",
     "Without c2c account": "Participants sans compte c2c",
     "YETI - A preparation tool for your outing": "YETI - Un outil de préparation de course",
+    "You are using a custom sort": "Vous utilisez une clé de tri personnalisé",
     "You can choose to remain anonymous": "Vous pouvez choisir de rester anonyme",
     "You have to be authorized. Please contact administrators of the service if interested.": "Vous devez être autorisé. Merci de contacter les administrateurs du service si intéréssé.",
     "You may add associated waypoints, books and articles": "Associez d'autres documents de camptocamp à ce point de passage",
@@ -639,6 +644,7 @@
     "artificial": {
       "rock_types": "artificiel"
     },
+    "ascending sort": "Tri croissant",
     "associations": "Associations",
     "at least one route required": {
       "API message": "Sélectionnez au moins un itinéraire"
@@ -806,6 +812,7 @@
     "de": {
       "langs": "allemand"
     },
+    "descending sort": "Tri décroissant",
     "descent": {
       "image_categories": "descente"
     },
