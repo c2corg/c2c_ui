@@ -2,8 +2,10 @@
 
 import drill from "./drill"
 import paragliding from "./paragliding"
+import sort from "./sort"
 
 export {
     drill,
-    paragliding
+    paragliding,
+    sort
 }

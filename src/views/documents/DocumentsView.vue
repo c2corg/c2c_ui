@@ -16,7 +16,7 @@
               :key="type"
               class="dropdown-item is-size-6"
               :class="{ 'is-active': type === documentType }"
-              :to="{ name: type + 's', query: queryWithoutOffset }"
+              :to="{ name: type + 's', query: queryWithoutOffsetAndSort }"
             >
               <icon-document :document-type="type" />
               <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
@@ -87,8 +87,7 @@
             :key="index"
             :class="{
               'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
-              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
-                !showMap,
+              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd': !showMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"
@@ -187,9 +186,10 @@ export default {
         act: this.$route.query.act,
       };
     },
-    queryWithoutOffset() {
+    queryWithoutOffsetAndSort() {
       const result = Object.assign({}, this.$route.query);
       delete result.offset;
+      delete result.sort;
 
       return result;
     },

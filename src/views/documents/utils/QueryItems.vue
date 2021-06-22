@@ -1,15 +1,20 @@
 <template>
   <div class="query-items">
-    <div>
-      <query-item v-if="fields.title" :field="fields.title" class="title-input is-hidden-mobile" hide-label />
+    <div class="query-items-filters">
+      <query-item
+        v-if="fields.title"
+        :field="fields.title"
+        class="title-input is-hidden-mobile query-item-component"
+        hide-label
+      />
 
       <dropdown-button
         v-for="category of categorizedFields"
         :key="category.name"
-        class="category-button"
+        class="query-item-component"
         :disabled="category.fields.length === 0"
       >
-        <span slot="button" class="button is-small-mobile" :disabled="category.fields.length === 0">
+        <span slot="button" class="button is-size-7-mobile" :disabled="category.fields.length === 0">
           <fa-icon :icon="$options.categoryIcon[category.name]" />
           <span class="is-hidden-mobile">
             <!-- $gettext('General') -->
@@ -34,15 +39,20 @@
         </div>
       </dropdown-button>
 
+      <query-sort-dropdown
+        v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
+        class="query-item-component"
+      />
+
       <association-query-item
-        class="association-query-item is-hidden-mobile"
+        class="query-item-component is-hidden-mobile"
         :document-types="associations"
         @add="addTag"
       />
-      <load-user-preferences-button class="is-hidden-tablet category-button" />
+      <load-user-preferences-button class="is-hidden-tablet query-item-component" />
       <export-csv-button v-if="listMode" class="is-small-mobile"></export-csv-button>
     </div>
-    <div class="is-hidden-mobile">
+    <div class="query-items-tags is-hidden-mobile">
       <query-tags :documents="tags" @remove="removeTag"></query-tags>
     </div>
   </div>
@@ -53,7 +63,9 @@ import AssociationQueryItem from './AssociationQueryItem';
 import ExportCsvButton from './ExportCsvButton.vue';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
 import QueryItem from './QueryItem';
+import QuerySortDropdown from './QuerySortDropdown';
 import QueryTags from './QueryTags';
+import urlMixin from './url-mixin';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
@@ -190,10 +202,13 @@ export default {
   components: {
     AssociationQueryItem,
     QueryItem,
+    QuerySortDropdown,
     QueryTags,
     ExportCsvButton,
     LoadUserPreferencesButton,
   },
+
+  mixins: [urlMixin],
 
   props: {
     listMode: {
@@ -209,26 +224,6 @@ export default {
   },
 
   computed: {
-    urlActivities() {
-      return (this.$route.query.act ?? '').split(',');
-    },
-
-    urlWaypointTypes() {
-      return (this.$route.query.wtyp ?? '').split(',');
-    },
-
-    fields() {
-      return constants.objectDefinitions[this.documentType].fields;
-    },
-
-    documentType() {
-      // route name are like outings, routes ...
-      // always the document type with a tail "s".
-      // the `.slice(0, -1)` removes this "s"
-      // it also can be outings-stats => the `.split('-')[0]` remove "-stats"
-      return this.$route.name.split('-')[0].slice(0, -1);
-    },
-
     associations() {
       if (this.documentType === 'outing') {
         return ['area', 'route', 'waypoint', 'profile'];
@@ -266,11 +261,7 @@ export default {
               temp.activeCount += 1;
             }
 
-            if (this.documentType === 'waypoint') {
-              if (field.isVisibleForWaypointTypes(this.urlWaypointTypes)) {
-                temp.fields.push(field);
-              }
-            } else if (field.isVisibleForActivities(this.urlActivities)) {
+            if (this.fieldIsVisible(field)) {
               temp.fields.push(field);
             }
           }
@@ -386,6 +377,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.query-items-filters {
+  margin-bottom: 0.5rem;
+  font-size: 0;
+
+  > div {
+    font-size: 1rem;
+  }
+}
+
 .title-input {
   display: inline-flex;
   margin-bottom: 0 !important;
@@ -396,47 +396,22 @@ export default {
 }
 
 @media screen and (min-width: $tablet) {
-  .query-items {
-    display: flex;
-    flex-direction: column;
-
-    & + div {
-      display: flex;
-    }
-
-    div:last-child {
-      margin-top: 0.3rem;
-    }
-  }
-  .title-input,
-  .category-button {
-    margin-right: 1em;
+  .query-item-component {
+    margin-right: 0.75em;
   }
 }
 
 @media screen and (max-width: $tablet) {
-  .button.is-small-mobile {
-    border-radius: 2px;
-    font-size: 0.7857rem;
+  .query-item-component {
+    margin-right: 0.25em;
   }
 
-  .query-items + div:first-child {
-    position: relative; // important; to force dropdown to be on stick to left
-    display: flex;
-    justify-content: flex-start;
+  .query-items-filters {
+    position: relative; // important, to force drop down on the left
+  }
 
-    .title-input,
-    .category-button {
-      margin-right: 0.5em;
-    }
-
-    .dropdown {
-      position: unset;
-
-      .dropdown-menu {
-        width: 100%;
-      }
-    }
+  .dropdown {
+    position: unset; // important, to force drop down on the left
   }
 }
 </style>

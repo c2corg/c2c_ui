@@ -15,7 +15,8 @@
     "parent": "locales"
   },
   "access_time": {
-    "values": "access_times"
+    "values": "access_times",
+    "sortable": true
   },
   "activities": {
     "values": "activities",
@@ -37,7 +38,8 @@
     "values": "aid_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#aid"
+    "helper": "133323#aid",
+    "sortable": true
   },
   "anonymous": {
     "type": "boolean",
@@ -153,15 +155,18 @@
   },
   "climbing_rating_max": {
     "values": "climbing_ratings",
-    "i18n": false
+    "i18n": false,
+    "sortable": true
   },
   "climbing_rating_median": {
     "values": "climbing_ratings",
-    "i18n": false
+    "i18n": false,
+    "sortable": true
   },
   "climbing_rating_min": {
     "values": "climbing_ratings",
-    "i18n": false
+    "i18n": false,
+    "sortable": true
   },
   "climbing_styles": {
     "values": "climbing_styles",
@@ -236,7 +241,8 @@
     "type": "number",
     "min": 0,
     "max": 9000,
-    "unit": "m"
+    "unit": "m",
+    "sortable": true
   },
   "elevation_access": {
     "type": "number",
@@ -255,7 +261,8 @@
     "type": "number",
     "min": 0,
     "max": 9000,
-    "unit": "m"
+    "unit": "m",
+    "sortable": true
   },
   "elevation_min": {
     "type": "number",
@@ -274,13 +281,15 @@
     "values": "engagement_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#engagement"
+    "helper": "133323#engagement",
+    "sortable": true
   },
   "equipment_rating": {
     "values": "equipment_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#equipment"
+    "helper": "133323#equipment",
+    "sortable": true
   },
   "equipment_ratings": {
     "values": "equipment_ratings",
@@ -300,7 +309,8 @@
     "values": "exposition_rock_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#exposition"
+    "helper": "133323#exposition",
+    "sortable": true
   },
   "exposure_time": {
     "type": "number",
@@ -358,7 +368,8 @@
     "values": "global_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#global-rating"
+    "helper": "133323#global-rating",
+    "sortable": true
   },
   "ground_types": {
     "values": "ground_types",
@@ -388,7 +399,8 @@
     "min": 0,
     "max": 3000,
     "unit": "m",
-    "helper": "1063027#height-diff_difficulties"
+    "helper": "1063027#height-diff_difficulties",
+    "sortable": true
   },
   "height_diff_down": {
     "type": "number",
@@ -402,7 +414,8 @@
     "min": 0,
     "max": 9000,
     "unit": "m",
-    "helper": "1063027#height-diff_up"
+    "helper": "1063027#height-diff_up",
+    "sortable": true
   },
   "height_max": {
     "type": "number",
@@ -432,7 +445,8 @@
     "values": "hiking_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "106859#hiking-rating"
+    "helper": "106859#hiking-rating",
+    "sortable": true
   },
   "hut_comment": {
     "type": "markdown",
@@ -455,7 +469,8 @@
     "values": "ice_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "106871#ice-rating"
+    "helper": "106871#ice-rating",
+    "sortable": true
   },
   "image_categories": {
     "name": "categories",
@@ -485,13 +500,15 @@
     "values": "global_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "107675#labande-global_rating"
+    "helper": "107675#labande-global_rating",
+    "sortable": true
   },
   "labande_ski_rating": {
     "values": "labande_ski_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "107675#labande-ski-rating"
+    "helper": "107675#labande-ski-rating",
+    "sortable": true
   },
   "langs": {
     "values": "langs",
@@ -530,7 +547,8 @@
     "values": "mixed_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "106871#mixed-rating"
+    "helper": "106871#mixed-rating",
+    "sortable": true
   },
   "modifications": {
     "type": "markdown",
@@ -545,7 +563,8 @@
     "values": "mtb_down_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "922056#mtb-down_rating"
+    "helper": "922056#mtb-down_rating",
+    "sortable": true
   },
   "mtb_height_diff_portages": {
     "type": "number",
@@ -569,7 +588,8 @@
     "values": "mtb_up_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "922056#mtb-up_rating"
+    "helper": "922056#mtb-up_rating",
+    "sortable": true
   },
   "name": {
     "disabled": true
@@ -705,19 +725,22 @@
     "values": "risk_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#objective-danger"
+    "helper": "133323#objective-danger",
+    "sortable": true
   },
   "rock_free_rating": {
     "values": "climbing_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#rock-free"
+    "helper": "133323#rock-free",
+    "sortable": true
   },
   "rock_required_rating": {
     "values": "climbing_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "133323#rock-required"
+    "helper": "133323#rock-required",
+    "sortable": true
   },
   "rock_types": {
     "values": "rock_types",
@@ -735,7 +758,8 @@
     "type": "number",
     "min": 0,
     "max": 500000,
-    "unit": "m"
+    "unit": "m",
+    "sortable": true
   },
   "route_study": {
     "type": "markdown",
@@ -775,13 +799,15 @@
     "values": "exposition_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "107675#ski-exposition"
+    "helper": "107675#ski-exposition",
+    "sortable": true
   },
   "ski_rating": {
     "values": "ski_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "107675#ski-rating"
+    "helper": "107675#ski-rating",
+    "sortable": true
   },
   "slackline_anchor1": {
     "type": "markdown",
@@ -800,13 +826,17 @@
     "type": "number",
     "min": 0,
     "max": 9000,
-    "unit": "m"
+    "unit": "m",
+    "sortable": false,
+    "_comment": "not sortable: api responds 500"
   },
   "slackline_length_min": {
     "type": "number",
     "min": 0,
     "max": 9000,
-    "unit": "m"
+    "unit": "m",
+    "sortable": false,
+    "_comment": "not sortable: api responds 500"
   },
   "slackline_type": {
     "values": "slackline_types"
@@ -840,7 +870,8 @@
     "values": "snowshoe_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "239491#snowshoe-rating"
+    "helper": "239491#snowshoe-rating",
+    "sortable": true
   },
   "summary": {
     "type": "markdown",
@@ -884,7 +915,8 @@
     "values": "via_ferrata_ratings",
     "queryMode": "valuesRangeSlider",
     "i18n": false,
-    "helper": "925306#via-ferrata_rating"
+    "helper": "925306#via-ferrata_rating",
+    "sortable": true
   },
   "waypoint_type": {
     "values": "waypoint_types"
