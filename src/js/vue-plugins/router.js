@@ -17,7 +17,6 @@ import XreportView from '@/views/document/XreportView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
-import YetiView from '@/views/portals/YetiView';
 import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
 import SeracView from '@/views/static-views/SeracView';
@@ -47,6 +46,7 @@ const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/w
 const AssociationsHistoryView = () =>
   import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
+const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
 
 const routes = [
   { path: '/', name: 'home', component: FeedView },
