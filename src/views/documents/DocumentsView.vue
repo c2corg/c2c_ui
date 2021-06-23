@@ -327,9 +327,7 @@ $cards-gap: 0.25rem;
 
   .map-container {
     height: $result-height;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
   }
 
   .mobile-mode-map {
