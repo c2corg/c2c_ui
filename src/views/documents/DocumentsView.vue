@@ -87,7 +87,8 @@
             :key="index"
             :class="{
               'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
-              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd': !showMap,
+              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
+                !showMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"
@@ -293,7 +294,7 @@ $cards-gap: 0.25rem;
 
 @media screen and (max-width: $tablet) {
   $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 46px;
+  $mobile-header-height: 56px;
   $mobile-filters-height: 25px;
 
   .search-infos {
@@ -326,9 +327,7 @@ $cards-gap: 0.25rem;
 
   .map-container {
     height: $result-height;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
   }
 
   .mobile-mode-map {
