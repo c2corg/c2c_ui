@@ -422,10 +422,10 @@ $swiper-navigation-size: 4rem;
 .swiper-button-next {
   position: absolute;
   top: 50%;
-  font-size: $swiper-navigation-size/2;
+  font-size: $swiper-navigation-size * 0.5;
   width: $swiper-navigation-size;
   height: $swiper-navigation-size;
-  margin-top: -$swiper-navigation-size/2;
+  margin-top: -$swiper-navigation-size * 0.5;
   z-index: 10;
   display: flex;
   align-items: center;
