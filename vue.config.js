@@ -5,6 +5,7 @@ const result = {
   publicPath: '/',
 
   css: {
+    sourceMap: true,
     loaderOptions: {
       sass: {
         additionalData: `
@@ -14,6 +15,8 @@ const result = {
       },
     },
   },
+
+  productionSourceMap: true,
 
   chainWebpack(config) {
     // remove prefetch plugin, in order to prevent loading of translations
