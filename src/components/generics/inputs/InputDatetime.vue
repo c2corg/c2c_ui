@@ -44,7 +44,7 @@ export default {
     },
     value_: {
       get() {
-        return this.$dateUtils.parseDate(this.value || undefined);
+        return this.$dateUtils.parseDate(this.value);
       },
       set(value) {
         if (!this.disabled) {
