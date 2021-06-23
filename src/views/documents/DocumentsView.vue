@@ -294,7 +294,7 @@ $cards-gap: 0.25rem;
 
 @media screen and (max-width: $tablet) {
   $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 46px;
+  $mobile-header-height: 56px;
   $mobile-filters-height: 25px;
 
   .search-infos {
