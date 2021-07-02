@@ -126,15 +126,39 @@ export default {
 <style scoped lang="scss">
 .serac-view {
   background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
+  background-image: -webkit-image-set(
+    url('~@/assets/img/backgrounds/cermygian-crevasse-800w.webp') type('image/webp'),
+    url('~@/assets/img/backgrounds/cermygian-crevasse-800w.jpg') type('image/jpeg')
+  );
+  background-image: image-set(
+    url('~@/assets/img/backgrounds/cermygian-crevasse-800w.webp') type('image/webp'),
+    url('~@/assets/img/backgrounds/cermygian-crevasse-800w.jpg') type('image/jpeg')
+  );
   background-size: cover;
   background-position: center;
   min-height: 100%;
   // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
   @media (min-width: 800px) and (max-width: 1224px) {
     background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
+    background-image: -webkit-image-set(
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.webp') type('image/webp'),
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg') type('image/jpeg')
+    );
+    background-image: -webkit-image-set(
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.webp') type('image/webp'),
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg') type('image/jpeg')
+    );
   }
   @media (min-width: 1224px) {
     background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg');
+    background-image: -webkit-image-set(
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.webp') type('image/webp'),
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg') type('image/jpeg')
+    );
+    background-image: -webkit-image-set(
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.webp') type('image/webp'),
+      url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg') type('image/jpeg')
+    );
   }
 
   .serac-view-content {
