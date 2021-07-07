@@ -28,15 +28,22 @@ Vue.config.silent = false;
 
 Vue.use(localStorage); // First, vm.$localStorage property
 
-// Google analytics
+Vue.use(gdpr);
+
+let enableAnalytics = false;
+try {
+  enableAnalytics = JSON.parse(window.localStorage.getItem('Gdpr.preferences', '{}')).choice?.statistics || false;
+} catch (err) {
+  window.localStorage.removeItem('Gdpr.preferences');
+}
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
-  disabled: true,
-  // debug: {
-  //   enabled: true, // default value
-  //   trace: true, // default value
-  //   sendHitTask: true, // default value
-  // },
+  disabled: !enableAnalytics,
+  /*debug: {
+    enabled: true,
+    trace: true,
+    sendHitTask: true,
+  },*/
   router,
   autoTracking: {
     // do not send updates if query parameter has changed
@@ -71,7 +78,6 @@ Vue.use(screen); // screen reactives properties
 Vue.use(stripMarkdown); // stripMarkdown filter
 Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
-Vue.use(gdpr);
 
 new Vue({
   router,
