@@ -47,13 +47,19 @@
     </div>
 
     <div v-show="showFilterControl" ref="useMapAsFilter" class="ol-control ol-control-use-map-as-filter">
-      <button
-        @click="filterDocumentsWithMap = !filterDocumentsWithMap"
-        :class="{ 'has-text-success': filterDocumentsWithMap }"
+      <input
+        id="filter-documents-with-map"
+        class="switch is-rtl is-rounded is-info is-small"
+        type="checkbox"
+        v-model="filterDocumentsWithMap"
+      />
+      <label
+        for="filter-documents-with-map"
+        v-translate
+        :title="filterDocumentsWithMap ? $gettext('Map filter on') : $gettext('Map filter off')"
       >
-        <fa-icon icon="search" />
-        <span v-translate>Filter on map extent</span>
-      </button>
+        Filter on map extent
+      </label>
     </div>
 
     <div
@@ -991,16 +997,10 @@ $control-margin: 0.5em;
 .ol-control-use-map-as-filter {
   top: $control-margin;
   left: 3em;
+  background: rgba(255, 255, 255, 0.8);
 
-  button {
-    width: auto;
-    font-size: 1rem;
-    font-weight: normal;
-    padding: 3px;
-
-    svg {
-      margin-right: 3px;
-    }
+  .is-info:checked + label::before {
+    background-color: rgba(0, 60, 136, 0.6);
   }
 }
 
