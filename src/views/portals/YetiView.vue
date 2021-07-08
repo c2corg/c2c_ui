@@ -105,8 +105,8 @@
           :active-tab="activeTab"
           :valid-min-zoom="validFormData.minZoom"
           :map-zoom.sync="mapZoom"
-          :computed-extent="yetiExtent"
-          :computed-data="yetiImage"
+          :yeti-data="yetiData"
+          :yeti-extent="yetiExtent"
           :mountains.sync="mountains"
           :area-ok.sync="areaOk"
           :features.sync="features"
@@ -233,8 +233,7 @@ export default {
       currentError: undefined,
 
       promise: null,
-      yetiImage: null,
-      yetiLayer: null,
+      yetiData: null,
       yetiExtent: [],
 
       features: [],
@@ -361,8 +360,8 @@ export default {
 
       const yetiUrl = this.getYetiUrl(extendedExtent);
 
-      // remove old layers first
-      this.yetiMap.clearLayers();
+      // first, set data to null (will remove last one)
+      this.yetiData = null;
 
       // fetch img
       this.promise = axios
@@ -378,7 +377,7 @@ export default {
     },
 
     onYetiResult(result, extendedExtent) {
-      this.yetiImage = result.data;
+      this.yetiData = result.data;
       this.yetiExtent = extendedExtent;
 
       this.promise = null;

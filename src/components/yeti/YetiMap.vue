@@ -1,49 +1,8 @@
 <template>
   <div class="column map-container">
-    <div class="legend">
-      <div>
-        <div class="legend-button is-pulled-right ol-control">
-          <button type="button" @click="showLegend = !showLegend">
-            <span v-translate>Legend</span>
-          </button>
-        </div>
-      </div>
-      <div class="legend-content" v-show="showLegend === true">
-        <p class="is-italic" v-if="!mapLegend" v-translate>Legend will appear automatically with the generated image</p>
-        <div v-else>
-          <ul>
-            <li v-for="(item, i) of mapLegend.items" :key="i">
-              <span class="legend-color" :style="'background:' + item.color" />
-              <!-- $gettext('Risky slopes') -->
-              <!-- $gettext('Risky slopes, increased risk due to orientation') -->
-              <!-- $gettext('Residual risk >1') -->
-              <!-- $gettext('Residual risk >1.3') -->
-              <!-- $gettext('Residual risk >1.5') -->
-              <span>{{ $gettext(item.text['en']) }}</span>
-            </li>
-          </ul>
-          <!-- $gettext('From danger 3, consider the slopes which dominate the route') -->
-          <p class="is-size-6 is-italic">{{ $gettext(mapLegend.comment['en']) }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="ol-control opacity" v-if="yetiLayerLoaded">
-      <div class="opacity-slider">
-        <vue-slider
-          v-model="opacityYetiLayer"
-          :min="0"
-          :max="1"
-          :interval="0.01"
-          tooltip="none"
-          direction="btt"
-          :rail-style="{ background: 'rgba(0,0,0,.25)' }"
-          :process-style="{ background: 'white' }"
-          @change="onUpdateOpacityYetiLayer"
-        />
-      </div>
-    </div>
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
+      <yeti-layer :data="yetiData" :extent="yetiExtent"></yeti-layer>
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -96,9 +55,10 @@
 
 <script>
 import axios from 'axios';
-import 'vue-slider-component/theme/default.css';
 
 import { cartoLayers, dataLayers } from '../map/map-layers';
+
+import YetiLayer from './map-layers/YetiLayer.vue';
 
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
@@ -108,8 +68,6 @@ const DEFAULT_CENTER = [6.25, 45.15];
 const DEFAULT_ZOOM = 6;
 const MAX_ZOOM = 19;
 
-const YETI_ATTRIBUTION = 'RGE ALTI®';
-const YETI_LAYER_OPACITY = 0.75;
 const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
@@ -138,7 +96,9 @@ const highlightedLineStyle = [
 ];
 
 export default {
-  components: { VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component') },
+  components: {
+    YetiLayer,
+  },
   props: {
     activeTab: {
       type: Number,
@@ -152,11 +112,11 @@ export default {
       type: Number,
       required: true,
     },
-    computedExtent: {
+    yetiExtent: {
       type: Array,
       required: true,
     },
-    computedData: {
+    yetiData: {
       type: String,
       default: null,
     },
@@ -192,11 +152,6 @@ export default {
 
       featuresTitleFromSource: null,
       promiseDocument: null,
-
-      yetiLayerLoaded: false,
-      showLegend: undefined,
-      mapLegend: null,
-      opacityYetiLayer: YETI_LAYER_OPACITY,
 
       areas: [],
     };
@@ -256,29 +211,16 @@ export default {
         this.snapInteraction.setActive(true);
       }
     },
-    computedData() {
-      this.drawYetiImage();
-    },
-    computedExtent() {
-      this.drawExtent(this.computedExtent);
-    },
   },
-  mounted() {
-    // map
+  created() {
+    // build map
     this.map = new ol.Map({
-      target: this.$refs.map,
-
       controls: [
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
-        new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
         new ol.control.ScaleLine(),
-        new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
-        new ol.control.Control({ element: this.$refs.layerSwitcher }),
-        new ol.control.Control({ element: this.$refs.recenterOnControl }),
-        new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
       ],
 
@@ -294,35 +236,20 @@ export default {
         maxZoom: MAX_ZOOM,
       }),
     });
-    // New layers
-    // yeti layer
-    this.yetiLayer = new ol.layer.Image({
-      source: new ol.source.ImageStatic({
-        url: null,
-        imageExtent: ol.extent.createEmpty(),
-      }),
-      opacity: this.opacityYetiLayer,
-    });
-    // extent layer
-    this.extentLayer = new ol.layer.Vector({
-      source: new ol.source.Vector(),
-      style: [
-        new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'hsla(30, 100%, 60%, .45)',
-          }),
-        }),
-        new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'hsla(30, 100%, 40%, 1)',
-            width: 2,
-          }),
-          geometry: (feature) => {
-            return new ol.geom.Polygon([feature.getGeometry().getCoordinates()[1]]);
-          },
-        }),
-      ],
-    });
+  },
+  mounted() {
+    // when mounted, bind map to element
+    this.map.setTarget(this.$refs.map);
+    // add specific controls
+    let controls = [
+      new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
+      new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
+      new ol.control.Control({ element: this.$refs.layerSwitcher }),
+      new ol.control.Control({ element: this.$refs.recenterOnControl }),
+      new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
+    ];
+    controls.map(control => this.map.addControl(control));
+
     // areas layer
     this.areasLayer = new ol.layer.Vector({
       renderMode: 'image',
@@ -341,8 +268,6 @@ export default {
 
     // add layers to map
     this.map.addLayer(this.areasLayer);
-    this.map.addLayer(this.yetiLayer);
-    this.map.addLayer(this.extentLayer);
     this.map.addLayer(this.featuresLayer);
 
     // load camptocamp document
@@ -403,13 +328,6 @@ export default {
       }
 
       this.showRecenterOnPropositions = false;
-    },
-
-    clearLayers() {
-      this.yetiLayer.setSource(null);
-      this.yetiLayerLoaded = false;
-
-      this.extentLayer.getSource().clear();
     },
 
     addEvents() {
@@ -604,61 +522,6 @@ export default {
       }
     },
 
-    drawYetiImage() {
-      const xml = new DOMParser().parseFromString(this.computedData, 'application/xml');
-      const imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
-      const imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
-      const imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
-
-      this.yetiLayer.setSource(
-        new ol.source.ImageStatic({
-          imageLoadFunction(image) {
-            image.getImage().src = 'data:image/png;base64,' + imageBase64;
-          },
-          attributions: YETI_ATTRIBUTION,
-          imageExtent,
-        })
-      );
-      // source is set
-      this.yetiLayerLoaded = true;
-      // set map legend
-      this.setLegend(xml);
-    },
-
-    setLegend(xml) {
-      this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
-      this.mapLegend.items.forEach((item) => {
-        item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
-      });
-    },
-
-    drawExtent(extent) {
-      // extend extent
-      const extentFill = ol.extent.buffer(extent, Math.max(extent[2] - extent[0], extent[3] - extent[1]) / 10);
-      // then, create a donut polygon
-      const feature = new ol.Feature(new ol.geom.Polygon([this.toLinearRing(extentFill), this.toLinearRing(extent)]));
-      // add feature to extentlayer
-      this.extentLayer.getSource().addFeature(feature);
-    },
-
-    toLinearRing(extent) {
-      const minX = extent[0];
-      const minY = extent[1];
-      const maxX = extent[2];
-      const maxY = extent[3];
-      return [
-        [minX, minY],
-        [minX, maxY],
-        [maxX, maxY],
-        [maxX, minY],
-        [minX, minY],
-      ];
-    },
-
-    onUpdateOpacityYetiLayer() {
-      this.yetiLayer.setOpacity(this.opacityYetiLayer);
-    },
-
     onMountainsResult(data) {
       const features = data.data;
       let mountains = new ol.format.GeoJSON().readFeatures(features).map((mountain) => {
@@ -828,74 +691,6 @@ $yeti-height: calc(
 
 .map-container {
   position: relative;
-
-  .legend {
-    position: absolute;
-    z-index: 6;
-    top: 1.25rem;
-    right: 1.25rem;
-
-    .legend-button {
-      position: static;
-
-      button {
-        width: auto;
-        padding: 0 0.5em;
-      }
-    }
-
-    .legend-content {
-      margin-top: 0.5rem;
-      margin-left: 1.25rem;
-      border-radius: 2px;
-      border: 1px solid lightgray;
-      padding: 0.5rem;
-      background: white;
-      clear: both;
-    }
-
-    .legend-color {
-      vertical-align: bottom;
-      display: inline-block;
-      width: 21px;
-      height: 21px;
-      margin-right: 5px;
-    }
-  }
-
-  .opacity {
-    position: absolute;
-    z-index: 5;
-    top: 3.5rem;
-    right: 1.25rem;
-
-    .opacity-slider {
-      font-size: 1.14em;
-      margin: 1px;
-      width: 1.375em;
-      padding: 1rem 0;
-      background: rgba(0, 60, 136, 0.5);
-      border-radius: 2px;
-
-      &:hover {
-        background: rgba(0, 60, 136, 0.7);
-      }
-    }
-
-    .vue-slider {
-      padding: 0 9px !important;
-      height: 300px !important;
-      max-height: 30vh;
-    }
-
-    .vue-slider-process {
-      background: $white;
-    }
-
-    .vue-slider-rail {
-      background: $black;
-    }
-  }
 }
 @media screen and (max-width: $tablet) {
   .map-container {
@@ -903,18 +698,6 @@ $yeti-height: calc(
     padding-left: 0;
     padding-top: 0;
     padding-bottom: 0;
-
-    .legend {
-      top: 0.5rem;
-
-      .legend-content {
-        margin-left: 0.5rem;
-      }
-    }
-
-    .opacity {
-      top: 2.75rem;
-    }
   }
 }
 
