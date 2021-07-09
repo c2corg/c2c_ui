@@ -89,6 +89,7 @@ export default {
         addClasses('div[c2c\\:role=info]', ['notification', 'is-info']);
         addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
         addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
+        addClasses('div[c2c\\:role=video]', ['no-print']);
         addClasses('table[c2c\\:role=ltag]', ['table']);
       }
     },
