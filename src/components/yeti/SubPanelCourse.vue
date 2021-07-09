@@ -24,7 +24,7 @@
               spellcheck="false"
               @blur="onEditFeaturesTitle"
               @keypress.13.prevent
-              >{{ editableFeaturesTitle }}</span
+              >{{ featuresTitle }}</span
             >
           </p>
         </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="ml-5 mb-5">
         <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
-        <features-list :features="features" :map="map" />
+        <features-list :features="features" />
       </div>
       <sub-panel-title><span v-translate>Export</span></sub-panel-title>
       <div class="columns is-vcentered is-mobile">
@@ -120,11 +120,8 @@ import utils from '@/js/utils';
 
 export default {
   components: { FeaturesList, SubPanelTitle },
+  inject: ['$yetix'],
   props: {
-    map: {
-      type: Object,
-      default: null,
-    },
     features: {
       type: Array,
       default: null,
@@ -136,7 +133,6 @@ export default {
   },
   data() {
     return {
-      editableFeaturesTitle: '',
       newFeaturesTitle: false,
       loading: false,
       formats: ['GPX', 'KML'],
@@ -145,18 +141,13 @@ export default {
   },
   computed: {
     hasFeaturesTitle() {
-      return !(!this.editableFeaturesTitle.length && !this.newFeaturesTitle);
-    },
-  },
-  watch: {
-    featuresTitle() {
-      // if featuresTitle was changed (load document), set to editableFeaturesTitle
-      this.editableFeaturesTitle = this.featuresTitle;
+      return !(!this.featuresTitle.length && !this.newFeaturesTitle);
     },
   },
   mounted() {
-    // when mounted, set editableFeaturesTitle to featuresTitle
-    this.editableFeaturesTitle = this.featuresTitle;
+    this.$yetix.$on('featuresTitle', (featuresTitle) => {
+      this.$emit('update:featuresTitle', featuresTitle);
+    });
   },
   methods: {
     onEditFeaturesTitle(e) {
@@ -178,7 +169,9 @@ export default {
     },
 
     onRemoveFeatures() {
-      this.map.removeFeatures();
+      if (confirm(this.$gettext('Confirm delete'))) {
+        this.$yetix.$emit('removeFeatures');
+      }
     },
 
     uploadGpx(event) {

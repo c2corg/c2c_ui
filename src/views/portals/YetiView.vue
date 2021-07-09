@@ -61,12 +61,7 @@
             </panel>
 
             <panel ref="panel1" :index="1" :active-tab="activeTab">
-              <sub-panel-course
-                :map="yetiMap"
-                :features="features"
-                :features-title.sync="featuresTitle"
-                @gpx="onGpxLoaded"
-              />
+              <sub-panel-course :features="features" :features-title.sync="featuresTitle" @gpx="onGpxLoaded" />
             </panel>
           </div>
 
@@ -109,8 +104,7 @@
           :yeti-extent="yetiExtent"
           :mountains.sync="mountains"
           :area-ok.sync="areaOk"
-          :features.sync="features"
-          :features-title.sync="featuresTitle"
+          :features="features"
         />
       </div>
     </div>
@@ -119,6 +113,7 @@
 
 <script>
 import axios from 'axios';
+import Vue from 'vue';
 
 import YetiArticle from '@/components/yeti/Article';
 import Panel from '@/components/yeti/Panel';
@@ -138,6 +133,8 @@ const VALID_FORM_DATA = {
   braMaxMrd: 3,
 };
 
+const $yetix = new Vue();
+
 export default {
   name: 'Yeti',
 
@@ -150,6 +147,12 @@ export default {
     Tabs,
     ValidationButton,
     YetiMap,
+  },
+
+  provide() {
+    return {
+      $yetix: $yetix,
+    };
   },
 
   data() {
@@ -167,8 +170,6 @@ export default {
           title: this.$gettext('Disclaimer'),
         },
       },
-
-      yetiMap: null,
 
       tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
       activeTab: 0,
@@ -288,10 +289,12 @@ export default {
   },
 
   mounted() {
-    // yeti app is loaded: store yetiMap
-    this.yetiMap = this.$refs.map;
-
     this.check();
+
+    // mutations
+    $yetix.$on('features', (features) => {
+      this.features = features;
+    });
   },
 
   methods: {

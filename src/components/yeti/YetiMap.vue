@@ -3,6 +3,13 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
       <yeti-layer :data="yetiData" :extent="yetiExtent"></yeti-layer>
+      <route-layer
+        :active="activeTab === 0"
+        :features="features"
+        :gpx="gpx"
+        :valid-min-zoom="validMinZoom"
+        @interaction="addInteraction"
+      />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -30,10 +37,7 @@
         </div>
       </div>
 
-      <div
-        ref="recenterOnControl"
-        class="ol-control ol-control-recenter-on"
-      >
+      <div ref="recenterOnControl" class="ol-control ol-control-recenter-on">
         <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions" />
       </div>
 
@@ -58,9 +62,9 @@ import axios from 'axios';
 
 import { cartoLayers, dataLayers } from '../map/map-layers';
 
+import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
-import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -71,32 +75,9 @@ const MAX_ZOOM = 19;
 const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
-const normalLineStyle = new ol.style.Style({
-  stroke: new ol.style.Stroke({
-    color: 'yellow',
-    width: 3,
-  }),
-});
-
-const highlightedLineStyle = [
-  new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: 'rgba(255, 255, 0, .5)',
-      width: 8,
-    }),
-    zIndex: 1,
-  }),
-  new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: 'red',
-      width: 3,
-    }),
-    zIndex: 1,
-  }),
-];
-
 export default {
   components: {
+    RouteLayer,
     YetiLayer,
   },
   props: {
@@ -136,10 +117,6 @@ export default {
       type: String,
       default: null,
     },
-    featuresTitle: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
@@ -166,15 +143,6 @@ export default {
         layer.setVisible(true);
       },
     },
-    localFeaturesTitle() {
-      if (this.featuresTitleFromSource) {
-        return this.featuresTitleFromSource;
-      }
-      if (this.features.length) {
-        return this.featuresTitle;
-      }
-      return null;
-    },
     areasLayerStyle() {
       const levelStrokeWidth = 2;
       const levelStrokeOpacity = 4;
@@ -189,27 +157,6 @@ export default {
           lineDash: [lineDashStroke],
         }),
       });
-    },
-  },
-  watch: {
-    gpx() {
-      if (this.gpx) {
-        this.addFeaturesFromGpx(this.gpx);
-      }
-    },
-    localFeaturesTitle() {
-      this.$emit('update:featuresTitle', this.localFeaturesTitle);
-    },
-    activeTab() {
-      if (this.activeTab === 0) {
-        this.drawInteraction.setActive(false);
-        this.modifyInteraction.setActive(false);
-        this.snapInteraction.setActive(false);
-      } else {
-        this.drawInteraction.setActive(true);
-        this.modifyInteraction.setActive(true);
-        this.snapInteraction.setActive(true);
-      }
     },
   },
   created() {
@@ -248,7 +195,7 @@ export default {
       new ol.control.Control({ element: this.$refs.recenterOnControl }),
       new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
     ];
-    controls.map(control => this.map.addControl(control));
+    controls.map((control) => this.map.addControl(control));
 
     // areas layer
     this.areasLayer = new ol.layer.Vector({
@@ -256,31 +203,14 @@ export default {
       source: new ol.source.Vector(),
       style: this.areasLayerStyle,
     });
-    // features layer
-    this.featuresLayer = new ol.layer.Vector({
-      source: new ol.source.Vector(),
-      style: normalLineStyle,
-    });
-    this.featuresLayerSource = this.featuresLayer.getSource();
 
-    //this.map = this.$refs.map.map;
     this.view = this.map.getView();
 
     // add layers to map
     this.map.addLayer(this.areasLayer);
-    this.map.addLayer(this.featuresLayer);
-
-    // load camptocamp document
-    const doc = this.$route.params.document_id;
-    const lang = this.$language.current;
-    if (doc) {
-      c2c['route'].getCooked(doc, lang).then(this.addFeaturesFromDocument);
-    }
 
     // add events
     this.addEvents();
-    // add interactions
-    this.addInteractions();
 
     // set mountains
     axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
@@ -333,32 +263,6 @@ export default {
     addEvents() {
       // global events
       this.map.on('moveend', this.onMapMoveEnd);
-      // features events (added feature)
-      this.featuresLayerSource.on('addfeature', this.onFeature);
-    },
-
-    addInteractions() {
-      const source = this.featuresLayerSource;
-
-      this.modifyInteraction = new ol.interaction.Modify({ source });
-      this.map.addInteraction(this.modifyInteraction);
-
-      this.drawInteraction = new ol.interaction.Draw({
-        source,
-        type: 'LineString',
-      });
-      this.map.addInteraction(this.drawInteraction);
-
-      this.snapInteraction = new ol.interaction.Snap({ source });
-      this.map.addInteraction(this.snapInteraction);
-
-      this.drawInteraction.on('drawstart', this.onDrawStart);
-      this.drawInteraction.on('drawend', this.onDrawEnd);
-      this.modifyInteraction.on('modifyend', this.onModifyEnd);
-
-      this.drawInteraction.setActive(false);
-      this.modifyInteraction.setActive(false);
-      this.snapInteraction.setActive(false);
     },
 
     onMapMoveEnd(event) {
@@ -372,154 +276,6 @@ export default {
       this.isAreaOK();
       // update areas layer style
       this.areasLayer.setStyle(this.areasLayerStyle);
-    },
-
-    fitMapToFeatures() {
-      let extent = ol.extent.createEmpty();
-
-      ol.extent.extend(extent, this.featuresLayerSource.getExtent());
-
-      this.view.fit(extent, { size: this.map.getSize() });
-
-      // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinZoom, this.view.getZoom()));
-    },
-
-    addFeaturesFromGpx(gpx) {
-      // first, remove camptocamp document
-      this.promiseDocument = null;
-      // and clear geometry
-      this.featuresLayerSource.clear(true);
-
-      // before reading gpx, set what we are doing
-      this.loadingExternalFeatures = true;
-
-      const gpxFormat = new ol.format.GPX();
-      const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
-      features.map(this.addFeature);
-      this.featuresTitleFromSource = this.getFeaturesTitleFromGpx(features);
-
-      // gpx is loaded, go back to normal case
-      this.loadingExternalFeatures = false;
-      // and emit new features
-      this.emitFeaturesEvent();
-      // fit map to new features
-      this.fitMapToFeatures();
-    },
-
-    addFeaturesFromDocument(doc) {
-      // before reading document, set what we are doing
-      this.loadingExternalFeatures = true;
-
-      const documentGeometry = doc.data.geometry.geom_detail;
-      const feature = new ol.format.GeoJSON().readFeature(documentGeometry);
-      this.addFeature(feature);
-      this.featuresTitleFromSource = this.getFeaturesTitleFromDocument(doc);
-
-      // document is loaded, go back to normal case
-      this.loadingExternalFeatures = false;
-      // and emit new features
-      this.emitFeaturesEvent();
-      // fit map to new features
-      this.fitMapToFeatures();
-    },
-
-    addFeature(feature) {
-      // split multilinestrings into linestrings
-      if (feature.getGeometry().getType() === 'MultiLineString') {
-        const lines = feature.getGeometry().getLineStrings();
-        lines.map((line) => new ol.Feature({ geometry: line })).map(this.addFeature);
-      } else {
-        const nbPointsOnFeature = feature.getGeometry().getCoordinates().length;
-        if (nbPointsOnFeature >= 2) {
-          this.featuresLayerSource.addFeature(feature);
-        }
-      }
-    },
-
-    removeFeature(feature) {
-      // remove feature
-      // when only one left, ask for user to confirm
-      let toBeRemoved = !(
-        this.featuresLayerSource.getFeatures().length === 1 && !confirm(this.$gettext('Confirm delete'))
-      );
-      if (toBeRemoved) {
-        this.featuresLayerSource.removeFeature(feature);
-        this.emitFeaturesEvent();
-      }
-    },
-
-    removeFeatures() {
-      if (confirm(this.$gettext('Confirm delete'))) {
-        this.featuresLayerSource.clear(true);
-        this.emitFeaturesEvent();
-      }
-    },
-
-    emitFeaturesEvent() {
-      // updates features
-      const features = this.getFeaturesLayerFeatures();
-      this.$emit('update:features', features);
-
-      if (features.length === 0) {
-        this.featuresTitleFromSource = null;
-
-        // if user come from a document url, remove url
-        if (this.$route.params.document_id) {
-          this.$router.replace({ path: '/' + this.$route.name });
-        }
-      }
-    },
-
-    getFeaturesLayerFeatures() {
-      return this.featuresLayerSource.getFeatures();
-    },
-
-    getFeaturesTitleFromGpx(features) {
-      if (features && features.length) {
-        const properties = features[0].getProperties();
-        if (properties.name) {
-          return properties.name;
-        } else {
-          return this.$gettext('GPX file');
-        }
-      }
-    },
-
-    getFeaturesTitleFromDocument(document) {
-      return this.$documentUtils.getDocumentTitle(document.data);
-    },
-
-    onFeature(event) {
-      // set features styles
-      event.feature.set('highlightedStyle', highlightedLineStyle);
-      // emit new features, only in normal case (drawing)
-      // not in gpx/document case (prevent multiple update for each lines)
-      if (!this.loadingExternalFeatures) {
-        this.emitFeaturesEvent();
-      }
-    },
-
-    onDrawStart() {
-      document.addEventListener('keydown', this.onKeyWhileDrawing);
-      document.addEventListener('keypress', this.onKeyWhileDrawing);
-    },
-
-    onDrawEnd() {
-      document.removeEventListener('keydown', this.onKeyWhileDrawing);
-      document.removeEventListener('keypress', this.onKeyWhileDrawing);
-    },
-
-    onModifyEnd() {
-      this.emitFeaturesEvent();
-    },
-
-    onKeyWhileDrawing(event) {
-      event.preventDefault();
-      // backspace key
-      if (event.key === 'Backspace') {
-        this.drawInteraction.removeLastPoint();
-      }
     },
 
     onMountainsResult(data) {

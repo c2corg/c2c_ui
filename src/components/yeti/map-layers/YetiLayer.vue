@@ -38,13 +38,15 @@
           direction="btt"
           :rail-style="{ background: 'rgba(0,0,0,.25)' }"
           :process-style="{ background: 'white' }"
-          @change="onUpdateOpacityYetiLayer"
+          @change="onUpdateOpacity"
         />
       </div>
     </div>
   </div>
 </template>
 <script>
+import layerMixin from './layer';
+
 import 'vue-slider-component/theme/default.css';
 
 import ol from '@/js/libs/ol';
@@ -56,6 +58,7 @@ export default {
   components: {
     VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
   },
+  mixins: [layerMixin],
   props: {
     data: {
       type: String,
@@ -124,7 +127,7 @@ export default {
       this.setLegend(xml);
     },
 
-    onUpdateOpacityYetiLayer() {
+    onUpdateOpacity() {
       this.layer.setOpacity(this.opacity);
     },
 
@@ -178,8 +181,8 @@ export default {
     });
   },
   mounted() {
-    this.$parent.map.addLayer(this.layer);
-    this.$parent.map.addLayer(this.extentLayer);
+    this.map.addLayer(this.layer);
+    this.map.addLayer(this.extentLayer);
   },
 };
 </script>

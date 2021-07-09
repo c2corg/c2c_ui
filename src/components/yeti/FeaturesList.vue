@@ -15,11 +15,8 @@
 
 <script>
 export default {
+  inject: ['$yetix'],
   props: {
-    map: {
-      type: Object,
-      default: null,
-    },
     features: {
       type: Array,
       required: true,
@@ -27,7 +24,7 @@ export default {
   },
   methods: {
     removeFeature(feature) {
-      this.map.removeFeature(feature);
+      this.$yetix.$emit('removeFeature', feature);
     },
 
     showFeature(feature) {
