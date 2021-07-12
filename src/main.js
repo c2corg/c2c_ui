@@ -29,21 +29,14 @@ Vue.config.silent = false;
 Vue.use(localStorage); // First, vm.$localStorage property
 
 Vue.use(gdpr);
-
-let enableAnalytics = false;
-try {
-  enableAnalytics = JSON.parse(window.localStorage.getItem('Gdpr.preferences', '{}')).choice?.statistics || false;
-} catch (err) {
-  window.localStorage.removeItem('Gdpr.preferences');
-}
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
-  disabled: !enableAnalytics,
-  /*debug: {
-    enabled: true,
-    trace: true,
-    sendHitTask: true,
-  },*/
+  disabled: true,
+  beforeFirstHit() {
+    if (Vue.prototype.$gdpr.gdprValue?.statistics) {
+      Vue.prototype.$ga.enable();
+    }
+  },
   router,
   autoTracking: {
     // do not send updates if query parameter has changed
