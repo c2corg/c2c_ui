@@ -116,21 +116,17 @@ export default {
       this.modifyInteraction.setActive(false);
       this.snapInteraction.setActive(false);
     },
-
     onDrawStart() {
       document.addEventListener('keydown', this.onKeyWhileDrawing);
       document.addEventListener('keypress', this.onKeyWhileDrawing);
     },
-
     onDrawEnd() {
       document.removeEventListener('keydown', this.onKeyWhileDrawing);
       document.removeEventListener('keypress', this.onKeyWhileDrawing);
     },
-
     onModifyEnd() {
       this.emitFeaturesEvent();
     },
-
     onKeyWhileDrawing(event) {
       event.preventDefault();
       // backspace key
@@ -138,7 +134,6 @@ export default {
         this.drawInteraction.removeLastPoint();
       }
     },
-
     onFeature(event) {
       // set features styles
       event.feature.set('highlightedStyle', highlightedLineStyle);
@@ -148,7 +143,6 @@ export default {
         this.emitFeaturesEvent();
       }
     },
-
     emitFeaturesEvent() {
       // updates features
       const features = this.getFeaturesLayerFeatures();
@@ -163,11 +157,9 @@ export default {
         }
       }
     },
-
     getFeaturesLayerFeatures() {
       return this.featuresLayerSource.getFeatures();
     },
-
     removeFeature(feature) {
       // remove feature
       // when only one left, ask for user to confirm
@@ -179,12 +171,10 @@ export default {
         this.emitFeaturesEvent();
       }
     },
-
     removeFeatures() {
       this.featuresLayerSource.clear(true);
       this.emitFeaturesEvent();
     },
-
     addFeaturesFromGpx(gpx) {
       // first, remove camptocamp document
       this.promiseDocument = null;
@@ -207,7 +197,6 @@ export default {
       // fit map to new features
       this.fitMapToFeatures();
     },
-
     getFeaturesTitleFromGpx(features) {
       if (features && features.length) {
         const properties = features[0].getProperties();
@@ -218,7 +207,6 @@ export default {
         }
       }
     },
-
     addFeaturesFromDocument(doc) {
       // before reading document, set what we are doing
       this.loadingExternalFeatures = true;
@@ -236,7 +224,6 @@ export default {
       // fit map to new features
       this.fitMapToFeatures();
     },
-
     addFeature(feature) {
       // split multilinestrings into linestrings
       if (feature.getGeometry().getType() === 'MultiLineString') {
@@ -249,11 +236,9 @@ export default {
         }
       }
     },
-
     getFeaturesTitleFromDocument(document) {
       return this.$documentUtils.getDocumentTitle(document.data);
     },
-
     fitMapToFeatures() {
       let extent = ol.extent.createEmpty();
 

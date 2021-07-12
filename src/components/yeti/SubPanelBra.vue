@@ -155,7 +155,6 @@ export default {
       const value = prop === 'isDifferent' ? event : event.target.value;
       this.$emit('update:bra', Object.assign(this.bra, { [prop]: value }));
     },
-
     checkBraIsDifferent() {
       if (!this.bra.isDifferent) {
         this.bra.low = null;

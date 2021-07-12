@@ -156,24 +156,20 @@ export default {
       }
       this.$emit('update:featuresTitle', e.target.innerText);
     },
-
     onEditNewFeaturesTitle() {
       this.newFeaturesTitle = true;
       this.$nextTick(() => {
         this.$refs.featuresTitle.focus();
       });
     },
-
     onLoadGpx() {
       this.$refs.gpxFileInput.click();
     },
-
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
         this.$yetix.$emit('removeFeatures');
       }
     },
-
     uploadGpx(event) {
       this.loading = true;
 
@@ -192,7 +188,6 @@ export default {
       this.$refs.gpxFileInput.value = '';
       this.$emit('gpx', null);
     },
-
     downloadCourse() {
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
@@ -200,7 +195,6 @@ export default {
         this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
       }
     },
-
     downloadFeatures(olFormat, extension, mimetype) {
       const features = this.features;
       features[0].set('name', this.featuresTitle);
@@ -213,7 +207,6 @@ export default {
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
     },
-
     setFilename(ext) {
       return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
     },

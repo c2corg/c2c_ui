@@ -96,7 +96,6 @@ export default {
 
       this.extentLayer.getSource().clear();
     },
-
     drawExtent(extent) {
       // extend extent
       const extentFill = ol.extent.buffer(extent, Math.max(extent[2] - extent[0], extent[3] - extent[1]) / 10);
@@ -105,7 +104,6 @@ export default {
       // add feature to extentlayer
       this.extentLayer.getSource().addFeature(feature);
     },
-
     drawImage() {
       const xml = new DOMParser().parseFromString(this.data, 'application/xml');
       const imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
@@ -126,18 +124,15 @@ export default {
       // set map legend
       this.setLegend(xml);
     },
-
     onUpdateOpacity() {
       this.layer.setOpacity(this.opacity);
     },
-
     setLegend(xml) {
       this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
       this.mapLegend.items.forEach((item) => {
         item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
       });
     },
-
     toLinearRing(extent) {
       const minX = extent[0];
       const minY = extent[1];

@@ -9,14 +9,11 @@ const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
 
 export default {
   mixins: [layerMixin],
-
   inject: ['$yetix'],
-
   mounted() {
     axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
     this.map.on('moveend', this.onMapMoveEnd);
   },
-
   methods: {
     onMountainsResult(data) {
       const features = data.data;
@@ -26,7 +23,6 @@ export default {
       this.allMountains = this.sortMountainsByMassif(mountains);
       this.setVisibleMountains();
     },
-
     sortMountainsByMassif(mountains) {
       // first, order mountains by massifs
       const sortedMountains = {};
@@ -49,7 +45,6 @@ export default {
 
       return mountains;
     },
-
     setVisibleMountains() {
       // return, if mountains not loaded
       if (!this.allMountains) {
@@ -73,13 +68,11 @@ export default {
       const mountains = { visibleMountains };
       this.$yetix.$emit('mountains', mountains);
     },
-
     onMapMoveEnd() {
       // set visible mountains
       this.setVisibleMountains();
     },
   },
-
   render() {
     return null;
   },

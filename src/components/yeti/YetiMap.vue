@@ -75,7 +75,6 @@ export default {
     RouteLayer,
     YetiLayer,
   },
-
   props: {
     activeTab: {
       type: Number,
@@ -126,7 +125,6 @@ export default {
       get() {
         return this.cartoLayers.find((layer) => layer.getVisible() === true);
       },
-
       set(layer) {
         this.visibleCartoLayer.setVisible(false);
         layer.setVisible(true);
@@ -179,7 +177,6 @@ export default {
     toggleMapDataLayer(layer) {
       layer.setVisible(!layer.getVisible());
     },
-
     searchRecenterPropositions(event) {
       const query = event.target.value;
 
@@ -191,7 +188,6 @@ export default {
         this.showRecenterOnPropositions = true;
       }
     },
-
     recenterOn(item) {
       const feature = new ol.format.GeoJSON().readFeature(item);
       let extent = feature.get('extent');
@@ -208,7 +204,6 @@ export default {
 
       this.showRecenterOnPropositions = false;
     },
-
     onMapMoveEnd(event) {
       const mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
       this.$emit('update:mapZoom', mapZoom);

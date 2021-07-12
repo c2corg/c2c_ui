@@ -45,7 +45,6 @@ export default {
       // then set
       this.$emit('update:activeTab', index);
     },
-
     setActiveTabKeyboard(event, index) {
       // Set arrow keys: left/right = switch active tabs / down = focus panel
       const ARROW_LEFT = 37;

@@ -26,15 +26,12 @@ export default {
     removeFeature(feature) {
       this.$yetix.$emit('removeFeature', feature);
     },
-
     showFeature(feature) {
       feature.setStyle(feature.get('highlightedStyle'));
     },
-
     hideFeature(feature) {
       feature.setStyle(feature.get('normalStyle'));
     },
-
     nbPointsOnFeature(feature) {
       return feature.getGeometry().getCoordinates().length;
     },
