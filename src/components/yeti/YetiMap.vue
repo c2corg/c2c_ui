@@ -2,14 +2,10 @@
   <div class="column map-container">
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
-      <yeti-layer :data="yetiData" :extent="yetiExtent"></yeti-layer>
-      <route-layer
-        :active="activeTab === 0"
-        :features="features"
-        :gpx="gpx"
-        :valid-min-zoom="validMinZoom"
-        @interaction="addInteraction"
-      />
+      <area-layer :map-zoom="mapZoom" />
+      <mountains-layer />
+      <yeti-layer :data="yetiData" :extent="yetiExtent" />
+      <route-layer :active="activeTab === 0" :features="features" :gpx="gpx" :valid-min-zoom="validMinZoom" />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -58,10 +54,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 import { cartoLayers, dataLayers } from '../map/map-layers';
 
+import AreaLayer from './map-layers/AreaLayer.vue';
+import MountainsLayer from './map-layers/MountainsLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
@@ -72,14 +68,14 @@ const DEFAULT_CENTER = [6.25, 45.15];
 const DEFAULT_ZOOM = 6;
 const MAX_ZOOM = 19;
 
-const YETI_URL_MOUNTAINS = '/mountains_WGS84.json';
-const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
-
 export default {
   components: {
+    AreaLayer,
+    MountainsLayer,
     RouteLayer,
     YetiLayer,
   },
+
   props: {
     activeTab: {
       type: Number,
@@ -100,14 +96,6 @@ export default {
     yetiData: {
       type: String,
       default: null,
-    },
-    mountains: {
-      type: Object,
-      required: true,
-    },
-    areaOk: {
-      type: Boolean,
-      required: true,
     },
     features: {
       type: Array,
@@ -138,25 +126,11 @@ export default {
       get() {
         return this.cartoLayers.find((layer) => layer.getVisible() === true);
       },
+
       set(layer) {
         this.visibleCartoLayer.setVisible(false);
         layer.setVisible(true);
       },
-    },
-    areasLayerStyle() {
-      const levelStrokeWidth = 2;
-      const levelStrokeOpacity = 4;
-      const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
-      const opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
-      const lineDashStroke = opacityStroke * 6;
-
-      return new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'hsla(30, 100%, 40%,' + opacityStroke + ')',
-          width: lineWidthStroke,
-          lineDash: [lineDashStroke],
-        }),
-      });
     },
   },
   created() {
@@ -197,36 +171,11 @@ export default {
     ];
     controls.map((control) => this.map.addControl(control));
 
-    // areas layer
-    this.areasLayer = new ol.layer.Vector({
-      renderMode: 'image',
-      source: new ol.source.Vector(),
-      style: this.areasLayerStyle,
-    });
-
     this.view = this.map.getView();
 
-    // add layers to map
-    this.map.addLayer(this.areasLayer);
-
-    // add events
-    this.addEvents();
-
-    // set mountains
-    axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
-
-    // set areas (yeti valid areas)
-    axios.get(YETI_URL_AREAS).then(this.onAreasResult);
+    this.map.on('moveend', this.onMapMoveEnd);
   },
   methods: {
-    getExtent(projection) {
-      let extent = this.view.calculateExtent(this.map.getSize() || null);
-      if (projection) {
-        extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get(projection));
-      }
-      return extent;
-    },
-
     toggleMapDataLayer(layer) {
       layer.setVisible(!layer.getVisible());
     },
@@ -260,125 +209,9 @@ export default {
       this.showRecenterOnPropositions = false;
     },
 
-    addEvents() {
-      // global events
-      this.map.on('moveend', this.onMapMoveEnd);
-    },
-
     onMapMoveEnd(event) {
       const mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
       this.$emit('update:mapZoom', mapZoom);
-
-      // set visible mountains
-      this.setVisibleMountains();
-
-      // is area OK ?
-      this.isAreaOK();
-      // update areas layer style
-      this.areasLayer.setStyle(this.areasLayerStyle);
-    },
-
-    onMountainsResult(data) {
-      const features = data.data;
-      let mountains = new ol.format.GeoJSON().readFeatures(features).map((mountain) => {
-        return mountain.getProperties();
-      });
-      this.allMountains = this.sortMountainsByMassif(mountains);
-      this.setVisibleMountains();
-    },
-
-    sortMountainsByMassif(mountains) {
-      // first, order mountains by massifs
-      const sortedMountains = {};
-      for (let i = 0; i < mountains.length; i++) {
-        if (!sortedMountains[mountains[i].mountain]) {
-          sortedMountains[mountains[i].mountain] = [];
-        }
-        sortedMountains[mountains[i].mountain].push(mountains[i]);
-      }
-      mountains = sortedMountains;
-
-      // then sort mountains inside each massif
-      for (const i in mountains) {
-        mountains[i].sort((a, b) => {
-          if (a.title < b.title) return -1;
-          if (b.title > a.title) return 1;
-          return 0;
-        });
-      }
-
-      return mountains;
-    },
-
-    setVisibleMountains() {
-      // return, if mountains not loaded
-      if (!this.allMountains) {
-        return;
-      }
-      const mapExtent = this.getExtent('EPSG:4326');
-      // clone this.mountains first, with no reference
-      const visibleMountains = Object.assign({}, this.allMountains);
-      // then filter if polygon isn’t in view
-      for (const massif in visibleMountains) {
-        visibleMountains[massif] = visibleMountains[massif].filter((mountain) => {
-          const polygon = mountain.geometry;
-          return polygon.intersectsExtent(mapExtent);
-        });
-        // unset massif if empty
-        if (visibleMountains[massif].length === 0) {
-          delete visibleMountains[massif];
-        }
-      }
-      // set mountains in visibleMountains key
-      const mountains = { visibleMountains };
-      this.$emit('update:mountains', mountains);
-    },
-
-    onAreasResult(data) {
-      const areas = data.data;
-      const rawFeatures = new ol.format.GeoJSON().readFeatures(areas);
-      // geojson is 4326, convert to 3857
-      rawFeatures[0].getGeometry().transform('EPSG:4326', 'EPSG:3857');
-
-      this.areas = rawFeatures.map((area) => {
-        return area.getProperties();
-      });
-
-      // flatten coords
-      const rawCoords = rawFeatures[0].getGeometry().getCoordinates();
-      const coords = [];
-      for (let i = 0; i < rawCoords.length; i++) {
-        coords.push(...rawCoords[i]);
-      }
-      // then, build linestrings instead of polygon (perf)
-      const features = [];
-      for (let i = 0; i < coords.length; i++) {
-        for (let j = 0; j < coords[i].length - 1; j++) {
-          features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
-        }
-      }
-
-      // add features
-      this.areasLayer.getSource().addFeatures(features);
-      // is area OK
-      this.isAreaOK();
-    },
-
-    isAreaOK() {
-      const mapExtent = this.getExtent('EPSG:3857');
-
-      let areaOk = true;
-
-      for (const area in this.areas) {
-        const polygon = this.areas[area].geometry;
-        if (polygon.intersectsExtent(mapExtent)) {
-          break;
-        } else {
-          areaOk = false;
-        }
-      }
-
-      this.$emit('update:areaOk', areaOk);
     },
   },
 };

@@ -102,8 +102,6 @@
           :map-zoom.sync="mapZoom"
           :yeti-data="yetiData"
           :yeti-extent="yetiExtent"
-          :mountains.sync="mountains"
-          :area-ok.sync="areaOk"
           :features="features"
         />
       </div>
@@ -294,6 +292,12 @@ export default {
     // mutations
     $yetix.$on('features', (features) => {
       this.features = features;
+    });
+    $yetix.$on('areaOk', (areaOk) => {
+      this.areaOk = areaOk;
+    });
+    $yetix.$on('mountains', (mountains) => {
+      this.mountains = mountains;
     });
   },
 
