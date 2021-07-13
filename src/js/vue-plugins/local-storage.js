@@ -5,7 +5,11 @@
 
 function LocalStorageItem(key) {
   this.key = key;
-  this.data_ = JSON.parse(window.localStorage.getItem(key) ?? '{}');
+  try {
+    this.data_ = JSON.parse(window.localStorage.getItem(key) ?? '{}');
+  } catch (err) {
+    this.data_ = {};
+  }
 }
 
 LocalStorageItem.prototype.commit_ = function () {
@@ -68,6 +72,12 @@ export default function install(Vue) {
       // find another way. Maybe this in created() :
       // this.$localStorage
       return localStorage.getItem(`${this.$options.name}.preferences`);
+    },
+    clear() {
+      if (!this.$options.name) {
+        throw new Error('Please set name property of your componenent');
+      }
+      localStorage.removeItem(`${this.$options.name}.preferences`);
     },
   });
 }
