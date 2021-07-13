@@ -12,11 +12,7 @@ export default {
   },
   methods: {
     getExtent(projection) {
-      let extent = this.view.calculateExtent(this.map.getSize() || null);
-      if (projection) {
-        extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get(projection));
-      }
-      return extent;
+      return this.$parent.getExtent(projection);
     },
   },
 };

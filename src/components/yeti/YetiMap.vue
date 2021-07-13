@@ -174,6 +174,13 @@ export default {
     this.map.on('moveend', this.onMapMoveEnd);
   },
   methods: {
+    getExtent(projection) {
+      let extent = this.view.calculateExtent(this.map.getSize() || null);
+      if (projection) {
+        extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857'), ol.proj.get(projection));
+      }
+      return extent;
+    },
     toggleMapDataLayer(layer) {
       layer.setVisible(!layer.getVisible());
     },
