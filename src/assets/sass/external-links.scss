@@ -28,6 +28,8 @@ $escaped-color-link: '%23#{str-slice(inspect($color-link), 2)}';
     {
       content: " [" attr(href) "]";
       font-size: 0.6em;
+      background: none;
+      padding-right: 0;
     }
   }
 }
