@@ -22,11 +22,12 @@ $escaped-color-link: '%23#{str-slice(inspect($color-link), 2)}';
     content: none;
   }
 
-  /* also hide the icon when printed */
+  /* don't show the icon when printed, but display the url */
   @media print {
     a[href*="//"]::after
     {
-      content: none;
+      content: " [" attr(href) "]";
+      font-size: 0.6em;
     }
   }
 }
