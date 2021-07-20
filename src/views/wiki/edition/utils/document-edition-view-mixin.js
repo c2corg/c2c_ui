@@ -87,9 +87,6 @@ export default {
       if (!vm.$user.isLogged) {
         vm.$router.push({ name: 'auth' });
       }
-      if (!vm.lang) {
-        vm.$router.replace({ ...to, params: { ...to.params, lang: vm.$language.current } });
-      }
     });
   },
 

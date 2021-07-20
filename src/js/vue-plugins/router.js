@@ -108,7 +108,7 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/add/:lang?',
+    path: '/' + def.documentType + 's/add/:lang',
     name: def.documentType + '-add',
     component: editionComponent,
   });
