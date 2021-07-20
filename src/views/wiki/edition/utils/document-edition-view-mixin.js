@@ -122,14 +122,14 @@ export default {
         this.promise = c2c[this.documentType].get(this.documentId, this.lang).then((response) => {
           const locales = response.data.locales;
 
-          if (locales.length === 0) {
+          if (!locales.length) {
             // it's a translation from an existing doc
             locales.push(this.$documentUtils.buildLocale(this.documentType, this.lang));
           }
 
           this.afterLoad(response);
 
-          // TODO : implements a algorithm to determin if document has bee modified
+          // TODO : implement an algorithm to determine if document has been modified
           this.modified = true;
         });
       } else {
