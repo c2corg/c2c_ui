@@ -14,13 +14,13 @@
       class="has-text-centered add-section"
     >
       <router-link
-        :to="{ name: 'outings', query: query }"
+        :to="{ name: 'outings', query: allOutingsQuery }"
         class="button is-primary"
         v-if="!hideSeeAllResultsButton && outings.length"
       >
         <span v-translate>show all</span>&nbsp;<span class="badge">{{ totalOutings }}</span>
       </router-link>
-      <add-link v-if="showAddOutingButton" document-type="outing" :query="query" class="button is-primary">
+      <add-link v-if="showAddOutingButton" document-type="outing" :query="addOutingQuery" class="button is-primary">
         <span v-translate v-if="outings.length === 0">Add the first outing</span>
       </add-link>
     </div>
@@ -40,20 +40,28 @@ export default {
       type: Boolean,
       default: false,
     },
+    includeEmptyOutings: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     outings() {
-      return (this.document.associations.recent_outings?.documents || this.document.associations.outings).filter(
-        (outing) => outing.quality !== 'empty'
-      );
+      let outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
+
+      if (this.includeEmptyOutings) {
+        return outings;
+      } else {
+        return outings.filter((outing) => outing.quality !== 'empty');
+      }
     },
 
     totalOutings() {
       return this.document.associations.recent_outings?.total || outings.length;
     },
 
-    query() {
+    addOutingQuery() {
       const query = {};
 
       if (this.documentType === 'waypoint') {
@@ -63,6 +71,12 @@ export default {
         query[this.document.type] = this.document.document_id;
       }
 
+      return query;
+    },
+
+    allOutingsQuery() {
+      const query = {};
+      query[this.document.type] = this.document.document_id;
       return query;
     },
 
