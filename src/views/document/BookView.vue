@@ -15,6 +15,8 @@
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
 
+        <map-box v-if="document.associations.waypoints.length" :document="document" />
+
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
