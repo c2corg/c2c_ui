@@ -47,7 +47,7 @@
         </div>
 
         <routes-box :document="document" hide-buttons />
-        <recent-outings-box :document="document" hide-see-all-results-button />
+        <recent-outings-box :document="document" hide-see-all-results-button include-empty-outings />
         <images-box v-if="document" :document="document" />
         <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box :document="document" />
