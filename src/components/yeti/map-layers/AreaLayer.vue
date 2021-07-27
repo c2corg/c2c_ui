@@ -3,26 +3,20 @@ import axios from 'axios';
 
 import layerMixin from './layer';
 
+import { $yetix } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
 export default {
   mixins: [layerMixin],
-  inject: ['$yetix'],
-  props: {
-    mapZoom: {
-      type: Number,
-      required: true,
-    },
-  },
   computed: {
     areasLayerStyle() {
-      const levelStrokeWidth = 2;
-      const levelStrokeOpacity = 4;
-      const lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
-      const opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
-      const lineDashStroke = opacityStroke * 6;
+      let levelStrokeWidth = 2;
+      let levelStrokeOpacity = 4;
+      let lineWidthStroke = Math.max(0, Math.min(this.mapZoom() - 6, levelStrokeWidth));
+      let opacityStroke = Math.max(0, Math.min(this.mapZoom() - 6, levelStrokeOpacity)) / 4;
+      let lineDashStroke = opacityStroke * 6;
 
       return new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -43,12 +37,12 @@ export default {
     // set areas (yeti valid areas)
     axios.get(YETI_URL_AREAS).then(this.onAreasResult);
     //
-    this.map.on('moveend', this.onMapMoveEnd);
+    $yetix.$on('mapMoveEnd', this.onMapMoveEnd);
   },
   methods: {
     onAreasResult(data) {
-      const areas = data.data;
-      const rawFeatures = new ol.format.GeoJSON().readFeatures(areas);
+      let areas = data.data;
+      let rawFeatures = new ol.format.GeoJSON().readFeatures(areas);
       // geojson is 4326, convert to 3857
       rawFeatures[0].getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
@@ -57,13 +51,13 @@ export default {
       });
 
       // flatten coords
-      const rawCoords = rawFeatures[0].getGeometry().getCoordinates();
-      const coords = [];
+      let rawCoords = rawFeatures[0].getGeometry().getCoordinates();
+      let coords = [];
       for (let i = 0; i < rawCoords.length; i++) {
         coords.push(...rawCoords[i]);
       }
       // then, build linestrings instead of polygon (perf)
-      const features = [];
+      let features = [];
       for (let i = 0; i < coords.length; i++) {
         for (let j = 0; j < coords[i].length - 1; j++) {
           features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
@@ -76,12 +70,12 @@ export default {
       this.isAreaOK();
     },
     isAreaOK() {
-      const mapExtent = this.getExtent('EPSG:3857');
+      let mapExtent = this.getExtent('EPSG:3857');
 
       let areaOk = true;
 
-      for (const area in this.areas) {
-        const polygon = this.areas[area].geometry;
+      for (let area in this.areas) {
+        let polygon = this.areas[area].geometry;
         if (polygon.intersectsExtent(mapExtent)) {
           break;
         } else {
@@ -89,7 +83,7 @@ export default {
         }
       }
 
-      this.$yetix.$emit('areaOk', areaOk);
+      $yetix.$emit('areaOk', areaOk);
     },
     onMapMoveEnd() {
       // is area OK ?

@@ -111,7 +111,6 @@
 
 <script>
 import axios from 'axios';
-import Vue from 'vue';
 
 import YetiArticle from '@/components/yeti/Article';
 import Panel from '@/components/yeti/Panel';
@@ -121,6 +120,7 @@ import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
+import { $yetix } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
@@ -130,8 +130,6 @@ const VALID_FORM_DATA = {
   minZoom: 13,
   braMaxMrd: 3,
 };
-
-const $yetix = new Vue();
 
 export default {
   name: 'Yeti',
@@ -145,12 +143,6 @@ export default {
     Tabs,
     ValidationButton,
     YetiMap,
-  },
-
-  provide() {
-    return {
-      $yetix: $yetix,
-    };
   },
 
   data() {

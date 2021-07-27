@@ -115,12 +115,12 @@ import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import { $yetix } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
   components: { FeaturesList, SubPanelTitle },
-  inject: ['$yetix'],
   props: {
     features: {
       type: Array,
@@ -145,7 +145,7 @@ export default {
     },
   },
   mounted() {
-    this.$yetix.$on('featuresTitle', (featuresTitle) => {
+    $yetix.$on('featuresTitle', (featuresTitle) => {
       this.$emit('update:featuresTitle', featuresTitle);
     });
   },
@@ -167,7 +167,7 @@ export default {
     },
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
-        this.$yetix.$emit('removeFeatures');
+        $yetix.$emit('removeFeatures');
       }
     },
     uploadGpx(event) {

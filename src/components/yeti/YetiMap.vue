@@ -2,8 +2,8 @@
   <div class="column map-container">
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
-      <area-layer :map-zoom="mapZoom" />
-      <mountains-layer />
+      <area-layer />
+      <mountains-layer @showMountains="onShowMountains" />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <route-layer :active="activeTab === 0" :features="features" :gpx="gpx" :valid-min-zoom="validMinZoom" />
       <div
@@ -61,6 +61,7 @@ import MountainsLayer from './map-layers/MountainsLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
+import { $yetix } from '@/components/yeti/yetix';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -118,6 +119,8 @@ export default {
       promiseDocument: null,
 
       areas: [],
+
+      showMountains: false,
     };
   },
   computed: {
@@ -155,6 +158,7 @@ export default {
         maxZoom: MAX_ZOOM,
       }),
     });
+    this.view = this.map.getView();
   },
   mounted() {
     // when mounted, bind map to element
@@ -169,9 +173,9 @@ export default {
     ];
     controls.map((control) => this.map.addControl(control));
 
-    this.view = this.map.getView();
-
+    // events
     this.map.on('moveend', this.onMapMoveEnd);
+    $yetix.$on('showMountains', this.onShowMountains);
   },
   methods: {
     getExtent(projection) {
@@ -185,18 +189,18 @@ export default {
       layer.setVisible(!layer.getVisible());
     },
     searchRecenterPropositions(event) {
-      const query = event.target.value;
+      let query = event.target.value;
 
       if (query && query.length >= 3) {
-        const center = this.view.getCenter();
-        const centerWgs84 = ol.proj.toLonLat(center);
+        let center = this.view.getCenter();
+        let centerWgs84 = ol.proj.toLonLat(center);
 
         this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84);
         this.showRecenterOnPropositions = true;
       }
     },
     recenterOn(item) {
-      const feature = new ol.format.GeoJSON().readFeature(item);
+      let feature = new ol.format.GeoJSON().readFeature(item);
       let extent = feature.get('extent');
       let coordinates = feature.getGeometry().flatCoordinates;
 
@@ -211,9 +215,33 @@ export default {
 
       this.showRecenterOnPropositions = false;
     },
+    getMapZoom() {
+      return Math.floor(this.view.getZoom() * 10) / 10;
+    },
     onMapMoveEnd(event) {
-      const mapZoom = Math.floor(event.map.getView().getZoom() * 10) / 10;
-      this.$emit('update:mapZoom', mapZoom);
+      let mapZoom = this.getMapZoom();
+      // emit map zoom, only if zoom changed
+      if (this.mapZoom !== mapZoom) {
+        this.$emit('update:mapZoom', mapZoom);
+      }
+      // if mountains are here, update
+      if (this.showMountains) {
+        this.updateCartoLayersOpacity(mapZoom);
+      }
+      // emit an event for map layers, and give actual zoom
+      $yetix.$emit('mapMoveEnd', mapZoom);
+    },
+    onShowMountains(showMountains) {
+      this.showMountains = showMountains;
+
+      let mapZoom = this.getMapZoom();
+      this.updateCartoLayersOpacity(mapZoom);
+    },
+    updateCartoLayersOpacity(mapZoom) {
+      const LIMIT_ZOOM = 9;
+      this.cartoLayers.forEach((layer) => {
+        layer.setOpacity(this.showMountains && mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+      });
     },
   },
 };

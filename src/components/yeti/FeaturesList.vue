@@ -14,8 +14,9 @@
 </template>
 
 <script>
+import { $yetix } from '@/components/yeti/yetix';
+
 export default {
-  inject: ['$yetix'],
   props: {
     features: {
       type: Array,
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     removeFeature(feature) {
-      this.$yetix.$emit('removeFeature', feature);
+      $yetix.$emit('removeFeature', feature);
     },
     showFeature(feature) {
       feature.setStyle(feature.get('highlightedStyle'));

@@ -1,17 +1,18 @@
 <script>
 import layerMixin from './layer';
 
+import { $yetix } from '@/components/yeti/yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
-const normalLineStyle = new ol.style.Style({
+let normalLineStyle = new ol.style.Style({
   stroke: new ol.style.Stroke({
     color: 'green',
     width: 3,
   }),
 });
 
-const highlightedLineStyle = [
+let highlightedLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: 'rgba(255, 255, 0, .5)',
@@ -30,7 +31,6 @@ const highlightedLineStyle = [
 
 export default {
   mixins: [layerMixin],
-  inject: ['$yetix'],
   props: {
     active: {
       type: Boolean,
@@ -78,8 +78,8 @@ export default {
     this.map.addLayer(this.featuresLayer);
 
     // load camptocamp document
-    const doc = this.$route.params.document_id;
-    const lang = this.$language.current;
+    let doc = this.$route.params.document_id;
+    let lang = this.$language.current;
     if (doc) {
       c2c['route'].getCooked(doc, lang).then(this.addFeaturesFromDocument);
     }
@@ -89,12 +89,12 @@ export default {
 
     this.addInteractions();
 
-    this.$yetix.$on('removeFeature', this.removeFeature);
-    this.$yetix.$on('removeFeatures', this.removeFeatures);
+    $yetix.$on('removeFeature', this.removeFeature);
+    $yetix.$on('removeFeatures', this.removeFeatures);
   },
   methods: {
     addInteractions() {
-      const source = this.featuresLayerSource;
+      let source = this.featuresLayerSource;
 
       this.modifyInteraction = new ol.interaction.Modify({ source });
       this.map.addInteraction(this.modifyInteraction);
@@ -145,8 +145,8 @@ export default {
     },
     emitFeaturesEvent() {
       // updates features
-      const features = this.getFeaturesLayerFeatures();
-      this.$yetix.$emit('features', features);
+      let features = this.getFeaturesLayerFeatures();
+      $yetix.$emit('features', features);
 
       if (features.length === 0) {
         this.featuresTitleFromSource = null;
@@ -184,11 +184,11 @@ export default {
       // before reading gpx, set what we are doing
       this.loadingExternalFeatures = true;
 
-      const gpxFormat = new ol.format.GPX();
-      const features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
+      let gpxFormat = new ol.format.GPX();
+      let features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
       features.map(this.addFeature);
       let featuresTitleFromSource = this.getFeaturesTitleFromGpx(features);
-      this.$yetix.$emit('featuresTitle', featuresTitleFromSource);
+      $yetix.$emit('featuresTitle', featuresTitleFromSource);
 
       // gpx is loaded, go back to normal case
       this.loadingExternalFeatures = false;
@@ -199,7 +199,7 @@ export default {
     },
     getFeaturesTitleFromGpx(features) {
       if (features && features.length) {
-        const properties = features[0].getProperties();
+        let properties = features[0].getProperties();
         if (properties.name) {
           return properties.name;
         } else {
@@ -211,11 +211,11 @@ export default {
       // before reading document, set what we are doing
       this.loadingExternalFeatures = true;
 
-      const documentGeometry = doc.data.geometry.geom_detail;
-      const feature = new ol.format.GeoJSON().readFeature(documentGeometry);
+      let documentGeometry = doc.data.geometry.geom_detail;
+      let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
       this.addFeature(feature);
       let featuresTitleFromSource = this.getFeaturesTitleFromDocument(doc);
-      this.$yetix.$emit('featuresTitle', featuresTitleFromSource);
+      $yetix.$emit('featuresTitle', featuresTitleFromSource);
 
       // document is loaded, go back to normal case
       this.loadingExternalFeatures = false;
@@ -227,10 +227,10 @@ export default {
     addFeature(feature) {
       // split multilinestrings into linestrings
       if (feature.getGeometry().getType() === 'MultiLineString') {
-        const lines = feature.getGeometry().getLineStrings();
+        let lines = feature.getGeometry().getLineStrings();
         lines.map((line) => new ol.Feature({ geometry: line })).map(this.addFeature);
       } else {
-        const nbPointsOnFeature = feature.getGeometry().getCoordinates().length;
+        let nbPointsOnFeature = feature.getGeometry().getCoordinates().length;
         if (nbPointsOnFeature >= 2) {
           this.featuresLayerSource.addFeature(feature);
         }

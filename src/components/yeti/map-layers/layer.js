@@ -14,5 +14,8 @@ export default {
     getExtent(projection) {
       return this.$parent.getExtent(projection);
     },
+    mapZoom() {
+      return Math.floor(this.view.getZoom() * 10) / 10;
+    },
   },
 };

@@ -88,17 +88,21 @@
       </div>
       <div v-if="showMountainsList">
         <div v-if="showVisibleMountains">
-          <p class="column yetiform-info" v-translate>Get avalanche bulletins from Météo-France website</p>
+          <div class="pl-3 mt-2 mb-2">
+            <input-checkbox @input="onShowMountains" :value="showMountains">
+              <span v-translate>Show on map</span>
+            </input-checkbox>
+          </div>
           <dl>
             <div v-for="(mountainsForMassif, massif) of mountains.visibleMountains" :key="massif">
               <dt class="yetimountains-listtitle">
                 {{ massif }}
               </dt>
               <div class="yetimountains-list">
-                <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.title">
+                <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.name">
                   <a :href="mountain.urls[0].url" target="_blank">
                     <fa-icon icon="external-link-alt" />
-                    {{ mountain.title }}
+                    {{ mountain.name }}
                   </a>
                 </dd>
               </div>
@@ -116,6 +120,7 @@
 <script>
 import Counter from '@/components/yeti/Counter.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import { $yetix } from '@/components/yeti/yetix';
 
 export default {
   components: { Counter, SubPanelTitle },
@@ -131,6 +136,7 @@ export default {
   },
   data() {
     return {
+      showMountains: false,
       showMountainsList: false,
     };
   },
@@ -160,6 +166,10 @@ export default {
         this.bra.low = null;
         this.bra.altiThreshold = null;
       }
+    },
+    onShowMountains(value) {
+      this.showMountains = value;
+      $yetix.$emit('showMountains', value);
     },
   },
 };
