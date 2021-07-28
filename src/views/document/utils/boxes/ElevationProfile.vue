@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
@@ -95,12 +96,16 @@ export default {
     if (this.hasData) {
       d3.then(this.createChart);
     }
+
+    this.debouncedOnWindowResize = debounce(this.onWindowResize, 300);
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.debouncedOnWindowResize);
   },
 
   methods: {
     computeCoords() {
-      // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
-
       // compute data
       const geom_detail = JSON.parse(this.document.geometry.geom_detail);
 
@@ -170,14 +175,8 @@ export default {
       const height = size.height - this.margin.top - this.margin.bottom;
 
       // Add an SVG element with the desired dimensions and margin
-
-      this.svg = d3
-        .select(this.$refs.graph)
-        .append('svg')
-        .attr('width', size.width)
-        .attr('height', size.height)
-        .append('g')
-        .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+      this.svg = d3.select(this.$refs.graph).append('svg').attr('width', size.width).attr('height', size.height);
+      this.svg.append('g').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
       // Scales and axes
       this.y = d3.scaleLinear().range([height, 0]);
@@ -294,14 +293,37 @@ export default {
           this.focush.style('display', 'none');
           this.focusv.style('display', 'none');
           this.bubble1.style('display', 'none');
-          this.bubble2.style('display', null);
+          this.bubble2.style('display', 'none');
         })
-        .on('mousemove', this.mousemove); // TODO
+        .on('mousemove', this.mousemove);
 
-      // listen to width changes to redraw graph
-      // $(window).on('resize', TODO
-      //    this.ngeoDebounce_(this.resizeChart_.bind(this), 300, true)
-      // );
+      window.addEventListener('resize', this.debouncedOnWindowResize);
+    },
+
+    onWindowResize() {
+      const wrapper = this.$refs.graph;
+      const width = wrapper.offsetWidth - this.margin.left - this.margin.right;
+
+      // recompute axes, lines and resize elements
+      this.x1.range([0, width]);
+      if (this.timeAvailable) {
+        this.x2.range([0, width]);
+      }
+      const axis = this.mode === 'distance' ? this.x1Axis : this.x2Axis;
+      this.svg.select('.x.axis').call(axis);
+      this.svg.select('.x.axis.legend').attr('x', width);
+      this.line.attr('d', this.mode === 'distance' ? this.dLine : this.tLine);
+      this.focush.attr('x2', width);
+      this.bubble1.attr('x', (width - this.margin.left - this.margin.right) / 2);
+      this.bubble2.attr('x', (width - this.margin.left - this.margin.right) / 2);
+      this.svg.select('rect.overlay').attr('width', width);
+      this.svg.attr('width', width + this.margin.left + this.margin.right);
+
+      this.focus.style('display', 'none');
+      this.focush.style('display', 'none');
+      this.focusv.style('display', 'none');
+      this.bubble1.style('display', 'none');
+      this.bubble2.style('display', 'none');
     },
 
     mousemove(event) {
