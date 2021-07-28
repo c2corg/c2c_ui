@@ -295,6 +295,7 @@ export default {
           this.focusv.style('display', 'none');
           this.bubble1.style('display', 'none');
           this.bubble2.style('display', null);
+          this.emitMouseOutEvent();
         })
         .on('mousemove', this.mousemove); // TODO
 
@@ -359,6 +360,8 @@ export default {
             formatMinutes(~~((elapsed % 3600) / 60))
         );
       }
+
+      this.emitMouseMoveEvent(this.coords[d === d0 ? i - 1 : i]);
     },
 
     updateChart() {
@@ -370,6 +373,14 @@ export default {
 
       d3.select('.x.axis').call(axis);
       d3.select('.x.axis.legend').text(legend);
+    },
+
+    emitMouseOutEvent() {
+      this.$root.$emit('elevation_profile', 'end');
+    },
+
+    emitMouseMoveEvent(coord) {
+      this.$root.$emit('elevation_profile', 'move', coord);
     },
   },
 };

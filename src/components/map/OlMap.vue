@@ -248,6 +248,11 @@ export default {
         source: new ol.source.Vector(),
       }),
 
+      // layer for displaying the elevation profile current point
+      elevationProfileLayer: new ol.layer.Vector({
+        source: new ol.source.Vector(),
+      }),
+
       geolocation: null,
 
       showLayerSwitcher: false,
@@ -369,6 +374,7 @@ export default {
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
+        this.elevationProfileLayer,
         this.editionLayer,
       ],
 
@@ -424,6 +430,10 @@ export default {
       this.map.on('pointermove', this.onPointerMove);
       this.map.on('click', this.onClick);
     }
+
+    // listen to elevation profile events to display
+    // the related point on the map
+    this.setElevationProfileInteraction();
   },
 
   methods: {
@@ -548,6 +558,30 @@ export default {
       }
 
       document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
+    },
+
+    setElevationProfileInteraction() {
+      this.elevationProfileLayer.setVisible(false);
+      const elevationProfileSource = this.elevationProfileLayer.getSource();
+      const elevationProfileMarker = new ol.Feature();
+      elevationProfileSource.addFeature(elevationProfileMarker);
+      this.$root.$on('elevation_profile', (event, coord) => {
+        if (event === 'end') {
+          this.elevationProfileLayer.setVisible(false);
+        }
+
+        if (event === 'move') {
+          this.elevationProfileLayer.setVisible(true);
+          elevationProfileMarker.setGeometry(new ol.geom.Point(coord));
+          const visible = ol.extent.containsXY(this.view.calculateExtent(), coord[0], coord[1]);
+          if (!visible) {
+            this.view.animate({
+              center: coord,
+              duration: 300,
+            });
+          }
+        }
+      });
     },
 
     setDocumentGeometry(geometry) {
