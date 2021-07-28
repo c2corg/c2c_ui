@@ -18,7 +18,9 @@ const result = {
 
   productionSourceMap: true,
 
-  chainWebpack(config) {
+  chainWebpack: (config) => {
+    config.resolve.alias.set('vue', '@vue/compat');
+
     // remove prefetch plugin, in order to prevent loading of translations
     // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
     config.plugins.delete('prefetch');
@@ -29,12 +31,16 @@ const result = {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .loader('vue-loader')
       .tap((options) => {
-        // modify the options...
-        delete options.compilerOptions.preserveWhitespace;
-        options.compilerOptions.whitespace = 'condensed';
-        return options;
+        return {
+          ...options,
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2,
+            },
+            whitespace: 'condensed',
+          },
+        };
       });
 
     // also handle avif format
