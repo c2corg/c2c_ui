@@ -176,7 +176,9 @@ export default {
 
       // Add an SVG element with the desired dimensions and margin
       this.svg = d3.select(this.$refs.graph).append('svg').attr('width', size.width).attr('height', size.height);
-      this.svg.append('g').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+      this.container = this.svg
+        .append('g')
+        .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
       // Scales and axes
       this.y = d3.scaleLinear().range([height, 0]);
@@ -198,7 +200,7 @@ export default {
         this.x2.domain(d3.extent(this.data, (d) => d.elapsed)).nice(d3.timeHour);
       }
 
-      this.svg
+      this.container
         .append('g')
         .attr('class', 'y axis')
         .call(this.yAxis)
@@ -209,7 +211,7 @@ export default {
         .style('text-anchor', 'end')
         .text(this.i18n_.elevation_legend);
 
-      this.svg
+      this.container
         .append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
@@ -235,10 +237,10 @@ export default {
       }
 
       // display line path
-      this.line = this.svg.append('path').datum(this.data).attr('class', 'line').attr('d', this.dLine);
+      this.line = this.container.append('path').datum(this.data).attr('class', 'line').attr('d', this.dLine);
 
       // Display point information one hover
-      this.focusv = this.svg
+      this.focusv = this.container
         .append('line')
         .attr('class', 'target')
         .attr('x1', 0)
@@ -247,7 +249,7 @@ export default {
         .attr('y2', size.height - this.margin.bottom - this.margin.top)
         .style('display', 'none');
 
-      this.focush = this.svg
+      this.focush = this.container
         .append('line')
         .attr('class', 'target')
         .attr('x1', 0)
@@ -256,9 +258,9 @@ export default {
         .attr('y2', 0)
         .style('display', 'none');
 
-      this.focus = this.svg.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
+      this.focus = this.container.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
 
-      this.bubble1 = this.svg
+      this.bubble1 = this.container
         .append('text')
         .attr('x', (size.width - this.margin.left - this.margin.right) / 2)
         .attr('dy', '-.71em')
@@ -267,7 +269,7 @@ export default {
         .style('display', 'none')
         .text('');
 
-      this.bubble2 = this.svg
+      this.bubble2 = this.container
         .append('text')
         .attr('x', (size.width - this.margin.left - this.margin.right) / 2)
         .attr('dy', '-1.71em')
@@ -276,7 +278,7 @@ export default {
         .style('display', 'none')
         .text('');
 
-      this.svg
+      this.container
         .append('rect')
         .attr('class', 'overlay')
         .attr('width', width)
@@ -310,13 +312,13 @@ export default {
         this.x2.range([0, width]);
       }
       const axis = this.mode === 'distance' ? this.x1Axis : this.x2Axis;
-      this.svg.select('.x.axis').call(axis);
-      this.svg.select('.x.axis.legend').attr('x', width);
+      this.container.select('.x.axis').call(axis);
+      this.container.select('.x.axis.legend').attr('x', width);
       this.line.attr('d', this.mode === 'distance' ? this.dLine : this.tLine);
       this.focush.attr('x2', width);
       this.bubble1.attr('x', (width - this.margin.left - this.margin.right) / 2);
       this.bubble2.attr('x', (width - this.margin.left - this.margin.right) / 2);
-      this.svg.select('rect.overlay').attr('width', width);
+      this.container.select('rect.overlay').attr('width', width);
       this.svg.attr('width', width + this.margin.left + this.margin.right);
 
       this.focus.style('display', 'none');
@@ -338,8 +340,8 @@ export default {
       const bisect = this.mode === 'distance' ? bisectDistance : bisectDate;
       const x0 =
         this.mode === 'distance'
-          ? this.x1.invert(d3.pointer(event, this.svg.node())[0])
-          : this.x2.invert(d3.pointer(event, this.svg.node())[0]);
+          ? this.x1.invert(d3.pointer(event, this.container.node())[0])
+          : this.x2.invert(d3.pointer(event, this.container.node())[0]);
 
       const i = bisect(this.data, x0, 1, this.data.length - 1);
       const d0 = this.data[i - 1];
