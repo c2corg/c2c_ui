@@ -110,20 +110,16 @@ export default {
   },
   methods: {
     onMountainsResult(data) {
-      let mountainsFeatures = data.data;
+      let mountainsFeatures = this.getFeaturesFromData(data);
       // TMP: filter only France for now
-      mountainsFeatures.features = mountainsFeatures.features.filter((feature) => {
-        return feature.properties.country === 'France';
+      mountainsFeatures = mountainsFeatures.filter((feature) => {
+        return feature.get('country') === 'France';
       });
 
-      // read geoJSON, and project to 3857 (geoJSON is 4326 by default)
-      mountainsFeatures = new ol.format.GeoJSON().readFeatures(mountainsFeatures, { featureProjection: 'EPSG:3857' });
       // add to mountains layer
       mountainsLayer.getSource().addFeatures(mountainsFeatures);
 
-      let mountains = mountainsFeatures.map((mountain) => {
-        return mountain.getProperties();
-      });
+      let mountains = this.getPropertiesFromFeatures(mountainsFeatures);
       mountains = this.sortMountainsByMassif(mountains);
 
       mutations.setAllMountains(mountains);

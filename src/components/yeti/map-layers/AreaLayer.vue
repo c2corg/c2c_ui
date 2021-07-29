@@ -47,18 +47,13 @@ export default {
   },
   methods: {
     onAreasResult(data) {
-      let areasFeatures = data.data;
-      // read geoJSON, and project to 3857 (geoJSON is 4326 by default)
-      areasFeatures = new ol.format.GeoJSON().readFeatures(areasFeatures, { featureProjection: 'EPSG:3857' });
-
-      let areas = areasFeatures.map((area) => {
-        return area.getProperties();
-      });
+      let areasFeatures = this.getFeaturesFromData(data);
+      let areas = this.getPropertiesFromFeatures(areasFeatures);
 
       // set areas in state
       mutations.setAreas(areas);
 
-      // to improve map rendering, we will build linestrings from polygon
+      // to improve map rendering, we will build linestrings from polygon features
       // first, flatten coords
       let rawCoords = areasFeatures[0].getGeometry().getCoordinates();
       let coords = [];
