@@ -1,5 +1,3 @@
-import ol from '@/js/libs/ol';
-
 export default {
   computed: {
     map() {
