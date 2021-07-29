@@ -100,7 +100,7 @@ export default {
     this.debouncedOnResize = debounce(this.onResize, 100);
   },
 
-  unmounted() {
+  beforeDestroy() {
     this.resizeObserver.unobserve(this.$refs.graph);
   },
 
