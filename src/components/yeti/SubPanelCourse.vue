@@ -115,22 +115,12 @@ import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
   components: { FeaturesList, SubPanelTitle },
-  props: {
-    features: {
-      type: Array,
-      default: null,
-    },
-    featuresTitle: {
-      type: String,
-      default: null,
-    },
-  },
   data() {
     return {
       newFeaturesTitle: false,
@@ -140,21 +130,22 @@ export default {
     };
   },
   computed: {
+    features() {
+      return state.features;
+    },
+    featuresTitle() {
+      return state.featuresTitle;
+    },
     hasFeaturesTitle() {
       return !(!this.featuresTitle.length && !this.newFeaturesTitle);
     },
-  },
-  mounted() {
-    $yetix.$on('featuresTitle', (featuresTitle) => {
-      this.$emit('update:featuresTitle', featuresTitle);
-    });
   },
   methods: {
     onEditFeaturesTitle(e) {
       if (!e.target.innerText.length) {
         this.newFeaturesTitle = false;
       }
-      this.$emit('update:featuresTitle', e.target.innerText);
+      mutations.setFeaturesTitle(e.target.innerText);
     },
     onEditNewFeaturesTitle() {
       this.newFeaturesTitle = true;
@@ -167,7 +158,7 @@ export default {
     },
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
-        $yetix.$emit('removeFeatures');
+        bus.$emit('removeFeatures');
       }
     },
     uploadGpx(event) {
@@ -177,7 +168,7 @@ export default {
 
       reader.onload = () => {
         this.loading = false;
-        this.$emit('gpx', reader.result);
+        bus.$emit('gpx', reader.result);
       };
 
       reader.readAsText(event.target.files[0]);
@@ -186,7 +177,7 @@ export default {
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
-      this.$emit('gpx', null);
+      bus.$emit('gpx', null);
     },
     downloadCourse() {
       if (this.format === 'GPX') {

@@ -1,3 +1,97 @@
 import Vue from 'vue';
 
-export const $yetix = new Vue();
+let defaultState = {
+  activeTab: 0,
+
+  bra: {
+    high: null,
+    low: null,
+    altiThreshold: null,
+    isDifferent: false,
+  },
+
+  method: {
+    type: null,
+    orientation: [],
+    potentialDanger: null,
+    wetSnow: false,
+    groupSize: 1,
+  },
+
+  areas: [],
+  areaOk: true,
+
+  features: [],
+  featuresTitle: 'New route',
+
+  mountains: {
+    all: [],
+    visible: [],
+  },
+  bulletinsLoaded: false,
+  showMountains: false,
+
+  mapZoom: 0,
+};
+
+export let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
+
+export let getters = {
+  hasFeatures: () => !!state.features.length,
+};
+
+export let mutations = {
+  setActiveTab(index) {
+    state.activeTab = index;
+  },
+  setBra(prop, value) {
+    state.bra[prop] = value;
+  },
+  setMethod(prop, value) {
+    state.method[prop] = value;
+  },
+  setAreas(areas) {
+    state.areas = areas;
+  },
+  setAreaOk(areaOk) {
+    state.areaOk = areaOk;
+  },
+  setFeatures(features) {
+    state.features = features;
+  },
+  setFeaturesTitle(featuresTitle) {
+    state.featuresTitle = featuresTitle;
+  },
+  setAllMountains(mountains) {
+    state.mountains.all = mountains;
+  },
+  setVisibleMountains(mountains) {
+    state.mountains.visible = mountains;
+  },
+  setShowMountains(showMountains) {
+    state.showMountains = showMountains;
+  },
+  setBulletinsLoaded(bool) {
+    state.bulletinsLoaded = bool;
+  },
+  setMapZoom(mapZoom) {
+    state.mapZoom = mapZoom;
+  },
+  setDefault() {
+    // revert all state properties to default
+    for (let i in state) {
+      if (typeof state[i] === 'object' && !Array.isArray(state[i])) {
+        for (let j in state[i]) {
+          state[i][j] = defaultState[i][j];
+        }
+      } else {
+        state[i] = defaultState[i];
+      }
+    }
+  },
+};
+
+// Eventbus
+// Used to communicate between components
+// A can $emit('e'), B can $on('e')
+export let bus = new Vue();

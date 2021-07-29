@@ -38,10 +38,10 @@
                 </router-link>
               </li>
             </ul>
-            <tabs :tabs="tabs" :active-tab.sync="activeTab" :has-features="hasFeatures" />
+            <tabs :tabs="tabs" />
           </div>
           <div class="box">
-            <panel ref="panel0" :index="0" :active-tab="activeTab" class="is-relative">
+            <panel ref="panel0" :index="0" class="is-relative">
               <validation-button
                 class="is-hidden-mobile yeti-validation--top"
                 :current-error="currentError"
@@ -49,8 +49,8 @@
                 @click="compute"
                 tabindex="-1"
               />
-              <sub-panel-bra :bra.sync="bra" :mountains="mountains" />
-              <sub-panel-methods :method.sync="method" :bra="bra" @warn-about-method-bra="warnAboutMethodBra" />
+              <sub-panel-bra />
+              <sub-panel-methods @warn-about-method-bra="warnAboutMethodBra" />
               <validation-button
                 v-show="method.type"
                 class="yeti-validation--bottom"
@@ -60,8 +60,8 @@
               />
             </panel>
 
-            <panel ref="panel1" :index="1" :active-tab="activeTab">
-              <sub-panel-course :features="features" :features-title.sync="featuresTitle" @gpx="onGpxLoaded" />
+            <panel ref="panel1" :index="1">
+              <sub-panel-course />
             </panel>
           </div>
 
@@ -94,16 +94,7 @@
           </div>
         </div>
 
-        <yeti-map
-          ref="map"
-          :gpx="gpx"
-          :active-tab="activeTab"
-          :valid-min-zoom="validFormData.minZoom"
-          :map-zoom.sync="mapZoom"
-          :yeti-data="yetiData"
-          :yeti-extent="yetiExtent"
-          :features="features"
-        />
+        <yeti-map ref="map" :valid-min-zoom="validFormData.minZoom" :yeti-data="yetiData" :yeti-extent="yetiExtent" />
       </div>
     </div>
   </div>
@@ -120,7 +111,7 @@ import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
@@ -162,7 +153,6 @@ export default {
       },
 
       tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
-      activeTab: 0,
 
       errors: {
         area: {
@@ -205,53 +195,36 @@ export default {
 
       validFormData: VALID_FORM_DATA,
 
-      bra: {
-        high: null,
-        low: null,
-        altiThreshold: null,
-        isDifferent: false,
-      },
-      method: {
-        type: null,
-        orientation: [],
-        potentialDanger: undefined,
-        wetSnow: false,
-        groupSize: 1,
-      },
-
-      mapZoom: 0,
       formError: undefined,
       currentError: undefined,
 
       promise: null,
       yetiData: null,
       yetiExtent: [],
-
-      features: [],
-      gpx: null,
-      featuresTitle: this.$gettext('New route'),
-
-      mountains: {},
-
-      areaOk: true,
     };
   },
 
   computed: {
+    bra() {
+      return state.bra;
+    },
+    method() {
+      return state.method;
+    },
+    mapZoom() {
+      return state.mapZoom;
+    },
+    areaOk() {
+      return state.areaOk;
+    },
     mrdIsNotApplicable() {
       return this.isBraMax && this.method.type === 'mrd';
     },
-
     isBraMax() {
       return this.bra.high > this.validFormData.braMaxMrd || this.bra.low > this.validFormData.braMaxMrd;
     },
-
     isValidMapZoom() {
       return this.mapZoom >= this.validFormData.minZoom;
-    },
-
-    hasFeatures() {
-      return !!this.features.length;
     },
   },
 
@@ -263,12 +236,6 @@ export default {
     'method.potentialDanger': 'check',
     mapZoom: 'check',
     areaOk: 'check',
-    featuresTitle(newValue) {
-      // set default featuresTitle if null (from yeti map)
-      if (newValue === null) {
-        this.featuresTitle = this.$gettext('New route');
-      }
-    },
   },
 
   created() {
@@ -276,21 +243,12 @@ export default {
     if (!this.$localStorage.get('yeti-disclaimer')) {
       this.showDisclaimer = true;
     }
+    // tmp: set default values for persistent state
+    mutations.setDefault();
   },
 
   mounted() {
     this.check();
-
-    // mutations
-    $yetix.$on('features', (features) => {
-      this.features = features;
-    });
-    $yetix.$on('areaOk', (areaOk) => {
-      this.areaOk = areaOk;
-    });
-    $yetix.$on('mountains', (mountains) => {
-      this.mountains = mountains;
-    });
   },
 
   methods: {
@@ -436,10 +394,6 @@ export default {
     onSubmitDisclaimer() {
       this.showDisclaimer = false;
       this.$localStorage.set('yeti-disclaimer', 'validated');
-    },
-
-    onGpxLoaded(data) {
-      this.gpx = data;
     },
   },
 };

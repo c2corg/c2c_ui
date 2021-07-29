@@ -3,9 +3,9 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
       <area-layer />
-      <mountains-layer @showMountains="onShowMountains" />
+      <mountains-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
-      <route-layer :active="activeTab === 0" :features="features" :gpx="gpx" :valid-min-zoom="validMinZoom" />
+      <route-layer :valid-min-zoom="validMinZoom" />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -61,7 +61,7 @@ import MountainsLayer from './map-layers/MountainsLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations, bus } from '@/components/yeti/yetix';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -77,15 +77,7 @@ export default {
     YetiLayer,
   },
   props: {
-    activeTab: {
-      type: Number,
-      required: true,
-    },
     validMinZoom: {
-      type: Number,
-      required: true,
-    },
-    mapZoom: {
       type: Number,
       required: true,
     },
@@ -94,14 +86,6 @@ export default {
       required: true,
     },
     yetiData: {
-      type: String,
-      default: null,
-    },
-    features: {
-      type: Array,
-      required: true,
-    },
-    gpx: {
       type: String,
       default: null,
     },
@@ -114,16 +98,15 @@ export default {
       showLayerSwitcher: false,
       recenterPropositions: null,
       showRecenterOnPropositions: false,
-
-      featuresTitleFromSource: null,
-      promiseDocument: null,
-
-      areas: [],
-
-      showMountains: false,
     };
   },
   computed: {
+    mapZoom() {
+      return state.mapZoom;
+    },
+    showMountains() {
+      return state.showMountains;
+    },
     visibleCartoLayer: {
       get() {
         return this.cartoLayers.find((layer) => layer.getVisible() === true);
@@ -132,6 +115,11 @@ export default {
         this.visibleCartoLayer.setVisible(false);
         layer.setVisible(true);
       },
+    },
+  },
+  watch: {
+    showMountains() {
+      this.updateCartoLayersOpacity();
     },
   },
   created() {
@@ -175,7 +163,6 @@ export default {
 
     // events
     this.map.on('moveend', this.onMapMoveEnd);
-    $yetix.$on('showMountains', this.onShowMountains);
   },
   methods: {
     getExtent(projection) {
@@ -218,29 +205,23 @@ export default {
     getMapZoom() {
       return Math.floor(this.view.getZoom() * 10) / 10;
     },
-    onMapMoveEnd(event) {
+    onMapMoveEnd() {
       let mapZoom = this.getMapZoom();
       // emit map zoom, only if zoom changed
       if (this.mapZoom !== mapZoom) {
-        this.$emit('update:mapZoom', mapZoom);
+        mutations.setMapZoom(mapZoom);
       }
       // if mountains are here, update
       if (this.showMountains) {
-        this.updateCartoLayersOpacity(mapZoom);
+        this.updateCartoLayersOpacity();
       }
-      // emit an event for map layers, and give actual zoom
-      $yetix.$emit('mapMoveEnd', mapZoom);
+      // emit an event for map layers
+      bus.$emit('mapMoveEnd');
     },
-    onShowMountains(showMountains) {
-      this.showMountains = showMountains;
-
-      let mapZoom = this.getMapZoom();
-      this.updateCartoLayersOpacity(mapZoom);
-    },
-    updateCartoLayersOpacity(mapZoom) {
+    updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
       this.cartoLayers.forEach((layer) => {
-        layer.setOpacity(this.showMountains && mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity(this.showMountains && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
   },

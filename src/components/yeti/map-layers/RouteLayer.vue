@@ -1,7 +1,7 @@
 <script>
 import layerMixin from './layer';
 
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations, bus } from '@/components/yeti/yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
@@ -32,26 +32,22 @@ let highlightedLineStyle = [
 export default {
   mixins: [layerMixin],
   props: {
-    active: {
-      type: Boolean,
-      required: true,
-    },
-    features: {
-      type: Array,
-      required: true,
-    },
-    gpx: {
-      type: String,
-      default: null,
-    },
     validMinZoom: {
       type: Number,
       required: true,
     },
   },
+  computed: {
+    activeTab() {
+      return state.activeTab;
+    },
+    features() {
+      return state.features;
+    },
+  },
   watch: {
-    active() {
-      if (this.active) {
+    activeTab() {
+      if (this.activeTab === 0) {
         this.drawInteraction.setActive(false);
         this.modifyInteraction.setActive(false);
         this.snapInteraction.setActive(false);
@@ -59,11 +55,6 @@ export default {
         this.drawInteraction.setActive(true);
         this.modifyInteraction.setActive(true);
         this.snapInteraction.setActive(true);
-      }
-    },
-    gpx() {
-      if (this.gpx) {
-        this.addFeaturesFromGpx(this.gpx);
       }
     },
   },
@@ -77,6 +68,9 @@ export default {
 
     this.map.addLayer(this.featuresLayer);
 
+    // set default featuresTitle
+    mutations.setFeaturesTitle(this.$gettext(state.featuresTitle));
+
     // load camptocamp document
     let doc = this.$route.params.document_id;
     let lang = this.$language.current;
@@ -89,8 +83,9 @@ export default {
 
     this.addInteractions();
 
-    $yetix.$on('removeFeature', this.removeFeature);
-    $yetix.$on('removeFeatures', this.removeFeatures);
+    bus.$on('removeFeature', this.removeFeature);
+    bus.$on('removeFeatures', this.removeFeatures);
+    bus.$on('gpx', this.addFeaturesFromGpx);
   },
   methods: {
     addInteractions() {
@@ -125,7 +120,7 @@ export default {
       document.removeEventListener('keypress', this.onKeyWhileDrawing);
     },
     onModifyEnd() {
-      this.emitFeaturesEvent();
+      this.updateFeaturesFromStore();
     },
     onKeyWhileDrawing(event) {
       event.preventDefault();
@@ -140,17 +135,15 @@ export default {
       // emit new features, only in normal case (drawing)
       // not in gpx/document case (prevent multiple update for each lines)
       if (!this.loadingExternalFeatures) {
-        this.emitFeaturesEvent();
+        this.updateFeaturesFromStore();
       }
     },
-    emitFeaturesEvent() {
+    updateFeaturesFromStore() {
       // updates features
       let features = this.getFeaturesLayerFeatures();
-      $yetix.$emit('features', features);
+      mutations.setFeatures(features);
 
       if (features.length === 0) {
-        this.featuresTitleFromSource = null;
-
         // if user come from a document url, remove url
         if (this.$route.params.document_id) {
           this.$router.replace({ path: '/' + this.$route.name });
@@ -168,17 +161,19 @@ export default {
       );
       if (toBeRemoved) {
         this.featuresLayerSource.removeFeature(feature);
-        this.emitFeaturesEvent();
+        this.updateFeaturesFromStore();
       }
     },
     removeFeatures() {
       this.featuresLayerSource.clear(true);
-      this.emitFeaturesEvent();
+      this.updateFeaturesFromStore();
     },
     addFeaturesFromGpx(gpx) {
-      // first, remove camptocamp document
-      this.promiseDocument = null;
-      // and clear geometry
+      // return if no gpx
+      if (!gpx) {
+        return;
+      }
+      // first, clear geometry
       this.featuresLayerSource.clear(true);
 
       // before reading gpx, set what we are doing
@@ -187,13 +182,13 @@ export default {
       let gpxFormat = new ol.format.GPX();
       let features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
       features.map(this.addFeature);
-      let featuresTitleFromSource = this.getFeaturesTitleFromGpx(features);
-      $yetix.$emit('featuresTitle', featuresTitleFromSource);
+      // update store
+      mutations.setFeaturesTitle(this.getFeaturesTitleFromGpx(features));
 
       // gpx is loaded, go back to normal case
       this.loadingExternalFeatures = false;
       // and emit new features
-      this.emitFeaturesEvent();
+      this.updateFeaturesFromStore();
       // fit map to new features
       this.fitMapToFeatures();
     },
@@ -214,13 +209,13 @@ export default {
       let documentGeometry = doc.data.geometry.geom_detail;
       let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
       this.addFeature(feature);
-      let featuresTitleFromSource = this.getFeaturesTitleFromDocument(doc);
-      $yetix.$emit('featuresTitle', featuresTitleFromSource);
+      // update store
+      mutations.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
 
       // document is loaded, go back to normal case
       this.loadingExternalFeatures = false;
       // and emit new features
-      this.emitFeaturesEvent();
+      this.updateFeaturesFromStore();
       // fit map to new features
       this.fitMapToFeatures();
     },

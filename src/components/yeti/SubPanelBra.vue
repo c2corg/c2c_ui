@@ -94,7 +94,7 @@
             </input-checkbox>
           </div>
           <dl>
-            <div v-for="(mountainsForMassif, massif) of mountains.visibleMountains" :key="massif">
+            <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
               <dt class="yetimountains-listtitle">
                 {{ massif }}
               </dt>
@@ -120,34 +120,32 @@
 <script>
 import Counter from '@/components/yeti/Counter.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations } from '@/components/yeti/yetix';
 
 export default {
   components: { Counter, SubPanelTitle },
-  props: {
-    bra: {
-      type: Object,
-      default: null,
-    },
-    mountains: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
-      showMountains: false,
       showMountainsList: false,
     };
   },
   computed: {
+    bra() {
+      return state.bra;
+    },
+    visibleMountains() {
+      return state.mountains.visible;
+    },
+    showMountains() {
+      return state.showMountains;
+    },
     showVisibleMountains() {
       return this.countVisibleMountains >= 0;
     },
     countVisibleMountains() {
       // if visibleMountains are set
-      if (this.mountains.visibleMountains) {
-        return Object.values(this.mountains.visibleMountains).reduce((a, b) => a + b.length, 0);
+      if (this.visibleMountains) {
+        return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
       }
       // else, return -1 (because 0 is not an error)
       return -1;
@@ -159,17 +157,16 @@ export default {
   methods: {
     onChange(event, prop) {
       const value = prop === 'isDifferent' ? event : event.target.value;
-      this.$emit('update:bra', Object.assign(this.bra, { [prop]: value }));
+      mutations.setBra(prop, value);
     },
     checkBraIsDifferent() {
       if (!this.bra.isDifferent) {
-        this.bra.low = null;
-        this.bra.altiThreshold = null;
+        mutations.setBra('low', null);
+        mutations.setBra('altiThreshold', null);
       }
     },
     onShowMountains(value) {
-      this.showMountains = value;
-      $yetix.$emit('showMountains', value);
+      mutations.setShowMountains(value);
     },
   },
 };

@@ -227,6 +227,7 @@
 
 <script>
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import { state, mutations } from '@/components/yeti/yetix';
 
 const DANGER = {
   min: 1,
@@ -241,16 +242,6 @@ const DANGER = {
 
 export default {
   components: { SubPanelTitle },
-  props: {
-    method: {
-      type: Object,
-      default: null,
-    },
-    bra: {
-      type: Object,
-      default: null,
-    },
-  },
   data() {
     return {
       methods: {
@@ -279,6 +270,12 @@ export default {
     };
   },
   computed: {
+    bra() {
+      return state.bra;
+    },
+    method() {
+      return state.method;
+    },
     potentialDangerLabels() {
       const result = [];
       for (let i = DANGER.min; i <= DANGER.max; i++) {
@@ -310,7 +307,7 @@ export default {
       } else {
         value = event.target.value;
       }
-      this.$emit('update:method', Object.assign(this.method, { [prop]: value }));
+      mutations.setMethod(prop, value);
     },
     warnAboutMethodBra(item) {
       this.$emit('warn-about-method-bra', item);

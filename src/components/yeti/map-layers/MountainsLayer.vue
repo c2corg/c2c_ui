@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import layerMixin from './layer';
 
-import { $yetix } from '@/components/yeti/yetix';
+import { state, mutations, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_MOUNTAINS = 'https://api.ensg.eu/zonesbra';
@@ -84,20 +84,33 @@ let mountainsLayerGroup = new ol.layer.Group({
 
 export default {
   mixins: [layerMixin],
-  data() {
-    return {
-      areBulletinsAlreadyShowed: false,
-    };
+  computed: {
+    mapZoom() {
+      return state.mapZoom;
+    },
+    showMountains() {
+      return state.showMountains;
+    },
+    bulletinsLoaded() {
+      return state.bulletinsLoaded;
+    },
+  },
+  watch: {
+    showMountains() {
+      this.onShowMountains();
+    },
   },
   mounted() {
     this.map.addLayer(mountainsLayerGroup);
     // layers are not visible on load
     mountainsLayerGroup.setVisible(false);
 
-    axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
+    // only on first mount, if mountains already loaded
+    if (state.mountains.all.length === 0) {
+      axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
 
-    $yetix.$on('showMountains', this.onShowMountains);
-    $yetix.$on('mapMoveEnd', this.onMapMoveEnd);
+      bus.$on('mapMoveEnd', this.onMapMoveEnd);
+    }
   },
   methods: {
     onMountainsResult(data) {
@@ -115,7 +128,10 @@ export default {
       let mountains = mountainsFeatures.map((mountain) => {
         return mountain.getProperties();
       });
-      this.allMountains = this.sortMountainsByMassif(mountains);
+      mountains = this.sortMountainsByMassif(mountains);
+
+      mutations.setAllMountains(mountains);
+
       this.setVisibleMountains();
     },
     sortMountainsByMassif(mountains) {
@@ -149,13 +165,10 @@ export default {
       return mountains;
     },
     setVisibleMountains() {
-      // return, if mountains not loaded
-      if (!this.allMountains) {
-        return;
-      }
       let mapExtent = this.getExtent('EPSG:3857');
       // clone this.mountains first, with no reference
-      let visibleMountains = Object.assign({}, this.allMountains);
+      let visibleMountains = Object.assign({}, state.mountains.all);
+
       // then filter if polygon isn’t in view
       for (let massif in visibleMountains) {
         visibleMountains[massif] = visibleMountains[massif].filter((mountain) => {
@@ -167,35 +180,29 @@ export default {
           delete visibleMountains[massif];
         }
       }
-      // set mountains in visibleMountains key
-      let mountains = { visibleMountains };
-      $yetix.$emit('mountains', mountains);
+      // set mountains in visible
+      mutations.setVisibleMountains(visibleMountains);
     },
-    updateMountainsStyle(mapZoom) {
-      mountainsLayer.setStyle(mountainsStyle(mapZoom));
+    updateMountainsStyle() {
+      mountainsLayer.setStyle(mountainsStyle(this.mapZoom));
     },
-    onMapMoveEnd(mapZoom) {
+    onMapMoveEnd() {
       // set visible mountains
       this.setVisibleMountains();
-      this.updateMountainsStyle(mapZoom);
-      this.updateBulletinsGeometry(mapZoom);
+      this.updateMountainsStyle();
+      this.updateBulletinsGeometry();
     },
-    onShowMountains(showMountains) {
+    onShowMountains() {
       // first time, bulletins are not loaded yet
-      if (!this.areBulletinsAlreadyShowed) {
-        this.areBulletinsAlreadyShowed = true;
+      if (!this.bulletinsLoaded) {
+        mutations.setBulletinsLoaded(true);
         // so load them
         axios.get(YETI_URL_BULLETINS).then(this.onBulletinsResult);
       }
       // show mountains layer group if needed
-      mountainsLayerGroup.setVisible(showMountains);
+      mountainsLayerGroup.setVisible(this.showMountains);
     },
     onBulletinsResult(data) {
-      // return, if mountains not loaded
-      if (!this.allMountains) {
-        return;
-      }
-
       let bulletinsFeatures = data.data;
       let mountainsFeatures = mountainsLayer.getSource().getFeatures();
 
@@ -234,22 +241,17 @@ export default {
       // update in case we're already zoomed in
       this.updateBulletinsGeometry();
     },
-    updateBulletinsGeometry(mapZoom) {
+    updateBulletinsGeometry() {
       // return, if bulletins are not loaded
-      if (!this.areBulletinsAlreadyShowed) {
+      if (!this.bulletinsLoaded) {
         return;
-      }
-
-      // get mapZoom if not defined
-      if (!mapZoom) {
-        mapZoom = this.mapZoom();
       }
 
       // if zoom > 10
       //   we will intersect every polygon with the map extent, and update geometry of avalanche bulletin icons (icons will always be visible, even when zoomed)
       // else
       //   we set geometry of all points to be the initial geometry (stored during the request)
-      if (mapZoom > 10) {
+      if (this.mapZoom > 10) {
         let mapExtent = this.getExtent('EPSG:3857');
         let mapExtentFeature = new ol.Feature(ol.geom.polygonFromExtent(mapExtent));
 
