@@ -1,5 +1,8 @@
 <template>
-  <router-link :to="{ name: documentType + '-history', params: { id: document.document_id, lang: lang } }">
+  <router-link
+    :to="{ name: documentType + '-history', params: { id: document.document_id, lang: lang } }"
+    rel="nofollow"
+  >
     <slot> hist </slot>
   </router-link>
 </template>

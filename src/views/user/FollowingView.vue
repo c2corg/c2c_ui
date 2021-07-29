@@ -24,8 +24,11 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 export default {
+  mixins: [noRobotsMixin],
+
   data() {
     return {
       following: null,
