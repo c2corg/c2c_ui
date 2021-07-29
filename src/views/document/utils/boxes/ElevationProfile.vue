@@ -418,12 +418,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
-// do NOT add scoped
-
+<style lang="scss" scoped>
 $C2C-orange: red;
 
-.elevation-profile-chart {
+::v-deep .elevation-profile-chart {
   .axis path,
   .axis line {
     fill: none;
