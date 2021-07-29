@@ -97,7 +97,7 @@ export default {
       d3.then(this.createChart);
     }
 
-    this.debouncedOnResize = debounce(this.onResize, 300);
+    this.debouncedOnResize = debounce(this.onResize, 100);
   },
 
   unmounted() {
