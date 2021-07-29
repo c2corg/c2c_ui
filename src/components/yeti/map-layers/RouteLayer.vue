@@ -7,7 +7,7 @@ import ol from '@/js/libs/ol';
 
 let normalLineStyle = new ol.style.Style({
   stroke: new ol.style.Stroke({
-    color: 'green',
+    color: 'yellow',
     width: 3,
   }),
 });
@@ -22,7 +22,7 @@ let highlightedLineStyle = [
   }),
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'white',
+      color: 'red',
       width: 3,
     }),
     zIndex: 1,
