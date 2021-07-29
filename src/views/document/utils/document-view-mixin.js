@@ -69,10 +69,23 @@ export default {
       ];
     },
     meta: function () {
-      if (!this.document) {
-        return null;
+      const result = [
+        {
+          name: 'robots',
+          content: 'index',
+          id: 'meta-robots',
+        },
+      ];
+
+      if (this.isVersionView) {
+        result[0]['content'] = 'noindex';
       }
-      return this.documentOpenGraph();
+
+      if (!this.document) {
+        return result;
+      }
+
+      return [...result, ...this.documentOpenGraph()];
     },
   },
 
@@ -158,6 +171,7 @@ export default {
                 documents: [],
               },
             };
+            this.$emit('updateHead'); // eslint-disable-line
           });
       } else if (this.isDraftView) {
         this.promise = {};
@@ -280,19 +294,23 @@ export default {
     documentOpenGraph() {
       const title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
       let meta = [
-        { p: 'og:title', c: title },
-        { p: 'og:type', c: this.documentType === 'article' ? 'article' : 'website' },
-        { p: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}` },
-        { p: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang) },
+        { p: 'og:title', c: title, id: 'meta-og-title' },
+        { p: 'og:type', c: this.documentType === 'article' ? 'article' : 'website', id: 'meta-og-type' },
+        { p: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}`, id: 'meta-og-url' },
+        { p: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang), id: 'meta-og-locale' },
       ];
       const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
       if (locale?.summary || locale?.description) {
         const description = utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200);
-        meta = [...meta, { p: 'og:description', c: description }, { n: 'description', c: description }];
+        meta = [
+          ...meta,
+          { p: 'og:description', c: description, id: 'meta-og-description' },
+          { n: 'description', c: description, id: 'meta-description' },
+        ];
       }
       if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
-        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image) }];
+        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image), id: 'meta-og-image' }];
       }
       return meta;
     },

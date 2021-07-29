@@ -4,6 +4,7 @@
       name: documentType + '-diff',
       params: { id: id, versionFrom: versionFrom || 'prev', versionTo: versionTo || 'next', lang: lang },
     }"
+    rel="nofollow"
   >
     <slot>diff</slot>
   </router-link>

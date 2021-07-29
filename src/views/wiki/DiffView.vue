@@ -174,6 +174,7 @@ import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import imageUrls from '@/js/image-urls';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 const hasChanged = function (oldVal, newVal) {
   // does oldVal equals to newVal ?
@@ -357,6 +358,8 @@ Rows.prototype.computeEllipsisStates = function () {
 };
 
 export default {
+  mixins: [noRobotsMixin],
+
   data() {
     return {
       title: null,
