@@ -97,11 +97,11 @@ export default {
       d3.then(this.createChart);
     }
 
-    this.debouncedOnWindowResize = debounce(this.onWindowResize, 300);
+    this.debouncedOnResize = debounce(this.onResize, 300);
   },
 
   unmounted() {
-    window.removeEventListener('resize', this.debouncedOnWindowResize);
+    this.resizeObserver.unobserve(this.$refs.graph);
   },
 
   methods: {
@@ -299,12 +299,20 @@ export default {
         })
         .on('mousemove', this.mousemove);
 
-      window.addEventListener('resize', this.debouncedOnWindowResize);
+      this.resizeObserver = new ResizeObserver(([entry]) => {
+        if (entry.contentBoxSize) {
+          // Firefox implements `contentBoxSize` as a single content rect, rather than an array
+          const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
+          this.debouncedOnResize(contentBoxSize.inlineSize);
+        } else {
+          this.debouncedOnResize(entry.contentRect.width);
+        }
+      });
+      this.resizeObserver.observe(this.$refs.graph);
     },
 
-    onWindowResize() {
-      const wrapper = this.$refs.graph;
-      const width = wrapper.offsetWidth - this.margin.left - this.margin.right;
+    onResize(graphWidth) {
+      const width = graphWidth - this.margin.left - this.margin.right;
 
       // recompute axes, lines and resize elements
       this.x1.range([0, width]);
