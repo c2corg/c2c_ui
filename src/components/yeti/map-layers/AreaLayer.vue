@@ -1,12 +1,8 @@
 <script>
-import axios from 'axios';
-
 import layerMixin from './layer';
 
-import { state, mutations, bus } from '@/components/yeti/yetix';
+import { state, mutations, actions, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
-
-const YETI_URL_AREAS = 'https://api.ensg.eu/yeti-extent';
 
 export default {
   mixins: [layerMixin],
@@ -44,7 +40,7 @@ export default {
     // only in first mount
     if (this.areas.length === 0) {
       // set areas (yeti valid areas)
-      axios.get(YETI_URL_AREAS).then(this.onAreasResult);
+      actions.fetchAreas().then(this.onAreasResult);
       // event
       bus.$on('mapMoveEnd', this.onMapMoveEnd);
     }

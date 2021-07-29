@@ -1,14 +1,10 @@
 <script>
 import turfIntersect from '@turf/intersect';
-import axios from 'axios';
 
 import layerMixin from './layer';
 
-import { state, mutations, bus } from '@/components/yeti/yetix';
+import { state, mutations, actions, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
-
-const YETI_URL_MOUNTAINS = 'https://api.ensg.eu/zonesbra';
-const YETI_URL_BULLETINS = 'https://api.ensg.eu/bra';
 
 let mountainsStyle = (mapZoom) => {
   const MIN_ZOOM = 8;
@@ -107,7 +103,7 @@ export default {
 
     // only on first mount, if mountains already loaded
     if (state.mountains.all.length === 0) {
-      axios.get(YETI_URL_MOUNTAINS).then(this.onMountainsResult);
+      actions.fetchMountains().then(this.onMountainsResult);
 
       bus.$on('mapMoveEnd', this.onMapMoveEnd);
     }
@@ -197,7 +193,7 @@ export default {
       if (!this.bulletinsLoaded) {
         mutations.setBulletinsLoaded(true);
         // so load them
-        axios.get(YETI_URL_BULLETINS).then(this.onBulletinsResult);
+        actions.fetchBulletins().then(this.onBulletinsResult);
       }
       // show mountains layer group if needed
       mountainsLayerGroup.setVisible(this.showMountains);

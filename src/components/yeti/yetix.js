@@ -1,6 +1,8 @@
+import axios from 'axios';
 import Vue from 'vue';
 
 let defaultState = {
+  API_URL: 'https://api.ensg.eu/',
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
 
@@ -91,6 +93,21 @@ export let mutations = {
         state[i] = defaultState[i];
       }
     }
+  },
+};
+
+export let actions = {
+  fetchApi(url) {
+    return axios.get(state.API_URL + url);
+  },
+  fetchAreas() {
+    return actions.fetchApi('yeti-extent');
+  },
+  fetchMountains() {
+    return actions.fetchApi('zonesbra');
+  },
+  fetchBulletins() {
+    return actions.fetchApi('bra');
   },
 };
 
