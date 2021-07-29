@@ -31,18 +31,15 @@ let highlightedLineStyle = [
 
 export default {
   mixins: [layerMixin],
-  props: {
-    validMinZoom: {
-      type: Number,
-      required: true,
-    },
-  },
   computed: {
     activeTab() {
       return state.activeTab;
     },
     features() {
       return state.features;
+    },
+    validMinimumMapZoom() {
+      return state.VALID_MINIMUM_MAP_ZOOM;
     },
   },
   watch: {
@@ -242,7 +239,7 @@ export default {
       this.view.fit(extent, { size: this.map.getSize() });
 
       // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinZoom, this.view.getZoom()));
+      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.view.getZoom()));
     },
   },
   render() {

@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <yeti-map ref="map" :valid-min-zoom="validFormData.minZoom" :yeti-data="yetiData" :yeti-extent="yetiExtent" />
+        <yeti-map ref="map" :yeti-data="yetiData" :yeti-extent="yetiExtent" />
       </div>
     </div>
   </div>
@@ -116,11 +116,6 @@ import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
   'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
-
-const VALID_FORM_DATA = {
-  minZoom: 13,
-  braMaxMrd: 3,
-};
 
 export default {
   name: 'Yeti',
@@ -154,7 +149,36 @@ export default {
 
       tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
 
-      errors: {
+      formError: undefined,
+      currentError: undefined,
+
+      promise: null,
+      yetiData: null,
+      yetiExtent: [],
+    };
+  },
+
+  computed: {
+    validMinimumMapZoom() {
+      return state.VALID_MINIMUM_MAP_ZOOM;
+    },
+    dangerMaxWhenMrd() {
+      return state.DANGER_MAX_WHEN_MRD;
+    },
+    bra() {
+      return state.bra;
+    },
+    method() {
+      return state.method;
+    },
+    mapZoom() {
+      return state.mapZoom;
+    },
+    areaOk() {
+      return state.areaOk;
+    },
+    errors() {
+      return {
         area: {
           simple: this.$gettext('Area not covered'),
           full: this.$gettext(
@@ -183,7 +207,7 @@ export default {
         },
         zoom: {
           simple: this.$gettext('Area too large'),
-          full: this.$gettext('Current map view is too large. Please zoom to level ' + VALID_FORM_DATA.minZoom),
+          full: this.$gettext('Current map view is too large. Please zoom to level ' + this.validMinimumMapZoom),
         },
         ok: this.$gettext('Seems fine! :)'),
         yeti: this.$gettext('Service is inactive right now'),
@@ -191,40 +215,16 @@ export default {
         yeti_unauthorized: this.$gettext(
           'You have to be authorized. Please contact administrators of the service if interested.'
         ),
-      },
-
-      validFormData: VALID_FORM_DATA,
-
-      formError: undefined,
-      currentError: undefined,
-
-      promise: null,
-      yetiData: null,
-      yetiExtent: [],
-    };
-  },
-
-  computed: {
-    bra() {
-      return state.bra;
-    },
-    method() {
-      return state.method;
-    },
-    mapZoom() {
-      return state.mapZoom;
-    },
-    areaOk() {
-      return state.areaOk;
+      };
     },
     mrdIsNotApplicable() {
       return this.isBraMax && this.method.type === 'mrd';
     },
     isBraMax() {
-      return this.bra.high > this.validFormData.braMaxMrd || this.bra.low > this.validFormData.braMaxMrd;
+      return this.bra.high > this.dangerMaxWhenMrd || this.bra.low > this.dangerMaxWhenMrd;
     },
     isValidMapZoom() {
-      return this.mapZoom >= this.validFormData.minZoom;
+      return this.mapZoom >= this.validMinimumMapZoom;
     },
   },
 
@@ -298,7 +298,7 @@ export default {
             ' ' +
             this.$gettext('on') +
             ' ' +
-            this.validFormData.minZoom +
+            this.validMinimumMapZoom +
             ')';
         }
       } else {
@@ -328,7 +328,7 @@ export default {
     },
 
     extendExtent(extent) {
-      const extendedFactor = Math.min(0.5, (this.mapZoom - this.validFormData.minZoom) / 6);
+      const extendedFactor = Math.min(0.5, (this.mapZoom - this.validMinimumMapZoom) / 6);
       const extendedValue = Math.max(extent[2] - extent[0], extent[3] - extent[1]) * extendedFactor;
       return ol.extent.buffer(extent, extendedValue);
     },

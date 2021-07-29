@@ -1,6 +1,9 @@
 import Vue from 'vue';
 
 let defaultState = {
+  DANGER_MAX_WHEN_MRD: 3,
+  VALID_MINIMUM_MAP_ZOOM: 13,
+
   activeTab: 0,
 
   bra: {

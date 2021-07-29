@@ -5,7 +5,7 @@
       <area-layer />
       <mountains-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
-      <route-layer :valid-min-zoom="validMinZoom" />
+      <route-layer />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -77,10 +77,6 @@ export default {
     YetiLayer,
   },
   props: {
-    validMinZoom: {
-      type: Number,
-      required: true,
-    },
     yetiExtent: {
       type: Array,
       required: true,
