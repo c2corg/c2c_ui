@@ -72,6 +72,7 @@
       v-if="documentType === 'profile'"
       :to="{ name: 'whatsnew', query: { u: document.document_id } }"
       :label="$gettext('Contributions')"
+      rel="nofollow"
       icon="edit"
     />
 
@@ -84,6 +85,7 @@
       v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
       :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
       :label="$gettext('History')"
+      rel="nofollow"
       icon="history"
     />
 

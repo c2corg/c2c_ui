@@ -171,6 +171,7 @@ import FormField from './utils/FormField';
 
 import c2c from '@/js/apis/c2c';
 import config from '@/js/config';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 // possible mode values :
 //
@@ -189,6 +190,8 @@ export default {
     BaseForm,
     VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
   },
+
+  mixins: [noRobotsMixin],
 
   // here is the trick : all auth action are on the same component.
   // vue won't reload it, even on route modification.
