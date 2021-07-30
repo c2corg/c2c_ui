@@ -116,6 +116,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  getElevationProfileMarkerStyle,
   swissExtent,
 } from './map-utils';
 
@@ -589,6 +590,7 @@ export default {
       this.elevationProfileLayer.setVisible(false);
       const elevationProfileSource = this.elevationProfileLayer.getSource();
       const elevationProfileMarker = new ol.Feature();
+      elevationProfileMarker.setStyle(getElevationProfileMarkerStyle());
       elevationProfileSource.addFeature(elevationProfileMarker);
       this.$root.$on('elevation_profile', (event, coord) => {
         if (event === 'end') {
