@@ -345,22 +345,15 @@ export default {
       // update the fullscreen control (we actually need to remove the old
       // one and attach a new one)
       this.map.removeControl(this.fullScreenControl);
-      this.map.addControl(
-        (this.fullScreenControl = new ol.control.FullScreen({
-          source: newValue || this.$el,
-          tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
-        }))
-      );
+      this.fullScreenControl = this.createFullScreenController(newValue || this.$el);
+      this.map.addControl(this.fullScreenControl);
     },
   },
 
   mounted() {
-    this.fullScreenControl = new ol.control.FullScreen({
-      // if we have an elevation profile, it will be display over the map
-      // else, we directly use the map element for fullscreen
-      source: this.fullScreenElementId || this.$el,
-      tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
-    });
+    // if we have an elevation profile, it will be displayed over the map
+    // else, we directly use the map element for fullscreen
+    this.fullScreenControl = this.createFullScreenController(this.fullScreenElementId || this.$el);
 
     this.map = new ol.Map({
       target: this.$refs.map,
@@ -453,7 +446,22 @@ export default {
     this.setElevationProfileInteraction();
   },
 
+  beforeDestroy() {
+    this.fullScreenControl.un('enterfullscreen', this.fitMapToDocuments);
+    this.fullScreenControl.un('leavefullscreen', this.fitMapToDocuments);
+  },
+
   methods: {
+    createFullScreenController(source) {
+      const control = new ol.control.FullScreen({
+        source,
+        tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
+      });
+      control.on('enterfullscreen', this.fitMapToDocuments);
+      control.on('leavefullscreen', this.fitMapToDocuments);
+      return control;
+    },
+
     setModifyInteractions() {
       const source = this.editionLayer.getSource();
       const modify = new ol.interaction.Modify({ source });
