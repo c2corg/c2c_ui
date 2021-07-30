@@ -45,7 +45,7 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('showGdpr', () => this.showGdprModal());
+    this.$root.$on('show-gdpr', () => this.showGdprModal());
   },
 
   methods: {
