@@ -37,7 +37,7 @@ export default {
 
   computed: {
     minutes() {
-      return range(1, 59);
+      return range(0, 59);
     },
     hours() {
       return range(0, 23);
