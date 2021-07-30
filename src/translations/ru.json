@@ -416,6 +416,9 @@
     },
     "Numbers": "данные",
     "Ok": "ok",
+    "Only document less than 24h old can be deleted": {
+      "API message": "Документ не может быть удален по прошествии 24 часов. Обратитесь к модератору если это необходимо."
+    },
     "Ooops": "ойй",
     "Ordered list": "Сортированный список",
     "Oups! something went wrong...": "Ой! Что-то пошло не так...",
@@ -452,6 +455,8 @@
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Фактор частоты прохождения склона не принят во внимание, приложением, так как его трудно оценить при подготовке маршрута",
     "There are sensitive areas on this route. Please refer to the map.": "Этот маршрутпроходит черея или находится близко с защищаемой прирдной зоной. Проконсультируйтесь с картой.",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Эти cookies позволяют взаимодействию через сайт  camptocamp.org с соцсетями и делиться содержанием сайта с другими людьми или поделиться своим мнением б например, когда вы нажимаете на кнопку \"поделиться\". Дезактивировав эту опцию вы не сможете делиться в соцсетях содержанием  camptocamp.org",
+    "This content is licensed under Creative Commons BY-NC-ND 3.0": "Данный контент распространяется под лицензией Creative Commons BY-NC-ND 3.0",
+    "This content is licensed under Creative Commons BY-SA 3.0": "Данный контент распространяется под лицензией Creative Commons BY-SA 3.0",
     "This field is too long": "это поле слышком длинное",
     "This field is too short": "это поле слышком короткое",
     "This is the first version": "это первая версия",
@@ -465,6 +470,7 @@
     "Toggle full-screen": {
       "Map Controls": "Полноэкранная мода"
     },
+    "Toggle fullscreen": "Переключиться в полноэкранный режим",
     "Too many results: please refine your search.": "слишком много результатов : уточните свой поиск",
     "Topoguide": {
       "$$noContext": "топогид",
@@ -473,15 +479,26 @@
     "Trace": "Линия маршрута",
     "Translate into an other lang": "перевести на другом языке",
     "Transport & road or PT access": "Проезд на автомобиле или общественном транспортею",
+    "Types and styles": "Типы и стили",
+    "Unformatted text": "Неформатированный текст",
+    "Unordered list": "Несортированный список",
     "Upload a GPS track": "загрузить GPS трек",
     "Upload a new version": "загрузить новую версию",
+    "User avatar": "Аватар",
     "Username": "Идентификатор",
     "Versions": "Версии",
     "Very complex (steps, narrow sections, ridges...)": "Очень сложно (крутые обрывы, узкие секции, гребни...)",
     "View in other lang": "видеть на другом языке",
+    "Warning: This action cannot be undone!": "Внимание: Это действие не может быть отменено",
     "Weather & conditions": "погода и условия",
     "Weather forecast (meteoblue)": "Прогноз погоды (meteoblue)",
     "Without c2c account": "Без с2с аккаунта",
+    "You are using a custom sort": "Вы можете выбрать ключ для сортировки",
+    "You can choose to remain anonymous": "Вы можете остаться анонимным, если пожелаете",
+    "You may add associated waypoints, books and articles": "Вы можете добавить другие статьи, книги или путевые точки",
+    "You may also drag, draw or edit the track on the map.": "Вы можете создать, отредактировать или перетащить свой GPS-трек на карте",
+    "You need to activate your by clicking the link sent to your email address.": "Вы должны активировать свой аккаунт перейдя по ссылке в письме",
+    "Your account was successfully created": "Ваш аккаунт успешно создан!",
     "Zoom in": {
       "Map controls": "увеличить"
     },
@@ -1369,6 +1386,7 @@
     "temperature": {
       "weather_station_types": "температура"
     },
+    "text to display": "Текст для отображения",
     "timing": "расчет времени",
     "title": "заглавие",
     "to start a new route": "Начать новый маршрут",
@@ -1428,6 +1446,9 @@
     "waypoint_type": "путевая точка - тип",
     "waypoints": "путевые точки",
     "weather": "Погода",
+    "weather_event": {
+      "event_types": "Погодное событие"
+    },
     "weather_station": {
       "waypoint_types": "метео-станция"
     },
@@ -1444,7 +1465,10 @@
     "wind_speed": {
       "weather_station_types": "скорость ветра"
     },
+    "write a summary": "Напишите резюме здесь",
     "write your comments": "пишите комментарии",
+    "xreport": "происшествие / несчастный случай",
+    "xreports": "отчеты о происшествиях/несчастных случаях",
     "yes": {
       "$$noContext": "да",
       "parking_fee_types": "да"
