@@ -201,6 +201,11 @@ export default {
       type: Array,
       default: null,
     },
+
+    fullScreenElementId: {
+      type: String,
+      default: null,
+    },
   },
 
   data() {
@@ -310,12 +315,7 @@ export default {
   },
 
   watch: {
-    documents: {
-      handler() {
-        this.drawDocumentMarkers();
-      },
-    },
-
+    documents: 'drawDocumentMarkers',
     'editedDocument.condition_rating': 'drawDocumentMarkers',
     'editedDocument.waypoint_type': 'drawDocumentMarkers',
 
@@ -333,27 +333,44 @@ export default {
 
     filterDocumentsWithMap: 'sendBoundsToUrl',
 
-    highlightedDocument() {
-      if (this.highlightedDocument) {
-        this.setHighlightedFeature(
-          this.documentsLayer.getSource().getFeatureById(this.highlightedDocument.document_id)
-        );
+    highlightedDocument(newValue) {
+      if (newValue) {
+        this.setHighlightedFeature(this.documentsLayer.getSource().getFeatureById(newValue.document_id));
       } else {
         this.setHighlightedFeature(null);
       }
     },
+
+    fullScreenElementId(newValue) {
+      // update the fullscreen control (we actually need to remove the old
+      // one and attach a new one)
+      this.map.removeControl(this.fullScreenControl);
+      this.map.addControl(
+        (this.fullScreenControl = new ol.control.FullScreen({
+          source: newValue || this.$el,
+          tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
+        }))
+      );
+    },
   },
 
   mounted() {
+    this.fullScreenControl = new ol.control.FullScreen({
+      // if we have an elevation profile, it will be display over the map
+      // else, we directly use the map element for fullscreen
+      source: this.fullScreenElementId || this.$el,
+      tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
+    });
+
     this.map = new ol.Map({
       target: this.$refs.map,
 
       controls: [
+        this.fullScreenControl,
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
-        new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
         new ol.control.ScaleLine(),
         new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcher }),

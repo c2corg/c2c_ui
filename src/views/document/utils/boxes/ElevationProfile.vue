@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasData">
+  <div v-if="hasData" class="elevation-profile-container">
     <form v-if="timeAvailable" class="has-text-centered">
       <span class="is-size-7" v-translate>See profile based on:</span>
       <br />
@@ -125,6 +125,7 @@ export default {
 
       this.timeAvailable = this.coords.every((coord) => coord.length > 3);
       this.hasData = true;
+      this.$emit('has-data');
     },
 
     createChart() {
@@ -141,7 +142,6 @@ export default {
         if (i > 0) {
           // convert from web mercator to lng/lat
           const deg1 = ol.proj.transform([coords[i][0], coords[i][1]], 'EPSG:3857', 'EPSG:4326');
-
           const deg2 = ol.proj.transform([coords[i - 1][0], coords[i - 1][1]], 'EPSG:3857', 'EPSG:4326');
           // arc distance x earth radius
           d = d3.geoDistance(deg1, deg2) * 6371;
@@ -161,13 +161,13 @@ export default {
 
       const size = {
         width: wrapper.offsetWidth,
-        height: 300,
+        height: wrapper.offsetHeight,
       };
 
       this.margin = {
-        top: 40, // 7,
+        top: 40,
         right: 10,
-        bottom: 18,
+        bottom: 25,
         left: 35,
       };
 
@@ -239,7 +239,7 @@ export default {
       // display line path
       this.line = this.container.append('path').datum(this.data).attr('class', 'line').attr('d', this.dLine);
 
-      // Display point information one hover
+      // Display point information on hover
       this.focusv = this.container
         .append('line')
         .attr('class', 'target')
@@ -304,16 +304,17 @@ export default {
         if (entry.contentBoxSize) {
           // Firefox implements `contentBoxSize` as a single content rect, rather than an array
           const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
-          this.debouncedOnResize(contentBoxSize.inlineSize);
+          this.debouncedOnResize(contentBoxSize.inlineSize, contentBoxSize.blockSize);
         } else {
-          this.debouncedOnResize(entry.contentRect.width);
+          this.debouncedOnResize(entry.contentRect.width, entry.contentRect.height);
         }
       });
       this.resizeObserver.observe(this.$refs.graph);
     },
 
-    onResize(graphWidth) {
+    onResize(graphWidth, graphHeight) {
       const width = graphWidth - this.margin.left - this.margin.right;
+      const height = graphHeight - this.margin.top - this.margin.bottom;
 
       // recompute axes, lines and resize elements
       this.x1.range([0, width]);
@@ -321,14 +322,24 @@ export default {
         this.x2.range([0, width]);
       }
       const axis = this.mode === 'distance' ? this.x1Axis : this.x2Axis;
-      this.container.select('.x.axis').call(axis);
+      this.container
+        .select('.x.axis')
+        .call(axis)
+        .attr('transform', 'translate(0,' + height + ')');
       this.container.select('.x.axis.legend').attr('x', width);
+
+      this.y.range([height, 0]);
+      this.container.select('.y.axis').call(this.yAxis);
+
       this.line.attr('d', this.mode === 'distance' ? this.dLine : this.tLine);
       this.focush.attr('x2', width);
       this.bubble1.attr('x', (width - this.margin.left - this.margin.right) / 2);
       this.bubble2.attr('x', (width - this.margin.left - this.margin.right) / 2);
       this.container.select('rect.overlay').attr('width', width);
-      this.svg.attr('width', width + this.margin.left + this.margin.right);
+      this.svg
+        .attr('width', graphWidth)
+        // while on fullscreen, the x axis switch is displayed in top right corner
+        .attr('height', !document.fullscreenElement ? graphHeight : graphHeight + this.margin.top);
 
       this.focus.style('display', 'none');
       this.focush.style('display', 'none');
@@ -421,38 +432,66 @@ export default {
 <style lang="scss" scoped>
 $C2C-orange: red;
 
-::v-deep .elevation-profile-chart {
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
+::v-deep {
+  .elevation-profile-chart {
+    height: 300px; // default height on page
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+    .line {
+      fill: none;
+      stroke: $C2C-orange;
+      stroke-width: 3px;
+    }
+
+    .circle {
+      fill: white;
+      stroke: $C2C-orange;
+      stroke-width: 2px;
+    }
+
+    line.target {
+      stroke: lightgray;
+      stroke-width: 1px;
+    }
+
+    .bubble {
+      font-size: 12px;
+    }
+
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+  }
+}
+
+:fullscreen .elevation-profile-container {
+  position: absolute;
+  bottom: 0;
+  height: 30%;
+  max-height: 350px;
+  min-height: 200px;
+  width: 100%;
+  background-color: white;
+
+  > form {
+    position: absolute;
+    right: 0;
+    z-index: 2;
   }
 
-  .line {
-    fill: none;
-    stroke: $C2C-orange;
-    stroke-width: 3px;
-  }
+  .elevation-profile-chart {
+    height: 100%;
 
-  .circle {
-    fill: white;
-    stroke: $C2C-orange;
-    stroke-width: 2px;
-  }
-
-  line.target {
-    stroke: lightgray;
-    stroke-width: 1px;
-  }
-
-  .bubble {
-    font-size: 12px;
-  }
-
-  .overlay {
-    fill: none;
-    pointer-events: all;
+    ::v-deep svg {
+      position: absolute;
+    }
   }
 }
 </style>
