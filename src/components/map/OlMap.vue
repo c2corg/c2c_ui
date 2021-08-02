@@ -116,6 +116,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  getElevationProfileMarkerStyle,
   swissExtent,
 } from './map-utils';
 
@@ -201,6 +202,11 @@ export default {
       type: Array,
       default: null,
     },
+
+    fullScreenElementId: {
+      type: String,
+      default: null,
+    },
   },
 
   data() {
@@ -245,6 +251,11 @@ export default {
 
       // layer for associated images
       imagesLayer: new ol.layer.Vector({
+        source: new ol.source.Vector(),
+      }),
+
+      // layer for displaying the elevation profile current point
+      elevationProfileLayer: new ol.layer.Vector({
         source: new ol.source.Vector(),
       }),
 
@@ -305,12 +316,7 @@ export default {
   },
 
   watch: {
-    documents: {
-      handler() {
-        this.drawDocumentMarkers();
-      },
-    },
-
+    documents: 'drawDocumentMarkers',
     'editedDocument.condition_rating': 'drawDocumentMarkers',
     'editedDocument.waypoint_type': 'drawDocumentMarkers',
 
@@ -328,27 +334,37 @@ export default {
 
     filterDocumentsWithMap: 'sendBoundsToUrl',
 
-    highlightedDocument() {
-      if (this.highlightedDocument) {
-        this.setHighlightedFeature(
-          this.documentsLayer.getSource().getFeatureById(this.highlightedDocument.document_id)
-        );
+    highlightedDocument(newValue) {
+      if (newValue) {
+        this.setHighlightedFeature(this.documentsLayer.getSource().getFeatureById(newValue.document_id));
       } else {
         this.setHighlightedFeature(null);
       }
     },
+
+    fullScreenElementId(newValue) {
+      // update the fullscreen control (we actually need to remove the old
+      // one and attach a new one)
+      this.map.removeControl(this.fullScreenControl);
+      this.fullScreenControl = this.createFullScreenController(newValue || this.$el);
+      this.map.addControl(this.fullScreenControl);
+    },
   },
 
   mounted() {
+    // if we have an elevation profile, it will be displayed over the map
+    // else, we directly use the map element for fullscreen
+    this.fullScreenControl = this.createFullScreenController(this.fullScreenElementId || this.$el);
+
     this.map = new ol.Map({
       target: this.$refs.map,
 
       controls: [
+        this.fullScreenControl,
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
-        new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
         new ol.control.ScaleLine(),
         new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcher }),
@@ -369,6 +385,7 @@ export default {
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
+        this.elevationProfileLayer,
         this.editionLayer,
       ],
 
@@ -424,9 +441,28 @@ export default {
       this.map.on('pointermove', this.onPointerMove);
       this.map.on('click', this.onClick);
     }
+
+    // listen to elevation profile events to display
+    // the related point on the map
+    this.setElevationProfileInteraction();
+  },
+
+  beforeDestroy() {
+    this.fullScreenControl.un('enterfullscreen', this.fitMapToDocuments);
+    this.fullScreenControl.un('leavefullscreen', this.fitMapToDocuments);
   },
 
   methods: {
+    createFullScreenController(source) {
+      const control = new ol.control.FullScreen({
+        source,
+        tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
+      });
+      control.on('enterfullscreen', this.fitMapToDocuments);
+      control.on('leavefullscreen', this.fitMapToDocuments);
+      return control;
+    },
+
     setModifyInteractions() {
       const source = this.editionLayer.getSource();
       const modify = new ol.interaction.Modify({ source });
@@ -548,6 +584,31 @@ export default {
       }
 
       document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
+    },
+
+    setElevationProfileInteraction() {
+      this.elevationProfileLayer.setVisible(false);
+      const elevationProfileSource = this.elevationProfileLayer.getSource();
+      const elevationProfileMarker = new ol.Feature();
+      elevationProfileMarker.setStyle(getElevationProfileMarkerStyle());
+      elevationProfileSource.addFeature(elevationProfileMarker);
+      this.$root.$on('elevation_profile', (event, coord) => {
+        if (event === 'end') {
+          this.elevationProfileLayer.setVisible(false);
+        }
+
+        if (event === 'move') {
+          this.elevationProfileLayer.setVisible(true);
+          elevationProfileMarker.setGeometry(new ol.geom.Point(coord));
+          const visible = ol.extent.containsXY(this.view.calculateExtent(), coord[0], coord[1]);
+          if (!visible) {
+            this.view.animate({
+              center: coord,
+              duration: 300,
+            });
+          }
+        }
+      });
     },
 
     setDocumentGeometry(geometry) {

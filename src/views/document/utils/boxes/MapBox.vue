@@ -8,16 +8,23 @@
       </span>
     </div>
 
-    <div class="map-container">
-      <map-view
-        :documents="new Array(document)"
-        :show-protection-areas="['r', 'w'].includes(document.type)"
-        :biodiv-sports-activities="document.activities"
-        @has-protection-area="$emit('has-protection-area')"
-      />
-    </div>
+    <!-- The fullscreen map container is used to display both the map
+         and the elevation profile in fullscreen (if the elevation profile exists) -->
+    <div id="fullscreen-map-container">
+      <div class="map-container">
+        <map-view
+          :documents="new Array(document)"
+          :show-protection-areas="['r', 'w'].includes(document.type)"
+          :biodiv-sports-activities="document.activities"
+          :full-screen-element-id="
+            !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
+          "
+          @has-protection-area="$emit('has-protection-area')"
+        />
+      </div>
 
-    <elevation-profile :document="document" v-if="documentType == 'outing'" />
+      <elevation-profile :document="document" v-if="showElevationProfile" @has-data="elevationProfileHasData = true" />
+    </div>
 
     <div class="buttons is-centered">
       <router-link v-if="showYetiButton" :to="yetiUrl" class="button is-small">
@@ -60,10 +67,15 @@ export default {
   data() {
     return {
       mapLinksAreVisible: false,
+      elevationProfileHasData: false,
     };
   },
 
   computed: {
+    showElevationProfile() {
+      return this.documentType === 'outing';
+    },
+
     showYetiButton() {
       // at least one of document activities is concerned by yeti
 
@@ -90,6 +102,10 @@ export default {
   },
 
   methods: {
+    hasDataChanged(value) {
+      this.elevationProfileHasData = value;
+    },
+
     downloadKml() {
       this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
     },
@@ -126,10 +142,23 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .map-container {
   height: 275px;
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+/**
+ * Fullscreen mode *with* elevation profile
+ * Without the elevation profile it's the map-view
+ * element that goes into fullscreen mode, so the
+ * rule diesn't apply
+ */
+:fullscreen .map-container {
+  height: 70%;
+  max-height: calc(100% - 200px);
+  min-height: calc(100% - 350px);
+  margin: 0;
 }
 </style>
