@@ -135,7 +135,7 @@ export default {
 
   methods: {
     showGdpr() {
-      this.$root.$emit('showGdpr');
+      this.$root.$emit('show-gdpr');
     },
 
     onHeightBreakpointChange() {
