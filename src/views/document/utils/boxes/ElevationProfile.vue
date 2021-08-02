@@ -101,7 +101,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.resizeObserver.unobserve(this.$refs.graph);
+    this.resizeObserver?.unobserve(this.$refs.graph);
   },
 
   methods: {
