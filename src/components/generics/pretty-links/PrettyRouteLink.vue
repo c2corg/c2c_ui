@@ -70,4 +70,10 @@ export default {
 .icon-activities {
   line-height: 1;
 }
+
+@media print {
+  .is-size-4 {
+    font-size: 1rem !important;
+  }
+}
 </style>
