@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
-    <document-view-header :document="document" :version="version" :promise="promise" />
+    <loading-notification :promise="promise" />
+    <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
@@ -25,7 +26,8 @@
             <div class="column is-4">
               <label-value :label="$gettext('ratings')">
                 <document-rating v-if="$documentUtils.hasRating(document)" :document="document" show-helper />
-                <edit-link v-else :document="document" :lang="$user.lang" />
+                <edit-link v-else-if="isEditable" :document="document" :lang="$user.lang" />
+                <span v-else>...</span>
               </label-value>
 
               <field-view v-if="document.glacier_gear != 'no'" :document="document" :field="fields.glacier_gear" />
@@ -76,13 +78,13 @@
 
         <div class="box">
           <low-document-quality-banner
+            v-if="isEditable && ['empty', 'draft'].includes(document.quality)"
             :document="document"
-            :low-quality="!version && ['empty', 'draft'].includes(document.quality)"
           />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">
-            <edit-link :document="document" :lang="lang" show-always v-translate>
+            <edit-link :document="document" :lang="lang" v-translate>
               History is missing, please provide it if you have information.
             </edit-link>
           </div>
@@ -207,6 +209,11 @@ export default {
 
     showMissingHistoryBanner() {
       const doc = this.document;
+
+      if (!this.isEditable) {
+        return false;
+      }
+
       if (this.version || ['empty', 'draft'].includes(doc.quality)) {
         // hide notice if we are consulting an old version, or if low quality doc banner is already shown
         return false;

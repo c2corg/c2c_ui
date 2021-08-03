@@ -1,7 +1,7 @@
 <template>
-  <div v-if="lowQuality" class="notification is-info no-print">
+  <div class="notification is-info no-print">
     <span v-translate> This document is a draft.</span>
-    <edit-link show-always :document="document" :lang="lang">
+    <edit-link :document="document" :lang="lang">
       <span v-translate>Feel free to edit it.</span>
     </edit-link>
     <span v-translate>
@@ -15,13 +15,6 @@ import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],
-
-  props: {
-    lowQuality: {
-      type: Boolean,
-      required: true,
-    },
-  },
 
   computed: {
     lang() {
