@@ -496,7 +496,7 @@ export default {
     },
 
     formatConditions(document) {
-      return this.$gettext(document.condition_rating, 'condition_ratings');
+      return document.condition_rating ? this.$gettext(document.condition_rating, 'condition_ratings') : '';
     },
 
     formatQuality(document) {
