@@ -163,7 +163,6 @@ import waypointwaterpoint from '@/assets/font-awesome-custom/js/waypoint/waterpo
 import waypointwaypoints from '@/assets/font-awesome-custom/js/waypoint/waypoints';
 import waypointweather_station from '@/assets/font-awesome-custom/js/waypoint/weather_station';
 import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
-import yetiDanger from '@/assets/font-awesome-custom/js/yeti/danger';
 
 // registered globally
 export default function install(Vue) {
@@ -173,8 +172,6 @@ export default function install(Vue) {
     sort,
 
     documentTypeOuting,
-
-    yetiDanger,
 
     waypointaccess,
     waypointbase_camp,

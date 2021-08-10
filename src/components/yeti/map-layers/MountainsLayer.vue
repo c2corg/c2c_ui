@@ -3,6 +3,7 @@ import turfIntersect from '@turf/intersect';
 
 import layerMixin from './layer';
 
+import iconBulletinSvg from '@/assets/img/yeti/icons-bulletins.svg';
 import { state, mutations, actions, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
@@ -43,19 +44,11 @@ let mountainsStyle = (mapZoom) => {
   });
 };
 
-let iconSize = 40;
+let iconSize = 80;
 
 let bulletinsIcon = (danger) => {
-  let dangerFill = ['lightgreen', 'yellow', 'orange', 'orangered', 'red'];
-  let svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="${iconSize}" height="${iconSize}" viewBox="0 0 100 100">
-      <path d="M5,50L50,5L95,50" fill="white" />
-      <path d="M5,50L50,95L95,50" fill="${dangerFill[danger]}" />
-      <path d="m50,0l50,50-50,50-50-50zv5L21,33l19-10L50,26l9-8L80,38l2-1L50,5M5,50L50,95L95,50" />
-      <text x="50" y ="72" dominant-baseline="central" text-anchor="middle" font-family="sans-serif" font-size="40px" font-weight="bold">${danger}</text>
-    </svg>
-  `;
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  danger = danger || 0;
+  return iconBulletinSvg + '#danger' + danger;
 };
 
 let bulletinsStyle = (danger) => {
