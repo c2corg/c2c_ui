@@ -159,6 +159,7 @@ export default {
 
     // events
     this.map.on('moveend', this.onMapMoveEnd);
+    this.map.on('click', this.onMapClick);
   },
   methods: {
     getExtent(projection) {
@@ -213,6 +214,10 @@ export default {
       }
       // emit an event for map layers
       bus.$emit('mapMoveEnd');
+    },
+    onMapClick(evt) {
+      // emit an event for map layers
+      bus.$emit('mapClick', evt);
     },
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
