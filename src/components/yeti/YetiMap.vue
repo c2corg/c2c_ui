@@ -19,16 +19,31 @@
       <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
         <div>
           <header v-translate>Base layer</header>
-          <div v-for="layer of cartoLayers" :key="layer.get('title')" @click="visibleCartoLayer = layer">
-            <input :checked="layer == visibleCartoLayer" type="radio" />
-            {{ $gettext(layer.get('title'), 'Map layer') }}
+          <div v-for="(layer, i) of cartoLayers" :key="layer.get('title')">
+            <input
+              :id="'carto-checkbox' + i"
+              :checked="layer == visibleCartoLayer"
+              type="radio"
+              @change="visibleCartoLayer = layer"
+            />
+            <label :for="'carto-checkbox' + i">{{ $gettext(layer.get('title'), 'Map layer') }}</label>
           </div>
         </div>
         <div>
           <header v-translate>Slopes</header>
-          <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toggleMapDataLayer(layer)">
-            <input :checked="layer.getVisible()" type="checkbox" />
-            {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+          <div v-for="(layer, i) of dataLayers" :key="layer.get('title')">
+            <input
+              :id="'data-checkbox' + i"
+              :checked="layer.getVisible()"
+              type="checkbox"
+              @change="toggleMapDataLayer(layer)"
+            />
+            <label :for="'data-checkbox' + i">{{ $gettext(layer.get('title'), 'Map slopes layer') }}</label>
+          </div>
+          <header>YETI</header>
+          <div v-for="(layer, i) of yetiLayers" :key="layer.title">
+            <input :id="'yeti-checkbox' + i" :checked="showMountains" type="checkbox" @change="layer.action" />
+            <label :for="'yeti-checkbox' + i">{{ layer.title }}</label>
           </div>
         </div>
       </div>
@@ -90,6 +105,12 @@ export default {
     return {
       cartoLayers: cartoLayers(),
       dataLayers: dataLayers(),
+      yetiLayers: [
+        {
+          title: this.$gettext('Avalanche bulletins'),
+          action: this.onShowMountains,
+        },
+      ],
 
       showLayerSwitcher: false,
       recenterPropositions: null,
@@ -225,6 +246,9 @@ export default {
         layer.setOpacity(this.showMountains && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
+    onShowMountains() {
+      mutations.setShowMountains(!this.showMountains);
+    },
   },
 };
 </script>
@@ -238,20 +262,18 @@ $control-margin: 0.5em;
 .ol-control-layer-switcher {
   bottom: 3em;
   left: $control-margin;
+  right: $control-margin;
+  max-width: 400px;
   color: white;
   text-decoration: none;
-  background-color: rgba(0, 60, 136, 0.6);
+  background-color: rgba(0, 60, 136, 0.7);
   border: none;
   border-radius: 2px;
   padding: 0 10px 10px 10px;
   display: flex;
 
   & > div {
-    width: 50%;
-
-    &:first-child {
-      margin-right: 10px;
-    }
+    flex: 1;
 
     header {
       font-weight: bold;
