@@ -481,7 +481,7 @@ export default {
         // find the closest point (because it's a MultiPoint)
         let closestPointCoordinate = clickedBulletinFeature.getGeometry().getClosestPoint(evt.coordinate);
         // set overlay position
-        bulletinsOverlay.setPosition(closestPointCoordinate);
+        this.openOverlay(closestPointCoordinate;
         // store this point
         this.activeBulletins = {
           feature: clickedBulletinFeature,
@@ -498,8 +498,7 @@ export default {
         }
       } else {
         // remove when no feature found (click on map)
-        bulletinsOverlay.setPosition(undefined);
-        this.activeBulletins = null;
+        this.closeOverlay();
       }
     },
     updateBulletinsOverlay() {
@@ -511,10 +510,17 @@ export default {
         if (!activePoint) {
           activePoint = activeFeature.getGeometry().getPoint(0);
         }
-        bulletinsOverlay.setPosition(activePoint.getCoordinates());
+        this.openOverlay(activePoint.getCoordinates());
       } else {
-        bulletinsOverlay.setPosition(undefined);
+        this.closeOverlay();
       }
+    },
+    openOverlay(coordinates) {
+      bulletinsOverlay.setPosition(coordinates);
+    },
+    closeOverlay() {
+      bulletinsOverlay.setPosition(undefined);
+      this.activeBulletins = null;
     },
   },
 };
