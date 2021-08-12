@@ -41,14 +41,7 @@
                 x2="90"
                 y2="61.5"
               />
-              <text
-                x="50"
-                y="54"
-                text-anchor="middle"
-                font-family="sans-serif"
-                font-size="20px"
-                font-weight="bold"
-              >
+              <text x="50" y="54" text-anchor="middle" font-family="sans-serif" font-size="20px" font-weight="bold">
                 <tspan>{{ overlayData.danger.high }}</tspan>
                 <tspan v-if="overlayData.danger.highEvol">&ensp;</tspan>
                 <tspan v-if="overlayData.danger.highEvol">{{ overlayData.danger.highEvol }}</tspan>
@@ -166,19 +159,19 @@ let bulletinsIcon = (danger) => {
     `;
   }
 
-  if (danger == 2) {
+  if (danger === 2) {
     svg += `
       <path d="M86,45a7,7,0,106.5-13.5a7,7,0,00-10.5-8a5.4,5.4,0,00-10.2,3" />
       <path d="M69,27L86,44a5,5,0,104-12a5,5,0,10-9-5a3,3,0,10-8,0" fill="white" />
       <path d="M85,32a1,1,0,110,8v-2a1,1,0,100-4" />
     `;
-  } else if (danger == 3) {
+  } else if (danger === 3) {
     svg += `
       <path d="M54,22L79,50h33a5,5,0,10-4-22.3a11.3,11.3,0,00-20,0q-8-2,-14,6" />
       <path d="M55,21L82,48h30a5,5,0,10-5-18a9.7,9.7,0,00-18,0q-7-2,-11,3L60,16" fill="white" />
       <path d="M59,18l25,25-1.5,1.5-25-25M87,38a1,1,0,1110,5l-2-1a1,1,0,10-6-3" />
     `;
-  } else if (danger == 4 || danger == 5) {
+  } else if (danger === 4 || danger === 5) {
     svg += `
       <path d="M54,22L79,50h52a12.5,12.5,0,001.5-24.4a7,7,0,00-8.2-7a11.9,11.9,0,00-22.5-2q-11-1,-14,7q-10-2-14,4" />
       <path d="M52,24L77,48h50a5,5,0,103-21a5,5,0,00-7-6a10.3,10.3,0,00-20-2q-11-2,-14,7q-10-3-14,4L60,16" fill="white" />
