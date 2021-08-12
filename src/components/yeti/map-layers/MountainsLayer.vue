@@ -1,5 +1,6 @@
 <template>
   <div ref="bulletinsOverlay" class="bulletins-overlay">
+    <button class="delete is-small button-close" @click="closeOverlay">x</button>
     <div class="bulletins-header pt-5 pb-3 has-text-centered">
       <p class="title is-5">{{ overlayData.mountainName }}</p>
     </div>
@@ -554,6 +555,11 @@ export default {
 }
 strong {
   color: #4a4a4a;
+}
+.button-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
 }
 </style>
 
