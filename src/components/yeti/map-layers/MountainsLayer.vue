@@ -101,7 +101,6 @@ import { format } from 'date-fns';
 
 import layerMixin from './layer';
 
-import iconBulletinSvg from '@/assets/img/yeti/icons-bulletins.svg';
 import { state, mutations, actions, bus } from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
@@ -146,7 +145,40 @@ let iconSize = 80;
 
 let bulletinsIcon = (danger) => {
   danger = danger || 0;
-  return iconBulletinSvg + '#danger' + danger;
+
+  let dangerFill = ['#999', '#cbdb45', '#fff100', '#f6921e', '#ec1c24', '#ec1c24'];
+
+  let svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${iconSize}" height="${iconSize}" viewBox="-50 0 200 100">
+      <path d="M5,50L50,5L95,50" fill="white" />
+      <path d="M5,50L50,95L95,50" fill="${dangerFill[danger]}" />
+      <path d="m50,0l50,50-50,50-50-50zv5L21,33l19-10L50,26l9-8L80,38l2-1L50,5M5,50L50,95L95,50" />
+      <text x="50" y="83" text-anchor="middle" font-family="sans-serif" font-size="40px" font-weight="bold">${danger != 0 ? danger : '&#xd7;'}</text>
+  `;
+
+  if (danger == 2) {
+    svg += `
+      <path d="M86,45a7,7,0,106.5-13.5a7,7,0,00-10.5-8a5.4,5.4,0,00-10.2,3" />
+      <path d="M69,27L86,44a5,5,0,104-12a5,5,0,10-9-5a3,3,0,10-8,0" fill="white" />
+      <path d="M85,32a1,1,0,110,8v-2a1,1,0,100-4" />
+    `;
+  } else if (danger == 3) {
+    svg += `
+      <path d="M54,22L79,50h33a5,5,0,10-4-22.3a11.3,11.3,0,00-20,0q-8-2,-14,6" />
+      <path d="M55,21L82,48h30a5,5,0,10-5-18a9.7,9.7,0,00-18,0q-7-2,-11,3L60,16" fill="white" />
+      <path d="M59,18l25,25-1.5,1.5-25-25M87,38a1,1,0,1110,5l-2-1a1,1,0,10-6-3" />
+    `;
+  } else if (danger == 4 || danger == 5) {
+    svg += `
+      <path d="M54,22L79,50h52a12.5,12.5,0,001.5-24.4a7,7,0,00-8.2-7a11.9,11.9,0,00-22.5-2q-11-1,-14,7q-10-2-14,4" />
+      <path d="M52,24L77,48h50a5,5,0,103-21a5,5,0,00-7-6a10.3,10.3,0,00-20-2q-11-2,-14,7q-10-3-14,4L60,16" fill="white" />
+      <path d="M59,18l25,25-1.5,1.5-25-25m-1.5,1.5l22.5,22.5-1.5,1.5-22.5-22.5M87,38a1,1,0,1110,5l-2-1a1,1,0,10-6-3M96,29a1,1,0,1115,14l-1.7-1.7A1,1,0,1097.7,30.7" />
+    `;
+  }
+
+  svg += '</svg>';
+
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 };
 
 let bulletinsStyle = (danger) => {
