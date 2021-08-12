@@ -209,6 +209,12 @@ let bulletinsOverlay = new ol.Overlay({
   offset: [0, 0],
   className: 'bulletins-overlay-container',
 });
+let bulletinsOverlayPanOptions = {
+  animation: {
+    duration: 250,
+  },
+  margin: 10,
+};
 
 export default {
   mixins: [layerMixin],
@@ -221,6 +227,7 @@ export default {
         orientations: [],
         urls: [],
       },
+      panIntoView: false,
     };
   },
   computed: {
@@ -421,6 +428,13 @@ export default {
         return;
       }
 
+      // no update if overlay is animating into view when opens
+      // = prevent overlay from moving
+      if (this.panIntoView) {
+        this.panIntoView = false;
+        return;
+      }
+
       // if zoom > 10
       //   we will intersect every polygon with the map extent, and update geometry of avalanche bulletin icons (icons will always be visible, even when zoomed)
       // else
@@ -482,7 +496,7 @@ export default {
         // find the closest point (because it's a MultiPoint)
         let closestPointCoordinate = clickedBulletinFeature.getGeometry().getClosestPoint(evt.coordinate);
         // set overlay position
-        this.openOverlay(closestPointCoordinate;
+        this.openOverlay(closestPointCoordinate, true);
         // store this point
         this.activeBulletins = {
           feature: clickedBulletinFeature,
@@ -516,8 +530,13 @@ export default {
         this.closeOverlay();
       }
     },
-    openOverlay(coordinates) {
+    openOverlay(coordinates, panIntoView = false) {
       bulletinsOverlay.setPosition(coordinates);
+
+      if (panIntoView) {
+        this.panIntoView = true;
+        bulletinsOverlay.panIntoView(bulletinsOverlayPanOptions);
+      }
     },
     closeOverlay() {
       bulletinsOverlay.setPosition(undefined);
