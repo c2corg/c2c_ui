@@ -18,8 +18,7 @@
             />
             <text
               x="50"
-              :y="overlayData.danger.high ? 75 : 58"
-              dominant-baseline="central"
+              :y="overlayData.danger.high ? 82 : 65"
               text-anchor="middle"
               font-family="sans-serif"
               font-size="20px"
@@ -44,8 +43,7 @@
               />
               <text
                 x="50"
-                y="46"
-                dominant-baseline="central"
+                y="54"
                 text-anchor="middle"
                 font-family="sans-serif"
                 font-size="20px"
