@@ -151,8 +151,20 @@ let bulletinsIcon = (danger) => {
       <path d="M5,50L50,5L95,50" fill="white" />
       <path d="M5,50L50,95L95,50" fill="${dangerFill[danger]}" />
       <path d="m50,0l50,50-50,50-50-50zv5L21,33l19-10L50,26l9-8L80,38l2-1L50,5M5,50L50,95L95,50" />
-      <text x="50" y="83" text-anchor="middle" font-family="sans-serif" font-size="40px" font-weight="bold">${danger != 0 ? danger : '&#xd7;'}</text>
   `;
+
+  if (danger !== 0) {
+    svg += `
+      <text x="50" y="83" text-anchor="middle" font-family="sans-serif" font-size="40px" font-weight="bold">${danger}</text>
+    `;
+  } else {
+    svg += `
+      <g stroke-width="5" stroke="black">
+        <line x1="40" x2="60" y1="58" y2="78" />
+        <line x1="40" x2="60" y1="78" y2="58" />
+      </g>
+    `;
+  }
 
   if (danger == 2) {
     svg += `
