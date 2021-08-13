@@ -414,21 +414,49 @@
     "No user with this email": {
       "API message": "нет пользователя с этим адресом"
     },
+    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "«Без производных» —  Если вы делаете ремиксы, трансформируете или дополняете материал, то вы не имеете права распространять измененный материал.",
+    "NonCommercial — You may not use the material for commercial purposes.": "Некоммерческий — вы не можете использовать материал в коммерческих целях.",
+    "Note that comments have to be transferred manually in Discourse before merging.": "Комментарии должны быть вручную загружены в Discourse перед слиянием документов.",
     "Numbers": "данные",
     "Ok": "ok",
+    "On a drawn line": "На линии",
     "Only document less than 24h old can be deleted": {
       "API message": "Документ не может быть удален по прошествии 24 часов. Обратитесь к модератору если это необходимо."
     },
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "В вашей ленте отображаются только документы, относящиеся к выбранным регионам и видам деятельности.\nОбновления статуса отслеживаемых пользователей будут отображаться всегда.",
     "Ooops": "ойй",
+    "Open fields to deeply explain the event circumstances.": "Поле, чтобы подробнее описать событие в свободной форме.",
+    "Open fields to detail the picture's context": "Поле для детализации содержимого изображения в свободной форме",
+    "Open in a new tab": "Открыть на новой вкладке",
     "Ordered list": "Сортированный список",
+    "Orientations": "Ориентации",
+    "Oups! Something went wrong with forum. Here is the message :": "Ох! Что-то пошло не так с форумом. Сообщение об ошибке:",
     "Oups! something went wrong...": "Ой! Что-то пошло не так...",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Наш веб-сайт использует файлы cookie, предоставленные нами и третьими сторонами. Некоторые файлы cookie необходимы для работы веб-сайта, в то время как настройки других могут быть изменены вами в любое время, особенно тех, которые позволяют нам оценить производительность нашего веб-сайта и предоставить вам функции социальных сетей. Вы можете принять или отклонить их все или",
     "Outing": "отчет",
     "Outings statistics": "статистики отчетов",
     "Page not found": "страница не найдена",
+    "Paragliding outings": "Выход с парапланом",
+    "Parameters of the Digital Camera": "Параметры цифровой камеры",
+    "Parent": "Родитель",
+    "Participants and context": "Участники и контекст",
     "Password": "Пароль",
     "Password too short": {
       "API message": "Слишком короткий пароль"
     },
+    "Paysage": {
+      "Sophie picture context": "Пейзаж"
+    },
+    "Paysage - prix du jury et du public": {
+      "Sophie picture context": "Пейзаж - приз жюри и зрителей"
+    },
+    "People who were with you, and your feelings about this outing": "Другие участники которые были с вами а также ваши ощущения от мероприятия",
+    "Period of protection": "Период охраны",
+    "Personal data are confidential": "Персональные данные конфиденциальны",
+    "Personal feed": "Личная лента",
+    "Personal feed off": "Личная лента отключена",
+    "Personal feed on": "Личная лента включена",
+    "Personal informations": "Персональная информация",
     "Register": "записываться",
     "Results only": "только результаты",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC это общемировая база несчастных случаев и инцидентов в скалолазании и других видах спорта, связанных с горами. Ее целью является увеличение безопасности этих видов спорта.",
@@ -1182,6 +1210,12 @@
     "no service": {
       "public_transportation_ratings": "нет сервиса"
     },
+    "non_applicable": {
+      "snow_clearance_ratings": "не приложимо"
+    },
+    "non_autonomous": {
+      "autonomies": "не автономно"
+    },
     "novel": {
       "book_types": "роман"
     },
@@ -1192,30 +1226,64 @@
     "open": {
       "lift_status": "открытый"
     },
+    "open_guarded": {
+      "hut_status": "открыто, обслуживается"
+    },
+    "open_non_guarded": {
+      "hut_status": "открыто, не обслуживается"
+    },
+    "opening_hours": "расписание работы",
+    "opening_periods": "период обслуживания",
+    "or try the following pages:": "или попробуйте следующие страницы:",
+    "orientations": "Ориентации",
     "other": {
       "event_activities": "Другое",
       "event_types": "Другое"
     },
+    "other_comments": "Физические последствия и другие комментарии",
     "outing": "отчет",
     "outings": "отчеты",
     "overcrowded": {
       "frequentation_types": "переполнен"
     },
+    "overhang": {
+      "climbing_styles": "нависание"
+    },
     "paragliding": {
       "activities": "парапланеризм"
+    },
+    "paragliding_instructor": {
+      "user_categories": "инструктор парапланеризма"
     },
     "paragliding_landing": {
       "waypoint_types": "Зона приземления"
     },
+    "paragliding_rating": "уровень сложности для параплана",
     "paragliding_takeoff": {
       "waypoint_types": "Зона взлета"
     },
+    "parking_fee": "Бесплатный паркинг",
+    "partial_trip": "Частично пройденный маршрут",
+    "participant_count": "Число участников",
     "participants": "участники",
+    "partly_protected": {
+      "rain_proof_types": "частично пробитый"
+    },
     "pass": {
       "waypoint_types": "перевал"
     },
+    "pedestrian access": {
+      "$$noContext": "Пешая доступность",
+      "hut": "Доступ"
+    },
     "people": {
       "image_categories": "люди"
+    },
+    "per page": {
+      "30 per page": "на страницу"
+    },
+    "person_fall": {
+      "event_types": "потеря равновесия или падение"
     },
     "personal": {
       "$$noContext": "личный",
@@ -1224,6 +1292,7 @@
     },
     "personal comments": "личные комментарии",
     "phone": "телефон",
+    "phone_custodian": "Телефон смотрителя/распорядителя",
     "place": "место",
     "poor service": {
       "public_transportation_ratings": "плохой сервис"
