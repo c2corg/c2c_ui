@@ -80,6 +80,12 @@
           <span v-translate>Avalanche bulletins</span>
           <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
           <fa-icon
+            icon="check-circle"
+            v-if="showMountains"
+            class="has-text-primary"
+            :title="$gettext('Visible on map')"
+          />
+          <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
             icon="angle-down"
             :rotation="showMountainsList ? 180 : undefined"
