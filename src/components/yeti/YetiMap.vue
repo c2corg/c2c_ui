@@ -1,7 +1,7 @@
 <template>
   <div class="column map-container">
     <div style="width: 100%; height: 100%">
-      <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
+      <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
       <mountains-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
@@ -237,6 +237,9 @@ export default {
       bus.$emit('mapMoveEnd');
     },
     onMapClick(evt) {
+      // close controls
+      this.showLayerSwitcher = false;
+      this.showRecenterOnPropositions = false;
       // emit an event for map layers
       bus.$emit('mapClick', evt);
     },
@@ -264,10 +267,9 @@ $control-margin: 0.5em;
   left: $control-margin;
   right: $control-margin;
   max-width: 400px;
-  color: white;
   text-decoration: none;
-  background-color: rgba(0, 60, 136, 0.7);
-  border: none;
+  background-color: white;
+  border: 1px solid lightgray;
   border-radius: 2px;
   padding: 0 10px 10px 10px;
   display: flex;
@@ -295,7 +297,9 @@ $control-margin: 0.5em;
 .ol-control-recenter-on-propositions {
   top: 35px;
   left: 3em;
-  background: rgba(255, 255, 255, 0.9);
+  background: white;
+  border-radius: 2px;
+  border: 1px solid lightgray;
   padding: 5px;
 
   li:hover {
