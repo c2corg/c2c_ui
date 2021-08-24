@@ -34,7 +34,7 @@ let defaultState = {
     visible: [],
   },
   bulletinsLoaded: false,
-  showMountains: false,
+  showAvalancheBulletins: false,
 
   mapZoom: 0,
 };
@@ -73,8 +73,8 @@ export let mutations = {
   setVisibleMountains(mountains) {
     state.mountains.visible = mountains;
   },
-  setShowMountains(showMountains) {
-    state.showMountains = showMountains;
+  setShowAvalancheBulletins(showAvalancheBulletins) {
+    state.showAvalancheBulletins = showAvalancheBulletins;
   },
   setBulletinsLoaded(bool) {
     state.bulletinsLoaded = bool;

@@ -239,8 +239,8 @@ export default {
     mapZoom() {
       return state.mapZoom;
     },
-    showMountains() {
-      return state.showMountains;
+    showAvalancheBulletins() {
+      return state.showAvalancheBulletins;
     },
     bulletinsLoaded() {
       return state.bulletinsLoaded;
@@ -266,8 +266,8 @@ export default {
     },
   },
   watch: {
-    showMountains() {
-      this.onShowMountains();
+    showAvalancheBulletins() {
+      this.onShowAvalancheBulletins();
     },
   },
   mounted() {
@@ -364,18 +364,18 @@ export default {
       // set visible mountains
       this.setVisibleMountains();
 
-      if (this.showMountains) {
+      if (this.showAvalancheBulletins) {
         this.updateMountainsStyle();
         this.updateBulletinsGeometry();
       }
     },
     onMapClick(evt) {
-      // this will set bulletins overlay, only when showmountains is true
-      if (this.showMountains) {
+      // this will set bulletins overlay, only when showAvalancheBulletins is true
+      if (this.showAvalancheBulletins) {
         this.setBulletinsOverlay(evt);
       }
     },
-    onShowMountains() {
+    onShowAvalancheBulletins() {
       // first time, bulletins are not loaded yet
       if (!this.bulletinsLoaded) {
         mutations.setBulletinsLoaded(true);
@@ -383,7 +383,7 @@ export default {
         actions.fetchBulletins().then(this.onBulletinsResult);
       }
       // show mountains layer group if needed
-      mountainsLayerGroup.setVisible(this.showMountains);
+      mountainsLayerGroup.setVisible(this.showAvalancheBulletins);
       // update styles
       this.updateMountainsStyle();
       this.updateBulletinsGeometry();
@@ -528,7 +528,7 @@ export default {
       }
     },
     updateBulletinsOverlay() {
-      if (this.activeBulletins && this.showMountains) {
+      if (this.activeBulletins && this.showAvalancheBulletins) {
         let activeFeature = this.activeBulletins.feature;
         let activeIndex = this.activeBulletins.index || 0;
         // try to get point

@@ -42,7 +42,7 @@
           </div>
           <header>YETI</header>
           <div v-for="(layer, i) of yetiLayers" :key="layer.title">
-            <input :id="'yeti-checkbox' + i" :checked="showMountains" type="checkbox" @change="layer.action" />
+            <input :id="'yeti-checkbox' + i" :checked="showAvalancheBulletins" type="checkbox" @change="layer.action" />
             <label :for="'yeti-checkbox' + i">{{ layer.title }}</label>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default {
       yetiLayers: [
         {
           title: this.$gettext('Avalanche bulletins'),
-          action: this.onShowMountains,
+          action: this.onShowAvalancheBulletins,
         },
       ],
 
@@ -121,8 +121,8 @@ export default {
     mapZoom() {
       return state.mapZoom;
     },
-    showMountains() {
-      return state.showMountains;
+    showAvalancheBulletins() {
+      return state.showAvalancheBulletins;
     },
     visibleCartoLayer: {
       get() {
@@ -135,7 +135,7 @@ export default {
     },
   },
   watch: {
-    showMountains() {
+    showAvalancheBulletins() {
       this.updateCartoLayersOpacity();
     },
   },
@@ -230,7 +230,7 @@ export default {
         mutations.setMapZoom(mapZoom);
       }
       // if mountains are here, update
-      if (this.showMountains) {
+      if (this.showAvalancheBulletins) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -246,11 +246,11 @@ export default {
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
       this.cartoLayers.forEach((layer) => {
-        layer.setOpacity(this.showMountains && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity(this.showAvalancheBulletins && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
-    onShowMountains() {
-      mutations.setShowMountains(!this.showMountains);
+    onShowAvalancheBulletins() {
+      mutations.setShowAvalancheBulletins(!this.showAvalancheBulletins);
     },
   },
 };

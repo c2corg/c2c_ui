@@ -81,7 +81,7 @@
           <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
           <fa-icon
             icon="check-circle"
-            v-if="showMountains"
+            v-if="showAvalancheBulletins"
             class="has-text-primary"
             :title="$gettext('Visible on map')"
           />
@@ -95,8 +95,8 @@
       <div v-if="showMountainsList">
         <div v-if="showVisibleMountains">
           <div class="pl-3 mt-2 mb-2">
-            <input-checkbox @input="onShowMountains" :value="showMountains">
-              <span v-translate>Show on map</span>
+            <input-checkbox @input="onShowAvalancheBulletins" :value="showAvalancheBulletins">
+              <span v-translate>Visible on map</span>
             </input-checkbox>
           </div>
           <dl>
@@ -142,8 +142,8 @@ export default {
     visibleMountains() {
       return state.mountains.visible;
     },
-    showMountains() {
-      return state.showMountains;
+    showAvalancheBulletins() {
+      return state.showAvalancheBulletins;
     },
     showVisibleMountains() {
       return this.countVisibleMountains >= 0;
@@ -171,8 +171,8 @@ export default {
         mutations.setBra('altiThreshold', null);
       }
     },
-    onShowMountains(value) {
-      mutations.setShowMountains(value);
+    onShowAvalancheBulletins(value) {
+      mutations.setShowAvalancheBulletins(value);
     },
   },
 };
