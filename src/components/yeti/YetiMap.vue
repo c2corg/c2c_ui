@@ -3,7 +3,7 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
-      <mountains-layer />
+      <avalanche-bulletins-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <route-layer />
       <div
@@ -72,7 +72,7 @@
 import { cartoLayers, dataLayers } from '../map/map-layers';
 
 import AreaLayer from './map-layers/AreaLayer.vue';
-import MountainsLayer from './map-layers/MountainsLayer.vue';
+import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
@@ -87,7 +87,7 @@ const MAX_ZOOM = 19;
 export default {
   components: {
     AreaLayer,
-    MountainsLayer,
+    AvalancheBulletinsLayer,
     RouteLayer,
     YetiLayer,
   },
