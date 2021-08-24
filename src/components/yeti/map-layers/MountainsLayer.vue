@@ -4,8 +4,10 @@
     <div class="bulletins-header pt-5 pb-3 has-text-centered">
       <p class="title is-5">{{ overlayData.mountainName }}</p>
     </div>
-    <div v-if="overlayData.danger.low">
-      <p class="is-size-7 px-3 pt-1 pb-3 bulletins-date">{{ overlayValidUntil }}</p>
+    <div v-if="overlayData.danger.low" class="py-2">
+      <p class="is-size-7 px-3 pb-5 bulletins-date">
+        <strong v-translate>Validity date:</strong> {{ overlayValidUntil }}
+      </p>
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <div>
           <svg
@@ -67,23 +69,26 @@
         </div>
         <input-orientation :value="overlayOrientations" />
       </div>
+      <dl v-if="overlayDangerComment || overlayOrientationsComment" class="is-size-6 px-3 pt-3">
+        <div v-if="overlayDangerComment">
+          <dt v-translate>Danger:</dt>
+          <dd>{{ overlayDangerComment }}</dd>
+        </div>
+        <div v-if="overlayOrientationsComment">
+          <dt v-translate>Orientations:</dt>
+          <dd>{{ overlayOrientationsComment }}</dd>
+        </div>
+      </dl>
     </div>
-    <div v-else>
+    <div v-else class="py-2">
       <p class="is-size-6 p-3"><span v-translate>No avalanche bulletin right now</span></p>
     </div>
-    <p v-if="overlayData.danger.low && overlayData.danger.comment" class="is-size-6 px-3 pt-3">
-      <strong v-translate>Danger</strong> {{ overlayData.danger.comment }}
+    <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer">
+      <strong v-translate>Full bulletin:</strong>
+      <span v-for="(url, i) in overlayData.urls" :key="i" class="pl-1">
+        <a :href="url.url" target="_blank"><fa-icon icon="external-link-alt" /> {{ url.title }}</a>
+      </span>
     </p>
-    <p v-if="overlayData.orientations.comment" class="is-size-6 px-3 pb-3">
-      <strong v-translate>Orientations</strong> {{ overlayData.orientations.comment }}
-    </p>
-    <div class="p-3">
-      <ul class="">
-        <li v-for="(url, i) in overlayData.urls" :key="i" class="mr-5 is-size-7">
-          <a :href="url.url" target="_blank"><fa-icon icon="external-link-alt" /> {{ url.title }}</a>
-        </li>
-      </ul>
-    </div>
     <img :src="overlayDangerIcon" alt="" class="bulletins-overlay-danger-icon" />
   </div>
 </template>
@@ -248,10 +253,16 @@ export default {
         .map((val) => val.toUpperCase());
     },
     overlayValidUntil() {
-      return format(new Date(this.overlayData.validUntil), 'dd/MM/yyyy HH:mm:ss');
+      return format(new Date(this.overlayData.validUntil), 'dd/MM/yyyy HH:mm');
     },
     overlayDangerIcon() {
       return bulletinsIcon(this.overlayData.danger.max);
+    },
+    overlayDangerComment() {
+      return this.overlayData.danger.low ? this.overlayData.danger.comment : null;
+    },
+    overlayOrientationsComment() {
+      return this.overlayData.orientations.comment;
     },
   },
   watch: {
@@ -554,14 +565,17 @@ export default {
   max-width: 100%;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 2px 3px rgba($black, 0.5), 0 3px 8px rgba($black, 0.5);
+  box-shadow: 0 0 3px rgba($black, 0.5), 0 3px 8px rgba($black, 0.5);
   overflow: hidden;
 }
 .bulletins-header {
-  background: $grey-lighter;
+  background: $primary;
 }
-.bulletins-date {
-  opacity: 0.75;
+.bulletins-header * {
+  color: white;
+}
+.bulletins-footer {
+  background: $grey-lighter;
 }
 .bulletins-overlay-danger-icon {
   position: absolute;
@@ -572,8 +586,15 @@ export default {
   z-index: 2;
   pointer-events: none;
 }
-strong {
-  color: #4a4a4a;
+.bulletins-date {
+  opacity: 0.75;
+}
+dt,
+dd {
+  display: inline;
+}
+dt {
+  font-weight: bold;
 }
 .button-close {
   position: absolute;
