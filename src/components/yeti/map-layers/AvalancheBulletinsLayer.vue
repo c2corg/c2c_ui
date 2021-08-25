@@ -443,6 +443,8 @@ export default {
       // = prevent overlay from moving
       if (this.panIntoView) {
         this.panIntoView = false;
+        // update bulletin overlay though (hide/show if needed)
+        this.updateBulletinsOverlay();
         return;
       }
 
@@ -524,7 +526,7 @@ export default {
         }
       } else {
         // remove when no feature found (click on map)
-        this.closeOverlay();
+        this.closeOverlay(true);
       }
     },
     updateBulletinsOverlay() {
@@ -542,16 +544,21 @@ export default {
       }
     },
     openOverlay(coordinates, panIntoView = false) {
-      bulletinsOverlay.setPosition(coordinates);
+      this.$nextTick(() => {
+        bulletinsOverlay.setPosition(coordinates);
 
-      if (panIntoView) {
-        this.panIntoView = true;
-        bulletinsOverlay.panIntoView(bulletinsOverlayPanOptions);
-      }
+        if (panIntoView) {
+          this.panIntoView = true;
+          bulletinsOverlay.panIntoView(bulletinsOverlayPanOptions);
+        }
+      });
     },
-    closeOverlay() {
+    closeOverlay(force = false) {
       bulletinsOverlay.setPosition(undefined);
-      this.activeBulletins = null;
+
+      if (force) {
+        this.activeBulletins = null;
+      }
     },
   },
 };
