@@ -24,10 +24,11 @@
             </div>
 
             <div class="column is-4">
-              <label-value :label="$gettext('ratings')">
-                <document-rating v-if="$documentUtils.hasRating(document)" :document="document" show-helper />
-                <edit-link v-else-if="isEditable" :document="document" :lang="$user.lang" />
-                <span v-else>...</span>
+              <label-value v-if="$documentUtils.hasRating(document)" :label="$gettext('ratings')">
+                <document-rating :document="document" show-helper />
+              </label-value>
+              <label-value v-if="isEditable" :label="$gettext('ratings')">
+                <edit-link :document="document" :lang="$user.lang" />
               </label-value>
 
               <field-view v-if="document.glacier_gear != 'no'" :document="document" :field="fields.glacier_gear" />
