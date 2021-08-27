@@ -170,8 +170,6 @@
 
 <script>
 import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
-import isEditableMixin from '../is-editable-mixin';
-import viewModeMixin from '../view-mode-mixin';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow';
@@ -185,8 +183,10 @@ import AssociationsWindow from '@/components/association-editor/AssociationsWind
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
+import isEditableMixin from '@/js/is-editable-mixin';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
+import viewModeMixin from '@/js/view-mode-mixin';
 
 const GeoJSON = new ol.format.GeoJSON();
 

@@ -1,4 +1,11 @@
-import viewModeMixin from './view-mode-mixin';
+// The purpose of this mixin is to expose isDeletable and isEditable properties
+// It relies onthe presence of document and documentType properties
+//
+// As you can see, knowing if a document is editable is quite complex
+// Note : if user is not logged, we continue the process, as we want to display
+// edit button even for anonymous users
+
+import viewModeMixin from '@/js/view-mode-mixin';
 
 export default {
   mixins: [viewModeMixin],
@@ -51,7 +58,8 @@ export default {
     },
 
     isEditable() {
-      if (!this.$user.isLogged || !this.isNormalView) {
+      // We do not check if the user is logged. If he's not, he can login
+      if (!this.isNormalView) {
         return false;
       }
 

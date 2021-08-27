@@ -12,13 +12,14 @@ import FieldView from './field-viewers/FieldView';
 import LabelValue from './field-viewers/LabelValue';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
-import viewModeMixin from './view-mode-mixin';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
 import imageUrls from '@/js/image-urls';
+import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
+import viewModeMixin from '@/js/view-mode-mixin';
 
 export default {
   components: {
@@ -39,7 +40,7 @@ export default {
     ImagesBox,
   },
 
-  mixins: [viewModeMixin],
+  mixins: [viewModeMixin, isEditableMixin],
 
   props: {
     draft: {
