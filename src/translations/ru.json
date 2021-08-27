@@ -340,6 +340,7 @@
     "Issue report": "Сигнализировать о проблеме",
     "Know more about SERAC": "Узнать побольше про SERAC",
     "Large group = 5 people and more": "Большая группа = 5 чел или больше",
+    "Large group with load shedding distance": "Большая группа на достаточном расстоянии",
     "Last forum topics": "Последние дискуссии",
     "Last outings": "Последные отчеты",
     "Latitude": "Широта",
@@ -357,6 +358,7 @@
     "List mode": "Режим списка",
     "List of versions for language:": "Посмотреть версии для языка:",
     "Load my preferences": "Загрузить мои настройки",
+    "Load shedding distance": "Безопасная дистанция",
     "Location / elevation / orientation": "Место / Высота / Ориентация",
     "Log in to post a comment": "Войдите чтобы комментировать",
     "Login": "Войти",
@@ -370,6 +372,8 @@
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Основная информация о маршруте: название, способ прохождения, общая локализация, GPS",
     "Main informations about your outing": "Главные информации вашего отчета",
     "Make profile page public": "Сделать мой профайл публичным",
+    "Map filter off": "Выключить фильтр карты",
+    "Map filter on": "Включить фильтр карты",
     "Map only": "только карта",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Карты, гайдбуки, известные маршруты, варианты плана \"Б\", (пере)оценка маршрута во время движения.",
     "Mark this route as to do": "Добавить маршрут в избранные",
@@ -402,6 +406,7 @@
     "My statistics": "Моя статистика",
     "Narration": "повествование",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Близость к несчастному случаю = опасная ситуация, не приведшая к телесным повреждениям, но могшая привести к гораздо более серьезным последствиям.",
+    "Near-accidents are valuable": "Происшествия близкие к несчастным случаям ",
     "Necessary cookies": "необходимые куки",
     "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Файлы cookie необходимы для правильного функционирования нашего веб-сайта и не могут быть отключены полностью. Они отправляются на ваш компьютер или устройство, когда вы запрашиваете определенное действие или услугу, например когда вы входите в систему, заполняете форму или определяете свои предпочтения в отношении файлов cookie. Если вы настроите свой компьютер так, чтобы блокировать эти файлы cookie, наш веб-сайт не будет доступен для вас в полной мере.",
     "New outing": "новый отчет",
@@ -411,6 +416,11 @@
     "No account yet?": "Нет аккаунта?",
     "No data could be extracted from GPS file": "Данные не могут быть извлечены из GPS-файла",
     "No match?": "Нет подходящих результатов",
+    "No orientation selected": "Не выбрано направление",
+    "No reduction factor": "Без понижающего коэффициента",
+    "No result found": "Результат не найден",
+    "No route right now": "В данный момент маршрут не найден",
+    "No selected hazard potential. Set danger level first.": "Уровень опасности не выбран. Сначала введите уровень опасности.",
     "No user with this email": {
       "API message": "нет пользователя с этим адресом"
     },
@@ -457,6 +467,7 @@
     "Personal feed off": "Личная лента отключена",
     "Personal feed on": "Личная лента включена",
     "Personal informations": "Персональная информация",
+    "Pitch description tag": "Тэг описания питча",
     "Register": "записываться",
     "Results only": "только результаты",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC это общемировая база несчастных случаев и инцидентов в скалолазании и других видах спорта, связанных с горами. Ее целью является увеличение безопасности этих видов спорта.",
@@ -1084,6 +1095,8 @@
       "custodianship_types": "чтобы от крыть необходим ключ"
     },
     "kilometers": "километры",
+    "labande_global_rating": "Общий лыжный рейтинг",
+    "labande_ski_rating": "Уточненный лыжный рейтинг",
     "lake": {
       "waypoint_types": "озеро"
     },
@@ -1180,9 +1193,15 @@
       "user_categories": "инструктор по горному велосипеду"
     },
     "mtb_down_rating": "Уровень спуска на MTB",
+    "mtb_height_diff_portages": "Перемещение MTB",
+    "mtb_length_asphalt": "Расстояние по асфальту",
+    "mtb_length_trail": "Расстояние по тропе",
     "mtb_up_rating": "Уровень подъема на MTB",
     "multi": {
       "climbing_outdoor_types": "Мультипитч"
+    },
+    "multipitch_climbing": {
+      "event_activities": "Лазанье мультипитчей"
     },
     "name": "имя",
     "natural_avalanche": {
@@ -1197,8 +1216,12 @@
     "nearby service": {
       "public_transportation_ratings": "близкий сервис"
     },
+    "new lines chunks": "новые строки",
     "next difference": "следующая разница",
     "next version": "следующая версия",
+    "nivology": {
+      "image_categories": "Снеговедение и лавины"
+    },
     "no": {
       "$$noContext": "нет",
       "avalanche_signs": "нет",
@@ -1210,6 +1233,12 @@
     "no service": {
       "public_transportation_ratings": "нет сервиса"
     },
+    "no_supervision": {
+      "supervision": "Без присмотра"
+    },
+    "no_warden": {
+      "custodianship_types": "необслуживаемый"
+    },
     "non_applicable": {
       "snow_clearance_ratings": "не приложимо"
     },
@@ -1220,9 +1249,13 @@
       "book_types": "роман"
     },
     "numbers": "номеры",
+    "of": {
+      "1-30 of 200 results": "на"
+    },
     "often": {
       "snow_clearance_ratings": "часто"
     },
+    "on": "на",
     "open": {
       "lift_status": "открытый"
     },
@@ -1293,6 +1326,19 @@
     "personal comments": "личные комментарии",
     "phone": "телефон",
     "phone_custodian": "Телефон смотрителя/распорядителя",
+    "photos-art": {
+      "book_types": "фото-арт"
+    },
+    "physical_failure": {
+      "event_types": "физический отказ"
+    },
+    "pillar": {
+      "route_configuration_types": "столб"
+    },
+    "pitch": {
+      "climbing_indoor_types": "питч"
+    },
+    "pixels": "точек",
     "place": "место",
     "poor service": {
       "public_transportation_ratings": "плохой сервис"
