@@ -19,7 +19,7 @@
       <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
         <div>
           <header v-translate>Base layer</header>
-          <div v-for="(layer, i) of cartoLayers" :key="layer.get('title')">
+          <div v-for="(layer, i) of cartoLayers" :key="layer.get('title')" class="map-control-listitem">
             <input
               :id="'carto-checkbox' + i"
               :checked="layer == visibleCartoLayer"
@@ -31,7 +31,7 @@
         </div>
         <div>
           <header v-translate>Slopes</header>
-          <div v-for="(layer, i) of dataLayers" :key="layer.get('title')">
+          <div v-for="(layer, i) of dataLayers" :key="layer.get('title')" class="map-control-listitem">
             <input
               :id="'data-checkbox' + i"
               :checked="layer.getVisible()"
@@ -41,7 +41,7 @@
             <label :for="'data-checkbox' + i">{{ $gettext(layer.get('title'), 'Map slopes layer') }}</label>
           </div>
           <header>YETI</header>
-          <div v-for="(layer, i) of yetiLayers" :key="layer.title">
+          <div v-for="(layer, i) of yetiLayers" :key="layer.title" class="map-control-listitem">
             <input :id="'yeti-checkbox' + i" :checked="showAvalancheBulletins" type="checkbox" @change="layer.action" />
             <label :for="'yeti-checkbox' + i">{{ layer.title }}</label>
           </div>
@@ -306,6 +306,13 @@ $control-margin: 0.5em;
     background: lightgrey;
     cursor: pointer;
   }
+}
+
+.map-control-listitem {
+  display: flex;
+}
+.map-control-listitem label {
+  padding-left: 0.25rem;
 }
 
 $section-padding: 1.5rem; //TODO find this variable
