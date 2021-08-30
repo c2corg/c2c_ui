@@ -107,7 +107,7 @@
           </dl>
         </div>
         <div v-else>
-          <p class="column yetiform-info" v-translate>Massifs could not be loaded</p>
+          <info class="column" v-translate>Massifs could not be loaded</info>
         </div>
       </template>
     </dropdown-content>
@@ -117,11 +117,12 @@
 <script>
 import Counter from '@/components/yeti/Counter.vue';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
-  components: { Counter, DropdownContent, SubPanelTitle },
+  components: { Counter, DropdownContent, Info, SubPanelTitle },
   data() {
     return {
       showMountainsList: false,

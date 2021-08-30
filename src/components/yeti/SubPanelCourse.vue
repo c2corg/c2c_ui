@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="ml-5 mb-5">
-        <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
+        <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
       <sub-panel-title><span v-translate>Export</span></sub-panel-title>
@@ -60,7 +60,7 @@
           <button class="button is-primary" @click="downloadCourse" v-translate>Export route</button>
         </div>
       </div>
-      <div class="yetiform-note mt-5">
+      <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
           <li><strong v-translate translate-context="yeti">Draw</strong> <span v-translate>new lines chunks</span></li>
@@ -85,6 +85,7 @@
           <li><strong v-translate>Delete a line chunk</strong></li>
           <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
         </ul>
+      </info>
       </div>
     </div>
     <div v-else>
@@ -102,9 +103,9 @@
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
-        <div class="yetiform-note mt-5">
+        <info type="help" class="mt-5">
           <p><strong v-translate>Draw right on the map</strong> <span v-translate>to start a new route</span></p>
-        </div>
+        </info>
       </div>
     </div>
   </div>
@@ -114,13 +115,14 @@
 import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
+import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, SubPanelTitle },
+  components: { FeaturesList, Info, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,

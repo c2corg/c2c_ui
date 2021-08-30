@@ -13,7 +13,7 @@
           @click.prevent="setActiveTab(i)"
           @keydown="setActiveTabKeyboard($event, i)"
         >
-          {{ tab }} <counter is-primary v-if="i === 1 && hasFeatures">1</counter>
+          {{ tab }} <fa-icon icon="check-circle" v-if="i === 1 && hasFeatures" class="ml-1" />
         </a>
       </li>
     </ul>
@@ -21,11 +21,9 @@
 </template>
 
 <script>
-import Counter from '@/components/yeti/Counter.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
-  components: { Counter },
   props: {
     tabs: {
       type: Array,
