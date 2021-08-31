@@ -53,13 +53,9 @@ export default {
   watch: {
     activeTab() {
       if (this.activeTab === 0) {
-        this.drawInteraction.setActive(false);
-        this.modifyInteraction.setActive(false);
-        this.snapInteraction.setActive(false);
+        this.disableInteractions();
       } else {
-        this.drawInteraction.setActive(true);
-        this.modifyInteraction.setActive(true);
-        this.snapInteraction.setActive(true);
+        this.enableInteractions();
       }
     },
   },
@@ -112,6 +108,14 @@ export default {
       this.drawInteraction.on('drawend', this.onDrawEnd);
       this.modifyInteraction.on('modifyend', this.onModifyEnd);
 
+      this.disableInteractions();
+    },
+    enableInteractions() {
+      this.drawInteraction.setActive(true);
+      this.modifyInteraction.setActive(true);
+      this.snapInteraction.setActive(true);
+    },
+    disableInteractions() {
       this.drawInteraction.setActive(false);
       this.modifyInteraction.setActive(false);
       this.snapInteraction.setActive(false);
