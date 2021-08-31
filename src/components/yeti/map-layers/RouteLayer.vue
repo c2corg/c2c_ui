@@ -5,18 +5,26 @@ import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
-let normalLineStyle = new ol.style.Style({
-  stroke: new ol.style.Stroke({
-    color: 'yellow',
-    width: 3,
+let normalLineStyle = [
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0, 0, 0, 0.4)',
+      width: 5,
+    }),
   }),
-});
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'yellow',
+      width: 3,
+    }),
+  }),
+];
 
 let highlightedLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'rgba(255, 255, 0, .5)',
-      width: 8,
+      color: 'yellow',
+      width: 9,
     }),
     zIndex: 1,
   }),
