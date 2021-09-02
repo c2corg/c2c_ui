@@ -526,7 +526,7 @@ export default {
         function (event) {
           event.features.map((feature) => {
             if (document.type !== 'o') {
-              this.cleanZeroElevationFromDroppedFeature(feature);
+              this.cleanZeroElevationFromgeoFileFeature(feature);
             }
             return this.setDocumentGeometryFromFeature(feature);
           });
@@ -544,7 +544,7 @@ export default {
       }
     },
 
-    cleanZeroElevationFromDroppedFeature(feature) {
+    cleanZeroElevationFromgeoFileFeature(feature) {
       // GPS often have a bad elevation (0) for the some of the first point
       // We do a simple algorithm to prevent most of these cases
       // by applying the elevation of the first 'good' coordinate to the
@@ -576,7 +576,12 @@ export default {
       for (const format of [new ol.format.GPX(), new FIT(), new ol.format.KML()]) {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
-          features.map(this.setDocumentGeometryFromFeature);
+          features.map((feature) => {
+            if (document.type !== 'o') {
+              this.cleanZeroElevationFromgeoFileFeature(feature);
+            }
+            return this.setDocumentGeometryFromFeature(feature);
+          });
           return;
         }
       }
