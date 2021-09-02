@@ -524,7 +524,12 @@ export default {
       dragAndDrop.on(
         'addfeatures',
         function (event) {
-          event.features.map(this.setDocumentGeometryFromFeature);
+          event.features.map((feature) => {
+            if (document.type !== 'o') {
+              this.cleanZeroElevationFromDroppedFeature(feature);
+            }
+            return this.setDocumentGeometryFromFeature(feature);
+          });
         }.bind(this)
       );
 
@@ -537,6 +542,34 @@ export default {
       } catch (e) {
         return null;
       }
+    },
+
+    cleanZeroElevationFromDroppedFeature(feature) {
+      // GPS often have a bad elevation (0) for the some of the first point
+      // We do a simple algorithm to prevent most of these cases
+      // by applying the elevation of the first 'good' coordinate to the
+      // 'faulty' coordinates if they are not too far away
+      const geometry = feature.get('geometry');
+      const type = geometry.getType();
+      const coords = geometry.getCoordinates();
+      const nonZeroElevationIndex = coords.findIndex((coord) => coord.length > 2 && coord[2] !== 0);
+      if (type !== 'LineString' || nonZeroElevationIndex <= 0) {
+        return;
+      }
+
+      for (let i = 0; i < nonZeroElevationIndex; i++) {
+        // Get the distance between the point without elevation, and the point with elevation
+        // If it's less than 100m, we can consider that it's elevation is the same
+        // Since we use EPSG:3857, we can easily compute the approximated distance
+        const distance = Math.sqrt(
+          (coords[nonZeroElevationIndex][0] - coords[i][0]) ** 2 +
+            (coords[nonZeroElevationIndex][1] - coords[i][1]) ** 2
+        );
+        if (distance < 100) {
+          coords[i][2] = coords[nonZeroElevationIndex][2];
+        }
+      }
+      geometry.setCoordinates(coords);
     },
 
     setDocumentGeometryFromGeoFile(file) {
