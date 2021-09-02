@@ -514,7 +514,6 @@ export default {
       }
     },
 
-    // https://openlayers.org/en/latest/examples/drag-and-drop.html
     setDragAndDropInteraction() {
       // handle use case when user drag&drop a gpx/kml/fit file on map
       const dragAndDrop = new ol.interaction.DragAndDrop({
@@ -545,7 +544,7 @@ export default {
     },
 
     cleanZeroElevationFromgeoFileFeature(feature) {
-      // GPS often have a bad elevation (0) for the some of the first point
+      // GPS often have a bad elevation (0) for some of the first points
       // We do a simple algorithm to prevent most of these cases
       // by applying the elevation of the first 'good' coordinate to the
       // 'faulty' coordinates if they are not too far away
