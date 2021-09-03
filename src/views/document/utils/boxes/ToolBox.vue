@@ -72,6 +72,7 @@
       v-if="documentType === 'profile'"
       :to="{ name: 'whatsnew', query: { u: document.document_id } }"
       :label="$gettext('Contributions')"
+      rel="nofollow"
       icon="edit"
     />
 
@@ -84,6 +85,7 @@
       v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
       :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
       :label="$gettext('History')"
+      rel="nofollow"
       icon="history"
     />
 
@@ -168,8 +170,6 @@
 
 <script>
 import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
-import isEditableMixin from '../is-editable-mixin';
-import viewModeMixin from '../view-mode-mixin';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow';
@@ -183,8 +183,10 @@ import AssociationsWindow from '@/components/association-editor/AssociationsWind
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
+import isEditableMixin from '@/js/is-editable-mixin';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
+import viewModeMixin from '@/js/view-mode-mixin';
 
 const GeoJSON = new ol.format.GeoJSON();
 

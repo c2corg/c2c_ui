@@ -29,7 +29,7 @@ export default {
 
 <style scoped lang="scss">
 @media print {
-  /*write the activity's title instead of the icon*/
+  /* write the activity's title instead of the icon */
   .replace-icon-by-names-on-print {
     color: $text !important;
   }

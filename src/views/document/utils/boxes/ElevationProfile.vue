@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasData">
+  <div v-if="hasData" class="elevation-profile-container">
     <form v-if="timeAvailable" class="has-text-centered">
       <span class="is-size-7" v-translate>See profile based on:</span>
       <br />
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
@@ -95,12 +96,16 @@ export default {
     if (this.hasData) {
       d3.then(this.createChart);
     }
+
+    this.debouncedOnResize = debounce(this.onResize, 100);
+  },
+
+  beforeDestroy() {
+    this.resizeObserver?.unobserve(this.$refs.graph);
   },
 
   methods: {
     computeCoords() {
-      // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/elevationprofile.js
-
       // compute data
       const geom_detail = JSON.parse(this.document.geometry.geom_detail);
 
@@ -120,6 +125,7 @@ export default {
 
       this.timeAvailable = this.coords.every((coord) => coord.length > 3);
       this.hasData = true;
+      this.$emit('has-data');
     },
 
     createChart() {
@@ -136,7 +142,6 @@ export default {
         if (i > 0) {
           // convert from web mercator to lng/lat
           const deg1 = ol.proj.transform([coords[i][0], coords[i][1]], 'EPSG:3857', 'EPSG:4326');
-
           const deg2 = ol.proj.transform([coords[i - 1][0], coords[i - 1][1]], 'EPSG:3857', 'EPSG:4326');
           // arc distance x earth radius
           d = d3.geoDistance(deg1, deg2) * 6371;
@@ -156,13 +161,13 @@ export default {
 
       const size = {
         width: wrapper.offsetWidth,
-        height: 300,
+        height: wrapper.offsetHeight,
       };
 
       this.margin = {
-        top: 40, // 7,
+        top: 40,
         right: 10,
-        bottom: 18,
+        bottom: 25,
         left: 35,
       };
 
@@ -170,12 +175,8 @@ export default {
       const height = size.height - this.margin.top - this.margin.bottom;
 
       // Add an SVG element with the desired dimensions and margin
-
-      this.svg = d3
-        .select(this.$refs.graph)
-        .append('svg')
-        .attr('width', size.width)
-        .attr('height', size.height)
+      this.svg = d3.select(this.$refs.graph).append('svg').attr('width', size.width).attr('height', size.height);
+      this.container = this.svg
         .append('g')
         .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
@@ -199,7 +200,7 @@ export default {
         this.x2.domain(d3.extent(this.data, (d) => d.elapsed)).nice(d3.timeHour);
       }
 
-      this.svg
+      this.container
         .append('g')
         .attr('class', 'y axis')
         .call(this.yAxis)
@@ -210,7 +211,7 @@ export default {
         .style('text-anchor', 'end')
         .text(this.i18n_.elevation_legend);
 
-      this.svg
+      this.container
         .append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
@@ -236,10 +237,10 @@ export default {
       }
 
       // display line path
-      this.line = this.svg.append('path').datum(this.data).attr('class', 'line').attr('d', this.dLine);
+      this.line = this.container.append('path').datum(this.data).attr('class', 'line').attr('d', this.dLine);
 
-      // Display point information one hover
-      this.focusv = this.svg
+      // Display point information on hover
+      this.focusv = this.container
         .append('line')
         .attr('class', 'target')
         .attr('x1', 0)
@@ -248,7 +249,7 @@ export default {
         .attr('y2', size.height - this.margin.bottom - this.margin.top)
         .style('display', 'none');
 
-      this.focush = this.svg
+      this.focush = this.container
         .append('line')
         .attr('class', 'target')
         .attr('x1', 0)
@@ -257,9 +258,9 @@ export default {
         .attr('y2', 0)
         .style('display', 'none');
 
-      this.focus = this.svg.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
+      this.focus = this.container.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
 
-      this.bubble1 = this.svg
+      this.bubble1 = this.container
         .append('text')
         .attr('x', (size.width - this.margin.left - this.margin.right) / 2)
         .attr('dy', '-.71em')
@@ -268,7 +269,7 @@ export default {
         .style('display', 'none')
         .text('');
 
-      this.bubble2 = this.svg
+      this.bubble2 = this.container
         .append('text')
         .attr('x', (size.width - this.margin.left - this.margin.right) / 2)
         .attr('dy', '-1.71em')
@@ -277,7 +278,7 @@ export default {
         .style('display', 'none')
         .text('');
 
-      this.svg
+      this.container
         .append('rect')
         .attr('class', 'overlay')
         .attr('width', width)
@@ -294,14 +295,57 @@ export default {
           this.focush.style('display', 'none');
           this.focusv.style('display', 'none');
           this.bubble1.style('display', 'none');
-          this.bubble2.style('display', null);
+          this.bubble2.style('display', 'none');
+          this.emitMouseOutEvent();
         })
-        .on('mousemove', this.mousemove); // TODO
+        .on('mousemove', this.mousemove);
 
-      // listen to width changes to redraw graph
-      // $(window).on('resize', TODO
-      //    this.ngeoDebounce_(this.resizeChart_.bind(this), 300, true)
-      // );
+      this.resizeObserver = new ResizeObserver(([entry]) => {
+        if (entry.contentBoxSize) {
+          // Firefox implements `contentBoxSize` as a single content rect, rather than an array
+          const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
+          this.debouncedOnResize(contentBoxSize.inlineSize, contentBoxSize.blockSize);
+        } else {
+          this.debouncedOnResize(entry.contentRect.width, entry.contentRect.height);
+        }
+      });
+      this.resizeObserver.observe(this.$refs.graph);
+    },
+
+    onResize(graphWidth, graphHeight) {
+      const width = graphWidth - this.margin.left - this.margin.right;
+      const height = graphHeight - this.margin.top - this.margin.bottom;
+
+      // recompute axes, lines and resize elements
+      this.x1.range([0, width]);
+      if (this.timeAvailable) {
+        this.x2.range([0, width]);
+      }
+      const axis = this.mode === 'distance' ? this.x1Axis : this.x2Axis;
+      this.container
+        .select('.x.axis')
+        .call(axis)
+        .attr('transform', 'translate(0,' + height + ')');
+      this.container.select('.x.axis.legend').attr('x', width);
+
+      this.y.range([height, 0]);
+      this.container.select('.y.axis').call(this.yAxis);
+
+      this.line.attr('d', this.mode === 'distance' ? this.dLine : this.tLine);
+      this.focush.attr('x2', width);
+      this.bubble1.attr('x', (width - this.margin.left - this.margin.right) / 2);
+      this.bubble2.attr('x', (width - this.margin.left - this.margin.right) / 2);
+      this.container.select('rect.overlay').attr('width', width);
+      this.svg
+        .attr('width', graphWidth)
+        // while on fullscreen, the x axis switch is displayed in top right corner
+        .attr('height', !document.fullscreenElement ? graphHeight : graphHeight + this.margin.top);
+
+      this.focus.style('display', 'none');
+      this.focush.style('display', 'none');
+      this.focusv.style('display', 'none');
+      this.bubble1.style('display', 'none');
+      this.bubble2.style('display', 'none');
     },
 
     mousemove(event) {
@@ -316,8 +360,8 @@ export default {
       const bisect = this.mode === 'distance' ? bisectDistance : bisectDate;
       const x0 =
         this.mode === 'distance'
-          ? this.x1.invert(d3.pointer(event, this.svg.node())[0])
-          : this.x2.invert(d3.pointer(event, this.svg.node())[0]);
+          ? this.x1.invert(d3.pointer(event, this.container.node())[0])
+          : this.x2.invert(d3.pointer(event, this.container.node())[0]);
 
       const i = bisect(this.data, x0, 1, this.data.length - 1);
       const d0 = this.data[i - 1];
@@ -359,6 +403,8 @@ export default {
             formatMinutes(~~((elapsed % 3600) / 60))
         );
       }
+
+      this.emitMouseMoveEvent(this.coords[d === d0 ? i - 1 : i]);
     },
 
     updateChart() {
@@ -371,47 +417,81 @@ export default {
       d3.select('.x.axis').call(axis);
       d3.select('.x.axis.legend').text(legend);
     },
+
+    emitMouseOutEvent() {
+      this.$root.$emit('elevation_profile', 'end');
+    },
+
+    emitMouseMoveEvent(coord) {
+      this.$root.$emit('elevation_profile', 'move', coord);
+    },
   },
 };
 </script>
 
-<style lang="scss">
-// do NOT add scoped
-
+<style lang="scss" scoped>
 $C2C-orange: red;
 
-.elevation-profile-chart {
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
+::v-deep {
+  .elevation-profile-chart {
+    height: 300px; // default height on page
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+    .line {
+      fill: none;
+      stroke: $C2C-orange;
+      stroke-width: 3px;
+    }
+
+    .circle {
+      fill: white;
+      stroke: $C2C-orange;
+      stroke-width: 2px;
+    }
+
+    line.target {
+      stroke: lightgray;
+      stroke-width: 1px;
+    }
+
+    .bubble {
+      font-size: 12px;
+    }
+
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+  }
+}
+
+:fullscreen .elevation-profile-container {
+  position: absolute;
+  bottom: 0;
+  height: 30%;
+  max-height: 350px;
+  min-height: 200px;
+  width: 100%;
+  background-color: white;
+
+  > form {
+    position: absolute;
+    right: 0;
+    z-index: 2;
   }
 
-  .line {
-    fill: none;
-    stroke: $C2C-orange;
-    stroke-width: 3px;
-  }
+  .elevation-profile-chart {
+    height: 100%;
 
-  .circle {
-    fill: white;
-    stroke: $C2C-orange;
-    stroke-width: 2px;
-  }
-
-  line.target {
-    stroke: lightgray;
-    stroke-width: 1px;
-  }
-
-  .bubble {
-    font-size: 12px;
-  }
-
-  .overlay {
-    fill: none;
-    pointer-events: all;
+    ::v-deep svg {
+      position: absolute;
+    }
   }
 }
 </style>

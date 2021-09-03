@@ -28,15 +28,15 @@ Vue.config.silent = false;
 
 Vue.use(localStorage); // First, vm.$localStorage property
 
-// Google analytics
+Vue.use(gdpr);
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
   disabled: true,
-  // debug: {
-  //   enabled: true, // default value
-  //   trace: true, // default value
-  //   sendHitTask: true, // default value
-  // },
+  beforeFirstHit() {
+    if (Vue.prototype.$gdpr.gdprValue?.statistics) {
+      Vue.prototype.$ga.enable();
+    }
+  },
   router,
   autoTracking: {
     // do not send updates if query parameter has changed
@@ -71,7 +71,6 @@ Vue.use(screen); // screen reactives properties
 Vue.use(stripMarkdown); // stripMarkdown filter
 Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
 Vue.use(user); // vm.$user property
-Vue.use(gdpr);
 
 new Vue({
   router,

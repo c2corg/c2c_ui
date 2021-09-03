@@ -1,5 +1,9 @@
 <template>
-  <component :is="disabled ? 'span' : 'router-link'" :to="{ name: 'associations-history', query: query }">
+  <component
+    :is="disabled ? 'span' : 'router-link'"
+    :to="{ name: 'associations-history', query: query }"
+    rel="nofollow"
+  >
     <slot />
   </component>
 </template>

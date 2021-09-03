@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import noRobotsMixin from '@/js/no-robots-mixin';
+
 const buildDocumentTypeButton = function (documentType, text) {
   return {
     to: documentType + 's',
@@ -40,6 +42,8 @@ const buildDocumentTypeButton = function (documentType, text) {
 };
 
 export default {
+  mixins: [noRobotsMixin],
+
   data() {
     return {
       buttons: [

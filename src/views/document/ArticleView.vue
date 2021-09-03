@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
-    <document-view-header :document="document" :version="version" :promise="promise" />
+    <loading-notification :promise="promise" />
+    <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 is-12-print">
         <div class="box">
@@ -17,10 +18,8 @@
       <div class="column is-9 is-12-print">
         <div class="box">
           <low-document-quality-banner
+            v-if="isEditable && ['empty', 'draft'].includes(document.quality)"
             :document="document"
-            :low-quality="
-              !version && document.article_type !== 'personal' && ['empty', 'draft'].includes(document.quality)
-            "
           />
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />

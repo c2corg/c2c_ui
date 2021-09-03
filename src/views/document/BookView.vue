@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
-    <document-view-header :document="document" :version="version" :promise="promise" />
+    <loading-notification :promise="promise" />
+    <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3">
         <div class="box">
@@ -14,6 +15,8 @@
           <field-view :document="document" :field="fields.publication_date" />
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
+
+        <map-box v-if="document.associations.waypoints.length" :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>

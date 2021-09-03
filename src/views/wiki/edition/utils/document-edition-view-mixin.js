@@ -12,6 +12,7 @@ import QualityField from './QualityField';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import ol from '@/js/libs/ol';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 const geoJSONFormat = new ol.format.GeoJSON();
 const FORM_PROJ = 'EPSG:4326';
@@ -29,6 +30,8 @@ export default {
     EditionContainer,
     AssociationsInputRow,
   },
+
+  mixins: [noRobotsMixin],
 
   data() {
     return {
@@ -122,14 +125,14 @@ export default {
         this.promise = c2c[this.documentType].get(this.documentId, this.lang).then((response) => {
           const locales = response.data.locales;
 
-          if (locales.length === 0) {
+          if (!locales.length) {
             // it's a translation from an existing doc
             locales.push(this.$documentUtils.buildLocale(this.documentType, this.lang));
           }
 
           this.afterLoad(response);
 
-          // TODO : implements a algorithm to determin if document has bee modified
+          // TODO : implement an algorithm to determine if document has been modified
           this.modified = true;
         });
       } else {
@@ -214,11 +217,11 @@ export default {
 
     beforeSave() {},
 
-    // display a popup with info from fields taht contains an error
+    // display a popup with info from fields that contains an error
     // return true if popup is displayed, false otherwise
-    displayErrors(isApiMassage) {
+    displayErrors(isApiMessage) {
       const fieldsWithError = this.getFieldsWithError();
-      const i18nContext = isApiMassage ? 'API message' : undefined;
+      const i18nContext = isApiMessage ? 'API message' : undefined;
 
       // list of possible API message (keep js syntax, for messages extraction)
       // $gettext('Shorter than minimum length 1', 'API message');

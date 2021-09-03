@@ -71,11 +71,14 @@ import infiniteScroll from 'vue-infinite-scroll';
 import ColoredIconDocument from './utils/ColoredIconDocument';
 
 import c2c from '@/js/apis/c2c';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 export default {
   components: { ColoredIconDocument },
 
   directives: { infiniteScroll },
+
+  mixins: [noRobotsMixin],
 
   data() {
     return {

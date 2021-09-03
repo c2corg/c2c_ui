@@ -1,7 +1,7 @@
 <template>
   <!--Can't use component for router-link, it does not set the href attribute.
     Surprisingly, it open the link, but it prevents user to open it in a new tab -->
-  <router-link v-if="to" :to="to" @click="$emit('click')" class="toolbox-button">
+  <router-link v-if="to" :to="to" @click="$emit('click')" class="toolbox-button" :rel="rel">
     <span class="toolbox-button-icon">
       <slot name="icon">
         <fa-icon v-if="icon" :icon="icon" :class="iconClass" />
@@ -39,6 +39,10 @@ export default {
       required: true,
     },
     href: {
+      type: String,
+      default: null,
+    },
+    rel: {
       type: String,
       default: null,
     },

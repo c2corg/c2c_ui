@@ -35,6 +35,7 @@ import OutingsStatsPart from './OutingsStatsPart';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import noRobotsMixin from '@/js/no-robots-mixin';
 import QueryItems from '@/views/documents/utils/QueryItems';
 
 const LIST_MAX_LENGTH = 2000;
@@ -44,6 +45,8 @@ export default {
     OutingsStatsPart,
     QueryItems,
   },
+
+  mixins: [noRobotsMixin],
 
   data() {
     return {

@@ -1,11 +1,11 @@
 <template>
-  <label-value v-if="value1 && value2" :label="label">
+  <label-value v-if="hasValue1 && hasValue2" :label="label">
     <span>{{ signPlus }}{{ value1 }}&nbsp;{{ field1.unit }}</span>
     <span>/</span>
     <span>{{ signMinus }}{{ value2 }}&nbsp;{{ field2.unit }}</span>
   </label-value>
-  <field-view v-else-if="value1" :document="document" :field="field1" />
-  <field-view v-else-if="value2" :document="document" :field="field2" />
+  <field-view v-else-if="hasValue1" :document="document" :field="field1" />
+  <field-view v-else-if="hasValue2" :document="document" :field="field2" />
 </template>
 
 <script>
@@ -47,6 +47,12 @@ export default {
     },
     value2() {
       return this.document[this.field2.name];
+    },
+    hasValue1() {
+      return this.value1 !== null && this.value1 !== undefined;
+    },
+    hasValue2() {
+      return this.value2 !== null && this.value2 !== undefined;
     },
     signPlus() {
       return this.showSigns ? '+' : '';

@@ -16,7 +16,7 @@
               :key="type"
               class="dropdown-item is-size-6"
               :class="{ 'is-active': type === documentType }"
-              :to="{ name: type + 's', query: queryWithoutOffset }"
+              :to="{ name: type + 's', query: queryWithoutOffsetAndSort }"
             >
               <icon-document :document-type="type" />
               <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
@@ -186,9 +186,10 @@ export default {
         act: this.$route.query.act,
       };
     },
-    queryWithoutOffset() {
+    queryWithoutOffsetAndSort() {
       const result = Object.assign({}, this.$route.query);
       delete result.offset;
+      delete result.sort;
 
       return result;
     },
@@ -292,7 +293,7 @@ $cards-gap: 0.25rem;
 
 @media screen and (max-width: $tablet) {
   $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 46px;
+  $mobile-header-height: 56px;
   $mobile-filters-height: 25px;
 
   .search-infos {
@@ -325,9 +326,7 @@ $cards-gap: 0.25rem;
 
   .map-container {
     height: $result-height;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
   }
 
   .mobile-mode-map {

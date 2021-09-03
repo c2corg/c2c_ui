@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
-    <document-view-header :document="document" :version="version" :promise="promise" />
+    <loading-notification :promise="promise" />
+    <document-view-header v-if="document" :document="document" :version="version" />
 
     <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
       This profile is only available to authenticated users.

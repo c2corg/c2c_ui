@@ -85,6 +85,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
+import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
+import { faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons/faSortAmountDownAlt';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
 import { faSquare } from '@fortawesome/free-solid-svg-icons/faSquare';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
@@ -121,6 +123,7 @@ import activityVia_ferrata from '@/assets/font-awesome-custom/js/activity/via_fe
 import documentTypeOuting from '@/assets/font-awesome-custom/js/document-type/outing';
 import drill from '@/assets/font-awesome-custom/js/miscs/drill';
 import paragliding from '@/assets/font-awesome-custom/js/miscs/paragliding';
+import sort from '@/assets/font-awesome-custom/js/miscs/sort';
 import qualityDraft from '@/assets/font-awesome-custom/js/quality/draft';
 import qualityEmpty from '@/assets/font-awesome-custom/js/quality/empty';
 import qualityFine from '@/assets/font-awesome-custom/js/quality/fine';
@@ -162,8 +165,9 @@ import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
 // registered globally
 export default function install(Vue) {
   library.add(
-    paragliding,
     drill,
+    paragliding,
+    sort,
 
     documentTypeOuting,
 
@@ -298,6 +302,8 @@ export default function install(Vue) {
     faShareAlt,
     faSignInAlt,
     faSignOutAlt,
+    faSortAmountDown,
+    faSortAmountDownAlt,
     faSortAmountUp,
     faSquare,
     faStar,

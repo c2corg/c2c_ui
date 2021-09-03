@@ -1,8 +1,6 @@
 <template>
   <div class="view-container">
-    <loading-notification :promise="promise" />
-
-    <div v-if="document && !document.not_authorized">
+    <div v-if="!document.not_authorized">
       <html-header v-if="!isDraftView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
@@ -26,7 +24,7 @@
             </fa-layers>
           </span>
 
-          <edit-link :show-always="showAlways" :document="document" :lang="lang" :title="$gettext('Edit')">
+          <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
             <icon-edit />
           </edit-link>
         </span>
@@ -58,10 +56,10 @@ import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
 import TagsButton from './TagsButton';
-import isEditableMixin from './is-editable-mixin';
-import viewModeMixin from './view-mode-mixin';
 
 import ImagesUploader from '@/components/images-uploader/ImagesUploader';
+import isEditableMixin from '@/js/is-editable-mixin';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   components: {
@@ -72,39 +70,22 @@ export default {
     DocumentVersionBanner,
   },
 
-  mixins: [isEditableMixin, viewModeMixin],
+  mixins: [isEditableMixin, requireDocumentProperty],
 
   props: {
-    document: {
-      type: Object,
-      default: null,
-    },
     version: {
       type: Object,
       default: null,
-    },
-    promise: {
-      type: Object,
-      required: true,
     },
   },
 
   computed: {
     lang() {
-      return this.document ? this.document.cooked.lang : null;
+      return this.document.cooked.lang;
     },
 
     title() {
-      return this.document ? this.$documentUtils.getDocumentTitle(this.document, this.lang) : undefined;
-    },
-
-    documentType() {
-      // is-editable mixin needs this property
-      return this.$documentUtils.getDocumentType(this.document.type);
-    },
-
-    showAlways() {
-      return !['outing', 'xreport', 'profile', 'image'].includes(this.documentType);
+      return this.$documentUtils.getDocumentTitle(this.document, this.lang);
     },
   },
 };

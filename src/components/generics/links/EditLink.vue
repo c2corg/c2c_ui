@@ -1,8 +1,8 @@
 <template>
   <router-link
-    v-if="$user.isLogged || showAlways"
     :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
     @click.native="$emit('click')"
+    rel="nofollow"
   >
     <slot>
       <span v-translate>Edit</span>
@@ -20,10 +20,6 @@ export default {
     lang: {
       type: String,
       required: true,
-    },
-    showAlways: {
-      type: Boolean,
-      default: false,
     },
   },
 };

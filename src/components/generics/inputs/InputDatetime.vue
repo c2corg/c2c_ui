@@ -37,14 +37,14 @@ export default {
 
   computed: {
     minutes() {
-      return range(1, 59);
+      return range(0, 59);
     },
     hours() {
       return range(0, 23);
     },
     value_: {
       get() {
-        return this.$dateUtils.parseDate(this.value || undefined);
+        return this.$dateUtils.parseDate(this.value);
       },
       set(value) {
         if (!this.disabled) {

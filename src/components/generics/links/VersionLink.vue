@@ -2,6 +2,7 @@
   <router-link
     v-if="documentType != 'profile'"
     :to="{ name: documentType + '-version', params: { id: id, version: version, lang: lang } }"
+    rel="nofollow"
   >
     <slot />
   </router-link>

@@ -60,12 +60,15 @@ import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
 
 import c2c from '@/js/apis/c2c';
+import noRobotsMixin from '@/js/no-robots-mixin';
 
 export default {
   components: {
     FormField,
     BaseForm,
   },
+
+  mixins: [noRobotsMixin],
 
   data() {
     return {

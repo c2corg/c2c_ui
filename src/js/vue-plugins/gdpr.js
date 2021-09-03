@@ -11,15 +11,12 @@ export default function install(Vue) {
         let storedValue = this.$localStorage.get('choice');
         // if choice is over a year, consent must be asked again
         if (Date.now() - (storedValue?.date ?? 0) > 1000 * 60 * 60 * 24 * 365) {
+          this.$localStorage.clear();
           storedValue = null;
         }
         this.gdprValue = storedValue;
       } catch (err) {
         this.gdprValue = undefined;
-      }
-
-      if (this.gdprValue?.statistics) {
-        this.$ga.enable();
       }
     },
 

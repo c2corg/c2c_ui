@@ -149,6 +149,23 @@ export const getDocumentLineStyle = function (title, highlight) {
   }
 };
 
+export const getElevationProfileMarkerStyle = function () {
+  return [
+    new ol.style.Style({
+      image: new ol.style.Circle({
+        fill: new ol.style.Fill({
+          color: 'yellow',
+        }),
+        stroke: new ol.style.Stroke({
+          color: 'grey',
+          width: 0.5,
+        }),
+        radius: 5,
+      }),
+    }),
+  ];
+};
+
 export const geoJSONFormat = new ol.format.GeoJSON();
 
 // extent of Switzerland in EPSG:3857 projection

@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
-    <document-view-header :document="document" :version="version" :promise="promise" />
+    <loading-notification :promise="promise" />
+    <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns">
       <div class="column is-3">
         <div class="box">
@@ -47,7 +48,7 @@
         </div>
 
         <routes-box :document="document" hide-buttons />
-        <recent-outings-box :document="document" hide-see-all-results-button />
+        <recent-outings-box :document="document" hide-see-all-results-button include-empty-outings />
         <images-box v-if="document" :document="document" />
         <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box :document="document" />

@@ -24,13 +24,13 @@ const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
 };
 
 const parseDate = (exif, iptc) => {
-  const iptcDate = iptc ? iptc.DateCreated : null;
-  const exifDate = exif ? exif.DateTimeOriginal ?? exif.DateTime : null;
+  const iptcDate = iptc?.DateCreated;
+  const exifDate = exif?.Exif?.DateTimeOriginal ?? exif?.DateTime;
 
-  let date = null;
+  let date = undefined;
 
   if (iptcDate) {
-    if (iptc.TimeCreated) {
+    if (iptc?.TimeCreated) {
       date = parseISO(`${iptcDate}T${iptc.TimeCreated}`);
     } else {
       date = parse(iptcDate, 'yyyyMMdd', new Date());
@@ -107,11 +107,11 @@ const parseMetaData = (document, metaData) => {
   if (exif) {
     orientation = metaData.exif.get('Orientation');
 
-    setIfDefined(document, 'exposure_time', exif.ExposureTime);
-    setIfDefined(document, 'iso_speed', exif.PhotographicSensitivity);
-    setIfDefined(document, 'focal_length', exif.FocalLengthIn35mmFilm);
-    setIfDefined(document, 'fnumber', exif.FNumber);
-    setIfDefined(document, 'camera_name', exif.Make && exif.Model ? exif.Make + ' ' + exif.Model : undefined);
+    setIfDefined(document, 'exposure_time', exif?.Exif?.ExposureTime);
+    setIfDefined(document, 'iso_speed', exif?.Exif?.PhotographicSensitivity);
+    setIfDefined(document, 'focal_length', exif?.Exif?.FocalLengthIn35mmFilm);
+    setIfDefined(document, 'fnumber', exif?.Exif?.FNumber);
+    setIfDefined(document, 'camera_name', exif?.Make && exif?.Model ? exif.Make + ' ' + exif.Model : undefined);
     setIfDefined(document, 'geometry', parseExifGeometry(exif));
     setIfDefined(document, 'elevation', parseExifElevation(exif));
   }
