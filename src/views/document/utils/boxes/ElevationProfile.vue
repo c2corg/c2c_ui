@@ -108,15 +108,7 @@ export default {
     computeCoords() {
       // compute data
       const geom_detail = JSON.parse(this.document.geometry.geom_detail);
-
-      if (geom_detail.type === 'MultiLineString') {
-        this.coords = [];
-        geom_detail.coordinates.forEach((linestring) => {
-          this.coords = this.coords.concat(linestring);
-        });
-      } else {
-        this.coords = geom_detail.coordinates;
-      }
+      this.coords = [].concat(...geom_detail.coordinates);
 
       // is there any elevation data
       if (!this.coords.some((coord) => coord.length > 2 && coord[2] !== 0)) {

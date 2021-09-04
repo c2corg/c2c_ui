@@ -514,7 +514,6 @@ export default {
       }
     },
 
-    // https://openlayers.org/en/latest/examples/drag-and-drop.html
     setDragAndDropInteraction() {
       // handle use case when user drag&drop a gpx/kml/fit file on map
       const dragAndDrop = new ol.interaction.DragAndDrop({
@@ -524,7 +523,12 @@ export default {
       dragAndDrop.on(
         'addfeatures',
         function (event) {
-          event.features.map(this.setDocumentGeometryFromFeature);
+          event.features.map((feature) => {
+            if (document.type !== 'o') {
+              this.cleanZeroElevationFromGeoFileFeature(feature);
+            }
+            return this.setDocumentGeometryFromFeature(feature);
+          });
         }.bind(this)
       );
 
@@ -539,11 +543,69 @@ export default {
       }
     },
 
+    cleanZeroElevationFromGeoFileFeature(feature) {
+      // GPS often have a bad elevation (0) for some of the points
+      // We do a simple algorithm to prevent most of these cases
+      // by applying the elevation of the nearest 'good' coordinate to the
+      // 'faulty' coordinates if they are not too far away
+      const geometry = feature.get('geometry');
+      const type = geometry.getType();
+      const coords = geometry.getCoordinates();
+
+      if (type === 'LineString') {
+        this.cleanZeroElevationFromLineString(coords);
+      } else if (type === 'MultiLineString') {
+        coords.map(this.cleanZeroElevationFromLineString);
+      }
+      geometry.setCoordinates(coords);
+    },
+
+    cleanZeroElevationFromLineString(coords) {
+      const findIndex = (array, callback, start) => {
+        const index = array.slice(start).findIndex(callback);
+        return index === -1 ? -1 : index + start;
+      };
+      const findIndexBackwards = (array, callback, start) => {
+        const index = findIndex(array.slice().reverse(), callback, array.length - 1 - start);
+        return index > 0 ? array.length - 1 - index : index;
+      };
+      const isElevationOk = (coord) => coord.length > 2 && coord[2] !== 0;
+      // Since we use EPSG:3857, we can easily compute the approximated distance
+      const distance = (c, i, j) => Math.sqrt((c[i][0] - c[j][0]) ** 2 + (c[i][1] - c[j][1]) ** 2);
+
+      if (!coords.some(isElevationOk)) {
+        return;
+      }
+
+      let badIndex = 0;
+      while ((badIndex = findIndex(coords, (coord) => !isElevationOk(coord), badIndex)) !== -1) {
+        // Get the distance between the point without elevation, and the nearest point with elevation
+        // If it's less than 100m, we can consider that it's elevation is the same
+        const goodIndexFw = findIndex(coords, isElevationOk, badIndex);
+        const goodIndexBw = findIndexBackwards(coords, isElevationOk, badIndex);
+        const distanceFw = goodIndexFw !== -1 ? distance(coords, badIndex, goodIndexFw) : Infinity;
+        const distanceBw = goodIndexBw !== -1 ? distance(coords, badIndex, goodIndexBw) : Infinity;
+
+        if (distanceFw > 100 && distanceBw > 100) {
+          badIndex++;
+          break;
+        }
+
+        coords[badIndex][2] = coords[distanceFw < distanceBw ? goodIndexFw : goodIndexBw][2];
+        badIndex++;
+      }
+    },
+
     setDocumentGeometryFromGeoFile(file) {
       for (const format of [new ol.format.GPX(), new FIT(), new ol.format.KML()]) {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
-          features.map(this.setDocumentGeometryFromFeature);
+          features.map((feature) => {
+            if (document.type !== 'o') {
+              this.cleanZeroElevationFromGeoFileFeature(feature);
+            }
+            return this.setDocumentGeometryFromFeature(feature);
+          });
           return;
         }
       }
