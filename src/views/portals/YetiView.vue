@@ -207,7 +207,7 @@ export default {
         },
         zoom: {
           simple: this.$gettext('Area too large'),
-          full: this.$gettext('Current map view is too large. Please zoom to level ' + this.validMinimumMapZoom),
+          full: this.$gettext('Current map view is too large. Please zoom to level') + ' ' + this.validMinimumMapZoom,
         },
         ok: this.$gettext('Seems fine! :)'),
         yeti: this.$gettext('Service is inactive right now'),
