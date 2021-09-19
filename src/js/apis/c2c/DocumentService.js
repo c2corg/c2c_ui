@@ -64,19 +64,19 @@ DocumentService.prototype.fullDownload = function (params, limit, onProgress) {
 };
 
 DocumentService.prototype.get = function (id, lang) {
-  return this.api.get('/' + this.documentType + 's/' + id, { params: { l: lang } });
+  return this.api.get('/' + this.documentType + 's/' + id, { params: { l: this.api.getApiLang(lang) } });
 };
 
 DocumentService.prototype.getCooked = function (id, prefered_lang) {
   // chinese is not yet present as topoguide lang, so default it to english
-  prefered_lang = prefered_lang === 'zh_CN' ? 'en' : prefered_lang;
+  prefered_lang = this.api.getApiLang(prefered_lang);
   const promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`);
 
   return promise;
 };
 
 DocumentService.prototype.getVersion = function (id, lang, versionId) {
-  const url = '/' + this.documentType + 's/' + id + '/' + lang + '/' + versionId;
+  const url = '/' + this.documentType + 's/' + id + '/' + this.api.getApiLang(lang) + '/' + versionId;
   return this.api.get(url);
 };
 
@@ -92,7 +92,7 @@ DocumentService.prototype.create = function (document) {
 };
 
 DocumentService.prototype.getHistory = function (document_id, lang) {
-  return this.api.get('/document/' + document_id + '/history/' + lang);
+  return this.api.get('/document/' + document_id + '/history/' + this.api.getApiLang(lang));
 };
 
 export default DocumentService;

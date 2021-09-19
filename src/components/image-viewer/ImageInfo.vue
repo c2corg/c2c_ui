@@ -63,7 +63,7 @@ export default {
   methods: {
     show(documentId) {
       this.visible = true;
-      this.promise = c2c.image.getCooked(documentId, this.$language.current);
+      this.promise = c2c.image.getCooked(documentId, this.$language.getApiLang(this.$language.current));
     },
 
     hide() {

@@ -122,7 +122,7 @@ export default {
       }
 
       const params = {
-        pl: this.$language.current === 'zh_CN' ? 'en' : this.$language.current,
+        pl: c2c.getApiLang(this.$language.current),
         token: this.paginationToken,
         u: this.$route.params.id,
       };

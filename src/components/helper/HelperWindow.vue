@@ -72,7 +72,7 @@ export default {
       this.lang = lang ?? this.lang;
 
       this.html = this.$gettext('loading');
-      c2c.article.getCooked(this.helper.documentId, this.lang).then(this.computeHtml);
+      c2c.article.getCooked(this.helper.documentId, this.$language.getApiLang(this.lang)).then(this.computeHtml);
       this.$refs.modalCard.show();
     },
 

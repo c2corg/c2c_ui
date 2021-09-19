@@ -169,6 +169,7 @@ export default function install(Vue) {
           case 'it':
           case 'de':
           case 'es':
+          case 'zh':
             return lang;
           case 'zh_CN':
             return 'zh';
@@ -195,6 +196,8 @@ export default function install(Vue) {
             return 'de_DE';
           case 'es':
             return 'es_ES';
+          case 'zh':
+            return 'zh_CN';
           case 'zh_CN':
             return 'zh_CN';
           default:

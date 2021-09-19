@@ -186,7 +186,7 @@
     ],
     "image_types": ["collaborative", "personal", "copyright"],
     "labande_ski_ratings": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"],
-    "langs": ["fr", "en", "it", "de", "es", "ca", "eu"],
+    "langs": ["fr", "en", "it", "de", "es", "ca", "eu", "zh"],
     "lift_status": ["open", "closed"],
     "mixed_ratings": [
       "M1",
