@@ -6,7 +6,7 @@
         <span v-if="mode === 'edit'">
           <html-header :title="$gettext('Edit a document')" />
           <document-title :document="document" />
-          <span class="is-size-5"> ({{ $language.available[$route.params.lang] }})</span>
+          <span class="is-size-5"> ({{ $language.availableAPI[$route.params.lang] }})</span>
         </span>
         <span v-else>
           <html-header :title="$documentUtils.getCreationTitle(documentType)" />
@@ -14,7 +14,7 @@
           <span>
             <dropdown-button>
               <span slot="button" class="button">
-                <span> {{ $language.available[document.locales[0].lang] }}&nbsp; </span>
+                <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
                 <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
               <div
@@ -23,7 +23,7 @@
                 class="dropdown-item has-hover-background has-cursor-pointer"
                 @click="document.locales[0].lang = lang"
               >
-                {{ $language.available[lang] }}
+                {{ $language.availableAPI[lang] }}
               </div>
             </dropdown-button>
           </span>

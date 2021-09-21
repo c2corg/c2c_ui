@@ -86,7 +86,7 @@ export default function install(Vue) {
 
     created() {
       // Non-reactive data.
-      this.available = {
+      this.availableUI = {
         fr: 'Français',
         it: 'Italiano',
         de: 'Deutsch',
@@ -95,6 +95,17 @@ export default function install(Vue) {
         ca: 'Català',
         eu: 'Euskara',
         zh_CN: 'Chinese',
+      };
+
+      this.availableAPI = {
+        fr: 'Français',
+        it: 'Italiano',
+        de: 'Deutsch',
+        en: 'English',
+        es: 'Español',
+        ca: 'Català',
+        eu: 'Euskara',
+        zh: 'Chinese',
       };
 
       this.translations = {};

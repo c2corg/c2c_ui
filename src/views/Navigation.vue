@@ -132,7 +132,7 @@
             {{ $language.current }}
           </button>
           <a
-            v-for="(language, key) in $language.available"
+            v-for="(language, key) in $language.availableUI"
             :key="key"
             class="dropdown-item is-size-5"
             :class="{ 'is-active': key == $language.current }"
