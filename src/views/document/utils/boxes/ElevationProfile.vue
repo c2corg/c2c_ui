@@ -474,7 +474,7 @@ export default {
       this.line.transition().duration(1000).attr('d', nLine);
 
       d3.select('.x.axis').call(axis);
-      d3.select('.x.axis.legend').text(legend);
+      d3.select('.x.axis .legend').text(legend);
     },
 
     emitCursorEndEvent() {
