@@ -25,9 +25,13 @@
 
     <div ref="graph" class="elevation-profile-chart" />
 
-    <div class="elevation-profile-fullscreen-toggle" @click="toggleFullScreenProfile">
+    <button
+      :title="$gettext('Toggle elevation profile')"
+      class="elevation-profile-fullscreen-toggle"
+      @click="toggleFullScreenProfile"
+    >
       <fa-icon :icon="toggleIcon" />
-    </div>
+    </button>
   </div>
 </template>
 
@@ -569,6 +573,8 @@ $C2C-orange: red;
     background-color: white;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
+    border: 0;
+    padding: 0;
     box-shadow: $shadow;
   }
 
