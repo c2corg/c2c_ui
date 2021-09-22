@@ -227,6 +227,8 @@ export default {
         this.x2.domain(d3.extent(this.data, (d) => d.elapsed)).nice(d3.timeHour);
       }
 
+      this.updateXAxisTicks(width);
+
       this.container
         .append('g')
         .attr('class', 'y axis')
@@ -354,6 +356,7 @@ export default {
       const height = graphHeight - this.margin.top - this.margin.bottom;
 
       // recompute axes, lines and resize elements
+      this.updateXAxisTicks(width);
       this.x1.range([0, width]);
       if (this.timeAvailable) {
         this.x2.range([0, width]);
@@ -383,6 +386,15 @@ export default {
       this.focusv.style('display', 'none');
       this.bubble1.style('display', 'none');
       this.bubble2.style('display', 'none');
+    },
+
+    updateXAxisTicks(width) {
+      // try to avoid too many ticks on x axis if the graph is small.
+      // with null, we let d3 decide
+      let ticksCount = Math.round(width / 40);
+      ticksCount = ticksCount < 8 ? ticksCount : null;
+      this.x1Axis.ticks(ticksCount);
+      this.x2Axis.ticks(ticksCount);
     },
 
     toggleFullScreenProfile() {
