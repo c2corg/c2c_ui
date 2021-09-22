@@ -1,9 +1,11 @@
 name: Continuous integration
 
 on:
-  push:
+  pull_request:
     branches:
       - '**'
+  push:
+    branches: [ master ]
     tags:
       - '**'
 
