@@ -234,7 +234,8 @@ export default {
         .append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', 6)
-        .attr('dy', '.71em')
+        .attr('dy', '.5em')
+        .attr('class', 'legend')
         .style('text-anchor', 'end')
         .text(this.i18n_.elevation_legend);
 
@@ -245,8 +246,8 @@ export default {
         .call(this.x1Axis)
         .append('text')
         .attr('x', size.width - this.margin.left - this.margin.right)
-        .attr('dy', '-.71em')
-        .attr('class', 'x axis legend')
+        .attr('dy', '-.5em')
+        .attr('class', 'legend')
         .style('text-anchor', 'end')
         .text(this.i18n_.distance_legend);
 
@@ -362,7 +363,7 @@ export default {
         .select('.x.axis')
         .call(axis)
         .attr('transform', 'translate(0,' + height + ')');
-      this.container.select('.x.axis.legend').attr('x', width);
+      this.container.select('.x.axis .legend').attr('x', width);
 
       this.y.range([height, 0]);
       this.container.select('.y.axis').call(this.yAxis);
@@ -491,6 +492,10 @@ $C2C-orange: red;
       fill: none;
       stroke: black;
       shape-rendering: crispEdges;
+    }
+
+    .axis .legend {
+      fill: black;
     }
 
     .line {
