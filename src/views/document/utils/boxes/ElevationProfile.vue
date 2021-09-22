@@ -522,6 +522,8 @@ $C2C-orange: red;
 }
 
 :fullscreen .elevation-profile-container {
+  $shadow: 1px -4px 5px rgb(0 0 0 / 20%);
+
   position: absolute;
   bottom: 0;
   height: 30%;
@@ -529,6 +531,7 @@ $C2C-orange: red;
   min-height: 200px;
   width: 100%;
   background-color: white;
+  box-shadow: $shadow;
 
   &.hidden {
     height: 0;
@@ -549,7 +552,7 @@ $C2C-orange: red;
     background-color: white;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
-    box-shadow: 1px -4px 3px rgb(0 0 0 / 30%);
+    box-shadow: $shadow;
   }
 
   > form {
