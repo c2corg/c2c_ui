@@ -30,15 +30,12 @@
       class="elevation-profile-fullscreen-toggle"
       @click="toggleFullScreenProfile"
     >
-      <fa-icon :icon="toggleIcon" />
+      <fa-icon :icon="fullScreenHidden ? 'chevron-up' : 'chevron-down'" />
     </button>
   </div>
 </template>
 
 <script>
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
-
 import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
@@ -113,12 +110,6 @@ export default {
       /** the elevation profile can be toggled in full screen mode */
       fullScreenHidden: false,
     };
-  },
-
-  computed: {
-    toggleIcon() {
-      return this.fullScreenHidden ? faChevronUp : faChevronDown;
-    },
   },
 
   watch: {
@@ -539,6 +530,10 @@ $C2C-orange: red;
       fill: none;
       pointer-events: all;
     }
+  }
+
+  .elevation-profile-fullscreen-toggle {
+    display: none;
   }
 }
 
