@@ -655,20 +655,23 @@ export default {
       elevationProfileMarker.setStyle(getElevationProfileMarkerStyle());
       elevationProfileSource.addFeature(elevationProfileMarker);
       this.$root.$on('elevation_profile', (event, coord) => {
-        if (event === 'end') {
-          this.elevationProfileLayer.setVisible(false);
-        }
-
-        if (event === 'move') {
-          this.elevationProfileLayer.setVisible(true);
-          elevationProfileMarker.setGeometry(new ol.geom.Point(coord));
-          const visible = ol.extent.containsXY(this.view.calculateExtent(), coord[0], coord[1]);
-          if (!visible) {
-            this.view.animate({
-              center: coord,
-              duration: 300,
-            });
-          }
+        switch (event) {
+          case 'cursor_end':
+            this.elevationProfileLayer.setVisible(false);
+            break;
+          case 'cursor_move':
+            this.elevationProfileLayer.setVisible(true);
+            elevationProfileMarker.setGeometry(new ol.geom.Point(coord));
+            const visible = ol.extent.containsXY(this.view.calculateExtent(), coord[0], coord[1]);
+            if (!visible) {
+              this.view.animate({
+                center: coord,
+                duration: 300,
+              });
+            }
+            break;
+          case 'toggle_fullscreen':
+            setTimeout(() => this.map.updateSize(), 0);
         }
       });
     },
