@@ -94,7 +94,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
-        zh_CN: 'Chinese',
+        zh_CN: '简体中文',
       };
 
       this.availableAPI = {
@@ -105,7 +105,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
-        zh: 'Chinese',
+        zh: '简体中文',
       };
 
       this.translations = {};
