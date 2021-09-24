@@ -13,7 +13,7 @@ BiodivSportsService.prototype.fetchData = function (extent, activities, language
   const params = {
     in_bbox: `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`,
     language,
-    fields: 'id,geometry,name,description,info_url,period,kml_url,species_id',
+    fields: 'id,geometry,name,description,info_url,period,kml_url',
   };
 
   if (activities?.length) {

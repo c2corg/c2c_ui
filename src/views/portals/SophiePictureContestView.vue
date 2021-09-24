@@ -186,6 +186,11 @@ export default {
         },
       ],
     },
+    2021: {
+      year: 2021,
+      documentId: 1350370,
+      winners: [],
+    },
   },
 
   computed: {
