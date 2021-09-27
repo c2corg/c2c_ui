@@ -44,6 +44,7 @@
     "Add the first outing": "Afegeix la primera sortida",
     "Add title…": "Afegiu un títol...",
     "Additional information": "Informació addicional",
+    "All": "Tot",
     "Allow all": "Permet-ho tot",
     "Altitude": "Altitud",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L'altitud és obligatòria quan els nivells de perill varien entre les cotes. Preciseu el valor donat pel butlletí d'allaus.",
@@ -357,6 +358,7 @@
     "My outings": "Les meves sortides",
     "My preferences": "Les meves preferències",
     "My profile": "El meu perfil",
+    "My statistics": "Les meves estadístiques",
     "Narration": "Descripció en text",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Quasi-accidents que haurien pogut degenerar en esdeveniments més greus",
     "Near-accidents are valuable": "Els incidents i els quasi-accidents són experiències valuoses:",
@@ -632,6 +634,9 @@
     "aid_rating": "Dificultat en escalada artificial",
     "alpine_climbing": {
       "event_activities": "Alpinisme en roca"
+    },
+    "already used email": {
+      "API message": "Aquest correu ja ha estat utilitzat"
     },
     "already used forum_username": {
       "API message": "Pseudònim del fòrum ja utilitzat"
