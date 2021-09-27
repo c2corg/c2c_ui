@@ -48,6 +48,8 @@
     "Allow all": "Permet-ho tot",
     "Altitude": "Altitud",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L'altitud és obligatòria quan els nivells de perill varien entre les cotes. Preciseu el valor donat pel butlletí d'allaus.",
+    "An error occurred, couldn't (un)mark route as to do": "No s'ha pogut afegir o retirar l'itinerari dels preferits",
+    "An error occurred, couldn't save images": "No s'ha pogut desar la imatge",
     "Anonymity and confidentiality": "Anonimat i confidencialitat",
     "Are you sure you want to delete this document?": "Esteu segur/a de voler suprimir aquest document?",
     "Are you sure you want to delete this locale?": "Esteu segur de voler eliminar aquesta versió lingüística?",
@@ -127,6 +129,7 @@
     },
     "Continue the discussion": "Segueix la discussió",
     "Contribute to common knowledge": "Participeu a la construcció d'un saber col·lectiu",
+    "Contribute to maintainance": "Ajudeu els actors locals",
     "Contributions": "Aportacions",
     "Contributor": "Contribuïdor",
     "Control the use of your personal data": "Controleu l'ús de les vostres dades personals",
@@ -134,6 +137,7 @@
     "Coup de coeur": {
       "Sophie picture context": "Desig"
     },
+    "Crag climbing gear": "Escalada en totxo",
     "Create": {
       "yeti": "Crea"
     },
@@ -186,6 +190,7 @@
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Descrigueu el desenvolupament de la sortida i de l'incident/accident. Si ja heu entrat una sortida, podeu descriure únicament l'esdeveniment, i després d'haver-ne registrat un informe, l'associeu a la sortida.",
     "Details on participants and event context": "Detalls sobre els participants i el context de l'esdeveniment",
     "Differences between versions": "Diferències entre les versions",
+    "Different high/low danger?": "Perill dalt/baix diferents?",
     "Directions (Google Maps)": "Indicacions (Google Maps)",
     "Disclaimer": "Advertiment",
     "Dispositions": "Disposicions",
@@ -193,6 +198,7 @@
     "Distance (km)": "Distància (km)",
     "Do you really want to leave? you have unsaved changes!": "De debò voleu sortir? No heu desat els canvis!",
     "Document quality": "Qualitat del document",
+    "Donate": "Feu un donatiu a l'associació Camptocamp",
     "Download outings": "Descarrega les sortides",
     "Draw": {
       "yeti": "Dibuixar"
@@ -226,7 +232,9 @@
     "FAQ?": "FAQs?",
     "Fauna protection areas": "Zona de protecció de la fauna",
     "Fauna protection site:": "Indret de protecció de la fauna:",
+    "Feel free to edit it.": "Editeu-ho",
     "Filter on map extent": "Limita la cerca al mapa visible",
+    "Filter results": "Filtra",
     "Followed users": "Usuaris seguits",
     "Forgot password?": "Contrasenya oblidada?",
     "Forum": "Fòrum",
@@ -238,6 +246,7 @@
     "GPX file": "Fitxer GPX",
     "General information": "Informació general",
     "Geolocation": "Geolocalització",
+    "Get avalanche bulletins from Météo-France website": "Mostra els butlletins d'allaus al lloc web de Météo France",
     "Go back to YETI": "Torna a YETI",
     "Go to the previous page": "Torna a la pàgina anterior",
     "Group": "Grup",
@@ -282,6 +291,8 @@
       "Map layer": "IGN Es"
     },
     "Ice and dry climbing gear": "Escalada en gel i dry-tooling",
+    "If the route does not exists in our base, you can create it.": "Si l'itinerari no existeix, el podeu crear",
+    "If you can't see this email, please check your spam folder.": "Penseu a revisar l'spam si no trobeu aquest correu",
     "Image could not be processed": "La imatge no ha pogut ser processada",
     "Image count": "Nombre d'imatges",
     "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
@@ -304,6 +315,7 @@
     "Last forum topics": "Darrers temes al fòrum",
     "Last outings": "Darreres sortides",
     "Latitude": "Latitud",
+    "Launch YETI": "Accedeix a YETI",
     "Layers": {
       "Map controls": "Capes"
     },
@@ -330,6 +342,8 @@
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Informació principal sobre l'itinerari, com el nom, les activitats, la geolocalització i l'entorn proper.",
     "Main informations about your outing": "Dades principals de la vostra sortida",
     "Make profile page public": "Fes pública la pàgina de perfil",
+    "Map filter off": "Desactiva el filtre del mapa",
+    "Map filter on": "Activa el filtre del mapa",
     "Map only": "Només el mapa",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Mapa, ressenyes, coneixement de l'itinerari, anticipació d'un pla B, reavaluació de l'itinerari durant la sortida?",
     "Mark this route as to do": "Marca aquesta ruta com a pendent",
@@ -350,6 +364,7 @@
       "modification date": "Modificat el"
     },
     "More info": "Més informació",
+    "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hi ha més itineraris disponibles. Us podeu desplaçar pel mapa, escriure un nom o seleccionar una activitat per mostrar-los",
     "Multi-criteria search": "Cerca multi-criteri",
     "My account": "El meu compte",
     "My bookmarks": "Els meus preferits",
@@ -369,6 +384,7 @@
     "New route": "Nou itinerari",
     "New waypoint": "Nou punt de pas",
     "No account yet?": "Encara no tens un compte?",
+    "No data could be extracted from GPS file": "No es pot extreure cap dada del fitxer GPS",
     "No match?": "No hi ha cap resultat satisfactori?",
     "No orientation selected": "No s'han seleccionat orientacions",
     "No reduction factor": "Cap factor de reducció",
@@ -391,11 +407,13 @@
     "Ooops": "Eeep!",
     "Open fields to deeply explain the event circumstances.": "Camps lliures per explicar el millor possible les circumstàncies de l'esdeveniment.",
     "Open fields to detail the picture's context": "Camps lliures per descriure el context de la imatge",
+    "Open in a new tab": "Obre a una pestanya nova",
     "Ordered list": "Llista ordenada",
     "Orientations": "Orientacions",
     "Oups! Something went wrong with forum. Here is the message :": "Ep! Hi ha hagut un problema amb el fòrum. Vegeu-ne el missatge:",
     "Oups! something went wrong...": "Ep! Hi ha hagut un problema...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "El nostre lloc web utilitza galetes nostres o de tercers. Algunes galetes són necessàries per al funcionament del lloc web, per bé que d'altres es poden configurar en tot moment, en particular les que ens permeten d'entendre el comportament del nostre lloc web i d'oferir-vos funcionalitats de xarxes socials. Les podeu acceptar o rebutjar totes o bé",
+    "Outing": "Itinerari",
     "Outings statistics": "Estadística de sortides",
     "Page not found": "No s'ha trobat la pàgina",
     "Paragliding outings": "Sortides de parapent",
@@ -421,7 +439,10 @@
     "Personal informations": "Informació personal",
     "Pitch description tag": "Balisa de descripció dels llargs",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Descrigueu el vostre nivell tècnic i experiència en relació a l'objectiu escollit, la vostra condició física, la fatiga acumulada abans de la sortida, l'aclimatació en cas de sortides en altura, etc.",
+    "Please move the map, or change the route's name.": "Desplaceu el mapa o modifiqueu el nom de l'itinerari.",
     "Please select a method before computing.": "Seleccioneu un mètode per al càlcul.",
+    "Please select a waypoint type to enable sort feature": "Seleccioneu un tipus de punt de pas per activar l'opció d'ordenar",
+    "Please select an activity to enable sort feature": "Seleccioneu una activitat per activar l'opció d'ordenar",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Falta el nivell de perill. Indiqueu el valor especificat pel butlletí d'allaus.",
     "Post the first comment": "Penja el primer comentari",
     "Precise localisation of the shooting": "Localització precisa del punt de captura de la imatge",
@@ -433,6 +454,7 @@
     "Protection area:": "Zona de protecció:",
     "Protection areas": "Zones de protecció",
     "Protection status": "Figura de protecció",
+    "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Us convidem a completar la informació i a millorar la qualitat del document seguint les regles de contribució i respectant els drets d'autor.",
     "Put it back": "Retornar",
     "Quote": "Cita",
     "Recent changes": "Canvis recents",
@@ -445,6 +467,7 @@
     "Required": {
       "API message": "Obligatori"
     },
+    "Reset": "Reinicialitza",
     "Reset geometry": "Reinicia",
     "Reset password": "Restableix la contrasenya",
     "Residual risk >1": "Risc residual > 1.0",
@@ -493,7 +516,9 @@
     "Small group = 2 to 4 people": "Grup petit = 2 a 4 persones",
     "Small group without distance": "Grup petit sense distància",
     "Social cookies": "Galetes socials",
+    "Soft mobility outing": "Sortida amb ecomobilitat",
     "Sophie Picture Contest": "Concurs de fotografia Sophie",
+    "Sort by": "Ordena per",
     "Source:": "Document a fusionar (font):",
     "Statistical cookies": "Galetes estadístiques",
     "Statistics": "Estadístiques",
@@ -504,20 +529,26 @@
     "SwissTopo": {
       "Map slopes layer": "Pendents SwissTopo"
     },
+    "SwissTopo ortho": {
+      "Map layer": "SwissTopo satèl·lig"
+    },
     "Target:": "Document a conservar (diana):",
     "Terrain": "Terreny",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Gràcies a les galetes estadístiques o analítiques, nostres o d'altres societats, podem comptar les visites al nostre lloc web i conèixer les fonts del trànsit. Les dades que n'obtenim ens ajuden a entendre allò que els usuaris voldrien millorar del lloc web. Si no les accepteu pas, no podrem millorar la vostra experiència.",
+    "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "El mètode MRD (iniciació) s'accepta fins a nivell de perill 3. Trieu els mètodes MRE o MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "El potencial de perill es calcula a partir del nivell de perill del butlletí d'allaus. Es pot ajustar seleccionant un potencial dins del rang corresponent al nivell de perill. Per exemple: el butlletí indica un perill 3 just després d'un període de perill 4. Es podrà indicar aleshores un potencial de perill de 12 en comptes de 8.",
     "The mountain sports community": "La comunitat dels esports de muntanya",
     "The page you are looking for does not exist or is broken.": "Aquesta pàgina no existeix o bé està malmesa.",
     "The slope must be between 0 and 80 deg": "El pendent ha d'estar entre 0 i 80 graus",
     "The slope must be between 50 and 3000m high": "L'alçada del pendent ha d'estar entre 50 i 3000m",
+    "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "L'aplicació no té en compte el factor \"vessant recorregut freqüentment\", donat que sovint és difícil d'assegurar-se'n en el moment de preparar la sortida.",
     "There are sensitive areas on this route. Please refer to the map.": "Aquest itinerari travessa o es troba a prop de zones sensibles. Si us plau, consulteu el mapa.",
     "These are positive experiences that reveal usefull risk-management skills.": "Experiències positives que revelen habilitats en gestió de riscos",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Aquestes galetes permeten d'interactuar des del lloc camptocamp.org amb els mòduls socials i de compartir els continguts del lloc amb d'altres persones o d'informar-les de la vostra consulta o opinió al respecte, quan cliqueu el mòdul \"Compartir\", per exemple. Desactivant aquestes galetes, no podreu compartir més els continguts de camptocamp.org des del lloc web cap a les xarxes socials.",
     "This book cover is the property of its editor and/or author": "La coberta del llibre és propietat del seu editor i/o autor",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Aquest contingut es troba sota llicència Creative Commons BY-SA 3.0",
+    "This document is a draft.": "Aquest document és un esborrany.",
     "This field is too long": "Text massa llarg",
     "This field is too short": "Text massa curt",
     "This field must be a valid ISBN.": {
@@ -577,10 +608,13 @@
     "With the": "Amb la",
     "Without c2c account": "Participants sense compte c2c",
     "YETI - A preparation tool for your outing": "YETI - Una eina de preparació de sortides",
+    "You are using a custom sort": "Esteu fent servir un ordre personalitzat",
     "You can choose to remain anonymous": "Podeu escollir restar en l'anonimat",
     "You have to be authorized. Please contact administrators of the service if interested.": "Heu de tenir autorització. Si us interessa, si us plau, contacteu amb els administradors del servei.",
     "You may add associated waypoints, books and articles": "Associeu d'altres documents de camptocamp a aquest punt de pas",
     "You may also drag, draw or edit the track on the map.": "També pots arrossegar, dibuixar o editar la traça al mapa.",
+    "You need to activate your by clicking the link sent to your email address.": "L'heu d'activar clicant l'enllaç que se us ha enviat a la vostra adreça de correu electrònic.",
+    "Your account was successfully created": "El vostre compte ha estat creat",
     "Zoom in": {
       "Map controls": "Apropa"
     },
@@ -656,6 +690,7 @@
     "areas": "regions",
     "article_categories": "categories d'articles",
     "article_type": "tipus d'article",
+    "ascending sort": "Ordre creixent",
     "association": {
       "article_categories": "associació"
     },
@@ -845,6 +880,7 @@
     "de": {
       "langs": "alemany"
     },
+    "descending sort": "Ordre decreixent",
     "descent": {
       "image_categories": "baixada"
     },
@@ -1107,6 +1143,7 @@
     },
     "lang": "Llengua",
     "langs": "llengües",
+    "last point with the Backspace key": "el darrer punt amb la tecla Backspace",
     "length": "Llargada",
     "length_total": "Llargada total",
     "level_1": {
