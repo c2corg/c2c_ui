@@ -5,7 +5,7 @@ on:
     branches:
       - '**'
   push:
-    branches: [ master ]
+    branches: [master]
     tags:
       - '**'
 
@@ -81,7 +81,7 @@ jobs:
 
   github-pages:
     needs: build
-    if: "!contains(github.ref, 'refs/heads/dependabot')"
+    if: "github.event_name != 'pull_request' || !contains(github.head_ref, 'dependabot')"
     runs-on: ubuntu-latest
     concurrency: github-pages
     steps:
