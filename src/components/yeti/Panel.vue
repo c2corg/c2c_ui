@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { state } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     activeTab() {
-      return state.activeTab;
+      return Yetix.activeTab;
     },
   },
 };

@@ -1,7 +1,7 @@
 <script>
 import layerMixin from './layer';
 
-import { state, mutations, bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
@@ -33,13 +33,13 @@ export default {
   mixins: [layerMixin],
   computed: {
     activeTab() {
-      return state.activeTab;
+      return Yetix.activeTab;
     },
     features() {
-      return state.features;
+      return Yetix.features;
     },
     validMinimumMapZoom() {
-      return state.VALID_MINIMUM_MAP_ZOOM;
+      return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
   },
   watch: {
@@ -66,7 +66,7 @@ export default {
     this.map.addLayer(this.featuresLayer);
 
     // set default featuresTitle
-    mutations.setFeaturesTitle(this.$gettext(state.featuresTitle));
+    Yetix.setFeaturesTitle(this.$gettext(Yetix.featuresTitle));
 
     // load camptocamp document
     let doc = this.$route.params.document_id;
@@ -80,9 +80,9 @@ export default {
 
     this.addInteractions();
 
-    bus.$on('removeFeature', this.removeFeature);
-    bus.$on('removeFeatures', this.removeFeatures);
-    bus.$on('gpx', this.addFeaturesFromGpx);
+    Yetix.$on('removeFeature', this.removeFeature);
+    Yetix.$on('removeFeatures', this.removeFeatures);
+    Yetix.$on('gpx', this.addFeaturesFromGpx);
   },
   methods: {
     addInteractions() {
@@ -138,7 +138,7 @@ export default {
     updateFeaturesFromStore() {
       // updates features
       let features = this.getFeaturesLayerFeatures();
-      mutations.setFeatures(features);
+      Yetix.setFeatures(features);
 
       if (features.length === 0) {
         // if user come from a document url, remove url
@@ -180,7 +180,7 @@ export default {
       let features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
       features.map(this.addFeature);
       // update store
-      mutations.setFeaturesTitle(this.getFeaturesTitleFromGpx(features));
+      Yetix.setFeaturesTitle(this.getFeaturesTitleFromGpx(features));
 
       // gpx is loaded, go back to normal case
       this.loadingExternalFeatures = false;
@@ -207,7 +207,7 @@ export default {
       let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
       this.addFeature(feature);
       // update store
-      mutations.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
+      Yetix.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
 
       // document is loaded, go back to normal case
       this.loadingExternalFeatures = false;

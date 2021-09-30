@@ -1,17 +1,17 @@
 <script>
 import layerMixin from './layer';
 
-import { state, mutations, actions, bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin],
   computed: {
     mapZoom() {
-      return state.mapZoom;
+      return Yetix.mapZoom;
     },
     areas() {
-      return state.areas;
+      return Yetix.areas;
     },
     areasLayerStyle() {
       let levelStrokeWidth = 2;
@@ -40,9 +40,9 @@ export default {
     // only in first mount
     if (this.areas.length === 0) {
       // set areas (yeti valid areas)
-      actions.fetchAreas().then(this.onAreasResult);
+      Yetix.fetchAreas().then(this.onAreasResult);
       // event
-      bus.$on('mapMoveEnd', this.onMapMoveEnd);
+      Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
     }
   },
   methods: {
@@ -51,7 +51,7 @@ export default {
       let areas = this.getPropertiesFromFeatures(areasFeatures);
 
       // set areas in state
-      mutations.setAreas(areas);
+      Yetix.setAreas(areas);
 
       // to improve map rendering, we will build linestrings from polygon features
       // first, flatten coords
@@ -85,7 +85,7 @@ export default {
           areaOk = false;
         }
       }
-      mutations.setAreaOk(areaOk);
+      Yetix.setAreaOk(areaOk);
     },
     onMapMoveEnd() {
       // is area OK ?

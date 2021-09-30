@@ -98,7 +98,7 @@ import { format } from 'date-fns';
 
 import layerMixin from './layer';
 
-import { state, mutations, actions, bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 let mountainsStyle = (mapZoom) => {
@@ -237,13 +237,13 @@ export default {
   },
   computed: {
     mapZoom() {
-      return state.mapZoom;
+      return Yetix.mapZoom;
     },
     showAvalancheBulletins() {
-      return state.showAvalancheBulletins;
+      return Yetix.showAvalancheBulletins;
     },
     bulletinsLoaded() {
-      return state.bulletinsLoaded;
+      return Yetix.bulletinsLoaded;
     },
     overlayOrientations() {
       // return truthy orientations, in uppercase
@@ -283,11 +283,11 @@ export default {
     mountainsLayerGroup.setVisible(false);
 
     // only on first mount, if mountains already loaded
-    if (state.mountains.all.length === 0) {
-      actions.fetchMountains().then(this.onMountainsResult);
+    if (Yetix.mountains.all.length === 0) {
+      Yetix.fetchMountains().then(this.onMountainsResult);
 
-      bus.$on('mapMoveEnd', this.onMapMoveEnd);
-      bus.$on('mapClick', this.onMapClick);
+      Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
+      Yetix.$on('mapClick', this.onMapClick);
     }
   },
   methods: {
@@ -304,7 +304,7 @@ export default {
       let mountains = this.getPropertiesFromFeatures(mountainsFeatures);
       mountains = this.sortMountainsByMassif(mountains);
 
-      mutations.setAllMountains(mountains);
+      Yetix.setAllMountains(mountains);
 
       this.setVisibleMountains();
     },
@@ -341,7 +341,7 @@ export default {
     setVisibleMountains() {
       let mapExtent = this.getExtent('EPSG:3857');
       // clone this.mountains first, with no reference
-      let visibleMountains = Object.assign({}, state.mountains.all);
+      let visibleMountains = Object.assign({}, Yetix.mountains.all);
 
       // then filter if polygon isn’t in view
       for (let massif in visibleMountains) {
@@ -355,7 +355,7 @@ export default {
         }
       }
       // set mountains in visible
-      mutations.setVisibleMountains(visibleMountains);
+      Yetix.setVisibleMountains(visibleMountains);
     },
     updateMountainsStyle() {
       mountainsLayer.setStyle(mountainsStyle(this.mapZoom));
@@ -378,9 +378,9 @@ export default {
     onShowAvalancheBulletins() {
       // first time, bulletins are not loaded yet
       if (!this.bulletinsLoaded) {
-        mutations.setBulletinsLoaded(true);
+        Yetix.setBulletinsLoaded(true);
         // so load them
-        actions.fetchBulletins().then(this.onBulletinsResult);
+        Yetix.fetchBulletins().then(this.onBulletinsResult);
       }
       // show mountains layer group if needed
       mountainsLayerGroup.setVisible(this.showAvalancheBulletins);

@@ -227,7 +227,7 @@
 
 <script>
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { state, mutations } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 
 const DANGER = {
   min: 1,
@@ -271,10 +271,10 @@ export default {
   },
   computed: {
     bra() {
-      return state.bra;
+      return Yetix.bra;
     },
     method() {
-      return state.method;
+      return Yetix.method;
     },
     potentialDangerLabels() {
       const result = [];
@@ -307,7 +307,7 @@ export default {
       } else {
         value = event.target.value;
       }
-      mutations.setMethod(prop, value);
+      Yetix.setMethod(prop, value);
     },
     warnAboutMethodBra(item) {
       this.$emit('warn-about-method-bra', item);

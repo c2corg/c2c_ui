@@ -22,7 +22,7 @@
 
 <script>
 import Counter from '@/components/yeti/Counter.vue';
-import { state, getters, mutations } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 
 export default {
   components: { Counter },
@@ -34,10 +34,10 @@ export default {
   },
   computed: {
     activeTab() {
-      return state.activeTab;
+      return Yetix.activeTab;
     },
     hasFeatures() {
-      return getters.hasFeatures();
+      return Yetix.hasFeatures;
     },
   },
   methods: {
@@ -45,7 +45,7 @@ export default {
       // focus active tab
       this.$refs.tab[index].focus();
       // then set
-      mutations.setActiveTab(index);
+      Yetix.setActiveTab(index);
     },
     setActiveTabKeyboard(event, index) {
       // Set arrow keys: left/right = switch active tabs / down = focus panel

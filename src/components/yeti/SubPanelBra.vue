@@ -126,7 +126,7 @@
 <script>
 import Counter from '@/components/yeti/Counter.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { state, mutations } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 
 export default {
   components: { Counter, SubPanelTitle },
@@ -137,13 +137,13 @@ export default {
   },
   computed: {
     bra() {
-      return state.bra;
+      return Yetix.bra;
     },
     visibleMountains() {
-      return state.mountains.visible;
+      return Yetix.mountains.visible;
     },
     showAvalancheBulletins() {
-      return state.showAvalancheBulletins;
+      return Yetix.showAvalancheBulletins;
     },
     showVisibleMountains() {
       return this.countVisibleMountains >= 0;
@@ -163,16 +163,16 @@ export default {
   methods: {
     onChange(event, prop) {
       const value = prop === 'isDifferent' ? event : event.target.value;
-      mutations.setBra(prop, value);
+      Yetix.setBra(prop, value);
     },
     checkBraIsDifferent() {
       if (!this.bra.isDifferent) {
-        mutations.setBra('low', null);
-        mutations.setBra('altiThreshold', null);
+        Yetix.setBra('low', null);
+        Yetix.setBra('altiThreshold', null);
       }
     },
     onShowAvalancheBulletins(value) {
-      mutations.setShowAvalancheBulletins(value);
+      Yetix.setShowAvalancheBulletins(value);
     },
   },
 };

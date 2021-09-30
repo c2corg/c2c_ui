@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 
 export default {
   props: {
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     removeFeature(feature) {
-      bus.$emit('removeFeature', feature);
+      Yetix.$emit('removeFeature', feature);
     },
     showFeature(feature) {
       feature.setStyle(feature.get('highlightedStyle'));

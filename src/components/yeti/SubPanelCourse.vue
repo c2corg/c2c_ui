@@ -115,7 +115,7 @@ import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { state, mutations, bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
@@ -131,10 +131,10 @@ export default {
   },
   computed: {
     features() {
-      return state.features;
+      return Yetix.features;
     },
     featuresTitle() {
-      return state.featuresTitle;
+      return Yetix.featuresTitle;
     },
     hasFeaturesTitle() {
       return !(!this.featuresTitle.length && !this.newFeaturesTitle);
@@ -145,7 +145,7 @@ export default {
       if (!e.target.innerText.length) {
         this.newFeaturesTitle = false;
       }
-      mutations.setFeaturesTitle(e.target.innerText);
+      Yetix.setFeaturesTitle(e.target.innerText);
     },
     onEditNewFeaturesTitle() {
       this.newFeaturesTitle = true;
@@ -158,7 +158,7 @@ export default {
     },
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
-        bus.$emit('removeFeatures');
+        Yetix.$emit('removeFeatures');
       }
     },
     uploadGpx(event) {
@@ -168,7 +168,7 @@ export default {
 
       reader.onload = () => {
         this.loading = false;
-        bus.$emit('gpx', reader.result);
+        Yetix.$emit('gpx', reader.result);
       };
 
       reader.readAsText(event.target.files[0]);
@@ -177,7 +177,7 @@ export default {
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
-      bus.$emit('gpx', null);
+      Yetix.$emit('gpx', null);
     },
     downloadCourse() {
       if (this.format === 'GPX') {

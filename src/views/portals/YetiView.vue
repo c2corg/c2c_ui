@@ -111,7 +111,7 @@ import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
-import { state, mutations } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
@@ -160,22 +160,22 @@ export default {
 
   computed: {
     validMinimumMapZoom() {
-      return state.VALID_MINIMUM_MAP_ZOOM;
+      return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
     dangerMaxWhenMrd() {
-      return state.DANGER_MAX_WHEN_MRD;
+      return Yetix.DANGER_MAX_WHEN_MRD;
     },
     bra() {
-      return state.bra;
+      return Yetix.bra;
     },
     method() {
-      return state.method;
+      return Yetix.method;
     },
     mapZoom() {
-      return state.mapZoom;
+      return Yetix.mapZoom;
     },
     areaOk() {
-      return state.areaOk;
+      return Yetix.areaOk;
     },
     errors() {
       return {
@@ -244,7 +244,7 @@ export default {
       this.showDisclaimer = true;
     }
     // tmp: set default values for persistent state
-    mutations.setDefault();
+    Yetix.setDefault();
   },
 
   mounted() {

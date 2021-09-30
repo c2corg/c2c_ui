@@ -76,7 +76,7 @@ import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
-import { state, mutations, bus } from '@/components/yeti/yetix';
+import Yetix from '@/components/yeti/Yetix';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -119,10 +119,10 @@ export default {
   },
   computed: {
     mapZoom() {
-      return state.mapZoom;
+      return Yetix.mapZoom;
     },
     showAvalancheBulletins() {
-      return state.showAvalancheBulletins;
+      return Yetix.showAvalancheBulletins;
     },
     visibleCartoLayer: {
       get() {
@@ -227,21 +227,21 @@ export default {
       let mapZoom = this.getMapZoom();
       // emit map zoom, only if zoom changed
       if (this.mapZoom !== mapZoom) {
-        mutations.setMapZoom(mapZoom);
+        Yetix.setMapZoom(mapZoom);
       }
       // if mountains are here, update
       if (this.showAvalancheBulletins) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
-      bus.$emit('mapMoveEnd');
+      Yetix.$emit('mapMoveEnd');
     },
     onMapClick(evt) {
       // close controls
       this.showLayerSwitcher = false;
       this.showRecenterOnPropositions = false;
       // emit an event for map layers
-      bus.$emit('mapClick', evt);
+      Yetix.$emit('mapClick', evt);
     },
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
@@ -250,7 +250,7 @@ export default {
       });
     },
     onShowAvalancheBulletins() {
-      mutations.setShowAvalancheBulletins(!this.showAvalancheBulletins);
+      Yetix.setShowAvalancheBulletins(!this.showAvalancheBulletins);
     },
   },
 };
