@@ -165,6 +165,7 @@
     },
     "Continue the discussion": "продолжать обсуждение",
     "Contribute to common knowledge": "Вносите вклад в общее знание",
+    "Contribute to maintainance": "Помощь локальному сообществу",
     "Contributions": "участия",
     "Contributor": "участник",
     "Control the use of your personal data": "Управление вашими персональными данными",
@@ -172,6 +173,7 @@
     "Coup de coeur": {
       "Sophie picture context": "Избранное"
     },
+    "Crag climbing gear": "Снаряжение для скалолазания",
     "Create": {
       "yeti": "Создать"
     },
@@ -251,6 +253,8 @@
     "Edit associations": "редактировать объединения",
     "Edit categories": "редактировать категории",
     "Edit titles": "редактировать заглавия",
+    "Elementary": "Простой",
+    "Elementary Reduction Method": "Простой метод для начинающих",
     "Elevation": "высота",
     "Elevation (m)": "высота (м)",
     "Email": "электронный адрес",
@@ -468,6 +472,22 @@
     "Personal feed on": "Личная лента включена",
     "Personal informations": "Персональная информация",
     "Pitch description tag": "Тэг описания питча",
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Опишите свой технический уровень и опыт в отношении выбранной цели, ваше физическое состояние, усталость, накопленную перед  выходом, уровень акклиматизации, etc",
+    "Please move the map, or change the route's name.": "Переместите карту или поменяйте имя маршрута",
+    "Please select a method before computing.": "Пожалуйста выберите метод расчета ",
+    "Please select a waypoint type to enable sort feature": "Выберите тип путевой точки для включения сортировки",
+    "Please select an activity to enable sort feature": "Выберите тип активности для включения сортировки",
+    "Please set danger level as specified on avalanche bulletin for the specific area.": "Введите уровень лавинной опасности из бюллетеня",
+    "Post the first comment": "Опубликовать первый комментарий",
+    "Precise localisation of the shooting": "Место съемки",
+    "Precise location of the event.": "Точная локализация события",
+    "Press enter to select": "Нажмите \"Ввод\" чтобы выбрать",
+    "Preview": "Предпросмотр",
+    "Professional Reduction Method": "метод для профессионалов",
+    "Protect document": "Защитить документ",
+    "Protection area:": "Охраняемая зона:",
+    "Protection areas": "Охраняемые зоны",
+    "Protection status": "Статус охраны",
     "Register": "записываться",
     "Results only": "только результаты",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC это общемировая база несчастных случаев и инцидентов в скалолазании и других видах спорта, связанных с горами. Ее целью является увеличение безопасности этих видов спорта.",
@@ -904,6 +924,7 @@
       "rain_proof_types": "Нет защиты от дождя"
     },
     "exposition_rock_rating": "Последствия падения",
+    "exposure_time": "Выдержка",
     "external_resources": "Внешние ресурсы",
     "external_witness": {
       "author_statuses": "сторонние свидетели"
@@ -1082,6 +1103,9 @@
     },
     "insolation": {
       "weather_station_types": "перегрев на солнце"
+    },
+    "institution": {
+      "user_categories": "институции"
     },
     "internal_witness": {
       "author_statuses": "непосредственный свидетель"
@@ -1340,23 +1364,62 @@
     },
     "pixels": "точек",
     "place": "место",
+    "please consult the server logs": {
+      "API message": "Неожиданная ошибка, пожалуйста свяжитесь с разработчиками: dev@camptocamp.org"
+    },
+    "points by moving them": "точки перемещая их",
+    "poor": {
+      "condition_ratings": "плохой",
+      "snow_quality_ratings": "плохой",
+      "snow_quantity_ratings": "плохой"
+    },
     "poor service": {
       "public_transportation_ratings": "плохой сервис"
     },
     "possible": {
       "glacier_ratings": "возможно"
     },
+    "pouding": {
+      "rock_types": "пудинг"
+    },
     "prairie": {
       "ground_types": "прерия"
+    },
+    "precipitation": {
+      "weather_station_types": "осадки (только дождь)"
+    },
+    "precipitation_heater": {
+      "weather_station_types": "осадки (дождь и снег)"
     },
     "pressure": {
       "weather_station_types": "давление"
     },
     "previous difference": "предыдущая разница",
     "previous version": "предыдущая версия",
+    "previous_injuries": "Предыдущие травмы",
+    "previous_injuries_2": {
+      "previous_injuries": "другие травмы"
+    },
+    "primary_impacted": {
+      "author_statuses": "основной пострадавший"
+    },
     "product_types": "типы продуктов",
+    "professional_diploma": {
+      "qualification": "профессиональный диплом"
+    },
+    "professional_supervision": {
+      "supervision": "профессионал"
+    },
     "profile": "профиль",
     "profiles": "профили",
+    "progressive": {
+      "snow_clearance_ratings": "обесснеживание"
+    },
+    "prominence": "относительная высота",
+    "protected": {
+      "$$noContext": "Защищен",
+      "rain_proof_types": "Защищен от дождя"
+    },
     "quality": "качество",
     "quartzite": {
       "rock_types": "кварцит"
