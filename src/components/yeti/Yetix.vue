@@ -1,4 +1,13 @@
 <script>
+/**
+ * Yetix
+ * State management component for Yeti (VueX inspired)
+ *
+ * - Read-only state
+ * - State mutations can only occur here
+ * - Actions call API
+ */
+
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -40,8 +49,19 @@ let defaultState = {
   mapZoom: 0,
 };
 
+/**
+ * Read-only reactive state
+ *
+ * A copy of `defaultState` without reference (to be able to reset default state)
+ */
 let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
 
+/**
+ * Exported state
+ *
+ * Computed act as getters for read-only state properties
+ * Methods act as mutations (to mutate state) or actions (api calls)
+ */
 export default new Vue({
   computed: {
     DANGER_MAX_WHEN_MRD() {
@@ -88,6 +108,7 @@ export default new Vue({
     },
   },
   methods: {
+    // mutations
     setActiveTab(index) {
       state.activeTab = index;
     },
@@ -136,6 +157,7 @@ export default new Vue({
         }
       }
     },
+    // actions
     fetchApi(url) {
       return axios.get(state.API_URL + url);
     },
