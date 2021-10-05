@@ -40,66 +40,104 @@ let defaultState = {
   mapZoom: 0,
 };
 
+let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
+
 export default new Vue({
-  data() {
-    return JSON.parse(JSON.stringify(defaultState));
-  },
   computed: {
+    DANGER_MAX_WHEN_MRD() {
+      return state.DANGER_MAX_WHEN_MRD;
+    },
+    VALID_MINIMUM_MAP_ZOOM() {
+      return state.VALID_MINIMUM_MAP_ZOOM;
+    },
+    activeTab() {
+      return state.activeTab;
+    },
+    bra() {
+      return state.bra;
+    },
+    method() {
+      return state.method;
+    },
+    areas() {
+      return state.areas;
+    },
+    areaOk() {
+      return state.areaOk;
+    },
+    features() {
+      return state.features;
+    },
     hasFeatures() {
-      return !!this.features.length;
+      return !!state.features.length;
+    },
+    featuresTitle() {
+      return state.featuresTitle;
+    },
+    mountains() {
+      return state.mountains;
+    },
+    bulletinsLoaded() {
+      return state.bulletinsLoaded;
+    },
+    showAvalancheBulletins() {
+      return state.showAvalancheBulletins;
+    },
+    mapZoom() {
+      return state.mapZoom;
     },
   },
   methods: {
     setActiveTab(index) {
-      this.activeTab = index;
+      state.activeTab = index;
     },
     setBra(prop, value) {
-      this.bra[prop] = value;
+      state.bra[prop] = value;
     },
     setMethod(prop, value) {
-      this.method[prop] = value;
+      state.method[prop] = value;
     },
     setAreas(areas) {
-      this.areas = areas;
+      state.areas = areas;
     },
     setAreaOk(areaOk) {
-      this.areaOk = areaOk;
+      state.areaOk = areaOk;
     },
     setFeatures(features) {
-      this.features = features;
+      state.features = features;
     },
     setFeaturesTitle(featuresTitle) {
-      this.featuresTitle = featuresTitle;
+      state.featuresTitle = featuresTitle;
     },
     setAllMountains(mountains) {
-      this.mountains.all = mountains;
+      state.mountains.all = mountains;
     },
     setVisibleMountains(mountains) {
-      this.mountains.visible = mountains;
+      state.mountains.visible = mountains;
     },
     setShowAvalancheBulletins(showAvalancheBulletins) {
-      this.showAvalancheBulletins = showAvalancheBulletins;
+      state.showAvalancheBulletins = showAvalancheBulletins;
     },
     setBulletinsLoaded(bool) {
-      this.bulletinsLoaded = bool;
+      state.bulletinsLoaded = bool;
     },
     setMapZoom(mapZoom) {
-      this.mapZoom = mapZoom;
+      state.mapZoom = mapZoom;
     },
     setDefault() {
       // revert all state properties to default
-      for (let i in this.$data) {
-        if (typeof this.$data[i] === 'object' && !Array.isArray(this.$data[i])) {
-          for (let j in this.$data[i]) {
-            this.$data[i][j] = defaultState[i][j];
+      for (let i in state) {
+        if (typeof state[i] === 'object' && !Array.isArray(state[i])) {
+          for (let j in state[i]) {
+            state[i][j] = defaultState[i][j];
           }
         } else {
-          this.$data[i] = defaultState[i];
+          state[i] = defaultState[i];
         }
       }
     },
     fetchApi(url) {
-      return axios.get(this.API_URL + url);
+      return axios.get(state.API_URL + url);
     },
     fetchAreas() {
       return this.fetchApi('yeti-extent');
