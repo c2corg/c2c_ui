@@ -39,27 +39,7 @@
         <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
-      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
-      <div class="columns is-vcentered is-mobile">
-        <div class="column">
-          <ul class="form-export">
-            <li v-for="type of formats" :key="type" class="control is-flex">
-              <input
-                :id="'format' + type"
-                type="radio"
-                name="exportFormat"
-                class="is-checkradio is-primary"
-                :value="type"
-                v-model="format"
-              />
-              <label :for="'format' + type">{{ type }}</label>
-            </li>
-          </ul>
-        </div>
-        <div class="column is-narrow">
-          <button class="button is-primary" @click="downloadCourse" v-translate>Export route</button>
-        </div>
-      </div>
+      <simplify-tool ref="simplifyTool" @validTolerance="onValidTolerance" />
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -86,6 +66,33 @@
           <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
         </ul>
       </info>
+      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
+      <div class="columns is-vcentered is-mobile">
+        <div class="column">
+          <ul class="form-export">
+            <li v-for="type of formats" :key="type" class="control is-flex">
+              <input
+                :id="'format' + type"
+                type="radio"
+                name="exportFormat"
+                class="is-checkradio is-primary"
+                :value="type"
+                v-model="format"
+              />
+              <label :for="'format' + type">{{ type }}</label>
+            </li>
+          </ul>
+        </div>
+        <div class="column is-narrow">
+          <button
+            class="button is-primary"
+            :class="{ 'is-disabled': validSimplifyTolerance }"
+            @click="downloadCourse"
+            v-translate
+          >
+            Export route
+          </button>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -116,19 +123,21 @@ import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
+import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, Info, SubPanelTitle },
+  components: { FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,
       loading: false,
       formats: ['GPX', 'KML'],
       format: 'GPX',
+      validSimplifyTolerance: false,
     };
   },
   computed: {
@@ -161,6 +170,8 @@ export default {
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
         Yetix.$emit('removeFeatures');
+        // initialize simplify tool (go back to init state)
+        this.$refs.simplifyTool.initialize();
       }
     },
     uploadGpx(event) {
@@ -182,6 +193,9 @@ export default {
       Yetix.$emit('gpx', null);
     },
     downloadCourse() {
+      if (this.validSimplifyTolerance) {
+        return window.alert('Export is disabled. You must confirm simplified geometry first.');
+      }
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
       } else if (this.format === 'KML') {
@@ -202,6 +216,9 @@ export default {
     },
     setFilename(ext) {
       return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
+    },
+    onValidTolerance(validSimplifyTolerance) {
+      this.validSimplifyTolerance = validSimplifyTolerance;
     },
   },
 };
@@ -286,6 +303,11 @@ input[type='file'] {
   .is-checkradio[type='radio'] + label {
     line-height: 1.2rem;
   }
+}
+
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 350px) {

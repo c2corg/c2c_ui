@@ -38,6 +38,7 @@ let defaultState = {
 
   features: [],
   featuresTitle: 'New route',
+  featuresLength: 0,
 
   mountains: {
     all: [],
@@ -94,6 +95,9 @@ export default new Vue({
     featuresTitle() {
       return state.featuresTitle;
     },
+    featuresLength() {
+      return state.featuresLength;
+    },
     mountains() {
       return state.mountains;
     },
@@ -129,6 +133,9 @@ export default new Vue({
     },
     setFeaturesTitle(featuresTitle) {
       state.featuresTitle = featuresTitle;
+    },
+    setFeaturesLength(featuresLength) {
+      state.featuresLength = featuresLength;
     },
     setAllMountains(mountains) {
       state.mountains.all = mountains;

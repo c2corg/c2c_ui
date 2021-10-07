@@ -20,6 +20,21 @@ let normalLineStyle = [
   }),
 ];
 
+let simplifiedLineStyle = [
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 5,
+    }),
+  }),
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0, 0, 0, 0.7)',
+      width: 3,
+    }),
+  }),
+];
+
 let highlightedLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
@@ -39,12 +54,20 @@ let highlightedLineStyle = [
 
 export default {
   mixins: [layerMixin],
+  data() {
+    return {
+      visibleSimplifiedLayer: false,
+    };
+  },
   computed: {
     activeTab() {
       return Yetix.activeTab;
     },
     features() {
       return Yetix.features;
+    },
+    featuresLength() {
+      return Yetix.featuresLength;
     },
     validMinimumMapZoom() {
       return Yetix.VALID_MINIMUM_MAP_ZOOM;
@@ -69,6 +92,17 @@ export default {
 
     this.map.addLayer(this.featuresLayer);
 
+    // simplified layer (preview)
+    this.simplifiedLayer = new ol.layer.Vector({
+      source: new ol.source.Vector(),
+      style: simplifiedLineStyle,
+    });
+    // get source
+    this.simplifiedSource = this.simplifiedLayer.getSource();
+    // add layer, and hide it
+    this.map.addLayer(this.simplifiedLayer);
+    this.simplifiedLayer.setVisible(false);
+
     // set default featuresTitle
     Yetix.setFeaturesTitle(this.$gettext(Yetix.featuresTitle));
 
@@ -81,12 +115,17 @@ export default {
 
     // features events (added feature)
     this.featuresLayerSource.on('addfeature', this.onFeature);
+    this.simplifiedSource.on('addfeature', this.onFeature);
 
     this.addInteractions();
 
     Yetix.$on('removeFeature', this.removeFeature);
     Yetix.$on('removeFeatures', this.removeFeatures);
     Yetix.$on('gpx', this.addFeaturesFromGpx);
+    Yetix.$on('previewSimplify', this.previewSimplify);
+    Yetix.$on('simplify', this.simplify);
+    Yetix.$on('enableInteractions', this.enableInteractions);
+    Yetix.$on('disableInteractions', this.disableInteractions);
   },
   methods: {
     addInteractions() {
@@ -149,8 +188,15 @@ export default {
     },
     updateFeaturesFromStore() {
       // updates features
-      let features = this.getFeaturesLayerFeatures();
+      let features = this.visibleSimplifiedLayer ? this.getSimplifiedFeatures() : this.getFeaturesLayerFeatures();
       Yetix.setFeatures(features);
+      // update length
+      let featuresLength = this.getFeaturesLayerFeatures()
+        .map((feature) => {
+          return feature.getGeometry().getCoordinates().length;
+        })
+        .reduce((acc, value) => acc + value, 0);
+      Yetix.setFeaturesLength(featuresLength);
 
       if (features.length === 0) {
         // if user come from a document url, remove url
@@ -162,6 +208,9 @@ export default {
     getFeaturesLayerFeatures() {
       return this.featuresLayerSource.getFeatures();
     },
+    getSimplifiedFeatures() {
+      return this.simplifiedSource.getFeatures();
+    },
     removeFeature(feature) {
       // remove feature
       // when only one left, ask for user to confirm
@@ -169,12 +218,27 @@ export default {
         this.featuresLayerSource.getFeatures().length === 1 && !confirm(this.$gettext('Confirm delete'))
       );
       if (toBeRemoved) {
-        this.featuresLayerSource.removeFeature(feature);
+        if (this.visibleSimplifiedLayer) {
+          this.simplifiedSource.removeFeature(feature);
+          // remove corresponding feature
+          this.getFeaturesLayerFeatures().forEach((f) => {
+            if (feature.get('id') === f.ol_uid) {
+              this.featuresLayerSource.removeFeature(f);
+            }
+          });
+        } else {
+          this.featuresLayerSource.removeFeature(feature);
+        }
         this.updateFeaturesFromStore();
       }
     },
     removeFeatures() {
-      this.featuresLayerSource.clear(true);
+      // clear both layers
+      this.featuresLayerSource.clear();
+      this.simplifiedSource.clear(true);
+      // set default layer to be visible
+      this.hideSimplifiedLayer();
+      // update features
       this.updateFeaturesFromStore();
     },
     addFeaturesFromGpx(gpx) {
@@ -183,7 +247,7 @@ export default {
         return;
       }
       // first, clear geometry
-      this.featuresLayerSource.clear(true);
+      this.featuresLayerSource.clear();
 
       // before reading gpx, set what we are doing
       this.loadingExternalFeatures = true;
@@ -252,6 +316,52 @@ export default {
 
       // set a minimum zoom level
       this.view.setZoom(Math.max(this.validMinimumMapZoom, this.view.getZoom()));
+    },
+    hideSimplifiedLayer() {
+      this.featuresLayer.setVisible(true);
+      this.simplifiedLayer.setVisible(false);
+      this.visibleSimplifiedLayer = false;
+    },
+    showSimplifiedLayer() {
+      this.featuresLayer.setVisible(false);
+      this.simplifiedLayer.setVisible(true);
+      this.visibleSimplifiedLayer = true;
+    },
+    previewSimplify(tolerance) {
+      // every preview, clear the layer first
+      this.simplifiedSource.clear(true);
+      // show/hide layers based on tolerance
+      if (tolerance === 0) {
+        this.hideSimplifiedLayer();
+      } else {
+        this.showSimplifiedLayer();
+        // get each features, simplify them, and add to simplified layer
+        let features = this.getFeaturesLayerFeatures();
+        features.map((feature) => {
+          let geometry = feature.getGeometry();
+          let simplifiedGeometry = geometry;
+          // check if tolerance is 0 == no simplification
+          if (tolerance !== 0) {
+            simplifiedGeometry = simplifiedGeometry.simplify(tolerance);
+          }
+          // create feature (store reference of actual feature thanks to ol_uid)
+          let simplifiedFeature = new ol.Feature({ geometry: simplifiedGeometry, id: feature.ol_uid });
+          this.simplifiedSource.addFeature(simplifiedFeature);
+        });
+      }
+      this.updateFeaturesFromStore();
+    },
+    simplify() {
+      // clear features layer
+      this.featuresLayerSource.clear();
+      // get simplified features
+      let simplifiedFeatures = this.getSimplifiedFeatures();
+      // and move them one by one (to keep order of line chunks) in features layer
+      simplifiedFeatures.forEach((feature) => {
+        this.featuresLayerSource.addFeature(feature);
+      });
+      // hide simplified/show features
+      this.hideSimplifiedLayer();
     },
   },
   render() {
