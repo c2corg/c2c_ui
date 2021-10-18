@@ -7,7 +7,7 @@
             ref="geoFileInput"
             type="file"
             @change="uploadGeoFile"
-            accept=".gpx,.kml,.fit,application/gpx+xml,application/vnd.ant.fit,application/vnd.google-earth.kml+xml"
+            accept=".gpx,.kml,.fit,.tcx,application/gpx+xml,application/vnd.ant.fit,application/vnd.google-earth.kml+xml,application/vnd.garmin.tcx+xml"
           />
           <button class="button is-primary is-small" @click="$refs.geoFileInput.click()" v-translate>
             Upload a GPS track
