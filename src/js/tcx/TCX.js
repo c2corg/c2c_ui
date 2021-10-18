@@ -50,7 +50,7 @@ export class TCX extends FeatureFormat {
     return coordinates;
   }
 
-  getFeature(node, readOptions) {
+  readFeatureFromNode(node, readOptions) {
     const tracks = node.getElementsByTagName('Track');
     const lines = Array.from(tracks)
       .map((track) => this.getPoints(track))
@@ -94,7 +94,7 @@ export class TCX extends FeatureFormat {
     const features = [];
 
     for (const node of [...laps, ...courses]) {
-      const feature = this.getFeature(node, this.getReadOptions(source, readOptions));
+      const feature = this.readFeatureFromNode(node, this.getReadOptions(source, readOptions));
       if (feature) {
         features.push(feature);
       }
