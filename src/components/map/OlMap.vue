@@ -125,6 +125,7 @@ import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService
 import photon from '@/js/apis/photon';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
+import { TCX } from '@/js/tcx/TCX';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
@@ -515,9 +516,9 @@ export default {
     },
 
     setDragAndDropInteraction() {
-      // handle use case when user drag&drop a gpx/kml/fit file on map
+      // handle use case when user drag&drop a gpx/kml/fit/tcx file on map
       const dragAndDrop = new ol.interaction.DragAndDrop({
-        formatConstructors: [ol.format.GPX, ol.format.KML, FIT],
+        formatConstructors: [ol.format.GPX, ol.format.KML, FIT, TCX],
       });
 
       dragAndDrop.on(
@@ -597,7 +598,7 @@ export default {
     },
 
     setDocumentGeometryFromGeoFile(file) {
-      for (const format of [new ol.format.GPX(), new FIT(), new ol.format.KML()]) {
+      for (const format of [new ol.format.GPX(), new ol.format.KML(), new FIT(), new TCX()]) {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
           features.map((feature) => {
