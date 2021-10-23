@@ -670,6 +670,9 @@
     "alpine_climbing": {
       "event_activities": "Alpinklettern"
     },
+    "already used email": {
+      "API message": "Email schon verwendet."
+    },
     "already used forum_username": {
       "API message": "Forumname schon verwendet"
     },
