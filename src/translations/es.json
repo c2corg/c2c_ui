@@ -333,6 +333,9 @@
     "alpine_climbing": {
       "event_activities": "alpinismo"
     },
+    "already used email": {
+      "API message": "correo electrónico ya usado"
+    },
     "already used forum_username": {
       "API message": "Usuario ya utilizado en el forum"
     },

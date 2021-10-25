@@ -321,6 +321,8 @@
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
     "Main informations about your outing": "Données principales de votre sortie",
     "Make profile page public": "Rendre publique la page de profil",
+    "Map filter off": "Filtre carte désactivé",
+    "Map filter on": "Filtre carte activé",
     "Map only": "Uniquement la carte",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Carte, topos, connaissance de l’itinéraire, anticipation d’un plan B, réévaluation de l’itinéraire en cours de sortie ?",
     "Mark this route as to do": "Mettre cet itinéraire dans ses favoris",
@@ -530,6 +532,7 @@
     "Time": "Heure",
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
+    "Toggle elevation profile": "basculer sur le profil altimétrique",
     "Toggle full-screen": {
       "Map Controls": "Mode plein écran"
     },
