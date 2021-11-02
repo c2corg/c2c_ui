@@ -2,6 +2,7 @@
 FROM node:lts-alpine as build-stage
 WORKDIR /
 COPY package*.json ./
+COPY .snyk /
 RUN npm install
 COPY . .
 RUN npm run build
