@@ -1196,6 +1196,11 @@ $control-margin: 0.5em;
     }
   }
 }
+
+.ol-attribution ul {
+  display: flex;
+  flex-direction: column;
+}
 </style>
 
 <style lang="scss">
