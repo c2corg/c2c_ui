@@ -157,6 +157,9 @@
     "Delete": {
       "yeti": "Eliminar"
     },
+    "Delete a point": "cancelar un punto",
+    "Delete image": "cancelar una imágen",
+    "Delete route": "cancelar una vía",
     "Delete this document": "Suprimir este documento",
     "Describe access": "Describir acceso",
     "Describe access period": "Describir periodo de acceso",
