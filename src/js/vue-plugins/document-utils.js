@@ -4,11 +4,11 @@
  */
 
 import { isSameDay, isSameMonth, isSameYear, format } from 'date-fns';
-import { ca, es, eu, de, fr, it, zhCN, enGB } from 'date-fns/locale';
+import { ca, es, eu, de, fr, it, slSl, zhCN, enGB } from 'date-fns/locale';
 
 import constants from '@/js/constants';
 
-const locales = { ca, es, eu, de, fr, it, zh_CN: zhCN, en: enGB };
+const locales = { ca, es, eu, de, fr, it, sl_Sl: slSl, zh_CN: zhCN, en: enGB };
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
@@ -212,7 +212,9 @@ export default function install(Vue) {
           }
         }
 
-        result.lang = lang === 'zh_CN' ? 'en' : lang;
+        result.lang = ['sl_Sl','zh_CN'].includes(lang) ? 'en' : lang;
+
+
 
         return result;
       },

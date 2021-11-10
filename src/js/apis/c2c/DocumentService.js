@@ -68,8 +68,8 @@ DocumentService.prototype.get = function (id, lang) {
 };
 
 DocumentService.prototype.getCooked = function (id, prefered_lang) {
-  // chinese is not yet present as topoguide lang, so default it to english
-  prefered_lang = prefered_lang === 'zh_CN' ? 'en' : prefered_lang;
+  // chinese and slovenian are not yet present as topoguide lang, so default it to english
+  prefered_lang = ['sl_Sl','zh_CN'].includes(prefered_lang)  ? 'en' : prefered_lang;
   const promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`);
 
   return promise;
