@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasData" class="elevation-profile-container">
+  <div v-if="hasData" ref="container" class="elevation-profile-container" :class="{ hidden: fullScreenHidden }">
     <form v-if="timeAvailable" class="has-text-centered">
       <span class="is-size-7" v-translate>See profile based on:</span>
       <br />
@@ -24,6 +24,14 @@
     </form>
 
     <div ref="graph" class="elevation-profile-chart" />
+
+    <button
+      :title="$gettext('Toggle elevation profile')"
+      class="elevation-profile-fullscreen-toggle"
+      @click="toggleFullScreenProfile"
+    >
+      <fa-icon :icon="fullScreenHidden ? 'chevron-up' : 'chevron-down'" />
+    </button>
   </div>
 </template>
 
@@ -38,34 +46,53 @@ export default {
 
   data() {
     return {
+      /** indicates whether there is any elevation data to display */
       hasData: false,
 
+      /** geometry coordinates */
       coords: null,
+      /** graph data */
       data: null,
+      /** indicates whether time information is available */
       timeAvailable: false,
+      /** x axis is either distance or time */
       mode: 'distance',
 
       margin: {},
       svg: null,
 
+      /** horizontal scale (distance) */
       x1: null,
+      /** horizontal axis (distance) */
       x1Axis: null,
 
+      /** horizontal scale (time) */
       x2: null,
+      /** horizontal axis (time) */
       x2Axis: null,
 
+      /** vertical scale (elevation) */
       y: null,
+      /** vertical axis (elevation) */
       yAxis: null,
 
+      /** time line generator */
       tLine: null,
+      /** distance line generator */
       dLine: null,
+      /** svg path element representing the distance or time line */
       line: null,
 
+      /** vertical line for focusing a specific point */
       focusv: null,
+      /** horizontal line for focusing a specific point */
       focush: null,
+      /** marker for focusing a specific point */
       focus: null,
 
+      /** focused point info (distance) */
       bubble1: null,
+      /** focused point info (time) */
       bubble2: null,
 
       i18n_: {
@@ -79,11 +106,14 @@ export default {
         duration: this.$gettext('Duration'),
         duration_legend: this.$gettext('Duration (hrs)'),
       },
+
+      /** the elevation profile can be toggled in full screen mode */
+      fullScreenHidden: false,
     };
   },
 
   watch: {
-    mode: 'updateChart',
+    mode: 'updateChartXAxis',
   },
 
   created() {
@@ -110,7 +140,7 @@ export default {
       const geom_detail = JSON.parse(this.document.geometry.geom_detail);
       this.coords = [].concat(...geom_detail.coordinates);
 
-      // is there any elevation data
+      // is there any elevation data?
       if (!this.coords.some((coord) => coord.length > 2 && coord[2] !== 0)) {
         return;
       }
@@ -192,6 +222,8 @@ export default {
         this.x2.domain(d3.extent(this.data, (d) => d.elapsed)).nice(d3.timeHour);
       }
 
+      this.updateXAxisTicks(width);
+
       this.container
         .append('g')
         .attr('class', 'y axis')
@@ -199,7 +231,8 @@ export default {
         .append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', 6)
-        .attr('dy', '.71em')
+        .attr('dy', '.5em')
+        .attr('class', 'legend')
         .style('text-anchor', 'end')
         .text(this.i18n_.elevation_legend);
 
@@ -210,8 +243,8 @@ export default {
         .call(this.x1Axis)
         .append('text')
         .attr('x', size.width - this.margin.left - this.margin.right)
-        .attr('dy', '-.71em')
-        .attr('class', 'x axis legend')
+        .attr('dy', '-.5em')
+        .attr('class', 'legend')
         .style('text-anchor', 'end')
         .text(this.i18n_.distance_legend);
 
@@ -275,23 +308,32 @@ export default {
         .attr('class', 'overlay')
         .attr('width', width)
         .attr('height', height)
-        .on('mouseover', () => {
-          this.focus.style('display', null);
-          this.focush.style('display', null);
-          this.focusv.style('display', null);
-          this.bubble1.style('display', null);
-          this.bubble2.style('display', null);
-        })
-        .on('mouseout', () => {
-          this.focus.style('display', 'none');
-          this.focush.style('display', 'none');
-          this.focusv.style('display', 'none');
-          this.bubble1.style('display', 'none');
-          this.bubble2.style('display', 'none');
-          this.emitMouseOutEvent();
-        })
-        .on('mousemove', this.mousemove);
+        .on(
+          'mouseover',
+          () => {
+            this.focus.style('display', null);
+            this.focush.style('display', null);
+            this.focusv.style('display', null);
+            this.bubble1.style('display', null);
+            this.bubble2.style('display', null);
+          },
+          { passive: true }
+        )
+        .on(
+          'mouseout',
+          () => {
+            this.focus.style('display', 'none');
+            this.focush.style('display', 'none');
+            this.focusv.style('display', 'none');
+            this.bubble1.style('display', 'none');
+            this.bubble2.style('display', 'none');
+            this.emitCursorEndEvent();
+          },
+          { passive: true }
+        )
+        .on('mousemove', this.setCursor, { passive: true });
 
+      // update the graph when it is resized
       this.resizeObserver = new ResizeObserver(([entry]) => {
         if (entry.contentBoxSize) {
           // Firefox implements `contentBoxSize` as a single content rect, rather than an array
@@ -309,6 +351,7 @@ export default {
       const height = graphHeight - this.margin.top - this.margin.bottom;
 
       // recompute axes, lines and resize elements
+      this.updateXAxisTicks(width);
       this.x1.range([0, width]);
       if (this.timeAvailable) {
         this.x2.range([0, width]);
@@ -318,7 +361,7 @@ export default {
         .select('.x.axis')
         .call(axis)
         .attr('transform', 'translate(0,' + height + ')');
-      this.container.select('.x.axis.legend').attr('x', width);
+      this.container.select('.x.axis .legend').attr('x', width);
 
       this.y.range([height, 0]);
       this.container.select('.y.axis').call(this.yAxis);
@@ -340,7 +383,26 @@ export default {
       this.bubble2.style('display', 'none');
     },
 
-    mousemove(event) {
+    updateXAxisTicks(width) {
+      // try to avoid too many ticks on x axis if the graph is small.
+      // with null, we let d3 decide
+      let ticksCount = Math.round(width / 40);
+      ticksCount = ticksCount < 8 ? ticksCount : null;
+      this.x1Axis.ticks(ticksCount);
+      this.x2Axis.ticks(ticksCount);
+    },
+
+    toggleFullScreenProfile() {
+      const isFullScreen = document.fullscreenElement !== null;
+      if (!isFullScreen) {
+        return;
+      }
+
+      this.fullScreenHidden = !this.fullScreenHidden;
+      this.emitToggleFullScreenEvent(this.fullScreenHidden);
+    },
+
+    setCursor(mouseMoveEvent) {
       const bisectDistance = d3.bisector((d) => d.d).left;
       const bisectDate = d3.bisector((d) => d.elapsed).left;
 
@@ -352,8 +414,8 @@ export default {
       const bisect = this.mode === 'distance' ? bisectDistance : bisectDate;
       const x0 =
         this.mode === 'distance'
-          ? this.x1.invert(d3.pointer(event, this.container.node())[0])
-          : this.x2.invert(d3.pointer(event, this.container.node())[0]);
+          ? this.x1.invert(d3.pointer(mouseMoveEvent, this.container.node())[0])
+          : this.x2.invert(d3.pointer(mouseMoveEvent, this.container.node())[0]);
 
       const i = bisect(this.data, x0, 1, this.data.length - 1);
       const d0 = this.data[i - 1];
@@ -396,10 +458,10 @@ export default {
         );
       }
 
-      this.emitMouseMoveEvent(this.coords[d === d0 ? i - 1 : i]);
+      this.emitCursorMoveEvent(this.coords[d === d0 ? i - 1 : i]);
     },
 
-    updateChart() {
+    updateChartXAxis() {
       const nLine = this.mode === 'distance' ? this.dLine : this.tLine;
       const axis = this.mode === 'distance' ? this.x1Axis : this.x2Axis;
       const legend = this.mode === 'distance' ? this.i18n_.distance_legend : this.i18n_.duration_legend;
@@ -407,15 +469,19 @@ export default {
       this.line.transition().duration(1000).attr('d', nLine);
 
       d3.select('.x.axis').call(axis);
-      d3.select('.x.axis.legend').text(legend);
+      d3.select('.x.axis .legend').text(legend);
     },
 
-    emitMouseOutEvent() {
-      this.$root.$emit('elevation_profile', 'end');
+    emitCursorEndEvent() {
+      this.$root.$emit('elevation_profile', 'cursor_end');
     },
 
-    emitMouseMoveEvent(coord) {
-      this.$root.$emit('elevation_profile', 'move', coord);
+    emitCursorMoveEvent(coord) {
+      this.$root.$emit('elevation_profile', 'cursor_move', coord);
+    },
+
+    emitToggleFullScreenEvent(hide = true) {
+      this.$root.$emit('elevation_profile', 'toggle_fullscreen', hide);
     },
   },
 };
@@ -433,6 +499,10 @@ $C2C-orange: red;
       fill: none;
       stroke: black;
       shape-rendering: crispEdges;
+    }
+
+    .axis .legend {
+      fill: black;
     }
 
     .line {
@@ -461,9 +531,15 @@ $C2C-orange: red;
       pointer-events: all;
     }
   }
+
+  .elevation-profile-fullscreen-toggle {
+    display: none;
+  }
 }
 
 :fullscreen .elevation-profile-container {
+  $shadow: 1px -4px 5px rgb(0 0 0 / 20%);
+
   position: absolute;
   bottom: 0;
   height: 30%;
@@ -471,6 +547,31 @@ $C2C-orange: red;
   min-height: 200px;
   width: 100%;
   background-color: white;
+  box-shadow: $shadow;
+
+  &.hidden {
+    height: 0;
+    min-height: 0;
+  }
+
+  > .elevation-profile-fullscreen-toggle {
+    $height: 23px;
+    display: inline-block;
+    position: absolute;
+    width: 48px;
+    height: $height;
+    top: -$height;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    border: 0;
+    padding: 0;
+    box-shadow: $shadow;
+  }
 
   > form {
     position: absolute;

@@ -88,7 +88,7 @@ export default function install(Vue) {
 
     created() {
       // Non-reactive data.
-      this.available = {
+      this.availableUI = {
         fr: 'Français',
         it: 'Italiano',
         de: 'Deutsch',
@@ -98,6 +98,17 @@ export default function install(Vue) {
         eu: 'Euskara',
         sl_Sl: 'Slovenian',
         zh_CN: 'Chinese',
+      };
+
+      this.availableAPI = {
+        fr: 'Français',
+        it: 'Italiano',
+        de: 'Deutsch',
+        en: 'English',
+        es: 'Español',
+        ca: 'Català',
+        eu: 'Euskara',
+        zh: 'Chinese',
       };
 
       this.translations = {};
@@ -172,6 +183,7 @@ export default function install(Vue) {
           case 'it':
           case 'de':
           case 'es':
+          case 'zh':
             return lang;
           case 'zh_CN':
             return 'zh';
@@ -202,7 +214,7 @@ export default function install(Vue) {
             return 'es_ES';
           case 'sl':
             return 'sl_Sl';
-          case 'zh_CN':
+          case 'zh':
             return 'zh_CN';
           default:
             // eslint-disable-next-line no-console

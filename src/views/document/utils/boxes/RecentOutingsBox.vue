@@ -1,7 +1,7 @@
 <template>
   <div class="box no-print" v-if="!isDraftView && (showAddOutingButton || outings.length !== 0)">
     <div class="title is-2">
-      <span v-if="documentType === 'image'" v-translate>Associated outings</span>
+      <span v-if="['image', 'article'].includes(documentType)" v-translate>Associated outings</span>
       <span v-else v-translate>Last outings</span>
     </div>
 
@@ -57,7 +57,7 @@ export default {
     },
 
     totalOutings() {
-      return this.document.associations.recent_outings?.total || outings.length;
+      return this.document.associations.recent_outings?.total || this.outings.length;
     },
 
     addOutingQuery() {

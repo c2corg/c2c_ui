@@ -91,8 +91,8 @@ export class FIT extends FeatureFormat {
       tmp.push(blob[startIndex + i]);
     }
 
-    var buffer = new Uint8Array(tmp).buffer;
-    var dataView = new DataView(buffer);
+    const buffer = new Uint8Array(tmp).buffer;
+    const dataView = new DataView(buffer);
 
     switch (type) {
       case 'uint16':
@@ -383,11 +383,12 @@ export class FIT extends FeatureFormat {
       loopIndex = nextIndex;
 
       if (messageType === MESSAGE_TYPE.DATA_RECORD && message.longitude && message.latitude) {
+        const time = message.timestamp?.getTime();
         geometry.appendCoordinate([
           message.longitude,
           message.latitude,
-          message.altitude || this.lastAltitude || 0,
-          message.timestamp?.getTime() / 1000 || 0,
+          message.altitude ?? this.lastAltitude ?? 0,
+          time ? time / 1000 : 0,
         ]);
       }
     }

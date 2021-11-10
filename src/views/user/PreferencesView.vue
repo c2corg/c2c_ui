@@ -7,7 +7,7 @@
     <div class="field">
       <div class="buttons">
         <button
-          v-for="(language, key) of $language.available"
+          v-for="(language, key) of $language.availableUI"
           :key="key"
           :class="{ 'is-primary': $language.current === key }"
           type="button"
@@ -36,7 +36,7 @@
       <div v-if="!preferences.followed_only">
         <h3 v-translate>langs</h3>
         <div class="field is-grouped">
-          <div v-for="(language, key) of $language.available" :key="key" class="control">
+          <div v-for="(language, key) of $language.availableUI" :key="key" class="control">
             <button
               :class="{ 'is-primary': preferences.langs.indexOf(key) > -1 }"
               type="button"

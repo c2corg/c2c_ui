@@ -43,6 +43,17 @@ CamptocampApi.prototype = Object.create(BaseApi.prototype);
 // restore good contructor
 CamptocampApi.prototype.constructor = CamptocampApi;
 
+CamptocampApi.prototype.getApiLang = function (lang) {
+  // some UI langs may not yet be present in API
+  // some UI langs may also be more precise than API lang (zh for instance)
+
+  if (lang === 'zh_CN') {
+    return 'zh';
+  } else {
+    return lang;
+  }
+};
+
 CamptocampApi.prototype.setAuthorizationToken = function (token) {
   if (token) {
     this.axios.defaults.headers.common.Authorization = 'JWT token="' + token + '"';

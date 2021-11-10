@@ -122,7 +122,8 @@ export default {
       }
 
       const params = {
-        pl: ['sl_Sl','zh_CN'].includes(this.$language.current) ? 'en' : this.$language.current,
+        pl: ['sl_Sl'].includes(this.$language.current) ? 'en' : this.$language.current,
+
         token: this.paginationToken,
         u: this.$route.params.id,
       };

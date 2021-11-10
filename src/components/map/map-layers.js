@@ -7,7 +7,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
-      attributions: ['<a target="_blank" rel="noopener" href="http://www.swisstopo.admin.ch">swisstopo</a>'],
+      attributions: ['© <a target="_blank" rel="noreferer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
       urls: ['10', '11', '12', '13', '14'].map((i) => {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
@@ -41,11 +41,7 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
     projection: 'EPSG:3857',
     tileGrid,
     style: 'normal',
-    attributions: [
-      '<a href="http://www.geoportail.fr/" target="_blank" rel="noreferer noopener">' +
-        '<img src="//api.ign.fr/geoportail/api/js/latest/' +
-        'theme/geoportal/img/logo_gp.gif"></a>',
-    ],
+    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferer noopener">Geoportail</a>'],
   });
 
   return new ol.layer.Tile({
@@ -163,7 +159,7 @@ function createBaseMapDotAtSource(title, source) {
       layer: 'geolandbasemap',
       matrixSet: 'google3857',
       tileGrid,
-      attributions: '<a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>',
+      attributions: '© <a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>',
     }),
   });
 }
@@ -206,8 +202,8 @@ export const cartoLayers = function () {
     source: new ol.source.XYZ({
       url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       attributions:
-        '© <a href="//openstreetmap.org/copyright">OpenStreetMap</a> | ' +
-        '© <a href="//opentopomap.org" target="_blank" rel="noreferer">OpenTopoMap</a>',
+        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noopener noreferer">OpenStreetMap</a> | ' +
+        '© <a href="//opentopomap.org" target="_blank" rel="noopener noreferer">OpenTopoMap</a>',
       maxZoom: 17,
     }),
   });

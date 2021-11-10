@@ -76,42 +76,25 @@
     "Action - prix du public": {
       "Sophie picture context": "Акция - приз зрителей"
     },
-    "Activity feed": "Активности",
     "Add": "Добавить",
     "Add here maps not automatically referenced": "Добавить карты, которые не были добавлены автоматически",
     "Add images": "Добавить изображения",
     "Add the first outing": "Добавить первый отчет",
-    "Add title…": "добавить название...",
     "Additional information": "Дополнительная информация",
     "All": "Все",
-    "Allow all": "Позволить все",
-    "Altitude": "Высота",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Указание высоты требуется если уровень опасности наверху и внизу различается. Укажите высоту так, как  в лавинном бюллетене.",
     "An error occurred, couldn't (un)mark route as to do": "Произошла ошибка, невозможно добавить (или удалить) маршрут в избранное.",
     "An error occurred, couldn't save images": "Ошибка, невозможно сохранить изображение",
-    "Anonymity and confidentiality": "Анонимность и конфиденциальность",
     "Are you sure you want to delete this document?": "Уверены ли вы, что хотите удалить этот документ ?",
-    "Are you sure you want to delete this locale?": "вы уверены, что хотите удалить этот регион ?",
     "Are you sure you want to merge?": "Ты уверен, что хочешь слиться?",
-    "Are you sure you want to revert to this version of the document?": "вы уверены, что хотите вернуться к этой версии документа ?",
     "Area not covered": "Недоступная зона",
-    "Area too large": "Слышком большая зона",
-    "Articles, waypoints or routes to be linked.": "Статьи, путевые точки или маршруты, которые должны быть связаны.",
-    "Articles, waypoints, routes or books to be linked.": "Статьи, путевые точки, маршруты или книги которые должны быть связаны.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Как следует из названия, этот метод предназначен для новичков. Поэтому запас прочности должен быть особенно важным. Никаких других параметров, кроме уровня  лавинной опасности, не указывается. Ориентация склона не учитывается.",
     "Associated outings": "связанные отчеты",
     "Associated routes": "связанные маршруты",
-    "Associated routes cotations": "Оценки связанных маршрутов.",
     "Association": "общество",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Атрибуция - вы должны указать соответствующий источник, предоставить ссылку на лицензию и указать, были ли внесены изменения в оригинал.",
-    "Attributions": {
-      "Map controls": "атрибуции"
-    },
-    "Avalanche bulletins": "Прогноз лавиноопасности.",
     "Average slope (degrees)": "Средный наклон (градусы)",
     "Average slope in degree": "Средный наклон в градусах",
-    "Back to code": "вернуться к коду",
-    "Back to edit mode": "вернуться к редактированию",
     "Base layer": "первая кожа",
     "Basemap (at)": {
       "Map layer": "Австрия"
@@ -119,199 +102,88 @@
     "Basemap ortho (at)": {
       "Map layer": "Австрийские спутниковые"
     },
-    "Beginner": "Начинающий",
     "Beware of case-sensitive login and password": "Внимание,  логин и пароль чувствительны к регистру.",
-    "Block account": "Блокировать счёт",
-    "Bolted rock climbing gear": "Оборудование для спортивного лазания",
     "Book content": "содержание книги",
-    "Books and websites not already associated to this route": "Книги и сайты пока не связаны с этим маршрутом.",
     "Both results and map": "Оба карта и результаты",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Кратко опишите телесные повреждения. Поместите здесь также комментарии, не соответствующие другим разделам.",
     "By month": "по месяцам",
     "By year": "по годам",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org стремится облегчить обмен информацией между людьми практикующими горные виды спорта и внести свой вклад в безопасность в горах.",
     "Cancel": "Отменить",
-    "Candidates": "Кандидаты",
     "Cards mode": "Режим карточек",
-    "Change account parameters": "изменить настройки профиля",
     "Change password": "Изменить пароль",
     "Checking...": "проверка...",
     "Child": "ребенок",
     "Clear": "стереть",
     "Close": "закрыть",
-    "Collapse": "падение",
     "Comments": "комментарии",
     "Comments are disabled.": "комментарии отключены",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Обмен целями , ожиданиями, наблюдениями, соображениями членов группы во время мероприятия. Обсуждение новых стратегий, разделение ответственностей, слаженно ли группа функционирует итп.",
-    "Compare selected versions": "сравнить выбранные версии",
-    "Compute": "вычислить",
-    "Compute risk": "Оценить риск",
-    "Conditions": "условия",
     "Conditions, summits, routes": "Условия, вершины, маршруты",
-    "Configure cookies": "настроить куки",
     "Confirm": "подтвердить",
     "Confirm delete": "Подтвердить удаление",
-    "Conflict: version of document has changed": "Конфликт : версия данного документа изменилась",
-    "Conflict: version of locale 'ca' has changed": "Конфликт : версия места 'ca' изменилась",
-    "Conflict: version of locale 'de' has changed": "Конфликт : версия места 'de' изменилась",
-    "Conflict: version of locale 'en' has changed": "Конфликт : версия места 'en' изменилась",
-    "Conflict: version of locale 'es' has changed": "Конфликт : версия места 'es' изменилась",
-    "Conflict: version of locale 'eu' has changed": "Конфликт : версия места 'eu' изменилась",
-    "Conflict: version of locale 'fr' has changed": "Конфликт : версия места 'fr' изменилась",
-    "Conflict: version of locale 'it' has changed": "Конфликт : версия места 'it' изменилась",
     "Conflicting method and danger": "Метод оценки и уровень опасности несовместимы",
-    "Contain invalid character(s)": {
-      "API message": "содержит недопустимые символы"
-    },
-    "Continue the discussion": "продолжать обсуждение",
-    "Contribute to common knowledge": "Вносите вклад в общее знание",
-    "Contributions": "участия",
-    "Contributor": "участник",
+    "Contribute to maintainance": "Помощь локальному сообществу",
     "Control the use of your personal data": "Управление вашими персональными данными",
-    "Cookies": "Куки",
     "Coup de coeur": {
       "Sophie picture context": "Избранное"
     },
-    "Create": {
-      "yeti": "Создать"
-    },
-    "Create a new report": "Создать новый отчет",
+    "Crag climbing gear": "Снаряжение для скалолазания",
     "Created on": "созданный",
     "Creation?": "Создание?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Данная территория не покрыта картами YETI. Нанесены только французские горы (ограничены пунктирной линией)<br>",
     "Current password": "действующий пароль",
-    "Danger level": "Уровень опасности",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Уровень опасности из лавинного бюллетеня распространяется на любую ориентацию. Роза ветров определяет наиболее важные сектора, представляющие повышенный риск.",
-    "Danger level:": "Уровень опасности",
-    "Danger rating - considerable": "Уровень опасности - значительный",
-    "Danger rating - high": "Уровень опасности - высокий",
-    "Danger rating - high to very high": "Уровень опасности - от высокого до очень высокого ",
-    "Danger rating - low": "Уровень опасности - низкий",
-    "Danger rating - moderate": "Уровень опасности - средний",
-    "Danger rating - very high": "Уровень опасности - очень высокий",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Технические данные, такие как ориентация, тип скал или общая конфигурация маршрута (гребень, кулуар, стена)",
-    "Delete": {
-      "yeti": "Удалить"
-    },
-    "Delete a line chunk": "Удалить часть линии",
-    "Delete a point": "Удалить пункт",
-    "Delete image": "Удалить изображение",
-    "Delete route": "Удалить маршрут",
     "Delete this document": "Удалить этот документ",
     "Delete this locale": "удалить эту языковую версию",
-    "Deny all": "отрицать все",
     "Describe access": "Описать подход",
-    "Describe access period": "Описать время подхода",
-    "Describe access restrictions": "Описать ограничения подхода",
     "Describe here the gear needed for this route": "Описать нужное на этом маршруте оборудование",
     "Describe here the waypoint": "Описать путевую точку",
     "Describe here your issue": "Описать проблему",
     "Describe historical information about the route (date, names..) here": "Напольнять историческую информацию про данный маршрут (даты, фамилии, итд...)",
-    "Describe opening hours": "описать часы работы",
-    "Describe opening periods": "описать даты работы",
-    "Describe pedestrian access": {
-      "$$noContext": "описать пешеходный подход",
-      "hut": "описать пешеходный подход"
-    },
-    "Describe pt access": "Описать пункт подхода",
-    "Describe road access": "описать дорогу к подходу",
-    "Describe the conditions you encountered during your outing": "описать условия во время экскурсии",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Опишите информацию, собранную перед поездкой,  и их прогресса в полевых условиях. Это касается прогноза погоды, бюллетеней оценки лавинной опасности, качества льда, снега, и т.п.",
     "Description": "Описание",
-    "Detailed figures, like ratings, height differences, frequentation...": "подробные цифры, как оценки, перепад высоты, толпа, итд...",
-    "Detailed information": "подробная информация",
-    "Details": "подробности",
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Опишите ваш выход и происшествие/несчастный случай. Если вы уже создали описание выхода, то можете описать лишь происшествие, а затем связать этот отчет с выходом (после его загрузки).",
     "Details on participants and event context": "Подробная информация об участниках и контексте вашего мероприятия.",
-    "Differences between versions": "разницы между версиями",
     "Different high/low danger?": "Уровень опасности наверху/внизу разнится?",
-    "Directions (Google Maps)": "Направления (Google Maps)",
-    "Disclaimer": "отказ",
-    "Distance": "дистанция",
-    "Distance (km)": "дистанция (км)",
     "Do you really want to leave? you have unsaved changes!": "Вы действительно хотите выйти? У вас есть несохраненные данные!",
-    "Document quality": "качество документа",
     "Donate": "Внести пожертвование для Camptocamp",
-    "Download outings": "скачать отчеты",
-    "Draw": {
-      "yeti": "Рисовать"
-    },
-    "Draw right on the map": "Рисовать прямо на карте",
-    "Drawing tips": "советы по рисованию",
     "Drop images here or click to upload": "Перетащите изображения сюда, или кликните чтобы выбрать их\nДанные изображения буду распространяться под лицензией <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nЕсли вы не являетесь автором изображения, вы не можете загрузить его, если автор не дал свое согласие на его выпуск под соответствующей лицензией Creative-Commons.\nИзображения размером свыше двух 2 Мб будут сжаты перед отправкой.",
     "Duration": "Продолжительность",
     "Duration (hrs)": "Продолжительность (ч)",
-    "Easy mountain climbing gear": "снаряжение легкого альпинизма",
-    "Easy snow ice mixed gear": "снаряжение легкого снежно-ледового лазания",
-    "Edit": {
-      "$$noContext": "редактировать",
-      "yeti": "редактировать"
-    },
-    "Edit a document": "редактировать документ",
-    "Edit associations": "редактировать объединения",
-    "Edit categories": "редактировать категории",
-    "Edit titles": "редактировать заглавия",
-    "Elevation": "высота",
-    "Elevation (m)": "высота (м)",
+    "Edit": "редактировать",
+    "Elementary": "Простой",
+    "Elementary Reduction Method": "Простой метод для начинающих",
     "Email": "электронный адрес",
-    "Everything about ratings : difficulties, exposition...": "Всё про оценки : сложности, экспозиция...",
     "Expand": "Развернуть ",
-    "Expert": "эксперт",
-    "Export": "экспортировать",
-    "Export route": "экспортировать маршрут",
     "Export to CSV": "Экспортировать в CSV",
     "Fauna protection areas": "Зоны заповедника",
-    "Fauna protection site:": "заповедник ",
     "Feel free to edit it.": "Отредактировать",
     "Filter on map extent": "Ограничить поиск видимой картой",
     "Filter results": "Фильтровать результаты",
-    "Followed users": "Ползователи, на которых вы подписаны",
     "Forgot password?": "забыли пароль ?",
     "Forum": "Форум",
-    "Forum username": "Имя ползователя на форуме",
-    "From danger 3, consider the slopes which dominate the route": "С 3-го уровня лавиноопасности, обращайте внимание на склоны которые находятся выше вашего маршрута",
     "From the interface": "Из интерфейса",
-    "Fullname": "ФИО ",
     "GPS Track": "GPS трек",
-    "GPX file": "GPX файл",
-    "General": "Генерал",
     "General information": "общая информация",
     "Geolocation": "Геолокация",
-    "Get avalanche bulletins from Météo-France website": "Видеть прогноз лавиноопасности от Météo-France",
     "Go back to YETI": "Вернуться к YETI",
-    "Go to the previous page": "вернуться к предыдущей странице",
-    "Group": "Группа",
-    "Group size": "размер группы",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Был ли составлен график? Выдерживался ли он? Было ли время фактором влияющим на происшествия?",
     "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Изменило ли это событие ваши привычки? Какие уроки вы извлекли из него?",
-    "Have an account?": "Уже зарегистрированы?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Вы (пере)оценивали риски при каждом изменении  ситуации? \nУчтите факторы, которые могли повлиять на ваш уровень внимания, такие как усталость, стресс, снижение внимания после преодоления трудностей или при спуске, известное или легкопроходимое место, наличие следов или других людей, полное доверие к лидеру группы, и т.п.",
-    "Hazard potential": "потенциальная опасность",
-    "Hazard potential:": "потенциальная опасность",
-    "Heading": "Название",
     "Help": "Помощь",
     "Help research activities to define new prevention means": "Помогите научным исследованиям определить пути предотвращения",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Вот список участников, на которых вы подписаны, и чьи действия вы увидите в своей личной ленте.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Определите фильтры для видов активности и регионов, которые будут применяться к вашей ленте",
-    "High danger level from the avalanche bulletin": "Высокий уровень опасности от прогноза лавиноопасности",
     "Hiking gear": "снаряжение для похода",
     "History": "Версии",
-    "History is missing, please provide it if you have information.": "Отсутствует история маршрута, пожалуйста заполните информации если их есть у вас.",
-    "Home": "Главная",
     "Home page feed parameters": "Настройка вашей ленты на главной странице",
     "How is my testimony used ? How / why is it useful ?": "Для чего будут использованы мои показания? Почему они важны?",
-    "I choose to cancel the outing": "Я хочу удалить отчет",
-    "I have read and agree to the terms of use": "Я прочитал и согласен с условиями использования",
     "I must not use slopes > 30°": "Не показывать склоны круче 30°",
     "I must not use slopes > 35°": "Не показывать склоны круче 35°",
     "I must not use slopes > 40°": "Не показывать склоны круче 40°",
     "I read and understood the interest and limitations of YETI": "Я прочел и осознал ограничения YETI",
-    "IGN maps": {
-      "Map layer": "карты IGN"
-    },
-    "IGN ortho": {
-      "Map layer": "IGN орто"
-    },
     "IGN ortho (es)": {
       "Map layer": "спутниковые карты IGN (es)"
     },
@@ -329,90 +201,58 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Информация о месте происшествия. Укажите место на карте ниже, даже если вы не можете сделать это точно (в этом случае дайте больше деталей). После заполнения отчета вы сможете привязать его к маршруту, сайту или выходу.",
     "Informations about the access": "Информация о подходе",
     "Infos": "информация",
-    "Insert a link": "вставить ссылку",
-    "Insert emoji": "вставить смайлик",
-    "Insert image": "вставить изображение",
-    "Insert link": "вставить ссылку",
     "Invalid date": "Ошибочная дата",
     "Invalid email address": {
       "API message": "неправильный электронный адрес"
     },
     "Issue report": "Сигнализировать о проблеме",
-    "Know more about SERAC": "Узнать побольше про SERAC",
-    "Large group = 5 people and more": "Большая группа = 5 чел или больше",
     "Large group with load shedding distance": "Большая группа на достаточном расстоянии",
     "Last forum topics": "Последние дискуссии",
-    "Last outings": "Последные отчеты",
     "Latitude": "Широта",
     "Launch YETI": "Использовать YETI",
-    "Layers": {
-      "Map controls": "Слои"
-    },
     "Leave fullscreen": "Выйти из полноэкранного режима",
     "Legend": "Легенда",
     "Legend will appear automatically with the generated image": "Легенда появится автоматически вместе с созданным изображением",
     "Let's make our feedbacks valuable": "Сделаем ваши отзывы ценными для всех",
     "Licenses": "Лицензия",
     "Lines chunks": "Части линии",
-    "Links": "ссылки",
     "List mode": "Режим списка",
     "List of versions for language:": "Посмотреть версии для языка:",
     "Load my preferences": "Загрузить мои настройки",
     "Load shedding distance": "Безопасная дистанция",
     "Location / elevation / orientation": "Место / Высота / Ориентация",
     "Log in to post a comment": "Войдите чтобы комментировать",
-    "Login": "Войти",
     "Login failed": {
       "API message": "Ошибка входа"
     },
-    "Logout": "Выйти",
     "Longitude": "Долгота",
     "Low danger level from the avalanche bulletin": "Нижний уровень опасности из лавинного бюллетеня",
     "Mail has been sent": "отправленное сообщение",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Основная информация о маршруте: название, способ прохождения, общая локализация, GPS",
-    "Main informations about your outing": "Главные информации вашего отчета",
     "Make profile page public": "Сделать мой профайл публичным",
     "Map filter off": "Выключить фильтр карты",
     "Map filter on": "Включить фильтр карты",
-    "Map only": "только карта",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Карты, гайдбуки, известные маршруты, варианты плана \"Б\", (пере)оценка маршрута во время движения.",
     "Mark this route as to do": "Добавить маршрут в избранные",
     "Massifs could not be loaded": "Массив не может быть загружен",
     "Merge documents": "документы о слиянии",
     "Merge with other document": "слияние с другим документом",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Слияние исходного документа с целевым документом переносит все ссылки из исходного документа в целевой и создает перенаправление из исходного в целевой документ.",
-    "Methods": "методы",
     "Misc data about the waypoint": "Различные данные о путевых точках",
     "Miscs": "Разное",
-    "Missing altitude": "высота отсутствует",
-    "Missing captcha": {
-      "API message": "капча отсутствует"
-    },
-    "Missing danger level": "уровень опасности отсутствует",
-    "Missing method": "метод отсутствует",
     "Modified the": {
       "modification date": "Изменён"
     },
-    "More info": "подробнее",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Доступны другие маршруты. Вы можете переместить карту, ввести имя или выбрать вид активности для их отображения.",
     "Multi-criteria search": "Многокритериальный поиск",
     "My account": "мой аккаунт",
     "My bookmarks": "мои любимчики",
     "My changes": "мои вклады",
     "My followed users": "миссис Друзья",
-    "My outings": "Мои отчеты",
-    "My preferences": "Мои предпочтения",
-    "My profile": "Моя страница",
     "My statistics": "Моя статистика",
-    "Narration": "повествование",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Близость к несчастному случаю = опасная ситуация, не приведшая к телесным повреждениям, но могшая привести к гораздо более серьезным последствиям.",
     "Near-accidents are valuable": "Происшествия близкие к несчастным случаям ",
-    "Necessary cookies": "необходимые куки",
     "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Файлы cookie необходимы для правильного функционирования нашего веб-сайта и не могут быть отключены полностью. Они отправляются на ваш компьютер или устройство, когда вы запрашиваете определенное действие или услугу, например когда вы входите в систему, заполняете форму или определяете свои предпочтения в отношении файлов cookie. Если вы настроите свой компьютер так, чтобы блокировать эти файлы cookie, наш веб-сайт не будет доступен для вас в полной мере.",
-    "New outing": "новый отчет",
-    "New password": "новый пароль",
-    "New route": "новый маршрут",
-    "New waypoint": "новая путевая точка",
     "No account yet?": "Нет аккаунта?",
     "No data could be extracted from GPS file": "Данные не могут быть извлечены из GPS-файла",
     "No match?": "Нет подходящих результатов",
@@ -421,14 +261,10 @@
     "No result found": "Результат не найден",
     "No route right now": "В данный момент маршрут не найден",
     "No selected hazard potential. Set danger level first.": "Уровень опасности не выбран. Сначала введите уровень опасности.",
-    "No user with this email": {
-      "API message": "нет пользователя с этим адресом"
-    },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "«Без производных» —  Если вы делаете ремиксы, трансформируете или дополняете материал, то вы не имеете права распространять измененный материал.",
     "NonCommercial — You may not use the material for commercial purposes.": "Некоммерческий — вы не можете использовать материал в коммерческих целях.",
     "Note that comments have to be transferred manually in Discourse before merging.": "Комментарии должны быть вручную загружены в Discourse перед слиянием документов.",
     "Numbers": "данные",
-    "Ok": "ok",
     "On a drawn line": "На линии",
     "Only document less than 24h old can be deleted": {
       "API message": "Документ не может быть удален по прошествии 24 часов. Обратитесь к модератору если это необходимо."
@@ -443,9 +279,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "Ох! Что-то пошло не так с форумом. Сообщение об ошибке:",
     "Oups! something went wrong...": "Ой! Что-то пошло не так...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Наш веб-сайт использует файлы cookie, предоставленные нами и третьими сторонами. Некоторые файлы cookie необходимы для работы веб-сайта, в то время как настройки других могут быть изменены вами в любое время, особенно тех, которые позволяют нам оценить производительность нашего веб-сайта и предоставить вам функции социальных сетей. Вы можете принять или отклонить их все или",
-    "Outing": "отчет",
-    "Outings statistics": "статистики отчетов",
-    "Page not found": "страница не найдена",
     "Paragliding outings": "Выход с парапланом",
     "Parameters of the Digital Camera": "Параметры цифровой камеры",
     "Parent": "Родитель",
@@ -468,89 +301,61 @@
     "Personal feed on": "Личная лента включена",
     "Personal informations": "Персональная информация",
     "Pitch description tag": "Тэг описания питча",
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Опишите свой технический уровень и опыт в отношении выбранной цели, ваше физическое состояние, усталость, накопленную перед  выходом, уровень акклиматизации, etc",
+    "Please move the map, or change the route's name.": "Переместите карту или поменяйте имя маршрута",
+    "Please select a method before computing.": "Пожалуйста выберите метод расчета ",
+    "Please select a waypoint type to enable sort feature": "Выберите тип путевой точки для включения сортировки",
+    "Please select an activity to enable sort feature": "Выберите тип активности для включения сортировки",
+    "Please set danger level as specified on avalanche bulletin for the specific area.": "Введите уровень лавинной опасности из бюллетеня",
+    "Post the first comment": "Опубликовать первый комментарий",
+    "Precise localisation of the shooting": "Место съемки",
+    "Precise location of the event.": "Точная локализация события",
+    "Press enter to select": "Нажмите \"Ввод\" чтобы выбрать",
+    "Preview": "Предпросмотр",
+    "Professional Reduction Method": "метод для профессионалов",
+    "Protect document": "Защитить документ",
+    "Protection area:": "Охраняемая зона:",
+    "Protection areas": "Охраняемые зоны",
+    "Protection status": "Статус охраны",
     "Register": "записываться",
-    "Results only": "только результаты",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC это общемировая база несчастных случаев и инцидентов в скалолазании и других видах спорта, связанных с горами. Ее целью является увеличение безопасности этих видов спорта.",
     "Search a document to associate...": "Искать документ, с которым надо ассоциировать",
-    "See more results": "показать больше результатов",
-    "See the latest version": "видеть самую последнюю версию",
-    "Settings": "настройки",
-    "Several days?": "несколько дней",
-    "Share": "участвуйте",
-    "Share with us!": "поделитесь своей информацией !",
-    "Skiability": "качество катания",
     "Skitouring gear": "снаряжение для скитуринга",
-    "Slopes": "склоны",
-    "Source:": "источник",
-    "Statistical cookies": "статистические куки",
-    "Statistics": "статистики",
-    "Stay careful while skiing": "Будьте осторожны во время катания",
     "Target:": "Сохраняемый документ",
-    "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Степень потенциальной опасности вычисляется исходя из прогноза лавинного бюллетеня. Она может быть уточнена  ??? ",
     "The mountain sports community": "Сообщество любителей гор",
     "The page you are looking for does not exist or is broken.": "Запрашиваемая вами страница отсутствует или не работает",
-    "The slope must be between 0 and 80 deg": "склон должен быть между 0 и 80 градусов",
-    "The slope must be between 50 and 3000m high": "склон должен быть между 50 и 3000м высотой",
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Фактор частоты прохождения склона не принят во внимание, приложением, так как его трудно оценить при подготовке маршрута",
     "There are sensitive areas on this route. Please refer to the map.": "Этот маршрутпроходит черея или находится близко с защищаемой прирдной зоной. Проконсультируйтесь с картой.",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Эти cookies позволяют взаимодействию через сайт  camptocamp.org с соцсетями и делиться содержанием сайта с другими людьми или поделиться своим мнением б например, когда вы нажимаете на кнопку \"поделиться\". Дезактивировав эту опцию вы не сможете делиться в соцсетях содержанием  camptocamp.org",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Данный контент распространяется под лицензией Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Данный контент распространяется под лицензией Creative Commons BY-SA 3.0",
-    "This field is too long": "это поле слышком длинное",
-    "This field is too short": "это поле слышком короткое",
-    "This is the first version": "это первая версия",
-    "This is the last version": "это последняя версия",
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Полное описание маршрута, включая подходы и спуск. Не забудьте указать его историю, если она известна.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Это изображение обложки книги. Оно является собственностью издателя и/или автора и приведено с иллюстративной целью.",
-    "This profile is only available to authenticated users.": "этот профиль доступен только пользователям",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Этот инструмент позволяет оценить техническую сложность лыжного маршрута (категория лыжной сложности)",
-    "Time": "время",
-    "Title of the book, author, language and date of publication.": "Название книги, автор, язык, дата публикации.",
     "Toggle full-screen": {
       "Map Controls": "Полноэкранная мода"
     },
     "Toggle fullscreen": "Переключиться в полноэкранный режим",
-    "Too many results: please refine your search.": "слишком много результатов : уточните свой поиск",
-    "Topoguide": {
-      "$$noContext": "топогид",
-      "Sophie picture context": "топогид"
-    },
     "Trace": "Линия маршрута",
-    "Translate into an other lang": "перевести на другом языке",
     "Transport & road or PT access": "Проезд на автомобиле или общественном транспортею",
     "Types and styles": "Типы и стили",
     "Unformatted text": "Неформатированный текст",
     "Unordered list": "Несортированный список",
-    "Upload a GPS track": "загрузить GPS трек",
-    "Upload a new version": "загрузить новую версию",
     "User avatar": "Аватар",
     "Username": "Идентификатор",
     "Versions": "Версии",
-    "Very complex (steps, narrow sections, ridges...)": "Очень сложно (крутые обрывы, узкие секции, гребни...)",
-    "View in other lang": "видеть на другом языке",
     "Warning: This action cannot be undone!": "Внимание: Это действие не может быть отменено",
-    "Weather & conditions": "погода и условия",
-    "Weather forecast (meteoblue)": "Прогноз погоды (meteoblue)",
-    "Without c2c account": "Без с2с аккаунта",
     "You are using a custom sort": "Вы можете выбрать ключ для сортировки",
     "You can choose to remain anonymous": "Вы можете остаться анонимным, если пожелаете",
     "You may add associated waypoints, books and articles": "Вы можете добавить другие статьи, книги или путевые точки",
     "You may also drag, draw or edit the track on the map.": "Вы можете создать, отредактировать или перетащить свой GPS-трек на карте",
     "You need to activate your by clicking the link sent to your email address.": "Вы должны активировать свой аккаунт перейдя по ссылке в письме",
     "Your account was successfully created": "Ваш аккаунт успешно создан!",
-    "Zoom in": {
-      "Map controls": "увеличить"
-    },
-    "Zoom out": {
-      "Map controls": "уменьшить"
-    },
     "a new point on an existing line": "новый пункт на уже существующей линии",
     "access": {
       "$$noContext": "доступ к дороге / общественный транспорт",
       "waypoint_types": "доступ к дороге / общественный транспорт"
     },
-    "access_comment": "к комментариям",
-    "access_condition": "к условиям",
     "access_period": "период доступности",
     "access_time": "время доступа",
     "accessible_when_wardened": {
@@ -562,9 +367,7 @@
     "action": {
       "image_categories": "действие"
     },
-    "activities": "виды деятельности ",
     "activity": "активность",
-    "activity_rate": "показатель активности",
     "activity_rate_m2": {
       "activity_rates": "1-2 раза в месяц"
     },
@@ -589,9 +392,6 @@
     "advertisement": "реклама",
     "age": "Возраст",
     "aid_rating": "категория ИТО",
-    "alpine_climbing": {
-      "event_activities": "горное лазание"
-    },
     "already used email": {
       "API message": "этот E-mail уже используется"
     },
@@ -607,17 +407,11 @@
     "amateur": {
       "user_categories": "любитель"
     },
-    "anonymous": "Анонимный",
     "area": "Зона",
     "area_type": "тип зоны",
     "areas": "Зоны",
     "article": "Статья",
-    "article_categories": "категории статей",
-    "article_type": "тип статьи",
     "articles": "Статьи",
-    "artificial": {
-      "rock_types": "искусственно"
-    },
     "ascending sort": "Сортировать по возрастанию",
     "association": {
       "article_categories": "общество"
@@ -631,33 +425,14 @@
     },
     "author": "автор",
     "author_status": "Вовлеченность в ситуацию",
-    "autonomous": {
-      "autonomies": "автономный"
-    },
-    "autonomy": "автономия",
     "avalanche": {
       "$$noContext": "лавина",
       "event_types": "лавина"
     },
-    "avalanche_forecaster": {
-      "user_categories": "прогноз лавиноопасности"
-    },
-    "avalanche_level": "уровень лавиноопасности",
-    "avalanche_signs": "лавинные признаки",
-    "avalanche_slope": "лавиноопасная зона",
     "avalanches": "лавинная информация",
     "average": {
       "condition_ratings": "средный",
-      "snow_quality_ratings": "средный",
-      "snow_quantity_ratings": "средный"
-    },
-    "awful": {
-      "condition_ratings": "Ужасно",
-      "snow_quality_ratings": "Ужасно",
-      "snow_quantity_ratings": "Ужасно"
-    },
-    "bar": {
-      "product_types": "бар"
+      "snow_quality_ratings": "средный"
     },
     "basalte": {
       "rock_types": "базальт"
@@ -665,7 +440,6 @@
     "base_camp": {
       "waypoint_types": "базовый лагерь"
     },
-    "best_periods": "лучшее время",
     "biography": {
       "book_types": "биография"
     },
@@ -676,13 +450,6 @@
       "waypoint_types": "бивак"
     },
     "blanket_unstaffed": "Необслуживаемое убежище",
-    "bloc": {
-      "climbing_indoor_types": "Боулдеринг",
-      "climbing_outdoor_types": "Боулдеринг"
-    },
-    "blocked_person": {
-      "event_types": "Блокированный пользователь"
-    },
     "boat": {
       "public_transportation_types": "лодка"
     },
@@ -690,13 +457,9 @@
       "$$noContext": "книга",
       "image_categories": "книга"
     },
-    "book_types": "тип книги",
     "books": "книги",
     "bus": {
       "public_transportation_types": "автобус"
-    },
-    "c2c_meetings": {
-      "article_categories": "С2С собрание"
     },
     "ca": {
       "langs": "Каталонский"
@@ -705,7 +468,6 @@
       "rock_types": "Известняк"
     },
     "camera settings": "настройки камеры",
-    "camera_name": "название камеры",
     "camp_site": {
       "waypoint_types": "кемпинга"
     },
@@ -713,7 +475,6 @@
       "waypoint_types": "каньон"
     },
     "capacity": {
-      "$$noContext": "количество мест",
       "bivouac": "количество мест"
     },
     "capacity_staffed": "Количество доступных мест",
@@ -725,23 +486,9 @@
     "cleared": {
       "access_conditions": "Бесснежый"
     },
-    "climbing rating": "Категория сложности (скалолазание)",
-    "climbing_indoor": {
-      "waypoint_types": "лазание по искусственному рельефу (скалодром)"
-    },
-    "climbing_indoor_types": "тип лазания",
     "climbing_instructor": {
       "user_categories": "инструктор по лазанию"
     },
-    "climbing_outdoor": {
-      "waypoint_types": "лазание по естественному рельефу (скалодром)"
-    },
-    "climbing_outdoor_type": "тип лазания",
-    "climbing_outdoor_types": "тип лазания",
-    "climbing_rating_max": "категория сложности максимум",
-    "climbing_rating_median": "средняя категория сложности",
-    "climbing_rating_min": "категория сложности минимум",
-    "climbing_styles": "тип лазания",
     "closed": {
       "lift_status": "закрыто"
     },
@@ -760,106 +507,34 @@
     "club": {
       "user_categories": "клуб"
     },
-    "code": "код",
-    "collab": {
-      "$$noContext": "сотрудничество",
-      "article_types": "сотрудничество"
-    },
-    "collaborative": {
-      "image_types": "совместный"
-    },
     "comment": "комментарий",
-    "condition_rating": "оценка условий",
     "conditions": "Условия",
     "conditions_levels": "Состояние снега по зонам",
-    "configuration": "форма",
-    "configure your choices": "Настроите свои выборы",
-    "conglomerat": {
-      "rock_types": "конгломерат"
-    },
     "contact": "контакт",
-    "contributor": "участник",
-    "copyright": {
-      "$$noContext": "авторское право",
-      "image_types": "авторское право"
-    },
     "corridor": {
       "route_configuration_types": "корридор"
     },
     "country": {
       "area_types": "страна"
     },
-    "crack_dihedral": {
-      "climbing_styles": "двугранная трещина"
-    },
-    "craie": {
-      "rock_types": "мел"
-    },
-    "crampons_req": {
-      "glacier_gear_types": "кошки нужны"
-    },
-    "crampons_spring": {
-      "glacier_gear_types": "кошки_весна"
-    },
-    "crevasse_fall": {
-      "event_types": "падение в трещину"
-    },
-    "critical_situation": {
-      "event_types": "критическая ситуация"
-    },
-    "crowded": {
-      "frequentation_types": "многолюдный"
-    },
     "current zoom:": "текущее увеличение:",
-    "custodianship": "опекунство",
-    "danger_sign": {
-      "avalanche_signs": "признаки опасности"
-    },
     "dangerous": {
       "children_proof_types": "опасно"
     },
     "date": "дата",
-    "date_end": "дата_конец",
-    "date_start": "дата_начало",
-    "date_time": "дата_время",
     "day(s)": "день(ы)",
-    "de": {
-      "langs": "немецкий"
-    },
     "descending sort": "Сортировать по убыванию",
     "descent": {
       "image_categories": "Спуск"
     },
-    "describe conditions": "Описать условия",
-    "describe route_conditions": "Описать условия на маршруте",
-    "describe timing": "Описать расписание",
-    "describe weather": "Описать погоду",
     "description": "Описание",
-    "detail": {
-      "image_categories": "подробности"
-    },
-    "difficult": {
-      "glacier_ratings": "Сложно"
-    },
-    "difficulties_height": "высота сложных частей",
-    "disable_comments": "отключить комментарии",
-    "draft": {
-      "quality_types": "проект"
-    },
     "durations": "Продолжительность",
-    "durations (days)": "Продолжительность (дни)",
-    "easy": {
-      "glacier_ratings": "Легко"
-    },
     "edge": {
       "route_configuration_types": "хребет"
     },
     "editor": "редактор",
     "elevation": "высота",
-    "elevation_access": "высота подхода",
     "elevation_down_snow": "Высота где сняли лыжи при спуске",
-    "elevation_max": "высота максимум",
-    "elevation_min": "высота минимум",
     "elevation_up_snow": "Высота, где надели лыжи при подъеме",
     "emphasized text": "выделенный текст",
     "empty": {
@@ -869,15 +544,6 @@
     "en": {
       "langs": "английский"
     },
-    "engagement_rating": "оценка обязательства",
-    "environment": {
-      "book_types": "среда"
-    },
-    "equipment": {
-      "image_categories": "подготовленность трасс"
-    },
-    "equipment_rating": "оценка подготовленности трасс",
-    "equipment_ratings": "оценки подготовленности трасс",
     "es": {
       "langs": "испанский"
     },
@@ -886,36 +552,23 @@
     },
     "event_activity": "Активность",
     "event_type": "Тип события",
-    "excellent": {
-      "condition_ratings": "Отлично",
-      "snow_quality_ratings": "Отлично",
-      "snow_quantity_ratings": "Отлично"
-    },
     "expedition": {
       "route_types": "экспедиция"
     },
     "expeditions": {
       "article_categories": "экспедиции"
     },
-    "expert": {
-      "autonomies": "эксперт"
-    },
     "exposed": {
       "rain_proof_types": "Нет защиты от дождя"
     },
     "exposition_rock_rating": "Последствия падения",
+    "exposure_time": "Выдержка",
     "external_resources": "Внешние ресурсы",
     "external_witness": {
       "author_statuses": "сторонние свидетели"
     },
-    "face": {
-      "route_configuration_types": "стена"
-    },
     "farm_sale": {
       "product_types": "прямые продажи"
-    },
-    "fauna": {
-      "image_categories": "фауна"
     },
     "federal_supervision": {
       "supervision": "федеральный"
@@ -923,14 +576,9 @@
     "federal_supervisor": {
       "qualification": "инструктор"
     },
-    "federal_trainer": {
-      "qualification": "федеральный инструктор"
-    },
     "female": {
       "genders": "женщина"
     },
-    "file_size": "размер файла",
-    "filename": "название файла",
     "fine": {
       "quality_types": "хорошо"
     },
@@ -943,7 +591,6 @@
     "fr": {
       "langs": "французкий"
     },
-    "frequentation": "народ",
     "gas_unstaffed": "Газ, необслуживаемое",
     "gear": {
       "$$noContext": "снаряжение ",
@@ -952,54 +599,21 @@
     "gender": "Пол",
     "general informations": "общая информация",
     "geolocation": "Геолокация",
-    "geology": {
-      "image_categories": "геология"
-    },
-    "gite": {
-      "waypoint_types": "жилье"
-    },
     "glacier": {
       "route_configuration_types": "ледник"
     },
-    "glacier_crampons": {
-      "glacier_gear_types": "ледник_кошки"
-    },
-    "glacier_gear": "ледник_снаряжение",
-    "glacier_rating": "ледник_оценка",
-    "glacier_safety_gear": {
-      "glacier_gear_types": "ледник_снаряжение для безопасности"
-    },
-    "global_rating": "общая оценка",
     "gneiss": {
       "rock_types": "гнейс"
-    },
-    "good": {
-      "condition_ratings": "хорошо",
-      "snow_quality_ratings": "хорошо",
-      "snow_quantity_ratings": "хорошо"
-    },
-    "good service": {
-      "public_transportation_ratings": "хороший сервис"
-    },
-    "goulotte": {
-      "route_configuration_types": "gully"
     },
     "granit": {
       "rock_types": "гранит"
     },
-    "great": {
-      "quality_types": "отлично"
-    },
     "gres": {
       "rock_types": "песчаник"
-    },
-    "grocery": {
-      "product_types": "гастроном"
     },
     "ground_types": "Тип ландшафта",
     "group_management": "управление группой",
     "has added images to area": "добавил изображения к зоне",
-    "has added images to article": "добавил изображения к статье",
     "has added images to book": "добавил изображения к книге",
     "has added images to outing": "добавил изображения на отчете",
     "has added images to route": "добавил изображения на маршруте",
@@ -1008,64 +622,19 @@
     "has created a new article": "создал новую статью",
     "has created a new book": "создал новую книгу",
     "has created a new image": "создал новое изображение",
-    "has created a new outing": "создал новый отчет",
-    "has created a new route": "создал новый маршрут",
-    "has created a new waypoint": "создал новую путевую точку",
     "has created a new xreport": "Создать новый отчёт о происшествии/несчастном случае",
-    "has updated the area": "Обновил зону",
-    "has updated the article": "Обновил статью",
-    "has updated the book": "Обновил книгу",
-    "has updated the image": "Обновил изображение ",
-    "has updated the outing": "Обновил отчет",
-    "has updated the route": "Обновил маршрут",
-    "has updated the waypoint": "Обновил путевую точку",
     "has updated the xreport": "обновить отчет о происшествии/несчастном случае",
-    "heading text": "заглавный текст",
     "heating_unstaffed": "Отапливаемое, неохраняемое",
-    "height": "высота",
-    "height_diff": "Перепад высоты",
-    "height_diff_access": "Перепад высоты - подход",
-    "height_diff_difficulties": "Перепад высоты - сам маршрут",
-    "height_diff_down": "Перепад высоты - спуск",
     "height_diff_up": "Набор высоты",
-    "height_max": "высота - максимум",
-    "height_median": "высота - средняя",
-    "height_min": "высота - минимум",
     "help": {
       "$$noContext": "помощь",
       "image_categories": "помощь"
     },
-    "highline": {
-      "slackline_types": "Хайлайн"
-    },
-    "hiking": {
-      "activities": "поход"
-    },
     "hiking_rating": "Категория маршрута/трэйла",
-    "historical": {
-      "book_types": "исторический"
-    },
-    "humidity": {
-      "weather_station_types": "мокрость"
-    },
-    "hut": {
-      "image_categories": "хижина",
-      "waypoint_types": "хижина"
-    },
-    "hut_comment": "хижина - комментарий",
-    "hut_status": "хижина - статус",
-    "hut_warden": {
-      "user_categories": "хижина - начальник"
-    },
-    "ice_climbing": {
-      "activities": "ледолазание",
-      "event_activities": "ледолазание"
-    },
     "ice_cornice_collapse": {
       "event_types": "обрушение каскада или карниза"
     },
     "ice_rating": "Уровень сложности льда",
-    "image": "изображение",
     "image_categories": "Категории",
     "image_type": "Тип изображения (лицензия)",
     "images": "изображения",
@@ -1080,8 +649,8 @@
     "inside": {
       "rain_proof_types": "внутри"
     },
-    "insolation": {
-      "weather_station_types": "перегрев на солнце"
+    "institution": {
+      "user_categories": "институции"
     },
     "internal_witness": {
       "author_statuses": "непосредственный свидетель"
@@ -1094,7 +663,6 @@
     "key_needed": {
       "custodianship_types": "чтобы от крыть необходим ключ"
     },
-    "kilometers": "километры",
     "labande_global_rating": "Общий лыжный рейтинг",
     "labande_ski_rating": "Уточненный лыжный рейтинг",
     "lake": {
@@ -1106,58 +674,25 @@
     "lang": "язык",
     "langs": "языки",
     "last point with the Backspace key": "Последняя точка доступна через клавишу Backspace",
-    "length": "длина",
     "length_total": "Общая протяженность",
-    "level_1": {
-      "avalanche_levels": "уровень_1"
-    },
-    "level_2": {
-      "avalanche_levels": "уровень_2"
-    },
-    "level_3": {
-      "avalanche_levels": "уровень_3"
-    },
-    "level_4": {
-      "avalanche_levels": "уровень_4"
-    },
-    "level_5": {
-      "avalanche_levels": "уровень_5"
-    },
     "level_na": {
       "avalanche_levels": "уровень не указан"
     },
     "lift_access": "Подъемники",
     "lift_status": "Подъемники",
-    "link": "ссылка",
     "loading": "загрузка",
-    "local_product": {
-      "waypoint_types": "местный продукт"
-    },
     "locality": {
       "waypoint_types": "место"
-    },
-    "loop": {
-      "route_types": "петля"
     },
     "loop_hut": {
       "route_types": "кольцо (подходы или приют)"
     },
-    "magazine": {
-      "book_types": "журнал"
-    },
     "main_waypoint_id": "Id главной путевой точки",
-    "male": {
-      "genders": "муж"
-    },
     "map": "карта",
     "maps": "карты",
     "maps_info": "карты",
     "maps_references": "Картографические ссылки",
     "matress_unstaffed": "Спальные места, без смотрителя",
-    "medium": {
-      "quality_types": "средний"
-    },
-    "meters": "метры",
     "migmatite": {
       "rock_types": "мигматит"
     },
@@ -1166,31 +701,11 @@
       "waypoint_types": "разное"
     },
     "mixed_rating": "Уровень микста",
-    "modifications": "модификации",
-    "mollasse_calcaire": {
-      "rock_types": "моласса_известняк"
-    },
     "more_than_3m": {
       "severities": "больше трех месяцев"
     },
-    "motivations": "мотивации",
-    "mountain_biking": {
-      "activities": "горный велосипед"
-    },
     "mountain_climbing": {
       "activities": "Альпинизм"
-    },
-    "mountain_environment": {
-      "article_categories": "горная среда"
-    },
-    "mountain_guide": {
-      "user_categories": "горный гид"
-    },
-    "mountain_leader": {
-      "user_categories": "горный лидер"
-    },
-    "mountainbike_instructor": {
-      "user_categories": "инструктор по горному велосипеду"
     },
     "mtb_down_rating": "Уровень спуска на MTB",
     "mtb_height_diff_portages": "Перемещение MTB",
@@ -1203,35 +718,12 @@
     "multipitch_climbing": {
       "event_activities": "Лазанье мультипитчей"
     },
-    "name": "имя",
-    "natural_avalanche": {
-      "avalanche_signs": "спонтанная лавина"
-    },
-    "naturally": {
-      "snow_clearance_ratings": "естественно"
-    },
     "nb_impacted": "Число затронутых персон",
     "nb_pages": "наименование страниц",
     "nb_participants": "Число участников",
-    "nearby service": {
-      "public_transportation_ratings": "близкий сервис"
-    },
     "new lines chunks": "новые строки",
-    "next difference": "следующая разница",
-    "next version": "следующая версия",
     "nivology": {
       "image_categories": "Снеговедение и лавины"
-    },
-    "no": {
-      "$$noContext": "нет",
-      "avalanche_signs": "нет",
-      "glacier_gear_types": "нет",
-      "parking_fee_types": "нет",
-      "previous_injuries": "нет"
-    },
-    "no info": "нет информации",
-    "no service": {
-      "public_transportation_ratings": "нет сервиса"
     },
     "no_supervision": {
       "supervision": "Без присмотра"
@@ -1248,12 +740,8 @@
     "novel": {
       "book_types": "роман"
     },
-    "numbers": "номеры",
     "of": {
       "1-30 of 200 results": "на"
-    },
-    "often": {
-      "snow_clearance_ratings": "часто"
     },
     "on": "на",
     "open": {
@@ -1270,20 +758,11 @@
     "or try the following pages:": "или попробуйте следующие страницы:",
     "orientations": "Ориентации",
     "other": {
-      "event_activities": "Другое",
-      "event_types": "Другое"
+      "event_activities": "Другое"
     },
     "other_comments": "Физические последствия и другие комментарии",
-    "outing": "отчет",
-    "outings": "отчеты",
-    "overcrowded": {
-      "frequentation_types": "переполнен"
-    },
     "overhang": {
       "climbing_styles": "нависание"
-    },
-    "paragliding": {
-      "activities": "парапланеризм"
     },
     "paragliding_instructor": {
       "user_categories": "инструктор парапланеризма"
@@ -1309,21 +788,12 @@
       "$$noContext": "Пешая доступность",
       "hut": "Доступ"
     },
-    "people": {
-      "image_categories": "люди"
-    },
     "per page": {
       "30 per page": "на страницу"
     },
     "person_fall": {
       "event_types": "потеря равновесия или падение"
     },
-    "personal": {
-      "$$noContext": "личный",
-      "article_types": "личный",
-      "image_types": "личный"
-    },
-    "personal comments": "личные комментарии",
     "phone": "телефон",
     "phone_custodian": "Телефон смотрителя/распорядителя",
     "photos-art": {
@@ -1339,249 +809,96 @@
       "climbing_indoor_types": "питч"
     },
     "pixels": "точек",
-    "place": "место",
-    "poor service": {
-      "public_transportation_ratings": "плохой сервис"
+    "please consult the server logs": {
+      "API message": "Неожиданная ошибка, пожалуйста свяжитесь с разработчиками: dev@camptocamp.org"
     },
-    "possible": {
-      "glacier_ratings": "возможно"
+    "points by moving them": "точки перемещая их",
+    "poor": {
+      "condition_ratings": "плохой",
+      "snow_quality_ratings": "плохой",
+      "snow_quantity_ratings": "плохой"
     },
-    "prairie": {
-      "ground_types": "прерия"
+    "pouding": {
+      "rock_types": "пудинг"
     },
-    "pressure": {
-      "weather_station_types": "давление"
+    "precipitation": {
+      "weather_station_types": "осадки (только дождь)"
     },
-    "previous difference": "предыдущая разница",
-    "previous version": "предыдущая версия",
-    "product_types": "типы продуктов",
+    "precipitation_heater": {
+      "weather_station_types": "осадки (дождь и снег)"
+    },
+    "previous_injuries": "Предыдущие травмы",
+    "previous_injuries_2": {
+      "previous_injuries": "другие травмы"
+    },
+    "primary_impacted": {
+      "author_statuses": "основной пострадавший"
+    },
+    "professional_diploma": {
+      "qualification": "профессиональный диплом"
+    },
+    "professional_supervision": {
+      "supervision": "профессионал"
+    },
     "profile": "профиль",
     "profiles": "профили",
-    "quality": "качество",
-    "quartzite": {
-      "rock_types": "кварцит"
+    "progressive": {
+      "snow_clearance_ratings": "обесснеживание"
     },
-    "quiet": {
-      "frequentation_types": "тихо"
+    "prominence": "относительная высота",
+    "protected": {
+      "$$noContext": "Защищен",
+      "rain_proof_types": "Защищен от дождя"
     },
     "raid": {
       "route_types": "рейд"
     },
-    "recent_avalanche": {
-      "avalanche_signs": "недавняя лавина"
-    },
     "remarks": "замечания",
-    "rescue": "спасение",
     "restaurant": {
       "product_types": "ресторан"
     },
-    "rhyolite": {
-      "rock_types": "риолит"
-    },
-    "risk": "риск",
-    "rock_climbing": {
-      "activities": "скалолазание"
-    },
-    "roof": {
-      "climbing_styles": "крыша"
-    },
     "route": "маршрут",
     "route_description": "описание маршрута",
-    "route_history": "история маршрута",
-    "route_length": "длинность маршрута",
-    "route_types": "тип маршрута",
     "routes": "маршруты",
-    "routes_quantity": "количество маршрутов",
-    "safe": {
-      "children_proof_types": "безопасно"
-    },
-    "safety": "безопасность",
-    "schiste": {
-      "rock_types": "сланец"
-    },
-    "scree": {
-      "ground_types": "осыпь"
-    },
-    "seasonal": {
-      "parking_fee_types": "сезонный"
-    },
-    "shelter": {
-      "waypoint_types": "хижина"
-    },
-    "show all": "показать все",
-    "ski_instructor": {
-      "user_categories": "лыжный инструктор"
-    },
-    "ski_rating": "оценка катания",
     "skitouring": {
       "activities": "скитур и сноуборд",
       "event_activities": "Скитур"
-    },
-    "slackline": {
-      "slackline_types": "Слэклайн"
-    },
-    "slackline_anchor1": "Слэклайн станция1",
-    "slackline_anchor2": "Слэклайн станция2",
-    "slackline_height": "Слэклайн_высота",
-    "slackline_length": "Слэклайн_длина",
-    "slackline_length_max": "Слэклайн_длина максимальная",
-    "slackline_length_min": "Слэклайн_длина минимальная ",
-    "slackline_spot": {
-      "waypoint_types": "Слэклайн_место"
-    },
-    "slackline_type": "Слэклайн_тип",
-    "slackline_types": "Слэклайн_типы",
-    "slacklining": {
-      "activities": "Слэклайн"
-    },
-    "slope": "склон",
-    "slope_30_35": {
-      "avalanche_slopes": "склон_30_35"
-    },
-    "slope_35_40": {
-      "avalanche_slopes": "склон_35_40"
-    },
-    "slope_40_45": {
-      "avalanche_slopes": "склон_40_45"
-    },
-    "small_pillar": {
-      "climbing_styles": "столбик"
-    },
-    "snow": {
-      "ground_types": "снег"
-    },
-    "snow_height": {
-      "weather_station_types": "количество свежего снега"
     },
     "snow_ice_mixed": {
       "activities": "Комбинированные маршруты",
       "event_activities": "Комбинированные маршруты"
     },
-    "snow_quality": "качество снега",
-    "snow_quantity": "количество снега",
-    "snowshoe_rating": "снегоступная оценка",
-    "snowshoeing": {
-      "activities": "снегоступы"
-    },
-    "snowy": {
-      "access_conditions": "снежный"
-    },
-    "soft snow": "мягкий снег",
-    "some": {
-      "frequentation_types": "несколько"
-    },
-    "sometimes": {
-      "snow_clearance_ratings": "иногда"
-    },
-    "sport_climbing": {
-      "event_activities": "спортивное лазание"
-    },
-    "sport_shop": {
-      "product_types": "магазин спортивного снаряжения"
-    },
-    "stone_ice_fall": {
-      "event_types": "камнепад или ледопад"
-    },
     "stories": {
       "article_categories": "рассказы"
-    },
-    "summary": "резюме",
-    "summit": {
-      "waypoint_types": "вершина"
     },
     "tags": {
       "article_categories": "теги"
     },
-    "technical": {
-      "article_categories": "техничный"
-    },
-    "technics": {
-      "book_types": "техники"
-    },
-    "temperature": {
-      "weather_station_types": "температура"
-    },
     "text to display": "Текст для отображения",
-    "timing": "расчет времени",
-    "title": "заглавие",
-    "to start a new route": "Начать новый маршрут",
     "topo": {
-      "book_types": "топо",
       "image_categories": "описание  "
     },
     "topoguide_supplements": {
       "article_categories": "дополнительное описание "
     },
-    "total snow": "толщина снежного покрова",
-    "tourism": {
-      "book_types": "туризм"
-    },
-    "trachyte": {
-      "rock_types": "трахит"
-    },
-    "track": {
-      "image_categories": "трек"
-    },
     "train": {
       "public_transportation_types": "поезд"
-    },
-    "training": "тренировка",
-    "traverse": {
-      "route_types": "траверс"
-    },
-    "users": "использователи",
-    "vertical": {
-      "climbing_styles": "вертикальный"
     },
     "very_dangerous": {
       "children_proof_types": "опасно"
     },
-    "very_safe": {
-      "children_proof_types": "очень безопасно"
-    },
     "via_ferrata": {
       "activities": "Виа Феррата"
     },
-    "via_ferrata_rating": "оценка виа-феррата",
-    "virtual": {
-      "waypoint_types": "виртуальный"
-    },
-    "waterfall": {
-      "waypoint_types": "водопад"
-    },
-    "waterline": {
-      "slackline_types": "ватерлиния"
-    },
-    "waterpoint": {
-      "waypoint_types": "пункт водоснабжения"
-    },
     "waypoint": "путевая точка",
-    "waypoint_children": "путевая точка - дети",
-    "waypoint_slope": "путевая точка - склон",
-    "waypoint_type": "путевая точка - тип",
-    "waypoints": "путевые точки",
     "weather": "Погода",
     "weather_event": {
       "event_types": "Погодное событие"
     },
-    "weather_station": {
-      "waypoint_types": "метео-станция"
-    },
     "webcam": {
       "waypoint_types": "ВЭБ-камера"
     },
-    "whole year": {
-      "period": "Целый год"
-    },
-    "width": "ширина",
-    "wind_direction": {
-      "weather_station_types": "направление ветра"
-    },
-    "wind_speed": {
-      "weather_station_types": "скорость ветра"
-    },
     "write a summary": "Напишите резюме здесь",
-    "write your comments": "пишите комментарии",
     "xreport": "происшествие / несчастный случай",
     "xreports": "отчеты о происшествиях/несчастных случаях",
     "yes": {

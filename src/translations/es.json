@@ -157,6 +157,9 @@
     "Delete": {
       "yeti": "Eliminar"
     },
+    "Delete a point": "Cancelar un punto",
+    "Delete image": "Cancelar una imágen",
+    "Delete route": "Cancelar una vía",
     "Delete this document": "Suprimir este documento",
     "Describe access": "Describir acceso",
     "Describe access period": "Describir periodo de acceso",
@@ -332,6 +335,9 @@
     "aid_rating": "Cotación escalada artificial",
     "alpine_climbing": {
       "event_activities": "alpinismo"
+    },
+    "already used email": {
+      "API message": "correo electrónico ya usado"
     },
     "already used forum_username": {
       "API message": "Usuario ya utilizado en el forum"

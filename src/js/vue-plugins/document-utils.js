@@ -6,6 +6,7 @@
 import { isSameDay, isSameMonth, isSameYear, format } from 'date-fns';
 import { ca, es, eu, de, fr, it, slSl, zhCN, enGB } from 'date-fns/locale';
 
+import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
 const locales = { ca, es, eu, de, fr, it, sl_Sl: slSl, zh_CN: zhCN, en: enGB };
@@ -58,6 +59,8 @@ export default function install(Vue) {
         if (!document.locales) {
           return null;
         }
+
+        lang = c2c.getApiLang(lang);
 
         for (const result of document.locales) {
           if (result.lang === lang) {
@@ -211,11 +214,7 @@ export default function install(Vue) {
             result[field.name] = field.multiple ? [] : null;
           }
         }
-
-        result.lang = ['sl_Sl','zh_CN'].includes(lang) ? 'en' : lang;
-
-
-
+        result.lang = ['sl_Sl'].includes(lang) ? 'en' : lang;
         return result;
       },
 
