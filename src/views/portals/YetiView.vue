@@ -382,11 +382,17 @@ export default {
       result += `bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]};`;
       result += `risque_haut=${this.bra.high};`;
       result += `risque_bas=${braLow};`;
-      result += `seuil_alti=${braAltiThreshold};`;
-      result += `rdv=${compass};`;
-      result += `potentiel_danger=${potentialDanger};`;
-      result += `neige_mouillee=${wetSnow};`;
-      result += `taille_groupe=${groupSize}`;
+      result += `seuil_alti=${braAltiThreshold}`;
+
+      // specific paramaters based on method
+      if (this.method.type === 'mre') {
+        result += `;rdv=${compass}`;
+      }
+      if (this.method.type === 'mrp') {
+        result += `;potentiel_danger=${potentialDanger};`;
+        result += `neige_mouillee=${wetSnow};`;
+        result += `taille_groupe=${groupSize}`;
+      }
 
       return result;
     },
