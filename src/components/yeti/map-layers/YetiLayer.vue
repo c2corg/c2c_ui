@@ -51,7 +51,6 @@ import 'vue-slider-component/theme/default.css';
 
 import ol from '@/js/libs/ol';
 
-const ATTRIBUTION = 'RGE ALTI®';
 const OPACITY = 0.75;
 
 export default {
@@ -147,7 +146,6 @@ export default {
           imageLoadFunction(image) {
             image.getImage().src = 'data:image/png;base64,' + imageBase64;
           },
-          attributions: ATTRIBUTION,
           imageExtent,
         })
       );
@@ -164,6 +162,7 @@ export default {
       this.mapLegend.items.forEach((item) => {
         item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
       });
+      this.layer.getSource().setAttributions('<li>| ' + this.mapLegend.attributions + '</li>');
     },
     toLinearRing(extent) {
       let minX = extent[0];
