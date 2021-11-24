@@ -162,7 +162,8 @@ export default {
       this.mapLegend.items.forEach((item) => {
         item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
       });
-      this.layer.getSource().setAttributions('<li>| ' + this.mapLegend.attributions + '</li>');
+      // add attribution (each attribution on its own line)
+      this.layer.getSource().setAttributions(this.mapLegend.attributions);
     },
     toLinearRing(extent) {
       let minX = extent[0];
