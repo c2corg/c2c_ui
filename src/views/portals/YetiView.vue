@@ -388,7 +388,7 @@ export default {
       if (this.method.type === 'mre') {
         result += `;rdv=${compass}`;
       }
-      if (this.method.type === 'mrp') {
+      else if (this.method.type === 'mrp') {
         result += `;potentiel_danger=${potentialDanger};`;
         result += `neige_mouillee=${wetSnow};`;
         result += `taille_groupe=${groupSize}`;
