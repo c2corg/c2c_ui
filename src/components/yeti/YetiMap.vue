@@ -42,7 +42,7 @@
           </div>
           <header>YETI</header>
           <div v-for="(layer, i) of yetiLayers" :key="layer.title" class="map-control-listitem">
-            <input :id="'yeti-checkbox' + i" :checked="showAvalancheBulletins" type="checkbox" @change="layer.action" />
+            <input :id="'yeti-checkbox' + i" :checked="layer.checked" type="checkbox" @change="layer.action" />
             <label :for="'yeti-checkbox' + i">{{ layer.title }}</label>
           </div>
         </div>
@@ -105,12 +105,6 @@ export default {
     return {
       cartoLayers: cartoLayers(),
       dataLayers: dataLayers(),
-      yetiLayers: [
-        {
-          title: this.$gettext('Avalanche bulletins'),
-          action: this.onShowAvalancheBulletins,
-        },
-      ],
 
       showLayerSwitcher: false,
       recenterPropositions: null,
@@ -124,6 +118,23 @@ export default {
     showAvalancheBulletins() {
       return Yetix.showAvalancheBulletins;
     },
+    showAreas() {
+      return Yetix.showAreas;
+    },
+    yetiLayers() {
+      return [
+        {
+          title: this.$gettext('YETI extent'),
+          checked: this.showAreas,
+          action: this.onShowAreas,
+        },
+        {
+          title: this.$gettext('Avalanche bulletins'),
+          checked: this.showAvalancheBulletins,
+          action: this.onShowAvalancheBulletins,
+        },
+      ];
+    },
     visibleCartoLayer: {
       get() {
         return this.cartoLayers.find((layer) => layer.getVisible() === true);
@@ -136,6 +147,9 @@ export default {
   },
   watch: {
     showAvalancheBulletins() {
+      this.updateCartoLayersOpacity();
+    },
+    showAreas() {
       this.updateCartoLayersOpacity();
     },
   },
@@ -230,7 +244,7 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // if mountains are here, update
-      if (this.showAvalancheBulletins) {
+      if (this.showAvalancheBulletins || this.showAreas) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -246,11 +260,14 @@ export default {
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
       this.cartoLayers.forEach((layer) => {
-        layer.setOpacity(this.showAvalancheBulletins && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity((this.showAvalancheBulletins || this.showAreas) && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
     onShowAvalancheBulletins() {
       Yetix.setShowAvalancheBulletins(!this.showAvalancheBulletins);
+    },
+    onShowAreas() {
+      Yetix.setShowAreas(!this.showAreas);
     },
   },
 };

@@ -35,6 +35,7 @@ let defaultState = {
 
   areas: [],
   areaOk: true,
+  showAreas: false,
 
   features: [],
   featuresTitle: 'New route',
@@ -86,6 +87,9 @@ export default new Vue({
     areaOk() {
       return state.areaOk;
     },
+    showAreas() {
+      return state.showAreas;
+    },
     features() {
       return state.features;
     },
@@ -127,6 +131,9 @@ export default new Vue({
     },
     setAreaOk(areaOk) {
       state.areaOk = areaOk;
+    },
+    setShowAreas(showAreas) {
+      state.showAreas = showAreas;
     },
     setFeatures(features) {
       state.features = features;
