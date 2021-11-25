@@ -486,6 +486,9 @@
     "cleared": {
       "access_conditions": "Бесснежый"
     },
+    "climbing_indoor": {
+      "waypoint_types": "Скалодром"
+    },
     "climbing_instructor": {
       "user_categories": "инструктор по лазанию"
     },
