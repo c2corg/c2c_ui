@@ -69,7 +69,7 @@
     "husky": "7.0.4",
     "prettier": "2.4.1",
     "pretty-quick": "3.1.2",
-    "sass": "1.43.4",
+    "sass": "1.43.5",
     "sass-loader": "10.1.1",
     "snyk": "1.773.0",
     "vue-template-compiler": "2.6.14",
