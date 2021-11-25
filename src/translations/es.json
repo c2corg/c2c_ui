@@ -175,11 +175,15 @@
       "hut": "Describe el accesso peateonal"
     },
     "Describe road access": "Describe el accesso con un coche",
+    "Describe the conditions you encountered during your outing": "describe las condiciones que encontraste mientras tu salida",
     "Description": "Descripción",
     "Detailed information": "Informaciónes detalladas",
     "Details": "Detalles",
+    "Differences between versions": "diferencias entres las versiones",
+    "Directions (Google Maps)": "direcciones",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
+    "Do you really want to leave? you have unsaved changes!": "no has salvaguardado tus cambios; de verdad quierres dejarlo.",
     "Document quality": "Calidad del documento",
     "Download outings": "Descargar las salidas",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
@@ -201,20 +205,28 @@
     "Email": "Correo electronico",
     "Expand": "Expandir",
     "Expert": "Experto",
+    "Fauna protection areas": "área de proteccion de la fauna",
+    "Fauna protection site:": "sector protegido de fauna",
+    "Feel free to edit it.": "sientese libre de modificarlo",
     "Filter on map extent": "Filtro en la extensión de mapa",
+    "Filter results": "resultado del filtro",
     "Followed users": "Usuarios seguidos",
     "Forgot password?": "¿Olvidaste la contraseña?",
     "Forum": "Foro",
     "Forum username": "Nombre de usuario del forum",
     "Fullname": "Nombre completo",
     "GPX file": "Archivo GPX",
+    "General information": "informacion general",
+    "Geolocation": "ubicacion geográfica",
     "Go to the previous page": "Ir a la página anterior",
     "Group": "Grupo",
     "Group size": "Tamaño del grupo",
     "Have an account?": "¿Tienes una cuenta?",
+    "Heading": "titulo",
     "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
+    "High danger level from the avalanche bulletin": "peligro fuerte según el boletín de avalancha",
     "Hiking gear": "Excursionismo de verano",
     "History": "Historia",
     "Home": "Inicio",
@@ -255,21 +267,39 @@
     "Personal feed on": "Noticias personales activadas",
     "Post the first comment": "Deja un comentario",
     "Preview": "Previsualizar",
+    "Protect document": "proteja el documento",
+    "Protection areas": "areas protegidas",
+    "Recent changes": "cambios nuevos",
     "Recenter on your current position": "Centrar en mi posición actual",
     "Recenter on...": "Centrar en ...",
     "Register": "Inscribirse ",
+    "Report title, activity, linked routes or outings.": "pon el titulo, la actividad, rutas asociadas o salidas",
     "Reset password": "Reiniciar contraseña ",
+    "Residual risk >1": "riesgo residual>1",
+    "Residual risk >1.3": "riesgo residual >1.3",
+    "Residual risk >1.5": "riesgo residual >1,5",
+    "Results only": "solo resultados",
+    "Route": "Vía",
     "Save": "Guardar",
     "Search ...": "Buscar ...",
+    "See more results": "ver más resultado",
+    "See other documents nearby": "ver más documentos cercanos",
     "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
     "See the latest version": "Ver la última versión",
     "Send reset email": "Enviar email de reinicio",
+    "Sensitive area:": "zona sensible",
+    "Sensitive areas": "zonas sensibles",
     "Settings": "Configuración",
     "Several days?": "¿Varios días?",
+    "Share": "compartir",
     "Share with us!": "¡ Comparte con nosotros!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
+    "Skiability": "esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
+    "Slopes": "pendientes",
+    "Source:": "recursos",
+    "Statistics": "estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
@@ -572,6 +602,7 @@
     "elevation_max": "Altitud máxima",
     "elevation_min": "Altitud mínima",
     "elevation_up_snow": "Altitud esquiable min. en la subida",
+    "emphasized text": "texto subrayado",
     "empty": {
       "quality_types": "vacío"
     },
@@ -939,6 +970,9 @@
     "possible": {
       "glacier_ratings": "posible"
     },
+    "pouding": {
+      "rock_types": "pudin"
+    },
     "prairie": {
       "ground_types": "pradera"
     },
@@ -952,8 +986,13 @@
       "weather_station_types": "presión"
     },
     "previous difference": "diferencia anterior",
+    "previous version": "version precedente",
     "product_types": "Tipo de productos locales",
+    "professional_diploma": {
+      "qualification": "titulo porfesional"
+    },
     "profile": "perfil",
+    "profiles": "perfiles",
     "progressive": {
       "snow_clearance_ratings": "desnevado gradual"
     },
@@ -987,6 +1026,7 @@
     "restaurant": {
       "product_types": "restaurante"
     },
+    "restricted_access": "acceso restringido",
     "return_same_way": {
       "route_types": "ida y vuelta"
     },
@@ -998,6 +1038,7 @@
     },
     "risk": "riesgo",
     "risk_rating": "Evaluación de riesgos",
+    "road access": "acceso en coche",
     "rock_climbing": {
       "activities": "Escalada"
     },
@@ -1017,6 +1058,7 @@
       "children_proof_types": "seguro"
     },
     "safety": "Seguridad",
+    "scale": "escalera",
     "schiste": {
       "rock_types": "esquites"
     },
@@ -1026,6 +1068,7 @@
     "seasonal": {
       "parking_fee_types": "servicio en temporada"
     },
+    "see actual version": "ver la version actual",
     "service_on_demand": {
       "public_transportation_types": "servicio por solicitud"
     },
@@ -1036,6 +1079,7 @@
     "shelter": {
       "waypoint_types": "refugio precario"
     },
+    "show all": "enseñar todo",
     "single": {
       "climbing_outdoor_types": "solo"
     },
@@ -1058,6 +1102,9 @@
       "climbing_styles": "placa"
     },
     "slope": "Pendiente",
+    "slope_30_35": {
+      "avalanche_slopes": "pendiente_30_35"
+    },
     "slope_lt_30": {
       "avalanche_slopes": "pendiente inferior a 30°"
     },
@@ -1081,6 +1128,9 @@
     "snowshoeing": {
       "activities": "Raquetas "
     },
+    "snowy": {
+      "access_conditions": "nevado"
+    },
     "soft snow": "Nieve blanda",
     "soft_mobility": {
       "article_categories": "movilidad blanda"
@@ -1090,6 +1140,9 @@
     },
     "sometimes": {
       "snow_clearance_ratings": "desnevado ocasional"
+    },
+    "sport_climbing": {
+      "event_activities": "escalada deportiva"
     },
     "sport_shop": {
       "product_types": "tienda de deportes"
