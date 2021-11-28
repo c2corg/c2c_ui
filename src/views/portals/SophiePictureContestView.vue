@@ -115,7 +115,7 @@ export default {
           category: 'Prix de la Meilleure Photo',
         },
         {
-          title: 'Le Pas de l’Oeille à la dent de Crolles',
+          title: 'Le Pas de l\'Oeille à la dent de Crolles',
           author: 'Martin Gerbaux',
           image: { document_id: 198978 },
           category: 'Prix de la Participation au Topoguide',
@@ -133,7 +133,7 @@ export default {
       documentId: 300413,
       winners: [
         {
-          title: 'Cervin, Obergabelhorn, Dent d'Hérens',
+          title: 'Cervin, Obergabelhorn, Dent d\'Hérens',
           author: 'BertrandSemelet',
           image: { document_id: 300594 },
           category: 'Paysage',
@@ -357,7 +357,7 @@ export default {
       documentId: 1350370,
       winners: [
         {
-          title: 'Rappel à la Tour d'Aï',
+          title: 'Rappel à la Tour d\'Aï',
           author: 'MartinSteffen',
           image: { document_id: 1359740 },
           category: 'Action',
