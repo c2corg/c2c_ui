@@ -186,6 +186,10 @@
     "Do you really want to leave? you have unsaved changes!": "no has salvaguardado tus cambios; de verdad quierres dejarlo.",
     "Document quality": "Calidad del documento",
     "Download outings": "Descargar las salidas",
+    "Draw": {
+      "yeti": "dibuja"
+    },
+    "Draw right on the map": "dibuja en el mismo mapa",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
@@ -200,6 +204,7 @@
     "Edit associations": "Editar las asociaciónes",
     "Edit categories": "Editar las categorias",
     "Edit titles": "Editar los títulos",
+    "Elementary": "elementario",
     "Elevation": "Altitud",
     "Elevation (m)": "Altitud (m)",
     "Email": "Correo electronico",
@@ -260,6 +265,10 @@
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
+    "Ooops": "Ups !",
+    "OpenTopoMap": {
+      "Map layer": "abrir reseña mapa"
+    },
     "Page not found": "Página no encontrada",
     "Password": "Contraseña",
     "Personal feed": "Noticias personales",
@@ -606,6 +615,7 @@
     "empty": {
       "quality_types": "vacío"
     },
+    "empty comment": "comentario vacío",
     "en": {
       "langs": "inglés"
     },
@@ -624,6 +634,8 @@
     "eu": {
       "langs": "vasco"
     },
+    "event_activity": "actividad del evento",
+    "event_type": "tipo del evento",
     "excellent": {
       "condition_ratings": "excelentes",
       "snow_quality_ratings": "excelentes",
