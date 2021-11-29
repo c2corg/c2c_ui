@@ -384,11 +384,10 @@ export default {
       result += `risque_bas=${braLow};`;
       result += `seuil_alti=${braAltiThreshold}`;
 
-      // specific paramaters based on method
+      // specific parameters based on method
       if (this.method.type === 'mre') {
         result += `;rdv=${compass}`;
-      }
-      else if (this.method.type === 'mrp') {
+      } else if (this.method.type === 'mrp') {
         result += `;potentiel_danger=${potentialDanger};`;
         result += `neige_mouillee=${wetSnow};`;
         result += `taille_groupe=${groupSize}`;
