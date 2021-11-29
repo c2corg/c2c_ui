@@ -136,7 +136,7 @@
     "Coup de coeur": {
       "Sophie picture context": "Nos enamoramos"
     },
-    "Crag climbing gear": "Equipo de escala",
+    "Crag climbing gear": "Material para deportivas",
     "Create": {
       "yeti": "Crear"
     },
@@ -174,18 +174,25 @@
       "$$noContext": "Describe el accesso peateonal",
       "hut": "Describe el accesso peateonal"
     },
+    "Describe pt access": "describa el inicio",
     "Describe road access": "Describe el accesso con un coche",
-    "Describe the conditions you encountered during your outing": "describe las condiciones que encontraste mientras tu salida",
+    "Describe the conditions you encountered during your outing": "Describe las condiciones que encontraste mientras tu salida",
     "Description": "Descripción",
     "Detailed information": "Informaciónes detalladas",
     "Details": "Detalles",
-    "Differences between versions": "diferencias entres las versiones",
-    "Directions (Google Maps)": "direcciones",
+    "Details on participants and event context": "detalles de los partipantes y evento",
+    "Differences between versions": "Diferencias entres las versiones",
+    "Directions (Google Maps)": "Direcciones (Google Maps)",
+    "Dispositions": "disposiciones",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
-    "Do you really want to leave? you have unsaved changes!": "no has salvaguardado tus cambios; de verdad quierres dejarlo.",
+    "Do you really want to leave? you have unsaved changes!": "No has salvaguardado tus cambios; de verdad quierres dejarlo.",
     "Document quality": "Calidad del documento",
     "Download outings": "Descargar las salidas",
+    "Draw": {
+      "yeti": "Dibuja"
+    },
+    "Draw right on the map": "Dibuja en el mismo mapa",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
@@ -200,36 +207,47 @@
     "Edit associations": "Editar las asociaciónes",
     "Edit categories": "Editar las categorias",
     "Edit titles": "Editar los títulos",
+    "Elementary": "Elementario",
     "Elevation": "Altitud",
     "Elevation (m)": "Altitud (m)",
     "Email": "Correo electronico",
     "Expand": "Expandir",
     "Expert": "Experto",
+    "Export": "exportar",
     "Fauna protection areas": "área de proteccion de la fauna",
-    "Fauna protection site:": "sector protegido de fauna",
-    "Feel free to edit it.": "sientese libre de modificarlo",
+    "Fauna protection site:": "Sector protegido de fauna",
+    "Feel free to edit it.": "Sientese libre de modificarlo",
     "Filter on map extent": "Filtro en la extensión de mapa",
     "Filter results": "resultado del filtro",
     "Followed users": "Usuarios seguidos",
     "Forgot password?": "¿Olvidaste la contraseña?",
     "Forum": "Foro",
     "Forum username": "Nombre de usuario del forum",
+    "From danger 3, consider the slopes which dominate the route": "desde el peligro 3, considera las pendientes que dominan la vía",
     "Fullname": "Nombre completo",
     "GPX file": "Archivo GPX",
-    "General information": "informacion general",
+    "General information": "Informacion general",
     "Geolocation": "ubicacion geográfica",
+    "Go back to YETI": "volver a YETI",
     "Go to the previous page": "Ir a la página anterior",
     "Group": "Grupo",
     "Group size": "Tamaño del grupo",
     "Have an account?": "¿Tienes una cuenta?",
-    "Heading": "titulo",
+    "Heading": "Titulo",
     "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "High danger level from the avalanche bulletin": "peligro fuerte según el boletín de avalancha",
     "Hiking gear": "Excursionismo de verano",
     "History": "Historia",
+    "History is missing, please provide it if you have information.": "falta el aperturista, gracias por entrarlo si tienes informacion",
     "Home": "Inicio",
+    "I choose to cancel the outing": "prefiero cancelar la salida",
+    "I have read and agree to the terms of use": "he leido y acepto las condiciones",
+    "I must not use slopes > 30°": "no puedo coger pendientes >30°",
+    "I must not use slopes > 35°": "no puedo coger pendientes >35°",
+    "I must not use slopes > 40°": "no puedo coger pendientes >40°",
+    "I read and understood the interest and limitations of YETI": "he leido y entendido el interes de las limitaciones de Yeti",
     "IGN maps": {
       "Map layer": "mapas IGN"
     },
@@ -237,29 +255,59 @@
       "Map layer": "IGN ortho (fr)"
     },
     "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
+    "If the route does not exists in our base, you can create it.": "si la vía no está en C2C, la puedes montar.",
     "Infos": "Informaciónes",
+    "Insert a link": "entra un enlace",
+    "Insert emoji": "entra un emoji",
+    "Insert image": "entra una imagen",
+    "Insert link": "entra enlace",
+    "Invalid date": "fecha no valida",
     "Invalid email address": {
       "API message": "Email inválido"
     },
+    "Know more about SERAC": "saber más en cuanto a SERAC",
     "Large group = 5 people and more": "Grupo largo = más de 5 personas",
     "Last outings": "Últimas salidas",
     "Latitude": "Latitud",
+    "Legend": "Leyenda",
+    "Licenses": "licencias",
+    "Links": "enlaces",
+    "List mode": "forma de la lista",
     "List of versions for language:": "Lista de versiones para el idioma:",
+    "Load my preferences": "carga mis preferencias",
     "Login": "Iniciar sesión",
+    "Login failed": {
+      "API message": "el login ha fallado"
+    },
     "Logout": "Desconectar",
     "Longitude": "Longitud",
+    "Mail has been sent": "el mail fue enviado",
     "Make profile page public": "Hacer pública la página de perfil",
+    "Map only": "solo el mapa",
+    "Massifs could not be loaded": "el macizo no ha podido ser cargado",
+    "Methods": "metodos",
+    "Modified the": {
+      "modification date": "cambia"
+    },
+    "More info": "mas informacion",
     "My account": "Mi cuenta",
+    "My changes": "mis cambios",
     "My followed users": "Mis amigos",
     "My outings": "Mis salidas",
     "My preferences": "Mis preferencias",
     "My profile": "Mi perfil",
+    "My statistics": "mis estadísticas",
     "New password": "Nueva contraseña",
+    "New route": "otra vía",
     "No account yet?": "¿No tienes cuenta?",
+    "No orientation selected": "no has seleccionado la orientacion",
+    "No result found": "no hemos encontrado ningún resultado",
+    "No route right now": "no hay reseña de momento",
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
+    "Ooops": "Ups !",
     "Page not found": "Página no encontrada",
     "Password": "Contraseña",
     "Personal feed": "Noticias personales",
@@ -267,9 +315,9 @@
     "Personal feed on": "Noticias personales activadas",
     "Post the first comment": "Deja un comentario",
     "Preview": "Previsualizar",
-    "Protect document": "proteja el documento",
-    "Protection areas": "areas protegidas",
-    "Recent changes": "cambios nuevos",
+    "Protect document": "Proteja el documento",
+    "Protection areas": "Areas protegidas",
+    "Recent changes": "Cambios nuevos",
     "Recenter on your current position": "Centrar en mi posición actual",
     "Recenter on...": "Centrar en ...",
     "Register": "Inscribirse ",
@@ -282,16 +330,16 @@
     "Route": "Vía",
     "Save": "Guardar",
     "Search ...": "Buscar ...",
-    "See more results": "ver más resultado",
-    "See other documents nearby": "ver más documentos cercanos",
+    "See more results": "Ver más resultado",
+    "See other documents nearby": "Ver más documentos cercanos ...",
     "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
     "See the latest version": "Ver la última versión",
     "Send reset email": "Enviar email de reinicio",
-    "Sensitive area:": "zona sensible",
-    "Sensitive areas": "zonas sensibles",
+    "Sensitive area:": "Zona sensible :",
+    "Sensitive areas": "Zonas sensibles",
     "Settings": "Configuración",
     "Several days?": "¿Varios días?",
-    "Share": "compartir",
+    "Share": "Compartir",
     "Share with us!": "¡ Comparte con nosotros!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
@@ -386,6 +434,7 @@
     "article_categories": "categorías de artículos",
     "article_type": "Tipo de artículo",
     "articles": "artículos",
+    "ascending sort": "Seleccion creciente",
     "association": {
       "article_categories": "asociación"
     },
@@ -606,6 +655,7 @@
     "empty": {
       "quality_types": "vacío"
     },
+    "empty comment": "comentario vacío",
     "en": {
       "langs": "inglés"
     },
@@ -624,6 +674,8 @@
     "eu": {
       "langs": "vasco"
     },
+    "event_activity": "Actividad",
+    "event_type": "Tipo del evento",
     "excellent": {
       "condition_ratings": "excelentes",
       "snow_quality_ratings": "excelentes",
@@ -649,6 +701,9 @@
     },
     "farm_sale": {
       "product_types": "venta directa"
+    },
+    "federal_supervision": {
+      "supervision": "supervision federal"
     },
     "female": {
       "genders": "mujer"
@@ -723,6 +778,7 @@
     "has updated the outing": "ha actualizado una salida",
     "has updated the route": "ha actualizado un itinerario",
     "has updated the waypoint": "ha actualizado un waypoint",
+    "heading text": "titulo",
     "heating_unstaffed": "Calefacción fuera de los períodos de guardia",
     "height": "Altitud",
     "height_diff": "Desnivel",
@@ -764,6 +820,7 @@
     "image": "imagen",
     "image_categories": "Categorías",
     "image_type": "Tipo de imagen (licencia)",
+    "images": "imagenes",
     "impossible": {
       "glacier_ratings": "imposible"
     },
@@ -812,8 +869,15 @@
     "level_4": {
       "avalanche_levels": "4"
     },
+    "level_5": {
+      "avalanche_levels": "nivel 5"
+    },
+    "level_na": {
+      "avalanche_levels": "nivel na"
+    },
     "lift_access": "Medios de elevación",
     "lift_status": "Medios de elevación",
+    "link": "enlace",
     "local_product": {
       "waypoint_types": "productos locales"
     },
@@ -833,6 +897,7 @@
       "genders": "varón"
     },
     "map": "mapa",
+    "maps": "mapas",
     "maps_info": "Mapas",
     "maps_references": "Referencias cartográficas",
     "matress_unstaffed": "Colchones fuera de los períodos de guardia",
@@ -861,6 +926,9 @@
     },
     "mountain_climbing": {
       "activities": "Roca alta montaña"
+    },
+    "mountain_environment": {
+      "article_categories": "entorno de la montaña"
     },
     "mountain_guide": {
       "user_categories": "Guía de alta montaña"
@@ -909,11 +977,13 @@
     },
     "opening_hours": "Horas de apertura",
     "opening_periods": "Período de apertura",
+    "or try the following pages:": "o intentar las paginas siguientes",
     "orientations": "Orientaciones",
     "other": {
       "event_activities": "otro",
       "event_types": "otro"
     },
+    "other_comments": "otros comentarios",
     "outing": "salidas",
     "overcrowded": {
       "frequentation_types": "muy frecuentado"
@@ -945,6 +1015,9 @@
     },
     "people": {
       "image_categories": "figura"
+    },
+    "per page": {
+      "30 per page": "por página"
     },
     "person_fall": {
       "event_types": "caida de montañero"
