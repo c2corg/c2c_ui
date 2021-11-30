@@ -92,14 +92,180 @@ export default {
   // $gettext('Topoguide - prix du jury', 'Sophie picture context')
   // $gettext('Topoguide - prix du public', 'Sophie picture context')
   years: {
-    2009: { year: 2009, documentId: 187913, winners: null },
-    2010: { year: 2010, documentId: 237549, winners: null },
-    2011: { year: 2011, documentId: 300413, winners: null },
-    2012: { year: 2012, documentId: 374949, winners: null },
-    2013: { year: 2013, documentId: 465897, winners: null },
-    2014: { year: 2014, documentId: 555996, winners: null },
-    2015: { year: 2015, documentId: 673796, winners: null },
-    2016: { year: 2016, documentId: 809627, winners: null },
+    2009: {
+      year: 2009,
+      documentId: 187913,
+      winners: [
+        {
+          title: 'Ombres et courbes sous la Pierra Menta (Beaufortain)',
+          author: 'Astier.V',
+          image: { document_id: 189178 },
+          category: 'Prix du Public',
+        },
+      ],
+    },
+    2010: {
+      year: 2010,
+      documentId: 237549,
+      winners: [
+        {
+          title: 'Halo lunaire en Islande',
+          author: 'Olivier Bidot',
+          image: { document_id: 240490 },
+          category: 'Prix de la Meilleure Photo',
+        },
+        {
+          title: 'Le Pas de l\'Oeille à la dent de Crolles',
+          author: 'Martin Gerbaux',
+          image: { document_id: 198978 },
+          category: 'Prix de la Participation au Topoguide',
+        },
+        {
+          title: 'Piz Roseg',
+          author: 'Nico',
+          image: { document_id: 241044 },
+          category: 'Prix Spécial du Jury',
+        },
+      ],
+    },
+    2011: {
+      year: 2011,
+      documentId: 300413,
+      winners: [
+        {
+          title: 'Cervin, Obergabelhorn, Dent d\'Hérens',
+          author: 'BertrandSemelet',
+          image: { document_id: 300594 },
+          category: 'Paysage',
+        },
+        {
+          title: 'En haut du Trident',
+          author: 'Vp2L',
+          image: { document_id: 301481 },
+          category: 'Action',
+        },
+      ],
+    },
+    2012: {
+      year: 2012,
+      documentId: 374949,
+      winners: [
+        {
+          title: 'Kandersteg/ Namenlos',
+          author: 'altii',
+          image: { document_id: 376859 },
+          category: 'Action',
+        },
+        {
+          title: 'Oisans, le troupeau se rassemble en fin de journée',
+          author: 'clec',
+          image: { document_id: 377637 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Ambiance brumeuse et gazeuse dans « Etat de Choc »…',
+          author: ' Guillaume Pellissier',
+          image: { document_id: 379748 },
+          category: 'Topoguide',
+        },
+      ],
+    },
+    2013: {
+      year: 2013,
+      documentId: 465897,
+      winners: [
+        {
+          title: 'Lumières naturelles à deux spatules du stratus',
+          author: 'Rem',
+          image: { document_id: 470596 },
+          category: 'Prix du Public',
+        },
+        {
+          title: 'Arrivée au sommet du Gletschhorn (région Furka, Suisse)',
+          author: 'florence christe',
+          image: { document_id: 466096 },
+          category: 'Action',
+        },
+        {
+          title: 'Hauts plateaux',
+          author: 'riv018',
+          image: { document_id: 466017 },
+          category: 'Paysage',
+        },
+      ],
+    },
+    2014: {
+      year: 2014,
+      documentId: 555996,
+      winners: [
+        {
+          title: 'Vallee Blanche',
+          author: 'Dorota',
+          image: { document_id: 565423 },
+          category: 'Prix du Public',
+        },
+        {
+          title: 'Escalade historique dans les Calanques : Le bidule.',
+          author: 'Mickaël Souveton',
+          image: { document_id: 565791 },
+          category: 'Action',
+        },
+        {
+          title: 'Aiguilles de Chamonix',
+          author: 'mat robin',
+          image: { document_id: 562741 },
+          category: 'Paysage',
+        },
+      ],
+    },
+    2015: {
+      year: 2015,
+      documentId: 673796,
+      winners: [
+        {
+          title: 'Jolie ambiance goulotte pour L3 de Répulsion dans le vallon du Diable',
+          author: 'JBT',
+          image: { document_id: 678170 },
+          category: 'Action',
+        },
+        {
+          title: 'Soleil levant sur la Laguna Verde - Licancabur',
+          author: 'florian-74',
+          image: { document_id: 679321 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Rappel dans la face sud',
+          author: 'Plov',
+          image: { document_id: 571440 },
+          category: 'Topoguide',
+        },
+      ],
+    },
+    2016: {
+      year: 2016,
+      documentId: 809627,
+      winners: [
+        {
+          title: 'Indian Creek, Supercrack',
+          author: 'velentin_chapuis',
+          image: { document_id: 815886 },
+          category: 'Action',
+        },
+        {
+          title: 'Le paradis à 2 pas de la maison',
+          author: 'PLN',
+          image: { document_id: 811590 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Extasyée',
+          author: 'Flop73',
+          image: { document_id: 812177 },
+          category: 'Paysage',
+        },
+      ],
+    },
     2017: {
       year: 2017,
       documentId: 937458,
@@ -189,7 +355,38 @@ export default {
     2021: {
       year: 2021,
       documentId: 1350370,
-      winners: [],
+      winners: [
+        {
+          title: 'Rappel à la Tour d\'Aï',
+          author: 'MartinSteffen',
+          image: { document_id: 1359740 },
+          category: 'Action',
+        },
+        {
+          title: 'Arche galactique sur Ordesa',
+          author: 'florian-74',
+          image: { document_id: 1362020 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Une Chouette de tengmalm à 11h00 du matin… Normal…',
+          author: 'LouisB',
+          image: { document_id: 1354989 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Tafoni Frenzy',
+          author: 'Xavier Fauvergue',
+          image: { document_id: 1355704 },
+          category: 'Topoguide',
+        },
+        {
+          title: 'Que la lumière soit! (dent blanche, 13 sept 2021)',
+          author: 'vincent71',
+          image: { document_id: 1356886 },
+          category: 'Prix du Public',
+        },
+      ],
     },
   },
 
