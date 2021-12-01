@@ -111,6 +111,23 @@ export default {
       this.$refs.qualityField.beforeSave();
     },
 
+    afterLoad() {
+      this.fields.image_type.values = this.fields.image_type.values
+        .filter(
+          // The copyright option should be only accessible to moderators,
+          // and if the image is associated to a book.
+          // It's meant for book covers only
+          (value) =>
+            value !== 'copyright' ||
+            this.document.image_type === 'copyright' ||
+            (this.$user.isModerator && this.document.associations.book.length)
+        )
+        .filter(
+          // Only moderators can change a picture which is personal to collaborative
+          (value) => value !== 'collaborative' || this.document.image_type === 'collaborative' || this.$user.isModerator
+        );
+    },
+
     onFileChange(event) {
       const file = event.target.files[0];
 
