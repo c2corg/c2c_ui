@@ -242,7 +242,7 @@
     "History": "Historia",
     "History is missing, please provide it if you have information.": "falta el aperturista, gracias por entrarlo si tienes informacion",
     "Home": "Inicio",
-    "I choose to cancel the outing": "prefiero cancelar la salida",
+    "I choose to cancel the outing": "Prefiero cancelar la salida",
     "I have read and agree to the terms of use": "he leido y acepto las condiciones",
     "I must not use slopes > 30°": "no puedo coger pendientes >30°",
     "I must not use slopes > 35°": "no puedo coger pendientes >35°",
@@ -285,7 +285,7 @@
     "Make profile page public": "Hacer pública la página de perfil",
     "Map only": "solo el mapa",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
-    "Methods": "metodos",
+    "Methods": "Metodos",
     "Modified the": {
       "modification date": "Cambia"
     },
@@ -347,7 +347,7 @@
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "pendientes",
     "Source:": "recursos",
-    "Statistics": "estadísticas",
+    "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
@@ -977,7 +977,7 @@
     },
     "opening_hours": "Horas de apertura",
     "opening_periods": "Período de apertura",
-    "or try the following pages:": "o intentar las paginas siguientes",
+    "or try the following pages:": "o intentar las paginas siguientes :",
     "orientations": "Orientaciones",
     "other": {
       "event_activities": "otro",
@@ -1111,7 +1111,7 @@
     },
     "risk": "riesgo",
     "risk_rating": "Evaluación de riesgos",
-    "road access": "acceso en coche",
+    "road access": "Acceso en coche",
     "rock_climbing": {
       "activities": "Escalada"
     },
