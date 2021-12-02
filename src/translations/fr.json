@@ -930,7 +930,7 @@
     "gas_unstaffed": "Gaz hors gardiennage",
     "gear": {
       "$$noContext": "Matériel",
-      "article_categories": "Matériel"
+      "article_categories": "matériel"
     },
     "gender": "Sexe",
     "general informations": "Informations générales",

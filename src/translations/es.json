@@ -722,7 +722,7 @@
     "gas_unstaffed": "Gas fuera de los períodos de guardia",
     "gear": {
       "$$noContext": "Equipamiento",
-      "article_categories": "Equipamiento"
+      "article_categories": "equipamiento"
     },
     "gender": "sexo",
     "general informations": "Información general",
