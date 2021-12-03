@@ -390,10 +390,7 @@
     },
     "frequentation": "Crowding",
     "gas_unstaffed": "Gas if unstaffed",
-    "gear": {
-      "$$noContext": "Gear",
-      "article_categories": "Gear"
-    },
+    "gear": "Gear",
     "gender": "Gender",
     "general informations": "General information",
     "geolocation": "Geolocation",
