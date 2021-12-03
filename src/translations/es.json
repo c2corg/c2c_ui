@@ -174,7 +174,6 @@
       "$$noContext": "Describe el accesso peateonal",
       "hut": "Describe el accesso peateonal"
     },
-    "Describe pt access": "describa el inicio",
     "Describe road access": "Describe el accesso con un coche",
     "Describe the conditions you encountered during your outing": "Describe las condiciones que encontraste mientras tu salida",
     "Description": "Descripción",
@@ -257,8 +256,8 @@
     "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "If the route does not exists in our base, you can create it.": "si la vía no está en C2C, la puedes montar.",
     "Infos": "Informaciónes",
-    "Insert a link": "entra un enlace",
-    "Insert emoji": "entra un emoji",
+    "Insert a link": "Entra un enlace",
+    "Insert emoji": "Entra un emoji",
     "Insert image": "entra una imagen",
     "Insert link": "entra enlace",
     "Invalid date": "fecha no valida",
@@ -271,7 +270,7 @@
     "Latitude": "Latitud",
     "Legend": "Leyenda",
     "Licenses": "Licencias",
-    "Links": "enlaces",
+    "Links": "Enlaces",
     "List mode": "forma de la lista",
     "List of versions for language:": "Lista de versiones para el idioma:",
     "Load my preferences": "carga mis preferencias",
@@ -281,7 +280,7 @@
     },
     "Logout": "Desconectar",
     "Longitude": "Longitud",
-    "Mail has been sent": "el mail fue enviado",
+    "Mail has been sent": "Mail fue enviado",
     "Make profile page public": "Hacer pública la página de perfil",
     "Map only": "solo el mapa",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
@@ -298,11 +297,10 @@
     "My profile": "Mi perfil",
     "My statistics": "Mis estadísticas",
     "New password": "Nueva contraseña",
-    "New route": "otra vía",
+    "New route": "Nueva vía",
     "No account yet?": "¿No tienes cuenta?",
     "No orientation selected": "no has seleccionado la orientacion",
     "No result found": "no hemos encontrado ningún resultado",
-    "No route right now": "no hay reseña de momento",
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "Numbers": "Numeros",
@@ -778,7 +776,7 @@
     "has updated the outing": "ha actualizado una salida",
     "has updated the route": "ha actualizado un itinerario",
     "has updated the waypoint": "ha actualizado un waypoint",
-    "heading text": "titulo",
+    "heading text": "texto del título",
     "heating_unstaffed": "Calefacción fuera de los períodos de guardia",
     "height": "Altitud",
     "height_diff": "Desnivel",
@@ -983,7 +981,6 @@
       "event_activities": "otro",
       "event_types": "otro"
     },
-    "other_comments": "otros comentarios",
     "outing": "salidas",
     "overcrowded": {
       "frequentation_types": "muy frecuentado"
@@ -1175,9 +1172,6 @@
       "climbing_styles": "placa"
     },
     "slope": "Pendiente",
-    "slope_30_35": {
-      "avalanche_slopes": "pendiente_30_35"
-    },
     "slope_lt_30": {
       "avalanche_slopes": "pendiente inferior a 30°"
     },
