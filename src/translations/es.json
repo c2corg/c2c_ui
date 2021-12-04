@@ -154,13 +154,17 @@
     "Danger rating - low": "Clasificación de peligro: bajo",
     "Danger rating - moderate": "Clasificación de peligro: moderado",
     "Danger rating - very high": "Clasificación de peligro: muy alto",
+    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "datos técnicos, tal como orientación, tipo de roca, o la configuración general del itinerario (arista, pilar...)",
     "Delete": {
       "yeti": "Eliminar"
     },
+    "Delete a line chunk": "suprimir un tramo de la línea",
     "Delete a point": "Cancelar un punto",
     "Delete image": "Cancelar una imágen",
     "Delete route": "Cancelar una vía",
     "Delete this document": "Suprimir este documento",
+    "Delete this locale": "suprimir esta version linguística",
+    "Deny all": "rehusar todo",
     "Describe access": "Describir acceso",
     "Describe access period": "Describir periodo de acceso",
     "Describe access restrictions": "Describe las limitaciones de accesso",
@@ -177,21 +181,26 @@
     "Describe road access": "Describe el accesso con un coche",
     "Describe the conditions you encountered during your outing": "Describe las condiciones que encontraste mientras tu salida",
     "Description": "Descripción",
+    "Detailed figures, like ratings, height differences, frequentation...": "datos detallados (cotaciones, desniveles, frecuentacion)",
     "Detailed information": "Informaciónes detalladas",
     "Details": "Detalles",
     "Details on participants and event context": "detalles de los partipantes y evento",
     "Differences between versions": "Diferencias entres las versiones",
+    "Different high/low danger?": "peligro alto/bajo diferentes",
     "Directions (Google Maps)": "Direcciones (Google Maps)",
+    "Disclaimer": "advertencia",
     "Dispositions": "disposiciones",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
     "Do you really want to leave? you have unsaved changes!": "No has salvaguardado tus cambios; de verdad quierres dejarlo.",
     "Document quality": "Calidad del documento",
+    "Donate": "hacer un donativo a la asociación Camptocamp",
     "Download outings": "Descargar las salidas",
     "Draw": {
       "yeti": "Dibuja"
     },
     "Draw right on the map": "Dibuja en el mismo mapa",
+    "Drawing tips": "astucias de dibujo",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
@@ -207,12 +216,16 @@
     "Edit categories": "Editar las categorias",
     "Edit titles": "Editar los títulos",
     "Elementary": "Elementario",
+    "Elementary Reduction Method": "método de reducción para principiante",
     "Elevation": "Altitud",
     "Elevation (m)": "Altitud (m)",
     "Email": "Correo electronico",
+    "Everything about ratings : difficulties, exposition...": "entrar aqui la totalidad de las cotaciones del itinerario (dificultad, exposicion, calidad del equipamiento...)",
     "Expand": "Expandir",
     "Expert": "Experto",
     "Export": "Exportar",
+    "Export route": "exportar el itinerario",
+    "Export to CSV": "exportar en CSV",
     "Fauna protection areas": "área de proteccion de la fauna",
     "Fauna protection site:": "Sector protegido de fauna :",
     "Feel free to edit it.": "Sientese libre de modificarlo.",
@@ -223,15 +236,19 @@
     "Forum": "Foro",
     "Forum username": "Nombre de usuario del forum",
     "From danger 3, consider the slopes which dominate the route": "desde el peligro 3, considera las pendientes que dominan la vía",
+    "From the interface": "desde la interfaz",
     "Fullname": "Nombre completo",
     "GPX file": "Archivo GPX",
     "General information": "Informacion general",
     "Geolocation": "ubicacion geográfica",
+    "Get avalanche bulletins from Météo-France website": "poner los boletines de avalancha en la página web de Meteo France",
     "Go back to YETI": "Volver a YETI",
     "Go to the previous page": "Ir a la página anterior",
     "Group": "Grupo",
     "Group size": "Tamaño del grupo",
     "Have an account?": "¿Tienes una cuenta?",
+    "Hazard potential": "potencial de peligro",
+    "Hazard potential:": "potencial de peligro",
     "Heading": "Titulo",
     "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
@@ -241,6 +258,7 @@
     "History": "Historia",
     "History is missing, please provide it if you have information.": "falta el aperturista, gracias por entrarlo si tienes informacion",
     "Home": "Inicio",
+    "How is my testimony used ? How / why is it useful ?": "a que sirve mi testimonio ?",
     "I choose to cancel the outing": "Prefiero cancelar la salida",
     "I have read and agree to the terms of use": "he leido y acepto las condiciones",
     "I must not use slopes > 30°": "no puedo coger pendientes >30°",
@@ -255,6 +273,9 @@
     },
     "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "If the route does not exists in our base, you can create it.": "si la vía no está en C2C, la puedes montar.",
+    "Image count": "número de imagenes",
+    "Improve our understanding of risks": "mejorar el conocimiento de los riesgos",
+    "Incidents and accidents": "incidentes y accidentes",
     "Infos": "Informaciónes",
     "Insert a link": "Entra un enlace",
     "Insert emoji": "Entra un emoji",
@@ -616,6 +637,7 @@
     "de": {
       "langs": "alemán"
     },
+    "descending sort": "clasificacion por orden decreciente",
     "descent": {
       "image_categories": "descenso"
     },
@@ -631,6 +653,7 @@
       "glacier_ratings": "difícil"
     },
     "difficulties_height": "Desnivel de las dificultades",
+    "disable_comments": "desactivar los comentarios",
     "draft": {
       "quality_types": "borrador"
     },
@@ -706,6 +729,7 @@
     "female": {
       "genders": "mujer"
     },
+    "file_size": "tamaño del fichero",
     "filename": "nombre del archivo",
     "fine": {
       "quality_types": "bueno"
@@ -771,7 +795,9 @@
     "has created a new outing": "agregó una nueva salida",
     "has created a new route": "agregó un nuevo itinerario",
     "has created a new waypoint": "agregó un nuevo waypoint",
+    "has updated the area": "puso al día esta comarca",
     "has updated the article": "ha actualizado un artículo",
+    "has updated the book": "pusó al día este libro",
     "has updated the image": "ha actualizado una imagen",
     "has updated the outing": "ha actualizado una salida",
     "has updated the route": "ha actualizado un itinerario",
@@ -794,6 +820,7 @@
     "hiking": {
       "activities": "Caminata pedestre"
     },
+    "hiking_mtb_exposition": "exposición, trial y BTT",
     "hiking_rating": "Cotación caminata pedestre",
     "historical": {
       "book_types": "historial"
@@ -813,6 +840,9 @@
     "ice_climbing": {
       "activities": "Escalada de hielo",
       "event_activities": "Escalada de hielo"
+    },
+    "ice_cornice_collapse": {
+      "event_types": "desrumbamiento cascada o cornisa"
     },
     "ice_rating": "Cotación hielo",
     "image": "imagen",
