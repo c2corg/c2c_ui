@@ -163,8 +163,8 @@
     "Delete image": "Cancelar una imágen",
     "Delete route": "Cancelar una vía",
     "Delete this document": "Suprimir este documento",
-    "Delete this locale": "suprimir esta version linguística",
-    "Deny all": "rehusar todo",
+    "Delete this locale": "Suprimir esta version linguística",
+    "Deny all": "Rehusar todo",
     "Describe access": "Describir acceso",
     "Describe access period": "Describir periodo de acceso",
     "Describe access restrictions": "Describe las limitaciones de accesso",
@@ -188,8 +188,8 @@
     "Differences between versions": "Diferencias entres las versiones",
     "Different high/low danger?": "peligro alto/bajo diferentes",
     "Directions (Google Maps)": "Direcciones (Google Maps)",
-    "Disclaimer": "advertencia",
-    "Dispositions": "disposiciones",
+    "Disclaimer": "Advertencia",
+    "Dispositions": "Disposiciones",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
     "Do you really want to leave? you have unsaved changes!": "No has salvaguardado tus cambios; de verdad quierres dejarlo.",
@@ -224,13 +224,12 @@
     "Expand": "Expandir",
     "Expert": "Experto",
     "Export": "Exportar",
-    "Export route": "exportar el itinerario",
-    "Export to CSV": "exportar en CSV",
+    "Export route": "Exportar el itinerario",
+    "Export to CSV": "Exportar en CSV",
     "Fauna protection areas": "área de proteccion de la fauna",
     "Fauna protection site:": "Sector protegido de fauna :",
     "Feel free to edit it.": "Sientese libre de modificarlo.",
     "Filter on map extent": "Filtro en la extensión de mapa",
-    "Filter results": "resultado del filtro",
     "Followed users": "Usuarios seguidos",
     "Forgot password?": "¿Olvidaste la contraseña?",
     "Forum": "Foro",
@@ -258,7 +257,7 @@
     "History": "Historia",
     "History is missing, please provide it if you have information.": "falta el aperturista, gracias por entrarlo si tienes informacion",
     "Home": "Inicio",
-    "How is my testimony used ? How / why is it useful ?": "a que sirve mi testimonio ?",
+    "How is my testimony used ? How / why is it useful ?": "A que sirve mi testimonio ?",
     "I choose to cancel the outing": "Prefiero cancelar la salida",
     "I have read and agree to the terms of use": "he leido y acepto las condiciones",
     "I must not use slopes > 30°": "no puedo coger pendientes >30°",
@@ -275,12 +274,12 @@
     "If the route does not exists in our base, you can create it.": "si la vía no está en C2C, la puedes montar.",
     "Image count": "número de imagenes",
     "Improve our understanding of risks": "mejorar el conocimiento de los riesgos",
-    "Incidents and accidents": "incidentes y accidentes",
+    "Incidents and accidents": "Incidentes y accidentes",
     "Infos": "Informaciónes",
     "Insert a link": "Entra un enlace",
     "Insert emoji": "Entra un emoji",
-    "Insert image": "entra una imagen",
-    "Insert link": "entra enlace",
+    "Insert image": "Entra una imagen",
+    "Insert link": "Entra enlace",
     "Invalid date": "fecha no valida",
     "Invalid email address": {
       "API message": "Email inválido"
@@ -297,7 +296,7 @@
     "Load my preferences": "carga mis preferencias",
     "Login": "Iniciar sesión",
     "Login failed": {
-      "API message": "el login ha fallado"
+      "API message": "Login ha fallado"
     },
     "Logout": "Desconectar",
     "Longitude": "Longitud",
@@ -365,7 +364,6 @@
     "Skiability": "esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "pendientes",
-    "Source:": "recursos",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
@@ -820,7 +818,7 @@
     "hiking": {
       "activities": "Caminata pedestre"
     },
-    "hiking_mtb_exposition": "exposición, trial y BTT",
+    "hiking_mtb_exposition": "Exposición, trail y BTT",
     "hiking_rating": "Cotación caminata pedestre",
     "historical": {
       "book_types": "historial"
