@@ -178,8 +178,10 @@
       "$$noContext": "Describe el accesso peateonal",
       "hut": "Describe el accesso peateonal"
     },
+    "Describe pt access": "describir el acceso al punto de paso",
     "Describe road access": "Describe el accesso con un coche",
     "Describe the conditions you encountered during your outing": "Describe las condiciones que encontraste mientras tu salida",
+    "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "describa las informacioens colectadas antes de la salida y  la comprobación en el terreno? tiene que ver con las precvisiones meteo, los boletines de evaluacion del riesgo de avalancaha, la calidad del hielo,  la calidad de la nieve/roca; los informes de los días precedentes, etc...",
     "Description": "Descripción",
     "Detailed figures, like ratings, height differences, frequentation...": "datos detallados (cotaciones, desniveles, frecuentacion)",
     "Detailed information": "Informaciónes detalladas",
