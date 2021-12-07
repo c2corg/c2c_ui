@@ -5,6 +5,7 @@
       class="is-checkradio is-primary"
       type="checkbox"
       v-model="value_"
+      :disabled="disabled"
       @change="$emit('change')"
     />
     <label :for="'c2c-checkbox' + _uid">
