@@ -13,7 +13,14 @@
           @click.prevent="setActiveTab(i)"
           @keydown="setActiveTabKeyboard($event, i)"
         >
-          {{ tab }} <fa-icon icon="check-circle" v-if="i === 1 && hasFeatures" class="ml-1" />
+          {{ tab }}
+          <fa-icon icon="check-circle" v-if="i === 1 && hasFeatures && !validSimplifyTolerance" class="ml-1" />
+          <fa-icon
+            icon="exclamation-circle"
+            v-if="i === 1 && validSimplifyTolerance"
+            class="has-text-danger ml-1"
+            :title="$gettext('Not simplified yet')"
+          />
         </a>
       </li>
     </ul>
@@ -36,6 +43,9 @@ export default {
     },
     hasFeatures() {
       return Yetix.hasFeatures;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
     },
   },
   methods: {

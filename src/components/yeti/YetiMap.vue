@@ -64,6 +64,19 @@
           </li>
         </ul>
       </div>
+
+      <div ref="drawingMode" class="ol-control ol-control-drawing-mode" :class="{ 'is-primary': drawingMode }">
+        <div class="ol-control-drawing-mode-inner">
+          <input-checkbox @input="onDrawingMode" :value="drawingMode" :disabled="validSimplifyTolerance">
+            <span v-translate title="Enable drawing and editing features on map">Drawing mode</span>
+            <span class="yeti-tag">
+              <span v-if="validSimplifyTolerance" v-translate>DISABLED</span>
+              <span v-else-if="drawingMode">ON</span>
+              <span v-else>OFF</span>
+            </span>
+          </input-checkbox>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -120,6 +133,12 @@ export default {
     },
     showAreas() {
       return Yetix.showAreas;
+    },
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
     },
     yetiLayers() {
       return [
@@ -187,6 +206,7 @@ export default {
       new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
       new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
       new ol.control.Control({ element: this.$refs.layerSwitcher }),
+      new ol.control.Control({ element: this.$refs.drawingMode }),
       new ol.control.Control({ element: this.$refs.recenterOnControl }),
       new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
     ];
@@ -269,6 +289,9 @@ export default {
     onShowAreas() {
       Yetix.setShowAreas(!this.showAreas);
     },
+    onDrawingMode() {
+      Yetix.setDrawingMode(!this.drawingMode);
+    },
   },
 };
 </script>
@@ -309,6 +332,14 @@ $control-margin: 0.5em;
 .ol-control-recenter-on {
   top: $control-margin;
   left: 3em;
+  background: $white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+  input {
+    border: none;
+    padding: 0.3rem;
+    border-radius: 2px;
+  }
 }
 
 .ol-control-recenter-on-propositions {
@@ -359,10 +390,74 @@ $yeti-height: calc(
     }
   }
 }
+
+.ol-control-drawing-mode {
+  top: $control-margin;
+  left: 18.75rem;
+  padding: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+  .ol-control-drawing-mode-inner {
+    padding: 0.15rem 0.25rem 0;
+    border-radius: 4px;
+    background: $white;
+  }
+
+  &.is-primary .ol-control-drawing-mode-inner {
+    background: $primary;
+    color: $white;
+  }
+
+  .yeti-tag {
+    font-size: 0.8em;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.25em;
+    border-radius: 2px;
+    margin-left: 0.5rem;
+    vertical-align: text-top;
+  }
+
+  &.is-primary .yeti-tag {
+    color: $white;
+  }
+}
+
+@media screen and (max-width: $widescreen) {
+  .ol-control-drawing-mode {
+    top: 3rem;
+    left: 3rem;
+  }
+}
+
+.icon-notification {
+  color: $primary;
+}
 </style>
 
-<style>
-.ol-attribution {
-  max-width: 75%;
+<style lang="scss">
+.yeti-app {
+  .ol-control {
+    background: $white;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+  .ol-control button {
+    background: $grey-dark;
+
+    &:hover,
+    &:focus {
+      background: $grey;
+    }
+  }
+
+  .ol-attribution {
+    max-width: 75%;
+  }
+
+  .ol-control-drawing-mode {
+    .is-checkradio[type='checkbox'] + label {
+      font-size: 0.95em;
+      margin-right: 0;
+    }
+  }
 }
 </style>

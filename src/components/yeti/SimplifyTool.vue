@@ -65,9 +65,6 @@ export default {
     };
   },
   computed: {
-    activeTab() {
-      return Yetix.activeTab;
-    },
     features() {
       return Yetix.features;
     },
@@ -86,22 +83,19 @@ export default {
     },
   },
   watch: {
-    activeTab() {
-      // reset simplify tool when user switches tab
-      if (this.activeTab !== 1) {
-        this.initialize();
-      }
-    },
     toleranceDistance() {
-      this.enableDisableInteractions();
-    },
-    validToleranceDistance() {
-      this.$emit('validTolerance', this.validToleranceDistance);
+      if (this.validToleranceDistance) {
+        Yetix.setValidSimplifyTolerance(true);
+      } else {
+        Yetix.setValidSimplifyTolerance(false);
+      }
     },
   },
   destroyed() {
-    // force map interactions
-    this.enableDisableInteractions();
+    // set validSimplifyTolerance to false
+    // go back to normal case for simplify tool
+    // and retrieve default value for drawing mode
+    Yetix.setValidSimplifyTolerance(false);
   },
   methods: {
     onPreviewSimplify() {
@@ -115,13 +109,6 @@ export default {
     initialize() {
       this.toleranceDistance = 0;
       this.onPreviewSimplify();
-    },
-    enableDisableInteractions() {
-      if (this.toleranceDistance === 0 && this.activeTab === 1) {
-        Yetix.$emit('enableInteractions');
-      } else {
-        Yetix.$emit('disableInteractions');
-      }
     },
   },
 };

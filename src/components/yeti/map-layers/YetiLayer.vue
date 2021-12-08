@@ -230,11 +230,11 @@ export default {
     margin: 1px;
     width: 1.375em;
     padding: 1rem 0;
-    background: rgba(0, 60, 136, 0.5);
+    background: $grey-dark;
     border-radius: 2px;
 
     &:hover {
-      background: rgba(0, 60, 136, 0.7);
+      background: $grey;
     }
   }
 

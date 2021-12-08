@@ -60,9 +60,6 @@ export default {
     };
   },
   computed: {
-    activeTab() {
-      return Yetix.activeTab;
-    },
     features() {
       return Yetix.features;
     },
@@ -72,10 +69,13 @@ export default {
     validMinimumMapZoom() {
       return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
   },
   watch: {
-    activeTab() {
-      if (this.activeTab === 0) {
+    drawingMode() {
+      if (!this.drawingMode) {
         this.disableInteractions();
       } else {
         this.enableInteractions();
@@ -124,8 +124,6 @@ export default {
     Yetix.$on('gpx', this.addFeaturesFromGpx);
     Yetix.$on('previewSimplify', this.previewSimplify);
     Yetix.$on('simplify', this.simplify);
-    Yetix.$on('enableInteractions', this.enableInteractions);
-    Yetix.$on('disableInteractions', this.disableInteractions);
   },
   methods: {
     addInteractions() {

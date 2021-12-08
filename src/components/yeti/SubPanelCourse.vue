@@ -39,7 +39,7 @@
         <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
-      <simplify-tool ref="simplifyTool" @validTolerance="onValidTolerance" />
+      <simplify-tool ref="simplifyTool" />
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -111,7 +111,10 @@
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
         <info type="help" class="mt-5">
-          <p><strong v-translate>Draw right on the map</strong> <span v-translate>to start a new route</span></p>
+          <p>
+            <strong v-translate>To draw (and edit) directly on the map</strong>
+            <span v-translate>you need to activate drawing mode</span>
+          </p>
         </info>
       </div>
     </div>
@@ -137,7 +140,6 @@ export default {
       loading: false,
       formats: ['GPX', 'KML'],
       format: 'GPX',
-      validSimplifyTolerance: false,
     };
   },
   computed: {
@@ -146,6 +148,9 @@ export default {
     },
     featuresTitle() {
       return Yetix.featuresTitle;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
     },
     hasFeaturesTitle() {
       return !(!this.featuresTitle.length && !this.newFeaturesTitle);
@@ -216,9 +221,6 @@ export default {
     },
     setFilename(ext) {
       return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
-    },
-    onValidTolerance(validSimplifyTolerance) {
-      this.validSimplifyTolerance = validSimplifyTolerance;
     },
   },
 };
