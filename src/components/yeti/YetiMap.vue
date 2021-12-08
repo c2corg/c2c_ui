@@ -12,7 +12,17 @@
         :title="$gettext('Layers', 'Map controls')"
       >
         <button @click.stop="showLayerSwitcher = !showLayerSwitcher">
-          <fa-icon icon="layer-group" />
+          <fa-layers>
+            <fa-icon icon="layer-group" />
+            <fa-icon v-if="atLeastOneYetiLayerIsShown" icon="circle" transform="shrink-2 up-10 right-10" />
+            <fa-icon
+              v-if="atLeastOneYetiLayerIsShown"
+              icon="check-circle"
+              inverse
+              transform="shrink-2 up-10 right-10"
+              class="icon-notification"
+            />
+          </fa-layers>
         </button>
       </div>
 
@@ -162,6 +172,9 @@ export default {
         this.visibleCartoLayer.setVisible(false);
         layer.setVisible(true);
       },
+    },
+    atLeastOneYetiLayerIsShown() {
+      return this.yetiLayers.filter((layer) => layer.checked).length;
     },
   },
   watch: {
