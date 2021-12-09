@@ -14,12 +14,10 @@
 </template>
 
 <script>
+import Yetix from '@/components/yeti/Yetix';
+
 export default {
   props: {
-    map: {
-      type: Object,
-      default: null,
-    },
     features: {
       type: Array,
       required: true,
@@ -27,17 +25,14 @@ export default {
   },
   methods: {
     removeFeature(feature) {
-      this.map.removeFeature(feature);
+      Yetix.$emit('removeFeature', feature);
     },
-
     showFeature(feature) {
       feature.setStyle(feature.get('highlightedStyle'));
     },
-
     hideFeature(feature) {
       feature.setStyle(feature.get('normalStyle'));
     },
-
     nbPointsOnFeature(feature) {
       return feature.getGeometry().getCoordinates().length;
     },

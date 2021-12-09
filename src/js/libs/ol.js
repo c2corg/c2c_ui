@@ -1,5 +1,5 @@
 import 'elm-pep';
-import { Feature, Map, View } from 'ol';
+import { Feature, Map, Overlay, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
@@ -7,8 +7,10 @@ import { buffer, containsXY, createEmpty, extend, getWidth, intersects } from 'o
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
-import { LineString, Point, Polygon } from 'ol/geom';
+import { LineString, MultiPolygon, Point, Polygon } from 'ol/geom';
+import { fromExtent } from 'ol/geom/Polygon';
 import { DragAndDrop, Draw, Modify, Snap } from 'ol/interaction';
+import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
@@ -26,6 +28,7 @@ export default {
   Map,
   View,
   Feature,
+  Overlay,
   Geolocation,
 
   control: {
@@ -57,8 +60,10 @@ export default {
 
   geom: {
     LineString,
+    MultiPolygon,
     Point,
     Polygon,
+    polygonFromExtent: fromExtent,
   },
 
   interaction: {
@@ -72,6 +77,7 @@ export default {
     Vector: VectorLayer,
     Tile: TileLayer,
     Image: ImageLayer,
+    Group: GroupLayer,
   },
 
   proj: {

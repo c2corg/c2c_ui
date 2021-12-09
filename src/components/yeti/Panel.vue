@@ -11,15 +11,18 @@
 </template>
 
 <script>
+import Yetix from '@/components/yeti/Yetix';
+
 export default {
   props: {
     index: {
       type: Number,
       required: true,
     },
-    activeTab: {
-      type: Number,
-      required: true,
+  },
+  computed: {
+    activeTab() {
+      return Yetix.activeTab;
     },
   },
 };

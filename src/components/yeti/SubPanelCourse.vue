@@ -24,7 +24,7 @@
               spellcheck="false"
               @blur="onEditFeaturesTitle"
               @keypress.13.prevent
-              >{{ editableFeaturesTitle }}</span
+              >{{ featuresTitle }}</span
             >
           </p>
         </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="ml-5 mb-5">
         <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
-        <features-list :features="features" :map="map" />
+        <features-list :features="features" />
       </div>
       <sub-panel-title><span v-translate>Export</span></sub-panel-title>
       <div class="columns is-vcentered is-mobile">
@@ -115,28 +115,14 @@ import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
   components: { FeaturesList, SubPanelTitle },
-  props: {
-    map: {
-      type: Object,
-      default: null,
-    },
-    features: {
-      type: Array,
-      default: null,
-    },
-    featuresTitle: {
-      type: String,
-      default: null,
-    },
-  },
   data() {
     return {
-      editableFeaturesTitle: '',
       newFeaturesTitle: false,
       loading: false,
       formats: ['GPX', 'KML'],
@@ -144,43 +130,37 @@ export default {
     };
   },
   computed: {
-    hasFeaturesTitle() {
-      return !(!this.editableFeaturesTitle.length && !this.newFeaturesTitle);
+    features() {
+      return Yetix.features;
     },
-  },
-  watch: {
     featuresTitle() {
-      // if featuresTitle was changed (load document), set to editableFeaturesTitle
-      this.editableFeaturesTitle = this.featuresTitle;
+      return Yetix.featuresTitle;
     },
-  },
-  mounted() {
-    // when mounted, set editableFeaturesTitle to featuresTitle
-    this.editableFeaturesTitle = this.featuresTitle;
+    hasFeaturesTitle() {
+      return !(!this.featuresTitle.length && !this.newFeaturesTitle);
+    },
   },
   methods: {
     onEditFeaturesTitle(e) {
       if (!e.target.innerText.length) {
         this.newFeaturesTitle = false;
       }
-      this.$emit('update:featuresTitle', e.target.innerText);
+      Yetix.setFeaturesTitle(e.target.innerText);
     },
-
     onEditNewFeaturesTitle() {
       this.newFeaturesTitle = true;
       this.$nextTick(() => {
         this.$refs.featuresTitle.focus();
       });
     },
-
     onLoadGpx() {
       this.$refs.gpxFileInput.click();
     },
-
     onRemoveFeatures() {
-      this.map.removeFeatures();
+      if (confirm(this.$gettext('Confirm delete'))) {
+        Yetix.$emit('removeFeatures');
+      }
     },
-
     uploadGpx(event) {
       this.loading = true;
 
@@ -188,7 +168,7 @@ export default {
 
       reader.onload = () => {
         this.loading = false;
-        this.$emit('gpx', reader.result);
+        Yetix.$emit('gpx', reader.result);
       };
 
       reader.readAsText(event.target.files[0]);
@@ -197,9 +177,8 @@ export default {
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
-      this.$emit('gpx', null);
+      Yetix.$emit('gpx', null);
     },
-
     downloadCourse() {
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
@@ -207,7 +186,6 @@ export default {
         this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
       }
     },
-
     downloadFeatures(olFormat, extension, mimetype) {
       const features = this.features;
       features[0].set('name', this.featuresTitle);
@@ -220,7 +198,6 @@ export default {
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
     },
-
     setFilename(ext) {
       return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
     },

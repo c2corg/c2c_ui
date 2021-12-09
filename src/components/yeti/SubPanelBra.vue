@@ -80,6 +80,12 @@
           <span v-translate>Avalanche bulletins</span>
           <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
           <fa-icon
+            icon="check-circle"
+            v-if="showAvalancheBulletins"
+            class="has-text-primary"
+            :title="$gettext('Visible on map')"
+          />
+          <fa-icon
             class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
             icon="angle-down"
             :rotation="showMountainsList ? 180 : undefined"
@@ -88,17 +94,21 @@
       </div>
       <div v-if="showMountainsList">
         <div v-if="showVisibleMountains">
-          <p class="column yetiform-info" v-translate>Get avalanche bulletins from Météo-France website</p>
+          <div class="pl-3 mt-2 mb-2">
+            <input-checkbox @input="onShowAvalancheBulletins" :value="showAvalancheBulletins">
+              <span v-translate>Visible on map</span>
+            </input-checkbox>
+          </div>
           <dl>
-            <div v-for="(mountainsForMassif, massif) of mountains.visibleMountains" :key="massif">
+            <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
               <dt class="yetimountains-listtitle">
                 {{ massif }}
               </dt>
               <div class="yetimountains-list">
-                <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.title">
+                <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.name">
                   <a :href="mountain.urls[0].url" target="_blank">
                     <fa-icon icon="external-link-alt" />
-                    {{ mountain.title }}
+                    {{ mountain.name }}
                   </a>
                 </dd>
               </div>
@@ -116,32 +126,32 @@
 <script>
 import Counter from '@/components/yeti/Counter.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
+import Yetix from '@/components/yeti/Yetix';
 
 export default {
   components: { Counter, SubPanelTitle },
-  props: {
-    bra: {
-      type: Object,
-      default: null,
-    },
-    mountains: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       showMountainsList: false,
     };
   },
   computed: {
+    bra() {
+      return Yetix.bra;
+    },
+    visibleMountains() {
+      return Yetix.mountains.visible;
+    },
+    showAvalancheBulletins() {
+      return Yetix.showAvalancheBulletins;
+    },
     showVisibleMountains() {
       return this.countVisibleMountains >= 0;
     },
     countVisibleMountains() {
       // if visibleMountains are set
-      if (this.mountains.visibleMountains) {
-        return Object.values(this.mountains.visibleMountains).reduce((a, b) => a + b.length, 0);
+      if (this.visibleMountains) {
+        return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
       }
       // else, return -1 (because 0 is not an error)
       return -1;
@@ -153,14 +163,16 @@ export default {
   methods: {
     onChange(event, prop) {
       const value = prop === 'isDifferent' ? event : event.target.value;
-      this.$emit('update:bra', Object.assign(this.bra, { [prop]: value }));
+      Yetix.setBra(prop, value);
     },
-
     checkBraIsDifferent() {
       if (!this.bra.isDifferent) {
-        this.bra.low = null;
-        this.bra.altiThreshold = null;
+        Yetix.setBra('low', null);
+        Yetix.setBra('altiThreshold', null);
       }
+    },
+    onShowAvalancheBulletins(value) {
+      Yetix.setShowAvalancheBulletins(value);
     },
   },
 };

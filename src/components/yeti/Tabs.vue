@@ -22,6 +22,8 @@
 
 <script>
 import Counter from '@/components/yeti/Counter.vue';
+import Yetix from '@/components/yeti/Yetix';
+
 export default {
   components: { Counter },
   props: {
@@ -29,13 +31,13 @@ export default {
       type: Array,
       required: true,
     },
-    activeTab: {
-      type: Number,
-      required: true,
+  },
+  computed: {
+    activeTab() {
+      return Yetix.activeTab;
     },
-    hasFeatures: {
-      type: Boolean,
-      default: false,
+    hasFeatures() {
+      return Yetix.hasFeatures;
     },
   },
   methods: {
@@ -43,9 +45,8 @@ export default {
       // focus active tab
       this.$refs.tab[index].focus();
       // then set
-      this.$emit('update:activeTab', index);
+      Yetix.setActiveTab(index);
     },
-
     setActiveTabKeyboard(event, index) {
       // Set arrow keys: left/right = switch active tabs / down = focus panel
       const ARROW_LEFT = 37;
