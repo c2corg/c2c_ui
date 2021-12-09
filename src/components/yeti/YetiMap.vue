@@ -336,3 +336,9 @@ $yeti-height: calc(
   }
 }
 </style>
+
+<style>
+.ol-attribution {
+  max-width: 75%;
+}
+</style>
