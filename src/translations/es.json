@@ -178,7 +178,7 @@
       "$$noContext": "Describe el accesso peateonal",
       "hut": "Describe el accesso peateonal"
     },
-    "Describe pt access": "describir el acceso al punto de paso",
+    "Describe pt access": "Describir el acceso al punto de paso",
     "Describe road access": "Describe el accesso con un coche",
     "Describe the conditions you encountered during your outing": "Describe las condiciones que encontraste mientras tu salida",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "describa las informacioens colectadas antes de la salida y  la comprobación en el terreno? tiene que ver con las precvisiones meteo, los boletines de evaluacion del riesgo de avalancaha, la calidad del hielo,  la calidad de la nieve/roca; los informes de los días precedentes, etc...",
@@ -188,7 +188,7 @@
     "Details": "Detalles",
     "Details on participants and event context": "detalles de los partipantes y evento",
     "Differences between versions": "Diferencias entres las versiones",
-    "Different high/low danger?": "peligro alto/bajo diferentes",
+    "Different high/low danger?": "Peligro alto/bajo diferentes ?",
     "Directions (Google Maps)": "Direcciones (Google Maps)",
     "Disclaimer": "Advertencia",
     "Dispositions": "Disposiciones",
@@ -346,7 +346,7 @@
     "Residual risk >1": "riesgo residual>1",
     "Residual risk >1.3": "riesgo residual >1.3",
     "Residual risk >1.5": "riesgo residual >1,5",
-    "Results only": "solo resultados",
+    "Results only": "Solo resultados",
     "Route": "Vía",
     "Save": "Guardar",
     "Search ...": "Buscar ...",
@@ -653,7 +653,7 @@
       "glacier_ratings": "difícil"
     },
     "difficulties_height": "Desnivel de las dificultades",
-    "disable_comments": "desactivar los comentarios",
+    "disable_comments": "Desactivar los comentarios",
     "draft": {
       "quality_types": "borrador"
     },
