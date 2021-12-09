@@ -245,6 +245,9 @@ export default {
     bulletinsLoaded() {
       return Yetix.bulletinsLoaded;
     },
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
     overlayOrientations() {
       // return truthy orientations, in uppercase
       return Object.keys(this.overlayData.orientations)
@@ -371,7 +374,8 @@ export default {
     },
     onMapClick(evt) {
       // this will set bulletins overlay, only when showAvalancheBulletins is true
-      if (this.showAvalancheBulletins) {
+      // and drawing mode is off
+      if (this.showAvalancheBulletins && !this.drawingMode) {
         this.setBulletinsOverlay(evt);
       }
     },

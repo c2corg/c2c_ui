@@ -16,7 +16,7 @@
           />
           <label :for="'c2c-method-' + item" class="yetitab-label" @click="warnAboutMethodBra(item)">
             {{ methods[item][0] }}
-            <span class="yetiform-info">{{ methods[item][1] }}</span>
+            <span class="is-size-7" :class="{ 'has-text-grey': item !== method.type }">{{ methods[item][1] }}</span>
           </label>
         </div>
       </div>
@@ -30,12 +30,12 @@
           (MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.
         </span>
       </p>
-      <div class="yetiform-note">
+      <info type="help">
         <p v-translate>
           As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly
           important. No parameter other than the danger level is specified. Orientation is ignored.
         </p>
-      </div>
+      </info>
 
       <table class="yetiform-danger">
         <tr>
@@ -77,22 +77,22 @@
       <input-orientation
         :value="method.orientation"
         @input="onChange($event, 'orientation')"
-        class="has-text-centered"
+        class="has-text-centered mb-2"
       />
 
-      <p v-if="method.orientation.length != 0" class="yetiform-info">
+      <info v-if="method.orientation.length != 0">
         <span v-translate key="tr1">Orientations</span>: {{ method.orientation.join(', ') }}
-      </p>
-      <p v-else class="yetiform-info">
+      </info>
+      <info type="warning" v-else>
         <span v-translate key="tr2">No orientation selected</span>
-      </p>
+      </info>
 
-      <div class="yetiform-note">
+      <info type="help">
         <p v-translate>
           Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most
           critical sectors presenting an increased risk.
         </p>
-      </div>
+      </info>
 
       <table class="yetiform-danger">
         <tr class="multiline">
@@ -160,22 +160,22 @@
         </li>
       </ul>
 
-      <p v-if="method.potentialDanger" class="yetiform-info">
+      <info v-if="method.potentialDanger">
         <span v-translate key="tr1">Hazard potential:</span>
         {{ method.potentialDanger }}
         (<span v-translate>Danger level:</span> {{ bra.high }})
-      </p>
-      <p v-else class="yetiform-info">
+      </info>
+      <info type="warning" v-else>
         <span v-translate key="tr2">No selected hazard potential. Set danger level first.</span>
-      </p>
+      </info>
 
-      <div class="yetiform-note">
+      <info type="help">
         <p v-translate>
           The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by
           selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin
           evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.
         </p>
-      </div>
+      </info>
 
       <p>
         <input-checkbox :value="method.wetSnow" @input="onChange($event, 'wetSnow')">
@@ -183,9 +183,9 @@
         </input-checkbox>
       </p>
 
-      <div class="yetiform-note">
+      <info type="help">
         <p v-translate>Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.</p>
-      </div>
+      </info>
 
       <h3 class="title is-3" v-translate>Group</h3>
 
@@ -204,7 +204,7 @@
         </li>
       </ul>
 
-      <div class="yetiform-note">
+      <info type="help">
         <p v-translate>Group size</p>
         <ul class="content-ul">
           <li v-translate>Large group = 5 people and more</li>
@@ -215,7 +215,7 @@
           <li v-translate>10 meters minimum while ascending</li>
           <li v-translate>50 meters while descending</li>
         </ul>
-      </div>
+      </info>
 
       <p v-translate>
         The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to
@@ -226,6 +226,7 @@
 </template>
 
 <script>
+import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 
@@ -241,7 +242,7 @@ const DANGER = {
 };
 
 export default {
-  components: { SubPanelTitle },
+  components: { Info, SubPanelTitle },
   data() {
     return {
       methods: {
@@ -332,12 +333,9 @@ table:not(:last-child) {
   width: 100%;
   table-layout: fixed;
   color: $dark;
-  background-color: $white-ter;
 
-  tr {
-    border: 1px solid $white;
-    border-left: 0;
-    border-right: 0;
+  tr + tr {
+    border-top: 1px solid $grey-lighter;
   }
 
   td {

@@ -36,31 +36,11 @@
         </div>
       </div>
       <div class="ml-5 mb-5">
-        <p class="yetiform-info is-italic is-marginless" v-translate>Lines chunks</p>
+        <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
-      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
-      <div class="columns is-vcentered is-mobile">
-        <div class="column">
-          <ul class="form-export">
-            <li v-for="type of formats" :key="type" class="control is-flex">
-              <input
-                :id="'format' + type"
-                type="radio"
-                name="exportFormat"
-                class="is-checkradio is-primary"
-                :value="type"
-                v-model="format"
-              />
-              <label :for="'format' + type">{{ type }}</label>
-            </li>
-          </ul>
-        </div>
-        <div class="column is-narrow">
-          <button class="button is-primary" @click="downloadCourse" v-translate>Export route</button>
-        </div>
-      </div>
-      <div class="yetiform-note mt-5">
+      <simplify-tool ref="simplifyTool" />
+      <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
           <li><strong v-translate translate-context="yeti">Draw</strong> <span v-translate>new lines chunks</span></li>
@@ -85,6 +65,34 @@
           <li><strong v-translate>Delete a line chunk</strong></li>
           <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
         </ul>
+      </info>
+      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
+      <div class="columns is-vcentered is-mobile">
+        <div class="column">
+          <ul class="form-export">
+            <li v-for="type of formats" :key="type" class="control is-flex">
+              <input
+                :id="'format' + type"
+                type="radio"
+                name="exportFormat"
+                class="is-checkradio is-primary"
+                :value="type"
+                v-model="format"
+              />
+              <label :for="'format' + type">{{ type }}</label>
+            </li>
+          </ul>
+        </div>
+        <div class="column is-narrow">
+          <button
+            class="button is-primary"
+            :class="{ 'is-disabled': validSimplifyTolerance }"
+            @click="downloadCourse"
+            v-translate
+          >
+            Export route
+          </button>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -102,9 +110,12 @@
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
-        <div class="yetiform-note mt-5">
-          <p><strong v-translate>Draw right on the map</strong> <span v-translate>to start a new route</span></p>
-        </div>
+        <info type="help" class="mt-5">
+          <p>
+            <strong v-translate>To draw (and edit) directly on the map</strong>
+            <span v-translate>you need to activate drawing mode</span>
+          </p>
+        </info>
       </div>
     </div>
   </div>
@@ -114,13 +125,15 @@
 import { format } from 'date-fns';
 
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
+import Info from '@/components/yeti/Info.vue';
+import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, SubPanelTitle },
+  components: { FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,
@@ -135,6 +148,9 @@ export default {
     },
     featuresTitle() {
       return Yetix.featuresTitle;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
     },
     hasFeaturesTitle() {
       return !(!this.featuresTitle.length && !this.newFeaturesTitle);
@@ -159,6 +175,8 @@ export default {
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
         Yetix.$emit('removeFeatures');
+        // initialize simplify tool (go back to init state)
+        this.$refs.simplifyTool.initialize();
       }
     },
     uploadGpx(event) {
@@ -180,6 +198,9 @@ export default {
       Yetix.$emit('gpx', null);
     },
     downloadCourse() {
+      if (this.validSimplifyTolerance) {
+        return window.alert('Export is disabled. You must confirm simplified geometry first.');
+      }
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
       } else if (this.format === 'KML') {
@@ -284,6 +305,11 @@ input[type='file'] {
   .is-checkradio[type='radio'] + label {
     line-height: 1.2rem;
   }
+}
+
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 350px) {

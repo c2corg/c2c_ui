@@ -13,7 +13,14 @@
           @click.prevent="setActiveTab(i)"
           @keydown="setActiveTabKeyboard($event, i)"
         >
-          {{ tab }} <counter is-primary v-if="i === 1 && hasFeatures">1</counter>
+          {{ tab }}
+          <fa-icon icon="check-circle" v-if="i === 1 && hasFeatures && !validSimplifyTolerance" class="ml-1" />
+          <fa-icon
+            icon="exclamation-circle"
+            v-if="i === 1 && validSimplifyTolerance"
+            class="has-text-danger ml-1"
+            :title="$gettext('Not simplified yet')"
+          />
         </a>
       </li>
     </ul>
@@ -21,11 +28,9 @@
 </template>
 
 <script>
-import Counter from '@/components/yeti/Counter.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
-  components: { Counter },
   props: {
     tabs: {
       type: Array,
@@ -38,6 +43,9 @@ export default {
     },
     hasFeatures() {
       return Yetix.hasFeatures;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
     },
   },
   methods: {

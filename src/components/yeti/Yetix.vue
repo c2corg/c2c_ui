@@ -35,9 +35,11 @@ let defaultState = {
 
   areas: [],
   areaOk: true,
+  showAreas: false,
 
   features: [],
   featuresTitle: 'New route',
+  featuresLength: 0,
 
   mountains: {
     all: [],
@@ -47,6 +49,9 @@ let defaultState = {
   showAvalancheBulletins: false,
 
   mapZoom: 0,
+  drawingMode: false,
+
+  validSimplifyTolerance: false,
 };
 
 /**
@@ -85,6 +90,9 @@ export default new Vue({
     areaOk() {
       return state.areaOk;
     },
+    showAreas() {
+      return state.showAreas;
+    },
     features() {
       return state.features;
     },
@@ -93,6 +101,9 @@ export default new Vue({
     },
     featuresTitle() {
       return state.featuresTitle;
+    },
+    featuresLength() {
+      return state.featuresLength;
     },
     mountains() {
       return state.mountains;
@@ -105,6 +116,12 @@ export default new Vue({
     },
     mapZoom() {
       return state.mapZoom;
+    },
+    drawingMode() {
+      return state.drawingMode;
+    },
+    validSimplifyTolerance() {
+      return state.validSimplifyTolerance;
     },
   },
   methods: {
@@ -124,11 +141,17 @@ export default new Vue({
     setAreaOk(areaOk) {
       state.areaOk = areaOk;
     },
+    setShowAreas(showAreas) {
+      state.showAreas = showAreas;
+    },
     setFeatures(features) {
       state.features = features;
     },
     setFeaturesTitle(featuresTitle) {
       state.featuresTitle = featuresTitle;
+    },
+    setFeaturesLength(featuresLength) {
+      state.featuresLength = featuresLength;
     },
     setAllMountains(mountains) {
       state.mountains.all = mountains;
@@ -144,6 +167,26 @@ export default new Vue({
     },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
+    },
+    setDrawingMode(drawingMode) {
+      state.drawingMode = drawingMode;
+    },
+    setValidSimplifyTolerance(validSimplifyTolerance) {
+      state.validSimplifyTolerance = validSimplifyTolerance;
+      // when validSimplifyTolerance is OK
+      // check state for drawingMode:
+      // if it's on, store it (tmp), and retrieve state later
+      if (validSimplifyTolerance) {
+        if (state.drawingMode) {
+          state.tmpDrawingMode = true;
+          this.setDrawingMode(false);
+        }
+      } else {
+        if (state.tmpDrawingMode) {
+          this.setDrawingMode(true);
+          delete state.tmpDrawingMode;
+        }
+      }
     },
     setDefault() {
       // revert all state properties to default

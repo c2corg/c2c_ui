@@ -4,6 +4,43 @@ import layerMixin from './layer';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
+let areasLayerStyle = (mapZoom) => {
+  const MIN_ZOOM = 8;
+  const MAX_ZOOM = 10;
+  const MIN_OPACITY = 0;
+  const MAX_OPACITY = 0.8;
+
+  let opacity = MAX_OPACITY;
+  let strokeWidth = 1;
+
+  if (mapZoom) {
+    // opacity should be
+    // 0.8 (default)
+    // gradually decreasing between min and max zooms
+    // 0 when zoom is > max
+    if (mapZoom >= MIN_ZOOM && mapZoom <= MAX_ZOOM) {
+      opacity = (MAX_ZOOM - mapZoom) * (MAX_OPACITY / (MAX_ZOOM - MIN_ZOOM));
+    } else if (mapZoom > MAX_ZOOM) {
+      opacity = MIN_OPACITY;
+    }
+
+    // increase stroke when zoom > max
+    if (mapZoom > MAX_ZOOM) {
+      strokeWidth = 2;
+    }
+  }
+
+  return new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: `hsla(20, 90%, 45%, .85)`,
+      width: strokeWidth,
+    }),
+    fill: new ol.style.Fill({
+      color: `hsla(20, 90%, 55%, ${opacity})`,
+    }),
+  });
+};
+
 export default {
   mixins: [layerMixin],
   computed: {
@@ -13,29 +50,25 @@ export default {
     areas() {
       return Yetix.areas;
     },
-    areasLayerStyle() {
-      let levelStrokeWidth = 2;
-      let levelStrokeOpacity = 4;
-      let lineWidthStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeWidth));
-      let opacityStroke = Math.max(0, Math.min(this.mapZoom - 6, levelStrokeOpacity)) / 4;
-      let lineDashStroke = opacityStroke * 6;
-
-      return new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'hsla(30, 100%, 40%,' + opacityStroke + ')',
-          width: lineWidthStroke,
-          lineDash: [lineDashStroke],
-        }),
-      });
+    showAreas() {
+      return Yetix.showAreas;
+    },
+  },
+  watch: {
+    showAreas() {
+      this.onShowAreas();
     },
   },
   mounted() {
     this.areasLayer = new ol.layer.Vector({
       renderMode: 'image',
       source: new ol.source.Vector(),
-      style: this.areasLayerStyle,
+      style: areasLayerStyle(),
     });
     this.map.addLayer(this.areasLayer);
+
+    // showAreas checked?
+    this.areasLayer.setVisible(this.showAreas);
 
     // only in first mount
     if (this.areas.length === 0) {
@@ -53,22 +86,8 @@ export default {
       // set areas in state
       Yetix.setAreas(areas);
 
-      // to improve map rendering, we will build linestrings from polygon features
-      // first, flatten coords
-      let rawCoords = areasFeatures[0].getGeometry().getCoordinates();
-      let coords = [];
-      for (let i = 0; i < rawCoords.length; i++) {
-        coords.push(...rawCoords[i]);
-      }
-      // then, build linestrings
-      let features = [];
-      for (let i = 0; i < coords.length; i++) {
-        for (let j = 0; j < coords[i].length - 1; j++) {
-          features.push(new ol.Feature(new ol.geom.LineString([coords[i][j], coords[i][j + 1]])));
-        }
-      }
       // add features
-      this.areasLayer.getSource().addFeatures(features);
+      this.areasLayer.getSource().addFeatures(areasFeatures);
       // check is area OK
       this.isAreaOK();
     },
@@ -87,11 +106,14 @@ export default {
       }
       Yetix.setAreaOk(areaOk);
     },
+    onShowAreas() {
+      this.areasLayer.setVisible(this.showAreas);
+    },
     onMapMoveEnd() {
       // is area OK ?
       this.isAreaOK();
       // update areas layer style
-      this.areasLayer.setStyle(this.areasLayerStyle);
+      this.areasLayer.setStyle(areasLayerStyle(this.mapZoom));
     },
   },
   render() {

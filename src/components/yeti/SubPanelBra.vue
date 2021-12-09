@@ -74,38 +74,29 @@
       </div>
     </div>
 
-    <div class="yetimountains">
-      <div>
-        <p class="yetimountains-title" @click="showMountainsList = !showMountainsList">
-          <span v-translate>Avalanche bulletins</span>
-          <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
-          <fa-icon
-            icon="check-circle"
-            v-if="showAvalancheBulletins"
-            class="has-text-primary"
-            :title="$gettext('Visible on map')"
-          />
-          <fa-icon
-            class="yetimountains-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
-            icon="angle-down"
-            :rotation="showMountainsList ? 180 : undefined"
-          />
-        </p>
-      </div>
-      <div v-if="showMountainsList">
+    <dropdown-content>
+      <span v-translate>Avalanche bulletins</span>
+      <counter v-if="showVisibleMountains">{{ countVisibleMountains }}</counter>
+      <fa-icon
+        icon="check-circle"
+        v-if="showAvalancheBulletins"
+        class="has-text-primary"
+        :title="$gettext('Visible on map')"
+      />
+      <template #content>
         <div v-if="showVisibleMountains">
-          <div class="pl-3 mt-2 mb-2">
+          <div class="mb-2">
             <input-checkbox @input="onShowAvalancheBulletins" :value="showAvalancheBulletins">
               <span v-translate>Visible on map</span>
             </input-checkbox>
           </div>
           <dl>
             <div v-for="(mountainsForMassif, massif) of visibleMountains" :key="massif">
-              <dt class="yetimountains-listtitle">
+              <dt>
                 {{ massif }}
               </dt>
-              <div class="yetimountains-list">
-                <dd class="yetimountains-listelement" v-for="mountain of mountainsForMassif" :key="mountain.name">
+              <div class="yetimountains-list px-4 py-3">
+                <dd v-for="mountain of mountainsForMassif" :key="mountain.name">
                   <a :href="mountain.urls[0].url" target="_blank">
                     <fa-icon icon="external-link-alt" />
                     {{ mountain.name }}
@@ -116,20 +107,22 @@
           </dl>
         </div>
         <div v-else>
-          <p class="column yetiform-info" v-translate>Massifs could not be loaded</p>
+          <info class="column" v-translate>Massifs could not be loaded</info>
         </div>
-      </div>
-    </div>
+      </template>
+    </dropdown-content>
   </div>
 </template>
 
 <script>
 import Counter from '@/components/yeti/Counter.vue';
+import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
-  components: { Counter, SubPanelTitle },
+  components: { Counter, DropdownContent, Info, SubPanelTitle },
   data() {
     return {
       showMountainsList: false,
@@ -211,36 +204,7 @@ export default {
   }
 }
 
-.yetimountains {
-  border: 1px solid #dbdbdb;
-  border-radius: 4px;
-
-  &:hover {
-    border-color: #b5b5b5;
-  }
-
-  &-title {
-    cursor: pointer;
-    padding: 0.25rem 0.75rem;
-  }
-
-  &-arrow {
-    color: $primary;
-    margin-top: 0.25rem;
-  }
-
-  &-list {
-    columns: 3 170px;
-    padding: 0.75rem 2rem;
-  }
-
-  &-listtitle {
-    font-weight: bold;
-    padding: 0 0.75rem;
-  }
-}
-
-.yetimountains-listelement + .yetimountains-listtitle {
-  margin-top: 0.5rem;
+.yetimountains-list {
+  columns: 3 170px;
 }
 </style>

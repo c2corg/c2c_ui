@@ -28,6 +28,7 @@ export default {
   color: $grey-darker;
   border-radius: 50%;
   font-size: 0.72em;
+  font-weight: normal;
   text-align: center;
 
   &.has-background-primary {
