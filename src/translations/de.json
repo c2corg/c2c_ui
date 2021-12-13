@@ -241,7 +241,6 @@
     "Draw": {
       "yeti": "Zeichnen"
     },
-    "Draw right on the map": "Zeichnen Sie rechts auf der Karte",
     "Drawing tips": "Zeichentipps",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
     "Duration": "Zeit",
@@ -1743,7 +1742,6 @@
     "to": {
       "period": "zu"
     },
-    "to start a new route": "um eine neue Route zu starten",
     "to start or load a new one": "zum Starten oder Laden eines neuen",
     "topo": {
       "book_types": "Topo",
