@@ -183,7 +183,6 @@
     "Draw": {
       "yeti": "Dessiner"
     },
-    "Draw right on the map": "Dessiner directement sur la carte",
     "Drawing tips": "Astuces de dessin",
     "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
@@ -1555,7 +1554,6 @@
     "to": {
       "period": "à"
     },
-    "to start a new route": "pour commencer un nouvel itinéraire",
     "to start or load a new one": "pour commencer ou en charger un nouveau",
     "topo": {
       "book_types": "topoguide",

@@ -203,7 +203,6 @@
     "Draw": {
       "yeti": "Dibuixar"
     },
-    "Draw right on the map": "Dibuixar directament a sobre del mapa",
     "Drawing tips": "Consells de dibuix",
     "Drop images here or click to upload": "Arrossegueu imatges aquí o cliqueu per carregar-ne",
     "Duration": "Durada",
@@ -1642,7 +1641,6 @@
     "to": {
       "period": "a"
     },
-    "to start a new route": "per començar un nou itinerari",
     "to start or load a new one": "per començar o carregar-ne un de nou",
     "topo": {
       "book_types": "ressenya",
