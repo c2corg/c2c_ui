@@ -71,6 +71,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Autriche Sat"
     },
+    "Be careful,": "Attention,",
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut être appliqué.",
     "Beginner": "Débutant",
     "Beginner Reduction Method": "méthode de réduction pour débutant",
@@ -126,10 +127,13 @@
       "yeti": "Créer"
     },
     "Create a new report": "Créer un nouveau compte-rendu",
+    "Create a simplified version of the geometry by reducing the amount of points": "Crée une version simplifiée de la géométrie en réduisant le nombre de points",
     "Created on": "Crée le",
     "Creation?": "Création ?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).",
+    "Current map view is too large. Please zoom to level": "La zone de carte est trop grande. Zoomez au niveau",
     "Current password": "Mot de passe actuel",
+    "DISABLED": "DÉSACTIVÉ",
     "Danger level": "Niveau de danger",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Le niveau de danger du bulletin d'avalanche concerne toutes les orientations. La rose des vents distingue les secteurs les plus critiques présentant un risque accru. ",
     "Danger level:": "Niveau de danger :",
@@ -139,6 +143,7 @@
     "Danger rating - low": "Danger faible",
     "Danger rating - moderate": "Danger limité",
     "Danger rating - very high": "Danger très fort",
+    "Danger:": "Danger :",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Données techniques, comme l'orientation, le type de roche ou la configuration générale de l'itinéraire (arête, pilier...)",
     "Delete": {
       "yeti": "Supprimer"
@@ -183,6 +188,7 @@
     "Draw": {
       "yeti": "Dessiner"
     },
+    "Drawing mode": "Mode dessin",
     "Drawing tips": "Astuces de dessin",
     "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
@@ -218,6 +224,7 @@
     "Forum username": "Pseudo forum",
     "From danger 3, consider the slopes which dominate the route": "À partir du danger 3, prendre en compte les pentes qui dominent l'itinéraire",
     "From the interface": "Depuis l'interface",
+    "Full bulletin:": "Bulletin complet :",
     "Fullname": "Nom",
     "GPS Track": "Trace GPS",
     "GPX file": "Fichier GPX",
@@ -360,7 +367,9 @@
     "New password": "Nouveau mot de passe",
     "New route": "Nouvel itinéraire",
     "New waypoint": "Nouveau point de passage",
+    "No": "Non",
     "No account yet?": "Pas encore de compte ?",
+    "No avalanche bulletin right now": "Pas de bulletin d’avalanche pour le moment",
     "No data could be extracted from GPS file": "Aucune donnée n'a pu être extraite du fichier",
     "No match?": "Aucun résultat satisfaisant ?",
     "No orientation selected": "Pas d’orientations sélectionnées",
@@ -373,6 +382,7 @@
     },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Pas de modifications — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre modifiée. ",
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
+    "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "Numbers": "Données",
     "On a drawn line": "Sur une ligne",
@@ -384,6 +394,7 @@
     "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
     "Open in a new tab": "Ouvrir dans un nouvel onglet",
     "Ordered list": "Liste triée",
+    "Orientations:": "Orientations :",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
     "Oups! something went wrong...": "Oups ! Il y a eu un problème...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien",
@@ -461,6 +472,7 @@
     "See the latest version": "Voir la dernière version",
     "Seems fine! :)": "Calcul possible ! :) ",
     "Select option": "Choisissez une option",
+    "Select tolerance (preview result on map)": "Choisir la tolérance (prévisualisation sur la carte)",
     "Send reset email": "Envoyer l'email de réinitialisation",
     "Sensitive area:": "Zone sensible :",
     "Sensitive areas": "Zones sensibles",
@@ -477,6 +489,7 @@
       "API message": "Champ trop court (minimum 3 caractères)"
     },
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
+    "Simplify": "Simplifier",
     "Skiability": "Skiabilité",
     "Skitouring gear": "Ski, surf, raquette",
     "Slopes": "Cartes de pentes",
@@ -530,6 +543,7 @@
     "Time": "Heure",
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
+    "To draw (and edit) directly on the map": "Pour dessiner (et éditer) directement sur la carte",
     "Toggle elevation profile": "basculer sur le profil altimétrique",
     "Toggle full-screen": {
       "Map Controls": "Mode plein écran"
@@ -550,10 +564,12 @@
     "Upload a new version": "Télécharger une nouvelle version",
     "User avatar": "Avatar",
     "Username": "Identifiant",
+    "Validity date:": "Date de validité :",
     "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres,...)",
     "View in other lang": "Voir dans une autre langue",
     "View next comments and continue the discussion": "Voir les commentaires suivants et continuer la discussion",
     "View xreports": "Voir les compte-rendus",
+    "Visible on map": "Visibles sur la carte",
     "Warning: This action cannot be undone!": "Attention : cette action est irréversible !",
     "Waypoint's main properties": "Principales données du point de passage",
     "Waypoint's textual description": "Descriptions textuelles du point de passage",
@@ -619,6 +635,7 @@
       "area_types": "limite administrative"
     },
     "advertisement": "publicité",
+    "after:": "après :",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
     "alpine_climbing": {
@@ -1548,6 +1565,7 @@
       "weather_station_types": "température"
     },
     "text to display": "texte à afficher",
+    "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "c’est une prévisualisation. La géométrie n’est pas encore simplifiée. Les interactions sur la carte ainsi que l’export sont désactivés.",
     "time_management": "Gestion de l'horaire",
     "timing": "Durée",
     "title": "Titre",
@@ -1628,6 +1646,7 @@
     "yes": {
       "$$noContext": "oui",
       "parking_fee_types": "oui"
-    }
+    },
+    "you need to activate drawing mode": "veuillez activer le «mode dessin»"
   }
 }
