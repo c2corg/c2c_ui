@@ -123,8 +123,8 @@ export default {
             (this.$user.isModerator && this.document.associations.book.length)
         )
         .filter(
-          // Only moderators can change a picture which is personal to collaborative
-          (value) => value !== 'collaborative' || this.document.image_type === 'collaborative' || this.$user.isModerator
+          // Only moderators can change a picture which is collaborative to personal
+          (value) => value !== 'personal' || this.document.image_type === 'personal' || this.$user.isModerator
         );
     },
 
