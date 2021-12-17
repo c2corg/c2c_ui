@@ -120,6 +120,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Österreich Luftbild"
     },
+    "Be careful,": "Achtung, ",
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Vorsicht, bei nassem Schnee kann kein Faktor zur Reduzierung der Orientierung oder Anwesenheit angewendet werden.",
     "Beginner": "Einsteiger",
     "Beginner Reduction Method": "Einsteiger-Reduktionsmethode",
@@ -180,10 +181,13 @@
       "yeti": "Erstellen"
     },
     "Create a new report": "Neuen Unfallbericht verfassen",
+    "Create a simplified version of the geometry by reducing the amount of points": "Eine vereinfachte Version der Geometrie erstellen, indem die Anzahl der Punkte reduziert wird",
     "Created on": "Erstellt am",
     "Creation?": "Verfassung ?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Nur französische Berge sind ab jetzt (durch einen gestrichelten Strich bestimmt).",
+    "Current map view is too large. Please zoom to level": "Der Kartenbereich ist zu groß. Zoomen Sie",
     "Current password": "Aktuelles Passwort",
+    "DISABLED": "AUS",
     "Danger level": "Lawinengefahr",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Die Gefahrenstufe aus dem Lawinenbericht gilt für alle Ausrichtungen. Die Windrose kennzeichnet die kritischsten Sektoren, die ein erhöhtes Risiko darstellen.",
     "Danger level:": "Lawinengefahr:",
@@ -193,6 +197,7 @@
     "Danger rating - low": "Gering",
     "Danger rating - moderate": "Mässig",
     "Danger rating - very high": "Sehr gross",
+    "Danger:": "Stufe :",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
     "Delete": {
       "yeti": "Löschen"
@@ -241,6 +246,7 @@
     "Draw": {
       "yeti": "Zeichnen"
     },
+    "Drawing mode": "Zeichnen-Modus",
     "Drawing tips": "Zeichentipps",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
     "Duration": "Zeit",
@@ -277,6 +283,7 @@
     "Forum username": "Forum-Benutzername",
     "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahr 3 die Hängen, die die Route dominieren",
     "From the interface": "Aus der Schnittstelle",
+    "Full bulletin:": "Vollständiges Lawinenlagebricht",
     "Fullname": "Name und Vorname",
     "GPS Track": "GPS-Strecke",
     "GPX file": "GPX-Datei",
@@ -418,7 +425,9 @@
     "New password": "Neues Passwort",
     "New route": "Neue Route",
     "New waypoint": "Neues Wegpunkt",
+    "No": "Nein",
     "No account yet?": "Noch kein Konto?",
+    "No avalanche bulletin right now": "Zurzeit kein Lawinenlagebericht",
     "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden.",
     "No match?": "Keine Ergebnisse?",
     "No orientation selected": "Keine Ausrichtungen gewählt",
@@ -431,6 +440,7 @@
     },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Keine Bearbeitungen — Wenn Sie das Material remixen, verändern oder darauf anderweitig direkt aufbauen dürfen Sie die bearbeitete Fassung der Materials nicht verbreiten.",
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
+    "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
     "Numbers": "Daten",
     "Ok": "OK",
@@ -444,6 +454,7 @@
     "Open in a new tab": "In neuer Registerkarte öffnen",
     "Ordered list": "geordnete Liste",
     "Orientations": "Ausrichtungen",
+    "Orientations:": "Ausrichtungen :",
     "Oups! Something went wrong with forum. Here is the message :": "Upsi ! Etwas is mit den Forum schief gegangen. Hier ist die Nachricht :",
     "Oups! something went wrong...": "Upsi ! Etwas ist schief gegangen ...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Unsere Website verwendet Cookies, die von uns und von Drittparteien bereitgestellt werden. Einige Cookies sind für den Betrieb der Website erforderlich, während andere von Ihnen zu jeder Zeit eingestellt werden können, insbesondere solche, die es uns ermöglichen, die Leistung unserer Website zu verstehen und Ihnen Social-Media-Funktionen zur Verfügung zu stellen. Sie können alle annehmen oder ablehnen oder",
@@ -527,6 +538,7 @@
     "See the latest version": "Letzte Version anschauen",
     "Seems fine! :)": "Rechnung möglich ! :)",
     "Select option": "Optionen wählen",
+    "Select tolerance (preview result on map)": "Toleranz wählen (Vorschau auf der Karte)",
     "Send reset email": "Reset-Email senden",
     "Sensitive area:": "Sensibles Gebiet",
     "Sensitive areas": "Sensible Gebiete",
@@ -543,6 +555,7 @@
       "API message": "Zu kurz, soll mindestens 3 Zeichen haben"
     },
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
+    "Simplify": "Vereinfachen",
     "Skiability": "Schifahrengenuss",
     "Skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
     "Slopes": "Hangneigung",
@@ -598,6 +611,7 @@
     "Time": "Zeit",
     "Title of the book, author, language and date of publication.": "Buchtitel, Autor, Sprache und Veröffentlichungsdatum.",
     "Title, activity and characteristics of the picture": "Titel, Aktivitäten und Spezifikationen des Bilds",
+    "To draw (and edit) directly on the map": "Direkt auf der Karte zeichnen (und bearbeiten)",
     "Toggle elevation profile": "Höhenprofil umschalten",
     "Toggle full-screen": {
       "Map Controls": "Vollbild"
@@ -628,11 +642,13 @@
     "Upload a new version": "Neue Version hochladen",
     "User avatar": "Avatar",
     "Username": "Benutzername",
+    "Validity date:": "Gültig bis :",
     "Versions": "Versionen",
     "Very complex (steps, narrow sections, ridges...)": "Sehr komplexe (Schritte, schmale Abschnitte, Felsen, ...)",
     "View in other lang": "In anderer Sprache anzeigen",
     "View next comments and continue the discussion": "Nächste Kommentare seen und Diskussion fortsetzen",
     "View xreports": "Unfallberichte sehen",
+    "Visible on map": "Auf der Karte sichtbar",
     "Warning: This action cannot be undone!": "Achtung: Diese Aktion ist unumkehrbar !",
     "Waypoint's main properties": "Hauptdaten des Wegpunkts",
     "Waypoint's textual description": "Textbeschreibung des Wegpunkts",
@@ -645,6 +661,7 @@
     "With the": "Mit der",
     "Without c2c account": "Ohne c2c Konto",
     "YETI - A preparation tool for your outing": "YETI - Ein Vorbereitungswerkzeug für Ihre Touren",
+    "YETI extent": "YETI Abdeckung",
     "You are using a custom sort": "Sie verwenden eine benutzerdefinierte Sortierung",
     "You can choose to remain anonymous": "Sie können entscheiden, anonym zu bleiben",
     "You have to be authorized. Please contact administrators of the service if interested.": "Sie müssen autorisiert sein. Bitte kontaktieren Sie bei Interesse die Administratoren des Dienstes.",
@@ -701,6 +718,7 @@
       "area_types": "administrative Grenze"
     },
     "advertisement": "Werbung",
+    "after:": "nach :",
     "age": "Alter",
     "aid_rating": "Technisches Klettern Schwierigkeitsgrad",
     "alpine_climbing": {
@@ -1462,6 +1480,7 @@
     "please consult the server logs": {
       "API message": "Unerwarteter Fehler, bitte kontaktieren Sie dev@camptocamp.org"
     },
+    "points": "Punkten",
     "points by moving them": "Punkte, indem Sie sie verschieben",
     "poor": {
       "condition_ratings": "schlecht",
@@ -1736,6 +1755,7 @@
       "weather_station_types": "Temperatur"
     },
     "text to display": "anzuzeigender Text",
+    "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "time_management": "Zeitmanagement",
     "timing": "Timing",
     "title": "Titel",
@@ -1828,6 +1848,7 @@
     "yes": {
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
-    }
+    },
+    "you need to activate drawing mode": "Bitte den Zeichnen-Modus aktivieren"
   }
 }
