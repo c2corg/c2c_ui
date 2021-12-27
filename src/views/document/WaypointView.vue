@@ -124,7 +124,7 @@
           <div style="clear: both" />
         </div>
 
-        <routes-box v-if="!isDraftView" :document="document" />
+        <routes-box v-if="!isDraftView && document.waypoint_type !== 'climbing_indoor'" :document="document" />
         <recent-outings-box v-if="!isDraftView" :document="document" />
         <images-box v-if="!isDraftView" :document="document" />
         <tool-box :document="document" v-if="$screen.isMobile" />
