@@ -286,7 +286,7 @@ export default {
 
   computed: {
     editable() {
-      return this.editedDocument !== null;
+      return !!this.editedDocument;
     },
 
     urlValue: {
