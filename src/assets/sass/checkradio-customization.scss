@@ -4,14 +4,11 @@
 
 // radio and checkbox must have white background
 .is-checkradio[type='checkbox'] + label::before,
-.is-checkradio[type='checkbox'] + label:before,
-.is-checkradio[type='radio'] + label::before,
 .is-checkradio[type='radio'] + label::before {
   background: white;
 }
 
 // checkbox unchecked : 0-sized tick centered
-.is-checkradio[type='checkbox'] + label::after,
 .is-checkradio[type='checkbox'] + label::after {
   border-top-width: 0;
   border-right-width: 0;
@@ -26,7 +23,6 @@
 }
 
 // checkbox checked : visible tick, with good placement
-.is-checkradio[type='checkbox']:checked + label::after,
 .is-checkradio[type='checkbox']:checked + label::after {
   border-right-width: 3px;
   border-bottom-width: 3px;
@@ -37,7 +33,6 @@
 }
 
 // ra:dio unchecked : 0-sized tick centerd
-.is-checkradio[type='radio'] + label::after,
 .is-checkradio[type='radio'] + label::after {
   left: 0.75em !important;
   top: 0.75em !important;
@@ -50,7 +45,6 @@
 }
 
 // radio checked : visible tick, with good placement
-.is-checkradio[type='radio']:checked + label::after,
 .is-checkradio[type='radio']:checked + label::after {
   left: 0 !important;
   top: 0 !important;
@@ -60,22 +54,16 @@
 
 // use good primary color
 .is-checkradio[type='radio'].is-primary:hover:not([disabled]) + label::before,
-.is-checkradio[type='radio'].is-primary:hover:not([disabled]) + label:before,
-.is-checkradio[type='checkbox'].is-primary:hover:not([disabled]) + label::before,
-.is-checkradio[type='checkbox'].is-primary:hover:not([disabled]) + label:before {
+.is-checkradio[type='checkbox'].is-primary:hover:not([disabled]) + label::before {
   border-color: $primary !important;
 }
 
 .is-checkradio[type='checkbox'].is-primary:checked + label::after,
-.is-checkradio[type='checkbox'].is-primary:checked + label::after,
-.is-checkradio[type='checkbox'].is-primary + label::after,
 .is-checkradio[type='checkbox'].is-primary + label::after {
   border-color: $primary !important;
 }
 
 .is-checkradio[type='radio'].is-primary:checked + label::after,
-.is-checkradio[type='radio'].is-primary:checked + label::after,
-.is-checkradio[type='radio'].is-primary + label::after,
 .is-checkradio[type='radio'].is-primary + label::after {
   border-color: $primary !important;
   background-color: $primary !important;
