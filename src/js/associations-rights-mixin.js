@@ -18,6 +18,11 @@ export default {
         return false;
       }
 
+      // cannot associated routes to climbing indoor
+      if (parent.type === 'r' && child.type === 'w' && child.waypoint_type === 'climbing_indoor') {
+        return false; // TODO API: climbing indoor cannot be associated to routes
+      }
+
       // moderator can always add
       if (this.$user.isModerator) {
         return true;
