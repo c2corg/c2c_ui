@@ -229,7 +229,7 @@ export default {
     },
 
     showAssociationEditor() {
-      return !['area'].includes(this.documentType);
+      return this.documentType !== 'area';
     },
 
     missingLangs() {

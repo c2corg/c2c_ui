@@ -5,7 +5,7 @@
     </h2>
 
     <div
-      v-for="child of childs"
+      v-for="child of children"
       :key="child.document.document_id"
       class="columns is-mobile is-gapless document-row has-hover-background"
     >
@@ -109,7 +109,7 @@ export default {
   },
 
   computed: {
-    childs() {
+    children() {
       const uniqueDocuments = new Map();
 
       const append = function (array, status, buttonLabel) {
