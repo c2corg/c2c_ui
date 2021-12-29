@@ -23,15 +23,8 @@ export default {
     return str;
   },
 
-  // from https://github.com/camptocamp/ngeo/blob/master/src/download/service.js#L27
   download(content, fileName, opt_fileType) {
-    // Safari does not properly work with FileSaver. Using the the type 'text/plain'
-    // makes it a least possible to show the file content so that users can
-    // do a manual download with "Save as".
-    // See also: https://github.com/eligrey/FileSaver.js/issues/12
-    const agent = navigator.userAgent;
-    const isSafari = agent.indexOf('Safari') !== -1 && agent.indexOf('Chrome') === -1;
-    const fileType = opt_fileType !== undefined && !isSafari ? opt_fileType : 'text/plain;charset=utf-8';
+    const fileType = opt_fileType ?? 'text/plain;charset=utf-8';
     const blob = new Blob([content], { type: fileType });
 
     saveAs(blob, fileName);
