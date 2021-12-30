@@ -18,6 +18,11 @@ export default {
         return false;
       }
 
+      // cannot associated routes to climbing indoor
+      if (parent.type === 'r' && child.type === 'w' && child.waypoint_type === 'climbing_indoor') {
+        return false; // TODO API: climbing indoor cannot be associated to routes
+      }
+
       // moderator can always add
       if (this.$user.isModerator) {
         return true;
@@ -33,15 +38,15 @@ export default {
       }
 
       if (child.type === 'a' && child.article_type === 'personal') {
-        return false; // TODO API : if user is article owner, he can => add author in response
+        return false; // TODO API: if user is article owner, he can => add author in response
       }
 
       if (child.type === 'x') {
-        return false; // TODO API : if user is xreport owner, he can => add author in response
+        return false; // TODO API: if user is xreport owner, he can => add author in response
       }
 
       if (child.type === 'i') {
-        return true; // TODO API : add image_type (collab), and author
+        return true; // TODO API: add image_type (collab), and author
       }
 
       return true;
