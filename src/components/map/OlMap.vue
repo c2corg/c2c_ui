@@ -122,6 +122,7 @@ import {
 
 import BiodivSportsService from '@/js/apis/BiodivSportsService';
 import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
+import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
@@ -286,7 +287,7 @@ export default {
 
   computed: {
     editable() {
-      return this.editedDocument !== null;
+      return !!this.editedDocument;
     },
 
     urlValue: {
@@ -883,7 +884,7 @@ export default {
       return this.view.calculateExtent().map(Math.round);
     },
 
-    fitMapToDocuments(force) {
+    async fitMapToDocuments(force) {
       if ((this.filterDocumentsWithMap || this.editable) && !force) {
         return this.view.calculateExtent().map(Math.round);
       }
@@ -894,6 +895,18 @@ export default {
 
       for (const layer of [this.editionLayer, this.documentsLayer, this.waypointsLayer]) {
         ol.extent.extend(extent, layer.getSource().getExtent());
+      }
+
+      if (extent.filter(isFinite).length !== 4 && this.$route.query.a) {
+        // compute extent for area(s)
+        const areas = await Promise.all(this.$route.query.a.split(',').map(async (area) => await c2c.area.get(area)));
+        extent = areas
+          .flatMap((response) =>
+            geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail)).getPolygons()
+          )
+          .flatMap((polygon) => polygon.getCoordinates())
+          .map((coords) => ol.extent.boundingExtent(coords))
+          .reduce((acc, extent) => ol.extent.extend(acc, extent));
       }
 
       if (extent.filter(isFinite).length !== 4) {
