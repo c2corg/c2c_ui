@@ -97,6 +97,8 @@
     },
     "Contribute to maintainance": "Help local actors",
     "Crag climbing gear": "Crag climbing",
+    "Current map view is too large. Please zoom to level": "Current map views is too large. Please zoom to level",
+    "Danger:": "Danger :",
     "Delete this locale": "Delete this linguistic version",
     "Describe access": "Describe the access",
     "Describe here your issue": "Describe your issue here",
@@ -113,6 +115,7 @@
     "Easy snow ice mixed gear": "Alpine snow, ice and mixed climbing from F to PD+",
     "Edit a document": "Edit document",
     "Everything about ratings : difficulties, exposition...": "Fill in all ratings and grades of the route (difficulties, exposure...)",
+    "Full bulletin:": "Full bulletin :",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Have you (re) evaluated the risks at each change in the situation?\nWhat factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the group, etc.",
     "Hiking gear": "Summer hiking",
     "Home page feed parameters": "Homepage feed parameters",
@@ -150,6 +153,7 @@
     "Only document less than 24h old can be deleted": {
       "API message": "Only recent documents (less than 24h old) can be deleted. Please contact moderators to delete this document."
     },
+    "Orientations:": "Orientations :",
     "Oups! Something went wrong with forum. Here is the message :": "Oops! Something went wrong with forum. Here is the message:",
     "Oups! something went wrong...": "Oops! something went wrong...",
     "Outing": "Route",
@@ -225,6 +229,7 @@
     "admin_limits": {
       "area_types": "adminitrative limits"
     },
+    "after:": "after :",
     "age": "Age",
     "aid_rating": "Aid rating",
     "alpine_climbing": {
@@ -734,6 +739,7 @@
     "summary": "Summary",
     "supervision": "Supervision",
     "text to display": "display text",
+    "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "This is a preview. Geometry is not simplified yet. Map interactions and export are disabled.",
     "time_management": "Time management",
     "timing": "Timing",
     "title": "Title",
