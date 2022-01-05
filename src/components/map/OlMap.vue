@@ -272,7 +272,7 @@ export default {
 
       biodivData: {},
       swissProtectionAreaData: { properties: {} },
-      protectionAreasVisible: this.showProtectionAreas && !this.editable,
+      protectionAreasVisible: this.showProtectionAreas && !this.editedDocument,
       hasProtectionAreas: null,
 
       // on editable mode, there a button reset
