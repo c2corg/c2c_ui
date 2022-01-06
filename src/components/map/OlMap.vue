@@ -898,7 +898,7 @@ export default {
       }
 
       const a = this.$route.query.a;
-      if (extent.filter(isFinite).length !== 4 && ta) {
+      if (extent.filter(isFinite).length !== 4 && a) {
         // compute extent for area(s)
         const areas = await Promise.all(
           (Array.isArray(a) ? a.map((area) => area.toString()) : a.toString().split(',')).map(
