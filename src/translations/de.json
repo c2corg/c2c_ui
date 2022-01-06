@@ -268,7 +268,7 @@
     "Elevation (m)": "Höhe (m)",
     "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
     "Expand": "Entfalten",
-    "Expert": "Experte",
+    "Expert": "Profi",
     "Export": "Exportieren",
     "Export route": "Route exportieren",
     "Export to CSV": "Exportieren als CSV",
@@ -494,7 +494,7 @@
     "Precise location of the event.": "Genaues Ort des Ereignis",
     "Press enter to select": "Drücken Sie die Eingabetaste, um auszuwählen",
     "Preview": "Vorschau",
-    "Professional Reduction Method": "Professionelle Reduktionsmethode",
+    "Professional Reduction Method": "Profi-Reduktionsmethode",
     "Protect document": "Dokument schützen",
     "Protection area:": "Schutzgebiet:",
     "Protection areas": "Schutzgebiete",
@@ -1030,7 +1030,7 @@
       "article_categories": "Expeditionen"
     },
     "expert": {
-      "autonomies": "Experte"
+      "autonomies": "Profis"
     },
     "exposed": {
       "rain_proof_types": "ausgesetzt"
