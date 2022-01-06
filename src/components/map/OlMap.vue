@@ -897,9 +897,14 @@ export default {
         ol.extent.extend(extent, layer.getSource().getExtent());
       }
 
-      if (extent.filter(isFinite).length !== 4 && this.$route.query.a) {
+      const a = this.$route.query.a;
+      if (extent.filter(isFinite).length !== 4 && ta) {
         // compute extent for area(s)
-        const areas = await Promise.all(this.$route.query.a.split(',').map(async (area) => await c2c.area.get(area)));
+        const areas = await Promise.all(
+          (Array.isArray(a) ? a.map((area) => area.toString()) : a.toString().split(',')).map(
+            async (area) => await c2c.area.get(area)
+          )
+        );
         extent = areas
           .flatMap((response) =>
             geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail)).getPolygons()
