@@ -117,6 +117,7 @@ import {
   getDocumentLineStyle,
   getDocumentPointStyle,
   getElevationProfileMarkerStyle,
+  isFiniteExtent,
   swissExtent,
 } from './map-utils';
 
@@ -897,27 +898,48 @@ export default {
         ol.extent.extend(extent, layer.getSource().getExtent());
       }
 
-      const a = this.$route.query.a;
-      if (extent.filter(isFinite).length !== 4 && a) {
+      if (!isFiniteExtent(extent)) {
+        const a = this.$route.query.a;
         // compute extent for area(s)
-        const areas = await Promise.all(
-          (Array.isArray(a) ? a.map((area) => area.toString()) : a.toString().split(',')).map(
-            async (area) => await c2c.area.get(area)
-          )
-        );
-        extent = areas
-          .flatMap((response) =>
-            geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail)).getPolygons()
-          )
-          .flatMap((polygon) => polygon.getCoordinates())
-          .map((coords) => ol.extent.boundingExtent(coords))
-          .reduce((acc, extent) => ol.extent.extend(acc, extent));
-      }
+        if (a) {
+          const areas = await Promise.all(
+            (Array.isArray(a) ? a.map((area) => area.toString()) : a.toString().split(',')).map(
+              async (area) => await c2c.area.get(area)
+            )
+          );
+          extent = areas
+            .flatMap((response) =>
+              geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail)).getPolygons()
+            )
+            .flatMap((polygon) => polygon.getCoordinates())
+            .map((coords) => ol.extent.boundingExtent(coords))
+            .reduce((acc, ext) => ol.extent.extend(acc, ext));
+        }
 
-      if (extent.filter(isFinite).length !== 4) {
-        // if there is infinity, default extent
-        // TODO need to be current extent if it exists ...
-        extent = DEFAULT_EXTENT;
+        // add extent for waypoint
+        const w = this.$route.query.w;
+        if (w) {
+          const waypoints = await Promise.all(
+            (Array.isArray(w) ? w.map((wpt) => wpt.toString()) : w.toString().split(',')).map(
+              async (wpt) => await c2c.waypoint.get(wpt)
+            )
+          );
+          extent = waypoints
+            .map((response) => response.data.geometry?.geom)
+            .filter((geom) => !!geom)
+            .map((geom) => geoJSONFormat.readFeatures(geom)[0])
+            .map((point) => ol.extent.buffer(point.getGeometry().getExtent(), 10000))
+            .reduce(
+              (acc, ext) => ol.extent.extend(acc, ext),
+              isFiniteExtent(extent) ? extent : ol.extent.createEmpty()
+            );
+        }
+
+        if (!isFiniteExtent(extent)) {
+          // if there is infinity, default extent
+          // TODO need to be current extent if it exists ...
+          extent = DEFAULT_EXTENT;
+        }
       }
 
       return this.fit(extent);
