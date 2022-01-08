@@ -273,7 +273,7 @@ export default {
         },
       };
 
-      if (this.document.geometry && this.document.geometry.geom) {
+      if (this.document.geometry?.geom) {
         const point = GeoJSON.readFeatures(this.document.geometry.geom)[0];
         const extent = ol.extent.buffer(point.getGeometry().getExtent(), 10000);
 
