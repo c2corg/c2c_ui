@@ -49,6 +49,17 @@
             </div>
           </div>
         </div>
+
+        <div class="box">
+          <h3 class="title is-3">
+            <icon-route />
+            Contenu de qualité
+          </h3>
+          <loading-notification :promise="routesPromise" />
+          <div v-if="routes != null">
+            <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
+          </div>
+        </div>
       </div>
 
       <div class="column is-5">
@@ -59,7 +70,7 @@
               {{ $gettext('Forum') }}
             </router-link>
           </h3>
-          <forum-widget :message-count="20" />
+          <forum-widget :message-count="10" />
         </div>
 
         <div class="box">
@@ -74,12 +85,43 @@
             <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
           </div>
         </div>
+
+        <div class="box">
+          <h3 class="title is-3">
+            <router-link to="articles">
+              <icon-article />
+              {{ $gettext('articles') | uppercaseFirstLetter }}
+            </router-link>
+          </h3>
+          <loading-notification :promise="articlesPromise" />
+          <div v-if="articles != null">
+            <dashboard-article-link
+              v-for="article of articles.documents"
+              :key="article.document_id"
+              :article="article"
+            />
+          </div>
+        </div>
+
+        <div class="box">
+          <h3 class="title is-3">Liens utiles</h3>
+          <div>
+            <p>
+              <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate
+                >Préparer sa course</router-link
+              >
+            </p>
+            <p><router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link></p>
+            <p>Fil d'actualités</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import DashboardArticleLink from './utils/DashboardArticleLink';
 import DashboardOutingLink from './utils/DashboardOutingLink';
 import DashboardRouteLink from './utils/DashboardRouteLink';
 import ForumWidget from './utils/ForumWidget';
@@ -91,6 +133,7 @@ export default {
   name: 'DashboardView',
 
   components: {
+    DashboardArticleLink,
     DashboardOutingLink,
     DashboardRouteLink,
     ForumWidget,
@@ -102,6 +145,7 @@ export default {
       enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
       outingsPromise: null,
       routesPromise: null,
+      articlesPromise: null,
       imagesPromise: null,
     };
   },
@@ -117,6 +161,10 @@ export default {
 
     routes() {
       return this.routesPromise.data;
+    },
+
+    articles() {
+      return this.articlesPromise.data;
     },
 
     outingsByDate() {
@@ -141,7 +189,8 @@ export default {
 
   created() {
     this.loadOutings();
-    this.routesPromise = c2c.route.getAll({ limit: 10 });
+    this.routesPromise = c2c.route.getAll({ limit: 5 });
+    this.articlesPromise = c2c.article.getAll({ limit: 5 });
     this.imagesPromise = c2c.image.getAll();
   },
 
@@ -157,7 +206,7 @@ export default {
     },
 
     loadOutingsWithQuery(query = {}) {
-      query.limit = 30;
+      query.limit = 20;
       this.outingsPromise = c2c.outing.getAll(query);
     },
 
