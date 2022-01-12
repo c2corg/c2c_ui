@@ -1,21 +1,37 @@
 <template>
   <div class="section">
     <html-header title="Dashboard" />
-    <div class="box">
-      <h3 class="title is-3">
-        <router-link to="images">
-          <icon-image />
-          {{ $gettext('images') | uppercaseFirstLetter }}
-        </router-link>
-      </h3>
-      <div class="images-container">
-        <loading-notification :promise="imagesPromise" />
-        <gallery v-if="images != null" :images="images.documents" />
-      </div>
-    </div>
 
     <div class="columns">
       <div class="column is-7">
+        <div class="box">
+          <h3 class="title is-3">
+            <span>Camptocamp Association</span>
+            <fa-icon
+              class="is-size-6 is-pulled-right has-cursor-pointer no-print"
+              icon="angle-down"
+              :rotation="visible ? undefined : 180"
+              @click="visible = !visible"
+            />
+          </h3>
+          <div v-show="visible">
+            <p>
+              Camptocamp.org est un site communautaire dédié aux sports de montagne. Vous y trouverez un
+              <router-link to="topoguide">topoguide</router-link>,
+              <router-link
+                :to="{ name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } }"
+                >des sorties</router-link
+              >, des articles, des forums, un album...
+            </p>
+            <p>
+              Campotocamp.org est géré par une
+              <router-link :to="{ name: 'article', params: { id: 106726 } }">association</router-link> à but non
+              lucratif, qui a fait le choix de contenus sous licences libres. N'hésitez pas à vous inscrire et à
+              contribuer !
+            </p>
+          </div>
+        </div>
+
         <div class="box">
           <span v-if="$user.isLogged" class="is-pulled-right is-size-4">
             <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
@@ -52,17 +68,34 @@
 
         <div class="box">
           <h3 class="title is-3">
-            <icon-route />
+            <fa-icon icon="star" /><fa-icon icon="star" /><fa-icon icon="star" />
             Contenu de qualité
           </h3>
-          <loading-notification :promise="routesPromise" />
-          <div v-if="routes != null">
-            <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
+          <loading-notification :promise="articlesPromise" />
+          <div v-if="articles != null">
+            <dashboard-article-link
+              v-for="article of articles.documents"
+              :key="article.document_id"
+              :article="article"
+            />
           </div>
         </div>
       </div>
 
       <div class="column is-5">
+        <div class="box">
+          <h3 class="title is-3">
+            <router-link to="images">
+              <icon-image />
+              {{ $gettext('images') | uppercaseFirstLetter }}
+            </router-link>
+          </h3>
+          <div class="images-container">
+            <loading-notification :promise="imagesPromise" />
+            <gallery v-if="images != null" :images="images.documents" />
+          </div>
+        </div>
+
         <div class="box">
           <h3 class="title is-3">
             <router-link to="forum">
@@ -71,6 +104,20 @@
             </router-link>
           </h3>
           <forum-widget :message-count="10" />
+        </div>
+
+        <div class="box">
+          <h3 class="title is-3">Liens utiles</h3>
+          <div>
+            <p>Fil d'actualités</p>
+            <p>
+              <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate
+                >Préparer sa course</router-link
+              >
+            </p>
+            <p><router-link :to="{ name: 'yeti' }" v-translate>yeti</router-link></p>
+            <a href="https://www.metaskirando.ovh/" title="Metaskirando">Metaskirando</a>
+          </div>
         </div>
 
         <div class="box">
@@ -100,19 +147,6 @@
               :key="article.document_id"
               :article="article"
             />
-          </div>
-        </div>
-
-        <div class="box">
-          <h3 class="title is-3">Liens utiles</h3>
-          <div>
-            <p>
-              <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate
-                >Préparer sa course</router-link
-              >
-            </p>
-            <p><router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link></p>
-            <p>Fil d'actualités</p>
           </div>
         </div>
       </div>
@@ -147,6 +181,7 @@ export default {
       routesPromise: null,
       articlesPromise: null,
       imagesPromise: null,
+      visible: true,
     };
   },
 
@@ -189,7 +224,7 @@ export default {
 
   created() {
     this.loadOutings();
-    this.routesPromise = c2c.route.getAll({ limit: 5 });
+    this.routesPromise = c2c.route.getAll({ limit: 7 });
     this.articlesPromise = c2c.article.getAll({ limit: 5 });
     this.imagesPromise = c2c.image.getAll();
   },
@@ -206,7 +241,7 @@ export default {
     },
 
     loadOutingsWithQuery(query = {}) {
-      query.limit = 20;
+      query.limit = 30;
       this.outingsPromise = c2c.outing.getAll(query);
     },
 
