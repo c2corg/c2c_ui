@@ -90,7 +90,7 @@
         </div>
         <div class="column">
           <a
-            href="https://www.helloasso.com/associations/camptocamp-association/formulaires/2"
+            href="https://www.helloasso.com/associations/camptocamp-association/"
             :title="$gettext('Donate')"
           >
             <fa-icon icon="heart" class="donate-icon" />
