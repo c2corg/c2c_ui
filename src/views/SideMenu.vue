@@ -89,7 +89,12 @@
           </a>
         </div>
         <div class="column">
-          <a href="https://www.helloasso.com/associations/camptocamp-association/" :title="$gettext('Donate')">
+          <a href="https://www.youtube.com/channel/UCllJ4-Ab7A0ZoqlAOAJtnCw" :title="$gettext('Youtube')">
+            <fa-icon :icon="['fab', 'youtube']" class="youtube-icon" />
+          </a>
+        </div>
+        <div class="column">
+          <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
             <fa-icon icon="heart" class="donate-icon" />
           </a>
         </div>
@@ -206,12 +211,17 @@ aside {
 
   .instagram-icon,
   .facebook-icon,
-  .donate-icon {
+  .donate-icon,
+  .youtube-icon {
     font-size: 30px;
   }
 
   .facebook-icon {
     color: #6d8bc9; //facebook color
+  }
+
+  .youtube-icon {
+    color: #f00; // youtube color
   }
 
   .donate-icon {
@@ -221,12 +231,6 @@ aside {
     }
   }
 }
-
-// @media screen and (max-height: 645px){
-//     .menu-ad {
-//         display:none!important;
-//     }
-// }
 
 @media screen and (max-height: 680px) {
   .menu-socials {

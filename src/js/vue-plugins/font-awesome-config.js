@@ -3,6 +3,7 @@ import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons/faCreative
 import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
+import { faYoutube } from '@fortawesome/free-brands-svg-icons/faYoutube';
 import { faCircle as faCircleRegular } from '@fortawesome/free-regular-svg-icons/faCircle';
 import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
@@ -338,7 +339,8 @@ export default function install(Vue) {
     faCreativeCommons,
     faFacebook,
     faGoogle,
-    faInstagram
+    faInstagram,
+    faYoutube
   );
 
   Vue.component('FaIcon', FontAwesomeIcon);
