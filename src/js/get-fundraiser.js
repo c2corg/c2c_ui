@@ -140,6 +140,15 @@ const mapping = {
     // Tasmania
     url: 'http://www.thesarvo.com/confluence/display/cctpublic/Home',
   },
+  1378407: {
+    // New South Wales (SydneyRockies)
+    url: 'https://sydneyrockies.org.au/rebolting/',
+  },
+  1379810: {
+    // Western Australia
+    url: 'https://www.climberswa.asn.au/cawa/bolting-fund/',
+  },
+  
 
   // Others
   14151: {
