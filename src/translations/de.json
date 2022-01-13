@@ -912,8 +912,8 @@
     "contact": "Kontakt",
     "contributor": "Beiträger",
     "copyright": {
-      "$$noContext": "Copyright",
-      "image_types": "Copyright"
+      "$$noContext": "Urheberrecht",
+      "image_types": "Urheberrecht"
     },
     "corridor": {
       "route_configuration_types": "Rinne"
