@@ -364,6 +364,7 @@
     "Skiability": "Esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "Pendientes",
+    "Sort by": "Ordenar por",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
@@ -451,7 +452,7 @@
     "article_categories": "categorías de artículos",
     "article_type": "Tipo de artículo",
     "articles": "artículos",
-    "ascending sort": "Seleccion creciente",
+    "ascending sort": "clasificación ascendente",
     "association": {
       "article_categories": "asociación"
     },
@@ -635,7 +636,7 @@
     "de": {
       "langs": "alemán"
     },
-    "descending sort": "clasificacion por orden decreciente",
+    "descending sort": "clasificación descendente",
     "descent": {
       "image_categories": "descenso"
     },

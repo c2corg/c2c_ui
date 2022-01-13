@@ -791,6 +791,10 @@
     },
     "contact": "Contact",
     "contributor": "contributeur",
+    "copyright": {
+      "$$noContext": "droit d'auteur",
+      "image_types": "droit d'auteur"
+    },
     "corridor": {
       "route_configuration_types": "couloir"
     },
