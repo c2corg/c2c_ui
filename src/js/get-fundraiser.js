@@ -115,8 +115,22 @@ const mapping = {
     // British Columbia
     url: 'https://access-society.ca/Donate',
   },
-
-  // UK Boltfund
+  
+  // Australia
+  1274261: {
+    // Tasmania
+    url: 'http://www.thesarvo.com/confluence/display/cctpublic/Home',
+  },
+  1378407: {
+    // New South Wales (SydneyRockies)
+    url: 'https://sydneyrockies.org.au/rebolting/',
+  },
+  1379810: {
+    // Western Australia
+    url: 'https://www.climberswa.asn.au/cawa/bolting-fund/',
+  },
+  
+// UK Boltfund
   1203403: {
     // Peak District
     url: 'http://thepeakboltfund.blogspot.com/',
@@ -135,20 +149,11 @@ const mapping = {
     url: 'https://www.7amax.co.uk/',
   },
 
-  // Australia
-  1274261: {
-    // Tasmania
-    url: 'http://www.thesarvo.com/confluence/display/cctpublic/Home',
+  // South Africa
+  1381796: {
+    //Western Cape
+    url: 'https://www.climbing.co.za/anchor-replacement-fund/',
   },
-  1378407: {
-    // New South Wales (SydneyRockies)
-    url: 'https://sydneyrockies.org.au/rebolting/',
-  },
-  1379810: {
-    // Western Australia
-    url: 'https://www.climberswa.asn.au/cawa/bolting-fund/',
-  },
-  
 
   // Others
   14151: {
