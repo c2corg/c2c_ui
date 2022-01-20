@@ -10,7 +10,7 @@
     </document-view-header>
 
     <div v-if="document" class="columns">
-      <div class="column is-3 no-print">
+      <div class="column is-3">
         <map-box :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
