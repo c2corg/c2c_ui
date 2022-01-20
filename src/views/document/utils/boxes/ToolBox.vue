@@ -1,159 +1,161 @@
 <template>
-  <div class="box no-print">
-    <associated-documents :document="document" />
+  <div class="box">
+    <div class="no-print">
+      <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length">
-      <span v-translate>View in other lang</span>
-      <br />
-      <span class="lang-switcher-box-list">
-        <span v-for="lang of available_langs" :key="lang">
-          <document-link :document="document" :lang="lang">
-            {{ $gettext(lang, 'langs') }}
-          </document-link>
+      <div class="has-text-centered" v-if="isNormalView && available_langs.length">
+        <span v-translate>View in other lang</span>
+        <br />
+        <span class="lang-switcher-box-list">
+          <span v-for="lang of available_langs" :key="lang">
+            <document-link :document="document" :lang="lang">
+              {{ $gettext(lang, 'langs') }}
+            </document-link>
+          </span>
         </span>
-      </span>
-      <hr />
-    </div>
+        <hr />
+      </div>
 
-    <tool-box-button
-      v-if="shouldAddWheatherLink"
-      :href="linkToMeteoBlue"
-      :label="$gettext('Weather forecast (meteoblue)')"
-      icon="sun"
-    />
-
-    <tool-box-button
-      v-if="shouldAddDirections"
-      :href="linkToGoogleMapsDirections"
-      :label="$gettext('Directions (Google Maps)')"
-      icon="directions"
-    />
-
-    <tool-box-button
-      v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
-      :to="linkToClosestDocuments"
-      :label="$gettext('See other documents nearby')"
-      icon="compass"
-    />
-
-    <tool-box-button
-      v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
-      :to="linkToParaglidingOutings"
-      :label="$gettext('Paragliding outings')"
-      :icon="['miscs', 'paragliding']"
-    />
-
-    <tool-box-button
-      v-if="fundraiser"
-      :label="$gettext('Contribute to maintainance')"
-      :href="fundraiser.url"
-      icon-class="has-text-danger"
-      :icon="['miscs', 'drill']"
-    />
-
-    <tool-box-button
-      v-if="documentType === 'profile'"
-      :to="{ name: 'outings', query: { u: document.document_id } }"
-      :label="$gettext('outings')"
-    >
-      <icon-outing slot="icon" />
-    </tool-box-button>
-
-    <tool-box-button
-      v-if="documentType === 'profile'"
-      :to="{ name: 'outings-stats', query: { u: document.document_id } }"
-      :label="$gettext('Statistics')"
-      icon="chart-bar"
-    />
-
-    <hr />
-
-    <tool-box-button
-      v-if="documentType === 'profile'"
-      :to="{ name: 'whatsnew', query: { u: document.document_id } }"
-      :label="$gettext('Contributions')"
-      rel="nofollow"
-      icon="edit"
-    />
-
-    <div class="quality" v-if="quality">
-      <icon-quality :quality="quality.value"></icon-quality>
-      <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
-    </div>
-
-    <tool-box-button
-      v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
-      :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
-      :label="$gettext('History')"
-      rel="nofollow"
-      icon="history"
-    />
-
-    <tool-box-button
-      v-if="isEditable && showAssociationEditor"
-      @click="$refs.associationsWindow.show()"
-      icon="link"
-      :label="$gettext('Edit associations')"
-    />
-
-    <tool-box-button
-      v-if="isEditable && hasMissingLangs"
-      @click="$refs.translateWindow.show()"
-      icon="globe"
-      :label="$gettext('Translate into an other lang')"
-    />
-
-    <tool-box-button
-      :href="`mailto:${$options.reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
-      :icon="['fas', 'exclamation-circle']"
-      icon-class="has-text-danger"
-      :label="$gettext('Report an issue')"
-    />
-
-    <hr />
-
-    <!-- Moderator zone -->
-    <template v-if="isEditable && $user.isModerator">
       <tool-box-button
-        v-if="documentType !== 'profile'"
-        @click="lockDocumentAction"
-        :icon="document.protected ? 'lock' : 'unlock'"
-        :class="document.protected ? 'lock-button-red' : 'lock-button-green'"
-        :label="document.protected ? $gettext('Unprotect document') : $gettext('Protect document')"
+        v-if="shouldAddWheatherLink"
+        :href="linkToMeteoBlue"
+        :label="$gettext('Weather forecast (meteoblue)')"
+        icon="sun"
       />
 
       <tool-box-button
-        v-if="documentType !== 'profile'"
-        @click="$refs.MergeDocumentWindow.show()"
-        icon="object-group"
-        :label="$gettext('Merge with other document')"
+        v-if="shouldAddDirections"
+        :href="linkToGoogleMapsDirections"
+        :label="$gettext('Directions (Google Maps)')"
+        icon="directions"
+      />
+
+      <tool-box-button
+        v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
+        :to="linkToClosestDocuments"
+        :label="$gettext('See other documents nearby')"
+        icon="compass"
+      />
+
+      <tool-box-button
+        v-if="document.type === 'w' && document.waypoint_type === 'paragliding_takeoff'"
+        :to="linkToParaglidingOutings"
+        :label="$gettext('Paragliding outings')"
+        :icon="['miscs', 'paragliding']"
+      />
+
+      <tool-box-button
+        v-if="fundraiser"
+        :label="$gettext('Contribute to maintainance')"
+        :href="fundraiser.url"
+        icon-class="has-text-danger"
+        :icon="['miscs', 'drill']"
       />
 
       <tool-box-button
         v-if="documentType === 'profile'"
-        @click="lockAccountAction"
-        icon="user-lock"
-        :class="{ 'lock-button-red': isAccountBlocked }"
-        :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')"
-      />
-    </template>
-
-    <template v-if="isDeletable">
-      <tool-box-button
-        v-if="document.available_langs.length > 1"
-        @click="$refs.DeleteLocaleWindow.show()"
-        :icon="['fas', 'trash']"
-        :label="$gettext('Delete this locale')"
-      />
+        :to="{ name: 'outings', query: { u: document.document_id } }"
+        :label="$gettext('outings')"
+      >
+        <icon-outing slot="icon" />
+      </tool-box-button>
 
       <tool-box-button
-        @click="$refs.deleteDocumentWindow.show()"
-        :icon="['fas', 'trash']"
-        :label="$gettext('Delete this document')"
+        v-if="documentType === 'profile'"
+        :to="{ name: 'outings-stats', query: { u: document.document_id } }"
+        :label="$gettext('Statistics')"
+        icon="chart-bar"
       />
-    </template>
 
-    <hr v-if="isDeletable || (isEditable && $user.isModerator)" />
+      <hr />
+
+      <tool-box-button
+        v-if="documentType === 'profile'"
+        :to="{ name: 'whatsnew', query: { u: document.document_id } }"
+        :label="$gettext('Contributions')"
+        rel="nofollow"
+        icon="edit"
+      />
+
+      <div class="quality" v-if="quality">
+        <icon-quality :quality="quality.value"></icon-quality>
+        <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
+      </div>
+
+      <tool-box-button
+        v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
+        :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
+        :label="$gettext('History')"
+        rel="nofollow"
+        icon="history"
+      />
+
+      <tool-box-button
+        v-if="isEditable && showAssociationEditor"
+        @click="$refs.associationsWindow.show()"
+        icon="link"
+        :label="$gettext('Edit associations')"
+      />
+
+      <tool-box-button
+        v-if="isEditable && hasMissingLangs"
+        @click="$refs.translateWindow.show()"
+        icon="globe"
+        :label="$gettext('Translate into an other lang')"
+      />
+
+      <tool-box-button
+        :href="`mailto:${$options.reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
+        :icon="['fas', 'exclamation-circle']"
+        icon-class="has-text-danger"
+        :label="$gettext('Report an issue')"
+      />
+
+      <hr />
+
+      <!-- Moderator zone -->
+      <template v-if="isEditable && $user.isModerator">
+        <tool-box-button
+          v-if="documentType !== 'profile'"
+          @click="lockDocumentAction"
+          :icon="document.protected ? 'lock' : 'unlock'"
+          :class="document.protected ? 'lock-button-red' : 'lock-button-green'"
+          :label="document.protected ? $gettext('Unprotect document') : $gettext('Protect document')"
+        />
+
+        <tool-box-button
+          v-if="documentType !== 'profile'"
+          @click="$refs.MergeDocumentWindow.show()"
+          icon="object-group"
+          :label="$gettext('Merge with other document')"
+        />
+
+        <tool-box-button
+          v-if="documentType === 'profile'"
+          @click="lockAccountAction"
+          icon="user-lock"
+          :class="{ 'lock-button-red': isAccountBlocked }"
+          :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')"
+        />
+      </template>
+
+      <template v-if="isDeletable">
+        <tool-box-button
+          v-if="document.available_langs.length > 1"
+          @click="$refs.DeleteLocaleWindow.show()"
+          :icon="['fas', 'trash']"
+          :label="$gettext('Delete this locale')"
+        />
+
+        <tool-box-button
+          @click="$refs.deleteDocumentWindow.show()"
+          :icon="['fas', 'trash']"
+          :label="$gettext('Delete this document')"
+        />
+      </template>
+
+      <hr v-if="isDeletable || (isEditable && $user.isModerator)" />
+    </div>
 
     <license-box :document="document" />
 
