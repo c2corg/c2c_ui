@@ -3,7 +3,7 @@
     <loading-notification :promise="promise" />
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
-      <div class="column is-3 no-print">
+      <div class="column is-3">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
