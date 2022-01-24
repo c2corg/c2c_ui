@@ -148,7 +148,6 @@ const mapping = {
     // Western Australia
     url: 'https://www.climberswa.asn.au/cawa/bolting-fund/',
   },
-  
 
   // Others
   14151: {

@@ -300,8 +300,8 @@ export default {
       }
     },
 
-    fitMapToDocuments() {
-      this.bbox = this.$refs.mapInput.fitMapToDocuments();
+    async fitMapToDocuments() {
+      this.bbox = await this.$refs.mapInput.fitMapToDocuments();
     },
 
     updateRoutes(reason, fitMap) {
