@@ -267,8 +267,8 @@ export default {
     'document.geometry.geom_detail': function (to, from) {
       if (from === null && to !== null) {
         this.possibleRoutes = null;
-        this.$nextTick(() => {
-          this.fitMapToDocuments();
+        this.$nextTick(async () => {
+          await this.fitMapToDocuments();
           this.updateRoutes();
         });
       }
@@ -300,8 +300,8 @@ export default {
       }
     },
 
-    fitMapToDocuments() {
-      this.bbox = this.$refs.mapInput.fitMapToDocuments();
+    async fitMapToDocuments() {
+      this.bbox = await this.$refs.mapInput.fitMapToDocuments();
     },
 
     updateRoutes(reason, fitMap) {
@@ -368,10 +368,10 @@ export default {
         if (routes.length === 1) {
           this.possibleRoutes = [];
 
-          this.$nextTick(() => {
+          this.$nextTick(async () => {
             // for first association, force the localization to be the route localization
             this.$documentUtils.propagateProperties(this.document, route);
-            this.fitMapToDocuments();
+            await this.fitMapToDocuments();
             this.updateRoutes('First route', false);
           });
         } else {
