@@ -389,7 +389,9 @@ export default {
       let ticksCount = Math.round(width / 40);
       ticksCount = ticksCount < 8 ? ticksCount : null;
       this.x1Axis.ticks(ticksCount);
-      this.x2Axis.ticks(ticksCount);
+      if (this.timeAvailable) {
+        this.x2Axis.ticks(ticksCount);
+      }
     },
 
     toggleFullScreenProfile() {
