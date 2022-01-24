@@ -61,14 +61,14 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-      - name: Get the branch
-        id: get_branch
-        run: echo ::set-output name=BRANCH::${GITHUB_REF/refs\/heads\//}
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v5.1
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
         env:
-          BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
+          BRANCH: ${{ steps.branch-name.outputs.current_branch }}
       - name: Build for github pages
         run: npm run build:github
         env:
@@ -85,14 +85,14 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: github-pages
     steps:
-      - name: Get the branch
-        id: get_branch
-        run: echo ::set-output name=BRANCH::${GITHUB_REF/refs\/heads\//}
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v5.1
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
         env:
-          BRANCH: ${{ steps.get_branch.outputs.BRANCH }}
+          BRANCH: ${{ steps.branch-name.outputs.current_branch }}
       - name: Checkout repository
         uses: actions/checkout@v2.4.0
         with:
@@ -109,7 +109,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add .
-          git commit -m "Deploy ${{ steps.get_branch.outputs.BRANCH }} branch"
+          git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
