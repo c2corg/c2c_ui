@@ -395,6 +395,8 @@
     <span v-translate translate-context="langs">es</span>
     <span v-translate translate-context="langs">ca</span>
     <span v-translate translate-context="langs">eu</span>
+    <span v-translate translate-context="langs">zh</span>
+    <span v-translate translate-context="langs">sl</span>
     <!-- lift_status -->
     <span v-translate translate-context="lift_status">open</span>
     <span v-translate translate-context="lift_status">closed</span>

@@ -49,6 +49,8 @@ CamptocampApi.prototype.getApiLang = function (lang) {
 
   if (lang === 'zh_CN') {
     return 'zh';
+  } else if (lang === 'sl') {
+    return 'en';
   } else {
     return lang;
   }
