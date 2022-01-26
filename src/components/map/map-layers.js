@@ -244,7 +244,7 @@ export const dataLayers = function () {
   const ignSlopes = createIgnFrSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', '20160101');
+  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
   swissSlopes.setOpacity(0.4);
 
   return [ignSlopes, swissSlopes];
