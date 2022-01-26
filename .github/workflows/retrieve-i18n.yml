@@ -25,6 +25,6 @@ jobs:
           transifex_project: c2corg_ui
           transifex_resource: main
           output: src/translations
-          locales: fr, en, es, eu, de, it, ca, zh_CN, ru
+          locales: fr, en, es, eu, de, it, ca, zh_CN, ru, sl
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: transifex/i18n
