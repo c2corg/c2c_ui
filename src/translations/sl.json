@@ -533,7 +533,7 @@
     "Small group with load shedding distance": "Mala skupina z razbremenitveno razdaljo",
     "Small group without distance": "Mala skupina brez razbremenitvene razdalje",
     "Social cookies": "Družbeni piškotki",
-    "Soft mobility outing": "Izlet z mehkim dostopom",
+    "Soft mobility outing": "Izlet z mehko mobilnostjo",
     "Sophie Picture Contest": "Foto Natečaj Sophie",
     "Sort by": "Razvrsti po",
     "Source:": "Dokument za združitev (vir): ",
@@ -1487,7 +1487,7 @@
       "rain_proof_types": "zaščiteno pred dežjem"
     },
     "public transportation access": "Dostop z javnim prevozom",
-    "public_transport": "Izlet z mehkim dostopom",
+    "public_transport": "Izlet z mehko mobilnostjo",
     "public_transportation_rating": "Dostopnost z javnim prevozom",
     "public_transportation_types": "Vrsta javnega prevoza",
     "publication_date": "Datum izida",
@@ -1665,7 +1665,7 @@
     },
     "soft snow": "Mehak sneg",
     "soft_mobility": {
-      "article_categories": "mehki dostop"
+      "article_categories": "mehka mobilnost"
     },
     "some": {
       "frequentation_types": "malo obljudeno"
