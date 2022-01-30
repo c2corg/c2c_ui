@@ -127,6 +127,7 @@
     "Conflict: version of locale 'eu' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflict: version of locale 'fr' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflict: version of locale 'it' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
+    "Conflict: version of locale 'zh_CN' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflicting method and danger": "Metoda in stopnja nevarnosti sta nezdružljivi",
     "Contain invalid character(s)": {
       "API message": "Vsebuje enega ali več neveljavnih znakov"
@@ -1416,7 +1417,7 @@
     "phone": "Telefon",
     "phone_custodian": "Telefon oskrbnik/upravitelj",
     "photos-art": {
-      "book_types": "foto-umetnost"
+      "book_types": "fotografija-umetnost"
     },
     "physical_failure": {
       "event_types": "fizična odpoved"
@@ -1508,7 +1509,7 @@
     },
     "ratings": "Ocene",
     "recent_avalanche": {
-      "avalanche_signs": "nedavna sled plazu (po zadnjem sneženju, dežju, vetru ali po otoplitvi)"
+      "avalanche_signs": "nedavna sled plazu (po zadnjem sneženju, dežju, vetru ali otoplitvi)"
     },
     "reduce_impact": "Elementi, ki so omilili posledice dogodka",
     "remarks": "Opombe",
@@ -1603,6 +1604,9 @@
     "skitouring": {
       "activities": "Smučanje, deskanje",
       "event_activities": "Turno smučanje"
+    },
+    "sl": {
+      "langs": "slovenščina"
     },
     "slab": {
       "climbing_styles": "plošča"
@@ -1798,6 +1802,9 @@
       "$$noContext": "da",
       "parking_fee_types": "da"
     },
-    "you need to activate drawing mode": "aktivirajte \"način risanje\""
+    "you need to activate drawing mode": "aktivirajte \"način risanje\"",
+    "zh": {
+      "langs": "kitajščina"
+    }
   }
 }
