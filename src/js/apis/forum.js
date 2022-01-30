@@ -46,7 +46,7 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
 };
 
 Forum.prototype.readAnnouncement = function (lang) {
-  lang = lang === 'zh_CN' ? 'en' : lang;
+  lang = ['zh_CN', 'sl'].includes(lang) ? 'en' : lang;
   return this.get('/t/annonce-' + lang + '.json');
 };
 

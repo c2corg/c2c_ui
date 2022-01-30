@@ -335,6 +335,7 @@ export default {
         // $gettext('Conflict: version of locale \'it\' has changed')
         // $gettext('Conflict: version of locale \'ca\' has changed')
         // $gettext('Conflict: version of locale \'fr\' has changed')
+        // $gettext('Conflict: version of locale \'zh_CN\' has changed')
         // $gettext('Conflict: version of document has changed')
         toast({ message: this.$gettext(`${error.name}: ${error.description}`), type: 'is-danger', position: 'center' });
       } else {
