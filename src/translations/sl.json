@@ -750,12 +750,12 @@
     "average": {
       "condition_ratings": "srednje",
       "snow_quality_ratings": "srednja",
-      "snow_quantity_ratings": "srednja"
+      "snow_quantity_ratings": "srednje"
     },
     "awful": {
       "condition_ratings": "grozne",
       "snow_quality_ratings": "grozna",
-      "snow_quantity_ratings": "grozna"
+      "snow_quantity_ratings": "grozno"
     },
     "basalte": {
       "rock_types": "bazalt"
@@ -980,7 +980,7 @@
     "excellent": {
       "condition_ratings": "odlične",
       "snow_quality_ratings": "odlična",
-      "snow_quantity_ratings": "odlična"
+      "snow_quantity_ratings": "odlično"
     },
     "expedition": {
       "route_types": "odprava"
@@ -1064,7 +1064,7 @@
     "good": {
       "condition_ratings": "dobre",
       "snow_quality_ratings": "dobra",
-      "snow_quantity_ratings": "dobra"
+      "snow_quantity_ratings": "dobro"
     },
     "good service": {
       "public_transportation_ratings": "redni promet"
@@ -1437,7 +1437,7 @@
     "poor": {
       "condition_ratings": "slabe",
       "snow_quality_ratings": "slaba",
-      "snow_quantity_ratings": "slaba"
+      "snow_quantity_ratings": "slabo"
     },
     "poor service": {
       "public_transportation_ratings": "skromnejši javni prevoz"
