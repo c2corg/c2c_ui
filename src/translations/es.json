@@ -116,13 +116,14 @@
     "Confirm": "Confirmar",
     "Confirm delete": "Confirmar eliminación",
     "Conflict: version of document has changed": "Conflicto: la versión del documento ha cambiado ",
-    "Conflict: version of locale 'ca' has changed": "Conflicto: la versión de la configuración local 'ca' ha cambiado",
-    "Conflict: version of locale 'de' has changed": "Conflicto: la versión de la configuración local 'de' ha cambiado",
-    "Conflict: version of locale 'en' has changed": "Conflicto: la versión de la configuración local 'en' ha cambiado",
-    "Conflict: version of locale 'es' has changed": "Conflicto: la versión de la configuración local 'es' ha cambiado",
-    "Conflict: version of locale 'eu' has changed": "Conflicto: la versión de la configuración local 'eu' ha cambiado",
-    "Conflict: version of locale 'fr' has changed": "Conflicto: la versión de la configuración local 'fr' ha cambiado",
-    "Conflict: version of locale 'it' has changed": "Conflicto: la versión de la configuración local 'it' ha cambiado",
+    "Conflict: version of locale 'ca' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'de' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'en' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'es' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'eu' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'fr' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'it' has changed": "Conflicto: la versión del documento ha cambiado",
+    "Conflict: version of locale 'zh_CN' has changed": "Conflicto: la versión del documento ha cambiado",
     "Conflicting method and danger": "Método conflictivo y peligro ",
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
@@ -1310,6 +1311,9 @@
     "yes": {
       "$$noContext": "si",
       "parking_fee_types": "si"
+    },
+    "zh": {
+      "langs": "chinese"
     }
   }
 }

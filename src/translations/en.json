@@ -92,6 +92,7 @@
     "Conflict: version of locale 'eu' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'fr' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'it' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'zh_CN' has changed": "Document has been modified in the meantime and a new version in chinese is available.",
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
     },
@@ -681,6 +682,9 @@
     "skitouring": {
       "event_activities": "Skitouring"
     },
+    "sl": {
+      "langs": "slovene"
+    },
     "slackline_anchor1": "Anchor 1",
     "slackline_anchor2": "Anchor 2",
     "slackline_height": "slackline height",
@@ -782,6 +786,9 @@
     "write a summary": "Write a summary",
     "write your comments": "Write your comments",
     "xreport": "Incident / accident",
-    "xreports": "Incidents / accidents"
+    "xreports": "Incidents / accidents",
+    "zh": {
+      "langs": "chinese"
+    }
   }
 }
