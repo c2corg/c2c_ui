@@ -137,7 +137,7 @@
     "Contribute to maintainance": "Prispevajte k vzdrževanju, pomagajte lokalnim akterjem",
     "Contributions": "Prispevki",
     "Contributor": "Avtor prispevka",
-    "Control the use of your personal data": "Nadzirajte uporabo vaših osebnih podatkov",
+    "Control the use of your personal data": "Nadzirajte uporabo svojih osebnih podatkov",
     "Cookies": "Piškoti",
     "Coup de coeur": {
       "Sophie picture context": "Srce bije"
@@ -169,7 +169,7 @@
       "yeti": "Izbrišite"
     },
     "Delete a line chunk": "Izbrišite del črte",
-    "Delete a point": "Izbriši točko",
+    "Delete a point": "Izbrišite točko",
     "Delete image": "Izbriši sliko",
     "Delete route": "Izbrišite itinerar",
     "Delete this document": "Izbriši ta dokument",
@@ -178,7 +178,7 @@
     "Describe access": "Opišite dostop",
     "Describe access period": "Opiši dostopno obdobje",
     "Describe access restrictions": "Opiši dostopne omejitve",
-    "Describe here the gear needed for this route": "Tukaj navedite posebno opremo, ki jo morate vzeti poleg običajne opreme. Omeniti je treba le \"eksotično\" opremo (v kakovosti ali količini). Primeri neuporabnih omemb: žolna, lopata, sonda, cepin, dereze, ledeniška oprema (zadošča polje \"ledeniška oprema\"), klini in traki brez dodatnih podrobnosti.",
+    "Describe here the gear needed for this route": "Tukaj navedite specifično opremo, ki jo morate vzeti poleg običajne opreme. Omeniti je treba le \"eksotično\" opremo (v kakovosti ali količini). Primeri neuporabnih omemb: žolna, lopata, sonda, cepin, dereze, ledeniška oprema (zadošča polje \"ledeniška oprema\"), klini in traki brez dodatnih podrobnosti.",
     "Describe here the waypoint": "Organizirajte opis s podnaslovi: oznake ##, ###, #### na začetku vrstice.",
     "Describe here your issue": "Tukaj opišite težavo",
     "Describe historical information about the route (date, names..) here": "Tukaj navedite zgodovinske podatke smeri: prvenstveni vzpon (od spodaj) ali opremljanje (z vrha), pomembne ponovitve, prvi spusti na smučeh/deska, preopremljanje, zrušenje itd. Navedite datum, ime protagonistov in društvo ali organizacijo, ki je financiralo opremo, ki je ostalo na mestu.",
@@ -190,7 +190,7 @@
     },
     "Describe pt access": "Opišite dostop do točke",
     "Describe road access": "Opišite cestni dostop in možnosti namestitve, prehrane itd.",
-    "Describe the conditions you encountered during your outing": "Opišite razmere na katere ste naleteli med vzponom",
+    "Describe the conditions you encountered during your outing": "Opišite razmere na katere ste naleteli med izletom",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Opišite informacije, zbrane pred vzponom, in navedite primerjavo z razmerami med vzponom: vremenska napoved, poročila o nevarnosti snežnih plazov, količina ponovnega zmrzovanja, stanje snega/ledu/skale, poročila iz prejšnjih dni itd. ",
     "Description": "Opis",
     "Detailed figures, like ratings, height differences, frequentation...": "Podrobni podatki, npr ocene, višinske razlike, obljudenost",
@@ -869,7 +869,7 @@
     "conditions": "Razmere",
     "conditions_levels": "Snežne razmere po območjih",
     "configuration": "Konfiguracija",
-    "configure your choices": "nastavite vaše izbire",
+    "configure your choices": "nastavite svoje izbire",
     "conglomerat": {
       "rock_types": "konglomerat"
     },
@@ -922,8 +922,8 @@
     "descent": {
       "image_categories": "sestop"
     },
-    "describe conditions": "Razmere terena, oprema in kakovost kamnin (pristop, smer in v bližini). \nČe naletite na okvarjeno opremo, obvestite lokalne akterje (postavljalci, vodniki, turistično društvo itd.) in/ali, za Francijo, obvestite na https://sentinelles.sportsdenature.fr/",
-    "describe route_conditions": "Na kratko opišite smer, ki ste jo šli v naslednjih primerih: smer se razlikuje od tiste v opisu, smer z različicami, krožna pot, prečenje (kombinacija), dosežena točka če ste delno opravili smer. \nPOZOR: ne nalagajte fotografij, kopiranih iz vodnika ali knjige. Moderatorji jih takoj odstranijo, ker je to nezakonita praksa in ne spoštuje licenc, ki jih uporablja spletno mesto. ",
+    "describe conditions": "Razmere terena, opremljenost in kakovost kamnin (pristop, smer in v bližini). \nČe naletite na okvarjeno opremo, obvestite lokalne akterje (postavljalci, vodniki, turistično društvo itd.) in/ali, za Francijo, obvestite na https://sentinelles.sportsdenature.fr/",
+    "describe route_conditions": "Na kratko opišite smer, ki ste jo šli v naslednjih primerih: smer se razlikuje od tiste v opisu, smer z različicami, krožna pot, prečenje (kombinacija), dosežena točka če ste delno opravili smer. \nPOZOR: ne prenesite fotografij, kopiranih iz vodnika ali knjige. Moderatorji jih takoj odstranijo, ker je to nezakonita praksa in ne spoštuje licenc, ki jih uporablja spletno mesto. ",
     "describe timing": "Čas odhoda / urnik",
     "describe weather": "Vremenske razmere na turi: oblačnost, padavine, veter, temperatura",
     "description": "Opis",
