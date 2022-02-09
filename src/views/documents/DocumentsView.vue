@@ -347,7 +347,6 @@ $cards-gap: 0.25rem;
   .mobile-mode-both {
     .map-container {
       visibility: hidden; // map does not like to be in a display none...
-      height: 0;
     }
   }
 }
