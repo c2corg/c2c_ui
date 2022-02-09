@@ -115,7 +115,7 @@ const mapping = {
     // British Columbia
     url: 'https://access-society.ca/Donate',
   },
-  
+
   // Australia
   1274261: {
     // Tasmania
@@ -129,8 +129,8 @@ const mapping = {
     // Western Australia
     url: 'https://www.climberswa.asn.au/cawa/bolting-fund/',
   },
-  
-// UK Boltfund
+
+  // UK Boltfund
   1203403: {
     // Peak District
     url: 'http://thepeakboltfund.blogspot.com/',
