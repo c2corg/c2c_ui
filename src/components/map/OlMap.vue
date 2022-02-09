@@ -908,9 +908,16 @@ export default {
             )
           );
           extent = areas
-            .flatMap((response) =>
-              geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail)).getPolygons()
-            )
+            .flatMap((response) => {
+              const geometry = geoJSONFormat.readGeometry(JSON.parse(response.data.geometry.geom_detail));
+              const type = geometry.getType();
+              if (type === 'Polygon') {
+                return [geometry];
+              } else if (type === 'MultiPolygon') {
+                return geometry.getPolygons();
+              }
+              return [];
+            })
             .flatMap((polygon) => polygon.getCoordinates())
             .map((coords) => ol.extent.boundingExtent(coords))
             .reduce((acc, ext) => ol.extent.extend(acc, ext));
