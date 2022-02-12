@@ -228,6 +228,7 @@
     "Export": "Exportar",
     "Export route": "Exportar el itinerario",
     "Export to CSV": "Exportar en CSV",
+    "FAQ?": "Preguntas Frecuentes ?",
     "Fauna protection areas": "Área de proteccion de la fauna",
     "Fauna protection site:": "Sector protegido de fauna :",
     "Feel free to edit it.": "Sientese libre de modificarlo.",
@@ -289,6 +290,7 @@
     "Large group = 5 people and more": "Grupo largo = más de 5 personas",
     "Last outings": "Últimas salidas",
     "Latitude": "Latitud",
+    "Launch YETI": "Lanzar YETI",
     "Legend": "Leyenda",
     "Licenses": "Licencias",
     "Links": "Enlaces",
@@ -327,6 +329,7 @@
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
     "Ooops": "Ups !",
+    "Outing": "Itinerario",
     "Page not found": "Página no encontrada",
     "Password": "Contraseña",
     "Personal feed": "Noticias personales",
@@ -340,12 +343,17 @@
     "Recenter on your current position": "Centrar en mi posición actual",
     "Recenter on...": "Centrar en ...",
     "Register": "Inscribirse ",
+    "Remove": "Eliminar",
     "Report title, activity, linked routes or outings.": "pon el titulo, la actividad, rutas asociadas o salidas",
+    "Required": {
+      "API message": "Requerido"
+    },
     "Reset password": "Reiniciar contraseña ",
     "Residual risk >1": "riesgo residual>1",
     "Residual risk >1.3": "riesgo residual >1.3",
     "Residual risk >1.5": "riesgo residual >1,5",
     "Results only": "Solo resultados",
+    "Retry": "Inténtalo de nuevo",
     "Route": "Vía",
     "Save": "Guardar",
     "Search ...": "Buscar ...",
@@ -353,6 +361,7 @@
     "See other documents nearby": "Ver más documentos cercanos ...",
     "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
     "See the latest version": "Ver la última versión",
+    "Seems fine! :)": "Posible cálculo ! :)",
     "Send reset email": "Enviar email de reinicio",
     "Sensitive area:": "Zona sensible :",
     "Sensitive areas": "Zonas sensibles",
@@ -365,6 +374,7 @@
     "Skiability": "Esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "Pendientes",
+    "Soft mobility outing": "Salida de movilidad suave",
     "Sort by": "Ordenar por",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
@@ -385,6 +395,7 @@
     "View in other lang": "Ver en otra lengua",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
     "Without c2c account": "Participantes sin cuenta c2c",
+    "YETI - A preparation tool for your outing": "YETI - Una herramienta de preparación para su salida",
     "a new point on an existing line": "un nuevo punto en una línea existente",
     "access": {
       "$$noContext": "acceso",
@@ -1009,6 +1020,7 @@
       "event_types": "otro"
     },
     "outing": "salidas",
+    "outings": "salidas",
     "overcrowded": {
       "frequentation_types": "muy frecuentado"
     },
@@ -1059,6 +1071,7 @@
     },
     "pixels": "pixeles",
     "place": "lugar",
+    "points": "puntos",
     "poor": {
       "condition_ratings": "malas",
       "snow_quality_ratings": "malas",
@@ -1150,6 +1163,7 @@
     "route_history": "Histórico del itinerario",
     "route_length": "Longitud de la ruta",
     "route_types": "Tipo de itinerario",
+    "routes": "Itinerarios",
     "routes_quantity": "Número de vías",
     "safe": {
       "children_proof_types": "seguro"
@@ -1195,8 +1209,14 @@
       "activities": "esqui, surf",
       "event_activities": "esqui, surf"
     },
+    "sl": {
+      "langs": "esloveno"
+    },
     "slab": {
       "climbing_styles": "placa"
+    },
+    "slackline": {
+      "slackline_types": "Slackline"
     },
     "slope": "Pendiente",
     "slope_lt_30": {
