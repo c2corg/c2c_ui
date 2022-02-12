@@ -33,8 +33,20 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
     matrixIds,
   });
 
+  let url;
+  switch (layer) {
+    case 'GEOGRAPHICALGRIDSYSTEMS.MAPS':
+      url = '//wxs.ign.fr/' + config.ignApiKey + '/geoportail/wmts';
+      break;
+    case 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN':
+      url = '//wxs.ign.fr/altimetrie/geoportail/wmts';
+      break;
+    default:
+      url = '//wxs.ign.fr/pratique/geoportail/wmts';
+  }
+
   const source = new ol.source.WMTS({
-    url: '//wxs.ign.fr/' + config.ignApiKey + '/wmts',
+    url,
     layer,
     matrixSet: 'PM',
     format: `image/${format}`,

@@ -154,7 +154,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 } else if (process.env.BUILD_ENV === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
 
-  config.ignApiKey = 'iq1rkryayi4z074da39pbg6s';
+  config.ignApiKey = '1qdmi4d0spl50eef78ftvm3j';
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
   config.isProduction = true; // explicit prod flag
