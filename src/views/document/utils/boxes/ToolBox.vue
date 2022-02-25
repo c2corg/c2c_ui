@@ -158,6 +158,7 @@
     </div>
 
     <license-box :document="document" />
+    <revision-box :document="document" />
 
     <!-- Modal windows -->
     <div v-if="isEditable">
@@ -179,6 +180,7 @@ import TranslateWindow from '../windows/TranslateWindow';
 
 import AssociatedDocuments from './AssociatedDocuments';
 import LicenseBox from './LicenseBox';
+import RevisionBox from './RevisionBox';
 import ToolBoxButton from './ToolBoxButton';
 
 import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
@@ -196,6 +198,7 @@ export default {
   components: {
     ToolBoxButton,
     LicenseBox,
+    RevisionBox,
     AssociatedDocuments,
     IconQuality,
     AssociationsWindow,

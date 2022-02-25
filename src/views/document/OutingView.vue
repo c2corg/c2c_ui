@@ -6,7 +6,7 @@
     <images-box v-if="document" :document="document" />
 
     <div v-if="document" class="columns is-multiline is-block-print">
-      <div class="column is-3">
+      <div class="column is-3 is-12-print">
         <map-box :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
