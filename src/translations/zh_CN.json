@@ -12,6 +12,8 @@
     "4": {
       "paragliding_ratings": "P4"
     },
+    "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD), 你不需要填写除了雪崩公告给出的风险等级以外的其他任何参数。",
+    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), 您可以细化潜在危险，给出团队规模和任何考虑到的预防措施。",
     "1 or 2 complications (steeper or narrow section...)": "1到2个难点(陡峭或窄的路段...)",
     "10min": {
       "access_times": "10分钟"
@@ -67,13 +69,18 @@
     "Add here maps not automatically referenced": "在此处添加未自动引用的地图",
     "Add images": "添加图片",
     "Add the first outing": "添加第一个出行记录",
+    "Add title…": "添加标题...",
     "Additional information": "附加信息",
+    "All": "全部",
     "Allow all": "允许所有",
+    "Altitude": "海拔",
     "Anonymity and confidentiality": "匿名与保密",
     "Are you sure you want to delete this document?": "你确定要删除此文档吗？",
     "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
+    "Area not covered": "区域未被覆盖",
+    "Area too large": "区域太大",
     "Articles, waypoints or routes to be linked.": "关联的文章、路点和路线。",
     "Articles, waypoints, routes or books to be linked.": "关联的文章、路点、路线和书籍。",
     "Associated outings": "关联的出行记录",
@@ -85,6 +92,7 @@
     "Attributions": {
       "Map controls": "归属"
     },
+    "Avalanche bulletins": "雪崩公告",
     "Average slope (degrees)": "平均坡度",
     "Average slope in degree": "平均坡度",
     "Back to code": "返回代码编辑模式",
@@ -96,6 +104,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Austria Sat"
     },
+    "Be careful,": "请注意，",
     "Beware of case-sensitive login and password": "请注意用户名和密码的大小写",
     "Block account": "冻结该用户",
     "Bolted rock climbing gear": "多段运动攀岩装备",
@@ -103,6 +112,8 @@
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "简要描述任何受伤。可以在此处输入不适合任何其他地方的评注。",
+    "By month": "按月",
+    "By year": "按年",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org促进爱山者之间的信息共享，并为山地运动的安全做贡献。",
     "Cancel": "取消",
     "Cards mode": "卡片模式",
@@ -528,6 +539,9 @@
     "alpine_climbing": {
       "event_activities": "高山岩石"
     },
+    "already used email": {
+      "API message": "已经被使用的电子邮箱"
+    },
     "already used forum_username": {
       "API message": "该论坛用户名已被使用"
     },
@@ -551,6 +565,7 @@
     "artificial": {
       "rock_types": "人工的"
     },
+    "ascending sort": "升序排序",
     "association": {
       "article_categories": "c2c协会"
     },
