@@ -120,7 +120,7 @@ export default {
           (value) =>
             value !== 'copyright' ||
             this.document.image_type === 'copyright' ||
-            (this.$user.isModerator && this.document.associations.book.length)
+            (this.$user.isModerator && this.document.associations.books.length)
         )
         .filter(
           // Only moderators can change a picture which is collaborative to personal
