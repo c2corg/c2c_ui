@@ -416,4 +416,10 @@ export default {
     @include colon;
   }
 }
+
+@media print {
+  .has-text-centered {
+    display: inline-flex;
+  }
+}
 </style>

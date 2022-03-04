@@ -1,5 +1,7 @@
 <template>
-  <div class="has-text-centered"><span v-translate>Revision</span> n° {{ version }}</div>
+  <div class="has-text-centered">
+    <span v-translate>Revision</span><span>&nbsp;: n° {{ version }}</span>
+  </div>
 </template>
 
 <script>
