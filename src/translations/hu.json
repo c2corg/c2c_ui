@@ -12,6 +12,9 @@
     "4": {
       "paragliding_ratings": "P4"
     },
+    "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD), semmi más paramétert nem kell megadnod, csak a lavinajelentésben foglalt veszélyszinteket. ",
+    "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE), megadhatod a szélrózsa szektorait, amit a lavinajelentés kritikusként jelölt meg.",
+    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), részletezheted a veszélylehetőségeket, a csoport méretét és a tervezett megelőző intézkedéseket.",
     "1 or 2 complications (steeper or narrow section...)": "1 vagy 2 nehézség (meredekebb vagy keskeny szakasz...)",
     "10 meters minimum while ascending": "Legalább 10 méter emelkedő",
     "10min": {
@@ -63,7 +66,7 @@
     "5min": {
       "access_times": "5 perc"
     },
-    "Accident database": "Baleseti adatbázis",
+    "Accident database": "Események és balesetek",
     "Action": {
       "Sophie picture context": "Művelet"
     },
@@ -84,16 +87,16 @@
     "Allow all": "Mindegyik engedélyezése",
     "Altitude": "Tengerszint feletti magasság",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Tengerszint feletti magasság megadása kötelező amikor a magasan és alacsonyan fennálló veszély különböző. Kérjük, add meg a tengerszint feletti magasságot a területre vonatkozó lavinajelentés alapján.",
-    "An error occurred, couldn't (un)mark route as to do": "Hiba történt, nem sikerült az útvonal megteendőként való kijelölése (kijelölés visszavonása) ",
-    "An error occurred, couldn't save images": "Hiba történt, a kép mentése sikertelen.",
+    "An error occurred, couldn't (un)mark route as to do": "Nem lehetséges a kedvelt útvonal hozzáadása vagy eltávolítása",
+    "An error occurred, couldn't save images": "Nem lehetséges a képek mentése",
     "Anonymity and confidentiality": "Névtelenség és bizalmasan kezelt adatok.",
-    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?",
-    "Are you sure you want to delete this locale?": "Biztosan törölni akarod ezeket a helyi beállításokat?",
+    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?\nFigyelemm, a társított fotók nem törlődnek és árvák lesznek.\nAmennyiben csak a címet vagy a társított dokumentumokat akarod megváltoztatni (pl. egy másik útvonallal társítani a kiruccanást), elegendő módosítani a dokumentumot.\nAmennyiben ez a dokumentum egy duplikátum, társított fotókkal, lépj kapcsolatba @Modo_Topo_FR, hogy egyesítsék a duplikátumokat a társított fotóknak a megőrzésével. ",
+    "Are you sure you want to delete this locale?": "Biztosan törölni akarod ezt a nyelvi verziót?",
     "Are you sure you want to merge?": "Biztosan össze akarod vonni?",
     "Are you sure you want to revert to this version of the document?": "Biztosan vissza akarod állítani a dokumentumnak ezt a verzióját?",
-    "Area not covered": "Lefedett terület",
+    "Area not covered": "Nem lefedett terület",
     "Area too large": "Túl nagy terület",
-    "Articles, waypoints or routes to be linked.": "Csatolandó cikkek, útvonal-pontok vagy utak",
+    "Articles, waypoints or routes to be linked.": "Csatolt cikkek, útvonal-pontok vagy utvonalak",
     "Articles, waypoints, routes or books to be linked.": "Csatolandó cikkek, útvonal-pontok, utak vagy könyvek.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Mint az elnevezés is sugallja, ez a módszer kezdőknek van szánva. Ebből kifolyólag a biztonsági ráhagyás kifejezetten fontos. A veszélyességi fokozatot kivéve más paraméter nincs megadva. A tájolás figyelmen kívül van hagyva.",
     "Associated outings": "Társított kiruccanások",
@@ -618,30 +621,30 @@
       "$$noContext": "megközelítés",
       "waypoint_types": "megközelítés"
     },
-    "access_comment": "megközelítés_megjegyzés",
-    "access_condition": "megközelítés_körülmények",
-    "access_period": "megközelítés_időszak",
-    "access_time": "megközelítés_idő",
+    "access_comment": "Közúti, tömegközlekedési megközelíthetőségre vonatkozó megjegyzések",
+    "access_condition": "Közúti, tömegközlekedési megközelíthetőség körülményei",
+    "access_period": "Hókotrási, nyitvatartási időszak",
+    "access_time": "Megközelítés ideje",
     "accessible_when_wardened": {
-      "custodianship_types": "megközelíthető_amikor_nyitva"
+      "custodianship_types": "személyzettel üzemel, a nyitvatartási időn kívül zárva"
     },
     "accidental_avalanche": {
-      "avalanche_signs": "véletlenszerű_lavina"
+      "avalanche_signs": "a kiruccanás napján egy személy által kiváltott lavina"
     },
     "action": {
       "image_categories": "művelet"
     },
     "activities": "tevékenységek",
     "activity": "tevékenység",
-    "activity_rate": "tevékenység_gyakoriság",
+    "activity_rate": "Tevékenység végzésének gyakorisága",
     "activity_rate_m2": {
-      "activity_rates": "tevékenység_gyakoriság_m2"
+      "activity_rates": "havonta 1-2"
     },
     "activity_rate_w1": {
-      "activity_rates": "tevékenység_gyakoriság_w1"
+      "activity_rates": "hetente 1 vagy több"
     },
     "activity_rate_y5": {
-      "activity_rates": "tevékenység_gyakoriság_y5"
+      "activity_rates": "évente 5-nél kevesebb"
     },
     "add a book": "könyv hozzáadása",
     "add a map": "térkép hozzáadása",
@@ -652,9 +655,16 @@
     "add an image": "kép hozzáadása",
     "add an incident/accident report": "baleseti beszámoló hozzáadása",
     "add an outing": "kiruccanás hozzáadása",
+    "admin_limits": {
+      "area_types": "adminisztrációs korlát"
+    },
     "advertisement": "hirdetés",
     "after:": "ennyi idő elteltével:",
     "age": "életkor",
+    "aid_rating": "Mesterséges mászás besorolása",
+    "alpine_climbing": {
+      "event_activities": "Hegyi sziklás terep"
+    },
     "already used email": {
       "API message": "már használatban levő email cím"
     },
@@ -665,18 +675,18 @@
       "API message": "már használatban levő felhasználói név"
     },
     "always_accessible": {
-      "custodianship_types": "mindig_megközelíthető"
+      "custodianship_types": "mindig nyitva"
     },
     "amateur": {
       "user_categories": "amatőr"
     },
-    "anonymous": "anonim",
+    "anonymous": "Anonim hozzájárulás",
     "area": "terület",
-    "area_type": "terület_típus",
+    "area_type": "Terület típusa",
     "areas": "területek",
     "article": "cikk",
-    "article_categories": "cikk_kategóriák",
-    "article_type": "cikk_típus",
+    "article_categories": "Cikk kategóriák",
+    "article_type": "Cikk típus",
     "articles": "cikkek",
     "artificial": {
       "rock_types": "mesterséges"
