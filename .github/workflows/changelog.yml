@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Checkout wiki repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           repository: c2corg/c2c_ui.wiki
           ref: master
