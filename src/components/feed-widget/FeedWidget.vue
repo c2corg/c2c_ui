@@ -155,6 +155,12 @@ export default {
         items = items.filter((item) => item.document.quality !== 'empty');
       }
 
+      //ne pas afficher les sorties de plus de x jours
+      //item.document.type == o
+
+      //ne pas afficher les modifications de point de passage
+      //item.document.type == w
+
       for (const item of items) {
         for (const column of this.columns) {
           if (column.height < destColumn.height) {

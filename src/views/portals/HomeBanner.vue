@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="intro-banner has-text-centered">
-      <div class="title is-1 with-background" v-translate>The mountain sports community</div>
+      <div class="title with-background" v-translate>The mountain sports community</div>
 
       <div class="outings-links">
         <router-link
@@ -15,20 +15,31 @@
         </router-link>
       </div>
 
-      <div class="title is-4 has-text-weight-normal with-background" v-translate>
-        Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
-        mountain activities.
+      <div class="title is-4 has-text-weight-normal with-background">
+        <p v-translate>
+          Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
+          mountain activities.
+        </p>
+        <p v-translate>
+          Ce site est géré par une association à but non lucratif, qui a fait le choix de contenus sous licences libres.
+        </p>
+        <p v-translate>N'hésitez pas à vous inscrire et à contribuer !</p>
       </div>
 
       <div class="buttons is-centered">
         <router-link :to="{ name: 'topoguide' }" class="button is-primary">
-          <icon-topoguide />&nbsp; <span v-translate="">Topoguide</span><br />
+          <icon-topoguide />&nbsp; <span v-translate>Topoguide</span><br />
           <span v-translate="" class="is-size-4">Conditions, summits, routes</span>...
         </router-link>
 
         <router-link :to="{ name: 'forum' }" class="button is-primary">
           <icon-forum />&nbsp; <span v-translate>Forum</span><br />
           <span v-translate class="is-size-4">Share with us!</span>
+        </router-link>
+
+        <router-link :to="{ name: 'article', params: { id: 106726 } }" class="button is-primary">
+          <icon-forum />&nbsp; <span v-translate>C2C Association</span><br />
+          <span v-translate class="is-size-4">Nous découvrir...</span>
         </router-link>
       </div>
     </div>
@@ -55,16 +66,16 @@ export default {
 
 <style scoped lang="scss">
 section {
-  background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-800w.jpg');
+  background-image: url(https://forum.camptocamp.org/uploads/default/optimized/3X/7/7/77e494902c10e5f9034eafff02fc8397114f7cc9_2_1200x675.jpeg);
   background-size: cover;
-  background-position-y: 50%;
+  //background-position-y: 50%;
   // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
-  @media (min-width: 800px) and (max-width: 1224px) {
+  /*@media (min-width: 800px) and (max-width: 1224px) {
     background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1024w.jpg');
   }
   @media (min-width: 1224px) {
     background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1200w.jpg');
-  }
+  }*/
 }
 
 .intro-banner {
@@ -84,13 +95,13 @@ section {
 
 .with-background {
   padding: 10px;
-  background-color: rgba(21, 50, 69, 0.4);
+  background-color: rgba(21, 50, 69, 0.6);
   color: #fff;
 }
 
 .outings-links {
   line-height: 60px;
-  margin-top: 60px;
+  margin-top: 40px;
 
   .outings-link svg {
     vertical-align: text-bottom;

@@ -27,12 +27,16 @@ export default {
 
   computed: {
     rangeAreas() {
-      let result = this.document.areas.filter((area) => area.area_type === 'range');
+      if (this.document.areas) {
+        let result = this.document.areas.filter((area) => area.area_type === 'range');
 
-      result = result.length !== 0 ? result : this.document.areas.filter((area) => area.area_type === 'admin_limits');
-      result = result.length !== 0 ? result : this.document.areas;
+        result = result.length !== 0 ? result : this.document.areas.filter((area) => area.area_type === 'admin_limits');
+        result = result.length !== 0 ? result : this.document.areas;
 
-      return result;
+        return result;
+      } else {
+        return null;
+      }
     },
   },
 };
@@ -50,7 +54,7 @@ export default {
     padding-right: 3px;
   }
 
-  .document-title:after {
+  .document-title:not(:last-child):after {
     content: '\0000a0\002022\0000a0'; //&nbsp;&bull;&nbsp;
   }
 
