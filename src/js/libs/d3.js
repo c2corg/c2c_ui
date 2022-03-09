@@ -14,16 +14,14 @@ D3.prototype.resolve_ = function () {
 
   this.resolving_ = true;
 
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale/src/linear'), 'scaleLinear');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale/src/band'), 'scaleBand');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-geo/src/distance'), 'geoDistance');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time/src/hour'), 'timeHour');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-shape/src/line'), 'line');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale/src/time'), 'scaleTime');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale'), 'scale');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-geo'), 'geo');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time'), 'time');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-shape'), 'shape');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-transition'), 'transition'); // do not forget. d3 has a strange behavior...
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-format'), 'format');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time-format'), 'timeFormat');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-axis/src/axis'), 'axis');
+  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-axis'), 'axis');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-array'), 'array');
   this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-selection'), 'selection');
 };
