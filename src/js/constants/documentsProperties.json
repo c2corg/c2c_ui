@@ -180,7 +180,10 @@
       },
       {
         "id": "global_rating",
-        "properties": { "url": "grat", "activities": ["mountain_climbing", "rock_climbing", "snow_ice_mixed"] }
+        "properties": {
+          "url": "grat",
+          "activities": ["ice_climbing", "mountain_climbing", "rock_climbing", "snow_ice_mixed"]
+        }
       },
       {
         "id": "height_diff_difficulties",
