@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showGreatDocuments: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -155,11 +159,16 @@ export default {
         items = items.filter((item) => item.document.quality !== 'empty');
       }
 
-      //ne pas afficher les sorties de plus de x jours
+      //ne pas afficher les modifications sur les sorties de plus de x jours
       //item.document.type == o
 
       //ne pas afficher les modifications de point de passage
       //item.document.type == w
+
+      //Pour le contenu de qualité
+      if (this.showGreatDocuments) {
+        items = items.filter((item) => item.document.quality == 'great');
+      }
 
       for (const item of items) {
         for (const column of this.columns) {

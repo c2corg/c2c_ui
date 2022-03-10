@@ -14,6 +14,7 @@ import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
+import AlterhomeView from '@/views/portals/AlterhomeView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
@@ -50,6 +51,7 @@ const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/Ye
 
 const routes = [
   { path: '/', name: 'home', component: FeedView },
+  { path: '/alterhome', name: 'alterhome', component: AlterhomeView },
   { path: '/dashboard', name: 'dashboard', component: DashboardView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
   { path: '/feed', name: 'feed', component: FeedView },
