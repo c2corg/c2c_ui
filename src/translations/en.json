@@ -188,6 +188,7 @@
     "SwissTopo ortho": {
       "Map layer": "SwissTopo Sat"
     },
+    "There are sensitive areas on this route. Please refer to the map.": "There are sensitive areas on or near this route. Please consult the map to locate them, you can click on the areas for detailed information on the measures to be taken.",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the \"Share\" module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.",
     "This field is too long": "Text is too long",
     "This field is too short": "Text is too short",
@@ -526,6 +527,9 @@
     },
     "mountain_environment": {
       "article_categories": "mountain environment"
+    },
+    "mountain_leader": {
+      "user_categories": "mountain leader"
     },
     "mtb_down_rating": "Mountain bike rating down",
     "mtb_height_diff_portages": "Portages height difference",
