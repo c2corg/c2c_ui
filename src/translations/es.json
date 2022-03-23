@@ -81,6 +81,7 @@
     "Basemap ortho (at)": {
       "Map layer": "Mapa inicial ortho (at)"
     },
+    "Be careful,": "Cuidado",
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Tenga cuidado, en la nieve mojada, no se puede aplicar ningún factor que reduzca la orientación o la asistencia.",
     "Beginner": "Principiante",
     "Beginner Reduction Method": "Método de reducción para principiantes ",
@@ -142,10 +143,13 @@
       "yeti": "Crear"
     },
     "Create a new report": "Agregar un nuevo informe",
+    "Create a simplified version of the geometry by reducing the amount of points": "Montar una version de la geometría reduciendo el numero de puntos",
     "Created on": "Creado",
     "Creation?": "Creación?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI no cubre la vista actual del mapa. Solo las montañas francesas lo son a partir de ahora (determinadas por un trazo discontinuo). ",
+    "Current map view is too large. Please zoom to level": "La zona del mapa es demasiada grande. zumar al nivel",
     "Current password": "Contraseña actual",
+    "DISABLED": "Desactivado",
     "Danger level": "Nivel de peligro",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivel de peligro del boletín de avalanchas se aplica a todas las orientaciones. La rosa de los vientos distingue los sectores más críticos que presentan un mayor riesgo.",
     "Danger level:": "Nivel de peligro:",
@@ -155,6 +159,7 @@
     "Danger rating - low": "Clasificación de peligro: bajo",
     "Danger rating - moderate": "Clasificación de peligro: moderado",
     "Danger rating - very high": "Clasificación de peligro: muy alto",
+    "Danger:": "Peligro :",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Datos técnicos, tal como orientación, tipo de roca, o la configuración general del itinerario (arista, pilar...)",
     "Delete": {
       "yeti": "Eliminar"
@@ -202,6 +207,7 @@
     "Draw": {
       "yeti": "Dibuja"
     },
+    "Drawing mode": "Modo dibujo",
     "Drawing tips": "Astucias de dibujo",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
@@ -233,12 +239,14 @@
     "Fauna protection site:": "Sector protegido de fauna :",
     "Feel free to edit it.": "Sientese libre de modificarlo.",
     "Filter on map extent": "Filtro en la extensión de mapa",
+    "Filter results": "Filtrar",
     "Followed users": "Usuarios seguidos",
     "Forgot password?": "¿Olvidaste la contraseña?",
     "Forum": "Foro",
     "Forum username": "Nombre de usuario del forum",
     "From danger 3, consider the slopes which dominate the route": "desde el peligro 3, considera las pendientes que dominan la vía",
     "From the interface": "Desde la interfaz",
+    "Full bulletin:": "Boletín completo :",
     "Fullname": "Nombre completo",
     "GPX file": "Archivo GPX",
     "General information": "Informacion general",
@@ -286,17 +294,24 @@
     "Invalid email address": {
       "API message": "Email inválido"
     },
+    "Issue report": "Aseñalar un problema",
     "Know more about SERAC": "Saber más en cuanto a SERAC",
     "Large group = 5 people and more": "Grupo largo = más de 5 personas",
+    "Last forum topics": "Ultimas cuestiones del foro",
     "Last outings": "Últimas salidas",
     "Latitude": "Latitud",
     "Launch YETI": "Lanzar YETI",
+    "Layers": {
+      "Map controls": "Selección de las teclas"
+    },
+    "Leave fullscreen": "Dejar el modo pantalla",
     "Legend": "Leyenda",
     "Licenses": "Licencias",
     "Links": "Enlaces",
     "List mode": "forma de la lista",
     "List of versions for language:": "Lista de versiones para el idioma:",
     "Load my preferences": "carga mis preferencias",
+    "Location / elevation / orientation": "Lugar /altitud/ orientación",
     "Login": "Iniciar sesión",
     "Login failed": {
       "API message": "Login ha fallado"
@@ -439,6 +454,7 @@
       "area_types": "límite administrativo"
     },
     "advertisement": "anuncio",
+    "after:": "Después :",
     "age": "edad",
     "aid_rating": "Cotación escalada artificial",
     "alpine_climbing": {
@@ -737,6 +753,9 @@
     "federal_supervision": {
       "supervision": "supervision federal"
     },
+    "federal_supervisor": {
+      "qualification": "iniciador federal"
+    },
     "female": {
       "genders": "mujer"
     },
@@ -863,6 +882,9 @@
     "impossible": {
       "glacier_ratings": "imposible"
     },
+    "injury_without_fall": {
+      "event_types": "Lesión sin caída"
+    },
     "inside": {
       "rain_proof_types": "dentro"
     },
@@ -907,6 +929,9 @@
     },
     "level_4": {
       "avalanche_levels": "4"
+    },
+    "level_5": {
+      "avalanche_levels": "Muy fuerte"
     },
     "level_na": {
       "avalanche_levels": "nivel na"
