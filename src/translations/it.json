@@ -14,8 +14,9 @@
     },
     "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD), l'unico dato che devi inserire é il livello del grado di pericolo del bollettino.",
     "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE) puoi aggiungere le orientazioni pericolosi indicate dal bollettino.",
-    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), puoi aggiungere la dimensione del gruppo e la sua capacità a mantenere le distanze di sicurezza. ",
+    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), puoi definire meglio il rischio potenziale, aggiungendo la dimensione del gruppo e qualsiasi precauzione presa. ",
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 difficoltà puntuale (tratto ripido, strettoia... )",
+    "10 meters minimum while ascending": "10 metri minimo in salita",
     "1d_to_3d": {
       "severities": "Da 1 a 3 giorni"
     },
@@ -25,6 +26,7 @@
     "4d_to_1m": {
       "severities": "Meno di un mese"
     },
+    "50 meters while descending": "50 metri in discesa",
     "Accident database": "Database degli incidenti",
     "Action": {
       "Sophie picture context": "Azion"
@@ -39,7 +41,7 @@
     "All": "Tutto",
     "Allow all": "Accetto tutto",
     "Altitude": "Altitudine",
-    "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La quota è obbligatoria quando il grado di pericolo in alto e in basso è differente.",
+    "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La quota è obbligatoria quando il grado di pericolo in alto e in basso è differente. Per favore impostare una quota come specificato nel bollettino valanghe per l'area specifica",
     "An error occurred, couldn't (un)mark route as to do": "È impossibile di aggiungere o rimuovere un itinerario dai preferiti",
     "An error occurred, couldn't save images": "È impossibile salvare gli immagini ",
     "Anonymity and confidentiality": "Anonima e confidenzialità",
@@ -51,11 +53,12 @@
     "Area too large": "Zona troppa grande",
     "Articles, waypoints or routes to be linked.": "Articoli, punti di passaggio e itinerari associati",
     "Articles, waypoints, routes or books to be linked.": "Articoli, punti di passaggio, itinerari e libri associati",
-    "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Questo metodo si rivolge ai principianti. Quindi, il margine di sicurezza deve essere molto importante. L'unico dato da inserire è il grado di pericolo che si legge sul bollettino di valanga. Non si tiene conto del orientazione dei pendii.",
+    "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Questo metodo si rivolge ai principianti. Quindi, il margine di sicurezza deve essere molto importante. L'unico dato da inserire è il grado di pericolo che si legge sul bollettino di valanga. Non si tiene conto dell'esposizione dei pendii.",
     "Associated outings": "Gite associate ",
     "Associated routes": "Itinerari associati",
     "Associated routes cotations": "Difficoltà degli itinerari associati al punto di passoggio",
     "Association": "Associazione Camptocamp",
+    "Associations history": "Cronologia dei documenti associati",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribuzione — Devi riconoscere una menzione di paternità adeguata, fornire un link alla licenza e indicare se sono state effettuate delle modifiche. ",
     "Avalanche bulletins": "Bollettino pericolo valanghe",
     "Average slope (degrees)": "Pendenza media (gradi)",
@@ -140,6 +143,8 @@
     "Delete": {
       "yeti": "Cancellare"
     },
+    "Delete image": "Cancella immagine",
+    "Delete route": "Cancella itinerario",
     "Delete this document": "Cancellare questo documento ",
     "Delete this locale": "Cancellare questa versione linguistica  ",
     "Deny all": "Rifiutare tutto",
@@ -148,6 +153,7 @@
     "Describe access restrictions": "Descrivere le restrizione delle accesso",
     "Describe here the gear needed for this route": "Materiale specifico necessario per l'itinerario. E' inutile precisare il materiale \"standard\" (per es. a sci : ARTVA, pala, sonda, ramponi, piccozza... - il campo \"materiale da ghiacciaio\" è sufficiente)...",
     "Describe here the waypoint": "Descrivi il punto di passaggio ",
+    "Describe here your issue": "Descrivi qui il tuo problema",
     "Describe historical information about the route (date, names..) here": "Specificare qui i ceni storici del itinerario: apertura, attrezzatura, prime salite, prime discese in sci / surf, riattrezzamento, frane, ecc. Indicare la data, il nome dei protagonisti e il club o l'organizzazione che ha finanziato l'attrezzatura.",
     "Describe opening hours": "Precisare gli orari di apertura",
     "Describe opening periods": "Precisare i periodi di apertura",
@@ -191,9 +197,12 @@
     "Everything about ratings : difficulties, exposition...": "Inserire i gradi relativo al itinerario (difficoltà, esposizione, attrezzatura) ",
     "Expand": "Aprire ",
     "Expert": "Esperto",
+    "Export to CSV": "Esporta in formato CSV",
     "Fauna protection areas": "Zona di protezione della fauna",
     "Fauna protection site:": "Sito di protezione della fauna: ",
+    "Feel free to edit it.": "Edizione libera",
     "Filter on map extent": "Limitare la ricerca alla zona visibile sulla carta",
+    "Filter results": "Filtrare i risultati",
     "Followed users": "Utenti seguiti",
     "Forgot password?": "Password dimenticata?",
     "Forum username": "Nickname",
@@ -201,6 +210,7 @@
     "Full bulletin:": "Bollettino:",
     "Fullname": "Cognome",
     "GPS Track": "Traccia GPS",
+    "GPX file": "File GPX",
     "General": "Generale",
     "General information": "Informazioni generali ",
     "Geolocation": "Geolocalizzazione  ",
@@ -208,6 +218,7 @@
     "Go to the previous page": "Tornare alla pagina precedente",
     "Group": "Gruppo",
     "Group size": "Dimensione del gruppo",
+    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Questa esperienza ha cambiato le tue abitudini? Descrivi le lezioni che hai appreso da questa esperienza",
     "Have an account?": "Già registrato?",
     "Hazard potential": "Potenziale di pericolo",
     "Hazard potential:": "Potenziale di pericolo :",
@@ -219,6 +230,7 @@
     "Hiking gear": "Escursionismo estivale",
     "History": "Versioni",
     "Home page feed parameters": "Parametro per le attualità sulla home",
+    "How is my testimony used ? How / why is it useful ?": "Come viene utilizzata la mia testimonianza? Come / perché è utile?",
     "I choose to cancel the outing": "Rinuncio alla gita",
     "I have read and agree to the terms of use": "Ho letto ed approvo i termini e condizioni d'uso ",
     "I must not use slopes > 30°": "Rinuncio agli pendii > 30°",
@@ -240,6 +252,7 @@
     "Image count": "Numero d'immagini",
     "Incidents and accidents": "accidenti",
     "Information about the terrain, like elevations, lengths...": "Dati relativi al terreno (altitudine, lunghezza...)  ",
+    "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informazioni sul luogo dell'incidente. Segna il luogo sulla mappa qui sopra, anche se non puoi farlo con molta precisione, (in tal caso dai più dettagli qui). Dopo aver completato il rapporto, puoi associarlo a una via, un sito di arrampicata o una gita.",
     "Informations about the access": "Informazioni sul accesso stradale o i mezzi pubblici ",
     "Infos": "Informazioni",
     "Insert a link": "Inserire un link",
@@ -261,6 +274,9 @@
       "Map controls": "Mappe principale"
     },
     "Leave fullscreen": "Lasciare il modo schermo intero",
+    "Legend": "Didascalia",
+    "Legend will appear automatically with the generated image": "La didascalia comparirà automaticamente insieme all'immagine",
+    "Let's make our feedbacks valuable": "Rendiamo preziosi i nostri feedback",
     "Licenses": "Licenze",
     "Links": "Link",
     "List mode": "Vista in lista",
@@ -280,7 +296,11 @@
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Informazioni principale sul itinerario (nome, attività, traccia gps...)",
     "Main informations about your outing": "Dati principali sulla tua gita",
     "Make profile page public": "Autorizzare tutti a vedere il tuo profilo",
+    "Map filter off": "Filtro mappa spento",
+    "Map filter on": "Filtro mappa acceso",
     "Map only": "solo carta",
+    "Mark this route as to do": "Segnare questo itinerario come da fare",
+    "Massifs could not be loaded": "Il massiccio non può essere caricato",
     "Merge documents": "Unire i documenti",
     "Merge with other document": "Unire con un altro documento",
     "Methods": "Metodi",
@@ -307,28 +327,40 @@
     "New route": "Nuovo itinerario",
     "New waypoint": "Nuovo punto di passaggio",
     "No account yet?": "Non hai ancora un account?",
+    "No data could be extracted from GPS file": "Nessun dato può essere estratto dal file GPX",
     "No match?": "Nessuna corrispondenza?",
+    "No orientation selected": "nessun orientamento selezionato",
+    "No reduction factor": "nessun fattore di riduzione",
+    "No result found": "Nessun risultato trovato",
+    "No route right now": "Nessun itnerario al momento",
+    "No selected hazard potential. Set danger level first.": "Nessun pericolo potenziale selezionato. Impostare prima il livello di pericolo.",
     "No user with this email": {
       "API message": "Non esiste un utente con questa email"
     },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Non opere derivate — Se remixi, trasformi il materiale o ti basi su di esso, non puoi distribuire il materiale così modificato.",
     "NonCommercial — You may not use the material for commercial purposes.": "Non commerciale — Non puoi utilizzare il materiale per scopi commerciali.",
+    "Not simplified yet": "Non ancora semplificato",
     "Note that comments have to be transferred manually in Discourse before merging.": "I commenti devono essere trasferiti manualmente con Discourse prima di unire i documenti. ",
     "Numbers": "Dati",
+    "On a drawn line": "Su una linea tracciata",
     "Only document less than 24h old can be deleted": {
       "API message": "Solo il documenti recenti (24h) possono essere cancellati. Contattare i moderatori per cancellare questo documento.  "
     },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Solo le novità relative alle regioni e alle attività selezionati saranno visibili nella sezione Notizie della homepage.\nLe novità relative agli utenti che segui saranno sempre visibili.",
     "Ooops": "Oops",
+    "Open fields to deeply explain the event circumstances.": "Campo libero per spiegare estensivamente le circostanze dell'evento.",
     "Ordered list": "Lista ordinata",
     "Orientations": "Orientazioni",
     "Orientations:": "Orientazioni:",
     "Oups! Something went wrong with forum. Here is the message :": "Oops! C'è un errore sul forum: ",
     "Oups! something went wrong...": "Oops! c'è un errore: ",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Il nostro sito web utilizza cookie forniti da noi stessi e da terzi. Alcuni cookie sono necessari per il sito web, altri possono essere regolati in qualsiasi momento, in particolare quelli che ci permettono di capire il rendimento del nostro sito web e di offrirvi le funzionalità dei social media. È possibile accettare o rifiutare tutti, o",
     "Outing": "Itinerari",
+    "Outings statistics": "Statistiche delle gite",
     "Page not found": "Pagina non trovata",
     "Paragliding outings": "Gita in parapendio",
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica ",
+    "Participants and context": "Partecipanti e contesto",
     "Password too short": {
       "API message": "La password è troppo corta "
     },
@@ -342,22 +374,31 @@
     "Personal feed on": "La personalizzazione della sezione Notizie è attivata ",
     "Personal informations": "Informazioni personale ",
     "Pitch description tag": "Codice per descrivere i tiri di una via di arrampicata",
+    "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Descrivete il vostro livello tecnico e di esperienza in relazione all'obiettivo scelto, il vostro livello di forma fisica, la stanchezza accumulata in precedenza, l'acclimatazione se in altitudine, ecc.",
+    "Please move the map, or change the route's name.": "Per favore muovere la mappa oppure cambiare il nome dell'itinerario",
     "Please select a method before computing.": "Seleziona un metodo di calcolo",
+    "Please select a waypoint type to enable sort feature": "Selezionare un tipo di waypoint per abilitare la funzione di ordinamento",
+    "Please select an activity to enable sort feature": "Selezionare un'attività per abilitare la funzione di ordinamento",
+    "Please set danger level as specified on avalanche bulletin for the specific area.": "Si prega di impostare il livello di pericolo come specificato nel bollettino valanghe per la zona specifica.",
     "Post the first comment": "Pubblicare il primo commento",
     "Precise localisation of the shooting": "Localizzazione del punto dello scatto",
+    "Precise location of the event.": "Localizzazione precisa dell'evento",
     "Press enter to select": "Premere \"Enter\" per selezionare ",
     "Preview": "Anteprima",
     "Professional Reduction Method": "metodo di riduzione professionale",
     "Protect document": "Proteggere il documento",
     "Protection area:": "Zona di protezione:",
     "Protection areas": "Zone di protezione:",
+    "Provide information and improve its quality, following the contribution rules and respecting copyright.": "fornire informazioni e migliorarne la qualità, seguendo le regole di contribuzione e rispettando il copyright.",
     "Put it back": "Riassociare ",
     "Quote": "Citazione ",
+    "Recent changes": "Cambiamenti recenti",
     "Recenter on your current position": "Centrare sulla tua posizione",
     "Recenter on...": "Centrare su...",
     "Register": "Registrarti ",
     "Remove": "Togliere",
     "Report an issue": "Segnalare un errore",
+    "Report title, activity, linked routes or outings.": "Segnale titolo, attività, itneari o gite collegati",
     "Required": {
       "API message": "Obbligatorio "
     },
@@ -375,6 +416,7 @@
     "Rotate image right": "Girare a destra",
     "Route": "Itinerari",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC è una base di dati mondiale sugli accidenti e incedenti in montagna. Il suo scopo è di migliorare la sicurezza delle attività di arrampicata e degli sport di montagna.",
+    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC è costruito su una mentalità di gentilezza. Vi ringraziamo per migliorarla",
     "Save": "Salva",
     "Search ...": "Cerca...",
     "Search a document to associate...": "Cercare un documento associato ",
@@ -382,6 +424,7 @@
     "See other documents nearby": "A prossimità... ",
     "See profile based on:": "Profilo altimetrico in funzione di:",
     "See the activity of this contributor in your feed": "Vedere tutte le attività di questo utente nella tua sezione Notizie",
+    "See the analysis of the submitted stories": "Vedere l'analisi delle storie presentate",
     "See the latest version": "Vedere l'ultima versione",
     "Seems fine! :)": "Il calcolo è possibile ! :)",
     "Select option": "Scegli un opzione ",
@@ -409,13 +452,22 @@
     "Small group = 2 to 4 people": "Piccolo gruppo = 2 a 4 persone ",
     "Small group with load shedding distance": "Piccolo gruppo con distanza di sicurezza",
     "Small group without distance": "Piccolo gruppo senza distanza di sicurezza",
+    "Social cookies": "Cookies sociali",
+    "Soft mobility outing": "Gita a mobilità dolce",
+    "Sophie Picture Contest": "Concorso fotografico Sophie",
+    "Sort by": "Ordina per",
     "Source:": "Documento da unire (sorgente):",
+    "Statistical cookies": "Cookies statistici",
+    "Statistics": "Statistiche",
     "Stay careful while skiing": "Sciare con prudenza",
     "Stop following this contributor": "Non seguire più questo utente",
     "Submit": "Salva e prosegui",
     "Suggested rating": "Grado proposto",
     "SwissTopo": {
       "Map slopes layer": "Pendenze SwissTopo"
+    },
+    "SwissTopo ortho": {
+      "Map layer": "SwissTopo ortofoto"
     },
     "Target:": "Documento da conservare (destinazione):",
     "Terrain": "Terreno ",
@@ -427,6 +479,7 @@
     "There are sensitive areas on this route. Please refer to the map.": "Questo itinerario attraversa (o passa vicino a) una aerea protetta. Consultare la mappa.",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Il contenuto e sotto la licenza Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Il contenuto e sotto la licenza Creative Commons BY-SA 3.0",
+    "This document is a draft.": "Questo documento è in bozza.",
     "This field is too long": "Testo troppo lungo",
     "This field is too short": "Testo troppo corto",
     "This field must be a valid ISBN.": {
@@ -480,6 +533,7 @@
     "YETI extent": "Copertura YETI",
     "You may add associated waypoints, books and articles": "Associare altri documenti a questo punto di passaggio ",
     "You may also drag, draw or edit the track on the map.": "Puoi anche trascinare, disegnare o creare la traccia sulla mappa",
+    "a new point on an existing line": "un nuovo punto o una linea esistente",
     "access": {
       "$$noContext": "accesso stradale o TP",
       "waypoint_types": "accesso stradale o TP"
@@ -554,6 +608,7 @@
     "artificial": {
       "rock_types": "artificiale "
     },
+    "ascending sort": "Tipo di salita",
     "association": {
       "article_categories": "associazione "
     },
@@ -1134,6 +1189,7 @@
     "often": {
       "snow_clearance_ratings": "spesso"
     },
+    "on": "acceso",
     "open": {
       "lift_status": "aperti"
     },
@@ -1222,6 +1278,7 @@
       "API message": "C'è stato un errore, puoi contattare dev@camptocamp.org"
     },
     "points": "punti",
+    "points by moving them": "puntare spostando i punti",
     "poor": {
       "condition_ratings": "cattive",
       "snow_quality_ratings": "cattive",
@@ -1313,6 +1370,7 @@
       "image_categories": "salita "
     },
     "risk": "rischio",
+    "risk of a rough fall on hard snow": "rischio di una brutta caduta su neve dura",
     "risk_rating": "Valutazione del rischio",
     "road access": "Accesso stradale",
     "road or pedestrian access": "Accesso pedonale o stradale",
@@ -1337,6 +1395,9 @@
       "children_proof_types": "sicuro"
     },
     "safety": "Sicurezza ",
+    "safety_operation": {
+      "event_types": "operazioni di sicurezza"
+    },
     "scale": "scala",
     "schiste": {
       "rock_types": "scisto"
@@ -1456,6 +1517,9 @@
     "sometimes": {
       "snow_clearance_ratings": "tavolta "
     },
+    "sport_climbing": {
+      "event_activities": "Arrampicata"
+    },
     "sport_shop": {
       "product_types": "negozio di sport"
     },
@@ -1486,6 +1550,7 @@
     "to": {
       "period": "a"
     },
+    "to start or load a new one": "per iniziare o caricarne uno nuovo",
     "topo": {
       "book_types": "guida",
       "image_categories": "schizzo "
