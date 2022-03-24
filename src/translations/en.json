@@ -202,6 +202,7 @@
     "Transport & road or PT access": "Road or public transport access",
     "View in other lang": "View in other language",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Why did you choose this outing? When did you decide to commit to it. What influenced your decision, (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)",
+    "You need to activate your by clicking the link sent to your email address.": "You need to activate it by clicking the link sent to your email address.",
     "access": {
       "$$noContext": "road or PT access",
       "waypoint_types": "road or PT access"
