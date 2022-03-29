@@ -45,6 +45,42 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
   return result;
 };
 
+Forum.prototype.getLatestSiteAsso = function () {
+  const result = this.get(`/c/57.json`);
+
+  result.then(function (response) {
+    const users = {};
+
+    response.data.users.forEach(function (user) {
+      users[user.username] = user;
+    });
+
+    response.data.topic_list.topics.map(function (topic) {
+      topic.last_poster_user = users[topic.last_poster_username];
+    });
+  });
+
+  return result;
+};
+
+Forum.prototype.getLatestContributeurs = function () {
+  const result = this.get(`/c/152.json`);
+
+  result.then(function (response) {
+    const users = {};
+
+    response.data.users.forEach(function (user) {
+      users[user.username] = user;
+    });
+
+    response.data.topic_list.topics.map(function (topic) {
+      topic.last_poster_user = users[topic.last_poster_username];
+    });
+  });
+
+  return result;
+};
+
 Forum.prototype.readAnnouncement = function (lang) {
   lang = lang === 'zh_CN' ? 'en' : lang;
   return this.get('/t/annonce-' + lang + '.json');
