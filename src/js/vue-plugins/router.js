@@ -17,6 +17,7 @@ import XreportView from '@/views/document/XreportView';
 import AlterhomeView from '@/views/portals/AlterhomeView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
+import Home2View from '@/views/portals/Home2View';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
 import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
@@ -53,6 +54,7 @@ const routes = [
   { path: '/', name: 'home', component: FeedView },
   { path: '/alterhome', name: 'alterhome', component: AlterhomeView },
   { path: '/dashboard', name: 'dashboard', component: DashboardView },
+  { path: '/home2', name: 'dhome2', component: Home2View },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
   { path: '/feed', name: 'feed', component: FeedView },
   { path: '/serac', name: 'serac', component: SeracView },

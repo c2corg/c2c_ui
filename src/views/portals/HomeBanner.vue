@@ -3,7 +3,7 @@
     <div class="intro-banner has-text-centered">
       <div class="title with-background" v-translate>The mountain sports community</div>
 
-      <div class="outings-links">
+      <!--     <div class="outings-links">
         <router-link
           v-for="activity of $options.activities"
           :key="activity"
@@ -13,7 +13,7 @@
         >
           <icon-activity :activity="activity" />
         </router-link>
-      </div>
+      </div>-->
 
       <div class="title is-4 has-text-weight-normal with-background">
         <p v-translate>

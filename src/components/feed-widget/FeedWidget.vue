@@ -167,7 +167,7 @@ export default {
 
       //Pour le contenu de qualité
       if (this.showGreatDocuments) {
-        items = items.filter((item) => item.document.quality == 'great');
+        items = items.filter((item) => item.document.quality === 'great');
       }
 
       for (const item of items) {

@@ -1,14 +1,10 @@
 <template>
   <div>
-    <html-header title="Dashboard" />
+    <html-header title="Home2" />
     <home-banner v-if="!$user.isLogged" />
     <div class="section">
       <div class="columns">
         <div class="column is-7">
-          <div class="box">
-            <h4 class="title is-3">Lumière sur :</h4>
-            <association-zoom ref="associationZoom" />
-          </div>
           <div class="box">
             <span v-if="$user.isLogged" class="is-pulled-right is-flex is-size-4">
               <div class="field" v-if="$user.isLogged">
@@ -30,10 +26,18 @@
               <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
                 <fa-icon icon="cogs" />
               </router-link>
-              <router-link to="feed" class="has-text-normal" :title="$gettext('Feed')">
-                <fa-icon icon="th" />
-              </router-link>
+              <span
+                @click="toogleProperty('listMode')"
+                class="header-item is-size-3 has-cursor-pointer is-hidden-mobile"
+              >
+                <fa-icon icon="th-list" :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Outings list')" />
+                <fa-icon icon="th" :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" />
+              </span>
             </span>
+            <h4 class="title is-3">Lumière sur</h4>
+            <association-zoom ref="associationZoom" />
+          </div>
+          <div v-if="listMode" class="box">
             <h4 class="title is-2">
               <router-link to="outings">
                 <icon-outing />
@@ -51,6 +55,12 @@
                 <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
               </div>
             </div>
+          </div>
+          <div v-if="!listMode">
+            <feed-widget
+              :type="enableUserPreferences && $user.isLogged ? 'personal' : 'default'"
+              hide-empty-documents
+            />
           </div>
         </div>
         <div class="column is-5">
@@ -144,7 +154,6 @@
           </div>
         </div>
       </div>
-
       <!--          <div class="box">
             <h4 class="title is-3">
               <router-link to="waypoints">
@@ -188,6 +197,7 @@ import DashboardRouteLink from './utils/DashboardRouteLink';
 //import DashboardWPLink from './utils/DashboardWPLink';
 import ForumWidget from './utils/ForumWidget';
 
+import FeedWidget from '@/components/feed-widget/FeedWidget';
 import Gallery from '@/components/gallery/Gallery';
 import c2c from '@/js/apis/c2c';
 
@@ -197,6 +207,7 @@ export default {
   components: {
     AssociationZoom,
     HomeBanner,
+    FeedWidget,
     DashboardArticleLink,
     //    DashboardBookLink,
     DashboardOutingLink,
@@ -215,6 +226,7 @@ export default {
       articlesPromise: null,
       booksPromise: null,
       imagesPromise: null,
+      listMode: null,
     };
   },
 
@@ -231,17 +243,17 @@ export default {
       return this.routesPromise.data;
     },
 
-    waypoints() {
-      return this.waypointsPromise.data;
-    },
-
     articles() {
       return this.articlesPromise.data;
     },
 
+    /*    waypoints() {
+      return this.waypointsPromise.data;
+    },
+
     books() {
       return this.booksPromise.data;
-    },
+    },*/
 
     outingsByDate() {
       if (!this.outings) {
@@ -266,9 +278,9 @@ export default {
   created() {
     this.loadOutings();
     this.routesPromise = c2c.route.getAll({ limit: 5 });
-    this.waypointsPromise = c2c.waypoint.getAll({ limit: 5 });
+    //this.waypointsPromise = c2c.waypoint.getAll({ limit: 5 });
     this.articlesPromise = c2c.article.getAll({ limit: 5 });
-    this.booksPromise = c2c.book.getAll({ limit: 5 });
+    //this.booksPromise = c2c.book.getAll({ limit: 5 });
     this.imagesPromise = c2c.image.getAll();
   },
 
@@ -308,6 +320,15 @@ export default {
           resolve(query);
         });
       });
+    },
+
+    toogleProperty(property) {
+      this.setProperty(property, !this[property]);
+    },
+
+    setProperty(property, value) {
+      this[property] = value;
+      this.$localStorage.set(`${this.documentType}.${property}`, this[property]);
     },
   },
 };
