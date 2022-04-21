@@ -23,8 +23,23 @@
                 Personal feed
               </label>
             </div>
+            <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
+              <fa-icon icon="th-list" :class="listMode ? 'has-text-primary' : ''" :title="$gettext('List mode')" />
+              <fa-icon icon="th" :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Cards mode')" />
+            </span>
           </div>
-          <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
+          <feed-widget
+            v-if="!listMode"
+            :type="isPersonal && $user.isLogged ? 'personal' : 'default'"
+            hide-empty-documents
+            hide-waypoints
+          />
+          <feed-tab
+            v-if="listMode"
+            :type="isPersonal && $user.isLogged ? 'personal' : 'default'"
+            hide-empty-documents
+            hide-waypoints
+          />
         </div>
         <div
           v-if="!$screen.isMobile"
@@ -42,6 +57,7 @@
 import HomeBanner from './HomeBanner';
 import ForumWidget from './utils/ForumWidget';
 
+import FeedTab from '@/components/feed-widget/FeedTab';
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 
 export default {
@@ -49,6 +65,7 @@ export default {
 
   components: {
     HomeBanner,
+    FeedTab,
     FeedWidget,
     ForumWidget,
   },
@@ -56,6 +73,7 @@ export default {
   data() {
     return {
       isPersonal: false,
+      listMode: false,
     };
   },
 
@@ -66,6 +84,15 @@ export default {
   methods: {
     saveIsPersonalState() {
       this.$localStorage.set('isPersonal', this.isPersonal);
+    },
+
+    toogleProperty(property) {
+      this.setProperty(property, !this[property]);
+    },
+
+    setProperty(property, value) {
+      this[property] = value;
+      this.$localStorage.set(`${this.documentType}.${property}`, this[property]);
     },
   },
 };

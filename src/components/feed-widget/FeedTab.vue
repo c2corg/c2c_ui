@@ -1,7 +1,7 @@
 <template>
   <div class="columns" v-infinite-scroll="load" infinite-scroll-disabled="loading" infinite-scroll-distance="500">
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
-      <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
+      <feed-row v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
     </div>
     <!-- <loading-notification :promise="promise" /> -->
   </div>
@@ -10,12 +10,12 @@
 <script>
 import infiniteScroll from 'vue-infinite-scroll';
 
-import FeedCard from '@/components/cards/FeedCard';
+import FeedRow from '@/components/cards/FeedRow';
 import c2c from '@/js/apis/c2c';
 
 export default {
   components: {
-    FeedCard,
+    FeedRow,
   },
 
   directives: { infiniteScroll },
@@ -79,30 +79,9 @@ export default {
     },
 
     initializeColumns() {
-      const availableWidth = this.$el.clientWidth;
-      const cardLargestWidth = 400;
-
       let columnCount;
-
-      if (availableWidth < 2 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-full';
-        columnCount = 1;
-      } else if (availableWidth < 3 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-half';
-        columnCount = 2;
-      } else if (availableWidth < 4 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-one-third';
-        columnCount = 3;
-      } else if (availableWidth < 5 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-one-quarter';
-        columnCount = 4;
-      } else if (availableWidth < 6 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-two-fifths';
-        columnCount = 5;
-      } else {
-        this.cssColumnsClass = 'is-2';
-        columnCount = 6;
-      }
+      this.cssColumnsClass = 'is-full';
+      columnCount = 1;
 
       this.columns = [];
 
@@ -210,6 +189,6 @@ export default {
 
 <style scoped lang="scss">
 .feed-card {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 </style>

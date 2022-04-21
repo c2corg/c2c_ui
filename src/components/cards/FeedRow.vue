@@ -1,34 +1,21 @@
 <template>
-  <card-container :document="document">
-    <card-title>
-      <span :title="$gettext('User avatar')">
-        <img
-          v-if="!useDefaultAvatarIcon"
-          class="avatar"
-          alt="Avatar"
-          @error="useDefaultAvatarIcon = true"
-          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
-          loading="lazy"
-        />
-        <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
-      </span>
-      <span>
-        <document-title :document="item.user" />
-        <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
-      </span>
+  <div :document="document" class="card" :class="{ 'is-highlighted': highlighted }">
+    <span :title="$gettext('User avatar')">
+      <img
+        v-if="!useDefaultAvatarIcon"
+        class="avatar"
+        alt="Avatar"
+        @error="useDefaultAvatarIcon = true"
+        :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+        loading="lazy"
+      />
+      <fa-icon v-else icon="user" class="is-size-1 has-text-grey" />
+    </span>
+    <marker-document-type :document-type="documentType" class="is-pulled-left is-size-1" />
+    <document-title :document="item.document" class="has-text-weight-bold" />
+    <span v-if="documentType === 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
 
-      <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3" />
-    </card-title>
-
-    <card-row>
-      <document-title :document="item.document" class="has-text-weight-bold" />
-      <span v-if="documentType === 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
-    </card-row>
-
-    <card-row v-if="locale && locale.summary">
-      <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
-    </card-row>
-
+    <!---
     <card-row v-if="images.length">
       <gallery :images="images" />
     </card-row>
@@ -53,17 +40,14 @@
 
       <card-elevation-item v-if="item.document.elevation" :elevation="item.document.elevation" />
 
-      <span v-if="item.document.waypoint_type">
-        <icon-waypoint-type :waypoint-type="item.document.waypoint_type" />
-        <span>{{ $gettext(item.document.waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}</span>
-      </span>
     </card-row>
+-->
 
-    <card-row v-if="item.document.areas && item.document.areas.length">
+    <span v-if="item.document.areas && item.document.areas.length">
       <card-region-item :document="item.document" />
-    </card-row>
+    </span>
 
-    <card-row>
+    <span>
       <span>
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
       </span>
@@ -74,25 +58,21 @@
         &nbsp;
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
       </span>
-      <span> {{ $dateUtils.timeAgo(item.time) }} </span>
       <span>
         <marker-condition v-if="documentType === 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
-    </card-row>
-  </card-container>
+    </span>
+  </div>
 </template>
 
 <script>
 import { cardMixin } from './utils/mixins';
 
-import Gallery from '@/components/gallery/Gallery';
 import forum from '@/js/apis/forum';
 
 export default {
-  components: {
-    Gallery,
-  },
+  components: {},
 
   filters: {
     max300chars: (value) => (value.length > 300 ? value.substring(0, 300) + '…' : value),
@@ -104,6 +84,10 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    highlighted: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -173,15 +157,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@media screen and (max-width: $tablet) {
-  .feed-card {
+/*@media screen and (max-width: $tablet) {
+ .feed-card {
     border-left: 0 !important;
     border-right: 0 !important;
   }
   .has-left-margin-mobile {
     margin-left: 5px;
   }
-}
+}*/
 
 .is-max-3-lines-height {
   // proprietary stuff, supported on limited browsers
@@ -203,6 +187,7 @@ export default {
   height: 36px;
   vertical-align: bottom;
   margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .has-3-images > div {
@@ -222,5 +207,18 @@ export default {
 .card-image-content > div > img {
   width: 100%;
   box-sizing: border-box;
+}
+
+.card {
+  transition: 0.1s;
+  border: $card-border;
+  background: white;
+}
+
+.card:hover,
+.is-highlighted {
+  transition: 0.2s;
+  box-shadow: $card-hover-shadow;
+  background: $hover-background;
 }
 </style>

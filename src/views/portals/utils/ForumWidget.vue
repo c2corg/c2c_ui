@@ -168,7 +168,7 @@ export default {
 
 .wide {
   .forum-row {
-    padding: 1rem;
+    padding: 0.5rem;
     border-bottom: 1px solid #eee;
 
     img {
