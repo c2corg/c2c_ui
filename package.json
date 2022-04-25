@@ -26,7 +26,7 @@
     "@turf/intersect": "6.5.0",
     "ag-grid-community": "26.2.1",
     "ag-grid-vue": "26.2.0",
-    "axios": "0.26.1",
+    "axios": "0.27.0",
     "blueimp-load-image": "5.16.0",
     "bulma": "0.9.3",
     "bulma-checkradio": "2.1.3",
