@@ -114,7 +114,7 @@ export default {
       'updated xreport': this.$gettext('has updated the xreport'),
     }[[this.item['change_type'], this.documentType].join(' ')];
 
-    this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document']);
+    this.dates = this.$documentUtils.getShortOutingDatesLocalized(this.item['document']);
 
     if (this.item.image1) {
       this.images.push(this.item.image1);
@@ -136,7 +136,7 @@ export default {
   border-radius: 50%;
   width: 24px;
   height: 24px;
-  vertical-align: bottom;
+  vertical-align: middle;
   margin-right: 0.5rem;
   margin-left: 0.5rem;
 }
@@ -145,6 +145,7 @@ export default {
   transition: 0.1s;
   border: $card-border;
   background: white;
+  max-height: 3em;
 }
 
 a {
@@ -160,7 +161,6 @@ a {
 
 .row {
   display: inline-block;
-  max-height: 2em;
   max-width: 75%;
 }
 </style>

@@ -60,22 +60,12 @@
     </card-row>
 
     <card-row v-if="item.document.areas && item.document.areas.length">
-      <card-region-item :document="item.document" />
-    </card-row>
-
-    <card-row>
+      <card-region-item :document="item.document" class="is-ellipsed" />
       <span>
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
-      </span>
-      <span>
         <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" />
-        &nbsp;
         <marker-image-count :image-count="item.document.img_count" />
-        &nbsp;
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
-      </span>
-      <span> {{ $dateUtils.timeAgo(item.time) }} </span>
-      <span>
         <marker-condition v-if="documentType === 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
@@ -199,8 +189,8 @@ export default {
 
 .avatar {
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   vertical-align: bottom;
   margin-right: 0.5rem;
 }

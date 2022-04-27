@@ -189,6 +189,6 @@ export default {
 
 <style scoped lang="scss">
 .feed-card {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 </style>

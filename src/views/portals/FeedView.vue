@@ -23,7 +23,7 @@
                 Personal feed
               </label>
             </div>
-            <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
+            <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer">
               <fa-icon icon="th-list" :class="listMode ? 'has-text-primary' : ''" :title="$gettext('List mode')" />
               <fa-icon icon="th" :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Cards mode')" />
             </span>

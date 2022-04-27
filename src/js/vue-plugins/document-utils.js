@@ -304,6 +304,31 @@ export default function install(Vue) {
         }
       },
 
+      getShortOutingDatesLocalized(document) {
+        // date_end may be empty on outing creation
+        // it will be filled on save
+        // so, for the preview, we must replace an empty date_end with date start
+        const date_start = document.date_start;
+        const date_end = document.date_end || date_start;
+
+        if (!date_start) {
+          return this.$gettext('Invalid date');
+        }
+
+        const start = this.$dateUtils.parseDate(date_start);
+        const end = this.$dateUtils.parseDate(date_end);
+
+        if (!isSameYear(start, end)) {
+          return this.formatDate(start, 'P') + ' - ' + this.formatDate(end, 'd');
+        } else if (!isSameMonth(start, end)) {
+          return this.formatDate(start, 'd MM') + ' - ' + this.formatDate(end, 'P');
+        } else if (!isSameDay(start, end)) {
+          return this.formatDate(start, 'd') + ' - ' + this.formatDate(end, 'P');
+        } else {
+          return this.formatDate(end, 'P');
+        }
+      },
+
       formatDate(arg, formatString) {
         return format(arg, formatString, { locale: locales[this.$language.current] });
       },
