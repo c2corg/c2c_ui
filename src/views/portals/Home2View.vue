@@ -6,32 +6,34 @@
       <div class="columns">
         <div class="column is-7">
           <div class="box">
-            <span v-if="$user.isLogged" class="is-pulled-right is-flex is-size-4">
-              <div class="field" v-if="$user.isLogged">
-                <input
-                  id="c2c-personal-feed"
-                  class="switch is-rtl is-rounded is-info"
-                  type="checkbox"
-                  v-model="enableUserPreferences"
-                  @change="enableUserPreferences"
-                />
-                <label
-                  for="c2c-personal-feed"
-                  v-translate
-                  :title="enableUserPreferences ? $gettext('Personal feed on') : $gettext('Personal feed off')"
-                >
-                  Personal feed
-                </label>
-              </div>
-              <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
-                <fa-icon icon="cogs" />
-              </router-link>
+            <span class="is-pulled-right is-flex is-size-4">
               <span
                 @click="toogleProperty('listMode')"
                 class="header-item is-size-3 has-cursor-pointer is-hidden-mobile"
               >
                 <fa-icon icon="th-list" :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Outings list')" />
                 <fa-icon icon="th" :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" />
+              </span>
+              <span v-if="$user.isLogged">
+                <div class="field" v-if="$user.isLogged">
+                  <input
+                    id="c2c-personal-feed"
+                    class="switch is-rtl is-rounded is-info"
+                    type="checkbox"
+                    v-model="enableUserPreferences"
+                    @change="enableUserPreferences"
+                  />
+                  <label
+                    for="c2c-personal-feed"
+                    v-translate
+                    :title="enableUserPreferences ? $gettext('Personal feed on') : $gettext('Personal feed off')"
+                  >
+                    Personal feed
+                  </label>
+                </div>
+                <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
+                  <fa-icon icon="cogs" />
+                </router-link>
               </span>
             </span>
             <h4 class="title is-3">Lumière sur</h4>
