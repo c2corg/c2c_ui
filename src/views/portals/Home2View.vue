@@ -7,10 +7,7 @@
         <div class="column is-7">
           <div class="box">
             <span class="is-pulled-right is-flex is-size-4">
-              <span
-                @click="toogleProperty('listMode')"
-                class="header-item is-size-3 has-cursor-pointer is-hidden-mobile"
-              >
+              <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer">
                 <fa-icon icon="th-list" :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Outings list')" />
                 <fa-icon icon="th" :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" />
               </span>
