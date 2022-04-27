@@ -33,7 +33,7 @@
                 </router-link>
               </span>
             </span>
-            <h4 class="title is-3">Lumière sur</h4>
+            <h4 class="title is-3">A la une</h4>
             <association-zoom ref="associationZoom" />
           </div>
           <div v-if="listMode" class="box">
@@ -225,7 +225,7 @@ export default {
       articlesPromise: null,
       booksPromise: null,
       imagesPromise: null,
-      listMode: null,
+      listMode: true,
     };
   },
 
