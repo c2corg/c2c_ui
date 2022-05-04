@@ -86,6 +86,7 @@ const config = {
   routerMode: 'history', // for pretty urls
   ignApiKey: undefined,
   bingApiKey: undefined,
+  ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isProduction: false,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',

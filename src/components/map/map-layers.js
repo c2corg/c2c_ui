@@ -176,6 +176,23 @@ function createBaseMapDotAtSource(title, source) {
   });
 }
 
+function createOrdnanceSurveySource(title) {
+  // available backgrounds are Outdoor, Light, Road
+  return new ol.layer.Tile({
+    title,
+    type: 'base',
+    visible: false,
+    source: new ol.source.XYZ({
+      attributions: [
+        '© <a target="_blank" rel="noreferer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
+      ],
+      url: 'https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey,
+      minZoom: 7,
+      maxZoom: 20,
+    }),
+  });
+}
+
 export const cartoLayers = function () {
   // $gettext('ESRI', 'Map layer')
   /* const esri = new ol.layer.Tile({
@@ -236,6 +253,8 @@ export const cartoLayers = function () {
   const basemap = createBaseMapDotAtSource('Basemap (at)', 'raster');
   // $gettext('Basemap ortho (at)', 'Map layer')
   const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'ortho');
+  // $gettext('Ordnance Survey (uk), 'Map layer')
+  const ordnanceSurvey = createOrdnanceSurveySource('UK');
   return [
     openTopoMap,
     /* esri, */
@@ -248,6 +267,7 @@ export const cartoLayers = function () {
     ignEsOrtho,
     basemap,
     basemapOrtho,
+    ordnanceSurvey,
   ];
 };
 
