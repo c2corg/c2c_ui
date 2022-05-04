@@ -188,7 +188,7 @@ function createOrdnanceSurveySource(title) {
       ],
       url: 'https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey,
       minZoom: 7,
-      maxZoom: 20,
+      maxZoom: 16,
     }),
   });
 }
