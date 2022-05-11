@@ -1,28 +1,10 @@
 <template>
   <card-container :document="document">
-    <card-title>
-      <span :title="$gettext('User avatar')">
-        <img
-          v-if="!useDefaultAvatarIcon"
-          class="avatar"
-          alt="Avatar"
-          @error="useDefaultAvatarIcon = true"
-          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
-          loading="lazy"
-        />
-        <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
-      </span>
-      <span>
-        <document-title :document="item.user" />
-        <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
-      </span>
-
-      <marker-document-type :document-type="documentType" class="is-pulled-right is-size-3" />
-    </card-title>
-
     <card-row>
-      <document-title :document="item.document" class="has-text-weight-bold" />
-      <span v-if="documentType === 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
+      <marker-document-type :document-type="documentType" class="is-pulled-left is-size-3" />
+      <document-title :document="item.document" class="has-text-weight-bold has-left-padding" />
+      <span v-if="documentType === 'outing'" class="is-nowrap is-pulled-right has-left-margin-mobile">{{ dates }}</span>
+      <span v-else> </span>
     </card-row>
 
     <card-row v-if="locale && locale.summary">
@@ -33,7 +15,25 @@
       <gallery :images="images" />
     </card-row>
 
-    <card-row v-if="documentType != 'article' && documentType != 'book'">
+    <card-row>
+      <span class="is-pulled-left">
+        <span :title="$gettext('User avatar')">
+          <img
+            v-if="!useDefaultAvatarIcon"
+            class="avatar"
+            alt="Avatar"
+            @error="useDefaultAvatarIcon = true"
+            :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+            loading="lazy"
+          />
+          <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
+        </span>
+        <document-title :document="item.user" />
+      </span>
+      <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
+    </card-row>
+
+    <card-row v-if="documentType != 'article' && documentType != 'book' && documentType != 'xreport'">
       <span v-if="documentType === 'outing' || documentType === 'route'">
         <icon-ratings class="card-icon" />
         <document-rating :document="item.document" />
@@ -63,7 +63,7 @@
       <card-region-item :document="item.document" class="is-ellipsed" />
       <span>
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
-        <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" />
+        <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" class="is-size-3" />
         <marker-image-count :image-count="item.document.img_count" />
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
         <marker-condition v-if="documentType === 'outing'" :condition="item.document.condition_rating" />
@@ -171,6 +171,10 @@ export default {
   .has-left-margin-mobile {
     margin-left: 5px;
   }
+}
+
+.has-left-padding {
+  padding-left: 0.5rem;
 }
 
 .is-max-3-lines-height {

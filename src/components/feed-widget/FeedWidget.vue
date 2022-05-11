@@ -80,7 +80,7 @@ export default {
 
     initializeColumns() {
       const availableWidth = this.$el.clientWidth;
-      const cardLargestWidth = 400;
+      const cardLargestWidth = 350; //400 de base
 
       let columnCount;
 
@@ -210,6 +210,6 @@ export default {
 
 <style scoped lang="scss">
 .feed-card {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 </style>
