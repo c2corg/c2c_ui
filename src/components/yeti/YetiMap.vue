@@ -167,14 +167,11 @@ export default {
       ];
     },
     atLeastOneYetiLayerIsShown() {
-      return this.yetiLayers.filter((layer) => layer.checked).length;
+      return !!this.yetiLayers.filter((layer) => layer.checked).length;
     },
   },
   watch: {
-    showAvalancheBulletins() {
-      this.updateCartoLayersOpacity();
-    },
-    showAreas() {
+    atLeastOneYetiLayerIsShown() {
       this.updateCartoLayersOpacity();
     },
     visibleCartoLayerId(id) {
@@ -299,8 +296,8 @@ export default {
       if (this.mapZoom !== mapZoom) {
         Yetix.setMapZoom(mapZoom);
       }
-      // if mountains are here, update
-      if (this.showAvalancheBulletins || this.showAreas) {
+      // if one of Yeti layers is here, update (on zooming for example)
+      if (this.atLeastOneYetiLayerIsShown) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -316,7 +313,7 @@ export default {
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
       c2c_cartoLayers.forEach((layer) => {
-        layer.setOpacity((this.showAvalancheBulletins || this.showAreas) && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity(this.atLeastOneYetiLayerIsShown && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
     onShowAvalancheBulletins() {
