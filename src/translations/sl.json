@@ -270,7 +270,7 @@
     "Help": "Pomoč",
     "Help research activities to define new prevention means": "Pomagati znanstvenim raziskavam pri opredelitvi novih preventivnih sredstev",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Tukaj je seznam uporabnikov, ki jih spremljate in katerih dejavnost boste videli v svojem osebnem toku.",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Tukaj lahko nastavite filtre za dejavnosti in regije, ki bodo veljali za tok domače strani.",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Tukaj lahko nastavite filtre za jezike, dejavnosti in regije, ki bodo veljali za tok domače strani.",
     "High danger level from the avalanche bulletin": "Visoka stopnja nevarnosti iz plazovnega biltena",
     "Hiking gear": "Planinarjenje",
     "History": "Različice",
@@ -417,7 +417,7 @@
     "Only document less than 24h old can be deleted": {
       "API message": "Izbrišete lahko samo nedavne dokumente (24 ur). Za odstranitev tega dokumenta se obrnite na moderatorja. "
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "V toku vaše domače strani so prikazani samo dokumenti, ki se nanašajo na izbrane regije in na izbrane dejavnosti. \nDokumenti spremljanih uporabnikov so vedno vidni.",
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "V toku vaše domače strani so prikazani samo dokumenti, ki se nanašajo na izbrani jeziki, izbrane regije in izbrane dejavnosti.  \nDokumenti spremljanih uporabnikov so vedno vidni.",
     "Ooops": "Ups",
     "Open fields to deeply explain the event circumstances.": "Prosta polja za poglobljeno razlago okoliščin dogodka",
     "Open fields to detail the picture's context": "Prosto polje za podroben opis konteksta slike",
