@@ -54,7 +54,7 @@
     "zingtouch": "1.0.6"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "5.0.4",
+    "@vue/cli-plugin-babel": "5.0.6",
     "@vue/cli-plugin-eslint": "5.0.4",
     "@vue/cli-service": "5.0.6",
     "@vue/eslint-config-standard": "6.1.0",
