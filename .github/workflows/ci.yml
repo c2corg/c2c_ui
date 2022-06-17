@@ -36,7 +36,7 @@ jobs:
           cache: 'npm'
       - name: npm install, lint and build
         run: |
-          npm ci
+          npm ci --force
           npm run lint:no-fix
           npm run build
         env:
