@@ -17,6 +17,7 @@
     "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
+    "@brunobesson/vue-awesome-swiper": "4.1.4",
     "@fortawesome/fontawesome-free": "6.1.1",
     "@fortawesome/fontawesome-svg-core": "6.1.1",
     "@fortawesome/free-brands-svg-icons": "6.1.1",
@@ -42,7 +43,6 @@
     "swiper": "6.8.4",
     "vue": "2.6.14",
     "vue-analytics": "5.22.1",
-    "vue-awesome-swiper": "4.1.1",
     "vue-head": "2.2.0",
     "vue-infinite-scroll": "2.0.2",
     "vue-multiselect": "2.1.6",

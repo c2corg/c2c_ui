@@ -3,7 +3,7 @@ FROM node:lts-alpine as build-stage
 WORKDIR /
 COPY package*.json ./
 COPY .snyk /
-RUN npm install --force
+RUN npm install
 COPY . .
 RUN npm run build
 RUN node tools/generate-health.js

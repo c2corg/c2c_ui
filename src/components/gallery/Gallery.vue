@@ -13,8 +13,8 @@
 </template>
 
 <script>
+import getAwesomeSwiper from '@brunobesson/vue-awesome-swiper/dist/exporter';
 import { Swiper as SwiperClass } from 'swiper/core';
-import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter';
 
 import imageUrls from '@/js/image-urls';
 

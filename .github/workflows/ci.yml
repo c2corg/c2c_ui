@@ -36,7 +36,7 @@ jobs:
           cache: 'npm'
       - name: npm install, lint and build
         run: |
-          npm ci --force
+          npm ci
           npm run lint:no-fix
           npm run build
         env:
@@ -154,7 +154,7 @@ jobs:
       - name: Push translations to Transifex
         run: |
           echo "::add-mask::$TOKEN"
-          npm i --force
+          npm i
           npm run messages:extract
           curl --location --fail --request POST 'https://rest.api.transifex.com/resource_strings_async_uploads' --header 'Content-Type: multipart/form-data' --header "Authorization: Bearer $TOKEN" --form 'content=@"src/translations/c2corg_ui-client.pot"' --form 'resource="o:camptocamp-association:p:c2corg_ui:r:main"'
         env:
