@@ -2,7 +2,7 @@
   <div class="advertisement">
     <iframe
       :title="$gettext('advertisement')"
-      :src="$options.publicPath + 'affiz.html'"
+      :src="$options.publicPath + 'revive-adserver.html'"
       frameborder="0"
       scrolling="no"
     />
