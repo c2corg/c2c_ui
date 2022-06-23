@@ -18,7 +18,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
       - name: Update caniuse database and create PR if applies
-        uses: c2corg/browserslist-update-action@5c47d1b8661b2e88a7db8cc75d6df7f5b01926da
+        uses: c2corg/browserslist-update-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: browserslist-update
