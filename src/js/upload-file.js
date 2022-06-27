@@ -165,7 +165,7 @@ const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSucce
   try {
     const document = {};
     const { default: loadImage } = await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image');
-    const metaData = await loadImage(file);
+    const metaData = await loadImage(file, { meta: true });
     let orientation = await parseMetaData(document, metaData);
     if (angle) {
       // if no orientation has been retrieved, consider value 1 (no rotation)
