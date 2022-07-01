@@ -31,35 +31,35 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables.scss';
 
-::v-deep {
-  a:hover,
-  a:focus {
+:deep(a) {
+  &:hover,
+  &:focus {
     text-decoration: underline;
   }
+}
 
-  h4 {
-    margin-top: 1rem;
-    margin-bottom: 0.25rem !important;
-  }
+:deep(h4) {
+  margin-top: 1rem;
+  margin-bottom: 0.25rem !important;
+}
 
-  abbr {
-    text-decoration: none;
-    border-bottom: dotted 2px #aaa;
-  }
+:deep(abbr) {
+  text-decoration: none;
+  border-bottom: dotted 2px #aaa;
+}
 
-  strong,
-  dt {
-    font-weight: bold;
-    color: inherit;
-  }
+:deep(strong),
+:deep(dt) {
+  font-weight: bold;
+  color: inherit;
+}
 
-  .yeti-subpanel + .yeti-subpanel {
-    margin-top: 2rem;
-  }
+:deep(.yeti-subpanel + .yeti-subpanel) {
+  margin-top: 2rem;
+}
 
-  .content-ul {
-    list-style: disc outside;
-    margin-left: 2em;
-  }
+:dep(.content-ul) {
+  list-style: disc outside;
+  margin-left: 2em;
 }
 </style>

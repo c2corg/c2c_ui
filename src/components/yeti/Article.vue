@@ -68,22 +68,20 @@ export default {
   max-width: 1039px;
   margin-top: 1.75em;
 }
-::v-deep {
-  h3 {
-    margin-top: 2em;
-  }
-  p {
-    margin: 1em 0;
-  }
-  ul {
-    list-style-type: disc;
-  }
-  figure img {
-    max-width: 90%;
-    max-height: 500px;
-  }
+:deep(h3) {
+  margin-top: 2em;
 }
-.yeti-article--disclaimer ::v-deep li {
+:deep(p) {
+  margin: 1em 0;
+}
+:deep(ul) {
+  list-style-type: disc;
+}
+:deep(figure) img {
+  max-width: 90%;
+  max-height: 500px;
+}
+.yeti-article--disclaimer :deep(li) {
   margin: 2em 0;
 }
 </style>

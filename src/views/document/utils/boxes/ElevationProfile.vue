@@ -492,51 +492,49 @@ export default {
 <style lang="scss" scoped>
 $C2C-orange: red;
 
-::v-deep {
-  .elevation-profile-chart {
-    height: 300px; // default height on page
+:deep(.elevation-profile-chart) {
+  height: 300px; // default height on page
 
-    .axis path,
-    .axis line {
-      fill: none;
-      stroke: black;
-      shape-rendering: crispEdges;
-    }
-
-    .axis .legend {
-      fill: black;
-    }
-
-    .line {
-      fill: none;
-      stroke: $C2C-orange;
-      stroke-width: 3px;
-    }
-
-    .circle {
-      fill: white;
-      stroke: $C2C-orange;
-      stroke-width: 2px;
-    }
-
-    line.target {
-      stroke: lightgray;
-      stroke-width: 1px;
-    }
-
-    .bubble {
-      font-size: 12px;
-    }
-
-    .overlay {
-      fill: none;
-      pointer-events: all;
-    }
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
   }
 
-  .elevation-profile-fullscreen-toggle {
-    display: none;
+  .axis .legend {
+    fill: black;
   }
+
+  .line {
+    fill: none;
+    stroke: $C2C-orange;
+    stroke-width: 3px;
+  }
+
+  .circle {
+    fill: white;
+    stroke: $C2C-orange;
+    stroke-width: 2px;
+  }
+
+  line.target {
+    stroke: lightgray;
+    stroke-width: 1px;
+  }
+
+  .bubble {
+    font-size: 12px;
+  }
+
+  .overlay {
+    fill: none;
+    pointer-events: all;
+  }
+}
+
+:deep(.elevation-profile-fullscreen-toggle) {
+  display: none;
 }
 
 :fullscreen .elevation-profile-container {
@@ -584,7 +582,7 @@ $C2C-orange: red;
   .elevation-profile-chart {
     height: 100%;
 
-    ::v-deep svg {
+    :deep(svg) {
       position: absolute;
     }
   }
