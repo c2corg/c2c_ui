@@ -58,7 +58,7 @@
     "@snyk/protect": "1.963.0",
     "@vue/cli-plugin-babel": "5.0.6",
     "@vue/cli-plugin-eslint": "5.0.6",
-    "@vue/cli-service": "5.0.6",
+    "@vue/cli-service": "5.0.7",
     "@vue/eslint-config-standard": "6.1.0",
     "babel-eslint": "10.1.0",
     "cross-env": "7.0.3",
