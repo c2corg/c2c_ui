@@ -47,6 +47,7 @@ const AssociationsHistoryView = () =>
   import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
 const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
+const FavorisView = () => import(/* webpackChunkName: "favoris" */ '@/views/user/utils/FavorisView.vue');
 
 const routes = [
   { path: '/', name: 'home', component: FeedView },
@@ -66,6 +67,7 @@ const routes = [
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
 
   { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
+  { path: '/favoris', name: 'favoris', component: FavorisView },
 
   {
     path: '/forum',

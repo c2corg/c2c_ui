@@ -1,1 +1,2 @@
-Sitemap: https://api.camptocamp.org/sitemaps.xml
+User-agent: *
+Disallow:

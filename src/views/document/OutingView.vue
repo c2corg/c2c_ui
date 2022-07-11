@@ -1,6 +1,7 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+
     <document-view-header v-if="document" :document="document" :version="version" />
 
     <images-box v-if="document" :document="document" />
@@ -100,7 +101,6 @@
         </div>
 
         <tool-box :document="document" v-if="$screen.isMobile" />
-
         <comments-box :document="document" />
       </div>
     </div>
