@@ -321,4 +321,13 @@ div[c2c\:role='video'] {
     }
   }
 }
+
+@media screen and (max-width: 844px) {
+  div[c2c\:role='video'] {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap-reverse;
+  }
+}
 </style>
