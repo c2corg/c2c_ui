@@ -322,7 +322,7 @@ div[c2c\:role='video'] {
   }
 }
 
-@media screen and(max-width: 844px) {
+@media screen and(max-width: $phone) {
   div[c2c\:role='video'] {
     display: flex;
     align-items: center;
