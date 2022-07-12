@@ -61,6 +61,13 @@
       </span>
     </router-link>
 
+    <router-link :to="{ name: 'favoris' }">
+      <span class="menu-item is-ellisped">
+        <icon-star />
+        <span class="menu-item-text"> {{ $gettext('Favoris') | uppercaseFirstLetter }} </span>
+      </span>
+    </router-link>
+
     <div class="menu-footer is-size-7">
       <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
       <advertisement class="menu-add" v-if="$screen.hasHeightForAd" />
