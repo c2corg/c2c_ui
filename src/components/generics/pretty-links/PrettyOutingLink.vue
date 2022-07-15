@@ -4,6 +4,7 @@
       {{ outing.date_end }}
       &hairsp;&bull;&hairsp;
     </span>
+
     <document-title :document="outing" />
     <span class="has-text-normal">
       <activities :activities="outing.activities" class="is-size-4 has-text-secondary icon-activities" />
