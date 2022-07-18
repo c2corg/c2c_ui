@@ -38,7 +38,11 @@
           <span v-if="documentType == 'outing'" class="outing-date is-size-5">
             {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
             <div class="favoris">
-              <button @click="click">
+              <button
+                v-on:click="clicked"
+                :style="{ 'background-color': clickedColor }"
+                @click="warn('A new fav has been added to your profil', $event)"
+              >
                 <icon-star> </icon-star>
               </button>
             </div>
@@ -93,6 +97,25 @@ export default {
       return this.$documentUtils.getDocumentTitle(this.document, this.lang);
     },
   },
+
+  data: function () {
+    return {
+      clickedColor: 'black',
+    };
+  },
+
+  methods: {
+    warn(message, event) {
+      if (event) {
+        event.preventDefault();
+      }
+      alert(message);
+    },
+
+    clicked() {
+      this.clickedColor = 'yellow';
+    },
+  },
 };
 </script>
 
@@ -129,5 +152,6 @@ export default {
 .favoris {
   display: flex;
   flex-direction: row-reverse;
+  background-color: none;
 }
 </style>
