@@ -286,7 +286,6 @@ div[c2c\:role='video'] {
     width: 400px;
     height: 300px;
     max-width: 100%;
-
     @media screen and(min-width: $tablet) {
       width: 470px;
       height: 315px;
