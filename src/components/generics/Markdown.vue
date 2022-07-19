@@ -289,7 +289,7 @@ div[c2c\:role='video'] {
 
     @media screen and(min-width: $tablet) {
       width: 420px;
-      height: 300px;
+      height: 315px;
     }
   }
 }
