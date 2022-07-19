@@ -283,8 +283,14 @@ div[c2c\:role='video'] {
   text-align: center;
 
   iframe {
-    width: 420px;
-    height: 315px;
+    width: 400px;
+    height: 300px;
+    max-width: 100%;
+
+    @media screen and(min-width: $tablet) {
+      width: 470px;
+      height: 315px;
+    }
   }
 }
 
@@ -319,15 +325,6 @@ div[c2c\:role='video'] {
       font-size: 1.2rem !important;
       margin-bottom: 0.25em !important;
     }
-  }
-}
-
-@media screen and(max-width: 844px) {
-  div[c2c\:role='video'] {
-    display: flex;
-    align-items: center;
-    justify-items: center;
-    flex-wrap: wrap-reverse;
   }
 }
 </style>
