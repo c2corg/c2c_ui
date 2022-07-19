@@ -1,6 +1,5 @@
 import Feature from 'ol/Feature';
 import FeatureFormat, { transformGeometryWithOptions } from 'ol/format/Feature';
-import FormatType from 'ol/format/FormatType';
 import GeometryLayout from 'ol/geom/GeometryLayout';
 import LineString from 'ol/geom/LineString';
 import { get as getProjection } from 'ol/proj';
@@ -64,7 +63,7 @@ export class FIT extends FeatureFormat {
   }
 
   getType() {
-    return FormatType.ARRAY_BUFFER;
+    return 'arraybuffer';
   }
 
   readProjection() {
