@@ -284,12 +284,13 @@ div[c2c\:role='video'] {
 
   iframe {
     width: 400px;
-    height: 300px;
+    height: 250px;
     max-width: 100%;
-
+    display: flex;
     @media screen and(min-width: $tablet) {
-      width: 420px;
-      height: 315px;
+      width: 500px;
+      height: 350px;
+      display: flex;
     }
   }
 }
