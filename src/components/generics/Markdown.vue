@@ -286,11 +286,9 @@ div[c2c\:role='video'] {
     width: 400px;
     height: 250px;
     max-width: 100%;
-    display: flex;
     @media screen and(min-width: $tablet) {
-      width: 500px;
-      height: 350px;
-      display: flex;
+      width: 420px;
+      height: 315px;
     }
   }
 }
