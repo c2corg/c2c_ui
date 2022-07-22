@@ -283,8 +283,13 @@ div[c2c\:role='video'] {
   text-align: center;
 
   iframe {
-    width: 420px;
-    height: 315px;
+    width: 400px;
+    height: 250px;
+    max-width: 100%;
+    @media screen and(min-width: $tablet) {
+      width: 420px;
+      height: 315px;
+    }
   }
 }
 
