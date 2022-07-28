@@ -49,7 +49,7 @@
     "vue-property-decorator": "9.1.2",
     "vue-recaptcha": "1.3.0",
     "vue-router": "3.5.4",
-    "vue-slider-component": "3.2.18",
+    "vue-slider-component": "3.2.20",
     "vuejs-datepicker": "1.6.2",
     "zingtouch": "1.0.6"
   },
