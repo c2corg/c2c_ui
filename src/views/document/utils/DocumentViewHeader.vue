@@ -37,15 +37,6 @@
           <!-- outing specific  -->
           <span v-if="documentType == 'outing'" class="outing-date is-size-5">
             {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
-            <div class="favoris">
-              <button
-                v-on:click="clicked"
-                :style="{ 'background-color': clickedColor }"
-                @click="warn('A new fav has been added to your profil', $event)"
-              >
-                <icon-star> </icon-star>
-              </button>
-            </div>
           </span>
 
           <!-- xreport specific  -->
@@ -88,6 +79,12 @@ export default {
     },
   },
 
+  data: function () {
+    return {
+      clickedColor: 'black',
+    };
+  },
+
   computed: {
     lang() {
       return this.document.cooked.lang;
@@ -96,12 +93,6 @@ export default {
     title() {
       return this.$documentUtils.getDocumentTitle(this.document, this.lang);
     },
-  },
-
-  data: function () {
-    return {
-      clickedColor: 'black',
-    };
   },
 
   methods: {

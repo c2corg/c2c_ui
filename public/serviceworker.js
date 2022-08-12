@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 
-const addRessourcesToCache = async (ressources) => {
-  const cache = await caches.open('v1');
-  await cache.addAll(ressources);
-};
+const cacheName = 'CampToCamp';
+
+const contentToCache = ['/public/', '/public/index.html', '/public/app.js', '/public/img/icons'];
 
 const putInCache = async (request, response) => {
   const cache = await caches.open('v1');
@@ -22,7 +21,6 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
     putInCache(request, preloadResponse.clone());
     return preloadResponse;
   }
-
   try {
     const responseFromNetwork = await fetch(request);
     putInCache(request, responseFromNetwork.clone());
@@ -50,15 +48,20 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(addRessourcesToCache(['/src/', '/public/', '/public/index.html', '/src/style.css', '/src/app.js']));
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(cacheName);
+      await cache.addAll(contentToCache);
+    })()
+  );
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWidth(
+  event.respondWith(
     cacheFirst({
       request: event.request,
       preloadResponsePromise: event.preloadResponse,
-      fallbackUrl: '/src/App.vue',
+      fallbackUrl: '/public/index.html',
     })
   );
 });

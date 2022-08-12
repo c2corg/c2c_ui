@@ -1,0 +1,21 @@
+{
+  "name": "CampToCamp",
+  "short_name": "CampToCamp",
+  "icons": [
+    {
+      "src": "/img/icons/android-chrome-512x512.png",
+      "size": "512x512",
+      "type": "img/png"
+    },
+    {
+      "src": "/img/icons/android-chrome-192x192.png",
+      "size": "192x192",
+      "type": "img/png"
+    }
+  ],
+  "start_url": "/public/index.html",
+  "scope": "/public",
+  "display": "fullscreen",
+  "background_color": "#fbfaf6",
+  "theme_color": "#F93"
+}

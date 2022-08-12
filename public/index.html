@@ -22,6 +22,8 @@
         "logo": "https://www.camptocamp.org/assets/img/logo.svg"
       }
     </script>
+    <link rel="manifest" href="./manifest.json" crossorigin="use-credentials" />
+    <script type="module" src="./app.js" defer></script>
   </head>
   <body style="background-color: #fbfaf6">
     <noscript>
@@ -44,7 +46,7 @@
       </svg>
     </div>
     <div id="app"></div>
-    <script type="module" src="app.js"></script>
+    <div class="hidden notification" id="Offline Notification">Online mode is available now !</div>
     <!-- built files will be auto injected -->
   </body>
 </html>
