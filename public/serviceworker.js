@@ -1,8 +1,5 @@
 /* eslint-disable no-console */
-
-const cacheName = 'CampToCamp';
-
-const contentToCache = ['/public/', '/public/index.html', '/public/app.js', '/public/img/icons'];
+const contentToCache = ['/public/', '/public/index.html', '/public/app.js'];
 
 const putInCache = async (request, response) => {
   const cache = await caches.open('v1');
@@ -50,7 +47,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
-      const cache = await caches.open(cacheName);
+      const cache = await caches.open('v1');
       await cache.addAll(contentToCache);
     })()
   );
