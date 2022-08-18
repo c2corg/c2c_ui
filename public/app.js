@@ -15,5 +15,4 @@ const registerServiceWorker = async () => {
     }
   }
 };
-
 registerServiceWorker();
