@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="img/png" href="/img/icons/android-chrome-512x512.png" sizes="512x512" />
     <title>Camptocamp.org</title>
 
     <meta name="theme-color" content="#F93" />
+    <meta name="msapplicationicon" content="/image/icon-144x144.png" />
     <meta name="application-name" content="Camptocamp.org" />
     <link rel="preconnect" href="<%= CAMPTOCAMP_CONFIG.urls.api %>" />
     <link rel="preconnect" href="<%= CAMPTOCAMP_CONFIG.urls.media %>" />
@@ -22,8 +24,8 @@
         "logo": "https://www.camptocamp.org/assets/img/logo.svg"
       }
     </script>
-    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
-    <script type="module" src="./app.js" defer></script>
+    <link rel="manifest" href="/manifest.json" defer />
+    <script type="module" src="/app.js" defer></script>
   </head>
   <body style="background-color: #fbfaf6">
     <noscript>
@@ -46,7 +48,6 @@
       </svg>
     </div>
     <div id="app"></div>
-    <div class="hidden notification" id="Offline Notification">Online mode is available now !</div>
     <!-- built files will be auto injected -->
   </body>
 </html>

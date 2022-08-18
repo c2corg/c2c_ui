@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-
 const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('./serviceworker.js');
+      const registration = await navigator.serviceWorker.register('/serviceworker.js');
       if (registration.installing) {
         console.log('Service Worker installing');
       } else if (registration.waiting) {

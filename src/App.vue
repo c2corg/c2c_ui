@@ -7,7 +7,6 @@
     <helper-window ref="helper" />
     <alert-window ref="alertWindow" />
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
-
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
       <router-view class="router-view" />
@@ -43,7 +42,6 @@ export default {
       alternativeSideMenu: false,
     };
   },
-
   watch: {
     $route: 'hideSideMenuOnMobile',
   },
