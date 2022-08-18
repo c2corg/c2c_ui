@@ -1,6 +1,8 @@
+const { event } = require('vue-analytics');
+
 /* eslint-disable no-console */
 const CacheName = 'CampToCamp';
-const Offline_page = './index.html';
+const Offline_page = 'index.html';
 
 self.addEventListener('fetch', function (event) {
   if (event.request.url.includes('/OutingViews/')) {
@@ -25,7 +27,11 @@ self.addEventListener('fetch', function (event) {
 
 const delay = (ms) => (_) => new Promise((resolve) => setTimeout(() => resolve(_), ms));
 function update(request) {
-  return fetch(request.url).then(delay(3000).then((response) => response));
+  return fetch(request.url).then((response) => cache(request, response).then(() => response));
+  if (event.request.url.includes('/OutingView/')) {
+    event.respondWith(caches.match(event.request));
+    event.waitUntil(update(event.request));
+  }
 }
 
 function refresh(response) {
@@ -47,6 +53,10 @@ function refresh(response) {
       const message = JSON.parse(event.data);
       if (message && message.type.includes('/views/documents/OutingView')) {
         renderAttendees(message.data);
+      }
+      if (event.request.url.includes('/OutingView/')) {
+        event.respondWith(caches.match(event.request));
+        event.waitUntil(update(event.request).then(refresh));
       }
     })
   );
