@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {

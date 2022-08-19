@@ -21,6 +21,7 @@
       "purpose": "any"
     }
   ],
+
   "id": "index.html",
   "start_url": "/src/App.vue",
   "scope": "/public/",
