@@ -1,5 +1,3 @@
-const { event } = require('vue-analytics');
-
 /* eslint-disable no-console */
 const CacheName = 'CampToCamp';
 const Offline_page = 'index.html';
