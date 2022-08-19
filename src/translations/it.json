@@ -31,6 +31,12 @@
     "Action": {
       "Sophie picture context": "Azion"
     },
+    "Action - prix du jury": {
+      "Sophie picture context": "Azione - Premio della giuria"
+    },
+    "Action - prix du public": {
+      "Sophie picture context": "Azione - Premio del pubblico"
+    },
     "Activity feed": "Notizie",
     "Add": "Aggiugere",
     "Add here maps not automatically referenced": "Aggiungi una carta",
@@ -116,6 +122,7 @@
     },
     "Continue the discussion": "Prosegui la discussione",
     "Contribute to common knowledge": "Partecipare alla costruzione di un sapere collettivo ",
+    "Contribute to maintainance": "Aiutare gli attori locali",
     "Contributions": "Contributi ",
     "Contributor": "Contributore",
     "Control the use of your personal data": "Controlla l'uso dei tuoi dati personali ",
@@ -145,6 +152,7 @@
     "Delete": {
       "yeti": "Cancellare"
     },
+    "Delete a line chunk": "Eliminare un segmento di linea",
     "Delete a point": "Cancella un punto",
     "Delete image": "Cancella immagine",
     "Delete route": "Cancella itinerario",
@@ -192,6 +200,7 @@
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
+    "EULA": "CGU",
     "Easy mountain climbing gear": "Alpinismo su roccia (F a AD)",
     "Easy snow ice mixed gear": "Alpinismo su neve, ghiaccio, misto (F a PD+)",
     "Edit": {
@@ -221,6 +230,7 @@
     "Forgot password?": "Password dimenticata?",
     "Forum username": "Nickname",
     "From danger 3, consider the slopes which dominate the route": "Dal grado 3, si deve tenere conto dei pendi sopra l'itinerario",
+    "From the interface": "Dall'interfaccia",
     "Full bulletin:": "Bollettino:",
     "Fullname": "Cognome",
     "GPS Track": "Traccia GPS",
@@ -283,6 +293,7 @@
     "Invalid email address": {
       "API message": "email invalido"
     },
+    "Issue report": "Segnalare un problema",
     "Know more about SERAC": "Saperne di più su SERAC",
     "Large group = 5 people and more": "grande gruppo = 5 persone e più",
     "Large group with load shedding distance": "grande gruppo con distanze di sicurezza",
@@ -521,6 +532,7 @@
     "There are sensitive areas on this route. Please refer to the map.": "Questo itinerario attraversa (o passa vicino a) una aerea protetta. Consultare la mappa.",
     "These are positive experiences that reveal usefull risk-management skills.": "Queste sono esperienze positive che rivelano utili capacità di gestione del rischio",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Questi cookie consentono di interagire dal sito web camptocamp.org con i moduli dei social media e di condividere i contenuti del sito web con altre persone o di far conoscere la propria consultazione o opinione in merito, ad esempio quando si clicca sul modulo. Disabilitando questi cookie, non sarà possibile condividere i contenuti di camptocamp.org sui social network.",
+    "This book cover is the property of its editor and/or author": "La copertina di questo libro è di proprietà dell'editore e/o dell'autore.",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Il contenuto e sotto la licenza Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Il contenuto e sotto la licenza Creative Commons BY-SA 3.0",
     "This document is a draft.": "Questo documento è in bozza.",
@@ -1412,6 +1424,7 @@
     "public_transportation_rating": "Accessibilità con i mezzi pubblici",
     "public_transportation_types": "Tipo di mezzi pubblici ",
     "publication_date": "Data di pubblicazione ",
+    "qualification": "Diploma di supervisione dell'attività",
     "quality": "Qualità del documento",
     "quartzite": {
       "rock_types": "quarzite"
@@ -1685,6 +1698,9 @@
     "waypoint_type": "Tipo di punto di passaggio",
     "waypoints": "punti di passaggio",
     "weather": "Meteo",
+    "weather_event": {
+      "event_types": "evento meteorologico"
+    },
     "weather_station": {
       "waypoint_types": "stazione meteo"
     },
