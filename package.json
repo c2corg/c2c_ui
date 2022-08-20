@@ -76,7 +76,7 @@
     "sass": "1.54.4",
     "sass-loader": "13.0.2",
     "vue-template-compiler": "2.7.9",
-    "webpack-bundle-analyzer": "4.5.0",
+    "webpack-bundle-analyzer": "4.6.0",
     "xml2js": "0.4.23"
   },
   "postcss": {
