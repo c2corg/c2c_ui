@@ -1,44 +1,78 @@
 <template>
   <div>
-    <html-header :title="$gettext('Home')" />
     <!-- Présentation de l'association, info qu'on met en avant -->
     <div class="section">
-      <div class="feed-title">
-        Bienvenue sur Camptocamp !
-      </div>
-      <div class="columns">
-        <div class="column">
-          <home-banner v-if="!$user.isLogged" />
+      <div class="box">
+        <div class="feed-title">
+          <span class="title is-1" v-translate>Welcome to Camptocamp ! The mountain sports community</span>
+          <fa-icon
+            class="is-size-6 is-pulled-right has-cursor-pointer no-print"
+            icon="angle-down"
+            :rotation="visible ? undefined : 180"
+            @click="visible = !visible"
+          />
         </div>
-        <div class="column">
-          Quoi de neuf côté association
+        <div v-show="visible">
+          <div class="title is-4 has-text-weight-normal" v-translate>
+              Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
+              mountain activities.
+          </div>
+          <div class="columns">
+            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd" v-if="!$user.isLogged">
+              <div>
+                <p>Vous trouverez ici :</p>
+                <ul>
+                  <li><router-link to="routes"><span v-translate>routes</span></router-link> pour vous indiquer le chemin</li>
+                  <li><router-link to="outings"><span v-translate>outings</span></router-link> pour les conditions</li>
+                  <li>une base de données incidents/accidents : <router-link to="serac">SERAC</router-link></li>
+                  <li>une aide à la gestion du risque d'avalanche : <router-link to="yeti">Yeti</router-link></li>
+                  <li>une bibliothèque comportant des <router-link to="articles">articles</router-link> et des <router-link to="books">références de livres</router-link></li>
+                  <li>un <router-link to="forum">forum</router-link> pour discuter de sujets techniques ou simplement papoter</li>
+                </ul>
+              </div>
+            </div>
+            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+              <p>Ce site est géré par une association à but non lucratif, qui a fait le choix de contenus sous licences libres, et dont les acteurs sont bénévoles.</p>
+              <ul>
+                <li>Vous souhaitez vous investir ou participer aux coulisses du topoguide : rejoignez <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>.</li>
+                <li>Vous souhaitez simplement aider financièrement le site (serveurs, développements...) :
+                  <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
+                    faites un don
+                    <fa-icon icon="heart" class="donate-icon" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+              <h3 class="title is-4">Partage du moment :</h3>
+              <i>Le petit bout de code qui va bien pour afficher une publi Facebook ou autre</i>
+          </div>
+          </div>
         </div>
       </div>
     </div>
     <!-- Partie dashboard/feed -->
     <!-- Swicht dashboard/feed -->
-    <div class="section">
-      <div class="feed-title">
-        <span @click="toogleProperty('listMode')" class="is-size-3 has-text-weight-semibold has-cursor-pointer">
-          <span :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Dashboard')" v-translate>Dashboard</span> /
-          <span :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" v-translate>Activity feed</span>
-        </span>
-        <div class="field" v-if="$user.isLogged">
-          <input
-            id="c2c-personal-feed"
-            class="switch is-rtl is-rounded is-info"
-            type="checkbox"
-            v-model="isPersonal"
-            @change="saveIsPersonalState"
-          />
-          <label
-            for="c2c-personal-feed"
-            v-translate
-            :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
-          >
-            Activer mes préférences
-          </label>
-        </div>
+    <div class="feed-title">
+      <span @click="toogleProperty('listMode')" class="is-size-3 has-text-weight-semibold has-cursor-pointer">
+        <span :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Dashboard')" v-translate>Dashboard</span> /
+        <span :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" v-translate>Activity feed</span>
+      </span>
+      <div class="field" v-if="$user.isLogged">
+        <input
+          id="c2c-personal-feed"
+          class="switch is-rtl is-rounded is-info"
+          type="checkbox"
+          v-model="isPersonal"
+          @change="saveIsPersonalState"
+        />
+        <label
+          for="c2c-personal-feed"
+          v-translate
+          :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
+        >
+          Activer mes préférences
+        </label>
       </div>
     </div>
     <!-- Feed -->
@@ -57,11 +91,11 @@
       </div>
     </div>
     <!-- Dashboard -->
-    <div class="section">
+    <div class="section" v-if="listMode">
       <div class="columns">
         <div class="column is-7">
           <!-- Sorties -->
-          <div v-if="listMode" class="box">
+          <div class="box">
             <h4 class="title is-2">
               <router-link to="outings">
                 <icon-outing />
@@ -78,6 +112,19 @@
                 </h4>
                 <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
               </div>
+            </div>
+          </div>
+          <!-- Itinéraires -->
+          <div class="box">
+            <h4 class="title is-3">
+              <router-link to="routes">
+                <icon-route />
+                {{ $gettext('routes') | uppercaseFirstLetter }}
+              </router-link>
+            </h4>
+            <loading-notification :promise="routesPromise" />
+            <div v-if="routes != null">
+              <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
             </div>
           </div>
         </div>
@@ -133,19 +180,6 @@
             </h4>
             <forum-widget :message-count="20" />
           </div>
-          <!-- Itinéraires -->
-          <div class="box">
-            <h4 class="title is-3">
-              <router-link to="routes">
-                <icon-route />
-                {{ $gettext('routes') | uppercaseFirstLetter }}
-              </router-link>
-            </h4>
-            <loading-notification :promise="routesPromise" />
-            <div v-if="routes != null">
-              <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
-            </div>
-          </div>
           <!-- Articles -->
           <div class="box">
             <h4 class="title is-3">
@@ -171,7 +205,7 @@
 
 <script>
 
-import HomeBanner from './HomeBanner';
+//import HomeBanner from './HomeBanner';
 import DashboardArticleLink from './utils/DashboardArticleLink';
 import DashboardOutingLink from './utils/DashboardOutingLink';
 import DashboardRouteLink from './utils/DashboardRouteLink';
@@ -185,7 +219,7 @@ export default {
   name: 'FeedView',
 
   components: {
-    HomeBanner,
+    //HomeBanner,
     FeedWidget,
     DashboardArticleLink,
     DashboardOutingLink,
@@ -203,6 +237,7 @@ export default {
       articlesPromise: null,
       imagesPromise: null,
       listMode: true,
+      visible: true,
     };
   },
 
@@ -319,13 +354,18 @@ export default {
 }
 
 .feed-title {
-  margin-bottom: 12px;
+  //margin-bottom: 12px;
+  margin-left: 21px;
   display: flex;
   align-items: baseline;
 
   span:first-child {
     flex-grow: 1;
   }
+}
+
+ul {
+  list-style-type: disc !important;
 }
 
 .cards-container > div {

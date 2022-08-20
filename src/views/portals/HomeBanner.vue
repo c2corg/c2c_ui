@@ -1,26 +1,23 @@
 <template>
   <section>
-    <div class="intro-banner has-text-centered">
-      <div class="title is-1 with-background" v-translate>The mountain sports community</div>
-
-      <div class="outings-links">
-        <router-link
-          v-for="activity of $options.activities"
-          :key="activity"
-          :to="{ name: 'outings', query: { act: activity } }"
-          :title="$gettext(activity, 'activities')"
-          class="outings-link"
-        >
-          <icon-activity :activity="activity" />
-        </router-link>
-      </div>
-
-      <div class="title is-4 has-text-weight-normal with-background" v-translate>
+    <div>
+      <div class="title is-4 has-text-weight-normal" v-translate>
         Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
         mountain activities.
       </div>
+      <div>
+        <p>Vous trouverez ici :</p>
+        <ul>
+          <li>des itinéraires pour vous indiquer le chemin</li>
+          <li>des sorties pour les conditions</li>
+          <li>une base de données incidents/accidents : Sérac</li>
+          <li>une aide à la gestion du risque d'avalanche : Yéti</li>
+          <li>une bibliothèque comportant des articles et des références de livres</li>
+          <li>un forum pour discuter de sujets techniques ou simplement papoter</li>
+        </ul>
+      </div>
 
-      <div class="buttons is-centered">
+      <!--<div class="buttons is-centered">
         <router-link :to="{ name: 'topoguide' }" class="button is-primary">
           <icon-topoguide />&nbsp; <span v-translate="">Topoguide</span><br />
           <span v-translate="" class="is-size-4">Conditions, summits, routes</span>...
@@ -30,7 +27,7 @@
           <icon-forum />&nbsp; <span v-translate>Forum</span><br />
           <span v-translate class="is-size-4">Share with us!</span>
         </router-link>
-      </div>
+      </div>-->
     </div>
   </section>
 </template>
@@ -54,7 +51,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-section {
+/*section {
   background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-800w.jpg');
   background-size: cover;
   background-position-y: 50%;
@@ -65,7 +62,7 @@ section {
   @media (min-width: 1224px) {
     background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1200w.jpg');
   }
-}
+}*/
 
 .intro-banner {
   padding-bottom: 40px;
