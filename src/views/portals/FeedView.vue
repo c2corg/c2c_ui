@@ -18,12 +18,12 @@
               mountain activities.
           </div>
           <div class="columns">
-            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd" v-if="!$user.isLogged">
+            <div class="column is-12-mobile" v-if="!$user.isLogged">
               <div>
                 <p>Vous trouverez ici :</p>
                 <ul>
-                  <li><router-link to="routes"><span v-translate>routes</span></router-link> pour vous indiquer le chemin</li>
-                  <li><router-link to="outings"><span v-translate>outings</span></router-link> pour les conditions</li>
+                  <li>des <router-link to="routes"><span v-translate>routes</span></router-link> pour vous indiquer le chemin</li>
+                  <li>des <router-link to="outings"><span v-translate>outings</span></router-link> pour les conditions</li>
                   <li>une base de données incidents/accidents : <router-link to="serac">SERAC</router-link></li>
                   <li>une aide à la gestion du risque d'avalanche : <router-link to="yeti">Yeti</router-link></li>
                   <li>une bibliothèque comportant des <router-link to="articles">articles</router-link> et des <router-link to="books">références de livres</router-link></li>
@@ -31,7 +31,7 @@
                 </ul>
               </div>
             </div>
-            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+            <div class="column is-12-mobile" >
               <p>Ce site est géré par une association à but non lucratif, qui a fait le choix de contenus sous licences libres, et dont les acteurs sont bénévoles.</p>
               <ul>
                 <li>Vous souhaitez vous investir ou participer aux coulisses du topoguide : rejoignez <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>.</li>
@@ -43,7 +43,7 @@
                 </li>
               </ul>
             </div>
-            <div class="column is-12-mobile is-4-tablet is-4-desktop is-4-widescreen is-4-fullhd">
+            <div class="column is-12-mobile">
               <h3 class="title is-4">Partage du moment :</h3>
               <i>Le petit bout de code qui va bien pour afficher une publi Facebook ou autre</i>
           </div>
