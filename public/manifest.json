@@ -1,0 +1,17 @@
+{
+  "name": "CampToCamp",
+  "short_name": "CampToCamp",
+  "icons": [
+    {
+      "src": "./favicon-16x16.png",
+      "size": "16x16",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "App.vue",
+  "start_url": "./src/App.vue",
+  "scope": "/src/",
+  "display": "standalone",
+  "background_color": "#fbfaf6",
+  "theme_color": "#F46"
+}
