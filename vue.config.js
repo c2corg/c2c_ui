@@ -75,6 +75,12 @@ const result = {
 
     plugins: [],
   },
+
+  // https://cli.vuejs.org/core-plugins/pwa.html#configuration
+  pwa: {
+    name: "camptocamp.org",
+    themeColor: "#f93"
+  }
 };
 
 /* Please note that all key present in this file are public keys
