@@ -105,7 +105,9 @@
     "Basemap ortho (at)": {
       "Map layer": "Австрийские спутниковые"
     },
+    "Beginner": "Начинающий",
     "Beware of case-sensitive login and password": "Внимание,  логин и пароль чувствительны к регистру.",
+    "Block account": "Заблокировать этого пользователя",
     "Book content": "содержание книги",
     "Both results and map": "Оба карта и результаты",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Кратко опишите телесные повреждения. Поместите здесь также комментарии, не соответствующие другим разделам.",
@@ -113,6 +115,7 @@
     "By year": "по годам",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org стремится облегчить обмен информацией между людьми практикующими горные виды спорта и внести свой вклад в безопасность в горах.",
     "Cancel": "Отменить",
+    "Candidates": "Все фотографии",
     "Cards mode": "Режим карточек",
     "Change password": "Изменить пароль",
     "Checking...": "проверка...",
@@ -122,22 +125,30 @@
     "Comments": "комментарии",
     "Comments are disabled.": "комментарии отключены",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Обмен целями , ожиданиями, наблюдениями, соображениями членов группы во время мероприятия. Обсуждение новых стратегий, разделение ответственностей, слаженно ли группа функционирует итп.",
+    "Compute": "Подсчет",
     "Conditions, summits, routes": "Условия, вершины, маршруты",
     "Confirm": "подтвердить",
     "Confirm delete": "Подтвердить удаление",
     "Conflicting method and danger": "Метод оценки и уровень опасности несовместимы",
+    "Continue the discussion": "Продолжить обсуждение",
     "Contribute to maintainance": "Помощь локальному сообществу",
     "Control the use of your personal data": "Управление вашими персональными данными",
     "Coup de coeur": {
       "Sophie picture context": "Избранное"
     },
     "Crag climbing gear": "Снаряжение для скалолазания",
+    "Create": {
+      "yeti": "Создать"
+    },
     "Created on": "созданный",
     "Creation?": "Создание?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Данная территория не покрыта картами YETI. Нанесены только французские горы (ограничены пунктирной линией)<br>",
     "Current password": "действующий пароль",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Уровень опасности из лавинного бюллетеня распространяется на любую ориентацию. Роза ветров определяет наиболее важные сектора, представляющие повышенный риск.",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Технические данные, такие как ориентация, тип скал или общая конфигурация маршрута (гребень, кулуар, стена)",
+    "Delete": {
+      "yeti": "Удалить"
+    },
     "Delete this document": "Удалить этот документ",
     "Delete this locale": "удалить эту языковую версию",
     "Describe access": "Описать подход",
@@ -147,6 +158,7 @@
     "Describe historical information about the route (date, names..) here": "Напольнять историческую информацию про данный маршрут (даты, фамилии, итд...)",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Опишите информацию, собранную перед поездкой,  и их прогресса в полевых условиях. Это касается прогноза погоды, бюллетеней оценки лавинной опасности, качества льда, снега, и т.п.",
     "Description": "Описание",
+    "Detailed information": "Подробная информация",
     "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Опишите ваш выход и происшествие/несчастный случай. Если вы уже создали описание выхода, то можете описать лишь происшествие, а затем связать этот отчет с выходом (после его загрузки).",
     "Details on participants and event context": "Подробная информация об участниках и контексте вашего мероприятия.",
     "Different high/low danger?": "Уровень опасности наверху/внизу разнится?",
@@ -155,7 +167,10 @@
     "Drop images here or click to upload": "Перетащите изображения сюда, или кликните чтобы выбрать их\nДанные изображения буду распространяться под лицензией <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nЕсли вы не являетесь автором изображения, вы не можете загрузить его, если автор не дал свое согласие на его выпуск под соответствующей лицензией Creative-Commons.\nИзображения размером свыше двух 2 Мб будут сжаты перед отправкой.",
     "Duration": "Продолжительность",
     "Duration (hrs)": "Продолжительность (ч)",
-    "Edit": "редактировать",
+    "Edit": {
+      "$$noContext": "редактировать",
+      "yeti": "Редактировать"
+    },
     "Elementary": "Простой",
     "Elementary Reduction Method": "Простой метод для начинающих",
     "Email": "электронный адрес",
@@ -172,6 +187,7 @@
     "General information": "общая информация",
     "Geolocation": "Геолокация",
     "Go back to YETI": "Вернуться к YETI",
+    "Group": "Группа",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Был ли составлен график? Выдерживался ли он? Было ли время фактором влияющим на происшествия?",
     "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Изменило ли это событие ваши привычки? Какие уроки вы извлекли из него?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Вы (пере)оценивали риски при каждом изменении  ситуации? \nУчтите факторы, которые могли повлиять на ваш уровень внимания, такие как усталость, стресс, снижение внимания после преодоления трудностей или при спуске, известное или легкопроходимое место, наличие следов или других людей, полное доверие к лидеру группы, и т.п.",
@@ -529,7 +545,13 @@
       "children_proof_types": "опасно"
     },
     "date": "дата",
+    "date_end": "Дата окончания",
+    "date_start": "Дата начала",
+    "date_time": "дата / время",
     "day(s)": "день(ы)",
+    "de": {
+      "langs": "  \n \n \n \nНемецкий"
+    },
     "descending sort": "Сортировать по убыванию",
     "descent": {
       "image_categories": "Спуск"
