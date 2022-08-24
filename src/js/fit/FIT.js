@@ -1,6 +1,5 @@
 import Feature from 'ol/Feature';
 import FeatureFormat, { transformGeometryWithOptions } from 'ol/format/Feature';
-import GeometryLayout from 'ol/geom/GeometryLayout';
 import LineString from 'ol/geom/LineString';
 import { get as getProjection } from 'ol/proj';
 
@@ -374,7 +373,7 @@ export class FIT extends FeatureFormat {
     this.messageTypes = [];
     /** Time reference for upcoming compressed messages */
     this.timestamp = 0;
-    const geometry = new LineString([], GeometryLayout.XYZM);
+    const geometry = new LineString([], 'XYZM');
     let loopIndex = headerSize;
 
     while (loopIndex < headerSize + dataLength) {

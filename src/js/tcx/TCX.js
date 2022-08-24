@@ -1,6 +1,5 @@
 import Feature from 'ol/Feature';
 import FeatureFormat, { transformGeometryWithOptions } from 'ol/format/Feature';
-import GeometryLayout from 'ol/geom/GeometryLayout';
 import LineString from 'ol/geom/LineString';
 import MultiLineString from 'ol/geom/MultiLineString';
 import { get as getProjection } from 'ol/proj';
@@ -58,10 +57,7 @@ export class TCX extends FeatureFormat {
       return;
     }
 
-    const geometry =
-      lines.length === 1
-        ? new LineString(lines[0], GeometryLayout.XYZM)
-        : new MultiLineString(lines, GeometryLayout.XYZM);
+    const geometry = lines.length === 1 ? new LineString(lines[0], 'XYZM') : new MultiLineString(lines, 'XYZM');
 
     return new Feature(transformGeometryWithOptions(geometry, false, readOptions));
   }
