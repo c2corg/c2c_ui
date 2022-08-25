@@ -18,6 +18,7 @@ div {
 @media screen and (max-width: $tablet) {
   div {
     align-items: flex-start;
+    justify-content: center;
   }
   span.is-ellipsed,
   p.is-ellipsed {

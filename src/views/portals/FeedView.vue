@@ -5,12 +5,61 @@
       <div class="box">
         <div class="feed-title">
           <span class="title is-1" v-translate>Welcome to Camptocamp ! The mountain sports community</span>
-          <fa-icon
-            class="is-size-6 is-pulled-right has-cursor-pointer no-print"
-            icon="angle-down"
-            :rotation="visible ? undefined : 180"
-            @click="visible = !visible"
-          />
+          <!--Display parameters-->
+          <dropdown-button class="is-right">
+            <span slot="button" class="button">
+              <fa-icon icon="cogs" />
+              <span class="is-hidden-mobile">&nbsp;</span>
+              <span class="is-hidden-mobile" v-translate>Display parameters</span>
+              <fa-icon class="is-hidden-mobile" icon="angle-down" aria-hidden="true" />
+            </span>
+            <!--Show intro text or not-->
+            <a
+              class="dropdown-item is-size-6"
+              :class="{ 'is-active': visible }"
+              @click="toogleProperty('visible')"
+            >
+              <span class="is-nowrap item-icons">
+                <fa-icon :icon="visible ? 'circle-check' : 'circle'" />
+              </span>
+              <span class="is-nowrap" v-translate>Show intro text</span>
+            </a>
+            <!--User preferences-->
+            <a
+              class="dropdown-item is-size-6"
+              :class="{ 'is-active': enableUserPreferences }"
+              @click="toogleProperty('enableUserPreferences')"
+              v-if="$user.isLogged"
+            >
+              <span class="is-nowrap item-icons">
+                <fa-icon :icon="enableUserPreferences ? 'circle-check' : 'circle'" />
+              </span>
+              <span class="is-nowrap" v-translate>Enable personal preferences</span>
+            </a>
+            <hr/>
+            <!--Dashboard/Default-->
+            <a
+              class="dropdown-item is-size-6"
+              :class="{ 'is-active': defaultMode }"
+              @click="toogleProperty('defaultMode')"
+            >
+              <span class="is-nowrap item-icons">
+                <fa-icon icon="th-list" />
+              </span>
+              <span class="is-nowrap" v-translate>Default</span>
+            </a>
+            <!--Feed/Comfortable-->
+            <a
+              class="dropdown-item is-size-6"
+              :class="{ 'is-active': !defaultMode }"
+              @click="toogleProperty('defaultMode')"
+            >
+              <span class="is-nowrap item-icons">
+                <fa-icon icon="th-large" />
+              </span>
+              <span class="is-nowrap" v-translate>Comfortable</span>
+            </a>
+          </dropdown-button>
         </div>
         <div v-show="visible">
           <div class="title is-4 has-text-weight-normal" v-translate>
@@ -52,46 +101,26 @@
       </div>
     </div>
     <!-- Partie dashboard/feed -->
-    <!-- Swicht dashboard/feed -->
-    <div class="feed-title">
-      <span @click="toogleProperty('listMode')" class="is-size-3 has-text-weight-semibold has-cursor-pointer">
-        <span :class="listMode ? 'has-text-primary' : ''" :title="$gettext('Dashboard')" v-translate>Dashboard</span> /
-        <span :class="!listMode ? 'has-text-primary' : ''" :title="$gettext('Feed')" v-translate>Activity feed</span>
-      </span>
-      <div class="field" v-if="$user.isLogged">
-        <input
-          id="c2c-personal-feed"
-          class="switch is-rtl is-rounded is-info"
-          type="checkbox"
-          v-model="isPersonal"
-          @change="saveIsPersonalState"
-        />
-        <label
-          for="c2c-personal-feed"
-          v-translate
-          :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
-        >
-          Activer mes préférences
-        </label>
-      </div>
-    </div>
     <!-- Feed -->
-    <div class="section feed-view" v-if="!listMode">
+    <div class="section feed-view" v-if="!defaultMode">
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div
           v-if="!$screen.isMobile"
-          class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd box"
+          class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd"
         >
-          <h3 class="title is-4" v-translate>Last forum topics</h3>
-          <forum-widget :message-count="20" />
+          <useful-links />
+          <div class="box">
+            <h3 class="title is-4" v-translate>Last forum topics</h3>
+            <forum-widget :message-count="20" />
+          </div>
         </div>
       </div>
     </div>
     <!-- Dashboard -->
-    <div class="section" v-if="listMode">
+    <div class="section" v-if="defaultMode">
       <div class="columns">
         <div class="column is-7">
           <!-- Sorties -->
@@ -142,34 +171,7 @@
               <gallery v-if="images != null" :images="images.documents" />
             </div>
           </div>
-          <!-- Liens utiles -->
-          <div class="box">
-            <h4 class="title is-3">Liens utiles</h4>
-            <div>
-              <ul>
-                <li>
-                  <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Préparer sa course</router-link>
-                </li>
-                <li>
-                  <router-link :to="{ name: 'yeti' }" v-translate>Yeti : un outil pour évaluer le risque d’avalanche</router-link>
-                </li>
-                <li>
-                  <a href="https://www.metaskirando.ovh/" title="Metaskirando">Metaskirando : sorties de ski de rando en Europe</a>
-                </li>
-                <li>
-                  <router-link :to="{ name: 'serac' }" v-translate>SERAC : accidents et incidents en montagne</router-link>
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Camptocamp Association</router-link>
-                </li>
-                <li>
-                  <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso">Faire un don ou adhérer</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <useful-links />
           <!-- Forum -->
           <div class="box">
             <h4 class="title is-3">
@@ -210,6 +212,7 @@ import DashboardArticleLink from './utils/DashboardArticleLink';
 import DashboardOutingLink from './utils/DashboardOutingLink';
 import DashboardRouteLink from './utils/DashboardRouteLink';
 import ForumWidget from './utils/ForumWidget';
+import UsefulLinks from './utils/UsefulLinks';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 import Gallery from '@/components/gallery/Gallery';
@@ -224,6 +227,7 @@ export default {
     DashboardArticleLink,
     DashboardOutingLink,
     DashboardRouteLink,
+    UsefulLinks,
     ForumWidget,
     Gallery,
     },
@@ -236,7 +240,7 @@ export default {
       routesPromise: null,
       articlesPromise: null,
       imagesPromise: null,
-      listMode: true,
+      defaultMode: true,
       visible: true,
     };
   },
@@ -344,18 +348,12 @@ export default {
 @media screen and (max-width: $tablet) {
   .feed-view {
     padding-left: 0;
-    padding-right: 0;
-
-    .feed-title {
-      padding-left: 0;
-      padding-right: 0;
-    }
+    padding-right: 0
   }
 }
 
 .feed-title {
   //margin-bottom: 12px;
-  margin-left: 21px;
   display: flex;
   align-items: baseline;
 
@@ -366,6 +364,7 @@ export default {
 
 ul {
   list-style-type: disc !important;
+  padding-left: 12px;
 }
 
 .cards-container > div {
