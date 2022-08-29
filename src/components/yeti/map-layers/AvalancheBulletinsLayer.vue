@@ -372,11 +372,11 @@ export default {
         this.updateBulletinsGeometry();
       }
     },
-    onMapClick(evt) {
+    onMapClick(evt, clickedFeature) {
       // this will set bulletins overlay, only when showAvalancheBulletins is true
       // and drawing mode is off
       if (this.showAvalancheBulletins && !this.drawingMode) {
-        this.setBulletinsOverlay(evt);
+        this.setBulletinsOverlay(evt, clickedFeature);
       }
     },
     onShowAvalancheBulletins() {
@@ -498,7 +498,7 @@ export default {
       // update bulletin overlay
       this.updateBulletinsOverlay();
     },
-    setBulletinsOverlay(evt) {
+    setBulletinsOverlay(evt, clickedFeature) {
       // first, get all features from bulletins layer where clicked
       let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
         layerFilter: function (layer) {
@@ -507,7 +507,8 @@ export default {
       });
       let clickedBulletinFeature = clickedBulletinFeatures.length ? clickedBulletinFeatures[0] : undefined;
       // if a feature is found
-      if (clickedBulletinFeature) {
+      // and feature is the clicked feature from map (overlap)
+      if (clickedBulletinFeature && clickedBulletinFeature === clickedFeature) {
         // set mountain name
         this.overlayData = clickedBulletinFeature.get('overlayData');
         // find the closest point (because it's a MultiPoint)
