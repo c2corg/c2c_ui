@@ -3,7 +3,7 @@
     <card-row>
       <marker-document-type :document-type="documentType" class="is-pulled-left is-size-3" />
       <document-title :document="item.document" class="has-text-weight-bold has-left-padding" />
-      <span v-if="documentType === 'outing'" class="is-nowrap is-pulled-right has-left-margin-mobile">{{ dates }}</span>
+      <span v-if="documentType === 'outing'" class="is-pulled-right has-left-margin-mobile">{{ dates }}</span>
       <span v-else> </span>
     </card-row>
 

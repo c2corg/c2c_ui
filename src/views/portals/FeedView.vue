@@ -348,7 +348,12 @@ export default {
 @media screen and (max-width: $tablet) {
   .feed-view {
     padding-left: 0;
-    padding-right: 0
+    padding-right: 0;
+
+    .feed-title {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 
