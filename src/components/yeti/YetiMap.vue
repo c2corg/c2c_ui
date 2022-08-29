@@ -307,8 +307,13 @@ export default {
       // close controls
       this.showLayerSwitcher = false;
       this.showRecenterOnPropositions = false;
+
+      // get clicked feature (the visible one on top)
+      let clickedFeature = this.map.getFeaturesAtPixel(evt.pixel)[0];
+
       // emit an event for map layers
-      Yetix.$emit('mapClick', evt);
+      // pass clicked feature
+      Yetix.$emit('mapClick', evt, clickedFeature);
     },
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
