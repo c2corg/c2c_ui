@@ -402,6 +402,7 @@ $control-margin: 0.5em;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 
   input {
+    width: 14.75rem;
     border: none;
     padding: 0.3rem;
     border-radius: 2px;
