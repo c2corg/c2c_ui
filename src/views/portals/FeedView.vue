@@ -11,7 +11,6 @@
               <fa-icon icon="cogs" />
               <span class="is-hidden-mobile">&nbsp;</span>
               <span class="is-hidden-mobile" v-translate>Display parameters</span>
-              <fa-icon class="is-hidden-mobile" icon="angle-down" aria-hidden="true" />
             </span>
             <!--Show intro text or not-->
             <a
@@ -24,6 +23,7 @@
               </span>
               <span class="is-nowrap" v-translate>Show intro text</span>
             </a>
+            <hr/>
             <!--User preferences-->
             <a
               class="dropdown-item is-size-6"
@@ -71,20 +71,20 @@
               <div>
                 <p>Vous trouverez ici :</p>
                 <ul>
-                  <li>des <router-link to="routes"><span v-translate>routes</span></router-link> pour vous indiquer le chemin</li>
-                  <li>des <router-link to="outings"><span v-translate>outings</span></router-link> pour les conditions</li>
+                  <li>des <router-link to="routes"><span v-translate>routes</span></router-link> à parcourir</li>
+                  <li>des <router-link to="outings"><span v-translate>outings</span></router-link> pour avoir les dernières conditions</li>
                   <li>une base de données incidents/accidents : <router-link to="serac">SERAC</router-link></li>
                   <li>une aide à la gestion du risque d'avalanche : <router-link to="yeti">Yeti</router-link></li>
                   <li>une bibliothèque comportant des <router-link to="articles">articles</router-link> et des <router-link to="books">références de livres</router-link></li>
-                  <li>un <router-link to="forum">forum</router-link> pour discuter de sujets techniques ou simplement papoter</li>
+                  <li>un <router-link to="forum">forum</router-link> pour discuter de sujets techniques ou bavarder</li>
                 </ul>
               </div>
             </div>
             <div class="column is-12-mobile" >
-              <p>Ce site est géré par une association à but non lucratif, qui a fait le choix de contenus sous licences libres, et dont les acteurs sont bénévoles.</p>
+              <p><router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link> est la structure bénévole à but non lucratif assurant la gestion du site camptocamp.org</p>
               <ul>
-                <li>Vous souhaitez vous investir ou participer aux coulisses du topoguide : rejoignez <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>.</li>
-                <li>Vous souhaitez simplement aider financièrement le site (serveurs, développements...) :
+                <li>Pour participer ou vous investir : rejoignez <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>.</li>
+                <li>Pour soutenir financièrement (serveurs, développements…) :
                   <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
                     faites un don
                     <fa-icon icon="heart" class="donate-icon" />
@@ -113,7 +113,12 @@
         >
           <useful-links />
           <div class="box">
-            <h3 class="title is-4" v-translate>Last forum topics</h3>
+            <h4 class="title is-3">
+              <router-link to="forum">
+                <icon-forum />
+                {{ $gettext('Forum') }}
+              </router-link>
+            </h4>
             <forum-widget :message-count="20" />
           </div>
         </div>
