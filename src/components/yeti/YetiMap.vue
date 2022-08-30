@@ -4,6 +4,8 @@
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
       <avalanche-bulletins-layer />
+      <nivoses-layer />
+      <romma-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <route-layer />
       <div
@@ -98,6 +100,8 @@ let c2c_dataLayers = dataLayers();
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
+import NivosesLayer from './map-layers/NivosesLayer.vue';
+import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
@@ -113,6 +117,8 @@ export default {
   components: {
     AreaLayer,
     AvalancheBulletinsLayer,
+    NivosesLayer,
+    RommaLayer,
     RouteLayer,
     YetiLayer,
   },
@@ -146,6 +152,12 @@ export default {
     showAreas() {
       return Yetix.showAreas;
     },
+    showNivoses() {
+      return Yetix.showNivoses;
+    },
+    showRomma() {
+      return Yetix.showRomma;
+    },
     drawingMode() {
       return Yetix.drawingMode;
     },
@@ -163,6 +175,16 @@ export default {
           title: this.$gettext('Avalanche bulletins'),
           checked: this.showAvalancheBulletins,
           action: this.onShowAvalancheBulletins,
+        },
+        {
+          title: this.$gettext('Nivose beacons'),
+          checked: this.showNivoses,
+          action: this.onShowNivoses,
+        },
+        {
+          title: this.$gettext('ROMMA stations'),
+          checked: this.showRomma,
+          action: this.onShowRomma,
         },
       ];
     },
@@ -326,6 +348,12 @@ export default {
     },
     onShowAreas() {
       Yetix.setShowAreas(!this.showAreas);
+    },
+    onShowNivoses() {
+      Yetix.setShowNivoses(!this.showNivoses);
+    },
+    onShowRomma() {
+      Yetix.setShowRomma(!this.showRomma);
     },
     onDrawingMode() {
       Yetix.setDrawingMode(!this.drawingMode);
