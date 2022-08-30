@@ -11,8 +11,8 @@
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <div>
           <svg
-            :viewBox="overlayData.danger.altitude ? '0 0 150 100' : '0 0 100 100'"
-            :width="overlayData.danger.altitude ? 120 : 80"
+            :viewBox="overlayData.danger.altitude ? '0 0 155 100' : '0 0 100 100'"
+            :width="overlayData.danger.altitude ? 130 : 80"
             height="80"
           >
             <polygon
