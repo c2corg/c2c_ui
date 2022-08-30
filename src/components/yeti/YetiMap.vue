@@ -505,14 +505,17 @@ $yeti-height: calc(
 .yeti-app {
   .ol-control {
     background: $white;
+    padding: 2px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   }
   .ol-control button {
     background: $grey-dark;
+    color: $white;
 
     &:hover,
     &:focus {
       background: $grey;
+      outline: none;
     }
   }
 
@@ -521,6 +524,8 @@ $yeti-height: calc(
   }
 
   .ol-control-drawing-mode {
+    padding: 0;
+
     .is-checkradio[type='checkbox'] + label {
       font-size: 0.95em;
       margin-right: 0;
