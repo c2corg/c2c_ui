@@ -66,6 +66,9 @@
     "Association": "Associazione Camptocamp",
     "Associations history": "Cronologia dei documenti associati",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribuzione — Devi riconoscere una menzione di paternità adeguata, fornire un link alla licenza e indicare se sono state effettuate delle modifiche. ",
+    "Attributions": {
+      "Map controls": "Attribuzioni "
+    },
     "Avalanche bulletins": "Bollettino pericolo valanghe",
     "Average slope (degrees)": "Pendenza media (gradi)",
     "Average slope in degree": "Pendenza media in gradi",
@@ -126,6 +129,9 @@
     "Contributions": "Contributi ",
     "Contributor": "Contributore",
     "Control the use of your personal data": "Controlla l'uso dei tuoi dati personali ",
+    "Coup de coeur": {
+      "Sophie picture context": "Colpo di fulmine"
+    },
     "Crag climbing gear": "Arrampicata in falesia ",
     "Create": {
       "yeti": "Creare"
@@ -186,6 +192,7 @@
     "Different high/low danger?": "Grado pericolo alto/basso differente?",
     "Directions (Google Maps)": "Andarci (Google Maps)",
     "Disclaimer": "Disclaimer / Liberatoria",
+    "Dispositions": "Disposizione",
     "Distance": "Distanza ",
     "Distance (km)": "Distanza (km)",
     "Do you really want to leave? you have unsaved changes!": "Sei sicuro di lasciare questa pagina? Le modifiche non sono state salvate !",
@@ -406,6 +413,7 @@
     "Page not found": "Pagina non trovata",
     "Paragliding outings": "Gita in parapendio",
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica ",
+    "Parent": "Padre",
     "Participants and context": "Partecipanti e contesto",
     "Password too short": {
       "API message": "La password è troppo corta "
@@ -439,6 +447,7 @@
     "Protect document": "Proteggere il documento",
     "Protection area:": "Zona di protezione:",
     "Protection areas": "Zone di protezione:",
+    "Protection status": "Stato di protezione",
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Fornire informazioni e migliorarne la qualità, seguendo le regole di contribuzione e rispettando il copyright.",
     "Put it back": "Riassociare ",
     "Quote": "Citazione ",
@@ -972,6 +981,12 @@
     "federal_supervision": {
       "supervision": "federale"
     },
+    "federal_supervisor": {
+      "qualification": "iniziatore federale"
+    },
+    "federal_trainer": {
+      "qualification": "istruttore federale"
+    },
     "female": {
       "genders": "femmina "
     },
@@ -1098,6 +1113,9 @@
       "activities": "Cascata di ghiaccio ",
       "event_activities": "Cascata di ghiaccio "
     },
+    "ice_cornice_collapse": {
+      "event_types": "crollo di cascata o cengia"
+    },
     "ice_rating": "Difficoltà ghiaccio ",
     "image": "immagine",
     "image_categories": "Categorie",
@@ -1142,6 +1160,7 @@
     },
     "lang": "Lingua",
     "langs": "Lingue",
+    "last point with the Backspace key": "l'ultimo punto con il tasto Backspace",
     "length": "Lunghezza ",
     "length_total": "Lunghezza totale",
     "level_1": {
@@ -1257,6 +1276,9 @@
     "no info": "nessuna informazione",
     "no service": {
       "public_transportation_ratings": "nessun servizio"
+    },
+    "no_supervision": {
+      "supervision": "nessuna supervisione"
     },
     "no_warden": {
       "custodianship_types": "non gestito"
@@ -1403,6 +1425,9 @@
       "author_statuses": "fattore principale "
     },
     "product_types": "Tipo di prodotti locali",
+    "professional_diploma": {
+      "qualification": "diploma professionale"
+    },
     "professional_supervision": {
       "supervision": "professionali"
     },
@@ -1612,6 +1637,9 @@
     "sport_shop": {
       "product_types": "negozio di sport"
     },
+    "stone_ice_fall": {
+      "event_types": "caduta massi/ice/seracchi"
+    },
     "stories": {
       "article_categories": "racconti"
     },
@@ -1620,6 +1648,7 @@
     "summit": {
       "waypoint_types": "cima"
     },
+    "supervision": "supervisione",
     "tags": {
       "article_categories": "tag"
     },
