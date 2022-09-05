@@ -108,15 +108,15 @@ export default {
 
   computed: {
     outings() {
-      return this.outingsPromise.data;
+      return this.outingsPromise?.data;
     },
 
     images() {
-      return this.imagesPromise.data;
+      return this.imagesPromise?.data;
     },
 
     routes() {
-      return this.routesPromise.data;
+      return this.routesPromise?.data;
     },
 
     outingsByDate() {

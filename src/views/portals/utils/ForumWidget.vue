@@ -111,7 +111,7 @@ export default {
 
   computed: {
     topics() {
-      if (!this.promise.data) {
+      if (!this.promise?.data) {
         return null;
       }
 

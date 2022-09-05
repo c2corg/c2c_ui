@@ -558,7 +558,7 @@ export default {
       if (type === 'LineString') {
         this.cleanZeroElevationFromLineString(coords);
       } else if (type === 'MultiLineString') {
-        coords.map(this.cleanZeroElevationFromLineString);
+        coords.forEach(this.cleanZeroElevationFromLineString);
       }
       geometry.setCoordinates(coords);
     },
@@ -1085,7 +1085,7 @@ export default {
         // check already made, only update biodivsport areas features
         biodivSportsService
           .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
-          .then(this.addBiodivSportsData);
+          .then((response) => this.addBiodivSportsData(response));
       } else {
         // first call, check protection areas are contained within map extent and download biodivsports features
         Promise.allSettled([
@@ -1124,7 +1124,7 @@ export default {
         // user can't set the outing point directly (he must select the route)
         // So do not reinit geometry.geom to nothing
         this.editedDocument.geometry.geom = this.initialGeometry.geom || this.editedDocument.geometry.geom;
-        this.editedDocument.geometry.geom_detail = this.initialGeometry.geom_detail;
+        this.editedDocument.geometry.geom_detail = this.initialGeometry?.geom_detail;
       } else {
         this.editedDocument.geometry = JSON.parse(JSON.stringify(this.initialGeometry));
       }

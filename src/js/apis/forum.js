@@ -32,14 +32,8 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
 
   result.then(function (response) {
     const users = {};
-
-    response.data.users.forEach(function (user) {
-      users[user.username] = user;
-    });
-
-    response.data.topic_list.topics.map(function (topic) {
-      topic.last_poster_user = users[topic.last_poster_username];
-    });
+    response.data.users.forEach((user) => (users[user.username] = user));
+    response.data.topic_list.topics.forEach((topic) => (topic.last_poster_user = users[topic.last_poster_username]));
   });
 
   return result;

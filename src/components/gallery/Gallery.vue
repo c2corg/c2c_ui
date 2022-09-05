@@ -35,12 +35,12 @@ export default {
 
   watch: {
     images: function () {
-      this.images.map(this.$imageViewer.push);
+      this.images.forEach(this.$imageViewer.push);
     },
   },
 
   created() {
-    this.images.map(this.$imageViewer.push);
+    this.images.forEach(this.$imageViewer.push);
   },
 
   methods: {

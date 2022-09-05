@@ -166,10 +166,10 @@ Process.prototype.compute = function (file_or_dir) {
       this.compute(file_or_dir + '/' + file);
     }
   } else if (file_or_dir.endsWith('.vue')) {
-    const data = fs.readFileSync(file_or_dir, 'utf-8');
+    const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addVueComponent(file_or_dir, data);
   } else if (file_or_dir.endsWith('.js')) {
-    const data = fs.readFileSync(file_or_dir, 'utf-8');
+    const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addScript(file_or_dir, data);
   }
 };

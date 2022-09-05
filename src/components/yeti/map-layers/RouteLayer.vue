@@ -252,7 +252,7 @@ export default {
 
       let gpxFormat = new ol.format.GPX();
       let features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
-      features.map(this.addFeature);
+      features.forEach(this.addFeature);
       // update store
       Yetix.setFeaturesTitle(this.getFeaturesTitleFromGpx(features));
 
@@ -294,7 +294,7 @@ export default {
       // split multilinestrings into linestrings
       if (feature.getGeometry().getType() === 'MultiLineString') {
         let lines = feature.getGeometry().getLineStrings();
-        lines.map((line) => new ol.Feature({ geometry: line })).map(this.addFeature);
+        lines.map((line) => new ol.Feature({ geometry: line })).forEach(this.addFeature);
       } else {
         let nbPointsOnFeature = feature.getGeometry().getCoordinates().length;
         if (nbPointsOnFeature >= 2) {
@@ -335,7 +335,7 @@ export default {
         this.showSimplifiedLayer();
         // get each features, simplify them, and add to simplified layer
         let features = this.getFeaturesLayerFeatures();
-        features.map((feature) => {
+        features.forEach((feature) => {
           let geometry = feature.getGeometry();
           let simplifiedGeometry = geometry;
           // check if tolerance is 0 == no simplification

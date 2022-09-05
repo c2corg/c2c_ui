@@ -35,8 +35,7 @@ export default {
       // keep line breaks for better readability
       const paragraphList = (this.data.description ?? '').split(/<br ?\/?>/);
       // decode html entities
-      let i = 0;
-      for (i in paragraphList) {
+      for (let i in paragraphList) {
         paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
       }
       return paragraphList;

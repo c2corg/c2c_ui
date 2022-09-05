@@ -85,11 +85,13 @@ export default {
 
   computed: {
     errorSlope() {
-      return isNaN(this.slope) || this.slope < 0 || this.slope > 80.0;
+      return Number.isNaN(this.slope) || this.slope < 0 || this.slope > 80.0;
     },
 
     errorElevation() {
-      return (isNaN(this.elevation) || this.elevation < 50.0 || this.elevation > 3000.0) && this.elevation !== null;
+      return (
+        (Number.isNaN(this.elevation) || this.elevation < 50.0 || this.elevation > 3000.0) && this.elevation !== null
+      );
     },
 
     rating() {

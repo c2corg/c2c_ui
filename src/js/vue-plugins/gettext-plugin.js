@@ -212,7 +212,6 @@ export default function install(Vue) {
           case 'es':
             return 'es_ES';
           case 'zh':
-            return 'zh_CN';
           case 'zh_CN':
             return 'zh_CN';
           case 'sl':

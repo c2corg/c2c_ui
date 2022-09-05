@@ -388,9 +388,9 @@ export default {
       // with null, we let d3 decide
       let ticksCount = Math.round(width / 40);
       ticksCount = ticksCount < 8 ? ticksCount : null;
-      this.x1Axis.ticks(ticksCount);
+      this.x1Axis?.ticks(ticksCount);
       if (this.timeAvailable) {
-        this.x2Axis.ticks(ticksCount);
+        this.x2Axis?.ticks(ticksCount);
       }
     },
 

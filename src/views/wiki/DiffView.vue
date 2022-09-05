@@ -388,7 +388,7 @@ export default {
     },
 
     filenameHasChanged() {
-      return this.oldVersion.document.filename !== this.newVersion.document.filename;
+      return this.oldVersion.document.filename !== this.newVersion?.document?.filename;
     },
 
     geometryHasChanged() {
@@ -399,11 +399,11 @@ export default {
         return false;
       }
 
-      if (!this.$documentUtils.hasSameGeolocation(this.oldVersion.document, this.newVersion.document)) {
+      if (!this.$documentUtils.hasSameGeolocation(this.oldVersion.document, this.newVersion?.document)) {
         return true;
       }
-      const oldGeometry = this.oldVersion.document.geometry;
-      const newGeometry = this.newVersion.document.geometry;
+      const oldGeometry = this.oldVersion?.document?.geometry;
+      const newGeometry = this.newVersion?.document?.geometry;
 
       if (oldGeometry.geom_detail !== newGeometry.geom_detail) {
         return true;

@@ -213,6 +213,10 @@ export default {
     window.addEventListener('click', this.onClick);
   },
 
+  beforeDestroy() {
+    window.removeEventListener('click', this.onClick);
+  },
+
   // do need to destroy event listener as Navigation component will always exists
 
   methods: {

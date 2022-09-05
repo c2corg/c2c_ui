@@ -53,7 +53,7 @@ const parseExifGeometry = (exif) => {
   lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSInfo?.GPSLatitudeRef);
   lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSInfo?.GPSLongitudeRef);
 
-  if (isNaN(lat) || isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
+  if (Number.isNaN(lat) || Number.isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
     return undefined;
   }
 

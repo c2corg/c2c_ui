@@ -251,7 +251,7 @@ export default {
       this.filteredWaypoints = documents.filter((document) => document.type === 'w');
 
       // do not display waypoints associated
-      this.filteredWaypoints.map((document) => delete document.associations);
+      this.filteredWaypoints.forEach((document) => delete document.associations);
     },
   },
 };
