@@ -57,8 +57,8 @@
     "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
     "Area not covered": "Área no cubiertado",
     "Area too large": "Área demasiado grande",
-    "Articles, waypoints or routes to be linked.": "Artículos, waypoints o rutas a enlazar.",
-    "Articles, waypoints, routes or books to be linked.": "Artículos, waypoints, rutas o libros a enlazar.",
+    "Articles, waypoints or routes to be linked.": "Artículos, puntos de ruta o rutas a enlazar.",
+    "Articles, waypoints, routes or books to be linked.": "Artículos, puntos de ruta, rutas o libros a enlazar.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Como su nombre indica, este método está destinado a principiantes. Por tanto, el margen de seguridad debe ser especialmente importante. No se especifica ningún otro parámetro otro que el nivel de peligro. Se ignora la orientación.",
     "Associated outings": "Salidas asociadas",
     "Associated routes": "Itinerarios asociados",
@@ -175,7 +175,7 @@
     "Describe access period": "Describir periodo de acceso",
     "Describe access restrictions": "Describe las limitaciones de accesso",
     "Describe here the gear needed for this route": "Describir el equipo necesario para este itinerario.",
-    "Describe here the waypoint": "Describir el waypoint",
+    "Describe here the waypoint": "Describir el punto de ruta",
     "Describe here your issue": "Describe aqui vuestra problema",
     "Describe historical information about the route (date, names..) here": "Describe mas informaciones historicas sobre la ruta (fecha, nombres...) aqui",
     "Describe opening hours": "Describir las horas de apertura",
@@ -312,6 +312,7 @@
     "List of versions for language:": "Lista de versiones para el idioma:",
     "Load my preferences": "carga mis preferencias",
     "Location / elevation / orientation": "Lugar /altitud/ orientación",
+    "Log in to post a comment": "Inicie sesión para publicar un comentario",
     "Login": "Iniciar sesión",
     "Login failed": {
       "API message": "Login ha fallado"
@@ -319,10 +320,14 @@
     "Logout": "Desconectar",
     "Longitude": "Longitud",
     "Mail has been sent": "Mail fue enviado",
+    "Main informations about your outing": "Información principal sobre su salida",
     "Make profile page public": "Hacer pública la página de perfil",
     "Map only": "solo el mapa",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
+    "Merge documents": "Fusionar documentos",
+    "Merge with other document": "Fusión con otro documento",
     "Methods": "Metodos",
+    "Misc data about the waypoint": "Datos varios sobre el punto de ruta",
     "Modified the": {
       "modification date": "Cambia"
     },
@@ -334,26 +339,39 @@
     "My preferences": "Mis preferencias",
     "My profile": "Mi perfil",
     "My statistics": "Mis estadísticas",
+    "Necessary cookies": "Cookies necesarias",
+    "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Las cookies necesarias son esenciales para el correcto funcionamiento de nuestro sitio web y no pueden ser desactivadas. Se envían a su ordenador o dispositivo cuando usted solicita una acción o servicio específico, por ejemplo, al iniciar sesión, rellenar un formulario o definir sus preferencias de cookies. Si configura su ordenador para que bloquee estas cookies o le advierta de su existencia, nuestro sitio web no funcionará plenamente.",
+    "New outing": "Nueva salida",
     "New password": "Nueva contraseña",
     "New route": "Nueva vía",
+    "New waypoint": "Nuevo punto de ruta",
     "No account yet?": "¿No tienes cuenta?",
+    "No match?": "¿no hay resultados satisfactorios?",
     "No orientation selected": "no has seleccionado la orientacion",
     "No result found": "no hemos encontrado ningún resultado",
+    "No route right now": "No hay ninguna ruta disponible actualmente",
+    "No user with this email": {
+      "API message": "Ningún usuario con este correo electrónico"
+    },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
     "Ooops": "Ups !",
+    "Oups! something went wrong...": "Oups! algo salió mal ...",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Nuestro sitio web utiliza cookies propias y de terceros. Algunas cookies son necesarias para el sitio web, mientras que usted puede ajustar otras en cualquier momento, en particular las que nos permiten entender el rendimiento de nuestro sitio web y ofrecerle funciones de medios sociales. Puede aceptar o rechazar todas, o",
     "Outing": "Itinerario",
     "Page not found": "Página no encontrada",
     "Password": "Contraseña",
     "Personal feed": "Noticias personales",
     "Personal feed off": "Noticias personales desactivadas",
     "Personal feed on": "Noticias personales activadas",
+    "Please select a waypoint type to enable sort feature": "Seleccione un tipo de punto de ruta para activar la función de clasificación",
     "Post the first comment": "Deja un comentario",
     "Preview": "Previsualizar",
     "Protect document": "Proteja el documento",
     "Protection areas": "Areas protegidas",
+    "Quote": "Cita",
     "Recent changes": "Cambios nuevos",
     "Recenter on your current position": "Centrar en mi posición actual",
     "Recenter on...": "Centrar en ...",
@@ -363,6 +381,8 @@
     "Required": {
       "API message": "Requerido"
     },
+    "Reset": "Reiniciar",
+    "Reset geometry": "reiniciar la geometría",
     "Reset password": "Reiniciar contraseña ",
     "Residual risk >1": "riesgo residual>1",
     "Residual risk >1.3": "riesgo residual >1.3",
@@ -408,9 +428,12 @@
     "Upload a GPS track": "Añadir una traza",
     "Username": "Usuario",
     "View in other lang": "Ver en otra lengua",
+    "Waypoint's main properties": "Datos clave del punto de ruta",
+    "Waypoint's textual description": "Descripciones textuales del punto de ruta",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
     "Without c2c account": "Participantes sin cuenta c2c",
     "YETI - A preparation tool for your outing": "YETI - Una herramienta de preparación para su salida",
+    "You may add associated waypoints, books and articles": "Puedes añadir puntos de ruta, libros y artículos asociados",
     "a new point on an existing line": "un nuevo punto en una línea existente",
     "access": {
       "$$noContext": "acceso",
@@ -444,7 +467,7 @@
     "add a book": "añadir un libro",
     "add a map": "añadir una mapa",
     "add a route": "añadir un itinerario",
-    "add a waypoint": "añadir un punto de ruta (WP)",
+    "add a waypoint": "añadir un punto de ruta",
     "add an area": "añadir un lugar",
     "add an article": "añadir un artículo",
     "add an image": "añadir un imagen",
@@ -819,19 +842,25 @@
     },
     "ground_types": "suelo_tipos",
     "group_management": "manejo_de_grupo",
+    "has added images to area": "ha añadido imágenes al área",
+    "has added images to article": "ha añadido imágenes al artículo",
+    "has added images to book": "ha añadido imágenes al libro",
+    "has added images to outing": "ha añadido imágenes a la salida",
+    "has added images to route": "ha añadido imágenes al itinerario",
+    "has added images to waypoint": "ha añadido imágenes al punto de ruta",
     "has created a new article": "escribió un nuevo artículo",
     "has created a new book": "agregó un nuevo libro",
     "has created a new image": "agregó una nueva imagen",
     "has created a new outing": "agregó una nueva salida",
     "has created a new route": "agregó un nuevo itinerario",
-    "has created a new waypoint": "agregó un nuevo waypoint",
+    "has created a new waypoint": "agregó un nuevo punto de ruta",
     "has updated the area": "puso al día esta comarca",
     "has updated the article": "ha actualizado un artículo",
     "has updated the book": "pusó al día este libro",
     "has updated the image": "ha actualizado una imagen",
     "has updated the outing": "ha actualizado una salida",
     "has updated the route": "ha actualizado un itinerario",
-    "has updated the waypoint": "ha actualizado un waypoint",
+    "has updated the waypoint": "ha actualizado un punto de ruta",
     "heading text": "texto del título",
     "heating_unstaffed": "Calefacción fuera de los períodos de guardia",
     "height": "Altitud",
@@ -954,6 +983,7 @@
     "magazine": {
       "book_types": "revista"
     },
+    "main_waypoint_id": "ID del punto de ruta principal",
     "male": {
       "genders": "varón"
     },
@@ -1016,10 +1046,14 @@
       "public_transportation_ratings": "servicio cercano"
     },
     "next difference": "proxima diferencia",
+    "next version": "siguiente versión ",
     "nivology": {
       "image_categories": "nivología y aludes"
     },
     "no info": "no hay información",
+    "no service": {
+      "public_transportation_ratings": "sin servicio"
+    },
     "novel": {
       "book_types": "nueva"
     },
@@ -1331,7 +1365,10 @@
     "waterpoint": {
       "waypoint_types": "agua/fuente"
     },
+    "waypoint_children": "subpunto de ruta",
+    "waypoint_slope": "pendiente",
     "waypoint_type": "Tipo de waypoint",
+    "waypoints": "puntos de ruta",
     "weather": "Meteo observada",
     "weather_station": {
       "waypoint_types": " estación meteorológica"
