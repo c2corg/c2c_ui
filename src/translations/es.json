@@ -282,9 +282,11 @@
     },
     "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
     "If the route does not exists in our base, you can create it.": "si la vía no está en C2C, la puedes montar.",
+    "Image could not be processed": "La imagen no ha podido ser procesada para su carga",
     "Image count": "Número de imagenes",
     "Improve our understanding of risks": "Mejorar el conocimiento de los riesgos",
     "Incidents and accidents": "Incidentes y accidentes",
+    "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Información sobre el lugar del incidente. Marca la ubicación en el mapa de arriba, incluso si no puedes hacerlo con mucha precisión, (en cuyo caso da más detalles aquí). Una vez completado el informe, puedes asociarlo a una ruta, un lugar de escalada o una salida.",
     "Infos": "Informaciónes",
     "Insert a link": "Entra un enlace",
     "Insert emoji": "Entra un emoji",
@@ -322,7 +324,10 @@
     "Mail has been sent": "Mail fue enviado",
     "Main informations about your outing": "Información principal sobre su salida",
     "Make profile page public": "Hacer pública la página de perfil",
+    "Map filter off": "Filtro de mapa desactivado",
+    "Map filter on": "Filtro de mapa activado",
     "Map only": "solo el mapa",
+    "Mark this route as to do": "Marcar esta ruta como favorita",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
     "Merge documents": "Fusionar documentos",
     "Merge with other document": "Fusión con otro documento",
@@ -333,6 +338,7 @@
     },
     "More info": "Mas informacion",
     "My account": "Mi cuenta",
+    "My bookmarks": "Mis favoritos",
     "My changes": "Mis cambios",
     "My followed users": "Mis amigos",
     "My outings": "Mis salidas",
@@ -377,6 +383,7 @@
     "Recenter on...": "Centrar en ...",
     "Register": "Inscribirse ",
     "Remove": "Eliminar",
+    "Report an issue": "Informar de un problema",
     "Report title, activity, linked routes or outings.": "pon el titulo, la actividad, rutas asociadas o salidas",
     "Required": {
       "API message": "Requerido"
@@ -387,6 +394,7 @@
     "Residual risk >1": "riesgo residual>1",
     "Residual risk >1.3": "riesgo residual >1.3",
     "Residual risk >1.5": "riesgo residual >1,5",
+    "Restore this version": "Restaurar esta versión",
     "Results only": "Solo resultados",
     "Retry": "Inténtalo de nuevo",
     "Route": "Vía",
@@ -405,7 +413,11 @@
     "Share": "Compartir",
     "Share with us!": "¡ Comparte con nosotros!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
+    "Shorter than minimum length 1": {
+      "API message": "Campo obligatorio"
+    },
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
+    "Simplify": "Simplificar",
     "Skiability": "Esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "Pendientes",
@@ -416,6 +428,7 @@
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
+    "This profile is only available to authenticated users.": "Este perfil sólo está disponible para los usuarios autentificados.",
     "Time": "Horario",
     "Toggle fullscreen": "Pasar a pantalla completa",
     "Topoguide": {
@@ -425,15 +438,28 @@
     "Translate into an other lang": "Traducir en otra lengua",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
+    "Unmark this route as to do": "Eliminar esta ruta de sus favoritos",
     "Upload a GPS track": "Añadir una traza",
+    "User avatar": "Avatar",
     "Username": "Usuario",
+    "Versions": "Versiones ",
     "View in other lang": "Ver en otra lengua",
+    "Visible on map": "Visible en el mapa",
+    "Warning: This action cannot be undone!": "Advertencia: Esta acción no se puede deshacer.",
     "Waypoint's main properties": "Datos clave del punto de ruta",
     "Waypoint's textual description": "Descripciones textuales del punto de ruta",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
     "Without c2c account": "Participantes sin cuenta c2c",
     "YETI - A preparation tool for your outing": "YETI - Una herramienta de preparación para su salida",
     "You may add associated waypoints, books and articles": "Puedes añadir puntos de ruta, libros y artículos asociados",
+    "You need to activate your by clicking the link sent to your email address.": "Debe activarlo haciendo clic en el enlace que se le envió a su dirección de correo electrónico.",
+    "Your account was successfully created": "Su cuenta ha sido creada",
+    "Zoom in": {
+      "Map controls": "Ampliar "
+    },
+    "Zoom out": {
+      "Map controls": "Alejar "
+    },
     "a new point on an existing line": "un nuevo punto en una línea existente",
     "access": {
       "$$noContext": "acceso",
@@ -968,6 +994,7 @@
     "lift_access": "Medios de elevación",
     "lift_status": "Medios de elevación",
     "link": "enlace",
+    "loading": "Cargando",
     "local_product": {
       "waypoint_types": "productos locales"
     },
@@ -1190,6 +1217,7 @@
       "avalanche_signs": "reciente_avalancha"
     },
     "remarks": "Observaciones",
+    "required field": "campo obligatorio",
     "rescue": "secorro",
     "resolution": "resolución",
     "restaurant": {
@@ -1277,6 +1305,20 @@
     "slackline": {
       "slackline_types": "Slackline"
     },
+    "slackline_anchor1": "Anclaje 1",
+    "slackline_anchor2": "Anclaje 2",
+    "slackline_height": "altura de la slackline",
+    "slackline_length": "longitud de la línea",
+    "slackline_length_max": "longitud máxima de la línea",
+    "slackline_length_min": "longitud mínima de la línea",
+    "slackline_spot": {
+      "waypoint_types": "ubicación del slackline "
+    },
+    "slackline_type": "Tipo de línea",
+    "slackline_types": "Tipos de línea",
+    "slacklining": {
+      "activities": "Slackline / Highline"
+    },
     "slope": "Pendiente",
     "slope_lt_30": {
       "avalanche_slopes": "pendiente inferior a 30°"
@@ -1349,6 +1391,7 @@
     "traverse": {
       "route_types": "cruce"
     },
+    "users": "usuarios",
     "very_dangerous": {
       "children_proof_types": "peligroso"
     },
@@ -1361,6 +1404,9 @@
     "via_ferrata_rating": "Cotación vía ferrata",
     "waterfall": {
       "waypoint_types": "cascada"
+    },
+    "waterline": {
+      "slackline_types": "Waterline"
     },
     "waterpoint": {
       "waypoint_types": "agua/fuente"
