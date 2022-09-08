@@ -2,14 +2,16 @@
   :lang(fr) &::after {
     content: '\00a0:';
   }
-  :lang(it) &::after,
+  :lang(ca) &::after,
   :lang(de) &::after,
   :lang(en) &::after,
   :lang(es) &::after,
-  :lang(ca) &::after,
   :lang(eu) &::after,
-  :lang(zh) &::after,
-  :lang(sl) &::after {
+  :lang(hu) &::after,
+  :lang(it) &::after,
+  :lang(sl) &::after,
+  :lang(zh) &::after
+ {
     content: ':';
   }
 }

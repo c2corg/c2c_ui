@@ -4,12 +4,12 @@
  */
 
 import { isSameDay, isSameMonth, isSameYear, format } from 'date-fns';
-import { ca, es, eu, de, fr, it, zhCN, sl, enGB } from 'date-fns/locale';
+import { ca, es, eu, de, fr, it, hu, zhCN, sl, enGB } from 'date-fns/locale';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
-const locales = { ca, es, eu, de, fr, it, sl, zh_CN: zhCN, en: enGB };
+const locales = { ca, es, eu, de, fr, it, hu, sl, zh_CN: zhCN, en: enGB };
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
