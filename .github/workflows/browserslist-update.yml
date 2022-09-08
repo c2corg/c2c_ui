@@ -6,8 +6,11 @@ on:
     - cron: '0 2 1,15 * *'
 
 jobs:
-  update-caniuse-database:
+  update-browseslist-database:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

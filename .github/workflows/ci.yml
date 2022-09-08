@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         node-version: [16.x]
@@ -84,6 +86,8 @@ jobs:
     if: "github.event_name != 'pull_request' || !contains(github.head_ref, 'dependabot')"
     runs-on: ubuntu-latest
     concurrency: github-pages
+    permissions:
+      contents: write
     steps:
       - name: Get branch name
         id: branch-name
@@ -120,6 +124,8 @@ jobs:
     needs: build
     if: "contains(github.ref, 'refs/tags/v')"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -148,6 +154,9 @@ jobs:
     needs: build
     if: "github.ref == 'refs/heads/master' && github.repository == 'c2corg/c2c_ui'"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
