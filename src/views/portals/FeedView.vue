@@ -36,23 +36,23 @@
               </span>
               <span class="is-nowrap" v-translate>Enable personal preferences</span>
             </a>
-            <hr/>
-            <!--Dashboard/Default-->
+            <hr v-if="$user.isLogged"/>
+            <!--Dashboard/Dense-->
             <a
               class="dropdown-item is-size-6"
-              :class="{ 'is-active': defaultMode }"
-              @click="toogleProperty('defaultMode')"
+              :class="{ 'is-active': denseMode }"
+              @click="toogleProperty('denseMode')"
             >
               <span class="is-nowrap item-icons">
                 <fa-icon icon="th-list" />
               </span>
-              <span class="is-nowrap" v-translate>Default</span>
+              <span class="is-nowrap" v-translate>Dense</span>
             </a>
             <!--Feed/Comfortable-->
             <a
               class="dropdown-item is-size-6"
-              :class="{ 'is-active': !defaultMode }"
-              @click="toogleProperty('defaultMode')"
+              :class="{ 'is-active': !denseMode }"
+              @click="toogleProperty('denseMode')"
             >
               <span class="is-nowrap item-icons">
                 <fa-icon icon="th-large" />
@@ -106,7 +106,7 @@
     </div>
     <!-- Partie dashboard/feed -->
     <!-- Feed -->
-    <div class="feed-view" v-if="!defaultMode">
+    <div class="feed-view" v-if="!denseMode">
       <div class="columns">
         <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
@@ -135,7 +135,7 @@
       </div>
     </div>
     <!-- Dashboard -->
-    <div v-if="defaultMode">
+    <div v-if="denseMode">
       <div class="columns">
         <div class="column is-7">
           <!-- Sorties -->
@@ -149,11 +149,11 @@
             <loading-notification :promise="outingsPromise" />
             <div v-if="outingsByDate != null">
               <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
-                <h4 class="outing-date-header has-text-centered is-italic has-text-weight-bold">
+                <p class="outing-date-header is-4 is-italic has-text-weight-bold">
                   <router-link :to="{ name: 'outings', query: { date: `${date},${date}` } }">
                     {{ $dateUtils.toLocalizedString(date, 'PPPP') | uppercaseFirstLetter }}
                   </router-link>
-                </h4>
+                </p>
                 <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
               </div>
             </div>
@@ -285,7 +285,7 @@ export default {
       routesPromise: null,
       articlesPromise: null,
       imagesPromise: null,
-      defaultMode: true,
+      denseMode: true,
       visible: true,
     };
   },
@@ -434,10 +434,26 @@ h4 {
 
 .outing-date-header {
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .intro {
   margin-bottom: 1.5rem;
+}
+
+
+//Variables already used on sidemenu
+$brandLogoHeight: 70px;
+//$brandLogoMargin: 5px;
+
+.menu-brand {
+  //display: block;
+  line-height: 0;
+
+  img {
+    height: $brandLogoHeight;
+    //margin: $brandLogoMargin 0;
+  }
 }
 
 .logo-association {
