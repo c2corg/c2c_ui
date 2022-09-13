@@ -19,7 +19,7 @@ import en from 'vuejs-datepicker/dist/locale/translations/en';
 import es from 'vuejs-datepicker/dist/locale/translations/es';
 import fr from 'vuejs-datepicker/dist/locale/translations/fr';
 import it from 'vuejs-datepicker/dist/locale/translations/it';
-import hu from 'vuejs-datepicker/dist/locale/translations/it';
+import hu from 'vuejs-datepicker/dist/locale/translations/hu';
 
 import { baseMixin } from './mixins';
 
