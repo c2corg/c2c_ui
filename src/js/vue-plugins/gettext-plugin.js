@@ -70,9 +70,9 @@ function getMessages(lang) {
   } else if (lang === 'es') {
     return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
   } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/zh_CN.json`);
+    return import(/* webpackChunkName: "translations-zh" */ `@/translations/zh_CN.json`);
   } else if (lang === 'sl') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/sl.json`);
+    return import(/* webpackChunkName: "translations-sl" */ `@/translations/sl.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
