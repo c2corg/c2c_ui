@@ -87,10 +87,13 @@
     <div v-else class="py-2">
       <p class="is-size-6 p-3"><span v-translate key="id2">No avalanche bulletin right now</span></p>
     </div>
-    <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer">
-      <strong v-translate>Full bulletin:</strong>
+    <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer" v-if="overlayData.urls.length">
+      <strong>©{{overlayData.urls[0].title}}</strong>
       <span v-for="(url, i) in overlayData.urls" :key="i" class="pl-1">
-        <a :href="url.url" target="_blank"><fa-icon icon="external-link-alt" /> {{ url.title }}</a>
+        <a :href="url.url" target="_blank">
+          <fa-icon icon="external-link-alt" />
+          <span v-translate>Full bulletin</span>
+        </a>
       </span>
     </p>
     <img :src="overlayDangerIcon" alt="" class="bulletins-overlay-danger-icon" />
