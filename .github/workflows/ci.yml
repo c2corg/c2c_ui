@@ -83,7 +83,7 @@ jobs:
 
   github-pages:
     needs: build
-    if: "github.event_name != 'pull_request' || !contains(github.head_ref, 'dependabot')"
+    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]'"
     runs-on: ubuntu-latest
     concurrency: github-pages
     permissions:
