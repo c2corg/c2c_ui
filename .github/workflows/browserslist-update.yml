@@ -18,7 +18,14 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
       - name: Update caniuse database and create PR if applies
-        uses: c2corg/browserslist-update-action@v1
+        id: caniuse
+        uses: c2corg/browserslist-update-action@397a810f1a86c0b428d22ba0b80f4f381457b62b
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: browserslist-update
+          labels: enhancement, github_actions
+      - name: echo
+        run: |
+          echo "$TOTO"
+        env:
+          TOTO: ${{ steps.caniuse.pr_number}}
