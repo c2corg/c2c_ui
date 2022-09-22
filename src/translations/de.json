@@ -321,6 +321,9 @@
     "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
     "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
     "I read and understood the interest and limitations of YETI": "Ich habe die Interessen und Einschränkungen von YETI gelesen und verstanden",
+    "IGN Slopes": {
+      "Map slopes layer": "Frankreich"
+    },
     "IGN maps": {
       "Map layer": "Frankreich"
     },
@@ -576,6 +579,9 @@
     "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
     "SwissTopo": {
       "Map layer": "Schweiz"
+    },
+    "SwissTopo Slopes": {
+      "Map slopes layer": "Schweiz"
     },
     "SwissTopo ortho": {
       "Map layer": "Schweiz Luftbild"
