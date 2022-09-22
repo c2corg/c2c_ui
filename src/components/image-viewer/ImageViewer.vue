@@ -263,9 +263,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~swiper/swiper.scss';
-@import '~swiper/components/lazy/lazy.scss';
-@import '~swiper/components/zoom/zoom.scss';
+@import '~swiper/swiper';
+@import '~swiper/components/lazy/lazy';
+@import '~swiper/components/zoom/zoom';
 
 // class not explicitly present in template, can't use scope
 
@@ -335,22 +335,22 @@ $paginationHeight: 30px;
     bottom: 0;
     height: $paginationHeight;
 
-    .image-viewer-bullet:first-child {
-      border-bottom-left-radius: 50%;
-      border-top-left-radius: 50%;
-    }
-
-    .image-viewer-bullet:last-child {
-      border-bottom-right-radius: 50%;
-      border-top-right-radius: 50%;
-    }
-
     .image-viewer-bullet {
       display: inline-block;
       background: white;
       max-width: 16px;
       height: 16px;
       border: 25% solid black;
+
+      &:first-child {
+        border-bottom-left-radius: 50%;
+        border-top-left-radius: 50%;
+      }
+
+      &:last-child {
+        border-bottom-right-radius: 50%;
+        border-top-right-radius: 50%;
+      }
     }
 
     .image-viewer-bullet-active {

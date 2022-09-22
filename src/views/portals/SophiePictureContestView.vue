@@ -479,7 +479,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .separator {
   background-color: $color-base-c2c-lighter;

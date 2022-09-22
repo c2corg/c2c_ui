@@ -1186,6 +1186,29 @@ $control-margin: 0.5em;
 .ol-control-layer-switcher {
   bottom: 2.5em;
   left: $control-margin;
+  color: white;
+  text-decoration: none;
+  background-color: rgba(0, 60, 136, 0.6);
+  border: none;
+  border-radius: 2px;
+  padding: 10px;
+  display: flex;
+
+  & > div {
+    column-count: 2;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    header {
+      font-weight: bold;
+
+      &:not(:first-child) {
+        padding-top: 10px;
+      }
+    }
+  }
 }
 
 .ol-control-layer-switcher-button {
@@ -1254,33 +1277,6 @@ $control-margin: 0.5em;
     padding: 5px;
     width: auto !important;
     font-weight: normal;
-  }
-}
-
-//style on layers popup
-.ol-control-layer-switcher {
-  color: white;
-  text-decoration: none;
-  background-color: rgba(0, 60, 136, 0.6);
-  border: none;
-  border-radius: 2px;
-  padding: 10px;
-  display: flex;
-
-  & > div {
-    column-count: 2;
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
-    header {
-      font-weight: bold;
-
-      &:not(:first-child) {
-        padding-top: 10px;
-      }
-    }
   }
 }
 </style>

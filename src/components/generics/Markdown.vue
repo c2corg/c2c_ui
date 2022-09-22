@@ -165,11 +165,11 @@ export default {
 
 <style lang="scss">
 // Not scoped syle, because CSS selector are not explicitly present in template
-.markdown-content:not(:last-child) {
-  margin-bottom: 1.5rem;
-}
-
 .markdown-content {
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
   h3 {
     font-size: 1.5rem !important;
     margin-bottom: 0.5em !important;
@@ -315,11 +315,11 @@ div[c2c\:role='video'] {
 }
 
 @media print {
-  .markdown-content:not(:last-child) {
-    margin-bottom: 0.5rem !important;
-  }
-
   .markdown-content {
+    &:not(:last-child) {
+      margin-bottom: 0.5rem !important;
+    }
+
     h3 {
       font-size: 1.2rem !important;
       margin-bottom: 0.25em !important;

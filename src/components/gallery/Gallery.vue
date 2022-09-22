@@ -57,10 +57,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~swiper/swiper.scss';
-@import '~swiper/components/lazy/lazy.scss';
-@import '~swiper/components/navigation/navigation.scss';
-@import '~swiper/components/zoom/zoom.scss';
+@import '~swiper/swiper';
+@import '~swiper/components/lazy/lazy';
+@import '~swiper/components/navigation/navigation';
+@import '~swiper/components/zoom/zoom';
 
 .swiper {
   .swiper-slide {

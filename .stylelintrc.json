@@ -1,0 +1,6 @@
+{
+  "extends": "stylelint-config-recommended-vue/scss",
+  "rules": {
+    "no-descending-specificity": null
+  }
+}

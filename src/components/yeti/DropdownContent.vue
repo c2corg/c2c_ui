@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .dropdown-content {
   border: 1px solid #dbdbdb;

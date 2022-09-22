@@ -183,7 +183,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .legend {
   position: absolute;

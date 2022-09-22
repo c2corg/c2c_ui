@@ -56,15 +56,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.markdown-section:nth-last-child(n + 3) {
-  margin-bottom: 1.5rem;
-}
-
 .markdown-section {
   .title {
     font-size: 1.8rem !important;
     margin-bottom: 0.5em !important;
     border-bottom: 1px solid #ddd;
+  }
+
+  &:nth-last-child(n + 3) {
+    margin-bottom: 1.5rem;
   }
 }
 

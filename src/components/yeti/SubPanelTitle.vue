@@ -9,7 +9,7 @@
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 h2 {
   display: inline-block;

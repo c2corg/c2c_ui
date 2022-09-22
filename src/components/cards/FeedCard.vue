@@ -205,20 +205,6 @@ export default {
   margin-right: 0.5rem;
 }
 
-.has-3-images > div {
-  width: 33.33%;
-  max-height: 275px;
-  overflow: hidden;
-}
-
-.has-2-images > div {
-  width: 50%;
-}
-
-.has-2-images > div {
-  width: 100%;
-}
-
 .card-image-content > div > img {
   width: 100%;
   box-sizing: border-box;

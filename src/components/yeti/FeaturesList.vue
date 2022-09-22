@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .featureslist {
   margin: 0 -0.5rem;

@@ -1,7 +1,7 @@
-@import './variables.scss';
-@import './mixins.scss';
-@import './scrollbar.scss';
-@import './external-links.scss';
+@import './variables';
+@import './mixins';
+@import './scrollbar';
+@import './external-links';
 
 // with bulma 0.8.0, buttons are now 2.5em high. Use the following lines to restore previous behaviour.
 $control-border-width: 1px;
@@ -45,8 +45,8 @@ $button-padding-horizontal: 0.75em;
 
 @import '~bulma-checkradio';
 // bulma checkradio isn't customizable with variables. Overrides its classes
-@import './checkradio-customization.scss';
+@import './checkradio-customization';
 //
 @import '~bulma-switch';
 //
-@import './helpers.scss';
+@import './helpers';

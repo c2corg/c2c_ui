@@ -264,13 +264,13 @@ $header-padding-bottom: 1.5rem; //TODO find this variable
 $filter-height: 32px;
 $tags-height: 28px;
 $filter-padding-bottom: 0.5rem;
+// prettier-ignore
 $result-height: calc(
-  100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
-    #{$filter-height}
+  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
 );
+// prettier-ignore
 $result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
-    #{$filter-height} - #{$tags-height}
+  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
 );
 $cards-gap: 0.25rem;
 
@@ -308,7 +308,7 @@ $cards-gap: 0.25rem;
   }
 
   .result-section {
-    padding-top: calc(2 *#{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
+    padding-top: calc(2 * #{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
   }
 
   .documents-view {
@@ -334,7 +334,7 @@ $cards-gap: 0.25rem;
     margin-top: 0;
     .map-container {
       height: calc(
-        100vh - #{$navbar-height} - 3 *#{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
+        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
       );
     }
 

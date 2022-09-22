@@ -397,9 +397,6 @@ export default {
     background: #eee;
     margin-bottom: 0;
     padding-bottom: 0;
-  }
-
-  .button-bar {
     border-bottom: 1px dashed lightgrey;
   }
 

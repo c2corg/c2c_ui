@@ -64,12 +64,12 @@ export default {
     display: none;
   }
 
-  tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
-  }
-
   tr {
     border-top: 1px solid #ddd;
+
+    &:nth-of-type(odd) {
+      background-color: #f9f9f9;
+    }
   }
 
   td {
