@@ -71,7 +71,7 @@ function getMessages(lang) {
     return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
   } else if (lang === 'hu') {
     return import(/* webpackChunkName: "translations-hu" */ `@/translations/hu.json`);
-} else if (lang === 'zh_CN') {
+  } else if (lang === 'zh_CN') {
     return import(/* webpackChunkName: "translations-zh" */ `@/translations/zh_CN.json`);
   } else if (lang === 'sl') {
     return import(/* webpackChunkName: "translations-sl" */ `@/translations/sl.json`);
