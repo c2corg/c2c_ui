@@ -284,7 +284,7 @@
     "I must not use slopes > 35°": "Odpovedujem se strminam > 35°",
     "I must not use slopes > 40°": "Odpovedujem se strminam > 40°",
     "I read and understood the interest and limitations of YETI": "Prebral sem in razumel korist in omejitve YETI-ja",
-    "IGN": {
+    "IGN Slopes": {
       "Map slopes layer": "Francija (IGN)"
     },
     "IGN maps": {
@@ -544,7 +544,7 @@
     "Stop following this contributor": "Nehaj spremljati tega uporabnika",
     "Submit": "Shrani in nadaljuj",
     "Suggested rating": "Predlagana ocena",
-    "SwissTopo": {
+    "SwissTopo Slopes": {
       "Map slopes layer": "Švica (SwissTopo)"
     },
     "SwissTopo ortho": {

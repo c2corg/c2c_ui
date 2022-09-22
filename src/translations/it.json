@@ -272,7 +272,7 @@
     "I must not use slopes > 35°": "Rinuncio agli pendii > 35°",
     "I must not use slopes > 40°": "Rinuncio agli pendii > 40°",
     "I read and understood the interest and limitations of YETI": "Ho letto e capito gli vantaggi e limiti di YETI",
-    "IGN": {
+    "IGN Slopes": {
       "Map slopes layer": "Pendenze IGN"
     },
     "IGN maps": {
@@ -522,7 +522,7 @@
     "Stop following this contributor": "Non seguire più questo utente",
     "Submit": "Salva e prosegui",
     "Suggested rating": "Grado proposto",
-    "SwissTopo": {
+    "SwissTopo Slopes": {
       "Map slopes layer": "Pendenze SwissTopo"
     },
     "SwissTopo ortho": {
