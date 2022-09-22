@@ -194,6 +194,9 @@
     "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
+    "ESRI World Imagery": {
+      "Map layer": "ESRI Sat"
+    },
     "EULA": "CGU",
     "Easy mountain climbing gear": "Alpinisme rocheux de F à AD",
     "Easy snow ice mixed gear": "Alpinisme neige/glace/mixte de F à PD+",
@@ -315,6 +318,7 @@
     "List of versions for language:": "Liste des versions pour la langue :",
     "Load my preferences": "Activer mes préférences",
     "Load shedding distance": "Distance de délestage",
+    "Loading...": "Chargement...",
     "Location / elevation / orientation": "Lieu / altitude / orientation",
     "Log in to post a comment": "Se connecter pour poster un commentaire",
     "Login": "Se connecter",
@@ -437,7 +441,7 @@
     "Put it back": "Remettre",
     "Quote": "Citation",
     "Recent changes": "Changements récents",
-    "Recenter on your current position": "Centrage sur votre position actuelle",
+    "Recenter on your current position": "Centrer sur votre position actuelle",
     "Recenter on...": "Recentrer sur...",
     "Register": "S'inscrire",
     "Remove": "Retirer",
