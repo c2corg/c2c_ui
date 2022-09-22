@@ -288,10 +288,10 @@ export const cartoLayers = function () {
 };
 
 export const dataLayers = function () {
-  // $gettext('IGN', 'Map slopes layer')
+  // $gettext('IGN Slopes', 'Map slopes layer')
   const ignSlopes = createIgnFrSource('IGN Slopes', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
-  // $gettext('SwissTopo', 'Map slopes layer')
+  // $gettext('SwissTopo Slopes', 'Map slopes layer')
   const swissSlopes = createSwisstopoLayer('SwissTopo Slopes', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
   swissSlopes.setOpacity(0.4);
 
