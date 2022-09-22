@@ -40,11 +40,11 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
 };
 
 Forum.prototype.readAnnouncement = function (lang) {
-  lang = ['zh_CN', 'sl'].includes(lang) ? 'en' : lang;
+  lang = ['zh_CN', 'hu','sl'].includes(lang) ? 'en' : lang;
   return this.get('/t/annonce-' + lang + '.json');
 };
 
-// Tehcniccly not part of the API, but this helper
+// Technically not part of the API, but this helper
 // is probably at the best place here...
 Forum.prototype.getAvatarUrl = function (user, size) {
   const template = user.avatar_template.startsWith('/') ? this.url + user.avatar_template : user.avatar_template;

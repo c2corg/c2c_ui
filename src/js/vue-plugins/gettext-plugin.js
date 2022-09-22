@@ -69,7 +69,9 @@ function getMessages(lang) {
     return import(/* webpackChunkName: "translations-de" */ `@/translations/de.json`);
   } else if (lang === 'es') {
     return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
-  } else if (lang === 'zh_CN') {
+  } else if (lang === 'hu') {
+    return import(/* webpackChunkName: "translations-hu" */ `@/translations/hu.json`);
+} else if (lang === 'zh_CN') {
     return import(/* webpackChunkName: "translations-zh" */ `@/translations/zh_CN.json`);
   } else if (lang === 'sl') {
     return import(/* webpackChunkName: "translations-sl" */ `@/translations/sl.json`);
@@ -96,6 +98,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
+        hu: 'Magyar',
         zh_CN: 'Chinese',
         sl: 'Slovenščina',
       };
@@ -184,6 +187,7 @@ export default function install(Vue) {
           case 'de':
           case 'es':
           case 'zh':
+          case 'hu':
           case 'sl':
             return lang;
           case 'zh_CN':
@@ -211,6 +215,8 @@ export default function install(Vue) {
             return 'de_DE';
           case 'es':
             return 'es_ES';
+          case 'hu':
+            return 'hu_HU';
           case 'zh':
           case 'zh_CN':
             return 'zh_CN';

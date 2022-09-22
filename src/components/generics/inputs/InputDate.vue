@@ -18,6 +18,7 @@ import de from 'vuejs-datepicker/dist/locale/translations/de';
 import en from 'vuejs-datepicker/dist/locale/translations/en';
 import es from 'vuejs-datepicker/dist/locale/translations/es';
 import fr from 'vuejs-datepicker/dist/locale/translations/fr';
+import hu from 'vuejs-datepicker/dist/locale/translations/hu';
 import it from 'vuejs-datepicker/dist/locale/translations/it';
 
 import { baseMixin } from './mixins';
@@ -51,6 +52,7 @@ const datepickerLocales = {
   ca,
   de,
   it,
+  hu,
   zh_Cn: {
     language: 'Chinese',
     months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
