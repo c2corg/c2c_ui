@@ -1141,9 +1141,22 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~ol/ol.css';
 
+:root,
+:host {
+  --ol-background-color: rgba(0, 60, 136, 0.6);
+  --ol-accent-background-color: #f5f5f5;
+  --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
+  --ol-partial-background-color: rgba(255, 255, 255, 0.75);
+  --ol-foreground-color: #fff;
+  --ol-subtle-foreground-color: #fff;
+  --ol-brand-color: #00aaff;
+}
+</style>
+
+<style lang="scss" scoped>
 $control-margin: 0.5em;
 
 .ol-control-center-on-geolocation {
@@ -1164,6 +1177,7 @@ $control-margin: 0.5em;
 .ol-control-use-map-as-filter {
   top: $control-margin;
   left: 3em;
+  padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
 
   .is-info:checked + label::before {
@@ -1174,6 +1188,12 @@ $control-margin: 0.5em;
 .ol-control-recenter-on {
   top: 35px;
   left: 3em;
+  opacity: 0.8;
+
+  input {
+    border-radius: 4px;
+    border-style: none;
+  }
 }
 
 .ol-control-recenter-on_on-top {
@@ -1181,7 +1201,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions {
-  top: 65px;
+  top: 57px;
   left: 3em;
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
@@ -1193,7 +1213,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions_on-top {
-  top: 35px;
+  top: 27px;
 }
 
 .ol-control-reset-geometry {
@@ -1244,27 +1264,27 @@ $control-margin: 0.5em;
     }
   }
 }
-
-.ol-attribution ul {
-  display: flex;
-  flex-direction: column;
-}
 </style>
 
 <style lang="scss">
 $control-margin: 0.5em;
 
+.ol-attribution ul,
 .ol-scale-line {
-  background: rgba(255, 255, 255, 0.3);
-  bottom: 10px;
+  --ol-subtle-foreground-color: #666666;
+  --ol-foreground-color: #333333;
+}
+
+.ol-attribution ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.ol-scale-line {
+  bottom: calc($control-margin + 1px);
   right: 40px;
   left: initial;
-
-  .ol-scale-line-inner {
-    color: black;
-    border: 1px solid black;
-    border-top: none;
-  }
+  line-height: 1.3;
 }
 
 .ol-full-screen {
