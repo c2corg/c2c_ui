@@ -20,8 +20,6 @@
           <input :checked="layer == visibleLayer" type="radio" />
           {{ $gettext(layer.get('title'), 'Map layer') }}
         </div>
-      </div>
-      <div>
         <header v-translate>Slopes</header>
         <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
           <input :checked="layer.getVisible()" type="checkbox" />
@@ -68,7 +66,14 @@
       class="ol-control ol-control-recenter-on"
       :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
     >
-      <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions" />
+      <input
+        type="text"
+        ref="recenterOnPropositionsInput"
+        :placeholder="$gettext('Recenter on...')"
+        @input="searchRecenterOnPropositions"
+        @focus="searchRecenterOnPropositions"
+        @blur="clearRecenterOnPropositions"
+      />
     </div>
 
     <div
@@ -77,12 +82,15 @@
       class="ol-control ol-control-recenter-on-propositions"
       :class="{ 'ol-control-recenter-on-propositions_on-top': !showFilterControl }"
     >
-      <ul v-if="recenterPropositions && recenterPropositions.data && recenterPropositions.data.features">
+      <ul v-if="recenterPropositions?.data?.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
           {{ item.properties.name }},
-          <small>{{ item.properties.state }}, {{ item.properties.country }}</small>
+          <small>
+            <template v-if="item.properties.state">{{ item.properties.state }}, </template>{{ item.properties.country }}
+          </small>
         </li>
       </ul>
+      <div v-else v-translate>Loading...</div>
     </div>
 
     <div v-show="editable" ref="resetGeometry" class="ol-control ol-control-reset-geometry">
@@ -1042,16 +1050,25 @@ export default {
       this.geolocation.setTracking(false);
     },
 
-    searchRecenterPropositions(event) {
+    searchRecenterOnPropositions(event) {
       const query = event.target.value;
 
-      if (query && query.length >= 3) {
+      if (query?.length >= 3) {
         const center = this.view.getCenter();
         const centerWgs84 = ol.proj.toLonLat(center);
 
         this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84);
         this.showRecenterOnPropositions = true;
+      } else {
+        this.showRecenterOnPropositions = false;
       }
+    },
+
+    clearRecenterOnPropositions() {
+      setTimeout(() => {
+        this.showRecenterOnPropositions = false;
+        this.$refs.recenterOnPropositionsInput.value = '';
+      }, 200);
     },
 
     // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
@@ -1143,9 +1160,22 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~ol/ol.css';
 
+:root,
+:host {
+  --ol-background-color: rgba(0, 60, 136, 0.6);
+  --ol-accent-background-color: #f5f5f5;
+  --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
+  --ol-partial-background-color: rgba(255, 255, 255, 0.75);
+  --ol-foreground-color: #fff;
+  --ol-subtle-foreground-color: #fff;
+  --ol-brand-color: #00aaff;
+}
+</style>
+
+<style lang="scss" scoped>
 $control-margin: 0.5em;
 
 .ol-control-center-on-geolocation {
@@ -1154,7 +1184,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher {
-  bottom: 3em;
+  bottom: 2.5em;
   left: $control-margin;
 }
 
@@ -1166,6 +1196,7 @@ $control-margin: 0.5em;
 .ol-control-use-map-as-filter {
   top: $control-margin;
   left: 3em;
+  padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
 
   .is-info:checked + label::before {
@@ -1176,6 +1207,12 @@ $control-margin: 0.5em;
 .ol-control-recenter-on {
   top: 35px;
   left: 3em;
+  opacity: 0.8;
+
+  input {
+    border-radius: 4px;
+    border-style: none;
+  }
 }
 
 .ol-control-recenter-on_on-top {
@@ -1183,7 +1220,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions {
-  top: 65px;
+  top: 57px;
   left: 3em;
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
@@ -1195,7 +1232,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions_on-top {
-  top: 35px;
+  top: 27px;
 }
 
 .ol-control-reset-geometry {
@@ -1227,11 +1264,11 @@ $control-margin: 0.5em;
   background-color: rgba(0, 60, 136, 0.6);
   border: none;
   border-radius: 2px;
-  padding: 0 10px 10px 10px;
+  padding: 10px;
   display: flex;
 
   & > div {
-    width: 50%;
+    column-count: 2;
 
     &:first-child {
       margin-right: 10px;
@@ -1239,31 +1276,34 @@ $control-margin: 0.5em;
 
     header {
       font-weight: bold;
-      padding-top: 10px;
+
+      &:not(:first-child) {
+        padding-top: 10px;
+      }
     }
   }
-}
-
-.ol-attribution ul {
-  display: flex;
-  flex-direction: column;
 }
 </style>
 
 <style lang="scss">
 $control-margin: 0.5em;
 
+.ol-attribution ul,
 .ol-scale-line {
-  background: rgba(255, 255, 255, 0.3);
-  bottom: 10px;
+  --ol-subtle-foreground-color: #666666;
+  --ol-foreground-color: #333333;
+}
+
+.ol-attribution ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.ol-scale-line {
+  bottom: calc($control-margin + 1px);
   right: 40px;
   left: initial;
-
-  .ol-scale-line-inner {
-    color: black;
-    border: 1px solid black;
-    border-top: none;
-  }
+  line-height: 1.3;
 }
 
 .ol-full-screen {

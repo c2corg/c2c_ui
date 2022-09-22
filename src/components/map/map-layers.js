@@ -237,6 +237,21 @@ export const cartoLayers = function () {
     }),
   });
 
+  // $gettext('ESRI World Imagery', 'Map layer')
+  const esriImagery = new ol.layer.Tile({
+    title: 'Esri World Imagery',
+    type: 'base',
+    visible: false,
+    source: new ol.source.XYZ({
+      url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attributions: [
+        '<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"' +
+          ' target="_blank" rel="noreferer">Esri</a>',
+      ],
+      maxZoom: 19,
+    }),
+  });
+
   // $gettext('IGN maps', 'Map layer')
   const ignFrMaps = createIgnFrSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
@@ -258,6 +273,7 @@ export const cartoLayers = function () {
   return [
     openTopoMap,
     /* esri, */
+    esriImagery,
     /* bingMap, */
     ignFrMaps,
     ignFrOrtho,
@@ -273,10 +289,10 @@ export const cartoLayers = function () {
 
 export const dataLayers = function () {
   // $gettext('IGN', 'Map slopes layer')
-  const ignSlopes = createIgnFrSource('IGN', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+  const ignSlopes = createIgnFrSource('IGN Slopes', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
+  const swissSlopes = createSwisstopoLayer('SwissTopo Slopes', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
   swissSlopes.setOpacity(0.4);
 
   return [ignSlopes, swissSlopes];
