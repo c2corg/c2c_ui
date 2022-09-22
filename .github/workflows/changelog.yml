@@ -30,11 +30,7 @@ jobs:
         uses: c2corg/generate-changelog-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Save changelog to file
-        run: |
-          echo "$CHANGELOG" > wiki/Changelog.md
-        env:
-          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+          write_to: wiki/Changelog.md
       - name: Commit files
         working-directory: wiki
         run: |
