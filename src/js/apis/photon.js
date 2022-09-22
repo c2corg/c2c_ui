@@ -1,4 +1,4 @@
-// http://photon.komoot.de/
+// http://photon.komoot.io/
 // https://github.com/komoot/photon
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -19,8 +19,8 @@ Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
     lon: centerWgs84[0],
     lat: centerWgs84[1],
   };
-  // only english, german, french and italian languages are supported
-  if (['en', 'de', 'fr', 'it'].includes(lang)) {
+  // only english, german and french languages are supported
+  if (['en', 'de', 'fr'].includes(lang)) {
     params = { ...params, lang };
   }
 

@@ -66,7 +66,14 @@
       class="ol-control ol-control-recenter-on"
       :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
     >
-      <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions" />
+      <input
+        type="text"
+        ref="recenterOnPropositionsInput"
+        :placeholder="$gettext('Recenter on...')"
+        @input="searchRecenterOnPropositions"
+        @focus="searchRecenterOnPropositions"
+        @blur="clearRecenterOnPropositions"
+      />
     </div>
 
     <div
@@ -75,12 +82,15 @@
       class="ol-control ol-control-recenter-on-propositions"
       :class="{ 'ol-control-recenter-on-propositions_on-top': !showFilterControl }"
     >
-      <ul v-if="recenterPropositions && recenterPropositions.data && recenterPropositions.data.features">
+      <ul v-if="recenterPropositions?.data?.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
           {{ item.properties.name }},
-          <small>{{ item.properties.state }}, {{ item.properties.country }}</small>
+          <small>
+            <template v-if="item.properties.state">{{ item.properties.state }}, </template>{{ item.properties.country }}
+          </small>
         </li>
       </ul>
+      <div v-else v-translate>Loading...</div>
     </div>
 
     <div v-show="editable" ref="resetGeometry" class="ol-control ol-control-reset-geometry">
@@ -1040,16 +1050,25 @@ export default {
       this.geolocation.setTracking(false);
     },
 
-    searchRecenterPropositions(event) {
+    searchRecenterOnPropositions(event) {
       const query = event.target.value;
 
-      if (query && query.length >= 3) {
+      if (query?.length >= 3) {
         const center = this.view.getCenter();
         const centerWgs84 = ol.proj.toLonLat(center);
 
         this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84);
         this.showRecenterOnPropositions = true;
+      } else {
+        this.showRecenterOnPropositions = false;
       }
+    },
+
+    clearRecenterOnPropositions() {
+      setTimeout(() => {
+        this.showRecenterOnPropositions = false;
+        this.$refs.recenterOnPropositionsInput.value = '';
+      }, 200);
     },
 
     // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
