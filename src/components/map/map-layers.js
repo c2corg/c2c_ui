@@ -237,6 +237,21 @@ export const cartoLayers = function () {
     }),
   });
 
+  // $gettext('ESRI World Imagery', 'Map layer')
+  const esriImagery = new ol.layer.Tile({
+    title: 'Esri World Imagery',
+    type: 'base',
+    visible: false,
+    source: new ol.source.XYZ({
+      url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attributions: [
+        '<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"' +
+          ' target="_blank" rel="noreferer">Esri</a>',
+      ],
+      maxZoom: 19,
+    }),
+  });
+
   // $gettext('IGN maps', 'Map layer')
   const ignFrMaps = createIgnFrSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
@@ -258,6 +273,7 @@ export const cartoLayers = function () {
   return [
     openTopoMap,
     /* esri, */
+    esriImagery,
     /* bingMap, */
     ignFrMaps,
     ignFrOrtho,

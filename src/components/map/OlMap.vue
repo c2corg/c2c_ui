@@ -20,8 +20,6 @@
           <input :checked="layer == visibleLayer" type="radio" />
           {{ $gettext(layer.get('title'), 'Map layer') }}
         </div>
-      </div>
-      <div>
         <header v-translate>Slopes</header>
         <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
           <input :checked="layer.getVisible()" type="checkbox" />
@@ -1154,7 +1152,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher {
-  bottom: 3em;
+  bottom: 2.5em;
   left: $control-margin;
 }
 
@@ -1227,11 +1225,11 @@ $control-margin: 0.5em;
   background-color: rgba(0, 60, 136, 0.6);
   border: none;
   border-radius: 2px;
-  padding: 0 10px 10px 10px;
+  padding: 10px;
   display: flex;
 
   & > div {
-    width: 50%;
+    column-count: 2;
 
     &:first-child {
       margin-right: 10px;
@@ -1239,7 +1237,10 @@ $control-margin: 0.5em;
 
     header {
       font-weight: bold;
-      padding-top: 10px;
+
+      &:not(:first-child) {
+        padding-top: 10px;
+      }
     }
   }
 }
