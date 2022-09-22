@@ -6,6 +6,7 @@ node_modules_BKP2
 # local env files
 .env.local
 .env.*.local
+*.env
 
 # Log files
 npm-debug.log*
@@ -23,5 +24,6 @@ yarn-error.log*
 
 # local helpers
 run-build.bat
-*.env
+
+# snyk
 .dccache
