@@ -18,6 +18,8 @@
         :helper="null"
         :placeholder="placeholder"
         :unit="unit"
+        :max="max"
+        :min="min"
         :divisor="divisor"
         :is-expanded="isExpanded"
       />
@@ -69,6 +71,14 @@ export default {
     noWrapper: {
       type: Boolean,
       default: false,
+    },
+    max: {
+      type: String,
+      default: undefined,
+    },
+    min: {
+      type: String,
+      default: undefined,
     },
   },
 

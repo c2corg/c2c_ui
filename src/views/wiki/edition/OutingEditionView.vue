@@ -10,8 +10,9 @@
           class="is-narrow"
           :document="document"
           :field="fields.date_start"
-          :max="showBothDates ? document.date_end : undefined"
+          :max="currentDate || (showBothDates ? document.date_end : undefined)"
           @input="handleDates"
+          @click.native="setCurrentDate"
         />
         <form-field
           class="is-narrow"
@@ -19,6 +20,8 @@
           :document="document"
           :field="fields.date_end"
           :min="showBothDates ? document.date_start : undefined"
+          :max="currentDate"
+          @click.native="setCurrentDate"
         />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
@@ -240,6 +243,7 @@ export default {
       routeTitle: '',
       bbox: null,
       showMoreResultsBanner: false,
+      currentDate: new Date().toISOString().substring(0, 10),
     };
   },
 
@@ -396,7 +400,9 @@ export default {
         this.document.date_end = this.document.date_start;
       }
     },
-
+    setCurrentDate() {
+      this.currentDate = new Date().toISOString().substring(0, 10)
+    },
     beforeSave() {
       this.handleDates();
       this.$refs.qualityField.beforeSave();
