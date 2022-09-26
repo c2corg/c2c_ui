@@ -4,6 +4,7 @@
     "node": true
   },
   "extends": ["plugin:vue/recommended", "plugin:import/errors", "plugin:import/warnings", "prettier"],
+  "reportUnusedDisableDirectives": true,
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "warn",
