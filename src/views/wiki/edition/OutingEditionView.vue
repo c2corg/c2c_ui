@@ -226,11 +226,16 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 import CotometerWindow from './utils/CotometerWindow';
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 import c2c from '@/js/apis/c2c';
 
+const getCurrentDateString = () => {
+  return format(new Date(), 'yyyy-MM-dd');
+};
 export default {
   components: { CotometerWindow },
 
@@ -243,7 +248,7 @@ export default {
       routeTitle: '',
       bbox: null,
       showMoreResultsBanner: false,
-      currentDate: new Date().toISOString().substring(0, 10),
+      currentDate: getCurrentDateString(),
     };
   },
 
@@ -401,7 +406,7 @@ export default {
       }
     },
     setCurrentDate() {
-      this.currentDate = new Date().toISOString().substring(0, 10)
+      this.currentDate = getCurrentDateString();
     },
     beforeSave() {
       this.handleDates();
