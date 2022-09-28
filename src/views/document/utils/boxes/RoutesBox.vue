@@ -29,13 +29,9 @@
 </template>
 
 <script>
-import AccordionItem from '@/components/generics/AccordionItem.vue';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
-  components: {
-    AccordionItem,
-  },
   mixins: [requireDocumentProperty],
   props: {
     hideButtons: {

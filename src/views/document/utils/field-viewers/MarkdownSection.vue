@@ -19,15 +19,10 @@
 </template>
 
 <script>
-import AccordionItem from '@/components/generics/AccordionItem.vue';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
-  components: {
-    AccordionItem,
-  },
   mixins: [requireDocumentProperty, requireFieldProperty],
-
   props: {
     hideTitle: {
       type: Boolean,
