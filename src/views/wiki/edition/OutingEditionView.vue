@@ -10,7 +10,7 @@
           class="is-narrow"
           :document="document"
           :field="fields.date_start"
-          :max="currentDate || (showBothDates ? document.date_end : undefined)"
+          :max="showBothDates ? document.date_end : currentDate"
           @input="handleDates"
           @click.native="setCurrentDate"
         />
