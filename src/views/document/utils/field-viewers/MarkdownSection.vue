@@ -19,8 +19,7 @@
 </template>
 
 <script>
-import AccordionItem from './AccordionItem.vue';
-
+import AccordionItem from '@/components/generics/AccordionItem.vue';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
