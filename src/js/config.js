@@ -2,7 +2,6 @@
 // DO not modify this file. If you need another build parameter
 // please go to vue.config.js in root
 
-// eslint-disable-next-line no-undef
 const config = CAMPTOCAMP_CONFIG;
 
 const LOCAL_STORAGE_KEY = 'SiteConfiguration.urlsName';

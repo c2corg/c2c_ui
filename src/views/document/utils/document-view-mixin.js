@@ -172,7 +172,7 @@ export default {
                 documents: [],
               },
             };
-            this.$emit('updateHead'); // eslint-disable-line
+            this.$emit('updateHead');
           });
       } else if (this.isDraftView) {
         this.promise = {};
@@ -200,7 +200,7 @@ export default {
           .then(() => {
             this.$root.$emit('trigger-scroll');
             // notify vue-head plugin to update
-            this.$emit('updateHead'); // eslint-disable-line
+            this.$emit('updateHead');
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);

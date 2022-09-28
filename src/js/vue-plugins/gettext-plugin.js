@@ -8,8 +8,6 @@ function cleanMessageId(msgid) {
   }
 
   if (!msgid.replace) {
-    // eslint-disable-next-line
-    // console.error("Found a non-string in translations", msgid)
     return String(msgid);
   }
 
