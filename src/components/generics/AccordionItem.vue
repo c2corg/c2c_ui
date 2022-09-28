@@ -1,13 +1,8 @@
 <template>
   <div>
-    <div class="accordion-title" :class="{ 'no-print': !visible }">
+    <div class="accordion-title has-cursor-pointer" :class="{ 'no-print': !visible }" @click="visible = !visible">
       <slot name="title" />
-      <fa-icon
-        class="is-size-6 has-cursor-pointer no-print accordion-icon"
-        icon="angle-down"
-        :rotation="visible ? undefined : 180"
-        @click="visible = !visible"
-      />
+      <fa-icon class="is-size-6 no-print accordion-icon" icon="angle-down" :rotation="visible ? undefined : 180" />
     </div>
     <div v-show="visible">
       <slot name="content" />
