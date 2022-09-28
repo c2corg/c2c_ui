@@ -1,20 +1,12 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
-    <div class="accordion-title" :class="{ 'no-print': !visible }">
-      <h2 v-if="field.name != 'summary' && !hideTitle" class="title is-2">
+    <accordion-item>
+      <h2 slot="title" v-if="field.name != 'summary' && !hideTitle" class="title is-2">
         <span>
           {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
         </span>
       </h2>
-      <fa-icon
-        class="is-size-6 has-cursor-pointer no-print accordion-icon"
-        icon="angle-down"
-        :rotation="visible ? undefined : 180"
-        @click="visible = !visible"
-      />
-    </div>
-    <div v-show="visible">
-      <div :lang="lang">
+      <div slot="content" :lang="lang">
         <markdown
           v-if="document.cooked[field.name]"
           :class="{ 'is-italic': field.name === 'summary' }"
@@ -22,14 +14,19 @@
         />
         <slot name="after" />
       </div>
-    </div>
+    </accordion-item>
   </div>
 </template>
 
 <script>
+import AccordionItem from './AccordionItem.vue';
+
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
+  components: {
+    AccordionItem,
+  },
   mixins: [requireDocumentProperty, requireFieldProperty],
 
   props: {
@@ -42,13 +39,6 @@ export default {
       default: null,
     },
   },
-
-  data() {
-    return {
-      visible: true,
-    };
-  },
-
   computed: {
     lang() {
       const current_lang = this.$language.current;
@@ -79,15 +69,5 @@ export default {
       margin-bottom: 0.25em !important;
     }
   }
-}
-
-.accordion-title {
-  position: relative;
-}
-
-.accordion-icon {
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 </style>
