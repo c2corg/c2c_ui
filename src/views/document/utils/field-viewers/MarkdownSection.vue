@@ -1,23 +1,27 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
-    <h2 v-if="field.name != 'summary' && !hideTitle" class="title is-2" :class="{ 'no-print': !visible }">
-      <span>
-        {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
-      </span>
+    <div class="accordion-title" :class="{ 'no-print': !visible }">
+      <h2 v-if="field.name != 'summary' && !hideTitle" class="title is-2">
+        <span>
+          {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
+        </span>
+      </h2>
       <fa-icon
-        class="is-size-6 is-pulled-right has-cursor-pointer no-print"
+        class="is-size-6 has-cursor-pointer no-print accordion-icon"
         icon="angle-down"
         :rotation="visible ? undefined : 180"
         @click="visible = !visible"
       />
-    </h2>
-    <div v-show="visible" :lang="lang">
-      <markdown
-        v-if="document.cooked[field.name]"
-        :class="{ 'is-italic': field.name === 'summary' }"
-        :content="document.cooked[field.name]"
-      />
-      <slot name="after" />
+    </div>
+    <div v-show="visible">
+      <div :lang="lang">
+        <markdown
+          v-if="document.cooked[field.name]"
+          :class="{ 'is-italic': field.name === 'summary' }"
+          :content="document.cooked[field.name]"
+        />
+        <slot name="after" />
+      </div>
     </div>
   </div>
 </template>
@@ -75,5 +79,15 @@ export default {
       margin-bottom: 0.25em !important;
     }
   }
+}
+
+.accordion-title {
+  position: relative;
+}
+
+.accordion-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>
