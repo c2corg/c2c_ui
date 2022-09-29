@@ -207,6 +207,9 @@
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
     "Duration (hrs)": "Durata (h)",
+    "ESRI World Imagery": {
+      "Map layer": "ESRI Sat"
+    },
     "EULA": "CGU",
     "Easy mountain climbing gear": "Alpinismo su roccia (F a AD)",
     "Easy snow ice mixed gear": "Alpinismo su neve, ghiaccio, misto (F a PD+)",
