@@ -66,6 +66,12 @@
               <contributor-link :contributor="version" />
             </td>
             <td>
+              <mask-link
+                v-if="version.version_id !== veryFirstVersionId"
+                :id="documentId"
+                :version="version"
+                :lang="lang"
+              />
               {{ version.comment }}
             </td>
           </tr>

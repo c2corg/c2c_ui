@@ -61,4 +61,20 @@ ModeratorService.prototype.unblockAccount = function (userId) {
   return this.api.post('/users/unblock', { user_id: userId });
 };
 
+/**
+ * Mask/unmask version service
+ */
+ModeratorService.prototype.maskVersion = function ({ documentId, lang, versionId }) {
+  console.log(documentId);
+  return this.api.post('/versions/mask', {
+    document_id: documentId, lang: lang, version_id: versionId
+  });
+};
+
+ModeratorService.prototype.unmaskVersion = function ({ documentId, lang, versionId }) {
+  return this.api.post('/versions/unmask', {
+    document_id: documentId, lang: lang, versionId: version_id
+  });
+};
+
 export default ModeratorService;
