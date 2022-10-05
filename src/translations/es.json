@@ -212,6 +212,9 @@
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
     "Duration (hrs)": "duración (horas)",
+    "ESRI World Imagery": {
+      "Map layer": "ESRI Sat"
+    },
     "EULA": "CGU",
     "Easy mountain climbing gear": "Alpinismo en roca de F a AD",
     "Easy snow ice mixed gear": "Alpinismo de nieve, hielo y mixto de F a PD+",
@@ -313,6 +316,7 @@
     "List mode": "forma de la lista",
     "List of versions for language:": "Lista de versiones para el idioma:",
     "Load my preferences": "carga mis preferencias",
+    "Loading...": "Cargando...",
     "Location / elevation / orientation": "Lugar /altitud/ orientación",
     "Log in to post a comment": "Inicie sesión para publicar un comentario",
     "Login": "Iniciar sesión",
@@ -333,10 +337,15 @@
     "Merge with other document": "Fusión con otro documento",
     "Methods": "Metodos",
     "Misc data about the waypoint": "Datos varios sobre el punto de ruta",
+    "Missing altitude": "Falta la altitud",
+    "Missing captcha": {
+      "API message": "Falta el captcha"
+    },
     "Modified the": {
       "modification date": "Cambia"
     },
     "More info": "Mas informacion",
+    "Multi-criteria search": "Búsqueda multicriterio",
     "My account": "Mi cuenta",
     "My bookmarks": "Mis favoritos",
     "My changes": "Mis cambios",
@@ -354,6 +363,7 @@
     "No account yet?": "¿No tienes cuenta?",
     "No match?": "¿no hay resultados satisfactorios?",
     "No orientation selected": "no has seleccionado la orientacion",
+    "No reduction factor": "Sin factor de reducción",
     "No result found": "no hemos encontrado ningún resultado",
     "No route right now": "No hay ninguna ruta disponible actualmente",
     "No user with this email": {
@@ -361,18 +371,39 @@
     },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
+    "Not simplified yet": "No se ha simplificado todavía",
     "Numbers": "Numeros",
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Sólo las actualizaciones de estado con las actividades seleccionadas y en las áreas seleccionadas se muestran en el hilo de la página principal. Siempre se mostrarán las actualizaciones de estado de los usuarios seguidos.",
     "Ooops": "Ups !",
+    "Open in a new tab": "Abrir en una nueva pestaña",
+    "Ordered list": "Lista ordenada",
     "Oups! something went wrong...": "Oups! algo salió mal ...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Nuestro sitio web utiliza cookies propias y de terceros. Algunas cookies son necesarias para el sitio web, mientras que usted puede ajustar otras en cualquier momento, en particular las que nos permiten entender el rendimiento de nuestro sitio web y ofrecerle funciones de medios sociales. Puede aceptar o rechazar todas, o",
     "Outing": "Itinerario",
+    "Outings statistics": "Estadísticas de las salidas",
     "Page not found": "Página no encontrada",
+    "Paragliding outings": "Salidas en parapente",
+    "Parameters of the Digital Camera": "Parámetros de la cámara digital",
+    "Parent": "Padre",
     "Password": "Contraseña",
+    "Paysage": {
+      "Sophie picture context": "Paisaje"
+    },
+    "Paysage - prix du jury et du public": {
+      "Sophie picture context": "Paisaje - Premio del Jurado y del Público"
+    },
+    "People who were with you, and your feelings about this outing": "Las personas que estuvieron con usted, y sus sentimientos sobre esta salida",
+    "Period of protection": "Período de protección",
+    "Personal data are confidential": "La información personal es confidencial",
     "Personal feed": "Noticias personales",
     "Personal feed off": "Noticias personales desactivadas",
     "Personal feed on": "Noticias personales activadas",
+    "Personal informations": "Información personal",
+    "Pitch description tag": "Etiqueta de descripción de la longitud",
+    "Please move the map, or change the route's name.": "Mover el mapa o cambiar el nombre de la ruta.",
+    "Please select a method before computing.": "Seleccione un método de cálculo.",
     "Please select a waypoint type to enable sort feature": "Seleccione un tipo de punto de ruta para activar la función de clasificación",
+    "Please select an activity to enable sort feature": "Seleccione una actividad para activar la función de clasificación",
     "Post the first comment": "Deja un comentario",
     "Preview": "Previsualizar",
     "Protect document": "Proteja el documento",
@@ -405,6 +436,7 @@
     "See the activity of this contributor in your feed": "Ver actividades de este usuario en sus noticias.",
     "See the latest version": "Ver la última versión",
     "Seems fine! :)": "Posible cálculo ! :)",
+    "Select option": "Seleccione la opción",
     "Send reset email": "Enviar email de reinicio",
     "Sensitive area:": "Zona sensible :",
     "Sensitive areas": "Zonas sensibles",
@@ -421,25 +453,46 @@
     "Skiability": "Esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
     "Slopes": "Pendientes",
+    "Social cookies": "Cookies sociales",
     "Soft mobility outing": "Salida de movilidad suave",
+    "Sophie Picture Contest": "Concurso fotográfico Sophie",
     "Sort by": "Ordenar por",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
     "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
+    "This document is a draft.": "Este documento es un borrador.",
+    "This field is too long": "Texto demasiado largo",
+    "This field is too short": "Texto demasiado breve",
+    "This field must be a valid ISBN.": {
+      "API message": "Este campo debe ser un ISBN válido."
+    },
+    "This is the first version": "Esta es la primera versión",
+    "This is the last version": "Esta es la última versión",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Este imagen representa una cubierta de libro. Es la propiedad de su redactor y/o autor. Es presentado aquí sólo para objetivos de ilustración.",
     "This profile is only available to authenticated users.": "Este perfil sólo está disponible para los usuarios autentificados.",
     "Time": "Horario",
+    "Title of the book, author, language and date of publication.": "Título de la obra, autor, idioma y fecha.",
+    "Toggle elevation profile": "Alternar perfil de elevación",
+    "Toggle full-screen": {
+      "Map Controls": "Alternar pantalla completa"
+    },
     "Toggle fullscreen": "Pasar a pantalla completa",
     "Topoguide": {
       "$$noContext": "Topoguía",
       "Sophie picture context": "Topoguía"
     },
+    "Trace": "Seguimiento del GPS",
     "Translate into an other lang": "Traducir en otra lengua",
+    "Transport & road or PT access": "Acceso por carretera/transporte público",
     "Types and styles": "Tipos y estilos",
     "Unblock account": "Desbloquear cuenta",
+    "Unformatted text": "texto sin formato",
     "Unmark this route as to do": "Eliminar esta ruta de sus favoritos",
+    "Unordered list": "Lista desordenada",
+    "Unprotect document": "Desproteger el documento",
     "Upload a GPS track": "Añadir una traza",
+    "Upload a new version": "Subir una nueva versión",
     "User avatar": "Avatar",
     "Username": "Usuario",
     "Versions": "Versiones ",
@@ -449,8 +502,13 @@
     "Waypoint's main properties": "Datos clave del punto de ruta",
     "Waypoint's textual description": "Descripciones textuales del punto de ruta",
     "We sent you an email, please click on the link to reset password.": "Te enviamos un email, por favor haz clic en el enlace para reiniciar la contraseña. ",
+    "Weather & conditions": "Condiciones y meteo",
+    "Weather forecast (meteoblue)": "Previsión meteorológica (meteoblue)",
+    "Wide and constant": "Amplio y regular",
     "Without c2c account": "Participantes sin cuenta c2c",
     "YETI - A preparation tool for your outing": "YETI - Una herramienta de preparación para su salida",
+    "YETI extent": "Alcance YETI",
+    "You can choose to remain anonymous": "Puede elegir permanecer en el anonimato",
     "You may add associated waypoints, books and articles": "Puedes añadir puntos de ruta, libros y artículos asociados",
     "You need to activate your by clicking the link sent to your email address.": "Debe activarlo haciendo clic en el enlace que se le envió a su dirección de correo electrónico.",
     "Your account was successfully created": "Su cuenta ha sido creada",
@@ -1057,8 +1115,13 @@
     "mountainbike_instructor": {
       "user_categories": "monitor-guía de MTB"
     },
+    "mtb_length_asphalt": "Distancia del asfalto",
+    "mtb_length_trail": "Distancia en el camino",
     "multi": {
       "climbing_outdoor_types": "ruta de varios largos"
+    },
+    "multipitch_climbing": {
+      "event_activities": "Escalada de rutas largas"
     },
     "name": "Nombre",
     "natural_avalanche": {
@@ -1067,6 +1130,7 @@
     "naturally": {
       "snow_clearance_ratings": "natural"
     },
+    "nb_impacted": "Número de personas afectadas",
     "nb_pages": "Número de páginas",
     "nb_participants": "número de participantes",
     "nearby service": {
@@ -1080,6 +1144,12 @@
     "no info": "no hay información",
     "no service": {
       "public_transportation_ratings": "sin servicio"
+    },
+    "non_applicable": {
+      "snow_clearance_ratings": "no aplicable"
+    },
+    "non_autonomous": {
+      "autonomies": "no autosuficiente"
     },
     "novel": {
       "book_types": "nueva"
@@ -1127,6 +1197,7 @@
       "waypoint_types": "despegues parapente"
     },
     "parking_fee": "Aparcamiento o camino de pago",
+    "partial_trip": "Curso parcial",
     "participant_count": "Número de participantes",
     "participants": "Participantes",
     "partly_protected": {
@@ -1134,6 +1205,10 @@
     },
     "pass": {
       "waypoint_types": "paso"
+    },
+    "pedestrian access": {
+      "$$noContext": "Acceso peatonal",
+      "hut": "Acceso"
     },
     "people": {
       "image_categories": "figura"
@@ -1146,8 +1221,12 @@
     },
     "personal comments": "Comentarios personales",
     "phone": "Teléfono",
+    "phone_custodian": "Teléfono del custodio/gerente",
     "photos-art": {
       "book_types": "fotos-arte"
+    },
+    "physical_failure": {
+      "event_types": "fallo físico"
     },
     "pillar": {
       "route_configuration_types": "pilar"
@@ -1157,6 +1236,9 @@
     },
     "pixels": "pixeles",
     "place": "lugar",
+    "please consult the server logs": {
+      "API message": "Error inesperado, por favor contacte con dev@camptocamp.org"
+    },
     "points": "puntos",
     "poor": {
       "condition_ratings": "malas",
@@ -1183,6 +1265,12 @@
     },
     "previous difference": "diferencia anterior",
     "previous version": "version precedente",
+    "previous_injuries_2": {
+      "previous_injuries": "otras lesiones"
+    },
+    "primary_impacted": {
+      "author_statuses": "víctima primaria"
+    },
     "product_types": "Tipo de productos locales",
     "professional_diploma": {
       "qualification": "titulo porfesional"
@@ -1197,6 +1285,7 @@
       "$$noContext": "protegido de la lluvia",
       "rain_proof_types": "protegido de la lluvia"
     },
+    "public transportation access": "acceso al transporte público",
     "public_transport": "Transporte público",
     "public_transportation_rating": "Acceso en transporte público",
     "public_transportation_types": "Tipo de transporte público",
@@ -1375,8 +1464,10 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "time_management": "Gestión de horarios",
     "timing": "Duración",
     "title": "Titulo",
+    "to start or load a new one": "para iniciar o cargar una nueva",
     "topoguide_supplements": {
       "article_categories": "topoguide_suplementos"
     },
@@ -1416,6 +1507,9 @@
     "waypoint_type": "Tipo de waypoint",
     "waypoints": "puntos de ruta",
     "weather": "Meteo observada",
+    "weather_event": {
+      "event_types": "evento meteorológico"
+    },
     "weather_station": {
       "waypoint_types": " estación meteorológica"
     },
@@ -1433,6 +1527,7 @@
     "wind_speed": {
       "weather_station_types": "velocidad del viento"
     },
+    "with Alt + clic": "con Alt + clic",
     "write a summary": "Escribir un resumen",
     "write your comments": "Escribir sus comentarios",
     "xreport": "incidente / accidente",
