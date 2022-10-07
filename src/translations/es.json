@@ -253,7 +253,7 @@
     "Fullname": "Nombre completo",
     "GPX file": "Archivo GPX",
     "General information": "Informacion general",
-    "Geolocation": "ubicacion geográfica",
+    "Geolocation": "Geolocalización",
     "Go back to YETI": "Volver a YETI",
     "Go to the previous page": "Ir a la página anterior",
     "Group": "Grupo",
@@ -321,7 +321,7 @@
     "Log in to post a comment": "Inicie sesión para publicar un comentario",
     "Login": "Iniciar sesión",
     "Login failed": {
-      "API message": "Login ha fallado"
+      "API message": "Identificación fallida"
     },
     "Logout": "Desconectar",
     "Longitude": "Longitud",
