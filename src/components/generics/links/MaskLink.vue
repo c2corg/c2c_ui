@@ -1,10 +1,12 @@
 <template>
   <span>
     <span v-if="$user.isModerator" @click="toggleMask">
-      <a v-if="isVersionMasked" v-translate>Unmask version</a>
-      <a v-else v-translate>Mask version</a>
+      <a v-if="version.masked" v-translate>Unmask</a>
+      <a v-else v-translate>Mask</a>
     </span>
-    <span v-if="isVersionMasked" v-translate>This version is masked.</span>
+    <span v-if="version.masked">
+      [<span v-translate>This version is masked.</span>]
+    </span>
   </span>
 </template>
 
@@ -30,21 +32,15 @@ export default {
     },
   },
 
-  computed: {
-    isVersionMasked() {
-      return this.version.masked;
-    }
-  },
-
   methods: {
     async toggleMask() {
       try {
         await (
-          this.isVersionMasked ?
+          this.version.masked ?
           c2c.moderator.unmaskVersion(this.id, this.lang, this.version.version_id) :
           c2c.moderator.maskVersion(this.id, this.lang, this.version.version_id)
         );
-        this.isVersionMasked = !this.isVersionMasked;
+        this.version.masked = !this.version.masked;
       } catch (error) {
         toast({
           message: this.$gettext(`An error occurred, couldn't (un)mask version`),

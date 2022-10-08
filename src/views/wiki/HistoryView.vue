@@ -67,7 +67,7 @@
             </td>
             <td>
               <mask-link
-                v-if="version.version_id !== veryFirstVersionId"
+                v-if="version.version_id !== latestVersionId"
                 :id="documentId"
                 :version="version"
                 :lang="lang"
@@ -121,6 +121,9 @@ export default {
     },
     veryFirstVersionId() {
       return this.history.versions[this.history.versions.length - 1].version_id;
+    },
+    latestVersionId() {
+      return this.history.versions[0].version_id;
     },
     history() {
       return this.promise.data;
