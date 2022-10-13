@@ -11,7 +11,7 @@
 
       <span>
         <span v-if="document.rock_free_rating" :title="$gettext('rock_free_rating')">
-          {{ document.rock_free_rating
+          {{ formatBoulderRating(document.rock_free_rating)
           }}<!--
               --></span
         ><!--
@@ -163,6 +163,11 @@ export default {
         },
       };
     },
+	formatBoulderRating(rating) {
+		if (this.document.climbing_outdoor_type !== 'bloc') return rating;
+
+		return rating.toUpperCase();
+	},
   },
 };
 </script>
