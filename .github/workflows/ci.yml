@@ -126,9 +126,6 @@ jobs:
           previousTag=$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')
           currentTag=$(git tag | sort -V -r | head -1)
           changelog=$(git log --pretty=oneline ${previousTag}..${currentTag} --no-merges)
-          changelog="${changelog//'%'/'%25'}"
-          changelog="${changelog//$'\n'/'%0A'}"
-          changelog="${changelog//$'\r'/'%0D'}"
           echo "changelog=$changelog" >> $GITHUB_OUTPUT
       - name: Create or update release
         uses: meeDamian/github-release@2.0
