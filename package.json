@@ -41,7 +41,7 @@
     "ol": "7.1.0",
     "process": "0.11.10",
     "swiper": "6.8.4",
-    "vue": "2.7.12",
+    "vue": "2.7.13",
     "vue-analytics": "5.22.1",
     "vue-head": "2.2.0",
     "vue-infinite-scroll": "2.0.2",
@@ -79,7 +79,7 @@
     "stylelint-config-recommended-scss": "7.0.0",
     "stylelint-config-recommended-vue": "1.4.0",
     "stylelint-scss": "4.3.0",
-    "vue-template-compiler": "2.7.12",
+    "vue-template-compiler": "2.7.13",
     "webpack-bundle-analyzer": "4.6.1",
     "xml2js": "0.4.23"
   },
