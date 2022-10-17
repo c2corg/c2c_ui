@@ -16,6 +16,9 @@ changelog:
     - title: ⛔ Removed
       labels:
         - removed
+    - title: 💬 Translations
+      labels:
+        - i18n
     - title: 📚 Documentation
       labels:
         - doc
