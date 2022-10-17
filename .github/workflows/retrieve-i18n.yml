@@ -18,7 +18,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
       - name: Retrieve i18n from Transifex and create PR if applies
-        uses: c2corg/transifex-pull-request-action@v4
+        uses: c2corg/transifex-pull-request-action@87f8e4600d67e70565be32ae72bb7e7af26412bf
         with:
           transifex_token: ${{ secrets.TRANSIFEX_TOKEN }}
           transifex_organisation: camptocamp-association
