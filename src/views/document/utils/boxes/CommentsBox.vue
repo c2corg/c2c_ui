@@ -95,7 +95,7 @@ const computeCooked = function (cooked) {
 };
 
 export default {
-  isProduction: config.isProduction,
+  isProduction: config.urls.name === 'prod',
 
   mixins: [requireDocumentProperty, viewModeMixin],
 

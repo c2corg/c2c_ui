@@ -87,7 +87,7 @@ const config = {
   ignApiKey: undefined,
   bingApiKey: undefined,
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
-  isProduction: false,
+  isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
   urlsConfigurations: {
@@ -158,7 +158,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.ignApiKey = '1qdmi4d0spl50eef78ftvm3j';
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
-  config.isProduction = true; // explicit prod flag
+  config.isBackendSelectable = false; // explicit flag
 
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';
