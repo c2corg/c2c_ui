@@ -14,10 +14,6 @@ const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? config.urls.n
 
 if (!config.isProduction) {
   config.urls = config.urlsConfigurations[urlsName];
-} else if (location.hostname === 'www.demov6.camptocamp.org') {
-  // production builds use production urls by default.
-  // use hostname to set urls for demo
-  configs.urls = config.urlsConfigurations[demo];
 }
 
 export default config;
