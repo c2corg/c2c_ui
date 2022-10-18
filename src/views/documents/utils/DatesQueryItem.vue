@@ -8,6 +8,7 @@
       <label class="label">{{ $gettext('date_end') | uppercaseFirstLetter }}</label>
       <input class="input" type="date" v-model="value[1]" />
     </div>
+    <input-checkbox v-model="isChecked" class="checkbox"> Ignorer l'année </input-checkbox>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ export default {
   data() {
     return {
       value: [null, null],
+      isChecked: true,
     };
   },
 
@@ -62,3 +64,8 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.checkbox {
+  margin-top: 10px;
+}
+</style>
