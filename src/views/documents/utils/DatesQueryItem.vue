@@ -21,40 +21,28 @@ export default {
     };
   },
 
-  computed: {
-    urlValue: {
-      get() {
-        return this.$route.query.date ?? '';
-      },
-      set(value) {
-        if (value !== this.$route.query.date) {
-          this.$router.push({
-            query: {
-              ...this.$route.query,
-              date: value,
-            },
-          });
-        }
-      },
-    },
-  },
-
   watch: {
-    value: 'compute',
+    value: 'updateUrl',
   },
 
   created() {
-    this.value = this.urlValue.split(',');
+    if (!this.$route.query.date) return;
+
+    this.value = this.$route.query.date.split(',');
   },
 
   methods: {
-    compute() {
-      if (!this.value[0] && !this.value[1]) {
-        this.urlValue = undefined;
-        return;
-      }
+    updateUrl() {
+      const value = [this.value[0], this.value[1]].filter(Boolean).join(',');
 
-      this.urlValue = [this.value[0], this.value[1]].filter(Boolean).join(',');
+      if (value !== this.$route.query.date) {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            date: value || undefined,
+          },
+        });
+      }
     },
   },
 };
