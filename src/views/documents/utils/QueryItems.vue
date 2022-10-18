@@ -85,7 +85,7 @@ const categorizedFieldsDefault = {
     'route_types',
     'quality',
     'categories',
-    'date_start',
+    'dates',
   ],
 
   ratings: [
