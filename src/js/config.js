@@ -1,5 +1,5 @@
 // CAMPTOCAMP_CONFIG is a placeholder defined in vue.config.js
-// DO not modify this file. If you need another build parameter
+// Do not modify this file. If you need another build parameter
 // please go to vue.config.js in root
 
 const config = CAMPTOCAMP_CONFIG;
@@ -14,6 +14,10 @@ const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? config.urls.n
 
 if (!config.isProduction) {
   config.urls = config.urlsConfigurations[urlsName];
+} else if (location.hostname === 'www.demov6.camptocamp.org') {
+  // production builds use production urls by default.
+  // use hostname to set urls for demo
+  configs.urls = config.urlsConfigurations[demo];
 }
 
 export default config;
