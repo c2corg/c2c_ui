@@ -24,7 +24,7 @@ export default {
   computed: {
     urlValue: {
       get() {
-        return (this.$route.query.date ?? '') + ',';
+        return this.$route.query.date ?? '';
       },
       set(value) {
         if (value !== this.$route.query.date) {
@@ -51,13 +51,10 @@ export default {
     compute() {
       if (!this.value[0] && !this.value[1]) {
         this.urlValue = undefined;
-      } else {
-        if (!this.value[1]) {
-          this.urlValue = this.value[0];
-        } else {
-          this.urlValue = this.value[0] + ',' + this.value[1];
-        }
+        return;
       }
+
+      this.urlValue = [this.value[0], this.value[1]].filter(Boolean).join(',');
     },
   },
 };
