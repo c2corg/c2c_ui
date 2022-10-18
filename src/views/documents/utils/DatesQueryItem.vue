@@ -50,10 +50,6 @@ export default {
       if (!this.value[0] && !this.value[1]) {
         this.urlValue = undefined;
       } else {
-        if (!this.value[0] && this.value[1]) {
-          this.value = [this.value[1], this.value[0]];
-        }
-
         if (!this.value[1]) {
           this.urlValue = this.value[0];
         } else {
