@@ -27,11 +27,13 @@ export default {
         return (this.$route.query.date ?? '') + ',';
       },
       set(value) {
-        const query = Object.assign({}, this.$route.query);
-        query.date = value;
-
-        if (query.date !== this.$route.query.date) {
-          this.$router.push({ query });
+        if (value !== this.$route.query.date) {
+          this.$router.push({
+            query: {
+              ...this.$route.query,
+              date: value,
+            },
+          });
         }
       },
     },
