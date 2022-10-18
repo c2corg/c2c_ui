@@ -392,7 +392,27 @@ export default {
 }
 
 .sub-query-items {
-  min-width: 300px;
+  @media screen and (min-width: $tablet) {
+    min-width: 300px;
+  }
+
+  @media screen and (max-width: $tablet) {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /*
+      max-height should be calculated:
+      100vh-($navbar-height)-height(.search-infos)
+      but .search-infos height is not fixed
+    */
+    max-height: 70vh;
+
+    -ms-overflow-style: none;  // IE and Edge
+    scrollbar-width: none;  // Firefox
+
+    &::-webkit-scrollbar {
+      display: none;  // Chrome, Safari and Opera
+    }
+  }
 }
 
 @media screen and (min-width: $tablet) {
