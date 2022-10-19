@@ -102,7 +102,7 @@ const config = {
     prod: {
       name: 'prod',
       api: 'https://api.camptocamp.org',
-      media: 'https://media.camptocamp.org/c2corg_active',
+      media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
