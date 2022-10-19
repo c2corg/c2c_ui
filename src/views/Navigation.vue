@@ -38,14 +38,14 @@
       </div>
 
       <div
-        v-if="!siteConfiguration.isProduction"
+        v-if="siteConfiguration.isBackendSelectable"
         class="navigation-item is-hidden-mobile"
         :title="'This page may contains bugs or incomplete features'"
       >
         <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
 
-      <div v-if="!siteConfiguration.isProduction" class="navigation-item dropdown is-hoverable is-hidden-mobile">
+      <div v-if="siteConfiguration.isBackendSelectable" class="navigation-item dropdown is-hoverable is-hidden-mobile">
         <div class="dropdown-trigger">
           <fa-icon icon="database" />
         </div>

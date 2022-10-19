@@ -12,8 +12,12 @@ config.setUrlsName = function (name) {
 
 const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? config.urls.name;
 
-if (!config.isProduction) {
+if (config.isBackendSelectable) {
   config.urls = config.urlsConfigurations[urlsName];
+} else if (location.hostname === 'www.demov6.camptocamp.org') {
+  // production builds use production urls by default.
+  // use hostname to set urls for demo
+  config.urls = config.urlsConfigurations['demo'];
 }
 
 export default config;
