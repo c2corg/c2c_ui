@@ -94,7 +94,7 @@ const config = {
     demo: {
       name: 'demo',
       api: 'https://api.demov6.camptocamp.org',
-      media: 'https://sos.exo.io/c2corg-demov6-active',
+      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
@@ -122,7 +122,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: 'http://localhost:6543',
-    media: 'https://sos.exo.io/c2corg-demov6-active',
+    media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
     imageBackend: 'https://images.demov6.camptocamp.org',
     forum: 'https://forum.demov6.camptocamp.org',
   };
