@@ -8,7 +8,7 @@
       <label class="label">{{ $gettext('date_end') | uppercaseFirstLetter }}</label>
       <input class="input" type="date" v-model="value[1]" />
     </div>
-    <input-checkbox v-model="isChecked" class="checkbox"> Ignorer l'année </input-checkbox>
+    <input-checkbox v-model="usePeriodFilter" class="checkbox"> Ignorer l'année </input-checkbox>
   </div>
 </template>
 
@@ -17,32 +17,62 @@ export default {
   data() {
     return {
       value: [null, null],
-      isChecked: true,
+      usePeriodFilter: false,
     };
   },
 
+  computed: {
+    currentQueryKey() {
+      return this.usePeriodFilter ? 'period' : 'date';
+    },
+  },
+
   watch: {
-    value: 'updateUrl',
+    value: 'updateDateInUrl',
+    usePeriodFilter: 'switchFilterInUrl',
   },
 
   created() {
-    if (!this.$route.query.date) return;
+    const dateQueryString = this.$route.query.date;
+    const periodQueryString = this.$route.query.period;
 
-    this.value = this.$route.query.date.split(',');
+    if (!dateQueryString && !periodQueryString) return;
+
+    if (!periodQueryString) {
+      this.value = dateQueryString.split(',');
+      return;
+    }
+
+    this.value = periodQueryString.split(',');
+    this.usePeriodFilter = true;
   },
 
   methods: {
-    updateUrl() {
+    updateDateInUrl() {
       const value = [this.value[0], this.value[1]].filter(Boolean).join(',');
 
-      if (value !== this.$route.query.date) {
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            date: value || undefined,
-          },
-        });
+      if (value !== this.$route.query[this.currentQueryKey]) {
+        this.pushQueryObjectToUrl({ [this.currentQueryKey]: value || undefined });
       }
+    },
+    switchFilterInUrl() {
+      const oldQueryKey = this.usePeriodFilter ? 'date' : 'period';
+      const existingQueryString = this.$route.query[oldQueryKey];
+
+      if (!existingQueryString) return;
+
+      this.pushQueryObjectToUrl({
+        [oldQueryKey]: undefined,
+        [this.currentQueryKey]: existingQueryString,
+      });
+    },
+    pushQueryObjectToUrl(queryObject) {
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          ...queryObject,
+        },
+      });
     },
   },
 };
