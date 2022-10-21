@@ -4,6 +4,7 @@
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
       <avalanche-bulletins-layer />
+      <flowcapt-layer />
       <nivoses-layer />
       <romma-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
@@ -100,6 +101,7 @@ let c2c_dataLayers = dataLayers();
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
+import FlowcaptLayer from './map-layers/FlowcaptLayer.vue';
 import NivosesLayer from './map-layers/NivosesLayer.vue';
 import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
@@ -117,6 +119,7 @@ export default {
   components: {
     AreaLayer,
     AvalancheBulletinsLayer,
+    FlowcaptLayer,
     NivosesLayer,
     RommaLayer,
     RouteLayer,
@@ -158,6 +161,9 @@ export default {
     showRomma() {
       return Yetix.showRomma;
     },
+    showFlowcapt() {
+      return Yetix.showFlowcapt;
+    },
     drawingMode() {
       return Yetix.drawingMode;
     },
@@ -185,6 +191,11 @@ export default {
           title: this.$gettext('ROMMA stations'),
           checked: this.showRomma,
           action: this.onShowRomma,
+        },
+        {
+          title: this.$gettext('FlowCapt sensors'),
+          checked: this.showFlowcapt,
+          action: this.onShowFlowcapt,
         },
       ];
     },
@@ -354,6 +365,9 @@ export default {
     },
     onShowRomma() {
       Yetix.setShowRomma(!this.showRomma);
+    },
+    onShowFlowcapt() {
+      Yetix.setShowFlowcapt(!this.showFlowcapt);
     },
     onDrawingMode() {
       Yetix.setDrawingMode(!this.drawingMode);

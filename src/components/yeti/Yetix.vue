@@ -54,6 +54,9 @@ let defaultState = {
   romma: [],
   showRomma: false,
 
+  flowcapt: [],
+  showFlowcapt: false,
+
   mapZoom: 0,
   drawingMode: false,
 
@@ -132,6 +135,12 @@ export default new Vue({
     showRomma() {
       return state.showRomma;
     },
+    flowcapt() {
+      return state.flowcapt;
+    },
+    showFlowcapt() {
+      return state.showFlowcapt;
+    },
     mapZoom() {
       return state.mapZoom;
     },
@@ -195,6 +204,12 @@ export default new Vue({
     setShowRomma(showRomma) {
       state.showRomma = showRomma;
     },
+    setFlowcapt(flowcapt) {
+      state.flowcapt = flowcapt;
+    },
+    setShowFlowcapt(showFlowcapt) {
+      state.showFlowcapt = showFlowcapt;
+    },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
@@ -248,6 +263,9 @@ export default new Vue({
     },
     fetchRomma() {
       return this.fetchApi('romma');
+    },
+    fetchFlowcapt() {
+      return this.fetchApi('flowcapt');
     },
   },
 });
