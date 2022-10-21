@@ -8,7 +8,7 @@
       <label class="label">{{ $gettext('date_end') | uppercaseFirstLetter }}</label>
       <input class="input" type="date" v-model="value[1]" />
     </div>
-    <input-checkbox v-model="usePeriodFilter" class="checkbox"> Ignorer l'année </input-checkbox>
+    <input-checkbox v-model="usePeriodFilter" class="checkbox">{{ $gettext('Ignore year') }}</input-checkbox>
   </div>
 </template>
 
