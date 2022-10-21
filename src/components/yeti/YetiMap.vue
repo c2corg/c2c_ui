@@ -29,26 +29,26 @@
       <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
         <div>
           <header v-translate>Base layer</header>
-          <div v-for="(layer, i) of cartoLayers" :key="layer.get('title')" class="map-control-listitem">
+          <div v-for="(layer, i) of reactiveCartoLayers" :key="layer.title" class="map-control-listitem">
             <input
               :id="'carto-checkbox' + i"
-              :checked="layer == visibleCartoLayer"
+              :checked="layer.id == visibleCartoLayerId"
               type="radio"
-              @change="visibleCartoLayer = layer"
+              @change="visibleCartoLayerId = layer.id"
             />
-            <label :for="'carto-checkbox' + i">{{ $gettext(layer.get('title'), 'Map layer') }}</label>
+            <label :for="'carto-checkbox' + i">{{ $gettext(layer.title, 'Map layer') }}</label>
           </div>
         </div>
         <div>
           <header v-translate>Slopes</header>
-          <div v-for="(layer, i) of dataLayers" :key="layer.get('title')" class="map-control-listitem">
+          <div v-for="(layer, i) of reactiveDataLayers" :key="layer.title" class="map-control-listitem">
             <input
               :id="'data-checkbox' + i"
-              :checked="layer.getVisible()"
+              :checked="layer.visible"
               type="checkbox"
               @change="toggleMapDataLayer(layer)"
             />
-            <label :for="'data-checkbox' + i">{{ $gettext(layer.get('title'), 'Map slopes layer') }}</label>
+            <label :for="'data-checkbox' + i">{{ $gettext(layer.title, 'Map slopes layer') }}</label>
           </div>
           <header>YETI</header>
           <div v-for="(layer, i) of yetiLayers" :key="layer.title" class="map-control-listitem">
@@ -93,6 +93,8 @@
 
 <script>
 import { cartoLayers, dataLayers } from '../map/map-layers';
+let c2c_cartoLayers = cartoLayers();
+let c2c_dataLayers = dataLayers();
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
@@ -126,12 +128,12 @@ export default {
   },
   data() {
     return {
-      cartoLayers: cartoLayers(),
-      dataLayers: dataLayers(),
-
       showLayerSwitcher: false,
       recenterPropositions: null,
       showRecenterOnPropositions: false,
+      visibleCartoLayerId: null,
+      reactiveCartoLayers: [],
+      reactiveDataLayers: [],
     };
   },
   computed: {
@@ -164,15 +166,6 @@ export default {
         },
       ];
     },
-    visibleCartoLayer: {
-      get() {
-        return this.cartoLayers.find((layer) => layer.getVisible() === true);
-      },
-      set(layer) {
-        this.visibleCartoLayer.setVisible(false);
-        layer.setVisible(true);
-      },
-    },
     atLeastOneYetiLayerIsShown() {
       return this.yetiLayers.filter((layer) => layer.checked).length;
     },
@@ -183,6 +176,16 @@ export default {
     },
     showAreas() {
       this.updateCartoLayersOpacity();
+    },
+    visibleCartoLayerId(id) {
+      console.log('visibleCartoLayerId')
+      // first, make visible layer invisible
+      let visibleLayer = c2c_cartoLayers.find((layer) => layer.getVisible() === true);
+      visibleLayer.setVisible(false);
+
+      // then, make new layer visible
+      visibleLayer = c2c_cartoLayers.find((layer) => layer.ol_uid === id);
+      visibleLayer.setVisible(true);
     },
   },
   created() {
@@ -199,8 +202,8 @@ export default {
 
       layers: [
         // c2c layers
-        ...this.cartoLayers,
-        ...this.dataLayers,
+        ...c2c_cartoLayers,
+        ...c2c_dataLayers,
       ],
 
       view: new ol.View({
@@ -210,6 +213,23 @@ export default {
       }),
     });
     this.view = this.map.getView();
+
+    // map carto and data layers to reactive ones
+    this.reactiveCartoLayers = c2c_cartoLayers.map(layer => {
+      return {
+        title: layer.get('title'),
+        id: layer.ol_uid,
+      };
+    });
+    this.visibleCartoLayerId = c2c_cartoLayers.find((layer) => layer.getVisible() === true).ol_uid;
+
+    this.reactiveDataLayers = c2c_dataLayers.map(layer => {
+      return {
+        title: layer.get('title'),
+        visible: layer.getVisible(),
+        id: layer.ol_uid,
+      };
+    });
   },
   mounted() {
     // when mounted, bind map to element
@@ -237,8 +257,12 @@ export default {
       }
       return extent;
     },
-    toggleMapDataLayer(layer) {
-      layer.setVisible(!layer.getVisible());
+    toggleMapDataLayer(reactiveLayer) {
+      let layer = c2c_dataLayers.find((layer) => layer.ol_uid === reactiveLayer.id);
+      let ok = layer.setVisible(!layer.getVisible());
+      if (ok) {
+        reactiveLayer.visible = !reactiveLayer.visible;
+      }
     },
     searchRecenterPropositions(event) {
       let query = event.target.value;
@@ -292,7 +316,7 @@ export default {
     },
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
-      this.cartoLayers.forEach((layer) => {
+      c2c_cartoLayers.forEach((layer) => {
         layer.setOpacity((this.showAvalancheBulletins || this.showAreas) && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
