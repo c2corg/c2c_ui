@@ -73,7 +73,11 @@ export default {
     },
 
     progress(current, total) {
-      this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      if (!total) {
+        this.loadingPercentage = 0;
+      } else {
+        this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      }
     },
 
     compute(outings) {
