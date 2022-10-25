@@ -4,6 +4,9 @@
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
       <avalanche-bulletins-layer />
+      <flowcapt-layer />
+      <nivoses-layer />
+      <romma-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <route-layer />
       <div
@@ -98,6 +101,9 @@ let c2c_dataLayers = dataLayers();
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
+import FlowcaptLayer from './map-layers/FlowcaptLayer.vue';
+import NivosesLayer from './map-layers/NivosesLayer.vue';
+import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
@@ -113,6 +119,9 @@ export default {
   components: {
     AreaLayer,
     AvalancheBulletinsLayer,
+    FlowcaptLayer,
+    NivosesLayer,
+    RommaLayer,
     RouteLayer,
     YetiLayer,
   },
@@ -146,6 +155,15 @@ export default {
     showAreas() {
       return Yetix.showAreas;
     },
+    showNivoses() {
+      return Yetix.showNivoses;
+    },
+    showRomma() {
+      return Yetix.showRomma;
+    },
+    showFlowcapt() {
+      return Yetix.showFlowcapt;
+    },
     drawingMode() {
       return Yetix.drawingMode;
     },
@@ -164,17 +182,29 @@ export default {
           checked: this.showAvalancheBulletins,
           action: this.onShowAvalancheBulletins,
         },
+        {
+          title: this.$gettext('Nivose beacons'),
+          checked: this.showNivoses,
+          action: this.onShowNivoses,
+        },
+        {
+          title: this.$gettext('ROMMA stations'),
+          checked: this.showRomma,
+          action: this.onShowRomma,
+        },
+        {
+          title: this.$gettext('FlowCapt sensors'),
+          checked: this.showFlowcapt,
+          action: this.onShowFlowcapt,
+        },
       ];
     },
     atLeastOneYetiLayerIsShown() {
-      return this.yetiLayers.filter((layer) => layer.checked).length;
+      return !!this.yetiLayers.filter((layer) => layer.checked).length;
     },
   },
   watch: {
-    showAvalancheBulletins() {
-      this.updateCartoLayersOpacity();
-    },
-    showAreas() {
+    atLeastOneYetiLayerIsShown() {
       this.updateCartoLayersOpacity();
     },
     visibleCartoLayerId(id) {
@@ -299,8 +329,8 @@ export default {
       if (this.mapZoom !== mapZoom) {
         Yetix.setMapZoom(mapZoom);
       }
-      // if mountains are here, update
-      if (this.showAvalancheBulletins || this.showAreas) {
+      // if one of Yeti layers is here, update (on zooming for example)
+      if (this.atLeastOneYetiLayerIsShown) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -310,13 +340,18 @@ export default {
       // close controls
       this.showLayerSwitcher = false;
       this.showRecenterOnPropositions = false;
+
+      // get clicked feature (the visible one on top)
+      let clickedFeature = this.map.getFeaturesAtPixel(evt.pixel)[0];
+
       // emit an event for map layers
-      Yetix.$emit('mapClick', evt);
+      // pass clicked feature
+      Yetix.$emit('mapClick', evt, clickedFeature);
     },
     updateCartoLayersOpacity() {
       const LIMIT_ZOOM = 9;
       c2c_cartoLayers.forEach((layer) => {
-        layer.setOpacity((this.showAvalancheBulletins || this.showAreas) && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity(this.atLeastOneYetiLayerIsShown && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
       });
     },
     onShowAvalancheBulletins() {
@@ -324,6 +359,15 @@ export default {
     },
     onShowAreas() {
       Yetix.setShowAreas(!this.showAreas);
+    },
+    onShowNivoses() {
+      Yetix.setShowNivoses(!this.showNivoses);
+    },
+    onShowRomma() {
+      Yetix.setShowRomma(!this.showRomma);
+    },
+    onShowFlowcapt() {
+      Yetix.setShowFlowcapt(!this.showFlowcapt);
     },
     onDrawingMode() {
       Yetix.setDrawingMode(!this.drawingMode);
@@ -372,6 +416,7 @@ $control-margin: 0.5em;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 
   input {
+    width: 14.75rem;
     border: none;
     padding: 0.3rem;
     border-radius: 2px;
@@ -474,14 +519,17 @@ $yeti-height: calc(
 .yeti-app {
   .ol-control {
     background: $white;
+    padding: 2px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   }
   .ol-control button {
     background: $grey-dark;
+    color: $white;
 
     &:hover,
     &:focus {
       background: $grey;
+      outline: none;
     }
   }
 
@@ -490,6 +538,8 @@ $yeti-height: calc(
   }
 
   .ol-control-drawing-mode {
+    padding: 0;
+
     .is-checkradio[type='checkbox'] + label {
       font-size: 0.95em;
       margin-right: 0;

@@ -48,6 +48,15 @@ let defaultState = {
   bulletinsLoaded: false,
   showAvalancheBulletins: false,
 
+  nivoses: [],
+  showNivoses: false,
+
+  romma: [],
+  showRomma: false,
+
+  flowcapt: [],
+  showFlowcapt: false,
+
   mapZoom: 0,
   drawingMode: false,
 
@@ -114,6 +123,24 @@ export default new Vue({
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
     },
+    nivoses() {
+      return state.nivoses;
+    },
+    showNivoses() {
+      return state.showNivoses;
+    },
+    romma() {
+      return state.romma;
+    },
+    showRomma() {
+      return state.showRomma;
+    },
+    flowcapt() {
+      return state.flowcapt;
+    },
+    showFlowcapt() {
+      return state.showFlowcapt;
+    },
     mapZoom() {
       return state.mapZoom;
     },
@@ -165,6 +192,24 @@ export default new Vue({
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
     },
+    setNivoses(nivoses) {
+      state.nivoses = nivoses;
+    },
+    setShowNivoses(showNivoses) {
+      state.showNivoses = showNivoses;
+    },
+    setRomma(romma) {
+      state.romma = romma;
+    },
+    setShowRomma(showRomma) {
+      state.showRomma = showRomma;
+    },
+    setFlowcapt(flowcapt) {
+      state.flowcapt = flowcapt;
+    },
+    setShowFlowcapt(showFlowcapt) {
+      state.showFlowcapt = showFlowcapt;
+    },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
@@ -212,6 +257,15 @@ export default new Vue({
     },
     fetchBulletins() {
       return this.fetchApi('bra');
+    },
+    fetchNivoses() {
+      return this.fetchApi('nivoses');
+    },
+    fetchRomma() {
+      return this.fetchApi('romma');
+    },
+    fetchFlowcapt() {
+      return this.fetchApi('flowcapt');
     },
   },
 });

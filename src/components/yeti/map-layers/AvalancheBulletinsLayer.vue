@@ -5,14 +5,18 @@
       <p class="title is-5">{{ overlayData.mountainName }}</p>
     </div>
     <div v-if="overlayData.danger.low" class="py-2">
-      <p class="is-size-7 px-3 pb-5 bulletins-date">
-        <strong v-translate>Validity date:</strong> {{ overlayValidUntil }}
+      <p class="is-size-7 px-3 pb-5">
+        <span class="bulletins-date"><strong v-translate>Validity date:</strong> {{ overlayValidUntil }}</span>
+        <strong v-if="overlayValidUntilExpired" class="is-block has-text-danger">
+          <fa-icon icon="exclamation-circle" />
+          <span v-translate key="id1">Validity date expired</span>
+        </strong>
       </p>
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <div>
           <svg
-            :viewBox="overlayData.danger.altitude ? '0 0 150 100' : '0 0 100 100'"
-            :width="overlayData.danger.altitude ? 120 : 80"
+            :viewBox="overlayData.danger.altitude ? '0 0 155 100' : '0 0 100 100'"
+            :width="overlayData.danger.altitude ? 130 : 80"
             height="80"
           >
             <polygon
@@ -81,12 +85,15 @@
       </dl>
     </div>
     <div v-else class="py-2">
-      <p class="is-size-6 p-3"><span v-translate>No avalanche bulletin right now</span></p>
+      <p class="is-size-6 p-3"><span v-translate key="id2">No avalanche bulletin right now</span></p>
     </div>
-    <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer">
-      <strong v-translate>Full bulletin:</strong>
+    <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer" v-if="overlayData.urls.length">
+      <strong>©{{overlayData.urls[0].title}}</strong>
       <span v-for="(url, i) in overlayData.urls" :key="i" class="pl-1">
-        <a :href="url.url" target="_blank"><fa-icon icon="external-link-alt" /> {{ url.title }}</a>
+        <a :href="url.url" target="_blank">
+          <fa-icon icon="external-link-alt" />
+          <span v-translate>Full bulletin</span>
+        </a>
       </span>
     </p>
     <img :src="overlayDangerIcon" alt="" class="bulletins-overlay-danger-icon" />
@@ -258,6 +265,10 @@ export default {
     overlayValidUntil() {
       return format(new Date(this.overlayData.validUntil), 'dd/MM/yyyy HH:mm');
     },
+    overlayValidUntilExpired() {
+      // expire delay is 48h
+      return (new Date() - new Date(this.overlayData.validUntil)) / 1000 > 60 * 60 * 24 * 2;
+    },
     overlayDangerIcon() {
       return bulletinsIcon(this.overlayData.danger.max);
     },
@@ -372,11 +383,11 @@ export default {
         this.updateBulletinsGeometry();
       }
     },
-    onMapClick(evt) {
+    onMapClick(evt, clickedFeature) {
       // this will set bulletins overlay, only when showAvalancheBulletins is true
       // and drawing mode is off
       if (this.showAvalancheBulletins && !this.drawingMode) {
-        this.setBulletinsOverlay(evt);
+        this.setBulletinsOverlay(evt, clickedFeature);
       }
     },
     onShowAvalancheBulletins() {
@@ -399,6 +410,14 @@ export default {
       bulletinsFeatures.zones.forEach((zone) => {
         mountainsFeatures.find((mountain) => {
           if (mountain.get('name') === zone.zone) {
+            // check validity first
+            // if no longer valid (expires 48h), set danger to null
+            if ((new Date() - new Date(zone.validUntil)) / 1000 > 60 * 60 * 24 * 2) {
+              zone.danger = {
+                low: null,
+                max: null,
+              };
+            }
             let mountainGeometry = mountain.getGeometry();
             let mountainGeometryType = mountainGeometry.getType();
 
@@ -498,7 +517,7 @@ export default {
       // update bulletin overlay
       this.updateBulletinsOverlay();
     },
-    setBulletinsOverlay(evt) {
+    setBulletinsOverlay(evt, clickedFeature) {
       // first, get all features from bulletins layer where clicked
       let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
         layerFilter: function (layer) {
@@ -507,7 +526,8 @@ export default {
       });
       let clickedBulletinFeature = clickedBulletinFeatures.length ? clickedBulletinFeatures[0] : undefined;
       // if a feature is found
-      if (clickedBulletinFeature) {
+      // and feature is the clicked feature from map (overlap)
+      if (clickedBulletinFeature && clickedBulletinFeature === clickedFeature) {
         // set mountain name
         this.overlayData = clickedBulletinFeature.get('overlayData');
         // find the closest point (because it's a MultiPoint)
