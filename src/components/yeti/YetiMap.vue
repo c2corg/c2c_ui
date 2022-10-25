@@ -178,7 +178,6 @@ export default {
       this.updateCartoLayersOpacity();
     },
     visibleCartoLayerId(id) {
-      console.log('visibleCartoLayerId')
       // first, make visible layer invisible
       let visibleLayer = c2c_cartoLayers.find((layer) => layer.getVisible() === true);
       visibleLayer.setVisible(false);
