@@ -78,7 +78,7 @@ export default {
     return {
       promise: null,
       images: null,
-      sortByAssociationDate: false,
+      sortByAssociationDate: true,
     };
   },
 
