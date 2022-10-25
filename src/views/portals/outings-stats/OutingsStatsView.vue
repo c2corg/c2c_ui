@@ -74,7 +74,8 @@ export default {
 
     progress(current, total) {
       if (!total) {
-        this.loadingPercentage = 0;
+        // when there are no outings, we do show "all" of them
+        this.loadingPercentage = 1;
       } else {
         this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
       }
