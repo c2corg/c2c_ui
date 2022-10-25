@@ -73,7 +73,12 @@ export default {
     },
 
     progress(current, total) {
-      this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      if (!total) {
+        // when there are no outings, we do show "all" of them
+        this.loadingPercentage = 1;
+      } else {
+        this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      }
     },
 
     compute(outings) {
