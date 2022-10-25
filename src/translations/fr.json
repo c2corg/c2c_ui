@@ -29,7 +29,9 @@
     "4d_to_1m": {
       "severities": "de 4 jours à un mois"
     },
+    "5 months": "5 mois",
     "50 meters while descending": "50 mètres à la descente",
+    "8 days": "8 jours",
     "Accident database": "Incidents et accidents",
     "Activity feed": "Fil d'activité",
     "Add": "Ajouter",
@@ -228,7 +230,7 @@
     "Forum username": "Pseudo forum",
     "From danger 3, consider the slopes which dominate the route": "À partir du danger 3, prendre en compte les pentes qui dominent l'itinéraire",
     "From the interface": "Depuis l'interface",
-    "Full bulletin:": "Bulletin complet :",
+    "Full bulletin": "Bulletin complet",
     "Fullname": "Nom",
     "GPS Track": "Trace GPS",
     "GPX file": "Fichier GPX",
@@ -569,6 +571,7 @@
     "Upload a new version": "Télécharger une nouvelle version",
     "User avatar": "Avatar",
     "Username": "Identifiant",
+    "Validity date expired": "Date de validité dépassée",
     "Validity date:": "Date de validité :",
     "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres,...)",
     "View in other lang": "Voir dans une autre langue",
