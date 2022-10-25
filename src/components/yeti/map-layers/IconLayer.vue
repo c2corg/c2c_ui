@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .overlay {
   min-width: 150px;
