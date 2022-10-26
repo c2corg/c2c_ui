@@ -60,7 +60,7 @@
           :title="$documentUtils.getDocumentTitle(image)"
           class="card-image"
         >
-          <img :img="image" size="MI" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
+          <thumbnail :img="image" size="MI" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
         </document-link>
       </div>
       <loading-notification v-else :promise="promise" />
