@@ -62,10 +62,12 @@
     "4d_to_1m": {
       "severities": "4 Tage bis 1 Monat"
     },
+    "5 months": "5 Monate",
     "50 meters while descending": "50 Meter beim Abstieg",
     "5min": {
       "access_times": "5 min"
     },
+    "8 days": "8 Tagen",
     "Accident database": "Unfalldatenbank",
     "Action": {
       "Sophie picture context": "Aktion"
@@ -282,12 +284,14 @@
     "Feel free to edit it.": "Bitte bearbeiten.",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
+    "FlowCapt sensor": "FlowCapt-Sensor ",
+    "FlowCapt sensors": "FlowCapt-Sensoren",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forum-Benutzername",
     "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahr 3 die Hängen, die die Route dominieren",
     "From the interface": "Aus der Schnittstelle",
-    "Full bulletin:": "Vollständiges Lawinenlagebricht",
+    "Full bulletin": "Vollständiges Lawinenlagebricht",
     "Fullname": "Name und Vorname",
     "GPS Track": "GPS-Strecke",
     "GPX file": "GPX-Datei",
@@ -507,6 +511,8 @@
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Sie sind eingeladen, die Informationen zu vervollständigen und die Qualität des Dokuments zu verbessern, indem Sie die Regeln für Beiträge befolgen und das Urheberrecht respektieren.",
     "Put it back": "Rücksetzen",
     "Quote": "Zitat",
+    "ROMMA station": "ROMMA-Station",
+    "ROMMA stations": "ROMMA-Stationen",
     "Recent changes": "Letzte Veränderungen",
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
@@ -649,6 +655,7 @@
     "Upload a new version": "Neue Version hochladen",
     "User avatar": "Avatar",
     "Username": "Benutzername",
+    "Validity date expired": "Gültigkeitsdatum abgelaufen",
     "Validity date:": "Gültig bis :",
     "Versions": "Versionen",
     "Very complex (steps, narrow sections, ridges...)": "Sehr komplexe (Schritte, schmale Abschnitte, Felsen, ...)",
