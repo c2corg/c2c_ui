@@ -1,8 +1,9 @@
 <template>
   <swiper :options="$options.swiperOption" class="swiper">
     <swiper-slide v-for="image of images" :key="image.document_id">
-      <img
-        :src="getUrl(image)"
+      <thumbnail
+        :img="image"
+        size="MI"
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
@@ -15,8 +16,6 @@
 <script>
 import getAwesomeSwiper from '@brunobesson/vue-awesome-swiper/dist/exporter';
 import { Swiper as SwiperClass } from 'swiper/core';
-
-import imageUrls from '@/js/image-urls';
 
 const { Swiper, SwiperSlide } = getAwesomeSwiper(SwiperClass);
 
@@ -43,12 +42,6 @@ export default {
     this.images.forEach(this.$imageViewer.push);
   },
 
-  methods: {
-    getUrl(image) {
-      return imageUrls.getMedium(image);
-    },
-  },
-
   swiperOption: {
     slidesPerView: 'auto',
     spaceBetween: 15,
@@ -68,7 +61,7 @@ export default {
     width: auto;
     cursor: pointer;
 
-    img {
+    picture::v-deep img {
       height: 200px;
     }
   }

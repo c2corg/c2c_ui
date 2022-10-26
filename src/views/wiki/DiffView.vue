@@ -77,10 +77,10 @@
       <div v-if="filenameHasChanged">
         <div class="columns">
           <div class="column">
-            <img :src="getImageUrl(oldVersion.document)" class="is-pulled-right" />
+            <thumbnail :img="oldVersion.document" size="MI" class="is-pulled-right" />
           </div>
           <div class="column">
-            <img :src="getImageUrl(newVersion.document)" />
+            <thumbnail :img="newVersion.document" size="MI" />
           </div>
         </div>
       </div>
@@ -173,7 +173,6 @@ import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-import imageUrls from '@/js/image-urls';
 import noRobotsMixin from '@/js/no-robots-mixin';
 
 const hasChanged = function (oldVal, newVal) {
@@ -421,8 +420,6 @@ export default {
   },
 
   methods: {
-    getImageUrl: imageUrls.getMedium,
-
     loadVersions() {
       this.loadVersion(this.$route.params.versionFrom, 'oldVersion');
       this.loadVersion(this.$route.params.versionTo, 'newVersion');

@@ -23,8 +23,9 @@
           </div>
           <div class="has-text-centered">
             <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
-              <img
-                :src="getImageUrl(winner.image)"
+              <thumbnail
+                :img="winner.image"
+                size="MI"
                 :alt="$documentUtils.getDocumentTitle(winner.image)"
                 class="winner-image"
                 loading="lazy"
@@ -59,7 +60,7 @@
           :title="$documentUtils.getDocumentTitle(image)"
           class="card-image"
         >
-          <img :src="getImageUrl(image)" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
+          <img :img="image" size="MI" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
         </document-link>
       </div>
       <loading-notification v-else :promise="promise" />
@@ -69,7 +70,6 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-import imageUrls from '@/js/image-urls';
 
 let associations = [];
 
@@ -472,8 +472,6 @@ export default {
         this.images = contributions.map((c) => c.image);
       }
     },
-
-    getImageUrl: imageUrls.getMedium,
   },
 };
 </script>

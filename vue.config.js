@@ -98,6 +98,8 @@ const config = {
       imageBackend: 'https://images.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
     },
     prod: {
       name: 'prod',
@@ -106,11 +108,13 @@ const config = {
       imageBackend: 'https://images.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
     },
   },
 };
 
-config.urls = config.urlsConfigurations.prod; // default : prod
+config.urls = config.urlsConfigurations.prod; // default: prod
 
 const bundleAnalyzerConfig = {
   analyzerMode: 'disabled',
@@ -118,13 +122,15 @@ const bundleAnalyzerConfig = {
 };
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
-  // add an url conf for local API devloppers :
+  // add an url conf for local API developers:
   config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: 'http://localhost:6543',
     media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
     imageBackend: 'https://images.demov6.camptocamp.org',
     forum: 'https://forum.demov6.camptocamp.org',
+    modernThumbnailsTimestamp: 0,
+    modernThumbnailsId: 0,
   };
 
   config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
