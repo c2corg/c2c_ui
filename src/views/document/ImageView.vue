@@ -42,7 +42,7 @@
       <div class="column is-9">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
-            <img class="main-image" :src="getBigImageUrl(document)" />
+            <thumbnail class="main-image" :img="document" size="BI" />
           </a>
         </div>
 
@@ -66,7 +66,7 @@
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
-import imageUrls from '@/js/image-urls';
+import { getImageUrl } from '@/js/image-urls';
 
 export default {
   components: {
@@ -76,8 +76,7 @@ export default {
   mixins: [documentViewMixin],
 
   methods: {
-    getOriginalImageUrl: imageUrls.get,
-    getBigImageUrl: imageUrls.getBig,
+    getOriginalImageUrl: getImageUrl,
   },
 };
 </script>

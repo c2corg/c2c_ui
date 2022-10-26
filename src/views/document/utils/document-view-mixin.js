@@ -16,7 +16,7 @@ import ProfilesLinks from './field-viewers/ProfilesLinks';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
-import imageUrls from '@/js/image-urls';
+import { getImageUrl } from '@/js/image-urls';
 import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
 import viewModeMixin from '@/js/view-mode-mixin';
@@ -295,7 +295,7 @@ export default {
         const image = this.document.associations.images[0];
         inner = {
           ...inner,
-          image: [imageUrls.getBig(image)],
+          image: [getImageUrl(image, 'BI')],
         };
       }
       return inner;
@@ -320,7 +320,7 @@ export default {
       }
       if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
-        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image), id: 'meta-og-image' }];
+        meta = [...meta, { p: 'og:image', c: getImageUrl(image, 'BI'), id: 'meta-og-image' }];
       }
       return meta;
     },
