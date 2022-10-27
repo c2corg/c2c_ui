@@ -81,7 +81,7 @@
     "stylelint-config-recommended-vue": "1.4.0",
     "stylelint-scss": "4.3.0",
     "vue-template-compiler": "2.7.13",
-    "webpack-bundle-analyzer": "4.6.1",
+    "webpack-bundle-analyzer": "4.7.0",
     "xml2js": "0.4.23"
   },
   "postcss": {
