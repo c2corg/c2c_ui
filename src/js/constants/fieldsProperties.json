@@ -331,7 +331,8 @@
     "disabled": true
   },
   "fnumber": {
-    "type": "text"
+    "type": "number",
+    "prefix": "f/"
   },
   "focal_length": {
     "type": "number",

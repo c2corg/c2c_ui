@@ -5,6 +5,7 @@
       :field="field"
       :unit="unit || field.unit"
       :divisor="divisor"
+      :prefix="prefix"
       :sort-values="sortValues"
     />
   </label-value>
@@ -27,6 +28,10 @@ export default {
     },
     divisor: {
       type: Number,
+      default: null,
+    },
+    prefix: {
+      type: String,
       default: null,
     },
     context: {
