@@ -32,7 +32,7 @@
               </label>
             </div>
           </div>
-          <img v-if="newVersionSource" src="newVersionSource" />
+          <img v-if="newVersionSource" :src="newVersionSource" />
           <thumbnail v-else :img="document" size="MI" />
         </div>
       </div>

@@ -142,17 +142,17 @@ export default {
         if (config.urls.modernThumbnailsId && document_id > config.urls.modernThumbnailsId) {
           const avif = document.createElement('source');
           avif.setAttribute('type', 'image/avif');
-          avif.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&format=avif');
+          avif.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=avif');
           const webp = document.createElement('source');
           webp.setAttribute('type', 'image/webp');
-          webp.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&format=webp');
+          webp.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=webp');
           picture.appendChild(avif);
           picture.appendChild(webp);
         }
         picture.appendChild(image);
         parent.appendChild(picture, image);
 
-        this.$imageViewer.push(image.c2cExtrapoledDocument); // TODO:
+        this.$imageViewer.push(image.c2cExtrapoledDocument);
       }
     },
 
