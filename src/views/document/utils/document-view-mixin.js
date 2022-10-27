@@ -278,7 +278,7 @@ export default {
       return {
         '@context': 'https://schema.org',
         '@type': 'ImageObject',
-        contentUrl: imageUrls.get(this.document),
+        contentUrl: getImageUrl(this.document),
         license,
         acquireLicensePage: 'https://www.camptocamp.org/articles/106728',
       };

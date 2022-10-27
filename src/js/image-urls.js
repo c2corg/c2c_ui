@@ -1,9 +1,20 @@
 import config from '@/js/config';
 
+const getImageProxyUrl = function (image, size, format) {
+  // Until all images are migrated only images uploaded after a given timestamp
+  // or with an id greater than a given one have their webp and avif versions
+  if (format && (!config.urls.modernThumbnailsId || image.document_id < config.urls.modernThumbnailsId)) {
+    return;
+  }
+
+  const sizeArg = size ? `?size=${size}` : '';
+  const formatArg = format && size ? `&extension=${format}` : '';
+  return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}${formatArg}`;
+};
+
 export const getImageUrl = function (image, size, format) {
   if (!image.filename) {
-    const sizeArg = size ? `?size=${size}` : '';
-    return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}`;
+    return getImageProxyUrl(image, size, format);
   }
 
   let backendFilename;
