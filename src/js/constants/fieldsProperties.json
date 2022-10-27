@@ -316,7 +316,7 @@
     "type": "number",
     "min": 0,
     "max": 0,
-    "unit": "ms"
+    "unit": "s"
   },
   "external_resources": {
     "type": "markdown",
