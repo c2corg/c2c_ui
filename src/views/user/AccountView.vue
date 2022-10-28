@@ -1,6 +1,6 @@
 <template>
   <div class="section account-view">
-    <html-header title="Account" />
+    <html-header :title="$gettext('Account')" />
 
     <h1 class="title is-1" v-translate>Change account parameters</h1>
     <base-form ref="form" @submit="save" :promise="promise">
