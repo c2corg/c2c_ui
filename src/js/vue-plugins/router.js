@@ -23,6 +23,8 @@ import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
 import WorkInProgressView from '@/views/static-views/WorkInProgressView';
 import AccountView from '@/views/user/AccountView';
+import ExternalServicesExchangeTokenView from '@/views/user/ExternalServicesExchangeTokenView';
+import ExternalServicesView from '@/views/user/ExternalServicesView';
 import FollowingView from '@/views/user/FollowingView';
 import LoginView from '@/views/user/LoginView';
 import PreferencesView from '@/views/user/PreferencesView';
@@ -61,6 +63,13 @@ const routes = [
   { path: '/account', name: 'account', component: AccountView },
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
+  // FIXME rename to something else, e.g. tracking or acivity-trackers or trackers
+  { path: '/external-services', name: 'external-services', component: ExternalServicesView },
+  {
+    path: '/external-services/:vendor/exchange-token',
+    name: 'suunto-exchange-token',
+    component: ExternalServicesExchangeTokenView,
+  },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },

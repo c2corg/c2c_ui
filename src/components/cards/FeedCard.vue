@@ -25,7 +25,7 @@
       <span v-if="documentType === 'outing'" class="is-nowrap has-left-margin-mobile">{{ dates }}</span>
     </card-row>
 
-    <card-row v-if="locale && locale.summary">
+    <card-row v-if="locale?.summary">
       <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 

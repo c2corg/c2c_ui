@@ -41,6 +41,7 @@ import { faCompass } from '@fortawesome/free-solid-svg-icons/faCompass';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faDirections } from '@fortawesome/free-solid-svg-icons/faDirections';
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
@@ -70,6 +71,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons/faLocationCrosshairs';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMap } from '@fortawesome/free-solid-svg-icons/faMap';
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkedAlt';
@@ -78,12 +80,15 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faNewspaper } from '@fortawesome/free-solid-svg-icons/faNewspaper';
 import { faObjectGroup } from '@fortawesome/free-solid-svg-icons/faObjectGroup';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faPlug } from '@fortawesome/free-solid-svg-icons/faPlug';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot';
+import { faRotate } from '@fortawesome/free-solid-svg-icons/faRotate';
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute';
+import { faRuler } from '@fortawesome/free-solid-svg-icons/faRuler';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
@@ -260,6 +265,7 @@ export default function install(Vue) {
     faCompress,
     faDatabase,
     faDirections,
+    faDownload,
     faEdit,
     faExclamation,
     faExclamationCircle,
@@ -290,6 +296,7 @@ export default function install(Vue) {
     faListOl,
     faListUl,
     faLock,
+    faLocationCrosshairs,
     faMap,
     faMapMarkedAlt,
     faMapMarkerAlt,
@@ -297,12 +304,15 @@ export default function install(Vue) {
     faNewspaper,
     faObjectGroup,
     faPen,
+    faPlug,
     faPlus,
     faPlusCircle,
     faQuestionCircle,
     faRedoAlt,
     faRobot,
+    faRotate,
     faRoute,
+    faRuler,
     faSearch,
     faShareAlt,
     faSignInAlt,
