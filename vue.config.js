@@ -16,6 +16,13 @@ const result = {
     },
   },
 
+  // FIXME only while debugging with ngrok
+  devServer: {
+    client: {
+      webSocketURL: 'auto://0.0.0.0:0/ws',
+    },
+  },
+
   productionSourceMap: true,
 
   chainWebpack(config) {
@@ -96,6 +103,7 @@ const config = {
       api: 'https://api.demov6.camptocamp.org',
       media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
+      tracking: 'https://tracking.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
     },
@@ -104,6 +112,7 @@ const config = {
       api: 'https://api.camptocamp.org',
       media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
+      tracking: 'https://tracking.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
     },

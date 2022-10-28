@@ -2,17 +2,13 @@
   <div>
     <div class="columns is-mobile" v-if="geomDetailEditable">
       <div class="column is-narrow">
-        <div class="control upload-button">
-          <input
-            ref="geoFileInput"
-            type="file"
-            @change="uploadGeoFile"
-            accept=".gpx,.kml,.fit,.tcx,application/gpx+xml,application/vnd.ant.fit,application/vnd.google-earth.kml+xml,application/vnd.garmin.tcx+xml"
-          />
-          <button class="button is-primary is-small" @click="$refs.geoFileInput.click()" v-translate>
-            Upload a GPS track
-          </button>
+        <div v-if="hasTrackingActivities">
+          <button class="button is-primary is-small" @click="openGPSModal" v-translate>Upload a GPS track</button>
+          <gps-upload-modal ref="GpsUploadModal" @data="setGeometry"></gps-upload-modal>
         </div>
+        <gps-file-upload class="upload-button" @click="setGeometry" v-else>
+          <span v-translate>Upload a GPS track</span>
+        </gps-file-upload>
       </div>
       <div class="column">
         <em v-translate> You may also drag, draw or edit the track on the map. </em>
@@ -49,6 +45,9 @@
 </template>
 
 <script>
+import GpsFileUpload from '@/components/map/GpsFileUpload';
+import GpsUploadModal from '@/components/map/GpsUploadModal';
+import trackingService from '@/js/apis/tracking-service';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -57,6 +56,8 @@ const FORM_PROJ = 'EPSG:4326';
 const DATA_PROJ = 'EPSG:3857';
 
 export default {
+  components: { GpsUploadModal, GpsFileUpload },
+
   mixins: [requireDocumentProperty],
 
   props: {
@@ -78,6 +79,7 @@ export default {
     return {
       latitude: null,
       longitude: null,
+      hasTrackingActivities: false,
     };
   },
 
@@ -97,24 +99,26 @@ export default {
     },
   },
 
-  methods: {
-    uploadGeoFile(event) {
-      const reader = new FileReader();
-
-      reader.onload = function () {
-        this.$refs.map.setDocumentGeometryFromGeoFile(reader.result);
-      }.bind(this);
-
-      const file = event.target.files[0];
-      if (file.type === 'application/vnd.ant.fit' || file.name.toLowerCase().endsWith('.fit')) {
-        reader.readAsArrayBuffer(file);
-      } else {
-        reader.readAsText(file);
+  mounted() {
+    trackingService.getStatus(this.$user.id).then(
+      ({ data }) => {
+        if (Object.values(data).includes('configured')) {
+          this.hasTrackingActivities = true;
+        }
+      },
+      () => {
+        // do nothing if errored
       }
+    );
+  },
 
-      // empty the input, because if user wan't to upload same trace
-      // change event is not fired
-      this.$refs.geoFileInput.value = '';
+  methods: {
+    openGPSModal() {
+      this.$refs.GpsUploadModal.show();
+    },
+
+    setGeometry(geometry) {
+      this.$refs.map.setDocumentGeometryFromGeoFile(geometry);
     },
 
     setGeometryPoint() {
@@ -155,16 +159,6 @@ export default {
 <style scoped lang="scss">
 .upload-button {
   position: relative;
-}
-
-input {
-  opacity: 0; /* invisible but it's there! */
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  cursor: pointer;
 }
 
 .map-container {

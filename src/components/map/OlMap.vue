@@ -129,10 +129,10 @@ import {
   swissExtent,
 } from './map-utils';
 
-import BiodivSportsService from '@/js/apis/BiodivSportsService';
-import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
+import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
+import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
@@ -141,9 +141,6 @@ const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
-
-const biodivSportsService = new BiodivSportsService();
-const respecterCestProtegerService = new RespecterCestProtegerService();
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
@@ -608,7 +605,7 @@ export default {
     },
 
     setDocumentGeometryFromGeoFile(file) {
-      for (const format of [new ol.format.GPX(), new ol.format.KML(), new FIT(), new TCX()]) {
+      for (const format of [new ol.format.GPX(), new ol.format.KML(), new ol.format.GeoJSON(), new FIT(), new TCX()]) {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
           features.map((feature) => {

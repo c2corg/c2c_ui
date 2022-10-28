@@ -162,48 +162,58 @@ export default {
       return config;
     },
     userMenuLinks() {
-      return [
-        {
-          to: { name: 'profile', params: { id: this.$user.id } },
-          text: this.$gettext('My profile'),
-          icon: 'user',
-        },
-        {
-          to: { name: 'account' },
-          text: this.$gettext('My account'),
-          icon: 'check-circle',
-        },
-        {
-          to: { name: 'preferences' },
-          text: this.$gettext('My preferences'),
-          icon: 'cogs',
-        },
-        {
-          to: { name: 'outings', query: { u: this.$user.id } },
-          text: this.$gettext('My outings'),
-          iconComponent: 'icon-outing',
-        },
-        {
-          to: { name: 'outings-stats', query: { u: this.$user.id } },
-          text: this.$gettext('My statistics'),
-          icon: 'chart-bar',
-        },
-        {
-          to: { name: 'whatsnew', query: { u: this.$user.id } },
-          text: this.$gettext('My changes'),
-          icon: 'edit',
-        },
-        {
-          to: { name: 'following' },
-          text: this.$gettext('My followed users'),
-          icon: 'heart',
-        },
-        {
-          to: { name: 'routes', query: { u: this.$user.id } },
-          text: this.$gettext('My bookmarks'),
-          icon: 'star',
-        },
-      ];
+      return (
+        [
+          {
+            to: { name: 'profile', params: { id: this.$user.id } },
+            text: this.$gettext('My profile'),
+            icon: 'user',
+          },
+          {
+            to: { name: 'account' },
+            text: this.$gettext('My account'),
+            icon: 'check-circle',
+          },
+          {
+            to: { name: 'preferences' },
+            text: this.$gettext('My preferences'),
+            icon: 'cogs',
+          },
+          {
+            to: { name: 'external-services' },
+            text: this.$gettext('Activity trackers'),
+            icon: 'location-crosshairs',
+            moderator: true,
+          },
+          {
+            to: { name: 'outings', query: { u: this.$user.id } },
+            text: this.$gettext('My outings'),
+            iconComponent: 'icon-outing',
+          },
+          {
+            to: { name: 'outings-stats', query: { u: this.$user.id } },
+            text: this.$gettext('My statistics'),
+            icon: 'chart-bar',
+          },
+          {
+            to: { name: 'whatsnew', query: { u: this.$user.id } },
+            text: this.$gettext('My changes'),
+            icon: 'edit',
+          },
+          {
+            to: { name: 'following' },
+            text: this.$gettext('My followed users'),
+            icon: 'heart',
+          },
+          {
+            to: { name: 'routes', query: { u: this.$user.id } },
+            text: this.$gettext('My bookmarks'),
+            icon: 'star',
+          },
+        ]
+          // TODO: for now, this feature is reserved to moderators for testing
+          .filter((item) => !item.moderator || this.$user.isModerator)
+      );
     },
   },
 
