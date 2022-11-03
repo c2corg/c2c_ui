@@ -16,7 +16,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [lts/*]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
