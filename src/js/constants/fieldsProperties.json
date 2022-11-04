@@ -209,6 +209,11 @@
     "required": true,
     "queryMode": "date"
   },
+  "dates": {
+    "type": "dates",
+    "required": true,
+    "queryMode": "dates"
+  },
   "date_time": {
     "type": "date_time"
   },

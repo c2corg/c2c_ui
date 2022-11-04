@@ -147,6 +147,7 @@
       { "id": "condition_rating", "properties": { "url": "ocond" } },
       { "id": "date_end" },
       { "id": "date_start", "properties": { "url": "date", "required": false } },
+      { "id": "dates", "properties": { "url": "date", "required": false } },
       { "id": "disable_comments" },
       { "id": "elevation_access", "properties": { "url": "oparka" } },
       {
