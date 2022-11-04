@@ -406,7 +406,6 @@ export default {
     */
     max-height: 70vh;
 
-    -ms-overflow-style: none;  // IE and Edge
     scrollbar-width: none;  // Firefox
 
     &::-webkit-scrollbar {
