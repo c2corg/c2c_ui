@@ -19,8 +19,10 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .input-document {
-  margin-right: 1rem;
+  @media screen and (min-width: $tablet) {
+    margin-right: 1rem;
+  }
 }
 </style>
