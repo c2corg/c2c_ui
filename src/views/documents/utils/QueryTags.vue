@@ -5,8 +5,9 @@
         {{ document.document_id }}
       </span>
       <document-title v-else :document="document" />
-      <button @click="$emit('remove', document)" class="delete is-small" /> </span
-  ></span>
+      <button @click="$emit('remove', document)" class="delete is-small" />
+    </span>
+  </span>
 </template>
 
 <script>

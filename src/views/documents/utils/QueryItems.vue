@@ -38,6 +38,23 @@
           />
         </div>
       </dropdown-button>
+      <dropdown-button key="multi-search" class="query-item-component is-hidden-tablet">
+        <span slot="button" class="button is-size-7-mobile">
+          <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
+          <span>&nbsp;</span>
+          <fa-icon icon="angle-down" aria-hidden="true" />
+        </span>
+        <div class="sub-query-items">
+          <association-query-item
+            class="dropdown-item"
+            :document-types="associations"
+            @add="addTag"
+          />
+          <div class="query-items-tags dropdown-item">
+            <query-tags :documents="tags" @remove="removeTag"></query-tags>
+          </div>
+        </div>
+      </dropdown-button>
 
       <query-sort-dropdown
         v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
@@ -194,6 +211,7 @@ const categorizedFields = {
 export default {
   categoryIcon: {
     General: 'filter',
+    MultiSearch: 'filter',
     Miscs: 'database',
     Terrain: ['waypoint', 'summit'],
     ratings: 'tachometer-alt',
