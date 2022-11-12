@@ -2,12 +2,14 @@
   <div v-if="documents" class="box">
     <h1 class="title is-1">Summary</h1>
     <div v-for="(document, index) in documents.documents" :key="index">
-      <span class="toc-number">{{ index + 1 }}. </span>
-      <pretty-route :route="document" v-if="documentType == 'route'" />
-      <pretty-waypoint :waypoint="document" v-else-if="documentType == 'waypoint'" />
-      <pretty-book :book="document" v-else-if="documentType == 'book'" />
-      <pretty-outing :outing="document" v-else-if="documentType == 'outing'" />
-      <document-title :document="document" v-else />
+      <span @click="sendSummaryClick(index)">
+        <span class="toc-number">{{ index + 1 }}. </span>
+        <pretty-route :route="document" v-if="documentType == 'route'" />
+        <pretty-waypoint :waypoint="document" v-else-if="documentType == 'waypoint'" />
+        <pretty-book :book="document" v-else-if="documentType == 'book'" />
+        <pretty-outing :outing="document" v-else-if="documentType == 'outing'" />
+        <document-title :document="document" v-else />
+      </span>
     </div>
   </div>
 </template>
@@ -27,6 +29,14 @@ export default {
       type: String,
       default: 'route',
     },
+  },
+
+  methods: {
+
+    sendSummaryClick(index) {
+      this.$emit("summary-click", index);
+    }
+
   },
 };
 </script>

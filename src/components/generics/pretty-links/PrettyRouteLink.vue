@@ -1,31 +1,12 @@
 <template>
   <document-link :document="route" class="pretty-route-link has-hover-background">
-    <document-title :document="route" />
-    <activities
-      v-if="!hideActivities"
-      :activities="route.activities"
-      class="is-size-4 has-text-secondary icon-activities"
+    <pretty-route
+      :route="route"
+      :hide-activities="hideActivities"
+      :hide-area="hideArea"
+      :hide-orientation="hideOrientation"
+      :hide-height-difficulties="hideHeightDiffDifficulties"
     />
-    <span
-      v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
-      :title="$gettext('height_diff_difficulties')"
-      class="has-text-normal"
-    >
-      {{ route.height_diff_difficulties }}&nbsp;m,
-    </span>
-    <span v-if="route.orientations && !hideOrientation" :title="$gettext('orientations')" class="has-text-normal">
-      {{ route.orientations.join(', ') }},
-    </span>
-    <document-rating :document="route" class="has-text-normal" />
-    <marker-gps-trace v-if="route.geometry.has_geom_detail" class="has-text-normal" />
-    <span v-if="!hideArea" class="has-text-normal">
-      <em v-for="area in rangeAreas" :key="area.document_id">
-        &hairsp;&bull;&hairsp;
-        <small>
-          <document-title :document="area" />
-        </small>
-      </em>
-    </span>
   </document-link>
 </template>
 
@@ -65,10 +46,6 @@ export default {
 <style scoped lang="scss">
 .pretty-route-link {
   display: block;
-}
-
-.icon-activities {
-  line-height: 1;
 }
 
 @media print {
