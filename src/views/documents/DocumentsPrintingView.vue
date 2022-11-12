@@ -1,6 +1,10 @@
 <template>
   <div class="section documents-view">
     <html-header :title="getDocumentTypeTitle(documentType)" />
+    <printing-summary
+      :documents="documents"
+      :document-type="documentType"
+    />
     <div :class="['documents-container', includeImages ? 'print-image' : '']">
       <div v-for="(doc, index) in promises" :key="index" class="column">
         <loading-notification :promise="doc.promise" />
@@ -16,6 +20,8 @@
 </template>
 
 <script>
+import PrintingSummary from './utils/PrintingSummary';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import AreaView from '@/views/document/AreaView';
@@ -29,6 +35,7 @@ import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
+
 export default {
   name: 'DocumentsPrintingView',
 
@@ -39,6 +46,7 @@ export default {
     ImageView,
     MapView,
     OutingView,
+    PrintingSummary,
     ProfileView,
     RouteView,
     WaypointView,
