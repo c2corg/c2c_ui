@@ -1,12 +1,12 @@
 <template>
   <div class="view-container">
     <div v-if="!document.not_authorized">
-      <html-header v-if="!isDraftView" :title="title" />
+      <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
 
       <div class="box">
-        <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
+        <span v-if="!isDraftView && !isPrintingView" class="is-pulled-right button-bar no-print">
           <follow-button :document="document" />
           <tags-button :document="document" />
 

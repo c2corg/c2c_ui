@@ -14,6 +14,7 @@ import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
+import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
@@ -81,6 +82,12 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
     path: '/' + def.documentType + 's',
     name: def.documentType + 's',
     component: DocumentsView,
+  });
+
+  routes.push({
+    path: '/print/' + def.documentType + 's',
+    name: def.documentType + 's-print',
+    component: DocumentsPrintingView,
   });
 
   routes.push({

@@ -95,9 +95,11 @@ export default {
      * properties that are deducted from URL
      */
     documentId() {
+      if (this.isDraftView || this.isPrintingView) return this.draft.document_id;
       return parseInt(this.$route.params.id, 10);
     },
     documentType() {
+      if (this.isPrintingView) return this.$route.name.split('s-')[0];
       return this.$route.name.split('-')[0];
     },
     fields() {
@@ -174,7 +176,7 @@ export default {
             };
             this.$emit('updateHead');
           });
-      } else if (this.isDraftView) {
+      } else if (this.isDraftView || this.isPrintingView) {
         this.promise = {};
 
         this.$imageViewer.clear();

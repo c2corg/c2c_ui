@@ -9,8 +9,13 @@ export default {
       return this.$route.name.endsWith('-edit') || this.$route.name.endsWith('-add');
     },
 
+    isPrintingView() {
+      // means in a list of document to print
+      return this.$route.name.endsWith('-print');
+    },
+
     isNormalView() {
-      return !this.isDraftView && !this.isVersionView;
+      return !this.isDraftView && !this.isVersionView && !this.isPrintingView;
     },
   },
 };
