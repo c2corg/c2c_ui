@@ -1,13 +1,22 @@
 <template>
   <div class="section documents-view">
     <html-header :title="getDocumentTypeTitle(documentType)" />
+    <printing-options
+      :documents="documents"
+      :promises="promises"
+      @set-page-breaks="pageBreaks = $event"
+      @set-image-printing="includeImages = $event"
+      @set-summary-visibility="summaryVisibility = $event"
+    />
     <printing-summary
+      v-if="summaryVisibility"
       :documents="documents"
       :document-type="documentType"
       @summary-click="scrollTo($event)"
     />
     <div :class="['documents-container', includeImages ? 'print-image' : '']">
       <div v-for="(doc, index) in promises" :key="index" class="column">
+        <div v-if="pageBreaks && (index > 0 || summaryVisibility)" class="page-break" />
         <loading-notification :promise="doc.promise" />
         <component
           v-if="doc.promise.data"
@@ -21,6 +30,7 @@
 </template>
 
 <script>
+import PrintingOptions from './utils/PrintingOptions';
 import PrintingSummary from './utils/PrintingSummary';
 
 import c2c from '@/js/apis/c2c';
@@ -36,7 +46,6 @@ import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
-
 export default {
   name: 'DocumentsPrintingView',
 
@@ -47,6 +56,7 @@ export default {
     ImageView,
     MapView,
     OutingView,
+    PrintingOptions,
     PrintingSummary,
     ProfileView,
     RouteView,
@@ -58,6 +68,9 @@ export default {
     return {
       promise: null,
       promises: [],
+      pageBreaks: false,
+      includeImages: false,
+      summaryVisibility: true,
     };
   },
 
@@ -114,3 +127,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.page-break {
+  page-break-after: always;
+}
+</style>
