@@ -391,6 +391,44 @@ export default {
     2022: {
       year: 2022,
       documentId: 1463470,
+      winners: [
+        {
+          title: "Lyskamm - le Mangeur d’Hommes",
+          author: 'Apoutsiak',
+          image: { document_id: 1467500 },
+          category: 'Action',
+        },
+        {
+          title: ' ',
+          author: 'petitefleur',
+          image: { document_id: 1476284 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Face à face',
+          author: 'Blf',
+          image: { document_id: 1476650 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Levé de soleil au Morgenhorn',
+          author: 'Plov',
+          image: { document_id: 1438319 },
+          category: 'Topoguide',
+        },
+        {
+          title: 'Lumière',
+          author: 'Jerome01',
+          image: { document_id: 1475788 },
+          category: 'Coup de coeur',
+        },
+        {
+          title: 'Peu d’audace à l’Androsace',
+          author: 'SEBonhomme_de_neige',
+          image: { document_id: 1476379 },
+          category: 'Prix du Public',
+        },
+      ],
     },
   },
 
