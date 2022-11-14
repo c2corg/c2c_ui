@@ -393,7 +393,7 @@ export default {
       documentId: 1463470,
       winners: [
         {
-          title: "Lyskamm - le Mangeur d’Hommes",
+          title: 'Lyskamm - le Mangeur d’Hommes',
           author: 'Apoutsiak',
           image: { document_id: 1467500 },
           category: 'Action',
@@ -426,6 +426,12 @@ export default {
           title: 'Peu d’audace à l’Androsace',
           author: 'SEBonhomme_de_neige',
           image: { document_id: 1476379 },
+          category: 'Prix du Public',
+        },
+        {
+          title: 'Lyskamm - le Mangeur d’Hommes',
+          author: 'Apoutsiak',
+          image: { document_id: 1467500 },
           category: 'Prix du Public',
         },
       ],
