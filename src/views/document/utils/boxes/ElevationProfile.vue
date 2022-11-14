@@ -136,9 +136,10 @@ export default {
 
   methods: {
     computeCoords() {
-      // compute data
       const geom_detail = JSON.parse(this.document.geometry.geom_detail);
-      this.coords = [].concat(...geom_detail.coordinates);
+      // concatenate MultiLineString or equivalent splitted data
+      const depth = Array.isArray(geom_detail.coordinates[0][0]) ? 1 : 0;
+      this.coords = geom_detail.coordinates.flat(depth);
 
       // is there any elevation data?
       if (!this.coords.some((coord) => coord.length > 2 && coord[2] !== 0)) {
