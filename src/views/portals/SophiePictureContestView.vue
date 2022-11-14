@@ -22,17 +22,23 @@
             {{ $gettext(winner.category) }}
           </div>
           <div class="has-text-centered">
-            <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
+            <document-link :document="{ ...winner.image, type: 'i' }">
               <img
                 :src="getImageUrl(winner.image)"
-                :alt="$documentUtils.getDocumentTitle(winner.image)"
+                :alt="
+                  $documentUtils.getDocumentTitle({
+                    ...winner.image,
+                    title: winner.title ?? $gettext('No title'),
+                    type: 'i',
+                  })
+                "
                 class="winner-image"
                 loading="lazy"
               />
             </document-link>
           </div>
           <div class="has-text-centered">
-            <span class="is-italic"> {{ winner.title }}, </span>
+            <span class="is-italic"> {{ winner.title ?? $gettext('No title') }}, </span>
             <span>
               {{ winner.author }}
             </span>
@@ -393,13 +399,12 @@ export default {
       documentId: 1463470,
       winners: [
         {
-          title: "Lyskamm - le Mangeur d’Hommes",
+          title: 'Lyskamm - le Mangeur d’Hommes',
           author: 'Apoutsiak',
           image: { document_id: 1467500 },
           category: 'Action',
         },
         {
-          title: ' ',
           author: 'petitefleur',
           image: { document_id: 1476284 },
           category: 'Paysage',
@@ -426,6 +431,12 @@ export default {
           title: 'Peu d’audace à l’Androsace',
           author: 'SEBonhomme_de_neige',
           image: { document_id: 1476379 },
+          category: 'Prix du Public',
+        },
+        {
+          title: 'Lyskamm - le Mangeur d’Hommes',
+          author: 'Apoutsiak',
+          image: { document_id: 1467500 },
           category: 'Prix du Public',
         },
       ],
