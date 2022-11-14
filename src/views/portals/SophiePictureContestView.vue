@@ -32,7 +32,7 @@
             </document-link>
           </div>
           <div class="has-text-centered">
-            <span class="is-italic"> {{ winner.title }}, </span>
+            <span class="is-italic"> {{ winner.title ?? $gettext('No title') }}, </span>
             <span>
               {{ winner.author }}
             </span>
@@ -399,7 +399,6 @@ export default {
           category: 'Action',
         },
         {
-          title: ' ',
           author: 'petitefleur',
           image: { document_id: 1476284 },
           category: 'Paysage',
