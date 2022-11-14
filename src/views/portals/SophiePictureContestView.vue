@@ -22,10 +22,16 @@
             {{ $gettext(winner.category) }}
           </div>
           <div class="has-text-centered">
-            <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
+            <document-link :document="{ ...winner.image, type: 'i' }">
               <img
                 :src="getImageUrl(winner.image)"
-                :alt="$documentUtils.getDocumentTitle(winner.image)"
+                :alt="
+                  $documentUtils.getDocumentTitle({
+                    ...winner.image,
+                    title: winner.title ?? $gettext('No title'),
+                    type: 'i',
+                  })
+                "
                 class="winner-image"
                 loading="lazy"
               />
