@@ -9,7 +9,7 @@
           ><span v-else-if="fetching === activity.id" class="has-text-link"><fa-icon icon="rotate" spin></fa-icon></span
           ><span v-else class="has-text-grey-light"><fa-icon icon="download"></fa-icon></span>
         </div>
-        <device-activity-row :activity="activity"></device-activity-row>
+        <tracking-device-activity-row :activity="activity"></tracking-device-activity-row>
       </div>
     </div>
   </div>
@@ -22,11 +22,11 @@
 <script>
 import { toast } from 'bulma-toast';
 
-import DeviceActivityRow from '@/components/tracking/DeviceActivityRow';
+import TrackingDeviceActivityRow from '@/components/tracking/TrackingDeviceActivityRow';
 import trackingService from '@/js/apis/tracking-service';
 
 export default {
-  components: { DeviceActivityRow },
+  components: { TrackingDeviceActivityRow },
 
   data() {
     return {

@@ -17,10 +17,10 @@ export default {
     exchangeToken() {
       trackingService.exchangeToken(this.$route.params.vendor, this.$user.id, this.$route.query).then(
         () => {
-          this.$router.push({ name: 'external-services' });
+          this.$router.push({ name: 'trackers' });
         },
         (error) => {
-          this.$router.push({ name: 'external-services', params: { error: error?.response?.data ?? 'unknown' } });
+          this.$router.push({ name: 'trackers', params: { error: error?.response?.data ?? 'unknown' } });
         }
       );
     },

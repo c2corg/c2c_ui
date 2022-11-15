@@ -16,13 +16,6 @@ const result = {
     },
   },
 
-  // FIXME only while debugging with ngrok
-  devServer: {
-    client: {
-      webSocketURL: 'auto://0.0.0.0:0/ws',
-    },
-  },
-
   productionSourceMap: true,
 
   chainWebpack(config) {
