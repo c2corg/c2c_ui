@@ -42,7 +42,7 @@
             <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
               <h4 class="outing-date-header has-text-centered is-italic has-text-weight-bold">
                 <router-link :to="{ name: 'outings', query: { date: `${date},${date}` } }">
-                  {{ $dateUtils.toLocalizedString(date, 'PPPP') | uppercaseFirstLetter }}
+                  {{ $dateUtils.toLocalizedString(date, '@1') | uppercaseFirstLetter }}
                 </router-link>
               </h4>
               <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />

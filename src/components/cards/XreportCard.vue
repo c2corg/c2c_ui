@@ -20,7 +20,7 @@
       <card-event-activity-item :event-activity="document.event_activity" />
 
       <span class="is-nowrap">
-        {{ $dateUtils.toLocalizedString(document.date, 'PP') }}
+        {{ $dateUtils.toLocalizedString(document.date, 'll') }}
       </span>
 
       <marker-quality :quality="document.quality" />

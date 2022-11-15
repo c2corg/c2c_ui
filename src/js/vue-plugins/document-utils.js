@@ -3,13 +3,8 @@
  * it does not provide any API service
  */
 
-import { isSameDay, isSameMonth, isSameYear, format } from 'date-fns';
-import { ca, es, eu, de, fr, it, hu, zhCN, sl, enGB } from 'date-fns/locale';
-
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-
-const locales = { ca, es, eu, de, fr, it, hu, sl, zh_CN: zhCN, en: enGB };
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
@@ -293,19 +288,19 @@ export default function install(Vue) {
         const start = this.$dateUtils.parseDate(date_start);
         const end = this.$dateUtils.parseDate(date_end);
 
-        if (!isSameYear(start, end)) {
-          return this.formatDate(start, 'PP') + ' - ' + this.formatDate(end, 'PP');
-        } else if (!isSameMonth(start, end)) {
-          return this.formatDate(start, 'd MMMM') + ' - ' + this.formatDate(end, 'PP');
-        } else if (!isSameDay(start, end)) {
-          return this.formatDate(start, 'd') + ' - ' + this.formatDate(end, 'PP');
+        if (!this.$dateUtils.isSameYear(start, end)) {
+          return this.formatDate(start, 'll') + ' - ' + this.formatDate(end, 'll');
+        } else if (!this.$dateUtils.isSameMonth(start, end)) {
+          return this.formatDate(start, 'D MMMM') + ' - ' + this.formatDate(end, 'll');
+        } else if (!this.$dateUtils.isSameDay(start, end)) {
+          return this.formatDate(start, 'D') + ' - ' + this.formatDate(end, 'll');
         } else {
-          return this.formatDate(end, 'PPPP');
+          return this.formatDate(end, '@1');
         }
       },
 
       formatDate(arg, formatString) {
-        return format(arg, formatString, { locale: locales[this.$language.current] });
+        return this.$dateUtils.toLocalizedString(arg, formatString);
       },
 
       // Returns true if both documents has same geolocalization point

@@ -122,8 +122,6 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
@@ -220,7 +218,7 @@ export default {
       utils.download(content, filename, mimetype + ';charset=utf-8');
     },
     setFilename(ext) {
-      return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
+      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
     },
   },
 };

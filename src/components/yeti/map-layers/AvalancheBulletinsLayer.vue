@@ -88,7 +88,7 @@
       <p class="is-size-6 p-3"><span v-translate key="id2">No avalanche bulletin right now</span></p>
     </div>
     <p class="is-size-7 px-3 pt-2 pb-2 bulletins-footer" v-if="overlayData.urls.length">
-      <strong>©{{overlayData.urls[0].title}}</strong>
+      <strong>©{{ overlayData.urls[0].title }}</strong>
       <span v-for="(url, i) in overlayData.urls" :key="i" class="pl-1">
         <a :href="url.url" target="_blank">
           <fa-icon icon="external-link-alt" />
@@ -101,7 +101,6 @@
 </template>
 <script>
 import turfIntersect from '@turf/intersect';
-import { format } from 'date-fns';
 
 import layerMixin from './layer';
 
@@ -263,7 +262,7 @@ export default {
         .map((val) => val.toUpperCase());
     },
     overlayValidUntil() {
-      return format(new Date(this.overlayData.validUntil), 'dd/MM/yyyy HH:mm');
+      return this.$dateUtils.toLocalizedString(new Date(this.overlayData.validUntil), 'DD/MM/YYYY HH:mm');
     },
     overlayValidUntilExpired() {
       // expire delay is 48h
