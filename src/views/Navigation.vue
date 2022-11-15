@@ -180,7 +180,7 @@ export default {
             icon: 'cogs',
           },
           {
-            to: { name: 'external-services' },
+            to: { name: 'trackers' },
             text: this.$gettext('Activity trackers'),
             icon: 'location-crosshairs',
             moderator: true,

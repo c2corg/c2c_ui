@@ -71,14 +71,14 @@ export default {
         // $gettext('strava')
         name: 'strava',
         website: 'https://www.strava.com',
-        connect: `https://www.strava.com/oauth/authorize?client_id=63968&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/external-services/strava/exchange-token`,
+        connect: `https://www.strava.com/oauth/authorize?client_id=63968&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
         status: 'not-configured',
       },
       {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
-        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=b708af3b-fd46-41ab-af73-5176a0a56f92&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/external-services/decathlon/exchange-token`,
+        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=b708af3b-fd46-41ab-af73-5176a0a56f92&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
         status: 'not-configured',
       },
       {
@@ -91,7 +91,7 @@ export default {
         // $gettext('suunto')
         name: 'suunto',
         website: 'https://app.suunto.com/',
-        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=2928e564-85eb-4aef-92fb-2a0259589c9c&redirect_uri=${this.baseUrl}/external-services/suunto/exchange-token`,
+        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=2928e564-85eb-4aef-92fb-2a0259589c9c&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
         status: 'not-configured',
       },
     ];
@@ -152,7 +152,7 @@ export default {
       this.trackingService.requestGarminUnauthorizeRequestToken(this.$user.id).then(
         ({ data }) => {
           const token = data.token;
-          window.location.href = `https://connect.garmin.com/oauthConfirm?oauth_token=${token}&oauth_callback=${this.baseUrl}/external-services/garmin/exchange-token`;
+          window.location.href = `https://connect.garmin.com/oauthConfirm?oauth_token=${token}&oauth_callback=${this.baseUrl}/trackers/garmin/exchange-token`;
         },
         () => {
           toast({ message: this.$gettext('setup-failed', 'tracking'), type: 'is-danger', position: 'center' });

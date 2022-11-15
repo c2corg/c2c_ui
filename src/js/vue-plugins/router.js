@@ -23,11 +23,11 @@ import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
 import WorkInProgressView from '@/views/static-views/WorkInProgressView';
 import AccountView from '@/views/user/AccountView';
-import ExternalServicesExchangeTokenView from '@/views/user/ExternalServicesExchangeTokenView';
-import ExternalServicesView from '@/views/user/ExternalServicesView';
 import FollowingView from '@/views/user/FollowingView';
 import LoginView from '@/views/user/LoginView';
 import PreferencesView from '@/views/user/PreferencesView';
+import TrackersExchangeTokenView from '@/views/user/TrackersExchangeTokenView';
+import TrackersView from '@/views/user/TrackersView';
 
 // lazy-load components
 // actually, only diff is quite big, because of diff computation
@@ -63,12 +63,11 @@ const routes = [
   { path: '/account', name: 'account', component: AccountView },
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
-  // FIXME rename to something else, e.g. tracking or acivity-trackers or trackers
-  { path: '/external-services', name: 'external-services', component: ExternalServicesView },
+  { path: '/trackers', name: 'trackers', component: TrackersView },
   {
-    path: '/external-services/:vendor/exchange-token',
-    name: 'suunto-exchange-token',
-    component: ExternalServicesExchangeTokenView,
+    path: '/trackers/:vendor/exchange-token',
+    name: 'trackers-exchange-token',
+    component: TrackersExchangeTokenView,
   },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
