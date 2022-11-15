@@ -6,7 +6,7 @@
       <span v-if="loadingPercentage !== 1">{{ Math.round(loadingPercentage * 100) }}%</span>
     </h1>
 
-    <div v-if="outings[''].length !== 0">
+    <div v-if="outings['']?.length">
       <query-items v-if="$user.isModerator" class="filter-section" />
 
       <div class="tabs">
