@@ -113,7 +113,6 @@
 
 <script>
 import { toast } from 'bulma-toast';
-import { format as formatDate } from 'date-fns';
 
 import BiodivInformation from './BiodivInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
@@ -653,7 +652,7 @@ export default {
         return;
       }
 
-      document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
+      document.date_start = this.$dateUtils.toLocalizedString(new Date(timestamp * 1000), 'YYYY-MM-DD');
     },
 
     setElevationProfileInteraction() {

@@ -6,7 +6,7 @@
       <p v-if="document.date_time">
         <fa-icon icon="calendar" />
         <label>
-          {{ $dateUtils.toLocalizedString(document.date_time, 'PPpp') }}
+          {{ $dateUtils.toLocalizedString(document.date_time, 'lll') }}
         </label>
       </p>
 

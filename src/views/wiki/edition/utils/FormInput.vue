@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { toDate, addDays } from 'date-fns';
+import dayjs from 'dayjs';
 
 import InputConditionsLevels from './InputConditionsLevels';
 
@@ -156,8 +156,8 @@ export default {
       const max = this.max || this.field.max;
 
       return {
-        to: min ? toDate(this.$dateUtils.parseDate(min)) : undefined,
-        from: max ? toDate(addDays(this.$dateUtils.parseDate(max), 1)) : undefined,
+        to: min ? dayjs(min).toDate() : undefined,
+        from: max ? dayjs(max).add(1, 'day').toDate() : undefined,
       };
     },
 
