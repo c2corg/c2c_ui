@@ -403,11 +403,15 @@ export default {
     handleDates() {
       if (!this.showBothDates) {
         this.document.date_end = this.document.date_start;
+      } else if (this.document.date_end < this.document.date_start) {
+        this.document.date_end = this.document.date_start;
       }
     },
+
     setCurrentDate() {
       this.currentDate = getCurrentDateString();
     },
+
     beforeSave() {
       this.handleDates();
       this.$refs.qualityField.beforeSave();
