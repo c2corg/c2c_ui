@@ -62,11 +62,14 @@
     "4d_to_1m": {
       "severities": "Менее чем через месяц"
     },
+    "5 months": "5 месяцев",
     "50 meters while descending": "50м во время спуска",
     "5min": {
       "access_times": "5мин"
     },
+    "8 days": "8 дней",
     "Accident database": "База данных неудачных случаев",
+    "Account": "Аккаунт",
     "Action": {
       "Sophie picture context": "действие"
     },
@@ -395,14 +398,24 @@
     "Unblock account": "Разблокировать этого пользователя",
     "Unformatted text": "Неформатированный текст",
     "Unordered list": "Несортированный список",
+    "Upload a GPS track": "Загрузить GPS трек",
     "Upload a new version": "Скачать новую версию",
     "User avatar": "Аватар",
     "Username": "Идентификатор",
+    "Validity date expired": "Срок годности прошел",
+    "Validity date:": "Срок годности:",
     "Versions": "Версии",
+    "View in other lang": "Посмотреть на другом языке",
+    "Visible on map": "Видим на карте",
     "Warning: This action cannot be undone!": "Внимание: Это действие не может быть отменено",
+    "Weather & conditions": "Метеоусловия",
     "Weather forecast (meteoblue)": "Прогноз погоды ( источник meteoblue)",
+    "Wet snow: orientation not taken into account": "Мокрый снег: ориентация не принимается во внимание",
+    "With the": "С",
+    "Without c2c account": "Участники без аккаунта с2с",
     "You are using a custom sort": "Вы можете выбрать ключ для сортировки",
     "You can choose to remain anonymous": "Вы можете остаться анонимным, если пожелаете",
+    "You have to be authorized. Please contact administrators of the service if interested.": "Вы авторизованы. Пожалуйста свяжитесь с администраторами сервиса если это необходимо.",
     "You may add associated waypoints, books and articles": "Вы можете добавить другие статьи, книги или путевые точки",
     "You may also drag, draw or edit the track on the map.": "Вы можете создать, отредактировать или перетащить свой GPS-трек на карте",
     "You need to activate your by clicking the link sent to your email address.": "Вы должны активировать свой аккаунт перейдя по ссылке в письме",
@@ -599,7 +612,7 @@
     "date_time": "дата / время",
     "day(s)": "день(ы)",
     "de": {
-      "langs": "  \n \n \n \nНемецкий"
+      "langs": "Немецкий"
     },
     "descending sort": "Сортировать по убыванию",
     "descent": {
@@ -1033,9 +1046,13 @@
     "very_dangerous": {
       "children_proof_types": "опасно"
     },
+    "very_safe": {
+      "children_proof_types": "достаточно безопасный"
+    },
     "via_ferrata": {
       "activities": "Виа Феррата"
     },
+    "via_ferrata_rating": "Рейтинг виа-ферраты",
     "virtual": {
       "waypoint_types": "виртуальный"
     },
@@ -1049,12 +1066,20 @@
       "waypoint_types": "водный ресурс"
     },
     "waypoint": "путевая точка",
+    "waypoint_type": "Тип путевой точки",
+    "waypoints": "путевые точки",
     "weather": "Погода",
     "weather_event": {
       "event_types": "Погодное событие"
     },
+    "weather_station": {
+      "waypoint_types": "метеостанция"
+    },
     "webcam": {
       "waypoint_types": "ВЭБ-камера"
+    },
+    "whole year": {
+      "period": "весь год"
     },
     "width": "ширина",
     "wind_direction": {
@@ -1063,6 +1088,7 @@
     "wind_speed": {
       "weather_station_types": "скорость ветра"
     },
+    "with Alt + clic": "с Alt + клик",
     "write a summary": "Напишите резюме здесь",
     "write your comments": "Оставьте ваш комментарий",
     "xreport": "происшествие / несчастный случай",
@@ -1071,6 +1097,7 @@
       "$$noContext": "да",
       "parking_fee_types": "да"
     },
+    "you need to activate drawing mode": "вы хотите активировать режим рисования?",
     "zh": {
       "langs": "Китайский"
     }
