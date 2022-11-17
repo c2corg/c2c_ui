@@ -79,27 +79,36 @@
     "Action - prix du public": {
       "Sophie picture context": "Акция - приз зрителей"
     },
+    "Activity feed": "Лента активности",
     "Add": "Добавить",
     "Add here maps not automatically referenced": "Добавить карты, которые не были добавлены автоматически",
     "Add images": "Добавить изображения",
     "Add the first outing": "Добавить первый отчет",
+    "Add title…": "Добавить заглавие",
     "Additional information": "Дополнительная информация",
     "All": "Все",
+    "Allow all": "Принять всё",
     "Altitude": "Высота",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Указание высоты требуется если уровень опасности наверху и внизу различается. Укажите высоту так, как  в лавинном бюллетене.",
     "An error occurred, couldn't (un)mark route as to do": "Произошла ошибка, невозможно добавить (или удалить) маршрут в избранное.",
     "An error occurred, couldn't save images": "Ошибка, невозможно сохранить изображение",
+    "Anonymity and confidentiality": "Анонимность и конфиденциальность",
     "Are you sure you want to delete this document?": "Уверены ли вы, что хотите удалить этот документ ?",
     "Are you sure you want to delete this locale?": "Вы хотите удалить версию на этом языке?",
     "Are you sure you want to merge?": "Ты уверен, что хочешь слиться?",
     "Are you sure you want to revert to this version of the document?": "Вы хотите откатить данную версию документа?",
     "Area not covered": "Недоступная зона",
     "Area too large": "Слишком большая зона",
+    "Articles, waypoints or routes to be linked.": "Связанные статьи, путевые точки и маршруты",
+    "Articles, waypoints, routes or books to be linked.": "Статьи, путевые точки, маршруты или книги для добавления",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Как следует из названия, этот метод предназначен для новичков. Поэтому запас прочности должен быть особенно важным. Никаких других параметров, кроме уровня  лавинной опасности, не указывается. Ориентация склона не учитывается.",
     "Associated outings": "связанные отчеты",
     "Associated routes": "связанные маршруты",
     "Association": "общество",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Атрибуция - вы должны указать соответствующий источник, предоставить ссылку на лицензию и указать, были ли внесены изменения в оригинал.",
+    "Attributions": {
+      "Map controls": "Атрибуция"
+    },
     "Average slope (degrees)": "Средный наклон (градусы)",
     "Average slope in degree": "Средный наклон в градусах",
     "Base layer": "первая кожа",
@@ -431,6 +440,8 @@
       "$$noContext": "доступ к дороге / общественный транспорт",
       "waypoint_types": "доступ к дороге / общественный транспорт"
     },
+    "access_comment": "Доступность на машине или общественном транспорте",
+    "access_condition": "Условия доступа на машине или общественном транспорте",
     "access_period": "период доступности",
     "access_time": "время доступа",
     "accessible_when_wardened": {
@@ -442,7 +453,9 @@
     "action": {
       "image_categories": "действие"
     },
+    "activities": "Виды активности",
     "activity": "активность",
+    "activity_rate": "Уровень активности",
     "activity_rate_m2": {
       "activity_rates": "1-2 раза в месяц"
     },
@@ -488,7 +501,12 @@
     "area_type": "тип зоны",
     "areas": "Зоны",
     "article": "Статья",
+    "article_categories": "категории статей",
+    "article_type": "Тип статьи",
     "articles": "Статьи",
+    "artificial": {
+      "rock_types": "искусственный"
+    },
     "ascending sort": "Сортировать по возрастанию",
     "association": {
       "article_categories": "общество"
