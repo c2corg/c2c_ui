@@ -2,8 +2,8 @@
   <!-- This a generic component that display field value of a document for any kind of field  -->
   <span>
     <activities v-if="field.name == 'activities'" :activities="document.activities" class="has-text-secondary" /><!--
-
- --><a v-else-if="field.type === 'url'" :href="value">{{ value }}</a
+ -->
+    <a v-else-if="field.type === 'url'" :href="value">{{ value }}</a
     ><!--
 
  --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'PPpp') }}</span

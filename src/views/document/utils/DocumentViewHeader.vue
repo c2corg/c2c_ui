@@ -37,6 +37,11 @@
           <!-- outing specific  -->
           <span v-if="documentType == 'outing'" class="outing-date is-size-5">
             {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+            <div class="favoris">
+              <button @click="click">
+                <icon-star> </icon-star>
+              </button>
+            </div>
           </span>
 
           <!-- xreport specific  -->
@@ -119,5 +124,10 @@ export default {
   .title {
     font-size: 1.5rem !important;
   }
+}
+
+.favoris {
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>

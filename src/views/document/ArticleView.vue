@@ -24,6 +24,7 @@
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
+          Hello
         </div>
 
         <routes-box v-if="!isDraftView" :document="document" hide-buttons />
