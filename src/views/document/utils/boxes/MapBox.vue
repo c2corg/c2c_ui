@@ -142,12 +142,21 @@ export default {
 
       feature.set('name', name);
 
-      const filename = this.document.document_id + extension;
+      const filename = this.getDownloadedFileName(name, extension);
       const content = format.writeFeatures([feature], {
         featureProjection: 'EPSG:3857',
       });
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
+    },
+
+    getDownloadedFileName(name, extension) {
+      let filename = this.document.document_id + '_' + name.substring(0, 100);
+      if (this.documentType === 'outing') {
+        filename = filename + '_' + this.document.date_start;
+      }
+      // Remove forbidden characters/spaces, and replace them with '_'
+      return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
     },
   },
 };
