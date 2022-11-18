@@ -116,7 +116,7 @@ export default {
       // as this method will be called in any case,
       // we must check that the user is logged
       // redirection is made be beforeRouteEnter()
-      // but we do not wan't to do anythin in this case
+      // but we do not want to do anything in this case
       if (!this.$user.isLogged) {
         return;
       }

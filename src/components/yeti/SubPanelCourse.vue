@@ -189,7 +189,7 @@ export default {
 
       reader.readAsText(event.target.files[0]);
 
-      // empty the input, because if user wan't to upload same trace
+      // empty the input, because if user wants to upload same trace
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';

@@ -29,7 +29,7 @@ export default {
         reader.readAsText(file);
       }
 
-      // empty the input, because if user wan't to upload same trace
+      // empty the input, because if user wants to upload same trace
       // change event is not fired
       this.$refs.geoFileInput.value = '';
     },
