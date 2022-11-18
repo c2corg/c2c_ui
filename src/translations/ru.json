@@ -18,10 +18,10 @@
     "1 or 2 complications (steeper or narrow section...)": "1 или 2 более сложных части (круче или уще)",
     "10 meters minimum while ascending": "минимум 10м во время восхождения",
     "10min": {
-      "access_times": "10мин"
+      "access_times": "10 мин."
     },
     "15min": {
-      "access_times": "15мин"
+      "access_times": "15 мин."
     },
     "1d_to_3d": {
       "severities": "1дн до 3дн"
@@ -371,7 +371,7 @@
     "SERAC": "Серак",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC это общемировая база несчастных случаев и инцидентов в скалолазании и других видах спорта, связанных с горами. Ее целью является увеличение безопасности этих видов спорта.",
     "Save": "Сохранить",
-    "Search ...": "Поиск",
+    "Search ...": "Поиск ...",
     "Search a document to associate...": "Искать документ, с которым надо ассоциировать",
     "See more results": "Показать больше результатов",
     "Service is inactive right now": "Сервис временно недоступен",
@@ -478,7 +478,7 @@
       "area_types": "административные границы"
     },
     "advertisement": "реклама",
-    "after:": "после",
+    "after:": "после:",
     "age": "Возраст",
     "aid_rating": "категория ИТО",
     "already used email": {
