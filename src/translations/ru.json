@@ -109,8 +109,11 @@
     "Attributions": {
       "Map controls": "Атрибуция"
     },
+    "Avalanche bulletins": "Лавинный бюллетень",
     "Average slope (degrees)": "Средный наклон (градусы)",
     "Average slope in degree": "Средный наклон в градусах",
+    "Back to code": "Вернуться к коду",
+    "Back to edit mode": "Вернуться в режим редактирования",
     "Base layer": "первая кожа",
     "Basemap (at)": {
       "Map layer": "Австрия"
@@ -118,9 +121,12 @@
     "Basemap ortho (at)": {
       "Map layer": "Австрийские спутниковые"
     },
+    "Be careful,": "Осторожно,",
     "Beginner": "Начинающий",
+    "Beginner Reduction Method": "Метод редукции для начинаюших",
     "Beware of case-sensitive login and password": "Внимание,  логин и пароль чувствительны к регистру.",
     "Block account": "Заблокировать этого пользователя",
+    "Bolted rock climbing gear": "Оборудованные мультипитчи",
     "Book content": "содержание книги",
     "Both results and map": "Оба карта и результаты",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Кратко опишите телесные повреждения. Поместите здесь также комментарии, не соответствующие другим разделам.",
@@ -130,6 +136,7 @@
     "Cancel": "Отменить",
     "Candidates": "Все фотографии",
     "Cards mode": "Режим карточек",
+    "Change account parameters": "Изменить настройки аккаунта",
     "Change password": "Изменить пароль",
     "Checking...": "проверка...",
     "Child": "ребенок",
@@ -520,15 +527,31 @@
     },
     "author": "автор",
     "author_status": "Вовлеченность в ситуацию",
+    "autonomous": {
+      "autonomies": "автономно"
+    },
     "avalanche": {
       "$$noContext": "лавина",
       "event_types": "лавина"
     },
+    "avalanche_forecaster": {
+      "user_categories": "Лавинный прогноз"
+    },
+    "avalanche_level": "Уровень лавинной опасности",
+    "avalanche_signs": "Признаки лавиноопасности",
     "avalanches": "лавинная информация",
     "average": {
       "condition_ratings": "средный",
       "snow_quality_ratings": "средный",
       "snow_quantity_ratings": "Средний"
+    },
+    "awful": {
+      "condition_ratings": "внушающий опасения",
+      "snow_quality_ratings": "опасный",
+      "snow_quantity_ratings": "опасный"
+    },
+    "bar": {
+      "product_types": "бар"
     },
     "basalte": {
       "rock_types": "базальт"
@@ -536,6 +559,7 @@
     "base_camp": {
       "waypoint_types": "базовый лагерь"
     },
+    "best_periods": "Лучшие периоды",
     "biography": {
       "book_types": "биография"
     },
@@ -557,6 +581,9 @@
     "bus": {
       "public_transportation_types": "автобус"
     },
+    "c2c_meetings": {
+      "article_categories": "собрания c2c"
+    },
     "ca": {
       "langs": "Каталонский"
     },
@@ -571,6 +598,7 @@
       "waypoint_types": "каньон"
     },
     "capacity": {
+      "$$noContext": "Число мест в необслуживаемый период",
       "bivouac": "количество мест"
     },
     "capacity_staffed": "Количество доступных мест",
@@ -582,6 +610,7 @@
     "cleared": {
       "access_conditions": "Бесснежый"
     },
+    "climbing rating": "Уровень сложности лазанья",
     "climbing_indoor": {
       "waypoint_types": "Скалодром"
     },
