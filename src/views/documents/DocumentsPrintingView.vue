@@ -93,18 +93,16 @@ export default {
   methods: {
     load() {
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
-        this.promises = this.promise.data.documents.map((doc) => {
-          return {
-            promise: c2c[this.documentType].getCooked(
-              doc.document_id,
-              this.$route.params.lang ?? this.$language.current
-            ),
-            documentId: doc.document_id,
-            expectedLang: this.$route.params.lang ?? this.$language.current,
-            documentType: this.documentType,
-            version: null,
-            fields: constants.objectDefinitions[this.documentType].fields,
-          };
+        this.promises = this.promise.data.documents.map((doc) => ({
+          promise: c2c[this.documentType].getCooked(
+            doc.document_id,
+            this.$route.params.lang ?? this.$language.current
+          ),
+          documentId: doc.document_id,
+          expectedLang: this.$route.params.lang ?? this.$language.current,
+          documentType: this.documentType,
+          version: null,
+          fields: constants.objectDefinitions[this.documentType].fields,
         });
       });
     },

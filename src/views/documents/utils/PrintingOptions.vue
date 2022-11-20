@@ -1,6 +1,6 @@
 <template>
   <div class="box no-print">
-    <h1 class="title is-1">Printing a selection of documents</h1>
+    <h1 class="title is-1">Print a selection of documents</h1>
     <div class="printing-option-section">
       <h2 class="title is-2">Number of documents</h2>
       <page-selector :documents="documents" page-type="print" />.
