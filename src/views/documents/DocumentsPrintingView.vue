@@ -118,7 +118,7 @@ export default {
         const docRect = docEl.getBoundingClientRect();
         const elRect = el.getBoundingClientRect();
         const y = elRect.top - docRect.top;
-        window.scrollTo(0, y - 50); // navbar height ...
+        window.scrollTo({ top: y - 50, behavior: 'smooth' }); // navbar height ...
       }
     },
 
