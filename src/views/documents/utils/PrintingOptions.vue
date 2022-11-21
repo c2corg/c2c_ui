@@ -1,22 +1,23 @@
 <template>
   <div class="box no-print">
-    <h1 class="title is-1">Print a selection of documents</h1>
-    <div class="printing-option-section">
-      <h2 class="title is-2">Number of documents</h2>
-      <page-selector :documents="documents" page-type="print" />.
-    </div>
-    <div class="printing-option-section">
-      <h2 class="title is-2">Other options</h2>
-      <ul>
-        <li><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" />Add page breaks before each document.</li>
-        <li><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" />Include images.</li>
-        <li><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" />Include a summary.</li>
-      </ul>
-    </div>
-    <div class="printing-option-section">
-      <h2 class="title is-2">Printing</h2>
-      <button :disabled="allLoaded" class="button is-primary print-button" onclick="window.print()">Print</button>
-      <span v-if="allLoaded">Loaded {{ totalResolved }} documents out of {{ total }}</span>
+    <div class="columns">
+      <div class="column printing-option-section">
+        <h2 class="title is-2">Number of documents</h2>
+        <page-selector :documents="documents" page-type="print" />.
+      </div>
+      <div class="column printing-option-section">
+        <h2 class="title is-2">Other options</h2>
+        <ul>
+          <li><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" />Add page breaks before each document</li>
+          <li><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" />Include image section</li>
+          <li><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" />Include a summary</li>
+        </ul>
+      </div>
+      <div class="column printing-option-section">
+        <h2 class="title is-2">Printing</h2>
+        <button :disabled="isLoading" class="button is-primary print-button" onclick="window.print()">Print</button>
+        <span v-if="isLoading">Loaded {{ totalResolved }} documents out of {{ total }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +57,7 @@ export default {
     total() {
       return this.promises.length;
     },
-    allLoaded() {
+    isLoading() {
       return this.totalResolved < this.total;
     },
   },

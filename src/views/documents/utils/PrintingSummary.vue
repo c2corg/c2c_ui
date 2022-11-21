@@ -2,7 +2,7 @@
   <div v-if="documents" class="box">
     <h1 class="title is-1">Summary</h1>
     <div v-for="(document, index) in documents.documents" :key="index">
-      <span @click="sendSummaryClick(index)">
+      <span class="toc-entry" @click="sendSummaryClick(index)">
         <span class="toc-number">{{ index + 1 }}. </span>
         <pretty-route :route="document" v-if="documentType == 'route'" />
         <pretty-waypoint :waypoint="document" v-else-if="documentType == 'waypoint'" />
@@ -32,11 +32,9 @@ export default {
   },
 
   methods: {
-
     sendSummaryClick(index) {
       this.$emit("summary-click", index);
     }
-
   },
 };
 </script>
@@ -44,5 +42,8 @@ export default {
 <style scoped>
 .toc-number {
   margin-right: 7px;
+}
+.toc-entry {
+  cursor: pointer;
 }
 </style>

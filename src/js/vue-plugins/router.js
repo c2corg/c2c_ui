@@ -85,7 +85,7 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
   });
 
   routes.push({
-    path: '/print/' + def.documentType + 's',
+    path: '/' + def.documentType + 's/print',
     name: def.documentType + 's-print',
     component: DocumentsPrintingView,
   });

@@ -67,7 +67,7 @@
         @add="addTag"
       />
       <load-user-preferences-button class="is-hidden-tablet query-item-component" />
-      <export-csv-button v-if="listMode" class="is-small-mobile"></export-csv-button>
+      <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
       <print-button />
     </div>
     <div class="query-items-tags is-hidden-mobile">

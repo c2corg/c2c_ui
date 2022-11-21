@@ -6,9 +6,10 @@
       <document-version-banner :version="version" :document="document" />
 
       <div class="box">
-        <span v-if="!isDraftView && !isPrintingView" class="is-pulled-right button-bar no-print">
-          <follow-button :document="document" />
-          <tags-button :document="document" />
+        <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
+          <gotop-button v-if="isPrintingView"/>
+          <follow-button v-if="!isPrintingView" :document="document" />
+          <tags-button v-if="!isPrintingView" :document="document" />
 
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
@@ -54,6 +55,7 @@
 <script>
 import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
+import GotopButton from './GotopButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
 import TagsButton from './TagsButton';
 
@@ -65,6 +67,7 @@ export default {
   components: {
     ImagesUploader,
     FollowButton,
+    GotopButton,
     TagsButton,
     SocialNetworkSharing,
     DocumentVersionBanner,

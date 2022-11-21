@@ -1,6 +1,7 @@
 <template>
   <div class="section documents-view">
-    <html-header :title="getDocumentTypeTitle(documentType)" />
+    <html-header :title="'Printing - ' + getDocumentTypeTitle(documentType)" />
+    <h1 class="title is-1 box">Print a selection of documents</h1>
     <printing-options
       :documents="documents"
       :promises="promises"
@@ -103,7 +104,7 @@ export default {
           documentType: this.documentType,
           version: null,
           fields: constants.objectDefinitions[this.documentType].fields,
-        });
+        }));
       });
     },
 
