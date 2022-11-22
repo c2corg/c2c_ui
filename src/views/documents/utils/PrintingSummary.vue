@@ -1,6 +1,6 @@
 <template>
   <div v-if="documents" class="box">
-    <h1 class="title is-1">Summary</h1>
+    <h1 class="title is-1" v-translate>Summary</h1>
     <div v-for="(document, index) in documents.documents" :key="index">
       <span class="toc-entry" @click="sendSummaryClick(index)">
         <span class="toc-number">{{ index + 1 }}. </span>
@@ -33,8 +33,8 @@ export default {
 
   methods: {
     sendSummaryClick(index) {
-      this.$emit("summary-click", index);
-    }
+      this.$emit('summary-click', index);
+    },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="section documents-view">
-    <html-header :title="'Printing - ' + getDocumentTypeTitle(documentType)" />
-    <h1 class="title is-1 box">Print a selection of documents</h1>
+    <html-header :title="$gettext('Printing') + ' - ' + getDocumentTypeTitle(documentType)" />
+    <h1 class="title is-1 box" v-translate>Print a selection of documents</h1>
     <printing-options
       :documents="documents"
       :promises="promises"
@@ -95,10 +95,7 @@ export default {
     load() {
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
         this.promises = this.promise.data.documents.map((doc) => ({
-          promise: c2c[this.documentType].getCooked(
-            doc.document_id,
-            this.$route.params.lang ?? this.$language.current
-          ),
+          promise: c2c[this.documentType].getCooked(doc.document_id, this.$route.params.lang ?? this.$language.current),
           documentId: doc.document_id,
           expectedLang: this.$route.params.lang ?? this.$language.current,
           documentType: this.documentType,
@@ -113,7 +110,7 @@ export default {
     },
 
     scrollTo(name) {
-      const el = document.querySelector("#toc-entry-"+name);
+      const el = document.querySelector('#toc-entry-' + name);
       if (el) {
         const docEl = document.documentElement;
         const docRect = docEl.getBoundingClientRect();
@@ -122,7 +119,6 @@ export default {
         window.scrollTo({ top: y - 50, behavior: 'smooth' }); // navbar height ...
       }
     },
-
   },
 };
 </script>

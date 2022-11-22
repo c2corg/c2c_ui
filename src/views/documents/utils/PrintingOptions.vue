@@ -2,21 +2,42 @@
   <div class="box no-print">
     <div class="columns">
       <div class="column printing-option-section">
-        <h2 class="title is-2">Number of documents</h2>
+        <h2 class="title is-2" v-translate>Number of documents</h2>
         <page-selector :documents="documents" page-type="print" />.
       </div>
       <div class="column printing-option-section">
-        <h2 class="title is-2">Other options</h2>
+        <h2 class="title is-2" v-translate>Other options</h2>
         <ul>
-          <li><label><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" />Add page breaks before each document</label></li>
-          <li><label><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" />Include image section</label></li>
-          <li><label><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" />Include a summary</label></li>
+          <li>
+            <label
+              ><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" /><span v-translate
+                >Add page break before each document</span
+              ></label
+            >
+          </li>
+          <li>
+            <label
+              ><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" /><span v-translate
+                >Include image section</span
+              ></label
+            >
+          </li>
+          <li>
+            <label
+              ><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" /><span
+                v-translate
+                >Include summary</span
+              ></label
+            >
+          </li>
         </ul>
       </div>
       <div class="column printing-option-section">
-        <h2 class="title is-2">Printing</h2>
-        <button :disabled="isLoading" class="button is-primary print-button" onclick="window.print()">Print</button>
-        <span v-if="isLoading">Loaded {{ totalResolved }} documents out of {{ total }}</span>
+        <h2 class="title is-2" v-translate>Printing</h2>
+        <button :disabled="isLoading" class="button is-primary print-button" onclick="window.print()" v-translate>
+          Print
+        </button>
+        <template v-if="isLoading"><span v-translate>Loading...</span>({{ totalResolved }} / {{ total }})</template>
       </div>
     </div>
   </div>
@@ -87,7 +108,6 @@ export default {
         });
       });
     },
-
   },
 };
 </script>
@@ -97,22 +117,22 @@ export default {
   margin-bottom: 1.5rem;
 }
 .printing-option-section h1 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid #ddd;
+  font-size: 1.8rem;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #ddd;
 }
 .printing-option-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid #ddd;
+  font-size: 1.8rem;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #ddd;
 }
 
 .print-button {
-    vertical-align: baseline;
-    margin-right: 10px;
+  vertical-align: baseline;
+  margin-right: 10px;
 }
 
 .print-option-checkbox {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 </style>
