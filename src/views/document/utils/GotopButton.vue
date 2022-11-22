@@ -1,12 +1,11 @@
 <template>
-  <span class="gotop-button" @click="onClick" title="Go back to the top of the page">
+  <span class="gotop-button" @click="onClick" :title="$gettext('Back to the top')">
     <fa-icon icon="arrow-up" />
   </span>
 </template>
 
 <script>
 export default {
-
   methods: {
     onClick() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
