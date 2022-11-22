@@ -390,6 +390,7 @@
     "No result found": "Pas de résultat",
     "No route right now": "Pas d'itinéraire actuellement",
     "No selected hazard potential. Set danger level first.": "Pas de potentiel de danger sélectionné. Entrez d’abord le niveau de danger",
+    "No title": "Sans titre",
     "No user with this email": {
       "API message": "Il n'existe pas d'utilisateur avec cet email"
     },
@@ -440,6 +441,7 @@
     "Precise location of the event.": "Localisation précise de l'évènement",
     "Press enter to select": "Entrée pour selectionner",
     "Preview": "Prévisualiser",
+    "Print search results": "Imprimer",
     "Professional Reduction Method": "méthode de réduction professionnelle",
     "Protect document": "Protéger ce document",
     "Protection area:": "Zone de protection :",
