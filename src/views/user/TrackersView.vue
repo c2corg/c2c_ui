@@ -94,6 +94,13 @@ export default {
         connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=2928e564-85eb-4aef-92fb-2a0259589c9c&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
         status: 'not-configured',
       },
+      {
+        // $gettext('polar')
+        name: 'polar',
+        website: 'https://www.flow.polar.com/',
+        connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=5a9f9ddd-fc15-48d2-bc56-86b43d491cc9&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        status: 'not-configured',
+      },
     ];
     this.load();
   },
