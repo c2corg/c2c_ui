@@ -38,6 +38,7 @@
     "Add": "Ajouter",
     "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
     "Add images": "Ajouter des images",
+    "Add page break before each document": "Ajouter un saut de page entre chaque document",
     "Add the first outing": "Ajouter la première sortie",
     "Add title…": "Ajouter un titre...",
     "Additional information": "Informations supplémentaires",
@@ -67,6 +68,7 @@
     "Average slope in degree": "Pente moyenne en degrés",
     "Back to code": "Retour au code",
     "Back to edit mode": "Retour en mode édition",
+    "Back to the top": "Haut de page",
     "Base layer": "Fond de carte",
     "Basemap (at)": {
       "Map layer": "Autriche"
@@ -291,6 +293,8 @@
     "Image count": "Nombre d'images",
     "Improve our understanding of risks": "Améliorer la connaissance des risques",
     "Incidents and accidents": "Incidents et accidents",
+    "Include image section": "Inclure les images associées",
+    "Include summary": "Inclure le résumé",
     "Information about the terrain, like elevations, lengths...": "Données relatives au terrain, comme les altitudes, la longueur, etc.",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Information sur la localisation de l'incident. Positionner la localisation sur la carte ci-dessus, même de manière peu précise (auquel cas vous pouvez ajouter plus de détails dans ce champ). Après avoir complété le rapport, vous pouvez associer un itinéraire, un point de passage ou une sortie.",
     "Informations about the access": "Information à propos de l'accès routier/transport en commun",
@@ -398,6 +402,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
+    "Number of documents": "Nombre de documents",
     "Numbers": "Données",
     "On a drawn line": "Sur une ligne",
     "Only document less than 24h old can be deleted": {
@@ -409,6 +414,7 @@
     "Open in a new tab": "Ouvrir dans un nouvel onglet",
     "Ordered list": "Liste triée",
     "Orientations:": "Orientations :",
+    "Other options": "Autres options",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
     "Oups! something went wrong...": "Oups ! Il y a eu un problème…",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien",
@@ -441,7 +447,10 @@
     "Precise location of the event.": "Localisation précise de l'évènement",
     "Press enter to select": "Entrée pour selectionner",
     "Preview": "Prévisualiser",
+    "Print": "Imprimer",
+    "Print a selection of documents": "Imprimer une sélection de documents",
     "Print search results": "Imprimer",
+    "Printing": "Impression",
     "Professional Reduction Method": "méthode de réduction professionnelle",
     "Protect document": "Protéger ce document",
     "Protection area:": "Zone de protection :",
@@ -524,6 +533,7 @@
     "Stop following this contributor": "Ne plus suivre ce contributeur",
     "Submit": "Enregistrer et continuer",
     "Suggested rating": "Cotation suggérée",
+    "Summary": "Résumé",
     "SwissTopo Slopes": {
       "Map slopes layer": "Suisse (SwissTopo)"
     },
