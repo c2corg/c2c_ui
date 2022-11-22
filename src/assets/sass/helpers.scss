@@ -62,6 +62,15 @@
     display: none !important;
   }
 
+  .print-image .no-print.image-box {
+    display: block !important;
+  }
+
+  .print-image .no-print.image-box .swiper-wrapper {
+    flex-wrap: wrap !important;
+    justify-content: space-evenly !important;
+  }
+
   .has-background-white-print {
     background-color: white !important;
   }

@@ -11,6 +11,7 @@ import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-i
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons/faArrowUp';
 import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons/faArrowsAltV';
 import { faAt } from '@fortawesome/free-solid-svg-icons/faAt';
 import { faAtlas } from '@fortawesome/free-solid-svg-icons/faAtlas';
@@ -80,6 +81,7 @@ import { faObjectGroup } from '@fortawesome/free-solid-svg-icons/faObjectGroup';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
+import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot';
@@ -231,6 +233,7 @@ export default function install(Vue) {
     faArrowsAltV,
     faArrowLeft,
     faArrowRight,
+    faArrowUp,
     faAt,
     faAtlas,
     faBan,
@@ -299,6 +302,7 @@ export default function install(Vue) {
     faPen,
     faPlus,
     faPlusCircle,
+    faPrint,
     faQuestionCircle,
     faRedoAlt,
     faRobot,
