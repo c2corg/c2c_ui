@@ -8,9 +8,9 @@
       <div class="column printing-option-section">
         <h2 class="title is-2">Other options</h2>
         <ul>
-          <li><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" />Add page breaks before each document</li>
-          <li><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" />Include image section</li>
-          <li><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" />Include a summary</li>
+          <li><label><input class="print-option-checkbox" v-model="pageBreaks" type="checkbox" />Add page breaks before each document</label></li>
+          <li><label><input class="print-option-checkbox" v-model="imagePrinting" type="checkbox" />Include image section</label></li>
+          <li><label><input class="print-option-checkbox" v-model="summaryVisibility" checked type="checkbox" />Include a summary</label></li>
         </ul>
       </div>
       <div class="column printing-option-section">
