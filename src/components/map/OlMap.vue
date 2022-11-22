@@ -874,7 +874,7 @@ export default {
       const query = Object.assign({}, this.$route.query);
 
       query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined;
-      if (query.bbox !== this.$route.query.bbox) {
+      if (query.bbox !== this.$route.query.bbox && !this.$route.name.endsWith('-print')) {
         this.$router.push({ query });
       }
     },
