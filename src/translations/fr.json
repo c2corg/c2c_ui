@@ -35,6 +35,7 @@
     "Accident database": "Incidents et accidents",
     "Account": "Compte",
     "Activity feed": "Fil d'activité",
+    "Activity trackers": "Trackers d'activité",
     "Add": "Ajouter",
     "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
     "Add images": "Ajouter des images",
@@ -45,6 +46,8 @@
     "All": "Tout",
     "Allow all": "Tout accepter",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L’altitude est requise quand les niveaux de danger haut et bas sont différents. Précisez la valeur fournie par le bulletin d'avalanche.",
+    "An error occurred, connection status could not be retrieved. Please refresh the page.": "Erreur : l'état de connexion avec les services n'a pas pu être récupéré. Merci de rafraîchir la page.",
+    "An error occurred, could not retrieve activities": "Erreur : les activités des trackers n'ont pas pu être récupérées.",
     "An error occurred, couldn't (un)mark route as to do": "Impossible d'ajouter ou d'enlever l'itinéraire des favoris",
     "An error occurred, couldn't save images": "Impossible de sauvegarder les images",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
@@ -97,6 +100,7 @@
     "Change password": "Modifier le mot de passe",
     "Checking...": "En cours de vérification…",
     "Child": "Enfant",
+    "Choose file": "Choisir un fichier",
     "Clear": "Effacer",
     "Close": "Fermer",
     "Collapse": "Replier",
@@ -107,7 +111,10 @@
     "Compute": "Calcul",
     "Compute risk": "Calculer le risque",
     "Conditions, summits, routes": "Conditions, sommets, itinéraires",
+    "Configure activity trackers": "Configuration des trackers d'activité",
     "Configure cookies": "Paramétrage des cookies",
+    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Configurez ici la connexion avec les services externes tels que Strava ou l'application de votre dispositif GPS pour récupérer facilement les traces GPX de vos activités.",
+    "Configured": "Configuré",
     "Confirm": "Confirmer",
     "Confirm delete": "Confirmer la suppression",
     "Conflict: version of document has changed": "Le document a été modifié entretemps et une version plus récente existe.",
@@ -120,6 +127,7 @@
     "Conflict: version of locale 'it' has changed": "Le document a été modifié entretemps et une version en italien plus récente existe.",
     "Conflict: version of locale 'zh_CN' has changed": "Le document a été modifié entretemps et une version en chinois plus récente existe.",
     "Conflicting method and danger": "Méthode et niveau de danger incompatible",
+    "Connect": "Connecter",
     "Contain invalid character(s)": {
       "API message": "Contient un ou plusieurs caractères invalides"
     },
@@ -226,6 +234,7 @@
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "Feel free to edit it.": "Éditez-le.",
+    "Fetch geographic data": "Utiliser les données de cette activité",
     "Filter on map extent": "Limiter la recherche à la carte visible",
     "Filter results": "Filtrer",
     "FlowCapt sensor": "Capteur FlowCapt",
@@ -241,9 +250,11 @@
     "GPX file": "Fichier GPX",
     "General": "Général",
     "General information": "Informations générales",
+    "Geographical data could not be retrieved": "La trace de l'activité n'a pas pu être récupérée",
     "Geolocation": "Géolocalisation",
     "Go back to YETI": "Retour YETI",
     "Go to the previous page": "Retourner à la page précédente",
+    "Go to website": "Accéder au site",
     "Group": "Groupe",
     "Group size": "Taille du groupe",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Un horaire avait-il été prévu ? A t-il été tenu ? La gestion du temps a t-elle eu une influence sur le déclenchement de l'événement ?",
@@ -329,6 +340,7 @@
     "Load my preferences": "Activer mes préférences",
     "Load shedding distance": "Distance de délestage",
     "Loading...": "Chargement en cours…",
+    "Local file": "Fichier local",
     "Location / elevation / orientation": "Lieu / altitude / orientation",
     "Log in to post a comment": "Se connecter pour poster un commentaire",
     "Login": "Se connecter",
@@ -386,6 +398,8 @@
     "Nivose beacons": "Balises Nivose",
     "No": "Non",
     "No account yet?": "Pas encore de compte ?",
+    "No activity found": "Aucune activité disponible",
+    "No activity retrieved yet. Have you connected your trackers?": "Aucune activité n'a été récupérée. Avez vous connecté vos dispositifs ?",
     "No avalanche bulletin right now": "Pas de bulletin d’avalanche pour le moment",
     "No data could be extracted from GPS file": "Aucune donnée n'a pu être extraite du fichier",
     "No match?": "Aucun résultat satisfaisant ?",
@@ -442,6 +456,7 @@
     "Please select a waypoint type to enable sort feature": "Sélectionnez un type de point de passage pour activer le tri",
     "Please select an activity to enable sort feature": "Sélectionnez une activité pour activer le tri",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Le niveau de danger est manquant. Veuillez saisir la valeur spécifiée par le bulletin d'avalanche.",
+    "Please wait. Requesting authorization...": "Autorisation en cours, merci de patienter quelques instants…",
     "Post the first comment": "Publier le premier commentaire",
     "Precise localisation of the shooting": "Localisation précise de la prise de vue",
     "Precise location of the event.": "Localisation précise de l'évènement",
@@ -464,6 +479,7 @@
     "Recent changes": "Changements récents",
     "Recenter on your current position": "Centrer sur votre position actuelle",
     "Recenter on...": "Recentrer sur…",
+    "Refresh": "Rafraîchir",
     "Register": "S'inscrire",
     "Remove": "Retirer",
     "Report an issue": "Signaler un problème",
@@ -480,6 +496,7 @@
     "Restore this version": "Restaurer cette version",
     "Results only": "Uniquement les résultats",
     "Retry": "Réessayer",
+    "Revoke": "Révoquer",
     "Risky slopes": "Pentes à risque",
     "Risky slopes, increased risk due to orientation": "Pentes à risque, orientation critique",
     "Rotate image left": "Tourner vers la gauche",
@@ -497,6 +514,7 @@
     "See the analysis of the submitted stories": "Lire les analyses des récits déjà déposés",
     "See the latest version": "Voir la dernière version",
     "Seems fine! :)": "Calcul possible ! :) ",
+    "Select an activity to load geographical data into document.": "Choisissez une activité pour récupérer la trace GPS et l'inclure dans le document.",
     "Select option": "Choisissez une option",
     "Select tolerance (preview result on map)": "Choisir la tolérance (prévisualisation sur la carte)",
     "Send reset email": "Envoyer l'email de réinitialisation",
@@ -531,6 +549,8 @@
     "Statistics": "Statistiques",
     "Stay careful while skiing": "Skier avec prudence",
     "Stop following this contributor": "Ne plus suivre ce contributeur",
+    "Subcription revokal failed": "La souscription au service n'a pu être révoquée.",
+    "Subcription revoked": "Souscription supprimée",
     "Submit": "Enregistrer et continuer",
     "Suggested rating": "Cotation suggérée",
     "Summary": "Résumé",
@@ -578,6 +598,7 @@
     "Toggle fullscreen": "Basculer en plein écran",
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
     "Trace": "Trace GPS",
+    "Tracking devices": "Dispositifs GPS",
     "Translate into an other lang": "Traduire dans une autre langue",
     "Transport & road or PT access": "Accès routier/TC",
     "Types and styles": "Types et styles",
@@ -698,6 +719,9 @@
     },
     "at least one user required": {
       "API message": "Sélectionnez au moins un itinéraire"
+    },
+    "auth-denied": {
+      "tracking": "L'autorisation de connexion au service a été refusée par l'utilisateur."
     },
     "author": "Auteur",
     "author_status": "Implication dans la situation",
@@ -863,6 +887,7 @@
     "de": {
       "langs": "allemand"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Tri décroissant",
     "descent": {
       "image_categories": "descente"
@@ -975,6 +1000,7 @@
       "langs": "français"
     },
     "frequentation": "Fréquentation",
+    "garmin": "Garmin",
     "gas_unstaffed": "Gaz hors gardiennage",
     "gear": {
       "$$noContext": "Matériel",
@@ -1352,6 +1378,7 @@
       "API message": "Erreur inattendue, merci de contacter dev@camptocamp.org"
     },
     "points by moving them": "les points en les déplaçant",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "mauvaises",
       "snow_quality_ratings": "mauvaise",
@@ -1475,6 +1502,9 @@
     "service_on_demand": {
       "public_transportation_types": "service à la demande"
     },
+    "setup-failed": {
+      "tracking": "La connexion a échoué"
+    },
     "severity": "Gravité",
     "severity_no": {
       "severities": "pas de blessure"
@@ -1585,12 +1615,14 @@
     "stories": {
       "article_categories": "récits"
     },
+    "strava": "Strava",
     "strong text": "texte en gras",
     "summary": "Résumé",
     "summit": {
       "waypoint_types": "sommet"
     },
     "supervision": "Encadrement",
+    "suunto": "Suunto",
     "technical": {
       "article_categories": "technique"
     },
@@ -1626,6 +1658,12 @@
     "training": "Préparation physique et niveau technique",
     "traverse": {
       "route_types": "traversée"
+    },
+    "unknown": {
+      "tracking": "Inconnu"
+    },
+    "unsufficient-scopes": {
+      "tracking": "Autorisations insuffisantes"
     },
     "url": "URL",
     "users": "utilisateurs",

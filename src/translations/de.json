@@ -976,6 +976,7 @@
     "de": {
       "langs": "deutsch"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Sortierung in absteigender Reihenfolge",
     "descent": {
       "image_categories": "Abstieg"
@@ -1095,6 +1096,7 @@
       "langs": "französisch"
     },
     "frequentation": "Begehungsfrequenz",
+    "garmin": "Garmin",
     "gas_unstaffed": "Gas (nicht bewartet)",
     "gear": {
       "$$noContext": "Ausrüstung",
@@ -1500,6 +1502,7 @@
     },
     "points": "Punkten",
     "points by moving them": "Punkte, indem Sie sie verschieben",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "schlecht",
       "snow_quality_ratings": "schlecht",
@@ -1757,12 +1760,14 @@
     "stories": {
       "article_categories": "Geschichten"
     },
+    "strava": "Strava",
     "strong text": "fetter Text",
     "summary": "Überblick",
     "summit": {
       "waypoint_types": "Gipfel"
     },
     "supervision": "Überwachung",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "Tags"
     },

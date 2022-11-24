@@ -871,6 +871,7 @@
     },
     "date": "dátum",
     "day(s)": "nap(ok)",
+    "decathlon": "Decathlon",
     "descending sort": "csökkenő rendezés",
     "descent": {
       "image_categories": "leereszkedés"
@@ -959,6 +960,7 @@
     "focal_length": "fókusz_távolság",
     "forum": "fórum",
     "frequentation": "látogatási gyakoriság",
+    "garmin": "Garmin",
     "gas_unstaffed": "gáz_gazdátlanul",
     "gear": {
       "$$noContext": "felszerelés",
@@ -1344,6 +1346,7 @@
     },
     "points": "pontok",
     "points by moving them": "pontok mozgatással",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "szegény",
       "snow_quality_ratings": "szegény",
@@ -1589,12 +1592,14 @@
     "stories": {
       "article_categories": "történetek"
     },
+    "strava": "Strava",
     "strong text": "hangsúlyos szöveg",
     "summary": "összefoglaló",
     "summit": {
       "waypoint_types": "csúcs"
     },
     "supervision": "felügyelet",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "címkék"
     },
