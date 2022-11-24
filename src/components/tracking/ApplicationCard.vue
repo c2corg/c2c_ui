@@ -13,7 +13,7 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="is-4 has-text-weight-bold" v-translate>{{ application.name }}</p>
+          <p class="is-4 has-text-weight-bold">{{ $gettext(application.name) }}</p>
           <a :href="application.website" class="is-6" target="_blank" v-translate>Go to website</a>
           <span
             class="status is-size-1"
