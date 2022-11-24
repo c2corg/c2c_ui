@@ -930,6 +930,7 @@
     "de": {
       "langs": "nemščina"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Padajoče razvrščanje",
     "descent": {
       "image_categories": "sestop"
@@ -1045,6 +1046,7 @@
       "langs": "francoščina"
     },
     "frequentation": "Obljudenost",
+    "garmin": "Garmin",
     "gas_unstaffed": "Plin izven oskrbovanja",
     "gear": {
       "$$noContext": "Oprema",
@@ -1447,6 +1449,7 @@
     },
     "points": "točke",
     "points by moving them": "točke tako, da jih premakneš",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "slabe",
       "snow_quality_ratings": "slaba",
@@ -1701,12 +1704,14 @@
     "stories": {
       "article_categories": "zgodbe"
     },
+    "strava": "Strava",
     "strong text": "krepko besedilo",
     "summary": "Povzetek",
     "summit": {
       "waypoint_types": "vrh"
     },
     "supervision": "Nadzor",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "oznake"
     },

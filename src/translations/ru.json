@@ -661,6 +661,7 @@
     "de": {
       "langs": "Немецкий"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Сортировать по убыванию",
     "descent": {
       "image_categories": "Спуск"
@@ -731,6 +732,7 @@
     "fr": {
       "langs": "французкий"
     },
+    "garmin": "Garmin",
     "gas_unstaffed": "Газ, необслуживаемое",
     "gear": {
       "$$noContext": "снаряжение ",
@@ -973,6 +975,7 @@
       "API message": "Неожиданная ошибка, пожалуйста свяжитесь с разработчиками: dev@camptocamp.org"
     },
     "points by moving them": "точки перемещая их",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "плохой",
       "snow_quality_ratings": "плохой",
@@ -1061,6 +1064,8 @@
     "stories": {
       "article_categories": "рассказы"
     },
+    "strava": "Strava",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "теги"
     },

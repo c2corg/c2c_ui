@@ -149,6 +149,7 @@
     },
     "My changes": "My contributions",
     "Narration": "Textual description",
+    "No title": "Sans titre",
     "No user with this email": {
       "API message": "There is no user with this email"
     },
@@ -259,6 +260,9 @@
     "at least one user required": {
       "API message": "Select at least one user"
     },
+    "auth-denied": {
+      "tracking": "Connection denied by user"
+    },
     "author_status": "Author",
     "avalanche_level": "Avalanche risk level",
     "avalanche_signs": "Avalanche signs",
@@ -338,6 +342,7 @@
     "de": {
       "langs": "german"
     },
+    "decathlon": "Decathlon",
     "describe conditions": "Describe ground conditions, equipment and rock quality.\nIf you meet defective equipment, contact local actors like mountain guides or tourism office.",
     "describe route_conditions": "Describe route conditions",
     "describe timing": "Describe timing",
@@ -397,6 +402,7 @@
       "langs": "french"
     },
     "frequentation": "Crowding",
+    "garmin": "Garmin",
     "gas_unstaffed": "Gas if unstaffed",
     "gear": "Gear",
     "gender": "Gender",
@@ -598,6 +604,7 @@
     "please consult the server logs": {
       "API message": "An unexpected error occured, please provide feedback to dev@camptocamp.org"
     },
+    "polar": "Polar",
     "possible": {
       "glacier_ratings": "delicate - travel is possible"
     },
@@ -675,6 +682,9 @@
     "service_on_demand": {
       "public_transportation_types": "service on demand"
     },
+    "setup-failed": {
+      "tracking": "Setup failed"
+    },
     "severity": "Severity",
     "severity_no": {
       "severities": "No injury"
@@ -744,9 +754,11 @@
     "stone_ice_fall": {
       "event_types": "stone or ice fall"
     },
+    "strava": "Strava",
     "strong text": "bold text",
     "summary": "Summary",
     "supervision": "Supervision",
+    "suunto": "Suunto",
     "text to display": "display text",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "This is a preview. Geometry is not simplified yet. Map interactions and export are disabled.",
     "time_management": "Time management",
@@ -757,6 +769,12 @@
     },
     "total snow": "Total snow",
     "training": "Physical training and technical level",
+    "unknown": {
+      "tracking": "Inconnu"
+    },
+    "unsufficient-scopes": {
+      "tracking": "Insufficient scopes"
+    },
     "url": "Url",
     "very_dangerous": {
       "children_proof_types": "dangerous"

@@ -878,6 +878,7 @@
     "de": {
       "langs": "alemany"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Ordre decreixent",
     "descent": {
       "image_categories": "baixada"
@@ -988,6 +989,7 @@
       "langs": "francès"
     },
     "frequentation": "Freqüentació",
+    "garmin": "Garmin",
     "gas_unstaffed": "Gas en període no guardat",
     "gear": {
       "$$noContext": "Material",
@@ -1368,6 +1370,7 @@
       "API message": "Error inesperat, si us plau contacteu amb dev@camptocamp.org"
     },
     "points by moving them": "els punts desplaçant-los",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "dolentes",
       "snow_quality_ratings": "dolentes",
@@ -1616,12 +1619,14 @@
     "stories": {
       "article_categories": "narracions"
     },
+    "strava": "Strava",
     "strong text": "text en negreta",
     "summary": "Resum",
     "summit": {
       "waypoint_types": "cim"
     },
     "supervision": "Supervisió",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "etiquetes"
     },

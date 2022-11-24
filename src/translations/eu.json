@@ -308,6 +308,7 @@
     "de": {
       "langs": "alemana"
     },
+    "decathlon": "Decathlon",
     "descent": {
       "image_categories": "jeitsiera"
     },
@@ -394,6 +395,7 @@
       "langs": "frantsesa"
     },
     "frequentation": "Jendetza",
+    "garmin": "Garmin",
     "gas_unstaffed": "gasa gordetako sasoitik kanpora",
     "gear": {
       "$$noContext": "Materiala",
@@ -701,6 +703,7 @@
       "climbing_indoor_types": "bidea"
     },
     "pixels": "pixelak",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "txarrak",
       "snow_quality_ratings": "txarrak",
@@ -872,10 +875,12 @@
     "stories": {
       "article_categories": "kontakizuna"
     },
+    "strava": "Strava",
     "summary": "laburpena",
     "summit": {
       "waypoint_types": "gaillurra"
     },
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "tag"
     },

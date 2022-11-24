@@ -817,6 +817,7 @@
     "de": {
       "langs": "Deutsch"
     },
+    "decathlon": "Decathlon",
     "descending sort": "降序排序",
     "descent": {
       "image_categories": "下降"
@@ -935,6 +936,7 @@
       "langs": "français"
     },
     "frequentation": "拥挤程度",
+    "garmin": "Garmin",
     "gas_unstaffed": "无看守时是否提供燃气",
     "gear": {
       "$$noContext": "装备",
@@ -1333,6 +1335,7 @@
     "please consult the server logs": {
       "API message": "发生意外错误，请提供反馈至dev@camptocamp.org"
     },
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "差",
       "snow_quality_ratings": "差",
@@ -1586,12 +1589,14 @@
     "stories": {
       "article_categories": "故事"
     },
+    "strava": "Strava",
     "strong text": "加粗字体",
     "summary": "总结",
     "summit": {
       "waypoint_types": "山峰"
     },
     "supervision": "指导",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "标签"
     },
