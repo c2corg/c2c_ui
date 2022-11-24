@@ -2,7 +2,7 @@
   <div v-if="version" class="notification is-warning has-text-centered">
     <!-- TODO : translation -->
     <p>
-      This is an archived version of this page, as of {{ $dateUtils.toLocalizedString(version.written_at, 'PPPPpp') }}
+      This is an archived version of this page, as of {{ $dateUtils.toLocalizedString(version.written_at, 'LLLL') }}
     </p>
 
     <span v-if="!isFirstVersion">

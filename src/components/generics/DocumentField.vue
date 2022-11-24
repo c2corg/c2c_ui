@@ -6,7 +6,7 @@
  --><a v-else-if="field.type === 'url'" :href="value">{{ value }}</a
     ><!--
 
- --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'PPpp') }}</span
+ --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'lll') }}</span
     ><!--
 
  --><best-periods v-else-if="field.name === 'best_periods'" :months="value" /><!--

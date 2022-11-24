@@ -55,7 +55,7 @@ export default {
     },
     date: {
       get() {
-        return this.value ? this.$dateUtils.toLocalizedString(this.value_, 'yyyy-MM-dd') : null;
+        return this.value ? this.$dateUtils.toLocalizedString(this.value_, 'YYYY-MM-DD') : null;
       },
       set(value) {
         const d = this.value_;
@@ -92,7 +92,7 @@ export default {
 
   methods: {
     onInput(valueAsObject) {
-      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `yyyy-MM-dd'T'HH:mm:ssxxx`));
+      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `YYYY-MM-DD[T]HH:mm:ssZ`));
     },
   },
 };

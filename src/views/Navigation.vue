@@ -162,7 +162,7 @@ export default {
       return config;
     },
     userMenuLinks() {
-      return [
+      const items = [
         {
           to: { name: 'profile', params: { id: this.$user.id } },
           text: this.$gettext('My profile'),
@@ -204,6 +204,14 @@ export default {
           icon: 'star',
         },
       ];
+      if (config.enableTrackers) {
+        items.splice(3, 0, {
+          to: { name: 'trackers' },
+          text: this.$gettext('Activity trackers'),
+          icon: 'location-crosshairs',
+        });
+      }
+      return items;
     },
   },
 

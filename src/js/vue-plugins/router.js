@@ -27,6 +27,8 @@ import AccountView from '@/views/user/AccountView';
 import FollowingView from '@/views/user/FollowingView';
 import LoginView from '@/views/user/LoginView';
 import PreferencesView from '@/views/user/PreferencesView';
+import TrackersExchangeTokenView from '@/views/user/TrackersExchangeTokenView';
+import TrackersView from '@/views/user/TrackersView';
 
 // lazy-load components
 // actually, only diff is quite big, because of diff computation
@@ -62,6 +64,12 @@ const routes = [
   { path: '/account', name: 'account', component: AccountView },
   { path: '/following', name: 'following', component: FollowingView },
   { path: '/preferences', name: 'preferences', component: PreferencesView },
+  { path: '/trackers', name: 'trackers', component: TrackersView },
+  {
+    path: '/trackers/:vendor/exchange-token',
+    name: 'trackers-exchange-token',
+    component: TrackersExchangeTokenView,
+  },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },

@@ -1,9 +1,12 @@
 // This file exposes a simple function that upload a file to c2c image backend
-import { isValid, formatISO, parse, parseISO } from 'date-fns';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
+
+dayjs.extend(customParseFormat);
 
 // get all world extent. sometimes, geoloc in exif is outside this extent.
 const worldExtent = ol.proj.get('EPSG:4326').getExtent();
@@ -31,15 +34,15 @@ const parseDate = (exif, iptc) => {
 
   if (iptcDate) {
     if (iptc?.TimeCreated) {
-      date = parseISO(`${iptcDate}T${iptc.TimeCreated}`);
+      date = dayjs(`${iptcDate}T${iptc.TimeCreated}`);
     } else {
-      date = parse(iptcDate, 'yyyyMMdd', new Date());
+      date = dayjs(iptcDate, 'YYYYMMDD');
     }
   } else if (exifDate) {
-    date = parse(exifDate, 'yyyy:MM:dd HH:mm:ss', new Date());
+    date = dayjs(exifDate, 'YYYY:MM:DD HH:mm:ss');
   }
 
-  return date && isValid(date) ? formatISO(date) : null;
+  return date && date.isValid() ? date.format() : null;
 };
 
 const parseExifGeometry = (exif) => {

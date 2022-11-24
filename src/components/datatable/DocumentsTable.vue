@@ -412,7 +412,7 @@ export default {
     },
 
     formatOutingDate(document, field) {
-      return this.$dateUtils.toLocalizedString(document[field], 'PP');
+      return this.$dateUtils.toLocalizedString(document[field], 'll');
     },
 
     formatAreas(document) {

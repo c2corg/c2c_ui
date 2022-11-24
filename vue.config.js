@@ -90,12 +90,14 @@ const config = {
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
+  enableTrackers: true,
   urlsConfigurations: {
     demo: {
       name: 'demo',
       api: 'https://api.demov6.camptocamp.org',
       media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
+      tracking: 'https://tracking.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
     },
@@ -104,6 +106,7 @@ const config = {
       api: 'https://api.camptocamp.org',
       media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
+      tracking: 'https://tracking.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
     },

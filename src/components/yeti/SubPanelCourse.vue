@@ -122,8 +122,6 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
@@ -191,7 +189,7 @@ export default {
 
       reader.readAsText(event.target.files[0]);
 
-      // empty the input, because if user wan't to upload same trace
+      // empty the input, because if user wants to upload same trace
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
@@ -220,7 +218,7 @@ export default {
       utils.download(content, filename, mimetype + ';charset=utf-8');
     },
     setFilename(ext) {
-      return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
+      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
     },
   },
 };

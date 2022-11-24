@@ -1,6 +1,6 @@
 <template>
   <span>
-    {{ $dateUtils.toLocalizedString(params.data.date_end, 'PP') }}
+    {{ $dateUtils.toLocalizedString(params.data.date_end, 'll') }}
   </span>
 </template>
 

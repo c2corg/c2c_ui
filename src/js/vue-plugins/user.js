@@ -1,4 +1,5 @@
 import c2c from '@/js/apis/c2c';
+import trackingService from '@/js/apis/tracking-service';
 import config from '@/js/config';
 
 export default function install(Vue) {
@@ -98,6 +99,7 @@ export default function install(Vue) {
 
       updateToken() {
         c2c.setAuthorizationToken(this.token);
+        trackingService.setAuthorizationToken(this.token);
       },
 
       saveLangPreference(lang) {
