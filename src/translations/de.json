@@ -80,9 +80,11 @@
       "Sophie picture context": "Aktion - Publikumspreis"
     },
     "Activity feed": "Aktivitäts-Feed",
+    "Activity trackers": "Aktivitätentracker",
     "Add": "Hinzufügen",
     "Add here maps not automatically referenced": "Hier Karten hinzufügen, die nicht automatisch referenziert wurden.",
     "Add images": "Bilder hinzufügen",
+    "Add page break before each document": "Einen Seitenumbruch vor jedem Dokument einfügen",
     "Add the first outing": "Ersten Tourenbericht hinzufügen",
     "Add title…": "Titel hinzufügen ...",
     "Additional information": "Weitere Informationen",
@@ -90,6 +92,8 @@
     "Allow all": "Alles akzeptieren",
     "Altitude": "Höhe",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Die Höheneinstellung ist erforderlich, wenn die Gefahr hoch und niedrig unterschiedlich ist. Bitte stellen Sie die Höhe so ein, wie im Lawinenbulletin für das jeweilige Gebiet angegeben.",
+    "An error occurred, connection status could not be retrieved. Please refresh the page.": "Ein Fehler ist aufgetreten: der Verbindungsstatus konnte nicht geladen werden. Bitte die Seite aktualisieren.",
+    "An error occurred, could not retrieve activities": "Ein Fehler ist aufgetreten: die Aktivitäten konnten nicht geladen werden.",
     "An error occurred, couldn't (un)mark route as to do": "Es ist ein Fehler aufgetreten, die Route konnte nicht als zu tun (un)markiert werden.",
     "An error occurred, couldn't save images": "Bilder konnten nicht geladen werden",
     "Anonymity and confidentiality": "Anonymität und Vertraulichkeit",
@@ -116,6 +120,7 @@
     "Average slope in degree": "durchschnittliche Steigung in grad.",
     "Back to code": "Zurück zur Code",
     "Back to edit mode": "Zurück zur Bearbeitung",
+    "Back to the top": "zum Seitenanfang",
     "Base layer": "Kartenhintergrund",
     "Basemap (at)": {
       "Map layer": "Österreich"
@@ -144,6 +149,7 @@
     "Change password": "Passwort ändern",
     "Checking...": "Überprüfen ...",
     "Child": "Kind",
+    "Choose file": "Datei auswählen",
     "Clear": "Löschen",
     "Close": "Schließen",
     "Collapse": "Zusammenbrechen",
@@ -155,7 +161,10 @@
     "Compute risk": "Risiko berechnen",
     "Conditions": "Voraussetzungen",
     "Conditions, summits, routes": "Verhältnisse, Gipfel, Routen",
+    "Configure activity trackers": "Aktivitätentracker konfigurieren",
     "Configure cookies": "Cookies einstellen",
+    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Hier können Sie Ihre Verbindung mit externen Diensten wie Strava oder der Anwendung Ihres GPS-Geräts, um GPX-Tracks Ihrer Aktivitäten einfach abzurufen.",
+    "Configured": "Konfiguriert",
     "Confirm": "Bestätigen",
     "Confirm delete": "Löschung bestätigen",
     "Conflict: version of document has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
@@ -168,6 +177,7 @@
     "Conflict: version of locale 'it' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
     "Conflict: version of locale 'zh_CN' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version .",
     "Conflicting method and danger": "Widersprüchliche Methode und Gefahr",
+    "Connect": "Verbinden",
     "Contain invalid character(s)": {
       "API message": "enthält ein oder mehrere ungültige Zeichen"
     },
@@ -283,6 +293,7 @@
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
     "Feel free to edit it.": "Bitte bearbeiten.",
+    "Fetch geographic data": "Daten dieser Aktivität nutzen",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
     "FlowCapt sensor": "FlowCapt-Sensor ",
@@ -298,8 +309,10 @@
     "GPX file": "GPX-Datei",
     "General": "Allgemein",
     "General information": "Allgemeine Information",
+    "Geographical data could not be retrieved": "den GPS Track konnte nicht abgeruft werden",
     "Go back to YETI": "Zurück zu YETI",
     "Go to the previous page": "Zur vorherigen Seite gehen",
+    "Go to website": "zur Website gehen",
     "Group": "Gruppe",
     "Group size": "Gruppengröße",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "War ein Zeitplan vorhanden ? Wurde er eingehalten ? Hatte das Zeitmanagement einen Einfluss auf die Auslösung des Ereignisses ?",
@@ -349,6 +362,8 @@
     "Image count": "Bildanzahl",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "Incidents and accidents": "Unfallberichte",
+    "Include image section": "Zugehörige Bilder einschließen",
+    "Include summary": "Zusammenfassung einschließen",
     "Information about the terrain, like elevations, lengths...": "Informationen über das Gelände, wie Höhen, Längen ...",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informationen zum Ort des Vorfalls. Markieren Sie den Ort auf der Karte oben, auch wenn Sie dies nicht sehr genau können. In diesem Fall geben Sie hier weitere Details an. Nachdem Sie den Bericht ausgefüllt haben, können Sie ihn einer Route, einem Klettergebiet oder einem Tourenbericht zuordnen.",
     "Informations about the access": "Informationen über Strassenzugang und Öffis",
@@ -382,6 +397,7 @@
     "Load my preferences": "Meine Einstellungen aktivieren",
     "Load shedding distance": "Lastabwurfweite",
     "Loading...": "Laden... ",
+    "Local file": "Lokale Datei",
     "Location / elevation / orientation": "Standort / Höhe / Ausrichtung",
     "Log in to post a comment": "Einloggen, um Kommentar zu hinzufügen",
     "Login": "Einloggen",
@@ -440,6 +456,8 @@
     "Nivose beacons": "Nivose-Beacons",
     "No": "Nein",
     "No account yet?": "Noch kein Konto?",
+    "No activity found": "Keine Aktivität gefunden",
+    "No activity retrieved yet. Have you connected your trackers?": "noch keine Aktivitäten abgeruft. Haben Sie Ihre Tracker verbunden ?",
     "No avalanche bulletin right now": "Zurzeit kein Lawinenlagebericht",
     "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden.",
     "No match?": "Keine Ergebnisse?",
@@ -448,6 +466,7 @@
     "No result found": "Keine Ergebnisse",
     "No route right now": "Momentan keine Route",
     "No selected hazard potential. Set danger level first.": "Kein ausgewähltes Gefahrenpotenzial. Stellen Sie zuerst die Gefahrenstufe ein.",
+    "No title": "Ohne Titel",
     "No user with this email": {
       "API message": "kein Konto mit diesem email"
     },
@@ -455,6 +474,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
+    "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
     "Ok": "OK",
     "On a drawn line": "An einer gezeichneten Linie",
@@ -468,6 +488,7 @@
     "Ordered list": "geordnete Liste",
     "Orientations": "Ausrichtungen",
     "Orientations:": "Ausrichtungen :",
+    "Other options": "Andere Optionen",
     "Oups! Something went wrong with forum. Here is the message :": "Upsi ! Etwas is mit den Forum schief gegangen. Hier ist die Nachricht :",
     "Oups! something went wrong...": "Upsi ! Etwas ist schief gegangen ...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Unsere Website verwendet Cookies, die von uns und von Drittparteien bereitgestellt werden. Einige Cookies sind für den Betrieb der Website erforderlich, während andere von Ihnen zu jeder Zeit eingestellt werden können, insbesondere solche, die es uns ermöglichen, die Leistung unserer Website zu verstehen und Ihnen Social-Media-Funktionen zur Verfügung zu stellen. Sie können alle annehmen oder ablehnen oder",
@@ -502,11 +523,16 @@
     "Please select a waypoint type to enable sort feature": "Bitte wählen Sie einen Wegpunkttyp aus, um die Sortierfunktion zu aktivieren",
     "Please select an activity to enable sort feature": "Bitte wählen Sie eine Aktivität aus, um die Sortierfunktion zu aktivieren.",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Stellen Sie die Gefahrenstufe ein, wie sie im Lawinenbulletin für das jeweilige Gebiet angegeben ist.",
+    "Please wait. Requesting authorization...": "Bitte warten, Berechtigung wird angefordert ...",
     "Post the first comment": "Ersten Kommentar schreiben",
     "Precise localisation of the shooting": "Geolocation des Schießens",
     "Precise location of the event.": "Genaues Ort des Ereignis",
     "Press enter to select": "Drücken Sie die Eingabetaste, um auszuwählen",
     "Preview": "Vorschau",
+    "Print": "Ausdrucken",
+    "Print a selection of documents": "Auswahl von Dokumenten ausdrucken",
+    "Print search results": "Ausdrucken",
+    "Printing": "Ausdruck",
     "Professional Reduction Method": "Profi-Reduktionsmethode",
     "Protect document": "Dokument schützen",
     "Protection area:": "Schutzgebiet:",
@@ -520,6 +546,7 @@
     "Recent changes": "Letzte Veränderungen",
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
+    "Refresh": "Aktualisieren",
     "Register": "Anmelden",
     "Remove": "Entfernen",
     "Report an issue": "Problem melden",
@@ -536,6 +563,7 @@
     "Restore this version": "Diese Version wiederherstellen",
     "Results only": "Nur Ergebnisse",
     "Retry": "Nochmal versuchen",
+    "Revoke": "Widerrufen",
     "Risky slopes": "Gefährliche Hängen",
     "Risky slopes, increased risk due to orientation": "Gefährliche Hänge, kritische Ausrichtungen",
     "Rotate image left": "Nach links drehen",
@@ -552,6 +580,7 @@
     "See the analysis of the submitted stories": "Lesen Sie die Analyse der eingereichten Geschichten",
     "See the latest version": "Letzte Version anschauen",
     "Seems fine! :)": "Rechnung möglich ! :)",
+    "Select an activity to load geographical data into document.": "Eine Aktivität auswählen, um den GPS Track wiederherszustellen und ins Dokument zu laden.",
     "Select option": "Optionen wählen",
     "Select tolerance (preview result on map)": "Toleranz wählen (Vorschau auf der Karte)",
     "Send reset email": "Reset-Email senden",
@@ -586,8 +615,11 @@
     "Statistics": "Statistiken",
     "Stay careful while skiing": "Bleiben Sie beim Skifahren vorsichtig",
     "Stop following this contributor": "Diesem Benutzer nicht mehr folgen",
+    "Subcription revokal failed": "Abo-Widerruf fehlgeschlagen.",
+    "Subcription revoked": "Abo widerrufen",
     "Submit": "Aufnehmen und fortsetzen",
     "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
+    "Summary": "Zusammenfassung",
     "SwissTopo": {
       "Map layer": "Schweiz"
     },
@@ -646,6 +678,7 @@
       "Sophie picture context": "Topoführer - Publikumspreis"
     },
     "Trace": "GPS-Track",
+    "Tracking devices": "GPS Geräte",
     "Translate into an other lang": "In eine andere Sprache übersetzen",
     "Transport & road or PT access": "Strassenzugang/Öffis",
     "Types and styles": "Art & Stile",
@@ -778,6 +811,9 @@
     },
     "at least one user required": {
       "API message": "wenigstens ein Benutzerkonto nötig"
+    },
+    "auth-denied": {
+      "tracking": "Die Verbindungsberechtigung zum Dienst wurde durch den Benutzer abgelehnt"
     },
     "author": "Autor",
     "author_status": "Status des Autors ",
@@ -1650,6 +1686,9 @@
     "service_on_demand": {
       "public_transportation_types": "On-Demand Dienste"
     },
+    "setup-failed": {
+      "tracking": "Die Verbindung ist gescheitert"
+    },
     "severity": "Schweregrad",
     "severity_no": {
       "severities": "harmlos"
@@ -1812,6 +1851,12 @@
     "training": "Training",
     "traverse": {
       "route_types": "Überquerung"
+    },
+    "unknown": {
+      "tracking": "Unbekannt"
+    },
+    "unsufficient-scopes": {
+      "tracking": "Unzureichende Berechtigungen"
     },
     "url": "URL",
     "users": "Benutzer",
