@@ -58,7 +58,7 @@ export default {
         const length = (this.activity.length / 1000.0).toFixed(1);
         return `${length}&nbsp;${this.$gettext('kilometers')}`;
       }
-      return `${this.activity.lengh}&nbsp;${this.$gettext('meters')}`;
+      return `${this.activity.length}&nbsp;${this.$gettext('meters')}`;
     },
   },
 };
