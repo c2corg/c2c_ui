@@ -1,5 +1,5 @@
 <template>
-  <router-link target="_blank" :to="path">
+  <router-link target="_blank" :to="path" rel="nofollow">
     <button class="button is-primary is-size-7-mobile">
       <fa-icon icon="print"></fa-icon>
       <span class="is-hidden-touch">&nbsp;</span>
