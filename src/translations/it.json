@@ -26,8 +26,11 @@
     "4d_to_1m": {
       "severities": "Meno di un mese"
     },
+    "5 months": "5 mesi",
     "50 meters while descending": "50 metri in discesa",
+    "8 days": "8 giorni",
     "Accident database": "Database degli incidenti",
+    "Account": "Profilo",
     "Action": {
       "Sophie picture context": "Azion"
     },
@@ -41,6 +44,7 @@
     "Add": "Aggiugere",
     "Add here maps not automatically referenced": "Aggiungi una carta",
     "Add images": "Aggiungi delle immagini",
+    "Add page break before each document": "Inserire una pagina di interruzione prima di ogni documento",
     "Add the first outing": "Aggiungere la prima gita ",
     "Add title…": "Aggiungi un titolo...",
     "Additional information": "Informazioni supplementari ",
@@ -48,6 +52,8 @@
     "Allow all": "Accetto tutto",
     "Altitude": "Altitudine",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La quota è obbligatoria quando il grado di pericolo in alto e in basso è differente. Per favore impostare una quota come specificato nel bollettino valanghe per l'area specifica.",
+    "An error occurred, connection status could not be retrieved. Please refresh the page.": "Si è verificato un errore, non è stato possibile recuperare lo stato della connessione.\nRicaricare la pagina per favore.",
+    "An error occurred, could not retrieve activities": "Si è verificato un errore, non è stato possibile recuperare le attività",
     "An error occurred, couldn't (un)mark route as to do": "È impossibile di aggiungere o rimuovere un itinerario dai preferiti",
     "An error occurred, couldn't save images": "È impossibile salvare gli immagini ",
     "Anonymity and confidentiality": "Anonima e confidenzialità",
@@ -96,6 +102,7 @@
     "Change password": "Cambiare la password",
     "Checking...": "Validazione in corso...",
     "Child": "Bambino",
+    "Choose file": "Scegliere il file",
     "Clear": "Cancellare",
     "Close": "Chiudere",
     "Collapse": "Chiudere",
@@ -247,6 +254,7 @@
     "GPX file": "File GPX",
     "General": "Generale",
     "General information": "Informazioni generali ",
+    "Geographical data could not be retrieved": "Non è stato possibile recuperare i dati geografici",
     "Geolocation": "Geolocalizzazione  ",
     "Go back to YETI": "Tornare a YETI",
     "Go to the previous page": "Tornare alla pagina precedente",
@@ -287,10 +295,12 @@
     "Ice and dry climbing gear": "Cascata di ghiaccio e dry-tooling",
     "If the route does not exists in our base, you can create it.": "Se l'itinerario non esiste, puoi crearlo.",
     "If you can't see this email, please check your spam folder.": "Se non ricevi la mail, verifichi che non si trova nel spam.",
+    "Ignore year": "Ignorare l'anno",
     "Image could not be processed": "L'imagine non può essere elaborata",
     "Image count": "Numero d'immagini",
     "Improve our understanding of risks": "Aiutaci a migliorare la comprensione del rischio",
     "Incidents and accidents": "accidenti",
+    "Include summary": "Includere il riassunto",
     "Information about the terrain, like elevations, lengths...": "Dati relativi al terreno (altitudine, lunghezza...)  ",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informazioni sul luogo dell'incidente. Segna il luogo sulla mappa qui sopra, anche se non puoi farlo con molta precisione, (in tal caso dai più dettagli qui). Dopo aver completato il rapporto, puoi associarlo a una via, un sito di arrampicata o una gita.",
     "Informations about the access": "Informazioni sul accesso stradale o i mezzi pubblici ",
@@ -389,6 +399,7 @@
     "No result found": "Nessun risultato trovato",
     "No route right now": "Nessun itnerario al momento",
     "No selected hazard potential. Set danger level first.": "Nessun pericolo potenziale selezionato. Impostare prima il livello di pericolo.",
+    "No title": "Nessun titolo",
     "No user with this email": {
       "API message": "Non esiste un utente con questa email"
     },
@@ -396,6 +407,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Non commerciale — Non puoi utilizzare il materiale per scopi commerciali.",
     "Not simplified yet": "Non ancora semplificato",
     "Note that comments have to be transferred manually in Discourse before merging.": "I commenti devono essere trasferiti manualmente con Discourse prima di unire i documenti. ",
+    "Number of documents": "Numero di documenti",
     "Numbers": "Dati",
     "On a drawn line": "Su una linea tracciata",
     "Only document less than 24h old can be deleted": {
@@ -409,6 +421,7 @@
     "Ordered list": "Lista ordinata",
     "Orientations": "Orientazioni",
     "Orientations:": "Orientazioni:",
+    "Other options": "Altre opzioni",
     "Oups! Something went wrong with forum. Here is the message :": "Oops! C'è un errore sul forum: ",
     "Oups! something went wrong...": "Oops! c'è un errore: ",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Il nostro sito web utilizza cookie forniti da noi stessi e da terzi. Alcuni cookie sono necessari per il sito web, altri possono essere regolati in qualsiasi momento, in particolare quelli che ci permettono di capire il rendimento del nostro sito web e di offrirvi le funzionalità dei social media. È possibile accettare o rifiutare tutti, o",
@@ -442,11 +455,16 @@
     "Please select a waypoint type to enable sort feature": "Selezionare un tipo di waypoint per abilitare la funzione di ordinamento",
     "Please select an activity to enable sort feature": "Selezionare un'attività per abilitare la funzione di ordinamento",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Si prega di impostare il livello di pericolo come specificato nel bollettino valanghe per la zona specifica.",
+    "Please wait. Requesting authorization...": "Attendere per favore. Richiesta di autorizzazione in corso...",
     "Post the first comment": "Pubblicare il primo commento",
     "Precise localisation of the shooting": "Localizzazione del punto dello scatto",
     "Precise location of the event.": "Localizzazione precisa dell'evento",
     "Press enter to select": "Premere \"Enter\" per selezionare ",
     "Preview": "Anteprima",
+    "Print": "Stampare",
+    "Print a selection of documents": "Stampare una gamma di documenti",
+    "Print search results": "Stampare i risultati della ricerca",
+    "Printing": "Stampa in corso",
     "Professional Reduction Method": "Metodo di riduzione professionale",
     "Protect document": "Proteggere il documento",
     "Protection area:": "Zona di protezione:",
@@ -455,9 +473,12 @@
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Fornire informazioni e migliorarne la qualità, seguendo le regole di contribuzione e rispettando il copyright.",
     "Put it back": "Riassociare ",
     "Quote": "Citazione ",
+    "ROMMA station": "Stazione ROMMA",
+    "ROMMA stations": "Stazioni ROMMA",
     "Recent changes": "Cambiamenti recenti",
     "Recenter on your current position": "Centrare sulla tua posizione",
     "Recenter on...": "Centrare su...",
+    "Refresh": "Ricaricare",
     "Register": "Registrarti ",
     "Remove": "Togliere",
     "Report an issue": "Segnalare un errore",
@@ -490,6 +511,7 @@
     "See the analysis of the submitted stories": "Vedere l'analisi delle storie presentate",
     "See the latest version": "Vedere l'ultima versione",
     "Seems fine! :)": "Il calcolo è possibile ! :)",
+    "Select an activity to load geographical data into document.": "Selezionare un'attività per caricare i dati geografici nel documento.",
     "Select option": "Scegli un opzione ",
     "Select tolerance (preview result on map)": "Scegliere la tolleranza (previsualizzazione sulla mappa)",
     "Send reset email": "Inviare l'email di reimpostazione",
@@ -524,8 +546,10 @@
     "Statistics": "Statistiche",
     "Stay careful while skiing": "Sciare con prudenza",
     "Stop following this contributor": "Non seguire più questo utente",
+    "Subcription revoked": "Abbonamento revocato",
     "Submit": "Salva e prosegui",
     "Suggested rating": "Grado proposto",
+    "Summary": "Riassunto",
     "SwissTopo Slopes": {
       "Map slopes layer": "Pendenze SwissTopo"
     },
@@ -711,6 +735,9 @@
     },
     "at least one user required": {
       "API message": "Selezionare al meno un itinerario"
+    },
+    "auth-denied": {
+      "tracking": "autorizzazione negata"
     },
     "author": "autore",
     "author_status": "Autore",
@@ -1702,6 +1729,9 @@
     "training": "allenamento ",
     "traverse": {
       "route_types": "traversata"
+    },
+    "unknown": {
+      "tracking": "sconosciuto"
     },
     "url": "URL",
     "users": "utenti",
