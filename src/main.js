@@ -5,6 +5,7 @@ import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
+import christmas from '@/js/vue-plugins/christmas';
 import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
@@ -29,6 +30,7 @@ Vue.config.silent = false;
 Vue.use(localStorage); // First, vm.$localStorage property
 
 Vue.use(gdpr);
+Vue.use(christmas);
 Vue.use(VueAnalytics, {
   id: config.googleAnalyticsKey,
   disabled: true,

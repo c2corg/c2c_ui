@@ -1,7 +1,8 @@
 <template>
   <aside>
-    <router-link :to="{ name: 'home' }" class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
+    <router-link :to="{ name: 'home' }" class="menu-brand has-text-centered" :class="{ christmas: christmas }">
+      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/hat.png" class="christmas-hat" v-if="christmas" />
     </router-link>
 
     <router-link :to="{ name: 'topoguide' }">
@@ -113,6 +114,12 @@ export default {
     return {
       isTall: false,
     };
+  },
+
+  computed: {
+    christmas() {
+      return this.$christmas.isChristmasTime();
+    },
   },
 
   created() {
@@ -235,6 +242,25 @@ aside {
 @media screen and (max-height: 680px) {
   .menu-socials {
     display: none !important;
+  }
+}
+
+.christmas {
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  height: 80px;
+
+  img {
+    position: absolute;
+    left: 30px;
+  }
+
+  .christmas-hat {
+    width: 45px;
+    height: auto;
+    left: 120px;
+    top: 0;
   }
 }
 </style>
