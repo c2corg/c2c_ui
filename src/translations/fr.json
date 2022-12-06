@@ -186,6 +186,7 @@
     "Describe road access": "Décrire l'accès routier et les commodités (logement, restauration, etc.)",
     "Describe the conditions you encountered during your outing": "Décrivez les conditions que vous avez rencontrées lors de votre sortie",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Décrivez les informations récoltées avant la sortie et le suivi de leur évolution sur le terrain. Cela concerne les prévisions météo, les bulletins d'évaluation du risque d'avalanche, la qualité du regel, la qualité de la neige/glace/rocher, les compte rendu des jours précédents, etc.",
+    "Describe the route following the structure below": "Merci de bien vouloir respecter la structure suivante :\n## Approche # durée en h\nDescription de l'approche\n\n## Voie # durée en h\nL# | cotation | longueur | description (accessible en cliquant sur le bouton # ci dessus)\n\n## Descente # durée en h\nDescription de la descente",
     "Detailed figures, like ratings, height differences, frequentation...": "Données détaillées (cotations, dénivelés, fréquentation…)",
     "Detailed information": "Informations détaillées",
     "Details": "Détails",

@@ -109,6 +109,7 @@
     "Describe pt access": "Describe access to the waypoint",
     "Describe road access": "Describe road access and facilities (accommodation, restaurant, etc.)",
     "Describe the conditions you encountered during your outing": "Describe the conditions encountered during your outing",
+    "Describe the route following the structure below": "Describe the route following the structure below:\n## Approach # duration in h\nApproach description\n\n## Ascent # duration in h\nL# | rating | length | description (use # button above)\n\n## Descent # duration in h\nDescent description",
     "Detailed figures, like ratings, height differences, frequentation...": "Detailed fiures (ratings, height differences, attendance...)",
     "Donate": "Donate to Camptocamp association",
     "ESRI World Imagery": {
