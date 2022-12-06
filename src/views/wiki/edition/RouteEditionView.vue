@@ -145,7 +145,12 @@
           :field="fields.route_history"
           :placeholder="$gettext('Describe historical information about the route (date, names..) here')"
         />
-        <form-field class="is-12" :document="document" :field="fields.description" />
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.description"
+          :placeholder="descriptionPlaceholder"
+        />
         <form-field class="is-12" :document="document" :field="fields.slackline_anchor1" />
         <form-field class="is-12" :document="document" :field="fields.slackline_anchor2" />
         <form-field class="is-12" :document="document" :field="fields.remarks" />
@@ -174,6 +179,17 @@ import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
   mixins: [documentEditionViewMixin],
+
+  computed: {
+    descriptionPlaceholder() {
+      if (
+        ['mountain_climbing', 'rock_climbing', 'ice_climbing'].find((act) => this.document.activities.includes(act))
+      ) {
+        return this.$gettext('Describe the route following the structure below');
+      }
+      return undefined;
+    },
+  },
 
   watch: {
     'document.associations.waypoints': 'onWaypointsAssociation',
