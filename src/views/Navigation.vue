@@ -13,9 +13,10 @@
     <router-link
       :to="{ name: 'home' }"
       class="navigation-item navigation-brand has-text-centered"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      :class="{ 'is-hidden-mobile': !hideSearchInput, christmas }"
     >
-      <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/hat.png" class="christmas-hat" v-if="christmas" />
     </router-link>
 
     <div class="navigation-end">
@@ -213,6 +214,9 @@ export default {
       }
       return items;
     },
+    christmas() {
+      return this.$christmas.isChristmasTime();
+    },
   },
 
   forumUrl: config.urls.forum,
@@ -387,6 +391,25 @@ nav {
   .search-input:hover {
     width: 300px;
     margin-right: 0;
+  }
+}
+
+.christmas {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 45px;
+
+  img {
+    position: absolute;
+    left: 5px;
+  }
+
+  .christmas-hat {
+    width: 25px;
+    height: auto;
+    left: 52px;
+    top: 3px;
   }
 }
 </style>
