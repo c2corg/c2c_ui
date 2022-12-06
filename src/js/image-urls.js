@@ -32,7 +32,7 @@ export const getImageUrl = function (image, size, format) {
       if (!config.urls.modernThumbnailsTimestamp || timestamp < config.urls.modernThumbnailsTimestamp) {
         return;
       }
-      return backendFilename.substring(0, backendFilename.length - 3) + format;
+      return `${config.urls.media}/${backendFilename.substring(0, backendFilename.length - 3) + format}`;
     }
   } else {
     backendFilename = image.filename;
