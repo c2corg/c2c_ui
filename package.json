@@ -15,7 +15,8 @@
     "messages:extract": "node tools/extract-messages.js",
     "prepare": "husky install && npm run snyk-protect",
     "snyk-protect": "snyk-protect",
-    "update-c2c-common": "python3 tools/update-c2c-common.py"
+    "update-c2c-common": "python3 tools/update-c2c-common.py",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@brunobesson/vue-awesome-swiper": "4.1.4",
@@ -72,6 +73,7 @@
     "eslint-plugin-promise": "5.2.0",
     "eslint-plugin-vue": "7.20.0",
     "husky": "8.0.3",
+    "patch-package": "6.5.0",
     "postcss-html": "1.5.0",
     "prettier": "2.8.2",
     "pretty-quick": "3.1.3",
