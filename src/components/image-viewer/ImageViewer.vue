@@ -152,7 +152,7 @@ export default {
                   <div class="swiper-zoom-container">
                   <picture>
                     ${avifSrc ? `<source type="image/avif" data-srcset="${avifSrc}">` : ''}
-                    ${webpSrc ? `<source type="image/avif" data-srcset="${webpSrc}">` : ''}
+                    ${webpSrc ? `<source type="image/webp" data-srcset="${webpSrc}">` : ''}
                     <img
                       data-src="${imgSrc}"
                       class="swiper-lazy"
