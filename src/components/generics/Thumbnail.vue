@@ -2,7 +2,7 @@
   <picture>
     <source v-if="avif" type="image/avif" :srcset="avif" />
     <source v-if="webp" type="image/webp" :srcset="webp" />
-    <img v-bind="$attrs" v-on="$listeners" :src="standard" />
+    <img ref="img" v-bind="$attrs" v-on="$listeners" :src="standard" @error.once="onError" />
   </picture>
 </template>
 
@@ -30,6 +30,14 @@ export default {
     },
     standard() {
       return getImageUrl(this.img, this.size);
+    },
+  },
+  methods: {
+    onError(event) {
+      if (this.avif) {
+        const img = event.target;
+        img.parentNode.children[0].srcset = img.parentNode.children[1].srcset = img.src;
+      }
     },
   },
 };
