@@ -308,7 +308,8 @@ export default {
       let mountainsFeatures = this.getFeaturesFromData(data);
       // TMP: filter only France for now
       mountainsFeatures = mountainsFeatures.filter((feature) => {
-        return feature.get('country') === 'France';
+        let country = feature.get('country');
+        return country === 'France' || country === 'Switzerland';
       });
 
       // add to mountains layer
