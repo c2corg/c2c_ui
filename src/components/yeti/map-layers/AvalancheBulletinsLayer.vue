@@ -293,7 +293,7 @@ export default {
 
     this.map.addLayer(mountainsLayerGroup);
     // layers are not visible on load
-    mountainsLayerGroup.setVisible(false);
+    mountainsLayerGroup.setVisible(this.showAvalancheBulletins);
 
     // only on first mount, if mountains already loaded
     if (Yetix.mountains.all.length === 0) {
@@ -321,6 +321,10 @@ export default {
       Yetix.setAllMountains(mountains);
 
       this.setVisibleMountains();
+
+      if (this.showAvalancheBulletins) {
+        this.onShowAvalancheBulletins();
+      }
     },
     sortMountainsByMassif(mountains) {
       // first, order mountains by massifs
