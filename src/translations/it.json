@@ -244,6 +244,8 @@
     "Feel free to edit it.": "Edizione libera",
     "Filter on map extent": "Limitare la ricerca alla zona visibile sulla carta",
     "Filter results": "Filtrare i risultati",
+    "FlowCapt sensor": "Sensore FlowCapt",
+    "FlowCapt sensors": "Sensori FlowCapt",
     "Followed users": "Utenti seguiti",
     "Forgot password?": "Password dimenticata?",
     "Forum username": "Nickname",
@@ -433,7 +435,7 @@
     "Page not found": "Pagina non trovata",
     "Paragliding outings": "Gita in parapendio",
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica ",
-    "Parent": "Padre",
+    "Parent": "Genitore",
     "Participants and context": "Partecipanti e contesto",
     "Password too short": {
       "API message": "La password è troppo corta "
