@@ -293,7 +293,7 @@ export default {
 
     this.map.addLayer(mountainsLayerGroup);
     // layers are not visible on load
-    mountainsLayerGroup.setVisible(false);
+    mountainsLayerGroup.setVisible(this.showAvalancheBulletins);
 
     // only on first mount, if mountains already loaded
     if (Yetix.mountains.all.length === 0) {
@@ -306,9 +306,10 @@ export default {
   methods: {
     onMountainsResult(data) {
       let mountainsFeatures = this.getFeaturesFromData(data);
-      // TMP: filter only France for now
+      // filter only data for France and Switzerland
       mountainsFeatures = mountainsFeatures.filter((feature) => {
-        return feature.get('country') === 'France';
+        let country = feature.get('country');
+        return country === 'France' || country === 'Switzerland';
       });
 
       // add to mountains layer
@@ -320,6 +321,10 @@ export default {
       Yetix.setAllMountains(mountains);
 
       this.setVisibleMountains();
+
+      if (this.showAvalancheBulletins) {
+        this.onShowAvalancheBulletins();
+      }
     },
     sortMountainsByMassif(mountains) {
       // first, order mountains by massifs

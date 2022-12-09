@@ -46,7 +46,7 @@ let defaultState = {
     visible: [],
   },
   bulletinsLoaded: false,
-  showAvalancheBulletins: false,
+  showAvalancheBulletins: true,
 
   nivoses: [],
   showNivoses: false,

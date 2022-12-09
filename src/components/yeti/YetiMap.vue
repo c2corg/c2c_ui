@@ -96,8 +96,8 @@
 
 <script>
 import { cartoLayers, dataLayers } from '../map/map-layers';
-let c2c_cartoLayers = cartoLayers();
-let c2c_dataLayers = dataLayers();
+let c2c_cartoLayers;
+let c2c_dataLayers;
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
@@ -218,6 +218,9 @@ export default {
     },
   },
   created() {
+    // build c2c layers
+    c2c_cartoLayers = cartoLayers();
+    c2c_dataLayers = dataLayers();
     // build map
     this.map = new ol.Map({
       controls: [
