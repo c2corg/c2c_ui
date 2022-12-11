@@ -404,6 +404,7 @@
     "New waypoint": "Nuovo punto di passaggio",
     "No account yet?": "Non hai ancora un account?",
     "No activity found": "Nessuna attività trovata",
+    "No activity retrieved yet. Have you connected your trackers?": "Non è stato possibile recuperare alcuna attività. Hai connesso i tuoi tracciatori?",
     "No avalanche bulletin right now": "Nessun bollettino valanghe al momento",
     "No data could be extracted from GPS file": "Nessun dato può essere estratto dal file GPX",
     "No match?": "Nessuna corrispondenza?",
