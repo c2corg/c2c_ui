@@ -311,6 +311,7 @@
     "Image count": "Numero d'immagini",
     "Improve our understanding of risks": "Aiutaci a migliorare la comprensione del rischio",
     "Incidents and accidents": "accidenti",
+    "Include image section": "Includere la sezione d'immagine",
     "Include summary": "Includere il riassunto",
     "Information about the terrain, like elevations, lengths...": "Dati relativi al terreno (altitudine, lunghezza...)  ",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informazioni sul luogo dell'incidente. Segna il luogo sulla mappa qui sopra, anche se non puoi farlo con molta precisione, (in tal caso dai più dettagli qui). Dopo aver completato il rapporto, puoi associarlo a una via, un sito di arrampicata o una gita.",
@@ -402,6 +403,8 @@
     "New password": "Nuova password",
     "New route": "Nuovo itinerario",
     "New waypoint": "Nuovo punto di passaggio",
+    "Nivose beacon": "Sonda Nivôse",
+    "Nivose beacons": "Sonde Nivôse",
     "No account yet?": "Non hai ancora un account?",
     "No activity found": "Nessuna attività trovata",
     "No activity retrieved yet. Have you connected your trackers?": "Non è stato possibile recuperare alcuna attività. Hai connesso i tuoi tracciatori?",
@@ -508,6 +511,7 @@
     "Restore this version": "Ripristinare questa versione",
     "Results only": "Solo i risultati",
     "Retry": "Riprovare",
+    "Revoke": "Cancellare",
     "Risky slopes": "Pendii a rischio",
     "Risky slopes, increased risk due to orientation": "Pendii a rischio, orientazioni pericolose",
     "Rotate image left": "Girare a sinistra",
@@ -560,6 +564,7 @@
     "Statistics": "Statistiche",
     "Stay careful while skiing": "Sciare con prudenza",
     "Stop following this contributor": "Non seguire più questo utente",
+    "Subcription revokal failed": "Cancellazione dell'abbonamento fallita",
     "Subcription revoked": "Abbonamento revocato",
     "Submit": "Salva e prosegui",
     "Suggested rating": "Grado proposto",
@@ -1583,6 +1588,9 @@
     "service_on_demand": {
       "public_transportation_types": "servizio a richiesta"
     },
+    "setup-failed": {
+      "tracking": "Configurazione fallita"
+    },
     "severity": "gravità ",
     "severity_no": {
       "severities": "nessuna ferita "
@@ -1748,6 +1756,9 @@
     },
     "unknown": {
       "tracking": "sconosciuto"
+    },
+    "unsufficient-scopes": {
+      "tracking": "Variabili insufficienti"
     },
     "url": "URL",
     "users": "utenti",
