@@ -140,13 +140,21 @@
     "Change password": "Изменить пароль",
     "Checking...": "проверка...",
     "Child": "ребенок",
+    "Choose file": "Выберите файл",
     "Clear": "стереть",
     "Close": "закрыть",
+    "Collapse": "Свернуть",
     "Comments": "комментарии",
     "Comments are disabled.": "комментарии отключены",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Обмен целями , ожиданиями, наблюдениями, соображениями членов группы во время мероприятия. Обсуждение новых стратегий, разделение ответственностей, слаженно ли группа функционирует итп.",
+    "Compare selected versions": "Сравнить с выбранной версией",
     "Compute": "Подсчет",
+    "Compute risk": "Вычислить уровень риска",
+    "Conditions": "Состояние",
     "Conditions, summits, routes": "Условия, вершины, маршруты",
+    "Configure activity trackers": "Настроить трекер активности",
+    "Configure cookies": "Настроить cookies",
+    "Configured": "Настроено",
     "Confirm": "подтвердить",
     "Confirm delete": "Подтвердить удаление",
     "Conflicting method and danger": "Метод оценки и уровень опасности несовместимы",
@@ -614,9 +622,19 @@
     "climbing_indoor": {
       "waypoint_types": "Скалодром"
     },
+    "climbing_indoor_types": "Тип скального зала",
     "climbing_instructor": {
       "user_categories": "инструктор по лазанию"
     },
+    "climbing_outdoor": {
+      "waypoint_types": "скальный массив"
+    },
+    "climbing_outdoor_type": "Тип маршрута",
+    "climbing_outdoor_types": "Тип скального массива",
+    "climbing_rating_max": "Максимальный уровень сложности",
+    "climbing_rating_median": "Средний уровень сложности",
+    "climbing_rating_min": "Минимальный уровень сложности",
+    "climbing_styles": "Стиль лазанья",
     "closed": {
       "lift_status": "закрыто"
     },
@@ -635,9 +653,13 @@
     "club": {
       "user_categories": "клуб"
     },
+    "code": "код",
     "comment": "комментарий",
+    "condition_rating": "Оценка состояния",
     "conditions": "Условия",
     "conditions_levels": "Состояние снега по зонам",
+    "configuration": "Конфигурация",
+    "configure your choices": "Параметры выбора",
     "contact": "контакт",
     "copyright": {
       "$$noContext": "Авторское право",

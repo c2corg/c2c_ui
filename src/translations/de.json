@@ -240,6 +240,7 @@
     "Describe road access": "Strassenzugang  und Komfort (Herberge, Restaurant,usw.) beschreiben.",
     "Describe the conditions you encountered during your outing": "Beschreiben Sie die Verhältnisse",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Beschreiben Sie hier die vor der Tour gesammelten Informationen und deren Nachprüfung im Gelände. Hier sind gemeint : Wetterprognose, Lawinenbulletin, Gefrieren der Schneedecke, Schnee-/Eis-/Felsbeschaffenheit, Tourenberichte der vorangegangenen Tage, usw...",
+    "Describe the route following the structure below": "Bitte halten Sie sich an die folgende Struktur:\n## Zugang # Dauer in Stunden\nBeschreibung des Zugangs\n\n## Route/Aufstieg # Dauer in Stunden\nL# | Bewertung | Länge | Beschreibung (erreichbar über den Button # oben)\n\n## Abstieg/Abfahrt # Dauer in Stunden\nBeschreibung des Abstiegs/Abfahrts",
     "Description": "Beschreibung",
     "Detailed figures, like ratings, height differences, frequentation...": "Genaue Daten (Schwierigkeitsgrat, Steigerung, Begehungsfrequenz ...)",
     "Detailed information": "Weitere Informationen",

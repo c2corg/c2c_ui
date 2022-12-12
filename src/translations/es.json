@@ -1316,7 +1316,7 @@
     "restaurant": {
       "product_types": "restaurante"
     },
-    "restricted_access": "acceso restringido",
+    "restricted_access": "Acceso restringido",
     "return_same_way": {
       "route_types": "ida y vuelta"
     },
