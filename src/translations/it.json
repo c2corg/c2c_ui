@@ -195,7 +195,6 @@
     "Describe road access": "Descrivere l'accesso",
     "Describe the conditions you encountered during your outing": "Descrivere le condizioni che hai incontrato durante la gita ",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Descrivere le informazioni raccolte prima della gita e come queste si sono evolute una volta sul percorso: previsioni del tempo, relazioni sul rischio di valanghe, quantità di rigelo, condizioni della neve/ghiaccio/roccia, condizioni nei giorni precedenti, ecc.",
-    "Describe the route following the structure below": "Descrivere il percorso seguendo le struttura sottoindicata",
     "Description": "Descrizione",
     "Detailed figures, like ratings, height differences, frequentation...": "Dati dettagliate (gradi, dislivello, frequentazione...) ",
     "Detailed information": "Informazioni dettagliate ",
@@ -447,7 +446,7 @@
     "Page not found": "Pagina non trovata",
     "Paragliding outings": "Gita in parapendio",
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica ",
-    "Parent": "Genitore",
+    "Parent": "Padre",
     "Participants and context": "Partecipanti e contesto",
     "Password too short": {
       "API message": "La password è troppo corta "
@@ -758,7 +757,7 @@
       "API message": "Selezionare al meno un itinerario"
     },
     "auth-denied": {
-      "tracking": "autorizzazione negata"
+      "tracking": "L'autorizzazione a connettersi al servizio è stata rifiutata dall'utente."
     },
     "author": "autore",
     "author_status": "Autore",
@@ -1707,7 +1706,7 @@
     "summit": {
       "waypoint_types": "cima"
     },
-    "supervision": "supervisione",
+    "supervision": "Supervisione",
     "suunto": "Suunto",
     "tags": {
       "article_categories": "tag"
@@ -1755,10 +1754,10 @@
       "route_types": "traversata"
     },
     "unknown": {
-      "tracking": "sconosciuto"
+      "tracking": "Sconosciuto"
     },
     "unsufficient-scopes": {
-      "tracking": "Variabili insufficienti"
+      "tracking": "Autorizzazioni insufficienti"
     },
     "url": "URL",
     "users": "utenti",
