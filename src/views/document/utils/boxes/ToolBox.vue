@@ -225,7 +225,8 @@ export default {
     },
 
     available_langs() {
-      return this.document.available_langs.filter((lang) => this.$route.params.lang !== lang);
+      const currentLang = this.$route.params.lang ?? this.document.cooked?.lang;
+      return this.document.available_langs.filter((lang) => currentLang !== lang);
     },
 
     showAssociationEditor() {
