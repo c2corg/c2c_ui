@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO on route view, map in full screen has not a full height -->
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
@@ -769,7 +768,7 @@ export default {
     },
 
     addDocumentFeature(document, source, style) {
-      if (!document || !document.geometry) {
+      if (!document?.geometry) {
         return;
       }
 
