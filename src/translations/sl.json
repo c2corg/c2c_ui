@@ -44,9 +44,11 @@
       "Sophie picture context": "Akcija - nagrada občinstva"
     },
     "Activity feed": "Tok dejavnosti",
+    "Activity trackers": "Sledilci dejavnosti",
     "Add": "Dodaj",
     "Add here maps not automatically referenced": "Tukaj dodajte zemljevide, ki niso samodejno navedeni",
     "Add images": "Dodaj slike",
+    "Add page break before each document": "Dodajte prelom strani pred vsakim dokumentom",
     "Add the first outing": "Objavi prvi vzpon",
     "Add title…": "Dodaj naslov...",
     "Additional information": "Dodatne informacije",
@@ -54,6 +56,8 @@
     "Allow all": "Dovoli vse",
     "Altitude": "Višina",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Nadmorska višina je obvezna, kadar sta visoka in nizka nevarnost različni. Prosimo, nastavite višino, kot je določeno v plazovnem biltenu za to območje.",
+    "An error occurred, connection status could not be retrieved. Please refresh the page.": "Prišlo je do napake, stanja povezave ni bilo mogoče pridobiti. Osvežite stran.",
+    "An error occurred, could not retrieve activities": "Prišlo je do napake, dejavnosti ni bilo mogoče pridobiti",
     "An error occurred, couldn't (un)mark route as to do": "Prišlo je do napake, smeri ni bilo mogoče dodati ali odstraniti iz priljubljenih",
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
     "Anonymity and confidentiality": "Anonimnost in zaupnost",
@@ -742,6 +746,9 @@
     },
     "at least one user required": {
       "API message": "Izberite vsaj en uporabnik"
+    },
+    "auth-denied": {
+      "tracking": "Dovoljenje za povezavo s storitvijo je bilo zavrnjeno"
     },
     "author": "Avtor",
     "author_status": "Vpletenost v situacijo",
