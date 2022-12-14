@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO on route view, map in full screen has not a full height -->
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
@@ -769,7 +768,7 @@ export default {
     },
 
     addDocumentFeature(document, source, style) {
-      if (!document || !document.geometry) {
+      if (!document?.geometry) {
         return;
       }
 
@@ -1006,10 +1005,23 @@ export default {
       if (feature) {
         const document = feature.get('document');
         if (document) {
-          this.$router.push({
-            name: this.$documentUtils.getDocumentType(document.type),
-            params: { id: document.document_id },
-          });
+          if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
+            return;
+          }
+          if (event.originalEvent.ctrlKey) {
+            window.open(
+              this.$router.resolve({
+                name: this.$documentUtils.getDocumentType(document.type),
+                params: { id: document.document_id },
+              }),
+              '_blank'
+            );
+          } else {
+            this.$router.push({
+              name: this.$documentUtils.getDocumentType(document.type),
+              params: { id: document.document_id },
+            });
+          }
         } else if (feature.get('biodivData')) {
           this.biodivData = feature.get('biodivData');
           this.$refs.BiodivInformation.show();
