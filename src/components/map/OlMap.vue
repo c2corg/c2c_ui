@@ -100,6 +100,10 @@
       <button @click="clearGeometry" v-translate>Clear</button>
     </div>
 
+    <div v-show="osmLayer" ref="editMap" class="ol-control ol-control-edit-map">
+      <a :href="editMapLink" :title="$gettext('Edit and improve map on Openstreetmap.org')"><fa-icon icon="pen" /></a>
+    </div>
+
     <biodiv-information v-if="protectionAreasVisible" ref="BiodivInformation" :data="biodivData" />
 
     <swiss-protection-area-information
@@ -286,6 +290,8 @@ export default {
       highlightedFeature: null,
 
       minZoomLevel: DEFAULT_POINT_ZOOM,
+
+      editMapLink: null,
     };
   },
 
@@ -318,6 +324,10 @@ export default {
         this.visibleLayer.setVisible(false);
         layer.setVisible(true);
       },
+    },
+
+    osmLayer() {
+      return this.visibleLayer.get('title') === 'OpenTopoMap';
     },
   },
 
@@ -380,6 +390,7 @@ export default {
         new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
         new ol.control.Control({ element: this.$refs.resetGeometry }),
         new ol.control.Control({ element: this.$refs.clearGeometry }),
+        new ol.control.Control({ element: this.$refs.editMap }),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
       ],
 
@@ -409,6 +420,7 @@ export default {
 
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
+    this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
     if (this.protectionAreasVisible) {
@@ -451,6 +463,8 @@ export default {
     // listen to elevation profile events to display
     // the related point on the map
     this.setElevationProfileInteraction();
+
+    this.updateEditMapLink();
   },
 
   beforeDestroy() {
@@ -1157,6 +1171,15 @@ export default {
       this.drawDocumentMarkers(); // redraw markers
       this.setDrawInteraction(); // reset interaction mode
     },
+
+    updateEditMapLink() {
+      const coords = ol.proj.transform(
+        this.map.getView().getCenter(),
+        ol.proj.get('EPSG:3857'),
+        ol.proj.get('EPSG:4326')
+      );
+      this.editMapLink = `https://www.openstreetmap.org/#map=13/${coords[1]}/${coords[0]}`;
+    },
   },
 };
 </script>
@@ -1286,6 +1309,41 @@ $control-margin: 0.5em;
     width: auto !important;
     font-weight: normal;
   }
+}
+
+.ol-control-edit-map {
+  bottom: 35px;
+  right: $control-margin;
+
+  svg {
+    height: 0.7em;
+    vertical-align: -0.45em;
+  }
+}
+
+/* make the link look like a button, copy style from ol.css */
+.ol-control a {
+  display: block;
+  margin: 1px;
+  padding: 0;
+  color: var(--ol-subtle-foreground-color);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: inherit;
+  text-align: center;
+  height: 1.375em;
+  width: 1.375em;
+  line-height: 0.4em;
+  background-color: var(--ol-background-color);
+  border: none;
+  border-radius: 2px;
+}
+
+.ol-control a:hover,
+.ol-control a:focus {
+  text-decoration: none;
+  outline: 1px solid var(--ol-subtle-foreground-color);
+  color: var(--ol-foreground-color);
 }
 </style>
 
