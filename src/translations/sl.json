@@ -84,6 +84,7 @@
     "Average slope in degree": "Povprečni naklon v stopinjah",
     "Back to code": "Nazaj na kodo",
     "Back to edit mode": "Nazaj k urejanju",
+    "Back to the top": "Na vrh strani",
     "Base layer": "Zemljevidi",
     "Basemap (at)": {
       "Map layer": "Avstrija"
@@ -112,6 +113,7 @@
     "Change password": "Spremeni geslo",
     "Checking...": "Preverjanje...",
     "Child": "Otrok",
+    "Choose file": "Izberite datoteko",
     "Clear": "Briši",
     "Close": "Zapri",
     "Collapse": "Zloži",
@@ -123,7 +125,10 @@
     "Compute risk": "Izračun tveganja",
     "Conditions": "Razmere",
     "Conditions, summits, routes": "Razmere, vrhovi, smeri",
+    "Configure activity trackers": "Konfigurirajte sledilce dejavnosti",
     "Configure cookies": "Nastavitve piškotkov",
+    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Konfigurirajte svojo povezavo z zunanjimi storitvami, kot je Strava ali aplikacija vaše naprave GPS, da preprosto pridobite geometrije.",
+    "Configured": "Konfigurirano",
     "Confirm": "Potrdi",
     "Confirm delete": "Potrdi izbris",
     "Conflict: version of document has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
@@ -136,6 +141,7 @@
     "Conflict: version of locale 'it' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflict: version of locale 'zh_CN' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflicting method and danger": "Metoda in stopnja nevarnosti sta nezdružljivi",
+    "Connect": "Povežite se",
     "Contain invalid character(s)": {
       "API message": "Vsebuje enega ali več neveljavnih znakov"
     },
