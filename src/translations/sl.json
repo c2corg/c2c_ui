@@ -205,6 +205,7 @@
     "Describe road access": "Opišite cestni dostop in možnosti namestitve, prehrane itd.",
     "Describe the conditions you encountered during your outing": "Opišite razmere na katere ste naleteli med izletom",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Opišite informacije, zbrane pred vzponom, in navedite primerjavo z razmerami med vzponom: vremenska napoved, poročila o nevarnosti snežnih plazov, količina ponovnega zmrzovanja, stanje snega/ledu/skale, poročila iz prejšnjih dni itd. ",
+    "Describe the route following the structure below": "Upoštevajte naslednjo strukturo:\n## Dostop # trajanje v h\nOpis dostopa\n\n## Smer # trajanje v h\nL# | ocena | dolžina | opis (dostopno s klikom na gumb # zgoraj)\n\n## Sestop # trajanje v h\nOpis sestopa",
     "Description": "Opis",
     "Detailed figures, like ratings, height differences, frequentation...": "Podrobni podatki, npr ocene, višinske razlike, obljudenost",
     "Detailed information": "Podrobne informacije",
@@ -237,6 +238,7 @@
       "yeti": "Uredi"
     },
     "Edit a document": "Uredi dokument",
+    "Edit and improve map on Openstreetmap.org": "Uredi in izboljšaj zemljevid na Openstreetmap.org",
     "Edit associations": "Uredi povezave",
     "Edit categories": "Uredi kategorije",
     "Edit titles": "Uredi naslove",
@@ -255,6 +257,7 @@
     "Fauna protection areas": "Favna",
     "Fauna protection site:": "Varovalno območje za favno:",
     "Feel free to edit it.": "Lahko ga uredite.",
+    "Fetch geographic data": "Uporabite podatke iz te dejavnosti",
     "Filter on map extent": "Zoži iskanje na vidni zemljevid",
     "Filter results": "Filtriraj",
     "FlowCapt sensor": "FlowCapt postaja",
