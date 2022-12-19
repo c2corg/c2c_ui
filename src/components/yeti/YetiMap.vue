@@ -16,7 +16,7 @@
       >
         <button @click.stop="showLayerSwitcher = !showLayerSwitcher">
           <fa-layers>
-            <fa-icon icon="layer-group" />
+            <fa-icon icon="layer-group" width="100%" />
             <fa-icon v-if="atLeastOneYetiLayerIsShown" icon="circle" transform="shrink-2 up-10 right-10" />
             <fa-icon
               v-if="atLeastOneYetiLayerIsShown"
