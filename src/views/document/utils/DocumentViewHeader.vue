@@ -7,7 +7,7 @@
 
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
-          <gotop-button v-if="isPrintingView"/>
+          <gotop-button v-if="isPrintingView" />
           <follow-button v-if="!isPrintingView" :document="document" />
           <tags-button v-if="!isPrintingView" :document="document" />
 

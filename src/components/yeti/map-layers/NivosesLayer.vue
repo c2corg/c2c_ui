@@ -1,8 +1,5 @@
 <template>
-  <icon-layer
-    :name="name"
-    :color="color"
-  >
+  <icon-layer :name="name" :color="color">
     <span v-translate>Nivose beacon</span>
     <template #overlay>
       <p class="overlay-title">
@@ -11,14 +8,14 @@
       <div class="overlay-nivoses-icons">
         <a :href="overlay.url1" target="_blank">
           <div class="overlay-nivoses-icons-imgs">
-            <img :src="icon" alt="">
+            <img :src="icon" alt="" />
             <fa-icon icon="external-link-alt" class="overlay-link-icon" />
           </div>
           <p v-translate>5 months</p>
         </a>
         <a :href="overlay.url2" target="_blank">
           <div class="overlay-nivoses-icons-imgs">
-            <img :src="icon" alt="">
+            <img :src="icon" alt="" />
             <fa-icon icon="external-link-alt" class="overlay-link-icon" />
           </div>
           <p v-translate>8 days</p>

@@ -1,8 +1,5 @@
 <template>
-  <icon-layer
-    :name="name"
-    :color="color"
-  >
+  <icon-layer :name="name" :color="color">
     <span v-translate>FlowCapt sensor</span>
     <template #overlay>
       <a :href="overlay.url" target="_blank">

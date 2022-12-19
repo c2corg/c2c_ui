@@ -247,7 +247,7 @@ export default {
     this.view = this.map.getView();
 
     // map carto and data layers to reactive ones
-    this.reactiveCartoLayers = c2c_cartoLayers.map(layer => {
+    this.reactiveCartoLayers = c2c_cartoLayers.map((layer) => {
       return {
         title: layer.get('title'),
         id: layer.ol_uid,
@@ -255,7 +255,7 @@ export default {
     });
     this.visibleCartoLayerId = c2c_cartoLayers.find((layer) => layer.getVisible() === true).ol_uid;
 
-    this.reactiveDataLayers = c2c_dataLayers.map(layer => {
+    this.reactiveDataLayers = c2c_dataLayers.map((layer) => {
       return {
         title: layer.get('title'),
         visible: layer.getVisible(),

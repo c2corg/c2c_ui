@@ -4,7 +4,7 @@
       <span v-if="document.loading">
         {{ document.document_id }}
       </span>
-      <document-title v-else :document="document" class="document-title"/>
+      <document-title v-else :document="document" class="document-title" />
       <button @click="$emit('remove', document)" class="delete is-small" />
     </span>
   </div>
@@ -22,7 +22,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .tags-container {
   margin-right: -0.5rem;
   margin-bottom: -0.5rem;
