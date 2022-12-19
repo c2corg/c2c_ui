@@ -7,7 +7,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
-      attributions: ['© <a target="_blank" rel="noreferer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
+      attributions: ['© <a target="_blank" rel="noreferrer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
       urls: ['10', '11', '12', '13', '14'].map((i) => {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
@@ -53,7 +53,7 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
     projection: 'EPSG:3857',
     tileGrid,
     style: 'normal',
-    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferer noopener">Geoportail</a>'],
+    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferrer noopener">Geoportail</a>'],
   });
 
   return new ol.layer.Tile({
@@ -120,7 +120,9 @@ function createIgnEsSource(title, source) {
       format: 'image/jpeg',
       projection: 'EPSG:3857',
       tileGrid,
-      attributions: ['CC BY 4.0 <a href="www.scne.es" target="_blank" rel="noreferrer noopener>www.scne.es</a>'],
+      attributions: [
+        'CC BY 4.0 <a href="https://www.scne.es" target="_blank" rel="noreferrer noopener">www.scne.es</a>',
+      ],
     }),
   });
 }
@@ -184,7 +186,7 @@ function createOrdnanceSurveySource(title) {
     visible: false,
     source: new ol.source.XYZ({
       attributions: [
-        '© <a target="_blank" rel="noreferer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
+        '© <a target="_blank" rel="noreferrer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
       ],
       url: 'https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey,
       minZoom: 7,
@@ -207,7 +209,7 @@ export const cartoLayers = function () {
         'TileMatrix={z}&TileCol={x}&TileRow={y}',
       attributions: [
         '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
-          ' target="_blank" rel="noreferer">Esri</a>'
+          ' target="_blank" rel="noreferrer noopener">Esri</a>'
       ],
       maxZoom: 19
     })
@@ -231,8 +233,8 @@ export const cartoLayers = function () {
     source: new ol.source.XYZ({
       url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       attributions:
-        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noopener noreferer">OpenStreetMap</a> | ' +
-        '© <a href="//opentopomap.org" target="_blank" rel="noopener noreferer">OpenTopoMap</a>',
+        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
+        '© <a href="//opentopomap.org" target="_blank" rel="noreferrer noopener">OpenTopoMap</a>',
       maxZoom: 17,
     }),
   });
@@ -246,7 +248,7 @@ export const cartoLayers = function () {
       url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       attributions: [
         '<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"' +
-          ' target="_blank" rel="noreferer">Esri</a>',
+          ' target="_blank" rel="noreferrer noopener">Esri</a>',
       ],
       maxZoom: 19,
     }),
