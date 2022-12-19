@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <h2 class="title is-2">Last activities</h2>
+    <h2 class="title is-2" v-translate>Last activities</h2>
     <template v-if="activities.length">
       <div v-for="activity in activities" :key="activity.id">
         {{ $dateUtils.toTechnicalString(activity.date) }}&hairsp;&bull;&hairsp;<template v-if="activity.name"
