@@ -8,7 +8,7 @@
       geometries.
     </p>
 
-    <h2 class="title is-2">Applications</h2>
+    <h2 class="title is-2" v-translate>Applications</h2>
 
     <div v-if="statusError" class="notification is-danger">
       <span v-translate>An error occurred, connection status could not be retrieved. Please refresh the page.</span>
