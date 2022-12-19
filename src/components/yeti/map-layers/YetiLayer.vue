@@ -49,9 +49,10 @@ import layerMixin from './layer';
 
 import 'vue-slider-component/theme/default.css';
 
+import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
-const OPACITY = 0.75;
+const OPACITY = 0.9;
 
 export default {
   components: {
@@ -76,6 +77,11 @@ export default {
       mapLegend: null,
     };
   },
+  computed: {
+    showAreas() {
+      return Yetix.showAreas;
+    },
+  },
   watch: {
     data() {
       if (!this.data) {
@@ -86,6 +92,10 @@ export default {
     },
     extent() {
       this.drawExtent(this.extent);
+    },
+    showAreas() {
+      // switch classname when showareas updates
+      this.setLayerClassName();
     },
   },
   created() {
@@ -115,10 +125,19 @@ export default {
         }),
       ],
     });
+    // blend modes multiply for yeti layer
+    this.layer.on('prerender', (evt) => {
+      evt.context.globalCompositeOperation = 'multiply';
+    });
+    this.layer.on('postrender', (evt) => {
+      evt.context.globalCompositeOperation = 'source-over';
+    });
   },
   mounted() {
     this.map.addLayer(this.layer);
     this.map.addLayer(this.extentLayer);
+
+    this.setLayerClassName();
   },
   methods: {
     clearLayers() {
@@ -177,6 +196,12 @@ export default {
         [maxX, minY],
         [minX, minY],
       ];
+    },
+    setLayerClassName() {
+      // it switches classname based on showareas visibility
+      // use same name as areas if showareas, so blend modes will apply to this layer
+      // or use default ol-layer to apply blend modes to whole layers
+      this.layer.className_ = this.showAreas ? Yetix.BLEND_MODES_CLASS_NAME : 'ol-layer';
     },
   },
 };
