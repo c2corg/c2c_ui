@@ -90,7 +90,7 @@ const config = {
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
-  enableTrackers: true,
+  enableTrackers: false, // hide for now, for testing first
   urlsConfigurations: {
     demo: {
       name: 'demo',
