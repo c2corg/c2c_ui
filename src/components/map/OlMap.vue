@@ -1215,6 +1215,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher {
+  z-index: 1;
   bottom: 2.5em;
   left: $control-margin;
   color: white;
