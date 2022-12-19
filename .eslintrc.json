@@ -3,7 +3,12 @@
   "env": {
     "node": true
   },
-  "extends": ["plugin:vue/recommended", "plugin:import/errors", "plugin:import/warnings", "prettier"],
+  "extends": [
+    "plugin:vue/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:prettier/recommended"
+  ],
   "reportUnusedDisableDirectives": true,
   "rules": {
     "no-unused-vars": "warn",
