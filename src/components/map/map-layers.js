@@ -1,9 +1,11 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current') {
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'ch',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
@@ -16,7 +18,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
   });
 }
 
-function createIgnFrSource(title, layer, format = 'jpeg') {
+function createIgnFrSource(title, image, layer, format = 'jpeg') {
   const resolutions = [];
   const matrixIds = [];
   const proj3857 = ol.proj.get('EPSG:3857');
@@ -58,6 +60,8 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'fr',
     type: 'base',
     visible: false,
     source,
@@ -73,7 +77,7 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
  *
  * See http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign
  */
-function createIgnEsSource(title, source) {
+function createIgnEsSource(title, image, source) {
   let url = 'http://www.ign.es/wmts/';
   let layer;
   switch (source) {
@@ -111,6 +115,8 @@ function createIgnEsSource(title, source) {
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'es',
     type: 'base',
     visible: false,
     source: new ol.source.WMTS({
@@ -127,7 +133,7 @@ function createIgnEsSource(title, source) {
   });
 }
 
-function createBaseMapDotAtSource(title, source) {
+function createBaseMapDotAtSource(title, image, source) {
   let format;
   let layer;
   switch (source) {
@@ -161,6 +167,8 @@ function createBaseMapDotAtSource(title, source) {
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'at',
     type: 'base',
     visible: false,
     source: new ol.source.WMTS({
@@ -178,10 +186,12 @@ function createBaseMapDotAtSource(title, source) {
   });
 }
 
-function createOrdnanceSurveySource(title) {
+function createOrdnanceSurveySource() {
   // available backgrounds are Outdoor, Light, Road
   return new ol.layer.Tile({
-    title,
+    title: 'UK',
+    image: 'uk.jpg',
+    country: 'gb',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
@@ -228,6 +238,7 @@ export const cartoLayers = function () {
   // $gettext('OpenTopoMap', 'Map layer')
   const openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
+    image: 'opentopomap.jpg',
     type: 'base',
     visible: true,
     source: new ol.source.XYZ({
@@ -242,6 +253,7 @@ export const cartoLayers = function () {
   // $gettext('ESRI World Imagery', 'Map layer')
   const esriImagery = new ol.layer.Tile({
     title: 'Esri World Imagery',
+    image: 'esri.jpg',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
@@ -255,23 +267,35 @@ export const cartoLayers = function () {
   });
 
   // $gettext('IGN maps', 'Map layer')
-  const ignFrMaps = createIgnFrSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+  const ignFrMaps = createIgnFrSource('IGN maps', 'ign.jpg', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
-  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ignortho.jpg', 'ORTHOIMAGERY.ORTHOPHOTOS');
   // $gettext('SwissTopo', 'Map layer')
-  const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current');
+  const swissTopo = createSwisstopoLayer(
+    'SwissTopo',
+    'swisstopo.jpg',
+    'ch.swisstopo.pixelkarte-farbe',
+    'jpeg',
+    'current'
+  );
   // $gettext('SwissTopo ortho', 'Map layer')
-  const swissTopoOrtho = createSwisstopoLayer('SwissTopo ortho', 'ch.swisstopo.swissimage', 'jpeg', 'current');
+  const swissTopoOrtho = createSwisstopoLayer(
+    'SwissTopo ortho',
+    'swisstopoortho.jpg',
+    'ch.swisstopo.swissimage',
+    'jpeg',
+    'current'
+  );
   // $gettext('IGN raster (es)', 'Map layer')
-  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
+  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'ignes.jpg', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
-  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ortho');
+  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ignesortho.jpg', 'ortho');
   // $gettext('Basemap (at)', 'Map layer')
-  const basemap = createBaseMapDotAtSource('Basemap (at)', 'raster');
+  const basemap = createBaseMapDotAtSource('Basemap (at)', 'at.jpg', 'raster');
   // $gettext('Basemap ortho (at)', 'Map layer')
-  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'ortho');
+  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'atortho.jpg', 'ortho');
   // $gettext('Ordnance Survey (uk), 'Map layer')
-  const ordnanceSurvey = createOrdnanceSurveySource('UK');
+  const ordnanceSurvey = createOrdnanceSurveySource();
   return [
     openTopoMap,
     /* esri, */
@@ -291,10 +315,16 @@ export const cartoLayers = function () {
 
 export const dataLayers = function () {
   // $gettext('IGN Slopes', 'Map slopes layer')
-  const ignSlopes = createIgnFrSource('IGN Slopes', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+  const ignSlopes = createIgnFrSource('IGN Slopes', 'ignslopes.jpg', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo Slopes', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer('SwissTopo Slopes', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
+  const swissSlopes = createSwisstopoLayer(
+    'SwissTopo Slopes',
+    'swisstoposlopes.jpg',
+    'ch.swisstopo.hangneigung-ueber_30',
+    'png',
+    'current'
+  );
   swissSlopes.setOpacity(0.4);
 
   return [ignSlopes, swissSlopes];
