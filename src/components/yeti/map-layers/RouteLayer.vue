@@ -204,10 +204,15 @@ export default {
       }
     },
     getFeaturesLayerFeatures() {
-      return this.featuresLayerSource.getFeatures();
+      return this.getSortedFeatures(this.featuresLayerSource.getFeatures());
     },
     getSimplifiedFeatures() {
-      return this.simplifiedSource.getFeatures();
+      return this.getSortedFeatures(this.simplifiedSource.getFeatures());
+    },
+    getSortedFeatures(features) {
+      return features.sort((a, b) => {
+        return Number(a.ol_uid) > Number(b.ol_uid);
+      });
     },
     removeFeature(feature) {
       // remove feature
