@@ -1,5 +1,6 @@
 <script>
 import layerMixin from './layer';
+import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
@@ -342,11 +343,25 @@ export default {
         let features = this.getFeaturesLayerFeatures();
         features.forEach((feature) => {
           let geometry = feature.getGeometry();
-          let simplifiedGeometry = geometry;
+
+          // clone geometry
+          let simplifiedGeometry = geometry.clone();
+          let coordinates = simplifiedGeometry.getCoordinates();
+
+          // if no z, add 0
+          coordinates = coordinates.map((coord) => {
+            if (!coord[2]) {
+              coord[2] = 0;
+            }
+            return coord;
+          });
+
           // check if tolerance is 0 == no simplification
           if (tolerance !== 0) {
-            simplifiedGeometry = simplifiedGeometry.simplify(tolerance);
+            coordinates = simplify(coordinates, tolerance, true);
+            simplifiedGeometry.setCoordinates(coordinates);
           }
+
           // create feature (store reference of actual feature thanks to ol_uid)
           let simplifiedFeature = new ol.Feature({ geometry: simplifiedGeometry, id: feature.ol_uid });
           this.simplifiedSource.addFeature(simplifiedFeature);
