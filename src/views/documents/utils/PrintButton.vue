@@ -16,9 +16,7 @@ export default {
 
   computed: {
     path() {
-       return {path: this.documentType+'s/print',
-       query: this.$route.query,
-      }
+      return { path: this.documentType + 's/print', query: this.$route.query };
     },
   },
 };

@@ -45,11 +45,7 @@
           <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
         <div class="sub-query-items">
-          <association-query-item
-            class="dropdown-item"
-            :document-types="associations"
-            @add="addTag"
-          />
+          <association-query-item class="dropdown-item" :document-types="associations" @add="addTag" />
           <div class="query-items-tags dropdown-item">
             <query-tags :documents="tags" @remove="removeTag"></query-tags>
           </div>
@@ -427,10 +423,10 @@ export default {
     */
     max-height: 70vh;
 
-    scrollbar-width: none;  // Firefox
+    scrollbar-width: none; // Firefox
 
     &::-webkit-scrollbar {
-      display: none;  // Chrome, Safari and Opera
+      display: none; // Chrome, Safari and Opera
     }
   }
 }

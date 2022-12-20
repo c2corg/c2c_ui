@@ -166,14 +166,15 @@ export default {
 <style lang="scss">
 // Not scoped syle, because CSS selector are not explicitly present in template
 .markdown-content {
-
   overflow: auto;
 
   &:not(:last-child) {
     margin-bottom: 1.5rem;
   }
 
-  h3, h4, h5 {
+  h3,
+  h4,
+  h5 {
     display: inline-block;
     width: 100%;
   }

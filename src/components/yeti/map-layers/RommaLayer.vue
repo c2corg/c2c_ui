@@ -1,8 +1,5 @@
 <template>
-  <icon-layer
-    :name="name"
-    :color="color"
-  >
+  <icon-layer :name="name" :color="color">
     <span v-translate>ROMMA station</span>
     <template #overlay>
       <a :href="overlay.url" target="_blank">

@@ -6,7 +6,7 @@
     <div class="overlay-content">
       <slot name="overlay"></slot>
     </div>
-    <img :src="icon('#4a4a4a')" alt="" class="overlay-icon">
+    <img :src="icon('#4a4a4a')" alt="" class="overlay-icon" />
   </div>
 </template>
 
@@ -80,7 +80,7 @@ export default {
 
     this.overlay = new ol.Overlay({
       positioning: 'top-left',
-      offset: [-4,-6],
+      offset: [-4, -6],
       className: 'overlay-container',
     });
   },
@@ -129,19 +129,23 @@ export default {
     onMapClick(e, clickedFeature) {
       this.closeOverlay(true);
       if (this.layer.getVisible()) {
-        this.map.forEachFeatureAtPixel(e.pixel, (feature) => {
-          if (feature !== clickedFeature) {
-            return false;
+        this.map.forEachFeatureAtPixel(
+          e.pixel,
+          (feature) => {
+            if (feature !== clickedFeature) {
+              return false;
+            }
+            this.$parent.setOverlay(feature);
+            this.activeFeature = feature;
+            this.openOverlay(feature);
+            return true;
+          },
+          {
+            layerFilter: (layer) => {
+              return layer === this.layer;
+            },
           }
-          this.$parent.setOverlay(feature);
-          this.activeFeature = feature;
-          this.openOverlay(feature);
-          return true;
-        }, {
-          layerFilter: (layer) => {
-            return layer === this.layer
-          }
-        });
+        );
       }
     },
     openOverlay(feature) {
@@ -172,7 +176,7 @@ export default {
   overflow: hidden;
 }
 .overlay-header {
-  font-size: .9em;
+  font-size: 0.9em;
   padding: 5px 0;
   text-align: center;
   color: $white;
