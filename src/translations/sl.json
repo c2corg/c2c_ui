@@ -61,6 +61,7 @@
     "An error occurred, couldn't (un)mark route as to do": "Prišlo je do napake, smeri ni bilo mogoče dodati ali odstraniti iz priljubljenih",
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
     "Anonymity and confidentiality": "Anonimnost in zaupnost",
+    "Applications": "Aplikacije",
     "Are you sure you want to delete this document?": "Ali ste prepričani, da želite izbrisati ta dokument? \nUpoštevajte, da povezane fotografije ne bodo izbrisane in bodo postale sirote. \nČe želite samo spremeniti naslov ali povezane dokumente (npr. premakniti vzpon na drugo smer), rabite samo urediti dokument. \nČe je ta dokument dvojnik s fotografijami, prosite Administracijo, da združi dvojnike, tako da bodo fotografije premaknjene v shranjeni dokument.",
     "Are you sure you want to delete this locale?": "Ali ste prepričani, da želite izbrisati to jezikovno različico?",
     "Are you sure you want to merge?": "Ali ste prepričani, da želite združiti?",
@@ -273,9 +274,11 @@
     "GPX file": "GPX datoteka",
     "General": "Splošno",
     "General information": "Splošne informacije",
+    "Geographical data could not be retrieved": "Sledi dejavnosti ni bilo mogoče pridobiti",
     "Geolocation": "Geolokacija",
     "Go back to YETI": "Vrni se na YETI",
     "Go to the previous page": "Pojdi na prejšnjo stran",
+    "Go to website": "Pojdite na spletno stran",
     "Group": "Skupina",
     "Group size": "Velikost skupine",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Ste imeli načrtovan urnik? Ste se držali urnika? Je bil čas dejavnik za nastanek incidenta?",
@@ -325,6 +328,8 @@
     "Image count": "Število slik",
     "Improve our understanding of risks": "Izboljšati razumevanje o tveganjih",
     "Incidents and accidents": "Incidenti in nesreče",
+    "Include image section": "Vključite povezane slike",
+    "Include summary": "Vključi povzetek",
     "Information about the terrain, like elevations, lengths...": "Podatki o terenu, kot so nadmorske višine, dolžine ...",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Podatki o kraju dogodka. Označite lokacijo na zgornjem zemljevidu, tudi če ne zelo natančno (v tem primeru navedite več podrobnosti tukaj). Ko izpolnite poročilo, ga lahko povežete s smerjo, točko (npr plezališčem) ali vzponom.",
     "Informations about the access": "Informacije o izhodišču / javnem prevozu",
@@ -341,6 +346,7 @@
     "Know more about SERAC": "Izvedite več o SERAC",
     "Large group = 5 people and more": "Velika skupina = 5 ljudi in več",
     "Large group with load shedding distance": "Velika skupina z razbremenitveno razdaljo",
+    "Last activities": "Zadnje dejavnosti",
     "Last forum topics": "Najnovejše teme foruma",
     "Last outings": "Zadnji vzponi",
     "Latitude": "Zemljepisna širina",
@@ -360,6 +366,7 @@
     "Load my preferences": "Aktiviraj moje nastavitve",
     "Load shedding distance": "Razbremenitvena razdalja",
     "Loading...": "Nalaganje...",
+    "Local file": "Lokalna datoteka",
     "Location / elevation / orientation": "Kraj / višina / orientacija",
     "Log in to post a comment": "Prijavite se za objavo komentarja",
     "Login": "Prijava",
@@ -418,6 +425,8 @@
     "Nivose beacons": "Nivose postaje",
     "No": "Ne",
     "No account yet?": "Še nimate računa?",
+    "No activity found": "Na voljo ni nobena dejavnost",
+    "No activity retrieved yet. Have you connected your trackers?": "Nobena dejavnost še ni bila pridobljena. Ali ste povezali svoje naprave?",
     "No avalanche bulletin right now": "Trenutno ni plazovnega biltena",
     "No data could be extracted from GPS file": "Iz datoteke ni bilo mogoče izvleči nobenih podatkov",
     "No match?": "Ni ujemanj?",
@@ -426,6 +435,7 @@
     "No result found": "Ni rezultatov",
     "No route right now": "Trenutno ni itinerarja",
     "No selected hazard potential. Set danger level first.": "Ni izbranega potenciala nevarnosti. Najprej vnesite stopnjo nevarnosti.",
+    "No title": "Brez naslova",
     "No user with this email": {
       "API message": "Ni uporabnika s tem e-mailom"
     },
@@ -433,6 +443,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "NonCommercial – gradiva ne smete uporabljati v komercialne namene.",
     "Not simplified yet": "Ne še poenostavljeno",
     "Note that comments have to be transferred manually in Discourse before merging.": "Komentarje je treba ročno prenesti v Discourse, preden združite dokumente.",
+    "Number of documents": "Število dokumentov",
     "Numbers": "Podatki",
     "Ok": "OK",
     "On a drawn line": "Na narisano črto",
@@ -447,6 +458,7 @@
     "Ordered list": "Oštevilčen seznam",
     "Orientations": "Orientacije",
     "Orientations:": "Orientacije:",
+    "Other options": "Druge možnosti",
     "Oups! Something went wrong with forum. Here is the message :": "Ups! Prišlo je do težave s forumom. Tukaj je sporočilo:",
     "Oups! something went wrong...": "Ups! nekaj je šlo narobe...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Naše spletno mesto uporablja piškotke, ki jih zagotovimo mi in tretje osebe. Nekateri piškotki so potrebni za spletno mesto, medtem ko lahko druge kadar koli prilagodite, zlasti tiste, ki nam omogočajo razumeti delovanja našega spletnega mesta in vam ponuditi funkcije družbenih medijev. Vse jih lahko sprejmete ali zavrnete oz lahko ",
@@ -481,11 +493,16 @@
     "Please select a waypoint type to enable sort feature": "Prosimo, izberite vrsto točke, da omogočite funkcijo razvrščanja",
     "Please select an activity to enable sort feature": "Prosimo, izberite dejavnost, da omogočite funkcijo razvrščanja",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Stopnja nevarnosti manjka. Prosimo, vnesite vrednost, določeno v plazovnem biltenu.",
+    "Please wait. Requesting authorization...": "Avtorizacija v teku, počakajte nekaj trenutkov ...",
     "Post the first comment": "Objavi prvi komentar",
     "Precise localisation of the shooting": "Od kod ste fotografirali? (natančna lokacija)",
     "Precise location of the event.": "Natančna lokacija dogodka",
     "Press enter to select": "Enter - da izberete",
     "Preview": "Predogled",
+    "Print": "Natisniti",
+    "Print a selection of documents": "Natisnite izbor dokumentov",
+    "Print search results": "Natisniti",
+    "Printing": "Tiskanje",
     "Professional Reduction Method": "zmanjševalno metodo za strokovnjake",
     "Protect document": "Zaščiti dokument",
     "Protection area:": "Varovalno območje:",
@@ -499,6 +516,7 @@
     "Recent changes": "Nedavne spremembe",
     "Recenter on your current position": "Centriranje na trenutno pozicijo",
     "Recenter on...": "Centriranje na ...",
+    "Refresh": "Osveži",
     "Register": "Registriraj se",
     "Remove": "Odstrani",
     "Report an issue": "Prijavi problem",
@@ -515,6 +533,7 @@
     "Restore this version": "Obnovi to različico",
     "Results only": "Samo rezultati",
     "Retry": "Poskusi znova",
+    "Revoke": "Prekliči",
     "Risky slopes": "Rizična pobočja",
     "Risky slopes, increased risk due to orientation": "Nevarna pobočja, povečano tveganje zaradi orientacije",
     "Rotate image left": "Zasukaj levo",
@@ -532,6 +551,7 @@
     "See the analysis of the submitted stories": "Preberite analize že poslanih zgodb",
     "See the latest version": "Oglejte si najnovejšo različico",
     "Seems fine! :)": "Zgleda OK! :)",
+    "Select an activity to load geographical data into document.": "Izberite dejavnost za pridobitev GPS sledi in jo vključite v dokument.",
     "Select option": "Izberite možnost",
     "Select tolerance (preview result on map)": "Izberite toleranco (predogled na zemljevidu)",
     "Send reset email": "Pošlji e-pošto za ponastavitev",
@@ -566,8 +586,11 @@
     "Statistics": "Statistika",
     "Stay careful while skiing": "Previdno smučajte ",
     "Stop following this contributor": "Nehaj spremljati tega uporabnika",
+    "Subcription revokal failed": "Naročnine na storitev ni bilo mogoče preklicati.",
+    "Subcription revoked": "Naročnina preklicana",
     "Submit": "Shrani in nadaljuj",
     "Suggested rating": "Predlagana ocena",
+    "Summary": "Povzetek",
     "SwissTopo Slopes": {
       "Map slopes layer": "Švica (SwissTopo)"
     },
@@ -623,6 +646,7 @@
       "Sophie picture context": "Vodniček - nagrada občinstva"
     },
     "Trace": "GPS sled",
+    "Tracking devices": "GPS naprave",
     "Translate into an other lang": "Prevedi v drug jezik",
     "Transport & road or PT access": "Izhodišče / javni prevoz",
     "Types and styles": "Vrste in slogi",
@@ -1610,6 +1634,9 @@
     "service_on_demand": {
       "public_transportation_types": "na zahtevo"
     },
+    "setup-failed": {
+      "tracking": "Povezava ni uspela"
+    },
     "severity": "Resnost",
     "severity_no": {
       "severities": "brez poškodb"
@@ -1772,6 +1799,12 @@
     "training": "Fizična pripravljenost in tehnična raven",
     "traverse": {
       "route_types": "prečenje"
+    },
+    "unknown": {
+      "tracking": "Neznano"
+    },
+    "unsufficient-scopes": {
+      "tracking": "Nezadostna dovoljenja"
     },
     "url": "URL",
     "users": "uporabniki",
