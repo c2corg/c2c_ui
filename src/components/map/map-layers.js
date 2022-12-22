@@ -356,12 +356,14 @@ export const dataLayers = function () {
 export const protectionAreasLayers = function () {
   const swissTranquilityZones = createSwisstopoLayer(
     'Swiss tranquility zones',
+    undefined,
     'ch.bafu.wrz-wildruhezonen_portal',
     'png'
   );
   swissTranquilityZones.setOpacity(0.7);
   const swissFaunaProtectionZones = createSwisstopoLayer(
     'Swiss fauna protection zones',
+    undefined,
     'ch.bafu.wrz-jagdbanngebiete_select',
     'png'
   );
