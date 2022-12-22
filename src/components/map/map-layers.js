@@ -206,7 +206,7 @@ function createBaseMapDotAtSource(title, image, source) {
 function createOrdnanceSurveySource() {
   // available backgrounds are Outdoor, Light, Road
   return new ol.layer.Tile({
-    title: 'UK',
+    title: 'Ordnance Survey (uk)',
     image: 'uk.jpg',
     country: 'gb',
     type: 'base',
@@ -315,7 +315,7 @@ export const cartoLayers = function () {
   const basemap = createBaseMapDotAtSource('Basemap (at)', 'at.jpg', 'raster');
   // $gettext('Basemap ortho (at)', 'Map layer')
   const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'atortho.jpg', 'ortho');
-  // $gettext('Ordnance Survey (uk), 'Map layer')
+  // $gettext('Ordnance Survey (uk)', 'Map layer')
   const ordnanceSurvey = createOrdnanceSurveySource();
   return [
     openTopoMap,
