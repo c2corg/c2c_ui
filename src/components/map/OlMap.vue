@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%">
+  <div :class="{ 'ol-map-fullscreen': isFullscreen }" style="width: 100%; height: 100%">
     <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
@@ -13,22 +13,46 @@
     </div>
 
     <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
-      <div>
+      <div class="ol-control-layer-switcher-layers">
         <header v-translate>Base layer</header>
-        <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer = layer">
-          <input :checked="layer == visibleLayer" type="radio" />
-          {{ $gettext(layer.get('title'), 'Map layer') }}
+        <div class="layer-group">
+          <layer-button
+            v-for="layer of mapLayers"
+            :key="layer.get('title')"
+            @click="visibleLayer = layer"
+            :selected="layer === visibleLayer"
+            :layer="layer"
+            title-context="Map layer"
+          ></layer-button>
         </div>
         <header v-translate>Slopes</header>
-        <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
-          <input :checked="layer.getVisible()" type="checkbox" />
-          {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+        <div class="layer-group">
+          <layer-button
+            v-for="layer of dataLayers"
+            :key="layer.get('title')"
+            @click="toogleMapLayer(layer)"
+            :selected="layer.getVisible()"
+            :layer="layer"
+            title-context="Map slopes layer"
+          ></layer-button>
         </div>
         <template v-if="showProtectionAreas && !editable">
           <header v-translate>Protection areas</header>
-          <input type="checkbox" :checked="protectionAreasVisible" @click="toggleProtectionAreas" />
-          <span v-translate>Fauna protection areas</span>
+          <!-- $gettext('Fauna protection areas') -->
+          <div class="layer-group">
+            <layer-button
+              @click="toggleProtectionAreas"
+              :selected="protectionAreasVisible"
+              :layer="{
+                title: 'Fauna protection areas',
+                image: 'fauna.jpg',
+              }"
+            ></layer-button>
+          </div>
         </template>
+      </div>
+      <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
+        <fa-icon :title="$gettext('Close')" icon="chevron-left" />
       </div>
     </div>
 
@@ -118,6 +142,7 @@
 import { toast } from 'bulma-toast';
 
 import BiodivInformation from './BiodivInformation';
+import LayerButton from './LayerButton';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
@@ -149,6 +174,7 @@ const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 export default {
   components: {
     BiodivInformation,
+    LayerButton,
     SwissProtectionAreaInformation,
   },
 
@@ -268,6 +294,8 @@ export default {
       elevationProfileLayer: new ol.layer.Vector({
         source: new ol.source.Vector(),
       }),
+
+      isFullscreen: false,
 
       geolocation: null,
 
@@ -468,8 +496,8 @@ export default {
   },
 
   beforeDestroy() {
-    this.fullScreenControl.un('enterfullscreen', this.fitMapToDocuments);
-    this.fullScreenControl.un('leavefullscreen', this.fitMapToDocuments);
+    this.fullScreenControl.un('enterfullscreen', this.onFullcreenChange);
+    this.fullScreenControl.un('leavefullscreen', this.onFullcreenChange);
   },
 
   methods: {
@@ -478,9 +506,15 @@ export default {
         source,
         tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
       });
-      control.on('enterfullscreen', this.fitMapToDocuments);
-      control.on('leavefullscreen', this.fitMapToDocuments);
+      control.on('enterfullscreen', this.onFullcreenChange);
+      control.on('leavefullscreen', this.onFullcreenChange);
       return control;
+    },
+
+    onFullcreenChange() {
+      this.isFullscreen = !this.isFullscreen;
+      this.showLayerSwitcher = false;
+      this.fitMapToDocuments();
     },
 
     setModifyInteractions() {
@@ -1215,30 +1249,57 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher {
-  bottom: 2.5em;
-  left: $control-margin;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  height: 275px;
+  width: 225px;
   color: white;
   text-decoration: none;
-  background-color: rgba(0, 60, 136, 0.6);
   border: none;
-  border-radius: 2px;
-  padding: 10px;
   display: flex;
+  align-items: flex-end;
+  background-color: initial;
+}
 
-  & > div {
-    column-count: 2;
+.ol-control-layer-switcher-layers {
+  width: 205px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px 0 10px 10px;
+  background-color: rgb(0, 59, 136, 0.7);
 
-    &:first-child {
-      margin-right: 10px;
-    }
+  header {
+    font-weight: bold;
+  }
 
-    header {
-      font-weight: bold;
+  .layer-group {
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: -10px;
+  }
+}
 
-      &:not(:first-child) {
-        padding-top: 10px;
-      }
-    }
+.ol-control-layer-switcher-close {
+  background-color: rgb(0, 59, 136, 0.7);
+  width: 20px;
+  height: 30px;
+  margin-bottom: 5px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ol-map-fullscreen {
+  .ol-control-layer-switcher {
+    width: 320px;
+  }
+  .ol-control-layer-switcher-layers {
+    width: 300px;
+    height: 100vh;
   }
 }
 

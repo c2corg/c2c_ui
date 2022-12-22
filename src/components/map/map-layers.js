@@ -1,13 +1,15 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current') {
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'ch',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
-      attributions: ['© <a target="_blank" rel="noreferer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
+      attributions: ['© <a target="_blank" rel="noreferrer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
       urls: ['10', '11', '12', '13', '14'].map((i) => {
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
@@ -16,7 +18,7 @@ function createSwisstopoLayer(title, layer, format = 'jpeg', time = 'current') {
   });
 }
 
-function createIgnFrSource(title, layer, format = 'jpeg') {
+function createIgnFrSource(title, image, layer, format = 'jpeg') {
   const resolutions = [];
   const matrixIds = [];
   const proj3857 = ol.proj.get('EPSG:3857');
@@ -53,11 +55,13 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
     projection: 'EPSG:3857',
     tileGrid,
     style: 'normal',
-    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferer noopener">Geoportail</a>'],
+    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferrer noopener">Geoportail</a>'],
   });
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'fr',
     type: 'base',
     visible: false,
     source,
@@ -73,7 +77,7 @@ function createIgnFrSource(title, layer, format = 'jpeg') {
  *
  * See http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign
  */
-function createIgnEsSource(title, source) {
+function createIgnEsSource(title, image, source) {
   let url = 'http://www.ign.es/wmts/';
   let layer;
   switch (source) {
@@ -111,6 +115,8 @@ function createIgnEsSource(title, source) {
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'es',
     type: 'base',
     visible: false,
     source: new ol.source.WMTS({
@@ -120,12 +126,14 @@ function createIgnEsSource(title, source) {
       format: 'image/jpeg',
       projection: 'EPSG:3857',
       tileGrid,
-      attributions: ['CC BY 4.0 <a href="www.scne.es" target="_blank" rel="noreferrer noopener>www.scne.es</a>'],
+      attributions: [
+        'CC BY 4.0 <a href="https://www.scne.es" target="_blank" rel="noreferrer noopener">www.scne.es</a>',
+      ],
     }),
   });
 }
 
-function createBaseMapDotAtSource(title, source) {
+function createBaseMapDotAtSource(title, image, source) {
   let format;
   let layer;
   switch (source) {
@@ -159,6 +167,8 @@ function createBaseMapDotAtSource(title, source) {
 
   return new ol.layer.Tile({
     title,
+    image,
+    country: 'at',
     type: 'base',
     visible: false,
     source: new ol.source.WMTS({
@@ -176,15 +186,17 @@ function createBaseMapDotAtSource(title, source) {
   });
 }
 
-function createOrdnanceSurveySource(title) {
+function createOrdnanceSurveySource() {
   // available backgrounds are Outdoor, Light, Road
   return new ol.layer.Tile({
-    title,
+    title: 'UK',
+    image: 'uk.jpg',
+    country: 'gb',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
       attributions: [
-        '© <a target="_blank" rel="noreferer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
+        '© <a target="_blank" rel="noreferrer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
       ],
       url: 'https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey,
       minZoom: 7,
@@ -207,7 +219,7 @@ export const cartoLayers = function () {
         'TileMatrix={z}&TileCol={x}&TileRow={y}',
       attributions: [
         '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
-          ' target="_blank" rel="noreferer">Esri</a>'
+          ' target="_blank" rel="noreferrer noopener">Esri</a>'
       ],
       maxZoom: 19
     })
@@ -226,13 +238,14 @@ export const cartoLayers = function () {
   // $gettext('OpenTopoMap', 'Map layer')
   const openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
+    image: 'opentopomap.jpg',
     type: 'base',
     visible: true,
     source: new ol.source.XYZ({
       url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       attributions:
-        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noopener noreferer">OpenStreetMap</a> | ' +
-        '© <a href="//opentopomap.org" target="_blank" rel="noopener noreferer">OpenTopoMap</a>',
+        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
+        '© <a href="//opentopomap.org" target="_blank" rel="noreferrer noopener">OpenTopoMap</a>',
       maxZoom: 17,
     }),
   });
@@ -240,36 +253,49 @@ export const cartoLayers = function () {
   // $gettext('ESRI World Imagery', 'Map layer')
   const esriImagery = new ol.layer.Tile({
     title: 'Esri World Imagery',
+    image: 'esri.jpg',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
       url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       attributions: [
         '<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"' +
-          ' target="_blank" rel="noreferer">Esri</a>',
+          ' target="_blank" rel="noreferrer noopener">Esri</a>',
       ],
       maxZoom: 19,
     }),
   });
 
   // $gettext('IGN maps', 'Map layer')
-  const ignFrMaps = createIgnFrSource('IGN maps', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
+  const ignFrMaps = createIgnFrSource('IGN maps', 'ign.jpg', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
-  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ORTHOIMAGERY.ORTHOPHOTOS');
+  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ignortho.jpg', 'ORTHOIMAGERY.ORTHOPHOTOS');
   // $gettext('SwissTopo', 'Map layer')
-  const swissTopo = createSwisstopoLayer('SwissTopo', 'ch.swisstopo.pixelkarte-farbe', 'jpeg', 'current');
+  const swissTopo = createSwisstopoLayer(
+    'SwissTopo',
+    'swisstopo.jpg',
+    'ch.swisstopo.pixelkarte-farbe',
+    'jpeg',
+    'current'
+  );
   // $gettext('SwissTopo ortho', 'Map layer')
-  const swissTopoOrtho = createSwisstopoLayer('SwissTopo ortho', 'ch.swisstopo.swissimage', 'jpeg', 'current');
+  const swissTopoOrtho = createSwisstopoLayer(
+    'SwissTopo ortho',
+    'swisstopoortho.jpg',
+    'ch.swisstopo.swissimage',
+    'jpeg',
+    'current'
+  );
   // $gettext('IGN raster (es)', 'Map layer')
-  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'raster');
+  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'ignes.jpg', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
-  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ortho');
+  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ignesortho.jpg', 'ortho');
   // $gettext('Basemap (at)', 'Map layer')
-  const basemap = createBaseMapDotAtSource('Basemap (at)', 'raster');
+  const basemap = createBaseMapDotAtSource('Basemap (at)', 'at.jpg', 'raster');
   // $gettext('Basemap ortho (at)', 'Map layer')
-  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'ortho');
+  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'atortho.jpg', 'ortho');
   // $gettext('Ordnance Survey (uk), 'Map layer')
-  const ordnanceSurvey = createOrdnanceSurveySource('UK');
+  const ordnanceSurvey = createOrdnanceSurveySource();
   return [
     openTopoMap,
     /* esri, */
@@ -289,10 +315,16 @@ export const cartoLayers = function () {
 
 export const dataLayers = function () {
   // $gettext('IGN Slopes', 'Map slopes layer')
-  const ignSlopes = createIgnFrSource('IGN Slopes', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
+  const ignSlopes = createIgnFrSource('IGN Slopes', 'ignslopes.jpg', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
   // $gettext('SwissTopo Slopes', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer('SwissTopo Slopes', 'ch.swisstopo.hangneigung-ueber_30', 'png', 'current');
+  const swissSlopes = createSwisstopoLayer(
+    'SwissTopo Slopes',
+    'swisstoposlopes.jpg',
+    'ch.swisstopo.hangneigung-ueber_30',
+    'png',
+    'current'
+  );
   swissSlopes.setOpacity(0.4);
 
   return [ignSlopes, swissSlopes];
