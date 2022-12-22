@@ -225,7 +225,7 @@ function createOrdnanceSurveySource() {
 export const cartoLayers = function () {
   // $gettext('ESRI', 'Map layer')
   /* const esri = new ol.layer.Tile({
-    title: 'Esri',
+    title: 'ESRI',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
@@ -269,7 +269,7 @@ export const cartoLayers = function () {
 
   // $gettext('ESRI World Imagery', 'Map layer')
   const esriImagery = new ol.layer.Tile({
-    title: 'Esri World Imagery',
+    title: 'ESRI World Imagery',
     image: 'esri.jpg',
     type: 'base',
     visible: false,
