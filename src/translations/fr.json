@@ -284,10 +284,10 @@
     "I must not use slopes > 40°": "Je renonce aux pentes > 40°",
     "I read and understood the interest and limitations of YETI": "J’ai lu et j’ai compris l’intérêt et les limites de YETI",
     "ICGC ortho (ca)": {
-      "Map layer": "ICGC"
+      "Map layer": "ICGC Sat"
     },
     "ICGC raster (ca)": {
-      "Map layer": "ICGC Sat"
+      "Map layer": "ICGC"
     },
     "IGN Slopes": {
       "Map slopes layer": "IGN"
@@ -437,7 +437,7 @@
     "Open in a new tab": "Ouvrir dans un nouvel onglet",
     "Ordered list": "Liste triée",
     "Ordnance Survey (uk)": {
-      "Map layer": "Ordnance Survey"
+      "Map layer": "Ordn. Survey"
     },
     "Orientations:": "Orientations :",
     "Other options": "Autres options",
