@@ -308,7 +308,7 @@ export const cartoLayers = function () {
   // $gettext('IGN ortho (es)', 'Map layer')
   const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ignesortho.jpg', 'ortho');
   // $gettext('ICGC raster (ca)', 'Map layer')
-  const icgcMaps = createIcgcSource('ICGC maps (ca)', 'icgc.jpg', 'topo');
+  const icgcMaps = createIcgcSource('ICGC raster (ca)', 'icgc.jpg', 'topo');
   // $gettext('ICGC ortho (ca)', 'Map layer')
   const icgcOrtho = createIcgcSource('ICGC ortho (ca)', 'icgcortho.jpg', 'orto');
   // $gettext('Basemap (at)', 'Map layer')
