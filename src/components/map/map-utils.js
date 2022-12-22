@@ -27,14 +27,14 @@ const buildTextStyle = function (title, highlight) {
   return new ol.style.Text(def);
 };
 
-export const buildPolygonStyle = function () {
+export const buildPolygonStyle = function (opacity = 0.7) {
   return new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: [190, 190, 190, 1],
-      width: 1,
+      color: [100, 100, 100, opacity * 0.5],
+      width: 1.5,
     }),
     fill: new ol.style.Fill({
-      color: [254, 228, 120, 0.7],
+      color: [251, 201, 0, opacity * 0.5],
     }),
   });
 };
