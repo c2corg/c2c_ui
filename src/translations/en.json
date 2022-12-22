@@ -73,10 +73,10 @@
     "Associated routes cotations": "Grades of routes associated to the waypoint",
     "Back to edit mode": "Back to edition mode",
     "Basemap (at)": {
-      "Map layer": "Austria"
+      "Map layer": "basemap.at"
     },
     "Basemap ortho (at)": {
-      "Map layer": "Autria Sat"
+      "Map layer": "basemap.at Sat"
     },
     "Beware of case-sensitive login and password": "Beware of case-sensitive login and password.",
     "Book content": "Short description of the book's contents",
@@ -122,20 +122,26 @@
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Have you (re) evaluated the risks at each change in the situation?\nWhat factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the group, etc.",
     "Hiking gear": "Summer hiking",
     "Home page feed parameters": "Homepage feed parameters",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC Sat"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC"
+    },
     "IGN Slopes": {
-      "Map slopes layer": "France (IGN)"
+      "Map slopes layer": "IGN"
     },
     "IGN maps": {
-      "Map layer": "IGN Fr"
+      "Map layer": "IGN"
     },
     "IGN ortho": {
-      "Map layer": "IGN Fr Sat"
+      "Map layer": "IGN Sat"
     },
     "IGN ortho (es)": {
-      "Map layer": "IGN Es Sat"
+      "Map layer": "IGN Sat"
     },
     "IGN raster (es)": {
-      "Map layer": "IGN Es"
+      "Map layer": "IGN"
     },
     "Ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "Information about the terrain, like elevations, lengths...": "Information about the terrain, like height diffs, lengths...",
@@ -156,6 +162,9 @@
     },
     "Only document less than 24h old can be deleted": {
       "API message": "Only recent documents (less than 24h old) can be deleted. Please contact moderators to delete this document."
+    },
+    "Ordnance Survey (uk)": {
+      "Map layer": "Ordnance Survey"
     },
     "Oups! Something went wrong with forum. Here is the message :": "Oops! Something went wrong with forum. Here is the message:",
     "Oups! something went wrong...": "Oops! something went wrong...",
@@ -185,7 +194,7 @@
     },
     "Skitouring gear": "Ski and snowboard touring, snowshoeing",
     "SwissTopo Slopes": {
-      "Map slopes layer": "Switzerland (SwissTopo)"
+      "Map slopes layer": "SwissTopo"
     },
     "SwissTopo ortho": {
       "Map layer": "SwissTopo Sat"

@@ -74,10 +74,10 @@
     "Back to the top": "Haut de page",
     "Base layer": "Fond de carte",
     "Basemap (at)": {
-      "Map layer": "Autriche"
+      "Map layer": "basemap.at"
     },
     "Basemap ortho (at)": {
-      "Map layer": "Autriche Sat"
+      "Map layer": "basemap.at Sat"
     },
     "Be careful,": "Attention,",
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Attention, par neige mouillée, aucun facteur de réduction d’orientation ou de fréquentation ne peut être appliqué.",
@@ -283,20 +283,26 @@
     "I must not use slopes > 35°": "Je renonce aux pentes > 35°",
     "I must not use slopes > 40°": "Je renonce aux pentes > 40°",
     "I read and understood the interest and limitations of YETI": "J’ai lu et j’ai compris l’intérêt et les limites de YETI",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC Sat"
+    },
     "IGN Slopes": {
-      "Map slopes layer": "France (IGN)"
+      "Map slopes layer": "IGN"
     },
     "IGN maps": {
-      "Map layer": "IGN Fr"
+      "Map layer": "IGN"
     },
     "IGN ortho": {
-      "Map layer": "IGN Fr Sat"
+      "Map layer": "IGN Sat"
     },
     "IGN ortho (es)": {
-      "Map layer": "IGN Es Sat"
+      "Map layer": "IGN Sat"
     },
     "IGN raster (es)": {
-      "Map layer": "IGN Es"
+      "Map layer": "IGN"
     },
     "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
     "If the route does not exists in our base, you can create it.": "Si l'itinéraire n'existe pas, vous pouvez le créer.",
@@ -430,6 +436,9 @@
     "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
     "Open in a new tab": "Ouvrir dans un nouvel onglet",
     "Ordered list": "Liste triée",
+    "Ordnance Survey (uk)": {
+      "Map layer": "Ordnance Survey"
+    },
     "Orientations:": "Orientations :",
     "Other options": "Autres options",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
@@ -558,7 +567,7 @@
     "Suggested rating": "Cotation suggérée",
     "Summary": "Résumé",
     "SwissTopo Slopes": {
-      "Map slopes layer": "Suisse (SwissTopo)"
+      "Map slopes layer": "SwissTopo"
     },
     "SwissTopo ortho": {
       "Map layer": "SwissTopo Sat"
