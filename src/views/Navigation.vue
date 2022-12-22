@@ -177,7 +177,7 @@ export default {
         {
           to: { name: 'preferences' },
           text: this.$gettext('My preferences'),
-          icon: 'cogs',
+          icon: 'gears',
         },
         {
           to: { name: 'outings', query: { u: this.$user.id } },

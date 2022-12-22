@@ -34,7 +34,6 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faCloud } from '@fortawesome/free-solid-svg-icons/faCloud';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
-import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
@@ -53,6 +52,8 @@ import { faFileDownload } from '@fortawesome/free-solid-svg-icons/faFileDownload
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons/faFlagCheckered';
+import { faGear } from '@fortawesome/free-solid-svg-icons/faGear';
+import { faGears } from '@fortawesome/free-solid-svg-icons/faGears';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { faGlobeAmericas } from '@fortawesome/free-solid-svg-icons/faGlobeAmericas';
 import { faGrin } from '@fortawesome/free-solid-svg-icons/faGrin';
@@ -260,7 +261,6 @@ export default function install(Vue) {
     faCircle,
     faCloud,
     faCode,
-    faCogs,
     faColumns,
     faComment,
     faComments,
@@ -279,6 +279,8 @@ export default function install(Vue) {
     faFilter,
     faFlag,
     faFlagCheckered,
+    faGear,
+    faGears,
     faGlobe,
     faGlobeAmericas,
     faGrin,

@@ -46,6 +46,12 @@
               :layer="{
                 title: 'Fauna protection areas',
                 image: 'fauna.jpg',
+                set(name, value) {
+                  protectionAreasLayerSet(name, value);
+                },
+                get(name) {
+                  return protectionAreasLayerGet(name);
+                },
               }"
             ></layer-button>
           </div>
@@ -903,6 +909,25 @@ export default {
       this.protectionAreasVisible = !this.protectionAreasVisible;
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(!layer.getVisible()));
       this.protectionAreasLayer.setVisible(!this.protectionAreasLayer.getVisible());
+    },
+
+    protectionAreasLayerSet(name, value) {
+      if (name === 'opacity') {
+        this.protectionAreasLayers.forEach((layer) => layer.setOpacity(value));
+        this.protectionAreasLayer.getSource().forEachFeature((feature) => {
+          feature.set('normalStyle', buildPolygonStyle(value));
+          feature.setStyle(feature.get('normalStyle'));
+        });
+      }
+    },
+
+    protectionAreasLayerGet(name) {
+      switch (name) {
+        case 'opacity':
+          return this.protectionAreasLayers[0].getOpacity();
+        case 'configurable':
+          return true;
+      }
     },
 
     emitMoveEvent() {
