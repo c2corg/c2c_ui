@@ -340,6 +340,7 @@ export const dataLayers = function () {
   // $gettext('IGN Slopes', 'Map slopes layer')
   const ignSlopes = createIgnFrSource('IGN Slopes', 'ignslopes.jpg', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
   ignSlopes.setOpacity(0.4);
+  ignSlopes.set('configurable', true);
   // $gettext('SwissTopo Slopes', 'Map slopes layer')
   const swissSlopes = createSwisstopoLayer(
     'SwissTopo Slopes',
@@ -349,6 +350,7 @@ export const dataLayers = function () {
     'current'
   );
   swissSlopes.setOpacity(0.4);
+  swissSlopes.set('configurable', true);
 
   return [ignSlopes, swissSlopes];
 };

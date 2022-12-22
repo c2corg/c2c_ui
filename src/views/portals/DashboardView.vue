@@ -19,7 +19,7 @@
         <div class="box">
           <span v-if="$user.isLogged" class="is-pulled-right is-size-4">
             <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
-              <fa-icon icon="cogs" />
+              <fa-icon icon="gears" />
             </router-link>
 
             <span :title="enableUserPreferences ? $gettext('Personal feed on') : $gettext('Personal feed off')">
