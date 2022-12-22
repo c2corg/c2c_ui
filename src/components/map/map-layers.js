@@ -133,6 +133,23 @@ function createIgnEsSource(title, image, source) {
   });
 }
 
+function createIcgcSource(title, image, source) {
+  return new ol.layer.Tile({
+    title,
+    image,
+    country: 'catalonia',
+    visible: false,
+    source: new ol.source.TileWMS({
+      projection: 'EPSG:3857',
+      url: 'https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?',
+      params: {
+        LAYERS: source,
+      },
+      attributions: ['CC BY 4.0 <a href="http://www.icgc.cat" target="_blank" rel="noreferrer noopener">ICGC</a>'],
+    }),
+  });
+}
+
 function createBaseMapDotAtSource(title, image, source) {
   let format;
   let layer;
@@ -290,6 +307,10 @@ export const cartoLayers = function () {
   const ignEsMaps = createIgnEsSource('IGN raster (es)', 'ignes.jpg', 'raster');
   // $gettext('IGN ortho (es)', 'Map layer')
   const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ignesortho.jpg', 'ortho');
+  // $gettext('ICGC raster (ca)', 'Map layer')
+  const icgcMaps = createIcgcSource('ICGC maps (ca)', 'icgc.jpg', 'topo');
+  // $gettext('ICGC ortho (ca)', 'Map layer')
+  const icgcOrtho = createIcgcSource('ICGC ortho (ca)', 'icgcortho.jpg', 'orto');
   // $gettext('Basemap (at)', 'Map layer')
   const basemap = createBaseMapDotAtSource('Basemap (at)', 'at.jpg', 'raster');
   // $gettext('Basemap ortho (at)', 'Map layer')
@@ -307,6 +328,8 @@ export const cartoLayers = function () {
     swissTopoOrtho,
     ignEsMaps,
     ignEsOrtho,
+    icgcMaps,
+    icgcOrtho,
     basemap,
     basemapOrtho,
     ordnanceSurvey,
