@@ -305,6 +305,12 @@
     "I must not use slopes > 35°": "Odpovedujem se strminam > 35°",
     "I must not use slopes > 40°": "Odpovedujem se strminam > 40°",
     "I read and understood the interest and limitations of YETI": "Prebral sem in razumel korist in omejitve YETI-ja",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC Sat"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC"
+    },
     "IGN Slopes": {
       "Map slopes layer": "Francija (IGN)"
     },
@@ -456,6 +462,9 @@
     "Open fields to detail the picture's context": "Prosto polje za podroben opis konteksta slike",
     "Open in a new tab": "Odpri v novem zavihku",
     "Ordered list": "Oštevilčen seznam",
+    "Ordnance Survey (uk)": {
+      "Map layer": "Ordn. Survey"
+    },
     "Orientations": "Orientacije",
     "Orientations:": "Orientacije:",
     "Other options": "Druge možnosti",
