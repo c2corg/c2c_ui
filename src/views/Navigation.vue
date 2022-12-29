@@ -179,6 +179,11 @@ export default {
           icon: 'gears',
         },
         {
+          to: { name: 'trackers' },
+          text: this.$gettext('Activity trackers'),
+          icon: 'location-crosshairs',
+        },
+        {
           to: { name: 'outings', query: { u: this.$user.id } },
           text: this.$gettext('My outings'),
           iconComponent: 'icon-outing',
@@ -204,13 +209,6 @@ export default {
           icon: 'star',
         },
       ];
-      if (config.enableTrackers) {
-        items.splice(3, 0, {
-          to: { name: 'trackers' },
-          text: this.$gettext('Activity trackers'),
-          icon: 'location-crosshairs',
-        });
-      }
       return items;
     },
   },
