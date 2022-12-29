@@ -22,7 +22,6 @@ import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
 import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
-import WorkInProgressView from '@/views/static-views/WorkInProgressView';
 import AccountView from '@/views/user/AccountView';
 import FollowingView from '@/views/user/FollowingView';
 import LoginView from '@/views/user/LoginView';
@@ -73,8 +72,6 @@ const routes = [
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
-
-  { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
   {
     path: '/forum',
