@@ -61,14 +61,15 @@ const routes = [
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
   { path: '/auth', name: 'auth', component: LoginView },
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
-  { path: '/account', name: 'account', component: AccountView },
-  { path: '/following', name: 'following', component: FollowingView },
-  { path: '/preferences', name: 'preferences', component: PreferencesView },
-  { path: '/trackers', name: 'trackers', component: TrackersView },
+  { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
+  { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
+  { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
+  { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },
   {
     path: '/trackers/:vendor/exchange-token',
     name: 'trackers-exchange-token',
     component: TrackersExchangeTokenView,
+    meta: { requiresAuth: true },
   },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
@@ -120,12 +121,14 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
     path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
     name: def.documentType + '-edit',
     component: editionComponent,
+    meta: { requiresAuth: true },
   });
 
   routes.push({
     path: '/' + def.documentType + 's/add/:lang',
     name: def.documentType + '-add',
     component: editionComponent,
+    meta: { requiresAuth: true },
   });
 
   routes.push({
@@ -189,6 +192,16 @@ const router = new Router({
       });
     });
   },
+});
+
+// authentication guard
+router.beforeEach((to, from, next) => {
+  const vm = router.app;
+  if (to.matched.some((record) => record.meta.requiresAuth) && !vm.$user.isLogged) {
+    next({ name: 'auth', query: { redirect: to.fullPath } });
+  } else {
+    next();
+  }
 });
 
 export default router;

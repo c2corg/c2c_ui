@@ -119,7 +119,7 @@
 
           <hr class="dropdown-divider" />
 
-          <a class="dropdown-item is-size-5" @click="$user.signout()">
+          <a class="dropdown-item is-size-5" @click="signout()">
             <fa-icon icon="sign-out-alt" />
             <span>&nbsp;</span>
             <span v-translate>Logout</span>
@@ -253,6 +253,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.searchInput.focus();
       });
+    },
+
+    signout() {
+      this.$user.signout(this.$route);
+      if (this.$route.meta.requiresAuth) {
+        this.$router.push({ name: 'home' });
+      }
     },
   },
 };

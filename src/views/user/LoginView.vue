@@ -201,7 +201,7 @@ export default {
   // that's all !
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.from = from;
+      vm.to = to;
     });
   },
 
@@ -305,10 +305,10 @@ export default {
     },
 
     signin() {
-      this.promise = this.$user.signIn(this.username, this.password).then(this.onSucessSigin);
+      this.promise = this.$user.signIn(this.username, this.password).then(this.onSuccessSigin);
     },
 
-    onSucessSigin(data) {
+    onSuccessSigin(data) {
       const discourse_url = data.data.redirect_internal;
 
       if (discourse_url) {
@@ -338,7 +338,7 @@ export default {
       // redirect() may be called twice
       if (!this.redirectionStillDone) {
         this.redirectionStillDone = true;
-        this.$router.push(this.from?.fullPath);
+        this.$router.push(this.to?.query?.redirect ?? '/');
       }
     },
 
