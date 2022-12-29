@@ -1,8 +1,7 @@
 <template>
   <span>
     <span v-if="$user.isModerator" @click="toggleMask">
-      <a v-if="version.masked" v-translate>Unmask</a>
-      <a v-else v-translate>Mask</a>
+      <a v-translate>Toggle masking</a>
     </span>
     <span v-if="version.masked">
       [<span v-translate>This version is masked.</span>]
