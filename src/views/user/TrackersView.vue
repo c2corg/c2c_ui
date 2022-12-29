@@ -14,7 +14,7 @@
       <span v-translate>An error occurred, connection status could not be retrieved. Please refresh the page.</span>
     </div>
     <div class="columns is-multiline">
-      <div class="column is-4" v-for="application in applications" :key="application.name">
+      <div class="column is-4" v-for="application in filteredApplications" :key="application.name">
         <application-card
           :application="application"
           @configure="configure(application.name)"
@@ -63,6 +63,9 @@ export default {
     baseUrl() {
       return window.location.origin;
     },
+    filteredApplications() {
+      return this.applications.filter(({ status }) => status !== 'disabled');
+    },
   },
 
   mounted() {
@@ -72,34 +75,34 @@ export default {
         name: 'strava',
         website: 'https://www.strava.com',
         connect: `https://www.strava.com/oauth/authorize?client_id=63968&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
-        status: 'not-configured',
+        status: 'disabled',
       },
       {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
         connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=b708af3b-fd46-41ab-af73-5176a0a56f92&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
-        status: 'not-configured',
+        status: 'disabled',
       },
       {
         // $gettext('garmin')
         name: 'garmin',
         website: 'https://www.garmin.com/',
-        status: 'not-configured',
+        status: 'disabled',
       },
       {
         // $gettext('suunto')
         name: 'suunto',
         website: 'https://app.suunto.com/',
         connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=2928e564-85eb-4aef-92fb-2a0259589c9c&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
-        status: 'not-configured',
+        status: 'disabled',
       },
       {
         // $gettext('polar')
         name: 'polar',
         website: 'https://www.flow.polar.com/',
         connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=5a9f9ddd-fc15-48d2-bc56-86b43d491cc9&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
-        status: 'not-configured',
+        status: 'disabled',
       },
     ];
     this.load();
