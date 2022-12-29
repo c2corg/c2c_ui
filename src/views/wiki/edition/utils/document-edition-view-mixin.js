@@ -85,14 +85,6 @@ export default {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
 
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      if (!vm.$user.isLogged) {
-        vm.$router.push({ name: 'auth' });
-      }
-    });
-  },
-
   beforeRouteLeave(to, from, next) {
     if (this.modified) {
       const answer = window.confirm(this.$gettext('Do you really want to leave? you have unsaved changes!'));
