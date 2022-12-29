@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'ol-map-fullscreen': isFullscreen }" style="width: 100%; height: 100%">
+  <div style="width: 100%; height: 100%">
     <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
@@ -1318,13 +1318,20 @@ $control-margin: 0.5em;
   justify-content: center;
 }
 
-.ol-map-fullscreen {
+:fullscreen {
   .ol-control-layer-switcher {
     width: 320px;
   }
   .ol-control-layer-switcher-layers {
     width: 300px;
     height: 100vh;
+  }
+
+  .with-elevation-profile .ol-control-layer-switcher-layers {
+    /* elevation profile occupies 30% of the screen, see MapBox.vue */
+    height: calc(100vh * 0.7);
+    max-height: calc(100vh - 200px);
+    min-height: calc(100vh - 350px);
   }
 }
 
