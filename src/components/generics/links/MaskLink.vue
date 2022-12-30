@@ -1,9 +1,10 @@
 <template>
   <span>
-    <span v-if="$user.isModerator" @click="toggleMask">
-      <a v-translate>Toggle masking</a>
-    </span>
-    <span v-if="version.masked">[<span v-translate>This version is masked.</span>]</span>
+    <button @click="toggleMask" class="button is-small is-ghost">
+      <!-- $gettext('Masked') -->
+      <!-- $gettext('Visible') -->
+      <fa-icon :icon="masked ? 'eye-slash' : 'eye'" :title="$gettext(masked ? 'Masked' : 'Visible')" />
+    </button>
   </span>
 </template>
 
@@ -25,6 +26,12 @@ export default {
     id: {
       type: Number,
       required: true,
+    },
+  },
+
+  computed: {
+    masked() {
+      return this.version.masked;
     },
   },
 
