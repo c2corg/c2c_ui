@@ -66,13 +66,17 @@ ModeratorService.prototype.unblockAccount = function (userId) {
  */
 ModeratorService.prototype.maskVersion = function (documentId, lang, versionId) {
   return this.api.post('/versions/mask', {
-    document_id: documentId, lang: lang, version_id: versionId
+    document_id: documentId,
+    lang: lang,
+    version_id: versionId,
   });
 };
 
 ModeratorService.prototype.unmaskVersion = function (documentId, lang, versionId) {
   return this.api.post('/versions/unmask', {
-    document_id: documentId, lang: lang, version_id: versionId
+    document_id: documentId,
+    lang: lang,
+    version_id: versionId,
   });
 };
 

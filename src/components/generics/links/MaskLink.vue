@@ -3,9 +3,7 @@
     <span v-if="$user.isModerator" @click="toggleMask">
       <a v-translate>Toggle masking</a>
     </span>
-    <span v-if="version.masked">
-      [<span v-translate>This version is masked.</span>]
-    </span>
+    <span v-if="version.masked">[<span v-translate>This version is masked.</span>]</span>
   </span>
 </template>
 
@@ -15,7 +13,6 @@ import { toast } from 'bulma-toast';
 import c2c from '@/js/apis/c2c';
 
 export default {
-
   props: {
     version: {
       type: Object,
@@ -34,11 +31,9 @@ export default {
   methods: {
     async toggleMask() {
       try {
-        await (
-          this.version.masked ?
-          c2c.moderator.unmaskVersion(this.id, this.lang, this.version.version_id) :
-          c2c.moderator.maskVersion(this.id, this.lang, this.version.version_id)
-        );
+        await (this.version.masked
+          ? c2c.moderator.unmaskVersion(this.id, this.lang, this.version.version_id)
+          : c2c.moderator.maskVersion(this.id, this.lang, this.version.version_id));
         this.version.masked = !this.version.masked;
       } catch (error) {
         toast({

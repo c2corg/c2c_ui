@@ -1,12 +1,10 @@
 <template>
   <div v-if="version" class="notification is-warning has-text-centered">
-    <!-- TODO : translation -->
     <p>
-      <span v-translate>This is an archived version of this page, as of</span> {{ $dateUtils.toLocalizedString(version.written_at, 'PPPPpp') }}
+      <span v-translate>This is an archived version of this page, as of</span>
+      {{ $dateUtils.toLocalizedString(version.written_at, 'LLLL') }}
     </p>
-    <p v-if="version.masked" v-translate>
-      This version has been masked.
-    </p>
+    <p v-if="version.masked" v-translate>This version has been masked.</p>
 
     <span v-if="!isFirstVersion">
       (<diff-link
