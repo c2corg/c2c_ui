@@ -43,21 +43,22 @@
               :title="$gettext('Cards mode')"
             />
           </span>
-          <display-mode-switch
-            v-if="documentAreGeoLocalized"
-            class="header-item is-hidden-mobile"
-            list-mode="listMode"
-            :value="displayMode"
-            @input="setProperty('displayMode', arguments[0])"
-          />
-
-          <span class="header-item is-size-3 is-hidden-tablet">
-            <fa-icon
-              :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
-              class="has-text-primary"
-              @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+          <template v-if="documentAreGeoLocalized">
+            <display-mode-switch
+              class="header-item is-hidden-mobile"
+              list-mode="listMode"
+              :value="displayMode"
+              @input="setProperty('displayMode', arguments[0])"
             />
-          </span>
+
+            <span class="is-size-3 is-hidden-tablet">
+              <fa-icon
+                :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
+                class="has-text-primary"
+                @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+              />
+            </span>
+          </template>
         </span>
       </div>
 
@@ -323,6 +324,10 @@ $cards-gap: 0.25rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-bottom: $mobile-section-padding;
+  }
+
+  .header-right {
+    line-height: 1em;
   }
 
   .map-container {
