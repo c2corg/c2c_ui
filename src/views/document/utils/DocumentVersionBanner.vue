@@ -92,10 +92,10 @@ export default {
 
   computed: {
     isFirstVersion() {
-      return this.version.previous_version_id === null;
+      return !this.version.previous_version_id;
     },
     isLastVersion() {
-      return this.version.next_version_id === null;
+      return !this.version.next_version_id;
     },
   },
 };
