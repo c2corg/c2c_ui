@@ -103,7 +103,7 @@
     "Associated routes": "Társított útvonalak",
     "Associated routes cotations": "Az útvonalponthoz társított útvonalak besorolása",
     "Association": "Camptocamp Egyesület",
-    "Associations history": "Egyesületek története",
+    "Associations history": "Társítások (előzmények)",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Tulajdonítás - a forrást meg kell jelölni, megadni egy linket a felhasználási feltételekre, és megjelölni, hogy történtek-e változtatások az eredeti műhöz képest.",
     "Attributions": {
       "Map controls": "Tulajdonítások"
@@ -143,7 +143,7 @@
     "Child": "Gyermek",
     "Clear": "Törlés",
     "Close": "Bezár",
-    "Collapse": "Meghajt",
+    "Collapse": "Elrejt",
     "Comments": "Megjegyzések",
     "Comments are disabled.": "Megjegyzések nincsenek engedélyezve ehhez a dokumentumhoz.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "A személyes célok és elvárások, a kiruccanás alatti gondolatok és megfigyelések leírása, új stratégiák megvitatása, a csoport viselkedésének és a felelősség megosztásának leírása, szokva volt-e a csoport a csapatmunkához, főbb törekvések, stb.",
@@ -700,9 +700,9 @@
     },
     "ascending sort": "Növekvő sorrend szerinti rendezés",
     "association": {
-      "article_categories": "egyesület"
+      "article_categories": "társítás"
     },
-    "associations": "Egyesület",
+    "associations": "Társítások",
     "at least one route required": {
       "API message": "Legalább egy útvonal megadása szükséges"
     },
@@ -1664,7 +1664,7 @@
     "waypoint": "útvonalpont",
     "waypoint_children": "útvonalpont_gyerekek",
     "waypoint_slope": "útvonalpont_meredekség",
-    "waypoint_type": "útvonalpont_típus",
+    "waypoint_type": "Útvonalpont típus",
     "waypoints": "útvonalpontok",
     "weather": "időjárás",
     "weather_event": {
