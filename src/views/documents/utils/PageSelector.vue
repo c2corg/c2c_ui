@@ -19,25 +19,27 @@
     >
       <fa-icon icon="chevron-right" />
     </component>
-    <dropdown-button class="ml-1 mr-1" ref="limitSelector">
-      <span slot="button" class="button is-small">
-        <span>{{ queryLimit }}</span>
-        &nbsp;
-        <fa-icon icon="angle-down" aria-hidden="true" />
-      </span>
-      <component
-        v-for="l in [30, 50, 100]"
-        :key="l"
-        :is="'router-link'"
-        class="dropdown-item is-small"
-        :class="{ 'is-active': queryLimit === l }"
-        :to="pageQuery(offset, l)"
-        @click.native="hideOnclick"
-      >
-        <span>{{ l }}</span>
-      </component>
-    </dropdown-button>
-    <span v-translate translate-context="30 per page">per page</span>
+    <span class="limit-selector">
+      <dropdown-button class="ml-1 mr-1" ref="limitSelector">
+        <span slot="button" class="button is-small">
+          <span>{{ queryLimit }}</span>
+          &nbsp;
+          <fa-icon icon="angle-down" aria-hidden="true" />
+        </span>
+        <component
+          v-for="l in [30, 50, 100]"
+          :key="l"
+          :is="'router-link'"
+          class="dropdown-item is-small"
+          :class="{ 'is-active': queryLimit === l }"
+          :to="pageQuery(offset, l)"
+          @click.native="hideOnclick"
+        >
+          <span>{{ l }}</span>
+        </component>
+      </dropdown-button>
+      <span v-translate translate-context="30 per page">per page</span>
+    </span>
   </span>
 </template>
 
@@ -99,5 +101,10 @@ export default {
 <style scoped lang="scss">
 .pagination-link {
   height: 1.75em;
+}
+@media screen and (max-width: 340px) {
+  .limit-selector {
+    display: none;
+  }
 }
 </style>
