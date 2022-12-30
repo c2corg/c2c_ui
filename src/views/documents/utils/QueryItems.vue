@@ -397,6 +397,14 @@ export default {
 .query-items-filters {
   margin-bottom: 0.5rem;
   font-size: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   > div {
     font-size: 1rem;
