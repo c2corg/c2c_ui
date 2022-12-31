@@ -292,7 +292,7 @@
     "Help": "Segítség",
     "Help research activities to define new prevention means": "Segíts a kutatási erőfeszítésekben új megelőzési módszereket kidolgozni",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "E az általad követett felhasználók listája, akiknek a bejegyzéseit látni fogod a személyes hírfolyamodban",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket amik az oldal hírfolyamára lesznek alkalmazva",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket, amik az oldal hírfolyamára lesznek alkalmazva.",
     "High danger level from the avalanche bulletin": "A lavinajelentés alapján nagy veszély",
     "Hiking gear": "Kiránduló felszerelés",
     "History": "Történet",
@@ -361,7 +361,7 @@
     "Longitude": "földrajzi hosszúság",
     "Low danger level from the avalanche bulletin": "A lavinajelentés szerint alacsony veszély",
     "Mail has been sent": "Email elküldve",
-    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Az útra vonatkozó fő információk, mint például cím, tevékenység, GPS és útvonalpont (melyik hegység, hely)",
+    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Az útra vonatkozó fő információk, mint például név, tevékenység, GPS és útvonalpontok (melyik hegység, stb)",
     "Main informations about your outing": "A kiruccanásra vonatkozó fő információk",
     "Make profile page public": "A profil oldal nyilvánossá tétele",
     "Map filter off": "Térkép szűrő kikapcsolva",
@@ -903,8 +903,8 @@
     "elevation": "magasság",
     "elevation_access": "megközelítés_szintje",
     "elevation_down_snow": "lefele_hó_szint",
-    "elevation_max": "max_magasság",
-    "elevation_min": "min_magasság",
+    "elevation_max": "Legmagasabb pont szintje",
+    "elevation_min": "Legalacsonyabb pont szintje",
     "elevation_up_snow": "felfele_hó_szint",
     "emphasized text": "kiemelt szöveg",
     "empty": {
@@ -940,6 +940,7 @@
       "rain_proof_types": "kitett"
     },
     "exposition_rock_rating": "kitettség_szikla_besorolás",
+    "external_resources": "Egyéb információ források",
     "face": {
       "route_configuration_types": "oldal"
     },
@@ -1037,14 +1038,14 @@
     "heading text": "Fejléc szövege",
     "heating_unstaffed": "fűtés_személyzet_nélkül",
     "height": "magasság",
-    "height_diff": "magasság_különbség",
-    "height_diff_access": "magasság_különbség_felfele",
-    "height_diff_difficulties": "magasság_különbség_nehézségek",
-    "height_diff_down": "magasság_különbség_lefele",
-    "height_diff_up": "magasság_különbség_felfele",
-    "height_max": "max_magasság",
+    "height_diff": "Szintkülönbség",
+    "height_diff_access": "Szintkülönbség a beszállásig",
+    "height_diff_difficulties": "Szintkülönbség, nehéz szakaszokon",
+    "height_diff_down": "Szintkülönbség lefele",
+    "height_diff_up": "Szintkülönbség felfele",
+    "height_max": "Maximális magasság",
     "height_median": "medián_magasság",
-    "height_min": "min_magasság",
+    "height_min": "Minimális magasság",
     "help": {
       "$$noContext": "segítség",
       "image_categories": "segítség"
@@ -1052,8 +1053,8 @@
     "hiking": {
       "activities": "kirándulás"
     },
-    "hiking_mtb_exposition": "kirándulás_mtb_kitettség",
-    "hiking_rating": "kirándulás_besorolás",
+    "hiking_mtb_exposition": "MTB kitettség besorolás",
+    "hiking_rating": "Túra nehézség",
     "historical": {
       "book_types": "történelmi"
     },
@@ -1070,8 +1071,8 @@
       "user_categories": "menedékház_gondnok"
     },
     "ice_climbing": {
-      "activities": "jég_mászás",
-      "event_activities": "jég_mászás"
+      "activities": "jégmászás",
+      "event_activities": "jégmászás"
     },
     "ice_cornice_collapse": {
       "event_types": "jég_párkány_összeomlás"
@@ -1140,7 +1141,7 @@
     "level_na": {
       "avalanche_levels": "szint_nem_alkalmazható"
     },
-    "lift_access": "lift_megközelítés",
+    "lift_access": "Megközelítés lifttel",
     "lift_status": "lift_állapot",
     "loading": "feltöltés",
     "local_product": {
@@ -1188,7 +1189,7 @@
     },
     "motivations": "motivációk",
     "mountain_biking": {
-      "activities": "hegyi_biciklizás"
+      "activities": "hegyibiciklizés"
     },
     "mountain_climbing": {
       "activities": "hegymászás"
@@ -1205,11 +1206,11 @@
     "mountainbike_instructor": {
       "user_categories": "hegyikerékpár_oktató"
     },
-    "mtb_down_rating": "mtb_lefele_besorolás",
-    "mtb_height_diff_portages": "mtb_cipelés_szintkülönbség",
-    "mtb_length_asphalt": "mtb_aszfalt_úthossz",
-    "mtb_length_trail": "mtb_ösvény_hossz",
-    "mtb_up_rating": "mtb_felfele_besorolás",
+    "mtb_down_rating": "MTB ereszkedés nehézség",
+    "mtb_height_diff_portages": "Bicikli cipelés szintkülönbség",
+    "mtb_length_asphalt": "Aszfaltozott szakasz hossza",
+    "mtb_length_trail": "Hegyibiciklis ösvény hossza",
+    "mtb_up_rating": "MTB hegymenet nehézség",
     "multi": {
       "climbing_outdoor_types": "több"
     },
@@ -1402,7 +1403,7 @@
     "public_transportation_types": "tömegközlekedés_típusok",
     "publication_date": "közzététel_dátuma",
     "qualification": "minősítés",
-    "quality": "minőség",
+    "quality": "Dokumentum minősége",
     "quartzite": {
       "rock_types": "kvarcit"
     },
@@ -1454,8 +1455,8 @@
     },
     "route": "útvonal",
     "route_description": "út_leírás",
-    "route_history": "út_történet",
-    "route_length": "út_hossz",
+    "route_history": "Az útvonal története",
+    "route_length": "úthossz",
     "route_study": "út_tanulmány",
     "route_types": "út_típusok",
     "routes": "utak",
@@ -1558,10 +1559,10 @@
       "weather_station_types": "hó_magasság"
     },
     "snow_ice_mixed": {
-      "activities": "hó_jég_vegyes",
-      "event_activities": "hó_jég_vegyes"
+      "activities": "hó/jég vegyes",
+      "event_activities": "hó/jég vegyes"
     },
-    "snow_quality": "hó_minőség",
+    "snow_quality": "hóminőség",
     "snow_quantity": "hó_mennyiség",
     "snowshoe_rating": "hótalpazás_besorolás",
     "snowshoeing": {
@@ -1587,7 +1588,7 @@
       "product_types": "sport_üzlet"
     },
     "stone_ice_fall": {
-      "event_types": "hó_jég_hullás"
+      "event_types": "hó- és jéghullás"
     },
     "stories": {
       "article_categories": "történetek"
@@ -1616,7 +1617,7 @@
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Ez egy előnézet. A geometria nincs még egyszerűsítve. A térképes interakciók és exportálás nincsenek engedélyezve.",
     "time_management": "idő_menedzsment",
     "timing": "időzítés",
-    "title": "cím",
+    "title": "név",
     "to": {
       "period": "-hoz -hez -höz"
     },
@@ -1648,7 +1649,10 @@
     "very_safe": {
       "children_proof_types": "nagyon_biztonságos"
     },
-    "via_ferrata_rating": "via_ferrata_besorolás",
+    "via_ferrata": {
+      "activities": "via ferrata"
+    },
+    "via_ferrata_rating": "via ferrata nehézség",
     "virtual": {
       "waypoint_types": "virtuális"
     },
