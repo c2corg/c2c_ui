@@ -43,6 +43,7 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faDirections } from '@fortawesome/free-solid-svg-icons/faDirections';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons/faEllipsisVertical';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
@@ -271,6 +272,7 @@ export default function install(Vue) {
     faDirections,
     faDownload,
     faEdit,
+    faEllipsisVertical,
     faExclamation,
     faExclamationCircle,
     faExpand,

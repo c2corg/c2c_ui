@@ -62,12 +62,23 @@
         :document-types="associations"
         @add="addTag"
       />
-      <load-user-preferences-button class="is-hidden-tablet query-item-component" />
-      <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
-      <print-button />
-    </div>
-    <div class="query-items-tags is-hidden-mobile">
-      <query-tags :documents="tags" @remove="removeTag"></query-tags>
+      <div class="is-hidden-mobile" style="display: inline">
+        <load-user-preferences-button class="is-hidden-tablet query-item-component" />
+        <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
+        <print-button />
+        <div class="query-items-tags">
+          <query-tags :documents="tags" @remove="removeTag"></query-tags>
+        </div>
+      </div>
+      <dropdown-button class="is-hidden-tablet is-pulled-right">
+        <span slot="button" class="button is-white is-size-7-mobile">
+          <fa-icon icon="ellipsis-vertical" />
+        </span>
+        <div class="dropdown-items is-flex is-flex-direction-column">
+          <load-user-preferences-button display="dropdown" />
+          <print-button display="dropdown" />
+        </div>
+      </dropdown-button>
     </div>
   </div>
 </template>
@@ -397,14 +408,6 @@ export default {
 .query-items-filters {
   margin-bottom: 0.5rem;
   font-size: 0;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 
   > div {
     font-size: 1rem;
