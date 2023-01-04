@@ -1,20 +1,36 @@
 <template>
   <button
-    v-if="$user.isLogged"
+    v-if="$user.isLogged && display === 'button'"
     class="button is-small is-primary header-item"
     :class="{ 'is-loading': promise.loading }"
     @click="loadPreferences"
   >
     <fa-icon icon="star" />
-    <span class="is-hidden-mobile">&nbsp;</span>
-    <span class="is-hidden-mobile" v-translate> Load my preferences </span>
+    <span>&nbsp;</span>
+    <span v-translate>Load my preferences</span>
   </button>
+  <span
+    v-else-if="$user.isLogged && display === 'dropdown'"
+    class="dropdown-item"
+    :class="{ 'is-loading': promise.loading }"
+    @click="loadPreferences"
+  >
+    <fa-icon icon="star" />
+    <span v-translate>Load my preferences</span>
+  </span>
 </template>
 
 <script>
 import c2c from '@/js/apis/c2c';
 
 export default {
+  props: {
+    display: {
+      type: String,
+      default: 'button',
+    },
+  },
+
   data() {
     return {
       promise: {},
