@@ -2,11 +2,20 @@
   <div ref="bulletinsOverlay" class="bulletins-overlay">
     <button class="delete is-small button-close" @click="closeOverlay">x</button>
     <div class="bulletins-header pt-5 pb-3 has-text-centered">
-      <p class="title is-5">{{ overlayData.mountainName }}</p>
+      <p class="title is-5 mb-1">
+        {{ overlayData.mountainName }}
+      </p>
+      <p class="title is-7 country-name">
+        {{ overlayData.country }}
+      </p>
+      <dl v-if="overlayData.fullName" class="is-size-7 px-3 has-text-left is-italic regions-list">
+        <dt v-translate>Regions:</dt>
+        <dd>{{ overlayData.fullName }}</dd>
+      </dl>
     </div>
     <div v-if="overlayData.danger.low" class="py-2">
       <p class="is-size-7 px-3 pb-5">
-        <span class="bulletins-date"><strong v-translate>Validity date:</strong> {{ overlayValidUntil }}</span>
+        <span><strong v-translate>Validity date:</strong> {{ overlayValidUntil }}</span>
         <strong v-if="overlayValidUntilExpired" class="is-block has-text-danger">
           <fa-icon icon="exclamation-circle" />
           <span v-translate key="id1">Validity date expired</span>
@@ -67,7 +76,7 @@
               font-size="16px"
               font-weight="bold"
             >
-              {{ overlayData.danger.altitude }}m
+              {{ overlayData.danger.altitude }}
             </text>
           </svg>
         </div>
@@ -232,7 +241,9 @@ export default {
   data() {
     return {
       overlayData: {
+        country: null,
         mountainName: null,
+        fullName: null,
         validUntil: null,
         danger: {},
         orientations: [],
@@ -306,11 +317,6 @@ export default {
   methods: {
     onMountainsResult(data) {
       let mountainsFeatures = this.getFeaturesFromData(data);
-      // filter only data for France and Switzerland
-      mountainsFeatures = mountainsFeatures.filter((feature) => {
-        let country = feature.get('country');
-        return country === 'France' || country === 'Switzerland';
-      });
 
       // add to mountains layer
       mountainsLayer.getSource().addFeatures(mountainsFeatures);
@@ -411,9 +417,11 @@ export default {
       let bulletinsFeatures = data.data;
       let mountainsFeatures = mountainsLayer.getSource().getFeatures();
 
+      // match up bulletin data and zone
       bulletinsFeatures.zones.forEach((zone) => {
         mountainsFeatures.find((mountain) => {
-          if (mountain.get('name') === zone.zone) {
+          // if name and country match, create bulletin
+          if (mountain.get('name') === zone.zone && mountain.get('country') === zone.country) {
             // check validity first
             // if no longer valid (expires 48h), set danger to null
             if ((new Date() - new Date(zone.validUntil)) / 1000 > 60 * 60 * 24 * 2) {
@@ -439,7 +447,9 @@ export default {
               geometry: bulletinsGeometry,
               initialGeometry: bulletinsGeometry,
               overlayData: {
+                country: mountain.get('country'),
                 mountainName: mountain.get('name'),
+                fullName: mountain.get('fullname'),
                 validUntil: zone.validUntil,
                 danger: zone.danger,
                 orientations: zone.orientations,
@@ -596,7 +606,7 @@ export default {
 @import '@/assets/sass/variables';
 
 .bulletins-overlay {
-  width: 250px;
+  width: 300px;
   max-width: 100%;
   background: #fff;
   border-radius: 4px;
@@ -621,8 +631,11 @@ export default {
   z-index: 2;
   pointer-events: none;
 }
-.bulletins-date {
+.country-name {
   opacity: 0.75;
+}
+.regions-list {
+  opacity: 0.9;
 }
 dt,
 dd {
