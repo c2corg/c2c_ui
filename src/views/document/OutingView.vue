@@ -1,6 +1,11 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+    <masked-document-version-info
+      v-if="document === null"
+      :version="version"
+      :document-type="documentType"
+    ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
     <images-box v-if="document" :document="document" />
@@ -108,12 +113,14 @@
 </template>
 
 <script>
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
 export default {
   components: {
     ConditionLevels,
+    MaskedDocumentVersionInfo,
   },
 
   mixins: [documentViewMixin],

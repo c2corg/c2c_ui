@@ -1,174 +1,181 @@
 <template>
   <div class="section content">
     <html-header :title="$gettext('Differences between versions')" />
-    <h1>
-      <icon-document :document-type="documentType" class="is-large" />
-      <span>&#8239;</span>
-      <span>diff</span> ({{ lang }}) :
-      <router-link :to="{ name: documentType, params: { id: documentId, lang: lang } }">{{ title }}</router-link>
-    </h1>
-    <div class="columns">
-      <div v-if="oldVersion" class="column">
-        <div>
-          <version-link
-            :document-type="documentType"
-            :id="documentId"
-            :version="oldVersion.version.version_id"
-            :lang="lang"
-          >
-            Revision #{{ oldVersion.document.version }} as of
-            {{ $dateUtils.toTechnicalString(oldVersion.version.written_at) }}
-          </version-link>
-        </div>
-        <div>by <contributor-link :contributor="oldVersion.version" /></div>
-        <div>
-          {{ oldVersion.version.comment }}
-        </div>
-        <div>
-          <diff-link
-            v-if="oldVersion.previous_version_id"
-            :document-type="documentType"
-            :id="documentId"
-            :lang="lang"
-            :version-from="oldVersion.previous_version_id"
-            :version-to="oldVersion.version.version_id"
-          >
-            ←
-            <span v-translate>previous difference</span>
-          </diff-link>
-          <span v-else v-translate> This is the first version </span>
-        </div>
-      </div>
-
-      <div v-if="newVersion" class="column">
-        <div>
-          <version-link
-            :document-type="documentType"
-            :id="documentId"
-            :version="newVersion.version.version_id"
-            :lang="lang"
-          >
-            Revision #{{ newVersion.document.version }} as of
-            {{ $dateUtils.toTechnicalString(newVersion.version.written_at) }}
-          </version-link>
-        </div>
-        <div>by <contributor-link :contributor="newVersion.version" /></div>
-        <div>
-          {{ newVersion.version.comment }}
-        </div>
-        <div>
-          <diff-link
-            v-if="newVersion.next_version_id"
-            :document-type="documentType"
-            :id="documentId"
-            :lang="lang"
-            :version-from="newVersion.version.version_id"
-            :version-to="newVersion.next_version_id"
-          >
-            <span v-translate>next difference</span>
-            →
-          </diff-link>
-          <span v-else v-translate> This is the last version </span>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="oldVersion && newVersion">
-      <div v-if="filenameHasChanged">
-        <div class="columns">
-          <div class="column">
-            <img :src="getImageUrl(oldVersion.document)" class="is-pulled-right" />
+    <masked-document-version-info
+      v-if="containsMaskedVersion"
+      :document-type="documentType"
+    ></masked-document-version-info>
+    <template v-else>
+      <h1>
+        <icon-document :document-type="documentType" class="is-large" />
+        <span>&#8239;</span>
+        <span>diff</span> ({{ lang }}) :
+        <router-link :to="{ name: documentType, params: { id: documentId, lang: lang } }">{{ title }}</router-link>
+      </h1>
+      <div class="columns">
+        <div v-if="oldVersion" class="column">
+          <div>
+            <version-link
+              :document-type="documentType"
+              :id="documentId"
+              :version="oldVersion.version.version_id"
+              :lang="lang"
+            >
+              Revision #{{ oldVersion.document.version }} as of
+              {{ $dateUtils.toTechnicalString(oldVersion.version.written_at) }}
+            </version-link>
           </div>
-          <div class="column">
-            <img :src="getImageUrl(newVersion.document)" />
+          <div>by <contributor-link :contributor="oldVersion.version" /></div>
+          <div>
+            {{ oldVersion.version.comment }}
+          </div>
+          <div>
+            <diff-link
+              v-if="oldVersion.previous_version_id"
+              :document-type="documentType"
+              :id="documentId"
+              :lang="lang"
+              :version-from="oldVersion.previous_version_id"
+              :version-to="oldVersion.version.version_id"
+            >
+              ←
+              <span v-translate>previous difference</span>
+            </diff-link>
+            <span v-else v-translate> This is the first version </span>
+          </div>
+        </div>
+
+        <div v-if="newVersion" class="column">
+          <div>
+            <version-link
+              :document-type="documentType"
+              :id="documentId"
+              :version="newVersion.version.version_id"
+              :lang="lang"
+            >
+              Revision #{{ newVersion.document.version }} as of
+              {{ $dateUtils.toTechnicalString(newVersion.version.written_at) }}
+            </version-link>
+          </div>
+          <div>by <contributor-link :contributor="newVersion.version" /></div>
+          <div>
+            {{ newVersion.version.comment }}
+          </div>
+          <div>
+            <diff-link
+              v-if="newVersion.next_version_id"
+              :document-type="documentType"
+              :id="documentId"
+              :lang="lang"
+              :version-from="newVersion.version.version_id"
+              :version-to="newVersion.next_version_id"
+            >
+              <span v-translate>next difference</span>
+              →
+            </diff-link>
+            <span v-else v-translate> This is the last version </span>
           </div>
         </div>
       </div>
 
-      <div v-if="geometryHasChanged" class="map-container">
-        <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
-      </div>
-
-      <div v-for="key of Object.keys(diffProperties)" :key="key">
-        <h2 class="title is-2 has-text-centered">{{ $gettext(key) | uppercaseFirstLetter }}</h2>
-        <div class="columns">
-          <div class="column is-6">
-            <del v-if="diffProperties[key].old === null" class="is-pulled-right is-italic">null</del>
-            <del v-else class="is-pulled-right">{{ diffProperties[key].old }}</del>
-          </div>
-          <div class="column is-6">
-            <ins v-if="diffProperties[key].new === null" class="is-italic">null</ins>
-            <ins v-else>{{ diffProperties[key].new }}</ins>
+      <div v-if="oldVersion && newVersion">
+        <div v-if="filenameHasChanged">
+          <div class="columns">
+            <div class="column">
+              <img :src="getImageUrl(oldVersion.document)" class="is-pulled-right" />
+            </div>
+            <div class="column">
+              <img :src="getImageUrl(newVersion.document)" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div v-for="(diffLocale, key) of diffLocales" :key="key">
-        <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
+        <div v-if="geometryHasChanged" class="map-container">
+          <map-view :old-document="oldVersion.document" :new-document="newVersion.document" />
+        </div>
 
-        <div class="columns is-mobile">
-          <div class="column is-6">
-            <div class="splitted-diff">
-              <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
-                <div
-                  v-if="block.ellipsed"
-                  class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic"
-                >
-                  {{ block.rows.length }} identical rows
-                </div>
-                <div v-else>
+        <div v-for="key of Object.keys(diffProperties)" :key="key">
+          <h2 class="title is-2 has-text-centered">{{ $gettext(key) | uppercaseFirstLetter }}</h2>
+          <div class="columns">
+            <div class="column is-6">
+              <del v-if="diffProperties[key].old === null" class="is-pulled-right is-italic">null</del>
+              <del v-else class="is-pulled-right">{{ diffProperties[key].old }}</del>
+            </div>
+            <div class="column is-6">
+              <ins v-if="diffProperties[key].new === null" class="is-italic">null</ins>
+              <ins v-else>{{ diffProperties[key].new }}</ins>
+            </div>
+          </div>
+        </div>
+
+        <div v-for="(diffLocale, key) of diffLocales" :key="key">
+          <h2 class="title is-2 has-text-centered">{{ $gettext(key) }}</h2>
+
+          <div class="columns is-mobile">
+            <div class="column is-6">
+              <div class="splitted-diff">
+                <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
                   <div
-                    v-for="(row, rowKey) of block.rows"
-                    :key="rowKey"
-                    class="row-diff"
-                    :class="{ 'row-del': !row.isIdentical && !row.isFakeOld, 'row-fake': row.isFakeOld }"
+                    v-if="block.ellipsed"
+                    class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic"
                   >
-                    <component
-                      v-for="(item, itemKey) of row.oldPart"
-                      :key="itemKey"
-                      :is="item.isIdentical ? 'span' : 'del'"
-                      >{{ item.text }}</component
+                    {{ block.rows.length }} identical rows
+                  </div>
+                  <div v-else>
+                    <div
+                      v-for="(row, rowKey) of block.rows"
+                      :key="rowKey"
+                      class="row-diff"
+                      :class="{ 'row-del': !row.isIdentical && !row.isFakeOld, 'row-fake': row.isFakeOld }"
                     >
+                      <component
+                        v-for="(item, itemKey) of row.oldPart"
+                        :key="itemKey"
+                        :is="item.isIdentical ? 'span' : 'del'"
+                        >{{ item.text }}</component
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="column is-6">
+              <div class="splitted-diff">
+                <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
+                  <div
+                    v-if="block.ellipsed"
+                    class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic"
+                  >
+                    {{ block.rows.length }} identical rows
+                  </div>
+                  <div v-else>
+                    <div
+                      v-for="(row, rowKey) of block.rows"
+                      :key="rowKey"
+                      class="row-diff"
+                      :class="{ 'row-ins': !row.isIdentical && !row.isFakeNew, 'row-fake': row.isFakeNew }"
+                    >
+                      <component
+                        v-for="(item, itemKey) of row.newPart"
+                        :key="itemKey"
+                        :is="item.isIdentical ? 'span' : 'ins'"
+                        >{{ item.text }}</component
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="column is-6">
-            <div class="splitted-diff">
-              <div v-for="(block, blockKey) of diffLocale" :key="blockKey">
-                <div
-                  v-if="block.ellipsed"
-                  class="block-ellipsed has-text-centered is-size-7 has-text-grey-light is-italic"
-                >
-                  {{ block.rows.length }} identical rows
-                </div>
-                <div v-else>
-                  <div
-                    v-for="(row, rowKey) of block.rows"
-                    :key="rowKey"
-                    class="row-diff"
-                    :class="{ 'row-ins': !row.isIdentical && !row.isFakeNew, 'row-fake': row.isFakeNew }"
-                  >
-                    <component
-                      v-for="(item, itemKey) of row.newPart"
-                      :key="itemKey"
-                      :is="item.isIdentical ? 'span' : 'ins'"
-                      >{{ item.text }}</component
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
 import c2c from '@/js/apis/c2c';
@@ -358,6 +365,10 @@ Rows.prototype.computeEllipsisStates = function () {
 };
 
 export default {
+  components: {
+    MaskedDocumentVersionInfo,
+  },
+
   mixins: [noRobotsMixin],
 
   data() {
@@ -367,6 +378,7 @@ export default {
       newVersion: null,
       diffProperties: {},
       diffLocales: {},
+      containsMaskedVersion: true,
     };
   },
 
@@ -444,7 +456,13 @@ export default {
       this.diffLocales = {};
 
       if (!this.oldVersion || !this.newVersion) {
-        return 'Waiting for other version';
+        return; // Waiting for other version
+      }
+
+      if (this.oldVersion.document && this.newVersion.document) {
+        this.containsMaskedVersion = false;
+      } else {
+        return;
       }
 
       const keys = this.getKeys(this.oldVersion.document, this.newVersion.document, [
@@ -514,7 +532,7 @@ export default {
         return;
       }
 
-      return c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then((response) => {
+      c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then((response) => {
         this[resultProperty] = response.data;
 
         // handle when url version is prev or next
@@ -527,7 +545,7 @@ export default {
           this.loadVersion(this.newVersion.next_version_id, 'newVersion');
         }
 
-        if (resultProperty === 'newVersion') {
+        if (resultProperty === 'newVersion' && this.newVersion.document) {
           this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title;
         }
 

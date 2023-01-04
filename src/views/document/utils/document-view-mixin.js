@@ -117,8 +117,8 @@ export default {
      * properties computed when document is loaded
      */
     document() {
-      if (!this.promise || !this.promise.data) {
-        return null;
+      if (!this.promise?.data) {
+        return undefined;
       }
 
       const doc = this.isVersionView ? this.promise.data.document : this.promise.data;
@@ -128,18 +128,18 @@ export default {
 
     version() {
       if (!this.promise.data || !this.isVersionView) {
-        return null;
+        return undefined;
       }
 
       return this.promise.data.version;
     },
 
     locale() {
-      return this.document ? this.document.cooked : null;
+      return this.document?.cooked;
     },
 
     lang() {
-      return this.document ? this.document.cooked.lang : null;
+      return this.document?.cooked?.lang;
     },
   },
 
@@ -161,23 +161,26 @@ export default {
             response.data.version.next_version_id = response.data.next_version_id;
             response.data.version.previous_version_id = response.data.previous_version_id;
 
-            // versioned data are poor...
-            response.data.document.areas = [];
-            response.data.document.creator = null;
-            response.data.document.associations = {
-              articles: [],
-              books: [],
-              images: [],
-              users: [],
-              waypoints: [],
-              waypoint_children: [],
-              all_routes: {
-                documents: [],
-              },
-              recent_outings: {
-                documents: [],
-              },
-            };
+            // (document may be masked and unavailable)
+            if (response.data.document) {
+              // versioned data are poor...
+              response.data.document.areas = [];
+              response.data.document.creator = null;
+              response.data.document.associations = {
+                articles: [],
+                books: [],
+                images: [],
+                users: [],
+                waypoints: [],
+                waypoint_children: [],
+                all_routes: {
+                  documents: [],
+                },
+                recent_outings: {
+                  documents: [],
+                },
+              };
+            }
             this.$emit('updateHead');
           });
       } else if (this.isDraftView || this.isPrintingView) {

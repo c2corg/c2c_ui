@@ -1,6 +1,11 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+    <masked-document-version-info
+      v-if="document === null"
+      :version="version"
+      :document-type="documentType"
+    ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 is-12-print">
@@ -38,11 +43,13 @@
 
 <script>
 import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
 export default {
   components: {
     LowDocumentQualityBanner,
+    MaskedDocumentVersionInfo,
   },
 
   mixins: [documentViewMixin],
