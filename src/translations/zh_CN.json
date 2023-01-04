@@ -1698,6 +1698,9 @@
       "$$noContext": "是",
       "parking_fee_types": "是"
     },
-    "you need to activate drawing mode": "你需要激活绘制模式"
+    "you need to activate drawing mode": "你需要激活绘制模式",
+    "zh": {
+      "langs": "中文"
+    }
   }
 }
