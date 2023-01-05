@@ -110,6 +110,7 @@ export default function install(Vue) {
         ca: 'Català',
         eu: 'Euskara',
         zh: 'Chinese',
+        sl: 'Slovenščina',
       };
 
       this.translations = {};
