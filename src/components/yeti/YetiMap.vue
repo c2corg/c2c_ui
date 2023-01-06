@@ -202,9 +202,12 @@ export default {
     atLeastOneYetiLayerIsShown() {
       return !!this.yetiLayers.filter((layer) => layer.checked).length;
     },
+    yetiExtentLayerIsShown() {
+      return this.yetiLayers[0].checked;
+    },
   },
   watch: {
-    atLeastOneYetiLayerIsShown() {
+    yetiExtentLayerIsShown() {
       this.updateCartoLayersOpacity();
     },
     visibleCartoLayerId(id) {
@@ -348,7 +351,7 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // if one of Yeti layers is here, update (on zooming for example)
-      if (this.atLeastOneYetiLayerIsShown) {
+      if (this.yetiExtentLayerIsShown) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -409,7 +412,7 @@ export default {
 
       // for each layers, set opacity if one yeti layers is shown
       c2c_cartoLayers.forEach((layer) => {
-        layer.setOpacity(this.atLeastOneYetiLayerIsShown ? opacity : 1);
+        layer.setOpacity(this.yetiExtentLayerIsShown ? opacity : 1);
       });
     },
     onShowAvalancheBulletins() {
