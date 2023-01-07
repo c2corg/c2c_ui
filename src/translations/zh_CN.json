@@ -668,8 +668,8 @@
     },
     "blanket_unstaffed": "无看守时是否提供毯子",
     "bloc": {
-      "climbing_indoor_types": "线路集合",
-      "climbing_outdoor_types": "线路集合"
+      "climbing_indoor_types": "抱石",
+      "climbing_outdoor_types": "抱石"
     },
     "blocked_person": {
       "event_types": "被冻结的用户"
