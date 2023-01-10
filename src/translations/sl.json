@@ -98,7 +98,7 @@
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Bodite previdni, v mokrem snegu, ni nobenega faktorja orientacije ali obljudenosti mogoče uporabiti.",
     "Beginner": "Začetnik",
     "Beginner Reduction Method": "zmanjševalno metodo za začetnike",
-    "Beware of case-sensitive login and password": "Upoštevajte, da sta uporabniško ime in geslo občutljiva na velike in male črke.",
+    "Beware of case-sensitive login and password": "Upoštevajte, da sta identifikacija in geslo občutljiva na velike in male črke.",
     "Block account": "Blokiraj uporabnika",
     "Bolted rock climbing gear": "Oprema za dolge športne smeri",
     "Book content": "Kratek opis vsebine knjige",
@@ -268,11 +268,11 @@
     "FlowCapt sensors": "FlowCapt postaje",
     "Followed users": "Uporabniki ki jih spremljam",
     "Forgot password?": "Ste pozabili geslo?",
-    "Forum username": "Psevdonim na forumu",
+    "Forum username": "Uporabniško ime na forumu",
     "From danger 3, consider the slopes which dominate the route": "Od nevarnosti 3 navzgor, upoštevajte pobočja nad potjo.",
     "From the interface": "Iz vmesnika",
     "Full bulletin": "Celoten bilten",
-    "Fullname": "Ime",
+    "Fullname": "Polno ime",
     "GPS Track": "GPS sled",
     "GPX file": "GPX datoteka",
     "General": "Splošno",
@@ -380,7 +380,7 @@
     "Log in to post a comment": "Prijavite se za objavo komentarja",
     "Login": "Prijava",
     "Login failed": {
-      "API message": "Nepravilno uporabniško ime ali geslo"
+      "API message": "Nepravilna identifikacija ali geslo"
     },
     "Logout": "Odjava",
     "Longitude": "Zemljepisna dolžina",
@@ -676,7 +676,7 @@
     "Upload a GPS track": "Naloži GPS-sled",
     "Upload a new version": "Naložite novo različico",
     "User avatar": "Avatar",
-    "Username": "Uporabniško ime",
+    "Username": "Identifikacija",
     "Validity date expired": "Datum veljavnosti je potekel",
     "Validity date:": "Datum veljavnosti:",
     "Versions": "Različice",
@@ -771,7 +771,7 @@
       "API message": "Že uporabljen psevdonim na forumu"
     },
     "already used username": {
-      "API message": "Že uporabljeno uporabniško ime"
+      "API message": "Že uporabljena identifikacija"
     },
     "always_accessible": {
       "custodianship_types": "zmeraj odprto"
