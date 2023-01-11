@@ -502,8 +502,8 @@ export default {
   },
 
   beforeDestroy() {
-    this.fullScreenControl.un('enterfullscreen', this.onFullcreenChange);
-    this.fullScreenControl.un('leavefullscreen', this.onFullcreenChange);
+    this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
+    this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
   },
 
   methods: {
@@ -512,12 +512,12 @@ export default {
         source,
         tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
       });
-      control.on('enterfullscreen', this.onFullcreenChange);
-      control.on('leavefullscreen', this.onFullcreenChange);
+      control.on('enterfullscreen', this.onFullscreenChange);
+      control.on('leavefullscreen', this.onFullscreenChange);
       return control;
     },
 
-    onFullcreenChange() {
+    onFullscreenChange() {
       this.isFullscreen = !this.isFullscreen;
       this.showLayerSwitcher = false;
       this.fitMapToDocuments();
