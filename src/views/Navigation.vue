@@ -76,7 +76,7 @@
             class="dropdown-item is-size-5 is-ellipsed"
             @click.native="$refs.addDocumentMenu.isActive = false"
           >
-            <icon-document :document-type="documentType" />
+            <icon-document :document-type="documentType" fixed-width />
             <span>
               {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
             </span>
@@ -111,7 +111,7 @@
             class="dropdown-item is-size-5"
             @click.native="$refs.userMenu.isActive = false"
           >
-            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" />
+            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
               {{ item.text }}
             </span>
@@ -161,6 +161,7 @@ export default {
     siteConfiguration() {
       return config;
     },
+
     userMenuLinks() {
       const items = [
         {
