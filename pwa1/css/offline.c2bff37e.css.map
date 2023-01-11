@@ -1,0 +1,1 @@
+{"version":3,"file":"css/offline.c2bff37e.css","mappings":"AAKA,wBACE","sources":["webpack://c2c_ui/./src/views/offline/OfflineView.vue"],"sourcesContent":["\n          @import '@/assets/sass/variables.scss';\n          @import '@/assets/sass/mixins.scss';\n        \n\n.title {\n  line-height: 1.5em;\n}\n"],"names":[],"sourceRoot":""}
