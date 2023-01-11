@@ -209,6 +209,11 @@ export default {
           text: this.$gettext('My bookmarks'),
           icon: 'star',
         },
+        {
+          to: { name: 'offline' },
+          text: this.$gettext('Offline documents'),
+          iconComponent: 'icon-offline',
+        },
       ];
       return items;
     },
@@ -275,6 +280,7 @@ nav {
 
 .navigation-brand {
   padding: 4px 5px !important;
+
   img {
     height: calc(#{$navbar-height} - 8px);
   }

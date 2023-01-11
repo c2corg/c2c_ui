@@ -2,17 +2,18 @@
   <div id="app">
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
-    <site-notice ref="siteNotice no-print" class="no-print site-notice" />
+    <site-notice class="no-print site-notice" />
+    <offline-notice class="no-print offline-notice" />
     <image-viewer ref="imageViewer" />
     <helper-window ref="helper" />
     <alert-window ref="alertWindow" />
+    <gdpr-banner></gdpr-banner>
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
 
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
       <router-view class="router-view" />
     </div>
-    <gdpr-banner></gdpr-banner>
   </div>
 </template>
 
@@ -24,18 +25,20 @@ import ImageViewer from './components/image-viewer/ImageViewer';
 import Navigation from './views/Navigation';
 import SideMenu from './views/SideMenu';
 import SiteNotice from './views/SiteNotice';
+import OfflineNotice from './views/offline/OfflineNotice';
 
 export default {
   name: 'App',
 
   components: {
-    SideMenu,
-    Navigation,
-    SiteNotice,
-    HelperWindow,
-    ImageViewer,
     AlertWindow,
     GdprBanner,
+    HelperWindow,
+    ImageViewer,
+    Navigation,
+    OfflineNotice,
+    SideMenu,
+    SiteNotice,
   },
 
   data() {
@@ -110,6 +113,13 @@ body,
   width: 100%;
   z-index: 20;
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
+}
+
+.offline-notice {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 20;
 }
 
 .page-content {

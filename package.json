@@ -6,16 +6,17 @@
   "author": "Camptocamp community <dev@camptocamp.org>",
   "scripts": {
     "serve": "cross-env BUILD_ENV=local vue-cli-service serve",
+    "sw:dev": "npm run build && cd dist && npx http-server && cd ..",
     "build": "cross-env BUILD_ENV=camptocamp vue-cli-service build --no-module --skip-plugins eslint",
-    "lint": "prettier --write \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint",
     "build:github": "cross-env BUILD_ENV=github vue-cli-service build --no-module --skip-plugins eslint",
-    "generate-icons": "node tools/generate-icons.js",
+    "lint": "prettier --write \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint",
     "lint:no-fix": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint --no-fix",
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
+    "generate-icons": "node tools/generate-icons.js",
     "messages:extract": "node tools/extract-messages.js",
+    "update-c2c-common": "python3 tools/update-c2c-common.py",
     "prepare": "husky install && npm run snyk-protect",
-    "snyk-protect": "snyk-protect",
-    "update-c2c-common": "python3 tools/update-c2c-common.py"
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
     "@brunobesson/vue-awesome-swiper": "4.1.4",
@@ -39,6 +40,8 @@
     "d3": "7.8.1",
     "dayjs": "1.11.7",
     "file-saver": "2.0.5",
+    "fuse.js": "6.6.2",
+    "idb-keyval": "6.2.0",
     "ol": "7.2.2",
     "process": "0.11.10",
     "register-service-worker": "1.7.2",

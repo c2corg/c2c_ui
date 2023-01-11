@@ -24,6 +24,7 @@
           <div class="has-text-centered">
             <document-link :document="{ ...winner.image, type: 'i' }">
               <img
+                crossorigin="anonymous"
                 :src="getImageUrl(winner.image)"
                 :alt="
                   $documentUtils.getDocumentTitle({
@@ -65,7 +66,12 @@
           :title="$documentUtils.getDocumentTitle(image)"
           class="card-image"
         >
-          <img :src="getImageUrl(image)" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
+          <img
+            crossorigin="anonymous"
+            :src="getImageUrl(image)"
+            loading="lazy"
+            :alt="$documentUtils.getDocumentTitle(image)"
+          />
         </document-link>
       </div>
       <loading-notification v-else :promise="promise" />

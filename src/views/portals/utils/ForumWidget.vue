@@ -1,7 +1,9 @@
 <template>
-  <div :class="{ wide: wide }">
-    <loading-notification :promise="promise" />
-    <div v-if="topics">
+  <div :class="{ wide }">
+    <div class="loading-notification">
+      <loading-notification :promise="promise" />
+    </div>
+    <div v-if="topics" class="box is-paddingless">
       <a
         class="forum-row"
         v-for="topic of topics"

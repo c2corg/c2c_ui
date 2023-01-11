@@ -1,7 +1,13 @@
 <template>
   <document-link :document="image" class="has-hover-background" target="_blank">
     <figure class="image is-96x96 association-image-link-child">
-      <img :src="getUrl(image)" :title="image.locales[0].title" :alt="image.locales[0].title" loading="lazy" />
+      <img
+        crossorigin="anonymous"
+        :src="getUrl(image)"
+        :title="image.locales[0].title"
+        :alt="image.locales[0].title"
+        loading="lazy"
+      />
     </figure>
     <span class="association-image-link-child">
       {{ image.locales[0].title | max50chars }}

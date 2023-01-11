@@ -11,7 +11,14 @@
   ],
   "reportUnusedDisableDirectives": true,
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
     "no-console": "warn",
     "vue/no-v-html": "off",
     "vue/order-in-components": "warn",

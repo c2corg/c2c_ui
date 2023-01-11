@@ -75,6 +75,23 @@ const result = {
 
     plugins: [],
   },
+
+  // https://cli.vuejs.org/core-plugins/pwa.html#configuration
+  pwa: {
+    name: 'camptocamp.org',
+    themeColor: '#f93',
+    msTileColor: '#f93',
+    appleMobileWebAppCache: 'yes',
+    manifestOptions: {
+      background_color: '#fff',
+      description: 'The mountain sports community',
+    },
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './public/service-worker.js',
+      exclude: [/\.map$/, /^google.*\.html$/, /^revive\-adserver\.html$/, /^img\/icons.*/, 'README.md', 'robots.txt'],
+    },
+  },
 };
 
 /* Please note that all key present in this file are public keys

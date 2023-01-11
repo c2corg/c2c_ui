@@ -3,10 +3,10 @@
     <div class="modal-background" @click="hide" :class="{ 'is-transparent': hasTransparentShader }" />
     <div class="modal-content" :class="{ 'has-background-danger has-text-white-bis': isDanger }">
       <header v-if="$slots.header" class="title is-3">
-        <button class="delete is-pulled-right" aria-label="close" @click="hide" />
+        <button class="delete is-pulled-right" aria-label="close" @click="hide" v-if="hasCloseButton" />
         <slot name="header" />
       </header>
-      <button v-else class="delete is-pulled-right" aria-label="close" @click="hide" />
+      <button v-else-if="hasCloseButton" class="delete is-pulled-right" aria-label="close" @click="hide" />
       <slot> Modal content </slot>
       <footer v-if="$slots.footer" class="is-3">
         <slot name="footer"></slot>
@@ -37,6 +37,10 @@ export default {
     hasTransparentShader: {
       type: Boolean,
       default: false,
+    },
+    hasCloseButton: {
+      type: Boolean,
+      default: true,
     },
   },
 };

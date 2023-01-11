@@ -147,7 +147,7 @@ export default {
             renderSlide(img) {
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
+                    <img crossorigin="anonymous" data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
                 img.locales[0].title
               }" loading="lazy">
                   </div>

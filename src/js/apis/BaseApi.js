@@ -55,8 +55,8 @@ BaseApi.prototype.get = function (url, params) {
   return new ApiData(this.axios.get(url, params));
 };
 
-BaseApi.prototype.post = function (url, body) {
-  return new ApiData(this.axios.post(url, body));
+BaseApi.prototype.post = function (url, body, config) {
+  return new ApiData(this.axios.post(url, body, config));
 };
 
 BaseApi.prototype.put = function (url, body) {

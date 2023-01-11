@@ -82,10 +82,10 @@
         <div v-if="filenameHasChanged">
           <div class="columns">
             <div class="column">
-              <img :src="getImageUrl(oldVersion.document)" class="is-pulled-right" />
+              <img crossorigin="anonymous" :src="getImageUrl(oldVersion.document)" class="is-pulled-right" />
             </div>
             <div class="column">
-              <img :src="getImageUrl(newVersion.document)" />
+              <img crossorigin="anonymous" :src="getImageUrl(newVersion.document)" />
             </div>
           </div>
         </div>

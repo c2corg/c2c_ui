@@ -1,5 +1,5 @@
 <template>
-  <a v-if="canFollow" @click="onClick" :title="tooltip" :class="{ 'follow-button-yellow': followed }">
+  <a v-if="canFollow" @click="onClick" :title="tooltip" :class="{ active: followed }">
     <fa-icon icon="star" />
   </a>
 </template>
@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.follow-button-yellow {
+.active {
   color: $yellow !important;
 }
 </style>

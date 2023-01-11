@@ -32,7 +32,7 @@
               </label>
             </div>
           </div>
-          <img :src="newVersionSource ? newVersionSource : getImageUrl(document)" />
+          <img crossorigin="anonymous" :src="newVersionSource ? newVersionSource : getImageUrl(document)" />
         </div>
       </div>
     </form-section>

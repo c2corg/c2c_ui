@@ -1,5 +1,5 @@
 <template>
-  <fa-layers class="fa-lg" @click="visible ? $emit('click') : undefined" :class="{ 'hidden-button': !visible }">
+  <fa-layers class="fa-lg" @click="visible ? $emit('click', $event) : undefined" :class="{ 'hidden-button': !visible }">
     <fa-icon icon="circle" />
     <fa-icon :icon="['far', 'trash-alt']" transform="shrink-6" :style="{ color: 'white' }" />
   </fa-layers>
@@ -18,6 +18,10 @@ export default {
 
 <style scoped lang="scss">
 @import '~bulma/sass/utilities/initial-variables.sass';
+
+.fa-layers:hover {
+  filter: brightness(90%);
+}
 
 div {
   cursor: pointer;

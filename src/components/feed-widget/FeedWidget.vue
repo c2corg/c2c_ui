@@ -1,9 +1,11 @@
 <template>
-  <div class="columns" v-infinite-scroll="load" infinite-scroll-disabled="loading" infinite-scroll-distance="500">
-    <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
-      <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
+  <div>
+    <div class="columns" v-infinite-scroll="load" infinite-scroll-disabled="loading" infinite-scroll-distance="500">
+      <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
+        <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
+      </div>
     </div>
-    <!-- <loading-notification :promise="promise" /> -->
+    <loading-notification v-if="promise" :promise="promise" />
   </div>
 </template>
 
@@ -38,6 +40,7 @@ export default {
       feed: [],
       paginationToken: null,
       endOfFeed: false,
+      loadErrorCount: 0,
       columns: null,
       cssColumnsClass: null,
     };
@@ -100,24 +103,14 @@ export default {
         columnCount = 6;
       }
 
-      this.columns = [];
-
-      for (let i = 0; i < columnCount; i++) {
-        this.columns.push({
-          items: [],
-          height: 0,
-        });
-      }
+      this.columns = [...Array(columnCount)].map(() => ({ items: [], height: 0 }));
 
       this.dispatchToColumns(this.feed);
     },
 
     load() {
-      if (this.promise && this.promise.loading) {
-        return;
-      }
-
-      if (this.endOfFeed) {
+      if (this.promise?.loading || this.endOfFeed || this.$offline.isOffline()) {
+        // do not try to fetch data
         return;
       }
 
@@ -127,25 +120,39 @@ export default {
         u: this.$route.params.id,
       };
 
-      if (this.type === 'personal') {
-        this.promise = c2c.feed.getPersonalFeed(params).then(this.onLoad);
-      } else if (this.type === 'default') {
-        this.promise = c2c.feed.getDefaultFeed(params).then(this.onLoad);
-      } else if (this.type === 'profile') {
-        this.promise = c2c.feed.getProfileFeed(params).then(this.onLoad);
+      let c2cfeed;
+      switch (this.type) {
+        case 'personal':
+          c2cfeed = (params) => c2c.feed.getPersonalFeed(params);
+          break;
+        case 'profile':
+          c2cfeed = (params) => c2c.feed.getProfileFeed(params);
+          break;
+        case 'default':
+        default:
+          c2cfeed = (params) => c2c.feed.getDefaultFeed(params);
+      }
+      c2cfeed = c2cfeed;
+      if (this.loadErrorCount > 2) {
+        // if too many successive errors occur, add delay between calls to avoid intensive infinite loop
+        this.promise = new Promise((resolve) => setTimeout(resolve, 2000))
+          .then(() => c2cfeed(params))
+          .then(this.onLoad, this.onError);
+      } else {
+        this.promise = c2cfeed(params).then(this.onLoad, this.onError);
       }
     },
 
     onLoad(response) {
+      this.loadErrorCount = 0;
       this.paginationToken = response.data.pagination_token;
-
-      for (const item of response.data.feed) {
-        this.feed.push(item);
-      }
-
+      this.feed.push(...response.data.feed);
       this.endOfFeed = response.data.feed.length === 0;
-
       this.dispatchToColumns(response.data.feed);
+    },
+
+    onError() {
+      this.loadErrorCount++;
     },
 
     dispatchToColumns(items) {
@@ -202,6 +209,6 @@ export default {
 
 <style scoped lang="scss">
 .feed-card {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 </style>

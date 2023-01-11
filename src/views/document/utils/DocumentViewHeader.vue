@@ -8,6 +8,7 @@
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <gotop-button v-if="isPrintingView" />
+          <offline-button v-if="!isPrintingView" :document="document" />
           <follow-button v-if="!isPrintingView" :document="document" />
           <tags-button v-if="!isPrintingView" :document="document" />
 
@@ -56,6 +57,7 @@
 import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
 import GotopButton from './GotopButton';
+import OfflineButton from './OfflineButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
 import TagsButton from './TagsButton';
 
@@ -68,6 +70,7 @@ export default {
     ImagesUploader,
     FollowButton,
     GotopButton,
+    OfflineButton,
     TagsButton,
     SocialNetworkSharing,
     DocumentVersionBanner,

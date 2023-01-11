@@ -49,6 +49,7 @@ const AssociationsHistoryView = () =>
   import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
 const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
+const OfflineView = () => import(/* webpackChunkName: "offline" */ `@/views/offline/OfflineView.vue`);
 
 const routes = [
   { path: '/', name: 'home', component: FeedView },
@@ -81,6 +82,8 @@ const routes = [
       location.href = config.urls.forum;
     },
   },
+
+  { path: '/offline', name: 'offline', component: OfflineView },
 ];
 
 const addDocumentTypeView = function (def, viewComponent, editionComponent) {

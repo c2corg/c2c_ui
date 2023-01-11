@@ -49,9 +49,8 @@ CamptocampApi.prototype.getApiLang = function (lang) {
 
   if (lang === 'zh_CN') {
     return 'zh';
-  } else {
-    return lang;
   }
+  return lang;
 };
 
 CamptocampApi.prototype.setAuthorizationToken = function (token) {
