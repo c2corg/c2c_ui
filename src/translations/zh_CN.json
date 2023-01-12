@@ -77,7 +77,7 @@
       "Sophie picture context": "行动 - 评审团奖"
     },
     "Action - prix du public": {
-      "Sophie picture context": "行动 - 公众评审奖"
+      "Sophie picture context": "行动 - 公众奖"
     },
     "Activity feed": "活动订阅",
     "Activity trackers": "活动追踪器",
@@ -178,6 +178,7 @@
     "Conflict: version of locale 'eu' has changed": "冲突：\"eu\"语言版本已更改",
     "Conflict: version of locale 'fr' has changed": "冲突：\"fr\"语言版本已更改",
     "Conflict: version of locale 'it' has changed": "冲突：\"it\"语言版本已更改",
+    "Conflict: version of locale 'sl' has changed": "冲突：\"sl\"语言版本已更改",
     "Conflict: version of locale 'zh_CN' has changed": "冲突：\"zh_CN\"语言版本已更改",
     "Conflicting method and danger": "冲突的方法和危险等级",
     "Connect": "连接",
@@ -190,6 +191,9 @@
     "Contributions": "贡献",
     "Contributor": "贡献者",
     "Control the use of your personal data": "控制如何使用你的个人数据",
+    "Coup de coeur": {
+      "Sophie picture context": "爱上某事"
+    },
     "Crag climbing gear": "攀岩装备",
     "Create": {
       "yeti": "创建"
@@ -405,6 +409,7 @@
     "Load my preferences": "加载我的偏好设置",
     "Load shedding distance": "降低雪层负载的距离",
     "Loading...": "加载中...",
+    "Local file": "本地文件",
     "Location / elevation / orientation": "位置/海拔/朝向",
     "Log in to post a comment": "登录以发表评论",
     "Login": "登录",
@@ -511,6 +516,12 @@
     "Password": "密码",
     "Password too short": {
       "API message": "密码太短"
+    },
+    "Paysage": {
+      "Sophie picture context": "风景"
+    },
+    "Paysage - prix du jury et du public": {
+      "Sophie picture context": "风景 - 评审团和公众奖"
     },
     "People who were with you, and your feelings about this outing": "同行的人以及你关于此次出行的感受",
     "Period of protection": "保护周期",
@@ -673,6 +684,13 @@
       "$$noContext": "路线指南",
       "Sophie picture context": "路线指南"
     },
+    "Topoguide - prix du jury": {
+      "Sophie picture context": "路线指南 - 评审团奖"
+    },
+    "Topoguide - prix du public": {
+      "Sophie picture context": "路线指南 - 公众奖"
+    },
+    "Trace": "轨迹",
     "Tracking devices": "追踪设备",
     "Translate into an other lang": "翻译成其他语言",
     "Transport & road or PT access": "交通节点",
@@ -811,6 +829,9 @@
     },
     "at least one user required": {
       "API message": "选择至少一位用户"
+    },
+    "auth-denied": {
+      "tracking": "拒绝授权"
     },
     "author": "作者",
     "author_status": "作者状态",
@@ -1122,6 +1143,7 @@
     "flora": {
       "image_categories": "植物群"
     },
+    "fnumber": "F值",
     "focal_length": "焦距",
     "forum": "论坛",
     "fr": {
@@ -1294,6 +1316,7 @@
     },
     "lang": "语言",
     "langs": "语言",
+    "last point with the Backspace key": "最后一点用退格键",
     "length": "长度",
     "length_total": "行程总长",
     "level_1": {
@@ -1443,6 +1466,7 @@
     "often": {
       "snow_clearance_ratings": "经常"
     },
+    "on": "在",
     "open": {
       "lift_status": "开放"
     },
