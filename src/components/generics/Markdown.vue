@@ -121,8 +121,9 @@ export default {
 
     computeImages(images) {
       for (const image of images) {
+        const document_id = parseInt(image.attributes['c2c:document-id'].value, 10);
         image.c2cExtrapoledDocument = {
-          document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
+          document_id,
           locales: [{ title: '...' }],
           available_langs: [this.$language.current],
           type: 'i',
@@ -132,6 +133,24 @@ export default {
         image.addEventListener('click', () => {
           this.$imageViewer.show(image.c2cExtrapoledDocument);
         });
+
+        const parent = image.parentNode;
+        const picture = document.createElement('picture');
+
+        // Until all images are migrated only images uploaded after a given timestamp
+        // or with an id greater than a given one have their webp and avif versions
+        if (config.urls.modernThumbnailsId && document_id > config.urls.modernThumbnailsId) {
+          const avif = document.createElement('source');
+          avif.setAttribute('type', 'image/avif');
+          avif.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=avif');
+          const webp = document.createElement('source');
+          webp.setAttribute('type', 'image/webp');
+          webp.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=webp');
+          picture.appendChild(avif);
+          picture.appendChild(webp);
+        }
+        picture.appendChild(image);
+        parent.appendChild(picture, image);
 
         this.$imageViewer.push(image.c2cExtrapoledDocument);
       }
