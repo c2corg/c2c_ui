@@ -33,6 +33,8 @@ export default {
     },
   },
   methods: {
+    // In case the "modern" thumbnail is not available, be sure
+    // to switch to the "basic" version.
     onError(event) {
       if (this.avif) {
         const img = event.target;

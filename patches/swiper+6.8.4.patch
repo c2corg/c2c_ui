@@ -10,7 +10,7 @@ index e5d87a6..d148e7f 100644
 +    if (callback) {
 +      setTimeout(() => {
 +        callback();
-+      }, 100);
++      }, 0);
 +    }
    }
  
