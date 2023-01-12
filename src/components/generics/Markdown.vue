@@ -244,12 +244,16 @@ figure[c2c\:position='right'] {
   float: right;
   clear: right;
   margin-right: 0 !important;
+  z-index: 1;
+  position: relative;
 }
 
 figure[c2c\:position='left'] {
   float: left;
   clear: left;
   margin-left: 0 !important;
+  z-index: 1;
+  position: relative;
 }
 
 figure[c2c\:position='center'] {
