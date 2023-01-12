@@ -10,8 +10,8 @@ const config = CAMPTOCAMP_CONFIG;
 
 let bucketName = 'c2corg-active';
 if (location.hostname === 'www.demov6.camptocamp.org') {
-  config.urls = config.urlsConfigurations['demo'];
-  bucketName = 'c2corg-demov6-active';
+  config.urls = config.urlsConfigurations['prod'];
+  // bucketName = 'c2corg-demov6-active';
 }
 const apiHostname = new URL(config.urls.api).hostname;
 const mediaHostname = new URL(config.urls.media).hostname;
