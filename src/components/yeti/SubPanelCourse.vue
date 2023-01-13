@@ -113,6 +113,10 @@
         >
           Upload a GPS track
         </button>
+        <button class="button is-secondary" @click="setDrawingMode">
+          <span v-translate key="1" v-if="!drawingMode">Activate drawing mode</span>
+          <span v-translate key="2" v-else>Disable drawing mode</span>
+        </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
@@ -149,6 +153,9 @@ export default {
     };
   },
   computed: {
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
     features() {
       return Yetix.features;
     },
@@ -227,6 +234,9 @@ export default {
     },
     setFilename(ext) {
       return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
+    },
+    setDrawingMode() {
+      Yetix.setDrawingMode(!this.drawingMode);
     },
   },
 };
