@@ -10,15 +10,12 @@ const defaultImage = '/img/broken_image.png';
 
 const config = CAMPTOCAMP_CONFIG;
 
-let bucketName = 'c2corg-active';
 if (location.hostname === 'www.demov6.camptocamp.org') {
-  config.urls = config.urlsConfigurations['prod'];
-  // bucketName = 'c2corg-demov6-active';
+  config.urls = config.urlsConfigurations['demo'];
 }
+const bucketName = new URL(config.urls.media).pathname.substring(1);
 const apiHostname = new URL(config.urls.api).hostname;
 const mediaHostname = new URL(config.urls.media).hostname;
-console.log(apiHostname);
-console.log(mediaHostname);
 
 const imgRegex = new RegExp(`^\\/${bucketName}\\/(\\d{9,10}_\\d{9,10}(?:BI|MI|SI)?)\\.(?:jpg|png|gif|svg)$`);
 const imgProxyPathnameRegex = /^\/images\/proxy\/(\d{1,9})$/;
@@ -34,38 +31,13 @@ const strategy = new NetworkFirst({
   networkTimeoutSeconds,
   plugins: [
     {
-      handlerWillStart: async ({ request }) => {
-        console.log('handler will start: ' + request.url);
-      },
-      handlerDidRespond: async ({ request }) => {
-        console.log('handler did respond: ' + request.url);
-      },
-      handlerDidError: async ({ request }) => {
-        console.log('handler did error: ' + request.url);
-        return Response.error();
-      },
-      requestWillFetch: async ({ request }) => {
-        console.log('request will fetch: ' + request.url);
-        return request;
-      },
-      fetchDidFail: async ({ request }) => {
-        console.log('fetch did fail: ' + request.url);
-      },
-      fetchDidSucceed: async ({ request, response }) => {
-        console.log('fetch did succeed: ' + request.url);
-        return response;
-      },
-
       cacheWillUpdate: async ({ request, response }) => {
-        console.log('cache will update');
         // update cache if applies
         if (!response || response.status !== 200) {
-          console.log('not a valid or opaque response, no cache set');
           return;
         }
         const key = await getKey(request);
         if (!key) {
-          console.log('no matching key, no cache set');
           return null;
         }
         const data = await get(key);
@@ -73,25 +45,20 @@ const strategy = new NetworkFirst({
           updateCache(key, asResponse(data), response.clone());
         }
         // do not use "default" caching
-        console.log('no matching cache entry, no cache update');
         return null;
       },
 
       cachedResponseWillBeUsed: async ({ request }) => {
-        console.log('cached response will be used: ' + request.url);
         const key = await getKey(request);
         if (!key) {
           // no key, request not handled (although it should not happen if configured properly)
-          console.log('no key for request: ' + request.url);
           return null;
         }
         const data = await get(key);
         if (!data) {
           // no cache found
-          console.log('no cache found: ' + request.url);
           return null;
         }
-        console.log('use cached data: ' + request.url);
         // use cached data
         return asResponse(data);
       },
@@ -139,7 +106,6 @@ const asResponse = (data) => {
 };
 
 const updateCache = async (key, previousResponse, newResponse) => {
-  console.log('update cache');
   const newData = isBlobData(key) ? await newResponse.blob() : await newResponse.json();
   await set(key, newData);
   if (key.startsWith('images')) {
@@ -150,7 +116,6 @@ const updateCache = async (key, previousResponse, newResponse) => {
       return;
     }
     // update media, because a new version of the image has been published
-    console.log('replace media');
     for (const filename of filenames(previousData)) {
       del(filename.replace(/\.[^/.]+$/, ''));
     }
