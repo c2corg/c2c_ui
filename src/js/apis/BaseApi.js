@@ -51,8 +51,8 @@ const BaseApi = function (apiUrl) {
  * Generic request helpers
  */
 
-BaseApi.prototype.get = function (url, params) {
-  return new ApiData(this.axios.get(url, params));
+BaseApi.prototype.get = function (url, config) {
+  return new ApiData(this.axios.get(url, config));
 };
 
 BaseApi.prototype.post = function (url, body, config) {

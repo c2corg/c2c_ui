@@ -2,7 +2,7 @@ import { clear, del, get, keys, set, values } from 'idb-keyval';
 import Vue from 'vue';
 
 import c2c from '@/js/apis/c2c';
-import media from '@/js/apis/media';
+import config from '@/js/config';
 import { filenames } from '@/js/image-formats';
 
 const offlineEventEmitter = new Vue();
@@ -77,7 +77,11 @@ export default function install(Vue) {
         set(documentId(type, id, lang), content);
         if (type === 'images') {
           for (const filename of filenames(content)) {
-            media.getImage(filename).then(({ data }) => set(filename.replace(/\.[^/.]+$/, ''), data));
+            await fetch(config.urls.media + '/' + filename, {
+              cache: 'reload',
+            })
+              .then((response) => response.blob())
+              .then((blob) => set(filename.replace(/\.[^/.]+$/, ''), blob));
           }
         }
         for (const embeddedImageId of embeddedImagesIds(content.cooked)) {

@@ -155,9 +155,11 @@ const updateCache = async (key, previousResponse, newResponse) => {
       del(filename.replace(/\.[^/.]+$/, ''));
     }
     for (const filename of filenames(newData)) {
-      fetch(config.urls.media + '/' + filename).then((response) =>
-        set(filename.replace(/\.[^/.]+$/, ''), response.blob())
-      );
+      fetch(config.urls.media + '/' + filename, {
+        cache: 'reload',
+      })
+        .then((response) => response.blob())
+        .then((blob) => set(filename.replace(/\.[^/.]+$/, ''), blob));
     }
   }
 };
