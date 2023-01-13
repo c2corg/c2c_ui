@@ -40,6 +40,12 @@
         <features-list :features="features" />
       </div>
       <simplify-tool ref="simplifyTool" />
+      <dropdown-content class="mb-5">
+        <span v-translate>Elevation profile</span>
+        <template #content>
+          <elevation-profile :features="features" />
+        </template>
+      </dropdown-content>
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -122,6 +128,8 @@
 </template>
 
 <script>
+import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
@@ -131,7 +139,7 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, Info, SimplifyTool, SubPanelTitle },
+  components: { DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,

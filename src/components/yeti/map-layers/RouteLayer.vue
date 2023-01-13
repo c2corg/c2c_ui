@@ -53,6 +53,19 @@ let highlightedLineStyle = [
   }),
 ];
 
+let elevationPointStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 5,
+    fill: new ol.style.Fill({
+      color: 'yellow',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'red',
+      width: 2,
+    }),
+  }),
+});
+
 export default {
   mixins: [layerMixin],
   data() {
@@ -103,6 +116,21 @@ export default {
     // add layer, and hide it
     this.map.addLayer(this.simplifiedLayer);
     this.simplifiedLayer.setVisible(false);
+
+    // layer for elevation point
+    this.elevationPointLayer = new ol.layer.Vector({
+      source: new ol.source.Vector(),
+      style: elevationPointStyle,
+    });
+    // add layer, and hide it
+    this.map.addLayer(this.elevationPointLayer);
+    this.elevationPointLayer.setVisible(false);
+    // add one feature for point
+    const elevationPointSource = this.elevationPointLayer.getSource();
+    this.elevationPoint = new ol.Feature();
+    elevationPointSource.addFeature(this.elevationPoint);
+    // react to event
+    Yetix.$on('elevationProfile', this.onElevationProfile);
 
     // set default featuresTitle
     Yetix.setFeaturesTitle(this.$gettext(Yetix.featuresTitle));
@@ -380,6 +408,17 @@ export default {
       });
       // hide simplified/show features
       this.hideSimplifiedLayer();
+    },
+    onElevationProfile(event, coord) {
+      switch (event) {
+        case 'cursor_move':
+          this.elevationPointLayer.setVisible(true);
+          this.elevationPoint.setGeometry(new ol.geom.Point(coord));
+          break;
+        case 'cursor_end':
+          this.elevationPointLayer.setVisible(false);
+          break;
+      }
     },
   },
   render() {
