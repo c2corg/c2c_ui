@@ -3,6 +3,8 @@ import { createHandlerBoundToURL, getCacheKeyForURL, precacheAndRoute } from 'wo
 import { NavigationRoute, registerRoute, setCatchHandler, setDefaultHandler } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 
+import { filenames } from '../src/js/image-formats';
+
 const networkTimeoutSeconds = 10; // in seconds, before defaulting to cache if available
 const defaultImage = '/img/broken_image.png';
 
@@ -58,7 +60,7 @@ const strategy = new NetworkFirst({
         console.log('cache will update');
         // update cache if applies
         if (!response || response.status !== 200) {
-          console.log('not a valid repsonse, no cache set');
+          console.log('not a valid or opaque response, no cache set');
           return;
         }
         const key = await getKey(request);
@@ -68,12 +70,10 @@ const strategy = new NetworkFirst({
         }
         const data = await get(key);
         if (data) {
-          const responseClone = response.clone();
-          console.log('set cache');
-          await set(key, isBlobData(key) ? await responseClone.blob() : await responseClone.json());
+          updateCache(key, asResponse(data), response.clone());
         }
         // do not use "default" caching
-        console.log('no matching cache entry, no cache set');
+        console.log('no matching cache entry, no cache update');
         return null;
       },
 
@@ -91,13 +91,9 @@ const strategy = new NetworkFirst({
           console.log('no cache found: ' + request.url);
           return null;
         }
-        console.log('us cached data: ' + request.url);
+        console.log('use cached data: ' + request.url);
         // use cached data
-        if (typeof data === 'string' || data instanceof Blob) {
-          return new Response(data);
-        } else {
-          return new Response(JSON.stringify(data));
-        }
+        return asResponse(data);
       },
     },
   ],
@@ -133,6 +129,42 @@ const isImageProxyRequest = (url) =>
   url.hostname === apiHostname && url.pathname.match(imgProxyPathnameRegex) && url.search.match(imgProxySearchRegex);
 
 const isBlobData = (key) => /^\d+$/.test(key[0]);
+
+const asResponse = (data) => {
+  if (typeof data === 'string' || data instanceof Blob) {
+    return new Response(data);
+  } else {
+    return new Response(JSON.stringify(data));
+  }
+};
+
+const updateCache = async (key, previousResponse, newResponse) => {
+  console.log('update cache');
+  const newData = isBlobData(key) ? await newResponse.blob() : await newResponse.json();
+  await set(key, newData);
+  if (key.startsWith('images')) {
+    const previousData = await previousResponse.json();
+    const previousFilename = previousData.filename;
+    const newFilename = newData.filename;
+    if (previousFilename === newFilename) {
+      return;
+    }
+    // update media, because a new version of the image has been published
+    console.log('replace media');
+    for (const filename of filenames(previousData)) {
+      del(filename.replace(/\.[^/.]+$/, ''));
+    }
+    for (const filename of filenames(newData)) {
+      fetch(config.urls.media + '/' + filename).then((response) =>
+        set(filename.replace(/\.[^/.]+$/, ''), response.blob())
+      );
+    }
+  }
+};
+
+//
+// configure offline strategies
+//
 
 precacheAndRoute(self.__WB_MANIFEST);
 

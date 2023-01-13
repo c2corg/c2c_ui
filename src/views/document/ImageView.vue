@@ -42,7 +42,7 @@
       <div class="column is-9">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
-            <img crossorigin="anonymous" class="main-image" :src="getBigImageUrl(document)" />
+            <img class="main-image" :src="getBigImageUrl(document)" />
           </a>
         </div>
 

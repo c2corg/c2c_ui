@@ -8,13 +8,7 @@
       :class="{ 'show-delete-button': showDeleteButton }"
     >
       <div>
-        <img
-          crossorigin="anonymous"
-          :src="getMediumImageUrl(doc)"
-          height="250"
-          loading="lazy"
-          :title="$documentUtils.getDocumentTitle(doc)"
-        />
+        <img :src="getMediumImageUrl(doc)" height="250" loading="lazy" :title="$documentUtils.getDocumentTitle(doc)" />
         <delete-button v-if="showDeleteButton" @click.prevent="clickDelete(doc)" class="delete-button" />
       </div>
     </document-link>

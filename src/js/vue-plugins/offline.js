@@ -3,23 +3,12 @@ import Vue from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import media from '@/js/apis/media';
-import { isWebpSupported, isAvifSupported, oldFormatTimestamp } from '@/js/image-formats';
+import { filenames } from '@/js/image-formats';
 
 const offlineEventEmitter = new Vue();
-const sizes = ['SI', 'MI', 'BI'];
 const offlineDocumentTypes = ['r', 'o', 'w', 'a', 'i', 'b', 'x'];
-let preferredImageFormat = 'jpg';
 
 const documentId = (type, id, lang) => `${type}/${id}/${lang}`;
-
-const filenames = (content) => {
-  const timestamp = Number.parseInt(content.filename);
-  const sizesImageFormat = timestamp > oldFormatTimestamp ? preferredImageFormat : 'jpg';
-  return [
-    content.filename,
-    ...sizes.map((size) => content.filename.replace('.', `${size}.`).replace('.svg', '.' + sizesImageFormat)),
-  ];
-};
 
 const embeddedImageRegex = /<img[^<>]+c2c:document-id="(\d+)"[^<>]+>/gm;
 
@@ -50,7 +39,6 @@ export default function install(Vue) {
     async created() {
       window.addEventListener('online', this.updateOnlineStatus);
       window.addEventListener('offline', this.updateOnlineStatus);
-      preferredImageFormat = (await isWebpSupported()) ? 'webp' : (await isAvifSupported()) ? 'avif' : 'jpg';
     },
 
     beforeDestroy() {

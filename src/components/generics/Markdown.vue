@@ -121,7 +121,6 @@ export default {
 
     computeImages(images) {
       for (const image of images) {
-        image.crossOrigin = 'anonymous';
         image.c2cExtrapoledDocument = {
           document_id: parseInt(image.attributes['c2c:document-id'].value, 10),
           locales: [{ title: '...' }],
