@@ -66,7 +66,7 @@
     <delete-offline-documents-modal ref="DeleteOfflineDocumentsModal" :doc-type="deleteType" @delete="clear" />
   </div>
 
-  <div v-else>
+  <div v-else-if="!loading">
     <p class="m-4">
       <fa-icon icon="cloud-arrow-down" size="3x" />
       <span v-translate>
@@ -94,6 +94,7 @@ export default {
 
   data() {
     return {
+      loading: true,
       documentsByType: [],
       filteredDocumentsByType: [],
       filterText: '',
@@ -123,6 +124,7 @@ export default {
       (acc, t) => ({ ...acc, [t]: this.documentsByType.some(([dt]) => dt === t) }),
       {}
     );
+    this.loading = false;
   },
 
   methods: {
