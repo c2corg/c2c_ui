@@ -1,6 +1,6 @@
 <template>
-  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
-    <div class="is-flex has-text-grey-lighter image-viewer-header">
+  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons, 'with-details': hasDetails }">
+    <div v-if="hasDetails" class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title || '&nbsp;' }}
       </span>
@@ -28,14 +28,14 @@
       <div class="swiper-wrapper" />
     </div>
 
-    <div class="swiper-button-prev">
+    <div v-if="hasDetails" class="swiper-button-prev">
       <fa-icon icon="arrow-left"></fa-icon>
     </div>
-    <div class="swiper-button-next">
+    <div v-if="hasDetails" class="swiper-button-next">
       <fa-icon icon="arrow-right"></fa-icon>
     </div>
 
-    <div class="image-viewer-pagination is-hidden-mobile">
+    <div v-if="hasDetails" class="image-viewer-pagination is-hidden-mobile">
       <span
         v-for="(image, index) of images"
         :key="image.document_id"
@@ -47,7 +47,7 @@
       />
     </div>
 
-    <image-info ref="imageInfo" class="image-viewer-info" />
+    <image-info v-if="hasDetails" ref="imageInfo" class="image-viewer-info" />
   </div>
 </template>
 
@@ -87,6 +87,16 @@ export default {
     ImageInfo,
   },
 
+  props: {
+    size: {
+      type: String,
+      default: 'big',
+      validator: function (value) {
+        return ['original', 'big'].includes(value);
+      },
+    },
+  },
+
   data() {
     return {
       visible: false,
@@ -95,6 +105,12 @@ export default {
       isFullscreen: false,
       hideButtons: false,
     };
+  },
+
+  computed: {
+    hasDetails() {
+      return this.size !== 'original';
+    },
   },
 
   created() {
@@ -119,6 +135,8 @@ export default {
 
       this.activeDocument = this.images[initialSlide];
       this.visible = true;
+
+      const getImage = this.getImage;
 
       this.$nextTick(function () {
         const slides = this.images;
@@ -145,11 +163,9 @@ export default {
           virtual: {
             slides,
             renderSlide(img) {
-              return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
+              return `<div class="swiper-slide image-viewer-slide">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
-                img.locales[0].title
-              }" loading="lazy">
+                    <img data-src="${getImage(img)}" class="swiper-lazy" alt="${img.locales[0].title}" loading="lazy">
                   </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
@@ -195,12 +211,24 @@ export default {
               this.close();
             }
           });
+          // close on escape
+          window.addEventListener('keydown', this.onKeydown);
         });
         if (this.$screen.isMobile) {
           this.$options.swiper.on('click', this.toggleButtons);
         }
         this.$options.swiper.init();
       });
+    },
+
+    getImage(img) {
+      switch (this.size) {
+        case 'original':
+          return imageUrls.get(img);
+        case 'big':
+        default:
+          return imageUrls.getBig(img);
+      }
     },
 
     onPaginationClick(index) {
@@ -221,6 +249,7 @@ export default {
         this.zt.unbind(this.$refs.container);
         this.zt = null;
       }
+      window.removeEventListener('keydown', this.onKeydown);
       this.hideButtons = false;
 
       // if we closed without hitting back, go back once in history
@@ -298,7 +327,7 @@ $paginationHeight: 30px;
   left: 0;
   width: 100%; // not 100vw, otherwise the viewer goes under the scrollbar
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0);
 
   &-header {
     justify-content: space-between;
@@ -323,9 +352,7 @@ $paginationHeight: 30px;
 
   &-swiper {
     width: 100vw;
-    // on mobile, we don't have pagination, but this will give enough space to display
-    // the title on one line.
-    height: calc(100% - #{$headerHeight} - #{$paginationHeight});
+    height: 100%;
   }
 
   &-pagination {
@@ -375,6 +402,15 @@ $paginationHeight: 30px;
       visibility: hidden;
       opacity: 0;
     }
+  }
+}
+
+.image-viewer.with-details {
+  background: rgba(0, 0, 0, 0.95);
+  .image-viewer-swiper {
+    // on mobile, we don't have pagination, but this will give enough space to display
+    // the title on one line.
+    height: calc(100% - #{$headerHeight} - #{$paginationHeight});
   }
 }
 

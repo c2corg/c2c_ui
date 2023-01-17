@@ -41,9 +41,8 @@
 
       <div class="column is-9">
         <div class="box is-paddingless">
-          <a :href="getOriginalImageUrl(document)">
-            <img class="main-image" :src="getBigImageUrl(document)" />
-          </a>
+          <img class="main-image" :src="getBigImageUrl(document)" @click="showOriginal" />
+          <image-viewer ref="originalImageViewer" size="original" />
         </div>
 
         <div v-if="locale.summary || locale.description" class="box">
@@ -63,6 +62,8 @@
 </template>
 
 <script>
+import ImageViewer from '../../components/image-viewer/ImageViewer';
+
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
@@ -70,14 +71,18 @@ import imageUrls from '@/js/image-urls';
 
 export default {
   components: {
+    ImageViewer,
     MaskedDocumentVersionInfo,
   },
 
   mixins: [documentViewMixin],
 
   methods: {
-    getOriginalImageUrl: imageUrls.get,
     getBigImageUrl: imageUrls.getBig,
+
+    showOriginal() {
+      this.$refs.originalImageViewer.show(this.document);
+    },
   },
 };
 </script>
