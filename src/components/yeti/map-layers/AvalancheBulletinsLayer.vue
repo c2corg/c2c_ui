@@ -322,6 +322,10 @@ export default {
     },
   },
   mounted() {
+    // clear layers when mounted (useful when navigating c2c)
+    mountainsLayer.getSource().clear();
+    bulletinsLayer.getSource().clear();
+
     // data
     this.activeBulletins = null;
 
