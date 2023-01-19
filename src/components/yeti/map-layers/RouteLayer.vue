@@ -1,5 +1,6 @@
 <script>
 import layerMixin from './layer';
+import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
@@ -52,6 +53,19 @@ let highlightedLineStyle = [
   }),
 ];
 
+let elevationPointStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 5,
+    fill: new ol.style.Fill({
+      color: 'yellow',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'red',
+      width: 2,
+    }),
+  }),
+});
+
 export default {
   mixins: [layerMixin],
   data() {
@@ -102,6 +116,21 @@ export default {
     // add layer, and hide it
     this.map.addLayer(this.simplifiedLayer);
     this.simplifiedLayer.setVisible(false);
+
+    // layer for elevation point
+    this.elevationPointLayer = new ol.layer.Vector({
+      source: new ol.source.Vector(),
+      style: elevationPointStyle,
+    });
+    // add layer, and hide it
+    this.map.addLayer(this.elevationPointLayer);
+    this.elevationPointLayer.setVisible(false);
+    // add one feature for point
+    const elevationPointSource = this.elevationPointLayer.getSource();
+    this.elevationPoint = new ol.Feature();
+    elevationPointSource.addFeature(this.elevationPoint);
+    // react to event
+    Yetix.$on('elevationProfile', this.onElevationProfile);
 
     // set default featuresTitle
     Yetix.setFeaturesTitle(this.$gettext(Yetix.featuresTitle));
@@ -204,10 +233,15 @@ export default {
       }
     },
     getFeaturesLayerFeatures() {
-      return this.featuresLayerSource.getFeatures();
+      return this.getSortedFeatures(this.featuresLayerSource.getFeatures());
     },
     getSimplifiedFeatures() {
-      return this.simplifiedSource.getFeatures();
+      return this.getSortedFeatures(this.simplifiedSource.getFeatures());
+    },
+    getSortedFeatures(features) {
+      return features.sort((a, b) => {
+        return Number(a.ol_uid) > Number(b.ol_uid);
+      });
     },
     removeFeature(feature) {
       // remove feature
@@ -337,11 +371,25 @@ export default {
         let features = this.getFeaturesLayerFeatures();
         features.forEach((feature) => {
           let geometry = feature.getGeometry();
-          let simplifiedGeometry = geometry;
+
+          // clone geometry
+          let simplifiedGeometry = geometry.clone();
+          let coordinates = simplifiedGeometry.getCoordinates();
+
+          // if no z, add 0
+          coordinates = coordinates.map((coord) => {
+            if (!coord[2]) {
+              coord[2] = 0;
+            }
+            return coord;
+          });
+
           // check if tolerance is 0 == no simplification
           if (tolerance !== 0) {
-            simplifiedGeometry = simplifiedGeometry.simplify(tolerance);
+            coordinates = simplify(coordinates, tolerance, true);
+            simplifiedGeometry.setCoordinates(coordinates);
           }
+
           // create feature (store reference of actual feature thanks to ol_uid)
           let simplifiedFeature = new ol.Feature({ geometry: simplifiedGeometry, id: feature.ol_uid });
           this.simplifiedSource.addFeature(simplifiedFeature);
@@ -360,6 +408,17 @@ export default {
       });
       // hide simplified/show features
       this.hideSimplifiedLayer();
+    },
+    onElevationProfile(event, coord) {
+      switch (event) {
+        case 'cursor_move':
+          this.elevationPointLayer.setVisible(true);
+          this.elevationPoint.setGeometry(new ol.geom.Point(coord));
+          break;
+        case 'cursor_end':
+          this.elevationPointLayer.setVisible(false);
+          break;
+      }
     },
   },
   render() {

@@ -13,6 +13,9 @@ import Vue from 'vue';
 
 let defaultState = {
   API_URL: 'https://api.ensg.eu/',
+  BLEND_MODES_CLASS_NAME: 'areas',
+  BLEND_MODES_MAX_ZOOM: 10,
+  BLEND_MODES_MIN_ZOOM: 8,
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
 
@@ -78,6 +81,15 @@ let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
  */
 export default new Vue({
   computed: {
+    BLEND_MODES_CLASS_NAME() {
+      return state.BLEND_MODES_CLASS_NAME;
+    },
+    BLEND_MODES_MAX_ZOOM() {
+      return state.BLEND_MODES_MAX_ZOOM;
+    },
+    BLEND_MODES_MIN_ZOOM() {
+      return state.BLEND_MODES_MIN_ZOOM;
+    },
     DANGER_MAX_WHEN_MRD() {
       return state.DANGER_MAX_WHEN_MRD;
     },

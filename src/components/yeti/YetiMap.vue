@@ -3,11 +3,11 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
+      <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <avalanche-bulletins-layer />
       <flowcapt-layer />
       <nivoses-layer />
       <romma-layer />
-      <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <route-layer />
       <div
         ref="layerSwitcherButton"
@@ -16,7 +16,7 @@
       >
         <button @click.stop="showLayerSwitcher = !showLayerSwitcher">
           <fa-layers>
-            <fa-icon icon="layer-group" />
+            <fa-icon icon="layer-group" width="100%" />
             <fa-icon v-if="atLeastOneYetiLayerIsShown" icon="circle" transform="shrink-2 up-10 right-10" />
             <fa-icon
               v-if="atLeastOneYetiLayerIsShown"
@@ -202,9 +202,12 @@ export default {
     atLeastOneYetiLayerIsShown() {
       return !!this.yetiLayers.filter((layer) => layer.checked).length;
     },
+    yetiExtentLayerIsShown() {
+      return this.yetiLayers[0].checked;
+    },
   },
   watch: {
-    atLeastOneYetiLayerIsShown() {
+    yetiExtentLayerIsShown() {
       this.updateCartoLayersOpacity();
     },
     visibleCartoLayerId(id) {
@@ -215,12 +218,27 @@ export default {
       // then, make new layer visible
       visibleLayer = c2c_cartoLayers.find((layer) => layer.ol_uid === id);
       visibleLayer.setVisible(true);
+
+      this.emitVisibleLayers();
     },
   },
   created() {
     // build c2c layers
     c2c_cartoLayers = cartoLayers();
     c2c_dataLayers = dataLayers();
+
+    // set blend modes
+    c2c_dataLayers = c2c_dataLayers.map((layer) => {
+      layer.setOpacity(0.9);
+      layer.on('prerender', (evt) => {
+        evt.context.globalCompositeOperation = 'multiply';
+      });
+      layer.on('postrender', (evt) => {
+        evt.context.globalCompositeOperation = 'source-over';
+      });
+      return layer;
+    });
+
     // build map
     this.map = new ol.Map({
       controls: [
@@ -291,10 +309,10 @@ export default {
     },
     toggleMapDataLayer(reactiveLayer) {
       let layer = c2c_dataLayers.find((layer) => layer.ol_uid === reactiveLayer.id);
-      let ok = layer.setVisible(!layer.getVisible());
-      if (ok) {
-        reactiveLayer.visible = !reactiveLayer.visible;
-      }
+      layer.setVisible(!layer.getVisible());
+      reactiveLayer.visible = !reactiveLayer.visible;
+
+      this.emitVisibleLayers();
     },
     searchRecenterPropositions(event) {
       let query = event.target.value;
@@ -333,7 +351,7 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // if one of Yeti layers is here, update (on zooming for example)
-      if (this.atLeastOneYetiLayerIsShown) {
+      if (this.yetiExtentLayerIsShown) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -351,10 +369,50 @@ export default {
       // pass clicked feature
       Yetix.$emit('mapClick', evt, clickedFeature);
     },
+    emitVisibleLayers() {
+      // emits the indexes (position in layers selector) of actual visible layers
+
+      // find index of cartolayers
+      let cartoLayerIndex = null;
+      this.reactiveCartoLayers.forEach((layer, i) => {
+        if (layer.id === this.visibleCartoLayerId) {
+          cartoLayerIndex = i;
+          return;
+        }
+      });
+
+      // find all visible data layers indexes
+      let dataLayersIndexes = [];
+      this.reactiveDataLayers.forEach((layer, i) => {
+        if (layer.visible) {
+          dataLayersIndexes.push(i);
+          return;
+        }
+      });
+
+      Yetix.$emit('layer-visibility', cartoLayerIndex, dataLayersIndexes);
+    },
     updateCartoLayersOpacity() {
-      const LIMIT_ZOOM = 9;
+      const MIN_ZOOM = Yetix.BLEND_MODES_MIN_ZOOM;
+      const MAX_ZOOM = Yetix.BLEND_MODES_MAX_ZOOM;
+      const MIN_OPACITY = 0.25;
+      const MAX_OPACITY = 1;
+      const DELTA_OPACITY = MAX_OPACITY - MIN_OPACITY;
+
+      let opacity = MIN_OPACITY;
+      // opacity should increase gradually between min and max zooms
+      if (this.mapZoom >= MIN_ZOOM && this.mapZoom <= MAX_ZOOM) {
+        // opacity is between 1 and 0
+        opacity = (MAX_ZOOM - this.mapZoom) * (MAX_OPACITY / (MAX_ZOOM - MIN_ZOOM));
+        // map value to min/max opacity
+        opacity = Math.abs(1 - opacity) * DELTA_OPACITY + MIN_OPACITY;
+      } else if (this.mapZoom > MAX_ZOOM) {
+        opacity = MAX_OPACITY;
+      }
+
+      // for each layers, set opacity if one yeti layers is shown
       c2c_cartoLayers.forEach((layer) => {
-        layer.setOpacity(this.atLeastOneYetiLayerIsShown && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+        layer.setOpacity(this.yetiExtentLayerIsShown ? opacity : 1);
       });
     },
     onShowAvalancheBulletins() {

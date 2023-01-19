@@ -24,7 +24,7 @@
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <div>
           <svg
-            :viewBox="overlayData.danger.altitude ? '0 0 155 100' : '0 0 100 100'"
+            :viewBox="overlayData.danger.altitude ? '0 0 165 100' : '0 0 100 100'"
             :width="overlayData.danger.altitude ? 130 : 80"
             height="80"
           >
@@ -109,6 +109,8 @@
   </div>
 </template>
 <script>
+import turfBuffer from '@turf/buffer';
+import turfDifference from '@turf/difference';
 import turfIntersect from '@turf/intersect';
 
 import layerMixin from './layer';
@@ -116,41 +118,61 @@ import layerMixin from './layer';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
-let mountainsStyle = (mapZoom) => {
-  const MIN_ZOOM = 8;
-  const MAX_ZOOM = 10;
+// min and max zooms for layers styles
+const MIN_ZOOM = 8;
+const MAX_ZOOM = 10;
+
+let mountainsStyle = (feature, mapZoom, danger) => {
   const MIN_OPACITY = 0;
-  const MAX_OPACITY = 0.8;
+  const MAX_OPACITY = 0.9;
 
   let opacity = MAX_OPACITY;
   let strokeWidth = 1;
 
+  let bufferedGeometryValue = 'bufferedGeometry_0';
+
   if (mapZoom) {
-    // opacity should be
-    // 0.8 (default)
-    // gradually decreasing between min and max zooms
-    // 0 when zoom is > max
+    // opacity should be gradually decreasing between min and max zooms
+    // also, set buffered geometry based on zoom
     if (mapZoom >= MIN_ZOOM && mapZoom <= MAX_ZOOM) {
       opacity = (MAX_ZOOM - mapZoom) * (MAX_OPACITY / (MAX_ZOOM - MIN_ZOOM));
     } else if (mapZoom > MAX_ZOOM) {
       opacity = MIN_OPACITY;
-    }
-
-    // increase stroke when zoom > max
-    if (mapZoom > MAX_ZOOM) {
+      bufferedGeometryValue = 'bufferedGeometry_1';
+      // increase stroke when zoom > max
       strokeWidth = 2;
     }
   }
 
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: 'rgba(0, 0, 0, .85)',
-      width: strokeWidth,
+  danger = danger || 0;
+
+  // #fff, #cbdb45, #fff100, #f6921e, #ec1c24, #ec1c24
+  let dangerFill = ['255, 255, 255', '203, 219, 69', '255, 241, 0', '246, 146, 30', '236, 28, 36', '236, 28, 36'];
+
+  let styles = [
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.85)',
+        width: strokeWidth,
+      }),
+      fill: new ol.style.Fill({
+        color: `rgba(${dangerFill[danger]}, ${opacity})`,
+      }),
     }),
-    fill: new ol.style.Fill({
-      color: `rgba(255, 255, 255, ${opacity})`,
-    }),
-  });
+  ];
+
+  if (feature && mapZoom < Yetix.VALID_MINIMUM_MAP_ZOOM) {
+    styles.push(
+      new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: `rgba(${dangerFill[danger]}, 0.75)`,
+        }),
+        geometry: feature.get(bufferedGeometryValue),
+      })
+    );
+  }
+
+  return styles;
 };
 
 let iconSize = 80;
@@ -158,12 +180,13 @@ let iconSize = 80;
 let bulletinsIcon = (danger) => {
   danger = danger || 0;
 
-  let dangerFill = ['#999', '#cbdb45', '#fff100', '#f6921e', '#ec1c24', '#ec1c24'];
+  // #999, #cbdb45, #fff100, #f6921e, #ec1c24, #ec1c24
+  let dangerFill = ['153, 153, 153', '203, 219, 69', '255, 241, 0', '246, 146, 30', '236, 28, 36', '236, 28, 36'];
 
   let svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${iconSize}" height="${iconSize}" viewBox="-50 0 200 100">
       <path d="M5,50L50,5L95,50" fill="white" />
-      <path d="M5,50L50,95L95,50" fill="${dangerFill[danger]}" />
+      <path d="M5,50L50,95L95,50" fill="rgb(${dangerFill[danger]})" />
       <path d="m50,0l50,50-50,50-50-50zv5L21,33l19-10L50,26l9-8L80,38l2-1L50,5M5,50L50,95L95,50" />
   `;
 
@@ -205,7 +228,11 @@ let bulletinsIcon = (danger) => {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 };
 
-let bulletinsStyle = (danger) => {
+let bulletinsStyle = (mapZoom, danger) => {
+  // no icon when zoom < MIN_ZOOM
+  if (mapZoom < MIN_ZOOM) {
+    return new ol.style.Style({});
+  }
   return new ol.style.Style({
     image: new ol.style.Icon({
       src: bulletinsIcon(danger),
@@ -295,6 +322,10 @@ export default {
     },
   },
   mounted() {
+    // clear layers when mounted (useful when navigating c2c)
+    mountainsLayer.getSource().clear();
+    bulletinsLayer.getSource().clear();
+
     // data
     this.activeBulletins = null;
 
@@ -320,6 +351,25 @@ export default {
 
       // add to mountains layer
       mountainsLayer.getSource().addFeatures(mountainsFeatures);
+
+      // build inner strokes for each mountains
+      let format = new ol.format.GeoJSON({ featureProjection: 'EPSG:3857' });
+      let distances = [2, 0.5];
+      mountainsFeatures.forEach((mountain) => {
+        let turfPolygon = format.writeFeatureObject(mountain);
+
+        distances.forEach((distance, i) => {
+          let innerBuffer = turfBuffer(turfPolygon, -distance);
+          let innerDiff;
+          if (innerBuffer) {
+            innerDiff = turfDifference(turfPolygon, innerBuffer);
+          } else {
+            innerDiff = turfPolygon;
+          }
+          let bufferedGeometry = format.readGeometry(innerDiff.geometry);
+          mountain.set(`bufferedGeometry_${i}`, bufferedGeometry);
+        });
+      });
 
       let mountains = this.getPropertiesFromFeatures(mountainsFeatures);
       mountains = this.sortMountainsByMassif(mountains);
@@ -382,7 +432,23 @@ export default {
       Yetix.setVisibleMountains(visibleMountains);
     },
     updateMountainsStyle() {
-      mountainsLayer.setStyle(mountainsStyle(this.mapZoom));
+      mountainsLayer
+        .getSource()
+        .getFeatures()
+        .forEach((mountain) => {
+          let bulletin = mountain.get('bulletinsFeature');
+          if (bulletin) {
+            let danger = bulletin.get('overlayData').danger.max;
+            mountain.setStyle(mountainsStyle(mountain, this.mapZoom, danger));
+          }
+        });
+      bulletinsLayer
+        .getSource()
+        .getFeatures()
+        .forEach((bulletin) => {
+          let danger = bulletin.get('overlayData').danger.max;
+          bulletin.setStyle(bulletinsStyle(this.mapZoom, danger));
+        });
     },
     onMapMoveEnd() {
       // set visible mountains
@@ -394,10 +460,38 @@ export default {
       }
     },
     onMapClick(evt, clickedFeature) {
-      // this will set bulletins overlay, only when showAvalancheBulletins is true
-      // and drawing mode is off
+      // this will set bulletins overlay
+      // only when showAvalancheBulletins is true and drawing mode is off
       if (this.showAvalancheBulletins && !this.drawingMode) {
-        this.setBulletinsOverlay(evt, clickedFeature);
+        // get feature from bulletins layer where clicked
+        let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: function (layer) {
+            return layer === bulletinsLayer;
+          },
+        });
+        let clickedBulletinFeature = clickedBulletinFeatures.length ? clickedBulletinFeatures[0] : undefined;
+
+        // get feature from mountains layer where clicked
+        let clickedMountainFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: function (layer) {
+            return layer === mountainsLayer;
+          },
+        });
+        let clickedMountainFeature = clickedMountainFeatures.length ? clickedMountainFeatures[0] : undefined;
+
+        // open overlay
+        // if clicked feature is from bulletin layer
+        if (clickedBulletinFeature && clickedBulletinFeature === clickedFeature) {
+          this.setBulletinsOverlay(evt, clickedBulletinFeature);
+        }
+        // or if clicked feature is from mountains layer AND zoom is below min zoom
+        else if (this.mapZoom < MIN_ZOOM && clickedMountainFeature && clickedMountainFeature === clickedFeature) {
+          this.setBulletinsOverlay(evt, clickedMountainFeature.get('bulletinsFeature'));
+        }
+        // else, close overlay
+        else {
+          this.closeOverlay(true);
+        }
       }
     },
     onShowAvalancheBulletins() {
@@ -458,7 +552,9 @@ export default {
             });
             bulletinsLayer.getSource().addFeature(bulletinsFeature);
 
-            bulletinsFeature.setStyle(bulletinsStyle(zone.danger.max));
+            // set styles
+            bulletinsFeature.setStyle(bulletinsStyle(this.mapZoom, zone.danger.max));
+            mountain.setStyle(mountainsStyle(mountain, this.mapZoom, zone.danger.max));
 
             mountain.setProperties({ bulletinsFeature });
 
@@ -531,40 +627,26 @@ export default {
       // update bulletin overlay
       this.updateBulletinsOverlay();
     },
-    setBulletinsOverlay(evt, clickedFeature) {
-      // first, get all features from bulletins layer where clicked
-      let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
-        layerFilter: function (layer) {
-          return layer === bulletinsLayer;
-        },
-      });
-      let clickedBulletinFeature = clickedBulletinFeatures.length ? clickedBulletinFeatures[0] : undefined;
-      // if a feature is found
-      // and feature is the clicked feature from map (overlap)
-      if (clickedBulletinFeature && clickedBulletinFeature === clickedFeature) {
-        // set mountain name
-        this.overlayData = clickedBulletinFeature.get('overlayData');
-        // find the closest point (because it's a MultiPoint)
-        let closestPointCoordinate = clickedBulletinFeature.getGeometry().getClosestPoint(evt.coordinate);
-        // set overlay position
-        this.openOverlay(closestPointCoordinate, true);
-        // store this point
-        this.activeBulletins = {
-          feature: clickedBulletinFeature,
-        };
-        // if there are more than one point in multipoint
-        // find the closest one and store index too
-        let points = clickedBulletinFeature.getGeometry().getPoints();
-        if (points.length > 1) {
-          points.forEach((point, index) => {
-            if (point.getCoordinates().every((coord, i) => coord === closestPointCoordinate[i])) {
-              this.activeBulletins.index = index;
-            }
-          });
-        }
-      } else {
-        // remove when no feature found (click on map)
-        this.closeOverlay(true);
+    setBulletinsOverlay(evt, clickedBulletinFeature) {
+      // set mountain name
+      this.overlayData = clickedBulletinFeature.get('overlayData');
+      // find the closest point (because it's a MultiPoint)
+      let closestPointCoordinate = clickedBulletinFeature.getGeometry().getClosestPoint(evt.coordinate);
+      // set overlay position
+      this.openOverlay(closestPointCoordinate, true);
+      // store this point
+      this.activeBulletins = {
+        feature: clickedBulletinFeature,
+      };
+      // if there are more than one point in multipoint
+      // find the closest one and store index too
+      let points = clickedBulletinFeature.getGeometry().getPoints();
+      if (points.length > 1) {
+        points.forEach((point, index) => {
+          if (point.getCoordinates().every((coord, i) => coord === closestPointCoordinate[i])) {
+            this.activeBulletins.index = index;
+          }
+        });
       }
     },
     updateBulletinsOverlay() {

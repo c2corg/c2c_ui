@@ -40,6 +40,12 @@
         <features-list :features="features" />
       </div>
       <simplify-tool ref="simplifyTool" />
+      <dropdown-content class="mb-5">
+        <span v-translate>Elevation profile</span>
+        <template #content>
+          <elevation-profile :features="features" />
+        </template>
+      </dropdown-content>
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -107,6 +113,10 @@
         >
           Upload a GPS track
         </button>
+        <button class="button is-secondary" @click="setDrawingMode">
+          <span v-translate key="1" v-if="!drawingMode">Activate drawing mode</span>
+          <span v-translate key="2" v-else>Disable drawing mode</span>
+        </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
@@ -122,6 +132,8 @@
 </template>
 
 <script>
+import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
@@ -131,7 +143,7 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, Info, SimplifyTool, SubPanelTitle },
+  components: { DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,
@@ -141,6 +153,9 @@ export default {
     };
   },
   computed: {
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
     features() {
       return Yetix.features;
     },
@@ -219,6 +234,9 @@ export default {
     },
     setFilename(ext) {
       return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
+    },
+    setDrawingMode() {
+      Yetix.setDrawingMode(!this.drawingMode);
     },
   },
 };
