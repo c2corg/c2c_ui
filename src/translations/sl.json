@@ -238,7 +238,7 @@
     "Easy mountain climbing gear": "Alpinizem (skala) od F do AD",
     "Easy snow ice mixed gear": "Alpinizem sneg/led/kombinirano od F do PD+",
     "Edit": {
-      "$$noContext": "Uredi",
+      "$$noContext": "Urejanje",
       "yeti": "Uredi"
     },
     "Edit a document": "Uredi dokument",
@@ -398,7 +398,7 @@
     "Massifs could not be loaded": "Gorskih skupin ni bilo mogoče naložiti",
     "Merge documents": "Združi dokumente",
     "Merge with other document": "Združi z drugim dokumentom",
-    "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Združenje izvornega dokumenta s ciljnim dokumentom prenese vse povezave izvornega dokumenta na ciljni dokument in nastavi preusmeritev iz izvornega v ciljni dokument.",
+    "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Združitev izvornega dokumenta s ciljnim dokumentom prenese vse povezave izvornega dokumenta na ciljni dokument in nastavi preusmeritev iz izvornega v ciljni dokument.",
     "Methods": "Metode",
     "Misc data about the waypoint": "Razni podatki o točki",
     "Miscs": "Razno",
@@ -768,7 +768,7 @@
       "API message": "Ta e-poštni naslov je že v uporabi"
     },
     "already used forum_username": {
-      "API message": "Že uporabljen psevdonim na forumu"
+      "API message": "Že uporabljeno uporabniško ime na forumu"
     },
     "already used username": {
       "API message": "Že uporabljena identifikacija"
