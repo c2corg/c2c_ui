@@ -1,8 +1,9 @@
 # build stage
 FROM node:lts-alpine as build-stage
 WORKDIR /
+COPY patches ./patches
 COPY package*.json ./
-COPY .snyk /
+COPY .snyk ./
 RUN npm install
 COPY . .
 RUN npm run build
