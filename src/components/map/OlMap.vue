@@ -1277,7 +1277,7 @@ $control-margin: 0.5em;
   z-index: 1;
   bottom: 0;
   left: 0;
-  height: 275px;
+  height: 100%;
   width: 225px;
   color: white;
   text-decoration: none;
