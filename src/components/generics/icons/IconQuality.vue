@@ -1,5 +1,5 @@
 <template>
-  <fa-icon :icon="['quality', quality]" />
+  <fa-icon :icon="['quality', quality]" :fixed-width="fixedWidth" />
 </template>
 
 <script>
@@ -8,6 +8,10 @@ export default {
     quality: {
       type: String,
       required: true,
+    },
+    fixedWidth: {
+      type: Boolean,
+      default: false,
     },
   },
 };
