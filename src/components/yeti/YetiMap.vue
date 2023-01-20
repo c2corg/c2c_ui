@@ -81,7 +81,7 @@
       <div ref="drawingMode" class="ol-control ol-control-drawing-mode" :class="{ 'is-primary': drawingMode }">
         <div class="ol-control-drawing-mode-inner">
           <input-checkbox @input="onDrawingMode" :value="drawingMode" :disabled="validSimplifyTolerance">
-            <span v-translate title="Enable drawing and editing features on map">Drawing mode</span>
+            <span v-translate :title="$gettext('Enable drawing and editing features on map')">Drawing mode</span>
             <span class="yeti-tag">
               <span v-if="validSimplifyTolerance" v-translate>DISABLED</span>
               <span v-else-if="drawingMode">ON</span>
