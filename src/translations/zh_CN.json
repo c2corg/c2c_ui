@@ -1392,7 +1392,7 @@
       "activities": "山地骑行"
     },
     "mountain_climbing": {
-      "activities": "高山岩石路线"
+      "activities": "高山岩石"
     },
     "mountain_environment": {
       "article_categories": "山区环境"
@@ -1786,8 +1786,8 @@
       "weather_station_types": "雪的厚度"
     },
     "snow_ice_mixed": {
-      "activities": "冰雪及混合路线",
-      "event_activities": "冰雪及混合路线"
+      "activities": "高山冰雪及混合",
+      "event_activities": "高山冰雪及混合"
     },
     "snow_quality": "雪质",
     "snow_quantity": "雪量",
