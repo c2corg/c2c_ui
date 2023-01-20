@@ -76,16 +76,16 @@
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
-            <li v-for="type of formats" :key="type" class="control is-flex">
+            <li v-for="f of formats" :key="f" class="control is-flex">
               <input
-                :id="'format' + type"
+                :id="'format' + f"
                 type="radio"
                 name="exportFormat"
                 class="is-checkradio is-primary"
                 :value="type"
                 v-model="format"
               />
-              <label :for="'format' + type">{{ type }}</label>
+              <label :for="'format' + f">{{ f }}</label>
             </li>
           </ul>
         </div>
