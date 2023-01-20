@@ -303,8 +303,8 @@ export default {
       return this.$dateUtils.toLocalizedString(new Date(this.overlayData.validUntil), 'DD/MM/YYYY HH:mm');
     },
     overlayValidUntilExpired() {
-      // expire delay is 48h
-      return (new Date() - new Date(this.overlayData.validUntil)) / 1000 > 60 * 60 * 24 * 2;
+      // return true when validUntil is expired (warn user)
+      return new Date() - new Date(this.overlayData.validUntil) > 0;
     },
     overlayDangerIcon() {
       return bulletinsIcon(this.overlayData.danger.max);
