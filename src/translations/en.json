@@ -92,6 +92,7 @@
     "Conflict: version of locale 'eu' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'fr' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'it' has changed": "Document has been modified in the meantime and a new version is available.",
+    "Conflict: version of locale 'sl' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'zh_CN' has changed": "Document has been modified in the meantime and a new version in chinese is available.",
     "Contain invalid character(s)": {
       "API message": "Contains invalid character(s)"
@@ -156,7 +157,6 @@
     },
     "My changes": "My contributions",
     "Narration": "Textual description",
-    "No title": "Sans titre",
     "No user with this email": {
       "API message": "There is no user with this email"
     },
@@ -182,6 +182,7 @@
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Please describe your technical and experience level related to the chosen goal, your level of fitness, priorly accumulated tiredness, acclimatization if in altitude, etc. ",
     "Precise location of the event.": "Precise location of the event",
     "Put it back": "Restore",
+    "Regions:": "Regions :",
     "Register": "Sign up",
     "See other documents nearby": "Other documents nearby...",
     "Seems fine! :)": "Computation possible ! :)",

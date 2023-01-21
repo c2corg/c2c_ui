@@ -79,6 +79,7 @@
     "Action - prix du public": {
       "Sophie picture context": "Aktion - Publikumspreis"
     },
+    "Activate drawing mode": "Zeichnen-Modus aktivieren",
     "Activity feed": "Aktivitäts-Feed",
     "Activity trackers": "Aktivitätentracker",
     "Add": "Hinzufügen",
@@ -95,6 +96,7 @@
     "An error occurred, connection status could not be retrieved. Please refresh the page.": "Ein Fehler ist aufgetreten: der Verbindungsstatus konnte nicht geladen werden. Bitte die Seite aktualisieren.",
     "An error occurred, could not retrieve activities": "Ein Fehler ist aufgetreten: die Aktivitäten konnten nicht geladen werden.",
     "An error occurred, couldn't (un)mark route as to do": "Es ist ein Fehler aufgetreten, die Route konnte nicht als zu tun (un)markiert werden.",
+    "An error occurred, couldn't (un)mask version": "Es ist ein Fehler aufgetreten, die Version konnte nicht (un)sichtbar gemacht werden.",
     "An error occurred, couldn't save images": "Bilder konnten nicht geladen werden",
     "Anonymity and confidentiality": "Anonymität und Vertraulichkeit",
     "Applications": "Apps",
@@ -164,6 +166,7 @@
     "Conditions, summits, routes": "Verhältnisse, Gipfel, Routen",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
     "Configure cookies": "Cookies einstellen",
+    "Configure layer": "Schicht konfigurieren",
     "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Hier können Sie Ihre Verbindung mit externen Diensten wie Strava oder der Anwendung Ihres GPS-Geräts, um GPX-Tracks Ihrer Aktivitäten einfach abzurufen.",
     "Configured": "Konfiguriert",
     "Confirm": "Bestätigen",
@@ -176,6 +179,7 @@
     "Conflict: version of locale 'eu' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
     "Conflict: version of locale 'fr' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
     "Conflict: version of locale 'it' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
+    "Conflict: version of locale 'sl' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
     "Conflict: version of locale 'zh_CN' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version .",
     "Conflicting method and danger": "Widersprüchliche Methode und Gefahr",
     "Connect": "Verbinden",
@@ -251,6 +255,7 @@
     "Differences between versions": "Unterschied zwischen Versionen",
     "Different high/low danger?": "Unterschiedlich hohe/niedrige Gefahr?",
     "Directions (Google Maps)": "Anfahrtsbeschreibung (Google Maps)",
+    "Disable drawing mode": "Zeichnen-Modus deaktivieren",
     "Disclaimer": "Haftungsausschluss",
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
@@ -287,6 +292,7 @@
     "Elevation": "Höhe",
     "Elevation (m)": "Höhe (m)",
     "Elevation profile": "Höhenprofil",
+    "Enable drawing and editing features on map": "Aktivieren Sie das Zeichnen und Bearbeiten von Features auf der Karte",
     "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
     "Expand": "Entfalten",
     "Expert": "Profi",
@@ -302,6 +308,7 @@
     "Filter results": "Ergebnisse filtern",
     "FlowCapt sensor": "FlowCapt-Sensor ",
     "FlowCapt sensors": "FlowCapt-Sensoren",
+    "Fold section": "Abschnitt falten",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forum-Benutzername",
@@ -343,6 +350,12 @@
     "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
     "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
     "I read and understood the interest and limitations of YETI": "Ich habe die Interessen und Einschränkungen von YETI gelesen und verstanden",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC Sat"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC"
+    },
     "IGN Slopes": {
       "Map slopes layer": "Frankreich"
     },
@@ -421,6 +434,7 @@
     "Map only": "Nur Karte",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Karte, Topos, Kenntnis der Route, Antizipation eines Plans B, Neubewertung der ausgeführten Route?",
     "Mark this route as to do": "Markieren Sie diese Route als zu tun",
+    "Masked": "Maskiert",
     "Massifs could not be loaded": "Die Gebirgemassiven konnten nicht geladen werden",
     "Merge documents": "Dokumente vereinigen",
     "Merge with other document": "Mit anderen Dokumenten vereinigen",
@@ -491,6 +505,9 @@
     "Open fields to detail the picture's context": "Freies Feld, um den Kontext des Bilds zu beschreiben",
     "Open in a new tab": "In neuer Registerkarte öffnen",
     "Ordered list": "geordnete Liste",
+    "Ordnance Survey (uk)": {
+      "Map layer": "Ordnance Survey (UK)"
+    },
     "Orientations": "Ausrichtungen",
     "Orientations:": "Ausrichtungen :",
     "Other options": "Andere Optionen",
@@ -552,6 +569,7 @@
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
     "Refresh": "Aktualisieren",
+    "Regions:": "Regionen:",
     "Register": "Anmelden",
     "Remove": "Entfernen",
     "Report an issue": "Problem melden",
@@ -603,6 +621,7 @@
     "Shorter than minimum length 3": {
       "API message": "Zu kurz, soll mindestens 3 Zeichen haben"
     },
+    "Show document history": "Dokumentverlauf anzeigen",
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
     "Simplify": "Vereinfachen",
     "Skiability": "Schifahrengenuss",
@@ -656,12 +675,14 @@
     "This field must be a valid ISBN.": {
       "API message": "Dieses Feld muss eine gultige ISBN sein."
     },
+    "This is an archived version of this page, as of": "Dies ist eine archivierte Version dieser Seite, Stand",
     "This is the first version": "Das ist die erste Version",
     "This is the last version": "Das ist die letzte Version",
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Hier können Sie die Route ausführlich beschreiben, möglicherweise mit einer kurzen Zusammenfassung beginnen und dann die Beschreibung entwickeln (einschließlich Anflug, Abstieg usw.). Vergessen Sie nicht, die Routenhistorie zu erwähnen, wenn Sie diese kennen.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Dieses Bild zeigt ein Buch-Cover. Es ist Eigentum des Herausgebers und/oder Autor. Es wird hier nur zwecks Veranschaulichung vorgestellt.",
     "This profile is only available to authenticated users.": "Dieses Profil ist nur für eingeloggte Benutzern zugänglich.",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Dieses Tool schätzt die technische Schwierigkeit einer Skiroute (Skibewertung).",
+    "This version has been masked.": "Diese Version wurde maskiert.",
     "Time": "Zeit",
     "Title of the book, author, language and date of publication.": "Buchtitel, Autor, Sprache und Veröffentlichungsdatum.",
     "Title, activity and characteristics of the picture": "Titel, Aktivitäten und Spezifikationen des Bilds",
@@ -689,6 +710,7 @@
     "Types and styles": "Art & Stile",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-geräte, usw…",
     "Unblock account": "Konto entsperren",
+    "Unfold section": "Abschnitt entfalten",
     "Unformatted text": "Roher Text",
     "Unmark this route as to do": "Entmarkieren Sie diese Route als zu tun",
     "Unordered list": "Ungeordnete Liste",
@@ -704,6 +726,8 @@
     "View in other lang": "In anderer Sprache anzeigen",
     "View next comments and continue the discussion": "Nächste Kommentare seen und Diskussion fortsetzen",
     "View xreports": "Unfallberichte sehen",
+    "Visibility": "Sichtbarkeit",
+    "Visible": "Sichtbar",
     "Visible on map": "Auf der Karte sichtbar",
     "Warning: This action cannot be undone!": "Achtung: Diese Aktion ist unumkehrbar !",
     "Waypoint's main properties": "Hauptdaten des Wegpunkts",
@@ -718,6 +742,8 @@
     "Without c2c account": "Ohne c2c Konto",
     "YETI - A preparation tool for your outing": "YETI - Ein Vorbereitungswerkzeug für Ihre Touren",
     "YETI extent": "YETI Abdeckung",
+    "You are trying to compare versions of a document of which at least one version is masked.": "Sie versuchen, Versionen eines Dokuments zu vergleichen, von denen mindestens eine Version maskiert ist.",
+    "You are trying to view a masked version of a document.": "Sie versuchen, eine maskierte Version eines Dokuments anzuzeigen.",
     "You are using a custom sort": "Sie verwenden eine benutzerdefinierte Sortierung",
     "You can choose to remain anonymous": "Sie können entscheiden, anonym zu bleiben",
     "You have to be authorized. Please contact administrators of the service if interested.": "Sie müssen autorisiert sein. Bitte kontaktieren Sie bei Interesse die Administratoren des Dienstes.",
