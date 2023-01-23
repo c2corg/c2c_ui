@@ -11,7 +11,7 @@
         class="columns is-mobile has-hover-background is-marginless is-vcentered"
       >
         <div class="column is-narrow is-paddingless">
-          <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" class="icon-link" />
+          <icon-waypoint-type :waypoint-type="waypoint.waypoint_type" fixed-width class="icon-link" />
         </div>
         <div class="column is-paddingless">
           <document-title :document="waypoint" />
@@ -28,7 +28,7 @@
       </div>
       <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
-          <icon-book class="icon-link" />
+          <icon-book fixed-width class="icon-link" />
           <document-title :document="book" />
         </document-link>
       </div>
@@ -42,7 +42,7 @@
       </div>
       <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
-          <icon-article class="icon-link" />
+          <icon-article fixed-width class="icon-link" />
           <document-title :document="article" />
         </document-link>
       </div>
@@ -56,7 +56,7 @@
       </div>
       <div v-for="xreport of associations.xreports" :key="xreport.document_id" class="is-ellipsed">
         <document-link :document="xreport">
-          <icon-xreport class="icon-link" />
+          <icon-xreport fixed-width class="icon-link" />
           <document-title :document="xreport" />
         </document-link>
       </div>
@@ -73,7 +73,7 @@
       </div>
       <div v-for="outing of associations.outings" :key="outing.document_id" class="is-ellipsed">
         <document-link :document="outing">
-          <icon-outing class="icon-link" />
+          <icon-outing fixed-width class="icon-link" />
           <document-title :document="outing" uppercase-first-letter />
         </document-link>
       </div>

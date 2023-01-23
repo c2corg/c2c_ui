@@ -6,9 +6,9 @@
       <span v-translate>View in other lang</span>
       <br />
       <span class="lang-switcher-box-list">
-        <span v-for="lang of available_langs" :key="lang">
-          <document-link :document="document" :lang="lang">
-            {{ $gettext(lang, 'langs') }}
+        <span v-for="l of available_langs" :key="l">
+          <document-link :document="document" :lang="l">
+            {{ $gettext(l, 'langs') }}
           </document-link>
         </span>
       </span>
@@ -77,16 +77,15 @@
     />
 
     <div class="quality" v-if="quality">
-      <icon-quality :quality="quality.value"></icon-quality>
+      <icon-quality :quality="quality.value" fixed-width></icon-quality>
       <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
     </div>
 
     <tool-box-button
-      v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
-      :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
-      :label="$gettext('History')"
-      rel="nofollow"
-      icon="history"
+      v-if="isEditable"
+      :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
+      icon="edit"
+      :label="$gettext('Edit a document')"
     />
 
     <tool-box-button
@@ -94,6 +93,14 @@
       @click="$refs.associationsWindow.show()"
       icon="link"
       :label="$gettext('Edit associations')"
+    />
+
+    <tool-box-button
+      v-if="documentType != 'profile' || $user.isModerator || document.document_id === $user.id"
+      :to="{ name: documentType + '-history', params: { id: document.document_id, lang: document.cooked.lang } }"
+      :label="$gettext('History')"
+      rel="nofollow"
+      icon="history"
     />
 
     <tool-box-button
@@ -214,6 +221,10 @@ export default {
   reportingIssueMail: 'topo-fr@camptocamp.org',
 
   computed: {
+    lang() {
+      return this.document.cooked.lang;
+    },
+
     reportingSubject() {
       return this.$gettext('Issue report');
     },

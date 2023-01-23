@@ -1,5 +1,5 @@
 <template>
-  <fa-icon :icon="['waypoint', waypointType]" />
+  <fa-icon :icon="['waypoint', waypointType]" :fixed-width="fixedWidth" />
 </template>
 
 <script>
@@ -8,6 +8,10 @@ export default {
     waypointType: {
       type: String,
       required: true,
+    },
+    fixedWidth: {
+      type: Boolean,
+      default: false,
     },
   },
 };
