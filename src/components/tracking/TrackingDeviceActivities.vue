@@ -2,15 +2,22 @@
   <div v-if="activities.length">
     <p v-translate>Select an activity to load geographical data into document.</p>
     <div class="mt-2">
-      <div v-for="activity in activities" :key="activity.id" class="has-hover-background activity-row">
-        <div>
-          <a @click="fetch(activity.id)" v-if="!fetching"
-            ><fa-icon icon="download" :title="$gettext('Fetch geographic data')"></fa-icon></a
-          ><span v-else-if="fetching === activity.id" class="has-text-link"><fa-icon icon="rotate" spin></fa-icon></span
-          ><span v-else class="has-text-grey-light"><fa-icon icon="download"></fa-icon></span>
+      <div class="activities-list columns is-multiline">
+        <div v-for="activity in activities" :key="activity.id">
+          <div class="column is-flex is-justify-content-space-around">
+            <tracking-device-activity :activity="activity">
+              <button class="button" @click="fetch(activity.id)" v-if="!fetching">
+                <fa-icon icon="download"></fa-icon>&hairsp;<span v-translate>Use track</span>
+              </button>
+              <span v-else-if="fetching === activity.id"><fa-icon icon="rotate" spin></fa-icon></span>
+            </tracking-device-activity>
+          </div>
         </div>
-        <tracking-device-activity-row :activity="activity"></tracking-device-activity-row>
       </div>
+      <p>
+        <span v-translate>Static map images</span> © <a href="https://www.mapbox.com/about/maps/">Mapbox</a> ©
+        <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>
+      </p>
     </div>
   </div>
   <div v-else-if="promise !== null"><span v-translate>Loading...</span></div>
@@ -22,11 +29,11 @@
 <script>
 import { toast } from 'bulma-toast';
 
-import TrackingDeviceActivityRow from '@/components/tracking/TrackingDeviceActivityRow';
+import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity';
 import trackingService from '@/js/apis/tracking-service';
 
 export default {
-  components: { TrackingDeviceActivityRow },
+  components: { TrackingDeviceActivity },
 
   data() {
     return {
@@ -71,10 +78,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.activity-row {
-  display: flex;
-  gap: 5px;
-}
-</style>
