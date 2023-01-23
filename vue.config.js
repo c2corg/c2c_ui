@@ -101,6 +101,10 @@ const config = {
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
       modernThumbnailsTimestamp: 0,
       modernThumbnailsId: 0,
+      stravaClientId: '99246',
+      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+      polarClientId: '65d10592-5abf-41d6-a5ce-b16a28174849',
     },
     prod: {
       name: 'prod',
@@ -112,6 +116,10 @@ const config = {
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
       modernThumbnailsTimestamp: 0,
       modernThumbnailsId: 0,
+      stravaClientId: '63968',
+      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+      polarClientId: '5a9f9ddd-fc15-48d2-bc56-86b43d491cc9',
     },
   },
 };

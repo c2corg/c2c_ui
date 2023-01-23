@@ -44,6 +44,7 @@ import { toast } from 'bulma-toast';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard';
 import trackingService from '@/js/apis/tracking-service';
+import config from '@/js/config';
 
 export default {
   components: { ApplicationCard },
@@ -74,14 +75,14 @@ export default {
         // $gettext('strava')
         name: 'strava',
         website: 'https://www.strava.com',
-        connect: `https://www.strava.com/oauth/authorize?client_id=63968&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
+        connect: `https://www.strava.com/oauth/authorize?client_id=${config.urls.stravaClientId}response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
         status: 'disabled',
       },
       {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
-        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=b708af3b-fd46-41ab-af73-5176a0a56f92&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
+        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=${config.urls.decathlonClientId}&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
         status: 'disabled',
       },
       {
@@ -94,14 +95,14 @@ export default {
         // $gettext('suunto')
         name: 'suunto',
         website: 'https://app.suunto.com/',
-        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=2928e564-85eb-4aef-92fb-2a0259589c9c&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
+        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=${config.urls.suuntoClientId}&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
         status: 'disabled',
       },
       {
         // $gettext('polar')
         name: 'polar',
         website: 'https://www.flow.polar.com/',
-        connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=5a9f9ddd-fc15-48d2-bc56-86b43d491cc9&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
         status: 'disabled',
       },
     ];
