@@ -3,7 +3,7 @@
     <html-header :title="$gettext('Activity trackers')" />
 
     <h1 class="title is-1" v-translate>Configure activity trackers</h1>
-    <p v-translate>
+    <p class="mb-4" v-translate>
       Configure your connection to external services like Strava or your GPS device application to easily retrieve
       geometries.
     </p>
@@ -21,6 +21,28 @@
           @revoke="revoke(application.name)"
         ></application-card>
       </div>
+    </div>
+
+    <h2 class="title is-2">Outdoorvision</h2>
+
+    <div class="columns">
+      <div class="column is-3">
+        <a href="https://outdoorvision.fr/" rel="noreferrer noopener">
+          <img src="@/assets/img/outdoorvision.svg" loading="lazy" />
+        </a>
+      </div>
+      <div class="column is-9">
+        <p class="m-4" v-translate>
+          Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the
+          preservation and design of my practice sites in France.
+        </p>
+        <div class="has-text-centered">
+          <a href="https://outdoorvision.fr/" rel="noreferrer noopener" class="button is-primary" v-translate>
+            I contribute
+          </a>
+        </div>
+      </div>
+      .
     </div>
 
     <h2 class="title is-2" v-translate>Last activities</h2>
