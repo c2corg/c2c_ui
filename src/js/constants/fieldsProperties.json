@@ -75,6 +75,7 @@
   },
   "author": {
     "minLength": 2,
+    "minLengthChinese": 1,
     "i18n": false
   },
   "author_status": {
@@ -240,7 +241,8 @@
     "unit": "day"
   },
   "editor": {
-    "minLength": 2
+    "minLength": 2,
+    "minLengthChinese": 1
   },
   "elevation": {
     "type": "number",
@@ -898,6 +900,7 @@
     "required": true,
     "parent": "locales",
     "minLength": 3,
+    "minLengthChinese": 1,
     "queryMode": "input",
     "url": "q"
   },
