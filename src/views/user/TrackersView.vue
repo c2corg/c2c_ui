@@ -75,7 +75,7 @@ export default {
         // $gettext('strava')
         name: 'strava',
         website: 'https://www.strava.com',
-        connect: `https://www.strava.com/oauth/authorize?client_id=${config.urls.stravaClientId}response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
+        connect: `https://www.strava.com/oauth/authorize?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
         status: 'disabled',
       },
       {
