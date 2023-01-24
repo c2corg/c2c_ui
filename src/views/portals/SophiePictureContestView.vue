@@ -24,7 +24,7 @@
           <div class="has-text-centered">
             <document-link :document="{ ...winner.image, type: 'i' }">
               <thumbnail
-                :img="getImageUrl(winner.image)"
+                :img="winner.image"
                 size="MI"
                 :alt="
                   $documentUtils.getDocumentTitle({
