@@ -82,7 +82,7 @@
                 type="radio"
                 name="exportFormat"
                 class="is-checkradio is-primary"
-                :value="type"
+                :value="f"
                 v-model="format"
               />
               <label :for="'format' + f">{{ f }}</label>
