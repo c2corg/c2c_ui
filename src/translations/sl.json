@@ -43,6 +43,7 @@
     "Action - prix du public": {
       "Sophie picture context": "Akcija - nagrada občinstva"
     },
+    "Activate drawing mode": "Aktiviraj način risanja",
     "Activity feed": "Tok dejavnosti",
     "Activity trackers": "Sledilci dejavnosti",
     "Add": "Dodaj",
@@ -219,6 +220,7 @@
     "Differences between versions": "Razlike med verzijami",
     "Different high/low danger?": "Nevarnost zgoraj/spodaj različna?",
     "Directions (Google Maps)": "Navodila za pot (Google Maps)",
+    "Disable drawing mode": "Onemogoči način risanja",
     "Disclaimer": "Opozorilo",
     "Dispositions": "Pravila obnašanja",
     "Distance": "Razdalja",
@@ -250,7 +252,9 @@
     "Elementary Reduction Method": "zmanjševalno metodo za pripravnike",
     "Elevation": "Višina",
     "Elevation (m)": "Višina (m)",
+    "Elevation profile": "Višinski profil",
     "Email": "Email naslov",
+    "Enable drawing and editing features on map": "Omogoči funkcije risanja in urejanja na zemljevidu",
     "Everything about ratings : difficulties, exposition...": "Tukaj vnesite vse ocene (težavnost, izpostavljenost, opremljenost itd.)",
     "Expand": "Razgrni",
     "Expert": "Strokovnjak",
