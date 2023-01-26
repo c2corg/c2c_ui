@@ -660,14 +660,14 @@
     "Toggle fullscreen": "Preklopi na celozaslonski način",
     "Too many results: please refine your search.": "Preveč rezultatov: prosimo, izboljšajte iskanje",
     "Topoguide": {
-      "$$noContext": "Vodniček",
-      "Sophie picture context": "Vodniček"
+      "$$noContext": "Wikivodnik",
+      "Sophie picture context": "Wikivodnik"
     },
     "Topoguide - prix du jury": {
-      "Sophie picture context": "Vodniček - nagrada žirije"
+      "Sophie picture context": "Wikivodnik - nagrada žirije"
     },
     "Topoguide - prix du public": {
-      "Sophie picture context": "Vodniček - nagrada občinstva"
+      "Sophie picture context": "Wikivodnik - nagrada občinstva"
     },
     "Trace": "GPS sled",
     "Tracking devices": "GPS naprave",
@@ -1806,11 +1806,11 @@
     },
     "to start or load a new one": "da začnete ali naložite novega",
     "topo": {
-      "book_types": "vodniček",
+      "book_types": "wikivodnik",
       "image_categories": "diagram / vrisana črta"
     },
     "topoguide_supplements": {
-      "article_categories": "dodatki k vodničku"
+      "article_categories": "dodatki k wikivodniku"
     },
     "total snow": "Celotna debelina",
     "tourism": {
