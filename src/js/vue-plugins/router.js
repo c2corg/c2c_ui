@@ -16,6 +16,7 @@ import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
+import Home from '@/views/portals/Home'
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
 import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
@@ -49,7 +50,7 @@ const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki
 const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
 
 const routes = [
-  { path: '/', name: 'home', component: FeedView },
+  { path: '/', name: 'home', component: Home },
   { path: '/dashboard', name: 'dashboard', component: DashboardView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
   { path: '/feed', name: 'feed', component: FeedView },

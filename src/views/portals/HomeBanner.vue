@@ -5,17 +5,41 @@
         Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
         mountain activities.
       </div>
-      <div>
-        <p>Vous trouverez ici :</p>
-        <ul>
-          <li>des itinéraires pour vous indiquer le chemin</li>
-          <li>des sorties pour les conditions</li>
-          <li>une base de données incidents/accidents : Sérac</li>
-          <li>une aide à la gestion du risque d'avalanche : Yéti</li>
-          <li>une bibliothèque comportant des articles et des références de livres</li>
-          <li>un forum pour discuter de sujets techniques ou simplement papoter</li>
-        </ul>
-      </div>
+      <div class="columns">
+            <div class="column is-12-mobile" >
+              <div>
+                <p v-translate>Vous trouverez ici :</p>
+                <ul>
+                  <li><icon-route/> <router-link to="routes"><span v-translate>des itinéraires à parcourir</span></router-link></li>
+                  <li><icon-outing/> <router-link to="outings"><span v-translate>des sorties pour avoir les dernières conditions</span></router-link></li>
+                  <li><icon-xreport/> <span v-translate>une base de données incidents/accidents</span> : <router-link to="serac">SERAC</router-link></li>
+                  <li><icon-yeti/> <span v-translate>une aide à la gestion du risque d'avalanche</span> : <router-link to="yeti">Yeti</router-link></li>
+                  <li><span v-translate>une bibliothèque comportant des</span> <icon-article/> <router-link to="articles">articles</router-link> et des <icon-book/> <router-link to="books">références de livres</router-link></li>
+                  <li><icon-forum/> <router-link to="forum" v-translate> un forum pour discuter de sujets techniques ou bavarder</router-link></li>
+                </ul>
+              </div>
+            </div>
+            <div class="column is-12-mobile" >
+              <p><router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link> <span v-translate> est la structure bénévole à but non lucratif assurant la gestion du site camptocamp.org</span></p>
+              <ul>
+              <router-link :to="{ name: 'article', params: { id: 106726 } }" class="menu-brand has-text-centered">
+                <img src="https://forum.camptocamp.org/uploads/default/original/3X/c/d/cd8d2daad7ec44d36b3182ec451767db3fc2509c.png" alt="CamptocampAssociation" class="logo-association" />
+              </router-link>
+                <li><a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Join us')">
+                    <span v-translate>Pour participer ou vous investir : rejoignez nous</span>
+                  </a></li>
+                <li><fa-icon icon="heart" class="donate-icon" />
+                  <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
+                    <span v-translate>Pour soutenir financièrement (serveurs, développements…) : faites un don</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="column is-12-mobile">
+              <h3 class="title is-4">Partage du moment :</h3>
+              <i>Le petit bout de code qui va bien pour afficher une publi Facebook ou autre</i>
+          </div>
+          </div>
 
       <!--<div class="buttons is-centered">
         <router-link :to="{ name: 'topoguide' }" class="button is-primary">
@@ -85,7 +109,7 @@ export default {
   color: #fff;
 }
 
-.outings-links {
+/*.outings-links {
   line-height: 60px;
   margin-top: 60px;
 
@@ -104,7 +128,7 @@ export default {
 .button {
   display: inline-block;
   height: auto;
-}
+}*/
 
 @media screen and (max-width: $tablet) {
   .intro-banner {
@@ -116,5 +140,12 @@ export default {
   .title.is-4 {
     margin-top: 0;
   }
+}
+
+.logo-association {
+  max-width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
