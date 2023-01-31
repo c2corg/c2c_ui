@@ -63,9 +63,11 @@ export default {
       required: true,
     },
     type: {
-      // HTML type of input (text, number...)
       type: String,
       required: true,
+      validator: (value) => {
+        return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
+      },
     },
     placeholder: {
       type: String,
