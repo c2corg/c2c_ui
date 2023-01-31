@@ -241,7 +241,7 @@ let bulletinsStyle = (mapZoom, danger) => {
   });
 };
 
-let mountainsLayer = new ol.layer.Vector({
+let mountainsLayer = new ol.layer.VectorImage({
   source: new ol.source.Vector(),
   style: mountainsStyle(),
 });
