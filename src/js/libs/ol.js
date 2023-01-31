@@ -13,6 +13,7 @@ import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
+import VectorImageLayer from 'ol/layer/VectorImage';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
 import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
@@ -76,6 +77,7 @@ export default {
 
   layer: {
     Vector: VectorLayer,
+    VectorImage: VectorImageLayer,
     Tile: TileLayer,
     Image: ImageLayer,
     Group: GroupLayer,

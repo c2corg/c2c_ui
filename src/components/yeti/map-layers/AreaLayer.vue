@@ -61,8 +61,7 @@ export default {
     });
 
     // layer for outer stroke of areas
-    this.areasStrokeLayer = new ol.layer.Vector({
-      renderMode: 'image',
+    this.areasStrokeLayer = new ol.layer.VectorImage({
       source: new ol.source.Vector(),
       style: [
         new ol.style.Style({
@@ -83,9 +82,8 @@ export default {
 
     // layer for clip
     // should set className, this forces ol to create another canvas
-    this.areasLayer = new ol.layer.Vector({
+    this.areasLayer = new ol.layer.VectorImage({
       className: Yetix.BLEND_MODES_CLASS_NAME,
-      renderMode: 'image',
       source: new ol.source.Vector(),
       style: new ol.style.Style({
         fill: new ol.style.Fill({
