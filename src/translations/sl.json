@@ -106,6 +106,7 @@
     "Books and websites not already associated to this route": "Navedite izvor informacij o smeri. Vodnik ali revija mora biti povezana s smerjo  (ne omenjajte je v tem polju). To polje je namenjeno povezavam na spletne vodnike, bloge, vire, ki niso javni (beležnica v koči ali lokalu) ali dodatnim informacijam v zvezi z vodniki (napačna skica itd.).",
     "Both results and map": "Rezultati in zemljevid",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Na kratko opišite morebitne poškodbe, in kaj bi storili danes za nazaj. Tukaj tudi lahko vnesete komentarje, ki ne sodijo v nobeno drugo polje.",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Vaše ime bo privzeto enako vašemu uporabniškemu imenu na forumu, vendar ga lahko pozneje spremenite v svojih nastavitvah.",
     "By month": "Na mesec",
     "By year": "Na leto",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org ima cilj olajšati izmenjavo informacij med ljubitelji gorskih športov in prispevati k varnosti gorskih dejavnosti.",
@@ -149,6 +150,9 @@
     "Connect": "Povežite se",
     "Contain invalid character(s)": {
       "API message": "Vsebuje enega ali več neveljavnih znakov"
+    },
+    "Contains consecutive special characters": {
+      "API message": "Vsebuje zaporedne posebne znake"
     },
     "Continue the discussion": "Nadaljuj pogovor",
     "Contribute to common knowledge": "Prispevati k izgradnji kolektivnega znanja",
@@ -255,6 +259,9 @@
     "Elevation profile": "Višinski profil",
     "Email": "Email naslov",
     "Enable drawing and editing features on map": "Omogoči funkcije risanja in urejanja na zemljevidu",
+    "Ended by confusing suffix": {
+      "API message": "Konča se z zmedeno pripono"
+    },
     "Everything about ratings : difficulties, exposition...": "Tukaj vnesite vse ocene (težavnost, izpostavljenost, opremljenost itd.)",
     "Expand": "Razgrni",
     "Expert": "Strokovnjak",
@@ -268,6 +275,9 @@
     "Fetch geographic data": "Uporabite podatke iz te dejavnosti",
     "Filter on map extent": "Zoži iskanje na vidni zemljevid",
     "Filter results": "Filtriraj",
+    "First character is invalid": {
+      "API message": "Prvi znak ni veljaven"
+    },
     "FlowCapt sensor": "FlowCapt postaja",
     "FlowCapt sensors": "FlowCapt postaje",
     "Fold section": "Zloži razdelek",
@@ -277,7 +287,7 @@
     "From danger 3, consider the slopes which dominate the route": "Od nevarnosti 3 navzgor, upoštevajte pobočja nad potjo.",
     "From the interface": "Iz vmesnika",
     "Full bulletin": "Celoten bilten",
-    "Fullname": "Polno ime",
+    "Fullname": "Ime",
     "GPS Track": "GPS sled",
     "GPX file": "GPX datoteka",
     "General": "Splošno",
@@ -362,6 +372,9 @@
     "Large group = 5 people and more": "Velika skupina = 5 ljudi in več",
     "Large group with load shedding distance": "Velika skupina z razbremenitveno razdaljo",
     "Last activities": "Zadnje dejavnosti",
+    "Last character is invalid": {
+      "API message": "Zadnji znak ni veljaven"
+    },
     "Last forum topics": "Najnovejše teme foruma",
     "Last outings": "Zadnji vzponi",
     "Latitude": "Zemljepisna širina",
@@ -390,6 +403,9 @@
       "API message": "Nepravilna identifikacija ali geslo"
     },
     "Logout": "Odjava",
+    "Longer than maximum length 25": {
+      "API message": "Daljše od maksimalne dolžine 25"
+    },
     "Longitude": "Zemljepisna dolžina",
     "Low danger level from the avalanche bulletin": "Nizka stopnja nevarnosti iz plazovnega biltena",
     "Mail has been sent": "Email poslan",
@@ -592,6 +608,7 @@
     },
     "Show document history": "Prikaži zgodovino dokumenta",
     "Show only updates from followed users in the homepage feed": "V toku domače strani si oglejte samo dokumente in posodobitve uporabnikov, ki jih spremljate.",
+    "Sign in to camptocamp today, it's free": "Prijavite se v camptocamp še danes, brezplačno je",
     "Simplify": "Poenostavi",
     "Skiability": "Smučljivost",
     "Skitouring gear": "Smučanje, deskanje, krpljanje",
@@ -685,6 +702,10 @@
     "Upload a new version": "Naložite novo različico",
     "User avatar": "Avatar",
     "Username": "Identifikacija",
+    "Username cannot be empty or whitespaces": {
+      "API message": "Identifikacija ne sme biti prazna ali s presledki"
+    },
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Identifikacija ali e-pošta skupaj z geslom vam bo omogočila prijavo. Tako identifikacija kot e-pošta ostaneta zasebna. Identifikacije ni mogoče spremeniti, e-pošto pa lahko.",
     "Validity date expired": "Datum veljavnosti je potekel",
     "Validity date:": "Datum veljavnosti:",
     "Versions": "Različice",
@@ -717,6 +738,7 @@
     "You may also drag, draw or edit the track on the map.": "GPS-sled lahko narišete, uredite ali povlecite na zemljevidu. ",
     "You need to activate your by clicking the link sent to your email address.": "Svoj račun morate aktivirati s klikom na povezavo, poslano na vaš e-poštni naslov",
     "Your account was successfully created": "Vaš račun je bil ustvarjen",
+    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaše uporabniško ime na forumu bo prikazano na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
     "Zoom in": {
       "Map controls": "Približaj"
     },
@@ -993,7 +1015,7 @@
     },
     "date": "Datum",
     "date_end": "Datum konca",
-    "date_start": "Datum začetka",
+    "date_start": "Datum",
     "date_time": "datum/ura",
     "day(s)": "dan(dni)",
     "de": {
