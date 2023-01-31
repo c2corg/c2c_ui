@@ -3,11 +3,17 @@
   "env": {
     "node": true
   },
-  "extends": ["plugin:vue/recommended", "plugin:import/errors", "plugin:import/warnings", "prettier"],
+  "extends": [
+    "plugin:vue/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:prettier/recommended"
+  ],
+  "reportUnusedDisableDirectives": true,
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "warn",
-    "vue/no-v-html": "error",
+    "vue/no-v-html": "off",
     "vue/order-in-components": "warn",
     "vue/require-prop-types": "warn",
     "vue/require-default-prop": "warn",

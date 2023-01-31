@@ -7,7 +7,7 @@
       <span v-else> </span>
     </card-row>
 
-    <card-row v-if="locale && locale.summary">
+    <card-row v-if="locale?.summary">
       <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
     </card-row>
 
@@ -197,20 +197,6 @@ export default {
   height: 24px;
   vertical-align: bottom;
   margin-right: 0.5rem;
-}
-
-.has-3-images > div {
-  width: 33.33%;
-  max-height: 275px;
-  overflow: hidden;
-}
-
-.has-2-images > div {
-  width: 50%;
-}
-
-.has-2-images > div {
-  width: 100%;
 }
 
 .card-image-content > div > img {

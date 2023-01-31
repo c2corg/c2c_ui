@@ -1,3 +1,3 @@
 <template>
-  <fa-icon icon="comments" />
+  <fa-icon icon="comments" fixed-width />
 </template>

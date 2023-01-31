@@ -32,25 +32,19 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
 
   result.then(function (response) {
     const users = {};
-
-    response.data.users.forEach(function (user) {
-      users[user.username] = user;
-    });
-
-    response.data.topic_list.topics.map(function (topic) {
-      topic.last_poster_user = users[topic.last_poster_username];
-    });
+    response.data.users.forEach((user) => (users[user.username] = user));
+    response.data.topic_list.topics.forEach((topic) => (topic.last_poster_user = users[topic.last_poster_username]));
   });
 
   return result;
 };
 
 Forum.prototype.readAnnouncement = function (lang) {
-  lang = ['zh_CN', 'sl'].includes(lang) ? 'en' : lang;
+  lang = ['zh_CN', 'hu', 'sl'].includes(lang) ? 'en' : lang;
   return this.get('/t/annonce-' + lang + '.json');
 };
 
-// Tehcniccly not part of the API, but this helper
+// Technically not part of the API, but this helper
 // is probably at the best place here...
 Forum.prototype.getAvatarUrl = function (user, size) {
   const template = user.avatar_template.startsWith('/') ? this.url + user.avatar_template : user.avatar_template;

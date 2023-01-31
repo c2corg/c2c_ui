@@ -1,3 +1,14 @@
 <template>
-  <fa-icon icon="map-marker-alt" />
+  <fa-icon icon="map-marker-alt" :fixed-width="fixedWidth" />
 </template>
+
+<script>
+export default {
+  props: {
+    fixedWidth: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
+</script>

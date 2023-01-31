@@ -1,9 +1,8 @@
 <template>
   <aside>
     <router-link :to="{ name: 'home' }" class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </router-link>
-
     <router-link :to="{ name: 'topoguide' }">
       <span
         class="menu-item is-ellipsed"
@@ -13,7 +12,7 @@
           ),
         }"
       >
-        <icon-topoguide />
+        <icon-topoguide fixed-width />
         <span class="menu-item-text"> {{ $gettext('Topoguide') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
@@ -24,7 +23,7 @@
           'router-link-active': ['outings', 'outing'].includes($route.name),
         }"
       >
-        <icon-outing />
+        <icon-outing fixed-width />
         <span class="menu-item-text"> {{ $gettext('outings') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
@@ -41,7 +40,7 @@
           'router-link-active': ['serac', 'xreports', 'xreport'].includes($route.name),
         }"
       >
-        <icon-xreport />
+        <icon-xreport fixed-width />
         <span class="menu-item-text"> {{ $gettext('Accident database') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
@@ -50,13 +49,13 @@
         class="menu-item is-ellipsed"
         :class="{ 'router-link-active': ['articles', 'article'].includes($route.name) }"
       >
-        <icon-article />
+        <icon-article fixed-width />
         <span class="menu-item-text"> {{ $gettext('articles') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'article', params: { id: 106732 } }" v-if="isTall">
       <span class="menu-item is-ellipsed">
-        <icon-help />
+        <icon-help fixed-width />
         <span class="menu-item-text"> {{ $gettext('Help') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>

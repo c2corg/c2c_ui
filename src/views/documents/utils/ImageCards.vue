@@ -7,24 +7,18 @@
       :title="$documentUtils.getDocumentTitle(document)"
       class="card-image"
     >
-      <img :src="getMediumImageUrl(document)" height="250" loading="lazy" />
+      <thumbnail :img="document" size="MI" height="250" loading="lazy" />
     </document-link>
   </div>
 </template>
 
 <script>
-import imageUrls from '@/js/image-urls';
-
 export default {
   props: {
     documents: {
       type: Object,
       required: true,
     },
-  },
-
-  methods: {
-    getMediumImageUrl: imageUrls.getMedium,
   },
 };
 </script>

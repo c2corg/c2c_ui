@@ -1,0 +1,60 @@
+diff --git a/node_modules/swiper/esm/components/core/images/loadImage.js b/node_modules/swiper/esm/components/core/images/loadImage.js
+index e5d87a6..d148e7f 100644
+--- a/node_modules/swiper/esm/components/core/images/loadImage.js
++++ b/node_modules/swiper/esm/components/core/images/loadImage.js
+@@ -5,12 +5,14 @@ export default function loadImage(imageEl, src, srcset, sizes, checkForComplete,
+   var image;
+ 
+   function onReady() {
+-    if (callback) callback();
++    if (callback) {
++      setTimeout(() => {
++        callback();
++      }, 0);
++    }
+   }
+ 
+-  var isPicture = $(imageEl).parent('picture')[0];
+-
+-  if (!isPicture && (!imageEl.complete || !checkForComplete)) {
++  if (!imageEl.complete || !checkForComplete) {
+     if (src) {
+       image = new window.Image();
+       image.onload = onReady;
+diff --git a/node_modules/swiper/esm/components/zoom/zoom.js b/node_modules/swiper/esm/components/zoom/zoom.js
+index 539004a..53a6386 100644
+--- a/node_modules/swiper/esm/components/zoom/zoom.js
++++ b/node_modules/swiper/esm/components/zoom/zoom.js
+@@ -36,8 +36,8 @@ var Zoom = {
+     if (!gesture.$slideEl || !gesture.$slideEl.length) {
+       gesture.$slideEl = $(e.target).closest("." + swiper.params.slideClass);
+       if (gesture.$slideEl.length === 0) gesture.$slideEl = swiper.slides.eq(swiper.activeIndex);
+-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
+-      gesture.$imageWrapEl = gesture.$imageEl.parent("." + params.containerClass);
++      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, .swiper-zoom-target');
++      gesture.$imageWrapEl = gesture.$imageEl.closest("." + params.containerClass);
+       gesture.maxRatio = gesture.$imageWrapEl.attr('data-swiper-zoom') || params.maxRatio;
+ 
+       if (gesture.$imageWrapEl.length === 0) {
+@@ -305,8 +305,8 @@ var Zoom = {
+         }
+       }
+ 
+-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
+-      gesture.$imageWrapEl = gesture.$imageEl.parent("." + params.containerClass);
++      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, .swiper-zoom-target');
++      gesture.$imageWrapEl = gesture.$imageEl.closest("." + params.containerClass);
+     }
+ 
+     if (!gesture.$imageEl || gesture.$imageEl.length === 0 || !gesture.$imageWrapEl || gesture.$imageWrapEl.length === 0) return;
+@@ -395,8 +395,8 @@ var Zoom = {
+         gesture.$slideEl = swiper.slides.eq(swiper.activeIndex);
+       }
+ 
+-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
+-      gesture.$imageWrapEl = gesture.$imageEl.parent("." + params.containerClass);
++      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, .swiper-zoom-target');
++      gesture.$imageWrapEl = gesture.$imageEl.closest("." + params.containerClass);
+     }
+ 
+     if (!gesture.$imageEl || gesture.$imageEl.length === 0 || !gesture.$imageWrapEl || gesture.$imageWrapEl.length === 0) return;

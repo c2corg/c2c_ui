@@ -44,9 +44,8 @@ function getQualityFromScore(score) {
     return 'medium';
   } else if (score < 4) {
     return 'fine';
-  } else {
-    return 'fine'; // never compute great
   }
+  return 'fine'; // never compute great
 }
 
 function hasActivities(doc, activities) {
@@ -134,9 +133,10 @@ function getOutingQuality(doc, locale) {
     score += hasRouteInfo(doc, locale) ? 0.5 : 0;
     score += hasSnowInfo(doc) ? 0.5 : 0;
 
-    if (doc.access_condition && doc.access_condition !== 'snowy' && doc.elevation_access) {
-      score += 0.5;
-    } else if (doc.access_condition === 'snowy' && doc.elevation_access && locale.access_comment) {
+    if (
+      (doc.access_condition && doc.access_condition !== 'snowy' && doc.elevation_access) ||
+      (doc.access_condition === 'snowy' && doc.elevation_access && locale.access_comment)
+    ) {
       score += 0.5;
     }
 

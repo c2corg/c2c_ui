@@ -15,7 +15,7 @@
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
-      <img src="@/assets/img/logo.svg" url="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </router-link>
 
     <div class="navigation-end">
@@ -38,14 +38,14 @@
       </div>
 
       <div
-        v-if="!siteConfiguration.isProduction"
+        v-if="siteConfiguration.isBackendSelectable"
         class="navigation-item is-hidden-mobile"
         :title="'This page may contains bugs or incomplete features'"
       >
         <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
 
-      <div v-if="!siteConfiguration.isProduction" class="navigation-item dropdown is-hoverable is-hidden-mobile">
+      <div v-if="siteConfiguration.isBackendSelectable" class="navigation-item dropdown is-hoverable is-hidden-mobile">
         <div class="dropdown-trigger">
           <fa-icon icon="database" />
         </div>
@@ -76,7 +76,7 @@
             class="dropdown-item is-size-5 is-ellipsed"
             @click.native="$refs.addDocumentMenu.isActive = false"
           >
-            <icon-document :document-type="documentType" />
+            <icon-document :document-type="documentType" fixed-width />
             <span>
               {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
             </span>
@@ -111,7 +111,7 @@
             class="dropdown-item is-size-5"
             @click.native="$refs.userMenu.isActive = false"
           >
-            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" />
+            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
               {{ item.text }}
             </span>
@@ -119,7 +119,7 @@
 
           <hr class="dropdown-divider" />
 
-          <a class="dropdown-item is-size-5" @click="$user.signout()">
+          <a class="dropdown-item is-size-5" @click="signout()">
             <fa-icon icon="sign-out-alt" />
             <span>&nbsp;</span>
             <span v-translate>Logout</span>
@@ -161,8 +161,9 @@ export default {
     siteConfiguration() {
       return config;
     },
+
     userMenuLinks() {
-      return [
+      const items = [
         {
           to: { name: 'profile', params: { id: this.$user.id } },
           text: this.$gettext('My profile'),
@@ -176,7 +177,12 @@ export default {
         {
           to: { name: 'preferences' },
           text: this.$gettext('My preferences'),
-          icon: 'cogs',
+          icon: 'gears',
+        },
+        {
+          to: { name: 'trackers' },
+          text: this.$gettext('Activity trackers'),
+          icon: 'location-crosshairs',
         },
         {
           to: { name: 'outings', query: { u: this.$user.id } },
@@ -204,6 +210,7 @@ export default {
           icon: 'star',
         },
       ];
+      return items;
     },
   },
 
@@ -211,6 +218,10 @@ export default {
 
   created() {
     window.addEventListener('click', this.onClick);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('click', this.onClick);
   },
 
   // do need to destroy event listener as Navigation component will always exists
@@ -241,6 +252,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.searchInput.focus();
       });
+    },
+
+    signout() {
+      this.$user.signout(this.$route);
+      if (this.$route.meta.requiresAuth) {
+        this.$router.push({ name: 'home' });
+      }
     },
   },
 };

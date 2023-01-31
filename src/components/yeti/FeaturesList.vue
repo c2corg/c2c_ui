@@ -4,8 +4,8 @@
       v-for="(feature, i) of features"
       :key="i"
       class="featureslist-item tag"
-      @mouseenter="showFeature(feature)"
-      @mouseleave="hideFeature(feature)"
+      @mouseenter="showFeature(feature, i)"
+      @mouseleave="hideFeature(feature, i)"
     >
       <span>{{ nbPointsOnFeature(feature) }} points</span>
       <button class="delete is-small" @click="removeFeature(feature)">x</button>
@@ -27,11 +27,13 @@ export default {
     removeFeature(feature) {
       Yetix.$emit('removeFeature', feature);
     },
-    showFeature(feature) {
+    showFeature(feature, index) {
       feature.setStyle(feature.get('highlightedStyle'));
+      Yetix.$emit('showFeature', index);
     },
-    hideFeature(feature) {
+    hideFeature(feature, index) {
       feature.setStyle(feature.get('normalStyle'));
+      Yetix.$emit('hideFeature', index);
     },
     nbPointsOnFeature(feature) {
       return feature.getGeometry().getCoordinates().length;
@@ -41,7 +43,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .featureslist {
   margin: 0 -0.5rem;

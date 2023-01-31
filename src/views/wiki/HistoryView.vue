@@ -25,12 +25,13 @@
           <tr>
             <th />
             <th v-translate>Created on</th>
-            <th v-translate>contributor</th>
+            <th v-translate>Contributor</th>
+            <th v-translate v-if="$user.isModerator">Visibility</th>
             <th v-translate>comment</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="version of history.versions" :key="version.version_id">
+          <tr v-for="version of filteredVersions" :key="version.version_id" :class="{ masked: version.masked }">
             <td>
               <div v-if="documentType != 'profile'" class="control">
                 <input
@@ -48,11 +49,11 @@
                   name="versionTo"
                 />
                 <diff-link
-                  v-if="version.version_id !== veryFirstVersionId"
+                  v-if="version.previous_version_id"
                   :document-type="documentType"
                   :id="documentId"
                   :lang="lang"
-                  version-from="prev"
+                  :version-from="version.previous_version_id"
                   :version-to="version.version_id"
                 />
               </div>
@@ -64,6 +65,14 @@
             </td>
             <td>
               <contributor-link :contributor="version" />
+            </td>
+            <td v-if="$user.isModerator">
+              <mask-link
+                v-if="version.version_id !== latestVersionId"
+                :id="documentId"
+                :version="version"
+                :lang="lang"
+              />
             </td>
             <td>
               {{ version.comment }}
@@ -113,8 +122,23 @@ export default {
     lang() {
       return this.$route.params.lang;
     },
-    veryFirstVersionId() {
-      return this.history.versions[this.history.versions.length - 1].version_id;
+    latestVersionId() {
+      return this.history.versions[0].version_id;
+    },
+    filteredVersions() {
+      let filteredVersions = [...this.history.versions];
+      if (!this.$user.isModerator) {
+        filteredVersions = filteredVersions.filter((version) => !version.masked);
+      }
+
+      const l = filteredVersions.length;
+      filteredVersions.forEach((version, i) => {
+        if (i < l - 1) {
+          version.previous_version_id = filteredVersions[i + 1].version_id;
+        }
+      });
+
+      return filteredVersions;
     },
     history() {
       return this.promise.data;
@@ -143,6 +167,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+tr.masked {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.05) 10px,
+    rgba(0, 0, 0, 0) 10px,
+    rgba(0, 0, 0, 0) 20px
+  );
+  background-attachment: scroll;
+}
+
 td {
   white-space: nowrap;
 }

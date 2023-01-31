@@ -251,7 +251,12 @@ Field.prototype.getError = function (document, locale) {
     throw new Error(`Unexpected parent property : ${this.parent}`);
   }
 
-  if (value && this.minLength && value.length < this.minLength) {
+  if (
+    value &&
+    this.minLength &&
+    value.length < this.minLength &&
+    (!this.minLengthChinese || !value.match(/[\u3400-\u9FFF]/) || value.length < this.minLengthChinese)
+  ) {
     return this.getErrorObject('This field is too short');
   }
 

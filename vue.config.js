@@ -87,30 +87,44 @@ const config = {
   ignApiKey: undefined,
   bingApiKey: undefined,
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
-  isProduction: false,
+  isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   googleAnalyticsKey: 'UA-2814179-1',
   urlsConfigurations: {
     demo: {
       name: 'demo',
       api: 'https://api.demov6.camptocamp.org',
-      media: 'https://sos.exo.io/c2corg-demov6-active',
+      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
+      tracking: 'https://tracking.demov6.camptocamp.org',
       forum: 'https://forum.demov6.camptocamp.org',
       recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
+      stravaClientId: '99246',
+      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+      polarClientId: '65d10592-5abf-41d6-a5ce-b16a28174849',
     },
     prod: {
       name: 'prod',
       api: 'https://api.camptocamp.org',
-      media: 'https://media.camptocamp.org/c2corg_active',
+      media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
+      tracking: 'https://tracking.camptocamp.org',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
+      stravaClientId: '63968',
+      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+      polarClientId: '5a9f9ddd-fc15-48d2-bc56-86b43d491cc9',
     },
   },
 };
 
-config.urls = config.urlsConfigurations.prod; // default : prod
+config.urls = config.urlsConfigurations.prod; // default: prod
 
 const bundleAnalyzerConfig = {
   analyzerMode: 'disabled',
@@ -118,13 +132,15 @@ const bundleAnalyzerConfig = {
 };
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
-  // add an url conf for local API devloppers :
+  // add an url conf for local API developers:
   config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: 'http://localhost:6543',
-    media: 'https://sos.exo.io/c2corg-demov6-active',
+    media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
     imageBackend: 'https://images.demov6.camptocamp.org',
     forum: 'https://forum.demov6.camptocamp.org',
+    modernThumbnailsTimestamp: 0,
+    modernThumbnailsId: 0,
   };
 
   config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
@@ -158,7 +174,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.ignApiKey = '1qdmi4d0spl50eef78ftvm3j';
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
-  config.isProduction = true; // explicit prod flag
+  config.isBackendSelectable = false; // explicit flag
 
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';

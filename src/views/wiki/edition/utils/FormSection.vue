@@ -98,9 +98,7 @@ export default {
 
     onKeyup(event) {
       if (event.altKey && event.shiftKey) {
-        if (event.key === 'ArrowUp' && this.expanded_) {
-          this.toggleExpandedState();
-        } else if (event.key === 'ArrowDown' && !this.expanded_) {
+        if ((event.key === 'ArrowUp' && this.expanded_) || (event.key === 'ArrowDown' && !this.expanded_)) {
           this.toggleExpandedState();
         }
       }

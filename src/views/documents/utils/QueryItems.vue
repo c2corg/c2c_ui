@@ -38,6 +38,19 @@
           />
         </div>
       </dropdown-button>
+      <dropdown-button key="multi-search" class="query-item-component is-hidden-tablet">
+        <span slot="button" class="button is-size-7-mobile">
+          <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
+          <span>&nbsp;</span>
+          <fa-icon icon="angle-down" aria-hidden="true" />
+        </span>
+        <div class="sub-query-items">
+          <association-query-item class="dropdown-item" :document-types="associations" @add="addTag" />
+          <div class="query-items-tags dropdown-item">
+            <query-tags :documents="tags" @remove="removeTag"></query-tags>
+          </div>
+        </div>
+      </dropdown-button>
 
       <query-sort-dropdown
         v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
@@ -49,11 +62,23 @@
         :document-types="associations"
         @add="addTag"
       />
-      <load-user-preferences-button class="is-hidden-tablet query-item-component" />
-      <export-csv-button v-if="listMode" class="is-small-mobile"></export-csv-button>
-    </div>
-    <div class="query-items-tags is-hidden-mobile">
-      <query-tags :documents="tags" @remove="removeTag"></query-tags>
+      <div class="is-hidden-mobile" style="display: inline">
+        <load-user-preferences-button class="is-hidden-tablet query-item-component" />
+        <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
+        <print-button />
+        <div class="query-items-tags">
+          <query-tags :documents="tags" @remove="removeTag"></query-tags>
+        </div>
+      </div>
+      <dropdown-button class="is-hidden-tablet is-pulled-right">
+        <span slot="button" class="button is-white is-size-7-mobile">
+          <fa-icon icon="ellipsis-vertical" />
+        </span>
+        <div class="dropdown-items is-flex is-flex-direction-column">
+          <load-user-preferences-button display="dropdown" />
+          <print-button display="dropdown" />
+        </div>
+      </dropdown-button>
     </div>
   </div>
 </template>
@@ -62,6 +87,7 @@
 import AssociationQueryItem from './AssociationQueryItem';
 import ExportCsvButton from './ExportCsvButton.vue';
 import LoadUserPreferencesButton from './LoadUserPreferencesButton';
+import PrintButton from './PrintButton';
 import QueryItem from './QueryItem';
 import QuerySortDropdown from './QuerySortDropdown';
 import QueryTags from './QueryTags';
@@ -85,7 +111,7 @@ const categorizedFieldsDefault = {
     'route_types',
     'quality',
     'categories',
-    'date_start',
+    'dates',
   ],
 
   ratings: [
@@ -194,6 +220,7 @@ const categorizedFields = {
 export default {
   categoryIcon: {
     General: 'filter',
+    MultiSearch: 'filter',
     Miscs: 'database',
     Terrain: ['waypoint', 'summit'],
     ratings: 'tachometer-alt',
@@ -201,6 +228,7 @@ export default {
 
   components: {
     AssociationQueryItem,
+    PrintButton,
     QueryItem,
     QuerySortDropdown,
     QueryTags,
@@ -378,12 +406,15 @@ export default {
 
 <style scoped lang="scss">
 .query-items-filters {
-  margin-bottom: 0.5rem;
   font-size: 0;
 
   > div {
     font-size: 1rem;
   }
+}
+
+.query-item-component {
+  margin-bottom: 0.5rem;
 }
 
 .title-input {
@@ -392,7 +423,26 @@ export default {
 }
 
 .sub-query-items {
-  min-width: 300px;
+  @media screen and (min-width: $tablet) {
+    min-width: 300px;
+  }
+
+  @media screen and (max-width: $tablet) {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /*
+      max-height should be calculated:
+      100vh-($navbar-height)-height(.search-infos)
+      but .search-infos height is not fixed
+    */
+    max-height: 70vh;
+
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari and Opera
+    }
+  }
 }
 
 @media screen and (min-width: $tablet) {

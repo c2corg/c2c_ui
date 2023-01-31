@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO on route view, map in full screen has not a full height -->
   <div style="width: 100%; height: 100%">
     <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
@@ -14,24 +13,52 @@
     </div>
 
     <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
-      <div>
+      <div class="ol-control-layer-switcher-layers">
         <header v-translate>Base layer</header>
-        <div v-for="layer of mapLayers" :key="layer.get('title')" @click="visibleLayer = layer">
-          <input :checked="layer == visibleLayer" type="radio" />
-          {{ $gettext(layer.get('title'), 'Map layer') }}
+        <div class="layer-group">
+          <layer-button
+            v-for="layer of mapLayers"
+            :key="layer.get('title')"
+            @click="visibleLayer = layer"
+            :selected="layer === visibleLayer"
+            :layer="layer"
+            title-context="Map layer"
+          ></layer-button>
         </div>
-      </div>
-      <div>
         <header v-translate>Slopes</header>
-        <div v-for="layer of dataLayers" :key="layer.get('title')" @click="toogleMapLayer(layer)">
-          <input :checked="layer.getVisible()" type="checkbox" />
-          {{ $gettext(layer.get('title'), 'Map slopes layer') }}
+        <div class="layer-group">
+          <layer-button
+            v-for="layer of dataLayers"
+            :key="layer.get('title')"
+            @click="toogleMapLayer(layer)"
+            :selected="layer.getVisible()"
+            :layer="layer"
+            title-context="Map slopes layer"
+          ></layer-button>
         </div>
         <template v-if="showProtectionAreas && !editable">
           <header v-translate>Protection areas</header>
-          <input type="checkbox" :checked="protectionAreasVisible" @click="toggleProtectionAreas" />
-          <span v-translate>Fauna protection areas</span>
+          <!-- $gettext('Fauna protection areas') -->
+          <div class="layer-group">
+            <layer-button
+              @click="toggleProtectionAreas"
+              :selected="protectionAreasVisible"
+              :layer="{
+                title: 'Fauna protection areas',
+                image: 'fauna.jpg',
+                set(name, value) {
+                  protectionAreasLayerSet(name, value);
+                },
+                get(name) {
+                  return protectionAreasLayerGet(name);
+                },
+              }"
+            ></layer-button>
+          </div>
         </template>
+      </div>
+      <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
+        <fa-icon :title="$gettext('Close')" icon="chevron-left" />
       </div>
     </div>
 
@@ -68,7 +95,14 @@
       class="ol-control ol-control-recenter-on"
       :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
     >
-      <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions" />
+      <input
+        type="text"
+        ref="recenterOnPropositionsInput"
+        :placeholder="$gettext('Recenter on...')"
+        @input="searchRecenterOnPropositions"
+        @focus="searchRecenterOnPropositions"
+        @blur="clearRecenterOnPropositions"
+      />
     </div>
 
     <div
@@ -77,12 +111,15 @@
       class="ol-control ol-control-recenter-on-propositions"
       :class="{ 'ol-control-recenter-on-propositions_on-top': !showFilterControl }"
     >
-      <ul v-if="recenterPropositions && recenterPropositions.data && recenterPropositions.data.features">
+      <ul v-if="recenterPropositions?.data?.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
           {{ item.properties.name }},
-          <small>{{ item.properties.state }}, {{ item.properties.country }}</small>
+          <small>
+            <template v-if="item.properties.state">{{ item.properties.state }}, </template>{{ item.properties.country }}
+          </small>
         </li>
       </ul>
+      <div v-else v-translate>Loading...</div>
     </div>
 
     <div v-show="editable" ref="resetGeometry" class="ol-control ol-control-reset-geometry">
@@ -91,6 +128,10 @@
 
     <div v-show="editable" ref="clearGeometry" class="ol-control ol-control-clear-geometry">
       <button @click="clearGeometry" v-translate>Clear</button>
+    </div>
+
+    <div v-show="osmLayer" ref="editMap" class="ol-control ol-control-edit-map">
+      <a :href="editMapLink" :title="$gettext('Edit and improve map on Openstreetmap.org')"><fa-icon icon="pen" /></a>
     </div>
 
     <biodiv-information v-if="protectionAreasVisible" ref="BiodivInformation" :data="biodivData" />
@@ -105,9 +146,9 @@
 
 <script>
 import { toast } from 'bulma-toast';
-import { format as formatDate } from 'date-fns';
 
 import BiodivInformation from './BiodivInformation';
+import LayerButton from './LayerButton';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
@@ -121,10 +162,10 @@ import {
   swissExtent,
 } from './map-utils';
 
-import BiodivSportsService from '@/js/apis/BiodivSportsService';
-import RespecterCestProtegerService from '@/js/apis/RespecterCestProtegerService';
+import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
+import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
@@ -134,14 +175,12 @@ const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
 
-const biodivSportsService = new BiodivSportsService();
-const respecterCestProtegerService = new RespecterCestProtegerService();
-
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
 export default {
   components: {
     BiodivInformation,
+    LayerButton,
     SwissProtectionAreaInformation,
   },
 
@@ -262,6 +301,8 @@ export default {
         source: new ol.source.Vector(),
       }),
 
+      isFullscreen: false,
+
       geolocation: null,
 
       showLayerSwitcher: false,
@@ -283,6 +324,8 @@ export default {
       highlightedFeature: null,
 
       minZoomLevel: DEFAULT_POINT_ZOOM,
+
+      editMapLink: null,
     };
   },
 
@@ -315,6 +358,10 @@ export default {
         this.visibleLayer.setVisible(false);
         layer.setVisible(true);
       },
+    },
+
+    osmLayer() {
+      return this.visibleLayer.get('title') === 'OpenTopoMap';
     },
   },
 
@@ -377,6 +424,7 @@ export default {
         new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
         new ol.control.Control({ element: this.$refs.resetGeometry }),
         new ol.control.Control({ element: this.$refs.clearGeometry }),
+        new ol.control.Control({ element: this.$refs.editMap }),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
       ],
 
@@ -406,6 +454,7 @@ export default {
 
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
+    this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
     if (this.protectionAreasVisible) {
@@ -448,11 +497,13 @@ export default {
     // listen to elevation profile events to display
     // the related point on the map
     this.setElevationProfileInteraction();
+
+    this.updateEditMapLink();
   },
 
   beforeDestroy() {
-    this.fullScreenControl.un('enterfullscreen', this.fitMapToDocuments);
-    this.fullScreenControl.un('leavefullscreen', this.fitMapToDocuments);
+    this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
+    this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
   },
 
   methods: {
@@ -461,9 +512,15 @@ export default {
         source,
         tipLabel: this.$gettext('Toggle full-screen', 'Map Controls'),
       });
-      control.on('enterfullscreen', this.fitMapToDocuments);
-      control.on('leavefullscreen', this.fitMapToDocuments);
+      control.on('enterfullscreen', this.onFullscreenChange);
+      control.on('leavefullscreen', this.onFullscreenChange);
       return control;
+    },
+
+    onFullscreenChange() {
+      this.isFullscreen = !this.isFullscreen;
+      this.showLayerSwitcher = false;
+      this.fitMapToDocuments();
     },
 
     setModifyInteractions() {
@@ -558,7 +615,7 @@ export default {
       if (type === 'LineString') {
         this.cleanZeroElevationFromLineString(coords);
       } else if (type === 'MultiLineString') {
-        coords.map(this.cleanZeroElevationFromLineString);
+        coords.forEach(this.cleanZeroElevationFromLineString);
       }
       geometry.setCoordinates(coords);
     },
@@ -600,7 +657,7 @@ export default {
     },
 
     setDocumentGeometryFromGeoFile(file) {
-      for (const format of [new ol.format.GPX(), new ol.format.KML(), new FIT(), new TCX()]) {
+      for (const format of [new ol.format.GPX(), new ol.format.KML(), new ol.format.GeoJSON(), new FIT(), new TCX()]) {
         const features = this.tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
         if (features?.length) {
           features.map((feature) => {
@@ -648,7 +705,7 @@ export default {
         return;
       }
 
-      document.date_start = formatDate(new Date(timestamp * 1000), 'yyyy-MM-dd');
+      document.date_start = this.$dateUtils.toLocalizedString(new Date(timestamp * 1000), 'YYYY-MM-DD');
     },
 
     setElevationProfileInteraction() {
@@ -765,7 +822,7 @@ export default {
     },
 
     addDocumentFeature(document, source, style) {
-      if (!document || !document.geometry) {
+      if (!document?.geometry) {
         return;
       }
 
@@ -854,6 +911,25 @@ export default {
       this.protectionAreasLayer.setVisible(!this.protectionAreasLayer.getVisible());
     },
 
+    protectionAreasLayerSet(name, value) {
+      if (name === 'opacity') {
+        this.protectionAreasLayers.forEach((layer) => layer.setOpacity(value));
+        this.protectionAreasLayer.getSource().forEachFeature((feature) => {
+          feature.set('normalStyle', buildPolygonStyle(value));
+          feature.setStyle(feature.get('normalStyle'));
+        });
+      }
+    },
+
+    protectionAreasLayerGet(name) {
+      switch (name) {
+        case 'opacity':
+          return this.protectionAreasLayers[0].getOpacity();
+        case 'configurable':
+          return true;
+      }
+    },
+
     emitMoveEvent() {
       const bounds = this.view.calculateExtent();
       this.$emit('move', bounds.map(Math.round));
@@ -866,7 +942,7 @@ export default {
       const query = Object.assign({}, this.$route.query);
 
       query.bbox = this.filterDocumentsWithMap ? bounds.map(Math.round).join(',') : undefined;
-      if (query.bbox !== this.$route.query.bbox) {
+      if (query.bbox !== this.$route.query.bbox && !this.$route.name.endsWith('-print')) {
         this.$router.push({ query });
       }
     },
@@ -1002,10 +1078,23 @@ export default {
       if (feature) {
         const document = feature.get('document');
         if (document) {
-          this.$router.push({
-            name: this.$documentUtils.getDocumentType(document.type),
-            params: { id: document.document_id },
-          });
+          if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
+            return;
+          }
+          if (event.originalEvent.ctrlKey) {
+            window.open(
+              this.$router.resolve({
+                name: this.$documentUtils.getDocumentType(document.type),
+                params: { id: document.document_id },
+              }),
+              '_blank'
+            );
+          } else {
+            this.$router.push({
+              name: this.$documentUtils.getDocumentType(document.type),
+              params: { id: document.document_id },
+            });
+          }
         } else if (feature.get('biodivData')) {
           this.biodivData = feature.get('biodivData');
           this.$refs.BiodivInformation.show();
@@ -1042,16 +1131,25 @@ export default {
       this.geolocation.setTracking(false);
     },
 
-    searchRecenterPropositions(event) {
+    searchRecenterOnPropositions(event) {
       const query = event.target.value;
 
-      if (query && query.length >= 3) {
+      if (query?.length >= 3) {
         const center = this.view.getCenter();
         const centerWgs84 = ol.proj.toLonLat(center);
 
         this.recenterPropositions = photon.getPropositions(query, this.$language.current, centerWgs84);
         this.showRecenterOnPropositions = true;
+      } else {
+        this.showRecenterOnPropositions = false;
       }
+    },
+
+    clearRecenterOnPropositions() {
+      setTimeout(() => {
+        this.showRecenterOnPropositions = false;
+        this.$refs.recenterOnPropositionsInput.value = '';
+      }, 200);
     },
 
     // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
@@ -1085,7 +1183,7 @@ export default {
         // check already made, only update biodivsport areas features
         biodivSportsService
           .fetchData(bsExtent, this.biodivSportsActivities, this.$language.current)
-          .then(this.addBiodivSportsData);
+          .then((response) => this.addBiodivSportsData(response));
       } else {
         // first call, check protection areas are contained within map extent and download biodivsports features
         Promise.allSettled([
@@ -1124,13 +1222,22 @@ export default {
         // user can't set the outing point directly (he must select the route)
         // So do not reinit geometry.geom to nothing
         this.editedDocument.geometry.geom = this.initialGeometry.geom || this.editedDocument.geometry.geom;
-        this.editedDocument.geometry.geom_detail = this.initialGeometry.geom_detail;
+        this.editedDocument.geometry.geom_detail = this.initialGeometry?.geom_detail;
       } else {
         this.editedDocument.geometry = JSON.parse(JSON.stringify(this.initialGeometry));
       }
 
       this.drawDocumentMarkers(); // redraw markers
       this.setDrawInteraction(); // reset interaction mode
+    },
+
+    updateEditMapLink() {
+      const coords = ol.proj.transform(
+        this.map.getView().getCenter(),
+        ol.proj.get('EPSG:3857'),
+        ol.proj.get('EPSG:4326')
+      );
+      this.editMapLink = `https://www.openstreetmap.org/#map=13/${coords[1]}/${coords[0]}`;
     },
   },
 };
@@ -1143,9 +1250,22 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~ol/ol.css';
 
+:root,
+:host {
+  --ol-background-color: rgba(0, 60, 136, 0.6);
+  --ol-accent-background-color: #f5f5f5;
+  --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
+  --ol-partial-background-color: rgba(255, 255, 255, 0.75);
+  --ol-foreground-color: #fff;
+  --ol-subtle-foreground-color: #fff;
+  --ol-brand-color: #00aaff;
+}
+</style>
+
+<style lang="scss" scoped>
 $control-margin: 0.5em;
 
 .ol-control-center-on-geolocation {
@@ -1154,8 +1274,65 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher {
-  bottom: 3em;
-  left: $control-margin;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 225px;
+  color: white;
+  text-decoration: none;
+  border: none;
+  display: flex;
+  align-items: flex-end;
+  background-color: initial;
+}
+
+.ol-control-layer-switcher-layers {
+  width: 205px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px 0 10px 10px;
+  background-color: rgb(0, 59, 136, 0.7);
+
+  header {
+    font-weight: bold;
+  }
+
+  .layer-group {
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: -10px;
+  }
+}
+
+.ol-control-layer-switcher-close {
+  background-color: rgb(0, 59, 136, 0.7);
+  width: 20px;
+  height: 30px;
+  margin-bottom: 5px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:fullscreen {
+  .ol-control-layer-switcher {
+    width: 320px;
+  }
+  .ol-control-layer-switcher-layers {
+    width: 300px;
+    height: 100vh;
+  }
+
+  .with-elevation-profile .ol-control-layer-switcher-layers {
+    /* elevation profile occupies 30% of the screen, see MapBox.vue */
+    height: calc(100vh * 0.7);
+    max-height: calc(100vh - 200px);
+    min-height: calc(100vh - 350px);
+  }
 }
 
 .ol-control-layer-switcher-button {
@@ -1166,6 +1343,7 @@ $control-margin: 0.5em;
 .ol-control-use-map-as-filter {
   top: $control-margin;
   left: 3em;
+  padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
 
   .is-info:checked + label::before {
@@ -1176,6 +1354,12 @@ $control-margin: 0.5em;
 .ol-control-recenter-on {
   top: 35px;
   left: 3em;
+  opacity: 0.8;
+
+  input {
+    border-radius: 4px;
+    border-style: none;
+  }
 }
 
 .ol-control-recenter-on_on-top {
@@ -1183,7 +1367,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions {
-  top: 65px;
+  top: 57px;
   left: 3em;
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
@@ -1195,7 +1379,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on-propositions_on-top {
-  top: 35px;
+  top: 27px;
 }
 
 .ol-control-reset-geometry {
@@ -1220,50 +1404,61 @@ $control-margin: 0.5em;
   }
 }
 
-//style on layers popup
-.ol-control-layer-switcher {
-  color: white;
-  text-decoration: none;
-  background-color: rgba(0, 60, 136, 0.6);
-  border: none;
-  border-radius: 2px;
-  padding: 0 10px 10px 10px;
-  display: flex;
+.ol-control-edit-map {
+  bottom: 35px;
+  right: $control-margin;
 
-  & > div {
-    width: 50%;
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
-    header {
-      font-weight: bold;
-      padding-top: 10px;
-    }
+  svg {
+    height: 0.7em;
+    vertical-align: -0.45em;
   }
 }
 
-.ol-attribution ul {
-  display: flex;
-  flex-direction: column;
+/* make the link look like a button, copy style from ol.css */
+.ol-control a {
+  display: block;
+  margin: 1px;
+  padding: 0;
+  color: var(--ol-subtle-foreground-color);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: inherit;
+  text-align: center;
+  height: 1.375em;
+  width: 1.375em;
+  line-height: 0.4em;
+  background-color: var(--ol-background-color);
+  border: none;
+  border-radius: 2px;
+}
+
+.ol-control a:hover,
+.ol-control a:focus {
+  text-decoration: none;
+  outline: 1px solid var(--ol-subtle-foreground-color);
+  color: var(--ol-foreground-color);
 }
 </style>
 
 <style lang="scss">
 $control-margin: 0.5em;
 
+.ol-attribution ul,
 .ol-scale-line {
-  background: rgba(255, 255, 255, 0.3);
-  bottom: 10px;
+  --ol-subtle-foreground-color: #666666;
+  --ol-foreground-color: #333333;
+}
+
+.ol-attribution ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.ol-scale-line {
+  bottom: calc($control-margin + 1px);
   right: 40px;
   left: initial;
-
-  .ol-scale-line-inner {
-    color: black;
-    border: 1px solid black;
-    border-top: none;
-  }
+  line-height: 1.3;
 }
 
 .ol-full-screen {

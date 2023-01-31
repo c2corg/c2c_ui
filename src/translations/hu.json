@@ -62,7 +62,7 @@
     "4d_to_1m": {
       "severities": "4 nap - 1 hónap"
     },
-    "50 meters while descending": "Legalább 50 méter ereszkedő",
+    "50 meters while descending": "50 méter ereszkedő",
     "5min": {
       "access_times": "5 perc"
     },
@@ -81,7 +81,7 @@
     "Add here maps not automatically referenced": "Nem automatikusan csatolt térképek hozzáadása",
     "Add images": "Képek hozzáadása",
     "Add the first outing": "Első kiruccanás hozzáadása",
-    "Add title…": "Cím hozzáadása",
+    "Add title…": "Cím hozzáadása...",
     "Additional information": "További információ",
     "All": "Mindegyik",
     "Allow all": "Mindegyik engedélyezése",
@@ -90,21 +90,21 @@
     "An error occurred, couldn't (un)mark route as to do": "Nem lehetséges a kedvelt útvonal hozzáadása vagy eltávolítása",
     "An error occurred, couldn't save images": "Nem lehetséges a képek mentése",
     "Anonymity and confidentiality": "Névtelenség és bizalmasan kezelt adatok.",
-    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?\nFigyelemm, a társított fotók nem törlődnek és árvák lesznek.\nAmennyiben csak a címet vagy a társított dokumentumokat akarod megváltoztatni (pl. egy másik útvonallal társítani a kiruccanást), elegendő módosítani a dokumentumot.\nAmennyiben ez a dokumentum egy duplikátum, társított fotókkal, lépj kapcsolatba @Modo_Topo_FR, hogy egyesítsék a duplikátumokat a társított fotóknak a megőrzésével. ",
+    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?\nFigyelemm, a társított fotók nem törlődnek és árvák lesznek.\nAmennyiben csak a címet vagy a társított dokumentumokat akarod megváltoztatni (pl. egy másik útvonallal társítani a kiruccanást), elegendő módosítani a dokumentumot.\nAmennyiben ez a dokumentum egy duplikátum, társított fotókkal, lépj kapcsolatba @Modo_Topo_FR, hogy egyesítsék a duplikátumokat a társított fotók megőrzésével. ",
     "Are you sure you want to delete this locale?": "Biztosan törölni akarod ezt a nyelvi verziót?",
     "Are you sure you want to merge?": "Biztosan össze akarod vonni?",
     "Are you sure you want to revert to this version of the document?": "Biztosan vissza akarod állítani a dokumentumnak ezt a verzióját?",
     "Area not covered": "Nem lefedett terület",
     "Area too large": "Túl nagy terület",
-    "Articles, waypoints or routes to be linked.": "Csatolt cikkek, útvonal-pontok vagy utvonalak",
-    "Articles, waypoints, routes or books to be linked.": "Csatolandó cikkek, útvonal-pontok, utak vagy könyvek.",
-    "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Mint az elnevezés is sugallja, ez a módszer kezdőknek van szánva. Ebből kifolyólag a biztonsági ráhagyás kifejezetten fontos. A veszélyességi fokozatot kivéve más paraméter nincs megadva. A tájolás figyelmen kívül van hagyva.",
+    "Articles, waypoints or routes to be linked.": "Csatolt cikkek, útvonal-pontok vagy útvonalak",
+    "Articles, waypoints, routes or books to be linked.": "Csatolt cikkek, útvonal-pontok, útvonalak vagy könyvek.",
+    "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Mint az elnevezés is sugallja, ez a módszer kezdőknek van szánva. Ebből kifolyólag a biztonsági ráhagyás kifejezetten fontos. A lavinajelentés által megadott veszélyességi fokozatot kivéve más paraméter nincs megadva. A tájolás figyelmen kívül van hagyva.",
     "Associated outings": "Társított kiruccanások",
     "Associated routes": "Társított útvonalak",
-    "Associated routes cotations": "Társított útvonalak besorolása",
-    "Association": "Társítás",
-    "Associations history": "Társítás történet",
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Tulajdonítás - a forrást meg kell jelölni, megadni egy linket a felhasználási feltételekre, és megjelölni, hogy történtek-e változások.",
+    "Associated routes cotations": "Az útvonalponthoz társított útvonalak besorolása",
+    "Association": "Camptocamp Egyesület",
+    "Associations history": "Társítások (előzmények)",
+    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Tulajdonítás - a forrást meg kell jelölni, megadni egy linket a felhasználási feltételekre, és megjelölni, hogy történtek-e változtatások az eredeti műhöz képest.",
     "Attributions": {
       "Map controls": "Tulajdonítások"
     },
@@ -113,32 +113,39 @@
     "Average slope in degree": "Átlagos meredeksêg fokban",
     "Back to code": "Vissza a kódhoz",
     "Back to edit mode": "Visszatérés a szerkesztési módba",
-    "Base layer": "Alap réteg",
+    "Base layer": "Térkép háttér",
     "Basemap (at)": {
-      "Map layer": "Alap térkép"
+      "Map layer": "Ausztria"
     },
-    "Be careful,": "Légy óvatos,",
+    "Basemap ortho (at)": {
+      "Map layer": "Ausztria Sat (?)"
+    },
+    "Be careful,": "Figyelem,",
+    "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Figyelem, nedves hóban nem vehetők figyelembe a tájolásból vagy a gyakori bejárásból származó rizikócsökkentő faktorok.",
     "Beginner": "Kezdő",
-    "Beware of case-sensitive login and password": "Figyelj a kis- és nagybetűkre a jelszónál és bejelentkezési azonosítónál",
+    "Beginner Reduction Method": "rizikócsökkentési módszer kezdők számára",
+    "Beware of case-sensitive login and password": "Figyelj a kis- és nagybetűkre a jelszónál és bejelentkezési azonosítónál.",
     "Block account": "Fiók blokkolása",
     "Bolted rock climbing gear": "nittelt biztosítás",
-    "Book content": "Könyv tartalma",
-    "Books and websites not already associated to this route": "Könyvek és weboldalak, amik még nem lettek társítva ehhez az úthoz",
+    "Book content": "Könyv tartalmának rövid ismertetése",
+    "Books and websites not already associated to this route": "Add meg a bejárt útvonalra vonatkozó információk forrását! Egy kalauzt vagy magazint az útvonalhoz kell társítani (nem pedig ebben a mezőben megadni). Ez a mező az on-line kalauzok, blogok, nem publikált egyéb források (pl. egy menedékházban vagy bárban található füzet) számára van fenntartva, vagy pedig a kalauzokban szereplő információk kiegészítésére (mint például rossz rajz, stb).",
     "Both results and map": "Eredmények és térképek",
-    "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Sérülések rövid leírása. Más mezőbe nem való megjegyzéseket is itt lehet megadni.",
+    "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Írd le röviden az esetleges sérüléseket, és hogy ma mit tennél ezek elkerülésére. Más mezőbe nem való megjegyzéseket is itt lehet megadni.",
     "By month": "Hónap szerint",
     "By year": "Év szerint",
-    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "A camptocamp.org célja, hogy segítse a hegyek szerelmesei közötti információáramlást, és hozzájáruljon a szabadtéri tevékenységek biztonságához.",
+    "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "A camptocamp.org célja, hogy segítse a hegyi sportok szerelmesei közötti információáramlást, és hozzájáruljon a szabadtéri tevékenységek biztonságához.",
     "Cancel": "Elvet",
-    "Candidates": "Jelöltek",
+    "Candidates": "Összes fotó",
+    "Cards mode": "kártya nézet",
     "Change account parameters": "Fiók paramétereinek megváltoztatása",
     "Change password": "Jelszóváltoztatás",
-    "Checking...": "Ellenőrzés...",
+    "Checking...": "Ellenőrzés. alatt..",
     "Child": "Gyermek",
-    "Clear": "Tiszta",
-    "Collapse": "Egybeejt",
+    "Clear": "Törlés",
+    "Close": "Bezár",
+    "Collapse": "Elrejt",
     "Comments": "Megjegyzések",
-    "Comments are disabled.": "Megjegyzések nincsenek engedélyezve.",
+    "Comments are disabled.": "Megjegyzések nincsenek engedélyezve ehhez a dokumentumhoz.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "A személyes célok és elvárások, a kiruccanás alatti gondolatok és megfigyelések leírása, új stratégiák megvitatása, a csoport viselkedésének és a felelősség megosztásának leírása, szokva volt-e a csoport a csapatmunkához, főbb törekvések, stb.",
     "Compare selected versions": "Kiválasztott verziók összehasonlítása",
     "Compute": "Számítás",
@@ -265,7 +272,7 @@
     "Forum username": "Fórum felhasználónév",
     "From danger 3, consider the slopes which dominate the route": "3. veszélyfokozattól vedd figyelembe a lejtőket, amik az utat dominálják",
     "From the interface": "A felhasználói felületről",
-    "Full bulletin:": "Teljes hírlevél:",
+    "Full bulletin": "Teljes hírlevél",
     "Fullname": "Teljes név",
     "GPS Track": "GPS útvonal",
     "General": "Általános",
@@ -285,7 +292,7 @@
     "Help": "Segítség",
     "Help research activities to define new prevention means": "Segíts a kutatási erőfeszítésekben új megelőzési módszereket kidolgozni",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "E az általad követett felhasználók listája, akiknek a bejegyzéseit látni fogod a személyes hírfolyamodban",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket amik az oldal hírfolyamára lesznek alkalmazva",
+    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket, amik az oldal hírfolyamára lesznek alkalmazva.",
     "High danger level from the avalanche bulletin": "A lavinajelentés alapján nagy veszély",
     "Hiking gear": "Kiránduló felszerelés",
     "History": "Történet",
@@ -354,7 +361,7 @@
     "Longitude": "földrajzi hosszúság",
     "Low danger level from the avalanche bulletin": "A lavinajelentés szerint alacsony veszély",
     "Mail has been sent": "Email elküldve",
-    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Az útra vonatkozó fő információk, mint például cím, tevékenység, GPS és útvonalpont (melyik hegység, hely)",
+    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Az útra vonatkozó fő információk, mint például név, tevékenység, GPS és útvonalpontok (melyik hegység, stb)",
     "Main informations about your outing": "A kiruccanásra vonatkozó fő információk",
     "Make profile page public": "A profil oldal nyilvánossá tétele",
     "Map filter off": "Térkép szűrő kikapcsolva",
@@ -618,10 +625,10 @@
     },
     "a new point on an existing line": "Új pont egy meglevő vonal mentén",
     "access": {
-      "$$noContext": "megközelítés",
-      "waypoint_types": "megközelítés"
+      "$$noContext": "közúti / tömegközelekedéssel való megközelítés",
+      "waypoint_types": "közúti / tömegközlekedéssel való megközelítés"
     },
-    "access_comment": "Közúti, tömegközlekedési megközelíthetőségre vonatkozó megjegyzések",
+    "access_comment": "Közúti / tömegközlekedési megközelíthetőségre vonatkozó megjegyzések",
     "access_condition": "Közúti, tömegközlekedési megközelíthetőség körülményei",
     "access_period": "Hókotrási, nyitvatartási időszak",
     "access_time": "Megközelítés ideje",
@@ -659,20 +666,20 @@
       "area_types": "adminisztrációs korlát"
     },
     "advertisement": "hirdetés",
-    "after:": "ennyi idő elteltével:",
+    "after:": " elteltével",
     "age": "életkor",
     "aid_rating": "Mesterséges mászás besorolása",
     "alpine_climbing": {
       "event_activities": "Hegyi sziklás terep"
     },
     "already used email": {
-      "API message": "már használatban levő email cím"
+      "API message": "Már használatban levő email cím"
     },
     "already used forum_username": {
-      "API message": "már használatban levő fórum felhasználói név"
+      "API message": "Már használatban levő fórum felhasználói név"
     },
     "already used username": {
-      "API message": "már használatban levő felhasználói név"
+      "API message": "Már használatban levő felhasználói név."
     },
     "always_accessible": {
       "custodianship_types": "mindig nyitva"
@@ -691,34 +698,34 @@
     "artificial": {
       "rock_types": "mesterséges"
     },
-    "ascending sort": "növekvő sorrend szerinti rendezés",
+    "ascending sort": "Növekvő sorrend szerinti rendezés",
     "association": {
       "article_categories": "társítás"
     },
-    "associations": "társítások",
+    "associations": "Társítások",
     "at least one route required": {
-      "API message": "legalább egy útvonal megadása szükséges"
+      "API message": "Legalább egy útvonal megadása szükséges"
     },
     "at least one user required": {
-      "API message": "Legalább egy felhasználó megadása szükséges"
+      "API message": "Legalább egy útvonal megadása szükséges"
     },
-    "author": "szerző",
-    "author_status": "szerző_státusz",
+    "author": "Szerző",
+    "author_status": "Az eseményben betöltött szerep",
     "autonomous": {
       "autonomies": "önálló"
     },
-    "autonomy": "önállóság",
+    "autonomy": "Gyakorlati szint",
     "avalanche": {
       "$$noContext": "lavina",
       "event_types": "lavina"
     },
     "avalanche_forecaster": {
-      "user_categories": "lavina_előrejelző"
+      "user_categories": "lavina előrejelzés"
     },
-    "avalanche_level": "lavina_szint",
-    "avalanche_signs": "lavina_jelek",
-    "avalanche_slope": "lavina_lejtés",
-    "avalanches": "lavinák",
+    "avalanche_level": "Lavinaveszély szintje",
+    "avalanche_signs": "Lavinák jelei",
+    "avalanche_slope": "A kiindulási zóna lejtése",
+    "avalanches": "Lavinákra vonatkozó megfigyelések",
     "average": {
       "condition_ratings": "átlagos",
       "snow_quality_ratings": "átlagos",
@@ -733,18 +740,22 @@
       "rock_types": "bazalt"
     },
     "base_camp": {
-      "waypoint_types": "alap_tábor"
+      "waypoint_types": "alaptábor"
     },
-    "best_periods": "legjobb_időszakok",
+    "best_periods": "Legjobb időszakok",
     "biography": {
       "book_types": "életrajz"
     },
     "bivouac": {
       "waypoint_types": "bivak"
     },
-    "blanket_unstaffed": "takaró_gondnok_nélkül",
+    "blanket_unstaffed": "Takarók a személyzet nélküli időszakban",
+    "bloc": {
+      "climbing_indoor_types": "blokk",
+      "climbing_outdoor_types": "blokk"
+    },
     "blocked_person": {
-      "event_types": "letiltott_személy"
+      "event_types": "letiltott személy"
     },
     "boat": {
       "public_transportation_types": "csónak"
@@ -753,47 +764,72 @@
       "$$noContext": "könyv",
       "image_categories": "könyv"
     },
-    "book_types": "könyv_típusok",
+    "book_types": "Könyv típusa",
     "books": "könyvek",
     "bus": {
       "public_transportation_types": "busz"
     },
     "c2c_meetings": {
-      "article_categories": "c2c_megbeszélések"
+      "article_categories": "c2c megbeszélések"
+    },
+    "ca": {
+      "langs": "katalán"
     },
     "calcaire": {
       "rock_types": "mészkő"
     },
-    "camera settings": "kamera beállítások",
+    "camera settings": "Hozzáférési pont paraméterei",
+    "camera_name": "Hozzáférési pont neve",
+    "camp_site": {
+      "waypoint_types": "kemping"
+    },
     "canyon": {
       "waypoint_types": "kanyon"
     },
     "capacity": {
-      "$$noContext": "kapacitás",
-      "bivouac": "kapacitás"
+      "$$noContext": "Helyek száma személyzet nélküli időszakban",
+      "bivouac": "Helyek száma"
     },
+    "capacity_staffed": "Helyek száma személyzettel működő időszakban",
     "categories": "kategóriák",
     "cave": {
       "waypoint_types": "barlang"
     },
-    "children_proof": "gyerek_biztos",
+    "children_proof": "Gyerekek",
     "cleared": {
-      "access_conditions": "tiszta"
+      "access_conditions": "hótól megtisztított"
     },
-    "climbing rating": "mászás nehézségi skála",
+    "climbing rating": "mászás nehézségi besorolása",
     "climbing_indoor": {
-      "waypoint_types": "beltéri_mászás"
+      "waypoint_types": "mászófal"
     },
-    "climbing_indoor_types": "beltéri_mászás_fajták",
+    "climbing_indoor_types": "Mászófal típusa",
     "climbing_instructor": {
-      "user_categories": "mászó_oktató"
+      "user_categories": "mászó oktató"
     },
     "climbing_outdoor": {
-      "waypoint_types": "kültéri_mászás"
+      "waypoint_types": "mászóhely"
     },
-    "climbing_outdoor_type": "kültéri_mászás_fajták",
+    "climbing_outdoor_type": "Mászóút típusa",
+    "climbing_outdoor_types": "Mászóhely típusa",
+    "climbing_rating_max": "Maximális nehézségi besorolás",
+    "climbing_rating_median": "Átlagos nehézségi besorolás",
+    "climbing_rating_min": "Minimum nehézségi besorolás",
+    "climbing_styles": "Mászás stílusa",
     "closed": {
       "lift_status": "zárva"
+    },
+    "closed_cleared": {
+      "access_conditions": "zárva, hótól megtisztítva"
+    },
+    "closed_hut": {
+      "hut_status": "menedékház bezárva"
+    },
+    "closed_in_winter": {
+      "snow_clearance_ratings": "télen zárva"
+    },
+    "closed_snow": {
+      "access_conditions": "zárva, hó alatt"
     },
     "club": {
       "user_categories": "klub"
@@ -806,7 +842,7 @@
     "collaborative": {
       "image_types": "együttműködésben készülő"
     },
-    "comment": "megjegyzés",
+    "comment": "Megjegyzés",
     "conditions": "körülmények",
     "configuration": "beállítások",
     "configure your choices": "Választások beállítása",
@@ -835,6 +871,7 @@
     },
     "date": "dátum",
     "day(s)": "nap(ok)",
+    "decathlon": "Decathlon",
     "descending sort": "csökkenő rendezés",
     "descent": {
       "image_categories": "leereszkedés"
@@ -866,8 +903,8 @@
     "elevation": "magasság",
     "elevation_access": "megközelítés_szintje",
     "elevation_down_snow": "lefele_hó_szint",
-    "elevation_max": "max_magasság",
-    "elevation_min": "min_magasság",
+    "elevation_max": "Legmagasabb pont szintje",
+    "elevation_min": "Legalacsonyabb pont szintje",
     "elevation_up_snow": "felfele_hó_szint",
     "emphasized text": "kiemelt szöveg",
     "empty": {
@@ -903,6 +940,7 @@
       "rain_proof_types": "kitett"
     },
     "exposition_rock_rating": "kitettség_szikla_besorolás",
+    "external_resources": "Egyéb információ források",
     "face": {
       "route_configuration_types": "oldal"
     },
@@ -919,10 +957,11 @@
     "flora": {
       "image_categories": "növényvilág"
     },
-    "fnumber": "f-szám",
+    "fnumber": "Rekesz",
     "focal_length": "fókusz_távolság",
     "forum": "fórum",
     "frequentation": "látogatási gyakoriság",
+    "garmin": "Garmin",
     "gas_unstaffed": "gáz_gazdátlanul",
     "gear": {
       "$$noContext": "felszerelés",
@@ -999,14 +1038,14 @@
     "heading text": "Fejléc szövege",
     "heating_unstaffed": "fűtés_személyzet_nélkül",
     "height": "magasság",
-    "height_diff": "magasság_különbség",
-    "height_diff_access": "magasság_különbség_felfele",
-    "height_diff_difficulties": "magasság_különbség_nehézségek",
-    "height_diff_down": "magasság_különbség_lefele",
-    "height_diff_up": "magasság_különbség_felfele",
-    "height_max": "max_magasság",
+    "height_diff": "Szintkülönbség",
+    "height_diff_access": "Szintkülönbség a beszállásig",
+    "height_diff_difficulties": "Szintkülönbség, nehéz szakaszokon",
+    "height_diff_down": "Szintkülönbség lefele",
+    "height_diff_up": "Szintkülönbség felfele",
+    "height_max": "Maximális magasság",
     "height_median": "medián_magasság",
-    "height_min": "min_magasság",
+    "height_min": "Minimális magasság",
     "help": {
       "$$noContext": "segítség",
       "image_categories": "segítség"
@@ -1014,8 +1053,8 @@
     "hiking": {
       "activities": "kirándulás"
     },
-    "hiking_mtb_exposition": "kirándulás_mtb_kitettség",
-    "hiking_rating": "kirándulás_besorolás",
+    "hiking_mtb_exposition": "MTB kitettség besorolás",
+    "hiking_rating": "Túra nehézség",
     "historical": {
       "book_types": "történelmi"
     },
@@ -1032,8 +1071,8 @@
       "user_categories": "menedékház_gondnok"
     },
     "ice_climbing": {
-      "activities": "jég_mászás",
-      "event_activities": "jég_mászás"
+      "activities": "jégmászás",
+      "event_activities": "jégmászás"
     },
     "ice_cornice_collapse": {
       "event_types": "jég_párkány_összeomlás"
@@ -1102,7 +1141,7 @@
     "level_na": {
       "avalanche_levels": "szint_nem_alkalmazható"
     },
-    "lift_access": "lift_megközelítés",
+    "lift_access": "Megközelítés lifttel",
     "lift_status": "lift_állapot",
     "loading": "feltöltés",
     "local_product": {
@@ -1150,7 +1189,7 @@
     },
     "motivations": "motivációk",
     "mountain_biking": {
-      "activities": "hegyi_biciklizás"
+      "activities": "hegyibiciklizés"
     },
     "mountain_climbing": {
       "activities": "hegymászás"
@@ -1167,11 +1206,11 @@
     "mountainbike_instructor": {
       "user_categories": "hegyikerékpár_oktató"
     },
-    "mtb_down_rating": "mtb_lefele_besorolás",
-    "mtb_height_diff_portages": "mtb_cipelés_szintkülönbség",
-    "mtb_length_asphalt": "mtb_aszfalt_úthossz",
-    "mtb_length_trail": "mtb_ösvény_hossz",
-    "mtb_up_rating": "mtb_felfele_besorolás",
+    "mtb_down_rating": "MTB ereszkedés nehézség",
+    "mtb_height_diff_portages": "Bicikli cipelés szintkülönbség",
+    "mtb_length_asphalt": "Aszfaltozott szakasz hossza",
+    "mtb_length_trail": "Hegyibiciklis ösvény hossza",
+    "mtb_up_rating": "MTB hegymenet nehézség",
     "multi": {
       "climbing_outdoor_types": "több"
     },
@@ -1308,6 +1347,7 @@
     },
     "points": "pontok",
     "points by moving them": "pontok mozgatással",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "szegény",
       "snow_quality_ratings": "szegény",
@@ -1363,7 +1403,7 @@
     "public_transportation_types": "tömegközlekedés_típusok",
     "publication_date": "közzététel_dátuma",
     "qualification": "minősítés",
-    "quality": "minőség",
+    "quality": "Dokumentum minősége",
     "quartzite": {
       "rock_types": "kvarcit"
     },
@@ -1415,8 +1455,8 @@
     },
     "route": "útvonal",
     "route_description": "út_leírás",
-    "route_history": "út_történet",
-    "route_length": "út_hossz",
+    "route_history": "Az útvonal története",
+    "route_length": "úthossz",
     "route_study": "út_tanulmány",
     "route_types": "út_típusok",
     "routes": "utak",
@@ -1519,10 +1559,10 @@
       "weather_station_types": "hó_magasság"
     },
     "snow_ice_mixed": {
-      "activities": "hó_jég_vegyes",
-      "event_activities": "hó_jég_vegyes"
+      "activities": "hó/jég vegyes",
+      "event_activities": "hó/jég vegyes"
     },
-    "snow_quality": "hó_minőség",
+    "snow_quality": "hóminőség",
     "snow_quantity": "hó_mennyiség",
     "snowshoe_rating": "hótalpazás_besorolás",
     "snowshoeing": {
@@ -1548,17 +1588,19 @@
       "product_types": "sport_üzlet"
     },
     "stone_ice_fall": {
-      "event_types": "hó_jég_hullás"
+      "event_types": "hó- és jéghullás"
     },
     "stories": {
       "article_categories": "történetek"
     },
+    "strava": "Strava",
     "strong text": "hangsúlyos szöveg",
     "summary": "összefoglaló",
     "summit": {
       "waypoint_types": "csúcs"
     },
     "supervision": "felügyelet",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "címkék"
     },
@@ -1575,7 +1617,7 @@
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Ez egy előnézet. A geometria nincs még egyszerűsítve. A térképes interakciók és exportálás nincsenek engedélyezve.",
     "time_management": "idő_menedzsment",
     "timing": "időzítés",
-    "title": "cím",
+    "title": "név",
     "to": {
       "period": "-hoz -hez -höz"
     },
@@ -1607,7 +1649,10 @@
     "very_safe": {
       "children_proof_types": "nagyon_biztonságos"
     },
-    "via_ferrata_rating": "via_ferrata_besorolás",
+    "via_ferrata": {
+      "activities": "via ferrata"
+    },
+    "via_ferrata_rating": "via ferrata nehézség",
     "virtual": {
       "waypoint_types": "virtuális"
     },
@@ -1623,7 +1668,7 @@
     "waypoint": "útvonalpont",
     "waypoint_children": "útvonalpont_gyerekek",
     "waypoint_slope": "útvonalpont_meredekség",
-    "waypoint_type": "útvonalpont_típus",
+    "waypoint_type": "Útvonalpont típus",
     "waypoints": "útvonalpontok",
     "weather": "időjárás",
     "weather_event": {

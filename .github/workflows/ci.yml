@@ -12,23 +12,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [lts/*]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Cache node modules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -44,7 +35,7 @@ jobs:
       - name: Docker meta
         id: docker_meta
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/metadata-action@v4.0.1
+        uses: docker/metadata-action@v4.3.0
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
@@ -56,14 +47,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push Docker images
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v5.5
+        uses: tj-actions/branch-names@v6
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
@@ -81,18 +72,20 @@ jobs:
 
   github-pages:
     needs: build
-    if: "github.event_name != 'pull_request' || !contains(github.head_ref, 'dependabot')"
+    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]'"
     runs-on: ubuntu-latest
     concurrency: github-pages
+    permissions:
+      contents: write
     steps:
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v5.5
+        uses: tj-actions/branch-names@v6
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
         env:
-          BRANCH: ${{ steps.branch-name.outputs.current_branch }}
+          BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -118,36 +111,28 @@ jobs:
 
   create-release:
     needs: build
-    if: "contains(github.ref, 'refs/tags/v')"
+    if: "startsWith(github.ref, 'refs/tags/v')"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Generate changelog for release
-        id: release_changelog
-        run: |
-          previousTag=$(git tag | sort -V -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')
-          currentTag=$(git tag | sort -V -r | head -1)
-          changelog=$(git log --pretty=oneline ${previousTag}..${currentTag} --no-merges)
-          changelog="${changelog//'%'/'%25'}"
-          changelog="${changelog//$'\n'/'%0A'}"
-          changelog="${changelog//$'\r'/'%0D'}"
-          echo "::set-output name=changelog::$changelog"
       - name: Create or update release
-        uses: meeDamian/github-release@2.0
+        uses: softprops/action-gh-release@v1
         with:
-          body: ${{ steps.release_changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          allow_override: true
 
   push-i18n:
     needs: build
     if: "github.ref == 'refs/heads/master' && github.repository == 'c2corg/c2c_ui'"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

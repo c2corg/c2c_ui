@@ -11,7 +11,7 @@
     <!-- The fullscreen map container is used to display both the map
          and the elevation profile in fullscreen (if the elevation profile exists) -->
     <div id="fullscreen-map-container">
-      <div class="map-container" :class="{ elevationProfileHidden }">
+      <div class="map-container" :class="{ 'with-elevation-profile': showElevationProfile && !elevationProfileHidden }">
         <map-view
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type)"
@@ -142,12 +142,21 @@ export default {
 
       feature.set('name', name);
 
-      const filename = this.document.document_id + extension;
+      const filename = this.getDownloadedFileName(name, extension);
       const content = format.writeFeatures([feature], {
         featureProjection: 'EPSG:3857',
       });
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
+    },
+
+    getDownloadedFileName(name, extension) {
+      let filename = this.document.document_id + '_' + name.substring(0, 100);
+      if (this.documentType === 'outing') {
+        filename = filename + '_' + this.document.date_start;
+      }
+      // Remove forbidden characters/spaces, and replace them with '_'
+      return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
     },
   },
 };
@@ -167,14 +176,14 @@ export default {
  * rule doesn't apply
  */
 :fullscreen .map-container {
-  height: 70%;
-  max-height: calc(100% - 200px);
-  min-height: calc(100% - 350px);
+  height: 100%;
+  max-height: 100%;
   margin: 0;
 
-  &.elevationProfileHidden {
-    height: 100%;
-    max-height: 100%;
+  &.with-elevation-profile {
+    height: 70%;
+    max-height: calc(100% - 200px);
+    min-height: calc(100% - 350px);
   }
 }
 </style>

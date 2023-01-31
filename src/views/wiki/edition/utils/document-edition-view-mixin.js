@@ -85,14 +85,6 @@ export default {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
 
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      if (!vm.$user.isLogged) {
-        vm.$router.push({ name: 'auth' });
-      }
-    });
-  },
-
   beforeRouteLeave(to, from, next) {
     if (this.modified) {
       const answer = window.confirm(this.$gettext('Do you really want to leave? you have unsaved changes!'));
@@ -116,7 +108,7 @@ export default {
       // as this method will be called in any case,
       // we must check that the user is logged
       // redirection is made be beforeRouteEnter()
-      // but we do not wan't to do anythin in this case
+      // but we do not want to do anything in this case
       if (!this.$user.isLogged) {
         return;
       }
@@ -335,6 +327,7 @@ export default {
         // $gettext('Conflict: version of locale \'it\' has changed')
         // $gettext('Conflict: version of locale \'ca\' has changed')
         // $gettext('Conflict: version of locale \'fr\' has changed')
+        // $gettext('Conflict: version of locale \'sl\' has changed')
         // $gettext('Conflict: version of locale \'zh_CN\' has changed')
         // $gettext('Conflict: version of document has changed')
         toast({ message: this.$gettext(`${error.name}: ${error.description}`), type: 'is-danger', position: 'center' });

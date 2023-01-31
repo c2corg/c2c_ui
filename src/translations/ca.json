@@ -222,6 +222,7 @@
     "Elementary Reduction Method": "mètode de reducció per a debutant",
     "Elevation": "Altitud",
     "Elevation (m)": "Altitud (m)",
+    "Elevation profile": "Perfil altimètric",
     "Email": "Correu electrònic",
     "Everything about ratings : difficulties, exposition...": "Entreu aquí totes les dades de l'itinerari (dificultat, exposició, qualitat de l'equipament, etc.)",
     "Expand": "Desplega",
@@ -273,8 +274,8 @@
     "I must not use slopes > 35°": "Renuncio als pendents > 35º",
     "I must not use slopes > 40°": "Renuncio als pendents > 40º",
     "I read and understood the interest and limitations of YETI": "He llegit i entenc l'interès i els límits de YETI",
-    "IGN": {
-      "Map slopes layer": "Mapa de pendents IGN"
+    "IGN Slopes": {
+      "Map slopes layer": "Pendents IGN"
     },
     "IGN maps": {
       "Map layer": "Cartografia oficial"
@@ -524,7 +525,7 @@
     "Stop following this contributor": "Deixa de seguir aquest participant",
     "Submit": "Desa els canvis i continua",
     "Suggested rating": "Dificultat suggerida",
-    "SwissTopo": {
+    "SwissTopo Slopes": {
       "Map slopes layer": "Pendents SwissTopo"
     },
     "SwissTopo ortho": {
@@ -878,6 +879,7 @@
     "de": {
       "langs": "alemany"
     },
+    "decathlon": "Decathlon",
     "descending sort": "Ordre decreixent",
     "descent": {
       "image_categories": "baixada"
@@ -981,13 +983,14 @@
     "fine": {
       "quality_types": "bo"
     },
-    "fnumber": "Propietats de la imatge",
+    "fnumber": "Obertura",
     "focal_length": "distància focal",
     "forum": "fòrum",
     "fr": {
       "langs": "francès"
     },
     "frequentation": "Freqüentació",
+    "garmin": "Garmin",
     "gas_unstaffed": "Gas en període no guardat",
     "gear": {
       "$$noContext": "Material",
@@ -1368,6 +1371,7 @@
       "API message": "Error inesperat, si us plau contacteu amb dev@camptocamp.org"
     },
     "points by moving them": "els punts desplaçant-los",
+    "polar": "Polar",
     "poor": {
       "condition_ratings": "dolentes",
       "snow_quality_ratings": "dolentes",
@@ -1616,12 +1620,14 @@
     "stories": {
       "article_categories": "narracions"
     },
+    "strava": "Strava",
     "strong text": "text en negreta",
     "summary": "Resum",
     "summit": {
       "waypoint_types": "cim"
     },
     "supervision": "Supervisió",
+    "suunto": "Suunto",
     "tags": {
       "article_categories": "etiquetes"
     },

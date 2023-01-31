@@ -49,3 +49,10 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.dropdown-menu {
+  @media screen and (max-width: $tablet) {
+    max-width: 100%;
+  }
+}
+</style>

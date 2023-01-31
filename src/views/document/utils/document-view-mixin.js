@@ -16,7 +16,7 @@ import ProfilesLinks from './field-viewers/ProfilesLinks';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
-import imageUrls from '@/js/image-urls';
+import { getImageUrl } from '@/js/image-urls';
 import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
 import viewModeMixin from '@/js/view-mode-mixin';
@@ -95,9 +95,15 @@ export default {
      * properties that are deducted from URL
      */
     documentId() {
+      if (this.isDraftView || this.isPrintingView) {
+        return this.draft.document_id;
+      }
       return parseInt(this.$route.params.id, 10);
     },
     documentType() {
+      if (this.isPrintingView) {
+        return this.$route.name.split('s-')[0];
+      }
       return this.$route.name.split('-')[0];
     },
     fields() {
@@ -111,8 +117,8 @@ export default {
      * properties computed when document is loaded
      */
     document() {
-      if (!this.promise || !this.promise.data) {
-        return null;
+      if (!this.promise?.data) {
+        return undefined;
       }
 
       const doc = this.isVersionView ? this.promise.data.document : this.promise.data;
@@ -122,18 +128,18 @@ export default {
 
     version() {
       if (!this.promise.data || !this.isVersionView) {
-        return null;
+        return undefined;
       }
 
       return this.promise.data.version;
     },
 
     locale() {
-      return this.document ? this.document.cooked : null;
+      return this.document?.cooked;
     },
 
     lang() {
-      return this.document ? this.document.cooked.lang : null;
+      return this.document?.cooked?.lang;
     },
   },
 
@@ -155,26 +161,29 @@ export default {
             response.data.version.next_version_id = response.data.next_version_id;
             response.data.version.previous_version_id = response.data.previous_version_id;
 
-            // versioned data are poor...
-            response.data.document.areas = [];
-            response.data.document.creator = null;
-            response.data.document.associations = {
-              articles: [],
-              books: [],
-              images: [],
-              users: [],
-              waypoints: [],
-              waypoint_children: [],
-              all_routes: {
-                documents: [],
-              },
-              recent_outings: {
-                documents: [],
-              },
-            };
-            this.$emit('updateHead'); // eslint-disable-line
+            // (document may be masked and unavailable)
+            if (response.data.document) {
+              // versioned data are poor...
+              response.data.document.areas = [];
+              response.data.document.creator = null;
+              response.data.document.associations = {
+                articles: [],
+                books: [],
+                images: [],
+                users: [],
+                waypoints: [],
+                waypoint_children: [],
+                all_routes: {
+                  documents: [],
+                },
+                recent_outings: {
+                  documents: [],
+                },
+              };
+            }
+            this.$emit('updateHead');
           });
-      } else if (this.isDraftView) {
+      } else if (this.isDraftView || this.isPrintingView) {
         this.promise = {};
 
         this.$imageViewer.clear();
@@ -200,7 +209,7 @@ export default {
           .then(() => {
             this.$root.$emit('trigger-scroll');
             // notify vue-head plugin to update
-            this.$emit('updateHead'); // eslint-disable-line
+            this.$emit('updateHead');
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);
@@ -269,7 +278,7 @@ export default {
       return {
         '@context': 'https://schema.org',
         '@type': 'ImageObject',
-        contentUrl: imageUrls.get(this.document),
+        contentUrl: getImageUrl(this.document),
         license,
         acquireLicensePage: 'https://www.camptocamp.org/articles/106728',
       };
@@ -286,7 +295,7 @@ export default {
         const image = this.document.associations.images[0];
         inner = {
           ...inner,
-          image: [imageUrls.getBig(image)],
+          image: [getImageUrl(image, 'BI')],
         };
       }
       return inner;
@@ -311,7 +320,7 @@ export default {
       }
       if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
-        meta = [...meta, { p: 'og:image', c: imageUrls.getBig(image), id: 'meta-og-image' }];
+        meta = [...meta, { p: 'og:image', c: getImageUrl(image, 'BI'), id: 'meta-og-image' }];
       }
       return meta;
     },

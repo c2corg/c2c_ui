@@ -8,15 +8,19 @@
         <pretty-route-link :route="route" hide-area />
       </div>
     </div>
-    <div v-else v-for="activity of Object.keys(routes)" :key="activity">
-      <h3 class="title is-3">
-        <icon-activity :activity="activity" />
-        {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
-      </h3>
-      <div v-for="(route, i) of routes[activity]" :key="i">
-        <pretty-route-link :route="route" hide-activities hide-area />
+    <template v-else>
+      <div v-for="activity of Object.keys(routes)" :key="activity">
+        <accordion-item>
+          <h3 slot="title" class="title is-3">
+            <icon-activity :activity="activity" />
+            {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+          </h3>
+          <div slot="content" v-for="(route, i) of routes[activity]" :key="i">
+            <pretty-route-link :route="route" hide-activities hide-area />
+          </div>
+        </accordion-item>
       </div>
-    </div>
+    </template>
     <div v-if="!hideButtons" class="has-text-centered add-section">
       <router-link :to="{ name: 'routes', query: query }" class="button is-primary" v-if="source.length">
         <span v-translate>Filter results</span>&nbsp;<span class="badge">{{ totalRoutes }}</span>
@@ -31,7 +35,6 @@ import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],
-
   props: {
     hideButtons: {
       type: Boolean,

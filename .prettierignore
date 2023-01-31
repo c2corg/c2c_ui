@@ -1,2 +1,5 @@
 src/assets/font-awesome-custom/
 src/translations/
+dist/
+node_modules/
+.husky/

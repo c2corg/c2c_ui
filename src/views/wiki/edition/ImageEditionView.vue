@@ -32,7 +32,8 @@
               </label>
             </div>
           </div>
-          <img :src="newVersionSource ? newVersionSource : getImageUrl(document)" />
+          <img v-if="newVersionSource" :src="newVersionSource" />
+          <thumbnail v-else :img="document" size="MI" />
         </div>
       </div>
     </form-section>
@@ -81,7 +82,6 @@
 <script>
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
-import imageUrls from '@/js/image-urls';
 import uploadFile from '@/js/upload-file';
 
 export default {
@@ -105,8 +105,6 @@ export default {
   },
 
   methods: {
-    getImageUrl: imageUrls.getMedium,
-
     beforeSave() {
       this.$refs.qualityField.beforeSave();
     },

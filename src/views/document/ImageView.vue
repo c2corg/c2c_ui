@@ -1,6 +1,11 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+    <masked-document-version-info
+      v-if="document === null"
+      :version="version"
+      :document-type="documentType"
+    ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns">
       <div class="column is-3">
@@ -37,7 +42,7 @@
       <div class="column is-9">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
-            <img class="main-image" :src="getBigImageUrl(document)" />
+            <thumbnail class="main-image" :img="document" size="BI" />
           </a>
         </div>
 
@@ -58,16 +63,20 @@
 </template>
 
 <script>
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
-import imageUrls from '@/js/image-urls';
+import { getImageUrl } from '@/js/image-urls';
 
 export default {
+  components: {
+    MaskedDocumentVersionInfo,
+  },
+
   mixins: [documentViewMixin],
 
   methods: {
-    getOriginalImageUrl: imageUrls.get,
-    getBigImageUrl: imageUrls.getBig,
+    getOriginalImageUrl: getImageUrl,
   },
 };
 </script>

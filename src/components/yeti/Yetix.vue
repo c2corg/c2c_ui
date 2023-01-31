@@ -13,6 +13,9 @@ import Vue from 'vue';
 
 let defaultState = {
   API_URL: 'https://api.ensg.eu/',
+  BLEND_MODES_CLASS_NAME: 'areas',
+  BLEND_MODES_MAX_ZOOM: 10,
+  BLEND_MODES_MIN_ZOOM: 8,
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
 
@@ -46,7 +49,16 @@ let defaultState = {
     visible: [],
   },
   bulletinsLoaded: false,
-  showAvalancheBulletins: false,
+  showAvalancheBulletins: true,
+
+  nivoses: [],
+  showNivoses: false,
+
+  romma: [],
+  showRomma: false,
+
+  flowcapt: [],
+  showFlowcapt: false,
 
   mapZoom: 0,
   drawingMode: false,
@@ -69,6 +81,15 @@ let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
  */
 export default new Vue({
   computed: {
+    BLEND_MODES_CLASS_NAME() {
+      return state.BLEND_MODES_CLASS_NAME;
+    },
+    BLEND_MODES_MAX_ZOOM() {
+      return state.BLEND_MODES_MAX_ZOOM;
+    },
+    BLEND_MODES_MIN_ZOOM() {
+      return state.BLEND_MODES_MIN_ZOOM;
+    },
     DANGER_MAX_WHEN_MRD() {
       return state.DANGER_MAX_WHEN_MRD;
     },
@@ -113,6 +134,24 @@ export default new Vue({
     },
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
+    },
+    nivoses() {
+      return state.nivoses;
+    },
+    showNivoses() {
+      return state.showNivoses;
+    },
+    romma() {
+      return state.romma;
+    },
+    showRomma() {
+      return state.showRomma;
+    },
+    flowcapt() {
+      return state.flowcapt;
+    },
+    showFlowcapt() {
+      return state.showFlowcapt;
     },
     mapZoom() {
       return state.mapZoom;
@@ -165,6 +204,24 @@ export default new Vue({
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
     },
+    setNivoses(nivoses) {
+      state.nivoses = nivoses;
+    },
+    setShowNivoses(showNivoses) {
+      state.showNivoses = showNivoses;
+    },
+    setRomma(romma) {
+      state.romma = romma;
+    },
+    setShowRomma(showRomma) {
+      state.showRomma = showRomma;
+    },
+    setFlowcapt(flowcapt) {
+      state.flowcapt = flowcapt;
+    },
+    setShowFlowcapt(showFlowcapt) {
+      state.showFlowcapt = showFlowcapt;
+    },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
@@ -212,6 +269,15 @@ export default new Vue({
     },
     fetchBulletins() {
       return this.fetchApi('bra');
+    },
+    fetchNivoses() {
+      return this.fetchApi('nivoses');
+    },
+    fetchRomma() {
+      return this.fetchApi('romma');
+    },
+    fetchFlowcapt() {
+      return this.fetchApi('flowcapt');
     },
   },
 });

@@ -1,8 +1,7 @@
 // CAMPTOCAMP_CONFIG is a placeholder defined in vue.config.js
-// DO not modify this file. If you need another build parameter
+// Do not modify this file. If you need another build parameter
 // please go to vue.config.js in root
 
-// eslint-disable-next-line no-undef
 const config = CAMPTOCAMP_CONFIG;
 
 const LOCAL_STORAGE_KEY = 'SiteConfiguration.urlsName';
@@ -13,8 +12,12 @@ config.setUrlsName = function (name) {
 
 const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? config.urls.name;
 
-if (!config.isProduction) {
+if (config.isBackendSelectable) {
   config.urls = config.urlsConfigurations[urlsName];
+} else if (location.hostname === 'www.demov6.camptocamp.org') {
+  // production builds use production urls by default.
+  // use hostname to set urls for demo
+  config.urls = config.urlsConfigurations['demo'];
 }
 
 export default config;

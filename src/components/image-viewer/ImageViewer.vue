@@ -57,7 +57,7 @@ import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
-import imageUrls from '@/js/image-urls';
+import { getImageUrl } from '@/js/image-urls';
 
 SwiperCore.use([Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom]);
 
@@ -140,16 +140,25 @@ export default {
           // https://swiperjs.com/api/#virtual
           // loop: true,
 
-          // virtual because it may be too slow if there is too many image
+          // virtual because it may be too slow if there are too many image
           // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
           virtual: {
             slides,
             renderSlide(img) {
+              const avifSrc = getImageUrl(img, 'BI', 'avif');
+              const webpSrc = getImageUrl(img, 'BI', 'webp');
+              const imgSrc = getImageUrl(img, 'BI');
               return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
                   <div class="swiper-zoom-container">
-                    <img data-src="${imageUrls.getBig(img)}" class="swiper-lazy" alt="${
-                img.locales[0].title
-              }" loading="lazy">
+                  <picture>
+                    ${avifSrc ? `<source type="image/avif" data-srcset="${avifSrc}">` : ''}
+                    ${webpSrc ? `<source type="image/webp" data-srcset="${webpSrc}">` : ''}
+                    <img
+                      data-src="${imgSrc}"
+                      class="swiper-lazy"
+                      alt="${img.locales[0].title}"
+                      loading="lazy">
+                  </picture>
                   </div>
                   <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
                 </div>`;
@@ -263,9 +272,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~swiper/swiper.scss';
-@import '~swiper/components/lazy/lazy.scss';
-@import '~swiper/components/zoom/zoom.scss';
+@import '~swiper/swiper';
+@import '~swiper/components/lazy/lazy';
+@import '~swiper/components/zoom/zoom';
 
 // class not explicitly present in template, can't use scope
 
@@ -335,22 +344,22 @@ $paginationHeight: 30px;
     bottom: 0;
     height: $paginationHeight;
 
-    .image-viewer-bullet:first-child {
-      border-bottom-left-radius: 50%;
-      border-top-left-radius: 50%;
-    }
-
-    .image-viewer-bullet:last-child {
-      border-bottom-right-radius: 50%;
-      border-top-right-radius: 50%;
-    }
-
     .image-viewer-bullet {
       display: inline-block;
       background: white;
       max-width: 16px;
       height: 16px;
       border: 25% solid black;
+
+      &:first-child {
+        border-bottom-left-radius: 50%;
+        border-top-left-radius: 50%;
+      }
+
+      &:last-child {
+        border-bottom-right-radius: 50%;
+        border-top-right-radius: 50%;
+      }
     }
 
     .image-viewer-bullet-active {

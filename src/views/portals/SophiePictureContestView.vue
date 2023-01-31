@@ -22,17 +22,24 @@
             {{ $gettext(winner.category) }}
           </div>
           <div class="has-text-centered">
-            <document-link :document="{ ...winner.image, ...{ type: 'i' } }">
-              <img
-                :src="getImageUrl(winner.image)"
-                :alt="$documentUtils.getDocumentTitle(winner.image)"
+            <document-link :document="{ ...winner.image, type: 'i' }">
+              <thumbnail
+                :img="winner.image"
+                size="MI"
+                :alt="
+                  $documentUtils.getDocumentTitle({
+                    ...winner.image,
+                    title: winner.title ?? $gettext('No title'),
+                    type: 'i',
+                  })
+                "
                 class="winner-image"
                 loading="lazy"
               />
             </document-link>
           </div>
           <div class="has-text-centered">
-            <span class="is-italic"> {{ winner.title }}, </span>
+            <span class="is-italic"> {{ winner.title ?? $gettext('No title') }}, </span>
             <span>
               {{ winner.author }}
             </span>
@@ -59,7 +66,7 @@
           :title="$documentUtils.getDocumentTitle(image)"
           class="card-image"
         >
-          <img :src="getImageUrl(image)" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
+          <thumbnail :img="image" size="MI" loading="lazy" :alt="$documentUtils.getDocumentTitle(image)" />
         </document-link>
       </div>
       <loading-notification v-else :promise="promise" />
@@ -69,7 +76,6 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-import imageUrls from '@/js/image-urls';
 
 let associations = [];
 
@@ -78,7 +84,7 @@ export default {
     return {
       promise: null,
       images: null,
-      sortByAssociationDate: false,
+      sortByAssociationDate: true,
     };
   },
 
@@ -388,6 +394,53 @@ export default {
         },
       ],
     },
+    2022: {
+      year: 2022,
+      documentId: 1463470,
+      winners: [
+        {
+          title: 'Lyskamm - le Mangeur d’Hommes',
+          author: 'Apoutsiak',
+          image: { document_id: 1467500 },
+          category: 'Action',
+        },
+        {
+          author: 'petitefleur',
+          image: { document_id: 1476284 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Face à face',
+          author: 'Blf',
+          image: { document_id: 1476650 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Levé de soleil au Morgenhorn',
+          author: 'Plov',
+          image: { document_id: 1438319 },
+          category: 'Topoguide',
+        },
+        {
+          title: 'Lumière',
+          author: 'Jerome01',
+          image: { document_id: 1475788 },
+          category: 'Coup de coeur',
+        },
+        {
+          title: 'Peu d’audace à l’Androsace',
+          author: 'SEBonhomme_de_neige',
+          image: { document_id: 1476379 },
+          category: 'Prix du Public',
+        },
+        {
+          title: 'Lyskamm - le Mangeur d’Hommes',
+          author: 'Apoutsiak',
+          image: { document_id: 1467500 },
+          category: 'Prix du Public',
+        },
+      ],
+    },
   },
 
   computed: {
@@ -468,14 +521,12 @@ export default {
         this.images = contributions.map((c) => c.image);
       }
     },
-
-    getImageUrl: imageUrls.getMedium,
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 .separator {
   background-color: $color-base-c2c-lighter;

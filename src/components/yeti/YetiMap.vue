@@ -3,8 +3,11 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" />
       <area-layer />
-      <avalanche-bulletins-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
+      <avalanche-bulletins-layer />
+      <flowcapt-layer />
+      <nivoses-layer />
+      <romma-layer />
       <route-layer />
       <div
         ref="layerSwitcherButton"
@@ -13,7 +16,7 @@
       >
         <button @click.stop="showLayerSwitcher = !showLayerSwitcher">
           <fa-layers>
-            <fa-icon icon="layer-group" />
+            <fa-icon icon="layer-group" width="100%" />
             <fa-icon v-if="atLeastOneYetiLayerIsShown" icon="circle" transform="shrink-2 up-10 right-10" />
             <fa-icon
               v-if="atLeastOneYetiLayerIsShown"
@@ -29,26 +32,26 @@
       <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
         <div>
           <header v-translate>Base layer</header>
-          <div v-for="(layer, i) of cartoLayers" :key="layer.get('title')" class="map-control-listitem">
+          <div v-for="(layer, i) of reactiveCartoLayers" :key="layer.title" class="map-control-listitem">
             <input
               :id="'carto-checkbox' + i"
-              :checked="layer == visibleCartoLayer"
+              :checked="layer.id == visibleCartoLayerId"
               type="radio"
-              @change="visibleCartoLayer = layer"
+              @change="visibleCartoLayerId = layer.id"
             />
-            <label :for="'carto-checkbox' + i">{{ $gettext(layer.get('title'), 'Map layer') }}</label>
+            <label :for="'carto-checkbox' + i">{{ $gettext(layer.title, 'Map layer') }}</label>
           </div>
         </div>
         <div>
           <header v-translate>Slopes</header>
-          <div v-for="(layer, i) of dataLayers" :key="layer.get('title')" class="map-control-listitem">
+          <div v-for="(layer, i) of reactiveDataLayers" :key="layer.title" class="map-control-listitem">
             <input
               :id="'data-checkbox' + i"
-              :checked="layer.getVisible()"
+              :checked="layer.visible"
               type="checkbox"
               @change="toggleMapDataLayer(layer)"
             />
-            <label :for="'data-checkbox' + i">{{ $gettext(layer.get('title'), 'Map slopes layer') }}</label>
+            <label :for="'data-checkbox' + i">{{ $gettext(layer.title, 'Map slopes layer') }}</label>
           </div>
           <header>YETI</header>
           <div v-for="(layer, i) of yetiLayers" :key="layer.title" class="map-control-listitem">
@@ -78,7 +81,7 @@
       <div ref="drawingMode" class="ol-control ol-control-drawing-mode" :class="{ 'is-primary': drawingMode }">
         <div class="ol-control-drawing-mode-inner">
           <input-checkbox @input="onDrawingMode" :value="drawingMode" :disabled="validSimplifyTolerance">
-            <span v-translate title="Enable drawing and editing features on map">Drawing mode</span>
+            <span v-translate :title="$gettext('Enable drawing and editing features on map')">Drawing mode</span>
             <span class="yeti-tag">
               <span v-if="validSimplifyTolerance" v-translate>DISABLED</span>
               <span v-else-if="drawingMode">ON</span>
@@ -93,9 +96,14 @@
 
 <script>
 import { cartoLayers, dataLayers } from '../map/map-layers';
+let c2c_cartoLayers;
+let c2c_dataLayers;
 
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
+import FlowcaptLayer from './map-layers/FlowcaptLayer.vue';
+import NivosesLayer from './map-layers/NivosesLayer.vue';
+import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
@@ -111,6 +119,9 @@ export default {
   components: {
     AreaLayer,
     AvalancheBulletinsLayer,
+    FlowcaptLayer,
+    NivosesLayer,
+    RommaLayer,
     RouteLayer,
     YetiLayer,
   },
@@ -126,12 +137,12 @@ export default {
   },
   data() {
     return {
-      cartoLayers: cartoLayers(),
-      dataLayers: dataLayers(),
-
       showLayerSwitcher: false,
       recenterPropositions: null,
       showRecenterOnPropositions: false,
+      visibleCartoLayerId: null,
+      reactiveCartoLayers: [],
+      reactiveDataLayers: [],
     };
   },
   computed: {
@@ -143,6 +154,15 @@ export default {
     },
     showAreas() {
       return Yetix.showAreas;
+    },
+    showNivoses() {
+      return Yetix.showNivoses;
+    },
+    showRomma() {
+      return Yetix.showRomma;
+    },
+    showFlowcapt() {
+      return Yetix.showFlowcapt;
     },
     drawingMode() {
       return Yetix.drawingMode;
@@ -162,30 +182,63 @@ export default {
           checked: this.showAvalancheBulletins,
           action: this.onShowAvalancheBulletins,
         },
+        {
+          title: this.$gettext('Nivose beacons'),
+          checked: this.showNivoses,
+          action: this.onShowNivoses,
+        },
+        {
+          title: this.$gettext('ROMMA stations'),
+          checked: this.showRomma,
+          action: this.onShowRomma,
+        },
+        {
+          title: this.$gettext('FlowCapt sensors'),
+          checked: this.showFlowcapt,
+          action: this.onShowFlowcapt,
+        },
       ];
     },
-    visibleCartoLayer: {
-      get() {
-        return this.cartoLayers.find((layer) => layer.getVisible() === true);
-      },
-      set(layer) {
-        this.visibleCartoLayer.setVisible(false);
-        layer.setVisible(true);
-      },
-    },
     atLeastOneYetiLayerIsShown() {
-      return this.yetiLayers.filter((layer) => layer.checked).length;
+      return !!this.yetiLayers.filter((layer) => layer.checked).length;
+    },
+    yetiExtentLayerIsShown() {
+      return this.yetiLayers[0].checked;
     },
   },
   watch: {
-    showAvalancheBulletins() {
+    yetiExtentLayerIsShown() {
       this.updateCartoLayersOpacity();
     },
-    showAreas() {
-      this.updateCartoLayersOpacity();
+    visibleCartoLayerId(id) {
+      // first, make visible layer invisible
+      let visibleLayer = c2c_cartoLayers.find((layer) => layer.getVisible() === true);
+      visibleLayer.setVisible(false);
+
+      // then, make new layer visible
+      visibleLayer = c2c_cartoLayers.find((layer) => layer.ol_uid === id);
+      visibleLayer.setVisible(true);
+
+      this.emitVisibleLayers();
     },
   },
   created() {
+    // build c2c layers
+    c2c_cartoLayers = cartoLayers();
+    c2c_dataLayers = dataLayers();
+
+    // set blend modes
+    c2c_dataLayers = c2c_dataLayers.map((layer) => {
+      layer.setOpacity(0.9);
+      layer.on('prerender', (evt) => {
+        evt.context.globalCompositeOperation = 'multiply';
+      });
+      layer.on('postrender', (evt) => {
+        evt.context.globalCompositeOperation = 'source-over';
+      });
+      return layer;
+    });
+
     // build map
     this.map = new ol.Map({
       controls: [
@@ -199,8 +252,8 @@ export default {
 
       layers: [
         // c2c layers
-        ...this.cartoLayers,
-        ...this.dataLayers,
+        ...c2c_cartoLayers,
+        ...c2c_dataLayers,
       ],
 
       view: new ol.View({
@@ -210,6 +263,23 @@ export default {
       }),
     });
     this.view = this.map.getView();
+
+    // map carto and data layers to reactive ones
+    this.reactiveCartoLayers = c2c_cartoLayers.map((layer) => {
+      return {
+        title: layer.get('title'),
+        id: layer.ol_uid,
+      };
+    });
+    this.visibleCartoLayerId = c2c_cartoLayers.find((layer) => layer.getVisible() === true).ol_uid;
+
+    this.reactiveDataLayers = c2c_dataLayers.map((layer) => {
+      return {
+        title: layer.get('title'),
+        visible: layer.getVisible(),
+        id: layer.ol_uid,
+      };
+    });
   },
   mounted() {
     // when mounted, bind map to element
@@ -237,8 +307,12 @@ export default {
       }
       return extent;
     },
-    toggleMapDataLayer(layer) {
+    toggleMapDataLayer(reactiveLayer) {
+      let layer = c2c_dataLayers.find((layer) => layer.ol_uid === reactiveLayer.id);
       layer.setVisible(!layer.getVisible());
+      reactiveLayer.visible = !reactiveLayer.visible;
+
+      this.emitVisibleLayers();
     },
     searchRecenterPropositions(event) {
       let query = event.target.value;
@@ -276,8 +350,8 @@ export default {
       if (this.mapZoom !== mapZoom) {
         Yetix.setMapZoom(mapZoom);
       }
-      // if mountains are here, update
-      if (this.showAvalancheBulletins || this.showAreas) {
+      // if one of Yeti layers is here, update (on zooming for example)
+      if (this.yetiExtentLayerIsShown) {
         this.updateCartoLayersOpacity();
       }
       // emit an event for map layers
@@ -287,13 +361,58 @@ export default {
       // close controls
       this.showLayerSwitcher = false;
       this.showRecenterOnPropositions = false;
+
+      // get clicked feature (the visible one on top)
+      let clickedFeature = this.map.getFeaturesAtPixel(evt.pixel)[0];
+
       // emit an event for map layers
-      Yetix.$emit('mapClick', evt);
+      // pass clicked feature
+      Yetix.$emit('mapClick', evt, clickedFeature);
+    },
+    emitVisibleLayers() {
+      // emits the indexes (position in layers selector) of actual visible layers
+
+      // find index of cartolayers
+      let cartoLayerIndex = null;
+      this.reactiveCartoLayers.forEach((layer, i) => {
+        if (layer.id === this.visibleCartoLayerId) {
+          cartoLayerIndex = i;
+          return;
+        }
+      });
+
+      // find all visible data layers indexes
+      let dataLayersIndexes = [];
+      this.reactiveDataLayers.forEach((layer, i) => {
+        if (layer.visible) {
+          dataLayersIndexes.push(i);
+          return;
+        }
+      });
+
+      Yetix.$emit('layer-visibility', cartoLayerIndex, dataLayersIndexes);
     },
     updateCartoLayersOpacity() {
-      const LIMIT_ZOOM = 9;
-      this.cartoLayers.forEach((layer) => {
-        layer.setOpacity((this.showAvalancheBulletins || this.showAreas) && this.mapZoom < LIMIT_ZOOM ? 0.5 : 1);
+      const MIN_ZOOM = Yetix.BLEND_MODES_MIN_ZOOM;
+      const MAX_ZOOM = Yetix.BLEND_MODES_MAX_ZOOM;
+      const MIN_OPACITY = 0.25;
+      const MAX_OPACITY = 1;
+      const DELTA_OPACITY = MAX_OPACITY - MIN_OPACITY;
+
+      let opacity = MIN_OPACITY;
+      // opacity should increase gradually between min and max zooms
+      if (this.mapZoom >= MIN_ZOOM && this.mapZoom <= MAX_ZOOM) {
+        // opacity is between 1 and 0
+        opacity = (MAX_ZOOM - this.mapZoom) * (MAX_OPACITY / (MAX_ZOOM - MIN_ZOOM));
+        // map value to min/max opacity
+        opacity = Math.abs(1 - opacity) * DELTA_OPACITY + MIN_OPACITY;
+      } else if (this.mapZoom > MAX_ZOOM) {
+        opacity = MAX_OPACITY;
+      }
+
+      // for each layers, set opacity if one yeti layers is shown
+      c2c_cartoLayers.forEach((layer) => {
+        layer.setOpacity(this.yetiExtentLayerIsShown ? opacity : 1);
       });
     },
     onShowAvalancheBulletins() {
@@ -301,6 +420,15 @@ export default {
     },
     onShowAreas() {
       Yetix.setShowAreas(!this.showAreas);
+    },
+    onShowNivoses() {
+      Yetix.setShowNivoses(!this.showNivoses);
+    },
+    onShowRomma() {
+      Yetix.setShowRomma(!this.showRomma);
+    },
+    onShowFlowcapt() {
+      Yetix.setShowFlowcapt(!this.showFlowcapt);
     },
     onDrawingMode() {
       Yetix.setDrawingMode(!this.drawingMode);
@@ -311,7 +439,7 @@ export default {
 
 <style scoped lang="scss">
 @import '~ol/ol.css';
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 $control-margin: 0.5em;
 
@@ -349,6 +477,7 @@ $control-margin: 0.5em;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 
   input {
+    width: 14.75rem;
     border: none;
     padding: 0.3rem;
     border-radius: 2px;
@@ -381,7 +510,7 @@ $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
 $yeti-height: calc(
-  100vh - #{$navbar-height} - #{$section-padding} - 2 *#{$box-padding} - #{$header-height} - #{$box-margin} - #{$box-margin}
+  100vh - #{$navbar-height} - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} - #{$box-margin}
 );
 
 .map-container {
@@ -451,14 +580,17 @@ $yeti-height: calc(
 .yeti-app {
   .ol-control {
     background: $white;
+    padding: 2px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   }
   .ol-control button {
     background: $grey-dark;
+    color: $white;
 
     &:hover,
     &:focus {
       background: $grey;
+      outline: none;
     }
   }
 
@@ -467,6 +599,8 @@ $yeti-height: calc(
   }
 
   .ol-control-drawing-mode {
+    padding: 0;
+
     .is-checkradio[type='checkbox'] + label {
       font-size: 0.95em;
       margin-right: 0;

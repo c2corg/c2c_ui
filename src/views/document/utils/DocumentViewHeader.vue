@@ -1,14 +1,15 @@
 <template>
   <div class="view-container">
     <div v-if="!document.not_authorized">
-      <html-header v-if="!isDraftView" :title="title" />
+      <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
 
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
-          <follow-button :document="document" />
-          <tags-button :document="document" />
+          <gotop-button v-if="isPrintingView" />
+          <follow-button v-if="!isPrintingView" :document="document" />
+          <tags-button v-if="!isPrintingView" :document="document" />
 
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
@@ -41,7 +42,7 @@
 
           <!-- xreport specific  -->
           <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-            {{ $dateUtils.toLocalizedString(document.date, 'PP') | uppercaseFirstLetter }}
+            {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
           </span>
         </h1>
       </div>
@@ -54,6 +55,7 @@
 <script>
 import DocumentVersionBanner from './DocumentVersionBanner';
 import FollowButton from './FollowButton';
+import GotopButton from './GotopButton';
 import SocialNetworkSharing from './SocialNetworkSharing';
 import TagsButton from './TagsButton';
 
@@ -65,6 +67,7 @@ export default {
   components: {
     ImagesUploader,
     FollowButton,
+    GotopButton,
     TagsButton,
     SocialNetworkSharing,
     DocumentVersionBanner,

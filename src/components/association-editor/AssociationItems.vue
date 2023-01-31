@@ -134,7 +134,7 @@ export default {
       append(this.propositions ? this.propositions.documents : undefined, 'proposition', this.$gettext('Add'));
 
       const result = [...uniqueDocuments.values()];
-      result.sort((a, b) => (a.sortKey < b.sortKey ? -1 : 1));
+      result.sort((a, b) => (a.sortKey === b.sortKey ? 0 : a.sortKey < b.sortKey ? -1 : 1));
 
       return result;
     },

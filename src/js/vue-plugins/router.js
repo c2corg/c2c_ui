@@ -14,6 +14,7 @@ import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
+import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView';
 import DashboardView from '@/views/portals/DashboardView';
 import FeedView from '@/views/portals/FeedView';
 import Home from '@/views/portals/Home'
@@ -22,11 +23,12 @@ import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
 import SeracView from '@/views/static-views/SeracView';
 import TopoguideView from '@/views/static-views/TopoguideView';
-import WorkInProgressView from '@/views/static-views/WorkInProgressView';
 import AccountView from '@/views/user/AccountView';
 import FollowingView from '@/views/user/FollowingView';
 import LoginView from '@/views/user/LoginView';
 import PreferencesView from '@/views/user/PreferencesView';
+import TrackersExchangeTokenView from '@/views/user/TrackersExchangeTokenView';
+import TrackersView from '@/views/user/TrackersView';
 
 // lazy-load components
 // actually, only diff is quite big, because of diff computation
@@ -59,14 +61,19 @@ const routes = [
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
   { path: '/auth', name: 'auth', component: LoginView },
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
-  { path: '/account', name: 'account', component: AccountView },
-  { path: '/following', name: 'following', component: FollowingView },
-  { path: '/preferences', name: 'preferences', component: PreferencesView },
+  { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
+  { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
+  { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
+  { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },
+  {
+    path: '/trackers/:vendor/exchange-token',
+    name: 'trackers-exchange-token',
+    component: TrackersExchangeTokenView,
+    meta: { requiresAuth: true },
+  },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
-
-  { path: '/wip', name: 'workinprogress', component: WorkInProgressView },
 
   {
     path: '/forum',
@@ -82,6 +89,12 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
     path: '/' + def.documentType + 's',
     name: def.documentType + 's',
     component: DocumentsView,
+  });
+
+  routes.push({
+    path: '/' + def.documentType + 's/print',
+    name: def.documentType + 's-print',
+    component: DocumentsPrintingView,
   });
 
   routes.push({
@@ -106,12 +119,14 @@ const addDocumentTypeView = function (def, viewComponent, editionComponent) {
     path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
     name: def.documentType + '-edit',
     component: editionComponent,
+    meta: { requiresAuth: true },
   });
 
   routes.push({
     path: '/' + def.documentType + 's/add/:lang',
     name: def.documentType + '-add',
     component: editionComponent,
+    meta: { requiresAuth: true },
   });
 
   routes.push({
@@ -175,6 +190,16 @@ const router = new Router({
       });
     });
   },
+});
+
+// authentication guard
+router.beforeEach((to, from, next) => {
+  const vm = router.app;
+  if (to.matched.some((record) => record.meta.requiresAuth) && !vm.$user.isLogged) {
+    next({ name: 'auth', query: { redirect: to.fullPath } });
+  } else {
+    next();
+  }
 });
 
 export default router;

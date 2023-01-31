@@ -87,7 +87,7 @@ export default {
 
   computed: {
     preferences() {
-      return this.promise.data;
+      return this.promise?.data;
     },
   },
 

@@ -1,4 +1,3 @@
-import 'elm-pep';
 import { Feature, Map, Overlay, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
@@ -17,6 +16,7 @@ import VectorLayer from 'ol/layer/Vector';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
 import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
+import TileWMS from 'ol/source/TileWMS';
 import VectorSource from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
@@ -89,11 +89,12 @@ export default {
   },
 
   source: {
-    Vector: VectorSource,
     BingMaps,
-    XYZ,
-    WMTS,
     ImageStatic,
+    TileWMS,
+    Vector: VectorSource,
+    WMTS,
+    XYZ,
   },
 
   style: {

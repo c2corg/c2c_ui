@@ -75,6 +75,7 @@
   },
   "author": {
     "minLength": 2,
+    "minLengthChinese": 1,
     "i18n": false
   },
   "author_status": {
@@ -209,6 +210,11 @@
     "required": true,
     "queryMode": "date"
   },
+  "dates": {
+    "type": "dates",
+    "required": true,
+    "queryMode": "dates"
+  },
   "date_time": {
     "type": "date_time"
   },
@@ -235,7 +241,8 @@
     "unit": "day"
   },
   "editor": {
-    "minLength": 2
+    "minLength": 2,
+    "minLengthChinese": 1
   },
   "elevation": {
     "type": "number",
@@ -316,7 +323,7 @@
     "type": "number",
     "min": 0,
     "max": 0,
-    "unit": "ms"
+    "unit": "s"
   },
   "external_resources": {
     "type": "markdown",
@@ -331,7 +338,8 @@
     "disabled": true
   },
   "fnumber": {
-    "type": "text"
+    "type": "number",
+    "prefix": "f/"
   },
   "focal_length": {
     "type": "number",
@@ -892,6 +900,7 @@
     "required": true,
     "parent": "locales",
     "minLength": 3,
+    "minLengthChinese": 1,
     "queryMode": "input",
     "url": "q"
   },

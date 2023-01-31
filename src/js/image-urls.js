@@ -1,40 +1,42 @@
 import config from '@/js/config';
 
-const getUrl = function (image, size) {
+const getImageProxyUrl = function (image, size, format) {
+  // Until all images are migrated only images uploaded after a given timestamp
+  // or with an id greater than a given one have their webp and avif versions
+  if (format && (!config.urls.modernThumbnailsId || image.document_id < config.urls.modernThumbnailsId)) {
+    return;
+  }
+
+  const sizeArg = size ? `?size=${size}` : '';
+  const formatArg = format && size ? `&extension=${format}` : '';
+  return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}${formatArg}`;
+};
+
+export const getImageUrl = function (image, size, format) {
   if (!image.filename) {
-    const sizeArg = size ? `?size=${size}` : '';
-    return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}`;
+    return getImageProxyUrl(image, size, format);
   }
 
   let backendFilename;
 
   if (size) {
+    if (!['SI', 'MI', 'BI'].includes(size)) {
+      throw new Error('Invalid size');
+    }
+
     backendFilename = image.filename.replace('.', `${size}.`).replace('.svg', '.jpg');
+    if (format) {
+      // Until all images are migrated only images uploaded after a given timestamp
+      // or with an id greater than a given one have their webp and avif versions
+      const timestamp = Number.parseInt(image.filename.split('_')[0], 10);
+      if (!config.urls.modernThumbnailsTimestamp || timestamp < config.urls.modernThumbnailsTimestamp) {
+        return;
+      }
+      return `${config.urls.media}/${backendFilename.substring(0, backendFilename.length - 3) + format}`;
+    }
   } else {
     backendFilename = image.filename;
   }
 
   return `${config.urls.media}/${backendFilename}`;
-};
-
-export default {
-  /* 200*200 px images */
-  getSquared(image) {
-    return getUrl(image, 'SI');
-  },
-
-  // max 400*400
-  getMedium(image) {
-    return getUrl(image, 'MI');
-  },
-
-  //
-  getBig(image) {
-    return getUrl(image, 'BI');
-  },
-
-  /* Original size */
-  get(image) {
-    return getUrl(image);
-  },
 };

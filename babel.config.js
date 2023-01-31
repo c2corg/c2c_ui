@@ -1,5 +1,5 @@
 module.exports = {
-  presets: ['@vue/cli-plugin-babel/preset'],
+  presets: [['@vue/cli-plugin-babel/preset', { targets: { esmodules: true }, polyfills: [] }]],
   /*
    * Looks like since we updated browserslist + caniuse database to support only recent browsers, we need to manually
    * include plugins.

@@ -6,7 +6,7 @@
  --><a v-else-if="field.type === 'url'" :href="value">{{ value }}</a
     ><!--
 
- --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'PPpp') }}</span
+ --><span v-else-if="field.type === 'date_time'">{{ $dateUtils.toLocalizedString(value, 'lll') }}</span
     ><!--
 
  --><best-periods v-else-if="field.name === 'best_periods'" :months="value" /><!--
@@ -27,7 +27,10 @@
  --><span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }} </span
     ><!--
 
- --><span v-else>{{ divisor ? Math.round(value / divisor) : value }}</span
+ --><span v-else
+      ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
+      ><!--
+    -->{{ divisor ? Math.round(value / divisor) : value }}</span
     ><!--
     --><span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span
     ><!--
@@ -54,6 +57,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    prefix: {
+      type: String,
+      default: null,
+    },
   },
 
   computed: {
@@ -67,6 +74,10 @@ export default {
 
     showUnit() {
       return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
+    },
+
+    showPrefix() {
+      return (this.prefix || this.field.prefix) && this.value !== null && this.value !== undefined;
     },
   },
 };

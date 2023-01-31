@@ -9,7 +9,6 @@
 <style scoped lang="scss">
 .card-header-title {
   padding: 0.4rem 0.8rem;
-  display: block;
   min-width: 0;
   color: $text;
 

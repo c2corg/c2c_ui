@@ -43,21 +43,22 @@
               :title="$gettext('Cards mode')"
             />
           </span>
-          <display-mode-switch
-            v-if="documentAreGeoLocalized"
-            class="header-item is-hidden-mobile"
-            list-mode="listMode"
-            :value="displayMode"
-            @input="setProperty('displayMode', arguments[0])"
-          />
-
-          <span class="header-item is-size-3 is-hidden-tablet">
-            <fa-icon
-              :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
-              class="has-text-primary"
-              @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+          <template v-if="documentAreGeoLocalized">
+            <display-mode-switch
+              class="header-item is-hidden-mobile"
+              list-mode="listMode"
+              :value="displayMode"
+              @input="setProperty('displayMode', arguments[0])"
             />
-          </span>
+
+            <span class="is-size-3 is-hidden-tablet">
+              <fa-icon
+                :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
+                class="has-text-primary"
+                @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+              />
+            </span>
+          </template>
         </span>
       </div>
 
@@ -251,7 +252,7 @@ export default {
       this.filteredWaypoints = documents.filter((document) => document.type === 'w');
 
       // do not display waypoints associated
-      this.filteredWaypoints.map((document) => delete document.associations);
+      this.filteredWaypoints.forEach((document) => delete document.associations);
     },
   },
 };
@@ -264,13 +265,13 @@ $header-padding-bottom: 1.5rem; //TODO find this variable
 $filter-height: 32px;
 $tags-height: 28px;
 $filter-padding-bottom: 0.5rem;
+// prettier-ignore
 $result-height: calc(
-  100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
-    #{$filter-height}
+  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
 );
+// prettier-ignore
 $result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 *#{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} -
-    #{$filter-height} - #{$tags-height}
+  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
 );
 $cards-gap: 0.25rem;
 
@@ -308,7 +309,7 @@ $cards-gap: 0.25rem;
   }
 
   .result-section {
-    padding-top: calc(2 *#{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
+    padding-top: calc(2 * #{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
   }
 
   .documents-view {
@@ -325,6 +326,10 @@ $cards-gap: 0.25rem;
     padding-bottom: $mobile-section-padding;
   }
 
+  .header-right {
+    line-height: 1em;
+  }
+
   .map-container {
     height: $result-height;
     padding: 0;
@@ -334,7 +339,7 @@ $cards-gap: 0.25rem;
     margin-top: 0;
     .map-container {
       height: calc(
-        100vh - #{$navbar-height} - 3 *#{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
+        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
       );
     }
 

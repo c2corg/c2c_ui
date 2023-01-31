@@ -1,6 +1,11 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+    <masked-document-version-info
+      v-if="document === null"
+      :version="version"
+      :document-type="documentType"
+    ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version">
       <icon-waypoint-type
         v-if="document && document.waypoint_type"
@@ -135,11 +140,16 @@
 </template>
 
 <script>
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
 import waypointLabels from '@/js/waypoint-labels-mixin';
 
 export default {
+  components: {
+    MaskedDocumentVersionInfo,
+  },
+
   mixins: [documentViewMixin, waypointLabels],
 
   computed: {

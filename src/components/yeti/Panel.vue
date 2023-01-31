@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 :deep(a) {
   &:hover,
@@ -58,7 +58,7 @@ export default {
   margin-top: 2rem;
 }
 
-:dep(.content-ul) {
+:deep(.content-ul) {
   list-style: disc outside;
   margin-left: 2em;
 }

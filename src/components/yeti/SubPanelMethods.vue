@@ -321,7 +321,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables.scss';
+@import '@/assets/sass/variables';
 
 p:not(:last-child),
 ul:not(:last-child),

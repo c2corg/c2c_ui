@@ -1,6 +1,11 @@
 <template>
   <div class="section has-background-white-print">
     <loading-notification :promise="promise" />
+    <masked-document-version-info
+      v-if="document === null"
+      :version="version"
+      :document-type="documentType"
+    ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
     <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
@@ -45,6 +50,7 @@
 </template>
 
 <script>
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import OutingsDownloader from './utils/OutingsDownloader';
 import documentViewMixin from './utils/document-view-mixin';
 
@@ -55,6 +61,7 @@ export default {
   components: {
     FeedWidget,
     OutingsDownloader,
+    MaskedDocumentVersionInfo,
   },
 
   mixins: [documentViewMixin],

@@ -1,8 +1,9 @@
 <template>
   <swiper :options="$options.swiperOption" class="swiper">
     <swiper-slide v-for="image of images" :key="image.document_id">
-      <img
-        :src="getUrl(image)"
+      <thumbnail
+        :img="image"
+        size="MI"
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
@@ -15,8 +16,6 @@
 <script>
 import getAwesomeSwiper from '@brunobesson/vue-awesome-swiper/dist/exporter';
 import { Swiper as SwiperClass } from 'swiper/core';
-
-import imageUrls from '@/js/image-urls';
 
 const { Swiper, SwiperSlide } = getAwesomeSwiper(SwiperClass);
 
@@ -35,18 +34,12 @@ export default {
 
   watch: {
     images: function () {
-      this.images.map(this.$imageViewer.push);
+      this.images.forEach(this.$imageViewer.push);
     },
   },
 
   created() {
-    this.images.map(this.$imageViewer.push);
-  },
-
-  methods: {
-    getUrl(image) {
-      return imageUrls.getMedium(image);
-    },
+    this.images.forEach(this.$imageViewer.push);
   },
 
   swiperOption: {
@@ -57,10 +50,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~swiper/swiper.scss';
-@import '~swiper/components/lazy/lazy.scss';
-@import '~swiper/components/navigation/navigation.scss';
-@import '~swiper/components/zoom/zoom.scss';
+@import '~swiper/swiper';
+@import '~swiper/components/lazy/lazy';
+@import '~swiper/components/navigation/navigation';
+@import '~swiper/components/zoom/zoom';
 
 .swiper {
   .swiper-slide {
@@ -68,7 +61,7 @@ export default {
     width: auto;
     cursor: pointer;
 
-    img {
+    picture::v-deep img {
       height: 200px;
     }
   }

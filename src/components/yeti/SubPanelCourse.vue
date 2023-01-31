@@ -40,6 +40,12 @@
         <features-list :features="features" />
       </div>
       <simplify-tool ref="simplifyTool" />
+      <dropdown-content class="mb-5">
+        <span v-translate>Elevation profile</span>
+        <template #content>
+          <elevation-profile :features="features" />
+        </template>
+      </dropdown-content>
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -70,16 +76,16 @@
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
-            <li v-for="type of formats" :key="type" class="control is-flex">
+            <li v-for="f of formats" :key="f" class="control is-flex">
               <input
-                :id="'format' + type"
+                :id="'format' + f"
                 type="radio"
                 name="exportFormat"
                 class="is-checkradio is-primary"
-                :value="type"
+                :value="f"
                 v-model="format"
               />
-              <label :for="'format' + type">{{ type }}</label>
+              <label :for="'format' + f">{{ f }}</label>
             </li>
           </ul>
         </div>
@@ -107,6 +113,10 @@
         >
           Upload a GPS track
         </button>
+        <button class="button is-secondary" @click="setDrawingMode">
+          <span v-translate key="1" v-if="!drawingMode">Activate drawing mode</span>
+          <span v-translate key="2" v-else>Disable drawing mode</span>
+        </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
@@ -122,8 +132,8 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-
+import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
@@ -133,7 +143,7 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { FeaturesList, Info, SimplifyTool, SubPanelTitle },
+  components: { DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,
@@ -143,6 +153,9 @@ export default {
     };
   },
   computed: {
+    drawingMode() {
+      return Yetix.drawingMode;
+    },
     features() {
       return Yetix.features;
     },
@@ -191,7 +204,7 @@ export default {
 
       reader.readAsText(event.target.files[0]);
 
-      // empty the input, because if user wan't to upload same trace
+      // empty the input, because if user wants to upload same trace
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
@@ -220,7 +233,10 @@ export default {
       utils.download(content, filename, mimetype + ';charset=utf-8');
     },
     setFilename(ext) {
-      return format(new Date(), 'yyyy-MM-dd_HH-mm-ss') + ext;
+      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
+    },
+    setDrawingMode() {
+      Yetix.setDrawingMode(!this.drawingMode);
     },
   },
 };

@@ -4,7 +4,7 @@ export default {
   computed: {
     map() {
       // store parent map
-      return this.$parent.map;
+      return this.$parent.map || this.$parent.$parent.map;
     },
     view() {
       return this.map.getView();

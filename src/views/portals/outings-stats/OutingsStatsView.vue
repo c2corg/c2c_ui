@@ -6,27 +6,42 @@
       <span v-if="loadingPercentage !== 1">{{ Math.round(loadingPercentage * 100) }}%</span>
     </h1>
 
-    <query-items v-if="$user.isModerator" class="filter-section" />
+    <div v-if="outings['']?.length">
+      <query-items v-if="$user.isModerator" class="filter-section" />
 
-    <div class="tabs">
-      <ul>
-        <li
-          v-for="activity of Object.keys(outings)"
-          :key="activity"
-          :class="{ 'is-active': activeTab === activity }"
-          @click="activeTab = activity"
-        >
-          <a>
-            <span v-if="activity">{{ $gettext(activity, 'activities') }}</span>
-            <span v-else v-translate>All</span>
-            &nbsp;
-            <span>({{ outings[activity].length }})</span>
-          </a>
-        </li>
-      </ul>
+      <div class="tabs">
+        <ul>
+          <li
+            v-for="activity of Object.keys(outings)"
+            :key="activity"
+            :class="{ 'is-active': activeTab === activity }"
+            @click="activeTab = activity"
+          >
+            <a>
+              <span v-if="activity">{{ $gettext(activity, 'activities') }}</span>
+              <span v-else v-translate>All</span>
+              &nbsp;
+              <span>({{ outings[activity].length }})</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" :activity="activeTab" />
     </div>
-
-    <outings-stats-part v-if="outings[activeTab]" :outings="outings[activeTab]" :activity="activeTab" />
+    <div v-else-if="promise !== null">
+      <span v-translate>Loading...</span>
+    </div>
+    <div v-else>
+      <div>
+        <span v-translate>No result found</span>
+      </div>
+      <div class="empty-screen-button">
+        <add-link document-type="outing" class="button is-primary">
+          <span v-translate>Add the first outing</span>
+        </add-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -73,7 +88,12 @@ export default {
     },
 
     progress(current, total) {
-      this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      if (!total) {
+        // when there are no outings, we do show "all" of them
+        this.loadingPercentage = 1;
+      } else {
+        this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
+      }
     },
 
     compute(outings) {
@@ -102,5 +122,8 @@ export default {
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
+}
+.empty-screen-button {
+  padding-top: 1rem;
 }
 </style>

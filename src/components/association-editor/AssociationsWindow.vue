@@ -64,13 +64,13 @@ export default {
     fields = fields.filter((field) => field.parent === 'associations');
 
     // sort this field, given associationEditorOrder property
-    fields.sort((a, b) => (a.associationEditorOrder < b.associationEditorOrder ? -1 : 1));
+    fields.sort((a, b) => a.associationEditorOrder - b.associationEditorOrder);
 
     // get field's document types, and store letters for API search service
     this.letterTypes = fields.map((field) => constants.objectDefinitions[field.documentType].letter);
 
     // and finally add field in result
-    fields.map(this.addToData);
+    fields.forEach(this.addToData);
   },
 
   methods: {

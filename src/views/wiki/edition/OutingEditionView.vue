@@ -10,8 +10,9 @@
           class="is-narrow"
           :document="document"
           :field="fields.date_start"
-          :max="showBothDates ? document.date_end : undefined"
+          :max="showBothDates ? document.date_end : currentDate"
           @input="handleDates"
+          @click.native="setCurrentDate"
         />
         <form-field
           class="is-narrow"
@@ -19,6 +20,8 @@
           :document="document"
           :field="fields.date_end"
           :min="showBothDates ? document.date_start : undefined"
+          :max="currentDate"
+          @click.native="setCurrentDate"
         />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
@@ -240,6 +243,7 @@ export default {
       routeTitle: '',
       bbox: null,
       showMoreResultsBanner: false,
+      currentDate: this.getCurrentDateString(),
     };
   },
 
@@ -394,7 +398,13 @@ export default {
     handleDates() {
       if (!this.showBothDates) {
         this.document.date_end = this.document.date_start;
+      } else if (this.document.date_end < this.document.date_start) {
+        this.document.date_end = this.document.date_start;
       }
+    },
+
+    setCurrentDate() {
+      this.currentDate = this.getCurrentDateString();
     },
 
     beforeSave() {
@@ -404,6 +414,10 @@ export default {
 
     showCotometer() {
       this.$refs.cotometerWindow.show();
+    },
+
+    getCurrentDateString() {
+      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
     },
   },
 };
