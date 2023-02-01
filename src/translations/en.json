@@ -150,7 +150,7 @@
     "Login": "Sign in",
     "Logout": "Sign out",
     "Longer than maximum length 25": {
-      "API message": "maximum length 25 characters "
+      "API message": "Text is too long (at most 25 characters)"
     },
     "Mail has been sent": "An e-mail has been sent",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Main information about the route, such as title, activity, GPS data, and environment.",
@@ -197,7 +197,7 @@
     "Shorter than minimum length 3": {
       "API message": "Text is too short (at least 3 chars)"
     },
-    "Sign in to camptocamp today, it's free": "Sign in to camptocamp today, it's free !",
+    "Sign in to camptocamp today, it's free": "Sign in to camptocamp today, it's free!",
     "Skitouring gear": "Ski and snowboard touring, snowshoeing",
     "SwissTopo Slopes": {
       "Map slopes layer": "SwissTopo"

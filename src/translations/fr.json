@@ -137,7 +137,7 @@
       "API message": "Contient un ou plusieurs caractères invalides"
     },
     "Contains consecutive special characters": {
-      "API message": "Contient des caractères spéciaux consécutifs"
+      "API message": "Ne doit pas contenir de caractères spéciaux consécutifs (-, _, .)"
     },
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
@@ -240,7 +240,7 @@
     "Email": "Adresse email",
     "Enable drawing and editing features on map": "Activer le mode dessin et l'édition des lignes sur la carte",
     "Ended by confusing suffix": {
-      "API message": "Fini par un suffixe conflictuel"
+      "API message": "Ne doit pas contenir un suffixe tel que '.json'"
     },
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement…)",
     "Expand": "Déplier",
@@ -254,7 +254,7 @@
     "Filter on map extent": "Limiter la recherche à la carte visible",
     "Filter results": "Filtrer",
     "First character is invalid": {
-      "API message": "Premier caractère invalide"
+      "API message": "Le premier caractère doit être un caractère alphanumérique de l'alphabet latin, y compris le tiret bas"
     },
     "FlowCapt sensor": "Capteur FlowCapt",
     "FlowCapt sensors": "Capteurs FlowCapt",
@@ -351,7 +351,7 @@
     "Large group with load shedding distance": "Grand groupe avec distance de délestage",
     "Last activities": "Dernières activités",
     "Last character is invalid": {
-      "API message": "Dernier caractère invalide"
+      "API message": "Le dernier caractère doit être une lettre ou un chiffre."
     },
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
@@ -381,7 +381,7 @@
     },
     "Logout": "Me déconnecter",
     "Longer than maximum length 25": {
-      "API message": "25 caractères maximum"
+      "API message": "Champ trop long (25 caractères maximum)"
     },
     "Low danger level from the avalanche bulletin": "Niveau de danger bas du bulletin d'avalanche",
     "Mail has been sent": "Courriel envoyé",
@@ -658,7 +658,7 @@
     "User avatar": "Avatar",
     "Username": "Identifiant",
     "Username cannot be empty or whitespaces": {
-      "API message": "L'identifiant ne peut être vide ou des espaces"
+      "API message": "L'identifiant ne peut être vide ou contenir des espaces"
     },
     "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "L'identifiant ou l'email associé au mot de passe vous permettront de vous identifier. L'identifiant et l'email restent privés. L'identifiant ne peut pas être modifié, contrairement à l'email.",
     "Validity date expired": "Date de validité dépassée",
