@@ -21,7 +21,7 @@
         </span>
       </div>
     </div>
-    <div class="activity-bottom px-2 is-flex is-justify-content-space-between is-size-7 is-italic">
+    <div class="activity-bottom is-flex is-justify-content-space-between is-size-7 is-italic px-2">
       <div v-if="duration">
         <fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
           v-html="duration"
