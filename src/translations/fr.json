@@ -264,7 +264,7 @@
     "From danger 3, consider the slopes which dominate the route": "À partir du danger 3, prendre en compte les pentes qui dominent l'itinéraire",
     "From the interface": "Depuis l'interface",
     "Full bulletin": "Bulletin complet",
-    "Fullname": "Nom",
+    "Fullname": "Pseudo topoguide",
     "GPS Track": "Trace GPS",
     "GPX file": "Fichier GPX",
     "General": "Général",
@@ -654,6 +654,7 @@
     "Unprotect document": "Déprotéger ce document",
     "Upload a GPS track": "Ajouter une trace GPS",
     "Upload a new version": "Télécharger une nouvelle version",
+    "Use track": "Utiliser la trace",
     "User avatar": "Avatar",
     "Username": "Identifiant",
     "Username cannot be empty or whitespaces": {

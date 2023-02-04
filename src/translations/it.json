@@ -255,11 +255,11 @@
     "FlowCapt sensors": "Sensori FlowCapt",
     "Followed users": "Utenti seguiti",
     "Forgot password?": "Password dimenticata?",
-    "Forum username": "Nickname",
+    "Forum username": "Pseudonimo nel forum",
     "From danger 3, consider the slopes which dominate the route": "Dal grado 3, si deve tenere conto dei pendi sopra l'itinerario",
     "From the interface": "Dall'interfaccia",
     "Full bulletin": "Bollettino",
-    "Fullname": "Cognome",
+    "Fullname": "Pseudonimo sulla guida",
     "GPS Track": "Traccia GPS",
     "GPX file": "File GPX",
     "General": "Generale",
@@ -638,6 +638,7 @@
     "Upload a GPS track": "Aggiungere una traccia GPS",
     "Upload a new version": "Scaricare una nuova versione ",
     "User avatar": "Avatar utente",
+    "Username": "Identificatore",
     "Validity date expired": "Data di validità scaduta",
     "Validity date:": "Data di validità:",
     "Versions": "Versioni",
@@ -725,10 +726,10 @@
       "API message": "Questa email è già usata"
     },
     "already used forum_username": {
-      "API message": "Nickname già usato "
+      "API message": "Pseudonimo già usato "
     },
     "already used username": {
-      "API message": "Questo username è già usato."
+      "API message": "Questo identificatore è già usato."
     },
     "always_accessible": {
       "custodianship_types": "sempre accessibile "
