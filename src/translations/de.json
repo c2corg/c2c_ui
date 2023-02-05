@@ -724,7 +724,7 @@
     "User avatar": "Avatar",
     "Username": "Benutzername",
     "Username cannot be empty or whitespaces": {
-      "API message": "Der Benutzername darf nicht leer sein oder Leerzeichen enthalten"
+      "API message": "Der Benutzername darf nicht leer sein oder nur Leerzeichen enthalten"
     },
     "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Mit dem Benutzernamen oder der Email in Verbindung mit dem Passwort können Sie sich identifizieren. Der Benutzername und die Email bleiben privat. Der Benutzername kann im Gegensatz zur Email nicht geändert werden.",
     "Validity date expired": "Gültigkeitsdatum abgelaufen",
