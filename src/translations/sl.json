@@ -99,7 +99,7 @@
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Bodite previdni, v mokrem snegu, ni nobenega faktorja orientacije ali obljudenosti mogoče uporabiti.",
     "Beginner": "Začetnik",
     "Beginner Reduction Method": "zmanjševalno metodo za začetnike",
-    "Beware of case-sensitive login and password": "Upoštevajte, da sta identifikacija in geslo občutljiva na velike in male črke.",
+    "Beware of case-sensitive login and password": "Upoštevajte, da sta uporabniško ime in geslo občutljiva na velike in male črke.",
     "Block account": "Blokiraj uporabnika",
     "Bolted rock climbing gear": "Oprema za dolge športne smeri",
     "Book content": "Kratek opis vsebine knjige",
@@ -399,7 +399,7 @@
     "Log in to post a comment": "Prijavite se za objavo komentarja",
     "Login": "Prijava",
     "Login failed": {
-      "API message": "Nepravilna identifikacija ali geslo"
+      "API message": "Nepravilno uporabniško ime ali geslo"
     },
     "Logout": "Odjava",
     "Longer than maximum length 25": {
@@ -704,9 +704,9 @@
     "User avatar": "Avatar",
     "Username": "Uporabniško ime",
     "Username cannot be empty or whitespaces": {
-      "API message": "Identifikacija ne sme biti prazna ali s presledki"
+      "API message": "Uporabniško ime ne sme biti prazno ali s presledki"
     },
-    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Identifikacija ali e-pošta skupaj z geslom vam bo omogočila prijavo. Tako identifikacija kot e-pošta ostaneta zasebna. Identifikacije ni mogoče spremeniti, e-pošto pa lahko.",
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Uporabniško ime ali e-pošta skupaj z geslom vam bo omogočilo prijavo. Tako uporabniško ime kot e-pošta ostaneta zasebna. Uporabniškega imena ni mogoče spremeniti, e-pošto pa lahko.",
     "Validity date expired": "Datum veljavnosti je potekel",
     "Validity date:": "Datum veljavnosti:",
     "Versions": "Različice",
@@ -739,7 +739,7 @@
     "You may also drag, draw or edit the track on the map.": "GPS-sled lahko narišete, uredite ali povlecite na zemljevidu. ",
     "You need to activate your by clicking the link sent to your email address.": "Svoj račun morate aktivirati s klikom na povezavo, poslano na vaš e-poštni naslov",
     "Your account was successfully created": "Vaš račun je bil ustvarjen",
-    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaše uporabniško ime na forumu bo prikazano na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
+    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaš vzdevek na forumu bo prikazan na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
     "Zoom in": {
       "Map controls": "Približaj"
     },
@@ -799,10 +799,10 @@
       "API message": "Ta e-poštni naslov je že v uporabi"
     },
     "already used forum_username": {
-      "API message": "Že uporabljeno uporabniško ime na forumu"
+      "API message": "Že uporabljen vzdevek na forumu"
     },
     "already used username": {
-      "API message": "Že uporabljena identifikacija"
+      "API message": "Že uporabljeno uporabniško ime"
     },
     "always_accessible": {
       "custodianship_types": "zmeraj odprto"
