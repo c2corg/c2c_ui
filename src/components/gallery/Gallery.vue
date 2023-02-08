@@ -1,6 +1,6 @@
 <template>
-  <swiper :options="$options.swiperOption" class="swiper">
-    <swiper-slide v-for="image of images" :key="image.document_id">
+  <swiper-container slides-per-view="auto" space-between="15" class="swiper">
+    <swiper-slide style="height: 200px" v-for="image of images" :key="image.document_id">
       <thumbnail
         :img="image"
         size="MI"
@@ -10,21 +10,11 @@
         loading="lazy"
       />
     </swiper-slide>
-  </swiper>
+  </swiper-container>
 </template>
 
 <script>
-import getAwesomeSwiper from '@brunobesson/vue-awesome-swiper/dist/exporter';
-import { Swiper as SwiperClass } from 'swiper/core';
-
-const { Swiper, SwiperSlide } = getAwesomeSwiper(SwiperClass);
-
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
-
   props: {
     images: {
       type: Array,
@@ -41,33 +31,17 @@ export default {
   created() {
     this.images.forEach(this.$imageViewer.push);
   },
-
-  swiperOption: {
-    slidesPerView: 'auto',
-    spaceBetween: 15,
-  },
 };
 </script>
 
 <style scoped lang="scss">
-@import '~swiper/swiper';
-@import '~swiper/components/lazy/lazy';
-@import '~swiper/components/navigation/navigation';
-@import '~swiper/components/zoom/zoom';
+swiper-slide {
+  height: 200px;
+  width: auto;
+  cursor: pointer;
 
-.swiper {
-  .swiper-slide {
+  picture::v-deep img {
     height: 200px;
-    width: auto;
-    cursor: pointer;
-
-    picture::v-deep img {
-      height: 200px;
-    }
-  }
-
-  .swiper-button-disabled {
-    opacity: 100;
   }
 }
 </style>
