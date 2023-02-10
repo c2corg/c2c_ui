@@ -13,9 +13,10 @@
     "lint:no-fix": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint --no-fix",
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
     "messages:extract": "node tools/extract-messages.js",
-    "prepare": "husky install && npm run snyk-protect",
+    "prepare": "husky install && npm run snyk-protect && npm run prepare-swiper",
     "snyk-protect": "snyk-protect",
-    "update-c2c-common": "python3 tools/update-c2c-common.py"
+    "update-c2c-common": "python3 tools/update-c2c-common.py",
+    "prepare-swiper": "mkdirp ./public/swiper && copyfiles --flat ./node_modules/swiper/modules/pagination/pagination-element.min.css ./node_modules/swiper/modules/navigation/navigation-element.min.css ./node_modules/swiper/modules/virtual/virtual-element.min.css ./node_modules/swiper/modules/zoom/zoom-element.min.css ./public/swiper"
   },
   "dependencies": {
     "@c2corg/fit-parser-extract-geometry": "1.0.0",
@@ -63,6 +64,7 @@
     "@vue/cli-service": "5.0.8",
     "@vue/eslint-config-standard": "6.1.0",
     "babel-eslint": "10.1.0",
+    "copyfiles": "2.4.1",
     "cross-env": "7.0.3",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.6.0",
@@ -73,6 +75,7 @@
     "eslint-plugin-promise": "5.2.0",
     "eslint-plugin-vue": "7.20.0",
     "husky": "8.0.3",
+    "mkdirp": "2.1.3",
     "postcss-html": "1.5.0",
     "prettier": "2.8.4",
     "pretty-quick": "3.1.3",

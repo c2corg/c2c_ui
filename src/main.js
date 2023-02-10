@@ -1,6 +1,6 @@
 import { setDefaults as toastDefaults } from 'bulma-toast';
 // eslint-disable-next-line import/no-unresolved
-import { register as registerSwiper } from 'swiper/element/bundle';
+import { register as registerSwiper } from 'swiper/element';
 import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
 import VueHead from 'vue-head';

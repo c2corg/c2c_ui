@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
@@ -141,6 +142,13 @@ export default {
 
       this.$nextTick(function () {
         const swiperParams = {
+          modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
+          injectStylesUrls: [
+            '/swiper/navigation-element.min.css',
+            '/swiper/pagination-element.min.css',
+            '/swiper/virtual-element.min.css',
+            '/swiper/zoom-element.min.css',
+          ],
           initialSlide,
 
           // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
