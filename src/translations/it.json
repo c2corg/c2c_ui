@@ -119,6 +119,7 @@
     "Conditions, summits, routes": "Condizioni, cime, itinerari",
     "Configure activity trackers": "Configura i rilevatori di attività",
     "Configure cookies": "Scegli i cookies",
+    "Configure layer": "Configurare",
     "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Configurare la propria connessione a servizi esterni come Strava o l'applicazione GPS del dispositivo al fine di recuperare facilmente le geometrie.",
     "Configured": "Configurato",
     "Confirm": "Confermare",
@@ -294,6 +295,12 @@
     "I must not use slopes > 35°": "Rinuncio agli pendii > 35°",
     "I must not use slopes > 40°": "Rinuncio agli pendii > 40°",
     "I read and understood the interest and limitations of YETI": "Ho letto e capito gli vantaggi e limiti di YETI",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC Sat"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC"
+    },
     "IGN Slopes": {
       "Map slopes layer": "Pendenze IGN"
     },

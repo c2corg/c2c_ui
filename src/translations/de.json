@@ -187,6 +187,9 @@
     "Contain invalid character(s)": {
       "API message": "enthält ein oder mehrere ungültige Zeichen"
     },
+    "Contains consecutive special characters": {
+      "API message": "Darf keine aufeinanderfolgenden Sonderzeichen enthalten (-, _, .)"
+    },
     "Continue the discussion": "Diskussion fortsetzen",
     "Contribute to common knowledge": "Tragen Sie zum Allgemeinwissen bei",
     "Contribute to maintainance": "lokale Akteure unterstützen",
@@ -294,6 +297,9 @@
     "Elevation (m)": "Höhe (m)",
     "Elevation profile": "Höhenprofil",
     "Enable drawing and editing features on map": "Aktivieren Sie das Zeichnen und Bearbeiten von Features auf der Karte",
+    "Ended by confusing suffix": {
+      "API message": "Darf kein Suffix wie '.json' enthalten"
+    },
     "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
     "Expand": "Entfalten",
     "Expert": "Profi",
@@ -306,6 +312,9 @@
     "Feel free to edit it.": "Bitte bearbeiten.",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
+    "First character is invalid": {
+      "API message": "Das erste Zeichen muss ein alphanumerisches Zeichen des lateinischen Alphabets sein, einschließlich des Unterstrichs"
+    },
     "FlowCapt sensor": "FlowCapt-Sensor ",
     "FlowCapt sensors": "FlowCapt-Sensoren",
     "Fold section": "Abschnitt falten",
@@ -398,6 +407,9 @@
     "Large group = 5 people and more": "Große Gruppe = 5 Personen und mehr",
     "Large group with load shedding distance": "Große Gruppe mit Lastabwurfweite",
     "Last activities": "Letzte Aktivitäten",
+    "Last character is invalid": {
+      "API message": "Das letzte Zeichen muss ein Buchstabe oder eine Zahl sein."
+    },
     "Last forum topics": "Letztes Forumsthema",
     "Last outings": "Letzte Tourenberichte",
     "Latitude": "Breitengrad",
@@ -425,6 +437,9 @@
       "API message": "Einloggen fehlgeschlagen"
     },
     "Logout": "Ausloggen",
+    "Longer than maximum length 25": {
+      "API message": "Feld zu lang (maximal 25 Zeichen)"
+    },
     "Longitude": "Längengrad",
     "Low danger level from the avalanche bulletin": "Geringe Gefahrenstufe aus dem Lawinenbulletin",
     "Mail has been sent": "E-Mail gesendet",
@@ -495,6 +510,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
+    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
     "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
     "Ok": "OK",
@@ -638,6 +654,7 @@
     "Sophie Picture Contest": "Sophie-Fotowettbewerb",
     "Sort by": "Sortieren nach",
     "Source:": "Quelle:",
+    "Static map images": "Statische Kartenbilder",
     "Statistical cookies": "Statistik-Cookies",
     "Statistics": "Statistiken",
     "Stay careful while skiing": "Bleiben Sie beim Skifahren vorsichtig",
