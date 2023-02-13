@@ -50,7 +50,7 @@ jobs:
           header: pr-title-lint-error
           delete: true
       # Add label corresponding to conventional commit type
-      - uses: srvaroa/labeler@v0.9
+      - uses: srvaroa/labeler@v1.0
         with:
           config_path: .github/semantic-labels.yml
         env:
