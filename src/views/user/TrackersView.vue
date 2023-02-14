@@ -123,7 +123,7 @@ export default {
       {
         // $gettext('polar')
         name: 'polar',
-        website: 'https://www.flow.polar.com/',
+        website: 'https://flow.polar.com/',
         connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
         status: 'disabled',
       },
