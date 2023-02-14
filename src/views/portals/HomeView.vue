@@ -13,17 +13,13 @@
               <span class="is-hidden-mobile" v-translate>Display parameters</span>
             </span>
             <!--Show intro text or not-->
-            <a
-              class="dropdown-item is-size-6"
-              :class="{ 'is-active': visible }"
-              @click="toogleProperty('visible')"
-            >
+            <a class="dropdown-item is-size-6" :class="{ 'is-active': visible }" @click="toogleProperty('visible')">
               <span class="is-nowrap item-icons">
                 <fa-icon :icon="visible ? 'circle-check' : 'circle'" />
               </span>
               <span class="is-nowrap" v-translate>Show intro text</span>
             </a>
-            <hr/>
+            <hr />
             <!--User preferences-->
             <a
               class="dropdown-item is-size-6"
@@ -36,13 +32,9 @@
               </span>
               <span class="is-nowrap" v-translate>Enable personal preferences</span>
             </a>
-            <hr v-if="$user.isLogged"/>
+            <hr v-if="$user.isLogged" />
             <!--Dashboard/Dense-->
-            <a
-              class="dropdown-item is-size-6"
-              :class="{ 'is-active': denseMode }"
-              @click="toogleProperty('denseMode')"
-            >
+            <a class="dropdown-item is-size-6" :class="{ 'is-active': denseMode }" @click="toogleProperty('denseMode')">
               <span class="is-nowrap item-icons">
                 <fa-icon icon="th-list" />
               </span>
@@ -67,38 +59,35 @@
     <!-- Partie dashboard/feed -->
     <!-- Feed -->
     <div class="feed-view" v-if="!denseMode">
-      <feed-view :isPersonal="isPersonal" />
+      <feed-view :is-personal="isPersonal" />
     </div>
     <!-- Dashboard -->
     <div v-if="denseMode">
-      <dashboard-view :enableUserPreferences="enableUserPreferences"/>
+      <dashboard-view :enable-user-preferences="enableUserPreferences" />
     </div>
   </div>
 </template>
 
 <script>
-
 import DashboardView from './DashboardView';
 import FeedView from './FeedView';
 import HomeBanner from './HomeBanner';
 
-import c2c from '@/js/apis/c2c';
-
 export default {
-  name: 'Home',
+  name: 'HomeView',
 
   components: {
     HomeBanner,
     FeedView,
     DashboardView,
-    },
+  },
 
   data() {
     let state = true;
 
     if (this.$user.isLogged) {
-        state = false;
-      }
+      state = false;
+    }
     return {
       isPersonal: false,
       enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
@@ -158,7 +147,6 @@ h4 {
   margin-bottom: 1.5rem;
 }
 
-
 //Variables already used on sidemenu
 $brandLogoHeight: 70px;
 //$brandLogoMargin: 5px;
@@ -173,4 +161,3 @@ $brandLogoHeight: 70px;
   }
 }
 </style>
-

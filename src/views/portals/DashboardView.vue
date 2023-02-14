@@ -20,7 +20,7 @@
             <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
           </div>
         </div>
-        <hr/>
+        <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="outings">
             <span v-translate>Voir plus</span>
@@ -39,7 +39,7 @@
         <div v-if="routes != null">
           <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
         </div>
-        <hr/>
+        <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="routes">
             <span v-translate>Voir plus</span>
@@ -60,7 +60,7 @@
           <loading-notification :promise="imagesPromise" />
           <gallery v-if="images != null" :images="images.documents" />
         </div>
-        <hr/>
+        <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="images">
             <span v-translate>Voir plus</span>
@@ -77,7 +77,7 @@
           </router-link>
         </h4>
         <forum-widget :message-count="20" />
-        <hr/>
+        <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="forum">
             <span v-translate>Voir plus</span>
@@ -94,13 +94,9 @@
         </h4>
         <loading-notification :promise="articlesPromise" />
         <div v-if="articles != null">
-          <dashboard-article-link
-            v-for="article of articles.documents"
-            :key="article.document_id"
-            :article="article"
-          />
+          <dashboard-article-link v-for="article of articles.documents" :key="article.document_id" :article="article" />
         </div>
-        <hr/>
+        <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="articles">
             <span v-translate>Voir plus</span>
@@ -112,7 +108,6 @@
 </template>
 
 <script>
-
 import DashboardArticleLink from './utils/DashboardArticleLink';
 import DashboardOutingLink from './utils/DashboardOutingLink';
 import DashboardRouteLink from './utils/DashboardRouteLink';
@@ -132,7 +127,7 @@ export default {
     UsefulLinks,
     ForumWidget,
     Gallery,
-    },
+  },
   props: {
     enableUserPreferences: {
       type: Boolean,
@@ -243,5 +238,4 @@ export default {
 .images-container {
   min-height: 200px;
 }
-
 </style>

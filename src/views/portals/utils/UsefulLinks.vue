@@ -1,41 +1,49 @@
 <template>
-    <div class="box">
+  <div class="box">
     <h4 class="title is-3">Liens utiles</h4>
     <div>
-        <ul>
+      <ul>
         <li>
-            <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Préparer sa course</router-link>
+          <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Préparer sa course</router-link>
         </li>
         <li>
-            <router-link :to="{ name: 'yeti' }" v-translate>Yeti : un outil pour évaluer le risque d’avalanche</router-link>
+          <router-link :to="{ name: 'yeti' }" v-translate
+            >Yeti : un outil pour évaluer le risque d’avalanche</router-link
+          >
         </li>
         <li>
-            <a href="https://www.metaskirando.ovh/" title="Metaskirando">Metaskirando : aggrégateur de sorties ski en Europe</a>
+          <a href="https://www.metaskirando.ovh/" title="Metaskirando"
+            >Metaskirando : aggrégateur de sorties ski en Europe</a
+          >
         </li>
         <li>
-            <router-link :to="{ name: 'serac' }" v-translate>SERAC : accidents et incidents en montagne</router-link>
+          <router-link :to="{ name: 'serac' }" v-translate>SERAC : accidents et incidents en montagne</router-link>
         </li>
-        </ul>
-        <ul>
+      </ul>
+      <ul>
         <li>
-            <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Camptocamp Association</router-link>
+          <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate
+            >Camptocamp Association</router-link
+          >
         </li>
         <li>
-            <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso">Faire un don ou adhérer</a>
+          <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso"
+            >Faire un don ou adhérer</a
+          >
         </li>
-        </ul>
+      </ul>
     </div>
-    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 ul {
-list-style-type: disc !important;
-padding-left: 12px;
+  list-style-type: disc !important;
+  padding-left: 12px;
 }
 h4 {
-padding-bottom: 0.7rem !important;
-margin-bottom: 0.7rem !important;
-border-bottom: 1px solid #ddd;
+  padding-bottom: 0.7rem !important;
+  margin-bottom: 0.7rem !important;
+  border-bottom: 1px solid #ddd;
 }
 </style>
