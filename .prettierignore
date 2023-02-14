@@ -3,4 +3,4 @@ src/translations/
 dist/
 node_modules/
 .husky/
-public/swiper
+public/swiper.css
