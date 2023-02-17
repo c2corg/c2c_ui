@@ -4,20 +4,22 @@
     <div>
       <div class="box intro">
         <div class="feed-title">
-          <span class="title is-1" v-translate>Welcome to Camptocamp ! The mountain sports community</span>
+          <span class="title" :class="{ 'is-marginless': !visible }" v-translate
+            >Bienvenue sur Camptocamp ! La communauté des sports de montagne</span
+          >
           <!--Display parameters-->
           <dropdown-button class="is-right">
             <span slot="button" class="button">
               <fa-icon icon="cogs" />
               <span class="is-hidden-mobile">&nbsp;</span>
-              <span class="is-hidden-mobile" v-translate>Display parameters</span>
+              <span class="is-hidden-mobile" v-translate>Paramètres d'affichage</span>
             </span>
             <!--Show intro text or not-->
             <a class="dropdown-item is-size-6" :class="{ 'is-active': visible }" @click="toogleProperty('visible')">
               <span class="is-nowrap item-icons">
                 <fa-icon :icon="visible ? 'circle-check' : 'circle'" />
               </span>
-              <span class="is-nowrap" v-translate>Show intro text</span>
+              <span class="is-nowrap" v-translate>Afficher le texte de présentation</span>
             </a>
             <hr />
             <!--User preferences-->
@@ -30,7 +32,7 @@
               <span class="is-nowrap item-icons">
                 <fa-icon :icon="enableUserPreferences ? 'circle-check' : 'circle'" />
               </span>
-              <span class="is-nowrap" v-translate>Enable personal preferences</span>
+              <span class="is-nowrap" v-translate>Load my preferences</span>
             </a>
             <hr v-if="$user.isLogged" />
             <!--Dashboard/Dense-->
@@ -38,7 +40,7 @@
               <span class="is-nowrap item-icons">
                 <fa-icon icon="th-list" />
               </span>
-              <span class="is-nowrap" v-translate>Dense</span>
+              <span class="is-nowrap" v-translate>Tableau de bord</span>
             </a>
             <!--Feed/Comfortable-->
             <a
@@ -49,7 +51,7 @@
               <span class="is-nowrap item-icons">
                 <fa-icon icon="th-large" />
               </span>
-              <span class="is-nowrap" v-translate>Comfortable</span>
+              <span class="is-nowrap" v-translate>Activity feed</span>
             </a>
           </dropdown-button>
         </div>
@@ -130,7 +132,7 @@ export default {
 .feed-title {
   //margin-bottom: 12px;
   display: flex;
-  align-items: baseline;
+  //align-items: baseline;
 
   span:first-child {
     flex-grow: 1;
@@ -144,7 +146,7 @@ h4 {
 }
 
 .intro {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 //Variables already used on sidemenu

@@ -1,7 +1,7 @@
 <template>
   <section>
     <div>
-      <div class="title is-4 has-text-weight-normal" v-translate>
+      <div class="subtitle" v-translate>
         Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
         mountain activities.
       </div>
@@ -33,8 +33,10 @@
               <li>
                 <span v-translate>une bibliothèque comportant des</span>
                 <icon-article />
-                <router-link to="articles">articles</router-link> et des <icon-book />
-                <router-link to="books">références de livres</router-link>
+                <router-link to="articles" v-translate>articles</router-link>
+                <span v-translate>et des </span>
+                <icon-book />
+                <router-link to="books" v-translate>books</router-link>
               </li>
               <li>
                 <icon-forum />
@@ -74,7 +76,7 @@
           </ul>
         </div>
         <div class="column is-12-mobile">
-          <h3 class="title is-4">Partage du moment :</h3>
+          <h3 class="title is-4" v-translate>Partage du moment</h3>
           <i>Le petit bout de code qui va bien pour afficher une publi Facebook ou autre</i>
         </div>
       </div>
