@@ -1,0 +1,23 @@
+version: 1
+appendOnly: true
+labels:
+  - label: 'enhancement'
+    title: '^feat[(:].*'
+  - label: 'bug'
+    title: '^fix[(:].*'
+  - label: 'documentation'
+    title: '^docs[(:].*'
+  - label: 'style'
+    title: '^style[(:].*'
+  - label: 'refactor'
+    title: '^refactor[(:].*'
+  - label: 'perf'
+    title: '^perf[(:].*'
+  - label: 'test'
+    title: '^test[(:].*'
+  - label: 'chore'
+    title: '^chore[(:].*'
+  - label: 'revert'
+    title: '^revert[(:].*'
+  - label: 'i18n'
+    title: '^i18n[(:].*'

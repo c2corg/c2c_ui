@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow">
+  <modal-window ref="modalWindow" wide>
     <div class="tabs">
       <ul>
         <li :class="{ 'is-active': activeTab === 'tracking-devices' }">

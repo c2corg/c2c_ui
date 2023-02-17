@@ -247,11 +247,11 @@
     "Followed users": "Usuarios seguidos",
     "Forgot password?": "¿Olvidaste la contraseña?",
     "Forum": "Foro",
-    "Forum username": "Nombre de usuario del forum",
+    "Forum username": "Pseudónimo en el foro",
     "From danger 3, consider the slopes which dominate the route": "desde el peligro 3, considera las pendientes que dominan la vía",
     "From the interface": "Desde la interfaz",
     "Full bulletin": "Boletín completo",
-    "Fullname": "Nombre completo",
+    "Fullname": "Pseudónimo en la topoguía",
     "GPX file": "Archivo GPX",
     "General information": "Informacion general",
     "Geolocation": "Geolocalización",
@@ -582,7 +582,7 @@
       "API message": "correo electrónico ya usado"
     },
     "already used forum_username": {
-      "API message": "Usuario ya utilizado en el forum"
+      "API message": "Pseudónimo ya utilizado en el forum"
     },
     "already used username": {
       "API message": "Usuario ya utilizado"

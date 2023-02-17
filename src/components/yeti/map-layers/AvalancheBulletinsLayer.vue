@@ -22,64 +22,7 @@
         </strong>
       </p>
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
-        <div>
-          <svg
-            :viewBox="overlayData.danger.altitude ? '0 0 165 100' : '0 0 100 100'"
-            :width="overlayData.danger.altitude ? 130 : 80"
-            height="80"
-          >
-            <polygon
-              style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 1.5"
-              points="2.2,89.5 97.5,89.5 62.7,11.9 48,32.9 31.8,25.5 "
-            />
-            <text
-              x="50"
-              :y="overlayData.danger.high ? 82 : 65"
-              text-anchor="middle"
-              font-family="sans-serif"
-              font-size="20px"
-              font-weight="bold"
-            >
-              <tspan>{{ overlayData.danger.low }}</tspan>
-              <tspan v-if="overlayData.danger.lowEvol">&ensp;</tspan>
-              <tspan v-if="overlayData.danger.lowEvol">{{ overlayData.danger.lowEvol }}</tspan>
-            </text>
-            <g v-if="overlayData.danger.lowEvol" style="fill: none; stroke: #000; stroke-width: 2">
-              <line x1="45" x2="55" :y1="overlayData.danger.high ? 75 : 58" :y2="overlayData.danger.high ? 75 : 58" />
-              <line x1="50" x2="55" :y1="overlayData.danger.high ? 70 : 53" :y2="overlayData.danger.high ? 75 : 58" />
-              <line x1="50" x2="55" :y1="overlayData.danger.high ? 80 : 63" :y2="overlayData.danger.high ? 75 : 58" />
-            </g>
-            <g v-show="overlayData.danger.high">
-              <line
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 1.5"
-                x1="10"
-                y1="61.5"
-                x2="90"
-                y2="61.5"
-              />
-              <text x="50" y="54" text-anchor="middle" font-family="sans-serif" font-size="20px" font-weight="bold">
-                <tspan>{{ overlayData.danger.high }}</tspan>
-                <tspan v-if="overlayData.danger.highEvol">&ensp;</tspan>
-                <tspan v-if="overlayData.danger.highEvol">{{ overlayData.danger.highEvol }}</tspan>
-              </text>
-              <g v-if="overlayData.danger.highEvol" style="fill: none; stroke: #000; stroke-width: 2">
-                <line x1="45" x2="55" y1="46" y2="46" />
-                <line x1="50" x2="55" y1="41" y2="46" />
-                <line x1="50" x2="55" y1="51" y2="46" />
-              </g>
-            </g>
-            <text
-              v-if="overlayData.danger.altitude"
-              x="92"
-              y="65"
-              font-family="sans-serif"
-              font-size="16px"
-              font-weight="bold"
-            >
-              {{ overlayData.danger.altitude }}
-            </text>
-          </svg>
-        </div>
+        <danger-level :danger="overlayData.danger" />
         <input-orientation :value="overlayOrientations" />
       </div>
       <dl v-if="overlayDangerComment || overlayOrientationsComment" class="is-size-6 px-3 pt-3">
@@ -116,6 +59,7 @@ import turfIntersect from '@turf/intersect';
 import layerMixin from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
+import DangerLevel from '@/components/yeti/map-layers/DangerLevel';
 import ol from '@/js/libs/ol';
 
 // min and max zooms for layers styles
@@ -241,7 +185,7 @@ let bulletinsStyle = (mapZoom, danger) => {
   });
 };
 
-let mountainsLayer = new ol.layer.Vector({
+let mountainsLayer = new ol.layer.VectorImage({
   source: new ol.source.Vector(),
   style: mountainsStyle(),
 });
@@ -264,6 +208,9 @@ let bulletinsOverlayPanOptions = {
 };
 
 export default {
+  components: {
+    DangerLevel,
+  },
   mixins: [layerMixin],
   data() {
     return {

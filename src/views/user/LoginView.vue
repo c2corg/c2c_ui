@@ -39,23 +39,25 @@
     </base-form>
 
     <base-form v-show="mode == 'signup'" :promise="promise" @submit="signup">
+      <h1 class="is-size-4 has-text-centered" v-translate>Sign in to camptocamp today, it's free</h1>
       <form-field
         ref="signupMainInput"
-        name="name"
-        v-model="name"
-        type="text"
-        :label="$gettext('Fullname')"
-        icon="user-check"
-      />
-      <form-field
         name="username"
         v-model="username"
         type="text"
-        autocapitalize="off"
-        autocorrect="off"
         :label="$gettext('Username')"
-        icon="user"
+        icon="user-check"
       />
+      <form-field name="email" v-model="email" type="email" :label="$gettext('Email')" icon="at" />
+      <form-field name="password" v-model="password" type="password" :label="$gettext('Password')" icon="key" />
+      <p class="is-italic is-size-7" v-translate>
+        Username or email combined with the password will allow you to log in. Both username and email remain private.
+        Username can not be changed, but email can.
+      </p>
+      <p class="is-italic is-size-7" v-translate>
+        By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings
+        afterwards.
+      </p>
       <form-field
         name="forum_username"
         v-model="forum_username"
@@ -63,17 +65,17 @@
         :label="$gettext('Forum username')"
         icon="comments"
       />
-      <form-field name="password" v-model="password" type="password" :label="$gettext('Password')" icon="key" />
-      <form-field name="email" v-model="email" type="email" :label="$gettext('Email')" icon="at" />
+      <p class="is-italic is-size-7" v-translate>
+        Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has
+        more restrictions, mainly no accent and no space.
+      </p>
       <div class="field">
         <div class="control">
           <label class="checkbox">
             <input type="checkbox" v-model="termsAgreed" />
             &nbsp;
-            <span v-translate> I have read and agree to the terms of use </span>
-            <span> (</span>
-            <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate> link </router-link>
-            <span>).</span>
+            <span class="has-text-weight-bold" v-translate>I have read and agree to the terms of use</span>
+            (<router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>link</router-link>).
           </label>
         </div>
       </div>
@@ -345,7 +347,7 @@ export default {
     signup() {
       this.promise = c2c.userProfile
         .register({
-          name: this.name,
+          name: this.username,
           username: this.username,
           forum_username: this.forum_username,
           password: this.password,

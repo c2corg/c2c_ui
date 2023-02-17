@@ -142,6 +142,7 @@
     "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
     "Both results and map": "Beide Ergebnisse und Karte",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Standardmäßig wird Ihr Topoführername Ihr Benutzername sein. Sie können ihn später in den Einstellungen frei ändern.",
     "By month": "Monatlich",
     "By year": "Jahresweise",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Das Ziel von Camptocamp.org ist es den Austausch von Information zwischen Bergsüchtigen zu vereinfachen und die Sicherheit bei der Ausübung von Bergaktivitäten zu erhöhen.",
@@ -185,6 +186,9 @@
     "Connect": "Verbinden",
     "Contain invalid character(s)": {
       "API message": "enthält ein oder mehrere ungültige Zeichen"
+    },
+    "Contains consecutive special characters": {
+      "API message": "Darf keine aufeinanderfolgenden Sonderzeichen enthalten (-, _, .)"
     },
     "Continue the discussion": "Diskussion fortsetzen",
     "Contribute to common knowledge": "Tragen Sie zum Allgemeinwissen bei",
@@ -293,6 +297,9 @@
     "Elevation (m)": "Höhe (m)",
     "Elevation profile": "Höhenprofil",
     "Enable drawing and editing features on map": "Aktivieren Sie das Zeichnen und Bearbeiten von Features auf der Karte",
+    "Ended by confusing suffix": {
+      "API message": "Darf kein Suffix wie '.json' enthalten"
+    },
     "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
     "Expand": "Entfalten",
     "Expert": "Profi",
@@ -303,19 +310,21 @@
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
     "Feel free to edit it.": "Bitte bearbeiten.",
-    "Fetch geographic data": "Daten dieser Aktivität nutzen",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
+    "First character is invalid": {
+      "API message": "Das erste Zeichen muss ein alphanumerisches Zeichen des lateinischen Alphabets sein, einschließlich des Unterstrichs"
+    },
     "FlowCapt sensor": "FlowCapt-Sensor ",
     "FlowCapt sensors": "FlowCapt-Sensoren",
     "Fold section": "Abschnitt falten",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
-    "Forum username": "Forum-Benutzername",
+    "Forum username": "Forumname",
     "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahr 3 die Hängen, die die Route dominieren",
     "From the interface": "Aus der Schnittstelle",
     "Full bulletin": "Vollständiges Lawinenlagebricht",
-    "Fullname": "Name und Vorname",
+    "Fullname": "Topoführername",
     "GPS Track": "GPS-Strecke",
     "GPX file": "GPX-Datei",
     "General": "Allgemein",
@@ -374,7 +383,7 @@
     },
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "If the route does not exists in our base, you can create it.": "Wenn die Route nicht in unserer Datenbank vorhanden ist, können Sie sie erstellen.",
-    "If you can't see this email, please check your spam folder.": "Wenn Sie diese E-Mail nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
+    "If you can't see this email, please check your spam folder.": "Wenn Sie diese Email nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
     "Ignore year": "Jahr ignorieren",
     "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
     "Image count": "Bildanzahl",
@@ -398,6 +407,9 @@
     "Large group = 5 people and more": "Große Gruppe = 5 Personen und mehr",
     "Large group with load shedding distance": "Große Gruppe mit Lastabwurfweite",
     "Last activities": "Letzte Aktivitäten",
+    "Last character is invalid": {
+      "API message": "Das letzte Zeichen muss ein Buchstabe oder eine Zahl sein."
+    },
     "Last forum topics": "Letztes Forumsthema",
     "Last outings": "Letzte Tourenberichte",
     "Latitude": "Breitengrad",
@@ -425,6 +437,9 @@
       "API message": "Einloggen fehlgeschlagen"
     },
     "Logout": "Ausloggen",
+    "Longer than maximum length 25": {
+      "API message": "Feld zu lang (maximal 25 Zeichen)"
+    },
     "Longitude": "Längengrad",
     "Low danger level from the avalanche bulletin": "Geringe Gefahrenstufe aus dem Lawinenbulletin",
     "Mail has been sent": "E-Mail gesendet",
@@ -495,6 +510,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
+    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
     "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
     "Ok": "OK",
@@ -625,6 +641,7 @@
     },
     "Show document history": "Dokumentverlauf anzeigen",
     "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
+    "Sign in to camptocamp today, it's free": "Melden Sie sich bei camptocamp an, es ist kostenlos !",
     "Simplify": "Vereinfachen",
     "Skiability": "Schifahrengenuss",
     "Skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
@@ -637,6 +654,7 @@
     "Sophie Picture Contest": "Sophie-Fotowettbewerb",
     "Sort by": "Sortieren nach",
     "Source:": "Quelle:",
+    "Static map images": "Statische Kartenbilder",
     "Statistical cookies": "Statistik-Cookies",
     "Statistics": "Statistiken",
     "Stay careful while skiing": "Bleiben Sie beim Skifahren vorsichtig",
@@ -719,8 +737,13 @@
     "Unprotect document": "Dokument unschützen",
     "Upload a GPS track": "GPS Strecke hochladen ",
     "Upload a new version": "Neue Version hochladen",
+    "Use track": "Strecke benutzen",
     "User avatar": "Avatar",
     "Username": "Benutzername",
+    "Username cannot be empty or whitespaces": {
+      "API message": "Der Benutzername darf nicht leer sein oder nur Leerzeichen enthalten"
+    },
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Mit dem Benutzernamen oder der Email in Verbindung mit dem Passwort können Sie sich identifizieren. Der Benutzername und die Email bleiben privat. Der Benutzername kann im Gegensatz zur Email nicht geändert werden.",
     "Validity date expired": "Gültigkeitsdatum abgelaufen",
     "Validity date:": "Gültig bis :",
     "Versions": "Versionen",
@@ -751,8 +774,9 @@
     "You have to be authorized. Please contact administrators of the service if interested.": "Sie müssen autorisiert sein. Bitte kontaktieren Sie bei Interesse die Administratoren des Dienstes.",
     "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher oder Artikeln verbinden",
     "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf die Karte ziehen, zeichnen oder bearbeiten.",
-    "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre E-Mail-Adresse gesendet wurde.",
+    "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre Email-Adresse gesendet wurde.",
     "Your account was successfully created": "Ihr Konto wurde erfolgreich erstellt",
+    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Ihr Forumsname wird im Forumsbereich der Website verwendet. Er kann jederzeit in den Einstellungen frei geändert werden. Es gibt mehr Einschränkungen bei den Zeichen, hauptsächlich keine Akzente und keine Leerzeichen.",
     "Zoom in": {
       "Map controls": "Vergrössern"
     },
@@ -1876,7 +1900,7 @@
       "rock_types": "Trachyt"
     },
     "track": {
-      "image_categories": "Spur"
+      "image_categories": "Strecke"
     },
     "train": {
       "public_transportation_types": "Zug"

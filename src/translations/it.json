@@ -119,6 +119,7 @@
     "Conditions, summits, routes": "Condizioni, cime, itinerari",
     "Configure activity trackers": "Configura i rilevatori di attività",
     "Configure cookies": "Scegli i cookies",
+    "Configure layer": "Configurare",
     "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Configurare la propria connessione a servizi esterni come Strava o l'applicazione GPS del dispositivo al fine di recuperare facilmente le geometrie.",
     "Configured": "Configurato",
     "Confirm": "Confermare",
@@ -249,18 +250,17 @@
     "Fauna protection areas": "Zona di protezione della fauna",
     "Fauna protection site:": "Sito di protezione della fauna: ",
     "Feel free to edit it.": "Edizione libera",
-    "Fetch geographic data": "Recupera i dati geografici",
     "Filter on map extent": "Limitare la ricerca alla zona visibile sulla carta",
     "Filter results": "Filtrare i risultati",
     "FlowCapt sensor": "Sensore FlowCapt",
     "FlowCapt sensors": "Sensori FlowCapt",
     "Followed users": "Utenti seguiti",
     "Forgot password?": "Password dimenticata?",
-    "Forum username": "Nickname",
+    "Forum username": "Pseudonimo nel forum",
     "From danger 3, consider the slopes which dominate the route": "Dal grado 3, si deve tenere conto dei pendi sopra l'itinerario",
     "From the interface": "Dall'interfaccia",
     "Full bulletin": "Bollettino",
-    "Fullname": "Cognome",
+    "Fullname": "Pseudonimo sulla guida",
     "GPS Track": "Traccia GPS",
     "GPX file": "File GPX",
     "General": "Generale",
@@ -295,6 +295,12 @@
     "I must not use slopes > 35°": "Rinuncio agli pendii > 35°",
     "I must not use slopes > 40°": "Rinuncio agli pendii > 40°",
     "I read and understood the interest and limitations of YETI": "Ho letto e capito gli vantaggi e limiti di YETI",
+    "ICGC ortho (ca)": {
+      "Map layer": "ICGC Sat"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "ICGC"
+    },
     "IGN Slopes": {
       "Map slopes layer": "Pendenze IGN"
     },
@@ -639,6 +645,7 @@
     "Upload a GPS track": "Aggiungere una traccia GPS",
     "Upload a new version": "Scaricare una nuova versione ",
     "User avatar": "Avatar utente",
+    "Username": "Identificatore",
     "Validity date expired": "Data di validità scaduta",
     "Validity date:": "Data di validità:",
     "Versions": "Versioni",
@@ -726,10 +733,10 @@
       "API message": "Questa email è già usata"
     },
     "already used forum_username": {
-      "API message": "Nickname già usato "
+      "API message": "Pseudonimo già usato "
     },
     "already used username": {
-      "API message": "Questo username è già usato."
+      "API message": "Questo identificatore è già usato."
     },
     "always_accessible": {
       "custodianship_types": "sempre accessibile "

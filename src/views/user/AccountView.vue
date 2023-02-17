@@ -27,6 +27,10 @@
 
       <form-field name="name" v-model="name" type="text" required :label="$gettext('Fullname')" icon="user-check" />
 
+      <p class="is-italic is-size-7 mb-4" v-translate>
+        Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.
+      </p>
+
       <form-field
         name="forum_username"
         v-model="forum_username"

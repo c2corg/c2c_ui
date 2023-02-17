@@ -92,6 +92,7 @@
     "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
     "Both results and map": "Résultats et carte",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Par défaut, votre pseudonyme dans la partie topoguide sera votre identifiant. Vous pourrez le changer librement par la suite dans les paramètres.",
     "By month": "Par mois",
     "By year": "Par année",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org a pour but de faciliter le partage d'informations entre les pratiquants de sports de montagne et de contribuer à la sécurité des activités montagne.",
@@ -134,6 +135,9 @@
     "Connect": "Connecter",
     "Contain invalid character(s)": {
       "API message": "Contient un ou plusieurs caractères invalides"
+    },
+    "Contains consecutive special characters": {
+      "API message": "Ne doit pas contenir de caractères spéciaux consécutifs (-, _, .)"
     },
     "Continue the discussion": "Continuer la discussion",
     "Contribute to common knowledge": "Participer à la construction d'un savoir collectif",
@@ -235,6 +239,9 @@
     "Elevation profile": "Profil altimétrique",
     "Email": "Adresse email",
     "Enable drawing and editing features on map": "Activer le mode dessin et l'édition des lignes sur la carte",
+    "Ended by confusing suffix": {
+      "API message": "Ne doit pas contenir un suffixe tel que '.json'"
+    },
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement…)",
     "Expand": "Déplier",
     "Export route": "Exporter l'itinéraire",
@@ -243,9 +250,11 @@
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
     "Feel free to edit it.": "Éditez-le.",
-    "Fetch geographic data": "Utiliser les données de cette activité",
     "Filter on map extent": "Limiter la recherche à la carte visible",
     "Filter results": "Filtrer",
+    "First character is invalid": {
+      "API message": "Le premier caractère doit être un caractère alphanumérique de l'alphabet latin, y compris le tiret bas"
+    },
     "FlowCapt sensor": "Capteur FlowCapt",
     "FlowCapt sensors": "Capteurs FlowCapt",
     "Fold section": "Replier la section",
@@ -255,7 +264,7 @@
     "From danger 3, consider the slopes which dominate the route": "À partir du danger 3, prendre en compte les pentes qui dominent l'itinéraire",
     "From the interface": "Depuis l'interface",
     "Full bulletin": "Bulletin complet",
-    "Fullname": "Nom",
+    "Fullname": "Pseudo topoguide",
     "GPS Track": "Trace GPS",
     "GPX file": "Fichier GPX",
     "General": "Général",
@@ -340,6 +349,9 @@
     "Large group = 5 people and more": "Grand groupe = 5 personnes et plus",
     "Large group with load shedding distance": "Grand groupe avec distance de délestage",
     "Last activities": "Dernières activités",
+    "Last character is invalid": {
+      "API message": "Le dernier caractère doit être une lettre ou un chiffre."
+    },
     "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
     "Launch YETI": "Accéder à YETI",
@@ -367,6 +379,9 @@
       "API message": "Identifiant ou mot de passe incorrects"
     },
     "Logout": "Me déconnecter",
+    "Longer than maximum length 25": {
+      "API message": "Champ trop long (25 caractères maximum)"
+    },
     "Low danger level from the avalanche bulletin": "Niveau de danger bas du bulletin d'avalanche",
     "Mail has been sent": "Courriel envoyé",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
@@ -436,6 +451,7 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
+    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Le pseudo topoguide sera celui mentionné dans les attributions des contenus auxquels vous contribuez.",
     "Number of documents": "Nombre de documents",
     "Numbers": "Données",
     "On a drawn line": "Sur une ligne",
@@ -558,6 +574,7 @@
     },
     "Show document history": "Voir l'historique du document",
     "Show only updates from followed users in the homepage feed": "N'afficher dans le fil de la page d'accueil que les documents qui concernent les utilisateurs suivis.",
+    "Sign in to camptocamp today, it's free": "Créez votre compte sur Camptocamp, c'est gratuit !",
     "Simplify": "Simplifier",
     "Skiability": "Skiabilité",
     "Skitouring gear": "Ski, surf, raquette",
@@ -570,6 +587,7 @@
     "Sophie Picture Contest": "Concours Photo Sophie",
     "Sort by": "Trier par",
     "Source:": "Document à fusionner (source) :",
+    "Static map images": "Images des cartes statiques",
     "Statistical cookies": "Cookies statistiques",
     "Statistics": "Statistiques",
     "Stay careful while skiing": "Skier avec prudence",
@@ -638,8 +656,13 @@
     "Unprotect document": "Déprotéger ce document",
     "Upload a GPS track": "Ajouter une trace GPS",
     "Upload a new version": "Télécharger une nouvelle version",
+    "Use track": "Utiliser la trace",
     "User avatar": "Avatar",
     "Username": "Identifiant",
+    "Username cannot be empty or whitespaces": {
+      "API message": "L'identifiant ne peut être vide ou contenir des espaces"
+    },
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "L'identifiant ou l'email associé au mot de passe vous permettront de vous identifier. L'identifiant et l'email restent privés. L'identifiant ne peut pas être modifié, contrairement à l'email.",
     "Validity date expired": "Date de validité dépassée",
     "Validity date:": "Date de validité :",
     "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres…)",
@@ -670,6 +693,7 @@
     "You may also drag, draw or edit the track on the map.": "Vous pouvez dessiner, éditer ou faire glisser la trace GPS sur la carte.",
     "You need to activate your by clicking the link sent to your email address.": "Vous devez l'activer en cliquant sur le lien qui a été envoyé à votre adresse email.",
     "Your account was successfully created": "Votre compte a été créé",
+    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Votre pseudo forum sera utilisé sur la partie forum du site. Il peut être changé librement à tout moment dans les paramètres. Il y a plus de restrictions sur les caractères, principalement pas d'accents et pas d'espace.",
     "Zoom in": {
       "Map controls": "Zoomer"
     },

@@ -97,7 +97,7 @@ export default function install(Vue) {
         ca: 'Català',
         eu: 'Euskara',
         hu: 'Magyar',
-        zh_CN: 'Chinese',
+        zh_CN: '简体中文',
         sl: 'Slovenščina',
       };
 
@@ -109,7 +109,7 @@ export default function install(Vue) {
         es: 'Español',
         ca: 'Català',
         eu: 'Euskara',
-        zh: 'Chinese',
+        zh: '简体中文',
         sl: 'Slovenščina',
       };
 

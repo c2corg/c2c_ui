@@ -24,9 +24,25 @@
       </span>
     </div>
 
-    <div ref="swiper" class="image-viewer-swiper">
-      <div class="swiper-wrapper" />
-    </div>
+    <swiper-container
+      init="false"
+      keyboard="true"
+      zoom="true"
+      :slides-per-view="1"
+      ref="swiper"
+      class="image-viewer-swiper"
+      @slidechange="onSlideChange"
+    >
+      <swiper-slide class="image-viewer-slide" v-for="image of images" :key="image.document_id">
+        <div class="swiper-zoom-container">
+          <picture>
+            <source v-if="image.avifSrc" type="image/avif" :srcset="image.avifSrc" />
+            <source v-if="image.webpSrc" type="image/webp" :srcset="image.webpSrc" />
+            <img :src="image.imgSrc" :alt="image.locales[0].title" loading="lazy" />
+          </picture>
+        </div>
+      </swiper-slide>
+    </swiper-container>
 
     <div class="swiper-button-prev">
       <fa-icon icon="arrow-left"></fa-icon>
@@ -52,14 +68,13 @@
 </template>
 
 <script>
-import SwiperCore, { Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom } from 'swiper/core';
+import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo';
 
 import { getImageUrl } from '@/js/image-urls';
-
-SwiperCore.use([Keyboard, Lazy, Navigation, Pagination, Virtual, Zoom]);
+import throttle from '@/js/throttle';
 
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {
@@ -105,7 +120,12 @@ export default {
   methods: {
     push(image) {
       if (this.images.findIndex((item) => item.document_id === image.document_id) === -1) {
-        this.images.push(image);
+        this.images.push({
+          ...image,
+          imgSrc: getImageUrl(image, 'BI'),
+          avifSrc: getImageUrl(image, 'BI', 'avif'),
+          webpSrc: getImageUrl(image, 'BI', 'webp'),
+        });
       }
     },
 
@@ -121,69 +141,29 @@ export default {
       this.visible = true;
 
       this.$nextTick(function () {
-        const slides = this.images;
-
-        const swiperOptions = {
-          init: false,
+        const swiperParams = {
+          modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
+          injectStylesUrls: [
+            '/swiper/navigation-element.min.css',
+            '/swiper/pagination-element.min.css',
+            '/swiper/virtual-element.min.css',
+            '/swiper/zoom-element.min.css',
+          ],
           initialSlide,
-          slidesPerView: 1,
 
-          // Disable preloading of all images
-          preloadImages: false,
-          // Enable lazy loading
-          lazy: {
-            // enable loading of closest images
-            loadPrevNext: true,
-          },
-
-          // not possible with virtual
-          // https://swiperjs.com/api/#virtual
-          // loop: true,
-
-          // virtual because it may be too slow if there are too many image
-          // test : https://c2corg.github.io/c2c_ui/#/articles/1058594/fr/concours-photo-sophie-2018
-          virtual: {
-            slides,
-            renderSlide(img) {
-              const avifSrc = getImageUrl(img, 'BI', 'avif');
-              const webpSrc = getImageUrl(img, 'BI', 'webp');
-              const imgSrc = getImageUrl(img, 'BI');
-              return `<div class="swiper-slide image-viewer-slide" style="{left:${this.offset}px}">
-                  <div class="swiper-zoom-container">
-                  <picture>
-                    ${avifSrc ? `<source type="image/avif" data-srcset="${avifSrc}">` : ''}
-                    ${webpSrc ? `<source type="image/webp" data-srcset="${webpSrc}">` : ''}
-                    <img
-                      data-src="${imgSrc}"
-                      class="swiper-lazy"
-                      alt="${img.locales[0].title}"
-                      loading="lazy">
-                  </picture>
-                  </div>
-                  <div class="swiper-lazy-preloader swiper-lazy-preloader-white"/>
-                </div>`;
-            },
-          },
-
+          // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
+          virtual: true,
           navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
           },
-
-          keyboard: {
-            enabled: true,
+          pagination: {
+            el: '.image-viewer-pagination',
+            type: 'custom',
           },
-
-          zoom: true,
         };
 
-        if (this.$options.swiper) {
-          this.$options.swiper.destroy();
-        }
-
-        this.$options.swiper = new SwiperCore(this.$refs.swiper, swiperOptions);
-        this.$options.swiper.on('slideChange', this.onSlideChange);
-        this.$options.swiper.on('init', () => {
+        this.$refs.swiper.addEventListener('init', () => {
           window.history.pushState(null, null, '#swipe-gallery');
 
           // close when the user goes back in history
@@ -206,14 +186,16 @@ export default {
           });
         });
         if (this.$screen.isMobile) {
-          this.$options.swiper.on('click', this.toggleButtons);
+          // no idea why toggleButtons is called twice, so we throttle...
+          this.$refs.swiper.addEventListener('click', throttle(this.toggleButtons, 150));
         }
-        this.$options.swiper.init();
+        Object.assign(this.$refs.swiper, swiperParams);
+        this.$refs.swiper.initialize();
       });
     },
 
     onPaginationClick(index) {
-      this.$options.swiper.slideTo(index, 0, false);
+      this.$refs.swiper.swiper.slideTo(index, 0, false);
     },
 
     clear() {
@@ -271,31 +253,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import '~swiper/swiper';
-@import '~swiper/components/lazy/lazy';
-@import '~swiper/components/zoom/zoom';
-
-// class not explicitly present in template, can't use scope
-
-.image-viewer-slide {
-  max-height: 100%;
-
-  img {
-    max-height: 100%;
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
-}
-</style>
-
 <style scoped lang="scss">
 $headerHeight: 3rem;
 $paginationHeight: 30px;
@@ -335,6 +292,14 @@ $paginationHeight: 30px;
     // on mobile, we don't have pagination, but this will give enough space to display
     // the title on one line.
     height: calc(100% - #{$headerHeight} - #{$paginationHeight});
+  }
+
+  &-slide {
+    overflow: hidden;
+
+    img {
+      max-height: 100vh;
+    }
   }
 
   &-pagination {
@@ -412,7 +377,7 @@ $paginationHeight: 30px;
   width: 20rem;
   z-index: 1000;
   position: fixed;
-  top: 3.7rem;
+  top: 3rem;
   right: 0;
 }
 
@@ -421,10 +386,18 @@ $swiper-navigation-size: 4rem;
 .swiper-button-prev {
   left: 0;
   right: auto;
+
+  &::after {
+    content: unset;
+  }
 }
 .swiper-button-next {
   left: auto;
   right: 0;
+
+  &::after {
+    content: unset;
+  }
 }
 
 .swiper-button-prev,

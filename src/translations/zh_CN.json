@@ -142,6 +142,7 @@
     "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "简要描述任何受伤。可以在此处输入不适合任何其他地方的评注。",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "默认情况下，路书指南上将显示你的用户名，但你可以在之后的设置中随意更改它。",
     "By month": "按月",
     "By year": "按年",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org促进爱山者之间的信息共享，并为山地运动的安全做贡献。",
@@ -185,6 +186,9 @@
     "Connect": "连接",
     "Contain invalid character(s)": {
       "API message": "包含无效字符"
+    },
+    "Contains consecutive special characters": {
+      "API message": "包含连续的特殊字符"
     },
     "Continue the discussion": "继续讨论",
     "Contribute to common knowledge": "贡献山地运动知识",
@@ -293,6 +297,10 @@
     "Elevation (m)": "海拔(m)",
     "Elevation profile": "高程剖面图",
     "Email": "邮箱",
+    "Enable drawing and editing features on map": "在地图上启用绘图和编辑功能",
+    "Ended by confusing suffix": {
+      "API message": "以令人困惑的后缀结尾"
+    },
     "Everything about ratings : difficulties, exposition...": "所有定级有关的：难度、暴露感...",
     "Expand": "展开",
     "Expert": "专家",
@@ -303,11 +311,14 @@
     "Fauna protection areas": "动物保护区",
     "Fauna protection site:": "动物保护区",
     "Feel free to edit it.": "请尽管编辑。",
-    "Fetch geographic data": "获取地理数据",
     "Filter on map extent": "过滤目前地图范围",
     "Filter results": "过滤结果",
+    "First character is invalid": {
+      "API message": "第一个字符无效"
+    },
     "FlowCapt sensor": "FlowCapt 传感器",
     "FlowCapt sensors": "FlowCapt 传感器",
+    "Fold section": "折叠章节",
     "Followed users": "关注的用户",
     "Forgot password?": "忘记密码？",
     "Forum": "论坛",
@@ -346,6 +357,7 @@
     "Home page feed parameters": "主页订阅参数",
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I choose to cancel the outing": "我选择取消出行",
+    "I contribute": "我贡献",
     "I have read and agree to the terms of use": "我已经阅读和同意使用条款",
     "I must not use slopes > 30°": "我不得使用大于30度的坡",
     "I must not use slopes > 35°": "我不得使用大于35度的坡",
@@ -393,6 +405,9 @@
     "Large group = 5 people and more": "大团队 = 5人及以上",
     "Large group with load shedding distance": "具有降低雪层负载的间隔的大团队",
     "Last activities": "最新活动",
+    "Last character is invalid": {
+      "API message": "最后一个字符无效"
+    },
     "Last forum topics": "最新的论坛主题",
     "Last outings": "最新的出行记录",
     "Latitude": "纬度",
@@ -404,6 +419,7 @@
     "Legend": "图例",
     "Legend will appear automatically with the generated image": "图例将与生成的图像一起自动出现",
     "Let's make our feedbacks valuable": "让我们的反馈更有价值",
+    "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "让我们保护我们的乐园！我在 Outdoorvision 上创建一个帐户，以分享我的 GPS 轨迹，以保护和设计在法国的活动场地。",
     "Licenses": "许可协议",
     "Lines chunks": "线条块",
     "Links": "链接",
@@ -420,6 +436,9 @@
       "API message": "登录失败"
     },
     "Logout": "登出",
+    "Longer than maximum length 25": {
+      "API message": "长于最大长度 25"
+    },
     "Longitude": "经度",
     "Low danger level from the avalanche bulletin": "雪崩公告给出的低危险等级",
     "Mail has been sent": "邮件已发送",
@@ -619,6 +638,7 @@
     },
     "Show document history": "显示文档历史",
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
+    "Sign in to camptocamp today, it's free": "立即登录 camptocamp，它是免费的",
     "Simplify": "简化",
     "Skiability": "可滑雪性",
     "Skitouring gear": "滑雪装备",
@@ -701,6 +721,7 @@
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "所使用的保护方式和保护点类型，登山者之间的互相检查，雪堆稳定性测试，雪崩收发器测试等。",
     "URL": "网址",
     "Unblock account": "取消冻结账号",
+    "Unfold section": "展开章节",
     "Unformatted text": "未格式化的文字",
     "Unmark this route as to do": "取消这条路线的 To Do 标记",
     "Unordered list": "无序列表",
@@ -709,6 +730,10 @@
     "Upload a new version": "上传一个新版本",
     "User avatar": "用户头像",
     "Username": "用户名",
+    "Username cannot be empty or whitespaces": {
+      "API message": "用户名不能为空或包含空格"
+    },
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "可使用用户名或邮箱与密码的组合登录网站。用户名和邮箱都是保密的。用户名不可以被更改，而邮箱可以。",
     "Validity date expired": "有效期已过",
     "Validity date:": "有效期：",
     "Versions": "版本",
@@ -741,6 +766,7 @@
     "You may also drag, draw or edit the track on the map.": "您也可以在地图上拖动，绘制或编辑轨迹。",
     "You need to activate your by clicking the link sent to your email address.": "您需要通过单击发送到您的电子邮箱的链接来激活您的账户。",
     "Your account was successfully created": "您的帐户已成功创建",
+    "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "您的论坛用户名将显示在论坛上，并且可以随时在您的设置中随意更改。它的限制比较多，主要是不能有音调符号和空格。",
     "Zoom in": {
       "Map controls": "放大"
     },
@@ -1943,7 +1969,7 @@
     },
     "you need to activate drawing mode": "你需要激活绘制模式",
     "zh": {
-      "langs": "中文"
+      "langs": "简体中文"
     }
   }
 }
