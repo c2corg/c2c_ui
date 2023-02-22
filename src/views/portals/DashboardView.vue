@@ -169,8 +169,10 @@ export default {
       const result = {};
 
       for (const outing of this.outings.documents) {
-        result[outing.date_end] = result[outing.date_end] ?? [];
-        result[outing.date_end].push(outing);
+        if (outing.quality !== 'empty') {
+          result[outing.date_end] = result[outing.date_end] ?? [];
+          result[outing.date_end].push(outing);
+        }
       }
 
       return result;

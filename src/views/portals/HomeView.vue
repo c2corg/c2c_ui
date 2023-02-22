@@ -91,20 +91,13 @@ export default {
       state = false;
     }
     return {
-      isPersonal: false,
       enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
       denseMode: true,
       visible: state,
     };
   },
 
-  created() {
-    this.isPersonal = this.$localStorage.get('isPersonal', false);
-  },
   methods: {
-    saveIsPersonalState() {
-      this.$localStorage.set('isPersonal', this.isPersonal);
-    },
     toogleProperty(property) {
       this.setProperty(property, !this[property]);
     },

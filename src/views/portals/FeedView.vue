@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
-      <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" />
+      <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
     </div>
     <div v-if="!$screen.isMobile" class="column is-hidden-mobile is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
       <useful-links />
