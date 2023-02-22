@@ -61,7 +61,7 @@
     <!-- Partie dashboard/feed -->
     <!-- Feed -->
     <div class="feed-view" v-if="!denseMode">
-      <feed-view :is-personal="isPersonal" />
+      <feed-view :is-personal="enableUserPreferences" />
     </div>
     <!-- Dashboard -->
     <div v-if="denseMode">
