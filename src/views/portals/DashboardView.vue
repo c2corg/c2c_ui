@@ -22,7 +22,17 @@
         </div>
         <hr />
         <h6 class="title is-6 has-text-centered">
-          <router-link to="outings">
+          <router-link
+            :to="{
+              name: 'outings',
+              query: {
+                qa: 'draft,great',
+                bbox: '-431698,3115462,1931123,8442818',
+                offset: 0,
+                limit: 100,
+              },
+            }"
+          >
             <span v-translate>Voir plus</span>
           </router-link>
         </h6>
@@ -94,7 +104,13 @@
         </h4>
         <loading-notification :promise="articlesPromise" />
         <div v-if="articles != null">
-          <dashboard-article-link v-for="article of articles.documents" :key="article.document_id" :article="article" />
+          <ul>
+            <dashboard-article-link
+              v-for="article of articles.documents"
+              :key="article.document_id"
+              :article="article"
+            />
+          </ul>
         </div>
         <hr />
         <h6 class="title is-6 has-text-centered">
@@ -129,7 +145,7 @@ export default {
     Gallery,
   },
   props: {
-    enableUserPreferences: {
+    isPersonal: {
       type: Boolean,
       required: true,
     },
@@ -180,7 +196,7 @@ export default {
   },
 
   watch: {
-    enableUserPreferences: 'loadOutings',
+    isPersonal: 'loadOutings',
   },
 
   created() {
@@ -192,9 +208,9 @@ export default {
 
   methods: {
     loadOutings() {
-      this.$localStorage.set('enableUserPreferences', this.enableUserPreferences);
+      //this.$localStorage.set('isPersonal', this.isPersonal);
 
-      if (!this.enableUserPreferences || !this.$user.isLogged) {
+      if (!this.isPersonal || !this.$user.isLogged) {
         this.loadOutingsWithQuery();
       } else {
         this.outingsPromise = this.getQueryFromUserPreferences('outing').then(this.loadOutingsWithQuery);
@@ -239,5 +255,10 @@ export default {
 
 .images-container {
   min-height: 200px;
+}
+
+ul {
+  list-style-type: disc !important;
+  padding-left: 12px;
 }
 </style>

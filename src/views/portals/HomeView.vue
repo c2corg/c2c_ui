@@ -25,12 +25,12 @@
             <!--User preferences-->
             <a
               class="dropdown-item is-size-6"
-              :class="{ 'is-active': enableUserPreferences }"
-              @click="toogleProperty('enableUserPreferences')"
+              :class="{ 'is-active': isPersonal }"
+              @click="toogleProperty('isPersonal')"
               v-if="$user.isLogged"
             >
               <span class="is-nowrap item-icons">
-                <fa-icon :icon="enableUserPreferences ? 'circle-check' : 'circle'" />
+                <fa-icon :icon="isPersonal ? 'circle-check' : 'circle'" />
               </span>
               <span class="is-nowrap" v-translate>Load my preferences</span>
             </a>
@@ -61,11 +61,11 @@
     <!-- Partie dashboard/feed -->
     <!-- Feed -->
     <div class="feed-view" v-if="!denseMode">
-      <feed-view :is-personal="enableUserPreferences" />
+      <feed-view :is-personal="isPersonal" />
     </div>
     <!-- Dashboard -->
     <div v-if="denseMode">
-      <dashboard-view :enable-user-preferences="enableUserPreferences" />
+      <dashboard-view :is-personal="isPersonal" />
     </div>
   </div>
 </template>
@@ -91,8 +91,8 @@ export default {
       state = false;
     }
     return {
-      enableUserPreferences: this.$localStorage.get('enableUserPreferences', false),
-      denseMode: true,
+      isPersonal: this.$localStorage.get('isPersonal', false),
+      denseMode: this.$localStorage.get('denseMode', true),
       visible: state,
     };
   },
@@ -103,7 +103,7 @@ export default {
     },
     setProperty(property, value) {
       this[property] = value;
-      this.$localStorage.set(`${this.documentType}.${property}`, this[property]);
+      this.$localStorage.set(`${property}`, this[property]);
     },
   },
 };

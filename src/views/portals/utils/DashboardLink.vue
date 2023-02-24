@@ -1,7 +1,7 @@
 <template>
   <document-link :document="document" class="dashboard-link has-text-normal is-flex has-hover-background">
     <activities :activities="document.activities" class="is-size-3 activity-icons is-nowrap" />
-    <span class="dashboard-link-main is-ellipsed">
+    <span class="dashboard-link-main" :class="{ 'is-ellipsed': !$screen.isMobile }">
       <document-title :document="document" class="document-title" />
       <document-title
         v-for="area of rangeAreas"

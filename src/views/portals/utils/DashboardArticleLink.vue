@@ -1,12 +1,12 @@
 <template>
-  <document-link :document="article" class="dashboard-link has-text-normal is-flex has-hover-background">
-    <span class="dashboard-link-main is-ellipsed">
-      <document-title :document="article" class="document-title" />
-    </span>
-    <span class="is-nowrap">
+  <li>
+    <document-link :document="article" class="dashboard-link has-text-normal is-flex has-hover-background">
+      <span class="dashboard-link-main">
+        <document-title :document="article" class="document-title" />
+      </span>
       <slot />
-    </span>
-  </document-link>
+    </document-link>
+  </li>
 </template>
 
 <script>
@@ -31,4 +31,8 @@ export default {
 .dashboard-link:visited {
   color: $grey-light;
 }
+
+/*.document-title::before {
+  content: '•';
+}*/
 </style>

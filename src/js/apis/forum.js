@@ -44,6 +44,10 @@ Forum.prototype.readAnnouncement = function (lang) {
   return this.get('/t/annonce-' + lang + '.json');
 };
 
+Forum.prototype.readPubli = function () {
+  return this.get('/t/publication-ca.json');
+};
+
 // Technically not part of the API, but this helper
 // is probably at the best place here...
 Forum.prototype.getAvatarUrl = function (user, size) {
