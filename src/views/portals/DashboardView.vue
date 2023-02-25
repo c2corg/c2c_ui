@@ -4,7 +4,17 @@
       <!-- Sorties -->
       <div class="box">
         <h4 class="title is-3">
-          <router-link to="outings">
+          <router-link
+            :to="{
+              name: 'outings',
+              query: {
+                qa: 'draft,great',
+                bbox: '-431698,3115462,1931123,8442818',
+                offset: 0,
+                limit: 100,
+              },
+            }"
+          >
             <icon-outing />
             {{ $gettext('outings') | uppercaseFirstLetter }}
           </router-link>
@@ -17,7 +27,9 @@
                 {{ $dateUtils.toLocalizedString(date, '@1') | uppercaseFirstLetter }}
               </router-link>
             </p>
-            <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
+            <div class="dashboard-list">
+              <dashboard-outing-link v-for="outing of sortedOutings" :key="outing.document_id" :outing="outing" />
+            </div>
           </div>
         </div>
         <hr />
@@ -33,7 +45,8 @@
               },
             }"
           >
-            <span v-translate>Voir plus</span>
+            <span v-translate>Voir plus </span>
+            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -46,13 +59,14 @@
           </router-link>
         </h4>
         <loading-notification :promise="routesPromise" />
-        <div v-if="routes != null">
+        <div v-if="routes != null" class="dashboard-list">
           <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
         </div>
         <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="routes">
-            <span v-translate>Voir plus</span>
+            <span v-translate>Voir plus </span>
+            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -73,7 +87,8 @@
         <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="images">
-            <span v-translate>Voir plus</span>
+            <span v-translate>Voir plus </span>
+            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -90,7 +105,8 @@
         <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="forum">
-            <span v-translate>Voir plus</span>
+            <span v-translate>Voir plus </span>
+            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -104,7 +120,7 @@
         </h4>
         <loading-notification :promise="articlesPromise" />
         <div v-if="articles != null">
-          <ul>
+          <ul class="dashboard-list">
             <dashboard-article-link
               v-for="article of articles.documents"
               :key="article.document_id"
@@ -115,7 +131,8 @@
         <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="articles">
-            <span v-translate>Voir plus</span>
+            <span v-translate>Voir plus </span>
+            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -251,6 +268,11 @@ export default {
 .outing-date-header {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
+  border-bottom: solid #f93 2px;
+
+  > a {
+    color: #4a4a4a !important;
+  }
 }
 
 .images-container {
@@ -260,5 +282,17 @@ export default {
 ul {
   list-style-type: disc !important;
   padding-left: 12px;
+}
+
+.dashboard-list > a:nth-child(2n + 1) {
+  background-color: #fbfaf6;
+}
+
+h4 > a {
+  color: #f93 !important;
+}
+
+h6 > a {
+  color: #4a4a4a !important;
 }
 </style>

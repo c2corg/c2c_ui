@@ -59,8 +59,12 @@
       </span>
     </card-row>
 
-    <card-row v-if="item.document.areas && item.document.areas.length">
-      <card-region-item :document="item.document" class="is-ellipsed" />
+    <card-row>
+      <card-region-item
+        v-if="item.document.areas && item.document.areas.length"
+        :document="item.document"
+        class="is-ellipsed"
+      />
       <span>
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
         <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" class="is-size-3" />

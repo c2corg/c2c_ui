@@ -45,5 +45,10 @@ h4 {
   padding-bottom: 0.7rem !important;
   margin-bottom: 0.7rem !important;
   border-bottom: 1px solid #ddd;
+  color: #f93 !important;
+}
+
+a {
+  color: #4a4a4a !important;
 }
 </style>
