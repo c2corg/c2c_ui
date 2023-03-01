@@ -46,7 +46,6 @@
             }"
           >
             <span v-translate>Voir plus </span>
-            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -66,7 +65,6 @@
         <h6 class="title is-6 has-text-centered">
           <router-link to="routes">
             <span v-translate>Voir plus </span>
-            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -88,7 +86,6 @@
         <h6 class="title is-6 has-text-centered">
           <router-link to="images">
             <span v-translate>Voir plus </span>
-            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -106,7 +103,6 @@
         <h6 class="title is-6 has-text-centered">
           <router-link to="forum">
             <span v-translate>Voir plus </span>
-            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -119,20 +115,24 @@
           </router-link>
         </h4>
         <loading-notification :promise="articlesPromise" />
-        <div v-if="articles != null">
-          <ul class="dashboard-list">
+        <ul class="dashboard-list">
+          <li>
+            <router-link :to="{ name: 'article', params: { id: 108793 } }" v-translate
+              >Sommaire d'une encyclopédie collaborative</router-link
+            >
+          </li>
+          <div v-if="articles != null">
             <dashboard-article-link
               v-for="article of articles.documents"
               :key="article.document_id"
               :article="article"
             />
-          </ul>
-        </div>
+          </div>
+        </ul>
         <hr />
         <h6 class="title is-6 has-text-centered">
           <router-link to="articles">
             <span v-translate>Voir plus </span>
-            <fa-icon icon="external-link-alt" />
           </router-link>
         </h6>
       </div>
@@ -269,10 +269,6 @@ export default {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   border-bottom: solid #f93 2px;
-
-  > a {
-    color: #4a4a4a !important;
-  }
 }
 
 .images-container {
@@ -286,13 +282,5 @@ ul {
 
 .dashboard-list > a:nth-child(2n + 1) {
   background-color: #fbfaf6;
-}
-
-h4 > a {
-  color: #f93 !important;
-}
-
-h6 > a {
-  color: #4a4a4a !important;
 }
 </style>

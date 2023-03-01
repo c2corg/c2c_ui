@@ -31,8 +31,4 @@ export default {
 .dashboard-link:visited {
   color: $grey-light;
 }
-
-/*.document-title::before {
-  content: '•';
-}*/
 </style>

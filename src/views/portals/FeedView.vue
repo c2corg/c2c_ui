@@ -75,4 +75,8 @@ export default {
   justify-content: center;
   margin: auto;
 }
+
+h4 > a {
+  color: #4a4a4a !important;
+}
 </style>

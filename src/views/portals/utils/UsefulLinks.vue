@@ -1,6 +1,8 @@
 <template>
   <div class="box">
-    <h4 class="title is-3">Liens utiles</h4>
+    <h4 class="title is-3">
+      <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Liens utiles</router-link>
+    </h4>
     <div>
       <ul>
         <li>
@@ -41,14 +43,14 @@ ul {
   list-style-type: disc !important;
   padding-left: 12px;
 }
+
 h4 {
   padding-bottom: 0.7rem !important;
   margin-bottom: 0.7rem !important;
   border-bottom: 1px solid #ddd;
-  color: #f93 !important;
 }
 
-a {
-  color: #4a4a4a !important;
+li:hover {
+  background: $hover-background;
 }
 </style>

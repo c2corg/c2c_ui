@@ -156,3 +156,21 @@ $brandLogoHeight: 70px;
   }
 }
 </style>
+<style lang="scss">
+/*h4 > a {
+  color: #f93 !important;
+}*/
+
+h4 > a,
+h6 > a,
+.outing-date-header > a,
+li > a {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover,
+h6 > a:hover,
+.outing-date-header > a:hover {
+  color: #337ab7 !important;
+}
+</style>
