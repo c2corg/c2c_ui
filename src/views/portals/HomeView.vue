@@ -7,64 +7,58 @@
           <span class="title" :class="{ 'is-marginless': !visible }" v-translate
             >Bienvenue sur Camptocamp ! La communauté des sports de montagne</span
           >
-          <!--Display parameters-->
-          <dropdown-button class="is-right">
-            <span slot="button" class="button">
-              <fa-icon icon="cogs" />
-              <span class="is-hidden-mobile">&nbsp;</span>
-              <span class="is-hidden-mobile" v-translate>Paramètres d'affichage</span>
-            </span>
-            <!--Show intro text or not-->
-            <a class="dropdown-item is-size-6" :class="{ 'is-active': visible }" @click="toogleProperty('visible')">
-              <span class="is-nowrap item-icons">
-                <fa-icon :icon="visible ? 'circle-check' : 'circle'" />
-              </span>
-              <span class="is-nowrap" v-translate>Afficher le texte de présentation</span>
-            </a>
-            <hr />
-            <!--User preferences-->
-            <a
-              class="dropdown-item is-size-6"
-              :class="{ 'is-active': isPersonal }"
-              @click="toogleProperty('isPersonal')"
-              v-if="$user.isLogged"
-            >
-              <span class="is-nowrap item-icons">
-                <fa-icon :icon="isPersonal ? 'circle-check' : 'circle'" />
-              </span>
-              <span class="is-nowrap" v-translate>Load my preferences</span>
-            </a>
-            <hr v-if="$user.isLogged" />
-            <!--Dashboard/Dense-->
-            <a class="dropdown-item is-size-6" :class="{ 'is-active': denseMode }" @click="toogleProperty('denseMode')">
-              <span class="is-nowrap item-icons">
-                <fa-icon icon="th-list" />
-              </span>
-              <span class="is-nowrap" v-translate>Tableau de bord</span>
-            </a>
-            <!--Feed/Comfortable-->
-            <a
-              class="dropdown-item is-size-6"
-              :class="{ 'is-active': !denseMode }"
-              @click="toogleProperty('denseMode')"
-            >
-              <span class="is-nowrap item-icons">
-                <fa-icon icon="th-large" />
-              </span>
-              <span class="is-nowrap" v-translate>Activity feed</span>
-            </a>
-          </dropdown-button>
+          <fa-icon
+            class="is-size-6 no-print accordion-icon mt-2"
+            icon="angle-down"
+            :rotation="visible ? 180 : 180"
+            @click="toogleProperty('visible')"
+          />
         </div>
         <home-banner v-show="visible" />
       </div>
     </div>
     <!-- Partie dashboard/feed -->
+    <!-- Switchs -->
+    <div>
+      <span class="field">
+        <input
+          id="c2c-mode"
+          class="switch is-rtl is-rounded"
+          type="checkbox"
+          v-model="feed"
+          @click="toogleProperty('feed')"
+        />
+        <label for="c2c-mode" v-translate :title="feed ? $gettext('Feed') : $gettext('Dashboard')">
+          Activity feed
+        </label>
+      </span>
+      <span class="field" v-if="$user.isLogged">
+        <span> / </span>
+        <input
+          id="c2c-personal-feed"
+          class="switch is-rtl is-rounded"
+          type="checkbox"
+          v-model="isPersonal"
+          @click="toogleProperty('isPersonal')"
+        />
+        <label
+          for="c2c-personal-feed"
+          v-translate
+          :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
+        >
+          Load my preferences
+        </label>
+      </span>
+      <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
+        <fa-icon icon="gears" />
+      </router-link>
+    </div>
     <!-- Feed -->
-    <div class="feed-view" v-if="!denseMode">
+    <div class="feed-view" v-if="feed">
       <feed-view :is-personal="isPersonal" />
     </div>
     <!-- Dashboard -->
-    <div v-if="denseMode">
+    <div v-if="!feed">
       <dashboard-view :is-personal="isPersonal" />
     </div>
   </div>
@@ -92,7 +86,7 @@ export default {
     }
     return {
       isPersonal: this.$localStorage.get('isPersonal', false),
-      denseMode: this.$localStorage.get('denseMode', true),
+      feed: this.$localStorage.get('feed', false),
       visible: state,
     };
   },
@@ -154,6 +148,10 @@ $brandLogoHeight: 70px;
     height: $brandLogoHeight;
     //margin: $brandLogoMargin 0;
   }
+}
+
+.switch[type='checkbox']:checked + label::before {
+  background: #f93;
 }
 </style>
 <style lang="scss">
