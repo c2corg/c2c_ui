@@ -10,7 +10,7 @@
           <fa-icon
             class="is-size-6 no-print accordion-icon mt-2"
             icon="angle-down"
-            :rotation="visible ? 180 : 180"
+            :rotation="visible ? 180 : undefined"
             @click="toogleProperty('visible')"
           />
         </div>
