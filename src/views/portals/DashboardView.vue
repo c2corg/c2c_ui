@@ -118,7 +118,7 @@
         <ul class="dashboard-list">
           <li>
             <router-link :to="{ name: 'article', params: { id: 108793 } }" v-translate
-              >Sommaire d'une encyclopédie collaborative</router-link
+              >Sommaire des articles</router-link
             >
           </li>
           <div v-if="articles != null">

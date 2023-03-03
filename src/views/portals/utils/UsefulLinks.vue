@@ -15,7 +15,7 @@
         </li>
         <li>
           <a href="https://www.metaskirando.ovh/" title="Metaskirando"
-            >Metaskirando : aggrégateur de sorties ski en Europe</a
+            >Metaskirando : agrégateur de sorties ski en Europe</a
           >
         </li>
         <li>
