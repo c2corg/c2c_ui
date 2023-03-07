@@ -7,7 +7,7 @@
       @click="visible = !visible"
     >
       <slot name="title" />
-      <fa-icon class="is-size-6 no-print accordion-icon mt-2" icon="angle-down" :rotation="visible ? undefined : 180" />
+      <fa-icon class="is-size-6 no-print accordion-icon mt-2" icon="angle-down" :rotation="visible ? 180 : undefined" />
     </div>
     <div v-show="visible">
       <slot name="content" />
