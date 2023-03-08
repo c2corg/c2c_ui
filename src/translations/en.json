@@ -335,6 +335,7 @@
     "conditions": "Conditions",
     "conditions_levels": "conditions levels",
     "configuration": "Configuration",
+    "coros": "Coros",
     "crack_dihedral": {
       "climbing_styles": "crack, dihedral"
     },
