@@ -97,14 +97,14 @@ export default {
         // $gettext('strava')
         name: 'strava',
         website: 'https://www.strava.com',
-        connect: `https://www.strava.com/oauth/authorize?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
+        connect: `${config.urls.stravaConnectAuthUrl}?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
         status: 'disabled',
       },
       {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
-        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=${config.urls.decathlonClientId}&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
+        connect: `${config.urls.decathlonConnectAuthUrl}?client_id=${config.urls.decathlonClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token&state=c2c`,
         status: 'disabled',
       },
       {
@@ -117,14 +117,21 @@ export default {
         // $gettext('suunto')
         name: 'suunto',
         website: 'https://app.suunto.com/',
-        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=${config.urls.suuntoClientId}&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
+        connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token&state=c2c`,
         status: 'disabled',
       },
       {
         // $gettext('polar')
         name: 'polar',
         website: 'https://flow.polar.com/',
-        connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        connect: `${config.urls.polarConnectAuthUrl}?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        status: 'disabled',
+      },
+      {
+        // $gettext('coros')
+        name: 'coros',
+        website: 'https://coros.com/traininghub',
+        connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${this.baseUrl}/trackers/coros/exchange-token&response_type=code`,
         status: 'disabled',
       },
     ];
