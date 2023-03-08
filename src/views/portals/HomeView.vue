@@ -19,39 +19,38 @@
     </div>
     <!-- Partie dashboard/feed -->
     <!-- Switchs -->
-    <div>
-      <span class="field">
-        <input
-          id="c2c-mode"
-          class="switch is-rtl is-rounded"
-          type="checkbox"
-          v-model="feed"
-          @click="toogleProperty('feed')"
-        />
-        <label for="c2c-mode" v-translate :title="feed ? $gettext('Feed') : $gettext('Dashboard')">
-          Activity feed
+    <div
+      class="field column is-7"
+      :class="{ 'is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd': feed }"
+    >
+      <span>
+        <input id="c2c-mode" class="toggleCheckbox" type="checkbox" v-model="feed" />
+        <label class="toggleContainer" for="c2c_mode">
+          <span :class="{ 'is-active': !feed }" v-translate @click="toogleProperty('feed')">Tableau de bord</span>
+          <span :class="{ 'is-active': feed }" v-translate @click="toogleProperty('feed')">Activity feed</span>
         </label>
       </span>
-      <span class="field" v-if="$user.isLogged">
-        <span> / </span>
-        <input
-          id="c2c-personal-feed"
-          class="switch is-rtl is-rounded"
-          type="checkbox"
-          v-model="isPersonal"
-          @click="toogleProperty('isPersonal')"
-        />
-        <label
-          for="c2c-personal-feed"
-          v-translate
-          :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
-        >
-          Load my preferences
-        </label>
+      <span :class="{ 'is-pulled-right': !$screen.isMobile }">
+        <span v-if="$user.isLogged">
+          <input
+            id="c2c-personal-feed"
+            class="switch is-rtl is-rounded"
+            type="checkbox"
+            v-model="isPersonal"
+            @click="toogleProperty('isPersonal')"
+          />
+          <label
+            for="c2c-personal-feed"
+            v-translate
+            :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
+          >
+            Load my preferences
+          </label>
+        </span>
+        <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
+          <fa-icon icon="gears" />
+        </router-link>
       </span>
-      <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
-        <fa-icon icon="gears" />
-      </router-link>
     </div>
     <!-- Feed -->
     <div class="feed-view" v-if="feed">
@@ -153,12 +152,34 @@ $brandLogoHeight: 70px;
 .switch[type='checkbox']:checked + label::before {
   background: #f93;
 }
+
+.toggleCheckbox {
+  display: none;
+}
+
+.toggleContainer {
+  position: relative;
+  border-radius: 20px;
+  background: #f93;
+  color: white;
+  padding: 5px 2px;
+  cursor: pointer;
+}
+
+.is-active {
+  color: #4a4a4a;
+  border-radius: 20px;
+  background: white;
+  transition: color 0.3s;
+}
+
+.toggleContainer span {
+  padding: 3px 10px;
+  text-align: center;
+  z-index: 100;
+}
 </style>
 <style lang="scss">
-/*h4 > a {
-  color: #f93 !important;
-}*/
-
 h4 > a,
 h6 > a,
 .outing-date-header > a,
