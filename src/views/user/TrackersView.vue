@@ -101,6 +101,13 @@ export default {
         status: 'disabled',
       },
       {
+        // $gettext('coros')
+        name: 'coros',
+        website: 'https://coros.com/traininghub',
+        connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${this.baseUrl}/trackers/coros/exchange-token&response_type=code`,
+        status: 'disabled',
+      },
+      {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
@@ -114,13 +121,6 @@ export default {
         status: 'disabled',
       },
       {
-        // $gettext('suunto')
-        name: 'suunto',
-        website: 'https://app.suunto.com/',
-        connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token&state=c2c`,
-        status: 'disabled',
-      },
-      {
         // $gettext('polar')
         name: 'polar',
         website: 'https://flow.polar.com/',
@@ -128,10 +128,10 @@ export default {
         status: 'disabled',
       },
       {
-        // $gettext('coros')
-        name: 'coros',
-        website: 'https://coros.com/traininghub',
-        connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${this.baseUrl}/trackers/coros/exchange-token&response_type=code`,
+        // $gettext('suunto')
+        name: 'suunto',
+        website: 'https://app.suunto.com/',
+        connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token&state=c2c`,
         status: 'disabled',
       },
     ];
