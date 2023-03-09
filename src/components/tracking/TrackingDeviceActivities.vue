@@ -9,7 +9,7 @@
               <button class="button" @click="fetch(activity.id)" v-if="!fetching">
                 <fa-icon icon="download"></fa-icon>&hairsp;<span v-translate>Use track</span>
               </button>
-              <span v-else-if="fetching === activity.id"><fa-icon icon="rotate" spin></fa-icon></span>
+              <spinner-icon v-else-if="fetching === activity.id" />
             </tracking-device-activity>
           </div>
         </div>

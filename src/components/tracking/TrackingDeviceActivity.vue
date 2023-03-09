@@ -66,21 +66,11 @@ export default {
     },
 
     heightDiffUp() {
-      if (!this.activity.heightDiffUp) {
-        return undefined;
-      }
-      return `${this.activity.heightDiffUp}&nbsp;${this.$gettext('meters')}`;
+      return this.$documentUtils.heightDiffUpWithUnit(this.activity.heightDiffUp);
     },
 
     length() {
-      if (!this.activity.length) {
-        return undefined;
-      }
-      if (this.activity.length > 1000) {
-        const length = (this.activity.length / 1000.0).toFixed(1);
-        return `${length}&nbsp;${this.$gettext('kilometers')}`;
-      }
-      return `${this.activity.length}&nbsp;${this.$gettext('meters')}`;
+      return this.$documentUtils.lengthWithUnit(this.activity.length);
     },
 
     miniaturesBaseUrl() {

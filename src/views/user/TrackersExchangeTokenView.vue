@@ -1,5 +1,5 @@
 <template>
-  <p v-translate>Please wait. Requesting authorization...</p>
+  <p class="m-4" v-translate><spinner-icon /> Please wait. Requesting authorization...</p>
 </template>
 
 <script>
