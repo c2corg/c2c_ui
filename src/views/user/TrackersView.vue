@@ -37,7 +37,12 @@
           preservation and design of my practice sites in France.
         </p>
         <div class="has-text-centered">
-          <a href="https://outdoorvision.fr/" rel="noreferrer noopener" class="button is-primary" v-translate>
+          <a
+            href="https://outdoorvision.fr/?mtm_campaign=CampToCamp"
+            rel="noreferrer noopener"
+            class="button is-primary"
+            v-translate
+          >
             I contribute
           </a>
         </div>
