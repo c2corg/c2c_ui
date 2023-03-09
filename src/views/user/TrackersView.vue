@@ -50,7 +50,18 @@
       <div v-for="activity in activities" :key="activity.id">
         {{ $dateUtils.toTechnicalString(activity.date) }}&hairsp;&bull;&hairsp;<template v-if="activity.name"
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
-        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor) }}
+        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor)
+        }}<template v-if="activity.duration"
+          >&hairsp;&bull;&hairsp;<fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
+            v-html="activity.duration"
+          ></span></template
+        ><template v-if="activity.length">
+          &hairsp;&bull;&hairsp;<fa-icon icon="ruler" :title="$gettext('length')"></fa-icon>&hairsp;<span
+            v-html="activity.length"
+          ></span></template
+        ><template v-if="activity.heightDiffUp"
+          >&hairsp;&bull;&hairsp;<icon-height-diff-up />&hairsp;<span v-html="activity.heightDiffUp"></span
+        ></template>
       </div>
     </template>
     <div v-else-if="activitiesLoading"><spinner-icon /></div>
@@ -166,7 +177,14 @@ export default {
           this.trackingService.getActivities(this.$user.id, this.$user.lang).then(
             ({ data }) => {
               this.activitiesLoading = false;
-              this.activities = data.slice(0, 5);
+              this.activities = data.slice(0, 5).map((activity) => ({
+                ...activity,
+                ...(activity.duration && { duration: this.$dateUtils.durationToTimeString(activity.duration) }),
+                ...(activity.heightDiffUp && {
+                  heightDiffUp: this.$documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
+                }),
+                ...(activity.length && { length: this.$documentUtils.lengthWithUnit(activity.length) }),
+              }));
             },
             () => {
               this.activitiesLoading = false;
