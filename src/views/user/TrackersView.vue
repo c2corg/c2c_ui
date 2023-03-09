@@ -53,7 +53,7 @@
         >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor) }}
       </div>
     </template>
-    <div v-else-if="activitiesLoading"><span v-translate>Loading...</span></div>
+    <div v-else-if="activitiesLoading"><spinner-icon /></div>
     <div v-else-if="activitiesError">
       <span v-translate>An error occurred, could not retrieve activities</span>
     </div>
