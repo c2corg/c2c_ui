@@ -359,6 +359,24 @@ export default function install(Vue) {
 
         return [minX, minY, maxX, maxY].map(Math.round);
       },
+
+      lengthWithUnit(length) {
+        if (!length) {
+          return undefined;
+        }
+        if (length > 1000) {
+          const l = (length / 1000.0).toFixed(1);
+          return `${l}&nbsp;${this.$gettext('kilometers')}`;
+        }
+        return `${length}&nbsp;${this.$gettext('meters')}`;
+      },
+
+      heightDiffUpWithUnit(hdu) {
+        if (!hdu) {
+          return undefined;
+        }
+        return `${hdu}&nbsp;${this.$gettext('meters')}`;
+      },
     },
   });
 }
