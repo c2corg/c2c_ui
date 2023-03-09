@@ -32,6 +32,7 @@
     "5 months": "5 mesecev",
     "50 meters while descending": "50 metrov dol grede",
     "8 days": "8 dni",
+    "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Sporočilo je bilo poslano na novi navedeni naslov. Za potrditev spremembe e-poštnega naslova morate slediti povezavi znotraj sporočila. ",
     "Accident database": "Incidenti in nesreče",
     "Account": "Račun",
     "Action": {
@@ -347,6 +348,7 @@
     "Ice and dry climbing gear": "Ledno plezanje in drytooling",
     "If the route does not exists in our base, you can create it.": "Če smer ne obstaja v bazi podatkov, jo lahko ustvarite. ",
     "If you can't see this email, please check your spam folder.": "Če tega e-poštnega sporočila ne vidite, preverite mapo z vsiljeno pošto.",
+    "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Če spremenite svoj e-poštni naslov, bo sporočilo poslano na novi navedeni naslov. Za potrditev spremembe e-poštnega naslova morate slediti povezavi znotraj sporočila.",
     "Ignore year": "Ignoriraj leto",
     "Image could not be processed": "Slike ni bilo mogoče obdelati za nalaganje",
     "Image count": "Število slik",
@@ -739,6 +741,7 @@
     "You may add associated waypoints, books and articles": "Poveži druge dokumente s to točko. ",
     "You may also drag, draw or edit the track on the map.": "GPS-sled lahko narišete, uredite ali povlecite na zemljevidu. ",
     "You need to activate your by clicking the link sent to your email address.": "Svoj račun morate aktivirati s klikom na povezavo, poslano na vaš e-poštni naslov",
+    "Your account is now bound to the new email address you filled in.": "Vaš račun je zdaj vezan na novi e-poštni naslov, ki ste ga vnesli.",
     "Your account was successfully created": "Vaš račun je bil ustvarjen",
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaš vzdevek na forumu bo prikazan na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
     "Zoom in": {
