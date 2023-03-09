@@ -37,6 +37,7 @@
         <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box v-if="!isDraftView" :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>

@@ -7,7 +7,7 @@
       :document-type="documentType"
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns print-no-columns">
       <div class="column is-3">
         <div class="box">
           <field-view :document="document" :field="fields.area_type" />
@@ -23,7 +23,7 @@
           <div style="clear: both" />
         </div>
 
-        <div class="box">
+        <div class="box no-print">
           <div class="level is-mobile">
             <div
               class="level-item has-text-centered"
@@ -46,6 +46,7 @@
 
         <comments-box :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>

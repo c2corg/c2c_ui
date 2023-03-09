@@ -28,7 +28,7 @@
       </span>
       3.0
       <br />
-      <span v-translate> This content is licensed under Creative Commons BY-SA 3.0 </span>
+      <span v-translate>This content is licensed under Creative Commons BY-SA 3.0</span>
     </a>
     <a
       v-else-if="license == 'by-nc-nd'"
@@ -59,7 +59,7 @@
       </span>
       3.0
       <br />
-      <span v-translate> This content is licensed under Creative Commons BY-NC-ND 3.0 </span>
+      <span v-translate>This content is licensed under Creative Commons BY-NC-ND 3.0</span>
     </a>
     <span
       v-else-if="license == 'copyright'"
@@ -70,7 +70,7 @@
       "
     >
       <fa-icon icon="ban" />
-      <span v-translate> This book cover is the property of its editor and/or author </span>
+      <span v-translate>This book cover is the property of its editor and/or author</span>
     </span>
   </div>
 </template>
@@ -86,37 +86,7 @@ export default {
     // collaborative means CC-By-Sa
 
     license() {
-      if (['route', 'waypoint', 'area', 'book'].includes(this.documentType)) {
-        return 'by-sa';
-      }
-
-      if (['outing', 'profile', 'xreport'].includes(this.documentType)) {
-        return 'by-nc-nd';
-      }
-
-      if (this.documentType === 'article') {
-        if (this.document.article_type === 'collab') {
-          return 'by-sa';
-        } else if (this.document.article_type === 'personal') {
-          return 'by-nc-nd';
-        } else {
-          throw new Error(`Unexpected article_type : ${this.document.article_type}`);
-        }
-      }
-
-      if (this.documentType === 'image') {
-        if (this.document.image_type === 'collaborative') {
-          return 'by-sa';
-        } else if (this.document.image_type === 'personal') {
-          return 'by-nc-nd';
-        } else if (this.document.image_type === 'copyright') {
-          return 'copyright';
-        } else {
-          throw new Error(`Unexpected image_type : ${this.document.image_type}`);
-        }
-      }
-
-      throw new Error(`Unexpected document_type: ${this.documentType}`);
+      return this.$documentUtils.getDocumentLicense(this.document);
     },
   },
 };

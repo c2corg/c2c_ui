@@ -1,3 +1,4 @@
+import DocumentPrintLicense from './DocumentPrintLicense';
 import DocumentViewHeader from './DocumentViewHeader';
 import CommentsBox from './boxes/CommentsBox';
 import ImagesBox from './boxes/ImagesBox';
@@ -26,6 +27,7 @@ export default {
     DocumentViewHeader,
 
     CommentsBox,
+    DocumentPrintLicense,
     DoubleNumericField,
     FieldView,
     LabelValue,

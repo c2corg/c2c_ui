@@ -68,6 +68,7 @@
 
         <comments-box :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>

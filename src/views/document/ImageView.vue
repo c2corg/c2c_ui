@@ -7,7 +7,7 @@
       :document-type="documentType"
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
-    <div v-if="document" class="columns">
+    <div v-if="document" class="columns print-no-columns">
       <div class="column is-3">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
@@ -58,6 +58,7 @@
         <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>
