@@ -50,6 +50,41 @@ export default function install(Vue) {
         return locale.title ?? '';
       },
 
+      getDocumentLicense(document) {
+        const documentType = this.$documentUtils.getDocumentType(document.type);
+        if (['route', 'waypoint', 'area', 'book'].includes(documentType)) {
+          return 'by-sa';
+        }
+
+        if (['outing', 'profile', 'xreport'].includes(documentType)) {
+          return 'by-nc-nd';
+        }
+
+        if (documentType === 'article') {
+          if (document.article_type === 'collab') {
+            return 'by-sa';
+          } else if (document.article_type === 'personal') {
+            return 'by-nc-nd';
+          } else {
+            throw new Error(`Unexpected article_type : ${document.article_type}`);
+          }
+        }
+
+        if (documentType === 'image') {
+          if (document.image_type === 'collaborative') {
+            return 'by-sa';
+          } else if (document.image_type === 'personal') {
+            return 'by-nc-nd';
+          } else if (document.image_type === 'copyright') {
+            return 'copyright';
+          } else {
+            throw new Error(`Unexpected image_type : ${document.image_type}`);
+          }
+        }
+
+        throw new Error(`Unexpected document_type: ${documentType}`);
+      },
+
       getLocaleStupid(document, lang) {
         if (!document.locales) {
           return null;

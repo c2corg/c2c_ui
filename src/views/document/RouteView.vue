@@ -131,6 +131,7 @@
 
         <comments-box :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>
@@ -139,6 +140,7 @@
 import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
+
 const historyWorthActivities = [
   'snow_ice_mixed',
   'mountain_climbing',

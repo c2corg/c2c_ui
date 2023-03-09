@@ -18,7 +18,7 @@
 
       <div class="column is-9 is-12-print">
         <div class="box">
-          <div v-for="route of document.associations.routes" :key="route.document_id">
+          <div class="no-print" v-for="route of document.associations.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
           </div>
 
@@ -108,6 +108,7 @@
 
         <comments-box :document="document" />
       </div>
+      <document-print-license :document="document" />
     </div>
   </div>
 </template>
