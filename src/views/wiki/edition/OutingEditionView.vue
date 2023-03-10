@@ -192,7 +192,6 @@
         <form-field class="is-4" :document="document" :field="fields.engagement_rating" />
         <form-field class="is-4" :document="document" :field="fields.equipment_rating" />
 
-        <!-- TODO cotometer -->
         <form-field
           class="is-4"
           :document="document"

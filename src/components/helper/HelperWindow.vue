@@ -18,7 +18,7 @@
           :to="{ name: 'article', params: { id: helper.documentId } }"
           target="_blank"
         >
-          <span class="button is-info" v-translate> Edit </span>
+          <span class="button is-info" v-translate>Edit</span>
         </router-link>
       </div>
     </div>

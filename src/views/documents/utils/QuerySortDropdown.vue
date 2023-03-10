@@ -44,7 +44,7 @@
         <span v-if="documentType === 'waypoint'" v-translate>
           Please select a waypoint type to enable sort feature
         </span>
-        <span v-translate> Please select an activity to enable sort feature </span>
+        <span v-translate>Please select an activity to enable sort feature</span>
       </div>
     </div>
   </dropdown-button>
