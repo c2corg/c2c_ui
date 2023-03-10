@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="columns">
-      <div class="column is-7 is-12-mobile">
+      <div class="column is-12-mobile">
         <div class="subtitle" v-translate>
           Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
           mountain activities.
@@ -78,21 +78,19 @@
           </div>
         </div>
       </div>
-      <div class="column is-5 is-12-mobile">
-        <publi-widget />
-      </div>
     </div>
   </section>
 </template>
 
 <script>
-import PubliWidget from './utils/PubliWidget';
-
 export default {
   name: 'HomeBanner',
 
-  components: {
-    PubliWidget,
+  props: {
+    feed: {
+      type: Boolean,
+      required: true,
+    },
   },
 };
 </script>
