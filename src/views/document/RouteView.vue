@@ -106,9 +106,9 @@
           </markdown-section>
 
           <markdown-section :document="document" :field="fields.gear">
-            <div class="content automatic-gears" slot="after" v-if="Object.keys(gear_articles).length !== 0">
+            <div class="content automatic-gears" slot="after" v-if="Object.keys(gearArticles).length !== 0">
               <ul>
-                <li v-for="(label, articleId) of gear_articles" :key="articleId">
+                <li v-for="(label, articleId) of gearArticles" :key="articleId">
                   <router-link :to="{ name: 'article', params: { id: articleId } }">
                     {{ label }}
                   </router-link>
@@ -164,8 +164,7 @@ export default {
   },
 
   computed: {
-    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L103
-    gear_articles() {
+    gearArticles() {
       const result = {};
       const doc = this.document;
       const activities = doc.activities ?? [];
@@ -186,7 +185,9 @@ export default {
       }
 
       if (activities.includes('rock_climbing')) {
-        if (['single', 'bloc', 'psicobloc'].includes(doc.climbing_outdoor_type)) {
+        if (['bloc', 'psicobloc'].includes(doc.climbing_outdoor_type)) {
+          result['1516488'] = this.$gettext('Bouldering climbing gear');
+        } else if (doc.climbing_outdoor_type === 'single') {
           result['1307778'] = this.$gettext('Crag climbing gear');
         } else if (['P1', 'P1+'].includes(doc.equipment_rating)) {
           result['183332'] = this.$gettext('Bolted rock climbing gear');
