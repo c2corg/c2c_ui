@@ -1,7 +1,7 @@
 <template>
   <modal-window ref="modalWindow">
     <div slot="header" class="has-text-centered">
-      <span v-translate> Sensitive area: </span>
+      <span v-translate>Sensitive area:</span>
       <span>
         {{ data.title }}
       </span>

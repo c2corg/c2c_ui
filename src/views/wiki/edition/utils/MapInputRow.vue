@@ -11,7 +11,7 @@
         </gps-file-upload>
       </div>
       <div class="column">
-        <em v-translate> You may also drag, draw or edit the track on the map. </em>
+        <em v-translate>You may also drag, draw or edit the track on the map.</em>
       </div>
     </div>
 

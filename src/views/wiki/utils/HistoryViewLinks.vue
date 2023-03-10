@@ -13,9 +13,9 @@
     <router-link :to="{ name: documentType, params: { id: documentId, lang: lang } }" v-translate>
       See the latest version
     </router-link>
-    <association-history-link :document-id="documentId" v-translate> Associations history </association-history-link>
+    <association-history-link :document-id="documentId" v-translate>Associations history</association-history-link>
     <span>
-      <span v-translate> List of versions for language: </span>
+      <span v-translate>List of versions for language:</span>
       <span> &nbsp;{{ $gettext(lang, 'langs') }} </span>
     </span>
   </div>

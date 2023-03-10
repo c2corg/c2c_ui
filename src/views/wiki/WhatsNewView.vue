@@ -3,7 +3,7 @@
     <html-header :title="$gettext('Recent changes')" />
 
     <div clas="links">
-      <association-history-link :user-id="userId" v-translate> Associations history </association-history-link>
+      <association-history-link :user-id="userId" v-translate>Associations history</association-history-link>
     </div>
 
     <table v-infinite-scroll="load" infinite-scroll-disabled="disableInfiniteSCroll" infinite-scroll-distance="100">
@@ -56,7 +56,7 @@
           <span v-if="change.comment">
             {{ change.comment }}
           </span>
-          <span v-else v-translate> empty comment </span>
+          <span v-else v-translate>empty comment</span>
         </td>
       </tr>
     </table>

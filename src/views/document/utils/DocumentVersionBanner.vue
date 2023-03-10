@@ -26,7 +26,7 @@
     </span>
     <span v-else v-translate>This is the first version</span>
     |
-    <document-link :document="document" :lang="$route.params.lang" v-translate> see actual version </document-link>
+    <document-link :document="document" :lang="$route.params.lang" v-translate>see actual version</document-link>
     (<diff-link
       :document-type="documentType"
       :id="document.document_id"

@@ -17,8 +17,8 @@ Supported pattern in .vue file, inside <template /> part :
 
     Exemple :
 
-        <span v-translate> Hello </span>
-        <span v-translate translate-context="World"> Hello </span>
+        <span v-translate>Hello</span>
+        <span v-translate translate-context="World">Hello</span>
 
 ******************************************/
 
