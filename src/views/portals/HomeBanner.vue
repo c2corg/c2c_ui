@@ -164,7 +164,7 @@ export default {
 }
 
 .logo-association {
-  max-width: 50%;
+  max-width: 35%;
   display: block;
   margin-left: auto;
   margin-right: auto;

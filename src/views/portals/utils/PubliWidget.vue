@@ -17,7 +17,6 @@ export default {
     return {
       hasAnnouncement: false,
       hidden: false,
-      showContent: true,
       updatedAt: null,
     };
   },
@@ -42,7 +41,7 @@ export default {
       forum.readPubli().then((response) => {
         const data = response['data'];
         if (data['tags'].indexOf('visible') > -1) {
-          const post = data.post_stream.posts[0];
+          const post = data.post_stream.posts[data.posts_count - 1];
 
           this.updatedAt = post.updated_at;
 
@@ -75,6 +74,7 @@ export default {
 .publication {
   //display: block;
   position: relative;
+  margin-bottom: 0.5rem;
 
   a,
   a:hover {

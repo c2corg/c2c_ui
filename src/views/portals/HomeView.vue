@@ -5,7 +5,7 @@
         <!-- Présentation de l'association, info qu'on met en avant -->
         <div class="box intro">
           <div class="feed-title">
-            <span class="title" :class="{ 'is-marginless': !visible }" v-translate
+            <span class="title is-4" :class="{ 'is-marginless': !visible }" v-translate
               >Bienvenue sur Camptocamp ! La communauté des sports de montagne</span
             >
             <fa-icon
@@ -172,16 +172,16 @@ h4 {
 .toggleContainer {
   position: relative;
   border-radius: 20px;
-  background: #f93;
-  color: white;
+  background: white;
+  border: 1px solid #f93;
   padding: 5px 2px;
   cursor: pointer;
 }
 
 .is-active {
-  color: #4a4a4a;
+  color: white;
   border-radius: 20px;
-  background: white;
+  background: #f93;
   transition: color 0.3s;
 }
 
