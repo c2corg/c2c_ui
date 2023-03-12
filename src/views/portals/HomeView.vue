@@ -18,7 +18,7 @@
               @click="toogleProperty('visible')"
             />
           </div>
-          <home-banner v-show="visible" :feed="feed" />
+          <home-banner v-show="visible" />
         </div>
         <publi-widget v-if="$screen.isMobile" />
         <!-- Switchs -->
