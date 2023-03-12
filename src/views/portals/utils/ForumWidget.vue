@@ -1,27 +1,41 @@
 <template>
-  <div :class="{ wide: wide }">
-    <loading-notification :promise="promise" />
-    <div v-if="topics">
-      <a
-        class="forum-row"
-        v-for="topic of topics"
-        :key="topic.id"
-        :href="getTopicUrl(topic)"
-        target="_blank"
-        rel="noopener"
-        :title="topic.last_poster_username"
-      >
-        <img
-          :src="getAvatarUrl(topic.last_poster_user)"
-          :style="'width:' + imgSize + 'px'"
-          loading="lazy"
-          alt="Avatar"
-        />
-        <span :class="{ 'is-ellipsed': !wide }">
-          {{ topic.title }}
-        </span>
-      </a>
+  <div class="box">
+    <h4 class="title is-3">
+      <router-link to="forum">
+        <icon-forum />
+        {{ $gettext('Forum') }}
+      </router-link>
+    </h4>
+    <div :class="{ wide: wide }">
+      <loading-notification :promise="promise" />
+      <div v-if="topics">
+        <a
+          class="forum-row"
+          v-for="topic of topics"
+          :key="topic.id"
+          :href="getTopicUrl(topic)"
+          target="_blank"
+          rel="noopener"
+          :title="topic.last_poster_username"
+        >
+          <img
+            :src="getAvatarUrl(topic.last_poster_user)"
+            :style="'width:' + imgSize + 'px'"
+            loading="lazy"
+            alt="Avatar"
+          />
+          <span :class="{ 'is-ellipsed': !wide }">
+            {{ topic.title }}
+          </span>
+        </a>
+      </div>
     </div>
+    <hr />
+    <h6 class="title is-6 has-text-centered">
+      <router-link to="forum">
+        <span v-translate>Voir plus </span>
+      </router-link>
+    </h6>
   </div>
 </template>
 

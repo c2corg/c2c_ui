@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="columns">
-      <div class="column is-7 is-12-mobile">
+      <div class="column is-12-mobile">
         <div class="subtitle" v-translate>
           Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of
           mountain activities.
@@ -78,39 +78,17 @@
           </div>
         </div>
       </div>
-      <div class="column is-5 is-12-mobile">
-        <publi-widget />
-      </div>
     </div>
   </section>
 </template>
 
 <script>
-import PubliWidget from './utils/PubliWidget';
-
 export default {
   name: 'HomeBanner',
-
-  components: {
-    PubliWidget,
-  },
 };
 </script>
 
 <style scoped lang="scss">
-/*section {
-  background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-800w.jpg');
-  background-size: cover;
-  background-position-y: 50%;
-  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
-  @media (min-width: 800px) and (max-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1024w.jpg');
-  }
-  @media (min-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/alexbuisse-greenland-1200w.jpg');
-  }
-}*/
-
 .intro-banner {
   padding-bottom: 40px;
   padding-top: 70px;
@@ -132,27 +110,6 @@ export default {
   color: #fff;
 }
 
-/*.outings-links {
-  line-height: 60px;
-  margin-top: 60px;
-
-  .outings-link svg {
-    vertical-align: text-bottom;
-    margin: 5px;
-    color: $color-base-c2c;
-    background-color: #fff;
-    border-radius: 50%;
-    font-size: 4rem;
-    width: 4rem;
-    height: 4rem;
-  }
-}
-
-.button {
-  display: inline-block;
-  height: auto;
-}*/
-
 @media screen and (max-width: $tablet) {
   .intro-banner {
     width: 100%;
@@ -166,7 +123,7 @@ export default {
 }
 
 .logo-association {
-  max-width: 50%;
+  max-width: 35%;
   display: block;
   margin-left: auto;
   margin-right: auto;
