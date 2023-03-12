@@ -1,7 +1,10 @@
 <template>
   <div class="section">
     <div class="columns">
-      <div class="column is-12-mobile is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd">
+      <div
+        class="column is-12-mobile"
+        :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
+      >
         <!-- Présentation de l'association, info qu'on met en avant -->
         <div class="box intro">
           <div class="feed-title">
@@ -61,7 +64,11 @@
           <forum-widget :message-count="20" v-if="$screen.isMobile" />
         </div>
       </div>
-      <div v-if="!$screen.isMobile" class="column is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd">
+      <div
+        v-if="!$screen.isMobile"
+        class="column"
+        :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
+      >
         <publi-widget />
         <dashboard-images-gallery v-if="!feed" />
         <useful-links />
