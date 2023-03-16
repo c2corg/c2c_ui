@@ -48,6 +48,11 @@
   border-radius: $radius;
 }
 
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 @media not print {
   .print-only {
     display: none !important;

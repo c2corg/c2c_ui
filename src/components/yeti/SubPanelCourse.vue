@@ -323,11 +323,6 @@ input[type='file'] {
   }
 }
 
-.is-disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 @media screen and (max-width: 350px) {
   .form-export {
     display: block;
