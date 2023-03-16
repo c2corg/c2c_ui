@@ -11,17 +11,20 @@
       >
         Compute risk
       </button>
-      <p class="yetiform-error" v-if="currentError">
-        <span>
-          {{ currentError }}
-        </span>
-      </p>
+      <div v-if="currentError" class="info">
+        <info inline>
+          <span>{{ currentError }}</span>
+        </info>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Info from '@/components/yeti/Info.vue';
+
 export default {
+  components: { Info },
   props: {
     currentError: {
       type: String,
@@ -40,24 +43,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.yetiform-error {
-  font-size: 0.8em;
-  font-style: italic;
-  margin-top: 10px;
-  text-align: right;
-  opacity: 0.75;
-
-  span::before {
-    content: 'i';
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    background: rgba(0, 60, 136, 0.5);
-    color: #fff;
-    border-radius: 50%;
-    font-size: 0.71rem;
-    font-weight: bold;
-    text-align: center;
-  }
+.info {
+  margin-top: 0.25rem;
+  margin-right: -0.75rem;
 }
 </style>
