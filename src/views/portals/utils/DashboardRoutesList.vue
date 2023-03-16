@@ -48,3 +48,19 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+h4 > a,
+h6 > a {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover,
+h6 > a:hover {
+  color: #337ab7 !important;
+}
+
+.dashboard-list > a:nth-child(2n + 1) {
+  background-color: #fbfaf6;
+}
+</style>

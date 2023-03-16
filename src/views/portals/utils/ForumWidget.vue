@@ -196,4 +196,14 @@ export default {
     padding-left: 0.5rem;
   }
 }
+
+h4 > a,
+h6 > a {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover,
+h6 > a:hover {
+  color: #337ab7 !important;
+}
 </style>

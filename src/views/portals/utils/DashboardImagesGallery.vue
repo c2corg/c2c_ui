@@ -52,4 +52,12 @@ export default {
 .images-container {
   min-height: 200px;
 }
+
+h4 > a, {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover {
+  color: #337ab7 !important;
+}
 </style>

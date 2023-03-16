@@ -26,25 +26,34 @@
           <span>
             <input id="c2c-mode" class="toggleCheckbox" type="checkbox" v-model="feed" />
             <label class="toggleContainer" for="c2c_mode">
-              <span :class="{ 'is-active': !feed }" v-translate @click="toogleProperty('feed')">Tableau de bord</span>
-              <span :class="{ 'is-active': feed }" v-translate @click="toogleProperty('feed')">Activity feed</span>
+              <span :class="{ 'is-active': !feed }" @click="toogleProperty('feed')">
+                <!--<span v-if="$screen.isMobile">
+                  <fa-icon icon="table-list" />
+                </span>-->
+                <span v-translate>Tableau de bord</span>
+              </span>
+              <span :class="{ 'is-active': feed }" @click="toogleProperty('feed')">
+                <!--<span v-if="$screen.isMobile">
+                  <fa-icon icon="table-cells-large" />
+                </span>-->
+                <span v-translate>Activity feed</span>
+              </span>
             </label>
           </span>
-          <span :class="{ 'is-pulled-right': !$screen.isMobile }">
+          <span class="is-pulled-right">
             <span v-if="$user.isLogged">
               <input
                 id="c2c-personal-feed"
-                class="switch is-rtl is-rounded"
+                :class="{ 'switch is-rtl is-rounded': !$screen.isMobile }"
                 type="checkbox"
                 v-model="isPersonal"
                 @click="toogleProperty('isPersonal')"
               />
               <label
                 for="c2c-personal-feed"
-                v-translate
                 :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
               >
-                Load my preferences
+                <span class="is-hidden-mobile" v-translate>Load my preferences</span>
               </label>
             </span>
             <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
@@ -142,6 +151,20 @@ export default {
       padding-right: 0;
     }
   }
+  /*
+  .toggleContainer {
+    background: none !important;
+    border: none !important;
+  }
+
+  .is-active {
+    color: #f93 !important;
+    background: none !important;
+  }
+
+  .toggleContainer span {
+    padding: 3px 2px !important;
+  }*/
 }
 
 @media screen and (min-width: $tablet) {
@@ -196,23 +219,5 @@ h4 {
   padding: 3px 10px;
   text-align: center;
   z-index: 100;
-}
-</style>
-<style lang="scss">
-h4 > a,
-h6 > a,
-.outing-date-header > a,
-li > a {
-  color: #4a4a4a !important;
-}
-
-h4 > a:hover,
-h6 > a:hover,
-.outing-date-header > a:hover {
-  color: #337ab7 !important;
-}
-
-.dashboard-list > a:nth-child(2n + 1) {
-  background-color: #fbfaf6;
 }
 </style>

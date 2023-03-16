@@ -53,4 +53,13 @@ h4 {
 li:hover {
   background: $hover-background;
 }
+
+h4 > a,
+li > a {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover {
+  color: #337ab7 !important;
+}
 </style>

@@ -149,4 +149,21 @@ export default {
   margin-bottom: 0.5rem;
   border-bottom: solid #f93 2px;
 }
+
+h4 > a,
+h6 > a,
+.outing-date-header > a,
+li > a {
+  color: #4a4a4a !important;
+}
+
+h4 > a:hover,
+h6 > a:hover,
+.outing-date-header > a:hover {
+  color: #337ab7 !important;
+}
+
+.dashboard-list > a:nth-child(2n + 1) {
+  background-color: #fbfaf6;
+}
 </style>
