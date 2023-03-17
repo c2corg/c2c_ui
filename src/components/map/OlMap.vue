@@ -1082,13 +1082,11 @@ export default {
             return;
           }
           if (event.originalEvent.ctrlKey) {
-            window.open(
-              this.$router.resolve({
-                name: this.$documentUtils.getDocumentType(document.type),
-                params: { id: document.document_id },
-              }),
-              '_blank'
-            );
+            const href = this.$router.resolve({
+              name: this.$documentUtils.getDocumentType(document.type),
+              params: { id: document.document_id },
+            }).href;
+            window.open(location.origin + href, '_blank');
           } else {
             this.$router.push({
               name: this.$documentUtils.getDocumentType(document.type),
