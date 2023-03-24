@@ -22,6 +22,7 @@
       <!-- $gettext('No user with this email', 'API message') -->
       <!-- $gettext('Username cannot be empty or whitespaces', 'API message') -->
       <!-- $gettext('please consult the server logs', 'API message') -->
+      <!-- $gettext(`I'm a teapot`) -->
 
       <span class="has-text-danger has-text-weight-bold" v-if="errorMessage">
         {{ $gettext(errorMessage, 'API message') }}
