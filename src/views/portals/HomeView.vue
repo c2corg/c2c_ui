@@ -8,9 +8,10 @@
         <!-- Présentation de l'association, info qu'on met en avant -->
         <div class="box intro">
           <div class="feed-title">
-            <span class="title is-4" :class="{ 'is-marginless': !visible }" v-translate
-              >Bienvenue sur Camptocamp ! La communauté des sports de montagne</span
-            >
+            <span class="title is-4" :class="{ 'is-marginless': !visible }">
+              <span v-translate>Welcome on Camptocamp !</span>
+              <span v-translate>The mountain sports community</span>
+            </span>
             <fa-icon
               class="is-size-6 no-print accordion-icon mt-2"
               icon="angle-down"

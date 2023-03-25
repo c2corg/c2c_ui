@@ -6,20 +6,22 @@
     <div>
       <ul>
         <li>
-          <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Préparer sa course</router-link>
+          <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate
+            >Get ready for your climb</router-link
+          >
         </li>
         <li>
-          <router-link :to="{ name: 'yeti' }" v-translate
-            >Yeti : un outil pour évaluer le risque d’avalanche</router-link
-          >
+          <router-link :to="{ name: 'yeti' }" v-translate>Yeti : A tool to assess the risk of avalanche</router-link>
         </li>
         <li>
           <a href="https://www.metaskirando.ovh/" title="Metaskirando" v-translate
-            >Metaskirando : aggrégateur de sorties ski en Europe</a
+            >Metaskirando : An aggregator of ski outings in Europe</a
           >
         </li>
         <li>
-          <router-link :to="{ name: 'serac' }" v-translate>SERAC : accidents et incidents en montagne</router-link>
+          <router-link :to="{ name: 'serac' }" v-translate
+            >SERAC : Accidents and incidents in the mountains</router-link
+          >
         </li>
       </ul>
       <ul>
@@ -30,7 +32,7 @@
         </li>
         <li>
           <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso" v-translate
-            >Donate or join us</a
+            >Want to join us ? Or donate ?</a
           >
         </li>
       </ul>

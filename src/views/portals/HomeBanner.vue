@@ -9,30 +9,30 @@
         <div class="columns">
           <div class="column is-12-mobile">
             <div>
-              <p v-translate>Vous trouverez ici :</p>
+              <p v-translate>All in store for you :</p>
               <ul>
                 <li>
                   <icon-route />
-                  <router-link to="routes"><span v-translate>des itinéraires à parcourir</span></router-link>
+                  <router-link to="routes"><span v-translate>Routes to explore</span></router-link>
                 </li>
                 <li>
                   <icon-outing />
                   <router-link to="outings">
-                    <span v-translate>des sorties pour avoir les dernières conditions</span>
+                    <span v-translate>Outings, with the latest conditions in the mountains</span>
                   </router-link>
                 </li>
                 <li>
                   <icon-xreport />
-                  <span v-translate>une base de données incidents/accidents</span> :
+                  <span v-translate>Accidents/Incidents Database</span> :
                   <router-link to="serac">SERAC</router-link>
                 </li>
                 <li>
                   <icon-yeti />
-                  <span v-translate>une aide à la gestion du risque d'avalanche</span> :
+                  <span v-translate>Avalanche Risk Evaluation Tool</span> :
                   <router-link to="yeti">Yeti</router-link>
                 </li>
                 <li>
-                  <span v-translate>a library with</span>
+                  <span v-translate>Library :</span>
                   <icon-article />
                   <router-link to="articles" v-translate>articles</router-link>
                   <span v-translate>and</span>
@@ -42,7 +42,7 @@
                 <li>
                   <icon-forum />
                   <router-link to="forum" v-translate>
-                    un forum pour discuter de sujets techniques ou bavarder
+                    Forum: a place to chat about technical matters, or just petty talk
                   </router-link>
                 </li>
               </ul>
@@ -54,7 +54,7 @@
                 Camptocamp Association
               </router-link>
               <span v-translate>
-                est la structure bénévole à but non lucratif assurant la gestion du site camptocamp.org
+                is a non profit organization, where volunteers manage the camptocamp.org website
               </span>
             </p>
             <router-link :to="{ name: 'article', params: { id: 106726 } }" class="menu-brand has-text-centered">
@@ -67,13 +67,13 @@
             <ul>
               <li>
                 <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Join us')">
-                  <span v-translate>Pour participer ou vous investir : rejoignez nous</span>
+                  <span v-translate>Want to take part or get involved ? Join us !</span>
                 </a>
               </li>
               <li>
                 <fa-icon icon="heart" class="donate-icon" />
                 <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
-                  <span v-translate>Pour soutenir financièrement (serveurs, développements…) : faites un don</span>
+                  <span v-translate>Want to contribute financially (hosting, developing...)? Donate!</span>
                 </a>
               </li>
             </ul>

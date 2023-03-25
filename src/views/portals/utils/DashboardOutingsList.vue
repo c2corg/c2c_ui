@@ -42,7 +42,7 @@
           },
         }"
       >
-        <span v-translate>Voir plus</span>
+        <span v-translate>See more</span>
       </router-link>
     </h6>
   </div>

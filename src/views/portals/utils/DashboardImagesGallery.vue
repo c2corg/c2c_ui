@@ -13,7 +13,7 @@
     <hr />
     <h6 class="title is-6 has-text-centered">
       <router-link to="images">
-        <span v-translate>Voir plus</span>
+        <span v-translate>See more</span>
       </router-link>
     </h6>
   </div>

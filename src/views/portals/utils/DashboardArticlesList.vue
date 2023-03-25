@@ -10,7 +10,7 @@
     <ul class="dashboard-list">
       <li>
         <router-link :to="{ name: 'article', params: { id: 108793 } }" v-translate
-          >Sommaire d'une encyclopédie collaborative</router-link
+          >Summary of camptocamp's articles</router-link
         >
       </li>
       <div v-if="articles != null">
@@ -20,7 +20,7 @@
     <hr />
     <h6 class="title is-6 has-text-centered">
       <router-link to="articles">
-        <span v-translate>Voir plus</span>
+        <span v-translate>See more</span>
       </router-link>
     </h6>
   </div>
