@@ -26,12 +26,14 @@ import { faBus } from '@fortawesome/free-solid-svg-icons/faBus';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
 import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
 import { faChartBar } from '@fortawesome/free-solid-svg-icons/faChartBar';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faCloud } from '@fortawesome/free-solid-svg-icons/faCloud';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
 import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns';
@@ -255,12 +257,14 @@ export default function install(Vue) {
     faCalendar,
     faCamera,
     faChartBar,
+    faCheck,
     faCheckCircle,
     faChevronLeft,
     faChevronRight,
     faChevronUp,
     faChevronDown,
     faCircle,
+    faCircleNotch,
     faCloud,
     faCode,
     faColumns,

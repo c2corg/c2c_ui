@@ -3,7 +3,7 @@
     <span slot="title">
       <span v-translate>Restore this version</span>
     </span>
-    <span v-translate> Are you sure you want to revert to this version of the document? </span>
+    <span v-translate>Are you sure you want to revert to this version of the document?</span>
   </modal-confirmation>
 </template>
 

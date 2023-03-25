@@ -37,7 +37,12 @@
           preservation and design of my practice sites in France.
         </p>
         <div class="has-text-centered">
-          <a href="https://outdoorvision.fr/" rel="noreferrer noopener" class="button is-primary" v-translate>
+          <a
+            href="https://outdoorvision.fr/?mtm_campaign=CampToCamp"
+            rel="noreferrer noopener"
+            class="button is-primary"
+            v-translate
+          >
             I contribute
           </a>
         </div>
@@ -50,10 +55,21 @@
       <div v-for="activity in activities" :key="activity.id">
         {{ $dateUtils.toTechnicalString(activity.date) }}&hairsp;&bull;&hairsp;<template v-if="activity.name"
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
-        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor) }}
+        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor)
+        }}<template v-if="activity.duration"
+          >&hairsp;&bull;&hairsp;<fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
+            v-html="activity.duration"
+          ></span></template
+        ><template v-if="activity.length">
+          &hairsp;&bull;&hairsp;<fa-icon icon="ruler" :title="$gettext('length')"></fa-icon>&hairsp;<span
+            v-html="activity.length"
+          ></span></template
+        ><template v-if="activity.heightDiffUp"
+          >&hairsp;&bull;&hairsp;<icon-height-diff-up />&hairsp;<span v-html="activity.heightDiffUp"></span
+        ></template>
       </div>
     </template>
-    <div v-else-if="activitiesLoading"><span v-translate>Loading...</span></div>
+    <div v-else-if="activitiesLoading"><spinner-icon /></div>
     <div v-else-if="activitiesError">
       <span v-translate>An error occurred, could not retrieve activities</span>
     </div>
@@ -97,14 +113,21 @@ export default {
         // $gettext('strava')
         name: 'strava',
         website: 'https://www.strava.com',
-        connect: `https://www.strava.com/oauth/authorize?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
+        connect: `${config.urls.stravaConnectAuthUrl}?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
+        status: 'disabled',
+      },
+      {
+        // $gettext('coros')
+        name: 'coros',
+        website: 'https://coros.com/traininghub',
+        connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${this.baseUrl}/trackers/coros/exchange-token&response_type=code`,
         status: 'disabled',
       },
       {
         // $gettext('decathlon')
         name: 'decathlon',
         website: 'https://developers.decathlon.com/products/sports-tracking-data',
-        connect: `https://api-global.decathlon.net/connect/oauth/authorize?client_id=${config.urls.decathlonClientId}&response_type=code&state=c2c&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token`,
+        connect: `${config.urls.decathlonConnectAuthUrl}?client_id=${config.urls.decathlonClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token&state=c2c`,
         status: 'disabled',
       },
       {
@@ -114,17 +137,17 @@ export default {
         status: 'disabled',
       },
       {
-        // $gettext('suunto')
-        name: 'suunto',
-        website: 'https://app.suunto.com/',
-        connect: `https://cloudapi-oauth.suunto.com/oauth/authorize?response_type=code&client_id=${config.urls.suuntoClientId}&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token`,
-        status: 'disabled',
-      },
-      {
         // $gettext('polar')
         name: 'polar',
         website: 'https://flow.polar.com/',
-        connect: `https://flow.polar.com/oauth2/authorization?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        connect: `${config.urls.polarConnectAuthUrl}?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
+        status: 'disabled',
+      },
+      {
+        // $gettext('suunto')
+        name: 'suunto',
+        website: 'https://app.suunto.com/',
+        connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token&state=c2c`,
         status: 'disabled',
       },
     ];
@@ -159,7 +182,14 @@ export default {
           this.trackingService.getActivities(this.$user.id, this.$user.lang).then(
             ({ data }) => {
               this.activitiesLoading = false;
-              this.activities = data.slice(0, 5);
+              this.activities = data.slice(0, 5).map((activity) => ({
+                ...activity,
+                ...(activity.duration && { duration: this.$dateUtils.durationToTimeString(activity.duration) }),
+                ...(activity.heightDiffUp && {
+                  heightDiffUp: this.$documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
+                }),
+                ...(activity.length && { length: this.$documentUtils.lengthWithUnit(activity.length) }),
+              }));
             },
             () => {
               this.activitiesLoading = false;

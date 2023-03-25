@@ -1,6 +1,6 @@
 <template>
   <div class="notification is-info no-print">
-    <span v-translate> This document is a draft.</span>
+    <span v-translate>This document is a draft.</span>
     <edit-link :document="document" :lang="lang">
       <span v-translate>Feel free to edit it.</span>
     </edit-link>

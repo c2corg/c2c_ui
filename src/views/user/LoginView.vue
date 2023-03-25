@@ -292,9 +292,16 @@ export default {
         // he receives on his new mail a secret url to validate
         // that  he is the owner
         this.mode = 'changeEmail';
-        this.promise = c2c.userProfile
-          .validateChangeEmail(this.$route.query.validate_change_email)
-          .then(() => this.$router.push({ name: 'home' }));
+        this.promise = c2c.userProfile.validateChangeEmail(this.$route.query.validate_change_email).then(() => {
+          toast({
+            message: this.$gettext('Your account is now bound to the new email address you filled in.'),
+            type: 'is-primary',
+            duration: 5000,
+            position: 'center',
+            closeOnClick: true,
+          });
+          this.$router.push({ name: 'home' });
+        });
       } else if (this.$route.query.validate_register_email) {
         // after account creation
         this.mode = 'validateAccountCreation';

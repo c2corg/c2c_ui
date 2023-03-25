@@ -489,6 +489,7 @@
     "Print": "Stampare",
     "Print a selection of documents": "Stampare una gamma di documenti",
     "Print search results": "Stampare i risultati della ricerca",
+    "Printed on": "Stampato il",
     "Printing": "Stampa in corso",
     "Professional Reduction Method": "Metodo di riduzione professionale",
     "Protect document": "Proteggere il documento",
@@ -907,6 +908,7 @@
     },
     "contact": "Contatto ",
     "contributor": "contributore ",
+    "coros": "Coros",
     "corridor": {
       "route_configuration_types": "canale"
     },

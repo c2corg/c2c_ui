@@ -37,7 +37,7 @@
             :to="{ name: 'outing-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate> New outing </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>New outing</span>
           </topoguide-view-small-link>
         </div>
       </div>
@@ -63,7 +63,7 @@
             :to="{ name: 'route-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate> New route </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>New route</span>
           </topoguide-view-small-link>
         </div>
       </div>
@@ -89,7 +89,7 @@
             :to="{ name: 'waypoint-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
-            <span class="has-text-success has-text-weight-semibold" v-translate> New waypoint </span>
+            <span class="has-text-success has-text-weight-semibold" v-translate>New waypoint</span>
           </topoguide-view-small-link>
         </div>
       </div>

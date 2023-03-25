@@ -1,7 +1,7 @@
 <template>
   <modal-card ref="modalWindow">
     <span slot="title">
-      <span v-translate> This tool estimates the technical difficulty of a ski route (ski rating). </span>
+      <span v-translate>This tool estimates the technical difficulty of a ski route (ski rating).</span>
     </span>
 
     <div class="field">

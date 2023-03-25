@@ -134,6 +134,7 @@
         <images-box v-if="!isDraftView" :document="document" />
         <tool-box :document="document" v-if="$screen.isMobile" />
         <comments-box v-if="!isDraftView" :document="document" />
+        <document-print-license :document="document" />
       </div>
     </div>
   </div>
