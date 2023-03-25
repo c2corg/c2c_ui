@@ -53,7 +53,7 @@ export default {
   min-height: 200px;
 }
 
-h4 > a, {
+h4 > a {
   color: #4a4a4a !important;
 }
 

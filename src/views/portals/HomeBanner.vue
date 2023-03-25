@@ -32,10 +32,10 @@
                   <router-link to="yeti">Yeti</router-link>
                 </li>
                 <li>
-                  <span v-translate>une bibliothèque comportant des</span>
+                  <span v-translate>a library with</span>
                   <icon-article />
                   <router-link to="articles" v-translate>articles</router-link>
-                  <span v-translate>et des </span>
+                  <span v-translate>and</span>
                   <icon-book />
                   <router-link to="books" v-translate>books</router-link>
                 </li>
@@ -50,7 +50,9 @@
           </div>
           <div class="column is-12-mobile">
             <p>
-              <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate> Association</router-link>
+              <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>
+                Camptocamp Association
+              </router-link>
               <span v-translate>
                 est la structure bénévole à but non lucratif assurant la gestion du site camptocamp.org
               </span>

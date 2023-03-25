@@ -26,18 +26,8 @@
           <span>
             <input id="c2c-mode" class="toggleCheckbox" type="checkbox" v-model="feed" />
             <label class="toggleContainer" for="c2c_mode">
-              <span :class="{ 'is-active': !feed }" @click="toogleProperty('feed')">
-                <!--<span v-if="$screen.isMobile">
-                  <fa-icon icon="table-list" />
-                </span>-->
-                <span v-translate>Tableau de bord</span>
-              </span>
-              <span :class="{ 'is-active': feed }" @click="toogleProperty('feed')">
-                <!--<span v-if="$screen.isMobile">
-                  <fa-icon icon="table-cells-large" />
-                </span>-->
-                <span v-translate>Activity feed</span>
-              </span>
+              <span :class="{ 'is-active': !feed }" @click="toogleProperty('feed')" v-translate>Dashboard</span>
+              <span :class="{ 'is-active': feed }" @click="toogleProperty('feed')" v-translate>Activity feed</span>
             </label>
           </span>
           <span class="is-pulled-right">

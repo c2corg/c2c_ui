@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <h4 class="title is-3">
-      <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Liens utiles</router-link>
+      <router-link :to="{ name: 'article', params: { id: 107228 } }" v-translate>Useful links</router-link>
     </h4>
     <div>
       <ul>
@@ -14,7 +14,7 @@
           >
         </li>
         <li>
-          <a href="https://www.metaskirando.ovh/" title="Metaskirando"
+          <a href="https://www.metaskirando.ovh/" title="Metaskirando" v-translate
             >Metaskirando : aggrégateur de sorties ski en Europe</a
           >
         </li>
@@ -29,8 +29,8 @@
           >
         </li>
         <li>
-          <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso"
-            >Faire un don ou adhérer</a
+          <a href="https://www.helloasso.com/associations/camptocamp-association/" title="Helloasso" v-translate
+            >Donate or join us</a
           >
         </li>
       </ul>
