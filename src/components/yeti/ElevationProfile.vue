@@ -28,7 +28,7 @@ export default {
 
   watch: {
     features() {
-      this.updateChart();
+      this.updateChart(true);
     },
   },
 
@@ -216,9 +216,10 @@ export default {
       });
       this.resizeObserver.observe(this.$refs.graph);
     },
-
-    updateChart() {
-      this.computeCoords();
+    updateChart(force = false) {
+      if (force) {
+        this.computeCoords();
+      }
 
       // update axes
       this.scaleX.domain(d3.extent(this.concatData, (d) => d.d)).nice();
