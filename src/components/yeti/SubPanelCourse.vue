@@ -228,6 +228,7 @@ export default {
 
       const content = olFormat.writeFeatures(features, {
         featureProjection: 'EPSG:3857',
+        decimals: 7,
       });
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
