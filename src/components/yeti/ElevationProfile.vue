@@ -63,9 +63,7 @@ export default {
       this.coords = this.features.map((feature) => {
         return feature.getGeometry().getCoordinates();
       });
-      this.concatCoords = this.coords.reduce((a, b) => {
-        return a.concat(b);
-      }, []);
+      this.concatCoords = this.coords.flat();
 
       this.updateData();
     },
@@ -92,9 +90,7 @@ export default {
         });
       });
 
-      this.concatData = this.data.reduce((a, b) => {
-        return a.concat(b);
-      }, []);
+      this.concatData = this.data.flat();
 
       this.areasData = this.data
         .map((d) => {
