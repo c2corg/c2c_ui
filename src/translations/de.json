@@ -68,6 +68,7 @@
       "access_times": "5 min"
     },
     "8 days": "8 Tagen",
+    "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Eine Nachricht wurde an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "Accident database": "Unfalldatenbank",
     "Account": "Konto",
     "Action": {
@@ -141,6 +142,7 @@
     "Book content": "Buch Inhalt",
     "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
     "Both results and map": "Beide Ergebnisse und Karte",
+    "Bouldering climbing gear": "Boulder-Kletterausrüstung",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Standardmäßig wird Ihr Topoführername Ihr Benutzername sein. Sie können ihn später in den Einstellungen frei ändern.",
     "By month": "Monatlich",
@@ -360,6 +362,7 @@
     "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
     "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
     "I read and understood the interest and limitations of YETI": "Ich habe die Interessen und Einschränkungen von YETI gelesen und verstanden",
+    "I'm a teapot": "Ich bin eine Teekanne",
     "ICGC ortho (ca)": {
       "Map layer": "ICGC Sat"
     },
@@ -384,9 +387,11 @@
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "If the route does not exists in our base, you can create it.": "Wenn die Route nicht in unserer Datenbank vorhanden ist, können Sie sie erstellen.",
     "If you can't see this email, please check your spam folder.": "Wenn Sie diese Email nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
+    "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Wenn Sie Ihre E-Mail-Adresse ändern, wird eine Nachricht an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "Ignore year": "Jahr ignorieren",
     "Image could not be processed": "Bild konnte nicht für das Hochladen verarbeitet werden",
     "Image count": "Bildanzahl",
+    "Images are under license specified in the original document of each image": "Die Bilder stehen unter der im Originaldokument des jeweiligen Bildes angegebenen Lizenz",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "Incidents and accidents": "Unfallberichte",
     "Include image section": "Zugehörige Bilder einschließen",
@@ -572,7 +577,7 @@
     "Print": "Ausdrucken",
     "Print a selection of documents": "Auswahl von Dokumenten ausdrucken",
     "Print search results": "Ausdrucken",
-    "Printed on": "gedruckt auf",
+    "Printed on": "gedruckt am",
     "Printing": "Ausdruck",
     "Professional Reduction Method": "Profi-Reduktionsmethode",
     "Protect document": "Dokument schützen",
@@ -776,6 +781,7 @@
     "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher oder Artikeln verbinden",
     "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf die Karte ziehen, zeichnen oder bearbeiten.",
     "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre Email-Adresse gesendet wurde.",
+    "Your account is now bound to the new email address you filled in.": "Ihr Konto ist jetzt an die neue E-Mail-Adresse gebunden, die Sie eingegeben haben.",
     "Your account was successfully created": "Ihr Konto wurde erfolgreich erstellt",
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Ihr Forumsname wird im Forumsbereich der Website verwendet. Er kann jederzeit in den Einstellungen frei geändert werden. Es gibt mehr Einschränkungen bei den Zeichen, hauptsächlich keine Akzente und keine Leerzeichen.",
     "Zoom in": {
