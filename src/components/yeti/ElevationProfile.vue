@@ -33,7 +33,10 @@ export default {
   },
 
   mounted() {
-    d3.then(this.createChart);
+    // debounce creating chart
+    debounce(() => {
+      d3.then(this.createChart);
+    }, 10)();
 
     this.debouncedOnResize = debounce(this.onResize, 100);
 
