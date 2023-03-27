@@ -134,6 +134,7 @@ export default {
 
       // areas container
       this.container.append('g').attr('class', 'areas');
+      this.container.append('g').attr('class', 'areas-lines');
 
       // Scales and axes
       this.scaleX = d3.scaleLinear().range([0, width]);
@@ -256,6 +257,11 @@ export default {
         })
         .y((d, i) => (i === 0 ? 0 : this.size.height - this.margin.top - this.margin.bottom));
 
+      this.areaLine = d3
+        .line()
+        .x((d) => Math.round(this.scaleX(d.max)) + 0.5)
+        .y((d, i) => (i === 0 ? 0 : this.size.height - this.margin.top - this.margin.bottom));
+
       // build areas
       this.container
         .select('.areas')
@@ -264,6 +270,17 @@ export default {
         .join('path')
         .attr('class', 'area')
         .attr('d', this.area);
+
+      // build areas line (dashed)
+      let areasDataForLines = JSON.parse(JSON.stringify(this.areasData));
+      // remove last one
+      areasDataForLines.pop();
+      this.container
+        .select('.areas-lines')
+        .selectAll('path')
+        .data(areasDataForLines)
+        .join('path')
+        .attr('d', this.areaLine);
 
       // build lines
       this.container
@@ -380,6 +397,12 @@ $C2C-orange: red;
 
   .area-highlighted {
     fill: rgba(255, 255, 0, 0.75);
+  }
+
+  .areas-lines {
+    stroke: $grey;
+    stroke-width: 1px;
+    stroke-dasharray: 5;
   }
 }
 </style>
