@@ -285,6 +285,8 @@ export default {
       // recompute axes, lines and resize elements
       this.scaleX.range([0, width]);
       this.scaleY.range([height, 0]);
+      // update overlay
+      this.container.select('rect.overlay').attr('width', width);
 
       this.updateChart();
     },
