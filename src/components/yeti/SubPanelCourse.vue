@@ -212,7 +212,7 @@ export default {
     },
     downloadCourse() {
       if (this.validSimplifyTolerance) {
-        return window.alert('Export is disabled. You must confirm simplified geometry first.');
+        return window.alert(this.$gettext('Action is disabled. You must confirm simplified geometry first.'));
       }
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
