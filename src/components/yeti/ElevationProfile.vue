@@ -31,7 +31,6 @@ export default {
       this.updateChart(true);
     },
   },
-
   mounted() {
     // debounce creating chart
     debounce(() => {
@@ -43,11 +42,9 @@ export default {
     Yetix.$on('showFeature', this.showFeature);
     Yetix.$on('hideFeature', this.hideFeature);
   },
-
   beforeDestroy() {
     this.resizeObserver?.unobserve(this.$refs.graph);
   },
-
   methods: {
     showFeature(index) {
       this.container
@@ -107,7 +104,6 @@ export default {
           return [d, d];
         });
     },
-
     createChart() {
       // first, compute coords
       this.computeCoords();
@@ -294,7 +290,6 @@ export default {
         .attr('class', 'line')
         .attr('d', this.line);
     },
-
     onResize(graphWidth, graphHeight) {
       const width = graphWidth - this.margin.left - this.margin.right;
       const height = graphHeight - this.margin.top - this.margin.bottom;
@@ -307,7 +302,6 @@ export default {
 
       this.updateChart();
     },
-
     setCursor(mouseMoveEvent) {
       const bisectDistance = d3.bisector((d) => d.d).left;
 
