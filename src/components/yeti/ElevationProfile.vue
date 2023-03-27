@@ -178,6 +178,15 @@ export default {
 
       this.focus = this.container.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
 
+      // altitude popup
+      this.popupAltitude = this.container
+        .append('g')
+        .attr('class', 'popup')
+        .attr('x', this.margin.left + 5)
+        .style('display', 'none');
+      this.popupAltitudeRect = this.popupAltitude.append('rect').attr('y', -8);
+      this.popupAltitudeText = this.popupAltitude.append('text').attr('dx', 5).attr('dy', 4);
+
       this.container
         .append('rect')
         .attr('class', 'overlay')
@@ -187,6 +196,7 @@ export default {
           'mouseover',
           () => {
             this.focus.style('display', null);
+            this.popupAltitude.style('display', null);
           },
           { passive: true }
         )
@@ -194,6 +204,7 @@ export default {
           'mouseout',
           () => {
             this.focus.style('display', 'none');
+            this.popupAltitude.style('display', 'none');
             this.emitCursorEndEvent();
           },
           { passive: true }
@@ -313,10 +324,15 @@ export default {
 
       const d = x0 - d0.d > d1.d - x0 ? d1 : d0;
 
-      const dy = this.scaleY(d.ele);
-      const dx = this.scaleX(d.d);
+      const dy = Math.round(this.scaleY(d.ele));
+      const dx = Math.round(this.scaleX(d.d));
 
       this.focus.attr('transform', 'translate(' + dx + ',' + dy + ')');
+      this.popupAltitude.attr('transform', 'translate(0,' + dy + ')');
+      let bbox = this.popupAltitudeText.node().getBBox();
+      this.popupAltitudeRect.attr('width', Math.round(bbox.width + 10)).attr('height', Math.round(bbox.height));
+
+      this.popupAltitudeText.text(Math.round(d.ele) + ' m');
 
       this.emitCursorMoveEvent(this.concatCoords[d === d0 ? i - 1 : i]);
     },
@@ -374,13 +390,14 @@ $C2C-orange: red;
     stroke-width: 2px;
   }
 
-  line.target {
-    stroke: lightgray;
-    stroke-width: 1px;
+  .popup {
+    font-size: 12px;
+    font-weight: bold;
+    fill: $primary;
   }
 
-  .bubble {
-    font-size: 12px;
+  .popup text {
+    fill: yellow;
   }
 
   .overlay {
