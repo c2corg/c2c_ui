@@ -1,16 +1,73 @@
 <template>
-  <div ref="container" class="elevation-profile-container">
-    <div ref="graph" class="elevation-profile-chart" />
+  <div>
+    <div ref="container">
+      <div ref="graph" class="elevation-profile-chart" />
+    </div>
+    <div class="elevation-generate-panel">
+      <h4 class="title is-6" v-translate>Generate new elevations</h4>
+      <div>
+        <input-checkbox v-model="interpolate" class="mt-2">
+          <span v-translate>Add more points</span>
+        </input-checkbox>
+        <div v-if="interpolate" class="control-subpanel">
+          <label for="inputInterpolate" v-translate>Distance</label>
+          <input
+            id="inputInterpolate"
+            class="input is-small input-interpolate ml-2"
+            type="number"
+            min="5"
+            step="5"
+            v-model.number="interpolateValue"
+          />
+          <info inline class="ml-0 pl-0" v-if="atLeastOneLineChunkHasTooMuchPoints">
+            <span v-translate key="1">Too much points</span>
+          </info>
+          <info inline class="ml-0 pl-0" v-if="interpolateValueInvalid">
+            <span v-translate key="2">Invalid value</span>
+          </info>
+        </div>
+        <info type="help" class="column">
+          <p v-translate>Will generate new points along route, at regular interval, defined by distance in meters</p>
+        </info>
+      </div>
+      <div>
+        <input-checkbox v-model="override" class="mt-2">
+          <span v-translate>Force elevations</span>
+        </input-checkbox>
+      </div>
+      <info type="help" class="column">
+        <p v-translate>If checked, all elevations will be recomputed and current values will be lost</p>
+      </info>
+    </div>
+    <div class="is-flex is-justify-content-end is-align-items-center">
+      <info inline v-if="routeIntersectsYetiAreas">
+        <span v-translate>Some points are out of extent</span>
+      </info>
+      <button
+        class="button is-primary"
+        :class="{ 'is-disabled': validSimplifyTolerance, 'is-loading': loading }"
+        :disabled="loading"
+        @click="onCalculateElevations"
+      >
+        <span v-translate>Generate elevations</span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import simplify from './map-layers/simplify';
+
+import Info from '@/components/yeti/Info.vue';
 import Yetix from '@/components/yeti/Yetix';
 import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
 
+const MIN_INTERPOLATE_VALUE = 5;
+
 export default {
+  components: { Info },
   props: {
     features: {
       type: Array,
@@ -19,13 +76,83 @@ export default {
   },
   data() {
     return {
+      data: [],
+      loading: false,
+      interpolate: false,
+      interpolateValue: 50,
+      override: false,
       i18n_: {
         elevation_legend: this.$gettext('Elevation (m)'),
         distance_legend: this.$gettext('Distance (km)'),
       },
+      errors: {
+        actionDisabled: this.$gettext('Action is disabled. You must confirm simplified geometry first.'),
+        fromApi: this.$gettext('One or more route could not be processed:'),
+        interpolateValue: this.$gettext('Interpolate value should be a number > 0'),
+        overrideElevation: this.$gettext(
+          'Features already have elevations. Enable "Force elevations" if you want to override them.'
+        ),
+        tooMuchPoints: this.$gettext(
+          'One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.'
+        ),
+      },
     };
   },
-
+  computed: {
+    areas() {
+      return Yetix.areas;
+    },
+    fetchWpsAlti() {
+      return Yetix.fetchWpsAlti;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
+    },
+    atLeastOneFeatureHas3D() {
+      let features = this.features.filter((feature) => {
+        let coords = feature.getGeometry().getCoordinates();
+        return !coords.some((coord) => coord.length >= 3 && coord[2] !== 0);
+      });
+      return features.length === 0;
+    },
+    atLeastOneLineChunkHasTooMuchPoints() {
+      if (this.interpolateValueInvalid) {
+        return false;
+      }
+      return this.data.filter((d) => {
+        return (d[d.length - 1].localD * 1000) / this.interpolateValue > 3000;
+      }).length;
+    },
+    interpolateValueInvalid() {
+      // type number is empty string when not number
+      return this.interpolateValue === 0 || this.interpolateValue === '';
+    },
+    routeIntersectsYetiAreas() {
+      if (this.areas.length) {
+        for (let feature of this.features) {
+          let coords = feature.getGeometry().getCoordinates();
+          // will simplify coords to improve compute time
+          // if no z, add 0 (simplify not working)
+          coords = coords.map((coord) => {
+            if (!coord[2]) {
+              coord[2] = 0;
+            }
+            return coord;
+          });
+          // and simplify
+          coords = simplify(coords, 200, true);
+          for (let coord of coords) {
+            let inside = this.areas[0].geometry.intersectsCoordinate(coord);
+            // return when at least one point if outside
+            if (!inside) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    },
+  },
   watch: {
     features() {
       this.updateChart(true);
@@ -46,6 +173,84 @@ export default {
     this.resizeObserver?.unobserve(this.$refs.graph);
   },
   methods: {
+    onCalculateElevations() {
+      // deal with errors first
+      if (this.validSimplifyTolerance) {
+        return window.alert(this.errors.actionDisabled);
+      }
+      if (this.atLeastOneLineChunkHasTooMuchPoints) {
+        return window.alert(this.errors.tooMuchPoints);
+      }
+      if (this.interpolateValueInvalid) {
+        return window.alert(this.errors.interpolateValue);
+      }
+      if (!this.override && this.atLeastOneFeatureHas3D) {
+        return window.alert(this.errors.overrideElevation);
+      }
+      // start loading
+      this.loading = true;
+      // and defer (next cycle)
+      setTimeout(() => {
+        if (this.override) {
+          // when force elevation, start by remove all elevations
+          this.removeAllElevations();
+        }
+
+        // interpolateValue is 5 meters min, or 0 is not checked
+        let interpolateValue = this.interpolate ? Math.max(MIN_INTERPOLATE_VALUE, this.interpolateValue) : 0;
+
+        // build promises for each http request (one per line chunk)
+        let promises = [];
+        // for each filtered features
+        this.features.forEach((feature) => {
+          let points = feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326').getCoordinates();
+          promises.push(
+            this.fetchWpsAlti(points, interpolateValue).then(({ data }) => {
+              // if we got features from api, set new geometry to feature
+              if (data.features) {
+                // first transform coords
+                let coords = data.features[0].geometry.coordinates.map((coord) => {
+                  return ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+                });
+                // replace this feature coordinates
+                feature.getGeometry().setCoordinates(coords);
+              }
+              // return promise (to deal with errors)
+              return data;
+            })
+          );
+        });
+        // when all requests finished
+        Promise.all(promises).then((promises) => {
+          // stop loading
+          this.loading = false;
+          // emit featureUpdated: routeLayer will update state.features
+          Yetix.$emit('featureUpdated');
+
+          // errors ?
+          // if we got status=error, concatenate all errors, and alert
+          let errors = promises
+            .filter((promise) => promise.status && promise.status === 'error')
+            .map((error) => {
+              return error.message;
+            });
+          if (errors.length) {
+            window.alert(this.errors.fromApi + '\n' + errors.join('\n'));
+          }
+        });
+      }, 10);
+    },
+    removeAllElevations() {
+      this.features.forEach((feature) => {
+        let coords = feature.getGeometry().getCoordinates();
+        coords = coords.map((coord) => {
+          coord[2] = 0;
+          return coord;
+        });
+        feature.getGeometry().setCoordinates(coords);
+      });
+      Yetix.$emit('featureUpdated');
+    },
     showFeature(index) {
       this.container
         .selectAll('.area')
@@ -67,10 +272,10 @@ export default {
 
       this.updateData();
     },
-
     updateData() {
       let totalDist = 0;
       this.data = this.coords.map((c) => {
+        let localTotalDist = 0;
         return c.map((coord, i, coords) => {
           let d = 0;
 
@@ -82,10 +287,12 @@ export default {
             d = d3.geoDistance(deg1, deg2) * 6371;
           }
           totalDist += d;
+          localTotalDist += d;
 
           return {
             ele: coord[2] ?? 0,
             d: totalDist,
+            localD: localTotalDist,
           };
         });
       });
@@ -418,5 +625,32 @@ $C2C-orange: red;
     stroke-width: 1px;
     stroke-dasharray: 5;
   }
+}
+
+.elevation-generate-panel {
+  margin-top: 1rem;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-top: 1px solid lightgray;
+}
+
+.input-interpolate {
+  width: 100px;
+  margin-right: 0.75rem;
+}
+
+.control-subpanel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height: 2;
+  margin-left: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-left: solid 1px $primary;
 }
 </style>

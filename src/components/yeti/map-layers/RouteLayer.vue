@@ -153,6 +153,7 @@ export default {
     Yetix.$on('gpx', this.addFeaturesFromGpx);
     Yetix.$on('previewSimplify', this.previewSimplify);
     Yetix.$on('simplify', this.simplify);
+    Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
   },
   methods: {
     addInteractions() {

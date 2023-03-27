@@ -279,6 +279,18 @@ export default new Vue({
     fetchFlowcapt() {
       return this.fetchApi('flowcapt');
     },
+    fetchWpsAlti(points, interpolate) {
+      let params = {
+        identifier: 'alti',
+        operation: 'execute',
+        inputs: {
+          points,
+          datum: 'EPSG:4326',
+          interpolate,
+        },
+      };
+      return axios.post(state.API_URL + 'yeti-wps-json', params);
+    },
   },
 });
 </script>
