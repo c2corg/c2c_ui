@@ -39,13 +39,13 @@
         <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
-      <simplify-tool ref="simplifyTool" />
       <dropdown-content class="mb-5">
         <span v-translate>Elevation profile</span>
         <template #content>
           <elevation-profile :features="features" />
         </template>
       </dropdown-content>
+      <simplify-tool ref="simplifyTool" />
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
