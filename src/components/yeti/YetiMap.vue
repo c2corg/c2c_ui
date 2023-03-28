@@ -297,7 +297,6 @@ export default {
 
     // events
     this.map.on('moveend', this.onMapMoveEnd);
-    this.map.on('click', this.onMapClick);
   },
   methods: {
     getExtent(projection) {
@@ -356,6 +355,19 @@ export default {
       }
       // emit an event for map layers
       Yetix.$emit('mapMoveEnd');
+
+      // deal with map clicks
+      // if zoom < 8 = use singleclick
+      //   - it allows double click (for zoom) even on shapes
+      // else = use click
+      //   - because singleclick has 250ms delay
+      if (mapZoom < Yetix.BLEND_MODES_MIN_ZOOM) {
+        this.map.on('singleclick', this.onMapClick);
+        this.map.un('click', this.onMapClick);
+      } else {
+        this.map.on('click', this.onMapClick);
+        this.map.un('singleclick', this.onMapClick);
+      }
     },
     onMapClick(evt) {
       // close controls

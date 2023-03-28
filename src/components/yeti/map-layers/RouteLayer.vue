@@ -133,7 +133,8 @@ export default {
     Yetix.$on('elevationProfile', this.onElevationProfile);
 
     // set default featuresTitle
-    Yetix.setFeaturesTitle(this.$gettext(Yetix.featuresTitle));
+    this.defaultFeaturesTitle = this.$gettext(Yetix.featuresTitle);
+    Yetix.setFeaturesTitle(this.defaultFeaturesTitle);
 
     // load camptocamp document
     let doc = this.$route.params.document_id;
@@ -153,6 +154,7 @@ export default {
     Yetix.$on('gpx', this.addFeaturesFromGpx);
     Yetix.$on('previewSimplify', this.previewSimplify);
     Yetix.$on('simplify', this.simplify);
+    Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
   },
   methods: {
     addInteractions() {
@@ -230,6 +232,8 @@ export default {
         if (this.$route.params.document_id) {
           this.$router.replace({ path: '/' + this.$route.name });
         }
+        // set featuresTitle back to default
+        Yetix.setFeaturesTitle(this.defaultFeaturesTitle);
       }
     },
     getFeaturesLayerFeatures() {

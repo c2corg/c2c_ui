@@ -24,6 +24,12 @@
         </div>
       </div>
       <div class="is-flex is-justify-content-flex-end is-align-items-center">
+        <info inline>
+          {{ featuresLength }} <span v-translate>points</span>
+          <strong v-if="validToleranceDistance">
+            (<span v-translate>after:</span> {{ featuresSimplifiedLength }} <span v-translate>points</span>)
+          </strong>
+        </info>
         <div>
           <button class="button" :disabled="!validToleranceDistance" @click="initialize" v-translate>Cancel</button>
           <button class="button is-primary" :disabled="!validToleranceDistance" @click="onSimplify" v-translate>
@@ -31,12 +37,6 @@
           </button>
         </div>
       </div>
-      <info>
-        {{ featuresLength }} <span v-translate>points</span>
-        <strong v-if="validToleranceDistance">
-          (<span v-translate>after:</span> {{ featuresSimplifiedLength }} <span v-translate>points</span>)
-        </strong>
-      </info>
       <info type="warning" v-if="validToleranceDistance">
         <strong v-translate>Be careful,</strong>
         <span v-translate>

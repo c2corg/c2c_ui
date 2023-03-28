@@ -39,13 +39,13 @@
         <p class="is-size-7 is-italic mb-1 has-text-grey" v-translate>Lines chunks</p>
         <features-list :features="features" />
       </div>
-      <simplify-tool ref="simplifyTool" />
       <dropdown-content class="mb-5">
         <span v-translate>Elevation profile</span>
         <template #content>
           <elevation-profile :features="features" />
         </template>
       </dropdown-content>
+      <simplify-tool ref="simplifyTool" />
       <info type="help">
         <p v-translate>Drawing tips</p>
         <ul class="content-ul">
@@ -212,7 +212,7 @@ export default {
     },
     downloadCourse() {
       if (this.validSimplifyTolerance) {
-        return window.alert('Export is disabled. You must confirm simplified geometry first.');
+        return window.alert(this.$gettext('Action is disabled. You must confirm simplified geometry first.'));
       }
       if (this.format === 'GPX') {
         this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
@@ -228,6 +228,7 @@ export default {
 
       const content = olFormat.writeFeatures(features, {
         featureProjection: 'EPSG:3857',
+        decimals: 7,
       });
 
       utils.download(content, filename, mimetype + ';charset=utf-8');
@@ -321,11 +322,6 @@ input[type='file'] {
   .is-checkradio[type='radio'] + label {
     line-height: 1.2rem;
   }
-}
-
-.is-disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 
 @media screen and (max-width: 350px) {
