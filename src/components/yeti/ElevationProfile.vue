@@ -193,11 +193,11 @@ export default {
       // and defer (next cycle)
       setTimeout(() => {
         if (this.override) {
-          // when force elevation, start by remove all elevations
+          // when elevation is forced, start by removing all elevations
           this.removeAllElevations();
         }
 
-        // interpolateValue is 5 meters min, or 0 is not checked
+        // interpolateValue is 5 meters min, or 0 if not checked
         let interpolateValue = this.interpolate ? Math.max(MIN_INTERPOLATE_VALUE, this.interpolateValue) : 0;
 
         // build promises for each http request (one per line chunk)
