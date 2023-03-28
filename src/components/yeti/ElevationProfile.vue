@@ -490,7 +490,7 @@ export default {
         .attr('d', this.area);
 
       // build areas line (dashed)
-      let areasDataForLines = JSON.parse(JSON.stringify(this.areasData));
+      let areasDataForLines = structuredClone(this.areasData);
       // remove last one
       areasDataForLines.pop();
       this.container
