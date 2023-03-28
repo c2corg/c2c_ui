@@ -48,8 +48,9 @@
         :class="{ 'is-disabled': validSimplifyTolerance, 'is-loading': loading }"
         :disabled="loading"
         @click="onCalculateElevations"
+        v-translate
       >
-        <span v-translate>Generate elevations</span>
+        Generate elevations
       </button>
     </div>
   </div>
