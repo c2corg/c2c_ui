@@ -9,30 +9,30 @@
         <div class="columns">
           <div class="column is-12-mobile">
             <div>
-              <p v-translate>All in store for you :</p>
+              <p v-translate>All in store for you:</p>
               <ul>
                 <li>
-                  <icon-route />
-                  <router-link to="routes"><span v-translate>Routes to explore</span></router-link>
+                  <icon-route fixed-width />
+                  <router-link to="routes" v-translate>Routes to explore</router-link>
                 </li>
                 <li>
-                  <icon-outing />
-                  <router-link to="outings">
-                    <span v-translate>Outings, with the latest conditions in the mountains</span>
+                  <icon-outing fixed-width />
+                  <router-link to="outings" v-translate>
+                    Outings, with the latest conditions in the mountains
                   </router-link>
                 </li>
                 <li>
-                  <icon-xreport />
-                  <span v-translate>Accidents/Incidents Database</span> :
+                  <icon-xreport fixed-width />
+                  <span v-translate>Accidents/Incidents database:</span>
                   <router-link to="serac">SERAC</router-link>
                 </li>
                 <li>
-                  <icon-yeti />
-                  <span v-translate>Avalanche Risk Evaluation Tool</span> :
+                  <icon-yeti fixed-width />
+                  <span v-translate>Avalanche risk evaluation tool:</span>
                   <router-link to="yeti">Yeti</router-link>
                 </li>
-                <li>
-                  <span v-translate>Library :</span>
+                <li class="with-circle">
+                  <span v-translate>Library:</span>
                   <icon-article />
                   <router-link to="articles" v-translate>articles</router-link>
                   <span v-translate>and</span>
@@ -40,7 +40,7 @@
                   <router-link to="books" v-translate>books</router-link>
                 </li>
                 <li>
-                  <icon-forum />
+                  <icon-forum fixed-width />
                   <router-link to="forum" v-translate>
                     Forum: a place to chat about technical matters, or just petty talk
                   </router-link>
@@ -58,16 +58,12 @@
               </span>
             </p>
             <router-link :to="{ name: 'article', params: { id: 106726 } }" class="menu-brand has-text-centered">
-              <img
-                src="https://forum.camptocamp.org/uploads/default/original/3X/c/d/cd8d2daad7ec44d36b3182ec451767db3fc2509c.png"
-                alt="CamptocampAssociation"
-                class="logo-association"
-              />
+              <img src="@/assets/img/logo_asso.svg" alt="Camptocamp Association" class="logo-association" />
             </router-link>
             <ul>
               <li>
                 <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Join us')">
-                  <span v-translate>Want to take part or get involved ? Join us !</span>
+                  <span v-translate>Want to take part or get involved? Join us!</span>
                 </a>
               </li>
               <li>
@@ -106,10 +102,9 @@ export default {
   margin-top: 25px;
 }
 
-.with-background {
-  padding: 10px;
-  background-color: rgba(21, 50, 69, 0.4);
-  color: #fff;
+.with-circle {
+  list-style: disc !important;
+  margin-left: $size-3;
 }
 
 @media screen and (max-width: $tablet) {

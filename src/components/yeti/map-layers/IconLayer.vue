@@ -6,7 +6,7 @@
     <div class="overlay-content">
       <slot name="overlay"></slot>
     </div>
-    <img :src="icon('#4a4a4a')" alt="" class="overlay-icon" />
+    <img :src="icon('$color-text')" alt="" class="overlay-icon" />
   </div>
 </template>
 

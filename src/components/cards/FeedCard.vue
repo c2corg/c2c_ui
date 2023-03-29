@@ -15,23 +15,21 @@
       <gallery :images="images" />
     </card-row>
 
-    <card-row>
-      <span class="is-pulled-left">
-        <span :title="$gettext('User avatar')">
-          <img
-            v-if="!useDefaultAvatarIcon"
-            class="avatar"
-            alt="Avatar"
-            @error="useDefaultAvatarIcon = true"
-            :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
-            loading="lazy"
-          />
-          <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
-        </span>
-        <document-title :document="item.user" />
+    <div class="row">
+      <span :title="$gettext('User avatar')">
+        <img
+          v-if="!useDefaultAvatarIcon"
+          class="avatar"
+          alt="Avatar"
+          @error="useDefaultAvatarIcon = true"
+          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+          loading="lazy"
+        />
+        <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
       </span>
+      <document-title :document="item.user" />
       <span class="has-text-weight-normal">&nbsp;{{ actionLine }}</span>
-    </card-row>
+    </div>
 
     <card-row v-if="documentType != 'article' && documentType != 'book' && documentType != 'xreport'">
       <span v-if="documentType === 'outing' || documentType === 'route'">
@@ -59,21 +57,23 @@
       </span>
     </card-row>
 
-    <card-row>
+    <div class="columns row is-mobile">
       <card-region-item
         v-if="item.document.areas && item.document.areas.length"
         :document="item.document"
-        class="is-ellipsed"
+        class="column is-9 is-flex-shrink-2 is-not-ellipsed"
       />
-      <span>
+      <span class="column is-flex-grow-1">
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
-        <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" class="is-size-3" />
+      </span>
+      <span class="column is-flex-grow-2">
+        <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" />
         <marker-image-count :image-count="item.document.img_count" />
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
         <marker-condition v-if="documentType === 'outing'" :condition="item.document.condition_rating" />
         <marker-quality :quality="item.document.quality" />
       </span>
-    </card-row>
+    </div>
   </card-container>
 </template>
 
@@ -206,5 +206,20 @@ export default {
 .card-image-content > div > img {
   width: 100%;
   box-sizing: border-box;
+}
+
+.row {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  min-height: 29px;
+  color: $text;
+
+  .column {
+    max-height: 58px;
+  }
+}
+
+.is-not-ellipsed {
+  white-space: normal !important;
 }
 </style>

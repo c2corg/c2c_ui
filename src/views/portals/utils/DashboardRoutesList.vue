@@ -7,7 +7,7 @@
       </router-link>
     </h4>
     <loading-notification :promise="routesPromise" />
-    <div v-if="routes != null" class="dashboard-list">
+    <div v-if="routes" class="dashboard-list">
       <dashboard-route-link v-for="route of routes.documents" :key="route.document_id" :route="route" />
     </div>
     <hr />
@@ -52,15 +52,15 @@ export default {
 <style scoped lang="scss">
 h4 > a,
 h6 > a {
-  color: #4a4a4a !important;
+  color: $color-text !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: #337ab7 !important;
+  color: $color-link !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: #fbfaf6;
+  background-color: $body-background-color;
 }
 </style>

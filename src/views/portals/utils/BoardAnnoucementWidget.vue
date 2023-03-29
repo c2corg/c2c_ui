@@ -11,7 +11,7 @@
 import forum from '@/js/apis/forum';
 
 export default {
-  name: 'PubliWidget',
+  name: 'BoardAnnouncementWidget',
 
   data() {
     return {
@@ -33,12 +33,12 @@ export default {
   },
 
   created() {
-    this.loadPubli();
+    this.loadBoardAnnouncement();
   },
 
   methods: {
-    loadPubli() {
-      forum.readPubli().then((response) => {
+    loadBoardAnnouncement() {
+      forum.readBoardAnnouncement().then((response) => {
         const data = response['data'];
         if (data['tags'].indexOf('visible') > -1) {
           const post = data.post_stream.posts[data.posts_count - 1];
@@ -74,7 +74,7 @@ export default {
 .publication {
   //display: block;
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-bottom: $size-7;
 
   a,
   a:hover {
@@ -87,7 +87,7 @@ export default {
 <style scoped lang="scss">
 .delete {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: $size-7;
+  right: $size-7;
 }
 </style>

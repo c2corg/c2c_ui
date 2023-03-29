@@ -44,7 +44,7 @@ Forum.prototype.readAnnouncement = function (lang) {
   return this.get('/t/annonce-' + lang + '.json');
 };
 
-Forum.prototype.readPubli = function () {
+Forum.prototype.readBoardAnnouncement = function () {
   return this.get('/t/publication-ca.json');
 };
 

@@ -1,7 +1,7 @@
 <template>
   <document-link :document="document" class="dashboard-link has-text-normal is-flex has-hover-background">
-    <activities :activities="document.activities" class="is-size-3 activity-icons is-nowrap" />
-    <span class="dashboard-link-main" :class="{ 'is-ellipsed': !$screen.isMobile }">
+    <activities :activities="document.activities" class="is-size-3 activity-icons" />
+    <span class="dashboard-link-main">
       <document-title :document="document" class="document-title" />
       <document-title
         v-for="area of rangeAreas"
@@ -10,7 +10,7 @@
         class="is-size-7 area-title is-italic"
       />
     </span>
-    <span class="is-nowrap">
+    <span class="has-text-right">
       <slot />
     </span>
   </document-link>
@@ -40,6 +40,8 @@ export default {
 
 <style scoped lang="scss">
 .dashboard-link {
+  align-items: center;
+
   .activity-icons {
     line-height: 1;
   }

@@ -9,11 +9,11 @@
     <loading-notification :promise="articlesPromise" />
     <ul class="dashboard-list">
       <li>
-        <router-link :to="{ name: 'article', params: { id: 108793 } }" v-translate
-          >Summary of camptocamp's articles</router-link
-        >
+        <router-link :to="{ name: 'article', params: { id: 108793 } }" v-translate>
+          Summary of camptocamp's articles
+        </router-link>
       </li>
-      <div v-if="articles != null">
+      <div v-if="articles">
         <dashboard-article-link v-for="article of articles.documents" :key="article.document_id" :article="article" />
       </div>
     </ul>
@@ -50,8 +50,10 @@ export default {
     },
   },
 
-  created() {
-    this.articlesPromise = c2c.article.getAll({ limit: 5 });
+  created(query = {}) {
+    query.limit = 5;
+    query.qa = 'draft,great';
+    this.articlesPromise = c2c.article.getAll(query);
   },
 };
 </script>
@@ -59,21 +61,21 @@ export default {
 <style scoped lang="scss">
 ul {
   list-style-type: disc !important;
-  padding-left: 12px;
+  padding-left: $size-6;
 }
 
 h4 > a,
 h6 > a,
 li > a {
-  color: #4a4a4a !important;
+  color: $color-text !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: #337ab7 !important;
+  color: $color-link !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: #fbfaf6;
+  background-color: $body-background-color;
 }
 </style>

@@ -199,11 +199,11 @@ export default {
 
 h4 > a,
 h6 > a {
-  color: #4a4a4a !important;
+  color: $color-text !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: #337ab7 !important;
+  color: $color-link !important;
 }
 </style>

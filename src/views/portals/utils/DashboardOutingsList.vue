@@ -6,7 +6,6 @@
           name: 'outings',
           query: {
             qa: 'draft,great',
-            bbox: '-431698,3115462,1931123,8442818',
             offset: 0,
             limit: 100,
           },
@@ -17,7 +16,7 @@
       </router-link>
     </h4>
     <loading-notification :promise="outingsPromise" />
-    <div v-if="outingsByDate != null">
+    <div v-if="outingsByDate">
       <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
         <p class="outing-date-header is-4 is-italic has-text-weight-bold">
           <router-link :to="{ name: 'outings', query: { date: `${date},${date}` } }">
@@ -115,6 +114,7 @@ export default {
 
     loadOutingsWithQuery(query = {}) {
       query.limit = 40;
+      query.qa = 'draft,great';
       this.outingsPromise = c2c.outing.getAll(query);
     },
 
@@ -145,25 +145,25 @@ export default {
 
 <style scoped lang="scss">
 .outing-date-header {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  border-bottom: solid #f93 2px;
+  margin-top: $size-6;
+  margin-bottom: $size-7;
+  border-bottom: solid $color-base-c2c 2px;
 }
 
 h4 > a,
 h6 > a,
 .outing-date-header > a,
 li > a {
-  color: #4a4a4a !important;
+  color: $color-text !important;
 }
 
 h4 > a:hover,
 h6 > a:hover,
 .outing-date-header > a:hover {
-  color: #337ab7 !important;
+  color: $color-link !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: #fbfaf6;
+  background-color: $body-background-color;
 }
 </style>

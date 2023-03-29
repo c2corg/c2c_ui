@@ -8,7 +8,7 @@
     </h4>
     <div class="images-container">
       <loading-notification :promise="imagesPromise" />
-      <gallery v-if="images != null" :images="images.documents" />
+      <gallery v-if="images" :images="images.documents" />
     </div>
     <hr />
     <h6 class="title is-6 has-text-centered">
@@ -43,7 +43,7 @@ export default {
   },
 
   created() {
-    this.imagesPromise = c2c.image.getAll();
+    this.imagesPromise = c2c.image.getAll({ limit: 10 });
   },
 };
 </script>
@@ -53,11 +53,13 @@ export default {
   min-height: 200px;
 }
 
-h4 > a {
-  color: #4a4a4a !important;
+h4 > a,
+h6 > a {
+  color: $color-text !important;
 }
 
-h4 > a:hover {
-  color: #337ab7 !important;
+h4 > a:hover,
+h6 > a:hover {
+  color: $color-link !important;
 }
 </style>
