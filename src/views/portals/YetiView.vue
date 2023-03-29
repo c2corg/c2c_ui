@@ -457,7 +457,7 @@ $yeti-height: calc(
   position: absolute;
   right: 0;
   top: 0.75rem;
-  width: 50%;
+  width: 55%;
   z-index: 1;
 }
 

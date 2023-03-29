@@ -44,6 +44,7 @@ export default {
   }
 }
 .dropdown-content-title {
+  color: $grey-darker;
   cursor: pointer;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;

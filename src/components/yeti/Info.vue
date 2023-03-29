@@ -1,7 +1,7 @@
 <template>
-  <div class="info-text mt-3 mb-3 px-3" :class="'is-' + type">
+  <div class="info-text" :class="['is-' + type, { 'is-inline-block': inline }]">
     <fa-icon :icon="icon" class="info-icon mt-1 ml-1" />
-    <div class="info-content">
+    <div class="info-content" :class="[{ 'is-inline': inline }]">
       <slot />
     </div>
   </div>
@@ -13,6 +13,10 @@ export default {
     type: {
       type: String,
       default: 'info',
+    },
+    inline: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -37,6 +41,10 @@ export default {
 
 .info-text {
   font-size: 0.85em;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 .is-info {
   color: $primary;
@@ -56,5 +64,18 @@ export default {
 }
 .info-content {
   margin-left: 2rem;
+}
+
+.is-inline-block {
+  &.info-text {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .info-icon {
+    float: none;
+  }
+  .info-content {
+    margin-left: 0;
+  }
 }
 </style>
