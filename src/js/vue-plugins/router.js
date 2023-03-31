@@ -15,8 +15,7 @@ import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView';
-import DashboardView from '@/views/portals/DashboardView';
-import FeedView from '@/views/portals/FeedView';
+import HomeView from '@/views/portals/HomeView';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
 import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
@@ -51,10 +50,8 @@ const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki
 const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
 
 const routes = [
-  { path: '/', name: 'home', component: FeedView },
-  { path: '/dashboard', name: 'dashboard', component: DashboardView },
+  { path: '/', name: 'home', component: HomeView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
-  { path: '/feed', name: 'feed', component: FeedView },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },

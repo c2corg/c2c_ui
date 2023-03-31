@@ -16,9 +16,6 @@ div {
 }
 
 @media screen and (max-width: $tablet) {
-  div {
-    align-items: flex-start;
-  }
   span.is-ellipsed,
   p.is-ellipsed {
     white-space: normal;
