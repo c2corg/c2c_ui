@@ -31,6 +31,10 @@ export default {
       type: Object,
       required: true,
     },
+    iconStyle: {
+      type: Function,
+      default: null,
+    },
   },
   computed: {
     letter() {
@@ -81,16 +85,15 @@ export default {
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     };
 
-    this.style = new ol.style.Style({
-      image: new ol.style.Icon({
-        src: this.icon(this.color),
-        size: [26, 26],
-      }),
-    });
-
-    this.hoveredStyle = this.style.clone();
-    this.hoveredStyle.setZIndex(1);
-    this.hoveredStyle.getImage().setScale(1.3);
+    // style is either a function (if iconStyle is set), or a Style object
+    this.style =
+      this.iconStyle ||
+      new ol.style.Style({
+        image: new ol.style.Icon({
+          src: this.icon(this.color),
+          size: [26, 26],
+        }),
+      });
 
     this.overlay = new ol.Overlay({
       positioning: 'top-left',
@@ -125,7 +128,18 @@ export default {
       new ol.interaction.Select({
         layers: [this.layer],
         condition: ol.events.condition.pointerMove,
-        style: this.hoveredStyle,
+        style: (feature) => {
+          // hovered style based on actual style (function or object)
+          let hoveredStyle;
+          if (this.iconStyle) {
+            hoveredStyle = this.style(feature).clone();
+          } else {
+            hoveredStyle = this.style.clone();
+          }
+          hoveredStyle.setZIndex(1);
+          hoveredStyle.getImage().setScale(1.3);
+          return hoveredStyle;
+        },
       })
     );
   },
@@ -166,6 +180,12 @@ export default {
             this.$parent.setOverlay(feature);
             this.activeFeature = feature;
             this.openOverlay(feature);
+
+            // set actual icon for specific feature on click
+            if (this.iconStyle) {
+              this.icon = () => this.style(feature).getImage().getSrc();
+            }
+
             return true;
           },
           {
