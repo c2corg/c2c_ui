@@ -129,7 +129,6 @@
     "Compute": "Izračun",
     "Compute risk": "Izračun tveganja",
     "Conditions": "Razmere",
-    "Conditions, summits, routes": "Razmere, vrhovi, smeri",
     "Configure activity trackers": "Konfigurirajte sledilce dejavnosti",
     "Configure cookies": "Nastavitve piškotkov",
     "Configure layer": "Konfigurirajte",
@@ -376,7 +375,6 @@
     "Last character is invalid": {
       "API message": "Zadnji znak ni veljaven"
     },
-    "Last forum topics": "Najnovejše teme foruma",
     "Last outings": "Zadnji vzponi",
     "Latitude": "Zemljepisna širina",
     "Launch YETI": "Zaženi YETI",
@@ -520,7 +518,6 @@
     "People who were with you, and your feelings about this outing": "Ljudje, ki so bili z vami, in vaši občutki glede izleta",
     "Period of protection": "Obdobje zaščite",
     "Personal data are confidential": "Osebni podatki so zaupni",
-    "Personal feed": "Osebni tok",
     "Personal feed off": "Osebni tok onemogočen",
     "Personal feed on": "Osebni tok omogočen",
     "Personal informations": "Osebne informacije",
@@ -600,7 +597,6 @@
     "Settings": "Nastavitve",
     "Several days?": "Več dni?",
     "Share": "Deli",
-    "Share with us!": "Delite z nami!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "ShareAlike — Če gradivo remiksate, preoblikujete ali nadgradite, morate spremenjen prispevek distribuirati pod isto licenco kot izvirnik.",
     "Shorter than minimum length 1": {
       "API message": "Obvezno polje"
@@ -644,7 +640,6 @@
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Zahvaljujoč statističnim in analitičnim piškotkom, ki jih zagotavljamo mi in druga podjetja, lahko ocenimo obisk naše spletne strani in poznamo vire prometa. Podatki, ki jih pridobimo, nam pomagajo razumeti, kaj je obiskovalcem všeč, in izboljšati naše spletno mesto. Če jih zavrnete, ne moremo izboljšati vaše izkušnje.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Metoda MRD (začetnik) je dovoljena s stopnjo nevarnosti največ 3. Izberite metodo MRE ali MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Potencial nevarnosti se izračuna iz stopnje nevarnosti plazovnega biltena. Lahko ga natančno nastavite z izbiro potenciala znotraj ustreznega območja stopnje nevarnosti. Na primer: plazovni bilten omenja nevarnost 3 takoj po obdobju v nevarnosti 4. Tako lahko navedemo potencial nevarnosti 12 namesto 8.",
-    "The mountain sports community": "Skupnost gorskih športov",
     "The page you are looking for does not exist or is broken.": "Stran, ki jo iščete, ne obstaja ali pa je pokvarjena.",
     "The slope must be between 0 and 80 deg": "Naklon mora biti med 0 in 80 stopinj",
     "The slope must be between 50 and 3000m high": "Višina pobočja mora biti med 50 in 3000 m",

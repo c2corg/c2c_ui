@@ -117,7 +117,6 @@
     "Compare selected versions": "Comparer les versions sélectionnées",
     "Compute": "Calcul",
     "Compute risk": "Calculer le risque",
-    "Conditions, summits, routes": "Conditions, sommets, itinéraires",
     "Configure activity trackers": "Configuration des traqueurs d'activité",
     "Configure cookies": "Paramétrage des cookies",
     "Configure layer": "Configurer",
@@ -170,6 +169,7 @@
     "Danger rating - moderate": "Danger limité",
     "Danger rating - very high": "Danger très fort",
     "Danger:": "Danger :",
+    "Dashboard": "Tableau de bord",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Données techniques, comme l'orientation, le type de roche ou la configuration générale de l'itinéraire (arête, pilier...)",
     "Delete": {
       "yeti": "Supprimer"
@@ -365,7 +365,6 @@
     "Last character is invalid": {
       "API message": "Le dernier caractère doit être une lettre ou un chiffre."
     },
-    "Last forum topics": "Dernières discussions du forum",
     "Last outings": "Dernières sorties",
     "Launch YETI": "Accéder à YETI",
     "Layers": {
@@ -499,7 +498,6 @@
     "People who were with you, and your feelings about this outing": "Les autres personnes qui étaient avec vous, ainsi que vos impressions sur la sortie",
     "Period of protection": "Période de protection",
     "Personal data are confidential": "Les informations personnelles sont confidentielles",
-    "Personal feed": "Fil personnel",
     "Personal feed off": "Fil personnel désactivé",
     "Personal feed on": "Fil personnel activé",
     "Personal informations": "Informations personnelles",
@@ -580,7 +578,6 @@
     "Settings": "Paramètres",
     "Several days?": "Plusieurs jours ?",
     "Share": "Partager",
-    "Share with us!": "Partagez avec nous !",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
     "Shorter than minimum length 1": {
       "API message": "Champ obligatoire"
@@ -624,7 +621,6 @@
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Le potentiel de danger est calculé à partir du niveau de danger du bulletin d'avalanche. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du danger. Par exemple : Le bulletin évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8. ",
-    "The mountain sports community": "La communauté des sports de montagne",
     "The page you are looking for does not exist or is broken.": "La page que vous demandez n'existe pas ou est cassée.",
     "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
     "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
@@ -778,6 +774,7 @@
     "always_accessible": {
       "custodianship_types": "toujours ouvert"
     },
+    "and": "et",
     "anonymous": "Contribution anonyme",
     "area": "région",
     "area_type": "Type de région",

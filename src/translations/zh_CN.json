@@ -164,7 +164,6 @@
     "Compute": "计算",
     "Compute risk": "计算风险",
     "Conditions": "条件",
-    "Conditions, summits, routes": "条件、山峰、路线",
     "Configure activity trackers": "设置活动追踪器",
     "Configure cookies": "设置 cookies",
     "Configure layer": "设置图层",
@@ -408,7 +407,6 @@
     "Last character is invalid": {
       "API message": "最后一个字符无效"
     },
-    "Last forum topics": "最新的论坛主题",
     "Last outings": "最新的出行记录",
     "Latitude": "纬度",
     "Launch YETI": "运行YETI",
@@ -548,7 +546,6 @@
     "People who were with you, and your feelings about this outing": "同行的人以及你关于此次出行的感受",
     "Period of protection": "保护周期",
     "Personal data are confidential": "个人数据是完全保密的",
-    "Personal feed": "个人订阅",
     "Personal feed off": "个人订阅设置关闭",
     "Personal feed on": "个人订阅设置开启",
     "Personal informations": "个人信息",
@@ -628,7 +625,6 @@
     "Settings": "设置",
     "Several days?": "多天行程？",
     "Share": "分享",
-    "Share with us!": "和我们分享！",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "相同方式共享 - 如果您重新组合，转换或在该材料上进行构建，则必须以与原始文件相同的许可分发您的贡献。",
     "Shorter than minimum length 1": {
       "API message": "必填项"
@@ -668,7 +664,6 @@
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "由于我们自己和其他公司提供的统计 cookie，我们可以评估对我们网站的访问并了解流量来源。我们获得的数据有助于我们了解访问者的喜好并改进我们的网站。 如果您拒绝它们，我们将无法改善您的体验。",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "当危险等级最大为3时，允许使用MRD方法（初学者）。选择另一种方法：MRE或MRP。",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "潜在危险是根据雪崩公告的危险等级计算出来的。可以通过选择危险等级对应范围内的危险高低进行微调。例如：雪崩公告在危险等级4后立即变为危险等级3。然后我们可以表明潜在危险为12而不是8。",
-    "The mountain sports community": "山地运动社区",
     "The page you are looking for does not exist or is broken.": "您查找的页面不存在或已损坏。",
     "The slope must be between 0 and 80 deg": "坡度必须在0到80度之间",
     "The slope must be between 50 and 3000m high": "坡高必须在50到3000米之间",
