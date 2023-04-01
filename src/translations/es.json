@@ -114,7 +114,6 @@
     "Compute": "Calcular",
     "Compute risk": "Calcular el riesgo ",
     "Conditions": "Condiciones",
-    "Conditions, summits, routes": "Condiciones, cumbres, rutas",
     "Configure cookies": "Configurar cookies",
     "Confirm": "Confirmar",
     "Confirm delete": "Confirmar eliminación",
@@ -303,7 +302,6 @@
     "Issue report": "Aseñalar un problema",
     "Know more about SERAC": "Saber más en cuanto a SERAC",
     "Large group = 5 people and more": "Grupo largo = más de 5 personas",
-    "Last forum topics": "Ultimas cuestiones del foro",
     "Last outings": "Últimas salidas",
     "Latitude": "Latitud",
     "Launch YETI": "Lanzar YETI",
@@ -403,7 +401,6 @@
     "People who were with you, and your feelings about this outing": "Las personas que estuvieron con usted, y sus sentimientos sobre esta salida",
     "Period of protection": "Período de protección",
     "Personal data are confidential": "La información personal es confidencial",
-    "Personal feed": "Noticias personales",
     "Personal feed off": "Noticias personales desactivadas",
     "Personal feed on": "Noticias personales activadas",
     "Personal informations": "Información personal",
@@ -451,7 +448,6 @@
     "Settings": "Configuración",
     "Several days?": "¿Varios días?",
     "Share": "Compartir",
-    "Share with us!": "¡ Comparte con nosotros!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual (Share alike): la explotación autorizada incluye la creación de obras derivadas siempre que mantengan la misma licencia al ser divulgadas.",
     "Shorter than minimum length 1": {
       "API message": "Campo obligatorio"
@@ -467,7 +463,6 @@
     "Sort by": "Ordenar por",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
-    "The mountain sports community": "La comunidad de los deportes de montaña",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Este contenido está bajo licencia Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Este contenido está bajo una licencia Creative Commons BY-SA 3.0",
@@ -590,6 +585,7 @@
     "always_accessible": {
       "custodianship_types": "siempre abierto"
     },
+    "and": "y",
     "anonymous": "anónimo",
     "area": "región",
     "area_type": "tipo de región",

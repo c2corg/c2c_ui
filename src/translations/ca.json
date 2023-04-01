@@ -111,7 +111,6 @@
     "Compute": "Càlcul",
     "Compute risk": "Calcula el risc",
     "Conditions": "Condicions",
-    "Conditions, summits, routes": "Condicions, cims, itineraris",
     "Configure cookies": "Configura les galetes",
     "Confirm": "Confirma",
     "Confirm delete": "Confirmeu la supressió",
@@ -311,7 +310,6 @@
     "Issue report": "Alerta d'un problema",
     "Know more about SERAC": "Més sobre SERAC",
     "Large group = 5 people and more": "Grup gran = 5 persones o més",
-    "Last forum topics": "Darrers temes al fòrum",
     "Last outings": "Darreres sortides",
     "Latitude": "Latitud",
     "Launch YETI": "Accedeix a YETI",
@@ -432,7 +430,6 @@
     "People who were with you, and your feelings about this outing": "L'altra gent que participava a la sortida, així com les vostres impressions sobre la sortida",
     "Period of protection": "Període de protecció",
     "Personal data are confidential": "Les dades personals són confidencials",
-    "Personal feed": "Fil personal",
     "Personal feed off": "Fil personal desactivat",
     "Personal feed on": "Fil personal activat",
     "Personal informations": "Informació personal",
@@ -501,7 +498,6 @@
     "Settings": "Propietats",
     "Several days?": "D'uns quants dies?",
     "Share": "Comparteix",
-    "Share with us!": "Comparteix-ho amb nosaltres!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual — Si feu una remescla, transformeu o creeu a partir del material de l'Obra original, haureu de difondre l'Obra modificada amb les mateixes condicions, és a dir, amb la mateixa llicència amb la que es difonia l'Obra original.",
     "Shorter than minimum length 1": {
       "API message": "Camp obligatori"
@@ -537,7 +533,6 @@
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Gràcies a les galetes estadístiques o analítiques, nostres o d'altres societats, podem comptar les visites al nostre lloc web i conèixer les fonts del trànsit. Les dades que n'obtenim ens ajuden a entendre allò que els usuaris voldrien millorar del lloc web. Si no les accepteu pas, no podrem millorar la vostra experiència.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "El mètode MRD (iniciació) s'accepta fins a nivell de perill 3. Trieu els mètodes MRE o MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "El potencial de perill es calcula a partir del nivell de perill del butlletí d'allaus. Es pot ajustar seleccionant un potencial dins del rang corresponent al nivell de perill. Per exemple: el butlletí indica un perill 3 just després d'un període de perill 4. Es podrà indicar aleshores un potencial de perill de 12 en comptes de 8.",
-    "The mountain sports community": "La comunitat dels esports de muntanya",
     "The page you are looking for does not exist or is broken.": "Aquesta pàgina no existeix o bé està malmesa.",
     "The slope must be between 0 and 80 deg": "El pendent ha d'estar entre 0 i 80 graus",
     "The slope must be between 50 and 3000m high": "L'alçada del pendent ha d'estar entre 50 i 3000m",
@@ -684,6 +679,7 @@
     "amateur": {
       "user_categories": "aficionat"
     },
+    "and": "i",
     "anonymous": "Contribució anònima",
     "area": "regió",
     "area_type": "tipus de regió",

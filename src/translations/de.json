@@ -168,7 +168,6 @@
     "Compute": "Berechnung",
     "Compute risk": "Risiko berechnen",
     "Conditions": "Voraussetzungen",
-    "Conditions, summits, routes": "Verhältnisse, Gipfel, Routen",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
     "Configure cookies": "Cookies einstellen",
     "Configure layer": "Schicht konfigurieren",
@@ -423,7 +422,6 @@
     "Last character is invalid": {
       "API message": "Das letzte Zeichen muss ein Buchstabe oder eine Zahl sein."
     },
-    "Last forum topics": "Letztes Forumsthema",
     "Last outings": "Letzte Tourenberichte",
     "Latitude": "Breitengrad",
     "Launch YETI": "YETI starten",
@@ -567,7 +565,6 @@
     "People who were with you, and your feelings about this outing": "Leute, die mit Sie waren, und ihr Eindruck über dieses Tour",
     "Period of protection": "Schutzdauer",
     "Personal data are confidential": "Persönliche Daten sind vertraulich",
-    "Personal feed": "Persönliche Filter",
     "Personal feed off": "Persönliche Filter aus",
     "Personal feed on": "Persönliche Filter ein",
     "Personal informations": "Persönliche Daten",
@@ -647,7 +644,6 @@
     "Settings": "Einstellungen",
     "Several days?": "Mehrere Tage?",
     "Share": "Teilen",
-    "Share with us!": "An der Diskussion teilnehmen!",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Weitergabe unter gleichen Bedingungen — Wenn Sie das Material remixen, verändern oder anderweitig direkt darauf aufbauen, dürfen Sie Ihre Beiträge nur unter derselben Lizenz wie das Original verbreiten.",
     "Shorter than minimum length 1": {
       "API message": "Feld notwendig"
@@ -695,7 +691,6 @@
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Dank der statistischen oder analytischen Cookies, die von uns und anderen Unternehmen zur Verfügung gestellt werden, können wir die Besuche auf unserer Website zählen und die Quellen des Verkehrs kennen. Die Daten, die wir erhalten, helfen uns zu verstehen, was den Besuchern gefällt und die Website zu verbessern. Wenn Sie diese Daten nicht akzeptieren, sind wir nicht in der Lage, Ihr Erlebnis zu verbessern.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Die MRD-Methode (Anfänger) ist mit einer maximalen Gefahrenstufe von 3 zulässig. Wählen Sie die MRE- oder MRP-Methode.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Das Gefahrenpotenzial wird aus der Gefahrenstufe des Lawinenbulletins berechnet. Es kann durch die Wahl eines Potenzials innerhalb des entsprechenden Bereichs der Gefahrenstufe feinjustiert werden. Beispiel: Das Lawinenbulletin ruft kurz nach einer Periode der Gefahrenstufe 4 die Gefahrenstufe 3 hervor. Wir können dann ein Gefahrenpotenzial von 12 statt 8 angeben.",
-    "The mountain sports community": "Die Bergsport-Community",
     "The page you are looking for does not exist or is broken.": "Die von Ihnen angeforderte Seite existiert nicht oder ist fehlerhaft.",
     "The slope must be between 0 and 80 deg": "Die Steigung muss zwischen 0 und 80 Grad liegen",
     "The slope must be between 50 and 3000m high": "Die Höhe des Hanges muss zwischen 50 und 3000 m betragen",
@@ -867,6 +862,7 @@
     "amateur": {
       "user_categories": "Amateur"
     },
+    "and": "und",
     "anonymous": "anonymer Beitrag",
     "area": "Gebiet",
     "area_type": "Gebietsart",
