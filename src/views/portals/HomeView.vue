@@ -20,7 +20,7 @@
           </div>
           <home-banner v-show="visible" />
         </div>
-        <publi-widget v-if="$screen.isMobile" />
+        <board-announcement-widget v-if="$screen.isMobile" />
         <!-- Switchs -->
         <div class="field">
           <span>
