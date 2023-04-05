@@ -1,6 +1,10 @@
 <template>
   <document-link :document="document" class="dashboard-link has-text-normal is-flex has-hover-background">
-    <activities :activities="document.activities" class="is-size-3 activity-icons" />
+    <activities
+      :activities="document.activities"
+      class="is-size-3 activity-icons"
+      :class="{ 'is-2-columns': isMultiActivities }"
+    />
     <span class="dashboard-link-main">
       <document-title :document="document" class="document-title" />
       <document-title
@@ -34,6 +38,10 @@ export default {
 
       return result;
     },
+
+    isMultiActivities() {
+      return this.document.activities.length > 1 ? true : false;
+    },
   },
 };
 </script>
@@ -63,5 +71,10 @@ export default {
 
 .dashboard-link:visited {
   color: $grey-light;
+}
+
+.is-2-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 </style>
