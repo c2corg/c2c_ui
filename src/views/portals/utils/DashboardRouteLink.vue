@@ -11,6 +11,7 @@
       {{ route.height_diff_difficulties }}&nbsp;m</span
     >
     <document-rating :document="filteredDocument" />
+    <marker-quality :quality="route.quality" />
   </dashboard-link>
 </template>
 
