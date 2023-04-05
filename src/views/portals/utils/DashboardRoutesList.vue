@@ -44,7 +44,7 @@ export default {
   },
 
   created(query = {}) {
-    query.limit = 15;
+    query.limit = 5;
     query.qa = 'draft,great';
     this.routesPromise = c2c.route.getAll(query);
   },
