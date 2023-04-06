@@ -84,7 +84,7 @@ export default {
 };
 </script>
 
-<style scope lang="scss">
+<style scoped lang="scss">
 $button-width: 78px;
 $button-height: $button-width;
 $button-radius: 5px;
