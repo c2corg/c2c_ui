@@ -244,8 +244,8 @@
     "Drop images here or click to upload": "Povlecite slike sem ali kliknite, da izberete. \nTe slike bodo izdane pod licenco <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nČe niste avtor slike, je ne smete naložiti, razen če je avtor dal soglasje, da se distribuira pod ustrezno Creative-Commons licenco. \nBrskalnik pred pošiljanjem spremeni velikost slik, večjih od 2Mo.",
     "Duration": "Čas",
     "Duration (hrs)": "Trajanje (h)",
-    "Easy mountain climbing gear": "Alpinizem (skala) od F do AD",
-    "Easy snow ice mixed gear": "Alpinizem sneg/led/kombinirano od F do PD+",
+    "Easy mountain climbing gear": "Alpinizem (skala)",
+    "Easy snow ice mixed gear": "Alpinizem sneg/led/kombinirano",
     "Edit": {
       "$$noContext": "Urejanje",
       "yeti": "Uredi"
