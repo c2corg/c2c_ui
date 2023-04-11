@@ -1,10 +1,10 @@
-/************************************************************************************************************
- Waypoint fields access and access_period have a different signification, depending of waypoint_type
- It implies different label/titles/placeholders. And this logic is needed in both document views and
- edition views. So we have to do a mixin for this logic
-
- Placeholders are needed only in edition views, but it's better to keep all thois logic on the same place
-*************************************************************************************************************/
+/*
+ * Waypoint fields access and access_period have a different signification, depending of waypoint_type
+ * It implies different label/titles/placeholders. And this logic is needed in both document views and
+ * edition views. So we have to do a mixin for this logic
+ *
+ * Placeholders are needed only in edition views, but it's better to keep all thois logic on the same place
+ */
 
 export default {
   computed: {

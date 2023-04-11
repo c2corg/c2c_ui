@@ -76,7 +76,7 @@ CamptocampApi.prototype.getRecentChanges = function (params) {
  * createImages() may not deserve a dedicated service, and can stay here
  */
 
-/**
+/*
  * Upload images service
  */
 CamptocampApi.prototype.uploadImage = function (file, onUploadProgress, onSucess, onFailure) {

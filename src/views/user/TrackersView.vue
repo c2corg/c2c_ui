@@ -171,8 +171,8 @@ export default {
       this.statusError = false;
       this.activitiesError = false;
       this.trackingService.getStatus(this.$user.id).then(
-        (response) => {
-          Object.entries(response.data).map(([app, status]) => {
+        ({ data }) => {
+          Object.entries(data).map(([app, status]) => {
             const idx = this.applications.findIndex(({ name }) => name === app);
             this.applications.splice(idx, 1, { ...this.applications[idx], status });
           });
