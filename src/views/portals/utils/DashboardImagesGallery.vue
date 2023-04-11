@@ -42,8 +42,11 @@ export default {
     },
   },
 
-  created() {
-    this.imagesPromise = c2c.image.getAll({ limit: 10 });
+  created(query = {}) {
+    this.imagesPromise = c2c.image.getAll({
+      ...query,
+      limit: 10,
+    });
   },
 };
 </script>
