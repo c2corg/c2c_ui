@@ -113,9 +113,11 @@ export default {
     },
 
     loadOutingsWithQuery(query = {}) {
-      query.limit = 40;
-      query.qa = 'draft,great';
-      this.outingsPromise = c2c.outing.getAll(query);
+      this.outingsPromise = c2c.outing.getAll({
+        ...query,
+        limit: 40,
+        qa: 'draft,great',
+      });
     },
 
     getQueryFromUserPreferences(documentType) {
