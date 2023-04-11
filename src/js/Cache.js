@@ -1,16 +1,16 @@
-/*******************************************************************
- This Object is a key-value disctionary, with these specificities  :
-
-* key and value must be strings
-* the total size in charater is calculated in Cache._size
-* Cache._size can't be greater than Cache._maxSize
-* if it happens, "oldest" pairs are removed
-* "oldest" and youngest are stored using Map object,
-  which keep key insertion order.
-* a given pair is reseted as the "youngest" one when :
-  * feeded to the cache : Cache.feed()
-  * requested : Cache.get()
-********************************************************************/
+/*
+ * This Object is a key-value disctionary, with these specificities  :
+ *
+ * * key and value must be strings
+ * * the total size in charater is calculated in Cache._size
+ * * Cache._size can't be greater than Cache._maxSize
+ * * if it happens, "oldest" pairs are removed
+ * * "oldest" and youngest are stored using Map object,
+ *  which keep key insertion order.
+ * * a given pair is reseted as the "youngest" one when :
+ *   * feeded to the cache : Cache.feed()
+ *   * requested : Cache.get()
+ */
 
 const Cache = function () {
   this._size = 0;

@@ -1,5 +1,5 @@
 <script>
-/**
+/*
  * Yetix
  * State management component for Yeti (VueX inspired)
  *
@@ -76,8 +76,8 @@ let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
 /**
  * Exported state
  *
- * Computed act as getters for read-only state properties
- * Methods act as mutations (to mutate state) or actions (api calls)
+ * Computed act as getters for read-only state properties Methods act as mutations (to mutate state) or actions (api
+ * calls)
  */
 export default new Vue({
   computed: {

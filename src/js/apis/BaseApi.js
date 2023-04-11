@@ -47,7 +47,7 @@ const BaseApi = function (apiUrl) {
   });
 };
 
-/**
+/*
  * Generic request helpers
  */
 

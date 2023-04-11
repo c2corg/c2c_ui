@@ -1,7 +1,13 @@
 import french_translations from '@/translations/fr.json';
 
+/** @typedef {'ca' | 'es' | 'eu' | 'de' | 'fr' | 'hu' | 'it' | 'sl' | 'zh_CN' | 'en'} Lang */
+
 const TEXT_NODE = 3;
 
+/**
+ * @param {string | undefined} msgid
+ * @returns {string}
+ */
 function cleanMessageId(msgid) {
   if (!msgid) {
     return msgid;
@@ -22,16 +28,22 @@ function cleanMessageId(msgid) {
   );
 }
 
+/**
+ * @param {{ [msgid: string]: string | { [ctxt: string]: string } } | undefined} messages
+ * @param {string} msgid
+ * @param {string} msgctxt
+ * @returns {string}
+ */
 function getTranslation(messages, msgid, msgctxt) {
   //, n = 1, context = null, defaultPlural = null){
-  if (messages === undefined) {
+  if (!messages) {
     // `messages are not yet available`
     return msgid;
   }
 
   const message = messages[msgid];
 
-  if (message === undefined) {
+  if (!message) {
     return msgid;
   }
 
@@ -50,6 +62,10 @@ function getTranslation(messages, msgid, msgctxt) {
   return message['$$noContext'] ?? msgid;
 }
 
+/**
+ * @param {Lang} lang
+ * @returns
+ */
 function getMessages(lang) {
   if (lang === 'fr') {
     // include fr langage in app
@@ -130,6 +146,7 @@ export default function install(Vue) {
         });
       },
 
+      /** @param {Lang} lang */
       setCurrent(lang) {
         // save in locale storage
         this.$localStorage.set('current', lang);
@@ -170,12 +187,21 @@ export default function install(Vue) {
         });
       },
 
+      /**
+       * @param {string} msgid
+       * @param {string} msgctxt
+       * @returns {string}
+       */
       gettext(msgid, msgctxt) {
         return getTranslation(this.translations[this.current], msgid, msgctxt)
           .replace(/&quot;/g, '"')
           .replace(/&#x5C;/gi, '\\');
       },
 
+      /**
+       * @param {Lang} lang
+       * @returns {string}
+       */
       getIANALanguageSubtag(lang) {
         switch (lang) {
           case 'fr':
@@ -198,6 +224,10 @@ export default function install(Vue) {
         }
       },
 
+      /**
+       * @param {Lang} lang
+       * @returns {string}
+       */
       getIsoLanguageTerritory(lang) {
         switch (lang) {
           case 'fr':
@@ -228,6 +258,7 @@ export default function install(Vue) {
         }
       },
 
+      /** @param {HTMLElement} element */
       updateElement(element) {
         if (element.dataset.msgid === undefined) {
           if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
@@ -251,14 +282,17 @@ export default function install(Vue) {
 
   // An option to support translation with HTML content: `v-translate`.
   Vue.directive('translate', {
+    /** @param {HTMLElement} el */
     bind(el) {
       // console.log("bind", el)
       languageVm.updateElement(el);
     },
+    /** @param {HTMLElement} el */
     inserted(el) {
       // console.log("inserted", el)
       languageVm.updateElement(el);
     },
+    /** @param {HTMLElement} el */
     update(el) {
       // console.log("update", el)
       languageVm.updateElement(el);

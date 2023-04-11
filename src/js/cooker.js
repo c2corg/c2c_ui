@@ -1,9 +1,9 @@
-/*******************************************************************
- This Object is a a wrapper around API /cooker service
-
-It use a cache object to store calculated field, in order to preserve API
-It also prevent the computation of not markdown property
-********************************************************************/
+/*
+ * This Object is a a wrapper around API /cooker service
+ *
+ *It use a cache object to store calculated field, in order to preserve API
+ *It also prevent the computation of not markdown property
+ */
 
 import Cache from './Cache';
 

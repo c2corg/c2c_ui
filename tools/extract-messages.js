@@ -1,26 +1,25 @@
-/*****************************************
-Extract untranslated string from .vue and .js files
-and save them into a .pot file :
-
-https://www.gnu.org/software/gettext/manual/gettext.html
-
-Supported patterns in .vue and .js files :
-
-    $gettext('msgid')
-    $gettext('msgid', 'msgctx')
-
-Supported pattern in .vue file, inside <template /> part :
-
-    Any node that contains a v-translate directive.
-    translate-context attribute is optional
-    node must contains only one text node
-
-    Exemple :
-
-        <span v-translate>Hello</span>
-        <span v-translate translate-context="World">Hello</span>
-
-******************************************/
+/*
+ * Extract untranslated string from .vue and .js files  and save them into a .pot file :
+ *
+ * https://www.gnu.org/software/gettext/manual/gettext.html
+ *
+ * Supported patterns in .vue and .js files :
+ *
+ *    $gettext('msgid')
+ *    $gettext('msgid', 'msgctx')
+ *
+ * Supported pattern in .vue file, inside <template /> part :
+ *
+ *    Any node that contains a v-translate directive.
+ *    translate-context attribute is optional
+ *    node must contains only one text node
+ *
+ *    Exemple :
+ *
+ *        <span v-translate>Hello</span>
+ *        <span v-translate translate-context="World">Hello</span>
+ *
+ */
 
 const fs = require('fs');
 const compiler = require('vue-template-compiler');
@@ -33,9 +32,7 @@ const gettext_template1b = /\$gettext\(\s*`((?:[^`$])*?)`\s*\)/gm;
 const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
 const gettext_template2b = /\$gettext\(\s*`((?:[^`$])*?)`,\s*`([^']*?)`\s*\)/gm;
 
-/**************************************************************************
-  a "Result" is a .pot item (msgctxt/msgid), with every associated meta-data
-**************************************************************************/
+/** A "Result" is a .pot item (msgctxt/msgid), with every associated meta-data */
 function Result(msgctxt, msgid) {
   this.msgctxt = msgctxt;
   this.msgid = msgid;
