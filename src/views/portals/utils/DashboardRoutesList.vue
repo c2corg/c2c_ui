@@ -43,8 +43,12 @@ export default {
     },
   },
 
-  created() {
-    this.routesPromise = c2c.route.getAll({ limit: 5 });
+  created(query = {}) {
+    this.routesPromise = c2c.route.getAll({
+      ...query,
+      limit: 5,
+      qa: 'draft,great',
+    });
   },
 };
 </script>

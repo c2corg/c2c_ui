@@ -28,9 +28,9 @@ export default {
         return true;
       }
 
-      /**********************************
-      /* rules for standard users. Do not forget that if he can open this page, he can edit parent
-      /**********************************/
+      /*
+       * rules for standard users. Do not forget that if he can open this page, he can edit parent
+       */
 
       // only moderator can add waypoint/waypoint association
       if (parent.type === 'w' && child.type === 'w') {
@@ -63,9 +63,10 @@ export default {
         return true;
       }
 
-      /**********************************
-      / rules for standard user. Do not forget that if he can open this page, he can edit parent
-      /**********************************/
+      /**
+       * / rules for standard user. Do not forget that if he can open this page, he can edit parent
+       * /*********************************
+       */
 
       // if it's an outing, user can do whatever he wants, except remove itself
       if (parent.type === 'o') {

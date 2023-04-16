@@ -6,6 +6,14 @@ function RespecterCestProtegerService() {
   this.axios = axios.create({ baseURL: 'https://api3.geo.admin.ch/rest/services/api/MapServer' });
 }
 
+/**
+ * @param {[number, number]} position
+ * @param {[number, number, number, number]} extent
+ * @param {number} mapWidth
+ * @param {number} mapHeight
+ * @param {import('@/js/vue-plugins/gettext-plugin.js').Lang} language
+ * @returns
+ */
 RespecterCestProtegerService.prototype.identify = function (position, extent, mapWidth, mapHeight, language) {
   if (!['fr', 'de', 'it'].includes(language)) {
     language = 'en';
@@ -33,6 +41,10 @@ RespecterCestProtegerService.prototype.identify = function (position, extent, ma
   );
 };
 
+/**
+ * @param {[number, number, number, number]} extent
+ * @returns {boolean}
+ */
 RespecterCestProtegerService.prototype.hasArea = function (extent) {
   const geometry = `${extent[0]},${extent[1]},${extent[2]},${extent[3]}`;
 

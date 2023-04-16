@@ -46,53 +46,53 @@ export default {
 
   data() {
     return {
-      /** indicates whether there is any elevation data to display */
+      /** Indicates whether there is any elevation data to display */
       hasData: false,
 
-      /** geometry coordinates */
+      /** Geometry coordinates */
       coords: null,
-      /** graph data */
+      /** Graph data */
       data: null,
-      /** indicates whether time information is available */
+      /** Indicates whether time information is available */
       timeAvailable: false,
-      /** x axis is either distance or time */
+      /** X axis is either distance or time */
       mode: 'distance',
 
       margin: {},
       svg: null,
 
-      /** horizontal scale (distance) */
+      /** Horizontal scale (distance) */
       x1: null,
-      /** horizontal axis (distance) */
+      /** Horizontal axis (distance) */
       x1Axis: null,
 
-      /** horizontal scale (time) */
+      /** Horizontal scale (time) */
       x2: null,
-      /** horizontal axis (time) */
+      /** Horizontal axis (time) */
       x2Axis: null,
 
-      /** vertical scale (elevation) */
+      /** Vertical scale (elevation) */
       y: null,
-      /** vertical axis (elevation) */
+      /** Vertical axis (elevation) */
       yAxis: null,
 
-      /** time line generator */
+      /** Time line generator */
       tLine: null,
-      /** distance line generator */
+      /** Distance line generator */
       dLine: null,
-      /** svg path element representing the distance or time line */
+      /** Svg path element representing the distance or time line */
       line: null,
 
-      /** vertical line for focusing a specific point */
+      /** Vertical line for focusing a specific point */
       focusv: null,
-      /** horizontal line for focusing a specific point */
+      /** Horizontal line for focusing a specific point */
       focush: null,
-      /** marker for focusing a specific point */
+      /** Marker for focusing a specific point */
       focus: null,
 
-      /** focused point info (distance) */
+      /** Focused point info (distance) */
       bubble1: null,
-      /** focused point info (time) */
+      /** Focused point info (time) */
       bubble2: null,
 
       i18n_: {
@@ -107,7 +107,7 @@ export default {
         duration_legend: this.$gettext('Duration (hrs)'),
       },
 
-      /** the elevation profile can be toggled in full screen mode */
+      /** The elevation profile can be toggled in full screen mode */
       fullScreenHidden: false,
     };
   },

@@ -68,7 +68,7 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
   });
 }
 
-/**
+/*
  * Creates map layer for IGN spain.
  * Available maps useful for c2c are:
  * - raster

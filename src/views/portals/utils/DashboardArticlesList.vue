@@ -51,9 +51,11 @@ export default {
   },
 
   created(query = {}) {
-    query.limit = 5;
-    query.qa = 'draft,great';
-    this.articlesPromise = c2c.article.getAll(query);
+    this.articlesPromise = c2c.article.getAll({
+      ...query,
+      limit: 5,
+      qa: 'draft,great',
+    });
   },
 };
 </script>

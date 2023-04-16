@@ -34,6 +34,7 @@
     "8 days": "8 dni",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Sporočilo je bilo poslano na novi navedeni naslov. Za potrditev spremembe e-poštnega naslova morate slediti povezavi znotraj sporočila. ",
     "Accident database": "Incidenti in nesreče",
+    "Accidents/Incidents database:": "Podatkovna baza Nesreče/Incidenti:",
     "Account": "Račun",
     "Action": {
       "Sophie picture context": "Akcija"
@@ -57,6 +58,7 @@
     "Add title…": "Dodaj naslov...",
     "Additional information": "Dodatne informacije",
     "All": "Vse",
+    "All in store for you:": "Vse na zalogi za vas:",
     "Allow all": "Dovoli vse",
     "Altitude": "Višina",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Nadmorska višina je obvezna, kadar sta visoka in nizka nevarnost različni. Prosimo, nastavite višino, kot je določeno v plazovnem biltenu za to območje.",
@@ -86,6 +88,7 @@
       "Map controls": "Atribucije"
     },
     "Avalanche bulletins": "Plazovni bilteni",
+    "Avalanche risk evaluation tool:": "Ocenjevalno orodje za nevarnost plazov:",
     "Average slope (degrees)": "Povprečni naklon (stopinje)",
     "Average slope in degree": "Povprečni naklon v stopinjah",
     "Back to code": "Nazaj na kodo",
@@ -113,6 +116,7 @@
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Vaše Ime na wikivodniku bo privzeto enako vašemu Uporabniškemu imenu. Lahko ga pa spremenite pozneje v svojih nastavitvah.",
     "By month": "Na mesec",
     "By year": "Na leto",
+    "Camptocamp Association": "Društvo Camptocamp",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org ima cilj olajšati izmenjavo informacij med ljubitelji gorskih športov in prispevati k varnosti gorskih dejavnosti.",
     "Cancel": "Prekliči",
     "Candidates": "Vse slike",
@@ -244,8 +248,8 @@
     "Drop images here or click to upload": "Povlecite slike sem ali kliknite, da izberete. \nTe slike bodo izdane pod licenco <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nČe niste avtor slike, je ne smete naložiti, razen če je avtor dal soglasje, da se distribuira pod ustrezno Creative-Commons licenco. \nBrskalnik pred pošiljanjem spremeni velikost slik, večjih od 2Mo.",
     "Duration": "Čas",
     "Duration (hrs)": "Trajanje (h)",
-    "Easy mountain climbing gear": "Alpinizem (skala) od F do AD",
-    "Easy snow ice mixed gear": "Alpinizem sneg/led/kombinirano od F do PD+",
+    "Easy mountain climbing gear": "Alpinizem (skala)",
+    "Easy snow ice mixed gear": "Alpinizem sneg/led/kombinirano",
     "Edit": {
       "$$noContext": "Urejanje",
       "yeti": "Uredi"
@@ -288,6 +292,7 @@
     "Force elevations": "Vsili višine",
     "Forgot password?": "Ste pozabili geslo?",
     "Forum username": "Vzdevek na forumu",
+    "Forum: a place to chat about technical matters, or just petty talk": "Forum: prostor za klepet o tehničnih zadevah ali samo za malenkosti",
     "From danger 3, consider the slopes which dominate the route": "Od nevarnosti 3 navzgor, upoštevajte pobočja nad potjo.",
     "From the interface": "Iz vmesnika",
     "Full bulletin": "Celoten bilten",
@@ -300,6 +305,7 @@
     "Generate new elevations": "Ustvari nove višine",
     "Geographical data could not be retrieved": "Sledi dejavnosti ni bilo mogoče pridobiti",
     "Geolocation": "Geolokacija",
+    "Get ready for your climb": "Pripravite se na turo",
     "Go back to YETI": "Vrni se na YETI",
     "Go to the previous page": "Pojdi na prejšnjo stran",
     "Go to website": "Pojdite na spletno stran",
@@ -379,6 +385,7 @@
     },
     "Invalid value": "Neveljavna vrednost",
     "Issue report": "Prijava problema",
+    "Join us": "Pridruži se nam",
     "Know more about SERAC": "Izvedite več o SERAC",
     "Large group = 5 people and more": "Velika skupina = 5 ljudi in več",
     "Large group with load shedding distance": "Velika skupina z razbremenitveno razdaljo",
@@ -590,6 +597,7 @@
     "Route": "Smer",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC je svetovna baza podatkov o incidentih in nesrečah, katere cilj je povečati varnost pri plezanju in drugih gorskih športih.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC je zasnovan v duhu dobrohotnosti in deljenja, hvala da ga izboljšate.",
+    "SERAC: accidents and incidents in the mountains": "SERAC: nesreče in incidenti v gorah",
     "Save": "Shrani",
     "Search ...": "Iskanje ...",
     "Search a document to associate...": "Poišči dokument, ki ga želiš povezati",
@@ -1297,6 +1305,7 @@
     "internal_witness": {
       "author_statuses": "direktna priča"
     },
+    "is a non profit organization, where volunteers manage the camptocamp.org website": "je neprofitna organizacija, kjer prostovoljci upravljajo spletno stran camptocamp.org",
     "isbn": "ISBN",
     "iso_speed": "Občutljivost",
     "it": {
