@@ -52,6 +52,8 @@ export default {
 
   .activity-icons {
     line-height: 1;
+    display: flex;
+    flex-wrap: nowrap;
   }
 
   .dashboard-link-main {
@@ -73,8 +75,10 @@ export default {
   color: $grey-light;
 }
 
-.is-2-columns {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+@media screen and (max-width: $tablet) {
+  .is-2-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
