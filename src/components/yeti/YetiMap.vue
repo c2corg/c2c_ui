@@ -527,6 +527,7 @@ $yeti-height: calc(
 
 .map-container {
   position: relative;
+  padding-left: 0;
 }
 @media screen and (max-width: $tablet) {
   .map-container {
