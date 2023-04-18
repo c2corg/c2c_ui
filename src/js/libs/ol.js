@@ -1,4 +1,4 @@
-import { Feature, Map, Overlay, View } from 'ol';
+import { Collection, Feature, Map, Overlay, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
@@ -29,6 +29,7 @@ export default {
   Map,
   View,
   Feature,
+  Collection,
   Overlay,
   Geolocation,
 

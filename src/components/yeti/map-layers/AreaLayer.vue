@@ -1,15 +1,22 @@
+<template>
+  <div>
+    <base-layers @layers="onBaseLayers"></base-layers>
+    <slopes-layers @layers="onSlopesLayers"></slopes-layers>
+  </div>
+</template>
 <script>
 import layerMixin from './layer';
 
-import { cartoLayers, dataLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
+import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
+import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers';
 import ol from '@/js/libs/ol';
 
-// c2c layers
-let c2c_cartoLayers = cartoLayers();
-let c2c_dataLayers = dataLayers();
-
 export default {
+  components: {
+    BaseLayers,
+    SlopesLayers,
+  },
   mixins: [layerMixin],
   computed: {
     mapZoom() {
@@ -27,39 +34,7 @@ export default {
       this.onShowAreas();
     },
   },
-  mounted() {
-    // override default values for each c2c layer:
-    // className = allow for compositiing between layers
-    // prerender/postrender = set bend modes to create clipping
-    c2c_cartoLayers = c2c_cartoLayers.map((layer) => {
-      layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
-      layer.on('prerender', (evt) => {
-        // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
-        // but only when MAX_ZOOM
-        if (this.mapZoom <= Yetix.BLEND_MODES_MAX_ZOOM) {
-          evt.context.globalCompositeOperation = 'source-atop';
-        }
-      });
-      layer.on('postrender', (evt) => {
-        // source-over: returns to default
-        evt.context.globalCompositeOperation = 'source-over';
-      });
-      return layer;
-    });
-
-    c2c_dataLayers = c2c_dataLayers.map((layer) => {
-      layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
-      layer.setOpacity(0.9);
-      layer.on('prerender', (evt) => {
-        // multiply: means pixels are multiplied with actual ones
-        evt.context.globalCompositeOperation = 'multiply';
-      });
-      layer.on('postrender', (evt) => {
-        evt.context.globalCompositeOperation = 'source-over';
-      });
-      return layer;
-    });
-
+  created() {
     // layer for outer stroke of areas
     this.areasStrokeLayer = new ol.layer.VectorImage({
       source: new ol.source.Vector(),
@@ -78,8 +53,6 @@ export default {
         }),
       ],
     });
-    this.map.addLayer(this.areasStrokeLayer);
-
     // layer for clip
     // should set className, this forces ol to create another canvas
     this.areasLayer = new ol.layer.VectorImage({
@@ -91,12 +64,18 @@ export default {
         }),
       }),
     });
-    this.map.addLayer(this.areasLayer);
-
     // group for c2c layers, clipped
     this.groupLayer = new ol.layer.Group({
-      layers: [...c2c_cartoLayers, ...c2c_dataLayers],
+      layers: [],
     });
+
+    this.baseLayers = [];
+    this.slopesLayers = [];
+  },
+  mounted() {
+    // add layers
+    this.map.addLayer(this.areasStrokeLayer);
+    this.map.addLayer(this.areasLayer);
     this.map.addLayer(this.groupLayer);
 
     // showAreas checked?
@@ -108,7 +87,6 @@ export default {
       Yetix.fetchAreas().then(this.onAreasResult);
       // event
       Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
-      Yetix.$on('layer-visibility', this.onLayerVisibility);
     }
   },
   methods: {
@@ -150,19 +128,37 @@ export default {
       // is area OK ?
       this.isAreaOK();
     },
-    onLayerVisibility(cartoLayerIndex, dataLayersIndexes) {
-      // toggle visibility based on currently active layers
-      c2c_cartoLayers.map((layer, index) => {
-        layer.setVisible(index === cartoLayerIndex);
+    onBaseLayers(baseLayers) {
+      let layers = baseLayers.map((layer) => {
+        layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
+        layer.on('prerender', (evt) => {
+          // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
+          // but only when MAX_ZOOM
+          if (this.mapZoom <= Yetix.BLEND_MODES_MAX_ZOOM) {
+            evt.context.globalCompositeOperation = 'source-atop';
+          }
+        });
+        layer.on('postrender', (evt) => {
+          // source-over: returns to default
+          evt.context.globalCompositeOperation = 'source-over';
+        });
+        return layer;
       });
+      this.baseLayers = layers;
 
-      c2c_dataLayers.map((layer, index) => {
-        layer.setVisible(dataLayersIndexes.includes(index));
-      });
+      this.groupLayer.setLayers(new ol.Collection(layers));
     },
-  },
-  render() {
-    return null;
+    onSlopesLayers(slopesLayers) {
+      let layers = slopesLayers.map((layer) => {
+        layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
+        return layer;
+      });
+      this.slopesLayers = layers;
+
+      let groupLayers = this.groupLayer.getLayers();
+      layers.map((layer) => groupLayers.push(layer));
+      this.groupLayer.setLayers(groupLayers);
+    },
   },
 };
 </script>
