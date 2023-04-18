@@ -64,9 +64,9 @@ export default {
   },
   created() {
     this.icon = (color) => {
-      let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="-10 -10 20 20">
-          <circle r="9" fill="${color}" />
-          <text y="5" text-anchor="middle" font-family="sans-serif" font-size="14px" font-weight="bold" fill="white">${this.letter}</text>
+      let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="-10 -10 20 20">
+          <circle r="9" fill="${color}" stroke="white" stroke-width="1.5" />
+          <text y="4" text-anchor="middle" font-family="sans-serif" font-size="10px" font-weight="bold" fill="white">${this.letter}</text>
         </svg>`;
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     };
@@ -74,7 +74,7 @@ export default {
     this.style = new ol.style.Style({
       image: new ol.style.Icon({
         src: this.icon(this.color),
-        size: [20, 20],
+        size: [26, 26],
       }),
     });
 
@@ -196,8 +196,8 @@ export default {
 .overlay-icon {
   position: absolute;
   transform: scale(1.3);
-  top: -4px;
-  left: -6px; /* iconSize / 2 */
+  top: -7px;
+  left: -10px; /* iconSize / 2 */
   margin: auto;
   z-index: 2;
   pointer-events: none;
