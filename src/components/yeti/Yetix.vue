@@ -36,6 +36,10 @@ let defaultState = {
     groupSize: 1,
   },
 
+  // base/slopes layers
+  baseLayersSelector: [],
+  slopesLayersSelector: [],
+
   areas: [],
   areaOk: true,
   showAreas: false,
@@ -105,6 +109,12 @@ export default new Vue({
     method() {
       return state.method;
     },
+    baseLayersSelector() {
+      return state.baseLayersSelector;
+    },
+    slopesLayersSelector() {
+      return state.slopesLayersSelector;
+    },
     areas() {
       return state.areas;
     },
@@ -173,6 +183,12 @@ export default new Vue({
     },
     setMethod(prop, value) {
       state.method[prop] = value;
+    },
+    setBaseLayersSelector(layers) {
+      state.baseLayersSelector = layers;
+    },
+    setSlopesLayersSelector(layers) {
+      state.slopesLayersSelector = layers;
     },
     setAreas(areas) {
       state.areas = areas;

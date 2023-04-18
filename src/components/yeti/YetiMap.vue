@@ -2,6 +2,7 @@
   <div class="column map-container">
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" />
+      <map-layers />
       <area-layer />
       <yeti-layer :data="yetiData" :extent="yetiExtent" />
       <avalanche-bulletins-layer />
@@ -53,13 +54,10 @@
 </template>
 
 <script>
-import { cartoLayers, dataLayers } from '../map/map-layers';
-let c2c_cartoLayers;
-let c2c_dataLayers;
-
 import AreaLayer from './map-layers/AreaLayer.vue';
 import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
 import FlowcaptLayer from './map-layers/FlowcaptLayer.vue';
+import MapLayers from './map-layers/MapLayers.vue';
 import NivosesLayer from './map-layers/NivosesLayer.vue';
 import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
@@ -78,6 +76,7 @@ export default {
     AreaLayer,
     AvalancheBulletinsLayer,
     FlowcaptLayer,
+    MapLayers,
     NivosesLayer,
     RommaLayer,
     RouteLayer,
@@ -111,22 +110,6 @@ export default {
     },
   },
   created() {
-    // build c2c layers
-    c2c_cartoLayers = cartoLayers();
-    c2c_dataLayers = dataLayers();
-
-    // set blend modes
-    c2c_dataLayers = c2c_dataLayers.map((layer) => {
-      layer.setOpacity(0.9);
-      layer.on('prerender', (evt) => {
-        evt.context.globalCompositeOperation = 'multiply';
-      });
-      layer.on('postrender', (evt) => {
-        evt.context.globalCompositeOperation = 'source-over';
-      });
-      return layer;
-    });
-
     // build map
     this.map = new ol.Map({
       controls: [
@@ -136,12 +119,6 @@ export default {
         }),
         new ol.control.ScaleLine(),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
-      ],
-
-      layers: [
-        // c2c layers
-        ...c2c_cartoLayers,
-        ...c2c_dataLayers,
       ],
 
       view: new ol.View({
