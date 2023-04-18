@@ -493,5 +493,82 @@ $yeti-height: calc(100vh - #{$navbar-height});
     width: 120px;
     height: 120px;
   }
+
+  /* a11y of forms */
+  *:focus-visible {
+    scroll-margin: 100px;
+  }
+  .is-checkradio[type='checkbox'],
+  .is-checkradio[type='radio'] {
+    display: block;
+    clip: rect(0, 0, 0, 0);
+  }
+  .is-checkradio[type='radio'].is-primary:focus-visible + label::before,
+  .is-checkradio[type='checkbox'].is-primary:focus-visible + label::before {
+    border-color: $primary;
+  }
+  .is-checkradio[type='radio'].is-primary:focus + label::before,
+  .is-checkradio[type='checkbox'].is-primary:focus + label::before {
+    outline: none;
+  }
+
+  /* customization of forms */
+  .select select,
+  .input {
+    border: none;
+    box-shadow: 0 0 0 1px $grey-lighter;
+  }
+  .select select:hover,
+  .select select:focus,
+  .input:hover,
+  .input:focus {
+    box-shadow: 0 0 0 2px $primary;
+  }
+  .is-checkradio[type='checkbox'] + label::after {
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-color: white !important;
+    /* decimal rem = integer pixels */
+    /* 0.357 = 5px, 0.429 = 6px, 0.571 = 8px, 0.714 = 10px */
+    width: 0.429rem !important;
+    height: 0.714rem !important;
+    top: 0.357rem !important;
+    left: 0.571rem !important;
+    transform: rotate(45deg) scale(0);
+  }
+  .is-checkradio[type='checkbox']:checked + label::after {
+    transform: rotate(45deg) scale(1);
+  }
+  .is-checkradio[type='radio'] + label::after {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+    transform: scale(0);
+  }
+  .is-checkradio[type='radio']:checked + label::after {
+    transform: scale(1);
+  }
+  .is-checkradio[type='checkbox']:checked + label::before,
+  .is-checkradio[type='radio']:checked + label::before {
+    background: $primary;
+  }
+  .is-checkradio[type='checkbox']:checked + label::before,
+  .is-checkradio[type='radio']:checked + label::before {
+    border-color: $primary !important;
+  }
+  .is-checkradio[type='checkbox']:checked + label::after {
+    border-color: white !important;
+  }
+  .is-checkradio[type='radio']:checked + label::after {
+    background-color: white !important;
+  }
+  .is-checkradio:hover:not([disabled]) + label::before,
+  .is-checkradio:focus + label::before {
+    border-width: 2px;
+  }
+  .is-checkradio:focus-visible + label::before {
+    box-shadow: 0 0 0 2px $secondary;
+  }
 }
 </style>
