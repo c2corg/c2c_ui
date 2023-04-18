@@ -1,7 +1,7 @@
 <template>
   <div class="column pb-0 mb-0 tabs is-boxed yetitabs">
     <ul role="tablist">
-      <li v-for="(tab, i) in tabs" role="presentation" :key="tab" :class="{ 'is-active': activeTab === i }">
+      <li v-for="(tab, i) in tabs" role="presentation" :key="tab.name" :class="{ 'is-active': activeTab === i }">
         <a
           class="yetitabs-link"
           role="tab"
@@ -10,16 +10,21 @@
           ref="tab"
           :aria-selected="activeTab === i"
           :tabindex="activeTab === i ? false : -1"
+          :title="tab.title"
           @click.prevent="setActiveTab(i)"
           @keydown="setActiveTabKeyboard($event, i)"
         >
-          {{ tab }}
-          <fa-icon icon="check-circle" v-if="i === 1 && hasFeatures && !validSimplifyTolerance" class="ml-1" />
+          <fa-icon :icon="tab.icon" />
+          <span v-if="tab.name" class="ml-1">{{ tab.name }}</span>
+          <span v-else>&ZeroWidthSpace;</span>
+          <counter v-if="tab.counter" is-primary :title="tab.counter.title">
+            {{ tab.counter.text }}
+          </counter>
           <fa-icon
+            v-if="tab.problemIcon"
             icon="exclamation-circle"
-            v-if="i === 1 && validSimplifyTolerance"
             class="has-text-danger ml-1"
-            :title="$gettext('Not simplified yet')"
+            :title="tab.problemIcon.title"
           />
         </a>
       </li>
@@ -28,9 +33,13 @@
 </template>
 
 <script>
+import Counter from '@/components/yeti/Counter';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
+  components: {
+    Counter,
+  },
   props: {
     tabs: {
       type: Array,
@@ -41,18 +50,15 @@ export default {
     activeTab() {
       return Yetix.activeTab;
     },
-    hasFeatures() {
-      return Yetix.hasFeatures;
-    },
-    validSimplifyTolerance() {
-      return Yetix.validSimplifyTolerance;
+  },
+  watch: {
+    activeTab(index) {
+      // focus active tab
+      this.$refs.tab[index].focus();
     },
   },
   methods: {
     setActiveTab(index) {
-      // focus active tab
-      this.$refs.tab[index].focus();
-      // then set
       Yetix.setActiveTab(index);
     },
     setActiveTabKeyboard(event, index) {

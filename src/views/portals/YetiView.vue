@@ -144,8 +144,6 @@ export default {
         },
       },
 
-      tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
-
       formError: undefined,
       currentError: undefined,
 
@@ -173,6 +171,43 @@ export default {
     },
     areaOk() {
       return Yetix.areaOk;
+    },
+    hasFeatures() {
+      return Yetix.hasFeatures;
+    },
+    featuresLength() {
+      return Yetix.features.length;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
+    },
+    tabs() {
+      let tabs = [
+        {
+          name: this.$gettext('Risk'),
+          icon: 'bolt',
+        },
+      ];
+
+      // add route
+      let tabRoute = {
+        name: this.$gettext('Outing'),
+        icon: 'route',
+      };
+      if (this.hasFeatures && !this.validSimplifyTolerance) {
+        tabRoute.counter = {
+          text: this.featuresLength,
+          title: this.$gettext('Route on map'),
+        };
+      }
+      if (this.validSimplifyTolerance) {
+        tabRoute.problemIcon = {
+          title: this.$gettext('Not simplified yet'),
+        };
+      }
+      tabs.push(tabRoute);
+
+      return tabs;
     },
     errors() {
       return {
