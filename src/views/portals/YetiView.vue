@@ -38,7 +38,10 @@
             <tabs :tabs="tabs" />
           </div>
           <div class="box">
-            <panel ref="panel0" :index="0" class="is-relative">
+            <panel :index="0">
+              <sub-panel-layers />
+            </panel>
+            <panel :index="1">
               <validation-button
                 class="is-hidden-mobile yeti-validation--top"
                 :current-error="currentError"
@@ -57,7 +60,7 @@
               />
             </panel>
 
-            <panel ref="panel1" :index="1">
+            <panel :index="2">
               <sub-panel-course />
             </panel>
           </div>
@@ -104,6 +107,7 @@ import YetiArticle from '@/components/yeti/Article';
 import Panel from '@/components/yeti/Panel';
 import SubPanelBra from '@/components/yeti/SubPanelBra';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse';
+import SubPanelLayers from '@/components/yeti/SubPanelLayers';
 import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
@@ -122,6 +126,7 @@ export default {
     Panel,
     SubPanelBra,
     SubPanelCourse,
+    SubPanelLayers,
     SubPanelMethods,
     Tabs,
     ValidationButton,
@@ -183,6 +188,10 @@ export default {
     },
     tabs() {
       let tabs = [
+        {
+          icon: 'layer-group',
+          title: this.$gettext('Layers'),
+        },
         {
           name: this.$gettext('Risk'),
           icon: 'bolt',
