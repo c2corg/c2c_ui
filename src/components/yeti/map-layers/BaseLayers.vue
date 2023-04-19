@@ -24,6 +24,14 @@ export default {
       return layer.get('country') !== 'gb';
     });
 
+    this.baseLayers = this.baseLayers.map((layer) => {
+      // set maxzoom to 16 for IGN maps
+      if (layer.get('title') === 'IGN maps') {
+        layer.getSource().tileGrid.maxZoom = 16;
+      }
+      return layer;
+    });
+
     // create layers selector
     let baseLayersSelector = this.baseLayers.map((layer) => {
       return {
