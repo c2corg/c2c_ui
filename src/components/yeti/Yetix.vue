@@ -18,6 +18,7 @@ let defaultState = {
   BLEND_MODES_MIN_ZOOM: 8,
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
+  YETI_LAYER_OPACITY: 0.9,
 
   activeTab: 0,
 
@@ -39,6 +40,11 @@ let defaultState = {
   // base/slopes layers
   baseLayersSelector: [],
   slopesLayersSelector: [],
+
+  // yeti layer
+  yetiLayerSelector: null,
+  showYeti: false,
+  yetiOk: false,
 
   areas: [],
   areaOk: true,
@@ -100,6 +106,9 @@ export default new Vue({
     VALID_MINIMUM_MAP_ZOOM() {
       return state.VALID_MINIMUM_MAP_ZOOM;
     },
+    YETI_LAYER_OPACITY() {
+      return state.YETI_LAYER_OPACITY;
+    },
     activeTab() {
       return state.activeTab;
     },
@@ -114,6 +123,15 @@ export default new Vue({
     },
     slopesLayersSelector() {
       return state.slopesLayersSelector;
+    },
+    yetiLayerSelector() {
+      return state.yetiLayerSelector;
+    },
+    showYeti() {
+      return state.showYeti;
+    },
+    yetiOk() {
+      return state.yetiOk;
     },
     areas() {
       return state.areas;
@@ -189,6 +207,18 @@ export default new Vue({
     },
     setSlopesLayersSelector(layers) {
       state.slopesLayersSelector = layers;
+    },
+    setYetiLayerSelector(layer) {
+      state.yetiLayerSelector = layer;
+    },
+    setShowYeti(showYeti) {
+      state.showYeti = showYeti;
+    },
+    setYetiOk(yetiOk) {
+      state.yetiOk = yetiOk;
+      if (yetiOk) {
+        this.setShowYeti(true);
+      }
     },
     setAreas(areas) {
       state.areas = areas;

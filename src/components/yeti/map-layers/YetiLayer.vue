@@ -27,37 +27,15 @@
         </div>
       </div>
     </div>
-    <div class="ol-control opacity" v-if="isLayerLoaded">
-      <div class="opacity-slider">
-        <vue-slider
-          v-model="opacity"
-          :min="0"
-          :max="1"
-          :interval="0.01"
-          tooltip="none"
-          direction="btt"
-          :rail-style="{ background: 'rgba(0,0,0,.25)' }"
-          :process-style="{ background: 'white' }"
-          @change="onUpdateOpacity"
-        />
-      </div>
-    </div>
   </div>
 </template>
 <script>
 import layerMixin from './layer';
 
-import 'vue-slider-component/theme/default.css';
-
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
-const OPACITY = 0.9;
-
 export default {
-  components: {
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
-  },
   mixins: [layerMixin],
   props: {
     data: {
@@ -71,8 +49,6 @@ export default {
   },
   data() {
     return {
-      isLayerLoaded: false,
-      opacity: OPACITY,
       showLegend: undefined,
       mapLegend: null,
     };
@@ -80,6 +56,12 @@ export default {
   computed: {
     showAreas() {
       return Yetix.showAreas;
+    },
+    showYeti() {
+      return Yetix.showYeti;
+    },
+    yetiLayerSelector() {
+      return Yetix.yetiLayerSelector;
     },
   },
   watch: {
@@ -97,6 +79,17 @@ export default {
       // switch classname when showareas updates
       this.setLayerClassName();
     },
+    showYeti() {
+      this.layer.setVisible(this.showYeti);
+      this.extentLayer.setVisible(this.showYeti);
+    },
+    yetiLayerSelector: {
+      handler(layer) {
+        this.setLayerOpacity(layer.opacity);
+        this.setLayerBlendModes(layer.blendModes);
+      },
+      deep: true,
+    },
   },
   created() {
     this.layer = new ol.layer.Image({
@@ -104,7 +97,7 @@ export default {
         url: null,
         imageExtent: ol.extent.createEmpty(),
       }),
-      opacity: this.opacity,
+      opacity: Yetix.YETI_LAYER_OPACITY,
     });
     this.extentLayer = new ol.layer.Vector({
       source: new ol.source.Vector(),
@@ -142,7 +135,6 @@ export default {
   methods: {
     clearLayers() {
       this.layer.setSource(null);
-      this.isLayerLoaded = false;
 
       this.extentLayer.getSource().clear();
     },
@@ -169,12 +161,9 @@ export default {
         })
       );
       // source is set
-      this.isLayerLoaded = true;
+      Yetix.setYetiOk(true);
       // set map legend
       this.setLegend(xml);
-    },
-    onUpdateOpacity() {
-      this.layer.setOpacity(this.opacity);
     },
     setLegend(xml) {
       this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
@@ -202,6 +191,16 @@ export default {
       // use same name as areas if showareas, so blend modes will apply to this layer
       // or use default ol-layer to apply blend modes to whole layers
       this.layer.className_ = this.showAreas ? Yetix.BLEND_MODES_CLASS_NAME : 'ol-layer';
+    },
+    setLayerOpacity(opacity) {
+      this.layer.setOpacity(opacity);
+    },
+    setLayerBlendModes(isBlend) {
+      this.layer.on('prerender', (evt) => {
+        evt.context.globalCompositeOperation = isBlend ? 'multiply' : 'source-over';
+      });
+      // force re-render
+      this.layer.setOpacity(this.layer.getOpacity() + 0.01);
     },
   },
 };
@@ -244,40 +243,6 @@ export default {
   }
 }
 
-.opacity {
-  position: absolute;
-  z-index: 5;
-  top: 3.5rem;
-  right: 1.25rem;
-
-  .opacity-slider {
-    font-size: 1.14em;
-    margin: 1px;
-    width: 1.375em;
-    padding: 1rem 0;
-    background: $grey-dark;
-    border-radius: 2px;
-
-    &:hover {
-      background: $grey;
-    }
-  }
-
-  .vue-slider {
-    padding: 0 9px !important;
-    height: 300px !important;
-    max-height: 30vh;
-  }
-
-  .vue-slider-process {
-    background: $white;
-  }
-
-  .vue-slider-rail {
-    background: $black;
-  }
-}
-
 @media screen and (max-width: $tablet) {
   .legend {
     top: 0.5rem;
@@ -285,10 +250,6 @@ export default {
     .legend-content {
       margin-left: 0.5rem;
     }
-  }
-
-  .opacity {
-    top: 2.75rem;
   }
 }
 </style>
