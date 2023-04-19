@@ -15,7 +15,7 @@
         class="ol-control ol-control-layer-switcher-button"
         :title="$gettext('Layers', 'Map controls')"
       >
-        <button>
+        <button @click.stop="activeLayersTab">
           <fa-icon icon="layer-group" width="100%" />
         </button>
       </div>
@@ -50,6 +50,13 @@
         </div>
       </div>
     </div>
+
+    <toast ref="toast-layer">
+      <template #title>
+        <span v-translate>Layers have moved</span>
+      </template>
+      <span v-translate>Now on the left, on the “Layers” tab</span> <fa-icon icon="layer-group" />
+    </toast>
   </div>
 </template>
 
@@ -63,6 +70,7 @@ import RommaLayer from './map-layers/RommaLayer.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayer from './map-layers/YetiLayer.vue';
 
+import Toast from '@/components/yeti/Toast';
 import Yetix from '@/components/yeti/Yetix';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
@@ -80,6 +88,7 @@ export default {
     NivosesLayer,
     RommaLayer,
     RouteLayer,
+    Toast,
     YetiLayer,
   },
   props: {
@@ -218,6 +227,10 @@ export default {
     },
     onDrawingMode() {
       Yetix.setDrawingMode(!this.drawingMode);
+    },
+    activeLayersTab() {
+      this.$refs['toast-layer'].toast();
+      Yetix.setActiveTab(0);
     },
   },
 };
