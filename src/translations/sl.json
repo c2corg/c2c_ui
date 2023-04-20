@@ -129,7 +129,7 @@
     "Clear": "Briši",
     "Close": "Zapri",
     "Collapse": "Zapri",
-    "Comments": "Komentarji",
+    "Comments": "Podroben opis",
     "Comments are disabled.": "Komentarji na ta dokument niso dovoljeni",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Sporočanje posameznih ciljev in pričakovanj, misli in opažanja med izletom, razprave o novih strategijah, način delovanja skupine in razdelitev odgovornosti, ali je skupina vajena delati skupaj, posnemanje itd.",
     "Compare selected versions": "Primerjaj izbrane različice",
@@ -1483,7 +1483,7 @@
     "novel": {
       "book_types": "novela"
     },
-    "numbers": "Značilnosti",
+    "numbers": "Karakteristike",
     "of": {
       "1-30 of 200 results": "od"
     },
@@ -1677,7 +1677,7 @@
     },
     "risk": "Stopnja pozornosti in ocena tveganja",
     "risk of a rough fall on hard snow": "nevarnost resnega padca na trdem snegu",
-    "risk_rating": "Objektivna tveganja",
+    "risk_rating": "Objektivne nevarnosti",
     "road access": "Cestni dostop",
     "road or pedestrian access": "Cestni ali peš dostop",
     "rock_climbing": {
