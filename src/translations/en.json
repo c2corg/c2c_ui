@@ -121,6 +121,7 @@
     "Easy snow ice mixed gear": "Alpine snow, ice and mixed climbing from F to PD+",
     "Edit a document": "Edit document",
     "Everything about ratings : difficulties, exposition...": "Fill in all ratings and grades of the route (difficulties, exposure...)",
+    "Features already have elevations. Enable &quot;Force elevations&quot; if you want to override them.": "Features already have elevations. Enable \"Force elevations\" if you want to override them.",
     "Fullname": "Topoguide username",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Have you (re) evaluated the risks at each change in the situation?\nWhat factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the group, etc.",
     "Hiking gear": "Summer hiking",
@@ -149,6 +150,7 @@
     },
     "Ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "Information about the terrain, like elevations, lengths...": "Information about the terrain, like height diffs, lengths...",
+    "Interpolate value should be a number > 0": "Interpolate value should be a positive number",
     "Login": "Sign in",
     "Logout": "Sign out",
     "Longer than maximum length 25": {
@@ -211,6 +213,7 @@
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the \"Share\" module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.",
     "This field is too long": "Text is too long",
     "This field is too short": "Text is too short",
+    "Too much points": "Too many points",
     "Topoguide - prix du jury": {
       "Sophie picture context": "Topoguide - Jury prize"
     },
@@ -220,6 +223,7 @@
     "Trace": "GPS Track",
     "Transport & road or PT access": "Road or public transport access",
     "View in other lang": "View in other language",
+    "Want to join us? Or donate?": "Join us or donate !",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Why did you choose this outing? When did you decide to commit to it. What influenced your decision, (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)",
     "You need to activate your by clicking the link sent to your email address.": "You need to activate it by clicking the link sent to your email address.",
     "access": {
