@@ -77,7 +77,7 @@ export default {
 
 @media screen and (max-width: $tablet) {
   .is-2-columns {
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(2, 1fr);
   }
 }
