@@ -57,16 +57,16 @@
       </span>
     </card-row>
 
-    <div class="columns row is-mobile">
+    <div class="row is-flex is-justify-content-flex-end is-mobile">
       <card-region-item
         v-if="item.document.areas && item.document.areas.length"
         :document="item.document"
-        class="column is-9 is-flex-shrink-2 is-not-ellipsed"
+        class="is-not-ellipsed"
       />
-      <span class="column is-flex-grow-1">
+      <span class="">
         <card-activities-item v-if="item.document.activities" :activities="item.document.activities" />
       </span>
-      <span class="column is-flex-grow-2">
+      <span class="outing-icons">
         <marker-soft-mobility v-if="documentType === 'outing' && item.document.public_transport" />
         <marker-image-count :image-count="item.document.img_count" />
         <marker-gps-trace v-if="item.document.geometry && item.document.geometry.has_geom_detail" />
@@ -213,6 +213,7 @@ export default {
   font-size: 0.9rem;
   min-height: 29px;
   color: $text;
+  align-items: center;
 
   .column {
     max-height: 58px;
@@ -221,5 +222,18 @@ export default {
 
 .is-not-ellipsed {
   white-space: normal !important;
+  flex: 1;
+}
+
+.outing-icons {
+  min-width: 5.4rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  span {
+    padding: 0 0.1rem;
+  }
 }
 </style>
