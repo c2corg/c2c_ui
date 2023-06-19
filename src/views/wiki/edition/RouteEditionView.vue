@@ -130,7 +130,7 @@
     </form-section>
 
     <form-section
-      :title="$gettext('Comments')"
+      :title="$gettext('Description')"
       :sub-title="
         $gettext(
           'This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don\'t forget to mention the route history if you know it.'
