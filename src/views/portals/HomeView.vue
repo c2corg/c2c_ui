@@ -190,4 +190,10 @@ export default {
   text-align: center;
   z-index: 100;
 }
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
 </style>
