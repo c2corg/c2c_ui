@@ -8,6 +8,7 @@
       <!-- Until we can reference the document version -->
       <p class="mt-2"><span v-translate>Printed on</span> {{ $dateUtils.toLocalizedString(new Date(), 'LLL') }}</p>
     </div>
+    <img class="logo" src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     <img loading="lazy" :src="qrcode" />
   </div>
 </template>
@@ -50,3 +51,9 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.logo {
+  height: 70px;
+}
+</style>
