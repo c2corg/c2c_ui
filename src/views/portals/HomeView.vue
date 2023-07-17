@@ -1,5 +1,6 @@
 <template>
   <div class="section">
+    <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
       <div
         class="column is-12-mobile"

@@ -13,7 +13,8 @@ export default {
   watch: {
     title: {
       handler() {
-        document.title = capitalizeFirstLetter(this.title) + ' - Camptocamp.org';
+        document.title =
+          this.title !== 'Camptocamp.org' ? capitalizeFirstLetter(this.title) + ' - Camptocamp.org' : 'Camptocamp.org';
       },
       immediate: true,
     },
