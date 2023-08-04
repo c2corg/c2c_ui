@@ -24,7 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "6.4.2",
     "@fortawesome/free-brands-svg-icons": "6.4.0",
     "@fortawesome/free-regular-svg-icons": "6.4.2",
-    "@fortawesome/free-solid-svg-icons": "6.4.0",
+    "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@fortawesome/vue-fontawesome": "2.0.10",
     "@turf/buffer": "6.5.0",
     "@turf/difference": "6.5.0",
