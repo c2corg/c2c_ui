@@ -193,7 +193,7 @@
     "Danger rating - moderate": "Zmerna nevarnost",
     "Danger rating - very high": "Zelo velika nevarnost",
     "Danger:": "Nevarnost:",
-    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Podatki, kot so orientacija, vrsta kamnine, vrsta smeri (povratna, zanka ...) in konfiguracija smeri (npr greben ali žleb).",
+    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Podatki, kot so orientacija, vrsta kamnine, vrsta itinerarja (povratno, zanka ...) in konfiguracija smeri (npr greben ali žleb).",
     "Delete": {
       "yeti": "Izbrišite"
     },
@@ -1694,7 +1694,7 @@
     "route_history": "Zgodovina smeri",
     "route_length": "Dolžina smeri",
     "route_study": "Preučevanje smeri",
-    "route_types": "Vrsta smeri",
+    "route_types": "Vrsta itinerarja",
     "routes": "smeri",
     "routes_quantity": "Število smeri",
     "safe": {
