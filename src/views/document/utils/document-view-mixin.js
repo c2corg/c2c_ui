@@ -90,6 +90,9 @@ export default {
 
       return [...result, ...this.documentOpenGraph()];
     },
+    link: function () {
+      return [{ rel: 'canonical', href: `https://www.camptocamp.org${this.getCurrentPath()}`, id: 'canonical' }];
+    },
   },
 
   computed: {
@@ -243,7 +246,7 @@ export default {
       }
     },
 
-    updateUrl() {
+    getCurrentPath() {
       let title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
 
       // transform any unicode into its ascii value
@@ -258,8 +261,13 @@ export default {
         path += this.$route.hash;
       }
 
-      if (this.$route.path !== path) {
-        this.$router.replace(path);
+      return path;
+    },
+
+    updateUrl() {
+      const currentPath = this.getCurrentPath();
+      if (this.$route.path !== currentPath) {
+        this.$router.replace(currentPath);
       }
     },
 
