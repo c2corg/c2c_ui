@@ -6,7 +6,13 @@
       :version="version"
       :document-type="documentType"
     ></masked-document-version-info>
-    <document-view-header v-if="document" :document="document" :version="version" />
+    <document-view-header
+      v-if="document"
+      :previous-document="previousDocument"
+      :next-document="nextDocument"
+      :document="document"
+      :version="version"
+    />
 
     <images-box v-if="document" :document="document" />
 
@@ -107,6 +113,7 @@
         <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
+        <search-navigation-box document-type="outing" :documents="search.documents" :index="index" />
       </div>
       <document-print-license :document="document" />
     </div>

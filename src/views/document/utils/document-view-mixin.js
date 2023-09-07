@@ -5,6 +5,7 @@ import ImagesBox from './boxes/ImagesBox';
 import MapBox from './boxes/MapBox';
 import RecentOutingsBox from './boxes/RecentOutingsBox';
 import RoutesBox from './boxes/RoutesBox';
+import SearchNavigationBox from './boxes/SearchNavigationBox';
 import ToolBox from './boxes/ToolBox';
 import ActivitiesField from './field-viewers/ActivitiesField';
 import DoubleNumericField from './field-viewers/DoubleNumericField';
@@ -14,6 +15,7 @@ import LabelValue from './field-viewers/LabelValue';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
 
+import { add_search_queries } from '@/js/add-search-query';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
@@ -37,6 +39,7 @@ export default {
     MarkdownSection,
     ProfilesLinks,
     RecentOutingsBox,
+    SearchNavigationBox,
     ToolBox,
     RoutesBox,
     ImagesBox,
@@ -54,6 +57,7 @@ export default {
   data() {
     return {
       promise: null,
+      search_promise: null,
     };
   },
 
@@ -126,6 +130,57 @@ export default {
       const doc = this.isVersionView ? this.promise.data.document : this.promise.data;
 
       return doc;
+    },
+
+    /*
+     * properties computed when search results is loaded
+     */
+    search() {
+      if (!this.search_promise?.data) {
+        return false;
+      }
+
+      const documents = this.isVersionView ? undefined : this.search_promise.data;
+
+      add_search_queries(this.$route.query, documents.documents);
+
+      return documents;
+    },
+
+    index() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      return this.search.documents.findIndex((d) => d.document_id === this.documentId);
+    },
+
+    previousDocument() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      if (typeof this.index === 'undefined') {
+        return undefined;
+      }
+      return this.search.documents[this.index - 1];
+    },
+
+    nextDocument() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      if (typeof this.index === 'undefined') {
+        return undefined;
+      }
+      return this.search.documents[this.index + 1];
     },
 
     version() {
@@ -205,6 +260,13 @@ export default {
         }
 
         this.$imageViewer.clear();
+
+        if (typeof this.$route.query.offset !== 'undefined') {
+          this.search_promise = c2c[this.documentType].getAll(this.$route.query);
+        } else {
+          this.search_promise = new Promise(() => []);
+        }
+
         this.promise = c2c[this.documentType]
           .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
@@ -220,7 +282,7 @@ export default {
 
     handleRedirection() {
       if (this.document.redirects_to) {
-        this.$router.push({ params: { id: this.document.redirects_to } });
+        this.$router.push({ params: { id: this.document.redirects_to, query: this.$route.query } });
       }
     },
 
@@ -259,7 +321,7 @@ export default {
       }
 
       if (this.$route.path !== path) {
-        this.$router.replace(path);
+        this.$router.replace({ path: path, query: this.$route.query });
       }
     },
 
