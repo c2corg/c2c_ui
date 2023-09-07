@@ -130,6 +130,7 @@ import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
 import PageSelector from './utils/PageSelector';
 import QueryItems from './utils/QueryItems';
 
+import { add_search_queries } from '@/js/add-search-query';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
@@ -172,7 +173,11 @@ export default {
       return ['result', 'both'].includes(this.displayMode);
     },
     documents() {
-      return this.promise.data;
+      let documents = this.promise.data;
+      if (documents) {
+        add_search_queries(this.$route.query, documents.documents);
+      }
+      return documents;
     },
     documentType() {
       return this.$route.name.slice(0, -1);
