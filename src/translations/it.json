@@ -31,6 +31,7 @@
     "8 days": "8 giorni",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Un messaggio è stato inviato al nuovo indirizzo indicato. Sarà necessario cliccare il link in esso contenuto al fine di confermare il cambio di indirizzo mail.",
     "Accident database": "Database degli incidenti",
+    "Accidents/Incidents database:": "Database degli incidenti/inconvenienti",
     "Account": "Profilo",
     "Action": {
       "Sophie picture context": "Azion"
@@ -41,6 +42,7 @@
     "Action - prix du public": {
       "Sophie picture context": "Azione - Premio del pubblico"
     },
+    "Activate drawing mode": "Attivare modalità disegno a mano libera",
     "Activity feed": "Notizie",
     "Activity trackers": "Rilevatori di attività",
     "Add": "Aggiugere",
@@ -52,12 +54,14 @@
     "Add title…": "Aggiungi un titolo...",
     "Additional information": "Informazioni supplementari ",
     "All": "Tutto",
+    "All in store for you:": "Tutto quello che c'è per te:",
     "Allow all": "Accetto tutto",
     "Altitude": "Altitudine",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "La quota è obbligatoria quando il grado di pericolo in alto e in basso è differente. Per favore impostare una quota come specificato nel bollettino valanghe per l'area specifica.",
     "An error occurred, connection status could not be retrieved. Please refresh the page.": "Si è verificato un errore, non è stato possibile recuperare lo stato della connessione.\nRicaricare la pagina per favore.",
     "An error occurred, could not retrieve activities": "Si è verificato un errore, non è stato possibile recuperare le attività",
     "An error occurred, couldn't (un)mark route as to do": "È impossibile di aggiungere o rimuovere un itinerario dai preferiti",
+    "An error occurred, couldn't (un)mask version": "Un errore è stato riscontrato, non è stato possibile (s)mascherare la versione",
     "An error occurred, couldn't save images": "È impossibile salvare gli immagini ",
     "Anonymity and confidentiality": "Anonima e confidenzialità",
     "Applications": "Applicazione",
@@ -80,6 +84,7 @@
       "Map controls": "Attribuzioni "
     },
     "Avalanche bulletins": "Bollettino pericolo valanghe",
+    "Avalanche risk evaluation tool:": "Strumento di valutazione del rischio valanghe",
     "Average slope (degrees)": "Pendenza media (gradi)",
     "Average slope in degree": "Pendenza media in gradi",
     "Back to code": "Tornare al codice",
@@ -96,7 +101,9 @@
     "Book content": "Breve descrizione del libro",
     "Books and websites not already associated to this route": "Non ci sono libri o siti web associati a questo itinerario ",
     "Both results and map": "Risultati e carta",
+    "Bouldering climbing gear": "Attrezzatura per il bouldering   ",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrivi le ferite, quello che faresti oggi con l'esperienza... ",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Per default, il tuo pseudonimo sulla guida topografica sarà il tuo nome utente, è possibile cambiarlo liberamente nelle impostazioni in un secondo momento.",
     "By month": "Per mese",
     "By year": "Per anno",
     "Camptocamp Association": "Associazione Camptocamp",
@@ -134,11 +141,15 @@
     "Conflict: version of locale 'eu' has changed": "Il documento è stato modificato nel frattempo e une versione più recente in basco esiste",
     "Conflict: version of locale 'fr' has changed": "Il documento è stato modificato nel frattempo e une versione più recente in francese esiste",
     "Conflict: version of locale 'it' has changed": "Il documento è stato modificato nel frattempo e une versione più recente in italiano esiste",
+    "Conflict: version of locale 'sl' has changed": "Il documento è stato modificato nel frattempo: una versione più recente più recente in sloveno esiste",
     "Conflict: version of locale 'zh_CN' has changed": "Il documento è stato modificato nel frattempo e une versione più recente in cinese esiste",
     "Conflicting method and danger": "Il metodo e il livello di pericolo sono incompatibile",
     "Connect": "Connessione",
     "Contain invalid character(s)": {
       "API message": "Ci sono caratteri invalidi "
+    },
+    "Contains consecutive special characters": {
+      "API message": "Contiene una successione di caratteri speciali"
     },
     "Continue the discussion": "Prosegui la discussione",
     "Contribute to common knowledge": "Partecipare alla costruzione di un sapere collettivo ",
@@ -171,6 +182,7 @@
     "Danger rating - moderate": "Grado moderato",
     "Danger rating - very high": "Grado molto forte",
     "Danger:": "Pericolo:",
+    "Dashboard": "Pannello interattivo",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dati tecnici, come l'orientazione, il tipo di roccia o la configurazione dell'itinerario ",
     "Delete": {
       "yeti": "Cancellare"
@@ -246,6 +258,7 @@
     "Elevation": "Quota",
     "Elevation (m)": "Altitudine (m)",
     "Elevation profile": "Profilo altimetrico",
+    "Enable drawing and editing features on map": "Attiva la modalità di disegno e modifica sulla mappa",
     "Everything about ratings : difficulties, exposition...": "Inserire i gradi relativo al itinerario (difficoltà, esposizione, attrezzatura) ",
     "Expand": "Aprire ",
     "Expert": "Esperto",
@@ -257,11 +270,16 @@
     "Feel free to edit it.": "Edizione libera",
     "Filter on map extent": "Limitare la ricerca alla zona visibile sulla carta",
     "Filter results": "Filtrare i risultati",
+    "First character is invalid": {
+      "API message": "Il primo inserimento è invalido"
+    },
     "FlowCapt sensor": "Sensore FlowCapt",
     "FlowCapt sensors": "Sensori FlowCapt",
+    "Fold section": "Riduci la sezione",
     "Followed users": "Utenti seguiti",
     "Forgot password?": "Password dimenticata?",
     "Forum username": "Pseudonimo nel forum",
+    "Forum: a place to chat about technical matters, or just petty talk": "Forum: un posto dove discutere di elementi tecnici, o dove farsi semplicemente una chiacchierata ",
     "From danger 3, consider the slopes which dominate the route": "Dal grado 3, si deve tenere conto dei pendi sopra l'itinerario",
     "From the interface": "Dall'interfaccia",
     "Full bulletin": "Bollettino",
@@ -270,8 +288,11 @@
     "GPX file": "File GPX",
     "General": "Generale",
     "General information": "Informazioni generali ",
+    "Generate elevations": "Generare elevazioni",
+    "Generate new elevations": "Generare nuove elevazioni",
     "Geographical data could not be retrieved": "Non è stato possibile recuperare i dati geografici",
     "Geolocation": "Geolocalizzazione  ",
+    "Get ready for your climb": "Preparati per la tua arrampicata",
     "Go back to YETI": "Tornare a YETI",
     "Go to the previous page": "Tornare alla pagina precedente",
     "Go to website": "Vai al sito internet",
@@ -340,12 +361,16 @@
     "Invalid email address": {
       "API message": "email invalido"
     },
+    "Invalid value": "Valore non valido",
     "Issue report": "Segnalare un problema",
     "Join us": "Unisciti a noi",
     "Know more about SERAC": "Saperne di più su SERAC",
     "Large group = 5 people and more": "grande gruppo = 5 persone e più",
     "Large group with load shedding distance": "grande gruppo con distanze di sicurezza",
     "Last activities": "Ultime attività",
+    "Last character is invalid": {
+      "API message": "L'ultimo inserimento è invalido"
+    },
     "Last outings": "Ultime gite",
     "Latitude": "Latitudine",
     "Launch YETI": "Vai a YETI",
@@ -357,6 +382,7 @@
     "Legend will appear automatically with the generated image": "La didascalia comparirà automaticamente insieme all'immagine",
     "Let's make our feedbacks valuable": "Rendiamo preziosi i nostri feedback",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Conserviamo il nostro parco giochi! Ho creato un account su Outdoorvision per condividere le mie tracce GPS per la conservazione e la progettazione dei miei siti di pratica in Francia.",
+    "Library:": "Biblioteca:",
     "Licenses": "Licenze",
     "Lines chunks": "Linee spezzate",
     "Links": "Link",
@@ -373,6 +399,9 @@
       "API message": "Identificanti o password incorretti "
     },
     "Logout": "Disconnettersi ",
+    "Longer than maximum length 25": {
+      "API message": "Lunghezza eccessiva rispetto a quella permessa (25)"
+    },
     "Longitude": "Longitudine",
     "Low danger level from the avalanche bulletin": "Grado di pericolo del bollettino in bassa quota ",
     "Mail has been sent": "La mail è stata spedita",
@@ -384,10 +413,12 @@
     "Map only": "solo carta",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Mappe, guide, percorsi conosciuti, presenza di un piano B, (ri)valutazione del percorso durante il viaggio?",
     "Mark this route as to do": "Segnare questo itinerario come da fare",
+    "Masked": "Nascosto",
     "Massifs could not be loaded": "Il massiccio non può essere caricato",
     "Merge documents": "Unire i documenti",
     "Merge with other document": "Unire con un altro documento",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "L'unione un documento di origine con un documento di destinazione trasferisce tutte le associazioni del documento di origine al documento di destinazione, e imposta un reindirizzamento dal documento di origine a quello di destinazione.",
+    "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando: un aggregatore di itinerari sciistici in Europa",
     "Methods": "Metodi",
     "Misc data about the waypoint": "dati sul punto di passaggio ",
     "Miscs": "Varie ",
@@ -441,9 +472,11 @@
     "NonCommercial — You may not use the material for commercial purposes.": "Non commerciale — Non puoi utilizzare il materiale per scopi commerciali.",
     "Not simplified yet": "Non ancora semplificato",
     "Note that comments have to be transferred manually in Discourse before merging.": "I commenti devono essere trasferiti manualmente con Discourse prima di unire i documenti. ",
+    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Nota: il nome utente nella carta topografica sarà quello indicato nell'attribuzione del contenuto al quale hai contribuito.",
     "Number of documents": "Numero di documenti",
     "Numbers": "Dati",
     "On a drawn line": "Su una linea tracciata",
+    "One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.": "Una o più sezione di linea genereranno più di 3000 punti. Regolare la distanza per generarne di meno.",
     "One or more route could not be processed:": "Uno o più percorsi non sono stati caricati correttamente: ",
     "Only document less than 24h old can be deleted": {
       "API message": "Solo il documenti recenti (24h) possono essere cancellati. Contattare i moderatori per cancellare questo documento.  "
@@ -462,6 +495,7 @@
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Il nostro sito web utilizza cookie forniti da noi stessi e da terzi. Alcuni cookie sono necessari per il sito web, altri possono essere regolati in qualsiasi momento, in particolare quelli che ci permettono di capire il rendimento del nostro sito web e di offrirvi le funzionalità dei social media. È possibile accettare o rifiutare tutti, o",
     "Outing": "Itinerari",
     "Outings statistics": "Statistiche delle gite",
+    "Outings, with the latest conditions in the mountains": "Itinerari, con le recenti condizioni sulle montagne",
     "Page not found": "Pagina non trovata",
     "Paragliding outings": "Gita in parapendio",
     "Parameters of the Digital Camera": "Dettagli sulla macchina fotografica ",
@@ -592,6 +626,7 @@
     "Submit": "Salva e prosegui",
     "Suggested rating": "Grado proposto",
     "Summary": "Riassunto",
+    "Summary of camptocamp's articles": "Riassunto degli articoli di camptocamp",
     "SwissTopo Slopes": {
       "Map slopes layer": "Pendenze SwissTopo"
     },
@@ -679,7 +714,9 @@
     "Visibility": "Visibilità",
     "Visible": "Visibile",
     "Visible on map": "Visibile sulla carta",
+    "Want to contribute financially (hosting, developing...)? Donate!": "Vuoi contribuire finanziariamente (eventi, sviluppo, etc.)? Effettua una donazione!",
     "Want to join us? Or donate?": "Vuoi unirti a noi? Oppure effettuare una donazione?",
+    "Want to take part or get involved? Join us!": "Vuoi partecipare o metterti in gioco? Unisciti a noi!",
     "Warning: This action cannot be undone!": "Attenzione: questa azione è irreversibile! ",
     "Waypoint's main properties": "Dati principali sul punto di passaggio",
     "Waypoint's textual description": "Descrizione testuale del punto di passaggio",
@@ -690,6 +727,7 @@
     "Wet snow: orientation not taken into account": "Neve umida: non si tiene conto dell'orientazione",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Perché hai scelto questa gita? Quando hai deciso di impegnarti. Che cosa ha influenzato la tua decisione (vacanze, lungo viaggio, prenotazioni di hotel/rifugi, tempo già speso nella preparazione, possibilità limitate, ecc.)",
     "Wide and constant": "Largo e regolare",
+    "Will generate new points along route, at regular interval, defined by distance in meters": "Genererà nuovi punti lungo il tragitto, ad una distanza regolare, identificabili secondo una distanza in metri",
     "With the": "Con il",
     "Without c2c account": "Partecipanti senza account c2c",
     "YETI - A preparation tool for your outing": "YETI - Un strumento per la preparazione della gita",

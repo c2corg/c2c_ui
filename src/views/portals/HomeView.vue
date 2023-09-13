@@ -1,5 +1,6 @@
 <template>
   <div class="section">
+    <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
       <div
         class="column is-12-mobile"
@@ -30,7 +31,7 @@
               <span :class="{ 'is-active': feed }" @click="toggleProperty('feed')" v-translate>Activity feed</span>
             </label>
           </span>
-          <span class="is-pulled-right">
+          <span class="preference-switch">
             <span v-if="$user.isLogged">
               <input
                 id="c2c-personal-feed"
@@ -43,7 +44,7 @@
                 for="c2c-personal-feed"
                 :title="isPersonal ? $gettext('Personal feed on') : $gettext('Personal feed off')"
               >
-                <span class="is-hidden-mobile" v-translate>Load my preferences</span>
+                <span v-translate>Load my preferences</span>
               </label>
             </span>
             <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
@@ -141,11 +142,35 @@ export default {
       padding-right: 0;
     }
   }
+
+  .field {
+    flex-direction: column;
+  }
+
+  .preference-switch {
+    margin-top: 0.3rem;
+    margin-left: 0.3rem;
+    display: flex;
+  }
+
+  .preference-switch > span {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .preference-switch > span > * {
+    margin-right: 0.3rem;
+  }
 }
 
 @media screen and (min-width: $tablet) {
   .feed-view {
     margin-top: $size-3;
+  }
+
+  .field {
+    justify-content: space-between;
+    align-items: baseline;
   }
 }
 
