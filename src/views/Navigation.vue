@@ -10,13 +10,13 @@
       </span>
     </span>
 
-    <router-link
-      :to="{ name: 'home' }"
+    <a
+      :href="'/'"
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
       <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </router-link>
+    </a>
 
     <div class="navigation-end">
       <router-link
