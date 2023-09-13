@@ -53,10 +53,10 @@
         <span class="menu-item-text"> {{ $gettext('articles') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
-    <router-link :to="{ name: 'article', params: { id: 106732 } }" v-if="isTall">
-      <span class="menu-item is-ellipsed">
-        <icon-help fixed-width />
-        <span class="menu-item-text"> {{ $gettext('Help') | uppercaseFirstLetter }} </span>
+    <router-link :to="{ name: 'yeti' }" v-if="isTall">
+      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes($route.name) }">
+        <icon-yeti fixed-width />
+        <span class="menu-item-text"> {{ $gettext('yeti') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
 
@@ -105,8 +105,10 @@
 <script>
 import Advertisement from './Advertisement';
 
+import IconYeti from '@/components/generics/icons/IconYeti';
+
 export default {
-  components: { Advertisement },
+  components: { IconYeti, Advertisement },
 
   data() {
     return {
