@@ -218,5 +218,7 @@ export default {
 
 .field {
   display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 </style>
