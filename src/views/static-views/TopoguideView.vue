@@ -9,6 +9,7 @@
         <topoguide-view-link to="waypoints" :label="$gettext('waypoints')" icon="icon-waypoint" />
         <topoguide-view-link to="images" :label="$gettext('images')" icon="icon-image" />
         <topoguide-view-link to="books" :label="$gettext('books')" icon="icon-book" />
+        <topoguide-view-link to="articles" :label="$gettext('articles')" icon="icon-article" />
         <topoguide-view-link to="areas" :label="$gettext('areas')" icon="icon-area" />
         <topoguide-view-link to="yeti" label="YETI" icon="icon-yeti" />
         <topoguide-view-link to="sophie-picture-contest" label="CPS" icon="icon-star" />
