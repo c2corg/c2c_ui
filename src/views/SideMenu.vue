@@ -205,9 +205,9 @@ aside {
   }
 
   .menu-ad {
-    height: 320px;
-    margin-left: calc((200px - 160px) / 2);
-    margin-right: calc((200px - 160px) / 2);
+    height: 250px;
+    //margin-left: calc((200px - 160px) / 2);
+    //margin-right: calc((200px - 160px) / 2);
   }
 
   .instagram-icon,
