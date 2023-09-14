@@ -22,6 +22,7 @@
           <home-banner v-show="visible" />
         </div>
         <board-announcement-widget v-if="$screen.isMobile" />
+        <ad-widget-square v-if="$screen.isMobile" />
         <!-- Switchs -->
         <div class="field">
           <span>
@@ -70,6 +71,7 @@
         :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
       >
         <board-announcement-widget />
+        <ad-widget-square />
         <dashboard-images-gallery v-if="!feed" />
         <useful-links />
         <forum-widget :message-count="20" />
@@ -81,6 +83,7 @@
 
 <script>
 import HomeBanner from './HomeBanner';
+import AdWidgetSquare from './utils/AdWidgetSquare';
 import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
 import DashboardArticlesList from './utils/DashboardArticlesList';
 import DashboardImagesGallery from './utils/DashboardImagesGallery';
@@ -96,6 +99,7 @@ export default {
 
   components: {
     HomeBanner,
+    AdWidgetSquare,
     BoardAnnouncementWidget,
     DashboardArticlesList,
     DashboardImagesGallery,
