@@ -3,6 +3,7 @@
     <div v-if="!document.not_authorized">
       <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
+      <ad-widget-long v-if="!$screen.isMobile" />
       <document-version-banner :version="version" :document="document" />
 
       <div class="box">
@@ -47,7 +48,6 @@
         </h1>
       </div>
 
-      <ad-widget-long v-if="!$screen.isMobile" />
       <ad-widget-square v-if="$screen.isMobile" />
 
       <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
