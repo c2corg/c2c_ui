@@ -15,12 +15,13 @@
     </document-view-header>
 
     <div v-if="document" class="columns">
-      <div class="column is-3 no-print">
+      <div class="column-pub no-print">
+        <ad-widget-square />
         <map-box :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="column is-12-print">
         <div class="box">
           <div class="columns is-multiline">
             <div class="column is-4">
@@ -145,10 +146,12 @@ import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
 import waypointLabels from '@/js/waypoint-labels-mixin';
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin, waypointLabels],

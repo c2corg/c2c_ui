@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="document && !document.not_authorized" class="columns">
-      <div class="column is-3">
+      <div class="column-pub">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
@@ -34,7 +34,7 @@
         <tool-box :document="document" />
       </div>
 
-      <div class="column is-9">
+      <div class="column">
         <div class="box" v-if="locale.summary || locale.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
@@ -56,12 +56,14 @@ import documentViewMixin from './utils/document-view-mixin';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 import config from '@/js/config';
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
     FeedWidget,
     OutingsDownloader,
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin],

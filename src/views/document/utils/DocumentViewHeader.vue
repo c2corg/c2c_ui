@@ -3,7 +3,6 @@
     <div v-if="!document.not_authorized">
       <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
-      <ad-widget-long v-if="!$screen.isMobile" />
       <document-version-banner :version="version" :document="document" />
 
       <div class="box">
@@ -65,13 +64,11 @@ import TagsButton from './TagsButton';
 import ImagesUploader from '@/components/images-uploader/ImagesUploader';
 import isEditableMixin from '@/js/is-editable-mixin';
 import { requireDocumentProperty } from '@/js/properties-mixins';
-import AdWidgetLong from '@/views/portals/utils/AdWidgetLong';
 import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
     ImagesUploader,
-    AdWidgetLong,
     AdWidgetSquare,
     FollowButton,
     GotopButton,

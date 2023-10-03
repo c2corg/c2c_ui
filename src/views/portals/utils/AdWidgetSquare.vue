@@ -1,5 +1,5 @@
 <template>
-  <div class="advertisement">
+  <div class="advertisement no-print">
     <img src="@/assets/img/pub_300x250.png" loading="lazy" />
   </div>
 </template>

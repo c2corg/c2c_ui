@@ -119,6 +119,11 @@ body,
   flex-flow: column;
 }
 
+.column-pub {
+  width: 350px;
+  padding: 0.75rem;
+}
+
 @media screen and (max-width: $tablet) {
   .side-menu {
     left: -$sidemenu-width;

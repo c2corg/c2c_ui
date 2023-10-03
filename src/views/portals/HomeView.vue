@@ -129,11 +129,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.column-pub {
-  width: 350px;
-  padding: 0.75rem;
-}
-
 @media screen and (max-width: $tablet) {
   .feed-view {
     padding-left: 0;

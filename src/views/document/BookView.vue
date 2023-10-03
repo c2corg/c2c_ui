@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
-      <div class="column is-3">
+      <div class="column-pub">
         <div class="box">
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.author" />
@@ -21,12 +21,12 @@
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
 
+        <ad-widget-square />
         <map-box v-if="document.associations.waypoints.length" :document="document" />
-
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
-      <div class="column is-9">
+      <div class="column">
         <div class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
@@ -50,9 +50,12 @@
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
+
 export default {
   components: {
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin],

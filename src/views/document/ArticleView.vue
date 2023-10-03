@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
-      <div class="column is-3 is-12-print">
+      <div class="column-pub is-12-print">
         <div class="box">
           <activities-field :document="document" />
           <field-view :document="document" :field="fields.categories" />
@@ -17,10 +17,11 @@
             <author-link :author="document.author" />
           </label-value>
         </div>
+        <ad-widget-square />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
-      <div class="column is-9 is-12-print">
+      <div class="column is-12-print">
         <div class="box">
           <low-document-quality-banner
             v-if="isEditable && ['empty', 'draft'].includes(document.quality)"
@@ -47,10 +48,13 @@ import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
+
 export default {
   components: {
     LowDocumentQualityBanner,
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin],
