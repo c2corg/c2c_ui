@@ -2,10 +2,7 @@
   <div class="section">
     <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
-      <div
-        class="column is-12-mobile"
-        :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
-      >
+      <div class="column is-12-mobile">
         <!-- Association and website introduction -->
         <div class="box intro">
           <div class="feed-title has-cursor-pointer">
@@ -65,11 +62,7 @@
           <forum-widget :message-count="20" v-if="$screen.isMobile" />
         </div>
       </div>
-      <div
-        v-if="!$screen.isMobile"
-        class="column"
-        :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
-      >
+      <div v-if="!$screen.isMobile" class="column-pub">
         <board-announcement-widget />
         <ad-widget-square />
         <dashboard-images-gallery v-if="!feed" />
@@ -136,6 +129,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.column-pub {
+  width: 350px;
+  padding: 0.75rem;
+}
+
 @media screen and (max-width: $tablet) {
   .feed-view {
     padding-left: 0;
