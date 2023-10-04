@@ -10,15 +10,23 @@
       </span>
     </span>
 
-    <router-link
-      :to="{ name: 'home' }"
+    <a
+      :href="'/'"
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
       <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </router-link>
+    </a>
 
     <div class="navigation-end">
+      <router-link
+        :to="{ name: 'article', params: { id: 106732 } }"
+        class="navigation-item has-text-centered"
+        :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      >
+        <icon-help fixed-width />
+        <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+      </router-link>
       <div ref="searchInputContainer">
         <input-document
           ref="searchInput"
@@ -147,9 +155,11 @@
 </template>
 
 <script>
+import IconHelp from '@/components/generics/icons/IconHelp';
 import config from '@/js/config';
 
 export default {
+  components: { IconHelp },
   data() {
     return {
       searchText: '',

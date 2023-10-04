@@ -116,10 +116,10 @@ const config = {
     prod: {
       name: 'prod',
       api: 'https://api.camptocamp.org',
-      media: 'https://sos-ch-dk-2.exo.io/c2corg-active',
+      media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
       tracking: 'https://tracking.camptocamp.org',
-      miniatures: 'https://sos-ch-dk-2.exo.io/c2corg-tracking',
+      miniatures: 'https://media.camptocamp.org/c2corg-tracking',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
       modernThumbnailsTimestamp: 0,

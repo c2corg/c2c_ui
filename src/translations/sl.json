@@ -318,7 +318,6 @@
     "Hazard potential": "Potencial nevarnosti",
     "Hazard potential:": "Potencial nevarnosti: ",
     "Heading": "Naslov",
-    "Help": "FAQ",
     "Help research activities to define new prevention means": "Pomagati znanstvenim raziskavam pri opredelitvi novih preventivnih sredstev",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Tukaj je seznam uporabnikov, ki jih spremljate in katerih dejavnost boste videli v svojem osebnem toku.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Tukaj lahko nastavite filtre za jezike, dejavnosti in regije, ki bodo veljali za tok domače strani.",
@@ -1959,6 +1958,7 @@
       "$$noContext": "da",
       "parking_fee_types": "da"
     },
+    "yeti": "Yeti",
     "you need to activate drawing mode": "aktivirajte \"način risanje\"",
     "zh": {
       "langs": "kitajščina"
