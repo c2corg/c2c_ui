@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns is-block-print">
-      <div class="colum-pub no-print">
+      <div class="column-pub no-print">
         <ad-widget-square />
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <tool-box :document="document" v-if="!$screen.isMobile" />

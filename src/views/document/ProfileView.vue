@@ -30,6 +30,7 @@
           </div>
         </div>
 
+        <ad-widget-square />
         <map-box :document="document" v-if="document.geometry && document.geometry.geom" />
         <tool-box :document="document" />
       </div>

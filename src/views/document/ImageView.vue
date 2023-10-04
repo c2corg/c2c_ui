@@ -69,9 +69,8 @@
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
-import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
-
 import { getImageUrl } from '@/js/image-urls';
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
