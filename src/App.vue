@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style lang="scss">
-$sidemenu-width: 200px;
+$sidemenu-width: 300px;
 $body-height: calc(100vh - #{$navbar-height});
 
 html {

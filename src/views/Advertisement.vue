@@ -1,6 +1,6 @@
 <template>
   <div class="advertisement">
-    <iframe
+    <!-- <iframe
       :title="$gettext('advertisement')"
       :src="$options.publicPath + 'revive-adserver.html'"
       frameborder="0"
@@ -13,7 +13,8 @@
         <source srcset="@/assets/img/serac.avif" type="image/avif" />
         <img src="@/assets/img/serac.png" loading="lazy" />
       </picture>
-    </router-link>
+    </router-link> -->
+    <img src="@/assets/img/pub_300x250.png" loading="lazy" />
   </div>
 </template>
 
@@ -35,8 +36,8 @@ export default {
 
 <style scoped lang="scss">
 .advertisement {
-  width: 160px;
-  height: 320px;
+  width: 300px;
+  height: 250px;
   position: relative;
   margin-left: auto;
   margin-right: auto;
