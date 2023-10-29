@@ -8,161 +8,155 @@
       <span class="button">
         <fa-icon icon="bars" />
       </span>
+
+      <a
+        :href="'/'"
+        class="navigation-item navigation-brand has-text-centered"
+        :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      >
+        <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      </a>
     </span>
 
-    <a
-      :href="'/'"
-      class="navigation-item navigation-brand has-text-centered"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-    >
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </a>
     <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-    <advertisement v-if="!$screen.isMobile" lass="menu-add" />
+    <advertisement class="menu-add" />
 
     <div class="navigation-end">
-      <div class="navigation-item">
-        <!-- Search -->
-        <div ref="searchInputContainer">
-          <input-document
-            ref="searchInput"
-            class="navigation-item search-input"
-            :class="{ 'is-hidden-mobile': hideSearchInput }"
-            :document-type="['waypoint', 'route', 'article', 'book']"
-            propose-creation
-            show-more-results-link
-            @input="go"
-          />
+      <!-- Search -->
+      <div ref="searchInputContainer">
+        <input-document
+          ref="searchInput"
+          class="navigation-item search-input"
+          :class="{ 'is-hidden-mobile': hideSearchInput }"
+          :document-type="['waypoint', 'route', 'article', 'book']"
+          propose-creation
+          show-more-results-link
+          @input="go"
+        />
 
-          <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
-            <span class="button" @click="showSearchInput">
-              <fa-icon icon="search" />
-            </span>
-          </div>
-        </div>
-
-        <!-- Development icons -->
-        <div
-          v-if="siteConfiguration.isBackendSelectable"
-          class="navigation-item is-hidden-mobile"
-          :title="'This page may contains bugs or incomplete features'"
-        >
-          <fa-icon icon="bug" size="lg" class="has-text-danger" />
-        </div>
-
-        <div
-          v-if="siteConfiguration.isBackendSelectable"
-          class="navigation-item dropdown is-hoverable is-hidden-mobile"
-        >
-          <div class="dropdown-trigger">
-            <fa-icon icon="database" />
-          </div>
-          <div class="dropdown-menu">
-            <div class="dropdown-content">
-              <a
-                v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
-                :key="i"
-                class="dropdown-item is-size-5"
-                :class="{ 'is-active': urlsConfiguration.name === siteConfiguration.urls.name }"
-                @click="setUrlsConfiguration(urlsConfiguration.name)"
-              >
-                <span>{{ urlsConfiguration.name }}</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add button -->
-        <div class="navigation-item">
-          <dropdown-button class="is-right add-button" ref="addDocumentMenu">
-            <span slot="button" class="button is-success">
-              <fa-icon icon="plus" />
-            </span>
-            <add-link
-              v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
-              :key="documentType"
-              :document-type="documentType"
-              class="dropdown-item is-size-5 is-ellipsed"
-              @click.native="$refs.addDocumentMenu.isActive = false"
-            >
-              <icon-document :document-type="documentType" fixed-width />
-              <span>
-                {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
-              </span>
-            </add-link>
-          </dropdown-button>
+        <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
+          <span class="button" @click="showSearchInput">
+            <fa-icon icon="search" />
+          </span>
         </div>
       </div>
 
-      <div class="navigation-item">
-        <!-- Help -->
-        <router-link
-          :to="{ name: 'article', params: { id: 106732 } }"
-          class="navigation-item has-text-centered"
-          :class="{ 'is-hidden-mobile': !hideSearchInput }"
-        >
-          <icon-help fixed-width />
-          <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
-        </router-link>
-        <!-- Login -->
-        <div v-if="!$user.isLogged" class="navigation-item">
-          <login-button class="is-link">
-            <span class="is-hidden-touch" v-translate>Login</span>
-            &nbsp;
-            <fa-icon icon="sign-in-alt" />
-          </login-button>
+      <!-- Development icons -->
+      <div
+        v-if="siteConfiguration.isBackendSelectable"
+        class="navigation-item is-hidden-mobile"
+        :title="'This page may contains bugs or incomplete features'"
+      >
+        <fa-icon icon="bug" size="lg" class="has-text-danger" />
+      </div>
+
+      <div v-if="siteConfiguration.isBackendSelectable" class="navigation-item dropdown is-hoverable is-hidden-mobile">
+        <div class="dropdown-trigger">
+          <fa-icon icon="database" />
         </div>
-
-        <div v-else class="navigation-item">
-          <dropdown-button class="is-right" ref="userMenu">
-            <span slot="button" class="button">
-              <img
-                width="24"
-                height="24"
-                alt="Avatar"
-                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-              />
-              <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
-            </span>
-
-            <router-link
-              v-for="item of userMenuLinks"
-              :key="item.text"
-              :to="item.to"
-              class="dropdown-item is-size-5"
-              @click.native="$refs.userMenu.isActive = false"
-            >
-              <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
-              <span>
-                {{ item.text }}
-              </span>
-            </router-link>
-
-            <hr class="dropdown-divider" />
-
-            <a class="dropdown-item is-size-5" @click="signout()">
-              <fa-icon icon="sign-out-alt" />
-              <span>&nbsp;</span>
-              <span v-translate>Logout</span>
-            </a>
-          </dropdown-button>
-        </div>
-        <div v-if="!$user.isLogged" class="navigation-item">
-          <dropdown-button class="is-right">
-            <button class="button" slot="button">
-              {{ $language.current }}
-            </button>
+        <div class="dropdown-menu">
+          <div class="dropdown-content">
             <a
-              v-for="(language, key) in $language.availableUI"
-              :key="key"
+              v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
+              :key="i"
               class="dropdown-item is-size-5"
-              :class="{ 'is-active': key == $language.current }"
-              @click="$language.setCurrent(key)"
+              :class="{ 'is-active': urlsConfiguration.name === siteConfiguration.urls.name }"
+              @click="setUrlsConfiguration(urlsConfiguration.name)"
             >
-              {{ language }}
+              <span>{{ urlsConfiguration.name }}</span>
             </a>
-          </dropdown-button>
+          </div>
         </div>
+      </div>
+
+      <!-- Add button -->
+      <div class="navigation-item">
+        <dropdown-button class="is-right add-button" ref="addDocumentMenu">
+          <span slot="button" class="button is-success">
+            <fa-icon icon="plus" />
+          </span>
+          <add-link
+            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
+            :key="documentType"
+            :document-type="documentType"
+            class="dropdown-item is-size-5 is-ellipsed"
+            @click.native="$refs.addDocumentMenu.isActive = false"
+          >
+            <icon-document :document-type="documentType" fixed-width />
+            <span>
+              {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+            </span>
+          </add-link>
+        </dropdown-button>
+      </div>
+
+      <!-- Help -->
+      <router-link
+        :to="{ name: 'article', params: { id: 106732 } }"
+        class="navigation-item has-text-centered"
+        :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      >
+        <icon-help fixed-width />
+        <span class="is-hidden-mobile is-hidden-widescreen-only"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+      </router-link>
+      <!-- Login -->
+      <div v-if="!$user.isLogged" class="navigation-item">
+        <login-button class="is-link">
+          <span class="is-hidden-touch is-hidden-widescreen-only" v-translate>Login</span>
+          &nbsp;
+          <fa-icon icon="sign-in-alt" />
+        </login-button>
+      </div>
+
+      <div v-else class="navigation-item">
+        <dropdown-button class="is-right" ref="userMenu">
+          <span slot="button" class="button">
+            <img
+              width="24"
+              height="24"
+              alt="Avatar"
+              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+            />
+            <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
+          </span>
+
+          <router-link
+            v-for="item of userMenuLinks"
+            :key="item.text"
+            :to="item.to"
+            class="dropdown-item is-size-5"
+            @click.native="$refs.userMenu.isActive = false"
+          >
+            <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
+            <span>
+              {{ item.text }}
+            </span>
+          </router-link>
+
+          <hr class="dropdown-divider" />
+
+          <a class="dropdown-item is-size-5" @click="signout()">
+            <fa-icon icon="sign-out-alt" />
+            <span>&nbsp;</span>
+            <span v-translate>Logout</span>
+          </a>
+        </dropdown-button>
+      </div>
+      <div v-if="!$user.isLogged" class="navigation-item">
+        <dropdown-button class="is-right">
+          <button class="button" slot="button">
+            {{ $language.current }}
+          </button>
+          <a
+            v-for="(language, key) in $language.availableUI"
+            :key="key"
+            class="dropdown-item is-size-5"
+            :class="{ 'is-active': key == $language.current }"
+            @click="$language.setCurrent(key)"
+          >
+            {{ language }}
+          </a>
+        </dropdown-button>
       </div>
     </div>
   </nav>
@@ -293,48 +287,54 @@ export default {
 <style scoped lang="scss">
 nav {
   max-width: 100vw;
-  height: $navbar-height;
+  height: $navbar-height-ad;
   background-color: $white;
   box-shadow: 0 2px 0 $color-base-c2c;
   display: flex;
+  margin-left: 200px;
 }
 
 .navigation-brand {
   padding: 4px 5px !important;
   img {
-    height: calc(#{$navbar-height} - 8px);
+    height: calc(#{$navbar-height-ad} - 8px);
   }
 }
 
 .menu-add {
-  align-self: center;
+  flex-shrink: 0;
 }
 
 .navigation-end {
-  justify-content: flex-end;
+  flex-shrink: 1;
   margin-left: auto;
+  margin-right: 1rem;
   display: flex;
   flex-wrap: wrap-reverse;
-  margin-right: 1rem;
+  justify-content: flex-end;
 }
 
 .navigation-item {
   display: flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.25rem;
   //line-height: 1.5;
+}
+
+.search-input {
+  width: 160px;
 }
 
 @media screen and (max-width: $tablet) {
   nav {
-    height: calc(#{$navbar-height} / 2);
+    height: calc(#{$navbar-height});
+    margin-left: 0px;
   }
 
   .navigation-brand {
     img {
       margin-left: 0px;
-      height: calc(#{$navbar-height} / 2 - 8px);
-      // height:31px;
+      height: calc(#{$navbar-height} - 8px);
     }
   }
 
@@ -343,58 +343,52 @@ nav {
     flex-wrap: nowrap;
   }
 
-  .search-input {
-    width: 160px;
+  .menu-add {
+    display: none;
   }
 }
 
 @media screen and (min-width: $tablet) and (max-width: $desktop) {
-  .navigation-brand {
-    img {
-      margin-left: 5px;
-    }
+  nav {
+    height: calc(#{$navbar-height});
+    margin-left: 0px;
   }
 
-  .navigation-item {
-    padding: 0.25rem 5px;
+  .navigation-brand {
+    img {
+      margin-left: 0px;
+      height: calc(#{$navbar-height} - 8px);
+    }
   }
 
   .navigation-end {
     margin-right: 5px;
+    flex-wrap: nowrap;
   }
 
-  .search-input {
-    width: 250px;
+  .menu-add {
+    display: none;
   }
 }
 
 @media screen and (min-width: $desktop) and (max-width: $widescreen) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
+  nav {
+    height: calc(#{$navbar-height});
   }
-}
 
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
+  .navigation-end {
+    margin-right: 5px;
+    flex-wrap: nowrap;
   }
-}
 
-@media screen and (min-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
+  .menu-add {
+    display: none;
   }
 }
 
 // search input : increase size to right on hover
 // only on screen wider than desktop
-@media screen and (min-width: $desktop) {
+@media screen and (min-width: $fullhd) {
   .search-input {
     width: 250px;
     margin-right: 50px;

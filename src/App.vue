@@ -166,6 +166,22 @@ body,
   }
 }
 
+@media screen and (min-width: $widescreen) {
+  html,
+  body,
+  #app {
+    min-height: calc(100vh - #{$navbar-height-ad});
+  }
+
+  .site-notice {
+    top: $navbar-height-ad;
+  }
+
+  .page-content {
+    padding-top: $navbar-height-ad;
+  }
+}
+
 @media screen and (min-width: $widescreen) and (max-width: $fullhd) {
   .page-content {
     margin-left: $sidemenu-width;

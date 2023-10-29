@@ -36,8 +36,8 @@ export default {
 
 <style scoped lang="scss">
 .advertisement {
-  width: 768px;
-  height: 90px;
+  width: 768px !important;
+  height: 90px !important;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -45,6 +45,11 @@ export default {
   iframe {
     height: 768px;
     width: 90px;
+  }
+
+  img {
+    width: 768px !important;
+    height: 90px !important;
   }
 
   .advertisement-fallback {
