@@ -1,6 +1,10 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
+    <div
+      ref="map"
+      @click="showLayerSwitcher = false"
+      :class="{ 'pinned-to-top': isPinnedToTop, 'fill-parent': !isPinnedToTop }"
+    />
 
     <div
       ref="layerSwitcherButton"
@@ -12,13 +16,12 @@
       </button>
     </div>
 
-    <!-- FIXME make this a toggle like fullscreen or showLayerSwitcher -->
     <div
-      ref="pinToTopButton"
+      ref="togglePinToTopButton"
       class="ol-control ol-control-pin-to-top"
       :title="$gettext('Pin the map to the top of the screen')"
     >
-      <button @click.stop="pinToTop">
+      <button @click.stop="togglePinToTop">
         <fa-icon icon="fa-regular fa-window-maximize" />
       </button>
     </div>
@@ -313,6 +316,7 @@ export default {
       }),
 
       isFullscreen: false,
+      isPinnedToTop: false,
 
       geolocation: null,
 
@@ -427,7 +431,7 @@ export default {
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
         new ol.control.ScaleLine(),
-        new ol.control.Control({ element: this.$refs.pinToTopButton }),
+        new ol.control.Control({ element: this.$refs.togglePinToTopButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcher }),
         new ol.control.Control({ element: this.$refs.useMapAsFilter }),
@@ -516,6 +520,7 @@ export default {
   beforeDestroy() {
     this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
     this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
+    if (this.isPinnedToTop) this.togglePinToTop();
   },
 
   methods: {
@@ -529,28 +534,14 @@ export default {
       return control;
     },
 
-    pinToTop() {
-      // this.isPinned = !this.isPinned;
-      // if (this.isPinned) {
-      var div = document.querySelector('.map-container');
-      div.style.position = 'fixed';
-      div.style.top = '3.25rem'; //  `nav` bar is z=25 fixed; h=3.25
-      div.style.marginTop = 0; // avoid space between nav and map, where body text can be seen while scrolling
-      div.style.left = '200px'; // 'side-menu' is z=30 fixed; w=200px
-      div.style.right = '0px';
-      div.style.zIndex = 10; // on top of body but below nav and side-menu
-      div.style.height = '50%';
-      document.body.style.paddingTop = '50vh'; // as % is relative to width
+    togglePinToTop() {
+      this.isPinnedToTop = !this.isPinnedToTop;
+      if (this.isPinnedToTop) {
+        document.body.style.paddingTop = '50vh'; // as % is relative to width
+      } else {
+        document.body.style.paddingTop = null;
+      }
       this.fitMapToDocuments();
-
-      // if you want a static size instead
-      //div.height=  window.innerHeight / 2 + 'px'
-      //document.body.style.paddingTop = div.offsetHeight + 'px';
-
-      //} else {
-      //  div.style.position = 'relative';
-      // height 275px
-      // marginTop 14
     },
 
     onFullscreenChange() {
@@ -1504,5 +1495,27 @@ $control-margin: 0.5em;
   right: auto;
   left: $control-margin;
   top: 60px;
+}
+
+.fill-parent {
+  width: 100%;
+  height: 100%;
+}
+
+.pinned-to-top {
+  position: fixed;
+  top: $navbar-height;
+  margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
+  right: 0px;
+  z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
+  height: 50vh;
+  width: 100%;
+  box-shadow: -2px 2px 0 $color-base-c2c;
+}
+
+@media screen and (min-width: $desktop) {
+  .pinned-to-top {
+    left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
+  }
 }
 </style>
