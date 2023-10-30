@@ -1,10 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <div
-      ref="map"
-      @click="showLayerSwitcher = false"
-      :class="{ 'pinned-to-top': isPinnedToTop, 'fill-parent': !isPinnedToTop }"
-    />
+    <div ref="map" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
       ref="layerSwitcherButton"
@@ -17,11 +13,12 @@
     </div>
 
     <div
+      v-show="showPinToTopButton"
       ref="togglePinToTopButton"
       class="ol-control ol-control-pin-to-top"
       :title="$gettext('Pin the map to the top of the screen')"
     >
-      <button @click.stop="togglePinToTop">
+      <button @click.stop="$emit('pin-to-top-clicked')">
         <fa-icon icon="fa-regular fa-window-maximize" />
       </button>
     </div>
@@ -263,6 +260,11 @@ export default {
       type: String,
       default: null,
     },
+
+    showPinToTopButton: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -316,7 +318,6 @@ export default {
       }),
 
       isFullscreen: false,
-      isPinnedToTop: false,
 
       geolocation: null,
 
@@ -520,7 +521,6 @@ export default {
   beforeDestroy() {
     this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
     this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
-    if (this.isPinnedToTop) this.togglePinToTop();
   },
 
   methods: {
@@ -532,16 +532,6 @@ export default {
       control.on('enterfullscreen', this.onFullscreenChange);
       control.on('leavefullscreen', this.onFullscreenChange);
       return control;
-    },
-
-    togglePinToTop() {
-      this.isPinnedToTop = !this.isPinnedToTop;
-      if (this.isPinnedToTop) {
-        document.body.style.paddingTop = '50vh'; // as % is relative to width
-      } else {
-        document.body.style.paddingTop = null;
-      }
-      this.fitMapToDocuments();
     },
 
     onFullscreenChange() {
@@ -1495,27 +1485,5 @@ $control-margin: 0.5em;
   right: auto;
   left: $control-margin;
   top: 60px;
-}
-
-.fill-parent {
-  width: 100%;
-  height: 100%;
-}
-
-.pinned-to-top {
-  position: fixed;
-  top: $navbar-height;
-  margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
-  right: 0px;
-  z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
-  height: 50vh;
-  width: 100%;
-  box-shadow: -2px 2px 0 $color-base-c2c;
-}
-
-@media screen and (min-width: $desktop) {
-  .pinned-to-top {
-    left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
-  }
 }
 </style>

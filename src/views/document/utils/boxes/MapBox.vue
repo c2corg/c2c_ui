@@ -11,15 +11,25 @@
     <!-- The fullscreen map container is used to display both the map
          and the elevation profile in fullscreen (if the elevation profile exists) -->
     <div id="fullscreen-map-container">
-      <div class="map-container" :class="{ 'with-elevation-profile': showElevationProfile && !elevationProfileHidden }">
+      <div
+        class="map-container"
+        :class="{
+          'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
+          'pinned-to-top': isPinnedToTop,
+          'fill-parent': !isPinnedToTop,
+        }"
+      >
         <map-view
+          ref="mapView"
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type)"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
+          :show-pin-to-top-button="true"
           @has-protection-area="$emit('has-protection-area')"
+          @pin-to-top-clicked="togglePinToTop"
         />
       </div>
 
@@ -69,6 +79,7 @@ export default {
       mapLinksAreVisible: false,
       elevationProfileHasData: false,
       elevationProfileHidden: false,
+      isPinnedToTop: false,
     };
   },
 
@@ -112,7 +123,24 @@ export default {
     });
   },
 
+  beforeDestroy() {
+    if (this.isPinnedToTop) this.togglePinToTop();
+  },
+
   methods: {
+    togglePinToTop() {
+      this.isPinnedToTop = !this.isPinnedToTop;
+      if (this.isPinnedToTop) {
+        document.body.style.paddingTop = '50vh'; // as % is relative to width
+      } else {
+        document.body.style.paddingTop = null;
+      }
+      setTimeout(() => {
+        // deferred so that map.getSize() gets updated
+        this.$refs.mapView.fitMapToDocuments();
+      });
+    },
+
     hasDataChanged(value) {
       this.elevationProfileHasData = value;
     },
@@ -164,9 +192,28 @@ export default {
 
 <style lang="scss" scoped>
 .map-container {
-  height: 275px;
   margin-top: 1rem;
   margin-bottom: 1rem;
+
+  &.fill-parent {
+    height: 275px;
+  }
+  &.pinned-to-top {
+    position: fixed;
+    top: $navbar-height;
+    margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
+    right: 0px;
+    z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
+    height: 50vh;
+    width: 100%;
+    box-shadow: -2px 2px 0 $color-base-c2c;
+  }
+}
+
+@media screen and (min-width: $desktop) {
+  .pinned-to-top {
+    left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
+  }
 }
 
 /**
