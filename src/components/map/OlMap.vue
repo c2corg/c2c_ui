@@ -12,6 +12,17 @@
       </button>
     </div>
 
+    <!-- FIXME make this a toggle like fullscreen or showLayerSwitcher -->
+    <div
+      ref="pinToTopButton"
+      class="ol-control ol-control-pin-to-top"
+      :title="$gettext('Pin the map to the top of the screen')"
+    >
+      <button @click.stop="pinToTop">
+        <fa-icon icon="fa-regular fa-window-maximize" />
+      </button>
+    </div>
+
     <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div class="ol-control-layer-switcher-layers">
         <header v-translate>Base layer</header>
@@ -416,6 +427,7 @@ export default {
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
         new ol.control.ScaleLine(),
+        new ol.control.Control({ element: this.$refs.pinToTopButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcher }),
         new ol.control.Control({ element: this.$refs.useMapAsFilter }),
@@ -515,6 +527,30 @@ export default {
       control.on('enterfullscreen', this.onFullscreenChange);
       control.on('leavefullscreen', this.onFullscreenChange);
       return control;
+    },
+
+    pinToTop() {
+      // this.isPinned = !this.isPinned;
+      // if (this.isPinned) {
+      var div = document.querySelector('.map-container');
+      div.style.position = 'fixed';
+      div.style.top = '3.25rem'; //  `nav` bar is z=25 fixed; h=3.25
+      div.style.marginTop = 0; // avoid space between nav and map, where body text can be seen while scrolling
+      div.style.left = '200px'; // 'side-menu' is z=30 fixed; w=200px
+      div.style.right = '0px';
+      div.style.zIndex = 10; // on top of body but below nav and side-menu
+      div.style.height = '50%';
+      document.body.style.paddingTop = '50vh'; // as % is relative to width
+      this.fitMapToDocuments();
+
+      // if you want a static size instead
+      //div.height=  window.innerHeight / 2 + 'px'
+      //document.body.style.paddingTop = div.offsetHeight + 'px';
+
+      //} else {
+      //  div.style.position = 'relative';
+      // height 275px
+      // marginTop 14
     },
 
     onFullscreenChange() {
@@ -1266,8 +1302,13 @@ export default {
 <style lang="scss" scoped>
 $control-margin: 0.5em;
 
+.ol-control-pin-to-top {
+  top: 80px;
+  left: $control-margin;
+}
+
 .ol-control-center-on-geolocation {
-  top: 100px;
+  top: 120px;
   left: $control-margin;
 }
 
