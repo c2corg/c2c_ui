@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns print-no-columns">
-      <div class="column is-3">
+      <div class="column-pub">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
@@ -34,12 +34,14 @@
           <field-view :document="document" :field="fields.elevation" />
         </div>
 
+        <ad-widget-square />
+
         <map-box :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
-      <div class="column is-9">
+      <div class="column">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document)">
             <thumbnail class="main-image" :img="document" size="BI" />
@@ -68,10 +70,12 @@ import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
 import { getImageUrl } from '@/js/image-urls';
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin],

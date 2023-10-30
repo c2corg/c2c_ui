@@ -11,12 +11,13 @@
     <images-box v-if="document" :document="document" />
 
     <div v-if="document" class="columns is-multiline is-block-print">
-      <div class="column is-3 no-print">
+      <div class="column-pub no-print">
+        <ad-widget-square />
         <map-box :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
-      <div class="column is-9 is-12-print">
+      <div class="column is-12-print">
         <div class="box">
           <div class="no-print" v-for="route of document.associations.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
@@ -118,10 +119,13 @@ import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
+
 export default {
   components: {
     ConditionLevels,
     MaskedDocumentVersionInfo,
+    AdWidgetSquare,
   },
 
   mixins: [documentViewMixin],

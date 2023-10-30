@@ -47,6 +47,8 @@
         </h1>
       </div>
 
+      <ad-widget-square v-if="$screen.isMobile" />
+
       <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
     </div>
   </div>
@@ -62,10 +64,12 @@ import TagsButton from './TagsButton';
 import ImagesUploader from '@/components/images-uploader/ImagesUploader';
 import isEditableMixin from '@/js/is-editable-mixin';
 import { requireDocumentProperty } from '@/js/properties-mixins';
+import AdWidgetSquare from '@/views/portals/utils/AdWidgetSquare';
 
 export default {
   components: {
     ImagesUploader,
+    AdWidgetSquare,
     FollowButton,
     GotopButton,
     TagsButton,
