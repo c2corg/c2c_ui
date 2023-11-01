@@ -6,6 +6,7 @@
       :version="version"
       :document-type="documentType"
     ></masked-document-version-info>
+    <advertisement-small v-if="$screen.isMobile" />
     <document-view-header v-if="document" :document="document" :version="version" />
 
     <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
@@ -14,6 +15,7 @@
 
     <div v-if="document && !document.not_authorized" class="columns">
       <div class="column is-3">
+        <advertisement-small v-if="$screen.isTablet || $screen.isDesktop" />
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
@@ -50,6 +52,8 @@
 </template>
 
 <script>
+import AdvertisementSmall from '../AdvertisementSmall.vue';
+
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import OutingsDownloader from './utils/OutingsDownloader';
 import documentViewMixin from './utils/document-view-mixin';
@@ -59,6 +63,7 @@ import config from '@/js/config';
 
 export default {
   components: {
+    AdvertisementSmall,
     FeedWidget,
     OutingsDownloader,
     MaskedDocumentVersionInfo,
@@ -73,5 +78,19 @@ export default {
 <style lang="scss" scoped>
 .button-outings {
   margin-top: 1rem;
+}
+</style>
+
+<style scoped lang="scss">
+@media screen and (min-width: $tablet) and (max-width: $widescreen) {
+  .is-3 {
+    width: calc(300px + 2 * 0.75rem) !important;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .is-9 {
+    flex: 1 1 auto !important;
+  }
 }
 </style>

@@ -6,9 +6,11 @@
       :version="version"
       :document-type="documentType"
     ></masked-document-version-info>
+    <advertisement-small v-if="$screen.isMobile" />
     <document-view-header v-if="document" :document="document" :version="version" />
     <div v-if="document" class="columns print-no-columns">
       <div class="column is-3">
+        <advertisement-small v-if="$screen.isTablet || $screen.isDesktop" />
         <div class="box">
           <field-view :document="document" :field="fields.area_type" />
         </div>
@@ -52,14 +54,31 @@
 </template>
 
 <script>
+import AdvertisementSmall from '../AdvertisementSmall.vue';
+
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import documentViewMixin from './utils/document-view-mixin';
 
 export default {
   components: {
+    AdvertisementSmall,
     MaskedDocumentVersionInfo,
   },
 
   mixins: [documentViewMixin],
 };
 </script>
+
+<style scoped lang="scss">
+@media screen and (min-width: $tablet) and (max-width: $widescreen) {
+  .is-3 {
+    width: calc(300px + 2 * 0.75rem) !important;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .is-9 {
+    flex: 1 1 auto !important;
+  }
+}
+</style>

@@ -2,10 +2,8 @@
   <div class="section">
     <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
-      <div
-        class="column is-12-mobile"
-        :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
-      >
+      <div class="column is-12-mobile" :class="feed ? 'is-8-widescreen is-9-fullhd' : 'is-7-widescreen is-8-fullhd'">
+        <advertisement-small v-if="$screen.isMobile" />
         <!-- Association and website introduction -->
         <div class="box intro">
           <div class="feed-title has-cursor-pointer">
@@ -66,9 +64,10 @@
       </div>
       <div
         v-if="!$screen.isMobile"
-        class="column"
-        :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
+        class="column column-ad"
+        :class="feed ? 'is-4-widescreen is-3-fullhd' : 'is-5-widescreen is-4-fullhd'"
       >
+        <advertisement-small v-if="$screen.isTablet || $screen.isDesktop" />
         <board-announcement-widget />
         <dashboard-images-gallery v-if="!feed" />
         <useful-links />
@@ -80,6 +79,8 @@
 </template>
 
 <script>
+import AdvertisementSmall from '../AdvertisementSmall.vue';
+
 import HomeBanner from './HomeBanner';
 import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
 import DashboardArticlesList from './utils/DashboardArticlesList';
@@ -95,6 +96,7 @@ export default {
   name: 'HomeView',
 
   components: {
+    AdvertisementSmall,
     HomeBanner,
     BoardAnnouncementWidget,
     DashboardArticlesList,
@@ -220,5 +222,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+@media screen and (min-width: $tablet) and (max-width: $widescreen) {
+  .column-ad {
+    width: calc(300px + 2 * 0.75rem);
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
 }
 </style>

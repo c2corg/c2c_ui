@@ -1,5 +1,5 @@
 <template>
-  <div class="advertisement no-print">
+  <div class="advertisement-small no-print">
     <!--<iframe
       :title="$gettext('advertisement')"
       :src="$options.publicPath + 'revive-adserver.html'"
@@ -14,7 +14,7 @@
         <img src="@/assets/img/serac.png" loading="lazy" />
       </picture>
     </router-link>-->
-    <img src="@/assets/img/pub_768x90.png" loading="lazy" />
+    <img src="@/assets/img/pub_300x250.png" loading="lazy" />
   </div>
 </template>
 
@@ -35,21 +35,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.advertisement {
-  width: 768px !important;
-  height: 90px !important;
+.advertisement-small {
+  width: 300px !important;
+  height: 250px !important;
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: $size-7;
 
   iframe {
-    height: 768px;
-    width: 90px;
+    height: 300px;
+    width: 250px;
   }
 
   img {
-    width: 768px !important;
-    height: 90px !important;
+    width: 300px !important;
+    height: 250px !important;
   }
 
   .advertisement-fallback {
@@ -59,8 +60,8 @@ export default {
     left: 0;
 
     img {
-      width: 768px !important;
-      height: 90px !important;
+      width: 300px !important;
+      height: 250px !important;
     }
   }
 }

@@ -19,7 +19,7 @@
     </span>
 
     <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-    <advertisement class="menu-add" />
+    <advertisement v-if="$screen.isWidescreen || $screen.isFullHD" class="menu-add" />
 
     <div class="navigation-end">
       <!-- Search -->
@@ -312,6 +312,7 @@ nav {
   display: flex;
   flex-wrap: wrap-reverse;
   justify-content: flex-end;
+  align-content: center;
 }
 
 .navigation-item {
@@ -325,7 +326,7 @@ nav {
   width: 160px;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (max-width: $desktop) {
   nav {
     height: calc(#{$navbar-height});
     margin-left: 0px;
@@ -341,33 +342,6 @@ nav {
   .navigation-end {
     margin-right: 5px;
     flex-wrap: nowrap;
-  }
-
-  .menu-add {
-    display: none;
-  }
-}
-
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
-  nav {
-    height: calc(#{$navbar-height});
-    margin-left: 0px;
-  }
-
-  .navigation-brand {
-    img {
-      margin-left: 0px;
-      height: calc(#{$navbar-height} - 8px);
-    }
-  }
-
-  .navigation-end {
-    margin-right: 5px;
-    flex-wrap: nowrap;
-  }
-
-  .menu-add {
-    display: none;
   }
 }
 
@@ -379,10 +353,6 @@ nav {
   .navigation-end {
     margin-right: 5px;
     flex-wrap: nowrap;
-  }
-
-  .menu-add {
-    display: none;
   }
 }
 
