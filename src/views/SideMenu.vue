@@ -53,7 +53,7 @@
         <span class="menu-item-text"> {{ $gettext('articles') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
-    <router-link :to="{ name: 'yeti' }" v-if="isTall">
+    <router-link :to="{ name: 'yeti' }">
       <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes($route.name) }">
         <icon-yeti fixed-width />
         <span class="menu-item-text"> {{ $gettext('yeti') | uppercaseFirstLetter }} </span>
@@ -61,9 +61,6 @@
     </router-link>
 
     <div class="menu-footer is-size-7">
-      <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
-      <advertisement class="menu-add" v-if="$screen.hasHeightForAd" />
-
       <div class="has-text-centered menu-links">
         <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
         <span> &bull; </span>
@@ -103,46 +100,14 @@
 </template>
 
 <script>
-import Advertisement from './Advertisement';
-
 import IconYeti from '@/components/generics/icons/IconYeti';
 
 export default {
-  components: { IconYeti, Advertisement },
-
-  data() {
-    return {
-      isTall: false,
-    };
-  },
-
-  created() {
-    this.mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
-    if (this.mediaQueryList.addEventListener) {
-      this.mediaQueryList.addEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.addListener(this.onHeightBreakpointChange);
-    }
-    this.onHeightBreakpointChange();
-  },
-
-  beforeDestroy() {
-    if (this.mediaQueryList.removeEventListener) {
-      this.mediaQueryList.removeEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.removeListener(this.onHeightBreakpointChange);
-    }
-  },
+  components: { IconYeti },
 
   methods: {
     showGdpr() {
       this.$root.$emit('show-gdpr');
-    },
-
-    onHeightBreakpointChange() {
-      this.isTall = this.mediaQueryList.matches;
     },
   },
 };

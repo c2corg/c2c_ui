@@ -8,25 +8,21 @@
       <span class="button">
         <fa-icon icon="bars" />
       </span>
-    </span>
 
-    <a
-      :href="'/'"
-      class="navigation-item navigation-brand has-text-centered"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-    >
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </a>
-
-    <div class="navigation-end">
-      <router-link
-        :to="{ name: 'article', params: { id: 106732 } }"
-        class="navigation-item has-text-centered"
+      <a
+        :href="'/'"
+        class="navigation-item navigation-brand has-text-centered"
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
-        <icon-help fixed-width />
-        <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
-      </router-link>
+        <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      </a>
+    </span>
+
+    <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
+    <advertisement v-if="$screen.isWidescreen || $screen.isFullHD" class="menu-add" />
+
+    <div class="navigation-end">
+      <!-- Search -->
       <div ref="searchInputContainer">
         <input-document
           ref="searchInput"
@@ -45,6 +41,7 @@
         </div>
       </div>
 
+      <!-- Development icons -->
       <div
         v-if="siteConfiguration.isBackendSelectable"
         class="navigation-item is-hidden-mobile"
@@ -72,6 +69,7 @@
         </div>
       </div>
 
+      <!-- Add button -->
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <span slot="button" class="button is-success">
@@ -92,9 +90,19 @@
         </dropdown-button>
       </div>
 
+      <!-- Help -->
+      <router-link
+        :to="{ name: 'article', params: { id: 106732 } }"
+        class="navigation-item has-text-centered"
+        :class="{ 'is-hidden-mobile': !hideSearchInput }"
+      >
+        <icon-help fixed-width />
+        <span class="is-hidden-mobile is-hidden-widescreen-only"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+      </router-link>
+      <!-- Login -->
       <div v-if="!$user.isLogged" class="navigation-item">
         <login-button class="is-link">
-          <span class="is-hidden-touch" v-translate>Login</span>
+          <span class="is-hidden-touch is-hidden-widescreen-only" v-translate>Login</span>
           &nbsp;
           <fa-icon icon="sign-in-alt" />
         </login-button>
@@ -155,11 +163,13 @@
 </template>
 
 <script>
+import Advertisement from './Advertisement';
+
 import IconHelp from '@/components/generics/icons/IconHelp';
 import config from '@/js/config';
 
 export default {
-  components: { IconHelp },
+  components: { IconHelp, Advertisement },
   data() {
     return {
       searchText: '',
@@ -277,123 +287,78 @@ export default {
 <style scoped lang="scss">
 nav {
   max-width: 100vw;
-  height: $navbar-height;
+  height: $navbar-height-ad;
   background-color: $white;
   box-shadow: 0 2px 0 $color-base-c2c;
   display: flex;
+  margin-left: 200px;
 }
 
 .navigation-brand {
   padding: 4px 5px !important;
   img {
-    height: calc(#{$navbar-height} - 8px);
+    height: calc(#{$navbar-height-ad} - 8px);
   }
 }
 
+.menu-add {
+  flex-shrink: 0;
+}
+
 .navigation-end {
-  justify-content: flex-end;
+  flex-shrink: 1;
   margin-left: auto;
+  margin-right: 1rem;
   display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  align-content: center;
 }
 
 .navigation-item {
   display: flex;
   align-items: center;
-  line-height: 1.5;
+  padding: 0.25rem 0.25rem;
+  //line-height: 1.5;
 }
 
-@media screen and (max-width: $tablet) {
+.search-input {
+  width: 160px;
+}
+
+@media screen and (max-width: $desktop) {
+  nav {
+    height: calc(#{$navbar-height});
+    margin-left: 0px;
+  }
+
   .navigation-brand {
     img {
       margin-left: 0px;
-      // height:31px;
+      height: calc(#{$navbar-height} - 8px);
     }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 5px;
   }
 
   .navigation-end {
     margin-right: 5px;
-  }
-
-  .search-input {
-    width: 160px;
-  }
-}
-
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
-  .navigation-brand {
-    img {
-      margin-left: 5px;
-    }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 5px;
-  }
-
-  .navigation-end {
-    margin-right: 5px;
-  }
-
-  .search-input {
-    width: 250px;
+    flex-wrap: nowrap;
   }
 }
 
 @media screen and (min-width: $desktop) and (max-width: $widescreen) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
+  nav {
+    height: calc(#{$navbar-height});
   }
 
   .navigation-end {
-    margin-right: 1rem;
-  }
-}
-
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
-  }
-}
-
-@media screen and (min-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
+    margin-right: 5px;
+    flex-wrap: nowrap;
   }
 }
 
 // search input : increase size to right on hover
 // only on screen wider than desktop
-@media screen and (min-width: $desktop) {
+@media screen and (min-width: $fullhd) {
   .search-input {
     width: 250px;
     margin-right: 50px;
