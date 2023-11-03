@@ -15,10 +15,10 @@
         class="map-container"
         :class="{
           'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
-          pinned: isPinnedToSide,
-          'pinned-to-top': isPinnedToSide === 1,
-          'pinned-to-left': isPinnedToSide === 2,
-          'fill-parent': !isPinnedToSide,
+          pinned: pinnedMode,
+          'pinned-to-top': pinnedSide === 'top',
+          'pinned-to-left': pinnedSide === 'left',
+          'fill-parent': !pinnedMode,
         }"
       >
         <map-view
@@ -31,7 +31,7 @@
           "
           :show-pin-to-top-button="true"
           @has-protection-area="$emit('has-protection-area')"
-          @pin-to-top-clicked="togglePinToTop"
+          @pin-to-top-clicked="togglePinToSide(true)"
         />
       </div>
 
@@ -81,7 +81,8 @@ export default {
       mapLinksAreVisible: false,
       elevationProfileHasData: false,
       elevationProfileHidden: false,
-      isPinnedToSide: false,
+      pinnedMode: 0,
+      pinnedSide: '',
     };
   },
 
@@ -123,31 +124,51 @@ export default {
 
       this.elevationProfileHidden = hide;
     });
+    window.addEventListener('resize', this.resizePin);
   },
 
   beforeDestroy() {
-    if (this.isPinnedToSide) this.togglePinToTop();
-    if (this.isPinnedToSide) this.togglePinToTop();
+    window.removeEventListener('resize', this.resizePin);
+    if (this.pinnedMode) this.togglePinToSide(true);
+    if (this.pinnedMode) this.togglePinToSide(true);
   },
 
   methods: {
-    togglePinToTop() {
-      const maxMode = this.$screen.isMobile ? 2 : 3; // no pin-to-left on mobile
-      this.isPinnedToSide = (this.isPinnedToSide + 1) % maxMode;
-      if (this.isPinnedToSide === 1) {
-        document.body.style.paddingLeft = null;
-        document.body.style.paddingTop = '50vh'; // as % is relative to width
-      } else if (this.isPinnedToSide === 2) {
+    togglePinToSide(toggle) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const breakMobile = 769;
+      // disable eg pin-to-left on mobile
+      const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
+
+      const toggleAmount = toggle ? 1 : 0;
+      // 0: unpinned / 1: pinned side1 / 2: pinned side2
+      this.pinnedMode = (this.pinnedMode + toggleAmount) % maxMode;
+
+      // side1 is the preferred side for comfort, ie the larger dimension
+      const [side1, side2] = width < height * 1.5 ? ['top', 'left'] : ['left', 'top'];
+      this.pinnedSide = this.pinnedMode === 0 ? '' : this.pinnedMode === 1 ? side1 : side2;
+
+      if (this.pinnedSide === 'left') {
         document.body.style.paddingLeft = '30%';
         document.body.style.paddingTop = null;
+      } else if (this.pinnedSide === 'top') {
+        document.body.style.paddingLeft = null;
+        document.body.style.paddingTop = '45vh'; // as % is relative to width
       } else {
         document.body.style.paddingLeft = null;
         document.body.style.paddingTop = null;
       }
       setTimeout(() => {
         // deferred so that map.getSize() gets updated
-        this.$refs.mapView.fitMapToDocuments();
+        if (this.$refs.mapView) {
+          this.$refs.mapView.fitMapToDocuments();
+        }
       });
+    },
+
+    resizePin() {
+      this.togglePinToSide(false);
     },
 
     hasDataChanged(value) {
@@ -219,7 +240,7 @@ export default {
   }
   &.pinned-to-top {
     right: 0px;
-    height: 50vh;
+    height: 45vh;
     width: 100%;
     @include desktop {
       left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
