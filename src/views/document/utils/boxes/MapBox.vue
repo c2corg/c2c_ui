@@ -17,7 +17,7 @@
           'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
           pinned: pinnedMode,
           'pinned-to-top': pinnedSide === 'top',
-          'pinned-to-left': pinnedSide === 'left',
+          'pinned-to-right': pinnedSide === 'right',
           'fill-parent': !pinnedMode,
         }"
       >
@@ -138,7 +138,7 @@ export default {
       const width = window.innerWidth;
       const height = window.innerHeight;
       const breakMobile = 769;
-      // disable eg pin-to-left on mobile
+      // disable eg pin-to-right on mobile
       const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
 
       const toggleAmount = toggle ? 1 : 0;
@@ -146,17 +146,17 @@ export default {
       this.pinnedMode = (this.pinnedMode + toggleAmount) % maxMode;
 
       // side1 is the preferred side for comfort, ie the larger dimension
-      const [side1, side2] = width < height * 1.5 ? ['top', 'left'] : ['left', 'top'];
+      const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
       this.pinnedSide = this.pinnedMode === 0 ? '' : this.pinnedMode === 1 ? side1 : side2;
 
-      if (this.pinnedSide === 'left') {
-        document.body.style.paddingLeft = '30%';
+      if (this.pinnedSide === 'right') {
+        document.body.style.paddingRight = '30%';
         document.body.style.paddingTop = null;
       } else if (this.pinnedSide === 'top') {
-        document.body.style.paddingLeft = null;
+        document.body.style.paddingRight = null;
         document.body.style.paddingTop = '45vh'; // as % is relative to width
       } else {
-        document.body.style.paddingLeft = null;
+        document.body.style.paddingRight = null;
         document.body.style.paddingTop = null;
       }
       setTimeout(() => {
@@ -246,17 +246,11 @@ export default {
       left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
     }
   }
-  &.pinned-to-left {
-    left: 0px;
+  &.pinned-to-right {
+    right: 0px;
     height: calc(100vh - #{$navbar-height});
     width: 30vw;
   }
-}
-#app[data-width='desktop'] .map-container.pinned-to-left {
-  left: $sidemenu-width;
-}
-#app:not([data-width='desktop']) .map-container.pinned-to-left {
-  left: 0;
 }
 
 /**
