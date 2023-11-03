@@ -231,6 +231,9 @@ export default {
   &.fill-parent {
     height: 275px;
   }
+}
+
+:not(:fullscreen) > .map-container {
   &.pinned {
     position: fixed;
     top: $navbar-height;
@@ -243,7 +246,7 @@ export default {
     height: 45vh;
     width: 100%;
     @include desktop {
-      left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
+      left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
     }
   }
   &.pinned-to-right {

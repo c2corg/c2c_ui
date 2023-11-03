@@ -13,10 +13,10 @@
     </div>
 
     <div
-      v-show="showPinToTopButton"
+      v-show="showPinToTopButton && !isFullscreen"
       ref="togglePinToTopButton"
       class="ol-control ol-control-pin-to-top"
-      :title="$gettext('Pin the map to the top of the screen')"
+      :title="$gettext('Pin the map to a side of the screen')"
     >
       <button @click.stop="$emit('pin-to-top-clicked')">
         <fa-icon icon="fa-regular fa-window-maximize" />
