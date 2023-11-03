@@ -15,8 +15,10 @@
         class="map-container"
         :class="{
           'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
-          'pinned-to-top': isPinnedToTop,
-          'fill-parent': !isPinnedToTop,
+          pinned: isPinnedToSide,
+          'pinned-to-top': isPinnedToSide === 1,
+          'pinned-to-left': isPinnedToSide === 2,
+          'fill-parent': !isPinnedToSide,
         }"
       >
         <map-view
@@ -79,7 +81,7 @@ export default {
       mapLinksAreVisible: false,
       elevationProfileHasData: false,
       elevationProfileHidden: false,
-      isPinnedToTop: false,
+      isPinnedToSide: false,
     };
   },
 
@@ -124,15 +126,22 @@ export default {
   },
 
   beforeDestroy() {
-    if (this.isPinnedToTop) this.togglePinToTop();
+    if (this.isPinnedToSide) this.togglePinToTop();
+    if (this.isPinnedToSide) this.togglePinToTop();
   },
 
   methods: {
     togglePinToTop() {
-      this.isPinnedToTop = !this.isPinnedToTop;
-      if (this.isPinnedToTop) {
+      const maxMode = this.$screen.isMobile ? 2 : 3; // no pin-to-left on mobile
+      this.isPinnedToSide = (this.isPinnedToSide + 1) % maxMode;
+      if (this.isPinnedToSide === 1) {
+        document.body.style.paddingLeft = null;
         document.body.style.paddingTop = '50vh'; // as % is relative to width
+      } else if (this.isPinnedToSide === 2) {
+        document.body.style.paddingLeft = '30%';
+        document.body.style.paddingTop = null;
       } else {
+        document.body.style.paddingLeft = null;
         document.body.style.paddingTop = null;
       }
       setTimeout(() => {
@@ -191,6 +200,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~bulma/sass/utilities/mixins.sass';
+
 .map-container {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -198,22 +209,32 @@ export default {
   &.fill-parent {
     height: 275px;
   }
-  &.pinned-to-top {
+  &.pinned {
     position: fixed;
     top: $navbar-height;
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
-    right: 0px;
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
+  }
+  &.pinned-to-top {
+    right: 0px;
     height: 50vh;
     width: 100%;
     box-shadow: -2px 2px 0 $color-base-c2c;
+    @include desktop {
+      left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
+    }
+  }
+  &.pinned-to-left {
+    left: 0px;
+    height: 100%;
+    width: 30vw;
   }
 }
-
-@media screen and (min-width: $desktop) {
-  .pinned-to-top {
-    left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
-  }
+#app[data-width='desktop'] .map-container.pinned-to-left {
+  left: $sidemenu-width + 2px;
+}
+#app:not([data-width='desktop']) .map-container.pinned-to-left {
+  left: 0;
 }
 
 /**
