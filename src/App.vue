@@ -77,10 +77,8 @@ export default {
         this.$el.dataset.width = 'mobile';
       } else if (width <= bulmaBreakpoints.desktop) {
         this.$el.dataset.width = 'tablet';
-      } else if (width <= bulmaBreakpoints.widescreen) {
-        this.$el.dataset.width = 'desktop';
       } else {
-        this.$el.dataset.width = 'widescreen';
+        this.$el.dataset.width = 'desktop';
       }
     },
   },
@@ -183,8 +181,7 @@ body,
     }
   }
 
-  [data-width='desktop'],
-  [data-width='widescreen'] {
+  [data-width='desktop'] {
     .side-menu {
       left: 0;
     }

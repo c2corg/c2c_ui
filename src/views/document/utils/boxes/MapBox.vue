@@ -205,6 +205,7 @@ export default {
 .map-container {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  background: beige;
 
   &.fill-parent {
     height: 275px;
@@ -214,24 +215,24 @@ export default {
     top: $navbar-height;
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
   }
   &.pinned-to-top {
     right: 0px;
     height: 50vh;
     width: 100%;
-    box-shadow: -2px 2px 0 $color-base-c2c;
     @include desktop {
       left: $sidemenu-width + 2px; /* when is sidemenu shown, as in App.vue */
     }
   }
   &.pinned-to-left {
     left: 0px;
-    height: 100%;
+    height: calc(100vh - #{$navbar-height});
     width: 30vw;
   }
 }
 #app[data-width='desktop'] .map-container.pinned-to-left {
-  left: $sidemenu-width + 2px;
+  left: $sidemenu-width;
 }
 #app:not([data-width='desktop']) .map-container.pinned-to-left {
   left: 0;
