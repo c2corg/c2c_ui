@@ -1,7 +1,9 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current', retina = false) {
+  const tileSize = retina ? 128 : undefined;
+  const tilePixelRatio = retina ? 2 : undefined;
   return new ol.layer.Tile({
     title,
     image,
@@ -14,6 +16,8 @@ function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'curr
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
       maxZoom: 17,
+      tileSize: tileSize,
+      tilePixelRatio: tilePixelRatio,
     }),
   });
 }
@@ -293,7 +297,8 @@ export const cartoLayers = function () {
     'swisstopo.jpg',
     'ch.swisstopo.pixelkarte-farbe',
     'jpeg',
-    'current'
+    'current',
+    true
   );
   // $gettext('SwissTopo ortho', 'Map layer')
   const swissTopoOrtho = createSwisstopoLayer(
