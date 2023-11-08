@@ -209,6 +209,8 @@ export default {
 
     beforeSave() {},
 
+    afterSave() {},
+
     // display a popup with info from fields that contains an error
     // return true if popup is displayed, false otherwise
     displayErrors(isApiMessage) {
@@ -269,6 +271,8 @@ export default {
           this.goToDocument(response.data.document_id);
         });
       }
+
+      this.afterSave(); // allow each view to handle some specific cases
 
       promise.catch((error) => {
         this.saving = false;
