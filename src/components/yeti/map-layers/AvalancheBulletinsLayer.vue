@@ -95,10 +95,6 @@ let mountainsStyle = (feature, mapZoom, danger) => {
 
   let styles = [
     new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0, 0, 0, 0.85)',
-        width: strokeWidth,
-      }),
       fill: new ol.style.Fill({
         color: `rgba(${dangerFill[danger]}, ${opacity})`,
       }),
@@ -115,6 +111,16 @@ let mountainsStyle = (feature, mapZoom, danger) => {
       })
     );
   }
+
+  // add stroke on top
+  styles.push(
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.85)',
+        width: strokeWidth,
+      }),
+    })
+  );
 
   return styles;
 };
