@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <yeti-map ref="map" :yeti-data="yetiData" :yeti-extent="yetiExtent" />
+        <yeti-map ref="map" />
       </div>
     </div>
   </div>
@@ -153,8 +153,6 @@ export default {
       currentError: undefined,
 
       promise: null,
-      yetiData: null,
-      yetiExtent: [],
     };
   },
 
@@ -359,7 +357,7 @@ export default {
       const yetiUrl = this.getYetiUrl(extendedExtent);
 
       // first, set data to null (will remove last one)
-      this.yetiData = null;
+      Yetix.setYetiData(null);
 
       // fetch img
       this.promise = axios
@@ -375,8 +373,8 @@ export default {
     },
 
     onYetiResult(result, extendedExtent) {
-      this.yetiData = result.data;
-      this.yetiExtent = extendedExtent;
+      Yetix.setYetiData(result.data);
+      Yetix.setYetiExtent(extendedExtent);
 
       this.promise = null;
     },

@@ -4,7 +4,7 @@
       <div ref="map" style="width: 100%; height: 100%" />
       <map-layers />
       <area-layer />
-      <yeti-layer :data="yetiData" :extent="yetiExtent" />
+      <yeti-layer />
       <avalanche-bulletins-layer />
       <flowcapt-layer />
       <nivoses-layer />
@@ -90,16 +90,6 @@ export default {
     RouteLayer,
     Toast,
     YetiLayer,
-  },
-  props: {
-    yetiExtent: {
-      type: Array,
-      required: true,
-    },
-    yetiData: {
-      type: String,
-      default: null,
-    },
   },
   data() {
     return {

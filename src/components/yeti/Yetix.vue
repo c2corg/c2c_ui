@@ -46,6 +46,9 @@ let defaultState = {
   showYeti: false,
   yetiOk: false,
 
+  yetiData: null,
+  yetiExtent: [],
+
   areas: [],
   areaOk: true,
   showAreas: false,
@@ -133,6 +136,12 @@ export default new Vue({
     yetiOk() {
       return state.yetiOk;
     },
+    yetiData() {
+      return state.yetiData;
+    },
+    yetiExtent() {
+      return state.yetiExtent;
+    },
     areas() {
       return state.areas;
     },
@@ -219,6 +228,12 @@ export default new Vue({
       if (yetiOk) {
         this.setShowYeti(true);
       }
+    },
+    setYetiData(yetiData) {
+      state.yetiData = yetiData;
+    },
+    setYetiExtent(yetiExtent) {
+      state.yetiExtent = yetiExtent;
     },
     setAreas(areas) {
       state.areas = areas;

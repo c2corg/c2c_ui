@@ -37,16 +37,6 @@ import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin],
-  props: {
-    data: {
-      type: String,
-      default: null,
-    },
-    extent: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       showLegend: undefined,
@@ -54,6 +44,12 @@ export default {
     };
   },
   computed: {
+    yetiData() {
+      return Yetix.yetiData;
+    },
+    yetiExtent() {
+      return Yetix.yetiExtent;
+    },
     showAreas() {
       return Yetix.showAreas;
     },
@@ -65,15 +61,15 @@ export default {
     },
   },
   watch: {
-    data() {
-      if (!this.data) {
+    yetiData() {
+      if (!this.yetiData) {
         this.clearLayers();
         return;
       }
       this.drawImage();
     },
-    extent() {
-      this.drawExtent(this.extent);
+    yetiExtent() {
+      this.drawExtent(this.yetiExtent);
     },
     showAreas() {
       // switch classname when showareas updates
@@ -147,7 +143,7 @@ export default {
       this.extentLayer.getSource().addFeature(feature);
     },
     drawImage() {
-      let xml = new DOMParser().parseFromString(this.data, 'application/xml');
+      let xml = new DOMParser().parseFromString(this.yetiData, 'application/xml');
       let imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
       let imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
       let imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
