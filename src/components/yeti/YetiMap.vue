@@ -3,12 +3,8 @@
     <div style="width: 100%; height: 100%">
       <div ref="map" style="width: 100%; height: 100%" />
       <map-layers />
-      <area-layer />
-      <yeti-layer />
-      <avalanche-bulletins-layer />
-      <flowcapt-layer />
-      <nivoses-layer />
-      <romma-layer />
+      <yeti-layers />
+      <overlays-layers />
       <route-layer />
       <div
         ref="layerSwitcherButton"
@@ -61,14 +57,10 @@
 </template>
 
 <script>
-import AreaLayer from './map-layers/AreaLayer.vue';
-import AvalancheBulletinsLayer from './map-layers/AvalancheBulletinsLayer.vue';
-import FlowcaptLayer from './map-layers/FlowcaptLayer.vue';
 import MapLayers from './map-layers/MapLayers.vue';
-import NivosesLayer from './map-layers/NivosesLayer.vue';
-import RommaLayer from './map-layers/RommaLayer.vue';
+import OverlaysLayers from './map-layers/OverlaysLayers.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
-import YetiLayer from './map-layers/YetiLayer.vue';
+import YetiLayers from './map-layers/YetiLayers.vue';
 
 import Toast from '@/components/yeti/Toast';
 import Yetix from '@/components/yeti/Yetix';
@@ -81,15 +73,11 @@ const MAX_ZOOM = 19;
 
 export default {
   components: {
-    AreaLayer,
-    AvalancheBulletinsLayer,
-    FlowcaptLayer,
     MapLayers,
-    NivosesLayer,
-    RommaLayer,
+    OverlaysLayers,
     RouteLayer,
     Toast,
-    YetiLayer,
+    YetiLayers,
   },
   data() {
     return {

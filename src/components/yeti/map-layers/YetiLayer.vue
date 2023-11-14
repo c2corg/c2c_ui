@@ -31,12 +31,13 @@
 </template>
 <script>
 import layerMixin from './layer';
+import layerSelectorWatcherMixin from './layer-selector-watcher';
 
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 export default {
-  mixins: [layerMixin],
+  mixins: [layerMixin, layerSelectorWatcherMixin],
   data() {
     return {
       showLegend: undefined,
@@ -56,8 +57,26 @@ export default {
     showYeti() {
       return Yetix.showYeti;
     },
-    yetiLayerSelector() {
-      return Yetix.yetiLayerSelector;
+    yetiOk() {
+      return Yetix.yetiOk;
+    },
+    layerSelector() {
+      return {
+        title: this.$gettext('Risk'),
+        checked: this.showYeti,
+        action: this.onShowYeti,
+        disabled: {
+          condition: !this.yetiOk,
+          title: this.$gettext('No risk to show yet'),
+          message: this.$gettext('Compute one for a specific zone from the “Risk” tab'),
+        },
+        image: 'yeti-risk.jpg',
+        opacity: Yetix.YETI_LAYER_OPACITY,
+        blendModes: true,
+      };
+    },
+    yetiLayersSelector() {
+      return Yetix.yetiLayersSelector;
     },
   },
   watch: {
@@ -79,10 +98,10 @@ export default {
       this.layer.setVisible(this.showYeti);
       this.extentLayer.setVisible(this.showYeti);
     },
-    yetiLayerSelector: {
-      handler(layer) {
-        this.setLayerOpacity(layer.opacity);
-        this.setLayerBlendModes(layer.blendModes);
+    yetiLayersSelector: {
+      handler(layers) {
+        this.setLayerOpacity(layers[0].opacity);
+        this.setLayerBlendModes(layers[0].blendModes);
       },
       deep: true,
     },
@@ -127,8 +146,13 @@ export default {
     this.map.addLayer(this.extentLayer);
 
     this.setLayerClassName();
+
+    this.$emit('layer', this.layerSelector);
   },
   methods: {
+    onShowYeti() {
+      Yetix.setShowYeti(!this.showYeti);
+    },
     clearLayers() {
       this.layer.setSource(null);
 

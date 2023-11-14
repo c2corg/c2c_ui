@@ -27,6 +27,10 @@ export default {
       type: String,
       required: true,
     },
+    selector: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     letter() {
@@ -50,6 +54,12 @@ export default {
     mapZoom() {
       return Yetix.mapZoom;
     },
+    layerSelector() {
+      return Object.assign(this.selector, {
+        checked: this.showLayer,
+        action: this.onShowLayer,
+      });
+    },
   },
   watch: {
     showLayer() {
@@ -59,7 +69,7 @@ export default {
         this.fetch().then(this.onResult);
       }
       // then, switch visibility
-      this.onShowLayer();
+      this.updateVisibility();
     },
   },
   created() {
@@ -103,6 +113,9 @@ export default {
       // events
       Yetix.$on('mapClick', this.onMapClick);
     }
+
+    // emit event on parent (this component is not instanciated)
+    this.$parent.$emit('layer', this.layerSelector);
   },
   methods: {
     onResult(data) {
@@ -116,6 +129,9 @@ export default {
       this.layer.getSource().addFeatures(features);
     },
     onShowLayer() {
+      Yetix['setShow' + this.capitalizedName](!this.showLayer);
+    },
+    updateVisibility() {
       // set layer visibility
       this.layer.setVisible(this.showLayer);
       // if a feature is active (selected) and layer is visible

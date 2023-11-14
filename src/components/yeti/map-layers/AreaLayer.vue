@@ -6,6 +6,7 @@
 </template>
 <script>
 import layerMixin from './layer';
+import layerSelectorWatcherMixin from './layer-selector-watcher';
 
 import Yetix from '@/components/yeti/Yetix';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
@@ -17,7 +18,7 @@ export default {
     BaseLayers,
     SlopesLayers,
   },
-  mixins: [layerMixin],
+  mixins: [layerMixin, layerSelectorWatcherMixin],
   computed: {
     mapZoom() {
       return Yetix.mapZoom;
@@ -28,10 +29,23 @@ export default {
     showAreas() {
       return Yetix.showAreas;
     },
+    layerSelector() {
+      return {
+        title: this.$gettext('Extent'),
+        checked: this.showAreas,
+        action: this.onShowAreas,
+        disabled: {
+          condition: this.mapZoom > Yetix.BLEND_MODES_MAX_ZOOM,
+          title: this.$gettext('Disabled at this zoom level'),
+          message: this.$gettext('Zoom out and it will be OK'),
+        },
+        image: 'yeti-extent.jpg',
+      };
+    },
   },
   watch: {
     showAreas() {
-      this.onShowAreas();
+      this.updateVisibility();
     },
   },
   created() {
@@ -79,7 +93,9 @@ export default {
     this.map.addLayer(this.groupLayer);
 
     // showAreas checked?
-    this.onShowAreas();
+    this.updateVisibility();
+
+    this.$emit('layer', this.layerSelector);
 
     // only in first mount
     if (this.areas.length === 0) {
@@ -120,6 +136,9 @@ export default {
       Yetix.setAreaOk(areaOk);
     },
     onShowAreas() {
+      Yetix.setShowAreas(!this.showAreas);
+    },
+    updateVisibility() {
       this.areasLayer.setVisible(this.showAreas);
       this.groupLayer.setVisible(this.showAreas);
       this.areasStrokeLayer.setVisible(this.showAreas);

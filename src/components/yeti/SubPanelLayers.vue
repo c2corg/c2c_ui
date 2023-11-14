@@ -4,7 +4,7 @@
       <sub-panel-title><span v-translate>Overlays</span></sub-panel-title>
       <div class="layer-items">
         <div
-          v-for="layer of overlayLayersSelector"
+          v-for="layer of overlaysLayersSelector"
           :key="layer.title"
           class="layer-item"
           :class="{ 'is-small': layer.small }"
@@ -25,19 +25,19 @@
         </div>
       </div>
       <div class="layer-controls">
-        <dropdown-content v-if="showYeti" class="mb-2">
+        <dropdown-content v-for="layer of yetiLayersSelectorChecked" :key="layer.title" class="mb-2">
           <span>
             <fa-icon icon="gear" />
-            <span>{{ yetiLayerSelector.title }}</span>
+            <span>{{ layer.title }}</span>
           </span>
           <template #content>
             <div class="layer-control-item">
-              <slider v-model="yetiLayerSelector.opacity" :min="0" :max="1" :interval="0.01">
+              <slider v-model="layer.opacity" :min="0" :max="1" :interval="0.01">
                 <span v-translate>Opacity</span>
               </slider>
             </div>
             <div class="layer-control-item">
-              <input-checkbox v-model="yetiLayerSelector.blendModes">
+              <input-checkbox v-model="layer.blendModes">
                 <span>Blend pixels</span>
               </input-checkbox>
             </div>
@@ -143,88 +143,19 @@ export default {
         return layer.checked;
       });
     },
-    overlayLayersSelector() {
-      return [
-        {
-          title: this.$gettext('Avalanche bulletins'),
-          checked: this.showAvalancheBulletins,
-          action: this.onShowAvalancheBulletins,
-          image: 'avalanche.jpg',
-        },
-        {
-          title: this.$gettext('Nivose beacons'),
-          checked: this.showNivoses,
-          action: this.onShowNivoses,
-          image: 'nivose.png',
-          small: true,
-        },
-        {
-          title: this.$gettext('ROMMA stations'),
-          checked: this.showRomma,
-          action: this.onShowRomma,
-          image: 'romma.png',
-          small: true,
-        },
-        {
-          title: this.$gettext('FlowCapt sensors'),
-          checked: this.showFlowcapt,
-          action: this.onShowFlowcapt,
-          image: 'flowcapt.png',
-          small: true,
-        },
-      ];
+    overlaysLayersSelector() {
+      return Yetix.overlaysLayersSelector;
     },
     yetiLayersSelector() {
-      return [
-        {
-          title: this.$gettext('YETI Risk'),
-          checked: this.showYeti,
-          action: this.onShowYeti,
-          disabled: {
-            condition: !this.yetiOk,
-            title: this.$gettext('No risk to show yet'),
-            message: this.$gettext('Compute one for a specific zone from the “Risk” tab'),
-          },
-          image: 'yeti-risk.jpg',
-          opacity: Yetix.YETI_LAYER_OPACITY,
-          blendModes: true,
-        },
-        {
-          title: this.$gettext('YETI extent'),
-          checked: this.showAreas,
-          action: this.onShowAreas,
-          disabled: {
-            condition: this.mapZoom > Yetix.BLEND_MODES_MAX_ZOOM,
-            title: this.$gettext('Disabled at this zoom level'),
-            message: this.$gettext('Zoom out and it will be OK'),
-          },
-          image: 'yeti-extent.jpg',
-        },
-      ];
+      return Yetix.yetiLayersSelector;
     },
-    yetiLayerSelector() {
-      return Yetix.yetiLayerSelector;
-    },
-    showAvalancheBulletins() {
-      return Yetix.showAvalancheBulletins;
+    yetiLayersSelectorChecked() {
+      return this.yetiLayersSelector.filter((layer) => {
+        return layer.checked && layer.opacity;
+      });
     },
     showAreas() {
       return Yetix.showAreas;
-    },
-    showNivoses() {
-      return Yetix.showNivoses;
-    },
-    showRomma() {
-      return Yetix.showRomma;
-    },
-    showFlowcapt() {
-      return Yetix.showFlowcapt;
-    },
-    showYeti() {
-      return Yetix.showYeti;
-    },
-    yetiOk() {
-      return Yetix.yetiOk;
     },
   },
   watch: {
@@ -241,29 +172,6 @@ export default {
         Yetix.setShowAreas(true);
         this.showAreasWasTrue = null;
       }
-    },
-  },
-  created() {
-    Yetix.setYetiLayerSelector(this.yetiLayersSelector[0]);
-  },
-  methods: {
-    onShowAvalancheBulletins() {
-      Yetix.setShowAvalancheBulletins(!this.showAvalancheBulletins);
-    },
-    onShowAreas() {
-      Yetix.setShowAreas(!this.showAreas);
-    },
-    onShowNivoses() {
-      Yetix.setShowNivoses(!this.showNivoses);
-    },
-    onShowRomma() {
-      Yetix.setShowRomma(!this.showRomma);
-    },
-    onShowFlowcapt() {
-      Yetix.setShowFlowcapt(!this.showFlowcapt);
-    },
-    onShowYeti() {
-      Yetix.setShowYeti(!this.showYeti);
     },
   },
 };

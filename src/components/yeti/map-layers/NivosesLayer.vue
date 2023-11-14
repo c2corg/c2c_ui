@@ -1,5 +1,5 @@
 <template>
-  <icon-layer :name="name" :color="color">
+  <icon-layer :name="name" :color="color" :selector="layerSelector">
     <span v-translate>Nivose beacon</span>
     <template #overlay>
       <p class="overlay-title">
@@ -43,6 +43,15 @@ export default {
         url2: null,
       },
     };
+  },
+  computed: {
+    layerSelector() {
+      return {
+        title: this.$gettext('Nivose beacons'),
+        image: 'nivose.png',
+        small: true,
+      };
+    },
   },
   created() {
     let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 37" width="50" height="37">

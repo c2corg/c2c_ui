@@ -41,8 +41,8 @@ let defaultState = {
   baseLayersSelector: [],
   slopesLayersSelector: [],
 
-  // yeti layer
-  yetiLayerSelector: null,
+  // yeti layers
+  yetiLayersSelector: [],
   showYeti: false,
   yetiOk: false,
 
@@ -56,6 +56,9 @@ let defaultState = {
   features: [],
   featuresTitle: 'New route',
   featuresLength: 0,
+
+  // overlays selector
+  overlaysLayersSelector: [],
 
   mountains: {
     all: [],
@@ -127,8 +130,8 @@ export default new Vue({
     slopesLayersSelector() {
       return state.slopesLayersSelector;
     },
-    yetiLayerSelector() {
-      return state.yetiLayerSelector;
+    yetiLayersSelector() {
+      return state.yetiLayersSelector;
     },
     showYeti() {
       return state.showYeti;
@@ -162,6 +165,9 @@ export default new Vue({
     },
     featuresLength() {
       return state.featuresLength;
+    },
+    overlaysLayersSelector() {
+      return state.overlaysLayersSelector;
     },
     mountains() {
       return state.mountains;
@@ -217,8 +223,15 @@ export default new Vue({
     setSlopesLayersSelector(layers) {
       state.slopesLayersSelector = layers;
     },
-    setYetiLayerSelector(layer) {
-      state.yetiLayerSelector = layer;
+    addLayerToYetiLayersSelector(layer, index) {
+      // to keep reactivity AND order in array
+      // we need to fill array first with empty data
+      for (let i = 0; i < index; i++) {
+        if (!state.yetiLayersSelector[i]) {
+          this.$set(state.yetiLayersSelector, i, {});
+        }
+      }
+      this.$set(state.yetiLayersSelector, index, layer);
     },
     setShowYeti(showYeti) {
       state.showYeti = showYeti;
@@ -252,6 +265,16 @@ export default new Vue({
     },
     setFeaturesLength(featuresLength) {
       state.featuresLength = featuresLength;
+    },
+    addLayerToOverlaysLayersSelector(layer, index) {
+      // to keep reactivity AND order in array
+      // we need to fill array first with empty data
+      for (let i = 0; i < index; i++) {
+        if (!state.overlaysLayersSelector[i]) {
+          this.$set(state.overlaysLayersSelector, i, {});
+        }
+      }
+      this.$set(state.overlaysLayersSelector, index, layer);
     },
     setAllMountains(mountains) {
       state.mountains.all = mountains;

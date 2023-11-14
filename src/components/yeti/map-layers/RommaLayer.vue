@@ -1,5 +1,5 @@
 <template>
-  <icon-layer :name="name" :color="color">
+  <icon-layer :name="name" :color="color" :selector="layerSelector">
     <span v-translate>ROMMA station</span>
     <template #overlay>
       <a :href="overlay.url" target="_blank">
@@ -26,6 +26,15 @@ export default {
         url: null,
       },
     };
+  },
+  computed: {
+    layerSelector() {
+      return {
+        title: this.$gettext('ROMMA stations'),
+        image: 'romma.png',
+        small: true,
+      };
+    },
   },
   methods: {
     setOverlay(feature) {

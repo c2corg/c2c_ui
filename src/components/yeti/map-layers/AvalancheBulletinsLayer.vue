@@ -268,10 +268,18 @@ export default {
     overlayOrientationsComment() {
       return this.overlayData.orientations.comment;
     },
+    layerSelector() {
+      return {
+        title: this.$gettext('Avalanche bulletins'),
+        checked: this.showAvalancheBulletins,
+        action: this.onShowAvalancheBulletins,
+        image: 'avalanche.jpg',
+      };
+    },
   },
   watch: {
     showAvalancheBulletins() {
-      this.onShowAvalancheBulletins();
+      this.loadAndUpdateAvalancheBulletins();
     },
   },
   mounted() {
@@ -297,6 +305,7 @@ export default {
       Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
       Yetix.$on('mapClick', this.onMapClick);
     }
+    this.$emit('layer', this.layerSelector);
   },
   methods: {
     onMountainsResult(data) {
@@ -332,7 +341,7 @@ export default {
       this.setVisibleMountains();
 
       if (this.showAvalancheBulletins) {
-        this.onShowAvalancheBulletins();
+        this.loadAndUpdateAvalancheBulletins();
       }
     },
     sortMountainsByMassif(mountains) {
@@ -448,6 +457,9 @@ export default {
       }
     },
     onShowAvalancheBulletins() {
+      Yetix.setShowAvalancheBulletins(!this.showAvalancheBulletins);
+    },
+    loadAndUpdateAvalancheBulletins() {
       // first time, bulletins are not loaded yet
       if (!this.bulletinsLoaded) {
         Yetix.setBulletinsLoaded(true);
