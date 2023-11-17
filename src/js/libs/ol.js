@@ -2,13 +2,14 @@ import { Collection, Feature, Map, Overlay, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
+import { pointerMove } from 'ol/events/condition';
 import { boundingExtent, buffer, containsXY, createEmpty, extend, getWidth, intersects } from 'ol/extent';
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
 import { LineString, MultiPolygon, Point, Polygon } from 'ol/geom';
 import { fromExtent } from 'ol/geom/Polygon';
-import { DragAndDrop, Draw, Modify, Snap } from 'ol/interaction';
+import { DragAndDrop, Draw, Modify, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
@@ -45,6 +46,12 @@ export default {
     format,
   },
 
+  events: {
+    condition: {
+      pointerMove,
+    },
+  },
+
   extent: {
     boundingExtent,
     buffer,
@@ -72,6 +79,7 @@ export default {
   interaction: {
     Draw,
     Modify,
+    Select,
     Snap,
     DragAndDrop,
   },

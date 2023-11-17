@@ -88,6 +88,10 @@ export default {
       }),
     });
 
+    this.hoveredStyle = this.style.clone();
+    this.hoveredStyle.setZIndex(1);
+    this.hoveredStyle.getImage().setScale(1.3);
+
     this.overlay = new ol.Overlay({
       positioning: 'top-left',
       offset: [-4, -6],
@@ -116,6 +120,14 @@ export default {
 
     // emit event on parent (this component is not instanciated)
     this.$parent.$emit('layer', this.layerSelector);
+
+    this.map.addInteraction(
+      new ol.interaction.Select({
+        layers: [this.layer],
+        condition: ol.events.condition.pointerMove,
+        style: this.hoveredStyle,
+      })
+    );
   },
   methods: {
     onResult(data) {
@@ -213,7 +225,7 @@ export default {
   position: absolute;
   transform: scale(1.3);
   top: -7px;
-  left: -10px; /* iconSize / 2 */
+  left: -9px; /* iconSize / 2 */
   margin: auto;
   z-index: 2;
   pointer-events: none;
