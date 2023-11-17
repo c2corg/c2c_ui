@@ -1,7 +1,7 @@
 <template>
   <div ref="bulletinsOverlay" class="bulletins-overlay">
     <button class="delete is-small button-close" @click="closeOverlay">x</button>
-    <div class="bulletins-header pt-5 pb-3 has-text-centered">
+    <div class="bulletins-header pb-3 has-text-centered">
       <p class="title is-5 mb-1">
         {{ overlayData.mountainName }}
       </p>
@@ -304,6 +304,22 @@ export default {
 
       Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
       Yetix.$on('mapClick', this.onMapClick);
+
+      let hover = new ol.interaction.Select({
+        layers: [bulletinsLayer],
+        condition: ol.events.condition.pointerMove,
+      });
+      this.map.addInteraction(hover);
+      hover.on('select', (e) => {
+        if (e.selected.length) {
+          let style = e.selected[0].get('normalStyle');
+          let hoveredStyle = style.clone();
+          if (hoveredStyle.getImage()) {
+            hoveredStyle.getImage().setScale(1.2);
+            e.selected[0].setStyle(hoveredStyle);
+          }
+        }
+      });
     }
     this.$emit('layer', this.layerSelector);
   },
@@ -410,6 +426,7 @@ export default {
         .forEach((bulletin) => {
           let danger = bulletin.get('overlayData').danger.max;
           bulletin.setStyle(bulletinsStyle(this.mapZoom, danger));
+          bulletin.set('normalStyle', bulletinsStyle(this.mapZoom, danger));
         });
     },
     onMapMoveEnd() {
@@ -519,6 +536,7 @@ export default {
 
             // set styles
             bulletinsFeature.setStyle(bulletinsStyle(this.mapZoom, zone.danger.max));
+            bulletinsFeature.set('normalStyle', bulletinsStyle(this.mapZoom, zone.danger.max));
             mountain.setStyle(mountainsStyle(mountain, this.mapZoom, zone.danger.max));
 
             mountain.setProperties({ bulletinsFeature });
@@ -662,6 +680,7 @@ export default {
 }
 .bulletins-header {
   background: $primary;
+  padding-top: 2rem;
 }
 .bulletins-header * {
   color: white;
@@ -677,6 +696,7 @@ export default {
   margin: auto;
   z-index: 2;
   pointer-events: none;
+  transform: scale(1.2);
 }
 .country-name {
   opacity: 0.75;
