@@ -1,34 +1,3 @@
-<template>
-  <div>
-    <div class="legend">
-      <div>
-        <div class="legend-button is-pulled-right ol-control">
-          <button type="button" @click="showLegend = !showLegend">
-            <span v-translate>Legend</span>
-          </button>
-        </div>
-      </div>
-      <div class="legend-content" v-show="showLegend === true">
-        <p class="is-italic" v-if="!mapLegend" v-translate>Legend will appear automatically with the generated image</p>
-        <div v-else>
-          <ul>
-            <li v-for="(item, i) of mapLegend.items" :key="i">
-              <span class="legend-color" :style="'background:' + item.color" />
-              <!-- $gettext('Risky slopes') -->
-              <!-- $gettext('Risky slopes, increased risk due to orientation') -->
-              <!-- $gettext('Residual risk >1') -->
-              <!-- $gettext('Residual risk >1.3') -->
-              <!-- $gettext('Residual risk >1.5') -->
-              <span>{{ $gettext(item.text['en']) }}</span>
-            </li>
-          </ul>
-          <!-- $gettext('From danger 3, consider the slopes which dominate the route') -->
-          <p class="is-size-6 is-italic">{{ $gettext(mapLegend.comment['en']) }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 <script>
 import layerMixin from './layer';
 import layerSelectorWatcherMixin from './layer-selector-watcher';
@@ -38,12 +7,6 @@ import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin, layerSelectorWatcherMixin],
-  data() {
-    return {
-      showLegend: undefined,
-      mapLegend: null,
-    };
-  },
   computed: {
     yetiData() {
       return Yetix.yetiData;
@@ -182,16 +145,18 @@ export default {
       );
       // source is set
       Yetix.setYetiOk(true);
-      // set map legend
+      // set yeti legend
       this.setLegend(xml);
     },
     setLegend(xml) {
-      this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
-      this.mapLegend.items.forEach((item) => {
+      let legend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
+      legend.items.forEach((item) => {
         item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
       });
       // add attribution (each attribution on its own line)
-      this.layer.getSource().setAttributions(this.mapLegend.attributions);
+      this.layer.getSource().setAttributions(legend.attributions);
+      // set legend in yetix
+      Yetix.setYetiLegend(legend);
     },
     toLinearRing(extent) {
       let minX = extent[0];
@@ -223,53 +188,8 @@ export default {
       this.layer.setOpacity(this.layer.getOpacity() + 0.01);
     },
   },
+  render() {
+    return null;
+  },
 };
 </script>
-
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
-.legend {
-  position: absolute;
-  z-index: 6;
-  top: 1.25rem;
-  right: 1.25rem;
-
-  .legend-button {
-    position: static;
-
-    button {
-      width: auto;
-      padding: 0 0.5em;
-    }
-  }
-
-  .legend-content {
-    margin-top: 0.5rem;
-    margin-left: 1.25rem;
-    border-radius: 2px;
-    border: 1px solid lightgray;
-    padding: 0.5rem;
-    background: white;
-    clear: both;
-  }
-
-  .legend-color {
-    vertical-align: bottom;
-    display: inline-block;
-    width: 21px;
-    height: 21px;
-    margin-right: 5px;
-  }
-}
-
-@media screen and (max-width: $tablet) {
-  .legend {
-    top: 0.5rem;
-
-    .legend-content {
-      margin-left: 0.5rem;
-    }
-  }
-}
-</style>

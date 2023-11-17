@@ -1,6 +1,7 @@
 <template>
   <div class="column map-container">
     <div style="width: 100%; height: 100%">
+      <yeti-map-legend />
       <div ref="map" style="width: 100%; height: 100%" />
       <map-layers />
       <yeti-layers />
@@ -63,6 +64,7 @@ import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayers from './map-layers/YetiLayers.vue';
 
 import Toast from '@/components/yeti/Toast';
+import YetiMapLegend from '@/components/yeti/YetiMapLegend';
 import Yetix from '@/components/yeti/Yetix';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
@@ -78,6 +80,7 @@ export default {
     RouteLayer,
     Toast,
     YetiLayers,
+    YetiMapLegend,
   },
   data() {
     return {
