@@ -15,6 +15,7 @@
       <div class="legend-content" v-show="showLegend === true">
         <div v-if="atLeastOneLegend">
           <yeti-layer-legend v-if="yetiLegend" class="legend-item"></yeti-layer-legend>
+          <winter-route-layer-legend v-if="winterRouteLegend" class="legend-item"></winter-route-layer-legend>
         </div>
         <p class="is-italic" v-else v-translate>No specific legend to show</p>
       </div>
@@ -24,10 +25,12 @@
 
 <script>
 import Yetix from '@/components/yeti/Yetix';
+import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend';
 import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend';
 
 export default {
   components: {
+    WinterRouteLayerLegend,
     YetiLayerLegend,
   },
   data() {
@@ -39,8 +42,11 @@ export default {
     yetiLegend() {
       return Yetix.yetiLegend;
     },
+    winterRouteLegend() {
+      return Yetix.winterRouteLegend;
+    },
     atLeastOneLegend() {
-      return this.yetiLegend;
+      return this.yetiLegend || this.winterRouteLegend;
     },
   },
 };

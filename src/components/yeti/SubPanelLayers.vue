@@ -9,7 +9,7 @@
           class="layer-item"
           :class="{ 'is-small': layer.small }"
         >
-          <layer-button v-model="layer.checked" :image="layer.image" @change="layer.action">
+          <layer-button v-model="layer.checked" :image="layer.image" :country="layer.country" @change="layer.action">
             <span>{{ layer.title }}</span>
           </layer-button>
         </div>

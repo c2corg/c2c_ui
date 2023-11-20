@@ -1,9 +1,10 @@
 <template>
   <div>
+    <winter-route-layer @layer="onLayer($event, 1)" />
     <avalanche-bulletins-layer @layer="onLayer($event, 0)" />
-    <flowcapt-layer @layer="onLayer($event, 3)" />
-    <nivoses-layer @layer="onLayer($event, 1)" />
-    <romma-layer @layer="onLayer($event, 2)" />
+    <flowcapt-layer @layer="onLayer($event, 4)" />
+    <nivoses-layer @layer="onLayer($event, 2)" />
+    <romma-layer @layer="onLayer($event, 3)" />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import AvalancheBulletinsLayer from '@/components/yeti/map-layers/AvalancheBulle
 import FlowcaptLayer from '@/components/yeti/map-layers/FlowcaptLayer.vue';
 import NivosesLayer from '@/components/yeti/map-layers/NivosesLayer.vue';
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
+import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
 
 export default {
   components: {
@@ -22,6 +24,7 @@ export default {
     FlowcaptLayer,
     NivosesLayer,
     RommaLayer,
+    WinterRouteLayer,
   },
   mixins: [layerMixin],
   methods: {

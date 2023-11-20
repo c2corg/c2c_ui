@@ -68,6 +68,9 @@ let defaultState = {
   bulletinsLoaded: false,
   showAvalancheBulletins: true,
 
+  showWinterRoute: false,
+  winterRouteLegend: null,
+
   nivoses: [],
   showNivoses: false,
 
@@ -182,6 +185,12 @@ export default new Vue({
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
     },
+    showWinterRoute() {
+      return state.showWinterRoute;
+    },
+    winterRouteLegend() {
+      return state.winterRouteLegend;
+    },
     nivoses() {
       return state.nivoses;
     },
@@ -294,6 +303,12 @@ export default new Vue({
     },
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
+    },
+    setShowWinterRoute(showWinterRoute) {
+      state.showWinterRoute = showWinterRoute;
+    },
+    setWinterRouteLegend(winterRouteLegend) {
+      state.winterRouteLegend = winterRouteLegend;
     },
     setNivoses(nivoses) {
       state.nivoses = nivoses;
