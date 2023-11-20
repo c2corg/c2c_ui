@@ -29,6 +29,9 @@ export default {
       if (layer.get('title') === 'IGN maps') {
         layer.getSource().tileGrid.maxZoom = 16;
       }
+      // disable animation on load
+      layer.getSource().tileOptions.transition = 0;
+
       return layer;
     });
 
