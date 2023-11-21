@@ -34,6 +34,16 @@
         </ul>
       </div>
 
+      <div
+        ref="centerOnGeolocation"
+        :title="$gettext('Recenter on your current position')"
+        class="ol-control ol-control-center-on-geolocation"
+      >
+        <button @click="activateCenterOnGeolocation">
+          <fa-icon icon="bullseye" />
+        </button>
+      </div>
+
       <div ref="editMode">
         <edit-mode-button />
       </div>
@@ -64,6 +74,7 @@ import ol from '@/js/libs/ol';
 const DEFAULT_CENTER = [6.25, 45.15];
 const DEFAULT_ZOOM = 6;
 const MAX_ZOOM = 19;
+const TRACKING_INITIAL_ZOOM = 13;
 
 export default {
   components: {
@@ -116,11 +127,20 @@ export default {
       new ol.control.Control({ element: this.$refs.editMode }),
       new ol.control.Control({ element: this.$refs.recenterOnControl }),
       new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
+      new ol.control.Control({ element: this.$refs.centerOnGeolocation }),
     ];
     controls.map((control) => this.map.addControl(control));
 
+    this.geolocation = new ol.Geolocation({
+      trackingOptions: {
+        enableHighAccuracy: true,
+      },
+      projection: this.view.getProjection(),
+    });
+
     // events
     this.map.on('moveend', this.onMapMoveEnd);
+    this.geolocation.on('change:position', this.setCenterOnGeoLocation);
   },
   methods: {
     getExtent(projection) {
@@ -197,6 +217,15 @@ export default {
       this.$refs['toast-layer'].toast();
       Yetix.setActiveTab(0);
     },
+    activateCenterOnGeolocation() {
+      this.geolocation.setTracking(true);
+    },
+    setCenterOnGeoLocation() {
+      let position = this.geolocation.getPosition();
+      this.view.setZoom(TRACKING_INITIAL_ZOOM);
+      this.view.setCenter(position);
+      this.geolocation.setTracking(false);
+    },
   },
 };
 </script>
@@ -260,6 +289,11 @@ $control-margin: 0.5em;
     background: lightgrey;
     cursor: pointer;
   }
+}
+
+.ol-control-center-on-geolocation {
+  top: 92px;
+  left: $control-margin;
 }
 
 .map-control-listitem {
