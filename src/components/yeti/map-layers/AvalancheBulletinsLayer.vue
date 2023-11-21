@@ -258,8 +258,8 @@ export default {
     bulletinsLoaded() {
       return Yetix.bulletinsLoaded;
     },
-    drawingMode() {
-      return Yetix.drawingMode;
+    editMode() {
+      return Yetix.editMode;
     },
     overlayOrientations() {
       // return truthy orientations, in uppercase
@@ -456,8 +456,8 @@ export default {
     },
     onMapClick(evt, clickedFeature) {
       // this will set bulletins overlay
-      // only when showAvalancheBulletins is true and drawing mode is off
-      if (this.showAvalancheBulletins && !this.drawingMode) {
+      // only when showAvalancheBulletins is true and edit mode is off
+      if (this.showAvalancheBulletins && !this.editMode) {
         // get feature from bulletins layer where clicked
         let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
           layerFilter: function (layer) {

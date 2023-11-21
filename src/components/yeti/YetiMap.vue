@@ -34,8 +34,8 @@
         </ul>
       </div>
 
-      <div ref="drawingMode">
-        <drawing-mode />
+      <div ref="editMode">
+        <edit-mode-button />
       </div>
     </div>
 
@@ -54,7 +54,7 @@ import OverlaysLayers from './map-layers/OverlaysLayers.vue';
 import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayers from './map-layers/YetiLayers.vue';
 
-import DrawingMode from '@/components/yeti/DrawingMode';
+import EditModeButton from '@/components/yeti/EditModeButton';
 import Toast from '@/components/yeti/Toast';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend';
 import Yetix from '@/components/yeti/Yetix';
@@ -67,7 +67,7 @@ const MAX_ZOOM = 19;
 
 export default {
   components: {
-    DrawingMode,
+    EditModeButton,
     MapLayers,
     OverlaysLayers,
     RouteLayer,
@@ -113,7 +113,7 @@ export default {
     let controls = [
       new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
       new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
-      new ol.control.Control({ element: this.$refs.drawingMode }),
+      new ol.control.Control({ element: this.$refs.editMode }),
       new ol.control.Control({ element: this.$refs.recenterOnControl }),
       new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
     ];
@@ -298,13 +298,13 @@ $yeti-height: calc(
   }
 }
 
-.ol-control-drawing-mode {
+.ol-control-edit-mode {
   top: $control-margin;
   left: 18.75rem;
 }
 
 @media screen and (max-width: $widescreen) {
-  .ol-control-drawing-mode {
+  .ol-control-edit-mode {
     top: 3rem;
     left: 3rem;
   }

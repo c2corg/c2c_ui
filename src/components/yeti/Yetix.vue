@@ -81,7 +81,7 @@ let defaultState = {
   showFlowcapt: false,
 
   mapZoom: 0,
-  drawingMode: false,
+  editMode: false,
 
   validSimplifyTolerance: false,
 };
@@ -212,8 +212,8 @@ export default new Vue({
     mapZoom() {
       return state.mapZoom;
     },
-    drawingMode() {
-      return state.drawingMode;
+    editMode() {
+      return state.editMode;
     },
     validSimplifyTolerance() {
       return state.validSimplifyTolerance;
@@ -331,23 +331,23 @@ export default new Vue({
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
-    setDrawingMode(drawingMode) {
-      state.drawingMode = drawingMode;
+    setEditMode(editMode) {
+      state.editMode = editMode;
     },
     setValidSimplifyTolerance(validSimplifyTolerance) {
       state.validSimplifyTolerance = validSimplifyTolerance;
       // when validSimplifyTolerance is OK
-      // check state for drawingMode:
+      // check state for editMode:
       // if it's on, store it (tmp), and retrieve state later
       if (validSimplifyTolerance) {
-        if (state.drawingMode) {
-          state.tmpDrawingMode = true;
-          this.setDrawingMode(false);
+        if (state.editMode) {
+          state.tmpEditMode = true;
+          this.setEditMode(false);
         }
       } else {
-        if (state.tmpDrawingMode) {
-          this.setDrawingMode(true);
-          delete state.tmpDrawingMode;
+        if (state.tmpEditMode) {
+          this.setEditMode(true);
+          delete state.tmpEditMode;
         }
       }
     },
