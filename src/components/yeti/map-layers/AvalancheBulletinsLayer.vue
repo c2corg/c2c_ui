@@ -455,6 +455,11 @@ export default {
       }
     },
     onMapClick(evt, clickedFeature) {
+      // do not allow clicks on smaller zoom
+      if (this.mapZoom < MIN_ZOOM) {
+        this.closeOverlay(true);
+        return false;
+      }
       // this will set bulletins overlay
       // only when showAvalancheBulletins is true and edit mode is off
       if (this.showAvalancheBulletins && !this.editMode) {
