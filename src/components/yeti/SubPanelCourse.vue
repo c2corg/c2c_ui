@@ -1,6 +1,7 @@
 <template>
   <div class="yeti-subpanel">
     <sub-panel-title><span v-translate>Route</span></sub-panel-title>
+    <drawing-mode class="drawing-mode-button" />
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -113,10 +114,6 @@
         >
           Upload a GPS track
         </button>
-        <button class="button is-secondary" @click="setDrawingMode">
-          <span v-translate key="1" v-if="!drawingMode">Activate drawing mode</span>
-          <span v-translate key="2" v-else>Disable drawing mode</span>
-        </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
@@ -132,6 +129,7 @@
 </template>
 
 <script>
+import DrawingMode from '@/components/yeti/DrawingMode.vue';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
@@ -143,7 +141,7 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
+  components: { DrawingMode, DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
   data() {
     return {
       newFeaturesTitle: false,
@@ -328,5 +326,12 @@ input[type='file'] {
   .form-export {
     display: block;
   }
+}
+
+.drawing-mode-button {
+  position: absolute;
+  right: 0;
+  top: 0.75rem;
+  z-index: 1;
 }
 </style>
