@@ -113,6 +113,7 @@ export default {
         center: ol.proj.transform(DEFAULT_CENTER, 'EPSG:4326', 'EPSG:3857'),
         zoom: DEFAULT_ZOOM,
         maxZoom: MAX_ZOOM,
+        enableRotation: false,
       }),
     });
     this.view = this.map.getView();
