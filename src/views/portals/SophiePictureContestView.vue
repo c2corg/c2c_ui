@@ -474,7 +474,8 @@ export default {
           author: 'Roland-V',
           image: { document_id: 1588823 },
           category: 'Prix du Public',
-        },],
+        },
+      ],
     },
   },
 
