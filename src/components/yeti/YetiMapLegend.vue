@@ -90,6 +90,8 @@ export default {
 
 .icon {
   position: absolute;
+  top: 7px;
+  right: -10px;
 }
 .icon-notification {
   color: $primary;

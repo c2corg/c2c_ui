@@ -224,7 +224,7 @@ export default {
 @import '~ol/ol.css';
 @import '@/assets/sass/variables';
 
-$control-margin: 0.5em;
+$control-margin: 0.52em;
 
 .ol-control-layer-switcher {
   bottom: 3em;
@@ -355,6 +355,9 @@ $yeti-height: calc(
       background: $grey;
       outline: none;
     }
+  }
+  .ol-control > * {
+    line-height: 1;
   }
 
   .ol-attribution {

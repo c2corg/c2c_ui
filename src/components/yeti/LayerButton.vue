@@ -156,14 +156,21 @@ $height: calc(50 / 14 * 1rem);
   .is-checkradio[type='radio'] + label::after {
     left: calc(50% - ($width / 2) + 0.5rem) !important;
   }
-  .is-checkradio:hover:not([disabled]) + label .layer-image,
+  .is-checkradio:hover:not([disabled]) + label .layer-image {
+    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+  }
   .is-checkradio:focus-visible + label .layer-image {
     box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
   }
   .is-checkradio:checked:not([disabled]) + label::before {
     box-shadow: 0 0 0 2px $white;
   }
-  .is-checkradio:not(:checked):hover:not([disabled]) + label::before,
+  .is-checkradio:not(:checked):hover:not([disabled]) + label::before {
+    border-width: 1px;
+    border-color: #dbdbdb !important;
+    background: white;
+    box-shadow: none;
+  }
   .is-checkradio:not(:checked):focus-visible + label::before {
     border-width: 1px;
     border-color: #dbdbdb !important;
@@ -197,7 +204,9 @@ $height: calc(50 / 14 * 1rem);
   .is-checkradio[type='radio'] + label::before {
     left: 0;
   }
-  .is-checkradio:not(:checked):hover:not([disabled]) + label::before,
+  .is-checkradio:not(:checked):hover:not([disabled]) + label::before {
+    opacity: 0;
+  }
   .is-checkradio:not(:checked):focus-visible + label::before {
     opacity: 0;
   }

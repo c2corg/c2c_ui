@@ -39,7 +39,7 @@ export default {
   }
 
   .ol-control-edit-mode-inner {
-    padding: 0.15rem 0.25rem 0;
+    padding: 0.3rem 0.25rem 0.2rem;
     border-radius: 4px;
     background: $white;
     white-space: nowrap;
@@ -56,7 +56,7 @@ export default {
 .yeti-app {
   .ol-control-edit-mode {
     .is-checkradio[type='checkbox'] + label {
-      font-size: 0.95em;
+      font-size: 0.93em;
       margin-right: 0;
     }
   }

@@ -104,6 +104,7 @@ export default {
   li,
   a {
     height: 100%;
+    outline: none;
   }
 
   li {
