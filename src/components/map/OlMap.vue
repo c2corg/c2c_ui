@@ -12,6 +12,17 @@
       </button>
     </div>
 
+    <div
+      v-show="showPinToTopButton && !isFullscreen"
+      ref="togglePinToTopButton"
+      class="ol-control ol-control-pin-to-top"
+      :title="$gettext('Pin the map to a side of the screen')"
+    >
+      <button @click.stop="$emit('pin-to-top-clicked')">
+        <fa-icon icon="fa-regular fa-window-maximize" />
+      </button>
+    </div>
+
     <div v-show="showLayerSwitcher" ref="layerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div class="ol-control-layer-switcher-layers">
         <header v-translate>Base layer</header>
@@ -249,6 +260,11 @@ export default {
       type: String,
       default: null,
     },
+
+    showPinToTopButton: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -416,6 +432,7 @@ export default {
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
         }),
         new ol.control.ScaleLine(),
+        new ol.control.Control({ element: this.$refs.togglePinToTopButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
         new ol.control.Control({ element: this.$refs.layerSwitcher }),
         new ol.control.Control({ element: this.$refs.useMapAsFilter }),
@@ -1266,8 +1283,13 @@ export default {
 <style lang="scss" scoped>
 $control-margin: 0.5em;
 
+.ol-control-pin-to-top {
+  top: 80px;
+  left: $control-margin;
+}
+
 .ol-control-center-on-geolocation {
-  top: 100px;
+  top: 120px;
   left: $control-margin;
 }
 
