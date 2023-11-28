@@ -580,6 +580,7 @@ $yeti-height: calc(100vh - #{$navbar-height});
   }
   .is-checkradio[type='checkbox']:checked + label::after {
     transform: rotate(45deg) scale(1);
+    border-color: white !important;
   }
   .is-checkradio[type='radio'] + label::after {
     width: 0.5rem !important;
@@ -590,20 +591,12 @@ $yeti-height: calc(100vh - #{$navbar-height});
   }
   .is-checkradio[type='radio']:checked + label::after {
     transform: scale(1);
+    background-color: white !important;
   }
   .is-checkradio[type='checkbox']:checked + label::before,
   .is-checkradio[type='radio']:checked + label::before {
     background: $primary;
-  }
-  .is-checkradio[type='checkbox']:checked + label::before,
-  .is-checkradio[type='radio']:checked + label::before {
     border-color: $primary !important;
-  }
-  .is-checkradio[type='checkbox']:checked + label::after {
-    border-color: white !important;
-  }
-  .is-checkradio[type='radio']:checked + label::after {
-    background-color: white !important;
   }
   .is-checkradio:hover:not([disabled]) + label::before,
   .is-checkradio:focus + label::before {

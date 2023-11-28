@@ -104,9 +104,6 @@ export default {
 $width: calc(70 / 14 * 1rem);
 $height: calc(50 / 14 * 1rem);
 
-.layer-button {
-  text-align: center;
-}
 .layer-image {
   position: relative;
   width: $width;
@@ -140,6 +137,8 @@ $height: calc(50 / 14 * 1rem);
   width: 12px;
 }
 .layer-button {
+  text-align: center;
+
   .is-checkradio[type='checkbox'] + label::before,
   .is-checkradio[type='radio'] + label::before,
   .is-checkradio[type='checkbox'] + label::after,
