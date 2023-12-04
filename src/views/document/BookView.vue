@@ -6,7 +6,13 @@
       :version="version"
       :document-type="documentType"
     ></masked-document-version-info>
-    <document-view-header v-if="document" :document="document" :version="version" />
+    <document-view-header
+      v-if="document"
+      :previous-document="previousDocument"
+      :next-document="nextDocument"
+      :document="document"
+      :version="version"
+    />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3">
         <div class="box">
@@ -40,6 +46,7 @@
         <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
+        <search-navigation-box document-type="book" :documents="search.documents" :index="index" />
       </div>
       <document-print-license :document="document" />
     </div>

@@ -4,49 +4,55 @@
       <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
+      <div class="columns">
+        <div class="column is-narrow" v-if="previousDocument">
+          <document-link :document="previousDocument" class="box">&lt;</document-link>
+        </div>
+        <div class="box column">
+          <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
+            <gotop-button v-if="isPrintingView" />
+            <follow-button v-if="!isPrintingView" :document="document" />
+            <tags-button v-if="!isPrintingView" :document="document" />
 
-      <div class="box">
-        <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
-          <gotop-button v-if="isPrintingView" />
-          <follow-button v-if="!isPrintingView" :document="document" />
-          <tags-button v-if="!isPrintingView" :document="document" />
+            <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
-          <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
+            <span
+              :title="$gettext('Add images')"
+              v-if="isEditable && documentType !== 'image'"
+              @click="$refs.imagesUploader.show()"
+            >
+              <fa-layers>
+                <fa-icon icon="image" />
+                <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
+                <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
+              </fa-layers>
+            </span>
 
-          <span
-            :title="$gettext('Add images')"
-            v-if="isEditable && documentType !== 'image'"
-            @click="$refs.imagesUploader.show()"
-          >
-            <fa-layers>
-              <fa-icon icon="image" />
-              <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
-              <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
-            </fa-layers>
+            <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
+              <icon-edit />
+            </edit-link>
           </span>
+          <h1 class="column title">
+            <slot name="icon-document">
+              <icon-document :document-type="documentType" />
+            </slot>
+            <document-title :document="document" uppercase-first-letter />
 
-          <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
-            <icon-edit />
-          </edit-link>
-        </span>
-        <h1 class="title is-1">
-          <slot name="icon-document">
-            <icon-document :document-type="documentType" />
-          </slot>
-          <document-title :document="document" uppercase-first-letter />
+            <!-- outing specific  -->
+            <span v-if="documentType == 'outing'" class="outing-date is-size-5">
+              {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+            </span>
 
-          <!-- outing specific  -->
-          <span v-if="documentType == 'outing'" class="outing-date is-size-5">
-            {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
-          </span>
-
-          <!-- xreport specific  -->
-          <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-            {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
-          </span>
-        </h1>
+            <!-- xreport specific  -->
+            <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
+              {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
+            </span>
+          </h1>
+        </div>
+        <div class="column is-narrow" v-if="nextDocument">
+          <document-link :document="nextDocument" class="box">&gt;</document-link>
+        </div>
       </div>
-
       <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
     </div>
   </div>
@@ -77,6 +83,14 @@ export default {
 
   props: {
     version: {
+      type: Object,
+      default: null,
+    },
+    previousDocument: {
+      type: Object,
+      default: null,
+    },
+    nextDocument: {
       type: Object,
       default: null,
     },

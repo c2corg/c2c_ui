@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="{ name: documentType, params: { id: document.document_id, lang: lang } }"
+    :to="{ name: documentType, params: { id: document.document_id, lang: lang }, query: document.search_query }"
     :target="target"
     :title="$documentUtils.getDocumentTitle(document, $route.params.lang)"
   >

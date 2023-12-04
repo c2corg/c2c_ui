@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { add_search_queries } from '@/js/add-search-query';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 import viewModeMixin from '@/js/view-mode-mixin';
 
@@ -48,7 +49,8 @@ export default {
   computed: {
     outings() {
       let outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
-
+      let query = this.allOutingsQuery;
+      add_search_queries(query, outings);
       if (this.includeEmptyOutings) {
         return outings;
       } else {
