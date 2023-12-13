@@ -82,7 +82,6 @@
       "Sophie picture context": "Aktion - Publikumspreis"
     },
     "Action is disabled. You must confirm simplified geometry first.": "Diese Aktion ist inaktiv. Bitte zuerst die laufende Vereinfachung bestätigen.",
-    "Activate drawing mode": "Zeichnen-Modus aktivieren",
     "Activity feed": "Aktivitäts-Feed",
     "Activity trackers": "Aktivitätentracker",
     "Add": "Hinzufügen",
@@ -169,7 +168,6 @@
     "Comments are disabled.": "Kommentare sind deaktiviert.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
-    "Compute": "Berechnung",
     "Compute risk": "Risiko berechnen",
     "Conditions": "Voraussetzungen",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
@@ -217,7 +215,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Nur französische Berge sind ab jetzt (durch einen gestrichelten Strich bestimmt).",
     "Current map view is too large. Please zoom to level": "Der Kartenbereich ist zu groß. Zoomen Sie",
     "Current password": "Aktuelles Passwort",
-    "DISABLED": "AUS",
     "Danger level": "Lawinengefahr",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Die Gefahrenstufe aus dem Lawinenbericht gilt für alle Ausrichtungen. Die Windrose kennzeichnet die kritischsten Sektoren, die ein erhöhtes Risiko darstellen.",
     "Danger level:": "Lawinengefahr:",
@@ -266,7 +263,6 @@
     "Differences between versions": "Unterschied zwischen Versionen",
     "Different high/low danger?": "Unterschiedlich hohe/niedrige Gefahr?",
     "Directions (Google Maps)": "Anfahrtsbeschreibung (Google Maps)",
-    "Disable drawing mode": "Zeichnen-Modus deaktivieren",
     "Disclaimer": "Haftungsausschluss",
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
@@ -278,7 +274,6 @@
     "Draw": {
       "yeti": "Zeichnen"
     },
-    "Drawing mode": "Zeichnen-Modus",
     "Drawing tips": "Zeichentipps",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
     "Duration": "Zeit",
@@ -316,7 +311,6 @@
     "FAQ?": "FAQ ?",
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
-    "Features already have elevations. Enable &quot;Force elevations&quot; if you want to override them.": "Die Linien sind bereits mit einer Höhe vermerkt. Bitte \"die Höhen erzwingen\" aktivieren, um sie zu ersetzen.",
     "Feel free to edit it.": "Bitte bearbeiten.",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
@@ -327,7 +321,6 @@
     "FlowCapt sensors": "FlowCapt-Sensoren",
     "Fold section": "Abschnitt falten",
     "Followed users": "Gefolgte Benutzer",
-    "Force elevations": "Die Höhen erzwingen",
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forumname",
     "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten, oder nur miteinander reden.",
@@ -394,7 +387,6 @@
       "Map layer": "Spanien"
     },
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
-    "If checked, all elevations will be recomputed and current values will be lost": "Wenn markiert, werden alle Höhen neu ermittelt, und die aktuellen Werte verloren gehen ",
     "If the route does not exists in our base, you can create it.": "Wenn die Route nicht in unserer Datenbank vorhanden ist, können Sie sie erstellen.",
     "If you can't see this email, please check your spam folder.": "Wenn Sie diese Email nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Wenn Sie Ihre E-Mail-Adresse ändern, wird eine Nachricht an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
@@ -432,11 +424,11 @@
     "Latitude": "Breitengrad",
     "Launch YETI": "YETI starten",
     "Layers": {
+      "$$noContext": "Schichte",
       "Map controls": "Dargestellte Karten"
     },
     "Leave fullscreen": "Vollbild verlassen",
     "Legend": "Legende",
-    "Legend will appear automatically with the generated image": "Die Legende erscheint automatisch mit dem erzeugten Bild",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Bewahren wir unseren Spielplatz! Ich erstelle ein Konto auf Outdoorvision, um meine GPS-Tracks für die Erhaltung und Gestaltung meiner Übungsplätze in Frankreich zu teilen.",
     "Library:": "Bibliothek :",
@@ -798,8 +790,6 @@
     "Will generate new points along route, at regular interval, defined by distance in meters": "Legt neue Punkte der Route entlang, in regelmässigen Abständen, je nach der Distanz in Metern, an.",
     "With the": "Mit der",
     "Without c2c account": "Ohne c2c Konto",
-    "YETI - A preparation tool for your outing": "YETI - Ein Vorbereitungswerkzeug für Ihre Touren",
-    "YETI extent": "YETI Abdeckung",
     "Yeti: a tool to assess the avalanche risk": "YETI: ein Tool, um das Lawinenrisiko zu bewerten",
     "You are trying to compare versions of a document of which at least one version is masked.": "Sie versuchen, Versionen eines Dokuments zu vergleichen, von denen mindestens eine Version maskiert ist.",
     "You are trying to view a masked version of a document.": "Sie versuchen, eine maskierte Version eines Dokuments anzuzeigen.",
@@ -1103,6 +1093,7 @@
     "date_start": "Start-Datum",
     "date_time": "Datum/Uhrzeit",
     "day(s)": "Tag(e)",
+    "days": "Tage",
     "de": {
       "langs": "deutsch"
     },
@@ -2015,7 +2006,6 @@
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
     },
-    "you need to activate drawing mode": "Bitte den Zeichnen-Modus aktivieren",
     "zh": {
       "langs": "Chinesisch"
     }

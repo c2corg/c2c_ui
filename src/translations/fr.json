@@ -37,7 +37,6 @@
     "Accidents/Incidents database:": "Une base de données incidents/accidents :",
     "Account": "Compte",
     "Action is disabled. You must confirm simplified geometry first.": "Cette action est désactivée. Vous devez d’abord confirmer la simplification en cours.",
-    "Activate drawing mode": "Activer le mode dessin",
     "Activity feed": "Fil d'activité",
     "Activity trackers": "Traqueurs d'activité",
     "Add": "Ajouter",
@@ -118,7 +117,6 @@
     "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication des objectifs et attentes de chacun, des craintes et observations en cours de sortie, briefing pour établir de nouvelles stratégies, éléments de conduite de groupe et de responsabilités, groupe habitué à fonctionner ensemble ou non, émulation, etc.",
     "Compare selected versions": "Comparer les versions sélectionnées",
-    "Compute": "Calcul",
     "Compute risk": "Calculer le risque",
     "Configure activity trackers": "Configuration des traqueurs d'activité",
     "Configure cookies": "Paramétrage des cookies",
@@ -161,7 +159,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).",
     "Current map view is too large. Please zoom to level": "La zone de carte est trop grande. Zoomez au niveau",
     "Current password": "Mot de passe actuel",
-    "DISABLED": "DÉSACTIVÉ",
     "Danger level": "Niveau de danger",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Le niveau de danger du bulletin d'avalanche concerne toutes les orientations. La rose des vents distingue les secteurs les plus critiques présentant un risque accru. ",
     "Danger level:": "Niveau de danger :",
@@ -210,7 +207,6 @@
     "Differences between versions": "Différences entre les versions",
     "Different high/low danger?": "Danger haut/bas différents ?",
     "Directions (Google Maps)": "Se rendre à ce lieu (Google Maps)",
-    "Disable drawing mode": "Désactiver le mode dessin",
     "Disclaimer": "Avertissement",
     "Do you really want to leave? you have unsaved changes!": "Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été sauvegardés !",
     "Document quality": "Qualité du document",
@@ -219,7 +215,6 @@
     "Draw": {
       "yeti": "Dessiner"
     },
-    "Drawing mode": "Mode dessin",
     "Drawing tips": "Astuces de dessin",
     "Drop images here or click to upload": "Faites glisser des images ici ou cliquez pour les sélectionner\nCes images seront diffusées sous licence <a href=\"https://www.camptocamp.org/articles/106728\">Creative Commons</a>.\nSi vous n'êtes pas l'auteur de l'image, vous ne pouvez pas la téléverser, à moins que l'auteur n'ait donné son accord pour qu'elle soit diffusée sous la licence Creative-Commons correspondante.\nLes images de plus de 2Mo sont redimensionnées par le navigateur avant d'être envoyées.",
     "Duration": "Durée",
@@ -256,7 +251,6 @@
     "FAQ?": "FAQ ?",
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
-    "Features already have elevations. Enable &quot;Force elevations&quot; if you want to override them.": "Les lignes ont déjà des altitudes. Activez «Forcer les altitudes» pour les remplacer.",
     "Feel free to edit it.": "Éditez-le.",
     "Filter on map extent": "Limiter la recherche à la carte visible",
     "Filter results": "Filtrer",
@@ -267,7 +261,6 @@
     "FlowCapt sensors": "Capteurs FlowCapt",
     "Fold section": "Replier la section",
     "Followed users": "Contributeurs suivis",
-    "Force elevations": "Forcer les altitudes",
     "Forgot password?": "Mot de passe oublié ?",
     "Forum username": "Pseudo forum",
     "Forum: a place to chat about technical matters, or just petty talk": "Un forum pour discuter de sujets techniques ou bavarder",
@@ -335,7 +328,6 @@
       "Map layer": "IGN"
     },
     "Ice and dry climbing gear": "Cascade de glace et dry-tooling",
-    "If checked, all elevations will be recomputed and current values will be lost": "Si coché, toutes les altitudes vont êtres recalculées et les valeurs courantes seront perdues",
     "If the route does not exists in our base, you can create it.": "Si l'itinéraire n'existe pas, vous pouvez le créer.",
     "If you can't see this email, please check your spam folder.": "Pensez à vérifier dans les spams si vous ne voyez pas ce mail.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Si vous changez votre mail, un message sera envoyé à la nouvelle adresse renseignée. Vous devrez cliquer sur le lien qu'il contient pour confirmer le changement d'adresse.",
@@ -373,11 +365,11 @@
     "Last outings": "Dernières sorties",
     "Launch YETI": "Accéder à YETI",
     "Layers": {
+      "$$noContext": "Couches",
       "Map controls": "Sélection des couches"
     },
     "Leave fullscreen": "Quitter le mode plein écran",
     "Legend": "Légende",
-    "Legend will appear automatically with the generated image": "La légende apparaitra automatiquement avec l’image générée",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Préservons notre terrain de jeu ! Je crée un compte sur Outdoorvision pour y partager mes traces GPS pour la préservation et l’aménagement de mes sites de pratique en France.",
     "Library:": "Une bibliothèque comportant ",
@@ -714,8 +706,6 @@
     "Will generate new points along route, at regular interval, defined by distance in meters": "Crée des nouveaux points le long du tracé, à intervalle régulier, défini par la distance en mètres ",
     "With the": "Avec la",
     "Without c2c account": "Participants sans compte c2c",
-    "YETI - A preparation tool for your outing": "YETI - Un outil de préparation de course",
-    "YETI extent": "Couverture YETI",
     "Yeti: a tool to assess the avalanche risk": "Yeti : un outil pour évaluer le risque d’avalanche",
     "You are trying to compare versions of a document of which at least one version is masked.": "Vous essayez de comparer les versions d'un document dont au moins une des versions est masquée.",
     "You are trying to view a masked version of a document.": "Vous essayez de visualiser une version masquée d'un document.",
@@ -975,6 +965,7 @@
     "date_start": "Date de début",
     "date_time": "date/heure",
     "day(s)": "jour(s)",
+    "days": "jours",
     "de": {
       "langs": "allemand"
     },
@@ -1814,7 +1805,6 @@
       "parking_fee_types": "oui"
     },
     "yeti": "YETI",
-    "you need to activate drawing mode": "veuillez activer le «mode dessin»",
     "zh": {
       "langs": "chinois"
     }

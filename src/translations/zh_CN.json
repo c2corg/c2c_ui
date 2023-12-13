@@ -79,7 +79,6 @@
     "Action - prix du public": {
       "Sophie picture context": "行动 - 公众奖"
     },
-    "Activate drawing mode": "激活绘制模式",
     "Activity feed": "活动订阅",
     "Activity trackers": "活动追踪器",
     "Add": "添加",
@@ -161,7 +160,6 @@
     "Comments are disabled.": "评论关闭",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "交流个人目标和期望，出行期间的所想和所看，关于新策略的讨论，小组自我执行和分工的方式，小组共同工作，核心愿望等。",
     "Compare selected versions": "比较选中的版本",
-    "Compute": "计算",
     "Compute risk": "计算风险",
     "Conditions": "条件",
     "Configure activity trackers": "设置活动追踪器",
@@ -209,7 +207,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI不涵盖当前地图视图。目前只有法国山脉（由虚线确定）。",
     "Current map view is too large. Please zoom to level": "当前地图视图太大，请放大到层级",
     "Current password": "当前密码",
-    "DISABLED": "已禁用",
     "Danger level": "危险等级",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "雪崩公告中的危险等级适用于所有朝向。罗盘区分了风险增加的最关键区域。",
     "Danger level:": "危险等级:",
@@ -258,7 +255,6 @@
     "Differences between versions": "不同版本之间的差异",
     "Different high/low danger?": "不同的高或低危险等级？",
     "Directions (Google Maps)": "导航（谷歌地图）",
-    "Disable drawing mode": "禁用绘制模式",
     "Disclaimer": "免责声明",
     "Dispositions": "规定",
     "Distance": "路程",
@@ -270,7 +266,6 @@
     "Draw": {
       "yeti": "绘制"
     },
-    "Drawing mode": "绘制模式",
     "Drawing tips": "绘制技巧",
     "Drop images here or click to upload": "拖拽图片到这里或者点击来上传",
     "Duration": "时长",
@@ -410,11 +405,11 @@
     "Latitude": "纬度",
     "Launch YETI": "运行YETI",
     "Layers": {
+      "$$noContext": "图层",
       "Map controls": "图层"
     },
     "Leave fullscreen": "离开全屏",
     "Legend": "图例",
-    "Legend will appear automatically with the generated image": "图例将与生成的图像一起自动出现",
     "Let's make our feedbacks valuable": "让我们的反馈更有价值",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "让我们保护我们的乐园！我在 Outdoorvision 上创建一个帐户，以分享我的 GPS 轨迹，以保护和设计在法国的活动场地。",
     "Licenses": "许可协议",
@@ -749,8 +744,6 @@
     "Wide and constant": "宽敞且角度不变的雪坡",
     "With the": "使用",
     "Without c2c account": "没有c2c账号",
-    "YETI - A preparation tool for your outing": "YETI - 你的出行准备工具",
-    "YETI extent": "YETI 界面",
     "You are trying to compare versions of a document of which at least one version is masked.": "您正在尝试比较的文档至少有一个版本被屏蔽。",
     "You are trying to view a masked version of a document.": "您正在尝试查看文档的屏蔽版本。",
     "You are using a custom sort": "你正在使用自定义排序",
@@ -1962,7 +1955,6 @@
       "$$noContext": "是",
       "parking_fee_types": "是"
     },
-    "you need to activate drawing mode": "你需要激活绘制模式",
     "zh": {
       "langs": "简体中文"
     }
