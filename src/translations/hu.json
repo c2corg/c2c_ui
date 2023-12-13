@@ -148,7 +148,6 @@
     "Comments are disabled.": "Megjegyzések nincsenek engedélyezve ehhez a dokumentumhoz.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "A személyes célok és elvárások, a kiruccanás alatti gondolatok és megfigyelések leírása, új stratégiák megvitatása, a csoport viselkedésének és a felelősség megosztásának leírása, szokva volt-e a csoport a csapatmunkához, főbb törekvések, stb.",
     "Compare selected versions": "Kiválasztott verziók összehasonlítása",
-    "Compute": "Számítás",
     "Compute risk": "Rizikó számítása",
     "Conditions": "Körülmények",
     "Configure cookies": "Sütibeállítások",
@@ -183,7 +182,6 @@
     "Created on": "Létrehozás dátuma",
     "Creation?": "Létrehozás?",
     "Current password": "Jelenlegi jelszó",
-    "DISABLED": "LETILTVA",
     "Danger level": "Veszélyességi szint",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "A lavinahíradóban jelzett veszélyességi fokozat minden irányú fekvésre vonatkozik. A szélrózsa a legkritikusabb, nagyobb veszélyességű szektorokat jelzi.",
     "Danger level:": "Veszélyességi szint:",
@@ -336,11 +334,11 @@
     "Latitude": "földrajzi szélesség",
     "Launch YETI": "A YETI elindítása",
     "Layers": {
+      "$$noContext": "Rétegek",
       "Map controls": "Rétegek"
     },
     "Leave fullscreen": "Kilépés a teljes képernyő módból",
     "Legend": "Jelmagyarázat",
-    "Legend will appear automatically with the generated image": "A jelmagyarázat automatikusan meg fog jelenni a generált képen",
     "Let's make our feedbacks valuable": "Tegyük a visszajelzésünket hasznossá",
     "Licenses": "Jogosítványok",
     "Lines chunks": "Vonal darabok",
@@ -602,8 +600,6 @@
     "Wide and constant": "Széles és állandó",
     "With the": "Avval",
     "Without c2c account": "c2c fiók nélkül",
-    "YETI - A preparation tool for your outing": "YETI - Egy kiruccanás-tervező alkalmazás",
-    "YETI extent": "YETI kiterjesztés",
     "You are using a custom sort": "Egyéni rendezést használsz",
     "You can choose to remain anonymous": "Dönthetsz úgy, hogy anonim maradsz",
     "You have to be authorized. Please contact administrators of the service if interested.": "Be kell jelentkezned. Kérlek vedd fel a szolgáltatás adminisztrátoraival a kapcsolatot, ha érdekel.",
@@ -1691,7 +1687,6 @@
     "yes": {
       "$$noContext": "igen",
       "parking_fee_types": "igen"
-    },
-    "you need to activate drawing mode": "a rajzolási üzemmódot aktiválnod kell"
+    }
   }
 }

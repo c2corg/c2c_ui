@@ -111,7 +111,6 @@
     "Comments are disabled.": "Comentarios están desactivados.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicación de los objetivos y expectativas, pensamientos y observaciones durante la salida, discusiones sobre nuevas estrategias, la forma en que el grupo se condujo y dividió las responsabilidades, estaba el grupo acostumbrado a trabajar en conjunto, aspiraciones centrales, etc.",
     "Compare selected versions": "Comparar versiones seleccionadas",
-    "Compute": "Calcular",
     "Compute risk": "Calcular el riesgo ",
     "Conditions": "Condiciones",
     "Configure cookies": "Configurar cookies",
@@ -150,7 +149,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI no cubre la vista actual del mapa. Solo las montañas francesas lo son a partir de ahora (determinadas por un trazo discontinuo). ",
     "Current map view is too large. Please zoom to level": "La zona del mapa es demasiada grande. zumar al nivel",
     "Current password": "Contraseña actual",
-    "DISABLED": "Desactivado",
     "Danger level": "Nivel de peligro",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivel de peligro del boletín de avalanchas se aplica a todas las orientaciones. La rosa de los vientos distingue los sectores más críticos que presentan un mayor riesgo.",
     "Danger level:": "Nivel de peligro:",
@@ -207,7 +205,6 @@
     "Draw": {
       "yeti": "Dibuja"
     },
-    "Drawing mode": "Modo dibujo",
     "Drawing tips": "Astucias de dibujo",
     "Drop images here or click to upload": "Arrastra imágenes aquí o haz clic para enviarlas",
     "Duration": "Duración",
@@ -305,6 +302,7 @@
     "Latitude": "Latitud",
     "Launch YETI": "Lanzar YETI",
     "Layers": {
+      "$$noContext": "Selección de las teclas",
       "Map controls": "Selección de las teclas"
     },
     "Leave fullscreen": "Dejar el modo pantalla",
@@ -511,8 +509,6 @@
     "Weather forecast (meteoblue)": "Previsión meteorológica (meteoblue)",
     "Wide and constant": "Amplio y regular",
     "Without c2c account": "Participantes sin cuenta c2c",
-    "YETI - A preparation tool for your outing": "YETI - Una herramienta de preparación para su salida",
-    "YETI extent": "Alcance YETI",
     "You can choose to remain anonymous": "Puede elegir permanecer en el anonimato",
     "You may add associated waypoints, books and articles": "Puedes añadir puntos de ruta, libros y artículos asociados",
     "You need to activate your by clicking the link sent to your email address.": "Debe activarlo haciendo clic en el enlace que se le envió a su dirección de correo electrónico.",
@@ -775,6 +771,7 @@
     "date_start": "Fecha de inicio",
     "date_time": "fecha/horario",
     "day(s)": "Dia(s)",
+    "days": "dias",
     "de": {
       "langs": "alemán"
     },

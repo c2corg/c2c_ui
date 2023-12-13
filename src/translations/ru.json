@@ -148,7 +148,6 @@
     "Comments are disabled.": "комментарии отключены",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Обмен целями , ожиданиями, наблюдениями, соображениями членов группы во время мероприятия. Обсуждение новых стратегий, разделение ответственностей, слаженно ли группа функционирует итп.",
     "Compare selected versions": "Сравнить с выбранной версией",
-    "Compute": "Подсчет",
     "Compute risk": "Вычислить уровень риска",
     "Conditions": "Состояние",
     "Configure activity trackers": "Настроить трекер активности",
@@ -265,7 +264,6 @@
     "Launch YETI": "Использовать YETI",
     "Leave fullscreen": "Выйти из полноэкранного режима",
     "Legend": "Легенда",
-    "Legend will appear automatically with the generated image": "Легенда появится автоматически вместе с созданным изображением",
     "Let's make our feedbacks valuable": "Сделаем ваши отзывы ценными для всех",
     "Licenses": "Лицензия",
     "Lines chunks": "Части линии",
@@ -1167,7 +1165,6 @@
       "$$noContext": "да",
       "parking_fee_types": "да"
     },
-    "you need to activate drawing mode": "вы хотите активировать режим рисования?",
     "zh": {
       "langs": "Китайский"
     }
