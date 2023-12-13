@@ -94,7 +94,7 @@ export default {
   destroyed() {
     // set validSimplifyTolerance to false
     // go back to normal case for simplify tool
-    // and retrieve default value for drawing mode
+    // and retrieve default value for edit mode
     Yetix.setValidSimplifyTolerance(false);
   },
   methods: {

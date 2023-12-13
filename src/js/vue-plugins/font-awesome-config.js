@@ -19,6 +19,7 @@ import { faAtlas } from '@fortawesome/free-solid-svg-icons/faAtlas';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
+import { faBolt } from '@fortawesome/free-solid-svg-icons/faBolt';
 import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faBroom } from '@fortawesome/free-solid-svg-icons/faBroom';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
@@ -249,6 +250,7 @@ export default function install(Vue) {
     faBan,
     faBars,
     faBold,
+    faBolt,
     faBomb,
     faBroom,
     faBug,

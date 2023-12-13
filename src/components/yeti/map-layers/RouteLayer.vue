@@ -83,13 +83,13 @@ export default {
     validMinimumMapZoom() {
       return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
-    drawingMode() {
-      return Yetix.drawingMode;
+    editMode() {
+      return Yetix.editMode;
     },
   },
   watch: {
-    drawingMode() {
-      if (!this.drawingMode) {
+    editMode() {
+      if (!this.editMode) {
         this.disableInteractions();
       } else {
         this.enableInteractions();
@@ -209,7 +209,7 @@ export default {
     onFeature(event) {
       // set features styles
       event.feature.set('highlightedStyle', highlightedLineStyle);
-      // emit new features, only in normal case (drawing)
+      // emit new features, only in normal case (edit/drawing)
       // not in gpx/document case (prevent multiple update for each lines)
       if (!this.loadingExternalFeatures) {
         this.updateFeaturesFromStore();
