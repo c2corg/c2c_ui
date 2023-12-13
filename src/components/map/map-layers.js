@@ -42,13 +42,10 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
   let url;
   switch (layer) {
     case 'GEOGRAPHICALGRIDSYSTEMS.MAPS':
-      url = '//wxs.ign.fr/' + config.ignApiKey + '/geoportail/wmts';
-      break;
-    case 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN':
-      url = '//wxs.ign.fr/altimetrie/geoportail/wmts';
+      url = 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws';
       break;
     default:
-      url = '//wxs.ign.fr/pratique/geoportail/wmts';
+      url = 'https://data.geopf.fr/wmts';
   }
 
   const source = new ol.source.WMTS({
