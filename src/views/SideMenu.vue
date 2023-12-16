@@ -1,7 +1,7 @@
 <template>
   <aside>
     <a :href="'/'" class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo-noel.png" alt="Camptocamp.org" />
     </a>
     <router-link :to="{ name: 'topoguide' }">
       <span
