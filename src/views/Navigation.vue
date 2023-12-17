@@ -15,7 +15,7 @@
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
-      <img src="@/assets/img/logo_noel" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo_noel.png" alt="Camptocamp.org" />
     </a>
 
     <div class="navigation-end">
