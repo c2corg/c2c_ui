@@ -80,6 +80,7 @@
     "Back to edit mode": "Retour en mode édition",
     "Back to the top": "Haut de page",
     "Base layer": "Fond de carte",
+    "Base layers": "Fonds de carte",
     "Basemap (at)": {
       "Map layer": "basemap.at"
     },
@@ -117,6 +118,7 @@
     "Comments are disabled.": "Les commentaires ne sont pas autorisés sur ce document.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Communication des objectifs et attentes de chacun, des craintes et observations en cours de sortie, briefing pour établir de nouvelles stratégies, éléments de conduite de groupe et de responsabilités, groupe habitué à fonctionner ensemble ou non, émulation, etc.",
     "Compare selected versions": "Comparer les versions sélectionnées",
+    "Compute one for a specific zone from the “Risk” tab": "Calculez un risque pour une zone spécifique depuis l’onglet «Risque»",
     "Compute risk": "Calculer le risque",
     "Configure activity trackers": "Configuration des traqueurs d'activité",
     "Configure cookies": "Paramétrage des cookies",
@@ -207,6 +209,7 @@
     "Differences between versions": "Différences entre les versions",
     "Different high/low danger?": "Danger haut/bas différents ?",
     "Directions (Google Maps)": "Se rendre à ce lieu (Google Maps)",
+    "Disabled at this zoom level": "Désactivé à ce niveau de zoom",
     "Disclaimer": "Avertissement",
     "Do you really want to leave? you have unsaved changes!": "Voulez-vous vraiment quitter cette page ? Des changements n'ont pas été sauvegardés !",
     "Document quality": "Qualité du document",
@@ -233,6 +236,7 @@
     "Edit and improve map on Openstreetmap.org": "Éditer et améliorer la carte OpenStreetMap",
     "Edit associations": "Modifier les associations",
     "Edit categories": "Modifier les catégories",
+    "Edit mode": "Mode édition",
     "Edit titles": "Modifier les titres",
     "Elementary": "Élémentaire",
     "Elementary Reduction Method": "méthode de réduction élémentaire",
@@ -248,6 +252,7 @@
     "Expand": "Déplier",
     "Export route": "Exporter l'itinéraire",
     "Export to CSV": "Exporter en CSV",
+    "Extent": "Couverture",
     "FAQ?": "FAQ ?",
     "Fauna protection areas": "Faune",
     "Fauna protection site:": "Site de protection de la faune :",
@@ -368,6 +373,7 @@
       "$$noContext": "Couches",
       "Map controls": "Sélection des couches"
     },
+    "Layers have moved": "Les calques ont été déplacés",
     "Leave fullscreen": "Quitter le mode plein écran",
     "Legend": "Légende",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
@@ -452,8 +458,10 @@
     "No orientation selected": "Pas d’orientations sélectionnées",
     "No reduction factor": "Aucun facteur de réduction",
     "No result found": "Pas de résultat",
+    "No risk to show yet": "Pas encore de risque",
     "No route right now": "Pas d'itinéraire actuellement",
     "No selected hazard potential. Set danger level first.": "Pas de potentiel de danger sélectionné. Entrez d’abord le niveau de danger",
+    "No specific legend to show": "Pas de légende spécifique pour le moment",
     "No title": "Sans titre",
     "No user with this email": {
       "API message": "Il n'existe pas d'utilisateur avec cet email"
@@ -463,6 +471,7 @@
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Le pseudo topoguide sera celui mentionné dans les attributions des contenus auxquels vous contribuez.",
+    "Now on the left, on the “Layers” tab": "Retrouvez-les à gauche, dans l’onglet «Calques»",
     "Number of documents": "Nombre de documents",
     "Numbers": "Données",
     "On a drawn line": "Sur une ligne",
@@ -472,6 +481,7 @@
       "API message": "Seuls les documents récents (24h) peuvent être supprimés. Contactez la modération pour supprimer ce document."
     },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
+    "Opacity": "Opacité",
     "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
     "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
     "Open in a new tab": "Ouvrir dans un nouvel onglet",
@@ -487,6 +497,7 @@
     "Outing": "Itinéraire",
     "Outings statistics": "Statistiques des sorties",
     "Outings, with the latest conditions in the mountains": "des sorties pour avoir les dernières conditions",
+    "Overlays": "Calques",
     "Page not found": "Page non trouvée",
     "Paragliding outings": "Sorties parapente",
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
@@ -551,11 +562,13 @@
     "Results only": "Uniquement les résultats",
     "Retry": "Réessayer",
     "Revoke": "Révoquer",
+    "Risk": "Risque",
     "Risky slopes": "Pentes à risque",
     "Risky slopes, increased risk due to orientation": "Pentes à risque, orientation critique",
     "Rotate image left": "Tourner vers la gauche",
     "Rotate image right": "Tourner vers la droite",
     "Route": "Itinéraire",
+    "Route on map": "Itinéraire sur la carte",
     "Routes to explore": "des itinéraires à parcourir",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
@@ -601,6 +614,7 @@
     "Social cookies": "Cookies sociaux",
     "Soft mobility outing": "Sortie en mobilité douce",
     "Some points are out of extent": "Points hors zone",
+    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Certains itinéraires présentent des passages délicats exposés à un risque de glissade dangereuse (risque de percussion ou de chute de grande hauteur), de crevasses, de séracs ou de noyade par rupture de la glace sur un lac de montagne. Pour réduire le risque de glissade, il est souvent opportun de progresser à pied, chaussé de crampons avec un encordement adéquat.",
     "Sophie Picture Contest": "Concours Photo Sophie",
     "Sort by": "Trier par",
     "Source:": "Document à fusionner (source) :",
@@ -664,6 +678,7 @@
     "Tracking devices": "Dispositifs GPS",
     "Translate into an other lang": "Traduire dans une autre langue",
     "Transport & road or PT access": "Accès routier/TC",
+    "Tricky sections": "Passages délicats",
     "Types and styles": "Types et styles",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Type d'assurage et de protection, vérifications entre grimpeurs, tests de stabilité du manteau neigeux, test des DVA, etc.",
     "Unblock account": "Débloquer cet utilisateur",
@@ -704,8 +719,10 @@
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Pourquoi avoir choisi cette sortie ? A quel point étiez-vous attaché à l'objectif fixé ? Considérez l'influence de possibles choix effectués en amont (jours de congés, long trajet, réservations de nuitées...), des efforts réalisés jusque-là, de la rareté de l'opportunité, etc.",
     "Wide and constant": "Large et régulière",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Crée des nouveaux points le long du tracé, à intervalle régulier, défini par la distance en mètres ",
+    "Winter hiking routes": "Itinéraires ski/surf",
     "With the": "Avec la",
     "Without c2c account": "Participants sans compte c2c",
+    "YETI Risk": "Risque YETI",
     "Yeti: a tool to assess the avalanche risk": "Yeti : un outil pour évaluer le risque d’avalanche",
     "You are trying to compare versions of a document of which at least one version is masked.": "Vous essayez de comparer les versions d'un document dont au moins une des versions est masquée.",
     "You are trying to view a masked version of a document.": "Vous essayez de visualiser une version masquée d'un document.",
@@ -724,6 +741,7 @@
     "Zoom out": {
       "Map controls": "Dézoomer"
     },
+    "Zoom out and it will be OK": "Dézoomer pour rendre actif",
     "a new point on an existing line": "un nouveau point sur une ligne existante",
     "access": {
       "$$noContext": "accès routier / transports en commun",
@@ -1805,6 +1823,7 @@
       "parking_fee_types": "oui"
     },
     "yeti": "YETI",
+    "you need to activate edit mode": "il vous faut activer le mode édition",
     "zh": {
       "langs": "chinois"
     }
