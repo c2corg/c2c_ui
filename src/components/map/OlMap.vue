@@ -1170,18 +1170,10 @@ export default {
     // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
     recenterOn(item) {
       const feature = geoJSONFormat.readFeature(item);
-      let extent = feature.get('extent');
       let coordinates = feature.getGeometry().flatCoordinates;
-
-      if (extent) {
-        extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
-        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 });
-      } else {
-        coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857');
-        this.view.setCenter(coordinates);
-        this.view.setZoom(16);
-      }
-
+      coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857');
+      this.view.setCenter(coordinates);
+      this.view.setZoom(16);
       this.showRecenterOnPropositions = false;
     },
 
