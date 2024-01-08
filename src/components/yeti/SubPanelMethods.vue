@@ -389,14 +389,9 @@ table:not(:last-child) {
       left: 0.25rem !important;
     }
     &.yetitab-label:after {
-      top: 1em !important;
-      left: 1em !important;
+      top: 0.75rem !important;
+      left: 0.75rem !important;
     }
-  }
-
-  .is-checkradio:checked + label:after {
-    top: 0.25rem !important;
-    left: 0.25rem !important;
   }
 }
 

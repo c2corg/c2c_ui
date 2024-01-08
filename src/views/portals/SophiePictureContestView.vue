@@ -444,7 +444,38 @@ export default {
     2023: {
       year: 2023,
       documentId: 1575347,
-      winners: [],
+      winners: [
+        {
+          title: "Epée d'Entrèves",
+          author: 'Roland-V',
+          image: { document_id: 1588823 },
+          category: 'Action',
+        },
+        {
+          title: 'Paysage',
+          author: 'Thomas Henninger',
+          image: { document_id: 1586984 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Silhouette',
+          author: 'Bruno Le Feuvre',
+          image: { document_id: 1588572 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Le Chablais, depuis le Jura',
+          author: 'Sylvain Chapeland',
+          image: { document_id: 1589244 },
+          category: 'Topoguide',
+        },
+        {
+          title: "Epée d'Entrèves",
+          author: 'Roland-V',
+          image: { document_id: 1588823 },
+          category: 'Prix du Public',
+        },
+      ],
     },
   },
 

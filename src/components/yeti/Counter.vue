@@ -1,6 +1,6 @@
 <template>
   <span class="yeti-counter" :class="{ 'has-background-primary': isPrimary }">
-    <slot />
+    <span><slot /></span>
   </span>
 </template>
 
@@ -20,16 +20,21 @@ export default {
 
 .yeti-counter {
   display: inline-block;
-  width: 1.1rem;
-  height: 1.1rem;
-  vertical-align: 0.1rem;
+  min-width: 1em;
+  height: 1em;
+  line-height: 1em;
   margin-left: 0.25rem;
+  padding: 0 0.25rem;
   background: $grey-lighter;
   color: $grey-darker;
-  border-radius: 50%;
-  font-size: 0.72em;
+  border-radius: 1em;
   font-weight: normal;
   text-align: center;
+
+  span {
+    font-size: 0.72em;
+    vertical-align: 0.125em;
+  }
 
   &.has-background-primary {
     color: $white;

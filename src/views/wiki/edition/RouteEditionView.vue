@@ -195,6 +195,12 @@ export default {
     'document.associations.waypoints': 'onWaypointsAssociation',
     'document.geometry.geom': 'onGeometryUpdate',
     'document.geometry.geom_detail': 'onGeometryUpdate',
+    'document.climbing_outdoor_type': {
+      handler(climbingType) {
+        this.handleRockFreeRating(climbingType);
+      },
+      immediate: true,
+    },
   },
 
   methods: {
@@ -202,6 +208,18 @@ export default {
       // on creation from a waypoint, set this waypoint as main
       if (this.mode === 'add' && this.$route.query.w) {
         this.document.main_waypoint_id = parseInt(this.$route.query.w);
+      }
+    },
+
+    beforeSave() {
+      if (this.document.climbing_outdoor_type === 'bloc') {
+        this.handleRockFreeRating('single');
+      }
+    },
+
+    afterSave() {
+      if (this.document.climbing_outdoor_type === 'bloc') {
+        this.handleRockFreeRating('bloc');
       }
     },
 
@@ -224,6 +242,20 @@ export default {
       // on creation mode, if main waypoint is null, and some waypoints are associated, take the first
       if (this.mode === 'add' && this.document.main_waypoint_id === null && waypoints.length !== 0) {
         this.document.main_waypoint_id = waypoints[0].document_id;
+      }
+    },
+
+    handleRockFreeRating(climbingType) {
+      const documentRating = this.document.rock_free_rating;
+      const ratings = this.fields.rock_free_rating.values;
+      switch (climbingType) {
+        case 'bloc':
+          this.document.rock_free_rating = documentRating.toUpperCase();
+          this.fields.rock_free_rating.values = ratings.map((grade) => grade.toUpperCase());
+          break;
+        default:
+          this.document.rock_free_rating = documentRating.toLowerCase();
+          this.fields.rock_free_rating.values = ratings.map((grade) => grade.toLowerCase());
       }
     },
   },

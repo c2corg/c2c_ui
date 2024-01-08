@@ -9,35 +9,29 @@
         <input-checkbox v-model="interpolate" class="mt-2">
           <span v-translate>Add more points</span>
         </input-checkbox>
-        <div v-if="interpolate" class="control-subpanel">
-          <label for="inputInterpolate" v-translate>Distance</label>
-          <input
-            id="inputInterpolate"
-            class="input is-small input-interpolate ml-2"
-            type="number"
-            min="5"
-            step="5"
-            v-model.number="interpolateValue"
-          />
-          <info inline class="ml-0 pl-0" v-if="atLeastOneLineChunkHasTooMuchPoints">
-            <span v-translate key="1">Too much points</span>
-          </info>
-          <info inline class="ml-0 pl-0" v-if="interpolateValueInvalid">
-            <span v-translate key="2">Invalid value</span>
+        <div v-if="interpolate">
+          <div class="control-subpanel">
+            <label for="inputInterpolate" v-translate>Distance</label>
+            <input
+              id="inputInterpolate"
+              class="input is-small input-interpolate ml-2"
+              type="number"
+              min="5"
+              step="5"
+              v-model.number="interpolateValue"
+            />
+            <info inline class="ml-0 pl-0" v-if="atLeastOneLineChunkHasTooMuchPoints">
+              <span v-translate key="1">Too much points</span>
+            </info>
+            <info inline class="ml-0 pl-0" v-if="interpolateValueInvalid">
+              <span v-translate key="2">Invalid value</span>
+            </info>
+          </div>
+          <info type="help" class="column">
+            <p v-translate>Will generate new points along route, at regular interval, defined by distance in meters</p>
           </info>
         </div>
-        <info type="help" class="column">
-          <p v-translate>Will generate new points along route, at regular interval, defined by distance in meters</p>
-        </info>
       </div>
-      <div>
-        <input-checkbox v-model="override" class="mt-2">
-          <span v-translate>Force elevations</span>
-        </input-checkbox>
-      </div>
-      <info type="help" class="column">
-        <p v-translate>If checked, all elevations will be recomputed and current values will be lost</p>
-      </info>
     </div>
     <div class="is-flex is-justify-content-end is-align-items-center">
       <info inline v-if="routeIntersectsYetiAreas">
@@ -81,7 +75,6 @@ export default {
       loading: false,
       interpolate: false,
       interpolateValue: 50,
-      override: false,
       i18n_: {
         elevation_legend: this.$gettext('Elevation (m)'),
         distance_legend: this.$gettext('Distance (km)'),
@@ -90,9 +83,6 @@ export default {
         actionDisabled: this.$gettext('Action is disabled. You must confirm simplified geometry first.'),
         fromApi: this.$gettext('One or more route could not be processed:'),
         interpolateValue: this.$gettext('Interpolate value should be a number > 0'),
-        overrideElevation: this.$gettext(
-          'Features already have elevations. Enable "Force elevations" if you want to override them.'
-        ),
         tooMuchPoints: this.$gettext(
           'One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.'
         ),
@@ -108,13 +98,6 @@ export default {
     },
     validSimplifyTolerance() {
       return Yetix.validSimplifyTolerance;
-    },
-    atLeastOneFeatureHas3D() {
-      let features = this.features.filter((feature) => {
-        let coords = feature.getGeometry().getCoordinates();
-        return !coords.some((coord) => coord.length >= 3 && coord[2] !== 0);
-      });
-      return features.length === 0;
     },
     atLeastOneLineChunkHasTooMuchPoints() {
       if (this.interpolateValueInvalid) {
@@ -185,18 +168,12 @@ export default {
       if (this.interpolateValueInvalid) {
         return window.alert(this.errors.interpolateValue);
       }
-      if (!this.override && this.atLeastOneFeatureHas3D) {
-        return window.alert(this.errors.overrideElevation);
-      }
       // start loading
       this.loading = true;
       // and defer (next cycle)
       setTimeout(() => {
-        if (this.override) {
-          // when elevation is forced, start by removing all elevations
-          this.removeAllElevations();
-        }
-
+        // start by removing all elevations
+        this.removeAllElevations();
         // interpolateValue is 5 meters min, or 0 if not checked
         let interpolateValue = this.interpolate ? Math.max(MIN_INTERPOLATE_VALUE, this.interpolateValue) : 0;
 

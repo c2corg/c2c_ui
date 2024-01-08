@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -35,26 +35,26 @@ jobs:
       - name: Docker meta
         id: docker_meta
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/metadata-action@v4.6.0
+        uses: docker/metadata-action@v5.4.0
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
       - name: Login to DockerHub
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push Docker images
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v7
+        uses: tj-actions/branch-names@v8
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
@@ -65,7 +65,7 @@ jobs:
         env:
           GITHUB_PAGES_BRANCH: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Upload artifact for github pages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: github-pages
           path: dist/*
@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v7
+        uses: tj-actions/branch-names@v8
       - name: Create clean branch name
         id: clean_branch
         run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
@@ -93,7 +93,7 @@ jobs:
       - name: Remove current branch files
         run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: github-pages
           path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
@@ -104,7 +104,7 @@ jobs:
           git add .
           git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages

@@ -1,7 +1,7 @@
 <template>
   <div ref="bulletinsOverlay" class="bulletins-overlay">
     <button class="delete is-small button-close" @click="closeOverlay">x</button>
-    <div class="bulletins-header pt-5 pb-3 has-text-centered">
+    <div class="bulletins-header pb-3 has-text-centered">
       <p class="title is-5 mb-1">
         {{ overlayData.mountainName }}
       </p>
@@ -95,10 +95,6 @@ let mountainsStyle = (feature, mapZoom, danger) => {
 
   let styles = [
     new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0, 0, 0, 0.85)',
-        width: strokeWidth,
-      }),
       fill: new ol.style.Fill({
         color: `rgba(${dangerFill[danger]}, ${opacity})`,
       }),
@@ -115,6 +111,16 @@ let mountainsStyle = (feature, mapZoom, danger) => {
       })
     );
   }
+
+  // add stroke on top
+  styles.push(
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.85)',
+        width: strokeWidth,
+      }),
+    })
+  );
 
   return styles;
 };
@@ -134,11 +140,7 @@ let bulletinsIcon = (danger) => {
       <path d="m50,0l50,50-50,50-50-50zv5L21,33l19-10L50,26l9-8L80,38l2-1L50,5M5,50L50,95L95,50" />
   `;
 
-  if (danger !== 0) {
-    svg += `
-      <text x="50" y="83" text-anchor="middle" font-family="sans-serif" font-size="40px" font-weight="bold">${danger}</text>
-    `;
-  } else {
+  if (danger === 0) {
     svg += `
       <g stroke-width="5" stroke="black">
         <line x1="40" x2="60" y1="58" y2="78" />
@@ -146,20 +148,40 @@ let bulletinsIcon = (danger) => {
       </g>
     `;
   }
-
+  if (danger === 1) {
+    svg += `
+      <path d="m54 84h-6l-0.1-21.1c-2.3 2.1-4.9 4-8 5v-5.6c1.6-0.5 3.2-2 5.1-3.4 1.9-1.5 3.1-3 3.8-4.9h5z" />
+    `;
+  }
   if (danger === 2) {
     svg += `
+      <path d="m60 77v5.1l-20 0.1c0.2-2.1 1-3.9 2.1-5.7q1.6-2.7 6.4-7.2 3.9-3.6 4.8-4.9 1.2-1.8 1.2-3.5 0-2-1.1-3-1-1-2.8-1-1.8 0-2.8 1.1c-0.7 0.7-1.6 1.3-1.7 3h-5.9c0.4-3.1 2-5.5 3.8-6.8q2.7-2.1 6.7-2.1 4.5 0 7 2.4 2.6 2.4 2.6 5.9 0 2.1-0.8 3.9-0.7 1.8-2.3 3.8-1 1.4-3.7 3.9-2.8 2.5-3.5 3.3c-0.5 0.5-0.8 1.3-1.1 1.8 0 0 11.1-0.1 11.1-0.1z" />
+
       <path d="M86,45a7,7,0,106.5-13.5a7,7,0,00-10.5-8a5.4,5.4,0,00-10.2,3" />
       <path d="M69,27L86,44a5,5,0,104-12a5,5,0,10-9-5a3,3,0,10-8,0" fill="white" />
       <path d="M85,32a1,1,0,110,8v-2a1,1,0,100-4" />
     `;
-  } else if (danger === 3) {
+  }
+  if (danger === 3) {
     svg += `
+      <path d="m58 81q-2.9 2.8-7.2 2.8-4.1 0-6.7-2.3c-1.8-1.6-2.1-4.2-2.4-6.7h5c0.2 1.4 0.5 2.4 1.2 3.1q1.2 1.1 2.9 1.1 1.7 0 3-1.3 1.2-1.4 1.2-3.7c0-1.4 0.1-1.6-0.7-2.4-0.8-0.9-1.3-1.8-2.7-1.8-1.4-0.1-2.6 0-3.9 0l0.1-4c3.3 0 3.9-1 4.7-1.7q1.2-1.1 1.2-2.8 0-1.5-0.9-2.4-0.9-0.9-2.3-0.9-1.5 0-2.5 1c-0.7 0.7-1.2 1.5-1.4 2.8h-5c0.4-1.8 0.7-4 1.5-5.1q1.1-1.6 3.1-2.6 2-0.9 4.4-0.9 4.3 0 6.8 2.7 2.1 2.2 2.1 5 0 3.9-4.3 6.3 2.6 0.5 4.1 2.5 1.6 1.9 1.6 4.6 0 3.9-2.9 6.7z" />
+
       <path d="M54,22L79,50h33a5,5,0,10-4-22.3a11.3,11.3,0,00-20,0q-8-2,-14,6" />
       <path d="M55,21L82,48h30a5,5,0,10-5-18a9.7,9.7,0,00-18,0q-7-2,-11,3L60,16" fill="white" />
       <path d="M59,18l25,25-1.5,1.5-25-25M87,38a1,1,0,1110,5l-2-1a1,1,0,10-6-3" />
     `;
-  } else if (danger === 4 || danger === 5) {
+  }
+  if (danger === 4) {
+    svg += `
+      <path d="m60 78h-3l-0.1 6-4.9-0.1 0.1-5.9h-13.1v-4.9l13.1-19.1h4.8l0.1 19 3-0.1zm-7.9-4.9l-0.1-10.1-7.9 10.1z" />
+    `;
+  }
+  if (danger === 5) {
+    svg += `
+      <path d="m58 80q-2.8 3.8-7.9 3.8-4.1 0-6.6-2.2-2.6-2.1-3.1-5.8h5.6c0.1 1.2 0.7 1.7 1.4 2.4q1.2 1.1 2.7 1.1 1.8 0 3-1.4 1.2-1.4 1.2-4.3 0-2.7-1.2-4.1-1.2-1.3-3.1-1.3c-1.6 0-2.7 0.2-4 1.6h-5l3.1-15.9h14.9v4.9h-10.9l-1 6c1.2-0.6 2.8-1.1 4.1-1.1q3.7 0 6.3 2.7 2.6 2.8 2.6 7.1 0 3.6-2.1 6.5z" />
+    `;
+  }
+  if (danger === 4 || danger === 5) {
     svg += `
       <path d="M54,22L79,50h52a12.5,12.5,0,001.5-24.4a7,7,0,00-8.2-7a11.9,11.9,0,00-22.5-2q-11-1,-14,7q-10-2-14,4" />
       <path d="M52,24L77,48h50a5,5,0,103-21a5,5,0,00-7-6a10.3,10.3,0,00-20-2q-11-2,-14,7q-10-3-14,4L60,16" fill="white" />
@@ -236,8 +258,8 @@ export default {
     bulletinsLoaded() {
       return Yetix.bulletinsLoaded;
     },
-    drawingMode() {
-      return Yetix.drawingMode;
+    editMode() {
+      return Yetix.editMode;
     },
     overlayOrientations() {
       // return truthy orientations, in uppercase
@@ -262,10 +284,18 @@ export default {
     overlayOrientationsComment() {
       return this.overlayData.orientations.comment;
     },
+    layerSelector() {
+      return {
+        title: this.$gettext('Avalanche bulletins'),
+        checked: this.showAvalancheBulletins,
+        action: this.onShowAvalancheBulletins,
+        image: 'avalanche.jpg',
+      };
+    },
   },
   watch: {
     showAvalancheBulletins() {
-      this.onShowAvalancheBulletins();
+      this.loadAndUpdateAvalancheBulletins();
     },
   },
   mounted() {
@@ -290,7 +320,24 @@ export default {
 
       Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
       Yetix.$on('mapClick', this.onMapClick);
+
+      let hover = new ol.interaction.Select({
+        layers: [bulletinsLayer],
+        condition: ol.events.condition.pointerMove,
+      });
+      this.map.addInteraction(hover);
+      hover.on('select', (e) => {
+        if (e.selected.length) {
+          let style = e.selected[0].get('normalStyle');
+          let hoveredStyle = style.clone();
+          if (hoveredStyle.getImage()) {
+            hoveredStyle.getImage().setScale(1.2);
+            e.selected[0].setStyle(hoveredStyle);
+          }
+        }
+      });
     }
+    this.$emit('layer', this.layerSelector);
   },
   methods: {
     onMountainsResult(data) {
@@ -326,7 +373,7 @@ export default {
       this.setVisibleMountains();
 
       if (this.showAvalancheBulletins) {
-        this.onShowAvalancheBulletins();
+        this.loadAndUpdateAvalancheBulletins();
       }
     },
     sortMountainsByMassif(mountains) {
@@ -395,6 +442,7 @@ export default {
         .forEach((bulletin) => {
           let danger = bulletin.get('overlayData').danger.max;
           bulletin.setStyle(bulletinsStyle(this.mapZoom, danger));
+          bulletin.set('normalStyle', bulletinsStyle(this.mapZoom, danger));
         });
     },
     onMapMoveEnd() {
@@ -407,9 +455,14 @@ export default {
       }
     },
     onMapClick(evt, clickedFeature) {
+      // do not allow clicks on smaller zoom
+      if (this.mapZoom < MIN_ZOOM) {
+        this.closeOverlay(true);
+        return false;
+      }
       // this will set bulletins overlay
-      // only when showAvalancheBulletins is true and drawing mode is off
-      if (this.showAvalancheBulletins && !this.drawingMode) {
+      // only when showAvalancheBulletins is true and edit mode is off
+      if (this.showAvalancheBulletins && !this.editMode) {
         // get feature from bulletins layer where clicked
         let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
           layerFilter: function (layer) {
@@ -442,6 +495,9 @@ export default {
       }
     },
     onShowAvalancheBulletins() {
+      Yetix.setShowAvalancheBulletins(!this.showAvalancheBulletins);
+    },
+    loadAndUpdateAvalancheBulletins() {
       // first time, bulletins are not loaded yet
       if (!this.bulletinsLoaded) {
         Yetix.setBulletinsLoaded(true);
@@ -501,6 +557,7 @@ export default {
 
             // set styles
             bulletinsFeature.setStyle(bulletinsStyle(this.mapZoom, zone.danger.max));
+            bulletinsFeature.set('normalStyle', bulletinsStyle(this.mapZoom, zone.danger.max));
             mountain.setStyle(mountainsStyle(mountain, this.mapZoom, zone.danger.max));
 
             mountain.setProperties({ bulletinsFeature });
@@ -644,6 +701,7 @@ export default {
 }
 .bulletins-header {
   background: $primary;
+  padding-top: 2rem;
 }
 .bulletins-header * {
   color: white;
@@ -659,6 +717,7 @@ export default {
   margin: auto;
   z-index: 2;
   pointer-events: none;
+  transform: scale(1.2);
 }
 .country-name {
   opacity: 0.75;

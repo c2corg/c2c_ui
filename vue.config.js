@@ -84,7 +84,6 @@ const result = {
 
 const config = {
   routerMode: 'history', // for pretty urls
-  ignApiKey: undefined,
   bingApiKey: undefined,
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isBackendSelectable: true,
@@ -157,7 +156,6 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     modernThumbnailsId: 0,
   };
 
-  config.ignApiKey = 'hzuh5yjuto8lqbqs2njo0che'; // Key valid for localhost (Expires 08/11/2019)
   config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj';
 
   // dev bundles are huge, no check
@@ -185,7 +183,6 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 } else if (process.env.BUILD_ENV === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
 
-  config.ignApiKey = '1qdmi4d0spl50eef78ftvm3j';
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
   config.isBackendSelectable = false; // explicit flag

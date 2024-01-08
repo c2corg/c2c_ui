@@ -1,5 +1,5 @@
 <template>
-  <fa-icon icon="life-ring" :fixed-width="fixedWidth" />
+  <fa-icon icon="info-circle" :fixed-width="fixedWidth" />
 </template>
 
 <script>

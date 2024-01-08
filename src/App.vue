@@ -50,18 +50,42 @@ export default {
 
   mounted() {
     document.getElementById('splashscreen').style.display = 'none';
+    this.updateWidth();
+    window.addEventListener('resize', this.updateWidth);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth);
   },
 
   methods: {
     hideSideMenuOnMobile() {
       this.alternativeSideMenu = false;
     },
+    updateWidth() {
+      // allows reactive css when body width changes because map is pinned
+      // (unlike the css @media(max-width) this is replacing)
+
+      const bulmaBreakpoints = {
+        tablet: 769,
+        desktop: 1024,
+        widescreen: 1216,
+        fullhd: 1408,
+      };
+      const width = this.$el.offsetWidth;
+      if (width <= bulmaBreakpoints.tablet) {
+        this.$el.dataset.width = 'mobile';
+      } else if (width <= bulmaBreakpoints.desktop) {
+        this.$el.dataset.width = 'tablet';
+      } else {
+        this.$el.dataset.width = 'desktop';
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss">
-$sidemenu-width: 200px;
 $body-height: calc(100vh - #{$navbar-height});
 
 html {
@@ -119,70 +143,55 @@ body,
   flex-flow: column;
 }
 
-@media screen and (max-width: $tablet) {
-  .side-menu {
-    left: -$sidemenu-width;
+@media screen {
+  [data-width='mobile'] {
+    .side-menu {
+      left: -$sidemenu-width;
+    }
+
+    .alternative-side-menu {
+      left: 0;
+    }
+
+    .page-content {
+      margin-left: 0;
+    }
+
+    .section {
+      padding: 0.75rem !important;
+    }
+
+    .box:not(:last-child),
+    .feed-card {
+      margin-bottom: 0.75rem !important;
+    }
   }
 
-  .alternative-side-menu {
-    left: 0;
+  [data-width='tablet'] {
+    .side-menu {
+      left: -$sidemenu-width;
+    }
+
+    .alternative-side-menu {
+      left: 0;
+    }
+
+    .page-content {
+      margin-left: 0;
+    }
   }
 
-  .page-content {
-    margin-left: 0;
-  }
+  [data-width='desktop'] {
+    .side-menu {
+      left: 0;
+    }
+    .page-content {
+      margin-left: $sidemenu-width;
+    }
 
-  .section {
-    padding: 0.75rem !important;
-  }
-
-  .box:not(:last-child),
-  .feed-card {
-    margin-bottom: 0.75rem !important;
-  }
-}
-
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
-  .side-menu {
-    left: -$sidemenu-width;
-  }
-
-  .alternative-side-menu {
-    left: 0;
-  }
-
-  .page-content {
-    margin-left: 0;
-  }
-}
-
-@media screen and (min-width: $desktop) and (max-width: $widescreen) {
-  .page-content {
-    margin-left: $sidemenu-width;
-  }
-
-  .site-notice {
-    padding-left: $sidemenu-width;
-  }
-}
-
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
-  .page-content {
-    margin-left: $sidemenu-width;
-  }
-
-  .site-notice {
-    padding-left: $sidemenu-width;
-  }
-}
-
-@media screen and (min-width: $fullhd) {
-  .page-content {
-    margin-left: $sidemenu-width;
-  }
-
-  .site-notice {
-    padding-left: $sidemenu-width;
+    .site-notice {
+      padding-left: $sidemenu-width;
+    }
   }
 }
 

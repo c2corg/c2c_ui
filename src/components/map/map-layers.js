@@ -1,7 +1,9 @@
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current') {
+function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current', retina = false) {
+  const tileSize = retina ? 128 : undefined;
+  const tilePixelRatio = retina ? 2 : undefined;
   return new ol.layer.Tile({
     title,
     image,
@@ -14,6 +16,8 @@ function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'curr
         return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
       }),
       maxZoom: 17,
+      tileSize: tileSize,
+      tilePixelRatio: tilePixelRatio,
     }),
   });
 }
@@ -38,13 +42,10 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
   let url;
   switch (layer) {
     case 'GEOGRAPHICALGRIDSYSTEMS.MAPS':
-      url = '//wxs.ign.fr/' + config.ignApiKey + '/geoportail/wmts';
-      break;
-    case 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN':
-      url = '//wxs.ign.fr/altimetrie/geoportail/wmts';
+      url = 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws';
       break;
     default:
-      url = '//wxs.ign.fr/pratique/geoportail/wmts';
+      url = 'https://data.geopf.fr/wmts';
   }
 
   const source = new ol.source.WMTS({
@@ -293,7 +294,8 @@ export const cartoLayers = function () {
     'swisstopo.jpg',
     'ch.swisstopo.pixelkarte-farbe',
     'jpeg',
-    'current'
+    'current',
+    true
   );
   // $gettext('SwissTopo ortho', 'Map layer')
   const swissTopoOrtho = createSwisstopoLayer(
