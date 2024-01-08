@@ -1,17 +1,8 @@
 <template>
   <!-- eslint-disable no-irregular-whitespace -->
-  <div class="section">
-    <html-header title="Yeti" />
-    <div class="box">
-      <h1 class="title is-1">
-        <div class="yeti-icon is-inline-block">
-          <icon-yeti />
-        </div>
-        <span v-translate>YETI - A preparation tool for your outing</span>
-      </h1>
-    </div>
-
-    <div class="yeti-app">
+  <div>
+    <div class="section yeti-app">
+      <html-header title="YETI" />
       <div class="box yeti-overlay" v-if="showDisclaimer">
         <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
         <form action="#" @submit="onSubmitDisclaimer">
@@ -29,8 +20,12 @@
       </div>
 
       <div class="columns yeti-content">
-        <div class="column is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd form-container">
-          <div class="columns mb-0 yeti-columns--reverse is-mobile">
+        <div class="column is-5-tablet is-5-desktop is-4-fullhd form-container">
+          <div class="columns is-mobile is-justify-content-space-between mb-5">
+            <div class="is-flex is-align-items-center yeti-title">
+              <h1 class="ml-3 mr-1 px-2 has-text-weight-bold has-background-primary has-text-white">YETI</h1>
+              <p class="has-text-primary">Préparez votre course</p>
+            </div>
             <ul class="column is-narrow pb-0">
               <li>
                 <router-link class="is-block yetitabs-link" :to="$route.fullPath + '/faq'" v-translate>
@@ -38,10 +33,15 @@
                 </router-link>
               </li>
             </ul>
+          </div>
+          <div class="columns mb-0 is-mobile">
             <tabs :tabs="tabs" />
           </div>
           <div class="box">
-            <panel ref="panel0" :index="0" class="is-relative">
+            <panel :index="0">
+              <sub-panel-layers />
+            </panel>
+            <panel :index="1">
               <validation-button
                 class="is-hidden-mobile yeti-validation--top"
                 :current-error="currentError"
@@ -60,7 +60,7 @@
               />
             </panel>
 
-            <panel ref="panel1" :index="1">
+            <panel :index="2">
               <sub-panel-course />
             </panel>
           </div>
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <yeti-map ref="map" :yeti-data="yetiData" :yeti-extent="yetiExtent" />
+        <yeti-map ref="map" />
       </div>
     </div>
   </div>
@@ -107,6 +107,7 @@ import YetiArticle from '@/components/yeti/Article';
 import Panel from '@/components/yeti/Panel';
 import SubPanelBra from '@/components/yeti/SubPanelBra';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse';
+import SubPanelLayers from '@/components/yeti/SubPanelLayers';
 import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
@@ -125,6 +126,7 @@ export default {
     Panel,
     SubPanelBra,
     SubPanelCourse,
+    SubPanelLayers,
     SubPanelMethods,
     Tabs,
     ValidationButton,
@@ -147,14 +149,10 @@ export default {
         },
       },
 
-      tabs: [this.$gettext('Compute'), this.$gettext('Outing')],
-
       formError: undefined,
       currentError: undefined,
 
       promise: null,
-      yetiData: null,
-      yetiExtent: [],
     };
   },
 
@@ -176,6 +174,47 @@ export default {
     },
     areaOk() {
       return Yetix.areaOk;
+    },
+    hasFeatures() {
+      return Yetix.hasFeatures;
+    },
+    featuresLength() {
+      return Yetix.features.length;
+    },
+    validSimplifyTolerance() {
+      return Yetix.validSimplifyTolerance;
+    },
+    tabs() {
+      let tabs = [
+        {
+          icon: 'layer-group',
+          title: this.$gettext('Layers'),
+        },
+        {
+          name: this.$gettext('Risk'),
+          icon: 'bolt',
+        },
+      ];
+
+      // add route
+      let tabRoute = {
+        name: this.$gettext('Outing'),
+        icon: 'route',
+      };
+      if (this.hasFeatures && !this.validSimplifyTolerance) {
+        tabRoute.counter = {
+          text: this.featuresLength,
+          title: this.$gettext('Route on map'),
+        };
+      }
+      if (this.validSimplifyTolerance) {
+        tabRoute.problemIcon = {
+          title: this.$gettext('Not simplified yet'),
+        };
+      }
+      tabs.push(tabRoute);
+
+      return tabs;
     },
     errors() {
       return {
@@ -318,7 +357,7 @@ export default {
       const yetiUrl = this.getYetiUrl(extendedExtent);
 
       // first, set data to null (will remove last one)
-      this.yetiData = null;
+      Yetix.setYetiData(null);
 
       // fetch img
       this.promise = axios
@@ -334,8 +373,8 @@ export default {
     },
 
     onYetiResult(result, extendedExtent) {
-      this.yetiData = result.data;
-      this.yetiExtent = extendedExtent;
+      Yetix.setYetiData(result.data);
+      Yetix.setYetiExtent(extendedExtent);
 
       this.promise = null;
     },
@@ -405,24 +444,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$section-padding: 1.5rem; //TODO find this variable
+$section-padding: 0.75rem; //TODO find this variable
 $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(
-  100vh - #{$navbar-height} - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} - #{$box-margin}
-);
+$yeti-height: calc(100vh - #{$navbar-height});
 
 .yeti-app {
   position: relative;
+  padding: $section-padding;
 }
 
 .yeti-icon {
   transform: scale(0.9);
 }
 
-.yeti-columns--reverse {
-  flex-direction: row-reverse;
+.yeti-title {
+  margin-top: calc(0.75rem + 2px);
 }
 
 @media screen and (max-width: $tablet) {
@@ -447,7 +485,8 @@ $yeti-height: calc(
     height: $yeti-height;
 
     .form-container {
-      height: 100%;
+      max-width: 450px;
+      height: calc(100% - 0.75rem);
       overflow: auto;
     }
   }
@@ -495,6 +534,76 @@ $yeti-height: calc(
   .input-orientation {
     width: 120px;
     height: 120px;
+  }
+
+  /* a11y of forms */
+  *:focus-visible {
+    scroll-margin: 100px;
+  }
+  .is-checkradio[type='checkbox'],
+  .is-checkradio[type='radio'] {
+    display: block;
+    clip: rect(0, 0, 0, 0);
+  }
+  .is-checkradio[type='radio'].is-primary:focus-visible + label::before,
+  .is-checkradio[type='checkbox'].is-primary:focus-visible + label::before {
+    border-color: $primary;
+  }
+  .is-checkradio[type='radio'].is-primary:focus + label::before,
+  .is-checkradio[type='checkbox'].is-primary:focus + label::before {
+    outline: none;
+  }
+
+  /* customization of forms */
+  .select select,
+  .input {
+    border: none;
+    box-shadow: 0 0 0 1px $grey-lighter;
+  }
+  .select select:hover,
+  .select select:focus,
+  .input:hover,
+  .input:focus {
+    box-shadow: 0 0 0 2px $primary;
+  }
+  .is-checkradio[type='checkbox'] + label::after {
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-color: white !important;
+    /* decimal rem = integer pixels */
+    /* 0.357 = 5px, 0.429 = 6px, 0.571 = 8px, 0.714 = 10px */
+    width: 0.429rem !important;
+    height: 0.714rem !important;
+    top: 0.357rem !important;
+    left: 0.571rem !important;
+    transform: rotate(45deg) scale(0);
+  }
+  .is-checkradio[type='checkbox']:checked + label::after {
+    transform: rotate(45deg) scale(1);
+    border-color: white !important;
+  }
+  .is-checkradio[type='radio'] + label::after {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+    transform: scale(0);
+  }
+  .is-checkradio[type='radio']:checked + label::after {
+    transform: scale(1);
+    background-color: white !important;
+  }
+  .is-checkradio[type='checkbox']:checked + label::before,
+  .is-checkradio[type='radio']:checked + label::before {
+    background: $primary;
+    border-color: $primary !important;
+  }
+  .is-checkradio:hover:not([disabled]) + label::before,
+  .is-checkradio:focus + label::before {
+    border-width: 2px;
+  }
+  .is-checkradio:focus-visible + label::before {
+    box-shadow: 0 0 0 2px $secondary;
   }
 }
 </style>

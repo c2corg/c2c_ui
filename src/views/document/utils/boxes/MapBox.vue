@@ -11,15 +11,27 @@
     <!-- The fullscreen map container is used to display both the map
          and the elevation profile in fullscreen (if the elevation profile exists) -->
     <div id="fullscreen-map-container">
-      <div class="map-container" :class="{ 'with-elevation-profile': showElevationProfile && !elevationProfileHidden }">
+      <div
+        class="map-container"
+        :class="{
+          'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
+          pinned: pinnedMode,
+          'pinned-to-top': pinnedSide === 'top',
+          'pinned-to-right': pinnedSide === 'right',
+          'fill-parent': !pinnedMode,
+        }"
+      >
         <map-view
+          ref="mapView"
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type)"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
+          :show-pin-to-top-button="true"
           @has-protection-area="$emit('has-protection-area')"
+          @pin-to-top-clicked="togglePinToSide(true)"
         />
       </div>
 
@@ -69,6 +81,8 @@ export default {
       mapLinksAreVisible: false,
       elevationProfileHasData: false,
       elevationProfileHidden: false,
+      pinnedMode: 0,
+      pinnedSide: '',
     };
   },
 
@@ -110,9 +124,53 @@ export default {
 
       this.elevationProfileHidden = hide;
     });
+    window.addEventListener('resize', this.resizePin);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.resizePin);
+    if (this.pinnedMode) this.togglePinToSide(true);
+    if (this.pinnedMode) this.togglePinToSide(true);
   },
 
   methods: {
+    togglePinToSide(toggle) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const breakMobile = 769;
+      // disable eg pin-to-right on mobile
+      const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
+
+      const toggleAmount = toggle ? 1 : 0;
+      // 0: unpinned / 1: pinned side1 / 2: pinned side2
+      this.pinnedMode = (this.pinnedMode + toggleAmount) % maxMode;
+
+      // side1 is the preferred side for comfort, ie the larger dimension
+      const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
+      this.pinnedSide = this.pinnedMode === 0 ? '' : this.pinnedMode === 1 ? side1 : side2;
+
+      if (this.pinnedSide === 'right') {
+        document.body.style.paddingRight = '30%';
+        document.body.style.paddingTop = null;
+      } else if (this.pinnedSide === 'top') {
+        document.body.style.paddingRight = null;
+        document.body.style.paddingTop = '45vh'; // as % is relative to width
+      } else {
+        document.body.style.paddingRight = null;
+        document.body.style.paddingTop = null;
+      }
+      setTimeout(() => {
+        // deferred so that map.getSize() gets updated
+        if (this.$refs.mapView) {
+          this.$refs.mapView.fitMapToDocuments();
+        }
+      });
+    },
+
+    resizePin() {
+      this.togglePinToSide(false);
+    },
+
     hasDataChanged(value) {
       this.elevationProfileHasData = value;
     },
@@ -163,10 +221,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~bulma/sass/utilities/mixins.sass';
+
 .map-container {
-  height: 275px;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  background: beige;
+
+  &.fill-parent {
+    height: 275px;
+  }
+}
+
+:not(:fullscreen) > .map-container {
+  &.pinned {
+    position: fixed;
+    top: $navbar-height;
+    margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
+    z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
+  }
+  &.pinned-to-top {
+    right: 0px;
+    height: 45vh;
+    width: 100%;
+    @include desktop {
+      left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
+    }
+  }
+  &.pinned-to-right {
+    right: 0px;
+    height: calc(100vh - #{$navbar-height});
+    width: 30vw;
+  }
 }
 
 /**

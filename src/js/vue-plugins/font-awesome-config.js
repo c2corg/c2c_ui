@@ -8,6 +8,7 @@ import { faCircle as faCircleRegular } from '@fortawesome/free-regular-svg-icons
 import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
 import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+import { faWindowMaximize as faWindowMaximizeRegular } from '@fortawesome/free-regular-svg-icons/faWindowMaximize';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
@@ -18,6 +19,7 @@ import { faAtlas } from '@fortawesome/free-solid-svg-icons/faAtlas';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
+import { faBolt } from '@fortawesome/free-solid-svg-icons/faBolt';
 import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faBroom } from '@fortawesome/free-solid-svg-icons/faBroom';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
@@ -72,7 +74,6 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
 import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons/faLayerGroup';
-import { faLifeRing } from '@fortawesome/free-solid-svg-icons/faLifeRing';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
@@ -249,6 +250,7 @@ export default function install(Vue) {
     faBan,
     faBars,
     faBold,
+    faBolt,
     faBomb,
     faBroom,
     faBug,
@@ -303,7 +305,6 @@ export default function install(Vue) {
     faItalic,
     faKey,
     faLayerGroup,
-    faLifeRing,
     faLink,
     faList,
     faListOl,
@@ -358,6 +359,7 @@ export default function install(Vue) {
     faClockRegular,
     faHourglassRegular,
     faTrashAltRegular,
+    faWindowMaximizeRegular,
 
     // brands icons
     faCreativeCommons,

@@ -1,6 +1,7 @@
 <template>
   <div class="yeti-subpanel">
     <sub-panel-title><span v-translate>Route</span></sub-panel-title>
+    <edit-mode-button class="edit-mode-button" />
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -113,17 +114,13 @@
         >
           Upload a GPS track
         </button>
-        <button class="button is-secondary" @click="setDrawingMode">
-          <span v-translate key="1" v-if="!drawingMode">Activate drawing mode</span>
-          <span v-translate key="2" v-else>Disable drawing mode</span>
-        </button>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
         <info type="help" class="mt-5">
           <p>
             <strong v-translate>To draw (and edit) directly on the map</strong>
-            <span v-translate>you need to activate drawing mode</span>
+            <span v-translate>you need to activate edit mode</span>
           </p>
         </info>
       </div>
@@ -133,6 +130,7 @@
 
 <script>
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import EditModeButton from '@/components/yeti/EditModeButton.vue';
 import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
@@ -143,7 +141,15 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
 export default {
-  components: { DropdownContent, ElevationProfile, FeaturesList, Info, SimplifyTool, SubPanelTitle },
+  components: {
+    DropdownContent,
+    EditModeButton,
+    ElevationProfile,
+    FeaturesList,
+    Info,
+    SimplifyTool,
+    SubPanelTitle,
+  },
   data() {
     return {
       newFeaturesTitle: false,
@@ -153,8 +159,8 @@ export default {
     };
   },
   computed: {
-    drawingMode() {
-      return Yetix.drawingMode;
+    editMode() {
+      return Yetix.editMode;
     },
     features() {
       return Yetix.features;
@@ -236,8 +242,8 @@ export default {
     setFilename(ext) {
       return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
     },
-    setDrawingMode() {
-      Yetix.setDrawingMode(!this.drawingMode);
+    setEditMode() {
+      Yetix.setEditMode(!this.editMode);
     },
   },
 };
@@ -328,5 +334,12 @@ input[type='file'] {
   .form-export {
     display: block;
   }
+}
+
+.edit-mode-button {
+  position: absolute;
+  right: 0;
+  top: 0.75rem;
+  z-index: 1;
 }
 </style>

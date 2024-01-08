@@ -18,6 +18,7 @@ let defaultState = {
   BLEND_MODES_MIN_ZOOM: 8,
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
+  YETI_LAYER_OPACITY: 0.9,
 
   activeTab: 0,
 
@@ -36,6 +37,19 @@ let defaultState = {
     groupSize: 1,
   },
 
+  // base/slopes layers
+  baseLayersSelector: [],
+  slopesLayersSelector: [],
+
+  // yeti layers
+  yetiLayersSelector: [],
+  showYeti: false,
+  yetiOk: false,
+
+  yetiData: null,
+  yetiExtent: [],
+  yetiLegend: null,
+
   areas: [],
   areaOk: true,
   showAreas: false,
@@ -44,12 +58,18 @@ let defaultState = {
   featuresTitle: 'New route',
   featuresLength: 0,
 
+  // overlays selector
+  overlaysLayersSelector: [],
+
   mountains: {
     all: [],
     visible: [],
   },
   bulletinsLoaded: false,
   showAvalancheBulletins: true,
+
+  showWinterRoute: false,
+  winterRouteLegend: null,
 
   nivoses: [],
   showNivoses: false,
@@ -60,8 +80,11 @@ let defaultState = {
   flowcapt: [],
   showFlowcapt: false,
 
+  dataAvalanche: [],
+  showDataAvalanche: false,
+
   mapZoom: 0,
-  drawingMode: false,
+  editMode: false,
 
   validSimplifyTolerance: false,
 };
@@ -96,6 +119,9 @@ export default new Vue({
     VALID_MINIMUM_MAP_ZOOM() {
       return state.VALID_MINIMUM_MAP_ZOOM;
     },
+    YETI_LAYER_OPACITY() {
+      return state.YETI_LAYER_OPACITY;
+    },
     activeTab() {
       return state.activeTab;
     },
@@ -104,6 +130,30 @@ export default new Vue({
     },
     method() {
       return state.method;
+    },
+    baseLayersSelector() {
+      return state.baseLayersSelector;
+    },
+    slopesLayersSelector() {
+      return state.slopesLayersSelector;
+    },
+    yetiLayersSelector() {
+      return state.yetiLayersSelector;
+    },
+    showYeti() {
+      return state.showYeti;
+    },
+    yetiOk() {
+      return state.yetiOk;
+    },
+    yetiData() {
+      return state.yetiData;
+    },
+    yetiExtent() {
+      return state.yetiExtent;
+    },
+    yetiLegend() {
+      return state.yetiLegend;
     },
     areas() {
       return state.areas;
@@ -126,6 +176,9 @@ export default new Vue({
     featuresLength() {
       return state.featuresLength;
     },
+    overlaysLayersSelector() {
+      return state.overlaysLayersSelector;
+    },
     mountains() {
       return state.mountains;
     },
@@ -134,6 +187,12 @@ export default new Vue({
     },
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
+    },
+    showWinterRoute() {
+      return state.showWinterRoute;
+    },
+    winterRouteLegend() {
+      return state.winterRouteLegend;
     },
     nivoses() {
       return state.nivoses;
@@ -153,11 +212,17 @@ export default new Vue({
     showFlowcapt() {
       return state.showFlowcapt;
     },
+    dataAvalanche() {
+      return state.dataAvalanche;
+    },
+    showDataAvalanche() {
+      return state.showDataAvalanche;
+    },
     mapZoom() {
       return state.mapZoom;
     },
-    drawingMode() {
-      return state.drawingMode;
+    editMode() {
+      return state.editMode;
     },
     validSimplifyTolerance() {
       return state.validSimplifyTolerance;
@@ -173,6 +238,40 @@ export default new Vue({
     },
     setMethod(prop, value) {
       state.method[prop] = value;
+    },
+    setBaseLayersSelector(layers) {
+      state.baseLayersSelector = layers;
+    },
+    setSlopesLayersSelector(layers) {
+      state.slopesLayersSelector = layers;
+    },
+    addLayerToYetiLayersSelector(layer, index) {
+      // to keep reactivity AND order in array
+      // we need to fill array first with empty data
+      for (let i = 0; i < index; i++) {
+        if (!state.yetiLayersSelector[i]) {
+          this.$set(state.yetiLayersSelector, i, {});
+        }
+      }
+      this.$set(state.yetiLayersSelector, index, layer);
+    },
+    setShowYeti(showYeti) {
+      state.showYeti = showYeti;
+    },
+    setYetiOk(yetiOk) {
+      state.yetiOk = yetiOk;
+      if (yetiOk) {
+        this.setShowYeti(true);
+      }
+    },
+    setYetiData(yetiData) {
+      state.yetiData = yetiData;
+    },
+    setYetiExtent(yetiExtent) {
+      state.yetiExtent = yetiExtent;
+    },
+    setYetiLegend(yetiLegend) {
+      state.yetiLegend = yetiLegend;
     },
     setAreas(areas) {
       state.areas = areas;
@@ -192,6 +291,16 @@ export default new Vue({
     setFeaturesLength(featuresLength) {
       state.featuresLength = featuresLength;
     },
+    addLayerToOverlaysLayersSelector(layer, index) {
+      // to keep reactivity AND order in array
+      // we need to fill array first with empty data
+      for (let i = 0; i < index; i++) {
+        if (!state.overlaysLayersSelector[i]) {
+          this.$set(state.overlaysLayersSelector, i, {});
+        }
+      }
+      this.$set(state.overlaysLayersSelector, index, layer);
+    },
     setAllMountains(mountains) {
       state.mountains.all = mountains;
     },
@@ -203,6 +312,12 @@ export default new Vue({
     },
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
+    },
+    setShowWinterRoute(showWinterRoute) {
+      state.showWinterRoute = showWinterRoute;
+    },
+    setWinterRouteLegend(winterRouteLegend) {
+      state.winterRouteLegend = winterRouteLegend;
     },
     setNivoses(nivoses) {
       state.nivoses = nivoses;
@@ -222,26 +337,32 @@ export default new Vue({
     setShowFlowcapt(showFlowcapt) {
       state.showFlowcapt = showFlowcapt;
     },
+    setDataAvalanche(dataAvalanche) {
+      state.dataAvalanche = dataAvalanche;
+    },
+    setShowDataAvalanche(showDataAvalanche) {
+      state.showDataAvalanche = showDataAvalanche;
+    },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
-    setDrawingMode(drawingMode) {
-      state.drawingMode = drawingMode;
+    setEditMode(editMode) {
+      state.editMode = editMode;
     },
     setValidSimplifyTolerance(validSimplifyTolerance) {
       state.validSimplifyTolerance = validSimplifyTolerance;
       // when validSimplifyTolerance is OK
-      // check state for drawingMode:
+      // check state for editMode:
       // if it's on, store it (tmp), and retrieve state later
       if (validSimplifyTolerance) {
-        if (state.drawingMode) {
-          state.tmpDrawingMode = true;
-          this.setDrawingMode(false);
+        if (state.editMode) {
+          state.tmpEditMode = true;
+          this.setEditMode(false);
         }
       } else {
-        if (state.tmpDrawingMode) {
-          this.setDrawingMode(true);
-          delete state.tmpDrawingMode;
+        if (state.tmpEditMode) {
+          this.setEditMode(true);
+          delete state.tmpEditMode;
         }
       }
     },
@@ -278,6 +399,9 @@ export default new Vue({
     },
     fetchFlowcapt() {
       return this.fetchApi('flowcapt');
+    },
+    fetchDataAvalanche() {
+      return this.fetchApi('data-avalanche');
     },
     fetchWpsAlti(points, interpolate) {
       let params = {

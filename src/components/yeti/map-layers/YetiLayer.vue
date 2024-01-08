@@ -1,101 +1,72 @@
-<template>
-  <div>
-    <div class="legend">
-      <div>
-        <div class="legend-button is-pulled-right ol-control">
-          <button type="button" @click="showLegend = !showLegend">
-            <span v-translate>Legend</span>
-          </button>
-        </div>
-      </div>
-      <div class="legend-content" v-show="showLegend === true">
-        <p class="is-italic" v-if="!mapLegend" v-translate>Legend will appear automatically with the generated image</p>
-        <div v-else>
-          <ul>
-            <li v-for="(item, i) of mapLegend.items" :key="i">
-              <span class="legend-color" :style="'background:' + item.color" />
-              <!-- $gettext('Risky slopes') -->
-              <!-- $gettext('Risky slopes, increased risk due to orientation') -->
-              <!-- $gettext('Residual risk >1') -->
-              <!-- $gettext('Residual risk >1.3') -->
-              <!-- $gettext('Residual risk >1.5') -->
-              <span>{{ $gettext(item.text['en']) }}</span>
-            </li>
-          </ul>
-          <!-- $gettext('From danger 3, consider the slopes which dominate the route') -->
-          <p class="is-size-6 is-italic">{{ $gettext(mapLegend.comment['en']) }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="ol-control opacity" v-if="isLayerLoaded">
-      <div class="opacity-slider">
-        <vue-slider
-          v-model="opacity"
-          :min="0"
-          :max="1"
-          :interval="0.01"
-          tooltip="none"
-          direction="btt"
-          :rail-style="{ background: 'rgba(0,0,0,.25)' }"
-          :process-style="{ background: 'white' }"
-          @change="onUpdateOpacity"
-        />
-      </div>
-    </div>
-  </div>
-</template>
 <script>
 import layerMixin from './layer';
-
-import 'vue-slider-component/theme/default.css';
+import layerSelectorWatcherMixin from './layer-selector-watcher';
 
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
-const OPACITY = 0.9;
-
 export default {
-  components: {
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
-  },
-  mixins: [layerMixin],
-  props: {
-    data: {
-      type: String,
-      default: null,
-    },
-    extent: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      isLayerLoaded: false,
-      opacity: OPACITY,
-      showLegend: undefined,
-      mapLegend: null,
-    };
-  },
+  mixins: [layerMixin, layerSelectorWatcherMixin],
   computed: {
+    yetiData() {
+      return Yetix.yetiData;
+    },
+    yetiExtent() {
+      return Yetix.yetiExtent;
+    },
     showAreas() {
       return Yetix.showAreas;
     },
+    showYeti() {
+      return Yetix.showYeti;
+    },
+    yetiOk() {
+      return Yetix.yetiOk;
+    },
+    layerSelector() {
+      return {
+        title: this.$gettext('Risk'),
+        checked: this.showYeti,
+        action: this.onShowYeti,
+        disabled: {
+          condition: !this.yetiOk,
+          title: this.$gettext('No risk to show yet'),
+          message: this.$gettext('Compute one for a specific zone from the “Risk” tab'),
+        },
+        image: 'yeti-risk.jpg',
+        opacity: Yetix.YETI_LAYER_OPACITY,
+        blendModes: true,
+      };
+    },
+    yetiLayersSelector() {
+      return Yetix.yetiLayersSelector;
+    },
   },
   watch: {
-    data() {
-      if (!this.data) {
+    yetiData() {
+      if (!this.yetiData) {
         this.clearLayers();
         return;
       }
       this.drawImage();
     },
-    extent() {
-      this.drawExtent(this.extent);
+    yetiExtent() {
+      this.drawExtent(this.yetiExtent);
     },
     showAreas() {
       // switch classname when showareas updates
       this.setLayerClassName();
+    },
+    showYeti() {
+      this.layer.setVisible(this.showYeti);
+      this.extentLayer.setVisible(this.showYeti);
+    },
+    yetiLayersSelector: {
+      handler(layers) {
+        this.setLayerOpacity(layers[0].opacity);
+        this.setLayerBlendModes(layers[0].blendModes);
+      },
+      deep: true,
     },
   },
   created() {
@@ -104,7 +75,7 @@ export default {
         url: null,
         imageExtent: ol.extent.createEmpty(),
       }),
-      opacity: this.opacity,
+      opacity: Yetix.YETI_LAYER_OPACITY,
     });
     this.extentLayer = new ol.layer.Vector({
       source: new ol.source.Vector(),
@@ -138,11 +109,15 @@ export default {
     this.map.addLayer(this.extentLayer);
 
     this.setLayerClassName();
+
+    this.$emit('layer', this.layerSelector);
   },
   methods: {
+    onShowYeti() {
+      Yetix.setShowYeti(!this.showYeti);
+    },
     clearLayers() {
       this.layer.setSource(null);
-      this.isLayerLoaded = false;
 
       this.extentLayer.getSource().clear();
     },
@@ -155,7 +130,7 @@ export default {
       this.extentLayer.getSource().addFeature(feature);
     },
     drawImage() {
-      let xml = new DOMParser().parseFromString(this.data, 'application/xml');
+      let xml = new DOMParser().parseFromString(this.yetiData, 'application/xml');
       let imageBase64 = xml.getElementsByTagName('wps:ComplexData')[0].textContent;
       let imageBbox = xml.getElementsByTagName('wps:ComplexData')[1].textContent;
       let imageExtent = ol.proj.transformExtent(imageBbox.split(',').map(Number), 'EPSG:4326', 'EPSG:3857');
@@ -169,20 +144,19 @@ export default {
         })
       );
       // source is set
-      this.isLayerLoaded = true;
-      // set map legend
+      Yetix.setYetiOk(true);
+      // set yeti legend
       this.setLegend(xml);
     },
-    onUpdateOpacity() {
-      this.layer.setOpacity(this.opacity);
-    },
     setLegend(xml) {
-      this.mapLegend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
-      this.mapLegend.items.forEach((item) => {
+      let legend = JSON.parse(xml.getElementsByTagName('wps:ComplexData')[2].textContent);
+      legend.items.forEach((item) => {
         item.color = `rgb(${item.color[0]}, ${item.color[1]}, ${item.color[2]})`;
       });
       // add attribution (each attribution on its own line)
-      this.layer.getSource().setAttributions(this.mapLegend.attributions);
+      this.layer.getSource().setAttributions(legend.attributions);
+      // set legend in yetix
+      Yetix.setYetiLegend(legend);
     },
     toLinearRing(extent) {
       let minX = extent[0];
@@ -203,92 +177,19 @@ export default {
       // or use default ol-layer to apply blend modes to whole layers
       this.layer.className_ = this.showAreas ? Yetix.BLEND_MODES_CLASS_NAME : 'ol-layer';
     },
+    setLayerOpacity(opacity) {
+      this.layer.setOpacity(opacity);
+    },
+    setLayerBlendModes(isBlend) {
+      this.layer.on('prerender', (evt) => {
+        evt.context.globalCompositeOperation = isBlend ? 'multiply' : 'source-over';
+      });
+      // force re-render
+      this.layer.setOpacity(this.layer.getOpacity() + 0.01);
+    },
+  },
+  render() {
+    return null;
   },
 };
 </script>
-
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
-.legend {
-  position: absolute;
-  z-index: 6;
-  top: 1.25rem;
-  right: 1.25rem;
-
-  .legend-button {
-    position: static;
-
-    button {
-      width: auto;
-      padding: 0 0.5em;
-    }
-  }
-
-  .legend-content {
-    margin-top: 0.5rem;
-    margin-left: 1.25rem;
-    border-radius: 2px;
-    border: 1px solid lightgray;
-    padding: 0.5rem;
-    background: white;
-    clear: both;
-  }
-
-  .legend-color {
-    vertical-align: bottom;
-    display: inline-block;
-    width: 21px;
-    height: 21px;
-    margin-right: 5px;
-  }
-}
-
-.opacity {
-  position: absolute;
-  z-index: 5;
-  top: 3.5rem;
-  right: 1.25rem;
-
-  .opacity-slider {
-    font-size: 1.14em;
-    margin: 1px;
-    width: 1.375em;
-    padding: 1rem 0;
-    background: $grey-dark;
-    border-radius: 2px;
-
-    &:hover {
-      background: $grey;
-    }
-  }
-
-  .vue-slider {
-    padding: 0 9px !important;
-    height: 300px !important;
-    max-height: 30vh;
-  }
-
-  .vue-slider-process {
-    background: $white;
-  }
-
-  .vue-slider-rail {
-    background: $black;
-  }
-}
-
-@media screen and (max-width: $tablet) {
-  .legend {
-    top: 0.5rem;
-
-    .legend-content {
-      margin-left: 0.5rem;
-    }
-  }
-
-  .opacity {
-    top: 2.75rem;
-  }
-}
-</style>

@@ -31,6 +31,10 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/sass/variables';
 
+.yeti-panel {
+  position: relative;
+}
+
 :deep(a) {
   &:hover,
   &:focus {

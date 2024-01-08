@@ -42,7 +42,6 @@
     "Action - prix du public": {
       "Sophie picture context": "Azione - Premio del pubblico"
     },
-    "Activate drawing mode": "Attivare modalità disegno a mano libera",
     "Activity feed": "Notizie",
     "Activity trackers": "Rilevatori di attività",
     "Add": "Aggiugere",
@@ -123,7 +122,6 @@
     "Comments are disabled.": "I commenti non sono autorizzati su questo documento.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicazione degli obiettivi e aspirazioni di ognuno, delle paure e osservazioni durante la gita. Briefing per le nuove strategie, elementi di gestione del gruppo e di responsabilità, gruppo di persone che si conoscono, emulazione, etc.",
     "Compare selected versions": "Comparare le versioni selezionate",
-    "Compute": "Calcolo",
     "Compute risk": "Calcolare il rischio ",
     "Conditions": "Condizioni",
     "Configure activity trackers": "Configura i rilevatori di attività",
@@ -171,7 +169,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Questa zona non è coperta da YETI. Sono sopporti, solo i massicci francesi delimitati dai punteggiati.",
     "Current map view is too large. Please zoom to level": "La zona della mappa è troppa grande. Devi zoomare. ",
     "Current password": "Password attuale",
-    "DISABLED": "DISATTIVATO",
     "Danger level": "Grado del pericolo",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Il grado di pericolo del bollettino concerna tutte le orientazioni. La rosa dei venti evidenza i settori con rischio maggiore.",
     "Danger level:": "Grado di pericolo:",
@@ -221,7 +218,6 @@
     "Differences between versions": "Differenze tra le versioni ",
     "Different high/low danger?": "Grado pericolo alto/basso differente?",
     "Directions (Google Maps)": "Andarci (Google Maps)",
-    "Disable drawing mode": "Disabilitare modalità disegno",
     "Disclaimer": "Disclaimer / Liberatoria",
     "Dispositions": "Disposizione",
     "Distance": "Distanza ",
@@ -233,7 +229,6 @@
     "Draw": {
       "yeti": "Disegnare"
     },
-    "Drawing mode": "Modalità disegno",
     "Drawing tips": "Consigni per disegnare",
     "Drop images here or click to upload": "Sposta qui le immagini o clicca per selezionarle",
     "Duration": "Durata ",
@@ -374,11 +369,11 @@
     "Latitude": "Latitudine",
     "Launch YETI": "Vai a YETI",
     "Layers": {
+      "$$noContext": "Mappe principale",
       "Map controls": "Mappe principale"
     },
     "Leave fullscreen": "Lasciare il modo schermo intero",
     "Legend": "Didascalia",
-    "Legend will appear automatically with the generated image": "La didascalia comparirà automaticamente insieme all'immagine",
     "Let's make our feedbacks valuable": "Rendiamo preziosi i nostri feedback",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Conserviamo il nostro parco giochi! Ho creato un account su Outdoorvision per condividere le mie tracce GPS per la conservazione e la progettazione dei miei siti di pratica in Francia.",
     "Library:": "Biblioteca:",
@@ -729,8 +724,6 @@
     "Will generate new points along route, at regular interval, defined by distance in meters": "Genererà nuovi punti lungo il tragitto, ad una distanza regolare, identificabili secondo una distanza in metri",
     "With the": "Con il",
     "Without c2c account": "Partecipanti senza account c2c",
-    "YETI - A preparation tool for your outing": "YETI - Un strumento per la preparazione della gita",
-    "YETI extent": "Copertura YETI",
     "Yeti: a tool to assess the avalanche risk": "Yeti: uno strumento per determinare il rischio di valanghe",
     "You are trying to compare versions of a document of which at least one version is masked.": "Stai cercando di compare le versioni di due documenti dei quali almeno una è mascherata.",
     "You are trying to view a masked version of a document.": "Stai cercando di visualizzare una versione mascherata del documento.",
@@ -1018,6 +1011,7 @@
     "date_start": "Data d'inizio",
     "date_time": "data/ora",
     "day(s)": "Giorno(i)",
+    "days": "giorni",
     "de": {
       "langs": "tedesco"
     },
@@ -1900,7 +1894,6 @@
       "$$noContext": "si",
       "parking_fee_types": "si"
     },
-    "you need to activate drawing mode": "Bisogna attivare la modalità disegno",
     "zh": {
       "langs": "Cinesi"
     }

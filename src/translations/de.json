@@ -82,7 +82,6 @@
       "Sophie picture context": "Aktion - Publikumspreis"
     },
     "Action is disabled. You must confirm simplified geometry first.": "Diese Aktion ist inaktiv. Bitte zuerst die laufende Vereinfachung bestätigen.",
-    "Activate drawing mode": "Zeichnen-Modus aktivieren",
     "Activity feed": "Aktivitäts-Feed",
     "Activity trackers": "Aktivitätentracker",
     "Add": "Hinzufügen",
@@ -131,6 +130,7 @@
     "Back to edit mode": "Zurück zur Bearbeitung",
     "Back to the top": "zum Seitenanfang",
     "Base layer": "Kartenhintergrund",
+    "Base layers": "Grundkarte",
     "Basemap (at)": {
       "Map layer": "Österreich"
     },
@@ -169,7 +169,7 @@
     "Comments are disabled.": "Kommentare sind deaktiviert.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
-    "Compute": "Berechnung",
+    "Compute one for a specific zone from the “Risk” tab": "Berechnen Sie ein Risiko fuer ein bestimmtes Gebiet im Reiter \"Risiko\"",
     "Compute risk": "Risiko berechnen",
     "Conditions": "Voraussetzungen",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
@@ -217,7 +217,6 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Nur französische Berge sind ab jetzt (durch einen gestrichelten Strich bestimmt).",
     "Current map view is too large. Please zoom to level": "Der Kartenbereich ist zu groß. Zoomen Sie",
     "Current password": "Aktuelles Passwort",
-    "DISABLED": "AUS",
     "Danger level": "Lawinengefahr",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Die Gefahrenstufe aus dem Lawinenbericht gilt für alle Ausrichtungen. Die Windrose kennzeichnet die kritischsten Sektoren, die ein erhöhtes Risiko darstellen.",
     "Danger level:": "Lawinengefahr:",
@@ -229,6 +228,7 @@
     "Danger rating - very high": "Sehr gross",
     "Danger:": "Stufe :",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
+    "Data-Avalanche": "Lawine-Databank",
     "Delete": {
       "yeti": "Löschen"
     },
@@ -266,7 +266,7 @@
     "Differences between versions": "Unterschied zwischen Versionen",
     "Different high/low danger?": "Unterschiedlich hohe/niedrige Gefahr?",
     "Directions (Google Maps)": "Anfahrtsbeschreibung (Google Maps)",
-    "Disable drawing mode": "Zeichnen-Modus deaktivieren",
+    "Disabled at this zoom level": "bei dieser Zoomstufe inaktiv",
     "Disclaimer": "Haftungsausschluss",
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
@@ -278,7 +278,6 @@
     "Draw": {
       "yeti": "Zeichnen"
     },
-    "Drawing mode": "Zeichnen-Modus",
     "Drawing tips": "Zeichentipps",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
     "Duration": "Zeit",
@@ -297,6 +296,7 @@
     "Edit and improve map on Openstreetmap.org": "OpenStreetMap-Karte bearbeiten und verbessern",
     "Edit associations": "Verbindungen bearbeiten",
     "Edit categories": "Kategorien bearbeiten",
+    "Edit mode": "Bearbeitungsmodus",
     "Edit titles": "Titeln bearbeiten",
     "Elementary": "Elementar",
     "Elementary Reduction Method": "Elementare Reduktionsmethode",
@@ -313,10 +313,10 @@
     "Export": "Exportieren",
     "Export route": "Route exportieren",
     "Export to CSV": "Exportieren als CSV",
+    "Extent": "Umfang",
     "FAQ?": "FAQ ?",
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
-    "Features already have elevations. Enable &quot;Force elevations&quot; if you want to override them.": "Die Linien sind bereits mit einer Höhe vermerkt. Bitte \"die Höhen erzwingen\" aktivieren, um sie zu ersetzen.",
     "Feel free to edit it.": "Bitte bearbeiten.",
     "Filter on map extent": "Mit Karte filtern",
     "Filter results": "Ergebnisse filtern",
@@ -327,7 +327,6 @@
     "FlowCapt sensors": "FlowCapt-Sensoren",
     "Fold section": "Abschnitt falten",
     "Followed users": "Gefolgte Benutzer",
-    "Force elevations": "Die Höhen erzwingen",
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forumname",
     "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten, oder nur miteinander reden.",
@@ -394,7 +393,6 @@
       "Map layer": "Spanien"
     },
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
-    "If checked, all elevations will be recomputed and current values will be lost": "Wenn markiert, werden alle Höhen neu ermittelt, und die aktuellen Werte verloren gehen ",
     "If the route does not exists in our base, you can create it.": "Wenn die Route nicht in unserer Datenbank vorhanden ist, können Sie sie erstellen.",
     "If you can't see this email, please check your spam folder.": "Wenn Sie diese Email nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Wenn Sie Ihre E-Mail-Adresse ändern, wird eine Nachricht an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
@@ -432,11 +430,12 @@
     "Latitude": "Breitengrad",
     "Launch YETI": "YETI starten",
     "Layers": {
+      "$$noContext": "Schichte",
       "Map controls": "Dargestellte Karten"
     },
+    "Layers have moved": "Kartenebenen wurden verschoben",
     "Leave fullscreen": "Vollbild verlassen",
     "Legend": "Legende",
-    "Legend will appear automatically with the generated image": "Die Legende erscheint automatisch mit dem erzeugten Bild",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Bewahren wir unseren Spielplatz! Ich erstelle ein Konto auf Outdoorvision, um meine GPS-Tracks für die Erhaltung und Gestaltung meiner Übungsplätze in Frankreich zu teilen.",
     "Library:": "Bibliothek :",
@@ -519,8 +518,10 @@
     "No orientation selected": "Keine Ausrichtungen gewählt",
     "No reduction factor": "Kein Reduktionsfaktor",
     "No result found": "Keine Ergebnisse",
+    "No risk to show yet": "Noch keine Gefahr aufzuweisen",
     "No route right now": "Momentan keine Route",
     "No selected hazard potential. Set danger level first.": "Kein ausgewähltes Gefahrenpotenzial. Stellen Sie zuerst die Gefahrenstufe ein.",
+    "No specific legend to show": "Noch keine spezifische Legende vorhanden",
     "No title": "Ohne Titel",
     "No user with this email": {
       "API message": "kein Konto mit diesem email"
@@ -530,6 +531,7 @@
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
+    "Now on the left, on the “Layers” tab": "Diese finden Sie links im Reiter \"Kartenebenen\"",
     "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
     "Ok": "OK",
@@ -540,6 +542,7 @@
       "API message": "Es können nur aktuelle Dokumente (24h) gelöscht werden. Wenden Sie sich an die Moderation, um dieses Dokument zu löschen."
     },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Nur Aktionen in den ausgewählten Gebieten und mit den ausgewählten Aktivitäten werden im Feed auf der Startseite gezeigt. Die Aktionen der gefolgten Benutzern sind auch sichtbar.",
+    "Opacity": "Deckkraft",
     "Open fields to deeply explain the event circumstances.": "Freies Feld, um bestens die Ereignisumstände zu beschreiben",
     "Open fields to detail the picture's context": "Freies Feld, um den Kontext des Bilds zu beschreiben",
     "Open in a new tab": "In neuer Registerkarte öffnen",
@@ -556,6 +559,7 @@
     "Outing": "Route",
     "Outings statistics": "Berichtenstatistiken",
     "Outings, with the latest conditions in the mountains": "Skitouren mit den aktuellsten Bedingungen in den Bergen",
+    "Overlays": "Kartenebenen",
     "Page not found": "Seite nicht gefunden",
     "Paragliding outings": "Gleitschirmberichte",
     "Parameters of the Digital Camera": "Details des Kamera",
@@ -577,6 +581,7 @@
     "Personal feed off": "Persönliche Filter aus",
     "Personal feed on": "Persönliche Filter ein",
     "Personal informations": "Persönliche Daten",
+    "Pin the map to a side of the screen": "Die Karte an eine Seite des Bildschirms anheften",
     "Pitch description tag": "Seillängebeschreibungstag",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Bitte beschreiben Sie Ihr technisches und Erfahrungsniveau in Bezug auf das gewählte Ziel, Ihren Fitnessgrad, die zuvor angesammelte Müdigkeit, die Akklimatisation in der Höhe usw.",
     "Please move the map, or change the route's name.": "Bitte verschieben Sie die Karte, oder ändern Sie den Namen der Route.",
@@ -627,10 +632,12 @@
     "Results only": "Nur Ergebnisse",
     "Retry": "Nochmal versuchen",
     "Revoke": "Widerrufen",
+    "Risk": "Risiko",
     "Risky slopes": "Gefährliche Hängen",
     "Risky slopes, increased risk due to orientation": "Gefährliche Hänge, kritische Ausrichtungen",
     "Rotate image left": "Nach links drehen",
     "Rotate image right": "Nach rechts drehen",
+    "Route on map": "Route auf der Karte",
     "Routes to explore": "Routen zum Erkunden",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Unfallberichtendatenbank, die strebt nach einer verbesserten Sicherheit in Klettern und Bergsporten.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC baut auf einer freundlichen Einstellung auf. Wir danken Ihnen, es zu verbessern.",
@@ -676,6 +683,7 @@
     "Social cookies": "Sozial-Cookies",
     "Soft mobility outing": "Tour in sanfte Mobilität",
     "Some points are out of extent": "Punkte ausserhalb des Gebietes",
+    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Einige Routen weisen heikle Stellen auf, die einem gefährlichen Rutschrisiko (Aufprallrisiko bzw. Absturzrisiko aus großer Höhe), Gletscherspalten, Eistürmen oder Ertrinken durch Eisbruch auf einem Bergsee ausgesetzt sind. Um das Rutschrisiko zu verringern wird empfohlen, zu Fuss mit Steigeisen und geeignetes Anseilen voranzukommen.",
     "Sophie Picture Contest": "Sophie-Fotowettbewerb",
     "Sort by": "Sortieren nach",
     "Source:": "Quelle:",
@@ -753,6 +761,7 @@
     "Tracking devices": "GPS Geräte",
     "Translate into an other lang": "In eine andere Sprache übersetzen",
     "Transport & road or PT access": "Strassenzugang/Öffis",
+    "Tricky sections": "heikle Stellen",
     "Types and styles": "Art & Stile",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-geräte, usw…",
     "Unblock account": "Konto entsperren",
@@ -795,10 +804,10 @@
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Erklären Sie bitte, warum Sie gerade diese Tour ausgewählt haben und wie wichtig das Erreichen des Zieles für Sie war. Berücksichtigen Sie dabei den Einfluss der verschiedenen Optionen vorher (Urlaubstage, lange Anreise, Unterkunftsbuchungen...), der bisher dazu nötigen Bemühungen, der Seltenheit der Opportunität, usw...",
     "Wide and constant": "Breit und konstant",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Legt neue Punkte der Route entlang, in regelmässigen Abständen, je nach der Distanz in Metern, an.",
+    "Winter hiking routes": "Ski/Surf Routen",
     "With the": "Mit der",
     "Without c2c account": "Ohne c2c Konto",
-    "YETI - A preparation tool for your outing": "YETI - Ein Vorbereitungswerkzeug für Ihre Touren",
-    "YETI extent": "YETI Abdeckung",
+    "YETI Risk": "YETI Risiko",
     "Yeti: a tool to assess the avalanche risk": "YETI: ein Tool, um das Lawinenrisiko zu bewerten",
     "You are trying to compare versions of a document of which at least one version is masked.": "Sie versuchen, Versionen eines Dokuments zu vergleichen, von denen mindestens eine Version maskiert ist.",
     "You are trying to view a masked version of a document.": "Sie versuchen, eine maskierte Version eines Dokuments anzuzeigen.",
@@ -817,6 +826,7 @@
     "Zoom out": {
       "Map controls": "Verkleinern"
     },
+    "Zoom out and it will be OK": "zum aktivieren bitte verkleinern",
     "a new point on an existing line": "ein neuer Punkt auf einer bestehenden Linie",
     "access": {
       "$$noContext": "zustieg",
@@ -1102,6 +1112,7 @@
     "date_start": "Start-Datum",
     "date_time": "Datum/Uhrzeit",
     "day(s)": "Tag(e)",
+    "days": "Tage",
     "de": {
       "langs": "deutsch"
     },
@@ -2014,7 +2025,7 @@
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
     },
-    "you need to activate drawing mode": "Bitte den Zeichnen-Modus aktivieren",
+    "you need to activate edit mode": "Bitte Bearbeitungsmodus aktivieren",
     "zh": {
       "langs": "Chinesisch"
     }
