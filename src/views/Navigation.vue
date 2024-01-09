@@ -73,6 +73,13 @@
       </div>
 
       <div class="navigation-item">
+        <join-us-link class="has-text-centered button c2c-color" :class="{ 'is-hidden-mobile': !hideSearchInput }">
+          <icon-join-us fixed-width />
+          <span class="is-hidden-mobile">{{ $gettext('Join us') | uppercaseFirstLetter }}</span>
+        </join-us-link>
+      </div>
+
+      <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <span slot="button" class="button is-success">
             <fa-icon icon="plus" />
@@ -156,10 +163,16 @@
 
 <script>
 import IconHelp from '@/components/generics/icons/IconHelp';
+import IconJoinUs from '@/components/generics/icons/IconJoinUs';
+import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import config from '@/js/config';
 
 export default {
-  components: { IconHelp },
+  components: {
+    IconHelp,
+    IconJoinUs,
+    JoinUsLink,
+  },
   data() {
     return {
       searchText: '',
@@ -302,6 +315,10 @@ nav {
   line-height: 1.5;
 }
 
+.c2c-color {
+  background-color: $color-base-c2c;
+}
+
 @media screen and (max-width: $tablet) {
   .navigation-brand {
     img {
@@ -311,7 +328,7 @@ nav {
   }
 
   .navigation-item {
-    padding: 0.5rem 5px;
+    padding: 0.5rem 0.1rem;
   }
 
   .navigation-end {
@@ -331,7 +348,7 @@ nav {
   }
 
   .navigation-item {
-    padding: 0.5rem 5px;
+    padding: 0.5rem 0.2rem;
   }
 
   .navigation-end {
@@ -408,6 +425,10 @@ nav {
 </style>
 
 <style lang="scss">
+.c2c-color > a {
+  color: $color-text;
+}
+
 @media screen and (max-width: $tablet) {
   .add-button .dropdown-content {
     position: fixed;
