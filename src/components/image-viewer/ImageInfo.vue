@@ -17,6 +17,13 @@
         </label>
       </p>
 
+      <p v-if="author">
+        <fa-icon icon="user" />
+        <label>
+          {{ author }}
+        </label>
+      </p>
+
       <markdown v-if="document.cooked.summary" class="is-italic" :content="document.cooked.summary" />
       <markdown v-if="document.cooked.description" :content="document.cooked.description" />
 
@@ -57,6 +64,9 @@ export default {
   computed: {
     document() {
       return this.promise.data ? this.promise.data : null;
+    },
+    author() {
+      return this.document.author ? this.document.author : this.document.creator?.name;
     },
   },
 
