@@ -1174,8 +1174,10 @@ export default {
       let coordinates = feature.getGeometry().flatCoordinates;
 
       if (extent) {
+        // convert from W N E S to W S E N if needed
+        extent = [extent[0], Math.min(extent[1], extent[3]), extent[2], Math.max(extent[1], extent[3])];
         extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
-        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 });
+        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 14 });
       } else {
         coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857');
         this.view.setCenter(coordinates);
