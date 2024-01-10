@@ -169,7 +169,7 @@
     "Comments are disabled.": "Kommentare sind deaktiviert.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
-    "Compute one for a specific zone from the “Risk” tab": "Berechnen Sie ein Risiko fuer ein bestimmtes Gebiet im Reiter \"Risiko\"",
+    "Compute one for a specific zone from the “Risk” tab": "Berechnen Sie ein Risiko für ein bestimmtes Gebiet im Reiter \"Risiko\"",
     "Compute risk": "Risiko berechnen",
     "Conditions": "Voraussetzungen",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
@@ -228,7 +228,6 @@
     "Danger rating - very high": "Sehr gross",
     "Danger:": "Stufe :",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
-    "Data-Avalanche": "Lawine-Databank",
     "Delete": {
       "yeti": "Löschen"
     },
@@ -759,7 +758,6 @@
     },
     "Trace": "GPS-Track",
     "Tracking devices": "GPS Geräte",
-    "Translate into an other lang": "In eine andere Sprache übersetzen",
     "Transport & road or PT access": "Strassenzugang/Öffis",
     "Tricky sections": "heikle Stellen",
     "Types and styles": "Art & Stile",
