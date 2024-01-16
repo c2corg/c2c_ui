@@ -35,8 +35,8 @@ export default {
     // then  set source
     this.layer.setSource(
       new ol.source.TileWMS({
-        url: 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/v/wms',
-        params: { LAYERS: 'TRACERANDOHIVERNALE' },
+        url: 'https://api.ensg.eu/geoserver/yeti/wms',
+        params: { LAYERS: 'yeti:TRACERANDOHIVERNALE' },
         attributions: '<a href="https://www.petzl.com/fondation/s/?language=fr">© PETZL</a>',
       })
     );
