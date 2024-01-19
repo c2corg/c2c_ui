@@ -27,10 +27,10 @@
         {{ $gettext(errorMessage, 'API message') }}
       </span>
     </label>
-    <div class="control has-icons-left">
+    <div class="control has-icons-left has-icons-right">
       <input
         ref="input"
-        :type="type"
+        :type="unmasked ? 'text' : type"
         :placeholder="placeholder || label"
         :required="required"
         :disabled="disabled"
@@ -40,6 +40,14 @@
         class="input"
         :class="{ 'is-danger': hasError || errorMessage }"
       />
+      <span
+        v-if="type === 'password'"
+        class="icon is-small is-right"
+        @click="onMaskToggle"
+        style="pointer-events: initial"
+      >
+        <fa-icon :icon="unmasked ? 'eye-slash' : 'eye'" />
+      </span>
       <span class="icon is-small is-left">
         <fa-icon :icon="icon" />
       </span>
@@ -98,6 +106,7 @@ export default {
   data() {
     return {
       errorMessage: null,
+      unmasked: false,
     };
   },
 
@@ -123,6 +132,9 @@ export default {
   methods: {
     focus() {
       this.$refs.input.focus();
+    },
+    onMaskToggle() {
+      this.unmasked = !this.unmasked;
     },
   },
 };
