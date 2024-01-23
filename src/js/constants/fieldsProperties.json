@@ -233,6 +233,10 @@
     "type": "boolean",
     "default": false
   },
+  "disable_view_count": {
+    "type": "boolean",
+    "default": false
+  },
   "durations": {
     "values": "route_duration_types",
     "multiple": true,
