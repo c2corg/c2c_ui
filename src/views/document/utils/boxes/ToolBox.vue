@@ -83,6 +83,11 @@
       <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
     </div>
 
+    <div class="view-count" v-if="viewCount">
+      <icon-view-count fixed-width></icon-view-count>
+      {{ viewCount.value }} <span>{{ viewCount.i18nName }}</span>
+    </div>
+
     <tool-box-button
       v-if="isEditable"
       :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
@@ -194,6 +199,7 @@ import ToolBoxButton from './ToolBoxButton.vue';
 
 import AssociationsWindow from '@/components/association-editor/AssociationsWindow.vue';
 import IconQuality from '@/components/generics/icons/IconQuality.vue';
+import IconViewCount from '@/components/generics/icons/IconViewCount.vue';
 import c2c from '@/js/apis/c2c';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -258,6 +264,19 @@ const quality = computed(() => {
     value: props.document.quality!,
     i18nName: $gettext(fields.quality.name),
     i18nValue: $gettext(props.document.quality!, fields.quality.i18nContext),
+  };
+});
+
+const viewCount = computed(() => {
+  const fields = constants.objectDefinitions[documentType.value].fields;
+  const value = (props.document as Record<string, unknown>)[fields.view_count?.name];
+  if (!fields.view_count || value === null || value === undefined) {
+    return undefined;
+  }
+  return {
+    ...fields.view_count,
+    value,
+    i18nName: $gettext(fields.view_count.name),
   };
 });
 
@@ -402,7 +421,8 @@ if ($user.isModerator && documentType.value === 'profile') {
 }
 
 /* a colon after the label, with a non-breaking space before it in French */
-.quality span:nth-of-type(1) {
+.quality span:nth-of-type(1),
+.view-count span:nth-of-type(1) {
   :lang(fr) &::after {
     content: '\00a0:';
   }
