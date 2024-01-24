@@ -43,7 +43,7 @@
       <span v-if="type === 'password'" class="icon is-small is-right is-clickable" @click="onMaskToggle">
         <fa-icon
           :icon="unmasked ? 'eye-slash' : 'eye'"
-          :title="$gettext(unmasked ? 'Hide password' : 'Show Password', 'Passord prompt')"
+          :title="$gettext(unmasked ? 'Hide password' : 'Show Password', 'Password prompt')"
         />
       </span>
       <span class="icon is-small is-left">
