@@ -40,13 +40,11 @@
         class="input"
         :class="{ 'is-danger': hasError || errorMessage }"
       />
-      <span
-        v-if="type === 'password'"
-        class="icon is-small is-right"
-        @click="onMaskToggle"
-        style="pointer-events: initial"
-      >
-        <fa-icon :icon="unmasked ? 'eye-slash' : 'eye'" />
+      <span v-if="type === 'password'" class="icon is-small is-right is-clickable" @click="onMaskToggle">
+        <fa-icon
+          :icon="unmasked ? 'eye-slash' : 'eye'"
+          :title="$gettext(unmasked ? 'Hide password' : 'Show Password', 'Passord prompt')"
+        />
       </span>
       <span class="icon is-small is-left">
         <fa-icon :icon="icon" />
