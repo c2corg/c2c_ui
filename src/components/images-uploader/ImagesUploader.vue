@@ -101,7 +101,7 @@ export default {
 
   computed: {
     imageType() {
-      if (this.parentDocument.type === 'o' || this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
+      if (this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
         return 'personal';
       }
 
