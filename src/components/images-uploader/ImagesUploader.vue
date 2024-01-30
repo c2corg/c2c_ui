@@ -20,6 +20,7 @@
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
+          @set-default-licence="setDefaultLicence(image)"
         />
       </div>
 
@@ -74,6 +75,7 @@ import c2c from '@/js/apis/c2c';
 import uploadFile from '@/js/upload-file';
 
 export default {
+  name: 'ImagesUploader',
   components: {
     ImageUploader,
   },
@@ -96,10 +98,21 @@ export default {
       promise: {},
       readyForSaving: false,
       dragOver: false,
+      lastUsedLicenceData: this.$localStorage.get('lastUsedLicence'),
     };
   },
 
   computed: {
+    lastUsedLicence: {
+      get() {
+        return this.lastUsedLicenceData;
+      },
+      set(value) {
+        this.$localStorage.set('lastUsedLicence', value);
+        this.lastUsedLicenceData = value;
+      },
+    },
+
     imageType() {
       if (this.parentDocument.type === 'u' || this.parentDocument.type === 'x') {
         return 'personal';
@@ -107,6 +120,14 @@ export default {
 
       if (this.parentDocument.type === 'c') {
         return this.parentDocument.article_type === 'collab' ? 'collaborative' : 'personal';
+      }
+
+      if (this.parentDocument.type === 'o') {
+        let lul = this.lastUsedLicence;
+        if (lul && ['collaborative', 'personal'].includes(lul)) {
+          return lul;
+        }
+        return null;
       }
 
       return 'collaborative';
@@ -225,6 +246,20 @@ export default {
       };
     },
 
+    setDefaultLicence(image) {
+      // remember it and apply it to images without licence (first use)
+      let lul = image.document.image_type;
+      if (lul && ['collaborative', 'personal'].includes(lul)) {
+        this.lastUsedLicence = lul;
+        for (const img of Object.values(this.images)) {
+          if (img.document.image_type === null) {
+            img.document.image_type = lul;
+          }
+        }
+      }
+      this.computeReadyForSaving();
+    },
+
     startUpload(image, angle = 0) {
       image.status = 'INITIAL';
       image.percentCompleted = 0;
@@ -274,7 +309,8 @@ export default {
 
     computeReadyForSaving() {
       const images = Object.values(this.images);
-      this.readyForSaving = images.length && images.every((image) => image.status === 'SUCCESS');
+      this.readyForSaving =
+        images.length && images.every((image) => image.status === 'SUCCESS' && image.document.image_type !== null);
     },
 
     save() {

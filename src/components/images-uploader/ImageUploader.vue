@@ -60,7 +60,7 @@
                 'is-6': licences.size === 2,
               }"
               :key="licence"
-              @click="document.image_type = licence"
+              @click="setLicence(licence)"
             >
               <label>{{ licences.length }} {{ label | uppercaseFirstLetter }}</label>
             </div>
@@ -176,6 +176,11 @@ export default {
       }
 
       this.document.categories = newValue;
+    },
+
+    setLicence(licence) {
+      this.document.image_type = licence;
+      this.$emit('set-default-licence');
     },
 
     applyRotation(angle) {
