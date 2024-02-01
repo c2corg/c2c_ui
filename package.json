@@ -13,7 +13,7 @@
     "lint:no-fix": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint --no-fix",
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
     "messages:extract": "node tools/extract-messages.js",
-    "prepare": "husky install && npm run snyk-protect && npm run prepare-swiper",
+    "prepare": "husky && npm run snyk-protect && npm run prepare-swiper",
     "snyk-protect": "snyk-protect",
     "update-c2c-common": "python3 tools/update-c2c-common.py",
     "prepare-swiper": "concat -o ./public/swiper.css ./node_modules/swiper/modules/pagination/pagination-element.min.css ./node_modules/swiper/modules/navigation/navigation-element.min.css ./node_modules/swiper/modules/virtual/virtual-element.min.css ./node_modules/swiper/modules/zoom/zoom-element.min.css"
@@ -74,7 +74,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-promise": "5.2.0",
     "eslint-plugin-vue": "7.20.0",
-    "husky": "8.0.3",
+    "husky": "9.0.10",
     "postcss-html": "1.6.0",
     "prettier": "2.8.8",
     "prettier-plugin-jsdoc": "0.4.2",
