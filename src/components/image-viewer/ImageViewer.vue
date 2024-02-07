@@ -2,7 +2,7 @@
   <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
-        {{ activeDocument.locales[0].title || '&nbsp;' }}
+        {{ activeDocument.locales[0].title }}
       </span>
       <span class="is-size-3 is-nowrap image-viewer-buttons">
         <document-link :document="activeDocument" class="has-text-grey-lighter">
@@ -267,6 +267,10 @@ $paginationHeight: 30px;
   background: rgba(0, 0, 0, 0.95);
 
   &-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 3;
     justify-content: space-between;
     padding: 0.5rem 1rem;
     margin-bottom: 0 !important;
@@ -274,30 +278,49 @@ $paginationHeight: 30px;
 
     .image-viewer-title {
       margin: auto;
+      // display title on top of the image with some alpha background
+      // in case it overlaps (eg when zooming or on mobile)
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      padding: 0 10px;
     }
 
     .image-viewer-buttons > *:not(:last-child) {
       margin-right: 0.75rem;
     }
 
-    .image-viewer-buttons {
+    .image-viewer-buttons > * {
+      // keep the buttons visible when they overlap the image
+      filter: drop-shadow(2px 2px 2px black);
       svg:hover {
         color: white;
       }
     }
   }
 
+  // the img container
   &-swiper {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 0;
     width: 100vw;
-    // on mobile, we don't have pagination, but this will give enough space to display
-    // the title on one line.
-    height: calc(100% - #{$headerHeight} - #{$paginationHeight});
+    height: 100%;
+
+    @media screen and (min-width: $tablet) {
+      & .swiper-zoom-container {
+        // adjust the initial centering of the img to avoid overlap with 1st line of title
+        margin-top: 10px;
+      }
+    }
   }
 
   &-slide {
     overflow: hidden;
 
     img {
+      // initially avoid overlap with title & scroll, but this is overridden when zooming
       max-height: calc(100vh - #{$headerHeight} - #{$paginationHeight});
     }
   }
@@ -308,6 +331,7 @@ $paginationHeight: 30px;
     justify-content: center;
     bottom: 0;
     height: $paginationHeight;
+    position: fixed;
 
     .image-viewer-bullet {
       display: inline-block;
@@ -353,17 +377,14 @@ $paginationHeight: 30px;
 }
 
 @media screen and (max-width: $tablet) {
-  .image-viewer-title {
-    position: absolute;
+  .image-viewer-header .image-viewer-title {
+    position: fixed;
+    // on mobile, title is below to avoid overlap with the toolbox
     bottom: 0;
     left: 0;
     width: 100%;
     text-align: center;
-    // since mobile are small, we don't do text ellipsis and allow multi line text
-    // make it displayed on top of the image, and with some alpha background in case it
-    // overlaps the image
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.6);
+    border-radius: unset;
   }
 
   .image-viewer-buttons {
