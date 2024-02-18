@@ -114,7 +114,7 @@
           </div>
         </div>
 
-        <div class="box" v-if="locale.summary || locale.access_period || locale.description || locale.access">
+        <div class="box" v-if="showMainBox">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.access_period" :title="accessPeriodTitle" />
           <template v-if="document.waypoint_type == 'access'">
@@ -126,6 +126,7 @@
             <markdown-section :document="document" :field="fields.description" :title="descriptionTitle" />
             <markdown-section :document="document" :field="fields.access" :title="accessTitle" />
           </template>
+          <markdown-section :document="document" :field="fields.external_resources" />
           <div style="clear: both" />
         </div>
 
@@ -156,6 +157,10 @@ export default {
   computed: {
     capacityContext() {
       return this.document.waypoint_type === 'bivouac' ? this.document.waypoint_type : null;
+    },
+    showMainBox() {
+      const { summary, access_period, description, access, external_resources } = this.locale;
+      return summary || access_period || description || access || external_resources;
     },
   },
 };
