@@ -19,7 +19,7 @@
     "prepare-swiper": "concat -o ./public/swiper.css ./node_modules/swiper/modules/pagination/pagination-element.min.css ./node_modules/swiper/modules/navigation/navigation-element.min.css ./node_modules/swiper/modules/virtual/virtual-element.min.css ./node_modules/swiper/modules/zoom/zoom-element.min.css"
   },
   "dependencies": {
-    "@c2corg/fit-parser-extract-geometry": "1.0.1",
+    "@c2corg/fit-parser-extract-geometry": "1.0.2",
     "@fortawesome/fontawesome-free": "6.5.1",
     "@fortawesome/fontawesome-svg-core": "6.5.1",
     "@fortawesome/free-brands-svg-icons": "6.5.1",
