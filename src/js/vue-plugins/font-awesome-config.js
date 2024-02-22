@@ -66,6 +66,7 @@ import { faGrin } from '@fortawesome/free-solid-svg-icons/faGrin';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faHeading } from '@fortawesome/free-solid-svg-icons/faHeading';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
+import { faHillAvalanche } from '@fortawesome/free-solid-svg-icons/faHillAvalanche';
 import { faHistory } from '@fortawesome/free-solid-svg-icons/faHistory';
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
@@ -298,6 +299,7 @@ export default function install(Vue) {
     faHashtag,
     faHeading,
     faHeart,
+    faHillAvalanche,
     faHistory,
     faHome,
     faImage,
