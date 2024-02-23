@@ -29,22 +29,6 @@
       icon="directions"
     />
 
-    <div v-if="showAvalancheInfo">
-      <fa-icon icon="hill-avalanche" fixed-width />
-      <template v-if="bras?.length">
-        <abbr :title="$gettext(`Bulletin d'estimation du risque d'avalanche`)" v-translate>BERA</abbr> :
-        <span v-for="(bra, index) in bras" :key="bra.id">
-          <a :href="bra.properties.urls[0].url" :title="bra.properties.fullname" target="_blank">{{
-            bra.properties.name
-          }}</a>
-          <template v-if="index + 1 < bras.length">&bull; </template>
-        </span>
-        &bull;
-      </template>
-      <template v-else v-translate>Analyse du risque d'avalanche :</template>
-      <router-link :to="yetiUrl"> <icon-yeti /> <span v-translate>YETI</span> </router-link>
-    </div>
-
     <tool-box-button
       v-if="document.geometry && document.geometry.geom && documentType !== 'area'"
       :to="linkToClosestDocuments"
@@ -192,8 +176,6 @@
 </template>
 
 <script>
-import turfBooleanIntersect from '@turf/boolean-intersects';
-
 import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
@@ -206,7 +188,6 @@ import ToolBoxButton from './ToolBoxButton';
 
 import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
 import c2c from '@/js/apis/c2c';
-import yetiService from '@/js/apis/yeti-service';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
 import isEditableMixin from '@/js/is-editable-mixin';
@@ -234,7 +215,6 @@ export default {
   data() {
     return {
       isAccountBlocked: null,
-      bras: null,
     };
   },
 
@@ -399,26 +379,6 @@ export default {
     if (this.$user.isModerator && this.documentType === 'profile') {
       c2c.moderator.isAccountBlocked(this.document.document_id).then((response) => {
         this.isAccountBlocked = response.data.blocked;
-      });
-    }
-  },
-
-  mounted() {
-    if (this.showAvalancheInfo) {
-      yetiService.zonesBra().then((response) => {
-        const routeGeometry = GeoJSON.readGeometry(
-          JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom)
-        );
-
-        this.bras = response.data.features.filter((feature) => {
-          const polygon = GeoJSON.readGeometry(feature.geometry, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857',
-          });
-          return routeGeometry.getType() === 'Point'
-            ? polygon.intersectsCoordinate(routeGeometry.getCoordinates())
-            : turfBooleanIntersect(GeoJSON.writeGeometryObject(polygon), GeoJSON.writeGeometryObject(routeGeometry));
-        });
       });
     }
   },
