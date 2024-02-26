@@ -23,6 +23,17 @@
         icon="key"
       />
 
+      <div class="field" v-if="showLoginTerms">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" v-model="loginTermsAgreed" />
+            <span class="has-text-weight-bold" v-translate>
+              I have read and agree to the <router-link :to="termsRoute" v-translate>terms of service</router-link>.
+            </span>
+          </label>
+        </div>
+      </div>
+
       <div class="has-text-weight-bold is-centered has-text-centered mb-1" v-translate>
         Beware of case-sensitive login and password
       </div>
@@ -74,8 +85,9 @@
           <label class="checkbox">
             <input type="checkbox" v-model="termsAgreed" />
             &nbsp;
-            <span class="has-text-weight-bold" v-translate>I have read and agree to the terms of use</span>
-            (<router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>link</router-link>).
+            <span class="has-text-weight-bold" v-translate>
+              I have read and agree to the <router-link :to="termsRoute" v-translate>terms of service</router-link>.
+            </span>
           </label>
         </div>
       </div>
@@ -225,10 +237,16 @@ export default {
       redirectionStillDone: false,
 
       promise: {},
+      loginTermsAgreed: undefined,
+      termsRoute: { name: 'article', params: { id: 106731 } },
     };
   },
 
-  computed: {},
+  computed: {
+    showLoginTerms() {
+      return this.loginTermsAgreed !== undefined;
+    },
+  },
 
   watch: {
     $route: 'load',
@@ -313,8 +331,20 @@ export default {
       }
     },
 
+    isTermsError(e) {
+      const { status } = e.response;
+      const { errors } = e.response.data;
+      const messageErrors = errors.map((e) => e.description);
+      return status === 403 && messageErrors.includes('Terms of Service need to be accepted');
+    },
+
     signin() {
-      this.promise = this.$user.signIn(this.username, this.password).then(this.onSuccessSigin);
+      this.promise = this.$user
+        .signIn(this.username, this.password, this.loginTermsAgreed)
+        .then(this.onSuccessSigin)
+        .catch((e) => {
+          this.loginTermsAgreed = this.isTermsError(e) ? false : undefined;
+        });
     },
 
     onSuccessSigin(data) {
