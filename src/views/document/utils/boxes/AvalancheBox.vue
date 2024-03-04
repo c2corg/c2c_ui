@@ -1,93 +1,37 @@
 <template>
   <div v-if="showAvalancheInfo" class="box no-print is-relative">
-    <icon-bra
-      v-if="bras?.length === 1 && bras[0].danger.max"
-      :level="bras[0].danger.max"
-      class="avalanche-danger-single"
-    />
     <div class="title" v-translate>Avalanche risk</div>
-    <template v-if="bras?.length === 1">
-      <div v-for="bra in bras" :key="bra.id">
-        <dl>
-          <dt v-translate>Area:</dt>
-          <dd>{{ bra.fullname ?? bra.zone }}</dd>
-          <dt v-translate>Country:</dt>
-          <dd>{{ bra.country }}</dd>
-        </dl>
-        <template v-if="bra.danger.low">
-          <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
-            <danger-level :danger="bra.danger" />
-            <input-orientation disabled :value="orientations(bra)" black-white />
-          </div>
-          <dl v-if="bra.danger.comment || bra.orientations.comment">
-            <template v-if="bra.danger.comment">
-              <dt v-translate>Danger:</dt>
-              <dd>{{ bra.danger.comment }}</dd>
-            </template>
-            <template v-if="bra.orientations.comment">
-              <dt v-translate>Orientations:</dt>
-              <dd>{{ bra.orientations.comment }}</dd>
-            </template>
-            <dt v-translate>Validity date:</dt>
-            <dd>
-              {{ validity(bra) }}
-              <template v-if="expired(bra)">
-                <fa-icon icon="exclamation-circle" class="has-text-danger" :title="$gettext('Validity date expired')" />
-              </template>
-            </dd>
-          </dl>
-        </template>
-        <div v-else class="py-2">
-          <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
+    <template v-if="bras?.length">
+      <template v-if="bulletinsWithInfo">
+        <div class="icon-bra is-flex is-justify-content-center">
+          <icon-bra :size="120" :level="Math.max(...bras.map((bra) => bra.danger.max).filter(Boolean))" />
         </div>
-        <template v-if="bra.urls.length">
-          <dt v-translate>Full bulletin:</dt>
-          <dd>
-            <span v-for="(url, i) in bra.urls" :key="i">
-              <a :href="url.url" target="_blank"> ©{{ url.title }} </a>
-              <template v-if="i + 1 < bra.urls.length">&bull; </template>
-            </span>
-          </dd>
-        </template>
-        <div class="py-3">
-          <icon-yeti fixed-width />
-          <router-link :to="yetiUrl"><span v-translate>Prepare your outing with YETI</span></router-link>
-        </div>
-      </div>
-    </template>
-    <div v-else>
-      <template v-if="bras?.length">
-        <div>
-          <span class="is-italic" v-translate>
-            Several bulletins match, only higher risk is displayed. See details below.
-          </span>
-        </div>
-
-        <div class="is-flex is-justify-content-center">
-          <icon-bra size="100" :level="Math.max(...bras.map((bra) => bra.danger.max))" />
-        </div>
-
-        <div>
+        <div class="has-text-centered">
           <span v-for="(bra, index) in bras" :key="bra.id">
-            <a :href="bra.urls[0].url" :title="bra.fullname" target="_blank">{{ bra.name }}</a>
+            <a :href="bra.urls[0].url" :title="bra.fullname" target="_blank">
+              {{ bra.name }}<template v-if="bra.fullname"> ({{ bra.country }})</template>
+            </a>
             <template v-if="index + 1 < bras.length">&bull; </template>
           </span>
         </div>
       </template>
-
-      <div class="py-3">
-        <icon-yeti fixed-width />
-        <router-link :to="yetiUrl"><span v-translate>Prepare your outing with YETI</span></router-link>
+      <div v-else class="py-2">
+        <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
       </div>
+      <hr />
+    </template>
+    <div>
+      <icon-yeti fixed-width />
+      <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
     </div>
   </div>
 </template>
 <script>
 import turfBooleanIntersects from '@turf/boolean-intersects';
+import turfBuffer from '@turf/buffer';
+import turfSimplify from '@turf/simplify';
 
 import IconBra from '../../../../components/generics/icons/IconBra';
-import InputOrientation from '../../../../components/generics/inputs/InputOrientation';
-import DangerLevel from '../../../../components/yeti/map-layers/DangerLevel';
 
 import yetiService from '@/js/apis/yeti-service.js';
 import ol from '@/js/libs/ol';
@@ -98,8 +42,6 @@ const GeoJSON = new ol.format.GeoJSON();
 export default {
   components: {
     IconBra,
-    InputOrientation,
-    DangerLevel,
   },
 
   mixins: [requireDocumentProperty],
@@ -107,6 +49,7 @@ export default {
   data() {
     return {
       bras: null,
+      bulletinsWithInfo: 0,
     };
   },
 
@@ -129,17 +72,23 @@ export default {
   mounted() {
     if (this.showAvalancheInfo) {
       yetiService.zonesBra().then((response) => {
-        const routeGeometry = JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom);
-
-        const zones = response.data.features.filter((feature) => {
-          const polygon = GeoJSON.writeGeometryObject(
-            GeoJSON.readGeometry(feature.geometry, {
-              dataProjection: 'EPSG:4326',
-              featureProjection: 'EPSG:3857',
+        // use WGS 84 projection for buffering with turf
+        const routeGeometry = turfSimplify(
+          GeoJSON.writeGeometryObject(
+            GeoJSON.readGeometry(JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom), {
+              dataProjection: 'EPSG:3857',
+              featureProjection: 'EPSG:4326',
             })
-          );
-          return turfBooleanIntersects(polygon, routeGeometry);
-        });
+          ),
+          { tolerance: 0.01, highQuality: false }
+        );
+
+        const zones = response.data.features.filter((feature) =>
+          turfBooleanIntersects(
+            feature.geometry,
+            turfBuffer(routeGeometry, this.document.geometry.geom_detail ? 1 : 2, { units: 'kilometers' }).geometry
+          )
+        );
 
         if (zones.length) {
           const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
@@ -147,6 +96,7 @@ export default {
             this.bras = response.data.zones
               .filter((zone) => m.has(zone.zone + '@' + zone.country))
               .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country).properties, ...zone }));
+            this.bulletinsWithInfo = this.bras.map((bra) => bra.danger.max).filter(Boolean).length;
           });
         }
       });
@@ -189,9 +139,7 @@ dt::before {
   content: '';
   display: block;
 }
-.avalanche-danger-single {
-  position: absolute;
-  top: 0;
-  right: 0;
+.icon-bra {
+  margin: -35px 0 -25px 0;
 }
 </style>

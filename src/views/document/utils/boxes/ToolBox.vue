@@ -359,20 +359,6 @@ export default {
       const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
       return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
     },
-
-    yetiUrl() {
-      return { name: 'yeti', params: { document_id: this.document.document_id } };
-    },
-
-    showAvalancheInfo() {
-      if (this.document?.type !== 'r') {
-        return false;
-      }
-
-      const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
-
-      return this.document.activities?.some((activity) => activities.includes(activity));
-    },
   },
 
   created() {
