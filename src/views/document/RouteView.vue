@@ -10,6 +10,7 @@
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
+        <avalanche-box :document="document" v-if="!$screen.isMobile" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
@@ -127,6 +128,8 @@
 
         <recent-outings-box :document="document" />
 
+        <avalanche-box :document="document" v-if="$screen.isMobile" />
+
         <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
@@ -139,6 +142,7 @@
 <script>
 import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
+import AvalancheBox from './utils/boxes/AvalancheBox';
 import documentViewMixin from './utils/document-view-mixin';
 
 const historyWorthActivities = [
@@ -154,6 +158,7 @@ export default {
   components: {
     LowDocumentQualityBanner,
     MaskedDocumentVersionInfo,
+    AvalancheBox,
   },
   mixins: [documentViewMixin],
 

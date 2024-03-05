@@ -23,17 +23,17 @@
       </p>
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <danger-level :danger="overlayData.danger" />
-        <input-orientation :value="overlayOrientations" />
+        <input-orientation disabled :value="overlayOrientations" />
       </div>
       <dl v-if="overlayDangerComment || overlayOrientationsComment" class="is-size-6 px-3 pt-3">
-        <div v-if="overlayDangerComment">
+        <template v-if="overlayDangerComment">
           <dt v-translate>Danger:</dt>
           <dd>{{ overlayDangerComment }}</dd>
-        </div>
-        <div v-if="overlayOrientationsComment">
+        </template>
+        <template v-if="overlayOrientationsComment">
           <dt v-translate>Orientations:</dt>
           <dd>{{ overlayOrientationsComment }}</dd>
-        </div>
+        </template>
       </dl>
     </div>
     <div v-else class="py-2">

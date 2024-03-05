@@ -1,11 +1,11 @@
 <template>
   <div class="control" :title="value_.join(', ')">
     <svg
-      :class="{ 'is-read-only': disabled }"
+      :class="{ 'is-read-only': disabled, 'is-black-white': blackWhite }"
       class="input-orientation is-unselectable"
       xmlns="http://www.w3.org/2000/svg"
-      width="100"
-      height="100"
+      :width="size"
+      :height="size"
       version="1.1"
       viewBox="0 0 454.00715 454.00714"
     >
@@ -53,6 +53,19 @@ import { arrayMixin, baseMixin } from './mixins';
 
 export default {
   mixins: [baseMixin, arrayMixin],
+
+  props: {
+    size: {
+      type: Number,
+      required: false,
+      default: 100,
+    },
+    blackWhite: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
 };
 </script>
 
@@ -68,6 +81,11 @@ export default {
 
 .input-orientation > g.input-orientation-selected > path {
   fill: $primary;
+  transition: 0.1s;
+}
+
+.input-orientation.is-black-white > g.input-orientation-selected > path {
+  fill: $black;
   transition: 0.1s;
 }
 

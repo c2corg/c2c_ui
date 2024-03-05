@@ -39,10 +39,6 @@
     </div>
 
     <div class="buttons is-centered">
-      <router-link v-if="showYetiButton" :to="yetiUrl" class="button is-small">
-        <icon-yeti class="icon" />
-        <span v-translate>YETI</span>
-      </router-link>
       <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadGpx">GPX</button>
       <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadKml">KML</button>
       <button
@@ -91,28 +87,12 @@ export default {
       return this.documentType === 'outing';
     },
 
-    showYetiButton() {
-      // at least one of document activities is concerned by yeti
-
-      if (!this.document || this.documentType !== 'route' || !this.document.activities) {
-        return false;
-      }
-
-      const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
-
-      return this.document.activities.some((activity) => activities.includes(activity));
-    },
-
     showDownloadTraceButtons() {
       return this.document.geometry && (this.document.geometry.geom_detail || this.documentType === 'waypoint');
     },
 
     hasMapLinks() {
       return (this.document.maps && this.document.maps.length !== 0) || this.document.maps_info;
-    },
-
-    yetiUrl() {
-      return { name: 'yeti', params: { document_id: this.document.document_id } };
     },
   },
 
