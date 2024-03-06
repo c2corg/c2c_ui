@@ -110,6 +110,14 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r') {
     svgSrc = svgSrcByDocumentType[type];
   } else if (type === 'w') {
+    if (
+      document.waypoint_type === 'access' &&
+      document.public_transportation_rating &&
+      document.public_transportation_rating !== 'no service'
+    ) {
+      // bulma green
+      color = '#4baf50';
+    }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
   } else if (type === 'a') {
     return new ol.style.Style();
