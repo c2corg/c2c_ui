@@ -6,6 +6,7 @@
       :key="profile.document_id"
       :document="profile"
       class="user-link-label"
+      :class="profile.categories"
       uppercase-first-letter
     />
   </span>
@@ -25,5 +26,8 @@ export default {
 <style scoped>
 .user-link-label:not(:last-child)::after {
   content: ', ';
+}
+.mountain_guide {
+  color:red;
 }
 </style>
