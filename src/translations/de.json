@@ -123,6 +123,7 @@
       "Map controls": "Zuschreibung"
     },
     "Avalanche bulletins": "Lawinenbulletin",
+    "Avalanche risk": "Lawinengefahr ",
     "Avalanche risk evaluation tool:": "Lawinenrisiko Einschätzungtool:",
     "Average slope (degrees)": "durchschnittliche Steigung (Grad)",
     "Average slope in degree": "durchschnittliche Steigung in grad.",
@@ -772,6 +773,7 @@
     "Unprotect document": "Dokument unschützen",
     "Upload a GPS track": "GPS Strecke hochladen ",
     "Upload a new version": "Neue Version hochladen",
+    "Use YETI to better analyze avalanche risk": "Bitte YETI nutzen, um die Lawinengefahr besser zu analysieren.",
     "Use track": "Strecke benutzen",
     "Useful links": "Hilfreiche Links",
     "User avatar": "Avatar",
