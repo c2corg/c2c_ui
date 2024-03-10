@@ -7,10 +7,10 @@
       class="is-size-4 has-text-secondary icon-activities"
     />
     <span v-if="heightUpText" :title="$gettext('height_diff_up')" class="has-text-normal .is-nowrap">
-      {{ heightUpText }}&#8202;m,
+      {{ heightUpText }}&#8202;m
     </span>
-    <span v-if="heightDiffText" :title="$gettext('height_diff_difficulties')" class="has-text-normal .is-nowrap">
-      {{ heightDiffText }}&#8202;m,
+    <span :title="$gettext('height_diff_difficulties')" class="has-text-normal .is-nowrap">
+      {{ heightDiffText }},
     </span>
     <span
       v-if="route.orientations && route.orientations.length < 3 && !hideOrientation"
@@ -77,19 +77,19 @@ export default {
       if (this.hideHeightDiffDifficulties) return '';
       var act = this.route.activities;
       if (!act) return;
-      var is_ski_alpinism = act.includes('skitouring') && this.route.ski_rating >= '4';
       var is_alpinism =
         act.includes('snow_ice_mixed') ||
         act.includes('mountain_climbing') ||
         act.includes('rock_climbing') ||
-        act.includes('ice_climbing');
+        act.includes('ice_climbing') ||
+        act.includes('skitouring');
       // don't clutter with difficulties for "easy" activities
-      if (this.heightUpText && !(is_ski_alpinism || is_alpinism)) return '';
+      if (this.heightUpText && !is_alpinism) return '';
       var dd = this.route.height_diff_difficulties;
       if (!dd || (this.heightUpText && dd === this.route.height_diff_up)) return '';
-      // to differentiate the 2 heights, use explicit symbol ↕ similar to `arrows-alt-v` in RouteCard
-      var prefix = this.heightUpText ? '\u2195\ufe0e ' : '';
-      return prefix + dd;
+      // to differentiate the 2 heights, use parenthesis
+      var ddstr = dd + '\u200am';
+      return this.heightUpText ? '(' + ddstr + ')' : ddstr;
     },
   },
 };
