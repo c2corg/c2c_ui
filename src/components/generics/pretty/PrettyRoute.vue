@@ -75,9 +75,9 @@ export default {
     },
     heightDiffText() {
       if (this.hideHeightDiffDifficulties) return '';
-      var act = this.route.activities;
+      const act = this.route.activities;
       if (!act) return;
-      var is_alpinism =
+      const is_alpinism =
         act.includes('snow_ice_mixed') ||
         act.includes('mountain_climbing') ||
         act.includes('rock_climbing') ||
@@ -85,10 +85,10 @@ export default {
         act.includes('skitouring');
       // don't clutter with difficulties for "easy" activities
       if (this.heightUpText && !is_alpinism) return '';
-      var dd = this.route.height_diff_difficulties;
+      const dd = this.route.height_diff_difficulties;
       if (!dd || (this.heightUpText && dd === this.route.height_diff_up)) return '';
       // to differentiate the 2 heights, use parenthesis
-      var ddstr = dd + '\u200am';
+      const ddstr = dd + '\u200am';
       return this.heightUpText ? '(' + ddstr + ')' : ddstr;
     },
   },
