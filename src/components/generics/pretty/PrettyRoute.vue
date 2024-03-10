@@ -6,14 +6,17 @@
       :activities="route.activities"
       class="is-size-4 has-text-secondary icon-activities"
     />
+    <span v-if="heightUpText" :title="$gettext('height_diff_up')" class="has-text-normal .is-nowrap">
+      {{ heightUpText }}&#8202;m,
+    </span>
+    <span v-if="heightDiffText" :title="$gettext('height_diff_difficulties')" class="has-text-normal .is-nowrap">
+      {{ heightDiffText }}&#8202;m,
+    </span>
     <span
-      v-if="route.height_diff_difficulties && !hideHeightDiffDifficulties"
-      :title="$gettext('height_diff_difficulties')"
+      v-if="route.orientations && route.orientations.length < 3 && !hideOrientation"
+      :title="$gettext('orientations')"
       class="has-text-normal"
     >
-      {{ route.height_diff_difficulties }}&nbsp;m,
-    </span>
-    <span v-if="route.orientations && !hideOrientation" :title="$gettext('orientations')" class="has-text-normal">
       {{ route.orientations.join(', ') }},
     </span>
     <document-rating :document="route" class="has-text-normal" />
@@ -57,6 +60,36 @@ export default {
   computed: {
     rangeAreas() {
       return this.route.areas.filter((area) => area.area_type === 'range');
+    },
+    heightUpText() {
+      if (
+        this.route.activities &&
+        (this.route.activities.includes('skitouring') ||
+          this.route.activities.includes('snowshoeing') ||
+          this.route.activities.includes('hiking'))
+      ) {
+        if (this.route.height_diff_up) return '+' + this.route.height_diff_up;
+        if (this.route.height_diff_down) return '-' + this.route.height_diff_down;
+      }
+      return '';
+    },
+    heightDiffText() {
+      if (this.hideHeightDiffDifficulties) return '';
+      var act = this.route.activities;
+      if (!act) return;
+      var is_ski_alpinism = act.includes('skitouring') && this.route.ski_rating >= '4';
+      var is_alpinism =
+        act.includes('snow_ice_mixed') ||
+        act.includes('mountain_climbing') ||
+        act.includes('rock_climbing') ||
+        act.includes('ice_climbing');
+      // don't clutter with difficulties for "easy" activities
+      if (this.heightUpText && !(is_ski_alpinism || is_alpinism)) return '';
+      var dd = this.route.height_diff_difficulties;
+      if (!dd || (this.heightUpText && dd === this.route.height_diff_up)) return '';
+      // to differentiate the 2 heights, use explicit symbol ↕ similar to `arrows-alt-v` in RouteCard
+      var prefix = this.heightUpText ? '\u2195\ufe0e ' : '';
+      return prefix + dd;
     },
   },
 };
