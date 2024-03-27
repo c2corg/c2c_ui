@@ -65,7 +65,6 @@
     "@vue/cli-plugin-eslint": "5.0.8",
     "@vue/cli-service": "5.0.8",
     "@vue/eslint-config-standard": "6.1.0",
-    "babel-eslint": "10.1.0",
     "concat": "1.0.3",
     "cross-env": "7.0.3",
     "eslint": "7.32.0",
