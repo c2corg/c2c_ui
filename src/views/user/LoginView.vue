@@ -9,7 +9,7 @@
         required
         autocapitalize="off"
         autocorrect="off"
-        :label="$gettext('Username')"
+        :label="$gettext('Username_or_email')"
         v-model="username"
         icon="user"
       />
