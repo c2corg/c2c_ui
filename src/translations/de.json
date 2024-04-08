@@ -782,6 +782,7 @@
       "API message": "Der Benutzername darf nicht leer sein oder nur Leerzeichen enthalten"
     },
     "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Mit dem Benutzernamen oder der Email in Verbindung mit dem Passwort können Sie sich identifizieren. Der Benutzername und die Email bleiben privat. Der Benutzername kann im Gegensatz zur Email nicht geändert werden.",
+    "Username_or_email": "User_bzw_Email",
     "Validity date expired": "Gültigkeitsdatum abgelaufen",
     "Validity date:": "Gültig bis :",
     "Versions": "Versionen",
