@@ -72,7 +72,22 @@ UserProfileService.prototype.login = function (username, password) {
   });
 };
 
-UserProfileService.prototype.logout = function () {
+UserProfileService.prototype.logout = function (token) {
+  // if the call is made on page load, and the user has expired token,
+  // the token will be passed as a parameter
+  if (token) {
+    this.api.axios
+      .post(
+        '/users/logout',
+        { discourse: true },
+        { headers: { common: { Authorization: 'JWT token="' + token + '"' } } }
+      )
+      .catch(() => {
+        // do nothing
+      });
+    return;
+  }
+
   return this.api.post('/users/logout', { discourse: true });
 };
 

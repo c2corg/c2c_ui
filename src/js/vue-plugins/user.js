@@ -48,7 +48,6 @@ export default function install(Vue) {
     watch: {
       token: {
         handler: 'updateToken',
-        immediate: true,
       },
     },
 
@@ -74,7 +73,11 @@ export default function install(Vue) {
       },
 
       signout() {
-        c2c.userProfile.logout();
+        // we have an expired token in local storage, so we don't want to use that token
+        // for the API calls (we would go into https://github.com/c2corg/v6_api/issues/730 instead
+        // of doing unauthentified requests).
+        // We still want to make the logout call which needs a (potentially expired) token
+        c2c.userProfile.logout(this.token);
 
         this.token = null;
         this.roles = [];

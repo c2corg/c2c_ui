@@ -278,7 +278,7 @@ export default {
     },
 
     signout() {
-      this.$user.signout(this.$route);
+      this.$user.signout();
       if (this.$route.meta.requiresAuth) {
         this.$router.push({ name: 'home' });
       }
