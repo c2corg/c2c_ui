@@ -16,6 +16,8 @@
 
       <textual-array :array="document.slackline_types" i18n i18n-context="slackline_types" />
 
+      <marker-soft-mobility v-if="$documentUtils.hasSoftMobility(document)" />
+
       <marker-quality :quality="document.quality" />
     </card-row>
   </card-container>
