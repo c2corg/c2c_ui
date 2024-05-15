@@ -221,11 +221,12 @@
     "previous_injuries": ["no", "previous_injuries_2"],
     "product_types": ["farm_sale", "restaurant", "grocery", "bar", "sport_shop"],
     "public_transportation_ratings": [
-      "good service",
-      "seasonal service",
-      "poor service",
+      "no service",
+      "unknown service",
       "nearby service",
-      "no service"
+      "poor service",
+      "seasonal service",
+      "good service"
     ],
     "public_transportation_types": ["train", "bus", "service_on_demand", "boat"],
     "qualification": ["federal_supervisor", "federal_trainer", "professional_diploma"],
