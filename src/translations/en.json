@@ -100,6 +100,7 @@
     },
     "Contribute to maintainance": "Help local actors",
     "Crag climbing gear": "Crag climbing",
+    "Create the first version in the following lang": "Create the first version in the following language",
     "Current map view is too large. Please zoom to level": "Current map views is too large. Please zoom to level",
     "Delete this locale": "Delete this linguistic version",
     "Describe access": "Describe the access",
@@ -221,9 +222,11 @@
     },
     "Trace": "GPS Track",
     "Transport & road or PT access": "Road or public transport access",
+    "Username_or_email": "Username (or email)",
     "View in other lang": "View in other language",
     "Want to join us? Or donate?": "Join us or donate !",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Why did you choose this outing? When did you decide to commit to it. What influenced your decision, (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)",
+    "Winter hiking routes": "Winter routes",
     "You need to activate your by clicking the link sent to your email address.": "You need to activate it by clicking the link sent to your email address.",
     "access": {
       "$$noContext": "road or PT access",
@@ -832,6 +835,7 @@
     "write your comments": "Write your comments",
     "xreport": "Incident / accident",
     "xreports": "Incidents / accidents",
+    "yeti": "YETI",
     "zh": {
       "langs": "chinese"
     }
