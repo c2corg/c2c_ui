@@ -69,6 +69,7 @@
         class="column"
         :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
       >
+        <ad-dfms />
         <board-announcement-widget />
         <dashboard-images-gallery v-if="!feed" />
         <useful-links />
@@ -91,6 +92,8 @@ import UsefulLinks from './utils/UsefulLinks';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 
+import AdDFMS from '@/views/AdDFMS';
+
 export default {
   name: 'HomeView',
 
@@ -104,6 +107,7 @@ export default {
     ForumWidget,
     UsefulLinks,
     FeedWidget,
+    AdDFMS,
   },
 
   data() {
