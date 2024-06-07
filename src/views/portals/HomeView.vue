@@ -52,6 +52,7 @@
             </router-link>
           </span>
         </div>
+        <!-- Feed/Dashboard -->
         <div class="feed-view" v-if="feed">
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
@@ -69,6 +70,7 @@
         class="column"
         :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
       >
+        <dfm-ad-small />
         <board-announcement-widget />
         <dashboard-images-gallery v-if="!feed" />
         <useful-links />
@@ -80,6 +82,8 @@
 </template>
 
 <script>
+import DfmAdSmall from '../DfmAdSmall';
+
 import HomeBanner from './HomeBanner';
 import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
 import DashboardArticlesList from './utils/DashboardArticlesList';
@@ -95,6 +99,7 @@ export default {
   name: 'HomeView',
 
   components: {
+    DfmAdSmall,
     HomeBanner,
     BoardAnnouncementWidget,
     DashboardArticlesList,
