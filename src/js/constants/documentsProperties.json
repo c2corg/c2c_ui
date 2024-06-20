@@ -650,7 +650,8 @@
       { "id": "books", "properties": { "url": "b", "associationEditorOrder": 2 } },
       { "id": "images", "properties": { "associationEditorOrder": 4 } },
       { "id": "waypoints", "properties": { "url": "w", "associationEditorOrder": 1 } },
-      { "id": "waypoints", "properties": { "name": "waypoint_children", "url": "w", "associationEditorOrder": 1 } }
+      { "id": "waypoints", "properties": { "name": "waypoint_children", "url": "w", "associationEditorOrder": 1 } },
+      { "id": "external_resources" }
     ]
   },
 
