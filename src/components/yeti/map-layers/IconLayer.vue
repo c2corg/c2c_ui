@@ -6,7 +6,7 @@
     <div class="overlay-content">
       <slot name="overlay"></slot>
     </div>
-    <img :src="icon('$color-text')" alt="" class="overlay-icon" />
+    <img :src="iconCardSrc" alt="" class="overlay-icon" />
   </div>
 </template>
 
@@ -30,10 +30,6 @@ export default {
     selector: {
       type: Object,
       required: true,
-    },
-    iconStyle: {
-      type: Function,
-      default: null,
     },
   },
   computed: {
@@ -77,7 +73,7 @@ export default {
     },
   },
   created() {
-    this.icon = (color) => {
+    this.createIcon = (color = 'black') => {
       let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="-10 -10 20 20">
           <circle r="9" fill="${color}" stroke="white" stroke-width="1.5" />
           <text y="4" text-anchor="middle" font-family="sans-serif" font-size="10px" font-weight="bold" fill="white">${this.letter}</text>
@@ -85,15 +81,28 @@ export default {
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     };
 
-    // style is either a function (if iconStyle is set), or a Style object
-    this.style =
-      this.iconStyle ||
-      new ol.style.Style({
-        image: new ol.style.Icon({
-          src: this.icon(this.color),
-          size: [26, 26],
-        }),
-      });
+    // style
+    this.iconSrc = this.$parent.iconSrc || this.createIcon(this.color);
+    this.style = new ol.style.Style({
+      image: new ol.style.Icon({
+        src: this.iconSrc,
+        size: [26, 26],
+      }),
+    });
+
+    // hovered style
+    this.hoveredStyle = this.style.clone();
+    this.hoveredStyle.setZIndex(1);
+    this.hoveredStyle.getImage().setScale(1.3);
+
+    // "selected" style (only for card)
+    this.iconCardSrc = this.$parent.iconCardSrc || this.createIcon();
+    this.selectedStyle = new ol.style.Style({
+      image: new ol.style.Icon({
+        src: this.iconCardSrc,
+        size: [26, 26],
+      }),
+    });
 
     this.overlay = new ol.Overlay({
       positioning: 'top-left',
@@ -103,6 +112,7 @@ export default {
   },
   mounted() {
     this.layer = new ol.layer.Vector({
+      name: this.capitalizedName + 'Layer',
       source: new ol.source.Vector(),
       style: this.style,
     });
@@ -110,38 +120,23 @@ export default {
 
     this.overlay.setElement(this.$refs.overlay);
     this.map.addOverlay(this.overlay);
+
+    // prevent event on map when overlay is open
+    this.$refs.overlay.addEventListener('pointermove', (evt) => {
+      evt.stopImmediatePropagation();
+      Yetix.$emit('map-pointermove', evt);
+    });
+
     this.activeFeature = false;
+
+    // selected feature for hover
+    this.selectedFeature = null;
 
     // showLayer checked?
     this.layer.setVisible(this.showLayer);
 
-    // only in first mount
-    if (this.dataLayer.length === 0) {
-      // events
-      Yetix.$on('mapClick', this.onMapClick);
-    }
-
     // emit event on parent (this component is not instanciated)
     this.$parent.$emit('layer', this.layerSelector);
-
-    this.map.addInteraction(
-      new ol.interaction.Select({
-        layers: [this.layer],
-        condition: ol.events.condition.pointerMove,
-        style: (feature) => {
-          // hovered style based on actual style (function or object)
-          let hoveredStyle;
-          if (this.iconStyle) {
-            hoveredStyle = this.style(feature).clone();
-          } else {
-            hoveredStyle = this.style.clone();
-          }
-          hoveredStyle.setZIndex(1);
-          hoveredStyle.getImage().setScale(1.3);
-          return hoveredStyle;
-        },
-      })
-    );
   },
   methods: {
     onResult(data) {
@@ -153,6 +148,16 @@ export default {
 
       // add features
       this.layer.getSource().addFeatures(features);
+
+      // store their style
+      this.layer.getSource().forEachFeature((feature) => {
+        feature.set('normalStyle', this.style);
+        feature.set('hoveredStyle', this.hoveredStyle);
+        feature.set('selectedStyle', this.selectedStyle);
+      });
+
+      // emit features for parent (modify style for each feature for example)
+      this.$emit('add-features', features);
     },
     onShowLayer() {
       Yetix['setShow' + this.capitalizedName](!this.showLayer);
@@ -168,32 +173,29 @@ export default {
         this.closeOverlay();
       }
     },
-    onMapClick(e, clickedFeature) {
+    onMapClick(evt, feature) {
+      this.$parent.setOverlay(feature);
+      this.activeFeature = feature;
+      this.openOverlay(feature);
+
+      // set icon for card on click
+      this.iconCardSrc = feature.get('selectedStyle').getImage().getSrc();
+    },
+    onMapLooseClick() {
       this.closeOverlay(true);
-      if (this.layer.getVisible()) {
-        this.map.forEachFeatureAtPixel(
-          e.pixel,
-          (feature) => {
-            if (feature !== clickedFeature) {
-              return false;
-            }
-            this.$parent.setOverlay(feature);
-            this.activeFeature = feature;
-            this.openOverlay(feature);
-
-            // set actual icon for specific feature on click
-            if (this.iconStyle) {
-              this.icon = () => this.style(feature).getImage().getSrc();
-            }
-
-            return true;
-          },
-          {
-            layerFilter: (layer) => {
-              return layer === this.layer;
-            },
-          }
-        );
+    },
+    onMapPointerMove(evt, feature) {
+      if (this.selectedFeature && this.selectedFeature !== feature) {
+        this.selectedFeature.setStyle(this.selectedFeature.get('normalStyle'));
+      }
+      this.selectedFeature = feature;
+      // then, apply hovered style on specific feature
+      feature.setStyle(feature.get('hoveredStyle'));
+    },
+    onMapLoosePointerMove() {
+      if (this.selectedFeature !== null) {
+        this.selectedFeature.setStyle(this.selectedFeature.get('normalStyle'));
+        this.selectedFeature = null;
       }
     },
     openOverlay(feature) {

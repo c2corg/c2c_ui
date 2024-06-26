@@ -27,11 +27,13 @@
 
 <script>
 import IconLayer from './IconLayer.vue';
+import getIconLayerMixin from './getIconLayer';
 
 export default {
   components: {
     IconLayer,
   },
+  mixins: [getIconLayerMixin],
   data() {
     return {
       name: 'nivoses',

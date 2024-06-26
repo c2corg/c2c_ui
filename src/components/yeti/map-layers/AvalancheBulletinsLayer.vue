@@ -213,6 +213,7 @@ let mountainsLayer = new ol.layer.VectorImage({
   style: mountainsStyle(),
 });
 let bulletinsLayer = new ol.layer.Vector({
+  name: 'bulletinsLayer',
   source: new ol.source.Vector(),
 });
 let mountainsLayerGroup = new ol.layer.Group({
@@ -306,41 +307,35 @@ export default {
 
     // data
     this.activeBulletins = null;
+    this.selectedFeature = null;
 
     // bulletins overlay
     bulletinsOverlay.setElement(this.$refs.bulletinsOverlay);
     this.map.addOverlay(bulletinsOverlay);
 
+    // prevent event on map when overlay is open
+    this.$refs.bulletinsOverlay.addEventListener('pointermove', (evt) => {
+      evt.stopImmediatePropagation();
+      Yetix.$emit('map-pointermove', evt);
+    });
+
     this.map.addLayer(mountainsLayerGroup);
     // layers are not visible on load
     mountainsLayerGroup.setVisible(this.showAvalancheBulletins);
+    bulletinsLayer.setVisible(this.showAvalancheBulletins);
 
     // only on first mount, if mountains already loaded
     if (Yetix.mountains.all.length === 0) {
       Yetix.fetchMountains().then(this.onMountainsResult);
 
-      Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
-      Yetix.$on('mapClick', this.onMapClick);
-
-      let hover = new ol.interaction.Select({
-        layers: [bulletinsLayer],
-        condition: ol.events.condition.pointerMove,
-      });
-      this.map.addInteraction(hover);
-      hover.on('select', (e) => {
-        if (e.selected.length) {
-          let style = e.selected[0].get('normalStyle');
-          let hoveredStyle = style.clone();
-          if (hoveredStyle.getImage()) {
-            hoveredStyle.getImage().setScale(1.2);
-            e.selected[0].setStyle(hoveredStyle);
-          }
-        }
-      });
+      Yetix.$on('map-moveend', this.onMapMoveEnd);
     }
     this.$emit('layer', this.layerSelector);
   },
   methods: {
+    getLayer() {
+      return bulletinsLayer;
+    },
     onMountainsResult(data) {
       let mountainsFeatures = this.getFeaturesFromData(data);
 
@@ -455,44 +450,31 @@ export default {
         this.updateBulletinsGeometry();
       }
     },
-    onMapClick(evt, clickedFeature) {
+    onMapClick(evt, feature) {
       // do not allow clicks on smaller zoom
       if (this.mapZoom < MIN_ZOOM) {
         this.closeOverlay(true);
         return false;
       }
-      // this will set bulletins overlay
-      // only when showAvalancheBulletins is true and edit mode is off
-      if (this.showAvalancheBulletins && !this.editMode) {
-        // get feature from bulletins layer where clicked
-        let clickedBulletinFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
-          layerFilter: function (layer) {
-            return layer === bulletinsLayer;
-          },
-        });
-        let clickedBulletinFeature = clickedBulletinFeatures.length ? clickedBulletinFeatures[0] : undefined;
+      this.setBulletinsOverlay(evt, feature);
+    },
+    onMapLooseClick() {
+      this.closeOverlay(true);
+    },
+    onMapPointerMove(evt, feature) {
+      this.selectedFeature = feature;
 
-        // get feature from mountains layer where clicked
-        let clickedMountainFeatures = this.map.getFeaturesAtPixel(evt.pixel, {
-          layerFilter: function (layer) {
-            return layer === mountainsLayer;
-          },
-        });
-        let clickedMountainFeature = clickedMountainFeatures.length ? clickedMountainFeatures[0] : undefined;
-
-        // open overlay
-        // if clicked feature is from bulletin layer
-        if (clickedBulletinFeature && clickedBulletinFeature === clickedFeature) {
-          this.setBulletinsOverlay(evt, clickedBulletinFeature);
-        }
-        // or if clicked feature is from mountains layer AND zoom is below min zoom
-        else if (this.mapZoom < MIN_ZOOM && clickedMountainFeature && clickedMountainFeature === clickedFeature) {
-          this.setBulletinsOverlay(evt, clickedMountainFeature.get('bulletinsFeature'));
-        }
-        // else, close overlay
-        else {
-          this.closeOverlay(true);
-        }
+      let style = feature.get('normalStyle');
+      let hoveredStyle = style.clone();
+      if (hoveredStyle.getImage()) {
+        hoveredStyle.getImage().setScale(1.2);
+        feature.setStyle(hoveredStyle);
+      }
+    },
+    onMapLoosePointerMove() {
+      if (this.selectedFeature !== null) {
+        this.selectedFeature.setStyle(this.selectedFeature.get('normalStyle'));
+        this.selectedFeature = null;
       }
     },
     onShowAvalancheBulletins() {
@@ -507,6 +489,7 @@ export default {
       }
       // show mountains layer group if needed
       mountainsLayerGroup.setVisible(this.showAvalancheBulletins);
+      bulletinsLayer.setVisible(this.showAvalancheBulletins);
       // update styles
       this.updateMountainsStyle();
       this.updateBulletinsGeometry();

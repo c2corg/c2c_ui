@@ -6,7 +6,6 @@
       <map-layers />
       <yeti-layers />
       <overlays-layers />
-      <route-layer />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -61,7 +60,6 @@
 <script>
 import MapLayers from './map-layers/MapLayers.vue';
 import OverlaysLayers from './map-layers/OverlaysLayers.vue';
-import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayers from './map-layers/YetiLayers.vue';
 
 import EditModeButton from '@/components/yeti/EditModeButton';
@@ -81,7 +79,6 @@ export default {
     EditModeButton,
     MapLayers,
     OverlaysLayers,
-    RouteLayer,
     Toast,
     YetiLayers,
     YetiMapLegend,
@@ -188,20 +185,19 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // emit an event for map layers
-      Yetix.$emit('mapMoveEnd');
-
+      Yetix.$emit('map-moveend');
+      // add other events
       this.map.on('click', this.onMapClick);
+      this.map.on('pointermove', this.onMapPointerMove);
     },
     onMapClick(evt) {
       // close controls
       this.showRecenterOnPropositions = false;
 
-      // get clicked feature (the visible one on top)
-      let clickedFeature = this.map.getFeaturesAtPixel(evt.pixel)[0];
-
-      // emit an event for map layers
-      // pass clicked feature
-      Yetix.$emit('mapClick', evt, clickedFeature);
+      Yetix.$emit('map-click', evt);
+    },
+    onMapPointerMove(evt) {
+      Yetix.$emit('map-pointermove', evt);
     },
     activeLayersTab() {
       this.$refs['toast-layer'].toast();

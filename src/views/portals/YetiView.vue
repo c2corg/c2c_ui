@@ -284,6 +284,8 @@ export default {
     }
     // tmp: set default values for persistent state
     Yetix.setDefault();
+    // remove all previous events (navigating from other c2c pages)
+    Yetix.$off();
   },
 
   mounted() {

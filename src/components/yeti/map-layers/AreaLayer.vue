@@ -102,7 +102,7 @@ export default {
       // set areas (yeti valid areas)
       Yetix.fetchAreas().then(this.onAreasResult);
       // event
-      Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
+      Yetix.$on('map-moveend', this.onMapMoveEnd);
     }
   },
   methods: {

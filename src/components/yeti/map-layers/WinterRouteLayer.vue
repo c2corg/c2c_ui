@@ -26,7 +26,9 @@ export default {
     },
   },
   created() {
-    this.layer = new ol.layer.Tile({});
+    this.layer = new ol.layer.Tile({
+      name: 'winterRouteLayer',
+    });
   },
   mounted() {
     // add layer first (maintain order)

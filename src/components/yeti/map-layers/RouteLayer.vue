@@ -99,6 +99,7 @@ export default {
   mounted() {
     // features layer
     this.featuresLayer = new ol.layer.Vector({
+      name: 'routeLayer',
       source: new ol.source.Vector(),
       style: normalLineStyle,
     });
@@ -157,6 +158,9 @@ export default {
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
   },
   methods: {
+    getLayer() {
+      return this.featuresLayer;
+    },
     addInteractions() {
       let source = this.featuresLayerSource;
 
