@@ -701,6 +701,7 @@
       "API message": "L'identifiant ne peut être vide ou contenir des espaces"
     },
     "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "L'identifiant ou l'email associé au mot de passe vous permettront de vous identifier. L'identifiant et l'email restent privés. L'identifiant ne peut pas être modifié, contrairement à l'email.",
+    "Username_or_email": "Identifiant (ou email)",
     "Validity date expired": "Date de validité dépassée",
     "Validity date:": "Date de validité :",
     "Very complex (steps, narrow sections, ridges...)": "Très complexe (marches, étroitures, barres…)",
