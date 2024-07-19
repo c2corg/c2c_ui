@@ -1,7 +1,14 @@
 <template>
-  <nav class="is-size-5" :class="{ 'has-background-warning': siteConfiguration.urls.name != 'prod' }">
+  <nav
+    class="is-size-5"
+    :class="{
+      'has-background-warning': siteConfiguration.urls.name != 'prod',
+      'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet,
+    }"
+  >
     <span
-      class="navigation-item is-hidden-desktop"
+      v-if="$screen.isMobile || $screen.isTablet"
+      class="navigation-item"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
       @click="$emit('toggle-side-menu')"
     >
@@ -11,12 +18,15 @@
     </span>
 
     <a
+      v-if="$screen.isMobile || $screen.isTablet"
       :href="'/'"
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
       <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </a>
+
+    <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet" />
 
     <div class="navigation-end">
       <router-link
@@ -162,6 +172,8 @@
 </template>
 
 <script>
+import DfmAdLarge from './DfmAdLarge.vue';
+
 import IconHelp from '@/components/generics/icons/IconHelp';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
@@ -169,6 +181,7 @@ import config from '@/js/config';
 
 export default {
   components: {
+    DfmAdLarge,
     IconHelp,
     IconJoinUs,
     JoinUsLink,
@@ -283,6 +296,14 @@ export default {
         this.$router.push({ name: 'home' });
       }
     },
+
+    homePage() {
+      if (this.$route.path === '/home' || this.$route.path === '/') {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>
@@ -317,6 +338,23 @@ nav {
 
 .c2c-color {
   background-color: $color-base-c2c;
+}
+
+.with-ad {
+  height: $navbarad-height;
+  margin-left: 200px;
+
+  .navigation-end {
+    flex-shrink: 1;
+    margin-right: 1rem;
+    flex-wrap: wrap-reverse;
+    align-content: center;
+  }
+
+  .navigation-item {
+    padding: 0.25rem 0.25rem;
+    line-height: auto;
+  }
 }
 
 @media screen and (max-width: $tablet) {

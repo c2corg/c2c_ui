@@ -1,7 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ 'nav-ad': !homePage() && !$screen.isMobile && !$screen.isTablet }">
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
+    <dfm-ad-small v-if="!homePage() && ($screen.isMobile || $screen.isTablet)" />
     <site-notice ref="siteNotice no-print" class="no-print site-notice" />
     <image-viewer ref="imageViewer" />
     <helper-window ref="helper" />
@@ -21,6 +22,7 @@ import AlertWindow from './components/alert-window/AlertWindow';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
 import HelperWindow from './components/helper/HelperWindow';
 import ImageViewer from './components/image-viewer/ImageViewer';
+import DfmAdSmall from './views/DfmAdSmall.vue';
 import Navigation from './views/Navigation';
 import SideMenu from './views/SideMenu';
 import SiteNotice from './views/SiteNotice';
@@ -29,6 +31,7 @@ export default {
   name: 'App',
 
   components: {
+    DfmAdSmall,
     SideMenu,
     Navigation,
     SiteNotice,
@@ -79,6 +82,13 @@ export default {
         this.$el.dataset.width = 'tablet';
       } else {
         this.$el.dataset.width = 'desktop';
+      }
+    },
+    homePage() {
+      if (this.$route.path === '/home' || this.$route.path === '/') {
+        return true;
+      } else {
+        return false;
       }
     },
   },
@@ -141,6 +151,24 @@ body,
   padding-top: $navbar-height;
   display: flex;
   flex-flow: column;
+}
+
+.nav-ad {
+  $body-height-ad: calc(100vh - #{$navbarad-height});
+
+  html,
+  body,
+  #app {
+    min-height: $body-height-ad;
+  }
+
+  .site-notice {
+    top: $navbarad-height;
+  }
+
+  .page-content {
+    padding-top: $navbarad-height;
+  }
 }
 
 @media screen {
