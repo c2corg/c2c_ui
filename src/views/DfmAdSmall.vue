@@ -9,9 +9,3 @@ var s = document.createElement('script');
 s.src = 'https://static.admysports.com/hb/site/camptocamp/hb_camptocamp.js';
 document.getElementsByTagName('head')[0].appendChild(s);
 </script>
-
-<style scoped lang="scss">
-.ams-ad {
-  margin-bottom: $size-7;
-}
-</style>

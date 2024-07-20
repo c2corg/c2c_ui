@@ -3,7 +3,7 @@
     class="is-size-5"
     :class="{
       'has-background-warning': siteConfiguration.urls.name != 'prod',
-      'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet,
+      'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
     }"
   >
     <span
@@ -26,7 +26,7 @@
       <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </a>
 
-    <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet" />
+    <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
 
     <div class="navigation-end">
       <router-link
@@ -394,7 +394,7 @@ nav {
   }
 
   .search-input {
-    width: 250px;
+    width: 160px;
   }
 }
 
@@ -411,6 +411,10 @@ nav {
 
   .navigation-end {
     margin-right: 1rem;
+  }
+
+  .search-input {
+    width: 160px;
   }
 }
 
@@ -448,7 +452,7 @@ nav {
 
 // search input : increase size to right on hover
 // only on screen wider than desktop
-@media screen and (min-width: $desktop) {
+@media screen and (min-width: $fullhd) {
   .search-input {
     width: 250px;
     margin-right: 50px;

@@ -227,4 +227,8 @@ export default {
   justify-content: space-between;
   align-items: baseline;
 }
+
+.ams-ad {
+  margin-bottom: $size-7;
+}
 </style>

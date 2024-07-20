@@ -1,8 +1,14 @@
 <template>
-  <div id="app" :class="{ 'nav-ad': !homePage() && !$screen.isMobile && !$screen.isTablet }">
+  <div
+    id="app"
+    :class="{
+      'nav-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'home-topoguide': homePage(),
+    }"
+  >
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
-    <dfm-ad-small v-if="!homePage() && ($screen.isMobile || $screen.isTablet)" />
+    <dfm-ad-large v-if="!homePage() && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice ref="siteNotice no-print" class="no-print site-notice" />
     <image-viewer ref="imageViewer" />
     <helper-window ref="helper" />
@@ -22,7 +28,7 @@ import AlertWindow from './components/alert-window/AlertWindow';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
 import HelperWindow from './components/helper/HelperWindow';
 import ImageViewer from './components/image-viewer/ImageViewer';
-import DfmAdSmall from './views/DfmAdSmall.vue';
+import DfmAdLarge from './views/DfmAdLarge.vue';
 import Navigation from './views/Navigation';
 import SideMenu from './views/SideMenu';
 import SiteNotice from './views/SiteNotice';
@@ -31,7 +37,7 @@ export default {
   name: 'App',
 
   components: {
-    DfmAdSmall,
+    DfmAdLarge,
     SideMenu,
     Navigation,
     SiteNotice,
@@ -148,9 +154,19 @@ body,
 
 .page-content {
   min-height: 100vh;
-  padding-top: $navbar-height;
   display: flex;
   flex-flow: column;
+}
+
+.home-topoguide {
+  .page-content {
+    padding-top: $navbar-height;
+  }
+
+  .ams-ad {
+    margin-left: auto !important;
+    padding-top: 0px !important;
+  }
 }
 
 .nav-ad {
@@ -181,8 +197,12 @@ body,
       left: 0;
     }
 
-    .page-content {
+    .page-content,
+    .ad {
       margin-left: 0;
+    }
+    .ad {
+      padding-top: $navbar-height;
     }
 
     .section {
@@ -204,8 +224,13 @@ body,
       left: 0;
     }
 
-    .page-content {
+    .page-content,
+    .ad {
       margin-left: 0;
+    }
+
+    .ad {
+      padding-top: $navbar-height;
     }
   }
 
@@ -213,8 +238,13 @@ body,
     .side-menu {
       left: 0;
     }
-    .page-content {
+    .page-content,
+    .ad {
       margin-left: $sidemenu-width;
+    }
+
+    .ad {
+      padding-top: $navbar-height;
     }
 
     .site-notice {
