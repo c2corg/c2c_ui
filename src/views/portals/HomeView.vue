@@ -22,6 +22,7 @@
           <home-banner v-show="visible" />
         </div>
         <board-announcement-widget v-if="$screen.isMobile" />
+        <dfm-ad-small v-if="$screen.isMobile" />
         <!-- Switchs -->
         <div class="field">
           <span>
@@ -52,10 +53,12 @@
             </router-link>
           </span>
         </div>
+        <!-- Feed/Dashboard -->
         <div class="feed-view" v-if="feed">
           <feed-widget :type="isPersonal && $user.isLogged ? 'personal' : 'default'" hide-empty-documents />
         </div>
         <div v-if="!feed">
+          <dashboard-images-gallery v-if="!$screen.isMobile" />
           <dashboard-outings-list :is-personal="isPersonal" />
           <dashboard-images-gallery v-if="$screen.isMobile" />
           <dashboard-routes-list />
@@ -70,7 +73,7 @@
         :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
       >
         <board-announcement-widget />
-        <dashboard-images-gallery v-if="!feed" />
+        <dfm-ad-small />
         <useful-links />
         <forum-widget :message-count="20" />
         <dashboard-articles-list v-if="!feed" />
@@ -80,6 +83,8 @@
 </template>
 
 <script>
+import DfmAdSmall from '../DfmAdSmall';
+
 import HomeBanner from './HomeBanner';
 import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
 import DashboardArticlesList from './utils/DashboardArticlesList';
@@ -95,6 +100,7 @@ export default {
   name: 'HomeView',
 
   components: {
+    DfmAdSmall,
     HomeBanner,
     BoardAnnouncementWidget,
     DashboardArticlesList,
@@ -220,5 +226,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+.ams-ad {
+  margin-bottom: $size-7;
 }
 </style>
