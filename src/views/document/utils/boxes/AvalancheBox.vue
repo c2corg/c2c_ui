@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import turfBooleanIntersects from '@turf/boolean-intersects';
+import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-intersects';
 import { buffer as turfBuffer } from '@turf/buffer';
 import { simplify as turfSimplify } from '@turf/simplify';
 
