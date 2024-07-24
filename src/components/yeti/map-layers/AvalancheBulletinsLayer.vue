@@ -52,9 +52,9 @@
   </div>
 </template>
 <script>
-import turfBuffer from '@turf/buffer';
-import turfDifference from '@turf/difference';
-import turfIntersect from '@turf/intersect';
+import { buffer as turfBuffer } from '@turf/buffer';
+import { difference as turfDifference } from '@turf/difference';
+import { intersect as turfIntersect } from '@turf/intersect';
 
 import layerMixin from './layer';
 
