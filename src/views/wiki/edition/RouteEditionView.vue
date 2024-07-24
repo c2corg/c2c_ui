@@ -183,6 +183,7 @@ export default {
   computed: {
     descriptionPlaceholder() {
       if (
+        this.document &&
         ['mountain_climbing', 'rock_climbing', 'ice_climbing'].find((act) => this.document.activities.includes(act))
       ) {
         return this.$gettext('Describe the route following the structure below');
@@ -246,6 +247,9 @@ export default {
     },
 
     handleRockFreeRating(climbingType) {
+      if (!this.document) {
+        return;
+      }
       const documentRating = this.document.rock_free_rating;
       const ratings = this.fields.rock_free_rating.values;
       switch (climbingType) {
