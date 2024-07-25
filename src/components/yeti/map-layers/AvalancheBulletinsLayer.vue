@@ -54,6 +54,7 @@
 <script>
 import { buffer as turfBuffer } from '@turf/buffer';
 import { difference as turfDifference } from '@turf/difference';
+import { featureCollection as turfFeatureCollection } from '@turf/helpers';
 import { intersect as turfIntersect } from '@turf/intersect';
 
 import layerMixin from './layer';
@@ -356,7 +357,7 @@ export default {
           let innerBuffer = turfBuffer(turfPolygon, -distance);
           let innerDiff;
           if (innerBuffer) {
-            innerDiff = turfDifference(turfPolygon, innerBuffer);
+            innerDiff = turfDifference(turfFeatureCollection([turfPolygon, innerBuffer]));
           } else {
             innerDiff = turfPolygon;
           }
