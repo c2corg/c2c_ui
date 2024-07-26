@@ -27,7 +27,7 @@
           <div class="level is-mobile">
             <div
               class="level-item has-text-centered"
-              v-for="documentType of ['waypoint', 'route', 'outing']"
+              v-for="documentType of ['waypoint', 'image', 'route', 'outing']"
               :key="documentType"
             >
               <router-link :to="{ name: documentType + 's', query: { a: documentId } }" class="">
