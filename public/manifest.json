@@ -1,0 +1,12 @@
+{
+  "name": "CampToCamp",
+  "short_name": "CampToCamp",
+
+  "id": "index.html",
+  "start_url": "/src/App.vue",
+  "scope": "/public/",
+  "display": "standalone",
+  "background_color": "#fbfaf6",
+  "theme_color": "#F93",
+  "prefer_related_application": "false"
+}
