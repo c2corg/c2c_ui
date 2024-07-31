@@ -88,12 +88,22 @@ export default function install(Vue) {
         });
       },
 
-      signout(token) {
-        // we have an expired token in local storage, so we don't want to use that token
-        // for the API calls (we would go into https://github.com/c2corg/v6_api/issues/730 instead
-        // of doing unauthentified requests).
-        // We still want to make the logout call which needs a (potentially expired) token
-        c2c.userProfile.logout(token);
+      expiredTokenLogout(token) {
+        c2c.userProfile.expiredTokenLogout(token);
+      },
+
+      signout() {
+        c2c.userProfile.logout();
+
+        this.token = null;
+        this.roles = [];
+        this.id = null;
+        this.userName = null;
+        this.name = null;
+        this.forumUsername = null;
+        this.expire = null;
+
+        this.commitToLocaleStorage_();
       },
 
       updateAccount(currentpassword, name, forum_username, email, is_profile_public, newpassword) {
@@ -132,7 +142,7 @@ export default function install(Vue) {
         const now = Date.now() / 1000; // in seconds
 
         if (now > expire) {
-          this.signout(token);
+          this.expiredTokenLogout(token);
           return true;
         }
 
