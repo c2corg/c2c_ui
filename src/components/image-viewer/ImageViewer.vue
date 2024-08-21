@@ -164,8 +164,6 @@ export default {
         };
 
         this.$refs.swiper.addEventListener('init', () => {
-          window.history.pushState(null, null, '#swipe-gallery');
-
           // close when the user goes back in history
           window.addEventListener('popstate', this.close);
           // close on mouse wheel
@@ -213,12 +211,6 @@ export default {
         this.zt = null;
       }
       this.hideButtons = false;
-
-      // if we closed without hitting back, go back once in history
-      // to remove the hash
-      if (window.location.hash === '#swipe-gallery') {
-        window.history.back();
-      }
     },
 
     onKeydown(event) {
