@@ -35,6 +35,7 @@
           :document-type="['waypoint', 'route', 'article', 'book']"
           propose-creation
           show-more-results-link
+          clear-input-on-toggle
           @input="go"
         />
 
