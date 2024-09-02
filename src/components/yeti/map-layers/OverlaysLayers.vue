@@ -25,12 +25,12 @@ import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue'
 export default {
   components: {
     AvalancheBulletinsLayer,
+    DataAvalancheLayer,
     FlowcaptLayer,
     NivosesLayer,
     RommaLayer,
     RouteLayer,
     WinterRouteLayer,
-    DataAvalancheLayer,
   },
   mixins: [layerMixin],
   data() {
