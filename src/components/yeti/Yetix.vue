@@ -83,6 +83,9 @@ let defaultState = {
   dataAvalanche: [],
   showDataAvalanche: false,
 
+  ffvl: [],
+  showFfvl: false,
+
   mapZoom: 0,
   editMode: false,
 
@@ -218,6 +221,12 @@ export default new Vue({
     showDataAvalanche() {
       return state.showDataAvalanche;
     },
+    ffvl() {
+      return state.ffvl;
+    },
+    showFfvl() {
+      return state.showFfvl;
+    },
     mapZoom() {
       return state.mapZoom;
     },
@@ -343,6 +352,12 @@ export default new Vue({
     setShowDataAvalanche(showDataAvalanche) {
       state.showDataAvalanche = showDataAvalanche;
     },
+    setFfvl(ffvl) {
+      state.ffvl = ffvl;
+    },
+    setShowFfvl(showFfvl) {
+      state.showFfvl = showFfvl;
+    },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
     },
@@ -402,6 +417,9 @@ export default new Vue({
     },
     fetchDataAvalanche() {
       return this.fetchApi('data-avalanche');
+    },
+    fetchFfvl() {
+      return this.fetchApi('ffvl');
     },
     fetchWpsAlti(points, interpolate) {
       let params = {
