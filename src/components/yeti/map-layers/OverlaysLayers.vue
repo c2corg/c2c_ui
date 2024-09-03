@@ -2,11 +2,11 @@
   <div>
     <winter-route-layer @layer="onLayer($event, 1)" />
     <avalanche-bulletins-layer @layer="onLayer($event, 0)" />
-    <data-avalanche-layer @layer="onLayer($event, 5)" />
+    <data-avalanche-layer @layer="onLayer($event, 2)" />
     <ffvl-layer @layer="onLayer($event, 6)" />
-    <flowcapt-layer @layer="onLayer($event, 4)" />
-    <nivoses-layer @layer="onLayer($event, 2)" />
-    <romma-layer @layer="onLayer($event, 3)" />
+    <flowcapt-layer @layer="onLayer($event, 5)" />
+    <nivoses-layer @layer="onLayer($event, 3)" />
+    <romma-layer @layer="onLayer($event, 4)" />
     <route-layer />
   </div>
 </template>

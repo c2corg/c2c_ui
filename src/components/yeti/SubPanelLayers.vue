@@ -3,12 +3,16 @@
     <div class="layers-group">
       <sub-panel-title><span v-translate>Overlays</span></sub-panel-title>
       <div class="layer-items">
-        <div
-          v-for="layer of overlaysLayersSelector"
-          :key="layer.title"
-          class="layer-item"
-          :class="{ 'is-small': layer.small }"
-        >
+        <div v-for="layer of overlaysLayersLarge" :key="layer.title" class="layer-item">
+          <layer-button v-model="layer.checked" :image="layer.image" :country="layer.country" @change="layer.action">
+            <span>{{ layer.title }}</span>
+          </layer-button>
+        </div>
+      </div>
+    </div>
+    <div class="layers-group">
+      <div class="layer-items">
+        <div v-for="layer of overlaysLayersSmall" :key="layer.title" class="layer-item is-small">
           <layer-button v-model="layer.checked" :image="layer.image" :country="layer.country" @change="layer.action">
             <span>{{ layer.title }}</span>
           </layer-button>
@@ -146,6 +150,16 @@ export default {
     overlaysLayersSelector() {
       return Yetix.overlaysLayersSelector;
     },
+    overlaysLayersLarge() {
+      return this.overlaysLayersSelector.filter((layer) => {
+        return !layer.small;
+      });
+    },
+    overlaysLayersSmall() {
+      return this.overlaysLayersSelector.filter((layer) => {
+        return layer.small;
+      });
+    },
     yetiLayersSelector() {
       return Yetix.yetiLayersSelector;
     },
@@ -182,7 +196,7 @@ $width: calc(70 / 14 * 1rem);
 $height: calc(50 / 14 * 1rem);
 
 .layers-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 .layer-items {
   display: grid;
