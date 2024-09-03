@@ -82,6 +82,7 @@ let defaultState = {
 
   dataAvalanche: [],
   showDataAvalanche: false,
+  dataAvalancheAll: false,
 
   ffvl: [],
   showFfvl: false,
@@ -221,6 +222,9 @@ export default new Vue({
     showDataAvalanche() {
       return state.showDataAvalanche;
     },
+    dataAvalancheAll() {
+      return state.dataAvalancheAll;
+    },
     ffvl() {
       return state.ffvl;
     },
@@ -351,6 +355,9 @@ export default new Vue({
     },
     setShowDataAvalanche(showDataAvalanche) {
       state.showDataAvalanche = showDataAvalanche;
+    },
+    setDataAvalancheAll(dataAvalancheAll) {
+      state.dataAvalancheAll = dataAvalancheAll;
     },
     setFfvl(ffvl) {
       state.ffvl = ffvl;

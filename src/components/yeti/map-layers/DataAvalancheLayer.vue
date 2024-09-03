@@ -3,24 +3,21 @@
     <span v-translate>Data-Avalanche</span>
     <template #overlay>
       <div class="data-avalanche-content">
-        <p v-if="!isDateValid" class="is-size-7 pl-1 pb-5 has-text-left">
-          <span class="has-text-primary">
-            <fa-icon icon="info-circle" />
-            <em>> {{ daysValid }} <span v-translate>days</span></em>
+        <p class="is-size-7 px-1 py-1">
+          <span>
+            <strong>{{ overlay.title }} ({{ differenceDays(overlay.date) }} <span v-translate>jours</span>)</strong>
           </span>
         </p>
-
-        <p class="is-size-7 px-1 pb-5">
-          <span>
-            <strong>{{ overlay.title }}</strong>
-            <em>{{ overlay.localisation }}</em>
-          </span>
+        <p class="is-size-7 is-italic">
+          <a :href="overlay.url" target="_blank">
+            {{ overlay.localisation }}
+            <fa-icon icon="external-link-alt" />
+          </a>
         </p>
       </div>
-      <p class="is-size-7 has-text-left px-3">
-        <a :href="overlay.url" target="_blank">
-          <strong>©Data-avalanche.org</strong>
-          <fa-icon icon="external-link-alt" />
+      <p class="footer is-size-7 has-text-left px-3 py-1">
+        <a href="https://data-avalanche.org" target="_blank">
+          <strong>©data-avalanche.org</strong>
         </a>
       </p>
     </template>
@@ -31,6 +28,9 @@
 import IconLayer from './IconLayer.vue';
 import getIconLayerMixin from './getIconLayer';
 
+import Yetix from '@/components/yeti/Yetix';
+import DataAvalancheLayerContent from '@/components/yeti/map-layers/DataAvalancheLayerContent';
+import DataAvalancheLayerContentTitle from '@/components/yeti/map-layers/DataAvalancheLayerContentTitle';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -42,6 +42,8 @@ export default {
     return {
       name: 'dataAvalanche',
       color: 'hsl(51, 100%, 45%)',
+      colorWeeks: 'hsl(31, 100%, 45%)',
+      colorSeason: 'hsl(51, 100%, 45%)',
       colorExpired: 'lightgray',
       overlay: {
         title: null,
@@ -49,7 +51,8 @@ export default {
         date: null,
         localisation: null,
       },
-      daysValid: 180,
+      daysValidWeeks: 15,
+      daysValidSeason: 190,
     };
   },
   computed: {
@@ -58,10 +61,17 @@ export default {
         title: this.$gettext('Data-Avalanche'),
         image: 'data-avalanche.png',
         small: true,
+        contentComponent: DataAvalancheLayerContent,
+        contentTitleComponent: DataAvalancheLayerContentTitle,
       };
     },
-    isDateValid() {
-      return this.dateValid(this.overlay.date);
+    dataAvalancheAll() {
+      return Yetix.dataAvalancheAll;
+    },
+  },
+  watch: {
+    dataAvalancheAll() {
+      this.updateStyle();
     },
   },
   created() {
@@ -95,8 +105,11 @@ export default {
       this.overlay.url = null;
       this.overlay.date = null;
     },
-    dateValid(date) {
-      return (new Date() - new Date(date)) / 1000 < 60 * 60 * 24 * this.daysValid;
+    dateValid(date, days) {
+      return (new Date() - new Date(date)) / 1000 < 60 * 60 * 24 * days;
+    },
+    differenceDays(date) {
+      return Math.round((new Date() - new Date(date)) / 1000 / 60 / 60 / 24);
     },
     onFeatures(features) {
       this.features = features;
@@ -105,15 +118,17 @@ export default {
     updateStyle() {
       // set style
       this.features.forEach((feature) => {
-        let isDateValid = this.dateValid(feature.get('date'));
-        let color = isDateValid ? this.color : this.colorExpired;
+        let isDateValidWeeks = this.dateValid(feature.get('date'), this.daysValidWeeks);
+        let isDateValidSeason = this.dateValid(feature.get('date'), this.daysValidSeason);
+        let color = isDateValidWeeks ? this.colorWeeks : isDateValidSeason ? this.colorSeason : this.colorExpired;
 
         let style = new ol.style.Style({
           image: new ol.style.Icon({
             src: this.createIcon(color),
-            size: [26, 26],
+            // based on dataAvalancheAll, size is 0,0, so icons are not visible
+            size: isDateValidSeason || this.dataAvalancheAll ? [26, 26] : [0, 0],
           }),
-          zIndex: isDateValid ? 1 : 0,
+          zIndex: isDateValidSeason ? 1 : 0,
         });
 
         let hoveredStyle = style.clone();
@@ -132,7 +147,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/sass/variables';
+
+.footer {
+  background: $grey-lighter;
+  margin: 10px -5px -5px;
+}
 .data-avalanche-content {
   width: 150px;
 }
