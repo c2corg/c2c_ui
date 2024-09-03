@@ -9,6 +9,14 @@
           </layer-button>
         </div>
       </div>
+      <div class="layer-controls">
+        <dropdown-content v-for="layer of overlaysLayersLargeCheckedAndNeedContent" :key="layer.title" class="mb-2">
+          <component :is="layer.contentTitleComponent" :layer="layer" />
+          <template #content>
+            <component :is="layer.contentComponent" />
+          </template>
+        </dropdown-content>
+      </div>
     </div>
     <div class="layers-group">
       <div class="layer-items">
@@ -17,6 +25,14 @@
             <span>{{ layer.title }}</span>
           </layer-button>
         </div>
+      </div>
+      <div class="layer-controls">
+        <dropdown-content v-for="layer of overlaysLayersSmallCheckedAndNeedContent" :key="layer.title" class="mb-2">
+          <component :is="layer.contentTitleComponent" :layer="layer" />
+          <template #content>
+            <component :is="layer.contentComponent" />
+          </template>
+        </dropdown-content>
       </div>
     </div>
     <div class="layers-group">
@@ -158,6 +174,16 @@ export default {
     overlaysLayersSmall() {
       return this.overlaysLayersSelector.filter((layer) => {
         return layer.small;
+      });
+    },
+    overlaysLayersLargeCheckedAndNeedContent() {
+      return this.overlaysLayersLarge.filter((layer) => {
+        return layer.checked && layer.contentComponent;
+      });
+    },
+    overlaysLayersSmallCheckedAndNeedContent() {
+      return this.overlaysLayersSmall.filter((layer) => {
+        return layer.checked && layer.contentComponent;
       });
     },
     yetiLayersSelector() {
