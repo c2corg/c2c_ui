@@ -68,6 +68,7 @@ let defaultState = {
   bulletinsLoaded: false,
   showAvalancheBulletins: true,
 
+  winterRoutes: [],
   showWinterRoute: false,
   winterRouteLegend: null,
 
@@ -191,6 +192,12 @@ export default new Vue({
     },
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
+    },
+    winterRoutes() {
+      return state.winterRoutes;
+    },
+    hasWinterRoutes() {
+      return !!state.winterRoutes.length;
     },
     showWinterRoute() {
       return state.showWinterRoute;
@@ -325,6 +332,9 @@ export default new Vue({
     },
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
+    },
+    setWinterRoutes(routes) {
+      state.winterRoutes = routes;
     },
     setShowWinterRoute(showWinterRoute) {
       state.showWinterRoute = showWinterRoute;

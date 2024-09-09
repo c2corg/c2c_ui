@@ -222,6 +222,7 @@ export default {
 
     this.addInteractions();
 
+    Yetix.$on('addFeature', this.addFeature);
     Yetix.$on('removeFeature', this.removeFeature);
     Yetix.$on('removeFeatures', this.removeFeatures);
     Yetix.$on('gpx', this.addFeaturesFromGpx);
