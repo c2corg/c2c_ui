@@ -203,7 +203,7 @@ export default {
 
       // route tab
       let tabRoute = {
-        name: this.$gettext('Outing'),
+        name: this.$gettext('My outing'),
         icon: 'route',
       };
       if (this.hasFeatures && !this.validSimplifyTolerance) {
