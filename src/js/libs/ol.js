@@ -7,7 +7,7 @@ import { boundingExtent, buffer, containsXY, createEmpty, extend, getWidth, inte
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
-import { LineString, MultiPolygon, Point, Polygon } from 'ol/geom';
+import { LineString, MultiPolygon, Point, Polygon, GeometryCollection } from 'ol/geom';
 import { fromExtent } from 'ol/geom/Polygon';
 import { DragAndDrop, Draw, Modify, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
@@ -74,6 +74,7 @@ export default {
     MultiPolygon,
     Point,
     Polygon,
+    GeometryCollection,
     polygonFromExtent: fromExtent,
   },
 
