@@ -185,18 +185,23 @@ export default {
       return Yetix.validSimplifyTolerance;
     },
     tabs() {
-      let tabs = [
-        {
-          icon: 'layer-group',
-          title: this.$gettext('Layers'),
-        },
-        {
-          name: this.$gettext('Risk'),
-          icon: 'bolt',
-        },
-      ];
+      let tabs = [];
 
-      // add route
+      // layer tab
+      let tabLayer = {
+        icon: 'layer-group',
+        title: this.$gettext('Layers'),
+      };
+      tabs.push(tabLayer);
+
+      // risk tab
+      let tabRisk = {
+        name: this.$gettext('Risk'),
+        icon: 'bolt',
+      };
+      tabs.push(tabRisk);
+
+      // route tab
       let tabRoute = {
         name: this.$gettext('Outing'),
         icon: 'route',
