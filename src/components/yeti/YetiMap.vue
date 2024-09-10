@@ -75,6 +75,7 @@ const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
 
 export default {
+  name: 'Yeti',
   components: {
     EditModeButton,
     MapLayers,
@@ -114,6 +115,13 @@ export default {
       }),
     });
     this.view = this.map.getView();
+
+    // if already a stored map position
+    if (this.$localStorage.get('yeti-map-position')) {
+      let { center, zoom } = this.$localStorage.get('yeti-map-position');
+      this.view.setCenter(center);
+      this.view.setZoom(zoom);
+    }
   },
   mounted() {
     // when mounted, bind map to element
@@ -189,6 +197,12 @@ export default {
       // add other events
       this.map.on('click', this.onMapClick);
       this.map.on('pointermove', this.onMapPointerMove);
+
+      // store position
+      this.$localStorage.set('yeti-map-position', {
+        center: this.map.getView().getCenter(),
+        zoom: this.map.getView().getZoom(),
+      });
     },
     onMapClick(evt) {
       // close controls
