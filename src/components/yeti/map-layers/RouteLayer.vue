@@ -397,17 +397,21 @@ export default {
       this.loadingExternalFeatures = true;
 
       let documentGeometry = doc.data.geometry.geom_detail;
-      let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
-      this.addFeature(feature);
+      if (documentGeometry) {
+        let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
+        this.addFeature(feature);
+        // fit map to new features
+        this.fitMapToFeatures();
+      } else {
+        // fit map to geom
+        this.fitMapToGeom(doc.data.geometry.geom);
+      }
       // update store
       Yetix.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
-
       // document is loaded, go back to normal case
       this.loadingExternalFeatures = false;
       // and emit new features
       this.updateFeaturesFromStore();
-      // fit map to new features
-      this.fitMapToFeatures();
     },
     addFeature(feature) {
       // split multilinestrings into linestrings
@@ -433,6 +437,12 @@ export default {
 
       // set a minimum zoom level
       this.view.setZoom(Math.max(this.validMinimumMapZoom, this.view.getZoom()));
+    },
+    fitMapToGeom(geom) {
+      let feature = new ol.format.GeoJSON().readFeature(geom);
+      let geometry = feature.getGeometry().getExtent();
+      this.view.fit(geometry, { size: this.map.getSize() });
+      this.view.setZoom(this.validMinimumMapZoom);
     },
     hideSimplifiedLayer() {
       this.featuresLayer.setVisible(true);
