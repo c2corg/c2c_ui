@@ -222,7 +222,7 @@ export default {
     },
 
     handleRedirection() {
-      if (this.document.redirects_to) {
+      if (this.document?.redirects_to) {
         this.$router.push({ params: { id: this.document.redirects_to } });
       }
     },
@@ -265,6 +265,10 @@ export default {
     },
 
     updateUrl() {
+      if (!this.document) {
+        return;
+      }
+
       const currentPath = this.getCurrentPath();
       if (this.$route.path !== currentPath) {
         this.$router.replace(currentPath);
