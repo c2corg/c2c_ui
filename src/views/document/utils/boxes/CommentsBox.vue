@@ -165,7 +165,7 @@ export default {
       const document_id = this.document.document_id;
       const lang = this.locale.lang;
 
-      // create topic must go threw c2c API, because system has to create
+      // create topic must go through c2c API, because system has to create
       // first message with good link
       c2c.forum
         .createTopic(document_id, lang)
