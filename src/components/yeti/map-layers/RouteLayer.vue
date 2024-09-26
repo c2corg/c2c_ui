@@ -148,6 +148,9 @@ export default {
     mapZoom() {
       return Yetix.mapZoom;
     },
+    zoomDelta() {
+      return Yetix.ZOOM_DELTA;
+    },
     validMinimumMapZoom() {
       return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
@@ -436,13 +439,13 @@ export default {
       this.view.fit(extent, { size: this.map.getSize() });
 
       // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.view.getZoom()));
+      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.mapZoom) / this.zoomDelta);
     },
     fitMapToGeom(geom) {
       let feature = new ol.format.GeoJSON().readFeature(geom);
       let geometry = feature.getGeometry().getExtent();
       this.view.fit(geometry, { size: this.map.getSize() });
-      this.view.setZoom(this.validMinimumMapZoom);
+      this.view.setZoom(this.validMinimumMapZoom / this.zoomDelta);
     },
     hideSimplifiedLayer() {
       this.featuresLayer.setVisible(true);

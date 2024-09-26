@@ -19,6 +19,8 @@ let defaultState = {
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
   YETI_LAYER_OPACITY: 0.9,
+  /* fixed zoom by 0.5 */
+  ZOOM_DELTA: 0.5,
 
   activeTab: 0,
 
@@ -126,6 +128,9 @@ export default new Vue({
     },
     YETI_LAYER_OPACITY() {
       return state.YETI_LAYER_OPACITY;
+    },
+    ZOOM_DELTA() {
+      return state.ZOOM_DELTA;
     },
     activeTab() {
       return state.activeTab;

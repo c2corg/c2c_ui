@@ -94,6 +94,9 @@ export default {
     mapZoom() {
       return Yetix.mapZoom;
     },
+    zoomDelta() {
+      return Yetix.ZOOM_DELTA;
+    },
   },
   created() {
     // build map
@@ -102,6 +105,7 @@ export default {
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
+          delta: this.zoomDelta,
         }),
         new ol.control.ScaleLine(),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
@@ -109,9 +113,11 @@ export default {
 
       view: new ol.View({
         center: ol.proj.transform(DEFAULT_CENTER, 'EPSG:4326', 'EPSG:3857'),
-        zoom: DEFAULT_ZOOM,
-        maxZoom: MAX_ZOOM,
+        zoom: DEFAULT_ZOOM / this.zoomDelta,
+        maxZoom: MAX_ZOOM / this.zoomDelta,
         enableRotation: false,
+        constrainResolution: true,
+        zoomFactor: 2 ** this.zoomDelta,
       }),
     });
     this.view = this.map.getView();
@@ -120,7 +126,7 @@ export default {
     if (this.$localStorage.get('yeti-map-position')) {
       let { center, zoom } = this.$localStorage.get('yeti-map-position');
       this.view.setCenter(center);
-      this.view.setZoom(zoom);
+      this.view.setZoom(zoom / this.zoomDelta);
     }
   },
   mounted() {
@@ -174,17 +180,17 @@ export default {
 
       if (extent) {
         extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
-        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 });
+        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 / this.zoomDelta });
       } else {
         coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857');
         this.view.setCenter(coordinates);
-        this.view.setZoom(16);
+        this.view.setZoom(16 / this.zoomDelta);
       }
 
       this.showRecenterOnPropositions = false;
     },
     getMapZoom() {
-      return Math.floor(this.view.getZoom() * 10) / 10;
+      return Math.round(new ol.View().getZoomForResolution(this.map.getView().getResolution()) * 10) / 10;
     },
     onMapMoveEnd() {
       let mapZoom = this.getMapZoom();
@@ -201,7 +207,7 @@ export default {
       // store position
       this.$localStorage.set('yeti-map-position', {
         center: this.map.getView().getCenter(),
-        zoom: this.map.getView().getZoom(),
+        zoom: mapZoom,
       });
     },
     onMapClick(evt) {
@@ -222,7 +228,7 @@ export default {
     },
     setCenterOnGeoLocation() {
       let position = this.geolocation.getPosition();
-      this.view.setZoom(TRACKING_INITIAL_ZOOM);
+      this.view.setZoom(TRACKING_INITIAL_ZOOM / this.zoomDelta);
       this.view.setCenter(position);
       this.geolocation.setTracking(false);
     },
