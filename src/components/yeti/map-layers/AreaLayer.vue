@@ -149,18 +149,16 @@ export default {
     },
     onBaseLayers(baseLayers) {
       let layers = baseLayers.map((layer) => {
-        layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
-        layer.on('prerender', (evt) => {
-          // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
-          // but only when MAX_ZOOM
-          if (this.mapZoom <= Yetix.BLEND_MODES_MAX_ZOOM) {
-            evt.context.globalCompositeOperation = 'source-atop';
-          }
-        });
-        layer.on('postrender', (evt) => {
-          // source-over: returns to default
-          evt.context.globalCompositeOperation = 'source-over';
-        });
+        if (layer instanceof ol.layer.Group) {
+          layer
+            .getLayers()
+            .getArray()
+            .forEach((subLayer) => {
+              this.setPrePostRender(subLayer);
+            });
+        } else {
+          this.setPrePostRender(layer);
+        }
         return layer;
       });
       this.baseLayers = layers;
@@ -177,6 +175,20 @@ export default {
       let groupLayers = this.groupLayer.getLayers();
       layers.map((layer) => groupLayers.push(layer));
       this.groupLayer.setLayers(groupLayers);
+    },
+    setPrePostRender(layer) {
+      layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
+      layer.on('prerender', (evt) => {
+        // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
+        // but only when MAX_ZOOM
+        if (this.mapZoom <= Yetix.BLEND_MODES_MAX_ZOOM) {
+          evt.context.globalCompositeOperation = 'source-atop';
+        }
+      });
+      layer.on('postrender', (evt) => {
+        // source-over: returns to default
+        evt.context.globalCompositeOperation = 'source-over';
+      });
     },
   },
 };
