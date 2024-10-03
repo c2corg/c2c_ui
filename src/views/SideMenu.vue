@@ -61,9 +61,7 @@
     </router-link>
 
     <div class="menu-footer is-size-7">
-      <!-- We must use JS to hide add, because we do not want that hidden add be taken add's stats -->
       <advertisement class="menu-add" v-if="$screen.hasHeightForAd" />
-
       <div class="has-text-centered menu-links">
         <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
         <span> &bull; </span>
