@@ -477,6 +477,11 @@ export default {
         },
       ],
     },
+    2024: {
+      year: 2024,
+      documentId: 1590020,
+      winners: [],
+    },
   },
 
   computed: {

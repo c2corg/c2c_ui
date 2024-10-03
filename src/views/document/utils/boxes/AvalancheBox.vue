@@ -27,9 +27,9 @@
   </div>
 </template>
 <script>
-import turfBooleanIntersects from '@turf/boolean-intersects';
-import turfBuffer from '@turf/buffer';
-import turfSimplify from '@turf/simplify';
+import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-intersects';
+import { buffer as turfBuffer } from '@turf/buffer';
+import { simplify as turfSimplify } from '@turf/simplify';
 
 import IconBra from '../../../../components/generics/icons/IconBra';
 

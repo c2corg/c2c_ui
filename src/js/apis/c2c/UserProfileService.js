@@ -72,23 +72,18 @@ UserProfileService.prototype.login = function (username, password) {
   });
 };
 
-UserProfileService.prototype.logout = function (token) {
-  // if the call is made on page load, and the user has expired token,
-  // the token will be passed as a parameter
-  if (token) {
-    this.api.axios
-      .post(
-        '/users/logout',
-        { discourse: true },
-        { headers: { common: { Authorization: 'JWT token="' + token + '"' } } }
-      )
-      .catch(() => {
-        // do nothing
-      });
-    return;
-  }
-
+UserProfileService.prototype.logout = function () {
   return this.api.post('/users/logout', { discourse: true });
+};
+
+UserProfileService.prototype.expiredTokenLogout = function (expiredToken) {
+  // When the user has expired token, the token is removed from the api,
+  // but we still want to use it in the logout call
+  return this.api.axios.post(
+    '/users/logout',
+    { discourse: true },
+    { headers: { common: { Authorization: 'JWT token="' + expiredToken + '"' } } }
+  );
 };
 
 UserProfileService.prototype.update_preferred_language = function (lang) {

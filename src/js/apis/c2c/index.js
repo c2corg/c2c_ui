@@ -67,6 +67,7 @@ CamptocampApi.prototype.setAuthorizationToken = function (token) {
 CamptocampApi.prototype.search = function (params) {
   return this.get('/search', { params });
 };
+
 CamptocampApi.prototype.getRecentChanges = function (params) {
   return this.get('/documents/changes', { params });
 };

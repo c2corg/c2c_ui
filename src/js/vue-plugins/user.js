@@ -9,31 +9,46 @@ export default function install(Vue) {
     data() {
       const data = this.$localStorage.get(config.urls.api, {});
 
-      return {
-        // The unique name, used to login
-        userName: data['userName'] ?? null,
+      // token expiration date
+      const expire = data['expire'] ?? null;
+      // The unique name, used to login
+      const userName = data['userName'] ?? null;
+      // unique numerical ID
+      const id = data['id'] ?? null;
+      // user lang, read write property everywhere : this.$user.lang
+      const lang = data['lang'] ?? this.$language.current;
+      // list of roles
+      const roles = data['roles'] ?? [];
+      // public name, a simple label
+      const name = data['name'] ?? null;
+      // forum name
+      const forumUsername = data['forumUsername'] ?? null;
+      // private token used for API auth
+      const token = data['token'] ?? null;
 
-        // unique numerical ID
-        id: data['id'] ?? null,
+      const expired = this.checkExpiration(expire, token);
 
-        // user lang, read write property everywhere : this.$user.lang
-        lang: data['lang'] ?? this.$language.current,
-
-        // list of roles
-        roles: data['roles'] ?? [],
-
-        // public name, a simple label
-        name: data['name'] ?? null,
-
-        // forum name
-        forumUsername: data['forumUsername'] ?? null,
-
-        // private token used for API auth
-        token: data['token'] ?? null,
-
-        // token expiration date
-        expire: data['expire'] ?? null,
-      };
+      return expired
+        ? {
+            userName: null,
+            id: null,
+            lang,
+            roles: [],
+            name: null,
+            forumUsername: null,
+            token: null,
+            expire: null,
+          }
+        : {
+            userName,
+            id,
+            lang,
+            roles,
+            name,
+            forumUsername,
+            token,
+            expire,
+          };
     },
 
     computed: {
@@ -48,11 +63,12 @@ export default function install(Vue) {
     watch: {
       token: {
         handler: 'updateToken',
+        immediate: true,
       },
     },
 
     created() {
-      this.checkExpiration();
+      this.commitToLocaleStorage_();
     },
 
     methods: {
@@ -72,12 +88,12 @@ export default function install(Vue) {
         });
       },
 
+      expiredTokenLogout(token) {
+        c2c.userProfile.expiredTokenLogout(token);
+      },
+
       signout() {
-        // we have an expired token in local storage, so we don't want to use that token
-        // for the API calls (we would go into https://github.com/c2corg/v6_api/issues/730 instead
-        // of doing unauthentified requests).
-        // We still want to make the logout call which needs a (potentially expired) token
-        c2c.userProfile.logout(this.token);
+        c2c.userProfile.logout();
 
         this.token = null;
         this.roles = [];
@@ -118,16 +134,15 @@ export default function install(Vue) {
         this.$localStorage.set(config.urls.api, this.$data);
       },
 
-      checkExpiration() {
-        if (!this.expire) {
+      checkExpiration(expire, token) {
+        if (!expire) {
           return true;
         }
 
         const now = Date.now() / 1000; // in seconds
-        const expire = this.expire;
 
         if (now > expire) {
-          this.signout();
+          this.expiredTokenLogout(token);
           return true;
         }
 
