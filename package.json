@@ -59,7 +59,7 @@
     "zingtouch": "1.0.6"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.25.1",
+    "@babel/eslint-parser": "7.25.7",
     "@snyk/protect": "1.1293.1",
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-plugin-eslint": "5.0.8",
