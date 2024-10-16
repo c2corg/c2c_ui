@@ -580,10 +580,14 @@ export default {
         let mountainsFeatures = mountainsLayer.getSource().getFeatures();
 
         mountainsFeatures.forEach((feature) => {
-          let intersect = turfIntersect(
-            new ol.format.GeoJSON().writeFeatureObject(feature),
-            new ol.format.GeoJSON().writeFeatureObject(mapExtentFeature)
-          );
+          let featureCollection = {
+            type: 'FeatureCollection',
+            features: [
+              new ol.format.GeoJSON().writeFeatureObject(feature),
+              new ol.format.GeoJSON().writeFeatureObject(mapExtentFeature),
+            ],
+          };
+          let intersect = turfIntersect(featureCollection);
           if (intersect) {
             let intersectFeature = new ol.format.GeoJSON().readFeature(intersect);
 
