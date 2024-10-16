@@ -185,20 +185,25 @@ export default {
       return Yetix.validSimplifyTolerance;
     },
     tabs() {
-      let tabs = [
-        {
-          icon: 'layer-group',
-          title: this.$gettext('Layers'),
-        },
-        {
-          name: this.$gettext('Risk'),
-          icon: 'bolt',
-        },
-      ];
+      let tabs = [];
 
-      // add route
+      // layer tab
+      let tabLayer = {
+        icon: 'layer-group',
+        title: this.$gettext('Layers'),
+      };
+      tabs.push(tabLayer);
+
+      // risk tab
+      let tabRisk = {
+        name: this.$gettext('Risk'),
+        icon: 'bolt',
+      };
+      tabs.push(tabRisk);
+
+      // route tab
       let tabRoute = {
-        name: this.$gettext('Outing'),
+        name: this.$gettext('My outing'),
         icon: 'route',
       };
       if (this.hasFeatures && !this.validSimplifyTolerance) {
@@ -284,6 +289,8 @@ export default {
     }
     // tmp: set default values for persistent state
     Yetix.setDefault();
+    // remove all previous events (navigating from other c2c pages)
+    Yetix.$off();
   },
 
   mounted() {

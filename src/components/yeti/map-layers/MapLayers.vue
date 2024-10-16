@@ -36,7 +36,7 @@ export default {
     this.slopesLayers = [];
   },
   mounted() {
-    Yetix.$on('mapMoveEnd', this.onMapMoveEnd);
+    Yetix.$on('map-moveend', this.onMapMoveEnd);
   },
   methods: {
     onBaseLayers(baseLayers) {

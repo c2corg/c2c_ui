@@ -361,7 +361,7 @@ export default {
       // then, update chart
       this.updateChart();
 
-      this.focus = this.container.append('circle').attr('class', 'circle').attr('r', 4.5).style('display', 'none');
+      this.focus = this.container.append('circle').attr('class', 'circle').attr('r', 5).style('display', 'none');
 
       // altitude popup
       this.popupAltitude = this.container
@@ -534,8 +534,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/sass/variables';
 
-$C2C-orange: red;
-
 :deep(.elevation-profile-chart) {
   height: 150px; // default height on page
 
@@ -564,14 +562,15 @@ $C2C-orange: red;
 
   .line {
     fill: none;
-    stroke: $C2C-orange;
+    stroke: red;
     stroke-width: 3px;
     stroke-linejoin: round;
+    stroke-linecap: round;
   }
 
   .circle {
-    fill: yellow;
-    stroke: $C2C-orange;
+    fill: red;
+    stroke: white;
     stroke-width: 2px;
   }
 
@@ -582,7 +581,7 @@ $C2C-orange: red;
   }
 
   .popup text {
-    fill: yellow;
+    fill: white;
   }
 
   .overlay {

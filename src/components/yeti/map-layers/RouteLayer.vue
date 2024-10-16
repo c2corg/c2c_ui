@@ -6,17 +6,73 @@ import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
+let angle = 60;
+let pColor = `hsl(${angle}, 100%, 50%)`;
+let pColorLight = `hsl(${angle}, 100%, 90%)`;
+let pColorDark = `hsl(${angle}, 100%, 20%)`;
+let pWidth = 5;
+
 let normalLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'rgba(0, 0, 0, 0.4)',
-      width: 5,
+      color: pColorDark,
+      width: pWidth + 2,
     }),
   }),
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'yellow',
-      width: 3,
+      color: pColor,
+      width: pWidth,
+    }),
+  }),
+];
+
+let normalWithEditLineStyle = [
+  ...normalLineStyle,
+  new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: pWidth - 1,
+      fill: new ol.style.Fill({
+        color: pColorLight,
+      }),
+      stroke: new ol.style.Stroke({
+        color: pColorDark,
+        width: 2,
+      }),
+    }),
+    geometry(feature) {
+      let coords = feature
+        .getGeometry()
+        .getCoordinates()
+        .map((c) => new ol.geom.Point(c));
+      return new ol.geom.GeometryCollection(coords);
+    },
+  }),
+];
+
+let editStyle = [
+  new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 6,
+      fill: new ol.style.Fill({
+        color: pColorDark,
+      }),
+      stroke: new ol.style.Stroke({
+        color: 'white',
+        width: 2,
+      }),
+    }),
+  }),
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: pWidth + 1,
+    }),
+  }),
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: pColorDark,
+      width: pWidth - 1,
     }),
   }),
 ];
@@ -25,13 +81,13 @@ let simplifiedLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: 'white',
-      width: 5,
+      width: pWidth + 2,
     }),
   }),
   new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: 'rgba(0, 0, 0, 0.7)',
-      width: 3,
+      width: pWidth,
     }),
   }),
 ];
@@ -39,32 +95,41 @@ let simplifiedLineStyle = [
 let highlightedLineStyle = [
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'yellow',
-      width: 9,
+      color: 'hsla(60, 100%, 50%, 0.8)',
+      width: 16,
     }),
     zIndex: 1,
   }),
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'red',
-      width: 3,
+      color: 'hsl(28, 100%, 45%)',
+      width: pWidth + 2,
+    }),
+    zIndex: 1,
+  }),
+  new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'hsl(28, 100%, 65%)',
+      width: pWidth,
     }),
     zIndex: 1,
   }),
 ];
 
-let elevationPointStyle = new ol.style.Style({
-  image: new ol.style.Circle({
-    radius: 5,
-    fill: new ol.style.Fill({
-      color: 'yellow',
-    }),
-    stroke: new ol.style.Stroke({
-      color: 'red',
-      width: 2,
+let elevationPointStyle = [
+  new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: pWidth + 1,
+      fill: new ol.style.Fill({
+        color: 'red',
+      }),
+      stroke: new ol.style.Stroke({
+        color: 'white',
+        width: 2,
+      }),
     }),
   }),
-});
+];
 
 export default {
   mixins: [layerMixin],
@@ -80,6 +145,12 @@ export default {
     featuresLength() {
       return Yetix.featuresLength;
     },
+    mapZoom() {
+      return Yetix.mapZoom;
+    },
+    zoomDelta() {
+      return Yetix.ZOOM_DELTA;
+    },
     validMinimumMapZoom() {
       return Yetix.VALID_MINIMUM_MAP_ZOOM;
     },
@@ -94,11 +165,16 @@ export default {
       } else {
         this.enableInteractions();
       }
+      this.updateEditStyle();
+    },
+    mapZoom() {
+      this.updateEditStyle();
     },
   },
   mounted() {
     // features layer
     this.featuresLayer = new ol.layer.Vector({
+      name: 'routeLayer',
       source: new ol.source.Vector(),
       style: normalLineStyle,
     });
@@ -149,6 +225,7 @@ export default {
 
     this.addInteractions();
 
+    Yetix.$on('addFeature', this.addFeature);
     Yetix.$on('removeFeature', this.removeFeature);
     Yetix.$on('removeFeatures', this.removeFeatures);
     Yetix.$on('gpx', this.addFeaturesFromGpx);
@@ -157,15 +234,22 @@ export default {
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
   },
   methods: {
+    getLayer() {
+      return this.featuresLayer;
+    },
     addInteractions() {
       let source = this.featuresLayerSource;
 
-      this.modifyInteraction = new ol.interaction.Modify({ source });
+      this.modifyInteraction = new ol.interaction.Modify({
+        source,
+        style: editStyle,
+      });
       this.map.addInteraction(this.modifyInteraction);
 
       this.drawInteraction = new ol.interaction.Draw({
         source,
         type: 'LineString',
+        style: editStyle,
       });
       this.map.addInteraction(this.drawInteraction);
 
@@ -316,17 +400,21 @@ export default {
       this.loadingExternalFeatures = true;
 
       let documentGeometry = doc.data.geometry.geom_detail;
-      let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
-      this.addFeature(feature);
+      if (documentGeometry) {
+        let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
+        this.addFeature(feature);
+        // fit map to new features
+        this.fitMapToFeatures();
+      } else {
+        // fit map to geom
+        this.fitMapToGeom(doc.data.geometry.geom);
+      }
       // update store
       Yetix.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
-
       // document is loaded, go back to normal case
       this.loadingExternalFeatures = false;
       // and emit new features
       this.updateFeaturesFromStore();
-      // fit map to new features
-      this.fitMapToFeatures();
     },
     addFeature(feature) {
       // split multilinestrings into linestrings
@@ -351,7 +439,13 @@ export default {
       this.view.fit(extent, { size: this.map.getSize() });
 
       // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.view.getZoom()));
+      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.mapZoom) / this.zoomDelta);
+    },
+    fitMapToGeom(geom) {
+      let feature = new ol.format.GeoJSON().readFeature(geom);
+      let geometry = feature.getGeometry().getExtent();
+      this.view.fit(geometry, { size: this.map.getSize() });
+      this.view.setZoom(this.validMinimumMapZoom / this.zoomDelta);
     },
     hideSimplifiedLayer() {
       this.featuresLayer.setVisible(true);
@@ -423,6 +517,11 @@ export default {
           this.elevationPointLayer.setVisible(false);
           break;
       }
+    },
+    updateEditStyle() {
+      this.featuresLayer.setStyle(
+        this.editMode && this.mapZoom >= this.validMinimumMapZoom ? normalWithEditLineStyle : normalLineStyle
+      );
     },
   },
   render() {

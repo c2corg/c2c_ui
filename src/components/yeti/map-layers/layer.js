@@ -24,5 +24,8 @@ export default {
         return feature.getProperties();
       });
     },
+    getLayer() {
+      return this.layer;
+    },
   },
 };

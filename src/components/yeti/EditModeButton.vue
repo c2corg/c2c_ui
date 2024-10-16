@@ -3,6 +3,7 @@
     <div class="ol-control-edit-mode-inner">
       <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
         <span v-translate :title="$gettext('Enable drawing and editing features on map')">Edit mode</span>
+        <fa-icon icon="pen" class="ml-1" />
       </input-checkbox>
     </div>
   </div>

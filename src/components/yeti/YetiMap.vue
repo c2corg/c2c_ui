@@ -6,7 +6,6 @@
       <map-layers />
       <yeti-layers />
       <overlays-layers />
-      <route-layer />
       <div
         ref="layerSwitcherButton"
         class="ol-control ol-control-layer-switcher-button"
@@ -61,7 +60,6 @@
 <script>
 import MapLayers from './map-layers/MapLayers.vue';
 import OverlaysLayers from './map-layers/OverlaysLayers.vue';
-import RouteLayer from './map-layers/RouteLayer.vue';
 import YetiLayers from './map-layers/YetiLayers.vue';
 
 import EditModeButton from '@/components/yeti/EditModeButton';
@@ -77,11 +75,11 @@ const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
 
 export default {
+  name: 'Yeti',
   components: {
     EditModeButton,
     MapLayers,
     OverlaysLayers,
-    RouteLayer,
     Toast,
     YetiLayers,
     YetiMapLegend,
@@ -96,6 +94,9 @@ export default {
     mapZoom() {
       return Yetix.mapZoom;
     },
+    zoomDelta() {
+      return Yetix.ZOOM_DELTA;
+    },
   },
   created() {
     // build map
@@ -104,6 +105,7 @@ export default {
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
+          delta: this.zoomDelta,
         }),
         new ol.control.ScaleLine(),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
@@ -111,12 +113,21 @@ export default {
 
       view: new ol.View({
         center: ol.proj.transform(DEFAULT_CENTER, 'EPSG:4326', 'EPSG:3857'),
-        zoom: DEFAULT_ZOOM,
-        maxZoom: MAX_ZOOM,
+        zoom: DEFAULT_ZOOM / this.zoomDelta,
+        maxZoom: MAX_ZOOM / this.zoomDelta,
         enableRotation: false,
+        constrainResolution: true,
+        zoomFactor: 2 ** this.zoomDelta,
       }),
     });
     this.view = this.map.getView();
+
+    // if already a stored map position
+    if (this.$localStorage.get('yeti-map-position')) {
+      let { center, zoom } = this.$localStorage.get('yeti-map-position');
+      this.view.setCenter(center);
+      this.view.setZoom(zoom / this.zoomDelta);
+    }
   },
   mounted() {
     // when mounted, bind map to element
@@ -169,17 +180,17 @@ export default {
 
       if (extent) {
         extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
-        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 });
+        this.view.fit(extent, { size: this.map.getSize(), maxZoom: 12 / this.zoomDelta });
       } else {
         coordinates = ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857');
         this.view.setCenter(coordinates);
-        this.view.setZoom(16);
+        this.view.setZoom(16 / this.zoomDelta);
       }
 
       this.showRecenterOnPropositions = false;
     },
     getMapZoom() {
-      return Math.floor(this.view.getZoom() * 10) / 10;
+      return Math.round(new ol.View().getZoomForResolution(this.map.getView().getResolution()) * 10) / 10;
     },
     onMapMoveEnd() {
       let mapZoom = this.getMapZoom();
@@ -188,20 +199,25 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // emit an event for map layers
-      Yetix.$emit('mapMoveEnd');
-
+      Yetix.$emit('map-moveend');
+      // add other events
       this.map.on('click', this.onMapClick);
+      this.map.on('pointermove', this.onMapPointerMove);
+
+      // store position
+      this.$localStorage.set('yeti-map-position', {
+        center: this.map.getView().getCenter(),
+        zoom: mapZoom,
+      });
     },
     onMapClick(evt) {
       // close controls
       this.showRecenterOnPropositions = false;
 
-      // get clicked feature (the visible one on top)
-      let clickedFeature = this.map.getFeaturesAtPixel(evt.pixel)[0];
-
-      // emit an event for map layers
-      // pass clicked feature
-      Yetix.$emit('mapClick', evt, clickedFeature);
+      Yetix.$emit('map-click', evt);
+    },
+    onMapPointerMove(evt) {
+      Yetix.$emit('map-pointermove', evt);
     },
     activeLayersTab() {
       this.$refs['toast-layer'].toast();
@@ -212,7 +228,7 @@ export default {
     },
     setCenterOnGeoLocation() {
       let position = this.geolocation.getPosition();
-      this.view.setZoom(TRACKING_INITIAL_ZOOM);
+      this.view.setZoom(TRACKING_INITIAL_ZOOM / this.zoomDelta);
       this.view.setCenter(position);
       this.geolocation.setTracking(false);
     },
