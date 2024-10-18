@@ -511,7 +511,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "Ups! Prišlo je do težave s forumom. Tukaj je sporočilo:",
     "Oups! something went wrong...": "Ups! nekaj je šlo narobe...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Naše spletno mesto uporablja piškotke, ki jih zagotovimo mi in tretje osebe. Nekateri piškotki so potrebni za spletno mesto, medtem ko lahko druge kadar koli prilagodite, zlasti tiste, ki nam omogočajo razumeti delovanja našega spletnega mesta in vam ponuditi funkcije družbenih medijev. Vse jih lahko sprejmete ali zavrnete oz lahko ",
-    "Outing": "Itinerar",
     "Outings statistics": "Statistika vzponov",
     "Outings, with the latest conditions in the mountains": "Poročanje o turah, z najnovejšimi razmerami v gorah",
     "Page not found": "Stran ni najdena",
@@ -1852,6 +1851,7 @@
     "timing": "Čas",
     "title": "Naslov",
     "to": {
+      "$$noContext": "do",
       "period": "do"
     },
     "to start or load a new one": "da začnete ali naložite novega",

@@ -490,7 +490,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "Oops! C'è un errore sul forum: ",
     "Oups! something went wrong...": "Oops! c'è un errore: ",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Il nostro sito web utilizza cookie forniti da noi stessi e da terzi. Alcuni cookie sono necessari per il sito web, altri possono essere regolati in qualsiasi momento, in particolare quelli che ci permettono di capire il rendimento del nostro sito web e di offrirvi le funzionalità dei social media. È possibile accettare o rifiutare tutti, o",
-    "Outing": "Itinerari",
     "Outings statistics": "Statistiche delle gite",
     "Outings, with the latest conditions in the mountains": "Itinerari, con le recenti condizioni sulle montagne",
     "Page not found": "Pagina non trovata",
@@ -1014,7 +1013,6 @@
     "date_start": "Data d'inizio",
     "date_time": "data/ora",
     "day(s)": "Giorno(i)",
-    "days": "giorni",
     "de": {
       "langs": "tedesco"
     },
@@ -1805,6 +1803,7 @@
     "timing": "Durata",
     "title": "Titolo",
     "to": {
+      "$$noContext": "a",
       "period": "a"
     },
     "to start or load a new one": "per iniziare o caricarne uno nuovo",

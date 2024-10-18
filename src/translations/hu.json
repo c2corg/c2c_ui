@@ -433,7 +433,6 @@
     "Orientations:": "Tájolások:",
     "Oups! Something went wrong with forum. Here is the message :": "Hoppácska! Valami hiba történt a fórumban. Ez az üzenet:",
     "Oups! something went wrong...": "Hoppácska, valami félresikerült...",
-    "Outing": "Kiruccanás",
     "Outings statistics": "Kiruccanások statisztikája",
     "Page not found": "Az oldal nem található",
     "Paragliding outings": "Siklóernyős kiruccanások",
@@ -1608,6 +1607,7 @@
     "timing": "időzítés",
     "title": "név",
     "to": {
+      "$$noContext": "-hoz -hez -höz",
       "period": "-hoz -hez -höz"
     },
     "to start or load a new one": "egy újat kezdeni vagy betölteni",
