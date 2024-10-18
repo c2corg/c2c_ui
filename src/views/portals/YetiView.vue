@@ -455,7 +455,7 @@ $section-padding: 0.75rem; //TODO find this variable
 $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(100vh - #{$navbar-height});
+$yeti-height: calc(100vh - #{$navbarad-height});
 
 .yeti-app {
   position: relative;
