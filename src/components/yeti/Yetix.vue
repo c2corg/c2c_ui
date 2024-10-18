@@ -19,6 +19,8 @@ let defaultState = {
   DANGER_MAX_WHEN_MRD: 3,
   VALID_MINIMUM_MAP_ZOOM: 13,
   YETI_LAYER_OPACITY: 0.9,
+  /* fixed zoom by 0.5 */
+  ZOOM_DELTA: 0.5,
 
   activeTab: 0,
 
@@ -68,6 +70,7 @@ let defaultState = {
   bulletinsLoaded: false,
   showAvalancheBulletins: true,
 
+  winterRoutes: [],
   showWinterRoute: false,
   winterRouteLegend: null,
 
@@ -82,6 +85,10 @@ let defaultState = {
 
   dataAvalanche: [],
   showDataAvalanche: false,
+  dataAvalancheAll: false,
+
+  ffvl: [],
+  showFfvl: false,
 
   mapZoom: 0,
   editMode: false,
@@ -121,6 +128,9 @@ export default new Vue({
     },
     YETI_LAYER_OPACITY() {
       return state.YETI_LAYER_OPACITY;
+    },
+    ZOOM_DELTA() {
+      return state.ZOOM_DELTA;
     },
     activeTab() {
       return state.activeTab;
@@ -188,6 +198,12 @@ export default new Vue({
     showAvalancheBulletins() {
       return state.showAvalancheBulletins;
     },
+    winterRoutes() {
+      return state.winterRoutes;
+    },
+    hasWinterRoutes() {
+      return !!state.winterRoutes.length;
+    },
     showWinterRoute() {
       return state.showWinterRoute;
     },
@@ -217,6 +233,15 @@ export default new Vue({
     },
     showDataAvalanche() {
       return state.showDataAvalanche;
+    },
+    dataAvalancheAll() {
+      return state.dataAvalancheAll;
+    },
+    ffvl() {
+      return state.ffvl;
+    },
+    showFfvl() {
+      return state.showFfvl;
     },
     mapZoom() {
       return state.mapZoom;
@@ -313,6 +338,9 @@ export default new Vue({
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
     },
+    setWinterRoutes(routes) {
+      state.winterRoutes = routes;
+    },
     setShowWinterRoute(showWinterRoute) {
       state.showWinterRoute = showWinterRoute;
     },
@@ -342,6 +370,15 @@ export default new Vue({
     },
     setShowDataAvalanche(showDataAvalanche) {
       state.showDataAvalanche = showDataAvalanche;
+    },
+    setDataAvalancheAll(dataAvalancheAll) {
+      state.dataAvalancheAll = dataAvalancheAll;
+    },
+    setFfvl(ffvl) {
+      state.ffvl = ffvl;
+    },
+    setShowFfvl(showFfvl) {
+      state.showFfvl = showFfvl;
     },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
@@ -402,6 +439,9 @@ export default new Vue({
     },
     fetchDataAvalanche() {
       return this.fetchApi('data-avalanche');
+    },
+    fetchFfvl() {
+      return this.fetchApi('ffvl');
     },
     fetchWpsAlti(points, interpolate) {
       let params = {
