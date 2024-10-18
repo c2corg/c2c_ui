@@ -481,6 +481,9 @@
     "Open fields to detail the picture's context": "Campo libero per descrivere il contesto della foto",
     "Open in a new tab": "Aprire in una nuova scheda",
     "Ordered list": "Lista ordinata",
+    "Ordnance Survey (uk)": {
+      "Map layer": "Ordnance Survey (UK)"
+    },
     "Orientations": "Orientazioni",
     "Orientations:": "Orientazioni:",
     "Other options": "Altre opzioni",
@@ -679,6 +682,7 @@
     },
     "Trace": "Traccia GPS",
     "Tracking devices": "Dispositivi di rilevamento",
+    "Translate": "Tradurre",
     "Transport & road or PT access": "Accesso stradale / mezzi publici",
     "Types and styles": "Tipi e stili",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Tipi di assicurazione e protezione utilizzati, verifiche tra gli arrampicatori, test di stabilità del manto nevoso, test degli apparecchi di ricerca in valanga, ecc.",
@@ -1893,6 +1897,7 @@
       "$$noContext": "si",
       "parking_fee_types": "si"
     },
+    "yeti": "YETI",
     "zh": {
       "langs": "Cinesi"
     }
