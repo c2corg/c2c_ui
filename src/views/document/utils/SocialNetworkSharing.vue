@@ -48,7 +48,7 @@ export default {
   methods: {
     onAddthisLoad() {
       this.addThisVisible = true;
-      window.addthis.button('.social-network-sharing');
+      window.addthis?.button('.social-network-sharing');
     },
 
     installAddThis() {
