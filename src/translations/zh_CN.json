@@ -520,7 +520,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "哎呀！论坛出现错误。这是信息：",
     "Oups! something went wrong...": "哎呀！出现错误...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "我们的网站使用我们自己和第三方提供的 cookie。 有些 cookie 是网站所必需的，而您可以随时调整其他 cookie，尤其是那些能让我们了解网站性能和为您提供社交媒体功能的 cookie。 你可以接受或拒绝所有，或",
-    "Outing": "出行记录",
     "Outings statistics": "出行统计",
     "Page not found": "页面未找到",
     "Paragliding outings": "滑翔伞出行记录",
@@ -1859,6 +1858,7 @@
     "timing": "时间节点",
     "title": "标题",
     "to": {
+      "$$noContext": "到",
       "period": "到"
     },
     "to start or load a new one": "开始或加载一个新的",

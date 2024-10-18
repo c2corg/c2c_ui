@@ -557,7 +557,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "Upsi ! Etwas is mit den Forum schief gegangen. Hier ist die Nachricht :",
     "Oups! something went wrong...": "Upsi ! Etwas ist schief gegangen ...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Unsere Website verwendet Cookies, die von uns und von Drittparteien bereitgestellt werden. Einige Cookies sind für den Betrieb der Website erforderlich, während andere von Ihnen zu jeder Zeit eingestellt werden können, insbesondere solche, die es uns ermöglichen, die Leistung unserer Website zu verstehen und Ihnen Social-Media-Funktionen zur Verfügung zu stellen. Sie können alle annehmen oder ablehnen oder",
-    "Outing": "Route",
     "Outings statistics": "Berichtenstatistiken",
     "Outings, with the latest conditions in the mountains": "Skitouren mit den aktuellsten Bedingungen in den Bergen",
     "Overlays": "Kartenebenen",
@@ -1115,7 +1114,6 @@
     "date_start": "Start-Datum",
     "date_time": "Datum/Uhrzeit",
     "day(s)": "Tag(e)",
-    "days": "Tage",
     "de": {
       "langs": "deutsch"
     },
@@ -1933,6 +1931,7 @@
     "timing": "Timing",
     "title": "Titel",
     "to": {
+      "$$noContext": "zu",
       "period": "zu"
     },
     "to start or load a new one": "zum Starten oder Laden eines neuen",

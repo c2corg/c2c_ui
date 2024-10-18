@@ -408,7 +408,6 @@
     "Oups! Something went wrong with forum. Here is the message :": "Ep! Hi ha hagut un problema amb el fòrum. Vegeu-ne el missatge:",
     "Oups! something went wrong...": "Ep! Hi ha hagut un problema...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "El nostre lloc web utilitza galetes nostres o de tercers. Algunes galetes són necessàries per al funcionament del lloc web, per bé que d'altres es poden configurar en tot moment, en particular les que ens permeten d'entendre el comportament del nostre lloc web i d'oferir-vos funcionalitats de xarxes socials. Les podeu acceptar o rebutjar totes o bé",
-    "Outing": "Itinerari",
     "Outings statistics": "Estadística de sortides",
     "Page not found": "No s'ha trobat la pàgina",
     "Paragliding outings": "Sortides de parapent",
@@ -870,7 +869,6 @@
     "date_start": "Data d'inici",
     "date_time": "data/hora",
     "day(s)": "Dia/dies",
-    "days": "dies",
     "de": {
       "langs": "alemany"
     },
@@ -1640,6 +1638,7 @@
     "timing": "durada",
     "title": "Títol",
     "to": {
+      "$$noContext": "a",
       "period": "a"
     },
     "to start or load a new one": "per començar o carregar-ne un de nou",
