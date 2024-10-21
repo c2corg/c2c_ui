@@ -427,10 +427,8 @@ export default {
         .getFeatures()
         .forEach((mountain) => {
           let bulletin = mountain.get('bulletinsFeature');
-          if (bulletin) {
-            let danger = bulletin.get('overlayData').danger.max;
-            mountain.setStyle(mountainsStyle(mountain, this.mapZoom, danger));
-          }
+          let danger = bulletin ? bulletin.get('overlayData').danger.max : 0;
+          mountain.setStyle(mountainsStyle(mountain, this.mapZoom, danger));
         });
       bulletinsLayer
         .getSource()
