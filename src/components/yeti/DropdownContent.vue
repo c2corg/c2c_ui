@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown-content">
+  <div class="dropdown-content" :class="{ 'dropdown-content-inverted': inverted }">
     <div>
       <h3 class="dropdown-content-title" :class="{ 'is-open': opened }" @click="switchOpen">
         <slot />
@@ -10,7 +10,7 @@
         />
       </h3>
     </div>
-    <div v-if="opened" class="p-3">
+    <div v-if="opened" class="dropdown-content-content p-3">
       <slot name="content" />
     </div>
   </div>
@@ -22,6 +22,12 @@ export default {
     return {
       opened: false,
     };
+  },
+  props: {
+    inverted: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     switchOpen() {
@@ -44,6 +50,8 @@ export default {
   }
 }
 .dropdown-content-title {
+  display: flex;
+  align-items: center;
   color: $grey-darker;
   cursor: pointer;
   padding: 0.25rem 0.75rem;
@@ -58,6 +66,28 @@ export default {
 }
 .dropdown-content-arrow {
   color: $primary;
-  margin-top: 0.25rem;
+  margin-left: auto;
+}
+
+.dropdown-content-inverted {
+  background: $primary;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .dropdown-content-title {
+    color: $white;
+  }
+  .dropdown-content-title:hover {
+    background: $primary;
+  }
+  .dropdown-content-arrow {
+    color: $white;
+  }
+  .dropdown-content-content {
+    color: $white;
+  }
 }
 </style>

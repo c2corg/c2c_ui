@@ -8,10 +8,14 @@
       <p class="title is-7 country-name">
         {{ overlayData.country }}
       </p>
-      <dl v-if="overlayData.fullName" class="is-size-7 px-3 has-text-left is-italic regions-list">
-        <dt v-translate>Regions:</dt>
-        <dd>{{ overlayData.fullName }}</dd>
-      </dl>
+      <dropdown-content inverted v-if="overlayData.fullName" class="mx-2 is-size-7">
+        <span v-translate>Merged regions</span>
+        <template #content>
+          <div class="is-size-7 has-text-left">
+            {{ overlayData.fullName }}
+          </div>
+        </template>
+      </dropdown-content>
     </div>
     <div v-if="overlayData.danger.low" class="py-2">
       <p class="is-size-7 px-3 pb-5">
@@ -59,6 +63,7 @@ import { intersect as turfIntersect } from '@turf/intersect';
 
 import layerMixin from './layer';
 
+import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Yetix from '@/components/yeti/Yetix';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel';
 import ol from '@/js/libs/ol';
@@ -234,6 +239,7 @@ let bulletinsOverlayPanOptions = {
 export default {
   components: {
     DangerLevel,
+    DropdownContent,
   },
   mixins: [layerMixin],
   data() {
@@ -688,9 +694,10 @@ export default {
 .bulletins-header {
   background: $primary;
   padding-top: 2rem;
-}
-.bulletins-header * {
-  color: white;
+
+  .title {
+    color: white;
+  }
 }
 .bulletins-footer {
   background: $grey-lighter;
@@ -707,9 +714,6 @@ export default {
 }
 .country-name {
   opacity: 0.75;
-}
-.regions-list {
-  opacity: 0.9;
 }
 dt,
 dd {
