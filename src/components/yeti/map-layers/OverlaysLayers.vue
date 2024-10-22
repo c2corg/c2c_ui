@@ -36,11 +36,6 @@ export default {
     WinterRouteLayer,
   },
   mixins: [layerMixin],
-  data() {
-    return {
-      layers: [],
-    };
-  },
   computed: {
     editMode() {
       return Yetix.editMode;
