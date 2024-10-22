@@ -133,6 +133,8 @@ export default {
 
     // events
     this.map.on('moveend', this.onMapMoveEnd);
+    this.map.on('click', this.onMapClick);
+    this.map.on('pointermove', this.onMapPointerMove);
     this.geolocation.on('change:position', this.setCenterOnGeoLocation);
   },
   methods: {
@@ -181,9 +183,6 @@ export default {
       }
       // emit an event for map layers
       Yetix.$emit('map-moveend');
-      // add other events
-      this.map.on('click', this.onMapClick);
-      this.map.on('pointermove', this.onMapPointerMove);
 
       // store position
       this.$localStorage.set('yeti-map-position', {
