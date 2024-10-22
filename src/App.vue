@@ -2,7 +2,7 @@
   <div
     id="app"
     :class="{
-      'nav-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'nav-dfm': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
       'home-topoguide': homePage(),
     }"
   >
@@ -169,7 +169,7 @@ body,
   }
 }
 
-.nav-ad {
+.nav-dfm {
   $body-height-ad: calc(100vh - #{$navbarad-height});
 
   html,

@@ -1,5 +1,5 @@
 # build stage
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine AS build-stage
 WORKDIR /
 COPY package*.json ./
 COPY .snyk ./
@@ -10,7 +10,7 @@ RUN npm run build
 RUN node tools/generate-health.js
 
 # production stage
-FROM openresty/openresty:bookworm as production-stage
+FROM openresty/openresty:bookworm AS production-stage
 RUN apt-get update && apt-get install -y gettext-base # required to use envsubst
 COPY --from=build-stage /dist /usr/share/nginx/html
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf.template
