@@ -91,6 +91,7 @@
     "Add page break before each document": "Einen Seitenumbruch vor jedem Dokument einfügen",
     "Add the first outing": "Ersten Tourenbericht hinzufügen",
     "Add title…": "Titel hinzufügen ...",
+    "Add to my outing": "Meinem Tourenbericht hinzufügen",
     "Additional information": "Weitere Informationen",
     "All": "Alles",
     "All in store for you:": "Alles für Sie bereit:",
@@ -316,6 +317,7 @@
     "Export to CSV": "Exportieren als CSV",
     "Extent": "Umfang",
     "FAQ?": "FAQ ?",
+    "FF Vol Libre": "Luftsportverband Frankreich",
     "Fauna protection areas": "Naturschutzgebiet ",
     "Fauna protection site:": "Naturschutzgebiet :",
     "Feel free to edit it.": "Bitte bearbeiten.",
@@ -331,6 +333,7 @@
     "Forgot password?": "Passwort vergessen?",
     "Forum username": "Forumname",
     "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten, oder nur miteinander reden.",
+    "From": "Von",
     "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahr 3 die Hängen, die die Route dominieren",
     "From the interface": "Aus der Schnittstelle",
     "Full bulletin": "Vollständiges Lawinenlagebricht",
@@ -494,6 +497,7 @@
     "My bookmarks": "Meine Favoriten",
     "My changes": "Meine Beiträge",
     "My followed users": "Meine Freunden",
+    "My outing": "Mein Tourenbericht",
     "My outings": "Meine Tourenberichte",
     "My preferences": "Meine Einstellungen",
     "My profile": "Mein Profil",
@@ -654,6 +658,7 @@
     "See the latest version": "Letzte Version anschauen",
     "Seems fine! :)": "Rechnung möglich ! :)",
     "Select an activity to load geographical data into document.": "Eine Aktivität auswählen, um den GPS Track wiederherszustellen und ins Dokument zu laden.",
+    "Select one or more winter routes on the map": "Bitte eine bzw. mehrere Schi/Surf Touren auf der Karte auswählen",
     "Select option": "Optionen wählen",
     "Select tolerance (preview result on map)": "Toleranz wählen (Vorschau auf der Karte)",
     "Send reset email": "Reset-Email senden",
@@ -786,6 +791,7 @@
     "Validity date:": "Gültig bis :",
     "Versions": "Versionen",
     "Very complex (steps, narrow sections, ridges...)": "Sehr komplexe (Schritte, schmale Abschnitte, Felsen, ...)",
+    "View all avalanche history": "Alle Ereignisse anzeigen",
     "View in other lang": "In anderer Sprache anzeigen",
     "View next comments and continue the discussion": "Nächste Kommentare seen und Diskussion fortsetzen",
     "View xreports": "Unfallberichte sehen",
@@ -807,6 +813,7 @@
     "Wide and constant": "Breit und konstant",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Legt neue Punkte der Route entlang, in regelmässigen Abständen, je nach der Distanz in Metern, an.",
     "Winter hiking routes": "Ski/Surf Routen",
+    "Winter routes": "Schi/Surf Routen",
     "With the": "Mit der",
     "Without c2c account": "Ohne c2c Konto",
     "YETI Risk": "YETI Risiko",
@@ -1390,6 +1397,7 @@
     "it": {
       "langs": "italienisch"
     },
+    "jours": "Tage",
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
     },
@@ -1757,6 +1765,7 @@
       "climbing_styles": "Dach"
     },
     "route": "Route",
+    "route(s) added to your outing": "Tour(en) hinzugefügt",
     "route_description": "Routenbeschreibung",
     "route_history": "Routengeschichte",
     "route_length": "Routenlänge",
