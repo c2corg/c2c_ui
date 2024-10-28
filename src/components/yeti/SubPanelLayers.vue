@@ -195,7 +195,7 @@ export default {
     },
     yetiLayersSelectorChecked() {
       return this.yetiLayersSelector.filter((layer) => {
-        return layer.checked && layer.opacity;
+        return layer.checked && layer.title !== this.$gettext('Extent');
       });
     },
     showAreas() {
