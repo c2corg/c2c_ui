@@ -3,6 +3,7 @@ import { dataLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
+  name: 'Yeti',
   computed: {
     slopesLayersSelector() {
       return Yetix.slopesLayersSelector;
@@ -29,10 +30,13 @@ export default {
       return this.setBlendModes(layer);
     });
 
+    // first, get stored map layer
+    let storedLayerNames = this.$localStorage.get('yeti-map-layers-slopes', []);
+
     let slopesLayersSelector = this.slopesLayers.map((layer) => {
       return {
         title: layer.get('title'),
-        checked: false,
+        checked: storedLayerNames.includes(layer.get('title')),
         opacity: layer.getOpacity(),
         blendModes: true,
         image: layer.get('image'),

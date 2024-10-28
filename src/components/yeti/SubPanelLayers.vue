@@ -217,6 +217,13 @@ export default {
         this.showAreasWasTrue = null;
       }
     },
+    slopesLayersSelectorChecked(layers) {
+      // store current slope layers
+      this.$localStorage.set(
+        'yeti-map-layers-slopes',
+        layers.map((layer) => layer.title)
+      );
+    },
   },
 };
 </script>
