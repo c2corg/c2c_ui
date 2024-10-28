@@ -4,6 +4,7 @@ import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 export default {
+  name: 'Yeti',
   computed: {
     baseLayersSelector() {
       return Yetix.baseLayersSelector;
@@ -117,10 +118,15 @@ export default {
     });
 
     // create layers selector
+    // first, get stored map layer
+    let storedLayerName = this.$localStorage.get(
+      'yeti-map-layers-base',
+      this.baseLayers.find((layer) => layer.get('visible')).get('title')
+    );
     let baseLayersSelector = this.baseLayers.map((layer) => {
       return {
         title: layer.get('title'),
-        checked: layer.get('visible'),
+        checked: storedLayerName === layer.get('title'),
         opacity: layer.getOpacity(),
         image: layer.get('image'),
         country: layer.get('country'),

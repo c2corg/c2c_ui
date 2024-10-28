@@ -128,6 +128,7 @@ import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
+  name: 'Yeti',
   components: {
     DropdownContent,
     LayerButton,
@@ -153,6 +154,9 @@ export default {
       set(layer) {
         this.baseLayersSelector.map((layer) => (layer.checked = false));
         layer.checked = true;
+
+        // store current map layers base
+        this.$localStorage.set('yeti-map-layers-base', layer.title);
       },
     },
     slopesLayersSelector() {
