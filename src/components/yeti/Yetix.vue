@@ -110,6 +110,7 @@ let state = Vue.observable(JSON.parse(JSON.stringify(defaultState)));
  * calls)
  */
 export default new Vue({
+  name: 'Yeti',
   computed: {
     BLEND_MODES_CLASS_NAME() {
       return state.BLEND_MODES_CLASS_NAME;
@@ -334,6 +335,7 @@ export default new Vue({
     },
     setShowAvalancheBulletins(showAvalancheBulletins) {
       state.showAvalancheBulletins = showAvalancheBulletins;
+      this.setOverlaysToLocalStorage({ avalanche: showAvalancheBulletins });
     },
     setBulletinsLoaded(bool) {
       state.bulletinsLoaded = bool;
@@ -343,6 +345,7 @@ export default new Vue({
     },
     setShowWinterRoute(showWinterRoute) {
       state.showWinterRoute = showWinterRoute;
+      this.setOverlaysToLocalStorage({ winterRoute: showWinterRoute });
     },
     setWinterRouteLegend(winterRouteLegend) {
       state.winterRouteLegend = winterRouteLegend;
@@ -352,24 +355,28 @@ export default new Vue({
     },
     setShowNivoses(showNivoses) {
       state.showNivoses = showNivoses;
+      this.setOverlaysToLocalStorage({ nivoses: showNivoses });
     },
     setRomma(romma) {
       state.romma = romma;
     },
     setShowRomma(showRomma) {
       state.showRomma = showRomma;
+      this.setOverlaysToLocalStorage({ romma: showRomma });
     },
     setFlowcapt(flowcapt) {
       state.flowcapt = flowcapt;
     },
     setShowFlowcapt(showFlowcapt) {
       state.showFlowcapt = showFlowcapt;
+      this.setOverlaysToLocalStorage({ flowcapt: showFlowcapt });
     },
     setDataAvalanche(dataAvalanche) {
       state.dataAvalanche = dataAvalanche;
     },
     setShowDataAvalanche(showDataAvalanche) {
       state.showDataAvalanche = showDataAvalanche;
+      this.setOverlaysToLocalStorage({ dataAvalanche: showDataAvalanche });
     },
     setDataAvalancheAll(dataAvalancheAll) {
       state.dataAvalancheAll = dataAvalancheAll;
@@ -379,6 +386,7 @@ export default new Vue({
     },
     setShowFfvl(showFfvl) {
       state.showFfvl = showFfvl;
+      this.setOverlaysToLocalStorage({ ffvl: showFfvl });
     },
     setMapZoom(mapZoom) {
       state.mapZoom = mapZoom;
@@ -414,6 +422,27 @@ export default new Vue({
           state[i] = defaultState[i];
         }
       }
+      // read localstorage and modify
+      let mapOverlays = this.$localStorage.get('yeti-map-layers-overlays', {
+        avalanche: this.showAvalancheBulletins,
+        winterRoute: this.showWinterRoute,
+        dataAvalanche: this.showDataAvalanche,
+        nivoses: this.showNivoses,
+        romma: this.showRomma,
+        flowcapt: this.showFlowcapt,
+        ffvl: this.showFfvl,
+      });
+      this.setShowAvalancheBulletins(mapOverlays.avalanche);
+      this.setShowWinterRoute(mapOverlays.winterRoute);
+      this.setShowDataAvalanche(mapOverlays.dataAvalanche);
+      this.setShowNivoses(mapOverlays.nivoses);
+      this.setShowRomma(mapOverlays.romma);
+      this.setShowFlowcapt(mapOverlays.flowcapt);
+      this.setShowFfvl(mapOverlays.ffvl);
+    },
+    setOverlaysToLocalStorage(overlay) {
+      let overlays = this.$localStorage.get('yeti-map-layers-overlays', {});
+      this.$localStorage.set('yeti-map-layers-overlays', { ...overlays, ...overlay });
     },
     // actions
     fetchApi(url) {
