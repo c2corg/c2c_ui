@@ -232,6 +232,7 @@ export default {
     Yetix.$on('previewSimplify', this.previewSimplify);
     Yetix.$on('simplify', this.simplify);
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
+    Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
   },
   methods: {
     getLayer() {

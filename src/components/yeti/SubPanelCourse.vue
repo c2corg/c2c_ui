@@ -6,6 +6,10 @@
         <fa-icon icon="trash" />
         <span v-translate class="is-sr-only">Delete route</span>
       </button>
+      <button class="button is-secondary is-small" :title="$gettext('Fit map to route')" @click="fitMapToFeatures">
+        <fa-icon icon="location-crosshairs" />
+        <span v-translate class="is-sr-only">Fit map to route</span>
+      </button>
     </div>
     <div v-if="features.length">
       <div class="columns is-mobile">
@@ -246,6 +250,9 @@ export default {
     },
     setEditMode() {
       Yetix.setEditMode(!this.editMode);
+    },
+    fitMapToFeatures() {
+      Yetix.$emit('fit-map-to-features');
     },
   },
 };
