@@ -1,12 +1,10 @@
 <template>
-  <div class="ol-control ol-control-edit-mode" :class="{ 'is-primary': editMode }">
-    <div class="ol-control-edit-mode-inner">
-      <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
-        <span v-translate :title="$gettext('Enable drawing and editing features on map')">Edit mode</span>
-        <fa-icon icon="pen" class="ml-1" />
-      </input-checkbox>
-    </div>
-  </div>
+  <button class="button edit-mode-button ol-control-edit-mode" :class="{ 'is-dark': editMode }">
+    <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
+      <span v-translate :title="$gettext('Enable drawing and editing features on map')">Edit mode</span>
+      <fa-icon icon="pen" class="ml-1" />
+    </input-checkbox>
+  </button>
 </template>
 
 <script>
@@ -30,32 +28,45 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
-.ol-control-edit-mode {
-  padding: 0 !important;
-
-  &.is-primary {
-    box-shadow: none;
+.edit-mode-button {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+  .input-checkbox {
+    padding: 0;
   }
+  .is-checkradio[type='checkbox'] + label {
+    margin-right: 0;
+    vertical-align: baseline;
 
-  .ol-control-edit-mode-inner {
-    padding: 0.3rem 0.25rem 0.2rem;
-    border-radius: 4px;
-    background: $white;
-    white-space: nowrap;
-  }
-
-  &.is-primary .ol-control-edit-mode-inner {
-    background: $grey-dark;
-    color: $white;
+    &:before {
+      top: 1px;
+    }
   }
 }
 </style>
 
 <style lang="scss">
-.yeti-app {
-  .ol-control-edit-mode {
+.edit-mode-button {
+  .input-checkbox {
+    padding: 0;
+  }
+
+  .is-checkradio[type='checkbox'] + label {
+    margin-right: 0;
+    vertical-align: baseline;
+
+    &:before {
+      top: 1px;
+    }
+  }
+}
+/* when used inside map */
+.map-container {
+  .edit-mode-button {
+    height: 2em;
+    border: none;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+
     .is-checkradio[type='checkbox'] + label {
       font-size: 0.93em;
       margin-right: 0;
