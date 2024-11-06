@@ -87,7 +87,6 @@ export default {
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
-          delta: this.zoomDelta,
         }),
         new ol.control.ScaleLine(),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
