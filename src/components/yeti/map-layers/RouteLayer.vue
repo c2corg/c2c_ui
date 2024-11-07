@@ -233,6 +233,12 @@ export default {
     Yetix.$on('simplify', this.simplify);
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
     Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
+
+    // already features to add?
+    // but not a c2c document
+    if (!doc && this.features.length) {
+      this.featuresLayerSource.addFeatures(this.features);
+    }
   },
   methods: {
     getLayer() {

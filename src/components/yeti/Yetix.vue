@@ -11,6 +11,8 @@
 import axios from 'axios';
 import Vue from 'vue';
 
+import ol from '@/js/libs/ol';
+
 let defaultState = {
   API_URL: 'https://api.ensg.eu/',
   BLEND_MODES_CLASS_NAME: 'areas',
@@ -310,9 +312,24 @@ export default new Vue({
     },
     setFeatures(features) {
       state.features = features;
+
+      // store features in localstorage
+      let coords = features.map((feature) => {
+        return feature
+          .getGeometry()
+          .getCoordinates()
+          .map((coords) => {
+            // round coords to 1 meter
+            return [Math.round(coords[0]), Math.round(coords[1]), Math.round(coords[2])];
+          });
+      });
+      this.$localStorage.set('yeti-map-features', coords);
     },
     setFeaturesTitle(featuresTitle) {
       state.featuresTitle = featuresTitle;
+
+      // store features title in localstorage
+      this.$localStorage.set('yeti-map-features-title', featuresTitle);
     },
     setFeaturesLength(featuresLength) {
       state.featuresLength = featuresLength;
@@ -439,6 +456,18 @@ export default new Vue({
       this.setShowRomma(mapOverlays.romma);
       this.setShowFlowcapt(mapOverlays.flowcapt);
       this.setShowFfvl(mapOverlays.ffvl);
+
+      // features (routeLayer)
+      // first, get saved features
+      let savedFeatures = this.$localStorage
+        .get('yeti-map-features', [])
+        .map((feature) => new ol.Feature(new ol.geom.LineString(feature)));
+      // if data, set features/featuresTitle
+      if (savedFeatures.length) {
+        this.setFeatures(savedFeatures);
+        let featuresTitle = this.$localStorage.get('yeti-map-features-title', state.featuresTitle);
+        this.setFeaturesTitle(featuresTitle);
+      }
     },
     setOverlaysToLocalStorage(overlay) {
       let overlays = this.$localStorage.get('yeti-map-layers-overlays', {});
