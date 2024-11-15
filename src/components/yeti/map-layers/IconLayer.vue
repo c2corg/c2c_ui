@@ -135,6 +135,11 @@ export default {
     // showLayer checked?
     this.layer.setVisible(this.showLayer);
 
+    // get data?
+    if (this.showLayer && this.dataLayer.length === 0) {
+      this.fetch().then(this.onResult);
+    }
+
     // emit event on parent (this component is not instanciated)
     this.$parent.$emit('layer', this.layerSelector);
   },

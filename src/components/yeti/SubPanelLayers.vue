@@ -128,6 +128,7 @@ import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
+  name: 'Yeti',
   components: {
     DropdownContent,
     LayerButton,
@@ -153,6 +154,9 @@ export default {
       set(layer) {
         this.baseLayersSelector.map((layer) => (layer.checked = false));
         layer.checked = true;
+
+        // store current map layers base
+        this.$localStorage.set('yeti-map-layers-base', layer.title);
       },
     },
     slopesLayersSelector() {
@@ -191,7 +195,7 @@ export default {
     },
     yetiLayersSelectorChecked() {
       return this.yetiLayersSelector.filter((layer) => {
-        return layer.checked && layer.opacity;
+        return layer.checked && layer.title !== this.$gettext('Extent');
       });
     },
     showAreas() {
@@ -212,6 +216,13 @@ export default {
         Yetix.setShowAreas(true);
         this.showAreasWasTrue = null;
       }
+    },
+    slopesLayersSelectorChecked(layers) {
+      // store current slope layers
+      this.$localStorage.set(
+        'yeti-map-layers-slopes',
+        layers.map((layer) => layer.title)
+      );
     },
   },
 };

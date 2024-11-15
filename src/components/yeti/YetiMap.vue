@@ -6,15 +6,6 @@
       <map-layers />
       <yeti-layers />
       <overlays-layers />
-      <div
-        ref="layerSwitcherButton"
-        class="ol-control ol-control-layer-switcher-button"
-        :title="$gettext('Layers', 'Map controls')"
-      >
-        <button @click.stop="activeLayersTab">
-          <fa-icon icon="layer-group" width="100%" />
-        </button>
-      </div>
 
       <div ref="recenterOnControl" class="ol-control ol-control-recenter-on">
         <input type="text" :placeholder="$gettext('Recenter on...')" @input="searchRecenterPropositions" />
@@ -47,13 +38,6 @@
         <edit-mode-button />
       </div>
     </div>
-
-    <toast ref="toast-layer">
-      <template #title>
-        <span v-translate>Layers have moved</span>
-      </template>
-      <span v-translate>Now on the left, on the “Layers” tab</span> <fa-icon icon="layer-group" />
-    </toast>
   </div>
 </template>
 
@@ -63,7 +47,6 @@ import OverlaysLayers from './map-layers/OverlaysLayers.vue';
 import YetiLayers from './map-layers/YetiLayers.vue';
 
 import EditModeButton from '@/components/yeti/EditModeButton';
-import Toast from '@/components/yeti/Toast';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend';
 import Yetix from '@/components/yeti/Yetix';
 import photon from '@/js/apis/photon';
@@ -80,7 +63,6 @@ export default {
     EditModeButton,
     MapLayers,
     OverlaysLayers,
-    Toast,
     YetiLayers,
     YetiMapLegend,
   },
@@ -105,7 +87,6 @@ export default {
         new ol.control.Zoom({
           zoomInTipLabel: this.$gettext('Zoom in', 'Map controls'),
           zoomOutTipLabel: this.$gettext('Zoom out', 'Map controls'),
-          delta: this.zoomDelta,
         }),
         new ol.control.ScaleLine(),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
@@ -135,7 +116,6 @@ export default {
     // add specific controls
     let controls = [
       new ol.control.FullScreen({ source: this.$el, tipLabel: this.$gettext('Toggle full-screen', 'Map Controls') }),
-      new ol.control.Control({ element: this.$refs.layerSwitcherButton }),
       new ol.control.Control({ element: this.$refs.editMode }),
       new ol.control.Control({ element: this.$refs.recenterOnControl }),
       new ol.control.Control({ element: this.$refs.recenterOnPropositions }),
@@ -152,6 +132,8 @@ export default {
 
     // events
     this.map.on('moveend', this.onMapMoveEnd);
+    this.map.on('click', this.onMapClick);
+    this.map.on('pointermove', this.onMapPointerMove);
     this.geolocation.on('change:position', this.setCenterOnGeoLocation);
   },
   methods: {
@@ -200,9 +182,6 @@ export default {
       }
       // emit an event for map layers
       Yetix.$emit('map-moveend');
-      // add other events
-      this.map.on('click', this.onMapClick);
-      this.map.on('pointermove', this.onMapPointerMove);
 
       // store position
       this.$localStorage.set('yeti-map-position', {
@@ -218,10 +197,6 @@ export default {
     },
     onMapPointerMove(evt) {
       Yetix.$emit('map-pointermove', evt);
-    },
-    activeLayersTab() {
-      this.$refs['toast-layer'].toast();
-      Yetix.setActiveTab(0);
     },
     activateCenterOnGeolocation() {
       this.geolocation.setTracking(true);

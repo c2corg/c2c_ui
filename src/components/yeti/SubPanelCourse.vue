@@ -1,7 +1,16 @@
 <template>
   <div class="yeti-subpanel">
     <sub-panel-title><span v-translate>Route</span></sub-panel-title>
-    <edit-mode-button class="edit-mode-button" />
+    <div class="route-buttons" v-if="features.length">
+      <button class="button is-secondary is-small" :title="$gettext('Delete route')" @click="onRemoveFeatures">
+        <fa-icon icon="trash" />
+        <span v-translate class="is-sr-only">Delete route</span>
+      </button>
+      <button class="button is-secondary is-small" :title="$gettext('Fit map to route')" @click="fitMapToFeatures">
+        <fa-icon icon="location-crosshairs" />
+        <span v-translate class="is-sr-only">Fit map to route</span>
+      </button>
+    </div>
     <div v-if="features.length">
       <div class="columns is-mobile">
         <div class="column">
@@ -28,12 +37,6 @@
               >{{ featuresTitle }}</span
             >
           </p>
-        </div>
-        <div class="column is-narrow">
-          <button class="button is-secondary is-small" @click="onRemoveFeatures">
-            <fa-icon icon="trash" class="trash-icon" />
-            <span v-translate>Delete route</span>
-          </button>
         </div>
       </div>
       <div class="ml-5 mb-5">
@@ -105,15 +108,18 @@
     <div v-else>
       <p v-translate>No route right now</p>
       <div class="load-gpx">
-        <button
-          class="button is-primary"
-          :class="{ 'is-loading': loading }"
-          :disabled="loading"
-          @click="onLoadGpx"
-          v-translate
-        >
-          Upload a GPS track
-        </button>
+        <div class="buttons">
+          <button
+            class="button is-primary mr-2"
+            :class="{ 'is-loading': loading }"
+            :disabled="loading"
+            @click="onLoadGpx"
+            v-translate
+          >
+            Upload a GPS track
+          </button>
+          <edit-mode-button />
+        </div>
         <div class="control upload-button">
           <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
         </div>
@@ -245,6 +251,9 @@ export default {
     setEditMode() {
       Yetix.setEditMode(!this.editMode);
     },
+    fitMapToFeatures() {
+      Yetix.$emit('fit-map-to-features');
+    },
   },
 };
 </script>
@@ -296,10 +305,6 @@ export default {
   margin-right: 3px;
 }
 
-.trash-icon {
-  margin-right: 3px;
-}
-
 .upload-button {
   position: relative;
 }
@@ -336,7 +341,11 @@ input[type='file'] {
   }
 }
 
-.edit-mode-button {
+.buttons {
+  line-height: 2.5rem;
+}
+
+.route-buttons {
   position: absolute;
   right: 0;
   top: 0.75rem;

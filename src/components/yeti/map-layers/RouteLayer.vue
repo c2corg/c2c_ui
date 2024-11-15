@@ -232,6 +232,13 @@ export default {
     Yetix.$on('previewSimplify', this.previewSimplify);
     Yetix.$on('simplify', this.simplify);
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
+    Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
+
+    // already features to add?
+    // but not a c2c document
+    if (!doc && this.features.length) {
+      this.featuresLayerSource.addFeatures(this.features);
+    }
   },
   methods: {
     getLayer() {
@@ -438,8 +445,9 @@ export default {
 
       this.view.fit(extent, { size: this.map.getSize() });
 
+      let actualZoom = Math.round(new ol.View().getZoomForResolution(this.map.getView().getResolution()) * 10) / 10;
       // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinimumMapZoom, this.mapZoom) / this.zoomDelta);
+      this.view.setZoom(Math.max(this.validMinimumMapZoom, actualZoom) / this.zoomDelta);
     },
     fitMapToGeom(geom) {
       let feature = new ol.format.GeoJSON().readFeature(geom);

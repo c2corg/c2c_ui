@@ -23,6 +23,7 @@ import NivosesLayer from '@/components/yeti/map-layers/NivosesLayer.vue';
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
 import RouteLayer from '@/components/yeti/map-layers/RouteLayer.vue';
 import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
+import ol from '@/js/libs/ol';
 
 export default {
   components: {
@@ -36,11 +37,6 @@ export default {
     WinterRouteLayer,
   },
   mixins: [layerMixin],
-  data() {
-    return {
-      layers: [],
-    };
-  },
   computed: {
     editMode() {
       return Yetix.editMode;
@@ -88,7 +84,7 @@ export default {
           })[0];
 
           // raster layers
-          if (!feature && olLayer.getData) {
+          if (!feature && olLayer instanceof ol.layer.Tile) {
             let data = olLayer.getData(evt.pixel);
             if (data && data[3] > 0) {
               feature = data;

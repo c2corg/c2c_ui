@@ -455,7 +455,8 @@ $section-padding: 0.75rem; //TODO find this variable
 $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(100vh - #{$navbarad-height});
+$yeti-height: calc(100vh - #{$navbar-height});
+$yeti-height-ad: calc(100vh - #{$navbarad-height});
 
 .yeti-app {
   position: relative;
@@ -496,6 +497,12 @@ $yeti-height: calc(100vh - #{$navbarad-height});
       height: calc(100% - 0.75rem);
       overflow: auto;
     }
+  }
+}
+
+@media screen and (min-width: $widescreen) {
+  .yeti-content {
+    height: $yeti-height-ad;
   }
 }
 
