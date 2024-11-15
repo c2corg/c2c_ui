@@ -5,7 +5,7 @@
       <div class="data-avalanche-content">
         <p class="is-size-7 px-1 py-1">
           <span>
-            <strong>{{ overlay.title }} ({{ differenceDays(overlay.date) }} <span v-translate>jours</span>)</strong>
+            <strong>{{ overlay.title }} ({{ differenceDays(overlay.date) }} <span v-translate>days</span>)</strong>
           </span>
         </p>
         <p class="is-size-7 is-italic">
