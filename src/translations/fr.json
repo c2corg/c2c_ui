@@ -265,6 +265,7 @@
     "First character is invalid": {
       "API message": "Le premier caractère doit être un caractère alphanumérique de l'alphabet latin, y compris le tiret bas"
     },
+    "Fit map to route": "Ajuster la carte à l'itinéraire",
     "FlowCapt sensor": "Capteur FlowCapt",
     "FlowCapt sensors": "Capteurs FlowCapt",
     "Fold section": "Replier la section",
@@ -377,7 +378,6 @@
       "$$noContext": "Couches",
       "Map controls": "Sélection des couches"
     },
-    "Layers have moved": "Les calques ont été déplacés",
     "Leave fullscreen": "Quitter le mode plein écran",
     "Legend": "Légende",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
@@ -416,6 +416,7 @@
     "Massifs could not be loaded": "Les massifs n'ont pas pu être chargés",
     "Merge documents": "Fusionner des documents",
     "Merge with other document": "Fusionner avec un autre document",
+    "Merged regions": "Régions fusionnées",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Fusionner un document source avec un document cible transfère toutes les associations du document source au document cible, et définit une redirection du document source vers le document cible.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando : agrégateur de sorties ski en Europe",
     "Methods": "Méthodes",
@@ -476,7 +477,6 @@
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Le pseudo topoguide sera celui mentionné dans les attributions des contenus auxquels vous contribuez.",
-    "Now on the left, on the “Layers” tab": "Retrouvez-les à gauche, dans l’onglet «Calques»",
     "Number of documents": "Nombre de documents",
     "Numbers": "Données",
     "On a drawn line": "Sur une ligne",
@@ -549,7 +549,6 @@
     "Recenter on your current position": "Centrer sur votre position actuelle",
     "Recenter on...": "Recentrer sur…",
     "Refresh": "Rafraîchir",
-    "Regions:": "Régions :",
     "Register": "S'inscrire",
     "Remove": "Retirer",
     "Report an issue": "Signaler un problème",
@@ -993,6 +992,7 @@
     "date_start": "Date de début",
     "date_time": "date/heure",
     "day(s)": "jour(s)",
+    "days": "jours",
     "de": {
       "langs": "allemand"
     },
@@ -1245,7 +1245,6 @@
     "it": {
       "langs": "italien"
     },
-    "jours": "days",
     "key_needed": {
       "custodianship_types": "clé nécessaire pour ouvrir"
     },

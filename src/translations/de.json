@@ -437,7 +437,6 @@
       "$$noContext": "Schichte",
       "Map controls": "Dargestellte Karten"
     },
-    "Layers have moved": "Kartenebenen wurden verschoben",
     "Leave fullscreen": "Vollbild verlassen",
     "Legend": "Legende",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
@@ -536,7 +535,6 @@
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
-    "Now on the left, on the “Layers” tab": "Diese finden Sie links im Reiter \"Kartenebenen\"",
     "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
     "Ok": "OK",
@@ -618,7 +616,6 @@
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
     "Refresh": "Aktualisieren",
-    "Regions:": "Regionen:",
     "Register": "Anmelden",
     "Remove": "Entfernen",
     "Report an issue": "Problem melden",
@@ -1121,6 +1118,7 @@
     "date_start": "Start-Datum",
     "date_time": "Datum/Uhrzeit",
     "day(s)": "Tag(e)",
+    "days": "Tage",
     "de": {
       "langs": "deutsch"
     },
@@ -1397,7 +1395,6 @@
     "it": {
       "langs": "italienisch"
     },
-    "jours": "Tage",
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
     },

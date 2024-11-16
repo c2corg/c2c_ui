@@ -544,7 +544,6 @@
     "Recenter on your current position": "Centrare sulla tua posizione",
     "Recenter on...": "Centrare su...",
     "Refresh": "Ricaricare",
-    "Regions:": "Regioni:",
     "Register": "Registrarti ",
     "Remove": "Togliere",
     "Report an issue": "Segnalare un errore",
@@ -1013,6 +1012,7 @@
     "date_start": "Data d'inizio",
     "date_time": "data/ora",
     "day(s)": "Giorno(i)",
+    "days": "giorni",
     "de": {
       "langs": "tedesco"
     },
