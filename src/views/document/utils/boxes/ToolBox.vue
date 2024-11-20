@@ -81,6 +81,11 @@
       <span>{{ quality.i18nName }}</span> {{ quality.i18nValue }}
     </div>
 
+    <div class="view-count" v-if="viewCount">
+      <icon-view-count fixed-width></icon-view-count>
+      {{ viewCount.value }} <span>{{ viewCount.i18nName }}</span>
+    </div>
+
     <tool-box-button
       v-if="isEditable"
       :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
@@ -177,6 +182,7 @@
 
 <script>
 import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
+import IconViewCount from '../../../../components/generics/icons/IconViewCount.vue';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow';
@@ -203,6 +209,7 @@ export default {
     LicenseBox,
     AssociatedDocuments,
     IconQuality,
+    IconViewCount,
     AssociationsWindow,
     DeleteLocaleWindow,
     DeleteDocumentWindow,
@@ -266,6 +273,20 @@ export default {
         value: this.document[fields.quality.name],
         i18nName: this.$gettext(fields.quality.name),
         i18nValue: this.$gettext(this.document[fields.quality.name], fields.quality.i18nContext),
+      };
+    },
+
+    viewCount() {
+      const fields = constants.objectDefinitions[this.documentType].fields;
+      const value = this.document[fields.view_count.name];
+      const isValue = value !== null && value !== undefined;
+      if (!fields.view_count || !isValue) {
+        return;
+      }
+      return {
+        ...fields.view_count,
+        value,
+        i18nName: this.$gettext(fields.view_count.name),
       };
     },
 
@@ -418,7 +439,7 @@ export default {
   content: ' \2022 '; /* \2022 is bull */
 }
 
-.quality {
+.quality .view-count {
   span:nth-of-type(1) {
     @include colon;
   }
