@@ -73,21 +73,24 @@ export default {
     if (this.showAvalancheInfo) {
       yetiService.zonesBra().then((response) => {
         // use WGS 84 projection for buffering with turf
-        const routeGeometry = turfSimplify(
-          GeoJSON.writeGeometryObject(
-            GeoJSON.readGeometry(JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom), {
-              dataProjection: 'EPSG:3857',
-              featureProjection: 'EPSG:4326',
-            })
+        const routeGeometry = turfBuffer(
+          turfSimplify(
+            GeoJSON.writeGeometryObject(
+              GeoJSON.readGeometry(JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom), {
+                dataProjection: 'EPSG:3857',
+                featureProjection: 'EPSG:4326',
+              })
+            ),
+            { tolerance: 0.01, highQuality: false }
           ),
-          { tolerance: 0.01, highQuality: false }
-        );
+          this.document.geometry.geom_detail ? 1 : 2,
+          {
+            units: 'kilometers',
+          }
+        ).geometry;
 
         const zones = response.data.features.filter((feature) =>
-          turfBooleanIntersects(
-            feature.geometry,
-            turfBuffer(routeGeometry, this.document.geometry.geom_detail ? 1 : 2, { units: 'kilometers' }).geometry
-          )
+          turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' }).geometry, routeGeometry)
         );
 
         if (zones.length) {
