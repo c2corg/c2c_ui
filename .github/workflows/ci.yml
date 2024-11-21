@@ -57,7 +57,7 @@ jobs:
         uses: tj-actions/branch-names@v8
       - name: Create clean branch name
         id: clean_branch
-        run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
+        run: echo "CLEAN_BRANCH=${BRANCH/\//-}" >> $GITHUB_OUTPUT
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch }}
       - name: Build for github pages
@@ -83,7 +83,7 @@ jobs:
         uses: tj-actions/branch-names@v8
       - name: Create clean branch name
         id: clean_branch
-        run: echo ::set-output name=CLEAN_BRANCH::${BRANCH/\//-}
+        run: echo CLEAN_BRANCH::${BRANCH/\//-} >> $GITHUB_OUTPUT
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
       - name: Checkout repository
