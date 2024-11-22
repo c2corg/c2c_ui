@@ -1,5 +1,5 @@
 <template>
-  <div id="camptocamp_htad" class="ams-ad is-flex is-justify-content-center" />
+  <div id="camptocamp_htad" class="ams-ad is-flex is-justify-content-center is-clipped" />
 </template>
 
 <script>
