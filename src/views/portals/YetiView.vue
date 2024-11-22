@@ -6,8 +6,8 @@
       <div class="box yeti-overlay" v-if="showDisclaimer">
         <yeti-article class="yeti-article--disclaimer" :article="articles.disclaimer"></yeti-article>
         <form action="#" @submit="onSubmitDisclaimer">
-          <input-checkbox v-model="checkDisclaimer" v-translate>
-            I read and understood the interest and limitations of YETI
+          <input-checkbox v-model="checkDisclaimer">
+            <span v-translate>I read and understood the interest and limitations of YETI</span>
           </input-checkbox>
           <button class="button is-primary" :disabled="!checkDisclaimer" v-translate>Launch YETI</button>
         </form>
