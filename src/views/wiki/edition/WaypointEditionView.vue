@@ -137,6 +137,13 @@
           :label="accessTitle"
         />
 
+        <form-field
+          class="is-12"
+          :document="document"
+          :field="fields.external_resources"
+          :placeholder="$gettext('Books and websites not already associated to this route')"
+        />
+
         <quality-field class="is-4" :document="document" />
       </div>
     </form-section>
