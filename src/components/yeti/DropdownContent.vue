@@ -18,16 +18,16 @@
 
 <script>
 export default {
-  data() {
-    return {
-      opened: false,
-    };
-  },
   props: {
     inverted: {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      opened: false,
+    };
   },
   methods: {
     switchOpen() {
