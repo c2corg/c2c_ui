@@ -482,31 +482,31 @@ export default {
       documentId: 1590020,
       winners: [
         {
-          title: "Toute la voie Lactée dans le Trou de la Mouche",
+          title: 'Toute la voie Lactée dans le Trou de la Mouche',
           author: 'le.metais.julien@gmail.com',
           image: { document_id: 1699110 },
           category: 'Paysage',
         },
-	{
-          title: "La faucheuse des neiges",
+        {
+          title: 'La faucheuse des neiges',
           author: 'xlpgn',
           image: { document_id: 1695200 },
           category: 'Action',
         },
-	{
-          title: "La fuite en avant",
+        {
+          title: 'La fuite en avant',
           author: 'Thomas Henninger',
           image: { document_id: 1699394 },
           category: 'Faune / Flore / Inclassable',
         },
-	{
+        {
           title: "Rocher de l'Armet fantomatique, notre presque Cervin :))",
           author: 'Thierry Clavel',
           image: { document_id: 1693933 },
           category: 'Topoguide',
         },
-	{
-          title: "ca gaz dans le piller sommital ( L26)",
+        {
+          title: 'ca gaz dans le piller sommital ( L26)',
           author: 'blondeau loic',
           image: { document_id: 1675966 },
           category: 'Prix du Public',
