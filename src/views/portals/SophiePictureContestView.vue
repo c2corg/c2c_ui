@@ -487,25 +487,25 @@ export default {
           image: { document_id: 1699110 },
           category: 'Paysage',
         },
-		    {
+	{
           title: "La faucheuse des neiges",
           author: 'xlpgn',
           image: { document_id: 1695200 },
           category: 'Action',
         },
-		    {
+	{
           title: "La fuite en avant",
           author: 'Thomas Henninger',
           image: { document_id: 1699394 },
           category: 'Faune / Flore / Inclassable',
         },
-		    {
+	{
           title: "Rocher de l'Armet fantomatique, notre presque Cervin :))",
           author: 'Thierry Clavel',
           image: { document_id: 1693933 },
           category: 'Topoguide',
         },
-		    {
+	{
           title: "ca gaz dans le piller sommital ( L26)",
           author: 'blondeau loic',
           image: { document_id: 1675966 },
