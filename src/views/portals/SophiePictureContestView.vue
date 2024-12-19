@@ -480,7 +480,38 @@ export default {
     2024: {
       year: 2024,
       documentId: 1590020,
-      winners: [],
+      winners: [
+        {
+          title: "La faucheuse des neiges",
+          author: 'xlpgn',
+          image: { document_id: 1695200 },
+          category: 'Action',
+        },
+        {
+          title: 'Toute la voie Lactée dans le Trou de la Mouche',
+          author: 'Julien Metais',
+          image: { document_id: 1699110 },
+          category: 'Paysage',
+        },
+        {
+          title: 'La fuite en avant',
+          author: 'Thomas Henninger',
+          image: { document_id: 1699394 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Rocher de l’Armet fantomatique, notre presque Cervin',
+          author: 'Thierry Clavel',
+          image: { document_id: 1693933 },
+          category: 'Topoguide',
+        },
+        {
+          title: "ça gaz dans le piller sommital (L26)",
+          author: 'Loic Blondeau',
+          image: { document_id: 1675966 },
+          category: 'Prix du Public',
+        },
+      ],
     },
   },
 
