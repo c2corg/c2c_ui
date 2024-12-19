@@ -64,11 +64,12 @@ function UserProfileService(api) {
   };
 }
 
-UserProfileService.prototype.login = function (username, password) {
+UserProfileService.prototype.login = function (username, password, acceptTos) {
   return this.api.post('/users/login', {
     username,
     password,
     discourse: true,
+    accept_tos: acceptTos,
   });
 };
 
