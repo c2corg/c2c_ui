@@ -482,7 +482,7 @@ export default {
       documentId: 1590020,
       winners: [
         {
-          title: "La faucheuse des neiges",
+          title: 'La faucheuse des neiges',
           author: 'xlpgn',
           image: { document_id: 1695200 },
           category: 'Action',
@@ -506,7 +506,7 @@ export default {
           category: 'Topoguide',
         },
         {
-          title: "ça gaz dans le piller sommital (L26)",
+          title: 'ça gaz dans le piller sommital (L26)',
           author: 'Loic Blondeau',
           image: { document_id: 1675966 },
           category: 'Prix du Public',
