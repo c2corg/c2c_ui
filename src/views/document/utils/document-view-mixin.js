@@ -144,7 +144,7 @@ export default {
     },
 
     lang() {
-      return this.document?.cooked?.lang;
+      return this.document?.cooked?.lang ?? this.$language.current;
     },
   },
 
