@@ -33,6 +33,7 @@
       <span class="card-icon">
         <!-- Englobing span is mandatory for tooltip ?? -->
         <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+        <marker-soft-mobility v-if="$documentUtils.hasSoftMobility(document)" />
       </span>
 
       <span
