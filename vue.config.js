@@ -185,10 +185,12 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
-  config.isBackendSelectable = false; // explicit flag
+  // config.isBackendSelectable = false; // explicit flag
 
   // set a warning if bundle size is too big
   result.configureWebpack.performance.hints = 'warning';
+  // add map for debbuging tools
+  result.configureWebpack.devtool = 'source-map';
 } else {
   throw new Error('Unknown BUILD_ENV');
 }
