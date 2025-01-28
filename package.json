@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.25.9",
-    "@snyk/protect": "1.1294.3",
+    "@snyk/protect": "1.1295.2",
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-plugin-eslint": "5.0.8",
     "@vue/cli-service": "5.0.8",
