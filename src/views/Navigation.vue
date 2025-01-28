@@ -354,7 +354,6 @@ nav {
 
   .navigation-item {
     padding: 0.25rem 0.25rem;
-    line-height: auto;
   }
 }
 

@@ -14,6 +14,7 @@
       "extends": ["stylelint-config-recommended-vue/scss"],
       "rules": {
         "no-descending-specificity": null,
+        "declaration-property-value-no-unknown": null,
         "scss/at-import-no-partial-leading-underscore": null,
         "scss/comment-no-empty": null
       }

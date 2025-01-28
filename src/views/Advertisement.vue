@@ -48,7 +48,7 @@ export default {
 
   .advertisement-fallback {
     display: block;
-    position: aboslute;
+    position: absolute;
     top: 0;
     left: 0;
 
