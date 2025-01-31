@@ -11,6 +11,7 @@
   ],
   "reportUnusedDisableDirectives": true,
   "rules": {
+    "prettier/prettier": ["warn", { "endOfLine": "auto" }],
     "no-unused-vars": "warn",
     "no-console": "warn",
     "vue/no-v-html": "off",

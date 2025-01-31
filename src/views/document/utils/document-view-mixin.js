@@ -6,6 +6,7 @@ import MapBox from './boxes/MapBox';
 import RecentOutingsBox from './boxes/RecentOutingsBox';
 import RoutesBox from './boxes/RoutesBox';
 import ToolBox from './boxes/ToolBox';
+import TransportsBox from './boxes/TransportsBox';
 import ActivitiesField from './field-viewers/ActivitiesField';
 import DoubleNumericField from './field-viewers/DoubleNumericField';
 import EventActivityField from './field-viewers/EventActivityField';
@@ -40,6 +41,7 @@ export default {
     ToolBox,
     RoutesBox,
     ImagesBox,
+    TransportsBox,
   },
 
   mixins: [viewModeMixin, isEditableMixin],
