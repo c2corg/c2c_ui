@@ -9,11 +9,13 @@
       <p class="mt-2"><span v-translate>Printed on</span> {{ $dateUtils.toLocalizedString(new Date(), 'LLL') }}</p>
     </div>
     <img class="logo" src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    <img loading="lazy" :src="qrcode" />
+    <div v-html="qrcode" class="qrcode" />
   </div>
 </template>
 
 <script>
+import { renderSVG } from 'uqr';
+
 export default {
   props: {
     document: {
@@ -28,8 +30,8 @@ export default {
     },
 
     qrcode() {
-      const shortURL = encodeURIComponent(location.href.substring(0, location.href.lastIndexOf('/')));
-      return `https://chart.googleapis.com/chart?chs=90x90&cht=qr&chl=${shortURL}&choe=UTF-8&chld=M|1`;
+      const shortURL = location.href.substring(0, location.href.lastIndexOf('/'));
+      return renderSVG(shortURL);
     },
 
     license() {
@@ -55,5 +57,9 @@ export default {
 <style scoped lang="scss">
 .logo {
   height: 70px;
+}
+
+.qrcode {
+  width: 70px;
 }
 </style>
