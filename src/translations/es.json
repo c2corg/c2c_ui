@@ -268,6 +268,7 @@
     "Home": "Inicio",
     "How is my testimony used ? How / why is it useful ?": "A que sirve mi testimonio ?",
     "I choose to cancel the outing": "Prefiero cancelar la salida",
+    "I have read and agree to the": "He leido y acepto las",
     "I must not use slopes > 30°": "no puedo coger pendientes >30°",
     "I must not use slopes > 35°": "no puedo coger pendientes >35°",
     "I must not use slopes > 40°": "no puedo coger pendientes >40°",
@@ -1469,6 +1470,7 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "terms of service": "condiciones",
     "time_management": "Gestión de horarios",
     "timing": "Duración",
     "title": "Titulo",
