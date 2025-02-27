@@ -322,7 +322,6 @@
     "How is my testimony used ? How / why is it useful ?": "Čemu služi moje pričevanje?",
     "I choose to cancel the outing": "Odpovem turo",
     "I contribute": "Prispevam",
-    "I have read and agree to the terms of use": "Prebral sem in se strinjam s pogoji uporabe",
     "I must not use slopes > 30°": "Odpovedujem se strminam > 30°",
     "I must not use slopes > 35°": "Odpovedujem se strminam > 35°",
     "I must not use slopes > 40°": "Odpovedujem se strminam > 40°",
@@ -1348,7 +1347,6 @@
     },
     "lift_access": "Žičnice",
     "lift_status": "Žičnice",
-    "link": "povezava",
     "loading": "nalaganje",
     "local_product": {
       "waypoint_types": "lokalni izdelki"

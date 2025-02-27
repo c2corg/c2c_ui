@@ -350,7 +350,6 @@
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I choose to cancel the outing": "我选择取消出行",
     "I contribute": "我贡献",
-    "I have read and agree to the terms of use": "我已经阅读和同意使用条款",
     "I must not use slopes > 30°": "我不得使用大于30度的坡",
     "I must not use slopes > 35°": "我不得使用大于35度的坡",
     "I must not use slopes > 40°": "我不得使用大于40度的坡",
@@ -1352,7 +1351,6 @@
     },
     "lift_access": "可缆车进入",
     "lift_status": "缆车状态",
-    "link": "链接",
     "loading": "加载中",
     "local_product": {
       "waypoint_types": "当地特产"

@@ -311,7 +311,7 @@
     "How is my testimony used ? How / why is it useful ?": "Come viene utilizzata la mia testimonianza? Come / perché è utile?",
     "I choose to cancel the outing": "Rinuncio alla gita",
     "I contribute": "Contribuisco",
-    "I have read and agree to the terms of use": "Ho letto ed approvo i termini e condizioni d'uso ",
+    "I have read and agree to the": "Ho letto e accetto le",
     "I must not use slopes > 30°": "Rinuncio agli pendii > 30°",
     "I must not use slopes > 35°": "Rinuncio agli pendii > 35°",
     "I must not use slopes > 40°": "Rinuncio agli pendii > 40°",
@@ -1797,6 +1797,7 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "terms of service": "termini e condizioni d'uso",
     "text to display": "testo da mostrare",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "questa è un'anteprima. La geometria non è stata ancora semplificata. Le interazioni e l'esportazione della mappa sono disabilitate.",
     "time_management": "Gestione della tempistica",

@@ -371,7 +371,7 @@
     "How is my testimony used ? How / why is it useful ?": "Was ist der Sinn meines Zeugnisses ?",
     "I choose to cancel the outing": "Ich verzichte auf den Tour",
     "I contribute": "Ich mache mit",
-    "I have read and agree to the terms of use": "Ich habe die Nutzungsbedingungen gelesen und akzeptiert",
+    "I have read and agree to the": "Ich habe gelesen und akzeptiere die",
     "I must not use slopes > 30°": "Ich verwende keine Neigungen über 30°.",
     "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
     "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
@@ -1434,7 +1434,6 @@
     },
     "lift_access": "Seilbahn",
     "lift_status": "Seilbahn",
-    "link": "Link",
     "loading": "hochladen",
     "local_product": {
       "waypoint_types": "lokale Produkte/Geschäfte"
@@ -1933,6 +1932,7 @@
     "temperature": {
       "weather_station_types": "Temperatur"
     },
+    "terms of service": "Nutzungsbedingungen",
     "text to display": "anzuzeigender Text",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "time_management": "Zeitmanagement",
