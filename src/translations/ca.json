@@ -265,7 +265,7 @@
     "Home page feed parameters": "Paràmetre del fil d'activitat a la pàgina d'inici",
     "How is my testimony used ? How / why is it useful ?": "De què serveix el meu testimoni?",
     "I choose to cancel the outing": "Renuncio a sortir",
-    "I have read and agree to the terms of use": "He llegit i accepto les condicions d'ús",
+    "I have read and agree to the": "He llegit i accepto les",
     "I must not use slopes > 30°": "Renuncio als pendents > 30º",
     "I must not use slopes > 35°": "Renuncio als pendents > 35º",
     "I must not use slopes > 40°": "Renuncio als pendents > 40º",
@@ -1160,7 +1160,6 @@
     },
     "lift_access": "Remuntadors mecànics",
     "lift_status": "Remuntadors mecànics",
-    "link": "enllaç",
     "loading": "s'està carregant",
     "local_product": {
       "waypoint_types": "Producte local / comerç"
