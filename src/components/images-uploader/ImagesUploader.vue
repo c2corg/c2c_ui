@@ -232,7 +232,7 @@ export default {
       uploadFile(
         image.file,
         angle,
-        (dataUrl) => {
+        /*onDataUrlReady =*/ (dataUrl) => {
           image.dataUrl = dataUrl;
         },
         (event) => {
