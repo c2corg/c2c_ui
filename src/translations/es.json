@@ -327,7 +327,7 @@
     "Make profile page public": "Hacer pública la página de perfil",
     "Map filter off": "Filtro de mapa desactivado",
     "Map filter on": "Filtro de mapa activado",
-    "Map only": "solo el mapa",
+    "Map only": "Solo el mapa",
     "Mark this route as to do": "Marcar esta ruta como favorita",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
     "Merge documents": "Fusionar documentos",
@@ -1048,7 +1048,7 @@
       "avalanche_levels": "4"
     },
     "level_5": {
-      "avalanche_levels": "Muy fuerte"
+      "avalanche_levels": "5 - Muy fuerte"
     },
     "level_na": {
       "avalanche_levels": "nivel na"
