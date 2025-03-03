@@ -641,6 +641,9 @@
       "Map layer": "SwissTopo Sat"
     },
     "Target:": "Document à conserver (cible) :",
+    "Terms of Service need to be accepted": {
+      "API message": "Les Conditions Générales d'Utilisation (CGU) doivent être acceptées"
+    },
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Le potentiel de danger est calculé à partir du niveau de danger du bulletin d'avalanche. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du danger. Par exemple : Le bulletin évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8. ",
