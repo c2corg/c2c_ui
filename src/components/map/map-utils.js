@@ -58,8 +58,13 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   const imgSize = highlight ? 30 : 20;
   const circleRadius = highlight ? 20 : 15;
 
+  if (svgSrc.includes('bus')) {
+    svgSrc = svgSrc.replace('fill="currentColor"', 'fill="white"'); // Icône blanche
+  } else {
+    svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
+  }
+
   svgSrc = svgSrc.replace('<svg ', `<svg width="${imgSize}px" height="${imgSize}px" `);
-  svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
 
   const iconStyle = new ol.style.Style({
     image: new ol.style.Icon({
@@ -68,11 +73,18 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
     text: buildTextStyle(title, highlight),
   });
 
+  let circleFillColor = 'rgba(255, 255, 255, 0.5)';
+  let circleStrokeColor = '#ddd';
+
+  if (svgSrc.includes('bus')) {
+    circleFillColor = highlight ? '#4baf50' : '#337ab7';
+  }
+
   const circleStyle = new ol.style.Style({
     image: new ol.style.Circle({
       radius: circleRadius,
-      fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
-      stroke: new ol.style.Stroke({ color: '#ddd', width: 2 }),
+      fill: new ol.style.Fill({ color: circleFillColor }),
+      stroke: new ol.style.Stroke({ color: circleStrokeColor, width: 2 }),
     }),
   });
 
@@ -85,6 +97,7 @@ const svgSrcByDocumentType = {
   r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
   u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
   x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
+  s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
 };
 
 const colorByConditionRating = {
@@ -107,7 +120,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     color = colorByConditionRating[document.condition_rating];
   }
 
-  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r') {
+  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
     svgSrc = svgSrcByDocumentType[type];
   } else if (type === 'w') {
     if (

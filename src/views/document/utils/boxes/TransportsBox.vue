@@ -9,22 +9,30 @@
     </button>
     <div class="public-transports-section">
       <div class="public-transports-result">
-        <h3 class="title is-3">
+        <p class="public-transports-subtitle">
           {{ $gettext('Public transport stops nearby (less than 5km)') }}
-        </h3>
-        <div v-for="stop in stops" :key="stop.id" class="stop-card">
-          <div class="stop-header">
-            <strong>{{ $gettext('Stop') }} :</strong> {{ stop.stop_name }}
-          </div>
-          <div>
-            <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
-          </div>
-          <div>
-            <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
-          </div>
-          <div>
-            <strong>{{ $gettext('Distance between the stop and the starting point of the topo') }} :</strong>
-            {{ formattedDistance(stop.distance) }}
+        </p>
+        <div class="stop-cards">
+          <div
+            v-for="stop in stops"
+            :key="stop.id"
+            class="stop-card"
+            :class="{ 'selected-stop': selectedStop && selectedStop.id === stop.id }"
+            @click="selectStop(stop)"
+          >
+            <div class="stop-header">
+              <strong>{{ $gettext('Stop') }} :</strong> {{ stop.stop_name }}
+            </div>
+            <div>
+              <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
+            </div>
+            <div>
+              <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
+            </div>
+            <div>
+              <strong>{{ $gettext('Distance between the stop and the starting point of the topo') }} :</strong>
+              {{ formattedDistance(stop.distance) }}
+            </div>
           </div>
         </div>
       </div>
@@ -41,11 +49,13 @@
           :show-pin-to-top-button="true"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
+          @stop-clicked="handleStopClicked"
         />
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -57,32 +67,25 @@ export default {
   data() {
     return {
       stops: [],
-      stopDocuments: [], // Tableaux pour stocker les documents des stops
+      stopDocuments: [],
       showElevationProfile: false,
       elevationProfileHasData: false,
       testDocument: null,
+      selectedStop: null,
     };
   },
   computed: {
-    // Propriété calculée qui combine document principal et stops
     mapDocuments() {
       if (!this.document) {
         return [];
       }
-
-      // Tous les documents à afficher: document principal + test + stops
       const documents = [this.document];
-
-      // Ajouter le document test si disponible
       if (this.testDocument) {
         documents.push(this.testDocument);
       }
-
-      // Ajouter tous les documents de stops
       if (this.stopDocuments && this.stopDocuments.length > 0) {
         documents.push(...this.stopDocuments);
       }
-
       return documents.filter(Boolean);
     },
   },
@@ -91,13 +94,10 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.testDocument = this.createTestDocument();
-          console.log('Document test créé après mise à jour :', this.testDocument);
         }
       },
       deep: true,
     },
-
-    // Observer les changements des stops pour mettre à jour les documents
     stops: {
       handler(newStops) {
         if (newStops && newStops.length > 0) {
@@ -108,16 +108,11 @@ export default {
     },
   },
   mounted() {
-    console.log('Document reçu dans transports-box :', this.document);
-
     if (!this.document || !this.document.document_id) {
       console.warn('Aucun document ou ID trouvé !');
       return;
     }
-
-    // Récupérer les stops depuis l'API
     const waypointUrl = `http://localhost:6543/waypoints/${this.document.document_id}/stops`;
-
     fetch(waypointUrl)
       .then((response) => {
         if (!response.ok) {
@@ -126,13 +121,10 @@ export default {
         return response.json();
       })
       .then((data) => {
-        console.log("Données récupérées depuis l'API :", data);
         this.stops = data.stops.map((stop) => ({
           ...stop,
           distance: stop.distance ?? 0,
         }));
-
-        // Créer les documents pour les stops
         this.createStopDocuments();
       })
       .catch((error) => {
@@ -141,33 +133,23 @@ export default {
   },
   methods: {
     formattedDistance(distance) {
-      return `${distance.toFixed(3)} km`;
+      return `${distance.toFixed(3).replace('.', ',')} km`;
     },
-
-    // Méthode pour créer les documents des stops
     createStopDocuments() {
       if (!this.stops || !this.stops.length) return;
-
       this.stopDocuments = this.stops
         .map((stop) => {
           try {
-            // Vérifier que les coordonnées sont disponibles
             if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
               console.warn(`Stop ${stop.id} n'a pas de coordonnées valides:`, stop);
               return null;
             }
-
-            // Créer un document basé sur le modèle du document principal
             const stopDoc = JSON.parse(JSON.stringify(this.document));
-
-            // Mettre à jour l'ID et le titre
             stopDoc.document_id = stop.id;
-
+            stopDoc.type = 's';
             if (stopDoc.locales && stopDoc.locales.length > 0) {
               stopDoc.locales[0].title = `${stop.stop_name} (${stop.line})`;
             }
-
-            // Modifier la géométrie avec les coordonnées du stop
             if (stopDoc.geometry) {
               const geom = {
                 type: 'Point',
@@ -175,61 +157,55 @@ export default {
               };
               stopDoc.geometry.geom = JSON.stringify(geom);
             }
-
-            // Ajouter des propriétés spécifiques aux stops pour différencier l'affichage si nécessaire
             stopDoc.isStopPoint = true;
             stopDoc.stopInfo = {
               operator: stop.operator,
               line: stop.line,
               distance: stop.distance,
             };
-
             return stopDoc;
           } catch (error) {
             console.error(`Erreur lors de la création du document pour le stop ${stop.id}:`, error);
             return null;
           }
         })
-        .filter(Boolean); // Filtrer les valeurs null
-
-      console.log('Documents pour les stops créés:', this.stopDocuments);
+        .filter(Boolean);
     },
-
-    // Méthode pour créer une copie du document avec des coordonnées décalées
     createTestDocument() {
-      // Vérifier que document est défini
       if (!this.document) {
         return null;
       }
-
       try {
-        // Copie profonde de l'objet document
         const test = JSON.parse(JSON.stringify(this.document));
-
-        // Modifions l'ID pour éviter toute confusion
         test.document_id = this.document.document_id + 1;
-
-        // Modifions le titre pour identifier facilement ce point test
         if (test.locales && test.locales.length > 0) {
           test.locales[0].title = 'Point de test (30m)';
         }
-
-        // Modification des coordonnées - décalage d'environ 30 mètres
         if (test.geometry && test.geometry.geom) {
           const geom = JSON.parse(test.geometry.geom);
           if (geom.coordinates && geom.coordinates.length >= 2) {
-            // Décalage de 150 mètres vers l'est et le nord
             geom.coordinates[0] += 150;
             geom.coordinates[1] += 150;
             test.geometry.geom = JSON.stringify(geom);
           }
         }
-
         return test;
       } catch (error) {
         console.error('Erreur lors de la création du document test:', error);
         return null;
       }
+    },
+    selectStop(stop) {
+      this.selectedStop = stop;
+      this.updateMap();
+    },
+    updateMap() {
+      if (this.selectedStop && this.$refs.mapView) {
+        this.$refs.mapView.highlightStop(this.selectedStop.id);
+      }
+    },
+    handleStopClicked(stopId) {
+      this.selectedStop = this.stops.find((stop) => stop.id === stopId);
     },
   },
 };
@@ -250,16 +226,32 @@ export default {
     margin-top: 20px;
     display: flex;
     gap: 20px;
+    height: 500px;
 
     .public-transports-result {
-      margin-top: 20px;
+      .public-transports-subtitle {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .stop-cards {
+        height: 430px;
+        overflow-y: scroll;
+        padding-right: 4px;
+      }
 
       .stop-card {
         border: 2px solid lightgray;
-        border-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
         padding: 15px;
         margin-bottom: 10px;
         background: white;
+        border-left: 8px solid #337ab7;
+        cursor: pointer;
 
         .stop-header {
           font-weight: bold;
@@ -267,12 +259,18 @@ export default {
           color: #2a2a2a;
           margin-bottom: 5px;
         }
+
+        &.selected-stop {
+          border: 2px solid #4baf50;
+          border-left: 8px solid #4baf50;
+          background-color: #fbfaf6;
+        }
       }
     }
 
     .public-transports-map {
-      width: 100%;
-      height: 400px;
+      height: auto;
+      width: 800px;
       border: 1px solid lightgray;
       border-radius: 4px;
     }
