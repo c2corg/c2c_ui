@@ -2,6 +2,7 @@ import DocumentPrintLicense from './DocumentPrintLicense';
 import DocumentViewHeader from './DocumentViewHeader';
 import CommentsBox from './boxes/CommentsBox';
 import ImagesBox from './boxes/ImagesBox';
+import IsReachableByPublicTransportsBox from './boxes/IsReachableByPublicTransportsBox';
 import MapBox from './boxes/MapBox';
 import RecentOutingsBox from './boxes/RecentOutingsBox';
 import RoutesBox from './boxes/RoutesBox';
@@ -34,6 +35,7 @@ export default {
     LabelValue,
     ActivitiesField,
     EventActivityField,
+    IsReachableByPublicTransportsBox,
     MapBox,
     MarkdownSection,
     ProfilesLinks,
