@@ -14,24 +14,38 @@
         </p>
         <div class="stop-cards">
           <div
-            v-for="stop in stops"
-            :key="stop.id"
+            v-for="(stopGroup, stopName) in groupedStops"
+            :key="stopName"
             class="stop-card"
-            :class="{ 'selected-stop': selectedStop && selectedStop.id === stop.id }"
-            @click="selectStop(stop)"
+            :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
           >
-            <div class="stop-header">
-              <strong>{{ $gettext('Stop') }} :</strong> {{ stop.stop_name }}
+            <div class="stop-header" @click="selectStopGroup(stopGroup)">
+              <strong>{{ $gettext('Stop') }} :</strong> {{ stopName }}
             </div>
-            <div>
-              <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
-            </div>
-            <div>
-              <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
-            </div>
-            <div>
-              <strong>{{ $gettext('Distance between the stop and the starting point of the topo') }} :</strong>
-              {{ formattedDistance(stop.distance) }}
+            <div class="stop-details">
+              <div v-for="stop in stopGroup" :key="stop.id" class="line-details">
+                <div class="line-header">
+                  <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
+                  <button class="toggle-details-button" @click.stop="toggleLineDetails(stop.id)">
+                    <img
+                      v-if="expandedLines[stop.id]"
+                      src="@/assets/img/boxes/toggle_minus.svg"
+                      alt="Minus"
+                      class="toggle-icon"
+                    />
+                    <img v-else src="@/assets/img/boxes/toggle_plus.svg" alt="Plus" class="toggle-icon" />
+                  </button>
+                </div>
+                <div v-if="expandedLines[stop.id]" class="line-info">
+                  <div>
+                    <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
+                  </div>
+                  <div>
+                    <strong>{{ $gettext('Distance between the stop and the starting point of the topo') }} :</strong>
+                    {{ formattedDistance(stop.distance) }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -72,9 +86,20 @@ export default {
       elevationProfileHasData: false,
       testDocument: null,
       selectedStop: null,
+      selectedStopGroup: null,
+      expandedLines: {},
     };
   },
   computed: {
+    groupedStops() {
+      return this.stops.reduce((acc, stop) => {
+        if (!acc[stop.stop_name]) {
+          acc[stop.stop_name] = [];
+        }
+        acc[stop.stop_name].push(stop);
+        return acc;
+      }, {});
+    },
     mapDocuments() {
       if (!this.document) {
         return [];
@@ -91,11 +116,6 @@ export default {
   },
   watch: {
     document: {
-      handler(newVal) {
-        if (newVal) {
-          this.testDocument = this.createTestDocument();
-        }
-      },
       deep: true,
     },
     stops: {
@@ -108,6 +128,7 @@ export default {
     },
   },
   mounted() {
+    console.log('Document reçu dans transports-box :', this.document);
     if (!this.document || !this.document.document_id) {
       console.warn('Aucun document ou ID trouvé !');
       return;
@@ -171,32 +192,9 @@ export default {
         })
         .filter(Boolean);
     },
-    createTestDocument() {
-      if (!this.document) {
-        return null;
-      }
-      try {
-        const test = JSON.parse(JSON.stringify(this.document));
-        test.document_id = this.document.document_id + 1;
-        if (test.locales && test.locales.length > 0) {
-          test.locales[0].title = 'Point de test (30m)';
-        }
-        if (test.geometry && test.geometry.geom) {
-          const geom = JSON.parse(test.geometry.geom);
-          if (geom.coordinates && geom.coordinates.length >= 2) {
-            geom.coordinates[0] += 150;
-            geom.coordinates[1] += 150;
-            test.geometry.geom = JSON.stringify(geom);
-          }
-        }
-        return test;
-      } catch (error) {
-        console.error('Erreur lors de la création du document test:', error);
-        return null;
-      }
-    },
-    selectStop(stop) {
-      this.selectedStop = stop;
+    selectStopGroup(stopGroup) {
+      this.selectedStopGroup = stopGroup;
+      this.selectedStop = stopGroup[0]; // Default to the first stop in the group
       this.updateMap();
     },
     updateMap() {
@@ -206,6 +204,19 @@ export default {
     },
     handleStopClicked(stopId) {
       this.selectedStop = this.stops.find((stop) => stop.id === stopId);
+      // Find and set the selected stop group
+      this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
+        group.some((stop) => stop.id === stopId)
+      );
+    },
+    isStopGroupSelected(stopGroup) {
+      return (
+        this.selectedStopGroup &&
+        stopGroup.some((stop) => this.selectedStopGroup.some((selectedStop) => selectedStop.id === stop.id))
+      );
+    },
+    toggleLineDetails(lineId) {
+      this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
     },
   },
 };
@@ -258,6 +269,51 @@ export default {
           font-size: 1.1em;
           color: #2a2a2a;
           margin-bottom: 5px;
+        }
+
+        .stop-details {
+          margin-top: 10px;
+          padding-left: 10px;
+          border-top: 1px solid #f0f0f0;
+
+          .line-details {
+            margin-bottom: 10px;
+            border: 1px solid #e0e0de;
+            padding: 7px;
+            border-radius: 4px;
+
+            .line-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: start;
+              gap: 4px;
+
+              strong {
+                white-space: nowrap;
+              }
+
+              .toggle-details-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                margin-left: 5px;
+                margin-right: 5px;
+                margin-top: 5px;
+
+                .toggle-icon {
+                  width: 24px;
+                  height: 24px;
+                }
+              }
+            }
+
+            .line-info {
+              div {
+                margin-top: 10px;
+              }
+            }
+          }
         }
 
         &.selected-stop {
