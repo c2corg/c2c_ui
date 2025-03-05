@@ -76,7 +76,7 @@ import { requireDocumentProperty } from '@/js/properties-mixins';
 export default {
   mixins: [requireDocumentProperty],
   props: {
-    document: Object,
+    document: Array,
   },
   data() {
     return {
@@ -101,10 +101,10 @@ export default {
       }, {});
     },
     mapDocuments() {
-      if (!this.document) {
+      if (!this.document || this.document.length === 0) {
         return [];
       }
-      const documents = [this.document];
+      const documents = [...this.document]; // Utilisez tous les documents waypoints
       if (this.testDocument) {
         documents.push(this.testDocument);
       }
@@ -116,7 +116,13 @@ export default {
   },
   watch: {
     document: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.fetchStopsForDocuments(newVal);
+        }
+      },
       deep: true,
+      immediate: true, // Déclenche le handler au montage
     },
     stops: {
       handler(newStops) {
@@ -127,32 +133,38 @@ export default {
       deep: true,
     },
   },
-  mounted() {
-    console.log('Document reçu dans transports-box :', this.document);
-    if (!this.document || !this.document.document_id) {
-      console.warn('Aucun document ou ID trouvé !');
-      return;
-    }
-    const waypointUrl = `http://localhost:6543/waypoints/${this.document.document_id}/stops`;
-    fetch(waypointUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.stops = data.stops.map((stop) => ({
-          ...stop,
-          distance: stop.distance ?? 0,
-        }));
-        this.createStopDocuments();
-      })
-      .catch((error) => {
-        console.error('Erreur lors de la récupération des données :', error);
-      });
-  },
   methods: {
+    fetchStopsForDocuments(documents) {
+      this.stops = []; // Réinitialise les stops avant de les remplir
+      const fetchPromises = documents.map((doc) => {
+        if (!doc || !doc.document_id) {
+          console.warn('Document invalide ou ID manquant :', doc);
+          return Promise.resolve();
+        }
+        const waypointUrl = `http://localhost:6543/waypoints/${doc.document_id}/stops`;
+        return fetch(waypointUrl)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const stopsForDocument = data.stops.map((stop) => ({
+              ...stop,
+              distance: stop.distance ?? 0,
+            }));
+            this.stops = this.stops.concat(stopsForDocument); // Concatène les stops
+          })
+          .catch((error) => {
+            console.error('Erreur lors de la récupération des données :', error);
+          });
+      });
+
+      Promise.all(fetchPromises).then(() => {
+        this.createStopDocuments();
+      });
+    },
     formattedDistance(distance) {
       return `${distance.toFixed(3).replace('.', ',')} km`;
     },
@@ -165,7 +177,7 @@ export default {
               console.warn(`Stop ${stop.id} n'a pas de coordonnées valides:`, stop);
               return null;
             }
-            const stopDoc = JSON.parse(JSON.stringify(this.document));
+            const stopDoc = JSON.parse(JSON.stringify(this.document[0])); // Utilise le premier document comme modèle
             stopDoc.document_id = stop.id;
             stopDoc.type = 's';
             if (stopDoc.locales && stopDoc.locales.length > 0) {

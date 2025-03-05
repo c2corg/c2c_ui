@@ -131,7 +131,7 @@
           <div style="clear: both" />
         </div>
 
-        <transports-box :document="document" />
+        <transports-box :document="[document]" />
 
         <routes-box v-if="!isDraftView && document.waypoint_type !== 'climbing_indoor'" :document="document" />
         <recent-outings-box v-if="!isDraftView" :document="document" />
