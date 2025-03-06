@@ -49,6 +49,15 @@
             </div>
           </div>
         </div>
+        <div class="missing-transports-warning" v-if="!missingTransportForWaypoint">
+          <p class="missing-transports-warning-exclamation">!</p>
+          <div class="missing-transports-warning-text">
+            <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
+            <p>
+              {{ $gettext('At least one access point in the topo does not have a public transport stop within 5km.') }}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="public-transports-map">
@@ -68,7 +77,7 @@
       </div>
     </div>
 
-    <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
+    <div v-if="showAccessibilityInfo" class="public-transport-no-result">
       <img class="public-transports-no-result-bus" src="@/assets/img/boxes/public_transports.png" />
       <div class="public-transport-no-result-text">
         <strong>{{
@@ -100,6 +109,7 @@ export default {
       selectedStopGroup: null,
       expandedLines: {},
       showAccessibilityInfo: false,
+      missingTransportForWaypoint: false,
     };
   },
   computed: {
@@ -145,11 +155,17 @@ export default {
   methods: {
     fetchStopsForDocuments(documents) {
       this.stops = []; // Réinitialise les stops avant de les remplir
+      const documentResults = {};
+
       const fetchPromises = documents.map((doc) => {
         if (!doc || !doc.document_id) {
           console.warn('Document invalide ou ID manquant :', doc);
           return Promise.resolve();
         }
+
+        // Initialiser le résultat pour ce document comme n'ayant pas de transport
+        documentResults[doc.document_id] = false;
+
         const waypointUrl = `http://localhost:6543/waypoints/${doc.document_id}/stops`;
         return fetch(waypointUrl)
           .then((response) => {
@@ -160,6 +176,9 @@ export default {
           })
           .then((data) => {
             this.showAccessibilityInfo = data.stops.length > 0;
+            // Marquer ce document comme ayant des transports si des arrêts sont trouvés
+            documentResults[doc.document_id] = data.stops.length > 0;
+
             const stopsForDocument = data.stops.map((stop) => ({
               ...stop,
               distance: stop.distance ?? 0,
@@ -168,10 +187,14 @@ export default {
           })
           .catch((error) => {
             console.error('Erreur lors de la récupération des données :', error);
+            // En cas d'erreur, on considère que le document n'a pas de transport
+            documentResults[doc.document_id] = false;
           });
       });
 
       Promise.all(fetchPromises).then(() => {
+        // Vérifier si au moins un document n'a pas de transport
+        this.missingTransportForWaypoint = Object.values(documentResults).some((hasTransport) => !hasTransport);
         this.createStopDocuments();
       });
     },
@@ -262,6 +285,9 @@ export default {
     height: 500px;
 
     .public-transports-result {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       .public-transports-subtitle {
         font-size: 16px;
         font-weight: bold;
@@ -269,7 +295,7 @@ export default {
       }
 
       .stop-cards {
-        height: 430px;
+        height: inherit;
         overflow-y: scroll;
         padding-right: 4px;
       }
@@ -342,6 +368,31 @@ export default {
           border: 2px solid #4baf50;
           border-left: 8px solid #4baf50;
           background-color: #fbfaf6;
+        }
+      }
+
+      .missing-transports-warning {
+        display: flex;
+        padding: 10px;
+        border: 1px solid #ffa74f;
+        border-radius: 4px;
+        margin-top: 25px;
+        gap: 10px;
+        align-items: center;
+        background-color: #fec184;
+        .missing-transports-warning-exclamation {
+          height: 26px;
+          width: 26px;
+          background-color: #ff4d09;
+          border-radius: 14px;
+          color: #fec184;
+          font-weight: bold;
+          text-align: center;
+          flex: none;
+          font-size: 18px;
+        }
+
+        .missing-transports-warning-text {
         }
       }
     }
