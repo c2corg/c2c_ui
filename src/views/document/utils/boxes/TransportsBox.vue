@@ -7,7 +7,7 @@
       <img class="public-transports-bus" src="@/assets/img/boxes/public_transports.png" />
       {{ $gettext('Show nearby stops') }}
     </button>
-    <div class="public-transports-section">
+    <div v-if="showAccessibilityInfo" class="public-transports-section">
       <div class="public-transports-result">
         <p class="public-transports-subtitle">
           {{ $gettext('Public transport stops nearby (less than 5km)') }}
@@ -67,6 +67,17 @@
         />
       </div>
     </div>
+
+    <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
+      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/public_transports.png" />
+      <div class="public-transport-no-result-text">
+        <strong>{{
+          $gettext('Unfortunately, this guide does not appear to be served by a public transport service')
+        }}</strong>
+        <p>{{ $gettext('We did not find any public transport stop near the topo route') }}</p>
+        <p>{{ $gettext('(less than 5km from one of the topo access points)') }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -88,6 +99,7 @@ export default {
       selectedStop: null,
       selectedStopGroup: null,
       expandedLines: {},
+      showAccessibilityInfo: false,
     };
   },
   computed: {
@@ -104,10 +116,7 @@ export default {
       if (!this.document || this.document.length === 0) {
         return [];
       }
-      const documents = [...this.document]; // Utilisez tous les documents waypoints
-      if (this.testDocument) {
-        documents.push(this.testDocument);
-      }
+      const documents = [...this.document];
       if (this.stopDocuments && this.stopDocuments.length > 0) {
         documents.push(...this.stopDocuments);
       }
@@ -122,7 +131,7 @@ export default {
         }
       },
       deep: true,
-      immediate: true, // Déclenche le handler au montage
+      immediate: true,
     },
     stops: {
       handler(newStops) {
@@ -150,6 +159,7 @@ export default {
             return response.json();
           })
           .then((data) => {
+            this.showAccessibilityInfo = data.stops.length > 0;
             const stopsForDocument = data.stops.map((stop) => ({
               ...stop,
               distance: stop.distance ?? 0,
@@ -341,6 +351,23 @@ export default {
       width: 800px;
       border: 1px solid lightgray;
       border-radius: 4px;
+    }
+  }
+  .public-transport-no-result {
+    display: flex;
+    padding: 20px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    margin-top: 20px;
+    gap: 30px;
+    align-items: center;
+
+    .public-transports-no-result-bus {
+      width: 100px;
+      height: 100px;
+    }
+
+    .public-transport-no-result-text {
     }
   }
 }
