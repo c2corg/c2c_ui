@@ -1266,11 +1266,11 @@ export default {
       const stopFeature = this.findStopPoint(stopId);
 
       if (!stopFeature) {
-        console.warn(`Arrêt avec l'ID ${stopId} non trouvé.`);
+        console.warn(`Stop with ID  ${stopId} not found.`);
         return;
       }
 
-      const title = stopFeature.get('document').stop_name;
+      const title = stopFeature.get('document').stoparea_name;
       stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
     },
 
@@ -1279,10 +1279,13 @@ export default {
       const waypointsSource = this.waypointsLayer.getSource();
 
       documentsSource.forEachFeature((feature) => {
-        feature.setStyle(feature.get('normalStyle'));
+        if (feature.values_.document.type !== 'w') {
+          feature.setStyle(feature.get('normalStyle'));
+        }
       });
 
       waypointsSource.forEachFeature((feature) => {
+        console.log(feature);
         feature.setStyle(feature.get('normalStyle'));
       });
     },
@@ -1302,7 +1305,7 @@ export default {
         return waypointFeature;
       }
 
-      console.warn(`Arrêt avec l'ID ${stopId} non trouvé.`);
+      console.warn(`Stop with ID ${stopId} not found.`);
       return null;
     },
   },

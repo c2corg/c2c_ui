@@ -59,7 +59,7 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   const circleRadius = highlight ? 20 : 15;
 
   if (svgSrc.includes('bus')) {
-    svgSrc = svgSrc.replace('fill="currentColor"', 'fill="white"'); // Icône blanche
+    svgSrc = svgSrc.replace('fill="currentColor"', 'fill="white"');
   } else {
     svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
   }

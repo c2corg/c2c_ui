@@ -1,17 +1,14 @@
 <template>
-  <div class="box public-transports-box">
+  <div v-if="accessWaypoint" class="box public-transports-box" id="public-transport">
     <h2 class="title is-2">
       <span>{{ $gettext('Access by public transport') }}</span>
     </h2>
     <button class="button is-primary public-transports-button">
-      <img class="public-transports-bus" src="@/assets/img/boxes/public_transports.png" />
+      <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
       {{ $gettext('Show nearby stops') }}
     </button>
     <div v-if="showAccessibilityInfo" class="public-transports-section">
       <div class="public-transports-result">
-        <p class="public-transports-subtitle">
-          {{ $gettext('Public transport stops nearby (less than 5km)') }}
-        </p>
         <div class="stop-cards">
           <div
             v-for="(stopGroup, stopName) in groupedStops"
@@ -20,7 +17,8 @@
             :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
           >
             <div class="stop-header" @click="selectStopGroup(stopGroup)">
-              <strong>{{ $gettext('Stop') }} :</strong> {{ stopName }}
+              <strong>{{ $gettext('Stop') }} :</strong> {{ stopName }} {{ $gettext('Away') }}
+              {{ stopGroup[0].distance }} {{ $gettext('km from the access point') }}
             </div>
             <div class="stop-details">
               <div v-for="stop in stopGroup" :key="stop.id" class="line-details">
@@ -40,16 +38,12 @@
                   <div>
                     <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
                   </div>
-                  <div>
-                    <strong>{{ $gettext('Distance between the stop and the starting point of the topo') }} :</strong>
-                    {{ formattedDistance(stop.distance) }}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="missing-transports-warning" v-if="!missingTransportForWaypoint">
+        <div class="missing-transports-warning" v-if="missingTransportForWaypoint">
           <p class="missing-transports-warning-exclamation">!</p>
           <div class="missing-transports-warning-text">
             <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
@@ -73,12 +67,13 @@
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
           @stop-clicked="handleStopClicked"
+          @highlight-document="handleDocumentHighlight"
         />
       </div>
     </div>
 
-    <div v-if="showAccessibilityInfo" class="public-transport-no-result">
-      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/public_transports.png" />
+    <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
+      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" />
       <div class="public-transport-no-result-text">
         <strong>{{
           $gettext('Unfortunately, this guide does not appear to be served by a public transport service')
@@ -92,6 +87,7 @@
 
 <script>
 import { requireDocumentProperty } from '@/js/properties-mixins';
+import transportService from '@/js/apis/transport-service';
 
 export default {
   mixins: [requireDocumentProperty],
@@ -110,23 +106,32 @@ export default {
       expandedLines: {},
       showAccessibilityInfo: false,
       missingTransportForWaypoint: false,
+      accessWaypoint: false,
     };
   },
   computed: {
+    accessWaypoints() {
+      if (!this.document || !Array.isArray(this.document)) {
+        return [];
+      }
+
+      // Filtrer pour ne garder que les waypoints de type "access"
+      return this.document.filter((doc) => doc && doc.waypoint_type === 'access');
+    },
     groupedStops() {
       return this.stops.reduce((acc, stop) => {
-        if (!acc[stop.stop_name]) {
-          acc[stop.stop_name] = [];
+        if (!acc[stop.stoparea_name]) {
+          acc[stop.stoparea_name] = [];
         }
-        acc[stop.stop_name].push(stop);
+        acc[stop.stoparea_name].push(stop);
         return acc;
       }, {});
     },
     mapDocuments() {
-      if (!this.document || this.document.length === 0) {
+      if (!this.accessWaypoints || this.accessWaypoints.length === 0) {
         return [];
       }
-      const documents = [...this.document];
+      const documents = [...this.accessWaypoints];
       if (this.stopDocuments && this.stopDocuments.length > 0) {
         documents.push(...this.stopDocuments);
       }
@@ -135,10 +140,8 @@ export default {
   },
   watch: {
     document: {
-      handler(newVal) {
-        if (newVal && newVal.length > 0) {
-          this.fetchStopsForDocuments(newVal);
-        }
+      handler() {
+        this.processAccessWaypoints();
       },
       deep: true,
       immediate: true,
@@ -153,68 +156,61 @@ export default {
     },
   },
   methods: {
+    processAccessWaypoints() {
+      const accessWaypoints = this.accessWaypoints;
+
+      if (accessWaypoints.length === 0) {
+        this.stops = [];
+        return;
+      } else {
+        this.accessWaypoint = true;
+      }
+
+      this.fetchStopsForDocuments(accessWaypoints);
+    },
     fetchStopsForDocuments(documents) {
-      this.stops = []; // Réinitialise les stops avant de les remplir
-      const documentResults = {};
-
-      const fetchPromises = documents.map((doc) => {
-        if (!doc || !doc.document_id) {
-          console.warn('Document invalide ou ID manquant :', doc);
-          return Promise.resolve();
-        }
-
-        // Initialiser le résultat pour ce document comme n'ayant pas de transport
-        documentResults[doc.document_id] = false;
-
-        const waypointUrl = `http://localhost:6543/waypoints/${doc.document_id}/stops`;
-        return fetch(waypointUrl)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            this.showAccessibilityInfo = data.stops.length > 0;
-            // Marquer ce document comme ayant des transports si des arrêts sont trouvés
-            documentResults[doc.document_id] = data.stops.length > 0;
-
-            const stopsForDocument = data.stops.map((stop) => ({
-              ...stop,
-              distance: stop.distance ?? 0,
-            }));
-            this.stops = this.stops.concat(stopsForDocument); // Concatène les stops
-          })
-          .catch((error) => {
-            console.error('Erreur lors de la récupération des données :', error);
-            // En cas d'erreur, on considère que le document n'a pas de transport
-            documentResults[doc.document_id] = false;
-          });
-      });
-
-      Promise.all(fetchPromises).then(() => {
-        // Vérifier si au moins un document n'a pas de transport
-        this.missingTransportForWaypoint = Object.values(documentResults).some((hasTransport) => !hasTransport);
-        this.createStopDocuments();
-      });
+      transportService
+        .getStopareasForDocuments(documents)
+        .then((result) => {
+          this.stops = result.stopareas;
+          this.missingTransportForWaypoint = result.missingTransportForWaypoint;
+          this.showAccessibilityInfo = this.stops.length > 0;
+          this.createStopDocuments();
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des données :', error);
+          this.missingTransportForWaypoint = true;
+        });
     },
     formattedDistance(distance) {
       return `${distance.toFixed(3).replace('.', ',')} km`;
     },
     createStopDocuments() {
       if (!this.stops || !this.stops.length) return;
-      this.stopDocuments = this.stops
-        .map((stop) => {
+
+      // S'assurer qu'il y a au moins un waypoint d'accès disponible comme modèle
+      if (this.accessWaypoints.length === 0) return;
+
+      this.stopDocuments = this.stops.reduce(
+        (uniqueStops, stop) => {
           try {
             if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
               console.warn(`Stop ${stop.id} n'a pas de coordonnées valides:`, stop);
-              return null;
+              return uniqueStops;
             }
-            const stopDoc = JSON.parse(JSON.stringify(this.document[0])); // Utilise le premier document comme modèle
+
+            // Vérifier si ces coordonnées existent déjà dans les points traités
+            const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
+            if (uniqueStops.coordsMap[coordKey]) {
+              return uniqueStops;
+            }
+
+            // Utiliser le premier waypoint d'accès comme modèle
+            const stopDoc = JSON.parse(JSON.stringify(this.accessWaypoints[0]));
             stopDoc.document_id = stop.id;
             stopDoc.type = 's';
             if (stopDoc.locales && stopDoc.locales.length > 0) {
-              stopDoc.locales[0].title = `${stop.stop_name} (${stop.line})`;
+              stopDoc.locales[0].title = '';
             }
             if (stopDoc.geometry) {
               const geom = {
@@ -229,13 +225,18 @@ export default {
               line: stop.line,
               distance: stop.distance,
             };
-            return stopDoc;
+
+            // Marquer ces coordonnées comme utilisées
+            uniqueStops.coordsMap[coordKey] = true;
+            uniqueStops.docs.push(stopDoc);
+            return uniqueStops;
           } catch (error) {
             console.error(`Erreur lors de la création du document pour le stop ${stop.id}:`, error);
-            return null;
+            return uniqueStops;
           }
-        })
-        .filter(Boolean);
+        },
+        { docs: [], coordsMap: {} }
+      ).docs;
     },
     selectStopGroup(stopGroup) {
       this.selectedStopGroup = stopGroup;
@@ -249,7 +250,6 @@ export default {
     },
     handleStopClicked(stopId) {
       this.selectedStop = this.stops.find((stop) => stop.id === stopId);
-      // Find and set the selected stop group
       this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
         group.some((stop) => stop.id === stopId)
       );
@@ -262,6 +262,31 @@ export default {
     },
     toggleLineDetails(lineId) {
       this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
+    },
+    handleDocumentHighlight(document) {
+      if (document && document.isStopPoint) {
+        const stopId = document.document_id;
+        const stop = this.stops.find((s) => s.id === stopId);
+        if (stop) {
+          // Trouver le groupe de cet arrêt
+          this.selectedStopGroup = Object.values(this.groupedStops).find((group) => group.some((s) => s.id === stopId));
+          this.selectedStop = stop;
+
+          // Surligner l'arrêt sur la carte
+          if (this.$refs.mapView) {
+            this.$refs.mapView.highlightStop(stopId);
+          }
+        }
+      } else {
+        // Réinitialiser la sélection si on n'est sur aucun arrêt
+        this.selectedStopGroup = null;
+        this.selectedStop = null;
+
+        // Réinitialiser tous les styles sur la carte
+        if (this.$refs.mapView) {
+          this.$refs.mapView.resetStopStyles();
+        }
+      }
     },
   },
 };
@@ -332,7 +357,6 @@ export default {
 
             .line-header {
               display: flex;
-              justify-content: space-between;
               align-items: start;
               gap: 4px;
 
@@ -345,7 +369,7 @@ export default {
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                margin-left: 5px;
+                margin-left: auto;
                 margin-right: 5px;
                 margin-top: 5px;
 
@@ -414,11 +438,24 @@ export default {
     align-items: center;
 
     .public-transports-no-result-bus {
+      margin-left: 20px;
       width: 100px;
       height: 100px;
     }
 
     .public-transport-no-result-text {
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .public-transports-section {
+    display: inline !important;
+    .public-transports-map {
+      height: 200px !important;
+      width: 300px !important;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
