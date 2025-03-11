@@ -108,6 +108,7 @@
     "Block account": "Blokiraj uporabnika",
     "Bolted rock climbing gear": "Oprema za dolge športne smeri",
     "Book content": "Kratek opis vsebine knjige",
+    "Books and websites not already associated to this route": "Knjige in spletna mesta, ki še niso povezana s to smerjo",
     "Both results and map": "Rezultati in zemljevid",
     "Bouldering climbing gear": "Oprema za balvansko plezanje",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Na kratko opišite morebitne poškodbe, in kaj bi storili danes za nazaj. Tukaj tudi lahko vnesete komentarje, ki ne sodijo v nobeno drugo polje.",
@@ -174,6 +175,7 @@
     },
     "Create a new report": "Ustvarite novo poročilo",
     "Create a simplified version of the geometry by reducing the amount of points": "Ustvarite poenostavljeno različico geometrije z zmanjšanjem števila točk",
+    "Create the first version in the following lang": "Ustvarite prvo različico v naslednjem jeziku",
     "Created on": "Ustvarjeno",
     "Creation?": "Ustvarjanje?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI ne pokriva trenutnega pogleda zemljevida. Zaenkrat so samo francoske gore (določene s pikčastimi črtami).",
@@ -285,6 +287,7 @@
     "Forgot password?": "Ste pozabili geslo?",
     "Forum username": "Vzdevek na forumu",
     "Forum: a place to chat about technical matters, or just petty talk": "Forum: prostor za razpravo o tehničnih zadevah ali za klepet",
+    "From": "Od",
     "From danger 3, consider the slopes which dominate the route": "Od nevarnosti 3 navzgor, upoštevajte pobočja nad potjo.",
     "From the interface": "Iz vmesnika",
     "Full bulletin": "Celoten bilten",
@@ -322,6 +325,7 @@
     "How is my testimony used ? How / why is it useful ?": "Čemu služi moje pričevanje?",
     "I choose to cancel the outing": "Odpovem turo",
     "I contribute": "Prispevam",
+    "I have read and agree to the": "Prebral sem in se strinjam z",
     "I must not use slopes > 30°": "Odpovedujem se strminam > 30°",
     "I must not use slopes > 35°": "Odpovedujem se strminam > 35°",
     "I must not use slopes > 40°": "Odpovedujem se strminam > 40°",
@@ -652,6 +656,9 @@
       "Map layer": "SwissTopo Sat"
     },
     "Target:": "Dokument, ki ga je treba hraniti (cilj): ",
+    "Terms of Service need to be accepted": {
+      "API message": "Sprejeti je treba pogoje storitve"
+    },
     "Terrain": "Teren",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Zahvaljujoč statističnim in analitičnim piškotkom, ki jih zagotavljamo mi in druga podjetja, lahko ocenimo obisk naše spletne strani in poznamo vire prometa. Podatki, ki jih pridobimo, nam pomagajo razumeti, kaj je obiskovalcem všeč, in izboljšati naše spletno mesto. Če jih zavrnete, ne moremo izboljšati vaše izkušnje.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Metoda MRD (začetnik) je dovoljena s stopnjo nevarnosti največ 3. Izberite metodo MRE ali MRP.",
@@ -722,6 +729,7 @@
       "API message": "Uporabniško ime ne sme biti prazno ali s presledki"
     },
     "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Uporabniško ime ali e-pošta skupaj z geslom vam bo omogočilo prijavo. Tako uporabniško ime kot e-pošta ostaneta zasebna. Uporabniškega imena ni mogoče spremeniti, e-pošto pa lahko.",
+    "Username_or_email": "Uporabniško ime_ali_e-pošta",
     "Validity date expired": "Datum veljavnosti je potekel",
     "Validity date:": "Datum veljavnosti:",
     "Versions": "Različice",
@@ -1041,6 +1049,7 @@
     "date_start": "Datum",
     "date_time": "datum/ura",
     "day(s)": "dan(dni)",
+    "days": "dnevi",
     "de": {
       "langs": "nemščina"
     },
@@ -1841,6 +1850,7 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "terms of service": "pogoji storitve",
     "text to display": "besedilo za prikaz",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "to je predogled. Geometrija še ni poenostavljena. Zemljevidne interakcije in izvoz so onemogočeni. ",
     "time_management": "Upravljanje z urnikom",
@@ -1944,6 +1954,7 @@
       "parking_fee_types": "da"
     },
     "yeti": "Yeti",
+    "you need to activate edit mode": "morate aktivirati način urejanja",
     "zh": {
       "langs": "kitajščina"
     }
