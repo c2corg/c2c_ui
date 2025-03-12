@@ -34,7 +34,7 @@ const parseDate = (exif, iptc) => {
 
   if (iptcDate) {
     if (iptc?.TimeCreated) {
-      date = dayjs(`${iptcDate}T${iptc.TimeCreated}`);
+      date = dayjs(`${iptcDate}T${iptc.TimeCreated}`, 'YYYYMMDDThhmmssZZ');
     } else {
       date = dayjs(iptcDate, 'YYYYMMDD');
     }
