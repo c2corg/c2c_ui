@@ -3,16 +3,16 @@
     <div class="accessible-transport">
       <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
       <div class="info-content">
-        <h3>Accessible en transport en commun</h3>
-        <a href="#public-transport" class="plan-link">Planifier mon déplacement →</a>
+        <h3>{{ $gettext('Accessible by public transport') }}</h3>
+        <a href="#public-transport" class="plan-link">{{ $gettext('Plan my trip →') }}</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import transportService from '@/js/apis/transport-service';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],
