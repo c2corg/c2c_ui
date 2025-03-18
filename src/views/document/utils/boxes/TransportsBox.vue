@@ -20,8 +20,19 @@
             @click="seeLineDetails(stopGroup)"
           >
             <div class="stop-header">
-              <strong>{{ $gettext('Stop') }} :</strong> {{ stopName }} {{ $gettext('Away') }}
-              {{ stopGroup[0].distance }} {{ $gettext('km from the access point') }}
+              <p>
+                <strong>{{ $gettext('Stop') }} : </strong> {{ stopName }}
+              </p>
+              <p>
+                <strong>{{ $gettext('Distance from the topo stopping point') }} : </strong
+                >{{ stopGroup[0].distance }} km
+              </p>
+              <div v-if="!isStopGroupExpanded(stopGroup)">
+                <p class="see-more-lines">{{ $gettext('See lines detail') }}</p>
+              </div>
+              <div v-if="isStopGroupExpanded(stopGroup)">
+                <p class="see-more-lines">{{ $gettext('Hide lines detail') }}</p>
+              </div>
             </div>
             <div v-if="isStopGroupExpanded(stopGroup)" class="stop-details">
               <div v-for="stop in stopGroup" :key="stop.id" class="line-details">
@@ -110,8 +121,24 @@ export default {
         return [];
       }
 
-      // Filtrer pour ne garder que les waypoints de type "access"
-      return this.document.filter((doc) => doc && doc.waypoint_type === 'access');
+      const accessPoints = this.document.filter((doc) => doc && doc.waypoint_type === 'access');
+      const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
+
+      accessPointsCopy.forEach((doc) => {
+        if (doc.type === 'w') {
+          doc.type = 'z';
+        }
+
+        if (doc.maps && Array.isArray(doc.maps)) {
+          doc.maps.forEach((map) => {
+            if (map.type === 'w') {
+              map.type = 'z';
+            }
+          });
+        }
+      });
+
+      return accessPointsCopy;
     },
     groupedStops() {
       return this.stops.reduce((acc, stop) => {
@@ -122,14 +149,17 @@ export default {
         return acc;
       }, {});
     },
+
     mapDocuments() {
       if (!this.accessWaypoints || this.accessWaypoints.length === 0) {
         return [];
       }
       const documents = [...this.accessWaypoints];
+
       if (this.stopDocuments && this.stopDocuments.length > 0) {
         documents.push(...this.stopDocuments);
       }
+
       return documents.filter(Boolean);
     },
   },
@@ -183,7 +213,6 @@ export default {
     createStopDocuments() {
       if (!this.stops || !this.stops.length) return;
 
-      // S'assurer qu'il y a au moins un waypoint d'accès disponible comme modèle
       if (this.accessWaypoints.length === 0) return;
 
       this.stopDocuments = this.stops.reduce(
@@ -194,13 +223,11 @@ export default {
               return uniqueStops;
             }
 
-            // Vérifier si ces coordonnées existent déjà dans les points traités
             const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
             if (uniqueStops.coordsMap[coordKey]) {
               return uniqueStops;
             }
 
-            // Utiliser le premier waypoint d'accès comme modèle
             const stopDoc = JSON.parse(JSON.stringify(this.accessWaypoints[0]));
             stopDoc.document_id = stop.id;
             stopDoc.type = 's';
@@ -221,7 +248,6 @@ export default {
               distance: stop.distance,
             };
 
-            // Marquer ces coordonnées comme utilisées
             uniqueStops.coordsMap[coordKey] = true;
             uniqueStops.docs.push(stopDoc);
             return uniqueStops;
@@ -270,17 +296,13 @@ export default {
 
     seeLineDetails(stopGroup) {
       const groupId = stopGroup[0].id;
-      // Toggle l'état d'expansion
       this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
 
-      // Définir ce groupe comme sélectionné
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];
 
-      // Mettre à jour la carte
       this.updateMap();
 
-      // Faire défiler automatiquement pour s'assurer que la card est visible
       this.$nextTick(() => {
         const refName = 'stopCard_' + groupId;
         if (this.$refs[refName] && this.$refs[refName][0]) {
@@ -294,16 +316,13 @@ export default {
         const stopId = document.document_id;
         const stop = this.stops.find((s) => s.id === stopId);
         if (stop) {
-          // Trouver le groupe de cet arrêt
           this.selectedStopGroup = Object.values(this.groupedStops).find((group) => group.some((s) => s.id === stopId));
           this.selectedStop = stop;
 
-          // Surligner l'arrêt sur la carte
           if (this.$refs.mapView) {
             this.$refs.mapView.highlightStop(stopId);
           }
 
-          // Faire défiler automatiquement vers l'élément sélectionné
           this.$nextTick(() => {
             const refName = 'stopCard_' + stopId;
             if (this.$refs[refName] && this.$refs[refName][0]) {
@@ -312,11 +331,9 @@ export default {
           });
         }
       } else {
-        // Réinitialiser la sélection si on n'est sur aucun arrêt
         this.selectedStopGroup = null;
         this.selectedStop = null;
 
-        // Réinitialiser tous les styles sur la carte
         if (this.$refs.mapView) {
           this.$refs.mapView.resetStopStyles();
         }
@@ -382,16 +399,20 @@ export default {
         }
 
         .stop-header {
-          font-weight: bold;
           font-size: 1.1em;
           color: #2a2a2a;
           margin-bottom: 5px;
+
+          .see-more-lines {
+            margin-top: 10px;
+            color: #337ab7;
+            font-weight: bold;
+          }
         }
 
         .stop-details {
           margin-top: 15px;
           padding-left: 10px;
-          border-top: 1px solid #f0f0f0;
 
           .line-details {
             margin-bottom: 10px;
@@ -442,7 +463,7 @@ export default {
 
     .public-transports-map {
       height: auto;
-      width: 800px;
+      width: 750px;
       border: 1px solid lightgray;
       border-radius: 4px;
     }

@@ -1064,8 +1064,7 @@ export default {
         resultFeature = feature;
         return true;
       });
-
-      this.setHighlightedFeature(resultFeature);
+      this.setHighlightedFeature(resultFeature); ///////////
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
     },
 
@@ -1273,6 +1272,7 @@ export default {
       const title = stopFeature.get('document').stoparea_name;
       stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
     },
+
     goAndZoomOnStop(stopId) {
       const stopFeature = this.findStopPoint(stopId);
 
@@ -1301,13 +1301,12 @@ export default {
       const waypointsSource = this.waypointsLayer.getSource();
 
       documentsSource.forEachFeature((feature) => {
-        if (feature.values_.document.type !== 'w') {
+        if (feature.values_.document.type !== 'w' && feature.values_.document.type !== 'z') {
           feature.setStyle(feature.get('normalStyle'));
         }
       });
 
       waypointsSource.forEachFeature((feature) => {
-        console.log(feature);
         feature.setStyle(feature.get('normalStyle'));
       });
     },
