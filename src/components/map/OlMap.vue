@@ -1266,12 +1266,34 @@ export default {
       const stopFeature = this.findStopPoint(stopId);
 
       if (!stopFeature) {
-        console.warn(`Stop with ID  ${stopId} not found.`);
+        console.warn(`Stop with ID ${stopId} not found.`);
         return;
       }
 
       const title = stopFeature.get('document').stoparea_name;
       stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
+    },
+    goAndZoomOnStop(stopId) {
+      const stopFeature = this.findStopPoint(stopId);
+
+      if (!stopFeature) {
+        console.warn(`Stop with ID ${stopId} not found.`);
+        return;
+      }
+      const geometry = stopFeature.getGeometry();
+      if (geometry) {
+        const coordinate = geometry.getCoordinates();
+
+        const view = this.map.getView();
+        view.animate({
+          center: coordinate,
+          duration: 200,
+        });
+        view.animate({
+          zoom: Math.max(view.getZoom(), 14),
+          duration: 500,
+        });
+      }
     },
 
     resetStopStyles() {

@@ -14,27 +14,21 @@
             v-for="(stopGroup, stopName) in groupedStops"
             :key="stopName"
             class="stop-card"
+            :ref="'stopCard_' + stopGroup[0].id"
             :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
+            @mouseover="selectStopGroup(stopGroup)"
+            @click="seeLineDetails(stopGroup)"
           >
-            <div class="stop-header" @click="selectStopGroup(stopGroup)">
+            <div class="stop-header">
               <strong>{{ $gettext('Stop') }} :</strong> {{ stopName }} {{ $gettext('Away') }}
               {{ stopGroup[0].distance }} {{ $gettext('km from the access point') }}
             </div>
-            <div class="stop-details">
+            <div v-if="isStopGroupExpanded(stopGroup)" class="stop-details">
               <div v-for="stop in stopGroup" :key="stop.id" class="line-details">
-                <div class="line-header">
-                  <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
-                  <button class="toggle-details-button" @click.stop="toggleLineDetails(stop.id)">
-                    <img
-                      v-if="expandedLines[stop.id]"
-                      src="@/assets/img/boxes/toggle_minus.svg"
-                      alt="Minus"
-                      class="toggle-icon"
-                    />
-                    <img v-else src="@/assets/img/boxes/toggle_plus.svg" alt="Plus" class="toggle-icon" />
-                  </button>
-                </div>
-                <div v-if="expandedLines[stop.id]" class="line-info">
+                <div class="line-info">
+                  <div>
+                    <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
+                  </div>
                   <div>
                     <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
                   </div>
@@ -86,8 +80,8 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
 import transportService from '@/js/apis/transport-service';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],
@@ -107,6 +101,7 @@ export default {
       showAccessibilityInfo: false,
       missingTransportForWaypoint: false,
       accessWaypoint: false,
+      expandedStopGroups: {},
     };
   },
   computed: {
@@ -172,7 +167,7 @@ export default {
       transportService
         .getStopareasForDocuments(documents)
         .then((result) => {
-          this.stops = result.stopareas;
+          this.stops = result.stopareas.sort((a, b) => a.distance - b.distance);
           this.missingTransportForWaypoint = result.missingTransportForWaypoint;
           this.showAccessibilityInfo = this.stops.length > 0;
           this.createStopDocuments();
@@ -246,23 +241,54 @@ export default {
     updateMap() {
       if (this.selectedStop && this.$refs.mapView) {
         this.$refs.mapView.highlightStop(this.selectedStop.id);
+        this.$refs.mapView.goAndZoomOnStop(this.selectedStop.id);
       }
     },
+
     handleStopClicked(stopId) {
       this.selectedStop = this.stops.find((stop) => stop.id === stopId);
       this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
         group.some((stop) => stop.id === stopId)
       );
     },
+
     isStopGroupSelected(stopGroup) {
       return (
         this.selectedStopGroup &&
         stopGroup.some((stop) => this.selectedStopGroup.some((selectedStop) => selectedStop.id === stop.id))
       );
     },
+
     toggleLineDetails(lineId) {
       this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
     },
+
+    isStopGroupExpanded(stopGroup) {
+      const groupId = stopGroup[0].id;
+      return this.expandedStopGroups[groupId] === true;
+    },
+
+    seeLineDetails(stopGroup) {
+      const groupId = stopGroup[0].id;
+      // Toggle l'état d'expansion
+      this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
+
+      // Définir ce groupe comme sélectionné
+      this.selectedStopGroup = stopGroup;
+      this.selectedStop = stopGroup[0];
+
+      // Mettre à jour la carte
+      this.updateMap();
+
+      // Faire défiler automatiquement pour s'assurer que la card est visible
+      this.$nextTick(() => {
+        const refName = 'stopCard_' + groupId;
+        if (this.$refs[refName] && this.$refs[refName][0]) {
+          this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    },
+
     handleDocumentHighlight(document) {
       if (document && document.isStopPoint) {
         const stopId = document.document_id;
@@ -276,6 +302,14 @@ export default {
           if (this.$refs.mapView) {
             this.$refs.mapView.highlightStop(stopId);
           }
+
+          // Faire défiler automatiquement vers l'élément sélectionné
+          this.$nextTick(() => {
+            const refName = 'stopCard_' + stopId;
+            if (this.$refs[refName] && this.$refs[refName][0]) {
+              this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          });
         }
       } else {
         // Réinitialiser la sélection si on n'est sur aucun arrêt
@@ -336,6 +370,16 @@ export default {
         background: white;
         border-left: 8px solid #337ab7;
         cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #4baf50;
+          background-color: #fafafa;
+
+          .line-details {
+            background-color: white;
+          }
+        }
 
         .stop-header {
           font-weight: bold;
@@ -345,44 +389,19 @@ export default {
         }
 
         .stop-details {
-          margin-top: 10px;
+          margin-top: 15px;
           padding-left: 10px;
           border-top: 1px solid #f0f0f0;
 
           .line-details {
             margin-bottom: 10px;
             border: 1px solid #e0e0de;
-            padding: 7px;
+            padding: 10px;
             border-radius: 4px;
-
-            .line-header {
-              display: flex;
-              align-items: start;
-              gap: 4px;
-
-              strong {
-                white-space: nowrap;
-              }
-
-              .toggle-details-button {
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0;
-                margin-left: auto;
-                margin-right: 5px;
-                margin-top: 5px;
-
-                .toggle-icon {
-                  width: 24px;
-                  height: 24px;
-                }
-              }
-            }
 
             .line-info {
               div {
-                margin-top: 10px;
+                margin-bottom: 8px;
               }
             }
           }
