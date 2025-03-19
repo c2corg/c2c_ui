@@ -515,5 +515,9 @@ export default {
       margin-right: auto;
     }
   }
+  .missing-transports-warning {
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
 }
 </style>
