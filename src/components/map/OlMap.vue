@@ -1093,6 +1093,9 @@ export default {
 
       if (feature) {
         const document = feature.get('document');
+        if (document && document.type === 'z') {
+          return;
+        }
         if (document && document.type === 's') {
           this.$emit('stop-clicked', document.document_id);
           return;
@@ -1287,10 +1290,10 @@ export default {
         const view = this.map.getView();
         view.animate({
           center: coordinate,
-          duration: 200,
+          duration: 300,
         });
         view.animate({
-          zoom: Math.max(view.getZoom(), 14),
+          zoom: Math.max(view.getZoom(), 15),
           duration: 500,
         });
       }

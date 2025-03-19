@@ -301,8 +301,6 @@ export default {
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];
 
-      this.updateMap();
-
       this.$nextTick(() => {
         const refName = 'stopCard_' + groupId;
         if (this.$refs[refName] && this.$refs[refName][0]) {
