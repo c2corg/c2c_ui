@@ -57,6 +57,7 @@ export const buildDiffStyle = function (isOld) {
 const buildPointStyle = function (title, svgSrc, color, highlight) {
   const imgSize = highlight ? 30 : 20;
   const circleRadius = highlight ? 20 : 15;
+  const zIndexValue = highlight ? 101 : 1;
 
   if (svgSrc.includes('bus')) {
     svgSrc = svgSrc.replace('fill="currentColor"', 'fill="white"');
@@ -71,6 +72,7 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
       src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSrc),
     }),
     text: buildTextStyle(title, highlight),
+    zIndex: zIndexValue + 1,
   });
 
   let circleFillColor = 'rgba(255, 255, 255, 0.5)';
@@ -86,6 +88,7 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
       fill: new ol.style.Fill({ color: circleFillColor }),
       stroke: new ol.style.Stroke({ color: circleStrokeColor, width: 2 }),
     }),
+    zIndex: zIndexValue,
   });
 
   return [circleStyle, iconStyle];
@@ -98,6 +101,7 @@ const svgSrcByDocumentType = {
   u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
   x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
   s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
+  z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
 };
 
 const colorByConditionRating = {
@@ -132,6 +136,33 @@ export const getDocumentPointStyle = function (document, title, highlight) {
       color = '#4baf50';
     }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
+  } else if (type === 'z') {
+    svgSrc = svgSrcByDocumentType['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
+
+    if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
+      color = '#4baf50';
+    } else {
+      color = '#F93';
+    }
+
+    const styles = buildPointStyle(title, svgSrc, color, highlight);
+
+    styles.forEach((style) => {
+      const image = style.getImage();
+
+      if (image instanceof ol.style.Circle) {
+        image.getFill().setColor('rgba(255, 255, 255, 1)');
+        image.getStroke().setColor('#4baf50');
+
+        style.setZIndex(highlight ? 101 : 50);
+      }
+
+      if (image instanceof ol.style.Icon) {
+        style.setZIndex(highlight ? 102 : 51);
+      }
+    });
+
+    return styles;
   } else if (type === 'a') {
     return new ol.style.Style();
   } else {

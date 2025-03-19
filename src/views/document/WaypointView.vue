@@ -17,7 +17,6 @@
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <is-reachable-by-public-transports-box :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
@@ -130,8 +129,6 @@
           <markdown-section :document="document" :field="fields.external_resources" />
           <div style="clear: both" />
         </div>
-
-        <transports-box :document="[document]" />
 
         <routes-box v-if="!isDraftView && document.waypoint_type !== 'climbing_indoor'" :document="document" />
         <recent-outings-box v-if="!isDraftView" :document="document" />

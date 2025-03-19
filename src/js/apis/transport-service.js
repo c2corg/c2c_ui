@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import config from '@/js/config';
 
 function TransportService() {
@@ -8,34 +9,34 @@ function TransportService() {
 }
 
 /**
- * Récupère les arrêts de transport en commun pour un waypoint donné
+ * Retrieves public transport stops for a given waypoint
  *
- * @param {string | number} waypointId - L'identifiant du waypoint
- * @returns {Promise} Promesse contenant les données des arrêts
+ * @param {string | number} waypointId
+ * @returns {Promise}
  */
 TransportService.prototype.getStopareas = function (waypointId) {
   return this.axios.get(`/waypoints/${waypointId}/stopareas`);
 };
 
 /**
- * Vérifie si un waypoint est accessible en transport en commun
+ * Check if a waypoint is accessible by public transport
  *
- * @param {string | number} waypointId - L'identifiant du waypoint
- * @returns {Promise<boolean>} Promesse contenant un booléen indiquant l'accessibilité
+ * @param {string | number} waypointId
+ * @returns {Promise<boolean>}
  */
 TransportService.prototype.isReachable = function (waypointId) {
   return this.axios.get(`/waypoints/${waypointId}/isReachable`).then((response) => response.data);
 };
 
 /**
- * Récupère les arrêts pour plusieurs waypoints et détermine si tous sont accessibles
+ * Retrieves stops for multiple waypoints and determines if all are reachable
  *
- * @param {Array} documents - Tableau de documents (waypoints)
- * @returns {Promise<Object>} Promesse contenant les résultats et les données d'accessibilité
+ * @param {Array} documents
+ * @returns {Promise<Object>}
  */
 TransportService.prototype.getStopareasForDocuments = function (documents) {
   if (!documents || documents.length === 0) {
-    return Promise.resolve({ stopareas: [], missingTransportForWaypoint: false });
+    return Promise.resolve({ stopareas: [], missingTransportForWaypoint: false, documentResults: {} });
   }
 
   const documentResults = {};
@@ -43,29 +44,30 @@ TransportService.prototype.getStopareasForDocuments = function (documents) {
 
   const fetchPromises = documents.map((doc) => {
     if (!doc || !doc.document_id) {
-      console.warn('Document invalide ou ID manquant :', doc);
+      console.warn('Invalid document or missing ID :', doc);
       return Promise.resolve();
     }
-
-    documentResults[doc.document_id] = false;
 
     return this.getStopareas(doc.document_id)
       .then((response) => {
         const data = response.data;
         const hasStopareas = data.stopareas && data.stopareas.length > 0;
 
+        // Store whether this document has stops
         documentResults[doc.document_id] = hasStopareas;
 
         if (hasStopareas) {
+          // Add document_id to each stoparea for reference
           const stopareasForDocument = data.stopareas.map((stoparea) => ({
             ...stoparea,
+            document_id: doc.document_id, // Associate stoparea with document
             distance: stoparea.distance ?? 0,
           }));
           allStopareas.push(...stopareasForDocument);
         }
       })
       .catch((error) => {
-        console.error(`Erreur lors de la récupération des arrêts pour le document ${doc.document_id}:`, error);
+        console.error(`Error retrieving stops for document ${doc.document_id}:`, error);
         documentResults[doc.document_id] = false;
       });
   });
@@ -75,7 +77,7 @@ TransportService.prototype.getStopareasForDocuments = function (documents) {
     return {
       stopareas: allStopareas,
       missingTransportForWaypoint,
-      documentResults,
+      documentResults, // Indicates which documents have stops
     };
   });
 };
