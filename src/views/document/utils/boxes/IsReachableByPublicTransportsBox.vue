@@ -1,12 +1,14 @@
 <template>
   <div v-if="showAccessibilityInfo" class="box accessible-transport-box">
-    <div class="accessible-transport">
-      <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
-      <div class="info-content">
-        <h3>{{ $gettext('Accessible by public transport') }}</h3>
-        <a href="#public-transport" class="plan-link">{{ $gettext('Plan my trip →') }}</a>
+    <a href="#public-transport">
+      <div class="accessible-transport">
+        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        <div class="info-content">
+          <h3>{{ $gettext('Accessible by public transport') }}</h3>
+          <p class="plan-link">{{ $gettext('Plan my trip →') }}</p>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
 </template>
 
@@ -29,15 +31,11 @@ export default {
   },
   computed: {
     accessWaypoints() {
-      // Si c'est un tableau, filtrer les documents de type access
       if (Array.isArray(this.document)) {
         return this.document.filter((doc) => doc && doc.waypoint_type === 'access');
-      }
-      // Si c'est un objet unique et qu'il est de type access, le retourner dans un tableau
-      else if (this.document && this.document.waypoint_type === 'access') {
+      } else if (this.document && this.document.waypoint_type === 'access') {
         return [this.document];
       }
-      // Sinon, retourner un tableau vide
       return [];
     },
   },
@@ -59,7 +57,6 @@ export default {
         return;
       }
 
-      // Vérifier chaque waypoint d'accès jusqu'à ce qu'on en trouve un accessible
       this.checkWaypointsReachability(accessWaypoints);
     },
     checkWaypointsReachability(waypoints) {
@@ -68,7 +65,6 @@ export default {
         return;
       }
 
-      // Récupérer les IDs des waypoints
       const waypointIds = waypoints.map((wp) => wp.document_id).filter(Boolean);
 
       if (waypointIds.length === 0) {
@@ -76,14 +72,11 @@ export default {
         return;
       }
 
-      // Vérifier s'ils sont accessibles en utilisant un service qui peut prendre un tableau d'IDs
-      // Si le service existant ne prend qu'un seul ID, on peut implémenter une vérification séquentielle
       this.checkMultipleWaypointsReachability(waypointIds);
     },
     checkMultipleWaypointsReachability(waypointIds) {
       const checkNextWaypoint = (index) => {
         if (index >= waypointIds.length) {
-          // Si on a vérifié tous les waypoints sans en trouver un accessible
           this.showAccessibilityInfo = false;
           return;
         }
@@ -92,10 +85,8 @@ export default {
           .isReachable(waypointIds[index])
           .then((isReachable) => {
             if (isReachable === true) {
-              // Dès qu'on trouve un waypoint accessible, on arrête la recherche
               this.showAccessibilityInfo = true;
             } else {
-              // Sinon, on vérifie le prochain waypoint
               checkNextWaypoint(index + 1);
             }
           })
@@ -104,12 +95,10 @@ export default {
               `Erreur lors de la vérification de l'accessibilité pour le waypoint ${waypointIds[index]} :`,
               error
             );
-            // On continue avec le prochain waypoint malgré l'erreur
             checkNextWaypoint(index + 1);
           });
       };
 
-      // Démarrer la vérification avec le premier waypoint
       checkNextWaypoint(0);
     },
   },
@@ -145,7 +134,6 @@ export default {
 
       .plan-link {
         color: #4a8fd6;
-        text-decoration: none;
         font-size: 15px;
 
         &:hover {

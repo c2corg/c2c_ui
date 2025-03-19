@@ -24,14 +24,13 @@
                 <strong>{{ $gettext('Stop') }} : </strong> {{ stopName }}
               </p>
               <p>
-                <strong>{{ $gettext('Distance from the topo stopping point') }} : </strong
-                >{{ stopGroup[0].distance }} km
+                <strong>{{ $gettext('Distance from the route access point') }} : </strong>{{ stopGroup[0].distance }} km
               </p>
               <div v-if="!isStopGroupExpanded(stopGroup)">
-                <p class="see-more-lines">{{ $gettext('See lines detail') }}</p>
+                <p class="see-more-lines">{{ $gettext('See lines details') }}</p>
               </div>
               <div v-if="isStopGroupExpanded(stopGroup)">
-                <p class="see-more-lines">{{ $gettext('Hide lines detail') }}</p>
+                <p class="see-more-lines">{{ $gettext('Hide lines details') }}</p>
               </div>
             </div>
             <div v-if="isStopGroupExpanded(stopGroup)" class="stop-details">
@@ -53,7 +52,7 @@
           <div class="missing-transports-warning-text">
             <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
             <p>
-              {{ $gettext('At least one access point in the topo does not have a public transport stop within 5km.') }}
+              {{ $gettext("At least one access point in the route don't have a public transport stop within 5km.") }}
             </p>
           </div>
         </div>
@@ -80,11 +79,12 @@
     <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
       <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" />
       <div class="public-transport-no-result-text">
-        <strong>{{
-          $gettext('Unfortunately, this guide does not appear to be served by a public transport service')
-        }}</strong>
-        <p>{{ $gettext('We did not find any public transport stop near the topo route') }}</p>
-        <p>{{ $gettext('(less than 5km from one of the topo access points)') }}</p>
+        <strong>{{ $gettext('Unfortunately, this route may not be deserved by public transport') }}</strong>
+        <p>
+          {{
+            $gettext("We didn't find any public transport stop point in a 5 km foot range from any route access point.")
+          }}
+        </p>
       </div>
     </div>
   </div>
@@ -197,6 +197,14 @@ export default {
       transportService
         .getStopareasForDocuments(documents)
         .then((result) => {
+          documents.forEach((doc) => {
+            if (!result.documentResults[doc.document_id]) {
+              doc.public_transportation_rating = 'no service';
+            } else {
+              doc.public_transportation_rating = 'service available';
+            }
+          });
+
           this.stops = result.stopareas.sort((a, b) => a.distance - b.distance);
           this.missingTransportForWaypoint = result.missingTransportForWaypoint;
           this.showAccessibilityInfo = this.stops.length > 0;
@@ -205,6 +213,10 @@ export default {
         .catch((error) => {
           console.error('Erreur lors de la récupération des données :', error);
           this.missingTransportForWaypoint = true;
+
+          documents.forEach((doc) => {
+            doc.public_transportation_rating = 'no service';
+          });
         });
     },
     formattedDistance(distance) {
@@ -487,11 +499,18 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+  .public-transports-button {
+    margin-bottom: 15px;
+  }
   .public-transports-section {
     display: inline !important;
+
+    .stop-cards {
+      margin-bottom: 10px;
+    }
     .public-transports-map {
-      height: 200px !important;
-      width: 300px !important;
+      height: 275px !important;
+      width: 319px !important;
       margin-left: auto;
       margin-right: auto;
     }

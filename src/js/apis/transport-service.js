@@ -36,7 +36,7 @@ TransportService.prototype.isReachable = function (waypointId) {
  */
 TransportService.prototype.getStopareasForDocuments = function (documents) {
   if (!documents || documents.length === 0) {
-    return Promise.resolve({ stopareas: [], missingTransportForWaypoint: false });
+    return Promise.resolve({ stopareas: [], missingTransportForWaypoint: false, documentResults: {} });
   }
 
   const documentResults = {};
@@ -48,18 +48,19 @@ TransportService.prototype.getStopareasForDocuments = function (documents) {
       return Promise.resolve();
     }
 
-    documentResults[doc.document_id] = false;
-
     return this.getStopareas(doc.document_id)
       .then((response) => {
         const data = response.data;
         const hasStopareas = data.stopareas && data.stopareas.length > 0;
 
+        // Store whether this document has stops
         documentResults[doc.document_id] = hasStopareas;
 
         if (hasStopareas) {
+          // Add document_id to each stoparea for reference
           const stopareasForDocument = data.stopareas.map((stoparea) => ({
             ...stoparea,
+            document_id: doc.document_id, // Associate stoparea with document
             distance: stoparea.distance ?? 0,
           }));
           allStopareas.push(...stopareasForDocument);
@@ -76,7 +77,7 @@ TransportService.prototype.getStopareasForDocuments = function (documents) {
     return {
       stopareas: allStopareas,
       missingTransportForWaypoint,
-      documentResults,
+      documentResults, // Indicates which documents have stops
     };
   });
 };

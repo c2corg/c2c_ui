@@ -138,7 +138,12 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
   } else if (type === 'z') {
     svgSrc = svgSrcByDocumentType['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
-    color = '#4baf50';
+
+    if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
+      color = '#4baf50';
+    } else {
+      color = '#F93';
+    }
 
     const styles = buildPointStyle(title, svgSrc, color, highlight);
 
