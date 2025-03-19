@@ -922,6 +922,9 @@
     "at least one route required": {
       "API message": "wenigstens eine Route ist nötig"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Indoor-Klettern können nicht mit einer Route verknüpft werden"
+    },
     "at least one user required": {
       "API message": "wenigstens ein Benutzerkonto nötig"
     },
