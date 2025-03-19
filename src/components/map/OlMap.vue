@@ -1288,13 +1288,12 @@ export default {
         const coordinate = geometry.getCoordinates();
 
         const view = this.map.getView();
+        view.cancelAnimations();
+
         view.animate({
           center: coordinate,
-          duration: 300,
-        });
-        view.animate({
           zoom: Math.max(view.getZoom(), 15),
-          duration: 500,
+          duration: 300,
         });
       }
     },
