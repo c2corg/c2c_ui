@@ -185,6 +185,7 @@
     "Describe historical information about the route (date, names..) here": "Напольнять историческую информацию про данный маршрут (даты, фамилии, итд...)",
     "Describe opening hours": "Уточнить часы работы",
     "Describe opening periods": "Уточнить даты открытия",
+    "Describe the conditions you encountered during your outing": "описать условия в которых провели экскурсию",
     "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Опишите информацию, собранную перед поездкой,  и их прогресса в полевых условиях. Это касается прогноза погоды, бюллетеней оценки лавинной опасности, качества льда, снега, и т.п.",
     "Description": "Описание",
     "Detailed information": "Подробная информация",
@@ -212,6 +213,7 @@
     "Filter results": "Фильтровать результаты",
     "Forgot password?": "забыли пароль ?",
     "Forum": "Форум",
+    "Forum username": "Имя ползователи на форуме",
     "From the interface": "Из интерфейса",
     "GPS Track": "GPS трек",
     "General information": "общая информация",
@@ -933,7 +935,8 @@
     "or try the following pages:": "или попробуйте следующие страницы:",
     "orientations": "Ориентации",
     "other": {
-      "event_activities": "Другое"
+      "event_activities": "Другое",
+      "event_types": "Другое"
     },
     "other_comments": "Физические последствия и другие комментарии",
     "overhang": {
@@ -1094,6 +1097,7 @@
       "period": "в"
     },
     "topo": {
+      "book_types": "описание  ",
       "image_categories": "описание  "
     },
     "topoguide_supplements": {
