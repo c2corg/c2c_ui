@@ -3,78 +3,55 @@
     <h2 class="title is-2">
       <span>{{ $gettext('Access by public transport') }}</span>
     </h2>
-    <button class="button is-primary public-transports-button">
-      <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
-      {{ $gettext('Show nearby stops') }}
-    </button>
-    <div v-if="showAccessibilityInfo" class="public-transports-section">
-      <div class="public-transports-result">
-        <div class="stop-cards" ref="stopCardContainer">
-          <div
-            v-for="(stopGroup, stopName) in groupedStops"
-            :key="stopName"
-            class="stop-card"
-            :ref="'stopCard_' + stopGroup[0].id"
-            :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
-            @mouseover="selectStopGroup(stopGroup)"
-            @click="seeLineDetails(stopGroup)"
-          >
-            <div class="stop-header">
-              <p>
-                <strong>{{ $gettext('Stop') }} : </strong> {{ stopName }}
-              </p>
-              <p>
-                <strong>{{ $gettext('Distance from the route access point') }} : </strong>{{ stopGroup[0].distance }} km
-              </p>
-              <div v-if="!isStopGroupExpanded(stopGroup)">
-                <p class="see-more-lines">{{ $gettext('See lines details') }}</p>
-              </div>
-              <div v-if="isStopGroupExpanded(stopGroup)">
-                <p class="see-more-lines">{{ $gettext('Hide lines details') }}</p>
-              </div>
-            </div>
-            <div v-if="isStopGroupExpanded(stopGroup)" class="stop-details">
-              <div v-for="stop in stopGroup" :key="stop.id" class="line-details">
-                <div class="line-info">
-                  <div>
-                    <strong>{{ $gettext('Line') }} :</strong> {{ stop.line }}
-                  </div>
-                  <div>
-                    <strong>{{ $gettext('Operator') }} :</strong> {{ stop.operator }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="missing-transports-warning" v-if="missingTransportForWaypoint">
-          <p class="missing-transports-warning-exclamation">!</p>
-          <div class="missing-transports-warning-text">
-            <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
-            <p>
-              {{ $gettext("At least one access point in the route don't have a public transport stop within 5km.") }}
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <div class="public-transports-map">
-        <map-view
-          ref="mapView"
-          :documents="mapDocuments"
-          :show-protection-areas="['r', 'w'].includes(document.type)"
-          :biodiv-sports-activities="document.activities"
-          :full-screen-element-id="
-            !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
-          "
-          @has-protection-area="$emit('has-protection-area')"
-          @stop-clicked="handleStopClicked"
-          @highlight-document="handleDocumentHighlight"
-        />
-      </div>
+    <div class="public-transport-buttons">
+      <button
+        class="button is-primary public-transports-button"
+        :class="{ 'is-active': activeSection === 'nearbyStops' }"
+        @click="setActiveSection('nearbyStops')"
+      >
+        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        {{ $gettext('Show nearby stops') }}
+      </button>
+
+      <button
+        v-if="hasSecondSection"
+        class="button is-primary public-transports-button"
+        :class="{ 'is-active': activeSection === 'planATrip' }"
+        @click="setActiveSection('planATrip')"
+      >
+        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        {{ $gettext('Planifier un trajet de transport en commun') }}
+      </button>
     </div>
 
-    <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
+    <nearby-stops-section
+      v-if="activeSection === 'nearbyStops' && showAccessibilityInfo"
+      :stops="stops"
+      :grouped-stops="groupedStops"
+      :missing-transport-for-waypoint="missingTransportForWaypoint"
+      :map-documents="mapDocuments"
+      :document="document"
+      :selected-stop="selectedStop"
+      :selected-stop-group="selectedStopGroup"
+      :expanded-stop-groups="expandedStopGroups"
+      @select-stop-group="selectStopGroup"
+      @see-line-details="seeLineDetails"
+      @stop-clicked="handleStopClicked"
+      @highlight-document="handleDocumentHighlight"
+      @has-protection-area="$emit('has-protection-area')"
+    />
+
+    <!-- Future Second Section Component -->
+    <plan-a-trip-section
+      v-if="activeSection === 'planATrip'"
+      :map-documents="mapDocuments"
+      :document="document"
+      @highlight-document="handleDocumentHighlight"
+      @has-protection-area="$emit('has-protection-area')"
+    />
+
+    <div v-if="activeSection === 'nearbyStops' && !showAccessibilityInfo" class="public-transport-no-result">
       <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" />
       <div class="public-transport-no-result-text">
         <strong>{{ $gettext('Unfortunately, this route may not be deserved by public transport') }}</strong>
@@ -89,13 +66,25 @@
 </template>
 
 <script>
+import NearbyStopsSection from './NearbyStopsSection.vue';
+import PlanATripSection from './PlanATripSection.vue';
+
 import transportService from '@/js/apis/transport-service';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
+  name: 'PublicTransport',
   mixins: [requireDocumentProperty],
+  components: {
+    NearbyStopsSection,
+    PlanATripSection,
+  },
   props: {
     document: Array,
+    hasSecondSection: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -111,6 +100,7 @@ export default {
       missingTransportForWaypoint: false,
       accessWaypoint: false,
       expandedStopGroups: {},
+      activeSection: 'nearbyStops', // Default active section
     };
   },
   computed: {
@@ -179,6 +169,9 @@ export default {
     },
   },
   methods: {
+    setActiveSection(section) {
+      this.activeSection = section;
+    },
     processAccessWaypoints() {
       const accessWaypoints = this.accessWaypoints;
 
@@ -216,9 +209,6 @@ export default {
             doc.public_transportation_rating = 'no service';
           });
         });
-    },
-    formattedDistance(distance) {
-      return `${distance.toFixed(3).replace('.', ',')} km`;
     },
     createStopDocuments() {
       if (!this.stops || !this.stops.length) return;
@@ -272,13 +262,6 @@ export default {
     selectStopGroup(stopGroup) {
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0]; // Default to the first stop in the group
-      this.updateMap();
-    },
-    updateMap() {
-      if (this.selectedStop && this.$refs.mapView) {
-        this.$refs.mapView.highlightStop(this.selectedStop.id);
-        this.$refs.mapView.goAndZoomOnStop(this.selectedStop.id);
-      }
     },
 
     handleStopClicked(stopId) {
@@ -295,15 +278,6 @@ export default {
       );
     },
 
-    toggleLineDetails(lineId) {
-      this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
-    },
-
-    isStopGroupExpanded(stopGroup) {
-      const groupId = stopGroup[0].id;
-      return this.expandedStopGroups[groupId] === true;
-    },
-
     seeLineDetails(stopGroup) {
       const selection = window.getSelection();
       if (selection && selection.toString().length > 0) {
@@ -315,13 +289,6 @@ export default {
 
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];
-
-      this.$nextTick(() => {
-        const refName = 'stopCard_' + groupId;
-        if (this.$refs[refName] && this.$refs[refName][0]) {
-          this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      });
     },
 
     handleDocumentHighlight(document) {
@@ -331,48 +298,10 @@ export default {
         if (stop) {
           this.selectedStopGroup = Object.values(this.groupedStops).find((group) => group.some((s) => s.id === stopId));
           this.selectedStop = stop;
-
-          if (this.$refs.mapView) {
-            this.$refs.mapView.highlightStop(stopId);
-          }
-
-          this.$nextTick(() => {
-            const refName = 'stopCard_' + stopId;
-            const cardContainer = this.$refs.stopCardContainer;
-
-            if (this.$refs[refName] && this.$refs[refName][0] && cardContainer) {
-              const card = this.$refs[refName][0];
-
-              const containerRect = cardContainer.getBoundingClientRect();
-              const cardRect = card.getBoundingClientRect();
-
-              const isCardAbove = cardRect.top < containerRect.top;
-              const isCardBelow = cardRect.bottom > containerRect.bottom;
-
-              if (isCardAbove || isCardBelow) {
-                let newScrollTop;
-
-                if (isCardAbove) {
-                  newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
-                } else {
-                  newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
-                }
-
-                cardContainer.scrollTo({
-                  top: newScrollTop,
-                  behavior: 'smooth',
-                });
-              }
-            }
-          });
         }
       } else {
         this.selectedStopGroup = null;
         this.selectedStop = null;
-
-        if (this.$refs.mapView) {
-          this.$refs.mapView.resetStopStyles();
-        }
       }
     },
   },
@@ -381,129 +310,31 @@ export default {
 
 <style scoped lang="scss">
 .public-transports-box {
+  .public-transport-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
   .public-transports-button {
     display: flex;
+    background-color: white;
+    color: black;
+    font-weight: 500;
+    border: 1px solid lightgray;
 
     .public-transports-bus {
       width: 18px;
       height: 18px;
       margin-right: 8px;
     }
-  }
-  .public-transports-section {
-    margin-top: 20px;
-    display: flex;
-    gap: 20px;
-    height: 500px;
 
-    .public-transports-result {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      .public-transports-subtitle {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 20px;
-      }
-
-      .stop-cards {
-        height: inherit;
-        overflow-y: scroll;
-        padding-right: 4px;
-      }
-
-      .stop-card {
-        border: 2px solid lightgray;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-        padding: 15px;
-        margin-bottom: 10px;
-        background: white;
-        border-left: 8px solid #337ab7;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover {
-          border-color: #4baf50;
-          background-color: #fafafa;
-
-          .line-details {
-            background-color: white;
-          }
-        }
-
-        .stop-header {
-          font-size: 1.1em;
-          color: #2a2a2a;
-          margin-bottom: 5px;
-
-          .see-more-lines {
-            margin-top: 10px;
-            color: #337ab7;
-            font-weight: bold;
-          }
-        }
-
-        .stop-details {
-          margin-top: 15px;
-          padding-left: 10px;
-
-          .line-details {
-            margin-bottom: 10px;
-            border: 1px solid #e0e0de;
-            padding: 10px;
-            border-radius: 4px;
-
-            .line-info {
-              div {
-                margin-bottom: 8px;
-              }
-            }
-          }
-        }
-
-        &.selected-stop {
-          border: 2px solid #4baf50;
-          border-left: 8px solid #4baf50;
-          background-color: #fbfaf6;
-        }
-      }
-
-      .missing-transports-warning {
-        display: flex;
-        padding: 10px;
-        border: 1px solid #ffa74f;
-        border-radius: 4px;
-        margin-top: 25px;
-        gap: 10px;
-        align-items: center;
-        background-color: #fec184;
-        .missing-transports-warning-exclamation {
-          height: 26px;
-          width: 26px;
-          background-color: #ff4d09;
-          border-radius: 14px;
-          color: #fec184;
-          font-weight: bold;
-          text-align: center;
-          flex: none;
-          font-size: 18px;
-        }
-
-        .missing-transports-warning-text {
-        }
-      }
-    }
-
-    .public-transports-map {
-      height: auto;
-      width: 750px;
-      border: 1px solid lightgray;
-      border-radius: 4px;
+    &.is-active {
+      background-color: #337ab7;
+      border: none;
     }
   }
+
   .public-transport-no-result {
     display: flex;
     padding: 20px;
@@ -518,32 +349,25 @@ export default {
       width: 100px;
       height: 100px;
     }
-
-    .public-transport-no-result-text {
-    }
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .public-transports-button {
-    margin-bottom: 15px;
-  }
-  .public-transports-section {
-    display: inline !important;
+  .public-transport-buttons {
+    flex-direction: column;
 
-    .stop-cards {
+    .public-transports-button {
       margin-bottom: 10px;
     }
-    .public-transports-map {
-      height: 275px !important;
-      width: 319px !important;
-      margin-left: auto;
-      margin-right: auto;
-    }
   }
-  .missing-transports-warning {
-    margin-top: 0px;
-    margin-bottom: 10px;
+
+  .public-transport-no-result {
+    flex-direction: column;
+
+    .public-transports-no-result-bus {
+      margin-left: 0;
+      margin-bottom: 15px;
+    }
   }
 }
 </style>
