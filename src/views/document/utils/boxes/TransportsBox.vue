@@ -9,7 +9,7 @@
     </button>
     <div v-if="showAccessibilityInfo" class="public-transports-section">
       <div class="public-transports-result">
-        <div class="stop-cards">
+        <div class="stop-cards" ref="stopCardContainer">
           <div
             v-for="(stopGroup, stopName) in groupedStops"
             :key="stopName"
@@ -67,9 +67,7 @@
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
-          :show-pin-to-top-button="true"
           @has-protection-area="$emit('has-protection-area')"
-          @pin-to-top-clicked="togglePinToSide(true)"
           @stop-clicked="handleStopClicked"
           @highlight-document="handleDocumentHighlight"
         />
@@ -307,6 +305,11 @@ export default {
     },
 
     seeLineDetails(stopGroup) {
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) {
+        return;
+      }
+
       const groupId = stopGroup[0].id;
       this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
 
@@ -335,8 +338,31 @@ export default {
 
           this.$nextTick(() => {
             const refName = 'stopCard_' + stopId;
-            if (this.$refs[refName] && this.$refs[refName][0]) {
-              this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const cardContainer = this.$refs.stopCardContainer;
+
+            if (this.$refs[refName] && this.$refs[refName][0] && cardContainer) {
+              const card = this.$refs[refName][0];
+
+              const containerRect = cardContainer.getBoundingClientRect();
+              const cardRect = card.getBoundingClientRect();
+
+              const isCardAbove = cardRect.top < containerRect.top;
+              const isCardBelow = cardRect.bottom > containerRect.bottom;
+
+              if (isCardAbove || isCardBelow) {
+                let newScrollTop;
+
+                if (isCardAbove) {
+                  newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
+                } else {
+                  newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
+                }
+
+                cardContainer.scrollTo({
+                  top: newScrollTop,
+                  behavior: 'smooth',
+                });
+              }
             }
           });
         }
