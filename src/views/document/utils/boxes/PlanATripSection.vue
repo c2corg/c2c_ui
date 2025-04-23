@@ -84,6 +84,101 @@
             <img class="" src="@/assets/img/boxes/itineraire.svg" />
             <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon itinéraire') }}</p>
           </button>
+
+          <div class="itineraries-container" v-if="journeys.length > 0">
+            <h4 class="itineraries-title">Itinéraires proposés</h4>
+
+            <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
+              <div class="itinerary-header">
+                <div class="itinerary-time">
+                  {{ formatTime(journey.departure_date_time) }} — {{ formatTime(journey.arrival_date_time) }}
+                  <span class="journey-duration">{{ formatDuration(journey.duration) }}</span>
+                </div>
+                <div class="itinerary-transfers">
+                  <span v-if="journey.nb_transfers === 0">Direct</span>
+                  <span v-else>{{ journey.nb_transfers }} correspondance{{ journey.nb_transfers > 1 ? 's' : '' }}</span>
+                </div>
+              </div>
+
+              <div class="itinerary-path">
+                <div class="journey-steps">
+                  <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex" class="step-wrapper">
+                    <div
+                      v-if="section.type === 'public_transport' || section.type === 'street_network'"
+                      class="journey-step"
+                    >
+                      <div
+                        v-if="section.type === 'public_transport'"
+                        class="transport-icon"
+                        :class="getTransportClass(section)"
+                      >
+                        {{ getTransportIcon(section) }}
+                      </div>
+                      <div
+                        v-else-if="section.type === 'street_network' && section.mode === 'walking'"
+                        class="transport-icon walking"
+                      >
+                        <img src="@/assets/img/boxes/walk.svg" alt="walking" />
+                      </div>
+                    </div>
+                    <div
+                      v-if="sectionIndex < journey.sections.length - 1 && section.type !== 'waiting'"
+                      class="connector"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="itinerary-details-button">
+                <button class="button is-info is-light" @click="showJourneyDetails(journey)">Voir le détail</button>
+              </div>
+
+              <div class="journey-details" v-if="selectedJourney === journey">
+                <div
+                  class="journey-details-section"
+                  v-for="(section, sectionIndex) in journey.sections"
+                  :key="sectionIndex"
+                >
+                  <template v-if="section.type === 'street_network' && section.mode === 'walking'">
+                    <div class="detail-section walking-section">
+                      <div class="detail-icon walking">
+                        <img src="@/assets/img/boxes/walk.svg" alt="walking" />
+                      </div>
+                      <div class="detail-content">
+                        <div class="detail-title">Marche à pied - {{ formatDuration(section.duration) }}</div>
+                        <div class="detail-info" v-if="section.path && section.path.length > 0">
+                          {{ section.path[0].instruction }}
+                        </div>
+                        <div class="detail-time">
+                          {{ formatTime(section.departure_date_time) }} — {{ formatTime(section.arrival_date_time) }}
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+
+                  <template v-else-if="section.type === 'public_transport'">
+                    <div class="detail-section transport-section">
+                      <div class="detail-icon" :class="getTransportClass(section)">
+                        {{ getTransportIcon(section) }}
+                      </div>
+                      <div class="detail-content">
+                        <div class="detail-title">
+                          {{ section.display_informations?.commercial_mode || 'Transport' }}
+                          {{ section.display_informations?.code || '' }} - {{ formatDuration(section.duration) }}
+                        </div>
+                        <div class="detail-info">
+                          De {{ section.from?.name || 'Départ' }} à {{ section.to?.name || 'Arrivée' }}
+                        </div>
+                        <div class="detail-time">
+                          {{ formatTime(section.departure_date_time) }} — {{ formatTime(section.arrival_date_time) }}
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -104,6 +199,8 @@
 </template>
 
 <script>
+import { transform } from 'ol/proj';
+
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -140,6 +237,9 @@ export default {
       fromCoordinates: null,
       toCoordinates: null,
       selectedWaypoint: null,
+      journeys: [],
+      selectedJourney: null,
+      apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
     };
   },
   computed: {
@@ -152,14 +252,13 @@ export default {
           return {
             id: waypoint.document_id,
             title: locale.title,
-            coordinates: geom.coordinates,
+            coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
           };
         });
     },
   },
   methods: {
     async searchAddressPropositions() {
-      console.log(this.document);
       if (this.fromAddress?.length >= 3) {
         const center = this.$refs.mapView?.view?.getCenter();
         const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
@@ -188,7 +287,6 @@ export default {
 
     formatProposition(proposition) {
       const props = proposition.properties;
-      console.log(props);
       let formattedAddress = props.name || '';
 
       if (props.housenumber) {
@@ -257,9 +355,14 @@ export default {
       console.log('Reverse address');
     },
 
-    calculateRoute() {
+    async calculateRoute() {
       if (!this.selectedWaypoint) {
         alert('Veuillez sélectionner un point de destination');
+        return;
+      }
+
+      if (!this.fromCoordinates) {
+        alert('Veuillez entrer une adresse de départ valide');
         return;
       }
 
@@ -273,19 +376,104 @@ export default {
         preference: this.timePreference,
       });
 
-      this.$emit('calculate-route', {
-        from: {
-          address: this.fromAddress,
-          coordinates: this.fromCoordinates,
-        },
-        to: {
-          address: this.selectedWaypoint.title,
-          coordinates: this.selectedWaypoint.coordinates,
-        },
-        date: this.selectedDate,
-        time: this.selectedTime,
-        preference: this.timePreference,
-      });
+      // Formater les données pour l'API Navitia
+      const fromCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
+      const toCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
+
+      // Formater la date et l'heure pour Navitia (YYYYMMDDTHHMMSS)
+      const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
+      const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+      try {
+        const response = await fetch(
+          `https://api.navitia.io/v1/journeys?from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`,
+          {
+            headers: {
+              Authorization: `${this.apiKey}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        console.log(
+          `https://api.navitia.io/v1/journeys?from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`
+        );
+
+        const data = await response.json();
+        this.journeys = data.journeys.slice(0, 3); // Prendre les 3 premiers itinéraires
+
+        this.$emit('calculate-route', {
+          from: {
+            address: this.fromAddress,
+            coordinates: this.fromCoordinates,
+          },
+          to: {
+            address: this.selectedWaypoint.title,
+            coordinates: this.selectedWaypoint.coordinates,
+          },
+          date: this.selectedDate,
+          time: this.selectedTime,
+          preference: this.timePreference,
+          journeys: this.journeys,
+        });
+      } catch (error) {
+        console.error('Erreur lors de la récupération des itinéraires:', error);
+        alert('Impossible de récupérer les itinéraires. Veuillez réessayer plus tard.');
+      }
+    },
+
+    formatTime(dateTimeString) {
+      if (!dateTimeString) return '';
+      // Format: YYYYMMDDTHHMMSS -> HH:MM
+      return dateTimeString.substring(9, 11) + ':' + dateTimeString.substring(11, 13);
+    },
+
+    formatDuration(seconds) {
+      if (!seconds && seconds !== 0) return '';
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+
+      if (hours > 0) {
+        return `${hours} h ${minutes > 0 ? minutes + ' min' : ''}`;
+      }
+      return `${minutes} min`;
+    },
+
+    getTransportIcon(section) {
+      if (!section.display_informations) return '';
+
+      const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
+      if (mode.includes('bus')) return 'B';
+      if (mode.includes('tram')) return 'T';
+      if (mode.includes('métro') || mode.includes('metro')) return 'M';
+      if (mode.includes('train')) return 'R';
+      if (mode.includes('car')) return 'C';
+
+      // Code de la ligne si disponible
+      return section.display_informations.code || '';
+    },
+
+    getTransportClass(section) {
+      if (!section.display_informations) return '';
+
+      const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
+      if (mode.includes('bus')) return 'bus';
+      if (mode.includes('tram')) return 'tram';
+      if (mode.includes('métro') || mode.includes('metro')) return 'metro';
+      if (mode.includes('train')) return 'train';
+      if (mode.includes('car')) return 'car';
+
+      return 'default-transport';
+    },
+
+    showJourneyDetails(journey) {
+      if (this.selectedJourney === journey) {
+        this.selectedJourney = null;
+      } else {
+        this.selectedJourney = journey;
+      }
     },
   },
 };
