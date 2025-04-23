@@ -31,19 +31,20 @@
                   </div>
                 </div>
                 <button class="geolocalisation" @click="useCurrentLocation">
-                  <img class="geolocalisation-img" src="@/assets/img/boxes/toggle_plus.svg" />
+                  <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
                 </button>
               </div>
               <div class="to-container">
                 <div class="to-text">À</div>
-                <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint">
-                  <option value="test1">test1</option>
-                  <option value="test2">test2</option>
+                <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
+                  <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
+                    {{ waypoint.title }}
+                  </option>
                 </select>
               </div>
             </div>
             <button class="reverse-from-to" @click="reverseFromTo">
-              <img class="" src="@/assets/img/boxes/toggle_plus.svg" />
+              <img class="" src="@/assets/img/boxes/swap.svg" />
             </button>
           </div>
 
@@ -53,22 +54,7 @@
               <div class="input-container">
                 <input type="date" id="date-input" class="date-input" v-model="selectedDate" />
                 <div class="calendar-icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
+                  <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" />
                 </div>
               </div>
             </div>
@@ -88,14 +74,14 @@
               <div class="input-container">
                 <input type="time" id="hour-input" class="hour-input" v-model="selectedTime" />
                 <div class="calendar-icon">
-                  <img class="" src="@/assets/img/boxes/toggle_plus.svg" />
+                  <img class="" src="@/assets/img/boxes/time.svg" />
                 </div>
               </div>
             </div>
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
-            <img class="" src="@/assets/img/boxes/toggle_plus.svg" />
+            <img class="" src="@/assets/img/boxes/itineraire.svg" />
             <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon itinéraire') }}</p>
           </button>
         </div>
@@ -153,10 +139,27 @@ export default {
       timePreference: 'leave-after',
       fromCoordinates: null,
       toCoordinates: null,
+      selectedWaypoint: null,
     };
+  },
+  computed: {
+    accessWaypoints() {
+      return this.document
+        .filter((doc) => doc.type === 'w' && doc.waypoint_type === 'access')
+        .map((waypoint) => {
+          const locale = waypoint.locales.find((l) => l.lang === this.$language.current) || waypoint.locales[0];
+          const geom = JSON.parse(waypoint.geometry.geom);
+          return {
+            id: waypoint.document_id,
+            title: locale.title,
+            coordinates: geom.coordinates,
+          };
+        });
+    },
   },
   methods: {
     async searchAddressPropositions() {
+      console.log(this.document);
       if (this.fromAddress?.length >= 3) {
         const center = this.$refs.mapView?.view?.getCenter();
         const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
@@ -255,9 +258,16 @@ export default {
     },
 
     calculateRoute() {
+      if (!this.selectedWaypoint) {
+        alert('Veuillez sélectionner un point de destination');
+        return;
+      }
+
       console.log("Calcul d'itinéraire avec les données:", {
         fromAddress: this.fromAddress,
         fromCoordinates: this.fromCoordinates,
+        toAddress: this.selectedWaypoint.title,
+        toCoordinates: this.selectedWaypoint.coordinates,
         date: this.selectedDate,
         time: this.selectedTime,
         preference: this.timePreference,
@@ -267,6 +277,10 @@ export default {
         from: {
           address: this.fromAddress,
           coordinates: this.fromCoordinates,
+        },
+        to: {
+          address: this.selectedWaypoint.title,
+          coordinates: this.selectedWaypoint.coordinates,
         },
         date: this.selectedDate,
         time: this.selectedTime,
@@ -312,6 +326,7 @@ export default {
 
           .from-to-container {
             width: 80%;
+            position: relative;
             .from-container {
               display: flex;
               border: 1px solid lightgray;
@@ -331,7 +346,7 @@ export default {
                   margin-left: 10px;
                   border: none;
                   outline: none;
-                  width: 95%;
+                  width: 88%;
                   text-overflow: ellipsis;
                   white-space: nowrap;
                   overflow: hidden;
@@ -341,6 +356,7 @@ export default {
                   background-color: white;
                   border: 1px solid lightgrey;
                   z-index: 2;
+                  margin-top: 5px;
                   ul {
                     li {
                       padding: 6px;
@@ -351,12 +367,18 @@ export default {
               }
               .geolocalisation {
                 border-radius: 15px;
-                margin-left: auto;
                 border: 1px solid lightgray;
                 background-color: white;
+                height: 25px;
+                position: absolute;
+                width: 29px;
+                right: 0;
+                margin-right: 5px;
+                top: 4px;
                 .geolocalisation-img {
-                  height: 16px;
-                  width: 16px;
+                  height: 18px;
+                  width: 18px;
+                  display: flex;
                 }
               }
             }
@@ -390,6 +412,10 @@ export default {
             margin-right: 15px;
             border: 1px solid lightgray;
             background-color: white;
+            img {
+              display: flex;
+              margin: auto;
+            }
           }
         }
 
@@ -431,6 +457,7 @@ export default {
                 font-size: 16px;
                 color: #333;
                 background-color: white;
+                margin-right: 7px;
 
                 &::-webkit-calendar-picker-indicator {
                   opacity: 0;
@@ -444,7 +471,7 @@ export default {
               .hour-input {
                 flex: 1;
                 padding: 12px 12px;
-                max-width: 70px;
+                max-width: 76px;
                 border: none;
                 outline: none;
                 font-size: 16px;

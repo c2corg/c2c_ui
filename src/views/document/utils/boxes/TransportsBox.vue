@@ -20,7 +20,7 @@
         :class="{ 'is-active': activeSection === 'planATrip' }"
         @click="setActiveSection('planATrip')"
       >
-        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        <img class="public-transports-bus" src="@/assets/img/boxes/itineraire.svg" />
         {{ $gettext('Planifier un trajet de transport en commun') }}
       </button>
     </div>
