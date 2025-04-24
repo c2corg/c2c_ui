@@ -86,8 +86,6 @@
           </button>
 
           <div class="itineraries-container" v-if="journeys.length > 0">
-            <h4 class="itineraries-title">Itinéraires proposés</h4>
-
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
               <div class="itinerary-header">
                 <div class="itinerary-time">
@@ -193,6 +191,7 @@
           !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
         "
         @has-protection-area="$emit('has-protection-area')"
+        @waypoint-clicked="handleWaypointClicked"
       />
     </div>
   </div>
@@ -258,6 +257,7 @@ export default {
     },
   },
   methods: {
+    /** Address auto-complete */
     async searchAddressPropositions() {
       if (this.fromAddress?.length >= 3) {
         const center = this.$refs.mapView?.view?.getCenter();
@@ -278,6 +278,7 @@ export default {
       }
     },
 
+    /** Takes selected address proposition */
     selectAddress(proposition) {
       this.selectedAddress = proposition;
       this.fromAddress = this.formatProposition(proposition);
@@ -285,6 +286,7 @@ export default {
       this.showAddressPropositions = false;
     },
 
+    /** Format address proposition rendered by Photon */
     formatProposition(proposition) {
       const props = proposition.properties;
       let formattedAddress = props.name || '';
@@ -312,13 +314,14 @@ export default {
       return formattedAddress;
     },
 
+    /** Short delay to allow selection before hiding suggestions */
     handleBlur() {
-      // Short delay to allow selection before hiding suggestions
       setTimeout(() => {
         this.showAddressPropositions = false;
       }, 200);
     },
 
+    /** Takes current location and use reverse query with Photon to get location name */
     useCurrentLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -351,10 +354,12 @@ export default {
       }
     },
 
+    /** Reserve address "From" and "To" */
     reverseFromTo() {
       console.log('Reverse address');
     },
 
+    /** Call Navitia with parameters (selected waypoint, from address, to address, date, time, preference) */
     async calculateRoute() {
       if (!this.selectedWaypoint) {
         alert('Veuillez sélectionner un point de destination');
@@ -402,7 +407,7 @@ export default {
         );
 
         const data = await response.json();
-        this.journeys = data.journeys.slice(0, 3); // Prendre les 3 premiers itinéraires
+        this.journeys = data.journeys.slice(0, 3); // Prend les 3 premiers itinéraires
 
         this.$emit('calculate-route', {
           from: {
@@ -419,17 +424,18 @@ export default {
           journeys: this.journeys,
         });
       } catch (error) {
-        console.error('Erreur lors de la récupération des itinéraires:', error);
-        alert('Impossible de récupérer les itinéraires. Veuillez réessayer plus tard.');
+        console.error('Error retrieving routes:', error);
+        alert('Unable to get Navitia directions. Please try again later.');
       }
     },
 
+    /** Format time for displaying : YYYYMMDDTHHMMSS -> HH:MM */
     formatTime(dateTimeString) {
       if (!dateTimeString) return '';
-      // Format: YYYYMMDDTHHMMSS -> HH:MM
       return dateTimeString.substring(9, 11) + ':' + dateTimeString.substring(11, 13);
     },
 
+    /** Format duration for displaying : h / min */
     formatDuration(seconds) {
       if (!seconds && seconds !== 0) return '';
       const hours = Math.floor(seconds / 3600);
@@ -441,11 +447,12 @@ export default {
       return `${minutes} min`;
     },
 
+    /** Gets icons according to the nature of the transport */
     getTransportIcon(section) {
       if (!section.display_informations) return '';
 
       const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
-      if (mode.includes('bus')) return 'B';
+      if (mode.includes('bus')) return 'Bus';
       if (mode.includes('tram')) return 'T';
       if (mode.includes('métro') || mode.includes('metro')) return 'M';
       if (mode.includes('train')) return 'R';
@@ -455,6 +462,7 @@ export default {
       return section.display_informations.code || '';
     },
 
+    /** Manage different spellings of transports */
     getTransportClass(section) {
       if (!section.display_informations) return '';
 
@@ -468,11 +476,20 @@ export default {
       return 'default-transport';
     },
 
+    /** Get the selected journey of the list */
     showJourneyDetails(journey) {
       if (this.selectedJourney === journey) {
         this.selectedJourney = null;
       } else {
         this.selectedJourney = journey;
+      }
+    },
+
+    /** Get the selected access waypoint on the map */
+    handleWaypointClicked(document) {
+      const waypoint = this.accessWaypoints.find((w) => w.id === document.document_id);
+      if (waypoint) {
+        this.selectedWaypoint = waypoint;
       }
     },
   },

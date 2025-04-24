@@ -1094,6 +1094,7 @@ export default {
       if (feature) {
         const document = feature.get('document');
         if (document && document.type === 'z') {
+          this.$emit('waypoint-clicked', document);
           return;
         }
         if (document && document.type === 's') {
