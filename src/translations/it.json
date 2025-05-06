@@ -834,6 +834,9 @@
     "at least one user required": {
       "API message": "Selezionare al meno un itinerario"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "L'arrampicata indoor non può essere collegata a un percorso"
+    },
     "auth-denied": {
       "tracking": "L'autorizzazione a connettersi al servizio è stata rifiutata dall'utente."
     },

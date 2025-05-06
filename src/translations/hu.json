@@ -695,6 +695,9 @@
     "at least one user required": {
       "API message": "Legalább egy útvonal megadása szükséges"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "A beltéri mászás nem hozható összefüggésbe egy útvonallal"
+    },
     "author": "Szerző",
     "author_status": "Az eseményben betöltött szerep",
     "autonomous": {

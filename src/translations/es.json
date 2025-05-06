@@ -601,6 +601,9 @@
     "at least one user required": {
       "API message": "al menos un usario requerido"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "La escalada en interiores no puede vincularse a una ruta"
+    },
     "author": "Autor",
     "author_status": "Autor",
     "autonomous": {

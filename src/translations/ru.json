@@ -527,6 +527,9 @@
     "at least one user required": {
       "API message": "требуется по крайней мере одного пользователя"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Залы для скалолазания не могут быть связаны с маршрутом"
+    },
     "author": "автор",
     "author_status": "Вовлеченность в ситуацию",
     "autonomous": {

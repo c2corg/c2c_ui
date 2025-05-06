@@ -283,6 +283,9 @@
     "at least one user required": {
       "API message": "Select at least one user"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Climbing indoor cannot be linked to a route"
+    },
     "auth-denied": {
       "tracking": "Connection denied by user"
     },

@@ -862,6 +862,9 @@
     "at least one user required": {
       "API message": "Izberite vsaj en uporabnik"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Plezanje v zaprtih prostorih ni mogoče povezati z potjo"
+    },
     "auth-denied": {
       "tracking": "Dovoljenje za povezavo s storitvijo je bilo zavrnjeno"
     },

@@ -141,6 +141,9 @@
       "article_categories": "elkartea"
     },
     "associations": "Elkarteak",
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Kanpoan igotzea ezin da erlazio bat egitea biderik ez"
+    },
     "author": "egilea",
     "avalanche_forecaster": {
       "user_categories": "elurjausi_iragarpena"

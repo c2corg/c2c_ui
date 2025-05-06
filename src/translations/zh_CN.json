@@ -841,6 +841,9 @@
     "at least one user required": {
       "API message": "选择至少一位用户"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "室内攀岩无法链接到路线"
+    },
     "auth-denied": {
       "tracking": "拒绝授权"
     },

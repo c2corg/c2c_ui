@@ -830,6 +830,9 @@
     "at least one user required": {
       "API message": "Sélectionnez au moins un itinéraire"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "Les SAE ne peuvent pas être reliées à un itinéraire"
+    },
     "auth-denied": {
       "tracking": "L'autorisation de connexion au service a été refusée par l'utilisateur."
     },

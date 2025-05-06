@@ -221,6 +221,7 @@ export default {
       // $gettext('Shorter than minimum length 1', 'API message');
       // $gettext('at least one route required', 'API message');
       // $gettext('at least one user required', 'API message');
+      // $gettext('climbing indoor waypoint cannot be linked to a route', 'API message');
       // $gettext('This field must be a valid ISBN.', 'API message');
 
       if (fieldsWithError.length !== 0) {

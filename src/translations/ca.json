@@ -691,6 +691,9 @@
     "at least one user required": {
       "API message": "Seleccioneu almenys un itinerari"
     },
+    "climbing indoor waypoint cannot be linked to a route": {
+      "API message": "L'escalada en interiores no es pot vincular a una ruta"
+    },
     "author": "autor",
     "author_status": "Autor",
     "autonomous": {
