@@ -1064,8 +1064,7 @@ export default {
         resultFeature = feature;
         return true;
       });
-
-      this.setHighlightedFeature(resultFeature);
+      this.setHighlightedFeature(resultFeature); ///////////
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
     },
 
@@ -1094,6 +1093,13 @@ export default {
 
       if (feature) {
         const document = feature.get('document');
+        if (document && document.type === 'z') {
+          return;
+        }
+        if (document && document.type === 's') {
+          this.$emit('stop-clicked', document.document_id);
+          return;
+        }
         if (document) {
           if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
             return;
@@ -1255,6 +1261,75 @@ export default {
         ol.proj.get('EPSG:4326')
       );
       this.editMapLink = `https://www.openstreetmap.org/#map=13/${coords[1]}/${coords[0]}`;
+    },
+
+    highlightStop(stopId) {
+      this.resetStopStyles();
+      const stopFeature = this.findStopPoint(stopId);
+
+      if (!stopFeature) {
+        console.warn(`Stop with ID ${stopId} not found.`);
+        return;
+      }
+
+      const title = stopFeature.get('document').stoparea_name;
+      stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
+    },
+
+    goAndZoomOnStop(stopId) {
+      const stopFeature = this.findStopPoint(stopId);
+
+      if (!stopFeature) {
+        console.warn(`Stop with ID ${stopId} not found.`);
+        return;
+      }
+      const geometry = stopFeature.getGeometry();
+      if (geometry) {
+        const coordinate = geometry.getCoordinates();
+
+        const view = this.map.getView();
+        view.cancelAnimations();
+
+        view.animate({
+          center: coordinate,
+          zoom: Math.max(view.getZoom(), 15),
+          duration: 300,
+        });
+      }
+    },
+
+    resetStopStyles() {
+      const documentsSource = this.documentsLayer.getSource();
+      const waypointsSource = this.waypointsLayer.getSource();
+
+      documentsSource.forEachFeature((feature) => {
+        if (feature.values_.document.type !== 'w' && feature.values_.document.type !== 'z') {
+          feature.setStyle(feature.get('normalStyle'));
+        }
+      });
+
+      waypointsSource.forEachFeature((feature) => {
+        feature.setStyle(feature.get('normalStyle'));
+      });
+    },
+
+    findStopPoint(stopId) {
+      const documentsSource = this.documentsLayer.getSource();
+      const documentFeature = documentsSource.getFeatureById(stopId);
+
+      if (documentFeature) {
+        return documentFeature;
+      }
+
+      const waypointsSource = this.waypointsLayer.getSource();
+      const waypointFeature = waypointsSource.getFeatureById(stopId);
+
+      if (waypointFeature) {
+        return waypointFeature;
+      }
+
+      console.warn(`Stop with ID ${stopId} not found.`);
+      return null;
     },
   },
 };
