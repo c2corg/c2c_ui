@@ -90,89 +90,138 @@
               <div class="itinerary-header">
                 <div class="itinerary-time">
                   {{ formatTime(journey.departure_date_time) }} — {{ formatTime(journey.arrival_date_time) }}
-                  <span class="journey-duration">{{ formatDuration(journey.duration) }}</span>
                 </div>
-                <div class="itinerary-transfers">
-                  <span v-if="journey.nb_transfers === 0">Direct</span>
-                  <span v-else>{{ journey.nb_transfers }} correspondance{{ journey.nb_transfers > 1 ? 's' : '' }}</span>
-                </div>
-              </div>
 
-              <div class="itinerary-path">
-                <div class="journey-steps">
-                  <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex" class="step-wrapper">
-                    <div
-                      v-if="section.type === 'public_transport' || section.type === 'street_network'"
-                      class="journey-step"
-                    >
+                <div class="itinerary-path">
+                  <div class="journey-steps">
+                    <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex" class="step-wrapper">
                       <div
-                        v-if="section.type === 'public_transport'"
-                        class="transport-icon"
-                        :class="getTransportClass(section)"
+                        v-if="section.type === 'public_transport' || section.type === 'street_network'"
+                        class="journey-step"
                       >
-                        {{ getTransportIcon(section) }}
+                        <div
+                          v-if="section.type === 'public_transport'"
+                          class="transport-icon"
+                          :class="getTransportClass(section)"
+                        >
+                          <img :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)" alt="walking" />
+                        </div>
+                        <div
+                          v-else-if="section.type === 'street_network' && section.mode === 'walking'"
+                          class="transport-icon walking"
+                        >
+                          <img src="@/assets/img/boxes/walk.svg" alt="walking" />
+                        </div>
                       </div>
                       <div
-                        v-else-if="section.type === 'street_network' && section.mode === 'walking'"
-                        class="transport-icon walking"
+                        v-if="sectionIndex < journey.sections.length - 1 && section.type !== 'waiting'"
+                        class="connector"
                       >
-                        <img src="@/assets/img/boxes/walk.svg" alt="walking" />
+                        <img src="@/assets/img/boxes/chevron_right.svg" alt="chevron" />
                       </div>
                     </div>
-                    <div
-                      v-if="sectionIndex < journey.sections.length - 1 && section.type !== 'waiting'"
-                      class="connector"
-                    ></div>
                   </div>
                 </div>
+
+                <div class="itinerary-details-button">
+                  <button class="button is-info is-light" @click="showJourneyDetails(journey)">Voir le détail</button>
+                </div>
               </div>
 
-              <div class="itinerary-details-button">
-                <button class="button is-info is-light" @click="showJourneyDetails(journey)">Voir le détail</button>
-              </div>
-
+              <!-- Remplacer la partie affichage des détails de l'itinéraire -->
               <div class="journey-details" v-if="selectedJourney === journey">
-                <div
-                  class="journey-details-section"
-                  v-for="(section, sectionIndex) in journey.sections"
-                  :key="sectionIndex"
-                >
-                  <template v-if="section.type === 'street_network' && section.mode === 'walking'">
-                    <div class="detail-section walking-section">
-                      <div class="detail-icon walking">
+                <div class="journey-timeline">
+                  <!-- Première heure -->
+                  <div class="timeline-item">
+                    <div class="timeline-time">{{ formatTime(journey.departure_date_time) }}</div>
+                    <div class="timeline-icon">
+                      <i class="location-dot"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-address">{{ fromAddress }}</div>
+                    </div>
+                  </div>
+
+                  <!-- Affichage des sections de l'itinéraire -->
+                  <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex">
+                    <!-- Section marche à pied -->
+                    <div
+                      v-if="section.type === 'street_network' && section.mode === 'walking'"
+                      class="timeline-item walking"
+                    >
+                      <div class="timeline-time"></div>
+                      <div class="timeline-icon walking">
                         <img src="@/assets/img/boxes/walk.svg" alt="walking" />
                       </div>
-                      <div class="detail-content">
-                        <div class="detail-title">Marche à pied - {{ formatDuration(section.duration) }}</div>
-                        <div class="detail-info" v-if="section.path && section.path.length > 0">
-                          {{ section.path[0].instruction }}
-                        </div>
-                        <div class="detail-time">
-                          {{ formatTime(section.departure_date_time) }} — {{ formatTime(section.arrival_date_time) }}
+                      <div class="timeline-content">
+                        <div class="timeline-walking-info">
+                          {{ Math.round(section.distance) }} mètres, {{ formatDuration(section.duration) }}
                         </div>
                       </div>
                     </div>
-                  </template>
 
-                  <template v-else-if="section.type === 'public_transport'">
-                    <div class="detail-section transport-section">
-                      <div class="detail-icon" :class="getTransportClass(section)">
-                        {{ getTransportIcon(section) }}
+                    <!-- Section transport en commun -->
+                    <div v-else-if="section.type === 'public_transport'">
+                      <!-- Arrêt de départ -->
+                      <div class="timeline-item">
+                        <div class="timeline-time">{{ formatTime(section.departure_date_time) }}</div>
+                        <div class="timeline-icon stop">
+                          <i class="stop-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                          <div class="timeline-stop-name">Arrêt : {{ section.from?.name || 'Départ' }}</div>
+                        </div>
                       </div>
-                      <div class="detail-content">
-                        <div class="detail-title">
-                          {{ section.display_informations?.commercial_mode || 'Transport' }}
-                          {{ section.display_informations?.code || '' }} - {{ formatDuration(section.duration) }}
+
+                      <!-- Ligne de transport -->
+                      <div class="timeline-item transport" :class="getTransportClass(section)">
+                        <div class="timeline-time"></div>
+                        <div class="timeline-icon transport" :class="getTransportClass(section)">
+                          <div class="transport-code">{{ section.display_informations?.code || '' }}</div>
                         </div>
-                        <div class="detail-info">
-                          De {{ section.from?.name || 'Départ' }} à {{ section.to?.name || 'Arrivée' }}
+                        <div class="timeline-content">
+                          <div class="timeline-line">Ligne : {{ section.display_informations?.code || '' }}</div>
+                          <div class="timeline-direction">
+                            Direction : {{ section.display_informations?.direction || '' }}
+                          </div>
+                          <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
+                            <img
+                              v-if="section.display_informations.equipments.includes('has_bike_accepted')"
+                              src="@/assets/img/boxes/velo.svg"
+                              alt="bike"
+                            />
+                            <img
+                              v-if="section.display_informations.equipments.includes('has_wheelchair')"
+                              src="@/assets/img/boxes/handi_accessible.svg"
+                              alt="wheelchair"
+                            />
+                          </div>
                         </div>
-                        <div class="detail-time">
-                          {{ formatTime(section.departure_date_time) }} — {{ formatTime(section.arrival_date_time) }}
+                      </div>
+
+                      <!-- Arrêt d'arrivée -->
+                      <div class="timeline-item">
+                        <div class="timeline-time">{{ formatTime(section.arrival_date_time) }}</div>
+                        <div class="timeline-icon stop">
+                          <i class="stop-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                          <div class="timeline-stop-name">Arrêt : {{ section.to?.name || 'Arrivée' }}</div>
                         </div>
                       </div>
                     </div>
-                  </template>
+                  </div>
+
+                  <!-- Heure et adresse d'arrivée -->
+                  <div class="timeline-item destination">
+                    <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
+                    <div class="timeline-icon">
+                      <i class="location-dot"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -452,11 +501,11 @@ export default {
       if (!section.display_informations) return '';
 
       const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
-      if (mode.includes('bus')) return 'Bus';
-      if (mode.includes('tram')) return 'T';
-      if (mode.includes('métro') || mode.includes('metro')) return 'M';
-      if (mode.includes('train')) return 'R';
-      if (mode.includes('car')) return 'C';
+      if (mode.includes('bus')) return 'bus';
+      if (mode.includes('tram')) return 'tram';
+      if (mode.includes('métro') || mode.includes('metro')) return 'Metro';
+      if (mode.includes('train')) return 'train';
+      if (mode.includes('car')) return 'car';
 
       // Code de la ligne si disponible
       return section.display_informations.code || '';
@@ -491,6 +540,30 @@ export default {
       if (waypoint) {
         this.selectedWaypoint = waypoint;
       }
+    },
+    // Méthode pour calculer la distance en mètres
+    getDistance(section) {
+      if (section.distance) {
+        return Math.round(section.distance);
+      }
+      return section.path && section.path.length > 0
+        ? Math.round(section.path.reduce((acc, step) => acc + (step.length || 0), 0))
+        : 0;
+    },
+
+    // Méthode pour obtenir les icônes d'accessibilité
+    hasAccessibility(section) {
+      if (!section.display_informations || !section.display_informations.equipments) {
+        return {
+          bike: false,
+          wheelchair: false,
+        };
+      }
+
+      return {
+        bike: section.display_informations.equipments.includes('has_bike_accepted'),
+        wheelchair: section.display_informations.equipments.includes('has_wheelchair'),
+      };
     },
   },
 };
@@ -704,6 +777,269 @@ export default {
             width: 107px;
           }
         }
+
+        // itinerary.scss
+        // Style principal pour l'itinéraire
+
+        .itinerary {
+          border-radius: 8px;
+          overflow: hidden;
+          border: 1px solid #e0e0e0;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          margin-bottom: 16px;
+          background-color: #ffffff;
+        }
+
+        // En-tête résumé de l'itinéraire
+        .itinerary-summary {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          background-color: #f7f9f7;
+          border-left: 4px solid #4caf50;
+          justify-content: space-between;
+
+          .travel-time {
+            font-weight: 600;
+            font-size: 16px;
+          }
+
+          .duration {
+            font-weight: 600;
+            color: #333333;
+          }
+
+          .travel-icons {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+
+            .icon {
+              margin: 0 4px;
+            }
+          }
+        }
+
+        // Bouton "Voir le détail"
+        .itinerary-details-button {
+          text-align: left;
+
+          button {
+            background-color: transparent;
+            color: #3273dc;
+            border: none;
+            padding: 0;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+
+            &:hover {
+              color: #2366d1;
+            }
+          }
+        }
+
+        // Détails du trajet
+        .journey-details {
+          font-family: Arial, sans-serif;
+          max-width: 650px;
+          margin: 0 auto;
+          padding: 15px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          background-color: #fff;
+
+          .journey-timeline {
+            position: relative;
+            padding-left: 40px;
+
+            &:before {
+              content: '';
+              position: absolute;
+              top: 30px;
+              bottom: 30px;
+              left: 16px;
+              width: 2px;
+              background-color: #e0e0e0;
+              z-index: 1;
+            }
+
+            .timeline-item {
+              display: flex;
+              align-items: flex-start;
+              margin-bottom: 20px;
+              position: relative;
+
+              &.walking {
+                margin: 10px 0;
+              }
+
+              &.transport {
+                margin: 10px 0;
+
+                &.bus-line-b {
+                  .timeline-icon.transport {
+                    background-color: #4caf50; // Green for B line
+                  }
+                }
+
+                &.bus-line-e {
+                  .timeline-icon.transport {
+                    background-color: #3f51b5; // Blue/purple for E line
+                  }
+                }
+
+                &.bus-line-55 {
+                  .timeline-icon.transport {
+                    background-color: #e91e63; // Pink for 55 line
+                  }
+                }
+              }
+            }
+
+            .timeline-time {
+              width: 60px;
+              font-weight: bold;
+              font-size: 14px;
+              padding-top: 2px;
+            }
+
+            .timeline-icon {
+              position: relative;
+              z-index: 2;
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background-color: #fff;
+              border: 2px solid #757575;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 15px 0 -16px;
+
+              &.stop {
+                border-color: #757575;
+                background-color: #fff;
+                width: 20px;
+                height: 20px;
+              }
+
+              &.walking {
+                border: none;
+                background: none;
+
+                img {
+                  width: 20px;
+                  height: 20px;
+                }
+              }
+
+              &.transport {
+                border: none;
+                color: #fff;
+                width: 32px;
+                height: 32px;
+
+                .transport-code {
+                  font-weight: bold;
+                  font-size: 12px;
+                }
+              }
+
+              i {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+
+                &.location-dot {
+                  background-color: #ff5722;
+                  border-radius: 50%;
+                }
+
+                &.stop-circle {
+                  background-color: #757575;
+                  border-radius: 50%;
+                  width: 8px;
+                  height: 8px;
+                }
+              }
+            }
+
+            .timeline-content {
+              flex: 1;
+              padding-top: 2px;
+
+              .timeline-address {
+                font-weight: bold;
+                font-size: 16px;
+              }
+
+              .timeline-walking-info {
+                font-size: 14px;
+                color: #757575;
+                display: flex;
+                align-items: center;
+              }
+
+              .timeline-stop-name {
+                font-size: 15px;
+              }
+
+              .timeline-line {
+                font-weight: bold;
+                font-size: 15px;
+              }
+
+              .timeline-direction {
+                font-size: 14px;
+                margin-top: 2px;
+              }
+
+              .timeline-accessibility {
+                display: flex;
+                margin-top: 5px;
+
+                img {
+                  width: 20px;
+                  height: 20px;
+                  margin-right: 8px;
+                }
+              }
+            }
+          }
+        }
+
+        // Classes spécifiques pour la coloration des lignes de transport
+        .getTransportClass {
+          &.bus-line-b {
+            background-color: #4caf50;
+            &:before {
+              background-color: #4caf50;
+            }
+          }
+
+          &.bus-line-e {
+            background-color: #3f51b5;
+            &:before {
+              background-color: #3f51b5;
+            }
+          }
+
+          &.bus-line-55 {
+            background-color: #e91e63;
+            &:before {
+              background-color: #e91e63;
+            }
+          }
+        }
+
+        // Style pour le point de départ du topo
+        .timeline-item:last-child {
+          .timeline-icon {
+            border: none;
+            background: none;
+          }
+        }
       }
 
       .plan-trip-search-button {
@@ -716,6 +1052,25 @@ export default {
         .plan-trip-search-button-text {
           font-weight: 600;
           margin-left: 12px;
+        }
+      }
+      .itineraries-container {
+        max-width: 480px;
+        .itinerary-header {
+          border: 1px solid lightgrey;
+          border-radius: 4px;
+          padding: 10px;
+
+          .journey-steps {
+            display: flex;
+            margin-top: 8px;
+
+            .step-wrapper {
+              margin-right: 16px;
+              display: flex;
+              gap: 15px;
+            }
+          }
         }
       }
     }
