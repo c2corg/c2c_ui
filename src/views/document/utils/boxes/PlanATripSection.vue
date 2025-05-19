@@ -96,7 +96,11 @@
                   <div class="journey-steps">
                     <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex" class="step-wrapper">
                       <div
-                        v-if="section.type === 'public_transport' || section.type === 'street_network'"
+                        v-if="
+                          section.type === 'public_transport' ||
+                          section.type === 'transfer' ||
+                          section.type === 'street_network'
+                        "
                         class="journey-step"
                       >
                         <div
@@ -107,7 +111,11 @@
                           <img :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)" alt="walking" />
                         </div>
                         <div
-                          v-else-if="section.type === 'street_network' && section.mode === 'walking'"
+                          v-else-if="
+                            section.type === 'street_network' ||
+                            section.type === 'transfer' ||
+                            section.mode === 'walking'
+                          "
                           class="transport-icon walking"
                         >
                           <img src="@/assets/img/boxes/walk.svg" alt="walking" />
@@ -135,7 +143,7 @@
                   <div class="timeline-item">
                     <div class="timeline-time">{{ formatTime(journey.departure_date_time) }}</div>
                     <div class="timeline-icon">
-                      <i class="location-dot"></i>
+                      <img src="@/assets/img/boxes/start.svg" alt="start" />
                     </div>
                     <div class="timeline-content">
                       <div class="timeline-address">{{ fromAddress }}</div>
@@ -146,7 +154,9 @@
                   <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex">
                     <!-- Section marche à pied -->
                     <div
-                      v-if="section.type === 'street_network' && section.mode === 'walking'"
+                      v-if="
+                        section.type === 'street_network' || section.type === 'transfer' || section.mode === 'walking'
+                      "
                       class="timeline-item walking"
                     >
                       <div class="timeline-time"></div>
@@ -175,10 +185,6 @@
 
                       <!-- Ligne de transport -->
                       <div class="timeline-item transport" :class="getTransportClass(section)">
-                        <div class="timeline-time"></div>
-                        <div class="timeline-icon transport" :class="getTransportClass(section)">
-                          <div class="transport-code">{{ section.display_informations?.code || '' }}</div>
-                        </div>
                         <div class="timeline-content">
                           <div class="timeline-line">Ligne : {{ section.display_informations?.code || '' }}</div>
                           <div class="timeline-direction">
@@ -216,7 +222,7 @@
                   <div class="timeline-item destination">
                     <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
                     <div class="timeline-icon">
-                      <i class="location-dot"></i>
+                      <img src="@/assets/img/boxes/end.svg" alt="end" />
                     </div>
                     <div class="timeline-content">
                       <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
@@ -457,6 +463,7 @@ export default {
 
         const data = await response.json();
         this.journeys = data.journeys.slice(0, 3); // Prend les 3 premiers itinéraires
+        console.log(this.journeys);
 
         this.$emit('calculate-route', {
           from: {
@@ -851,31 +858,25 @@ export default {
 
           .journey-timeline {
             position: relative;
-            padding-left: 40px;
-
-            &:before {
-              content: '';
-              position: absolute;
-              top: 30px;
-              bottom: 30px;
-              left: 16px;
-              width: 2px;
-              background-color: #e0e0e0;
-              z-index: 1;
-            }
 
             .timeline-item {
               display: flex;
-              align-items: flex-start;
-              margin-bottom: 20px;
+              align-items: center;
               position: relative;
 
               &.walking {
-                margin: 10px 0;
+                border-left: 3px dotted lightgray;
+                margin-left: 52px;
+                padding-top: 10px;
+                padding-bottom: 10px;
               }
 
               &.transport {
-                margin: 10px 0;
+                padding-left: 26px;
+                border-left: 3px solid red;
+                margin-left: 52px;
+                padding-top: 10px;
+                padding-bottom: 10px;
 
                 &.bus-line-b {
                   .timeline-icon.transport {
@@ -911,17 +912,17 @@ export default {
               height: 32px;
               border-radius: 50%;
               background-color: #fff;
-              border: 2px solid #757575;
               display: flex;
               align-items: center;
               justify-content: center;
-              margin: 0 15px 0 -16px;
+              margin: 0 15px 0 -22px;
 
               &.stop {
-                border-color: #757575;
                 background-color: #fff;
-                width: 20px;
-                height: 20px;
+                width: 15px;
+                height: 15px;
+                border: 2px solid grey;
+                margin-left: -14px;
               }
 
               &.walking {
@@ -954,13 +955,6 @@ export default {
                 &.location-dot {
                   background-color: #ff5722;
                   border-radius: 50%;
-                }
-
-                &.stop-circle {
-                  background-color: #757575;
-                  border-radius: 50%;
-                  width: 8px;
-                  height: 8px;
                 }
               }
             }
@@ -1066,9 +1060,14 @@ export default {
             margin-top: 8px;
 
             .step-wrapper {
-              margin-right: 16px;
               display: flex;
               gap: 15px;
+
+              .journey-step {
+                .transport-icon {
+                  margin-left: 8px;
+                }
+              }
             }
           }
         }
