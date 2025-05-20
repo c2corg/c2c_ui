@@ -265,10 +265,6 @@ export default {
       type: Array,
       required: true,
     },
-    mapDocuments: {
-      type: Array,
-      required: true,
-    },
     showElevationProfile: {
       type: Boolean,
       default: false,
@@ -309,6 +305,32 @@ export default {
             coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
           };
         });
+    },
+    mapDocuments() {
+      // Commencer avec les documents existants si nécessaire
+      const baseDocuments = this.document ? [this.document] : [];
+
+      // Ajouter les points d'accès
+      const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
+        return {
+          document_id: waypoint.id,
+          type: 'w',
+          waypoint_type: 'access',
+          geometry: {
+            version: 1,
+            geom: JSON.stringify({
+              type: 'Point',
+              coordinates: ol.proj.transform(waypoint.coordinates, 'EPSG:4326', 'EPSG:3857'),
+            }),
+          },
+          locales: [{ title: waypoint.title, lang: this.$language.current }],
+        };
+      });
+
+      // Ajouter les documents d'itinéraire si des itinéraires existent
+      const routeDocuments = this.prepareRouteDocuments();
+
+      return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
     },
   },
   methods: {
@@ -463,6 +485,7 @@ export default {
 
         const data = await response.json();
         this.journeys = data.journeys.slice(0, 3); // Prend les 3 premiers itinéraires
+
         console.log(this.journeys);
 
         this.$emit('calculate-route', {
@@ -532,15 +555,6 @@ export default {
       return 'default-transport';
     },
 
-    /** Get the selected journey of the list */
-    showJourneyDetails(journey) {
-      if (this.selectedJourney === journey) {
-        this.selectedJourney = null;
-      } else {
-        this.selectedJourney = journey;
-      }
-    },
-
     /** Get the selected access waypoint on the map */
     handleWaypointClicked(document) {
       const waypoint = this.accessWaypoints.find((w) => w.id === document.document_id);
@@ -548,7 +562,7 @@ export default {
         this.selectedWaypoint = waypoint;
       }
     },
-    // Méthode pour calculer la distance en mètres
+    // Method for calculating distance in meters
     getDistance(section) {
       if (section.distance) {
         return Math.round(section.distance);
@@ -558,7 +572,7 @@ export default {
         : 0;
     },
 
-    // Méthode pour obtenir les icônes d'accessibilité
+    // Method to get accessibility icons
     hasAccessibility(section) {
       if (!section.display_informations || !section.display_informations.equipments) {
         return {
@@ -571,6 +585,76 @@ export default {
         bike: section.display_informations.equipments.includes('has_bike_accepted'),
         wheelchair: section.display_informations.equipments.includes('has_wheelchair'),
       };
+    },
+
+    prepareRouteDocuments() {
+      // Si aucun itinéraire n'est sélectionné, ne pas afficher de routes sur la carte
+      if (!this.selectedJourney || !this.journeys || this.journeys.length === 0) return [];
+
+      const routeDocuments = [];
+
+      // N'utiliser que l'itinéraire sélectionné
+      const journey = this.selectedJourney;
+
+      // Pour chaque section de l'itinéraire
+      journey.sections.forEach((section, index) => {
+        if (section.geojson) {
+          // Créer un document pour chaque section avec une géométrie
+          const routeDocument = {
+            document_id: `route-section-${index}`,
+            type: 'r', // type route
+            geometry: {
+              version: 1,
+              // Transformer les coordonnées GeoJSON en format compatible
+              geom: JSON.stringify({
+                type: 'Point',
+                coordinates: section.geojson.coordinates[0], // Point de départ comme point principal
+              }),
+              geom_detail: JSON.stringify({
+                type: 'LineString',
+                coordinates: section.geojson.coordinates.map((coord) => {
+                  // Transformer de EPSG:4326 (WGS84) à EPSG:3857 (Web Mercator)
+                  const mercatorCoord = ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857');
+                  return [...mercatorCoord, 0.0, 0.0]; // Ajouter les valeurs z et timestamp comme dans votre exemple
+                }),
+              }),
+            },
+            // Ajouter des métadonnées pour différencier les types de sections
+            properties: {
+              mode: section.mode,
+              type: section.type,
+              duration: section.duration,
+              // Couleur selon le mode de transport
+              color: this.getRouteColor(section),
+            },
+          };
+
+          routeDocuments.push(routeDocument);
+        }
+      });
+
+      return routeDocuments;
+    },
+
+    getRouteColor(section) {
+      if (section.mode === 'walking') return '#3498db'; // Bleu pour la marche
+      if (section.mode === 'public_transport') {
+        const transportType = this.getTransportClass(section);
+        if (transportType === 'bus') return '#e74c3c'; // Rouge pour le bus
+        if (transportType === 'train') return '#2ecc71'; // Vert pour le train
+        if (transportType === 'tram') return '#f39c12'; // Orange pour le tram
+        if (transportType === 'metro') return '#9b59b6'; // Violet pour le métro
+        return '#f1c40f'; // Jaune par défaut
+      }
+      return '#95a5a6'; // Gris par défaut
+    },
+
+    showJourneyDetails(journey) {
+      if (this.selectedJourney === journey) {
+        this.selectedJourney = null;
+      } else {
+        this.selectedJourney = journey;
+      }
     },
   },
 };
