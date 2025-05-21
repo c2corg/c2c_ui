@@ -31,7 +31,7 @@
       :grouped-stops="groupedStops"
       :missing-transport-for-waypoint="missingTransportForWaypoint"
       :map-documents="mapDocuments"
-      :document="document"
+      :document="document.associations.waypoints"
       :selected-stop="selectedStop"
       :selected-stop-group="selectedStopGroup"
       :expanded-stop-groups="expandedStopGroups"
@@ -80,7 +80,7 @@ export default {
     PlanATripSection,
   },
   props: {
-    document: Array,
+    document: Object,
     hasSecondSection: {
       type: Boolean,
       default: true,
@@ -105,11 +105,11 @@ export default {
   },
   computed: {
     accessWaypoints() {
-      if (!this.document || !Array.isArray(this.document)) {
+      if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
         return [];
       }
 
-      const accessPoints = this.document.filter((doc) => doc && doc.waypoint_type === 'access');
+      const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
       const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
 
       accessPointsCopy.forEach((doc) => {

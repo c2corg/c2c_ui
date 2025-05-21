@@ -125,7 +125,7 @@
           <div style="clear: both" />
         </div>
 
-        <transports-box :document="document.associations.waypoints" />
+        <transports-box :document="document" />
 
         <routes-box :document="document" hide-buttons disable-activity-split />
         <images-box :document="document" />
