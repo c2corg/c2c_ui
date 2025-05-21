@@ -173,8 +173,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
 };
 
 export const getDocumentLineStyle = function (title, highlight, properties) {
-  // Si un survol est actif, utiliser un style plus visible
-  if (highlight) {
+  if (highlight && !properties) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: 'red',
@@ -182,20 +181,24 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
       }),
       text: buildTextStyle(title, highlight),
     });
-  }
-  // Si des propriétés avec une couleur sont fournies, utiliser cette couleur
-  else if (properties && properties.color) {
-    console.log(properties.color);
+  } else if (highlight && properties && properties.color) {
+    return new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'red',
+        width: 5,
+        zIndex: 1,
+      }),
+      text: buildTextStyle(properties.name, highlight),
+    });
+  } else if (properties && properties.color) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: properties.color,
-        width: 3,
+        width: 5,
         zIndex: 1,
       }),
     });
-  }
-  // Sinon utiliser le style par défaut (gris/jaune)
-  else {
+  } else {
     return [
       new ol.style.Style({
         stroke: new ol.style.Stroke({

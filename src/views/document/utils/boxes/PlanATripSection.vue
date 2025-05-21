@@ -330,8 +330,6 @@ export default {
     mapDocuments() {
       // Commencer avec les documents existants si nécessaire
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
-      console.log('hep');
-      console.log(this.document);
 
       // Ajouter les points d'accès
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
@@ -614,7 +612,6 @@ export default {
       const journey = this.selectedJourney;
 
       journey.sections.forEach((section, index) => {
-        console.log(this.getRouteColor(section));
         if (section.geojson) {
           const routeDocument = {
             document_id: `route-section-${index}`,
@@ -634,6 +631,7 @@ export default {
               }),
             },
             properties: {
+              name: section.display_informations?.code,
               mode: section.mode,
               type: section.type,
               duration: section.duration,

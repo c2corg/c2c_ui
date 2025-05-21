@@ -856,9 +856,7 @@ export default {
         feature.set('document', document);
         feature.setId(document.document_id);
       }
-      console.log('PIOU PIOU');
       if (document.geometry.geom_detail) {
-        console.log(document.properties);
         this.addFeature(
           source,
           JSON.parse(document.geometry.geom_detail),
