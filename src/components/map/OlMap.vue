@@ -856,13 +856,14 @@ export default {
         feature.set('document', document);
         feature.setId(document.document_id);
       }
-
+      console.log('PIOU PIOU');
       if (document.geometry.geom_detail) {
+        console.log(document.properties);
         this.addFeature(
           source,
           JSON.parse(document.geometry.geom_detail),
-          style ?? getDocumentLineStyle(title, false),
-          style ? null : getDocumentLineStyle(title, true)
+          style ?? getDocumentLineStyle(title, false, document.properties),
+          style ? null : getDocumentLineStyle(title, true, document.properties)
         ).set('document', document);
       }
     },

@@ -310,18 +310,7 @@ export default {
       apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
       calculatedDuration: this.document.calculated_duration,
       noResult: false,
-      transportColors: [
-        '#FF5252',
-        '#7C4DFF',
-        '#00C853',
-        '#FF9800',
-        '#00B0FF',
-        '#EC407A',
-        '#607D8B',
-        '#FFC400',
-        '#00BFA5',
-        '#8D6E63',
-      ],
+      transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
     };
   },
   computed: {
@@ -513,7 +502,7 @@ export default {
         );
 
         const data = await response.json();
-        this.journeys = data.journeys.slice(0, 3); // Prend les 3 premiers itinéraires
+        this.journeys = data.journeys.slice(0, 3);
         this.noResult = false;
 
         console.log(this.journeys);
@@ -568,7 +557,6 @@ export default {
       if (mode.includes('train')) return 'train';
       if (mode.includes('car')) return 'car';
 
-      // Code de la ligne si disponible
       return section.display_informations.code || '';
     },
 
@@ -619,43 +607,36 @@ export default {
     },
 
     prepareRouteDocuments() {
-      // Si aucun itinéraire n'est sélectionné, ne pas afficher de routes sur la carte
       if (!this.selectedJourney || !this.journeys || this.journeys.length === 0) return [];
 
       const routeDocuments = [];
 
-      // N'utiliser que l'itinéraire sélectionné
       const journey = this.selectedJourney;
 
-      // Pour chaque section de l'itinéraire
       journey.sections.forEach((section, index) => {
+        console.log(this.getRouteColor(section));
         if (section.geojson) {
-          // Créer un document pour chaque section avec une géométrie
           const routeDocument = {
             document_id: `route-section-${index}`,
-            type: 'r', // type route
+            type: 'r',
             geometry: {
               version: 1,
-              // Transformer les coordonnées GeoJSON en format compatible
               geom: JSON.stringify({
                 type: 'Point',
-                coordinates: section.geojson.coordinates[0], // Point de départ comme point principal
+                coordinates: section.geojson.coordinates[0],
               }),
               geom_detail: JSON.stringify({
                 type: 'LineString',
                 coordinates: section.geojson.coordinates.map((coord) => {
-                  // Transformer de EPSG:4326 (WGS84) à EPSG:3857 (Web Mercator)
                   const mercatorCoord = ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857');
-                  return [...mercatorCoord, 0.0, 0.0]; // Ajouter les valeurs z et timestamp comme dans votre exemple
+                  return [...mercatorCoord, 0.0, 0.0];
                 }),
               }),
             },
-            // Ajouter des métadonnées pour différencier les types de sections
             properties: {
               mode: section.mode,
               type: section.type,
               duration: section.duration,
-              // Couleur selon le mode de transport
               color: this.getRouteColor(section),
             },
           };
@@ -668,14 +649,12 @@ export default {
     },
 
     getRouteColor(section) {
-      if (section.mode === 'walking') return '#3498db'; // Bleu pour la marche
-      if (section.mode === 'public_transport') {
-        // On utilise l'index de la section pour déterminer la couleur
-        // pour assurer une coloration séquentielle des transports
+      if (section.mode === 'walking') return 'blue';
+      if (section.type === 'public_transport') {
         const colorIndex = this.getTransportSectionIndex(section);
         return this.transportColors[colorIndex % this.transportColors.length];
       }
-      return '#95a5a6'; // Gris par défaut
+      return 'gray';
     },
 
     showJourneyDetails(journey) {
@@ -997,34 +976,34 @@ export default {
               position: relative;
 
               &.transport-color-0 {
-                border-left: 3px solid #ff5252;
+                border-left: 3px solid pink;
               }
               &.transport-color-1 {
-                border-left: 3px solid #7c4dff;
+                border-left: 3px solid orange;
               }
               &.transport-color-2 {
-                border-left: 3px solid #00c853;
+                border-left: 3px solid royalblue;
               }
               &.transport-color-3 {
-                border-left: 3px solid #ff9800;
+                border-left: 3px solid purple;
               }
               &.transport-color-4 {
-                border-left: 3px solid #00b0ff;
+                border-left: 3px solid green;
               }
               &.transport-color-5 {
-                border-left: 3px solid #ec407a;
+                border-left: 3px solid yellow;
               }
               &.transport-color-6 {
-                border-left: 3px solid #607d8b;
+                border-left: 3px solid gray;
               }
               &.transport-color-7 {
-                border-left: 3px solid #ffc400;
+                border-left: 3px solid salmon;
               }
               &.transport-color-8 {
-                border-left: 3px solid #00bfa5;
+                border-left: 3px solid teal;
               }
               &.transport-color-9 {
-                border-left: 3px solid #8d6e63;
+                border-left: 3px solid brown;
               }
 
               &.walking {
