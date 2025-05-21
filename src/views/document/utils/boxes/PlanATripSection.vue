@@ -43,9 +43,6 @@
                 </select>
               </div>
             </div>
-            <button class="reverse-from-to" @click="reverseFromTo">
-              <img class="" src="@/assets/img/boxes/swap.svg" />
-            </button>
           </div>
 
           <div class="select-date-container">
@@ -82,8 +79,29 @@
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" />
-            <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon itinéraire') }}</p>
+            <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon trajet aller') }}</p>
           </button>
+
+          <div class="calculated-duration" v-if="calculatedDuration">
+            <div class="calculated-duration-number">
+              Ce topoguide a une durée théorique estimée à {{ calculatedDuration.toFixed(2) }} jours.
+            </div>
+            <div class="calculated-duration-vigilant">
+              Soyez vigilant à l'heure de départ pour votre trajet retour !
+            </div>
+          </div>
+
+          <div class="no-itineraries-container" v-if="noResult">
+            <div class="no-itineraries">
+              <img class="no-itineraries-img" src="@/assets/img/boxes/transport_not_found.svg" />
+              <div class="no-itineraries-text">
+                <div class="no-itineraries-found">Aucun itinéraire trouvé</div>
+                <div class="no-itineraries-detail">
+                  Il semblerait que votre trajet ne puisse être réalisé à la date et aux horaires indiqués
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="itineraries-container" v-if="journeys.length > 0">
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
@@ -184,7 +202,7 @@
                       </div>
 
                       <!-- Ligne de transport -->
-                      <div class="timeline-item transport" :class="getTransportClass(section)">
+                      <div class="timeline-item transport" :class="getTransportColorClass(section)">
                         <div class="timeline-content">
                           <div class="timeline-line">Ligne : {{ section.display_informations?.code || '' }}</div>
                           <div class="timeline-direction">
@@ -262,7 +280,7 @@ export default {
   name: 'PlanATripSection',
   props: {
     document: {
-      type: Array,
+      type: Object,
       required: true,
     },
     showElevationProfile: {
@@ -290,11 +308,25 @@ export default {
       journeys: [],
       selectedJourney: null,
       apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
+      calculatedDuration: this.document.calculated_duration,
+      noResult: false,
+      transportColors: [
+        '#FF5252',
+        '#7C4DFF',
+        '#00C853',
+        '#FF9800',
+        '#00B0FF',
+        '#EC407A',
+        '#607D8B',
+        '#FFC400',
+        '#00BFA5',
+        '#8D6E63',
+      ],
     };
   },
   computed: {
     accessWaypoints() {
-      return this.document
+      return this.document.associations.waypoints
         .filter((doc) => doc.type === 'w' && doc.waypoint_type === 'access')
         .map((waypoint) => {
           const locale = waypoint.locales.find((l) => l.lang === this.$language.current) || waypoint.locales[0];
@@ -308,7 +340,9 @@ export default {
     },
     mapDocuments() {
       // Commencer avec les documents existants si nécessaire
-      const baseDocuments = this.document ? [this.document] : [];
+      const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
+      console.log('hep');
+      console.log(this.document);
 
       // Ajouter les points d'accès
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
@@ -431,11 +465,6 @@ export default {
       }
     },
 
-    /** Reserve address "From" and "To" */
-    reverseFromTo() {
-      console.log('Reverse address');
-    },
-
     /** Call Navitia with parameters (selected waypoint, from address, to address, date, time, preference) */
     async calculateRoute() {
       if (!this.selectedWaypoint) {
@@ -485,6 +514,7 @@ export default {
 
         const data = await response.json();
         this.journeys = data.journeys.slice(0, 3); // Prend les 3 premiers itinéraires
+        this.noResult = false;
 
         console.log(this.journeys);
 
@@ -504,7 +534,8 @@ export default {
         });
       } catch (error) {
         console.error('Error retrieving routes:', error);
-        alert('Unable to get Navitia directions. Please try again later.');
+        this.noResult = true;
+        this.journeys = [];
       }
     },
 
@@ -639,12 +670,10 @@ export default {
     getRouteColor(section) {
       if (section.mode === 'walking') return '#3498db'; // Bleu pour la marche
       if (section.mode === 'public_transport') {
-        const transportType = this.getTransportClass(section);
-        if (transportType === 'bus') return '#e74c3c'; // Rouge pour le bus
-        if (transportType === 'train') return '#2ecc71'; // Vert pour le train
-        if (transportType === 'tram') return '#f39c12'; // Orange pour le tram
-        if (transportType === 'metro') return '#9b59b6'; // Violet pour le métro
-        return '#f1c40f'; // Jaune par défaut
+        // On utilise l'index de la section pour déterminer la couleur
+        // pour assurer une coloration séquentielle des transports
+        const colorIndex = this.getTransportSectionIndex(section);
+        return this.transportColors[colorIndex % this.transportColors.length];
       }
       return '#95a5a6'; // Gris par défaut
     },
@@ -655,6 +684,25 @@ export default {
       } else {
         this.selectedJourney = journey;
       }
+    },
+
+    getTransportSectionIndex(currentSection) {
+      if (!this.selectedJourney) return 0;
+
+      let index = 0;
+      for (const section of this.selectedJourney.sections) {
+        if (section === currentSection) {
+          return index;
+        }
+        if (section.type === 'public_transport') {
+          index++;
+        }
+      }
+      return 0;
+    },
+
+    getTransportColorClass(section) {
+      return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
     },
   },
 };
@@ -948,6 +996,37 @@ export default {
               align-items: center;
               position: relative;
 
+              &.transport-color-0 {
+                border-left: 3px solid #ff5252;
+              }
+              &.transport-color-1 {
+                border-left: 3px solid #7c4dff;
+              }
+              &.transport-color-2 {
+                border-left: 3px solid #00c853;
+              }
+              &.transport-color-3 {
+                border-left: 3px solid #ff9800;
+              }
+              &.transport-color-4 {
+                border-left: 3px solid #00b0ff;
+              }
+              &.transport-color-5 {
+                border-left: 3px solid #ec407a;
+              }
+              &.transport-color-6 {
+                border-left: 3px solid #607d8b;
+              }
+              &.transport-color-7 {
+                border-left: 3px solid #ffc400;
+              }
+              &.transport-color-8 {
+                border-left: 3px solid #00bfa5;
+              }
+              &.transport-color-9 {
+                border-left: 3px solid #8d6e63;
+              }
+
               &.walking {
                 border-left: 3px dotted lightgray;
                 margin-left: 52px;
@@ -957,7 +1036,6 @@ export default {
 
               &.transport {
                 padding-left: 26px;
-                border-left: 3px solid red;
                 margin-left: 52px;
                 padding-top: 10px;
                 padding-bottom: 10px;
@@ -1132,12 +1210,44 @@ export default {
           margin-left: 12px;
         }
       }
+
+      .calculated-duration {
+        max-width: 450px;
+        padding: 10px;
+        border: 1px solid #fdc42c;
+        background-color: #ffe089;
+        border-radius: 4px;
+        .calculated-duration-number {
+          font-weight: bold;
+        }
+      }
+      .no-itineraries-container {
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        max-width: 450px;
+        .no-itineraries {
+          padding: 16px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          .no-itineraries-img {
+            width: 70px;
+            height: 70px;
+          }
+          .no-itineraries-text {
+            .no-itineraries-found {
+              font-weight: bold;
+            }
+          }
+        }
+      }
       .itineraries-container {
         max-width: 480px;
         .itinerary-header {
           border: 1px solid lightgrey;
           border-radius: 4px;
           padding: 10px;
+          border-bottom: 18px;
 
           .journey-steps {
             display: flex;
