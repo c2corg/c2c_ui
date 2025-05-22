@@ -632,8 +632,6 @@ export default {
             },
             properties: {
               name: section.display_informations?.code,
-              mode: section.mode,
-              type: section.type,
               duration: section.duration,
               color: this.getRouteColor(section),
             },
@@ -642,7 +640,11 @@ export default {
           routeDocuments.push(routeDocument);
         }
       });
-
+      this.$nextTick(() => {
+        if (this.$refs.mapView) {
+          this.$refs.mapView.recenterOnDocuments();
+        }
+      });
       return routeDocuments;
     },
 

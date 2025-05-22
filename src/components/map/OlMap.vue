@@ -1063,7 +1063,7 @@ export default {
         resultFeature = feature;
         return true;
       });
-      this.setHighlightedFeature(resultFeature); ///////////
+      this.setHighlightedFeature(resultFeature);
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
     },
 
@@ -1295,6 +1295,63 @@ export default {
           zoom: Math.max(view.getZoom(), 15),
           duration: 300,
         });
+      }
+    },
+
+    recenterOnDocuments() {
+      if (!this.map || !this.documents || this.documents.length === 0) {
+        console.warn('Cannot recenter - map or documents not available');
+        return;
+      }
+
+      const extent = [Infinity, Infinity, -Infinity, -Infinity];
+
+      this.documents.forEach((doc) => {
+        try {
+          if (doc.geometry?.geom_detail) {
+            const geom = JSON.parse(doc.geometry.geom_detail);
+
+            if (geom.type === 'LineString' && geom.coordinates?.length > 0) {
+              geom.coordinates.forEach((coord) => {
+                const [x, y] =
+                  Math.abs(coord[0]) <= 180 && Math.abs(coord[1]) <= 90
+                    ? ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857')
+                    : [coord[0], coord[1]];
+
+                extent[0] = Math.min(extent[0], x);
+                extent[1] = Math.min(extent[1], y);
+                extent[2] = Math.max(extent[2], x);
+                extent[3] = Math.max(extent[3], y);
+              });
+            }
+          }
+        } catch (e) {
+          console.error('Error processing document geometry:', e);
+        }
+      });
+
+      if (extent[0] !== Infinity && extent[2] !== -Infinity) {
+        const padding = 50;
+        const mapSize = this.map.getSize();
+        const ratio = padding / Math.min(mapSize[0], mapSize[1]);
+
+        const width = extent[2] - extent[0];
+        const height = extent[3] - extent[1];
+
+        const paddedExtent = [
+          extent[0] - width * ratio,
+          extent[1] - height * ratio,
+          extent[2] + width * ratio,
+          extent[3] + height * ratio,
+        ];
+
+        this.map.getView().fit(paddedExtent, {
+          duration: 1000,
+          maxZoom: 18,
+        });
+      } else {
+        this.map.getView().fit(DEFAULT_EXTENT);
+        console.warn('No valid geometries found - using default extent');
       }
     },
 
