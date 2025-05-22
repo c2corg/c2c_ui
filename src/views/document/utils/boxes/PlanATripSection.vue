@@ -249,6 +249,23 @@
                 </div>
               </div>
             </div>
+
+            <div class="time-modification-buttons" v-if="journeys.length > 0">
+              <button class="modification-buttons" @click="departEarlier">
+                <img src="@/assets/img/boxes/before.svg" alt="earlier" />
+                <span>Partir + tôt</span>
+              </button>
+
+              <button class="modification-buttons" @click="departLater">
+                <img src="@/assets/img/boxes/after.svg" alt="later" />
+                <span>Partir + tard</span>
+              </button>
+
+              <button class="modification-buttons" @click="nextDay">
+                <img src="@/assets/img/boxes/next_day.svg" alt="next day" />
+                <span>Jour suivant</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -682,6 +699,58 @@ export default {
 
     getTransportColorClass(section) {
       return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
+    },
+
+    /** Recule l'heure d'une heure et relance la recherche */
+    departEarlier() {
+      const [hours, minutes] = this.selectedTime.split(':').map(Number);
+      let newHours = hours - 1;
+      let newDate = this.selectedDate;
+
+      // Gérer le passage à la veille si on passe en dessous de 00:00
+      if (newHours < 0) {
+        newHours = 23;
+        const currentDate = new Date(this.selectedDate);
+        currentDate.setDate(currentDate.getDate() - 1);
+        newDate = currentDate.toISOString().slice(0, 10);
+      }
+
+      this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      this.selectedDate = newDate;
+
+      // Relancer automatiquement la recherche
+      this.calculateRoute();
+    },
+
+    /** Avance l'heure d'une heure et relance la recherche */
+    departLater() {
+      const [hours, minutes] = this.selectedTime.split(':').map(Number);
+      let newHours = hours + 1;
+      let newDate = this.selectedDate;
+
+      // Gérer le passage au lendemain si on dépasse 23:59
+      if (newHours > 23) {
+        newHours = 0;
+        const currentDate = new Date(this.selectedDate);
+        currentDate.setDate(currentDate.getDate() + 1);
+        newDate = currentDate.toISOString().slice(0, 10);
+      }
+
+      this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      this.selectedDate = newDate;
+
+      // Relancer automatiquement la recherche
+      this.calculateRoute();
+    },
+
+    /** Passe au jour suivant et relance la recherche */
+    nextDay() {
+      const currentDate = new Date(this.selectedDate);
+      currentDate.setDate(currentDate.getDate() + 1);
+      this.selectedDate = currentDate.toISOString().slice(0, 10);
+
+      // Relancer automatiquement la recherche
+      this.calculateRoute();
     },
   },
 };
@@ -1242,6 +1311,29 @@ export default {
                 }
               }
             }
+          }
+        }
+        .time-modification-buttons {
+          display: flex;
+          justify-content: space-between;
+
+          .modification-buttons {
+            padding: 8px;
+            border: 1px solid lightgray;
+            align-items: center;
+            display: flex;
+            background-color: white;
+            gap: 6px;
+            border-radius: 3px;
+
+            span {
+              color: #337ab7;
+              font-weight: bold;
+            }
+          }
+          .modification-buttons:hover {
+            background-color: #f1f0f0;
+            cursor: pointer;
           }
         }
       }
