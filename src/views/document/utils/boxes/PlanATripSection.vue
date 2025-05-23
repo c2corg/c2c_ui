@@ -517,10 +517,21 @@ export default {
         );
 
         const data = await response.json();
+        const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+
+        const filteredJourneys = data.journeys.filter((journey) => {
+          const journeyDate = journey.departure_date_time.split('T')[0];
+          return journeyDate === selectedDateFormatted;
+        });
+
+        if (filteredJourneys.length === 0) {
+          this.noResult = true;
+          this.journeys = [];
+          return;
+        }
+
         this.journeys = data.journeys.slice(0, 3);
         this.noResult = false;
-
-        console.log(this.journeys);
 
         this.$emit('calculate-route', {
           from: {
