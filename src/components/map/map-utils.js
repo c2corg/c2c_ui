@@ -117,6 +117,22 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   let color = null;
   let svgSrc = null;
 
+  if (type === 'p') {
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: document.properties.radius || 5,
+        fill: new ol.style.Fill({
+          color: document.properties.color || '#ffffff',
+        }),
+        stroke: new ol.style.Stroke({
+          color: document.properties.border_color || '#000000',
+          width: document.properties.border_width || 1,
+        }),
+      }),
+      zIndex: highlight ? 101 : 50,
+    });
+  }
+
   if (!document.condition_rating) {
     // Usual icon orange
     color = '#F93';

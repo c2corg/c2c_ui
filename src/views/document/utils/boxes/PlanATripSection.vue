@@ -678,13 +678,60 @@ export default {
           };
 
           routeDocuments.push(routeDocument);
+
+          const startCoord = section.geojson.coordinates[0];
+          const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
+
+          const startPointDocument = {
+            document_id: `route-start-point-${index}`,
+            type: 'p',
+            geometry: {
+              version: 1,
+              geom: JSON.stringify({
+                type: 'Point',
+                coordinates: [...startMercatorCoord, 0.0, 0.0],
+              }),
+            },
+            properties: {
+              name: `Début section ${index + 1}`,
+              color: '#FFFFFF',
+              border_color: '#000000',
+              radius: 5,
+            },
+          };
+
+          routeDocuments.push(startPointDocument);
+          const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
+          const endMercatorCoord = ol.proj.transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
+
+          const endPointDocument = {
+            document_id: `route-end-point-${index}`,
+            type: 'p',
+            geometry: {
+              version: 1,
+              geom: JSON.stringify({
+                type: 'Point',
+                coordinates: [...endMercatorCoord, 0.0, 0.0],
+              }),
+            },
+            properties: {
+              name: `Fin section ${index + 1}`,
+              color: '#FFFFFF',
+              border_color: '#000000',
+              radius: 5,
+            },
+          };
+
+          routeDocuments.push(endPointDocument);
         }
       });
+
       this.$nextTick(() => {
         if (this.$refs.mapView) {
           this.$refs.mapView.recenterOnDocuments();
         }
       });
+
       return routeDocuments;
     },
 
