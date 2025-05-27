@@ -82,14 +82,14 @@
             <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon trajet aller') }}</p>
           </button>
 
-          <div class="calculated-duration" v-if="calculatedDuration">
+          <!-- <div class="calculated-duration" v-if="calculatedDuration">
             <div class="calculated-duration-number">
               Ce topoguide a une durée théorique estimée à {{ calculatedDuration.toFixed(2) }} jours.
             </div>
             <div class="calculated-duration-vigilant">
               Soyez vigilant à l'heure de départ pour votre trajet retour !
             </div>
-          </div>
+          </div> -->
 
           <div class="no-itineraries-container" v-if="noResult">
             <div class="no-itineraries">
@@ -105,9 +105,14 @@
 
           <div class="itineraries-container" v-if="journeys.length > 0">
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
-              <div class="itinerary-header">
+              <div
+                class="itinerary-header"
+                :class="{ selected: selectedRouteJourney === journey }"
+                @click="selectRouteOnly(journey)"
+              >
                 <div class="itinerary-time">
                   {{ formatTime(journey.departure_date_time) }} — {{ formatTime(journey.arrival_date_time) }}
+                  <span class="journey-duration">{{ formatJourneyDuration(journey.duration) }}</span>
                 </div>
 
                 <div class="itinerary-path">
@@ -328,6 +333,7 @@ export default {
       calculatedDuration: this.document.calculated_duration,
       noResult: false,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
+      selectedRouteJourney: null,
     };
   },
   computed: {
@@ -518,35 +524,41 @@ export default {
 
         const data = await response.json();
         const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+        if (data.journeys) {
+          const filteredJourneys = data.journeys.filter((journey) => {
+            const journeyDate = journey.departure_date_time.split('T')[0];
+            return journeyDate === selectedDateFormatted;
+          });
 
-        const filteredJourneys = data.journeys.filter((journey) => {
-          const journeyDate = journey.departure_date_time.split('T')[0];
-          return journeyDate === selectedDateFormatted;
-        });
+          if (filteredJourneys.length === 0) {
+            this.noResult = true;
+            this.journeys = [];
+            return;
+          }
 
-        if (filteredJourneys.length === 0) {
+          this.journeys = data.journeys.slice(0, 3);
+          this.noResult = false;
+
+          this.selectedRouteJourney = this.journeys[0];
+
+          this.$emit('calculate-route', {
+            from: {
+              address: this.fromAddress,
+              coordinates: this.fromCoordinates,
+            },
+            to: {
+              address: this.selectedWaypoint.title,
+              coordinates: this.selectedWaypoint.coordinates,
+            },
+            date: this.selectedDate,
+            time: this.selectedTime,
+            preference: this.timePreference,
+            journeys: this.journeys,
+          });
+        } else {
           this.noResult = true;
           this.journeys = [];
-          return;
         }
-
-        this.journeys = data.journeys.slice(0, 3);
-        this.noResult = false;
-
-        this.$emit('calculate-route', {
-          from: {
-            address: this.fromAddress,
-            coordinates: this.fromCoordinates,
-          },
-          to: {
-            address: this.selectedWaypoint.title,
-            coordinates: this.selectedWaypoint.coordinates,
-          },
-          date: this.selectedDate,
-          time: this.selectedTime,
-          preference: this.timePreference,
-          journeys: this.journeys,
-        });
       } catch (error) {
         console.error('Error retrieving routes:', error);
         this.noResult = true;
@@ -633,11 +645,11 @@ export default {
     },
 
     prepareRouteDocuments() {
-      if (!this.selectedJourney || !this.journeys || this.journeys.length === 0) return [];
+      if (!this.selectedRouteJourney || !this.journeys || this.journeys.length === 0) return [];
 
       const routeDocuments = [];
-
-      const journey = this.selectedJourney;
+      const journey = this.selectedRouteJourney;
+      console.log(journey);
 
       journey.sections.forEach((section, index) => {
         if (section.geojson) {
@@ -686,6 +698,8 @@ export default {
     },
 
     showJourneyDetails(journey) {
+      this.selectedRouteJourney = journey;
+
       if (this.selectedJourney === journey) {
         this.selectedJourney = null;
       } else {
@@ -694,10 +708,10 @@ export default {
     },
 
     getTransportSectionIndex(currentSection) {
-      if (!this.selectedJourney) return 0;
+      if (!this.selectedRouteJourney) return 0;
 
       let index = 0;
-      for (const section of this.selectedJourney.sections) {
+      for (const section of this.selectedRouteJourney.sections) {
         if (section === currentSection) {
           return index;
         }
@@ -763,6 +777,21 @@ export default {
       // Relancer automatiquement la recherche
       this.calculateRoute();
     },
+
+    selectRouteOnly(journey) {
+      this.selectedRouteJourney = journey;
+    },
+    formatJourneyDuration(seconds) {
+      if (!seconds && seconds !== 0) return '';
+
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+
+      if (hours > 0) {
+        return `${hours}h${minutes.toString().padStart(2, '0')}`;
+      }
+      return `${minutes} min`;
+    },
   },
 };
 </script>
@@ -772,14 +801,17 @@ export default {
   margin-top: 20px;
   display: flex;
   gap: 20px;
-  height: 500px;
+  height: 650px;
 
   .plan-trip-info {
     flex: 1;
-    height: 100%;
-    overflow-y: auto;
+    flex-direction: column;
+    display: flex;
 
     .plan-trip-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       .plan-trip-title {
         font-size: 15px;
         font-weight: bold;
@@ -790,6 +822,7 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 15px;
+        height: 94%;
 
         > p {
           margin-bottom: 10px;
@@ -1302,11 +1335,24 @@ export default {
       }
       .itineraries-container {
         max-width: 480px;
+        overflow-y: auto;
+        flex: 1;
+
         .itinerary-header {
           border: 1px solid lightgrey;
+          border-left: 4px solid #337ab7;
           border-radius: 4px;
           padding: 10px;
-          border-bottom: 18px;
+          margin-top: 12px;
+          cursor: pointer;
+          .itinerary-time {
+            display: flex;
+            .journey-duration {
+              margin-left: auto;
+              margin-right: 5px;
+              font-weight: bold;
+            }
+          }
 
           .journey-steps {
             display: flex;
@@ -1324,9 +1370,16 @@ export default {
             }
           }
         }
+        .selected {
+          border-left: 4px solid #4baf50;
+          background-color: #fbfaf6;
+        }
+
         .time-modification-buttons {
           display: flex;
           justify-content: space-between;
+          margin-top: 16px;
+          position: sticky;
 
           .modification-buttons {
             padding: 8px;
