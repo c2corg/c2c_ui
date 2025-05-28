@@ -103,7 +103,7 @@
             </div>
           </div>
 
-          <div class="itineraries-container" v-if="journeys.length > 0">
+          <div class="itineraries-container" :class="{ updating: isUpdating }" v-if="journeys.length > 0">
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
               <div
                 class="itinerary-header"
@@ -122,12 +122,13 @@
                         v-if="
                           section.type === 'public_transport' ||
                           section.type === 'transfer' ||
-                          section.type === 'street_network'
+                          section.type === 'street_network' ||
+                          section.type === 'on_demand_transport'
                         "
                         class="journey-step"
                       >
                         <div
-                          v-if="section.type === 'public_transport'"
+                          v-if="section.type === 'public_transport' || section.mode === 'on_demand_transport'"
                           class="transport-icon"
                           :class="getTransportClass(section)"
                         >
@@ -188,13 +189,13 @@
                       </div>
                       <div class="timeline-content">
                         <div class="timeline-walking-info">
-                          {{ Math.round(section.distance) }} mètres, {{ formatDuration(section.duration) }}
+                          {{ getDistance(section) }} mètres, {{ formatDuration(section.duration) }}
                         </div>
                       </div>
                     </div>
 
                     <!-- Section transport en commun -->
-                    <div v-else-if="section.type === 'public_transport'">
+                    <div v-else-if="section.type === 'public_transport' || section.mode === 'on_demand_transport'">
                       <!-- Arrêt de départ -->
                       <div class="timeline-item">
                         <div class="timeline-time">{{ formatTime(section.departure_date_time) }}</div>
@@ -254,23 +255,23 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="time-modification-buttons" v-if="journeys.length > 0">
-              <button class="modification-buttons" @click="departEarlier">
-                <img src="@/assets/img/boxes/before.svg" alt="earlier" />
-                <span>Partir + tôt</span>
-              </button>
+          <div class="time-modification-buttons" v-if="showTimeButton">
+            <button class="modification-buttons" @click="departEarlier">
+              <img src="@/assets/img/boxes/before.svg" alt="earlier" />
+              <span>Partir + tôt</span>
+            </button>
 
-              <button class="modification-buttons" @click="departLater">
-                <img src="@/assets/img/boxes/after.svg" alt="later" />
-                <span>Partir + tard</span>
-              </button>
+            <button class="modification-buttons" @click="departLater">
+              <img src="@/assets/img/boxes/after.svg" alt="later" />
+              <span>Partir + tard</span>
+            </button>
 
-              <button class="modification-buttons" @click="nextDay">
-                <img src="@/assets/img/boxes/next_day.svg" alt="next day" />
-                <span>Jour suivant</span>
-              </button>
-            </div>
+            <button class="modification-buttons" @click="nextDay">
+              <img src="@/assets/img/boxes/next_day.svg" alt="next day" />
+              <span>Jour suivant</span>
+            </button>
           </div>
         </div>
       </div>
@@ -295,6 +296,7 @@
 <script>
 import { transform } from 'ol/proj';
 
+import start from '@/assets/img/boxes/geoloc-2.svg';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -334,6 +336,8 @@ export default {
       noResult: false,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
       selectedRouteJourney: null,
+      showTimeButton: false,
+      isUpdating: false,
     };
   },
   computed: {
@@ -497,11 +501,15 @@ export default {
         preference: this.timePreference,
       });
 
-      // Formater les données pour l'API Navitia
+      this.isUpdating = true;
+
+      const animationTimeout = setTimeout(() => {
+        this.isUpdating = false;
+      }, 600);
+
       const fromCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
       const toCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
 
-      // Formater la date et l'heure pour Navitia (YYYYMMDDTHHMMSS)
       const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
@@ -518,12 +526,15 @@ export default {
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
+
         console.log(
           `https://api.navitia.io/v1/journeys?from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`
         );
 
         const data = await response.json();
+        this.showTimeButton = true;
         const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+
         if (data.journeys) {
           const filteredJourneys = data.journeys.filter((journey) => {
             const journeyDate = journey.departure_date_time.split('T')[0];
@@ -538,7 +549,6 @@ export default {
 
           this.journeys = data.journeys.slice(0, 3);
           this.noResult = false;
-
           this.selectedRouteJourney = this.journeys[0];
 
           this.$emit('calculate-route', {
@@ -603,6 +613,7 @@ export default {
       if (!section.display_informations) return '';
 
       const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
+
       if (mode.includes('bus')) return 'bus';
       if (mode.includes('tram')) return 'tram';
       if (mode.includes('métro') || mode.includes('metro')) return 'metro';
@@ -653,6 +664,9 @@ export default {
 
       journey.sections.forEach((section, index) => {
         if (section.geojson) {
+          const isWalkingSection =
+            section.type === 'street_network' || section.type === 'transfer' || section.mode === 'walking';
+
           const routeDocument = {
             document_id: `route-section-${index}`,
             type: 'r',
@@ -674,55 +688,86 @@ export default {
               name: section.display_informations?.code,
               duration: section.duration,
               color: this.getRouteColor(section),
+              isWalking: isWalkingSection,
             },
           };
 
           routeDocuments.push(routeDocument);
 
-          const startCoord = section.geojson.coordinates[0];
-          const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
+          if (index === 0) {
+            const startCoord = section.geojson.coordinates[0];
+            const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
 
-          const startPointDocument = {
-            document_id: `route-start-point-${index}`,
-            type: 'p',
-            geometry: {
-              version: 1,
-              geom: JSON.stringify({
-                type: 'Point',
-                coordinates: [...startMercatorCoord, 0.0, 0.0],
-              }),
-            },
-            properties: {
-              name: `Début section ${index + 1}`,
-              color: '#FFFFFF',
-              border_color: '#000000',
-              radius: 5,
-            },
-          };
+            const startPointDocument = {
+              document_id: `route-start-origin`,
+              type: 'start',
+              geometry: {
+                version: 1,
+                geom: JSON.stringify({
+                  type: 'Point',
+                  coordinates: [...startMercatorCoord, 0.0, 0.0],
+                }),
+              },
+              properties: {
+                name: 'Départ',
+                color: '#4CAF50',
+                radius: 12,
+                image_url: start,
+              },
+            };
 
-          routeDocuments.push(startPointDocument);
-          const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
-          const endMercatorCoord = ol.proj.transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
+            routeDocuments.push(startPointDocument);
+          }
 
-          const endPointDocument = {
-            document_id: `route-end-point-${index}`,
-            type: 'p',
-            geometry: {
-              version: 1,
-              geom: JSON.stringify({
-                type: 'Point',
-                coordinates: [...endMercatorCoord, 0.0, 0.0],
-              }),
-            },
-            properties: {
-              name: `Fin section ${index + 1}`,
-              color: '#FFFFFF',
-              border_color: '#000000',
-              radius: 5,
-            },
-          };
+          if (!isWalkingSection) {
+            if (index > 0) {
+              const startCoord = section.geojson.coordinates[0];
+              const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
 
-          routeDocuments.push(endPointDocument);
+              const startPointDocument = {
+                document_id: `route-start-point-${index}`,
+                type: 'p',
+                geometry: {
+                  version: 1,
+                  geom: JSON.stringify({
+                    type: 'Point',
+                    coordinates: [...startMercatorCoord, 0.0, 0.0],
+                  }),
+                },
+                properties: {
+                  name: `Début section ${index + 1}`,
+                  color: '#FFFFFF',
+                  border_color: '#000000',
+                  radius: 5,
+                },
+              };
+
+              routeDocuments.push(startPointDocument);
+            }
+
+            const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
+            const endMercatorCoord = ol.proj.transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
+
+            const endPointDocument = {
+              document_id: `route-end-point-${index}`,
+              type: 'p',
+              geometry: {
+                version: 1,
+                geom: JSON.stringify({
+                  type: 'Point',
+                  coordinates: [...endMercatorCoord, 0.0, 0.0],
+                }),
+              },
+              properties: {
+                name: `Fin section ${index + 1}`,
+                color: '#FFFFFF',
+                border_color: '#000000',
+                radius: 5,
+              },
+            };
+
+            routeDocuments.push(endPointDocument);
+          }
         }
       });
 
@@ -737,7 +782,7 @@ export default {
 
     getRouteColor(section) {
       if (section.mode === 'walking') return 'blue';
-      if (section.type === 'public_transport') {
+      if (section.type === 'public_transport' || section.mode === 'on_demand_transport') {
         const colorIndex = this.getTransportSectionIndex(section);
         return this.transportColors[colorIndex % this.transportColors.length];
       }
@@ -773,13 +818,11 @@ export default {
       return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
     },
 
-    /** Recule l'heure d'une heure et relance la recherche */
     departEarlier() {
       const [hours, minutes] = this.selectedTime.split(':').map(Number);
       let newHours = hours - 1;
       let newDate = this.selectedDate;
 
-      // Gérer le passage à la veille si on passe en dessous de 00:00
       if (newHours < 0) {
         newHours = 23;
         const currentDate = new Date(this.selectedDate);
@@ -790,17 +833,14 @@ export default {
       this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       this.selectedDate = newDate;
 
-      // Relancer automatiquement la recherche
       this.calculateRoute();
     },
 
-    /** Avance l'heure d'une heure et relance la recherche */
     departLater() {
       const [hours, minutes] = this.selectedTime.split(':').map(Number);
       let newHours = hours + 1;
       let newDate = this.selectedDate;
 
-      // Gérer le passage au lendemain si on dépasse 23:59
       if (newHours > 23) {
         newHours = 0;
         const currentDate = new Date(this.selectedDate);
@@ -811,17 +851,14 @@ export default {
       this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       this.selectedDate = newDate;
 
-      // Relancer automatiquement la recherche
       this.calculateRoute();
     },
 
-    /** Passe au jour suivant et relance la recherche */
     nextDay() {
       const currentDate = new Date(this.selectedDate);
       currentDate.setDate(currentDate.getDate() + 1);
       this.selectedDate = currentDate.toISOString().slice(0, 10);
 
-      // Relancer automatiquement la recherche
       this.calculateRoute();
     },
 
@@ -957,22 +994,6 @@ export default {
               }
             }
           }
-          .reverse-from-to {
-            border-radius: 4px;
-            height: 35px;
-            width: 35px;
-            margin-top: auto;
-            margin-bottom: auto;
-            padding: 4px;
-            margin-left: auto;
-            margin-right: 15px;
-            border: 1px solid lightgray;
-            background-color: white;
-            img {
-              display: flex;
-              margin: auto;
-            }
-          }
         }
 
         .select-date-container {
@@ -1056,48 +1077,6 @@ export default {
           }
         }
 
-        // itinerary.scss
-        // Style principal pour l'itinéraire
-
-        .itinerary {
-          border-radius: 8px;
-          overflow: hidden;
-          border: 1px solid #e0e0e0;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-          margin-bottom: 16px;
-          background-color: #ffffff;
-        }
-
-        // En-tête résumé de l'itinéraire
-        .itinerary-summary {
-          display: flex;
-          align-items: center;
-          padding: 12px 16px;
-          background-color: #f7f9f7;
-          border-left: 4px solid #4caf50;
-          justify-content: space-between;
-
-          .travel-time {
-            font-weight: 600;
-            font-size: 16px;
-          }
-
-          .duration {
-            font-weight: 600;
-            color: #333333;
-          }
-
-          .travel-icons {
-            display: flex;
-            align-items: center;
-            margin: 8px 0;
-
-            .icon {
-              margin: 0 4px;
-            }
-          }
-        }
-
         // Bouton "Voir le détail"
         .itinerary-details-button {
           text-align: left;
@@ -1124,7 +1103,10 @@ export default {
           margin: 0 auto;
           padding: 15px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          border-radius: 10px;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+          border: solid 2px lightgray;
+          border-top: none;
           background-color: #fff;
 
           .journey-timeline {
@@ -1178,24 +1160,6 @@ export default {
                 margin-left: 52px;
                 padding-top: 10px;
                 padding-bottom: 10px;
-
-                &.bus-line-b {
-                  .timeline-icon.transport {
-                    background-color: #4caf50; // Green for B line
-                  }
-                }
-
-                &.bus-line-e {
-                  .timeline-icon.transport {
-                    background-color: #3f51b5; // Blue/purple for E line
-                  }
-                }
-
-                &.bus-line-55 {
-                  .timeline-icon.transport {
-                    background-color: #e91e63; // Pink for 55 line
-                  }
-                }
               }
             }
 
@@ -1241,22 +1205,12 @@ export default {
                 color: #fff;
                 width: 32px;
                 height: 32px;
-
-                .transport-code {
-                  font-weight: bold;
-                  font-size: 12px;
-                }
               }
 
               i {
                 display: inline-block;
                 width: 12px;
                 height: 12px;
-
-                &.location-dot {
-                  background-color: #ff5722;
-                  border-radius: 50%;
-                }
               }
             }
 
@@ -1304,31 +1258,6 @@ export default {
           }
         }
 
-        // Classes spécifiques pour la coloration des lignes de transport
-        .getTransportClass {
-          &.bus-line-b {
-            background-color: #4caf50;
-            &:before {
-              background-color: #4caf50;
-            }
-          }
-
-          &.bus-line-e {
-            background-color: #3f51b5;
-            &:before {
-              background-color: #3f51b5;
-            }
-          }
-
-          &.bus-line-55 {
-            background-color: #e91e63;
-            &:before {
-              background-color: #e91e63;
-            }
-          }
-        }
-
-        // Style pour le point de départ du topo
         .timeline-item:last-child {
           .timeline-icon {
             border: none;
@@ -1381,9 +1310,12 @@ export default {
         }
       }
       .itineraries-container {
-        max-width: 480px;
+        max-width: 490px;
         overflow-y: auto;
         flex: 1;
+        padding-right: 16px;
+        transition: background-color 0.3s ease;
+        position: relative;
 
         .itinerary-header {
           border: 1px solid lightgrey;
@@ -1421,31 +1353,56 @@ export default {
           border-left: 4px solid #4baf50;
           background-color: #fbfaf6;
         }
+      }
 
-        .time-modification-buttons {
+      .itineraries-container.updating::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+        animation: fadeFlash 0.6s ease;
+        pointer-events: none;
+      }
+
+      @keyframes fadeFlash {
+        0% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .time-modification-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 16px;
+        position: sticky;
+
+        .modification-buttons {
+          padding: 8px;
+          border: 1px solid lightgray;
+          align-items: center;
           display: flex;
-          justify-content: space-between;
-          margin-top: 16px;
-          position: sticky;
+          background-color: white;
+          gap: 6px;
+          border-radius: 3px;
 
-          .modification-buttons {
-            padding: 8px;
-            border: 1px solid lightgray;
-            align-items: center;
-            display: flex;
-            background-color: white;
-            gap: 6px;
-            border-radius: 3px;
-
-            span {
-              color: #337ab7;
-              font-weight: bold;
-            }
+          span {
+            color: #337ab7;
+            font-weight: bold;
           }
-          .modification-buttons:hover {
-            background-color: #f1f0f0;
-            cursor: pointer;
-          }
+        }
+        .modification-buttons:hover {
+          background-color: #f1f0f0;
+          cursor: pointer;
         }
       }
     }
