@@ -31,7 +31,7 @@
       :grouped-stops="groupedStops"
       :missing-transport-for-waypoint="missingTransportForWaypoint"
       :map-documents="mapDocuments"
-      :document="document.associations.waypoints"
+      :document="document"
       :selected-stop="selectedStop"
       :selected-stop-group="selectedStopGroup"
       :expanded-stop-groups="expandedStopGroups"

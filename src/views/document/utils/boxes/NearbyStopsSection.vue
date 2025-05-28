@@ -53,7 +53,7 @@
     <div class="public-transports-map">
       <map-view
         ref="mapView"
-        :documents="mapDocuments"
+        :documents="[document].concat(mapDocuments)"
         :show-protection-areas="['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
@@ -88,7 +88,7 @@ export default {
       required: true,
     },
     document: {
-      type: Array,
+      type: Object,
       required: true,
     },
     selectedStop: {

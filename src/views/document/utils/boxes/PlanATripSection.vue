@@ -64,8 +64,8 @@
 
               <!-- Trajet RETOUR : De = waypoint, À = adresse -->
               <template v-else>
-                <div class="from-container">
-                  <div class="from-text">De</div>
+                <div class="to-container-return">
+                  <div class="to-text">De</div>
                   <select
                     name="chose-waypoint"
                     class="chose-waypoint"
@@ -77,8 +77,8 @@
                     </option>
                   </select>
                 </div>
-                <div class="to-container">
-                  <div class="to-text">À</div>
+                <div class="from-container-return">
+                  <div class="from-text">À</div>
                   <div class="autocomplete-container">
                     <input
                       class="from-address"
@@ -138,6 +138,10 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div v-if="nonValidAddress" class="non-valid-address">
+            Veuillez sélectionner un départ et une destination.
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
@@ -232,8 +236,11 @@
                     <div class="timeline-icon">
                       <img src="@/assets/img/boxes/start.svg" alt="start" />
                     </div>
-                    <div class="timeline-content">
+                    <div class="timeline-content" v-if="activeTab === 'outbound'">
                       <div class="timeline-address">{{ fromAddress }}</div>
+                    </div>
+                    <div class="timeline-content" v-else>
+                      <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
                     </div>
                   </div>
 
@@ -311,8 +318,11 @@
                     <div class="timeline-icon">
                       <img src="@/assets/img/boxes/end.svg" alt="end" />
                     </div>
-                    <div class="timeline-content">
+                    <div class="timeline-content" v-if="activeTab === 'outbound'">
                       <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
+                    </div>
+                    <div class="timeline-content" v-else>
+                      <div class="timeline-address">{{ fromAddress }}</div>
                     </div>
                   </div>
                 </div>
@@ -343,7 +353,7 @@
     <div class="plan-trip-map">
       <map-view
         ref="mapView"
-        :documents="mapDocuments"
+        :documents="mapDocuments.concat([document])"
         :show-protection-areas="['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
@@ -401,6 +411,7 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
+        nonValidAddress: false,
       },
 
       // Données pour le retour
@@ -420,6 +431,7 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
+        nonValidAddress: false,
       },
 
       // Garder les autres propriétés existantes
@@ -604,6 +616,15 @@ export default {
       },
     },
 
+    nonValidAddress: {
+      get() {
+        return this.currentData.nonValidAddress;
+      },
+      set(value) {
+        this.currentData.nonValidAddress = value;
+      },
+    },
+
     // Adapter le titre du bouton selon l'onglet
     calculateButtonText() {
       return this.activeTab === 'outbound'
@@ -728,20 +749,16 @@ export default {
 
     /** Call Navitia with parameters (selected waypoint, from address, to address, date, time, preference) */
     async calculateRoute() {
-      if (!this.selectedWaypoint) {
-        alert('Veuillez sélectionner un point de destination');
+      if (
+        !this.selectedWaypoint ||
+        (this.activeTab === 'outbound' && !this.fromCoordinates) ||
+        (this.activeTab === 'return' && !this.fromAddress)
+      ) {
+        this.nonValidAddress = true;
         return;
       }
 
-      if (!this.fromCoordinates && this.activeTab === 'outbound') {
-        alert('Veuillez entrer une adresse de départ valide');
-        return;
-      }
-
-      if (!this.fromAddress && this.activeTab === 'return') {
-        alert('Veuillez entrer une adresse de destination valide');
-        return;
-      }
+      this.nonValidAddress = false;
 
       // Logique inversée pour le retour
       let fromCoords, toCoords, fromAddressDisplay, toAddressDisplay;
@@ -759,14 +776,6 @@ export default {
         fromAddressDisplay = this.selectedWaypoint.title;
         toAddressDisplay = this.fromAddress;
       }
-
-      console.log(`Calcul d'itinéraire ${this.activeTab === 'outbound' ? 'ALLER' : 'RETOUR'} avec les données:`, {
-        fromAddress: fromAddressDisplay,
-        toAddress: toAddressDisplay,
-        date: this.selectedDate,
-        time: this.selectedTime,
-        preference: this.timePreference,
-      });
 
       this.isUpdating = true;
 
@@ -1241,7 +1250,8 @@ export default {
           .from-to-container {
             width: 80%;
             position: relative;
-            .from-container {
+            .from-container,
+            .from-container-return {
               display: flex;
               border: 1px solid lightgray;
               padding: 5px;
@@ -1296,7 +1306,12 @@ export default {
                 }
               }
             }
-            .to-container {
+            .from-container-return {
+              margin-bottom: 0px;
+            }
+
+            .to-container,
+            .to-container-return {
               display: flex;
               border: 1px solid lightgray;
               padding: 5px;
@@ -1313,6 +1328,9 @@ export default {
                 width: 100%;
                 background-color: white;
               }
+            }
+            .to-container-return {
+              margin-bottom: 15px;
             }
           }
         }
@@ -1598,6 +1616,10 @@ export default {
           font-weight: 600;
           margin-left: 12px;
         }
+      }
+
+      .non-valid-address {
+        color: red;
       }
 
       .calculated-duration {
