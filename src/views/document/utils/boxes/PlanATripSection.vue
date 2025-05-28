@@ -1,47 +1,102 @@
 <template>
   <div class="plan-trip-section">
     <div class="plan-trip-info">
+      <div class="trip-tabs">
+        <button class="tab-button" :class="{ active: activeTab === 'outbound' }" @click="switchTab('outbound')">
+          Trajet aller
+        </button>
+        <button class="tab-button" :class="{ active: activeTab === 'return' }" @click="switchTab('return')">
+          Trajet retour
+        </button>
+      </div>
       <div class="plan-trip-content">
         <h3 class="plan-trip-title">{{ $gettext('Planifier un trajet de transport en commun') }}</h3>
 
         <div class="plan-trip-details">
           <div class="plan-trip-from-to">
             <div class="from-to-container">
-              <div class="from-container">
-                <div class="from-text">De</div>
-                <div class="autocomplete-container">
-                  <input
-                    class="from-address"
-                    v-model="fromAddress"
-                    @input="searchAddressPropositions"
-                    @focus="showAddressPropositions = true"
-                    @blur="handleBlur"
-                    placeholder="Entrez une adresse de départ"
-                  />
-                  <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
-                    <ul>
-                      <li
-                        v-for="(proposition, index) in addressPropositions"
-                        :key="index"
-                        @mousedown="selectAddress(proposition)"
-                      >
-                        {{ formatProposition(proposition) }}
-                      </li>
-                    </ul>
+              <!-- Trajet ALLER : De = adresse, À = waypoint -->
+              <template v-if="activeTab === 'outbound'">
+                <div class="from-container">
+                  <div class="from-text">De</div>
+                  <div class="autocomplete-container">
+                    <input
+                      class="from-address"
+                      v-model="fromAddress"
+                      @input="searchAddressPropositions"
+                      @focus="showAddressPropositions = true"
+                      @blur="handleBlur"
+                      placeholder="Entrez une adresse de départ"
+                    />
+                    <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
+                      <ul>
+                        <li
+                          v-for="(proposition, index) in addressPropositions"
+                          :key="index"
+                          @mousedown="selectAddress(proposition)"
+                        >
+                          {{ formatProposition(proposition) }}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
+                  <button class="geolocalisation" @click="useCurrentLocation">
+                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
+                  </button>
                 </div>
-                <button class="geolocalisation" @click="useCurrentLocation">
-                  <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
-                </button>
-              </div>
-              <div class="to-container">
-                <div class="to-text">À</div>
-                <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
-                  <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
-                    {{ waypoint.title }}
-                  </option>
-                </select>
-              </div>
+                <div class="to-container">
+                  <div class="to-text">À</div>
+                  <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
+                    <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
+                      {{ waypoint.title }}
+                    </option>
+                  </select>
+                </div>
+              </template>
+
+              <!-- Trajet RETOUR : De = waypoint, À = adresse -->
+              <template v-else>
+                <div class="from-container">
+                  <div class="from-text">De</div>
+                  <select
+                    name="chose-waypoint"
+                    class="chose-waypoint"
+                    id="chose-waypoint-return"
+                    v-model="selectedWaypoint"
+                  >
+                    <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
+                      {{ waypoint.title }}
+                    </option>
+                  </select>
+                </div>
+                <div class="to-container">
+                  <div class="to-text">À</div>
+                  <div class="autocomplete-container">
+                    <input
+                      class="from-address"
+                      v-model="fromAddress"
+                      @input="searchAddressPropositions"
+                      @focus="showAddressPropositions = true"
+                      @blur="handleBlur"
+                      placeholder="Entrez une adresse de destination"
+                    />
+                    <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
+                      <ul>
+                        <li
+                          v-for="(proposition, index) in addressPropositions"
+                          :key="index"
+                          @mousedown="selectAddress(proposition)"
+                        >
+                          {{ formatProposition(proposition) }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <button class="geolocalisation" @click="useCurrentLocation">
+                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
+                  </button>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -318,26 +373,51 @@ export default {
   },
   data() {
     return {
-      fromAddress: '',
-      toAddress: '',
-      selectedAddress: null,
-      addressPropositions: [],
-      showAddressPropositions: false,
-      selectedDate: new Date().toISOString().slice(0, 10), // Format YYYY-MM-DD
-      selectedTime: new Date().toTimeString().slice(0, 5), // Format HH:MM
-      timePreference: 'leave-after',
-      fromCoordinates: null,
-      toCoordinates: null,
-      selectedWaypoint: null,
-      journeys: [],
-      selectedJourney: null,
-      apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
+      // Nouvelles propriétés pour les onglets
+      activeTab: 'outbound', // 'outbound' ou 'return'
+
+      // Données pour l'aller (renommer les propriétés existantes)
+      outboundData: {
+        fromAddress: '',
+        selectedAddress: null,
+        addressPropositions: [],
+        showAddressPropositions: false,
+        selectedDate: new Date().toISOString().slice(0, 10),
+        selectedTime: new Date().toTimeString().slice(0, 5),
+        timePreference: 'leave-after',
+        fromCoordinates: null,
+        selectedWaypoint: null,
+        journeys: [],
+        selectedJourney: null,
+        noResult: false,
+        selectedRouteJourney: null,
+        showTimeButton: false,
+        isUpdating: false,
+      },
+
+      // Données pour le retour
+      returnData: {
+        fromAddress: '',
+        selectedAddress: null,
+        addressPropositions: [],
+        showAddressPropositions: false,
+        selectedDate: new Date().toISOString().slice(0, 10),
+        selectedTime: new Date().toTimeString().slice(0, 5),
+        timePreference: 'leave-after',
+        fromCoordinates: null,
+        selectedWaypoint: null,
+        journeys: [],
+        selectedJourney: null,
+        noResult: false,
+        selectedRouteJourney: null,
+        showTimeButton: false,
+        isUpdating: false,
+      },
+
+      // Garder les autres propriétés existantes
       calculatedDuration: this.document.calculated_duration,
-      noResult: false,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
-      selectedRouteJourney: null,
-      showTimeButton: false,
-      isUpdating: false,
+      apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
     };
   },
   computed: {
@@ -355,10 +435,8 @@ export default {
         });
     },
     mapDocuments() {
-      // Commencer avec les documents existants si nécessaire
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
 
-      // Ajouter les points d'accès
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
         return {
           document_id: waypoint.id,
@@ -375,10 +453,167 @@ export default {
         };
       });
 
-      // Ajouter les documents d'itinéraire si des itinéraires existent
       const routeDocuments = this.prepareRouteDocuments();
 
       return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
+    },
+    currentData() {
+      return this.activeTab === 'outbound' ? this.outboundData : this.returnData;
+    },
+
+    fromAddress: {
+      get() {
+        return this.currentData.fromAddress;
+      },
+      set(value) {
+        this.currentData.fromAddress = value;
+      },
+    },
+
+    selectedAddress: {
+      get() {
+        return this.currentData.selectedAddress;
+      },
+      set(value) {
+        this.currentData.selectedAddress = value;
+      },
+    },
+
+    addressPropositions: {
+      get() {
+        return this.currentData.addressPropositions;
+      },
+      set(value) {
+        this.currentData.addressPropositions = value;
+      },
+    },
+
+    showAddressPropositions: {
+      get() {
+        return this.currentData.showAddressPropositions;
+      },
+      set(value) {
+        this.currentData.showAddressPropositions = value;
+      },
+    },
+
+    selectedDate: {
+      get() {
+        return this.currentData.selectedDate;
+      },
+      set(value) {
+        this.currentData.selectedDate = value;
+      },
+    },
+
+    selectedTime: {
+      get() {
+        return this.currentData.selectedTime;
+      },
+      set(value) {
+        this.currentData.selectedTime = value;
+      },
+    },
+
+    timePreference: {
+      get() {
+        return this.currentData.timePreference;
+      },
+      set(value) {
+        this.currentData.timePreference = value;
+      },
+    },
+
+    fromCoordinates: {
+      get() {
+        return this.currentData.fromCoordinates;
+      },
+      set(value) {
+        this.currentData.fromCoordinates = value;
+      },
+    },
+
+    selectedWaypoint: {
+      get() {
+        return this.currentData.selectedWaypoint;
+      },
+      set(value) {
+        this.currentData.selectedWaypoint = value;
+      },
+    },
+
+    journeys: {
+      get() {
+        return this.currentData.journeys;
+      },
+      set(value) {
+        this.currentData.journeys = value;
+      },
+    },
+
+    selectedJourney: {
+      get() {
+        return this.currentData.selectedJourney;
+      },
+      set(value) {
+        this.currentData.selectedJourney = value;
+      },
+    },
+
+    noResult: {
+      get() {
+        return this.currentData.noResult;
+      },
+      set(value) {
+        this.currentData.noResult = value;
+      },
+    },
+
+    selectedRouteJourney: {
+      get() {
+        return this.currentData.selectedRouteJourney;
+      },
+      set(value) {
+        this.currentData.selectedRouteJourney = value;
+      },
+    },
+
+    showTimeButton: {
+      get() {
+        return this.currentData.showTimeButton;
+      },
+      set(value) {
+        this.currentData.showTimeButton = value;
+      },
+    },
+
+    isUpdating: {
+      get() {
+        return this.currentData.isUpdating;
+      },
+      set(value) {
+        this.currentData.isUpdating = value;
+      },
+    },
+
+    // Adapter le titre du bouton selon l'onglet
+    calculateButtonText() {
+      return this.activeTab === 'outbound'
+        ? this.$gettext('Calculer mon trajet aller')
+        : this.$gettext('Calculer mon trajet retour');
+    },
+
+    // Adapter les libellés selon l'onglet
+    fromLabel() {
+      return this.activeTab === 'outbound' ? 'De' : 'De';
+    },
+
+    toLabel() {
+      return this.activeTab === 'outbound' ? 'À' : 'À';
+    },
+
+    fromPlaceholder() {
+      return this.activeTab === 'outbound' ? 'Entrez une adresse de départ' : 'Entrez une adresse de départ (retour)';
     },
   },
   methods: {
@@ -486,16 +721,36 @@ export default {
         return;
       }
 
-      if (!this.fromCoordinates) {
+      if (!this.fromCoordinates && this.activeTab === 'outbound') {
         alert('Veuillez entrer une adresse de départ valide');
         return;
       }
 
-      console.log("Calcul d'itinéraire avec les données:", {
-        fromAddress: this.fromAddress,
-        fromCoordinates: this.fromCoordinates,
-        toAddress: this.selectedWaypoint.title,
-        toCoordinates: this.selectedWaypoint.coordinates,
+      if (!this.fromAddress && this.activeTab === 'return') {
+        alert('Veuillez entrer une adresse de destination valide');
+        return;
+      }
+
+      // Logique inversée pour le retour
+      let fromCoords, toCoords, fromAddressDisplay, toAddressDisplay;
+
+      if (this.activeTab === 'outbound') {
+        // ALLER : De l'adresse vers le waypoint
+        fromCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
+        toCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
+        fromAddressDisplay = this.fromAddress;
+        toAddressDisplay = this.selectedWaypoint.title;
+      } else {
+        // RETOUR : Du waypoint vers l'adresse
+        fromCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
+        toCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
+        fromAddressDisplay = this.selectedWaypoint.title;
+        toAddressDisplay = this.fromAddress;
+      }
+
+      console.log(`Calcul d'itinéraire ${this.activeTab === 'outbound' ? 'ALLER' : 'RETOUR'} avec les données:`, {
+        fromAddress: fromAddressDisplay,
+        toAddress: toAddressDisplay,
         date: this.selectedDate,
         time: this.selectedTime,
         preference: this.timePreference,
@@ -506,9 +761,6 @@ export default {
       const animationTimeout = setTimeout(() => {
         this.isUpdating = false;
       }, 600);
-
-      const fromCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
-      const toCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
 
       const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
@@ -876,6 +1128,21 @@ export default {
       }
       return `${minutes} min`;
     },
+
+    switchTab(tab) {
+      this.activeTab = tab;
+
+      if (tab === 'return' && !this.returnData.fromAddress && this.outboundData.selectedWaypoint) {
+        // Pour le retour : le point de départ devient le waypoint sélectionné
+        this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
+
+        // Et la destination devient l'adresse de départ de l'aller
+        if (this.outboundData.fromAddress && this.outboundData.fromCoordinates) {
+          this.returnData.fromAddress = this.outboundData.fromAddress;
+          this.returnData.fromCoordinates = this.outboundData.fromCoordinates;
+        }
+      }
+    },
   },
 };
 </script>
@@ -892,6 +1159,35 @@ export default {
     flex-direction: column;
     display: flex;
 
+    .trip-tabs {
+      display: flex;
+      .tab-button {
+        color: #337ab7;
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: white;
+        border: 1px solid lightgray;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .tab-button:hover {
+        background-color: rgb(232, 232, 232);
+        cursor: pointer;
+      }
+      .tab-button.active:hover {
+        background-color: #337ab7;
+        cursor: auto;
+      }
+      .tab-button.active {
+        color: white;
+        background-color: #337ab7;
+      }
+    }
+
     .plan-trip-content {
       display: flex;
       flex-direction: column;
@@ -906,7 +1202,7 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 15px;
-        height: 94%;
+        height: 84%;
 
         > p {
           margin-bottom: 10px;
