@@ -5,7 +5,15 @@
         <button class="tab-button" :class="{ active: activeTab === 'outbound' }" @click="switchTab('outbound')">
           Trajet aller
         </button>
-        <button class="tab-button" :class="{ active: activeTab === 'return' }" @click="switchTab('return')">
+        <button
+          class="tab-button"
+          :class="{
+            active: activeTab === 'return',
+            disabled: !canAccessReturnTab,
+          }"
+          :disabled="!canAccessReturnTab"
+          @click="switchTab('return')"
+        >
           Trajet retour
         </button>
       </div>
@@ -374,7 +382,7 @@ export default {
   data() {
     return {
       // Nouvelles propriétés pour les onglets
-      activeTab: 'outbound', // 'outbound' ou 'return'
+      activeTab: 'outbound',
 
       // Données pour l'aller (renommer les propriétés existantes)
       outboundData: {
@@ -614,6 +622,10 @@ export default {
 
     fromPlaceholder() {
       return this.activeTab === 'outbound' ? 'Entrez une adresse de départ' : 'Entrez une adresse de départ (retour)';
+    },
+    canAccessReturnTab() {
+      // L'onglet retour est accessible seulement si l'aller a des résultats
+      return this.outboundData.journeys.length > 0;
     },
   },
   methods: {
@@ -1130,6 +1142,10 @@ export default {
     },
 
     switchTab(tab) {
+      // Empêcher le changement vers retour si pas de résultats aller
+      if (tab === 'return' && !this.canAccessReturnTab) {
+        return;
+      }
       this.activeTab = tab;
 
       if (tab === 'return' && !this.returnData.fromAddress && this.outboundData.selectedWaypoint) {
@@ -1173,6 +1189,15 @@ export default {
         border-top-left-radius: 10px;
         font-weight: bold;
         margin-bottom: 20px;
+      }
+      .tab-button.disabled {
+        color: #ccc !important;
+        cursor: not-allowed !important;
+        background-color: #f9f9f9 !important;
+      }
+
+      .tab-button:disabled {
+        pointer-events: none;
       }
       .tab-button:hover {
         background-color: rgb(232, 232, 232);
