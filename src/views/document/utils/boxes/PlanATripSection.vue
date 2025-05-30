@@ -158,6 +158,14 @@
             </div>
           </div> -->
 
+          <div v-if="showReturnWarning && activeTab === 'return'" class="return-warning">
+            <i class="warning-icon">⚠️</i>
+            <span
+              >Les horaires des transports en commun ne permettent peut-être pas de parcourir l'itinéraire
+              complet.</span
+            >
+          </div>
+
           <div class="no-itineraries-container" v-if="noResult">
             <div class="no-itineraries">
               <img class="no-itineraries-img" src="@/assets/img/boxes/transport_not_found.svg" />
@@ -435,6 +443,7 @@ export default {
       },
 
       // Garder les autres propriétés existantes
+      showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
       apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
@@ -456,7 +465,6 @@ export default {
     },
     mapDocuments() {
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
-
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
         return {
           document_id: waypoint.id,
@@ -658,7 +666,6 @@ export default {
 
         try {
           const response = await photon.getPropositions(this.fromAddress, this.$language.current, centerWgs84);
-
           this.addressPropositions = response.data.features.slice(0, 6) || [];
           this.showAddressPropositions = this.addressPropositions.length > 0;
         } catch (error) {
@@ -823,6 +830,10 @@ export default {
           this.journeys = data.journeys.slice(0, 3);
           this.noResult = false;
           this.selectedRouteJourney = this.journeys[0];
+
+          if (this.activeTab === 'outbound') {
+            this.calculateReturnParameters();
+          }
 
           this.$emit('calculate-route', {
             from: {
@@ -1166,6 +1177,68 @@ export default {
           this.returnData.fromAddress = this.outboundData.fromAddress;
           this.returnData.fromCoordinates = this.outboundData.fromCoordinates;
         }
+      }
+    },
+
+    calculateReturnParameters() {
+      if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
+        return;
+      }
+
+      const outboundJourney = this.outboundData.journeys[0];
+      const arrivalTime = outboundJourney.arrival_date_time;
+
+      // Récupération de la durée théorique ou de la durée renseignée
+      const theoreticalDuration = this.document.calculated_duration; // en jours (float)
+      const itineraryDuration = this.document.duration?.length ? Math.min(...this.document.duration) : null; // en jours (entier)
+
+      // Cas 1: Durée <= 1 jour avec durée théorique valide
+      if ((theoreticalDuration <= 1 || (itineraryDuration && itineraryDuration <= 1)) && theoreticalDuration) {
+        const returnDate = this.outboundData.selectedDate;
+
+        // Calcul de l'heure de retour (heure d'arrivée + durée théorique)
+        const arrivalHour = parseInt(arrivalTime.substring(9, 11));
+        const arrivalMinute = parseInt(arrivalTime.substring(11, 13));
+
+        const additionalHours = Math.floor(theoreticalDuration * 24);
+        const additionalMinutes = Math.round((theoreticalDuration * 24 - additionalHours) * 60);
+
+        let returnHour = arrivalHour + additionalHours;
+        let returnMinute = arrivalMinute + additionalMinutes;
+
+        // Gestion des minutes > 60
+        if (returnMinute >= 60) {
+          returnHour += Math.floor(returnMinute / 60);
+          returnMinute = returnMinute % 60;
+        }
+
+        // Gestion des heures > 24
+        if (returnHour >= 24) {
+          // Cas 2: Retour impossible le jour même
+          returnHour = 17;
+          returnMinute = 0;
+          this.showReturnWarning = true;
+        }
+
+        this.returnData.selectedDate = returnDate;
+        this.returnData.selectedTime = `${returnHour.toString().padStart(2, '0')}:${returnMinute
+          .toString()
+          .padStart(2, '0')}`;
+      }
+      // Cas 3: Durée > 1 jour
+      else if (theoreticalDuration > 1 || (itineraryDuration && itineraryDuration > 1)) {
+        const outboundDate = new Date(this.outboundData.selectedDate);
+        const daysToAdd = itineraryDuration ? Math.ceil(itineraryDuration) : Math.ceil(theoreticalDuration);
+        outboundDate.setDate(outboundDate.getDate() + daysToAdd);
+
+        this.returnData.selectedDate = outboundDate.toISOString().slice(0, 10);
+        this.returnData.selectedTime = '17:00';
+      }
+      // Cas 4: Autres cas (durée théorique non disponible ou incohérente)
+      else {
+        this.returnData.selectedDate = this.outboundData.selectedDate;
+        this.returnData.selectedTime = '17:00';
+        this.showReturnWarning = true;
       }
     },
   },
