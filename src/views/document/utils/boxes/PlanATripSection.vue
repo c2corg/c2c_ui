@@ -54,11 +54,22 @@
                 </div>
                 <div class="to-container">
                   <div class="to-text">À</div>
-                  <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
-                    <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
-                      {{ waypoint.title }}
-                    </option>
-                  </select>
+                  <template v-if="accessWaypoints.length > 1">
+                    <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
+                      <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
+                        {{ waypoint.title }}
+                      </option>
+                    </select>
+                  </template>
+                  <template v-else-if="accessWaypoints.length === 1">
+                    <div class="single-waypoint">
+                      {{ accessWaypoints[0].title }}
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="no-waypoint" v-if="loadingReachable">Chargement des points d'accès...</div>
+                    <div class="no-waypoint" v-else>Aucun point d'accès disponible</div>
+                  </template>
                 </div>
               </template>
 
@@ -379,6 +390,7 @@ import { transform } from 'ol/proj';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
 import photon from '@/js/apis/photon';
+import transportService from '@/js/apis/transport-service';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -447,21 +459,13 @@ export default {
       calculatedDuration: this.document.calculated_duration,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
       apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
+      reachableWaypoints: [], // Liste des waypoints desservis
+      loadingReachable: false, // État de chargement
     };
   },
   computed: {
     accessWaypoints() {
-      return this.document.associations.waypoints
-        .filter((doc) => doc.type === 'w' && doc.waypoint_type === 'access')
-        .map((waypoint) => {
-          const locale = waypoint.locales.find((l) => l.lang === this.$language.current) || waypoint.locales[0];
-          const geom = JSON.parse(waypoint.geometry.geom);
-          return {
-            id: waypoint.document_id,
-            title: locale.title,
-            coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
-          };
-        });
+      return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : []; // Au cas où, même si vous dites qu'il y en a toujours au moins un
     },
     mapDocuments() {
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
@@ -657,6 +661,17 @@ export default {
       return this.outboundData.journeys.length > 0;
     },
   },
+
+  async created() {
+    // Charger les waypoints desservis au montage du composant
+    await this.loadReachableWaypoints();
+
+    // Si un seul waypoint desservi, le sélectionner automatiquement
+    if (this.reachableWaypoints.length === 1) {
+      this.selectedWaypoint = this.reachableWaypoints[0];
+    }
+  },
+
   methods: {
     /** Address auto-complete */
     async searchAddressPropositions() {
@@ -833,6 +848,7 @@ export default {
 
           if (this.activeTab === 'outbound') {
             this.calculateReturnParameters();
+            await this.determineReturnWaypoint();
           }
 
           this.$emit('calculate-route', {
@@ -1239,6 +1255,75 @@ export default {
         this.returnData.selectedDate = this.outboundData.selectedDate;
         this.returnData.selectedTime = '17:00';
         this.showReturnWarning = true;
+      }
+    },
+
+    async loadReachableWaypoints() {
+      this.loadingReachable = true;
+      this.reachableWaypoints = [];
+
+      const waypoints = this.document.associations.waypoints || [];
+      const reachableChecks = [];
+
+      // Vérifier l'accessibilité de chaque waypoint
+      for (const waypoint of waypoints) {
+        if (waypoint.type === 'w' && waypoint.waypoint_type === 'access') {
+          reachableChecks.push(
+            transportService.isReachable(waypoint.document_id).then((isReachable) => ({ waypoint, isReachable }))
+          );
+        }
+      }
+
+      // Attendre toutes les vérifications
+      const results = await Promise.all(reachableChecks);
+
+      // Filtrer les waypoints desservis
+      for (const result of results) {
+        if (result.isReachable) {
+          const locale =
+            result.waypoint.locales.find((l) => l.lang === this.$language.current) || result.waypoint.locales[0];
+          const geom = JSON.parse(result.waypoint.geometry.geom);
+          this.reachableWaypoints.push({
+            id: result.waypoint.document_id,
+            title: locale.title,
+            coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
+          });
+        }
+      }
+
+      this.loadingReachable = false;
+    },
+
+    // Méthode pour déterminer le waypoint de retour automatiquement
+    async determineReturnWaypoint() {
+      if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
+        return;
+      }
+
+      // Cas 1: Un seul waypoint desservi
+      if (this.reachableWaypoints.length === 1) {
+        this.returnData.selectedWaypoint = this.reachableWaypoints[0];
+        return;
+      }
+
+      // Cas 2: Deux waypoints desservis
+      if (this.reachableWaypoints.length === 2) {
+        // Si le waypoint d'arrivée de l'aller est le premier, prendre le deuxième
+        if (this.outboundData.selectedWaypoint?.id === this.reachableWaypoints[0].id) {
+          this.returnData.selectedWaypoint = this.reachableWaypoints[1];
+        } else {
+          this.returnData.selectedWaypoint = this.reachableWaypoints[0];
+        }
+        return;
+      }
+
+      // Cas 3: Plus de deux waypoints desservis - laisser l'utilisateur choisir
+      // Cas 4: Certains waypoints non desservis - prendre celui de l'aller s'il est desservi
+      if (this.outboundData.selectedWaypoint) {
+        const isCurrentReachable = this.reachableWaypoints.some((w) => w.id === this.outboundData.selectedWaypoint.id);
+        if (isCurrentReachable) {
+          this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
+        }
       }
     },
   },
